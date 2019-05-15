@@ -52,14 +52,14 @@ class Compare extends Rule
      * and [[compareAttribute]] are set, this property takes precedence.
      * @see compareAttribute
      */
-    public $compareValue;
+    private $compareValue;
     /**
      * @var string the type of the values being compared. The follow types are supported:
      *
      * - [[TYPE_STRING|string]]: the values are being compared as strings. No conversion will be done before comparison.
      * - [[TYPE_NUMBER|number]]: the values are being compared as numbers. String values will be converted into numbers before comparison.
      */
-    public $type = self::TYPE_STRING;
+    private $type = self::TYPE_STRING;
     /**
      * @var string the operator for comparison. The following operators are supported:
      *
@@ -74,7 +74,7 @@ class Compare extends Rule
      *
      * When you want to compare numbers, make sure to also set [[type]] to `number`.
      */
-    public $operator = '==';
+    private $operator = '==';
     /**
      * @var string the user-defined error message. It may contain the following placeholders which
      * will be replaced accordingly by the validator:
@@ -85,7 +85,7 @@ class Compare extends Rule
      * - `{compareAttribute}`: the label of the attribute to be compared with
      * - `{compareValueOrAttribute}`: the value or the attribute label to be compared with
      */
-    public $message;
+    private $message;
 
     public function __construct()
     {
@@ -116,9 +116,32 @@ class Compare extends Rule
                     $this->message = Yii::t('yii', '{attribute} must be less than or equal to "{compareValueOrAttribute}".');
                     break;
                 default:
-                    throw new InvalidConfigException("Unknown operator: {$this->operator}");
+                    throw new \RuntimeException("Unknown operator: {$this->operator}");
             }
         }
+    }
+
+    public function withValue($value): self
+    {
+        $this->compareValue = $value;
+        return $this;
+    }
+
+    public function withAttribute(string $attribute): self
+    {
+        $this->compareAttribute = $attribute;
+        return $this;
+    }
+
+    public function operator(string $operator): self
+    {
+        $this->operator = $operator;
+        return $this;
+    }
+
+    public function message(string $message)
+    {
+        $this->message = $message;
     }
 
     public function validateAttribute(DataSet $data, string $attribute): Result

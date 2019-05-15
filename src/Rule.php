@@ -24,12 +24,13 @@ abstract class Rule
 
     protected function formatMessage(string $message, array $arguments = []): string
     {
-        $i18n = Yii::get('i18n', null, false);
-        if (isset($i18n)) {
-            return $i18n->format($message, $arguments);
-        }
-
-        return I18N::substitute($message, $arguments);
+//        $i18n = Yii::get('i18n', null, false);
+//        if (isset($i18n)) {
+//            return $i18n->format($message, $arguments);
+//        }
+//
+//        return I18N::substitute($message, $arguments);
+        return $message;
     }
 
     /**

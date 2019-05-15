@@ -1,50 +1,37 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
 
-namespace yii\tests\framework\validators;
+namespace Yii\Validator\Tests\Rule;
 
-use yii\exceptions\InvalidConfigException;
-use Yiisoft\Validators\Compare;
+use PHPUnit\Framework\TestCase;
 use yii\tests\data\validators\models\FakedValidationModel;
-use yii\tests\TestCase;
+use Yiisoft\Validator\DataSet;
+use Yiisoft\Validator\Rule\Compare;
 
 /**
  * @group validators
  */
-class CompareValidatorTest extends TestCase
+class CompareTest extends TestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-
-        // destroy application, Validator must work without $this->app
-        $this->destroyApplication();
-    }
-
     public function testValidateValueException()
     {
-        $this->expectException('yii\exceptions\InvalidConfigException');
+        $this->expectException(\RuntimeException::class);
         $val = new Compare();
-        $val->validate('val');
+        $val->validateValue('val');
     }
 
     public function testValidateValue()
     {
         $value = 18449;
         // default config
-        $val = new Compare(['compareValue' => $value]);
-        $this->assertTrue($val->validate($value));
-        $this->assertTrue($val->validate((string) $value));
-        $this->assertFalse($val->validate($value + 1));
-        foreach ($this->getOperationTestData($value) as $op => $tests) {
-            $val = new Compare(['compareValue' => $value]);
-            $val->operator = $op;
+        $val = (new Compare())->withValue($value);
+        $this->assertTrue($val->validateValue($value)->isValid());
+        $this->assertTrue($val->validateValue((string)$value)->isValid());
+        $this->assertFalse($val->validateValue($value + 1)->isValid());
+        foreach ($this->getOperationTestData($value) as $operator => $tests) {
+            $val = (new Compare())->withValue($value);
+            $val->operator($operator);
             foreach ($tests as $test) {
-                $this->assertEquals($test[1], $val->validate($test[0]), "Testing $op");
+                $this->assertEquals($test[1], $val->validateValue($test[0])->isValid(), "Testing $operator");
             }
         }
     }
@@ -54,21 +41,21 @@ class CompareValidatorTest extends TestCase
         return [
             '===' => [
                 [$value, true],
-                [(string) $value, true],
-                [(float) $value, true],
+                [(string)$value, true],
+                [(float)$value, true],
                 [$value + 1, false],
             ],
             '!=' => [
                 [$value, false],
-                [(string) $value, false],
-                [(float) $value, false],
+                [(string)$value, false],
+                [(float)$value, false],
                 [$value + 0.00001, true],
                 [false, true],
             ],
             '!==' => [
                 [$value, false],
-                [(string) $value, false],
-                [(float) $value, false],
+                [(string)$value, false],
+                [(float)$value, false],
                 [false, true],
             ],
             '>' => [
@@ -151,21 +138,32 @@ class CompareValidatorTest extends TestCase
 
     public function testAttributeErrorMessages()
     {
-        $model = FakedValidationModel::createWithAttributes([
-            'attr1' => 1,
-            'attr2' => 2,
-            'attrN' => 2,
-        ]);
+        $model = new class implements DataSet
+        {
+            public function getValue(string $key)
+            {
+                $data = [
+                    'attr1' => 1,
+                    'attr2' => 2,
+                    'attrN' => 2,
+                ];
+
+                if (isset($data[$key])) {
+                    return $data[$key];
+                }
+
+                throw new \RuntimeException("There is no property $key.");
+            }
+        };
 
         foreach ($this->getTestDataForMessages() as $data) {
-            $model->clearErrors($data[0]);
             $validator = new Compare();
-            $validator->operator = $data[1];
-            $validator->message = null;
-            $validator->init(); // reload messages
+            $validator->operator($data[1]);
+            $validator->message(null); // TODO: what for?
+            // $validator->init(); // reload messages
             $validator->{$data[4]} = $data[2];
-            $validator->validateAttribute($model, $data[0]);
-            $error = $model->getErrors($data[0])[0];
+            $result = $validator->validateAttribute($model, $data[0]);
+            $error = $result->getErrors()[0];
             $this->assertEquals($data[3], $error);
         }
     }
@@ -197,7 +195,7 @@ class CompareValidatorTest extends TestCase
     {
         $value = 55;
         foreach ($this->getOperationTestData($value) as $operator => $tests) {
-            $val = new Compare(['operator' => $operator, 'compareValue' => $value]);
+            $val = (new Compare())->operator($operator)->withValue($value);
             foreach ($tests as $test) {
                 $model = new FakedValidationModel();
                 $model->attr_test = $test[0];
@@ -210,12 +208,12 @@ class CompareValidatorTest extends TestCase
     public function testEnsureMessageSetOnInit()
     {
         foreach ($this->getOperationTestData(1337) as $operator => $tests) {
-            $val = new Compare(['operator' => $operator]);
+            $val = (new Compare())->operator($operator);
             $this->assertTrue(strlen($val->message) > 1);
         }
         try {
-            new Compare(['operator' => '<>']);
-        } catch (InvalidConfigException $e) {
+            (new Compare())->operator('<>');
+        } catch (\RuntimeException $e) {
             return;
         } catch (\Exception $e) {
             $this->fail('InvalidConfigException expected' . get_class($e) . 'received');
