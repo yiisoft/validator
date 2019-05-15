@@ -7,6 +7,8 @@ abstract class Rule
 {
     private $when;
 
+    private $skipOnEmpty = false;
+
     abstract public function validateValue($value): Result;
 
     public function validateAttribute(DataSet $data, string $attribute): Result
@@ -48,10 +50,22 @@ abstract class Rule
      *     return $data->getValue($attribute) == Country::USA;
      * }
      * ```
+     *
+     * @return $this
      */
     public function when(callable $callable): self
     {
         $this->when = $callable;
+        return $this;
+    }
+
+    /**
+     * @param bool $value
+     * @return $this
+     */
+    public function skipOnEmpty(bool $value): self
+    {
+        $this->skipOnEmpty = $value;
         return $this;
     }
 }

@@ -7,7 +7,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
 /**
- * RangeValidator validates that the attribute value is among a list of values.
+ * In validates that the attribute value is among a list of values.
  *
  * The range can be specified via the [[range]] property.
  * If the [[not]] property is set true, the validator will ensure the attribute value
@@ -44,17 +44,42 @@ class Range extends Rule
 
     private $message;
 
-    public function __construct()
+    public function __construct($range)
     {
-        if (!is_array($this->range)
-            && !($this->range instanceof \Closure)
-            && !($this->range instanceof \Traversable)
+        if (!is_array($range)
+            && !($range instanceof \Closure)
+            && !($range instanceof \Traversable)
         ) {
             throw new \RuntimeException('The "range" property must be set.');
         }
-        if ($this->message === null) {
-            $this->message = Yii::t('yii', '{attribute} is invalid.');
-        }
+
+        $this->range = $range;
+        $this->message = $this->formatMessage('{attribute} is invalid.');
+    }
+
+    public function strict(): self
+    {
+        $this->strict = true;
+        return $this;
+    }
+
+    public function not(): self
+    {
+        $this->not = true;
+        return $this;
+    }
+
+    public function message(string $message): self
+    {
+        $this->message = $message;
+        return $this;
+    }
+
+    public function allowArray(bool $value): self
+    {
+        // TODO: do we really need this option?
+        $this->allowArray = $value;
+        return $this;
     }
 
     public function validateValue($value): Result

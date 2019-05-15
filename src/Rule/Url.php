@@ -2,6 +2,7 @@
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\DataSet;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -21,12 +22,12 @@ class Url extends Rule
      * The pattern may contain a `{schemes}` token that will be replaced
      * by a regular expression which represents the [[validSchemes]].
      */
-    public $pattern = '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i';
+    private $pattern = '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i';
     /**
      * @var array list of URI schemes which should be considered valid. By default, http and https
      * are considered to be valid schemes.
      */
-    public $validSchemes = ['http', 'https'];
+    private $validSchemes = ['http', 'https'];
     /**
      * TODO: is it validation?!
      * @var string the default URI scheme. If the input doesn't contain the scheme part, the default
@@ -40,7 +41,7 @@ class Url extends Rule
      * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
      * extension, otherwise an exception would be thrown.
      */
-    public $enableIDN = false;
+    private $enableIDN = false;
 
     private $message;
 
@@ -49,12 +50,11 @@ class Url extends Rule
         if ($this->enableIDN && !function_exists('idn_to_ascii')) {
             throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }
-        if ($this->message === null) {
-            $this->message = Yii::t('yii', '{attribute} is not a valid URL.');
-        }
+
+        $this->message = Yii::t('yii', '{attribute} is not a valid URL.');
     }
 
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute(DataSet $data, string $attribute): Result
     {
         $value = $model->$attribute;
         $result = $this->validateValue($value);
