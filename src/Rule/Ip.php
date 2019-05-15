@@ -5,12 +5,12 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
 use yii\helpers\IpHelper;
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Rule;
 
 /**
  * The validator checks if the attribute value is a valid IPv4/IPv6 address or subnet.

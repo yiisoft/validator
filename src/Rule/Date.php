@@ -1,13 +1,13 @@
 <?php
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 
 use DateTime;
 use IntlDateFormatter;
 use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
 use yii\helpers\FormatConverter;
-use Yii\Validator\Result;
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * DateValidator verifies if the attribute represents a date, time or datetime in a proper [[format]].

@@ -8,11 +8,11 @@
 namespace yii\tests\framework\validators;
 
 use yii\base\DynamicModel;
-use yii\validators\Boolean;
-use yii\validators\Inline;
-use yii\validators\Number;
-use yii\validators\Required;
-use yii\validators\Rule2;
+use Yiisoft\Validators\Boolean;
+use Yiisoft\Validators\Inline;
+use Yiisoft\Validators\Number;
+use Yiisoft\Validators\Required;
+use Yiisoft\Validators\Rule2;
 use yii\tests\data\validators\models\FakedValidationModel;
 use yii\tests\data\validators\models\ValidatorTestFunctionModel;
 use yii\tests\data\validators\TestValidator;

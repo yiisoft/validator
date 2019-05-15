@@ -8,7 +8,7 @@
 namespace yii\tests\framework\validators;
 
 use yii\exceptions\InvalidConfigException;
-use yii\validators\Compare;
+use Yiisoft\Validators\Compare;
 use yii\tests\data\validators\models\FakedValidationModel;
 use yii\tests\TestCase;
 

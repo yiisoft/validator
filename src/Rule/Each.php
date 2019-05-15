@@ -5,12 +5,12 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
 use yii\base\Model;
-use Yii\Validator\Result;
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * EachValidator validates an array by checking each of its elements against an embedded validation rule.

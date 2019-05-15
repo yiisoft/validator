@@ -5,9 +5,9 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Rule;
 
 /**
  * InlineValidator represents a validator which is defined as a method in the object being validated.

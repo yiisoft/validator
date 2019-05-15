@@ -5,11 +5,11 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use yii\helpers\StringHelper;
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Rule;
 
 /**
  * NumberValidator validates that the attribute value is a number.

@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\validators;
+namespace Yiisoft\Validators;
 
 use yii\base\Component;
 use yii\di\AbstractContainer;

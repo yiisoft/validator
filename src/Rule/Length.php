@@ -5,11 +5,11 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 use yii\di\Initiable;
 use yii\helpers\Yii;
-use Yii\Validator\Result;
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * StringValidator validates that the attribute value is of certain length.

@@ -7,7 +7,7 @@
 
 namespace yii\tests\framework\validators;
 
-use yii\validators\Range;
+use Yiisoft\Validators\Range;
 use yii\tests\data\validators\models\FakedValidationModel;
 use yii\tests\TestCase;
 

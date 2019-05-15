@@ -1,9 +1,9 @@
 <?php
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Rule;
 
 /**
  * CompareValidator compares the specified attribute value with another value.

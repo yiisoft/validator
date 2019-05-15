@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Yii\Validator;
+namespace Yiisoft\Validator;
 
 use yii\i18n\I18N;
 

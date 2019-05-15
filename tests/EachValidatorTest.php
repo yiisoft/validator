@@ -8,7 +8,7 @@
 namespace yii\tests\framework\validators;
 
 use yii\db\ArrayExpression;
-use yii\validators\Each;
+use Yiisoft\Validators\Each;
 use yii\tests\data\base\ArrayAccessObject;
 use yii\tests\data\base\TraversableObject;
 use yii\tests\data\validators\models\FakedValidationModel;

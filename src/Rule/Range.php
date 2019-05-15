@@ -5,12 +5,12 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
 use yii\helpers\ArrayHelper;
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Rule;
 
 /**
  * RangeValidator validates that the attribute value is among a list of values.

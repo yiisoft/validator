@@ -4,12 +4,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use yii\helpers\FileHelper;
 use yii\http\UploadedFile;
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Rule;
 
 /**
  * FileValidator verifies if an attribute is receiving a valid uploaded file.

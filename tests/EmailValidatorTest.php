@@ -7,7 +7,7 @@
 
 namespace yii\tests\framework\validators;
 
-use yii\validators\Email;
+use Yiisoft\Validators\Email;
 use yii\tests\data\validators\models\FakedValidationModel;
 use yii\tests\TestCase;
 

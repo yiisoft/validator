@@ -28,12 +28,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Yii\\Validator\\": "src"
+            "Yiisoft\\Validator\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Yii\\Validator\\Tests\\": "tests"
+            "Yiisoft\\Validator\\Tests\\": "tests"
         }
     },
     "extra": {

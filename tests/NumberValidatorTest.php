@@ -7,7 +7,7 @@
 
 namespace yii\tests\framework\validators;
 
-use yii\validators\Number;
+use Yiisoft\Validators\Number;
 use yii\web\View;
 use yii\tests\data\validators\models\FakedValidationModel;
 use yii\tests\TestCase;

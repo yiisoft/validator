@@ -4,9 +4,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 use yii\exceptions\InvalidConfigException;
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Rule;
 
 /**
  * FilterValidator converts the attribute value according to a filter.

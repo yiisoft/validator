@@ -7,7 +7,7 @@
 
 namespace yii\tests\framework\validators;
 
-use yii\validators\Boolean;
+use Yiisoft\Validators\Boolean;
 use yii\tests\data\validators\models\FakedValidationModel;
 use yii\tests\TestCase;
 

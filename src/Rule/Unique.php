@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use yii\base\Model;
@@ -14,7 +14,7 @@ use yii\activerecord\ActiveQueryInterface;
 use yii\activerecord\ActiveRecord;
 use yii\activerecord\ActiveRecordInterface;
 use yii\helpers\Inflector;
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Rule;
 
 /**
  * UniqueValidator validates that the attribute value is unique in the specified database table.

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Yii\Validator;
+namespace Yiisoft\Validator;
 
 
 final class ResultSet

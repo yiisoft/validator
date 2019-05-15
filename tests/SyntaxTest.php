@@ -5,10 +5,10 @@ namespace yii\tests\framework\validators;
 
 
 use PHPUnit\Framework\TestCase;
-use yii\validators\Boolean;
-use yii\validators\Length;
-use yii\validators\String;
-use yii\validators\Validator;
+use Yiisoft\Validators\Boolean;
+use Yiisoft\Validators\Length;
+use Yiisoft\Validators\String;
+use Yiisoft\Validators\Validator;
 
 class SyntaxTest extends TestCase
 {

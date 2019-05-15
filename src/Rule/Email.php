@@ -4,12 +4,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
-use Yii\Validator\Result;
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * EmailValidator validates that the attribute value is a valid email address.

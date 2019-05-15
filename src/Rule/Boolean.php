@@ -5,9 +5,9 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Rule;
 
 /**
  * BooleanValidator checks if the attribute value is a boolean value.

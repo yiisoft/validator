@@ -7,7 +7,7 @@
 
 namespace yii\tests\framework\validators;
 
-use yii\validators\DefaultValue;
+use Yiisoft\Validators\DefaultValue;
 use yii\tests\TestCase;
 
 /**

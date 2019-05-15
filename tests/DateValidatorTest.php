@@ -8,7 +8,7 @@
 namespace yii\tests\framework\validators;
 
 use IntlDateFormatter;
-use yii\validators\Date;
+use Yiisoft\Validators\Date;
 use yii\tests\data\validators\models\FakedValidationModel;
 use yii\tests\framework\i18n\IntlTestHelper;
 use yii\tests\TestCase;

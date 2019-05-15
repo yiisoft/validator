@@ -7,7 +7,7 @@
 
 namespace yii\tests\framework\validators;
 
-use yii\validators\Url;
+use Yiisoft\Validators\Url;
 use yii\tests\data\validators\models\FakedValidationModel;
 use yii\tests\TestCase;
 

@@ -1,7 +1,7 @@
 <?php
-namespace Yii\Validator\Rule;
+namespace Yiisoft\Validator\Rule;
 
-use Yii\Validator\Rule;
+use Yiisoft\Validator\Rule;
 
 /**
  * DefaultValueValidator sets the attribute to be the specified default value.

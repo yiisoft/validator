@@ -8,7 +8,7 @@
 namespace yii\tests\framework\validators;
 
 use yii\helpers\FileHelper;
-use yii\validators\File;
+use Yiisoft\Validators\File;
 use yii\http\UploadedFile;
 use yii\tests\data\validators\models\FakedValidationModel;
 use yii\tests\TestCase;

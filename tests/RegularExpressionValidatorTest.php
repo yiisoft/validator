@@ -7,7 +7,7 @@
 
 namespace yii\tests\framework\validators;
 
-use yii\validators\RegularExpression;
+use Yiisoft\Validators\RegularExpression;
 use yii\tests\data\validators\models\FakedValidationModel;
 use yii\tests\TestCase;
 

@@ -7,7 +7,7 @@
 
 namespace yii\tests\framework\validators;
 
-use yii\validators\Filter;
+use Yiisoft\Validators\Filter;
 use yii\tests\data\validators\models\FakedValidationModel;
 use yii\tests\TestCase;
 
