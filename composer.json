@@ -1,0 +1,44 @@
+{
+    "name": "yiisoft/validator",
+    "type": "library",
+    "description": "Yii validator",
+    "keywords": ["validation", "validator"],
+    "homepage": "http://www.yiiframework.com/",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Alexander Makarov",
+            "email": "sam@rmcreative.ru",
+            "homepage": "http://rmcreative.ru/",
+            "role": "Core framework development"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/yiisoft/validator/issues?state=open",
+        "forum": "http://www.yiiframework.com/forum/",
+        "wiki": "http://www.yiiframework.com/wiki/",
+        "irc": "irc://irc.freenode.net/yii",
+        "source": "https://github.com/yiisoft/i18n"
+    },
+    "require": {
+        "php": "^7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Yii\\Validator\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Yii\\Validator\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.0.x-dev"
+        }
+    }
+}
