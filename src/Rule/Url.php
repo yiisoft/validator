@@ -1,14 +1,7 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
 
 namespace Yiisoft\Validator\Rule;
 
-use yii\helpers\Yii;
-use yii\exceptions\InvalidConfigException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -60,9 +53,6 @@ class Url extends Rule
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function validateAttribute($model, $attribute)
     {
         $value = $model->$attribute;

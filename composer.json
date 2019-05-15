@@ -23,7 +23,8 @@
     "require": {
         "php": "^7.2",
         "ext-mbstring": "*",
-        "yiisoft/strings": "dev-master"
+        "yiisoft/strings": "dev-master",
+        "yiisoft/arrays": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.2"

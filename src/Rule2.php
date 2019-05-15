@@ -98,11 +98,7 @@ class Rule2
         'url' => Url::class,
         'ip' => Ip::class,
     ];
-    /**
-     * @var array attributes to be validated by this validator. For multiple attributes,
-     * please specify them as an array; for single attribute, you may use either a string or an array.
-     */
-    public $attributes = [];
+
     /**
      * @var string the user-defined error message. It may contain the following placeholders which
      * will be replaced accordingly by the validator:
@@ -304,34 +300,5 @@ class Rule2
         }
 
         return $value === null || $value === [] || $value === '';
-    }
-
-    /**
-     * Formats a message using the I18N, or simple strtr if `\Yii::getApp()` is not available.
-     * @param string $message
-     * @param array $params
-     * @since 2.0.12
-     * @return string
-     */
-    public function formatMessage($message, $params)
-    {
-        $i18n = Yii::get('i18n', null, false);
-        if (isset($i18n)) {
-            return $i18n->format($message, $params);
-        }
-
-        return I18N::substitute($message, $params);
-    }
-
-    /**
-     * Returns cleaned attribute names without the `!` character at the beginning.
-     * @return array attribute names.
-     * @since 2.0.12
-     */
-    public function getAttributeNames()
-    {
-        return array_map(function ($attribute) {
-            return ltrim($attribute, '!');
-        }, $this->attributes);
     }
 }

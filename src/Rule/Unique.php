@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
@@ -14,6 +8,8 @@ use yii\activerecord\ActiveQueryInterface;
 use yii\activerecord\ActiveRecord;
 use yii\activerecord\ActiveRecordInterface;
 use yii\helpers\Inflector;
+use Yiisoft\Validator\DataSet;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
 /**
@@ -36,9 +32,7 @@ use Yiisoft\Validator\Rule;
  * // a1 needs to be unique by checking the uniqueness of both a2 and a3 (using a1 value)
  * ['a1', 'unique', 'targetAttribute' => ['a2', 'a1' => 'a3']]
  * ```
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
+ * TODO: can we abstract it from storage?
  */
 class Unique extends Rule
 {
@@ -110,10 +104,7 @@ class Unique extends Rule
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute(DataSet $data, string $attribute): Result
     {
         /* @var $targetClass ActiveRecordInterface */
         $targetClass = $this->getTargetClass($model);

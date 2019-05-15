@@ -11,6 +11,7 @@ abstract class Rule
 
     public function validateAttribute(DataSet $data, string $attribute): Result
     {
+        // TODO: consider moving out of Rule
         $when = $this->when;
         $shouldValidate = $when($data, $attribute);
         if ($shouldValidate === false) {
@@ -31,6 +32,22 @@ abstract class Rule
         return I18N::substitute($message, $arguments);
     }
 
+    /**
+     * @param callable $callable a PHP callable whose return value determines whether this validator should be applied.
+     * The signature of the callable should be `function ($model, $attribute)`, where `$model` and `$attribute`
+     * refer to the model and the attribute currently being validated. The callable should return a boolean value.
+     *
+     * This property is mainly provided to support conditional validation on the server-side.
+     * If this property is not set, this validator will be always applied on the server-side.
+     *
+     * The following example will enable the validator only when the country currently selected is USA:
+     *
+     * ```php
+     * function (DataSet $data, string $attribute) {
+     *     return $data->getValue($attribute) == Country::USA;
+     * }
+     * ```
+     */
     public function when(callable $callable): self
     {
         $this->when = $callable;

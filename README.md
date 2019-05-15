@@ -25,7 +25,8 @@ Library could be used in two ways: validating a single value and validating a se
 ### Validating a single value
 
 ```php
-new 
+$validator = new Validator();
+
 ```
 
 ### Validating a set of data

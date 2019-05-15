@@ -3,6 +3,7 @@ namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use Yiisoft\Strings\StringHelper;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
 /**
@@ -17,44 +18,41 @@ class Number extends Rule
     /**
      * @var bool whether the attribute value can only be an integer. Defaults to false.
      */
-    public $integerOnly = false;
+    private $integer = false;
     /**
      * @var int|float upper limit of the number. Defaults to null, meaning no upper limit.
      * @see tooBig for the customized message used when the number is too big.
      */
-    public $max;
+    private $max;
     /**
      * @var int|float lower limit of the number. Defaults to null, meaning no lower limit.
      * @see tooSmall for the customized message used when the number is too small.
      */
-    public $min;
+    private $min;
     /**
      * @var string user-defined error message used when the value is bigger than [[max]].
      */
-    public $tooBig;
+    private $tooBig;
     /**
      * @var string user-defined error message used when the value is smaller than [[min]].
      */
-    public $tooSmall;
+    private $tooSmall;
     /**
      * @var string the regular expression for matching integers.
      */
-    public $integerPattern = '/^\s*[+-]?\d+\s*$/';
+    private $integerPattern = '/^\s*[+-]?\d+\s*$/';
     /**
      * @var string the regular expression for matching numbers. It defaults to a pattern
      * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
      */
-    public $numberPattern = '/^\s*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/';
+    private $numberPattern = '/^\s*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/';
 
+    private $message;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function init(): void
+    public function __construct()
     {
-        parent::init();
         if ($this->message === null) {
-            $this->message = $this->integerOnly ? Yii::t('yii', '{attribute} must be an integer.')
+            $this->message = $this->integer ? Yii::t('yii', '{attribute} must be an integer.')
                 : Yii::t('yii', '{attribute} must be a number.');
         }
         if ($this->min !== null && $this->tooSmall === null) {
@@ -65,9 +63,24 @@ class Number extends Rule
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function integer(): self
+    {
+        $this->integer = true;
+        return $this;
+    }
+
+    public function min($value): self
+    {
+        $this->min = $value;
+        return $this;
+    }
+
+    public function max($value): self
+    {
+        $this->max = $value;
+        return $this;
+    }
+
     public function validateAttribute($model, $attribute)
     {
         $value = $model->$attribute;
@@ -88,24 +101,26 @@ class Number extends Rule
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function validateValue($value)
+    public function validateValue($value): Result
     {
+        $result = new Result();
+
         if ($this->isNotNumber($value)) {
-            return [Yii::t('yii', '{attribute} is invalid.'), []];
-        }
-        $pattern = $this->integerOnly ? $this->integerPattern : $this->numberPattern;
-        if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
-            return [$this->message, []];
-        } elseif ($this->min !== null && $value < $this->min) {
-            return [$this->tooSmall, ['min' => $this->min]];
-        } elseif ($this->max !== null && $value > $this->max) {
-            return [$this->tooBig, ['max' => $this->max]];
+            $result->addError('Value is not a number.');
+            return $result;
         }
 
-        return null;
+        $pattern = $this->integer ? $this->integerPattern : $this->numberPattern;
+
+        if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
+            $result->addError($this->message);
+        } elseif ($this->min !== null && $value < $this->min) {
+            $result->addError($this->formatMessage($this->tooSmall, ['min' => $this->min]));
+        } elseif ($this->max !== null && $value > $this->max) {
+            $result->addError($this->formatMessage($this->tooBig, ['max' => $this->max]));
+        }
+
+        return $result;
     }
 
     /*

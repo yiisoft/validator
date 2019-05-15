@@ -1,9 +1,9 @@
 <?php
 namespace Yiisoft\Validator\Rule;
 
-use yii\helpers\Yii;
-use yii\exceptions\InvalidConfigException;
-use yii\helpers\ArrayHelper;
+use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\DataSet;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
 /**
@@ -27,43 +27,37 @@ class Range extends Rule
      * }
      * ```
      */
-    public $range;
+    private $range;
     /**
      * @var bool whether the comparison is strict (both type and value must be the same)
      */
-    public $strict = false;
+    private $strict = false;
     /**
      * @var bool whether to invert the validation logic. Defaults to false. If set to true,
      * the attribute value should NOT be among the list of values defined via [[range]].
      */
-    public $not = false;
+    private $not = false;
     /**
      * @var bool whether to allow array type attribute.
      */
-    public $allowArray = false;
+    private $allowArray = false;
 
+    private $message;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function init(): void
+    public function __construct()
     {
-        parent::init();
         if (!is_array($this->range)
             && !($this->range instanceof \Closure)
             && !($this->range instanceof \Traversable)
         ) {
-            throw new InvalidConfigException('The "range" property must be set.');
+            throw new \RuntimeException('The "range" property must be set.');
         }
         if ($this->message === null) {
             $this->message = Yii::t('yii', '{attribute} is invalid.');
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function validateValue($value)
+    public function validateValue($value): Result
     {
         $in = false;
 
@@ -78,17 +72,20 @@ class Range extends Rule
             $in = true;
         }
 
-        return $this->not !== $in ? null : [$this->message, []];
+        $result = new Result();
+
+        if ($this->not === $in) {
+            $result->addError($this->message);
+        }
+
+        return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute(DataSet $data, string $attribute): Result
     {
         if ($this->range instanceof \Closure) {
-            $this->range = call_user_func($this->range, $model, $attribute);
+            $this->range = call_user_func($this->range, $data, $attribute);
         }
-        parent::validateAttribute($model, $attribute);
+        return parent::validateAttribute($data, $attribute);
     }
 }

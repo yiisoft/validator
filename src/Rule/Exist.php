@@ -44,6 +44,8 @@ use Yiisoft\Validator\Rule;
  * // the same as the previous, but using already defined relation "type"
  * ['type_id', 'exist', 'targetRelation' => 'type'],
  * ```
+ *
+ * TODO: can we abstract it from storrage?
  */
 class Exist extends Rule
 {
