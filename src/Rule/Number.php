@@ -1,8 +1,8 @@
 <?php
 namespace Yiisoft\Validator\Rule;
 
-use yii\helpers\Yii;
 use Yiisoft\Strings\StringHelper;
+use Yiisoft\Validator\DataSet;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -21,22 +21,22 @@ class Number extends Rule
     private $integer = false;
     /**
      * @var int|float upper limit of the number. Defaults to null, meaning no upper limit.
-     * @see tooBig for the customized message used when the number is too big.
+     * @see tooBigMessage for the customized message used when the number is too big.
      */
     private $max;
     /**
      * @var int|float lower limit of the number. Defaults to null, meaning no lower limit.
-     * @see tooSmall for the customized message used when the number is too small.
+     * @see tooSmallMessage for the customized message used when the number is too small.
      */
     private $min;
     /**
      * @var string user-defined error message used when the value is bigger than [[max]].
      */
-    private $tooBig;
+    private $tooBigMessage;
     /**
      * @var string user-defined error message used when the value is smaller than [[min]].
      */
-    private $tooSmall;
+    private $tooSmallMessage;
     /**
      * @var string the regular expression for matching integers.
      */
@@ -51,16 +51,11 @@ class Number extends Rule
 
     public function __construct()
     {
-        if ($this->message === null) {
-            $this->message = $this->integer ? Yii::t('yii', '{attribute} must be an integer.')
-                : Yii::t('yii', '{attribute} must be a number.');
-        }
-        if ($this->min !== null && $this->tooSmall === null) {
-            $this->tooSmall = Yii::t('yii', '{attribute} must be no less than {min}.');
-        }
-        if ($this->max !== null && $this->tooBig === null) {
-            $this->tooBig = Yii::t('yii', '{attribute} must be no greater than {max}.');
-        }
+        $this->message = $this->integer ? '{attribute} must be an integer.'
+            : '{attribute} must be a number.';
+
+        $this->tooSmallMessage = '{attribute} must be no less than {min}.';
+        $this->tooBigMessage = '{attribute} must be no greater than {max}.';
     }
 
     public function integer(): self
@@ -81,24 +76,34 @@ class Number extends Rule
         return $this;
     }
 
-    public function validateAttribute($model, $attribute)
+    public function tooSmallMessage(string $message): self
     {
-        $value = $model->$attribute;
+        $this->tooSmallMessage = $message;
+        return $this;
+    }
+
+    public function validateAttribute(DataSet $data, string $attribute): Result
+    {
+        $result = new Result();
+
+        $value = $data->getValue($attribute);
         if ($this->isNotNumber($value)) {
-            $this->addError($model, $attribute, $this->message);
-            return;
+            $result->addError($this->message);
+            return $result;
         }
-        $pattern = $this->integerOnly ? $this->integerPattern : $this->numberPattern;
+        $pattern = $this->integer ? $this->integerPattern : $this->numberPattern;
 
         if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
-            $this->addError($model, $attribute, $this->message);
+            $result->addError($this->message);
         }
         if ($this->min !== null && $value < $this->min) {
-            $this->addError($model, $attribute, $this->tooSmall, ['min' => $this->min]);
+            $result->addError($this->formatMessage($this->tooSmallMessage, ['min' => $this->min]));
         }
         if ($this->max !== null && $value > $this->max) {
-            $this->addError($model, $attribute, $this->tooBig, ['max' => $this->max]);
+            $result->addError($this->formatMessage($this->tooBigMessage, ['max' => $this->max]));
         }
+
+        return $result;
     }
 
     public function validateValue($value): Result
@@ -115,9 +120,9 @@ class Number extends Rule
         if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
             $result->addError($this->message);
         } elseif ($this->min !== null && $value < $this->min) {
-            $result->addError($this->formatMessage($this->tooSmall, ['min' => $this->min]));
+            $result->addError($this->formatMessage($this->tooSmallMessage, ['min' => $this->min]));
         } elseif ($this->max !== null && $value > $this->max) {
-            $result->addError($this->formatMessage($this->tooBig, ['max' => $this->max]));
+            $result->addError($this->formatMessage($this->tooBigMessage, ['max' => $this->max]));
         }
 
         return $result;
