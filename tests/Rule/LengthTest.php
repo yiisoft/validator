@@ -1,32 +1,17 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
+namespace Yiisoft\Validator\Tests\Rule;
 
-namespace yii\tests\framework\validators;
-
-use Yiisoft\Validators\String;
-use yii\tests\data\validators\models\FakedValidationModel;
-use yii\tests\TestCase;
+use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule\Length;
 
 /**
  * @group validators
  */
-class StringValidatorTest extends TestCase
+class LengthTest extends TestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-
-        // destroy application, Validator must work without $this->app
-        $this->destroyApplication();
-    }
-
     public function testValidateValue()
     {
-        $val = new String();
+        $val = new Length();
         $this->assertFalse($val->validate(['not a string']));
         $this->assertTrue($val->validate('Just some string'));
         $this->assertFalse($val->validate(true));
@@ -74,7 +59,7 @@ class StringValidatorTest extends TestCase
 
     public function testValidateAttribute()
     {
-        $val = new String();
+        $val = new Length();
         $model = new FakedValidationModel();
         $model->attr_string = 'a tet string';
         $val->validateAttribute($model, 'attr_string');

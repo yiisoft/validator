@@ -28,11 +28,12 @@ class Url extends Rule
      */
     public $validSchemes = ['http', 'https'];
     /**
+     * TODO: is it validation?!
      * @var string the default URI scheme. If the input doesn't contain the scheme part, the default
      * scheme will be prepended to it (thus changing the input). Defaults to null, meaning a URL must
      * contain the scheme part.
      */
-    public $defaultScheme;
+    private $defaultScheme;
     /**
      * @var bool whether validation process should take into account IDN (internationalized
      * domain names). Defaults to false meaning that validation of URLs containing IDN will always

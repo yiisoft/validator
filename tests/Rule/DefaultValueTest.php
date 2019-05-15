@@ -1,28 +1,14 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
+namespace Yiisoft\Validator\Tests\Rule;
 
-namespace yii\tests\framework\validators;
-
-use Yiisoft\Validators\DefaultValue;
-use yii\tests\TestCase;
+use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule\DefaultValue;
 
 /**
  * @group validators
  */
-class DefaultValueValidatorTest extends TestCase
+class DefaultValueTest extends TestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-
-        // destroy application, Validator must work without $this->app
-        $this->destroyApplication();
-    }
-
     public function testValidateAttribute()
     {
         $val = new DefaultValue();

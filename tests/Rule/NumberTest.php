@@ -1,21 +1,12 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
+namespace Yiisoft\Validator\Tests\Rule;
 
-namespace yii\tests\framework\validators;
-
-use Yiisoft\Validators\Number;
-use yii\web\View;
-use yii\tests\data\validators\models\FakedValidationModel;
-use yii\tests\TestCase;
+use Yiisoft\Validator\Rule\Number;
 
 /**
  * @group validators
  */
-class NumberValidatorTest extends TestCase
+class NumberTest extends \PHPUnit\Framework\TestCase
 {
     private $commaDecimalLocales = ['fr_FR.UTF-8', 'fr_FR.UTF8', 'fr_FR.utf-8', 'fr_FR.utf8', 'French_France.1252'];
     private $pointDecimalLocales = ['en_US.UTF-8', 'en_US.UTF8', 'en_US.utf-8', 'en_US.utf8', 'English_United States.1252'];

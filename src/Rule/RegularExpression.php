@@ -20,21 +20,31 @@ class RegularExpression extends Rule
     /**
      * @var string the regular expression to be matched with
      */
-    public $pattern;
+    private $pattern;
     /**
      * @var bool whether to invert the validation logic. Defaults to false. If set to true,
      * the regular expression defined via [[pattern]] should NOT match the attribute value.
      */
-    public $not = false;
+    private $not = false;
 
-    public function __construct()
+    private $message;
+
+    public function __construct(string $pattern)
     {
-        if ($this->pattern === null) {
-            throw new \RuntimeException('The "pattern" property must be set.');
-        }
-        if ($this->message === null) {
-            $this->message = Yii::t('yii', '{attribute} is invalid.');
-        }
+        $this->pattern = $pattern;
+        $this->message = $this->formatMessage('{attribute} is invalid.');
+    }
+
+    public function not(): self
+    {
+        $this->not = true;
+        return $this;
+    }
+
+    public function message(string $message): self
+    {
+        $this->message = $message;
+        return $this;
     }
 
     public function validateValue($value): Result
@@ -42,8 +52,8 @@ class RegularExpression extends Rule
         $result = new Result();
 
         $valid = !is_array($value) &&
-            (!$this->not && preg_match($this->pattern, $value)
-            || $this->not && !preg_match($this->pattern, $value));
+            ((!$this->not && preg_match($this->pattern, $value))
+            || ($this->not && !preg_match($this->pattern, $value)));
 
         if (!$valid) {
             $result->addError($this->message);

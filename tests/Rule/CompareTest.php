@@ -1,9 +1,8 @@
 <?php
 
-namespace Yii\Validator\Tests\Rule;
+namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
-use yii\tests\data\validators\models\FakedValidationModel;
 use Yiisoft\Validator\DataSet;
 use Yiisoft\Validator\Rule\Compare;
 

@@ -1,28 +1,13 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
+namespace Yiisoft\Validator\Tests\Rule;
 
-namespace yii\tests\framework\validators;
-
-use Yiisoft\Validators\Ip;
-use yii\tests\data\validators\models\FakedValidationModel;
-use yii\tests\TestCase;
+use Yiisoft\Validator\Rule\Ip;
 
 /**
  * @group validators
  */
-class IpValidatorTest extends TestCase
+class IpTest extends TestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-        // destroy application, Validator must work without $this->app
-        $this->destroyApplication();
-    }
-
     public function testInitException()
     {
         $this->expectException('yii\exceptions\InvalidConfigException');

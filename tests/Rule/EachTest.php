@@ -1,32 +1,15 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
+namespace Yiisoft\Validator\Tests\Rule;
 
-namespace yii\tests\framework\validators;
-
+use PHPUnit\Framework\TestCase;
 use yii\db\ArrayExpression;
-use Yiisoft\Validators\Each;
-use yii\tests\data\base\ArrayAccessObject;
-use yii\tests\data\base\TraversableObject;
-use yii\tests\data\validators\models\FakedValidationModel;
-use yii\tests\TestCase;
+use Yiisoft\Validator\Rule\Each;
 
 /**
  * @group validators
  */
-class EachValidatorTest extends TestCase
+class EachTest extends TestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-
-        // destroy application, Validator must work without $this->app
-        $this->destroyApplication();
-    }
-
     public function testArrayFormat()
     {
         $validator = new Each(['rule' => ['required']]);

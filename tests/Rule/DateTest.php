@@ -1,22 +1,14 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
-namespace yii\tests\framework\validators;
+namespace Yiisoft\Validator\Tests\Rule;
 
 use IntlDateFormatter;
-use Yiisoft\Validators\Date;
-use yii\tests\data\validators\models\FakedValidationModel;
-use yii\tests\framework\i18n\IntlTestHelper;
-use yii\tests\TestCase;
+use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule\Date;
 
 /**
  * @group validators
  */
-class DateValidatorTest extends TestCase
+class DateTest extends TestCase
 {
     protected function setUp()
     {

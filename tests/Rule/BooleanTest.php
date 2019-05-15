@@ -1,5 +1,5 @@
 <?php
-namespace Yii\Validator\Tests\Rule;
+namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule;
