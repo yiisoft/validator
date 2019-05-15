@@ -9,6 +9,7 @@ namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
 /**
@@ -47,15 +48,12 @@ class Url extends Rule
      */
     public $enableIDN = false;
 
+    private $message;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function init(): void
+    public function __construct()
     {
-        parent::init();
         if ($this->enableIDN && !function_exists('idn_to_ascii')) {
-            throw new InvalidConfigException('In order to use IDN validation intl extension must be installed and enabled.');
+            throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }
         if ($this->message === null) {
             $this->message = Yii::t('yii', '{attribute} is not a valid URL.');
@@ -76,11 +74,10 @@ class Url extends Rule
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function validateValue($value)
+    public function validateValue($value): Result
     {
+        $result = new Result();
+
         // make sure the length is limited to avoid DOS attacks
         if (is_string($value) && strlen($value) < 2000) {
             if ($this->defaultScheme !== null && strpos($value, '://') === false) {
@@ -100,11 +97,12 @@ class Url extends Rule
             }
 
             if (preg_match($pattern, $value)) {
-                return null;
+                return $result;
             }
         }
 
-        return [$this->message, []];
+        $result->addError($this->message);
+        return $result;
     }
 
     private function idnToAscii($idn)

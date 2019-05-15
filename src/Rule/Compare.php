@@ -2,6 +2,7 @@
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\DataSet;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -120,32 +121,36 @@ class Compare extends Rule
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute(DataSet $data, string $attribute): Result
     {
-        $value = $model->$attribute;
-        if (is_array($value)) {
-            $this->addError($model, $attribute, Yii::t('yii', '{attribute} is invalid.'));
+        $result = new Result();
 
-            return;
+        $value = $data->getValue($attribute);
+
+        if (is_array($value)) {
+            $result->addError($this->formatMessage('{attribute} is invalid.', ['attribute' => $attribute]));
+            return $result;
         }
+
         if ($this->compareValue !== null) {
             $compareLabel = $compareValue = $compareValueOrAttribute = $this->compareValue;
         } else {
             $compareAttribute = $this->compareAttribute ?? $attribute . '_repeat';
-            $compareValue = $model->$compareAttribute;
-            $compareLabel = $compareValueOrAttribute = $model->getAttributeLabel($compareAttribute);
+            $compareValue = $data->getValue($compareAttribute);
+
+            // TODO: how should we deal with labels?
+            //$compareLabel = $compareValueOrAttribute = $data->getAttributeLabel($compareAttribute);
         }
 
         if (!$this->compareValues($this->operator, $this->type, $value, $compareValue)) {
-            $this->addError($model, $attribute, $this->message, [
+            $result->addError($this->formatMessage($this->message, [
                 'compareAttribute' => $compareLabel,
                 'compareValue' => $compareValue,
                 'compareValueOrAttribute' => $compareValueOrAttribute,
-            ]);
+            ]));
         }
+
+        return $result;
     }
 
     public function validateValue($value): Result

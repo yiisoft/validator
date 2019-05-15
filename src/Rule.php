@@ -3,8 +3,6 @@
 
 namespace Yiisoft\Validator;
 
-use yii\i18n\I18N;
-
 abstract class Rule
 {
     abstract public function validateValue($value): Result;
