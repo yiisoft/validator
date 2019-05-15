@@ -1,8 +1,8 @@
 <?php
+
 namespace Yiisoft\Validator\Rule;
 
-use yii\helpers\Yii;
-use yii\exceptions\InvalidConfigException;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
 /**
@@ -21,9 +21,6 @@ use Yiisoft\Validator\Rule;
  * The default comparison function is based on string values, which means the values
  * are compared byte by byte. When comparing numbers, make sure to set the [[$type]]
  * to [[TYPE_NUMBER]] to enable numeric comparison.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class Compare extends Rule
 {
@@ -89,13 +86,8 @@ class Compare extends Rule
      */
     public $message;
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init(): void
+    public function __construct()
     {
-        parent::init();
         if ($this->message === null) {
             switch ($this->operator) {
                 case '==':
@@ -156,23 +148,24 @@ class Compare extends Rule
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function validateValue($value)
+    public function validateValue($value): Result
     {
+        $result = new Result();
+
         if ($this->compareValue === null) {
-            throw new InvalidConfigException('CompareValidator::compareValue must be set.');
+            throw new \RuntimeException('CompareValidator::compareValue must be set.');
         }
         if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
-            return [$this->message, [
+            $result->addError($this->formatMessage($this->message, [
                 'compareAttribute' => $this->compareValue,
                 'compareValue' => $this->compareValue,
                 'compareValueOrAttribute' => $this->compareValue,
-            ]];
+            ]));
+
+
         }
 
-        return null;
+        return $result;
     }
 
     /**
@@ -186,11 +179,11 @@ class Compare extends Rule
     protected function compareValues($operator, $type, $value, $compareValue)
     {
         if ($type === self::TYPE_NUMBER) {
-            $value = (float) $value;
-            $compareValue = (float) $compareValue;
+            $value = (float)$value;
+            $compareValue = (float)$compareValue;
         } else {
-            $value = (string) $value;
-            $compareValue = (string) $compareValue;
+            $value = (string)$value;
+            $compareValue = (string)$compareValue;
         }
         switch ($operator) {
             case '==':

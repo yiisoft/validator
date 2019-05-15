@@ -1,14 +1,6 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Validator\Rule;
 
-use yii\helpers\Yii;
-use yii\exceptions\InvalidConfigException;
 use yii\helpers\IpHelper;
 use Yiisoft\Validator\Rule;
 
@@ -32,9 +24,6 @@ use Yiisoft\Validator\Rule;
  *
  * @property array $ranges The IPv4 or IPv6 ranges that are allowed or forbidden. See [[setRanges()]] for
  * detailed description.
- *
- * @author Dmitry Naumenko <d.naumenko.a@gmail.com>
- * @since 2.0.7
  */
 class Ip extends Rule
 {

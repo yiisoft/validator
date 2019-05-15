@@ -44,9 +44,6 @@ use Yiisoft\Validator\Rule;
  * // the same as the previous, but using already defined relation "type"
  * ['type_id', 'exist', 'targetRelation' => 'type'],
  * ```
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class Exist extends Rule
 {

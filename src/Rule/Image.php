@@ -12,9 +12,6 @@ use yii\http\UploadedFile;
 
 /**
  * ImageValidator verifies if an attribute is receiving a valid image.
- *
- * @author Taras Gudz <gudz.taras@gmail.com>
- * @since 2.0
  */
 class Image extends File
 {

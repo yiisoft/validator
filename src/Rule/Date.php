@@ -34,6 +34,8 @@ class Date extends Rule
      * Constant for specifying the validation [[type]] as a date value, used for validation with intl short format.
      * @since 2.0.8
      * @see type
+     *
+     * TODO: split into 3 separate classes?
      */
     const TYPE_DATE = 'date';
     /**

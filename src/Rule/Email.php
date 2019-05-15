@@ -1,21 +1,11 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
 namespace Yiisoft\Validator\Rule;
 
-use yii\helpers\Yii;
-use yii\exceptions\InvalidConfigException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
 /**
  * EmailValidator validates that the attribute value is a valid email address.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class Email extends Rule
 {
@@ -56,7 +46,7 @@ class Email extends Rule
     {
 
         if ($this->enableIDN && !function_exists('idn_to_ascii')) {
-            throw new InvalidConfigException('In order to use IDN validation intl extension must be installed and enabled.');
+            throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }
         if ($this->message === null) {
             $this->message = $this->formatMessage('{attribute} is not a valid email address.');

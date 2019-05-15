@@ -1,22 +1,11 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
 /**
- * BooleanValidator checks if the attribute value is a boolean value.
- *
- * Possible boolean values can be configured via the [[trueValue]] and [[falseValue]] properties.
- * And the comparison can be either [[strict]] or not.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
+ * BooleanValidator checks if the attribute value is a boolean value or a value corresponding to it.
  */
 class Boolean extends Rule
 {
@@ -87,11 +76,5 @@ class Boolean extends Rule
         }
 
         return $result;
-    }
-
-    public function validateAttribute(DataSet $data, string $attribute): Result
-    {
-        $value = $data->getValue($attribute);
-        return $this->validateValue($value);
     }
 }

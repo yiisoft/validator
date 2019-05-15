@@ -27,8 +27,7 @@ use Yiisoft\Validator\Rule;
  *
  * To specify the filter, set [[filter]] property to be the callback.
  *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
+ * TODO: it's not really a validator...
  */
 class Filter extends Rule
 {

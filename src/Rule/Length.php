@@ -7,7 +7,6 @@
 
 namespace Yiisoft\Validator\Rule;
 use yii\di\Initiable;
-use yii\helpers\Yii;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 

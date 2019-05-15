@@ -1,14 +1,10 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
 
 namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
 /**
@@ -31,30 +27,28 @@ class RegularExpression extends Rule
      */
     public $not = false;
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init(): void
+    public function __construct()
     {
-        parent::init();
         if ($this->pattern === null) {
-            throw new InvalidConfigException('The "pattern" property must be set.');
+            throw new \RuntimeException('The "pattern" property must be set.');
         }
         if ($this->message === null) {
             $this->message = Yii::t('yii', '{attribute} is invalid.');
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function validateValue($value)
+    public function validateValue($value): Result
     {
+        $result = new Result();
+
         $valid = !is_array($value) &&
             (!$this->not && preg_match($this->pattern, $value)
             || $this->not && !preg_match($this->pattern, $value));
 
-        return $valid ? null : [$this->message, []];
+        if (!$valid) {
+            $result->addError($this->message);
+        }
+
+        return $result;
     }
 }

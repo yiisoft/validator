@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
@@ -19,8 +13,6 @@ use Yiisoft\Validator\Rule;
  * If the [[not]] property is set true, the validator will ensure the attribute value
  * is NOT among the specified range.
  *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class Range extends Rule
 {

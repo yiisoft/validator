@@ -17,9 +17,6 @@ use Yiisoft\Validator\Rule;
  * Note that you should enable `fileinfo` PHP extension.
  *
  * @property int $sizeLimit The size limit for uploaded files. This property is read-only.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class File extends Rule
 {

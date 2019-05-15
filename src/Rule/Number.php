@@ -1,14 +1,8 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
-use yii\helpers\StringHelper;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Rule;
 
 /**
@@ -17,9 +11,6 @@ use Yiisoft\Validator\Rule;
  * The format of the number must match the regular expression specified in [[integerPattern]] or [[numberPattern]].
  * Optionally, you may configure the [[max]] and [[min]] properties to ensure the number
  * is within certain range.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class Number extends Rule
 {
