@@ -1,118 +1,84 @@
 <?php
+
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Number;
 
 /**
  * @group validators
  */
 class LengthTest extends TestCase
 {
+
+
     public function testValidateValue()
     {
         $val = new Length();
-        $this->assertFalse($val->validate(['not a string']));
-        $this->assertTrue($val->validate('Just some string'));
-        $this->assertFalse($val->validate(true));
-        $this->assertFalse($val->validate(false));
+        $this->assertFalse($val->validateValue(['not a string'])->isValid());
+        $this->assertFalse($val->validateValue(new \stdClass())->isValid());
+        $this->assertTrue($val->validateValue('Just some string')->isValid());
+        $this->assertFalse($val->validateValue(true)->isValid());
+        $this->assertFalse($val->validateValue(false)->isValid());
     }
 
     public function testValidateValueLength()
     {
-        $val = new String(['length' => 25]);
-        $this->assertTrue($val->validate(str_repeat('x', 25)));
-        $this->assertTrue($val->validate(str_repeat('€', 25)));
-        $this->assertFalse($val->validate(str_repeat('x', 125)));
-        $this->assertFalse($val->validate(''));
-        $val = new String(['length' => [25]]);
-        $this->assertTrue($val->validate(str_repeat('x', 25)));
-        $this->assertTrue($val->validate(str_repeat('x', 1250)));
-        $this->assertFalse($val->validate(str_repeat('Ä', 24)));
-        $this->assertFalse($val->validate(''));
-        $val = new String(['length' => [10, 20]]);
-        $this->assertTrue($val->validate(str_repeat('x', 15)));
-        $this->assertTrue($val->validate(str_repeat('x', 10)));
-        $this->assertTrue($val->validate(str_repeat('x', 20)));
-        $this->assertFalse($val->validate(str_repeat('x', 5)));
-        $this->assertFalse($val->validate(str_repeat('x', 25)));
-        $this->assertFalse($val->validate(''));
-        // make sure min/max are overridden
-        $val = new String(['length' => [10, 20], 'min' => 25, 'max' => 35]);
-        $this->assertTrue($val->validate(str_repeat('x', 15)));
-        $this->assertFalse($val->validate(str_repeat('x', 30)));
+        $val = (new Length())
+            ->min(25)
+            ->max(25);
+        $this->assertTrue($val->validateValue(str_repeat('x', 25))->isValid());
+        $this->assertTrue($val->validateValue(str_repeat('€', 25))->isValid());
+        $this->assertFalse($val->validateValue(str_repeat('x', 125))->isValid());
+        $this->assertFalse($val->validateValue('')->isValid());
+
+        $val = (new Length())
+            ->min(25);
+        $this->assertTrue($val->validateValue(str_repeat('x', 125))->isValid());
+        $this->assertTrue($val->validateValue(str_repeat('€', 25))->isValid());
+        $this->assertFalse($val->validateValue(str_repeat('x', 13))->isValid());
+        $this->assertFalse($val->validateValue('')->isValid());
+
+        $val = (new Length())
+            ->max(25);
+        $this->assertTrue($val->validateValue(str_repeat('x', 25))->isValid());
+        $this->assertTrue($val->validateValue(str_repeat('Ä', 24))->isValid());
+        $this->assertfalse($val->validateValue(str_repeat('x', 1250))->isValid());
+        $this->assertTrue($val->validateValue('')->isValid());
+
+        $val = (new Length())
+            ->min(10)
+            ->max(25);
+        $this->assertTrue($val->validateValue(str_repeat('x', 15))->isValid());
+        $this->assertTrue($val->validateValue(str_repeat('x', 10))->isValid());
+        $this->assertTrue($val->validateValue(str_repeat('x', 20))->isValid());
+        $this->assertTrue($val->validateValue(str_repeat('x', 25))->isValid());
+        $this->assertFalse($val->validateValue(str_repeat('x', 5))->isValid());
+        $this->assertFalse($val->validateValue('')->isValid());
     }
 
-    public function testValidateValueMinMax()
+    public function testValidateValueMin()
     {
-        $val = new String(['min' => 10]);
-        $this->assertTrue($val->validate(str_repeat('x', 10)));
-        $this->assertFalse($val->validate('xxxx'));
-        $val = new String(['max' => 10]);
-        $this->assertTrue($val->validate('xxxx'));
-        $this->assertFalse($val->validate(str_repeat('y', 20)));
-        $val = new String(['min' => 10, 'max' => 20]);
-        $this->assertTrue($val->validate(str_repeat('y', 15)));
-        $this->assertFalse($val->validate('abc'));
-        $this->assertFalse($val->validate(str_repeat('b', 25)));
+        $rule = (new Length())
+            ->min(1);
+
+        $result = $rule->validateValue('');
+        $this->assertFalse($result->isValid());
+        $this->assertContains('{attribute} should contain at least {min, number} {min, plural, one{character} other{characters}}.', $result->getErrors()[0]);
+        $this->assertTrue($rule->validateValue(str_repeat('x', 5))->isValid());
     }
 
-    public function testValidateAttribute()
-    {
-        $val = new Length();
-        $model = new FakedValidationModel();
-        $model->attr_string = 'a tet string';
-        $val->validateAttribute($model, 'attr_string');
-        $this->assertFalse($model->hasErrors());
-        $model->attr_string = true;
-        $val->validateAttribute($model, 'attr_string');
-        $this->assertTrue($model->hasErrors());
-        $model->attr_string = false;
-        $val->validateAttribute($model, 'attr_string');
-        $this->assertTrue($model->hasErrors());
-        $val = new String(['length' => 20]);
-        $model = new FakedValidationModel();
-        $model->attr_string = str_repeat('x', 20);
-        $val->validateAttribute($model, 'attr_string');
-        $this->assertFalse($model->hasErrors());
-        $model = new FakedValidationModel();
-        $model->attr_string = 'abc';
-        $val->validateAttribute($model, 'attr_string');
-        $this->assertTrue($model->hasErrors('attr_string'));
-        $val = new String(['max' => 2]);
-        $model = new FakedValidationModel();
-        $model->attr_string = 'a';
-        $val->validateAttribute($model, 'attr_string');
-        $this->assertFalse($model->hasErrors());
-        $model = new FakedValidationModel();
-        $model->attr_string = 'abc';
-        $val->validateAttribute($model, 'attr_string');
-        $this->assertTrue($model->hasErrors('attr_string'));
-        $val = new String(['max' => 1]);
-        $model = FakedValidationModel::createWithAttributes(['attr_str' => ['abc']]);
-        $val->validateAttribute($model, 'attr_str');
-        $this->assertTrue($model->hasErrors('attr_str'));
-    }
 
-    public function testEnsureMessagesOnInit()
+    public function testValidateValueMax()
     {
-        $val = new String(['min' => 1, 'max' => 2]);
-        $this->assertInternalType('string', $val->message);
-        $this->assertInternalType('string', $val->tooLong);
-        $this->assertInternalType('string', $val->tooShort);
-    }
+        $rule = (new Length())
+            ->max(100);
 
-    public function testCustomErrorMessageInValidateAttribute()
-    {
-        $val = new String([
-            'min' => 5,
-            'tooShort' => '{attribute} to short. Min is {min}',
-        ]);
-        $model = new FakedValidationModel();
-        $model->attr_string = 'abc';
-        $val->validateAttribute($model, 'attr_string');
-        $this->assertTrue($model->hasErrors('attr_string'));
-        $errorMsg = $model->getErrors('attr_string');
-        $this->assertEquals('attr_string to short. Min is 5', $errorMsg[0]);
+        $this->assertTrue($rule->validateValue(str_repeat('x', 5))->isValid());
+
+        $result = $rule->validateValue(str_repeat('x', 1230));
+        $this->assertFalse($result->isValid());
+        $this->assertContains('{attribute} should contain at most {max, number} {max, plural, one{character} other{characters}}.', $result->getErrors()[0]);
     }
 }
