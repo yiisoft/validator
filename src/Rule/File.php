@@ -160,25 +160,25 @@ class File extends Rule
     {
         parent::init();
         if ($this->message === null) {
-            $this->message = Yii::t('yii', 'File upload failed.');
+            $this->message = $this->formatMessage('File upload failed.');
         }
         if ($this->uploadRequired === null) {
-            $this->uploadRequired = Yii::t('yii', 'Please upload a file.');
+            $this->uploadRequired = $this->formatMessage('Please upload a file.');
         }
         if ($this->tooMany === null) {
-            $this->tooMany = Yii::t('yii', 'You can upload at most {limit, number} {limit, plural, one{file} other{files}}.');
+            $this->tooMany = $this->formatMessage('You can upload at most {limit, number} {limit, plural, one{file} other{files}}.');
         }
         if ($this->tooFew === null) {
-            $this->tooFew = Yii::t('yii', 'You should upload at least {limit, number} {limit, plural, one{file} other{files}}.');
+            $this->tooFew = $this->formatMessage('You should upload at least {limit, number} {limit, plural, one{file} other{files}}.');
         }
         if ($this->wrongExtension === null) {
-            $this->wrongExtension = Yii::t('yii', 'Only files with these extensions are allowed: {extensions}.');
+            $this->wrongExtension = $this->formatMessage('Only files with these extensions are allowed: {extensions}.');
         }
         if ($this->tooBig === null) {
-            $this->tooBig = Yii::t('yii', 'The file "{file}" is too big. Its size cannot exceed {formattedLimit}.');
+            $this->tooBig = $this->formatMessage('The file "{file}" is too big. Its size cannot exceed {formattedLimit}.');
         }
         if ($this->tooSmall === null) {
-            $this->tooSmall = Yii::t('yii', 'The file "{file}" is too small. Its size cannot be smaller than {formattedLimit}.');
+            $this->tooSmall = $this->formatMessage('The file "{file}" is too small. Its size cannot be smaller than {formattedLimit}.');
         }
         if (!is_array($this->extensions)) {
             $this->extensions = preg_split('/[\s,]+/', strtolower($this->extensions), -1, PREG_SPLIT_NO_EMPTY);
@@ -186,7 +186,7 @@ class File extends Rule
             $this->extensions = array_map('strtolower', $this->extensions);
         }
         if ($this->wrongMimeType === null) {
-            $this->wrongMimeType = Yii::t('yii', 'Only files with these MIME types are allowed: {mimeTypes}.');
+            $this->wrongMimeType = $this->formatMessage('Only files with these MIME types are allowed: {mimeTypes}.');
         }
         if (!is_array($this->mimeTypes)) {
             $this->mimeTypes = preg_split('/[\s,]+/', strtolower($this->mimeTypes), -1, PREG_SPLIT_NO_EMPTY);

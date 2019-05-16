@@ -51,7 +51,7 @@ class Url extends Rule
             throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }
 
-        $this->message = Yii::t('yii', '{attribute} is not a valid URL.');
+        $this->message =  $this->formatMessage('{attribute} is not a valid URL.');
     }
 
     public function validateAttribute(DataSet $data, string $attribute): Result
@@ -59,10 +59,12 @@ class Url extends Rule
         $value = $model->$attribute;
         $result = $this->validateValue($value);
         if (!empty($result)) {
-            $this->addError($model, $attribute, $result[0], $result[1]);
+            $result->addError($model, $attribute, $result[0], $result[1]);
         } elseif ($this->defaultScheme !== null && strpos($value, '://') === false) {
             $model->$attribute = $this->defaultScheme . '://' . $value;
         }
+
+        return $result;
     }
 
     public function validateValue($value): Result
