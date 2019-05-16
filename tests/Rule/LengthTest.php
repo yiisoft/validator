@@ -4,7 +4,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Length;
-use Yiisoft\Validator\Rule\Number;
 
 /**
  * @group validators
