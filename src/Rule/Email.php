@@ -100,4 +100,40 @@ class Email extends Rule
     {
         return idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
     }
+
+    /**
+     * @param bool $allowName
+     *
+     * @return Email
+     */
+    public function allowName(bool $allowName): self
+    {
+        $this->allowName = $allowName;
+
+        return $this;
+}
+
+    /**
+     * @param bool $checkDNS
+     *
+     * @return Email
+     */
+    public function checkDNS(bool $checkDNS): self
+    {
+        $this->checkDNS = $checkDNS;
+
+        return $this;
+}
+
+    /**
+     * @param bool $enableIDN
+     *
+     * @return Email
+     */
+    public function enableIDN(bool $enableIDN): self
+    {
+        $this->enableIDN = $enableIDN;
+
+        return $this;
+}
 }

@@ -7,12 +7,11 @@
 
 namespace Yiisoft\Validator\Rule;
 
-use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
 use yii\base\Model;
-use yii\activerecord\ActiveQuery;
-use yii\activerecord\ActiveRecord;
-use yii\db\QueryInterface;
+use Yiisoft\ActiveRecord\ActiveQuery;
+use Yiisoft\ActiveRecord\ActiveRecord;
+use Yiisoft\Db\QueryInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -71,9 +70,9 @@ class Exist extends Rule
     public $targetRelation;
     /**
      * @var string|array|\Closure additional filter to be applied to the DB query used to check the existence of the attribute value.
-     * This can be a string or an array representing the additional query condition (refer to [[\yii\db\Query::where()]]
+     * This can be a string or an array representing the additional query condition (refer to [[\Yiisoft\Db\Query::where()]]
      * on the format of query condition), or an anonymous function with the signature `function ($query)`, where `$query`
-     * is the [[\yii\db\Query|Query]] object that you can modify in the function.
+     * is the [[\Yiisoft\Db\Query|Query]] object that you can modify in the function.
      */
     public $filter;
     /**
@@ -92,6 +91,8 @@ class Exist extends Rule
     public $forceMasterDb = true;
 
 
+    private $message;
+
     /**
      * {@inheritdoc}
      */
@@ -99,7 +100,7 @@ class Exist extends Rule
     {
         parent::init();
         if ($this->message === null) {
-            $this->message = Yii::t('yii', '{attribute} is invalid.');
+            $this->message = $this->formatMessage( '{attribute} is invalid.');
         }
     }
 

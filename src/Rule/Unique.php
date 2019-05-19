@@ -98,9 +98,9 @@ class Unique extends Rule
             return;
         }
         if (is_array($this->targetAttribute) && count($this->targetAttribute) > 1) {
-            $this->message = Yii::t('yii', 'The combination {values} of {attributes} has already been taken.');
+            $this->message = $this->formatMessage('The combination {values} of {attributes} has already been taken.');
         } else {
-            $this->message = Yii::t('yii', '{attribute} "{value}" has already been taken.');
+            $this->message = $this->formatMessage('{attribute} "{value}" has already been taken.');
         }
     }
 

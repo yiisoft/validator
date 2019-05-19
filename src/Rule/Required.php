@@ -6,7 +6,6 @@
  */
 namespace Yiisoft\Validator\Rule;
 
-use yii\helpers\Yii;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -38,7 +37,7 @@ class Required extends Rule
     {
 
         if ($this->message === null) {
-            $this->message = Yii::t('yii', '{attribute} cannot be blank.');
+            $this->message = $this->formatMessage('{attribute} cannot be blank.');
         }
     }
 

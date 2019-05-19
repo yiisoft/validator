@@ -202,25 +202,25 @@ class Ip extends Rule
             throw new InvalidConfigException('Both IPv4 and IPv6 checks can not be disabled at the same time');
         }
         if ($this->message === null) {
-            $this->message = Yii::t('yii', '{attribute} must be a valid IP address.');
+            $this->message = $this->formatMessage('{attribute} must be a valid IP address.');
         }
         if ($this->ipv6NotAllowed === null) {
-            $this->ipv6NotAllowed = Yii::t('yii', '{attribute} must not be an IPv6 address.');
+            $this->ipv6NotAllowed = $this->formatMessage('{attribute} must not be an IPv6 address.');
         }
         if ($this->ipv4NotAllowed === null) {
-            $this->ipv4NotAllowed = Yii::t('yii', '{attribute} must not be an IPv4 address.');
+            $this->ipv4NotAllowed = $this->formatMessage('{attribute} must not be an IPv4 address.');
         }
         if ($this->wrongCidr === null) {
-            $this->wrongCidr = Yii::t('yii', '{attribute} contains wrong subnet mask.');
+            $this->wrongCidr = $this->formatMessage('{attribute} contains wrong subnet mask.');
         }
         if ($this->noSubnet === null) {
-            $this->noSubnet = Yii::t('yii', '{attribute} must be an IP address with specified subnet.');
+            $this->noSubnet = $this->formatMessage('{attribute} must be an IP address with specified subnet.');
         }
         if ($this->hasSubnet === null) {
-            $this->hasSubnet = Yii::t('yii', '{attribute} must not be a subnet.');
+            $this->hasSubnet = $this->formatMessage('{attribute} must not be a subnet.');
         }
         if ($this->notInRange === null) {
-            $this->notInRange = Yii::t('yii', '{attribute} is not in the allowed range.');
+            $this->notInRange = $this->formatMessage('{attribute} is not in the allowed range.');
         }
     }
 

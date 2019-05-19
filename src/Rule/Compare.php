@@ -92,28 +92,28 @@ class Compare extends Rule
         if ($this->message === null) {
             switch ($this->operator) {
                 case '==':
-                    $this->message = Yii::t('yii', '{attribute} must be equal to "{compareValueOrAttribute}".');
+                    $this->message = $this->formatMessage('{attribute} must be equal to "{compareValueOrAttribute}".');
                     break;
                 case '===':
-                    $this->message = Yii::t('yii', '{attribute} must be equal to "{compareValueOrAttribute}".');
+                    $this->message = $this->formatMessage('{attribute} must be equal to "{compareValueOrAttribute}".');
                     break;
                 case '!=':
-                    $this->message = Yii::t('yii', '{attribute} must not be equal to "{compareValueOrAttribute}".');
+                    $this->message = $this->formatMessage('{attribute} must not be equal to "{compareValueOrAttribute}".');
                     break;
                 case '!==':
-                    $this->message = Yii::t('yii', '{attribute} must not be equal to "{compareValueOrAttribute}".');
+                    $this->message = $this->formatMessage('{attribute} must not be equal to "{compareValueOrAttribute}".');
                     break;
                 case '>':
-                    $this->message = Yii::t('yii', '{attribute} must be greater than "{compareValueOrAttribute}".');
+                    $this->message = $this->formatMessage('{attribute} must be greater than "{compareValueOrAttribute}".');
                     break;
                 case '>=':
-                    $this->message = Yii::t('yii', '{attribute} must be greater than or equal to "{compareValueOrAttribute}".');
+                    $this->message = $this->formatMessage('{attribute} must be greater than or equal to "{compareValueOrAttribute}".');
                     break;
                 case '<':
-                    $this->message = Yii::t('yii', '{attribute} must be less than "{compareValueOrAttribute}".');
+                    $this->message = $this->formatMessage('{attribute} must be less than "{compareValueOrAttribute}".');
                     break;
                 case '<=':
-                    $this->message = Yii::t('yii', '{attribute} must be less than or equal to "{compareValueOrAttribute}".');
+                    $this->message = $this->formatMessage('{attribute} must be less than or equal to "{compareValueOrAttribute}".');
                     break;
                 default:
                     throw new \RuntimeException("Unknown operator: {$this->operator}");
