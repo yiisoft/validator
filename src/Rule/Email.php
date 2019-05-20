@@ -10,12 +10,12 @@ use Yiisoft\Validator\Rule;
 class Email extends Rule
 {
     /**
-     * @var string the regular expression used to validate the attribute value.
+     * @var string the regular expression used to validateValue the attribute value.
      * @see http://www.regular-expressions.info/email.html
      */
     private $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/';
     /**
-     * @var string the regular expression used to validate email addresses with the name part.
+     * @var string the regular expression used to validateValue email addresses with the name part.
      * This property is used only when [[allowName]] is true.
      * @see allowName
      */
@@ -53,7 +53,7 @@ class Email extends Rule
         }
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value): Result
     {
         $result = new Result();
 

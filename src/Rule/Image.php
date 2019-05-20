@@ -9,6 +9,7 @@ namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use yii\http\UploadedFile;
+use Yiisoft\Validator\Result;
 
 /**
  * ImageValidator verifies if an attribute is receiving a valid image.
@@ -112,7 +113,7 @@ class Image extends File
     /**
      * {@inheritdoc}
      */
-    protected function validateValue($value)
+    protected function validateValue($value): Result
     {
         $result = parent::validateValue($value);
 

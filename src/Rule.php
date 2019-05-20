@@ -5,58 +5,36 @@ namespace Yiisoft\Validator;
 
 abstract class Rule
 {
-    private $when;
-
     private $skipOnEmpty = false;
 
-    abstract public function validateValue($value): Result;
-
-    public function validateAttribute(DataSet $data, string $attribute): Result
+    public function validate($value): Result
     {
-        // TODO: consider moving out of Rule
-        $when = $this->when;
-        $shouldValidate = $when($data, $attribute);
-        if ($shouldValidate === false) {
+        if ($this->skipOnEmpty && empty($value)) {
             return new Result();
         }
 
-        $value = $data->getValue($attribute);
         return $this->validateValue($value);
     }
 
+    abstract protected function validateValue($value): Result;
+
     protected function formatMessage(string $message, array $arguments = []): string
     {
-//        $i18n = Yii::get('i18n', null, false);
-//        if (isset($i18n)) {
-//            return $i18n->format($message, $arguments);
-//        }
-//
-//        return I18N::substitute($message, $arguments);
-        return $message;
-    }
+        $replacements = [];
+        foreach ($arguments as $key => $value) {
+            if (is_array($value)) {
+                $value = 'array';
+            } elseif (is_object($value)) {
+                $value = 'object';
+            } elseif (is_resource($value)) {
+                $value = 'resource';
+            }
 
-    /**
-     * @param callable $callable a PHP callable whose return value determines whether this validator should be applied.
-     * The signature of the callable should be `function ($model, $attribute)`, where `$model` and `$attribute`
-     * refer to the model and the attribute currently being validated. The callable should return a boolean value.
-     *
-     * This property is mainly provided to support conditional validation on the server-side.
-     * If this property is not set, this validator will be always applied on the server-side.
-     *
-     * The following example will enable the validator only when the country currently selected is USA:
-     *
-     * ```php
-     * function (DataSet $data, string $attribute) {
-     *     return $data->getValue($attribute) == Country::USA;
-     * }
-     * ```
-     *
-     * @return $this
-     */
-    public function when(callable $callable): self
-    {
-        $this->when = $callable;
-        return $this;
+            $replacements['{' . $key . '}'] = $value;
+        }
+
+        // TODO: move it to upper level and make it configurable?
+        return strtr($message, $replacements);
     }
 
     /**
@@ -67,5 +45,17 @@ abstract class Rule
     {
         $this->skipOnEmpty = $value;
         return $this;
+    }
+
+    /**
+     * Checks if the given value is empty.
+     * A value is considered empty if it is null, an empty array, or an empty string.
+     * Note that this method is different from PHP empty(). It will return false when the value is 0.
+     * @param mixed $value the value to be checked
+     * @return bool whether the value is empty
+     */
+    protected function isEmpty($value)
+    {
+        return $value === null || $value === [] || $value === '';
     }
 }

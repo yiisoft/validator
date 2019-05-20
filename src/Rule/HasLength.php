@@ -15,7 +15,7 @@ use Yiisoft\Validator\Rule;
  *
  * Note, this validator should only be used with string-typed attributes.
  */
-class Length extends Rule
+class HasLength extends Rule
 {
     /**
      * @var int maximum length. If not set, it means no maximum length limit.
@@ -64,7 +64,7 @@ class Length extends Rule
         return $this;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value): Result
     {
         $result = new Result();
 

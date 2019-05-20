@@ -49,21 +49,21 @@ use Yiisoft\Validator\Rule;
 class Exist extends Rule
 {
     /**
-     * @var string the name of the ActiveRecord class that should be used to validate the existence
+     * @var string the name of the ActiveRecord class that should be used to validateValue the existence
      * of the current attribute value. If not set, it will use the ActiveRecord class of the attribute being validated.
      * @see targetAttribute
      */
     public $targetClass;
     /**
      * @var string|array the name of the ActiveRecord attribute that should be used to
-     * validate the existence of the current attribute value. If not set, it will use the name
-     * of the attribute currently being validated. You may use an array to validate the existence
-     * of multiple columns at the same time. The array key is the name of the attribute with the value to validate,
+     * validateValue the existence of the current attribute value. If not set, it will use the name
+     * of the attribute currently being validated. You may use an array to validateValue the existence
+     * of multiple columns at the same time. The array key is the name of the attribute with the value to validateValue,
      * the array value is the name of the database field to search.
      */
     public $targetAttribute;
     /**
-     * @var string the name of the relation that should be used to validate the existence of the current attribute value
+     * @var string the name of the relation that should be used to validateValue the existence of the current attribute value
      * This param overwrites $targetClass and $targetAttribute
      * @since 2.0.14
      */
@@ -101,18 +101,6 @@ class Exist extends Rule
         parent::init();
         if ($this->message === null) {
             $this->message = $this->formatMessage( '{attribute} is invalid.');
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAttribute($model, $attribute)
-    {
-        if (!empty($this->targetRelation)) {
-            $this->checkTargetRelationExistence($model, $attribute);
-        } else {
-            $this->checkTargetAttributeExistence($model, $attribute);
         }
     }
 
@@ -184,9 +172,9 @@ class Exist extends Rule
      * [[\yii\db\Query::where()|Query::where()]] key-value format.
      *
      * @param $targetAttribute array|string $attribute the name of the ActiveRecord attribute that should be used to
-     * validate the existence of the current attribute value. If not set, it will use the name
-     * of the attribute currently being validated. You may use an array to validate the existence
-     * of multiple columns at the same time. The array key is the name of the attribute with the value to validate,
+     * validateValue the existence of the current attribute value. If not set, it will use the name
+     * of the attribute currently being validated. You may use an array to validateValue the existence
+     * of multiple columns at the same time. The array key is the name of the attribute with the value to validateValue,
      * the array value is the name of the database field to search.
      * If the key and the value are the same, you can just specify the value.
      * @param \yii\base\Model $model the data model to be validated
@@ -226,7 +214,7 @@ class Exist extends Rule
         return $this->targetClass ?? get_class($model);
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value): Result
     {
         if ($this->targetClass === null) {
             throw new InvalidConfigException('The "targetClass" property must be set.');

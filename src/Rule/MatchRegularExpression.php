@@ -15,7 +15,7 @@ use Yiisoft\Validator\Rule;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class RegularExpression extends Rule
+class MatchRegularExpression extends Rule
 {
     /**
      * @var string the regular expression to be matched with
@@ -47,7 +47,7 @@ class RegularExpression extends Rule
         return $this;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value): Result
     {
         $result = new Result();
 

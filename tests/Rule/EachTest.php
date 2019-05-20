@@ -2,7 +2,6 @@
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
-use yii\db\ArrayExpression;
 use Yiisoft\Validator\Rule\Each;
 
 /**

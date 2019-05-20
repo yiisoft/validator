@@ -9,6 +9,7 @@ namespace Yiisoft\Validator\Rule;
 use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
 use yii\base\Model;
+use Yiisoft\Validator\DataSet;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -31,7 +32,7 @@ use Yiisoft\Validator\Rule;
  * ```
  *
  * > Note: This validator will not work with inline validation rules in case of usage outside the model scope,
- *   e.g. via [[validate()]] method.
+ *   e.g. via [[validateValue()]] method.
  *
  * > Note: EachValidator is meant to be used only in basic cases, you should consider usage of tabular input,
  *   using several models for the more complex case.
@@ -42,7 +43,7 @@ use Yiisoft\Validator\Rule;
 class Each extends Rule
 {
     /**
-     * @var array|Rule2 definition of the validation rule, which should be used on array values.
+     * @var array|Rule definition of the validation rule, which should be used on array values.
      * It should be specified in the same format as at [[\yii\base\Model::rules()]], except it should not
      * contain attribute list as the first element.
      * For example:
@@ -54,13 +55,13 @@ class Each extends Rule
      *
      * Please refer to [[\yii\base\Model::rules()]] for more details.
      */
-    public $rule;
+    private $rule;
     /**
      * @var bool whether to use error message composed by validator declared via [[rule]] if its validation fails.
      * If enabled, error message specified for this validator itself will appear only if attribute value is not an array.
      * If disabled, own error message value will be used always.
      */
-    public $allowMessageFromRule = true;
+    private $allowMessageFromRule = true;
     /**
      * @var bool whether to stop validation once first error among attribute value elements is detected.
      * When enabled validation will produce single error message on attribute, when disabled - multiple
@@ -69,36 +70,29 @@ class Each extends Rule
      * not be affected.
      * @since 2.0.11
      */
-    public $stopOnFirstError = true;
+    private $stopOnFirstError = true;
 
     private $message;
 
     /**
-     * @var Rule2 validator instance.
+     * @var Rule validator instance.
      */
     private $_validator;
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init(): void
+    public function __construct()
     {
-        parent::init();
-        if ($this->message === null) {
-            $this->message = Yii::t('yii', '{attribute} is invalid.');
-        }
+        $this->message = '{attribute} is invalid.';
     }
 
     /**
      * Returns the validator declared in [[rule]].
-     * @param Model|null $model model in which context validator should be created.
-     * @return Rule2 the declared validator.
+     * @param DataSet|null $data model in which context validator should be created.
+     * @return Rule the declared validator.
      */
-    private function getValidator($model = null)
+    private function getValidator(DataSet $data = null)
     {
         if ($this->_validator === null) {
-            $this->_validator = $this->createEmbeddedValidator($model);
+            $this->_validator = $this->createEmbeddedValidator($data);
         }
 
         return $this->_validator;
@@ -106,41 +100,39 @@ class Each extends Rule
 
     /**
      * Creates validator object based on the validation rule specified in [[rule]].
-     * @param Model|null $model model in which context validator should be created.
-     * @return Rule2 validator instance
+     * @param DataSet|null $data model in which context validator should be created.
+     * @return Rule validator instance
      *@throws \yii\exceptions\InvalidConfigException
      */
-    private function createEmbeddedValidator($model)
+    private function createEmbeddedValidator(DataSet $data)
     {
         $rule = $this->rule;
-        if ($rule instanceof Rule2) {
+        if ($rule instanceof Rule) {
             return $rule;
         } elseif (is_array($rule) && isset($rule[0])) { // validator type
-            if (!is_object($model)) {
-                $model = new Model(); // mock up context model
+            if (!is_object($data)) {
+                $data = new Model(); // mock up context model
             }
 
-            return Rule2::createValidator($rule[0], $model, $this->attributes, array_slice($rule, 1));
+            return Rule::createValidator($rule[0], $data, $this->attributes, array_slice($rule, 1));
         }
 
         throw new InvalidConfigException('Invalid validation rule: a rule must be an array specifying validator type.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAttribute($model, $attribute)
+    public function validateAttribute(DataSet $data, string $attribute): Result
     {
-        $value = $model->$attribute;
+        $result = new Result();
+        $value = $data->getValue($attribute);
         if (!is_array($value) && !$value instanceof \ArrayAccess) {
-            $this->addError($model, $attribute, $this->message, []);
-            return;
+            $result->addError($this->formatMessage($this->message));
+            return $result;
         }
 
-        $validator = $this->getValidator($model); // ensure model context while validator creation
+        $validator = $this->getValidator($data); // ensure model context while validator creation
 
-        $detectedErrors = $model->getErrors($attribute);
-        $filteredValue = $model->$attribute;
+        $detectedErrors = $result->getErrors();
+
         foreach ($value as $k => $v) {
             $model->clearErrors($attribute);
             $model->$attribute = $v;
@@ -154,7 +146,7 @@ class Each extends Rule
                     $detectedErrors = array_merge($detectedErrors, $validationErrors);
                 } else {
                     $model->clearErrors($attribute);
-                    $this->addError($model, $attribute, $this->message, ['value' => $v]);
+                    $result->addError($this->formatMessage($this->message, ['value' => $v]));
                     $detectedErrors[] = $model->getFirstError($attribute);
                 }
                 $model->$attribute = $value;
@@ -165,7 +157,7 @@ class Each extends Rule
             }
         }
 
-        $model->$attribute = $filteredValue;
+
         $model->clearErrors($attribute);
         $model->addErrors([$attribute => $detectedErrors]);
     }
@@ -173,7 +165,7 @@ class Each extends Rule
     /**
      * {@inheritdoc}
      */
-    public function validateValue($value): Result
+    protected function validateValue($value): Result
     {
         $result = new Result();
         if (!is_array($value) && !$value instanceof \ArrayAccess) {
@@ -182,7 +174,7 @@ class Each extends Rule
 
         $validator = $this->getValidator();
         foreach ($value as $v) {
-            if ($validator->skipOnEmpty && $validator->isEmpty($v)) {
+            if ($validator->shouldSkipOnEmpty() && $validator->isEmpty($v)) {
                 continue;
             }
             $result = $validator->validateValue($v);
@@ -196,6 +188,6 @@ class Each extends Rule
             }
         }
 
-        return null;
+        return $result;
     }
 }

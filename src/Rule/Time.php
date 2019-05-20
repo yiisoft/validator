@@ -4,7 +4,14 @@
 namespace Yiisoft\Validator\Rule;
 
 
-class Time
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
+
+class Time extends Rule
 {
 
+    protected function validateValue($value): Result
+    {
+
+    }
 }

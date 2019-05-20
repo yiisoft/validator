@@ -38,10 +38,10 @@ class DateTest extends TestCase
      * @dataProvider provideTimezones
      * @param string $timezone
      */
-    public function testIntlValidateValue($timezone)
+    public function testIntlvalidate($timezone)
     {
         date_default_timezone_set($timezone);
-        $this->testValidateValue($timezone);
+        $this->testvalidate($timezone);
 
         $this->mockApplication(['locale' => 'en-GB'], null, [
             'formatter' => [
@@ -75,7 +75,7 @@ class DateTest extends TestCase
      * @dataProvider provideTimezones
      * @param string $timezone
      */
-    public function testValidateValue($timezone)
+    public function testvalidate($timezone)
     {
         date_default_timezone_set($timezone);
 
@@ -473,10 +473,10 @@ class DateTest extends TestCase
 
     public function testIntlValidateRange()
     {
-        $this->testValidateValueRange();
+        $this->testvalidateRange();
     }
 
-    public function testValidateValueRange()
+    public function testvalidateRange()
     {
         if (PHP_INT_SIZE == 8) { // this passes only on 64bit systems
             // intl parser allows 14 for yyyy pattern, see the following for more details:
@@ -561,7 +561,7 @@ class DateTest extends TestCase
         $this->validateModelAttribute($val, '2000-01-02', false, 'max +1 day is invalid');
     }
 
-    public function testIntlValidateValueRangeOld()
+    public function testIntlvalidateRangeOld()
     {
         if ($this->checkOldIcuBug()) {
             $this->markTestSkipped('ICU is too old.');

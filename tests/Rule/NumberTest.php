@@ -15,7 +15,7 @@ class NumberTest extends TestCase
     private $pointDecimalLocales = ['en_US.UTF-8', 'en_US.UTF8', 'en_US.utf-8', 'en_US.utf8', 'English_United States.1252'];
     private $oldLocale;
 
-    private function setCommaDecimalLocale()
+    private function setCommaDecimalLocale(): void
     {
         if ($this->oldLocale === false) {
             $this->markTestSkipped('Your platform does not support locales.');
@@ -49,309 +49,240 @@ class NumberTest extends TestCase
         $this->oldLocale = setlocale(LC_NUMERIC, 0);
     }
 
-//    public function testEnsureMessageOnInit()
-//    {
-//        $rule = new Number();
-//        $this->assertInternalType('string', $rule->message);
-//        $this->assertTrue($rule->max === null);
-//        $rule = new Number(['min' => -1, 'max' => 20, 'integerOnly' => true]);
-//        $this->assertInternalType('string', $rule->message);
-//        $this->assertInternalType('string', $rule->tooSmall);
-//        $this->assertInternalType('string', $rule->tooBig);
-//    }
-
-    public function testValidateValueSimple()
+    public function testvalidateSimple(): void
     {
         $rule = new Number();
-        $this->assertTrue($rule->validateValue(20)->isValid());
-        $this->assertTrue($rule->validateValue(0)->isValid());
-        $this->assertTrue($rule->validateValue(-20)->isValid());
-        $this->assertTrue($rule->validateValue('20')->isValid());
-        $this->assertTrue($rule->validateValue(25.45)->isValid());
+        $this->assertTrue($rule->validate(20)->isValid());
+        $this->assertTrue($rule->validate(0)->isValid());
+        $this->assertTrue($rule->validate(-20)->isValid());
+        $this->assertTrue($rule->validate('20')->isValid());
+        $this->assertTrue($rule->validate(25.45)->isValid());
 
         $this->setPointDecimalLocale();
-        $this->assertFalse($rule->validateValue('25,45')->isValid());
+        $this->assertFalse($rule->validate('25,45')->isValid());
         $this->setCommaDecimalLocale();
-        $this->assertTrue($rule->validateValue('25,45')->isValid());
+        $this->assertTrue($rule->validate('25,45')->isValid());
         $this->restoreLocale();
 
-        $this->assertFalse($rule->validateValue('12:45')->isValid());
+        $this->assertFalse($rule->validate('12:45')->isValid());
     }
 
-    public function testValidateValueSimpleInteger()
+    public function testvalidateSimpleInteger()
     {
         $rule = (new Number())
             ->integer();
 
-        $this->assertTrue($rule->validateValue(20)->isValid());
-        $this->assertTrue($rule->validateValue(0)->isValid());
-        $this->assertFalse($rule->validateValue(25.45)->isValid());
-        $this->assertTrue($rule->validateValue('20')->isValid());
-        $this->assertFalse($rule->validateValue('25,45')->isValid());
-        $this->assertTrue($rule->validateValue('020')->isValid());
-        $this->assertTrue($rule->validateValue(0x14)->isValid());
-        $this->assertFalse($rule->validateValue('0x14')->isValid()); // todo check this
+        $this->assertTrue($rule->validate(20)->isValid());
+        $this->assertTrue($rule->validate(0)->isValid());
+        $this->assertFalse($rule->validate(25.45)->isValid());
+        $this->assertTrue($rule->validate('20')->isValid());
+        $this->assertFalse($rule->validate('25,45')->isValid());
+        $this->assertTrue($rule->validate('020')->isValid());
+        $this->assertTrue($rule->validate(0x14)->isValid());
+        $this->assertFalse($rule->validate('0x14')->isValid()); // todo check this
     }
 
-    public function testValidateValueAdvanced()
+    public function testvalidateAdvanced()
     {
         $rule = new Number();
-        $this->assertTrue($rule->validateValue('-1.23')->isValid()); // signed float
-        $this->assertTrue($rule->validateValue('-4.423e-12')->isValid()); // signed float + exponent
-        $this->assertTrue($rule->validateValue('12E3')->isValid()); // integer + exponent
-        $this->assertFalse($rule->validateValue('e12')->isValid()); // just exponent
-        $this->assertFalse($rule->validateValue('-e3')->isValid());
-        $this->assertFalse($rule->validateValue('-4.534-e-12')->isValid()); // 'signed' exponent
-        $this->assertFalse($rule->validateValue('12.23^4')->isValid()); // expression instead of value
+        $this->assertTrue($rule->validate('-1.23')->isValid()); // signed float
+        $this->assertTrue($rule->validate('-4.423e-12')->isValid()); // signed float + exponent
+        $this->assertTrue($rule->validate('12E3')->isValid()); // integer + exponent
+        $this->assertFalse($rule->validate('e12')->isValid()); // just exponent
+        $this->assertFalse($rule->validate('-e3')->isValid());
+        $this->assertFalse($rule->validate('-4.534-e-12')->isValid()); // 'signed' exponent
+        $this->assertFalse($rule->validate('12.23^4')->isValid()); // expression instead of value
     }
 
-    public function testValidateValueAdvancedInteger()
+    public function testvalidateAdvancedInteger()
     {
         $rule = (new Number())->integer();
-        $this->assertFalse($rule->validateValue('-1.23')->isValid());
-        $this->assertFalse($rule->validateValue('-4.423e-12')->isValid());
-        $this->assertFalse($rule->validateValue('12E3')->isValid());
-        $this->assertFalse($rule->validateValue('e12')->isValid());
-        $this->assertFalse($rule->validateValue('-e3')->isValid());
-        $this->assertFalse($rule->validateValue('-4.534-e-12')->isValid());
-        $this->assertFalse($rule->validateValue('12.23^4')->isValid());
+        $this->assertFalse($rule->validate('-1.23')->isValid());
+        $this->assertFalse($rule->validate('-4.423e-12')->isValid());
+        $this->assertFalse($rule->validate('12E3')->isValid());
+        $this->assertFalse($rule->validate('e12')->isValid());
+        $this->assertFalse($rule->validate('-e3')->isValid());
+        $this->assertFalse($rule->validate('-4.534-e-12')->isValid());
+        $this->assertFalse($rule->validate('12.23^4')->isValid());
     }
 
-    public function testValidateValueWithLocaleWhereDecimalPointIsComma()
+    public function testvalidateWithLocaleWhereDecimalPointIsComma(): void
     {
         $rule = new Number();
 
         $this->setPointDecimalLocale();
-        $this->assertTrue($rule->validateValue(.5)->isValid());
+        $this->assertTrue($rule->validate(.5)->isValid());
 
         $this->setCommaDecimalLocale();
-        $this->assertTrue($rule->validateValue(.5)->isValid());
+        $this->assertTrue($rule->validate(.5)->isValid());
 
         $this->restoreLocale();
     }
 
-    public function testValidateValueMin()
+    public function testvalidateMin()
     {
         $rule = (new Number())
             ->min(1);
 
-        $this->assertTrue($rule->validateValue(1)->isValid());
+        $this->assertTrue($rule->validate(1)->isValid());
 
-        $result = $rule->validateValue(-1);
+        $result = $rule->validate(-1);
         $this->assertFalse($result->isValid());
-        $this->assertContains('the input value must be no less than 1.', $result->getErrors()[0]);
+        $this->assertContains('must be no less than 1.', $result->getErrors()[0]);
 
-        $this->assertFalse($rule->validateValue('22e-12')->isValid());
-        $this->assertTrue($rule->validateValue(PHP_INT_MAX + 1)->isValid());
+        $this->assertFalse($rule->validate('22e-12')->isValid());
+        $this->assertTrue($rule->validate(PHP_INT_MAX + 1)->isValid());
     }
 
-    public function testValidateValueMinInteger()
+    public function testvalidateMinInteger()
     {
         $rule = (new Number())
             ->min(1)
             ->integer();
 
-        $this->assertTrue($rule->validateValue(1)->isValid());
-        $this->assertFalse($rule->validateValue(-1)->isValid());
-        $this->assertFalse($rule->validateValue('22e-12')->isValid());
-        $this->assertTrue($rule->validateValue(PHP_INT_MAX + 1)->isValid());
+        $this->assertTrue($rule->validate(1)->isValid());
+        $this->assertFalse($rule->validate(-1)->isValid());
+        $this->assertFalse($rule->validate('22e-12')->isValid());
+        $this->assertTrue($rule->validate(PHP_INT_MAX + 1)->isValid());
     }
 
-    public function testValidateValueMax()
+    public function testvalidateMax()
     {
         $rule = (new Number())
             ->max(1.25);
 
-        $this->assertTrue($rule->validateValue(1)->isValid());
-        $this->assertFalse($rule->validateValue(1.5)->isValid());
-        $this->assertTrue($rule->validateValue('22e-12')->isValid());
-        $this->assertTrue($rule->validateValue('125e-2')->isValid());
+        $this->assertTrue($rule->validate(1)->isValid());
+        $this->assertFalse($rule->validate(1.5)->isValid());
+        $this->assertTrue($rule->validate('22e-12')->isValid());
+        $this->assertTrue($rule->validate('125e-2')->isValid());
     }
 
-    public function testValidateValueMaxInteger()
+    public function testvalidateMaxInteger()
     {
         $rule = (new Number())
             ->max(1.25)
             ->integer();
 
-        $this->assertTrue($rule->validateValue(1)->isValid());
-        $this->assertFalse($rule->validateValue(1.5)->isValid());
-        $this->assertFalse($rule->validateValue('22e-12')->isValid());
-        $this->assertFalse($rule->validateValue('125e-2')->isValid());
+        $this->assertTrue($rule->validate(1)->isValid());
+        $this->assertFalse($rule->validate(1.5)->isValid());
+        $this->assertFalse($rule->validate('22e-12')->isValid());
+        $this->assertFalse($rule->validate('125e-2')->isValid());
     }
 
-    public function testValidateValueRange()
+    public function testvalidateRange()
     {
         $rule = (new Number())
             ->min(-10)
             ->max(20);
 
-        $this->assertTrue($rule->validateValue(0)->isValid());
-        $this->assertTrue($rule->validateValue(-10)->isValid());
-        $this->assertFalse($rule->validateValue(-11)->isValid());
-        $this->assertFalse($rule->validateValue(21)->isValid());
+        $this->assertTrue($rule->validate(0)->isValid());
+        $this->assertTrue($rule->validate(-10)->isValid());
+        $this->assertFalse($rule->validate(-11)->isValid());
+        $this->assertFalse($rule->validate(21)->isValid());
     }
 
-    public function testValidateValueRangeInteger()
+    public function testvalidateRangeInteger()
     {
         $rule = (new Number())
             ->min(-10)
             ->max(20)
             ->integer();
 
-        $this->assertTrue($rule->validateValue(0)->isValid());
-        $this->assertFalse($rule->validateValue(-11)->isValid());
-        $this->assertFalse($rule->validateValue(22)->isValid());
-        $this->assertFalse($rule->validateValue('20e-1')->isValid());
+        $this->assertTrue($rule->validate(0)->isValid());
+        $this->assertFalse($rule->validate(-11)->isValid());
+        $this->assertFalse($rule->validate(22)->isValid());
+        $this->assertFalse($rule->validate('20e-1')->isValid());
     }
 
-    public function testScientificFormat()
+    public function testScientificFormat(): void
     {
         $rule = new Number();
-
-        $model = $this->getDataSet([
-            'attr_number' => '5.5e1',
-        ]);
-
-        $result = $rule->validateAttribute($model, 'attr_number');
+        $result = $rule->validate('5.5e1');
         $this->assertTrue($result->isValid());
     }
 
-    public function testExpressionFormat()
+    public function testExpressionFormat(): void
     {
         $rule = new Number();
-
-        $model = $this->getDataSet([
-            'attr_number' => '43^32', //expression
-        ]);
-
-        $result = $rule->validateAttribute($model, 'attr_number');
+        $result = $rule->validate('43^32');
         $this->assertFalse($result->isValid());
     }
 
-    public function testMinEdgeWith()
+    public function testMinEdge(): void
     {
         $rule = (new Number())
             ->min(10);
 
-        $model = $this->getDataSet([
-            'attr_number' => 10,
-        ]);
-
-        $result = $rule->validateAttribute($model, 'attr_number');
+        $result = $rule->validate(10);
         $this->assertTrue($result->isValid());
     }
 
-    public function testLessThanMin()
+    public function testLessThanMin(): void
     {
         $rule = (new Number())
             ->min(10);
 
-        $model = $this->getDataSet([
-            'attr_number' => 5,
-        ]);
-        $result = $rule->validateAttribute($model, 'attr_number');
+        $result = $rule->validate(5);
         $this->assertFalse($result->isValid());
     }
 
-    public function testMaxEdge()
+    public function testMaxEdge(): void
     {
         $rule = (new Number())
             ->max(10);
 
-        $model = $this->getDataSet([
-            'attr_number' => 10,
-        ]);
-
-        $result = $rule->validateAttribute($model, 'attr_number');
+        $result = $rule->validate(10);
         $this->assertTrue($result->isValid());
     }
 
-    public function testMaxEdgeInteger()
+    public function testMaxEdgeInteger(): void
     {
         $rule = (new Number())
             ->max(10)
             ->integer();
 
-        $model = $this->getDataSet([
-            'attr_number' => 10,
-        ]);
-
-        $result = $rule->validateAttribute($model, 'attr_number');
+        $result = $rule->validate(10);
         $this->assertTrue($result->isValid());
     }
 
-    public function testMoreThanMax()
+    public function testMoreThanMax(): void
     {
         $rule = (new Number())
             ->max(10);
 
-        $model = $this->getDataSet([
-            'attr_number' => 15,
-        ]);
-
-        $result = $rule->validateAttribute($model, 'attr_number');
+        $result = $rule->validate(15);
         $this->assertFalse($result->isValid());
     }
 
-    public function testFloatWithInteger()
+    public function testFloatWithInteger(): void
     {
         $rule = (new Number())
             ->max(10)
             ->integer();
 
-        $model = $this->getDataSet([
-            'attr_number' => 3.43,
-        ]);
-
-        $result = $rule->validateAttribute($model, 'attr_number');
+        $result = $rule->validate(3.43);
         $this->assertFalse($result->isValid());
     }
 
-    public function testArray()
+    public function testArray(): void
     {
         $rule = (new Number())
             ->min(1);
 
-        $model = $this->getDataSet([
-            'attr_num' => [1, 2, 3]
-        ]);
-
-        $result = $rule->validateAttribute($model, 'attr_num');
+        $result = $rule->validate([1, 2, 3]);
         $this->assertFalse($result->isValid());
     }
 
-    public function testStdClass()
+    /**
+     * @see https://github.com/yiisoft/yii2/issues/11672
+     */
+    public function testStdClass(): void
     {
         $rule = (new Number())
             ->min(1);
 
-        // @see https://github.com/yiisoft/yii2/issues/11672
-        $model = $this->getDataSet([
-            'attr_number' => new \stdClass(),
-        ]);
-
-        $result = $rule->validateAttribute($model, 'attr_number');
+        $result = $rule->validate(new \stdClass());
         $this->assertFalse($result->isValid());
-    }
-
-    public function testValidateAttributeWithLocaleWhereDecimalPointIsComma()
-    {
-        $rule = new Number();
-
-        $model = $this->getDataSet([
-            'attr_number' => 0.5,
-        ]);
-
-        $this->setPointDecimalLocale();
-        $result = $rule->validateAttribute($model, 'attr_number');
-        $this->assertTrue($result->isValid());
-
-        $this->setCommaDecimalLocale();
-        $result = $rule->validateAttribute($model, 'attr_number');
-        $this->assertTrue($result->isValid());
-
-        $this->restoreLocale();
     }
 
     public function getDataSet(array $attributeValues): DataSet
@@ -376,40 +307,33 @@ class NumberTest extends TestCase
         };
     }
 
-    public function testEnsureCustomMessageIsSetOnValidateAttribute()
+    public function testEnsureCustomMessageIsSetOnvalidate(): void
     {
         $rule = (new Number())
             ->min(5)
-            ->tooSmallMessage('{attribute} is to small.');
+            ->tooSmallMessage('Value is too small.');
 
-        $model = $this->getDataSet([
-            'attr_number' => 0,
-        ]);
-
-        $result = $rule->validateAttribute($model, 'attr_number');
+        $result = $rule->validate(0);
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
         $errors = $result->getErrors();
-        $this->assertSame('attr_number is to small.', $errors[0]);
+        $this->assertSame('Value is too small.', $errors[0]);
     }
 
-    public function testValidateObject()
+    public function testValidateObject(): void
     {
         $rule = new Number();
-        $ruleue = new \stdClass();
-        $this->assertFalse($rule->validateValue($ruleue)->isValid());
+        $value = new \stdClass();
+        $this->assertFalse($rule->validate($value)->isValid());
     }
 
-    public function testValidateResource()
+    public function testValidateResource(): void
     {
         $rule = new Number();
         $fp = fopen('php://stdin', 'r');
-        $this->assertFalse($rule->validateValue($fp)->isValid());
+        $this->assertFalse($rule->validate($fp)->isValid());
 
-        $model = $this->getDataSet([
-            'attr_number' => $fp,
-        ]);
-        $result = $rule->validateAttribute($model, 'attr_number');
+        $result = $rule->validate($fp);
         $this->assertFalse($result->isValid());
 
         // the check is here for HHVM that
@@ -419,7 +343,7 @@ class NumberTest extends TestCase
         }
     }
 
-    public function testValidateToString()
+    public function testValidateToString(): void
     {
         $rule = new Number();
         $object = new class('10')
@@ -436,13 +360,6 @@ class NumberTest extends TestCase
                 return $this->foo;
             }
         };
-        $this->assertTrue($rule->validateValue($object)->isValid());
-
-        $model = $this->getDataSet([
-            'attr_number' => $object,
-        ]);
-
-        $result = $rule->validateAttribute($model, 'attr_number');
-        $this->assertTrue($result->isValid());
+        $this->assertTrue($rule->validate($object)->isValid());
     }
 }

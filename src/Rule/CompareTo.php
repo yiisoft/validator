@@ -23,30 +23,19 @@ use Yiisoft\Validator\Rule;
  * are compared byte by byte. When comparing numbers, make sure to set the [[$type]]
  * to [[TYPE_NUMBER]] to enable numeric comparison.
  */
-class Compare extends Rule
+class CompareTo extends Rule
 {
     /**
      * Constant for specifying the comparison [[type]] by numeric values.
-     * @since 2.0.11
      * @see type
      */
-    const TYPE_STRING = 'string';
+    private const TYPE_STRING = 'string';
     /**
      * Constant for specifying the comparison [[type]] by numeric values.
-     * @since 2.0.11
      * @see type
      */
-    const TYPE_NUMBER = 'number';
+    private const TYPE_NUMBER = 'number';
 
-    /**
-     * @var string the name of the attribute to be compared with. When both this property
-     * and [[compareValue]] are set, the latter takes precedence. If neither is set,
-     * it assumes the comparison is against another attribute whose name is formed by
-     * appending '_repeat' to the attribute being validated. For example, if 'password' is
-     * being validated, then the attribute to be compared would be 'password_repeat'.
-     * @see compareValue
-     */
-    public $compareAttribute;
     /**
      * @var mixed the constant value to be compared with. When both this property
      * and [[compareAttribute]] are set, this property takes precedence.
@@ -87,96 +76,73 @@ class Compare extends Rule
      */
     private $message;
 
-    public function __construct()
+    private $validOperators = [
+        '==' => 1,
+        '===' => 1,
+        '!=' => 1,
+        '!==' => 1,
+        '>' => 1,
+        '>=' => 1,
+        '<' => 1,
+        '<=' => 1,
+    ];
+
+    public function getMessage(array $arguments): string
     {
         if ($this->message === null) {
             switch ($this->operator) {
                 case '==':
-                    $this->message = $this->formatMessage('{attribute} must be equal to "{compareValueOrAttribute}".');
-                    break;
                 case '===':
-                    $this->message = $this->formatMessage('{attribute} must be equal to "{compareValueOrAttribute}".');
-                    break;
+                    return $this->formatMessage('Value must be equal to "{value}".', $arguments);
                 case '!=':
-                    $this->message = $this->formatMessage('{attribute} must not be equal to "{compareValueOrAttribute}".');
-                    break;
                 case '!==':
-                    $this->message = $this->formatMessage('{attribute} must not be equal to "{compareValueOrAttribute}".');
-                    break;
+                    return $this->formatMessage('Value must not be equal to "{value}".', $arguments);
                 case '>':
-                    $this->message = $this->formatMessage('{attribute} must be greater than "{compareValueOrAttribute}".');
-                    break;
+                    return $this->formatMessage('Value must be greater than "{value}".', $arguments);
                 case '>=':
-                    $this->message = $this->formatMessage('{attribute} must be greater than or equal to "{compareValueOrAttribute}".');
-                    break;
+                    return $this->formatMessage('Value must be greater than or equal to "{value}".', $arguments);
                 case '<':
-                    $this->message = $this->formatMessage('{attribute} must be less than "{compareValueOrAttribute}".');
-                    break;
+                    return $this->formatMessage('Value must be less than "{value}".', $arguments);
                 case '<=':
-                    $this->message = $this->formatMessage('{attribute} must be less than or equal to "{compareValueOrAttribute}".');
-                    break;
+                    return $this->formatMessage('Value must be less than or equal to "{value}".', $arguments);
                 default:
                     throw new \RuntimeException("Unknown operator: {$this->operator}");
             }
         }
     }
 
-    public function withValue($value): self
+    public function __construct($value)
     {
         $this->compareValue = $value;
-        return $this;
-    }
-
-    public function withAttribute(string $attribute): self
-    {
-        $this->compareAttribute = $attribute;
-        return $this;
     }
 
     public function operator(string $operator): self
     {
+        if (!isset($this->validOperators[$operator])) {
+            throw new \InvalidArgumentException("Operator \"$operator\" is not supported.");
+        }
+
         $this->operator = $operator;
         return $this;
     }
 
-    public function message(string $message)
+    public function message(string $message): self
     {
         $this->message = $message;
+        return $this;
     }
 
-    public function validateAttribute(DataSet $data, string $attribute): Result
+    public function asString(): self
     {
-        $result = new Result();
-
-        $value = $data->getValue($attribute);
-
-        if (is_array($value)) {
-            $result->addError($this->formatMessage('{attribute} is invalid.', ['attribute' => $attribute]));
-            return $result;
-        }
-
-        if ($this->compareValue !== null) {
-            $compareLabel = $compareValue = $compareValueOrAttribute = $this->compareValue;
-        } else {
-            $compareAttribute = $this->compareAttribute ?? $attribute . '_repeat';
-            $compareValue = $data->getValue($compareAttribute);
-
-            // TODO: how should we deal with labels?
-            //$compareLabel = $compareValueOrAttribute = $data->getAttributeLabel($compareAttribute);
-        }
-
-        if (!$this->compareValues($this->operator, $this->type, $value, $compareValue)) {
-            $result->addError($this->formatMessage($this->message, [
-                'compareAttribute' => $compareLabel,
-                'compareValue' => $compareValue,
-                'compareValueOrAttribute' => $compareValueOrAttribute,
-            ]));
-        }
-
-        return $result;
+        $this->type = self::TYPE_STRING;
     }
 
-    public function validateValue($value): Result
+    public function asNumber(): self
+    {
+        $this->type = self::TYPE_NUMBER;
+    }
+
+    protected function validateValue($value): Result
     {
         $result = new Result();
 
@@ -184,13 +150,9 @@ class Compare extends Rule
             throw new \RuntimeException('CompareValidator::compareValue must be set.');
         }
         if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
-            $result->addError($this->formatMessage($this->message, [
-                'compareAttribute' => $this->compareValue,
-                'compareValue' => $this->compareValue,
-                'compareValueOrAttribute' => $this->compareValue,
+            $result->addError($this->getMessage([
+                'value' => $this->compareValue,
             ]));
-
-
         }
 
         return $result;
@@ -204,7 +166,7 @@ class Compare extends Rule
      * @param mixed $compareValue another value being compared
      * @return bool whether the comparison using the specified operator is true.
      */
-    protected function compareValues($operator, $type, $value, $compareValue)
+    protected function compareValues(string $operator, string $type, $value, $compareValue): bool
     {
         if ($type === self::TYPE_NUMBER) {
             $value = (float)$value;

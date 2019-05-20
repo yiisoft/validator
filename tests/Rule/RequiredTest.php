@@ -9,13 +9,13 @@ use Yiisoft\Validator\Rule\Required;
  */
 class RequiredTest extends TestCase
 {
-    public function testValidateValueWithDefaults()
+    public function testvalidateWithDefaults()
     {
         $val = new Required();
-        $this->assertFalse($val->validateValue(null)->isValid());
-        $this->assertFalse($val->validateValue([])->isValid());
-        $this->assertTrue($val->validateValue('not empty')->isValid());
-        $this->assertTrue($val->validateValue(['with', 'elements'])->isValid());
+        $this->assertFalse($val->validate(null)->isValid());
+        $this->assertFalse($val->validate([])->isValid());
+        $this->assertTrue($val->validate('not empty')->isValid());
+        $this->assertTrue($val->validate(['with', 'elements'])->isValid());
     }
 
 //    public function testValidateAttribute()

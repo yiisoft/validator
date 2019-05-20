@@ -6,9 +6,8 @@
  */
 namespace Yiisoft\Validator\Rule;
 
-use yii\helpers\Yii;
-use yii\helpers\FileHelper;
-use yii\http\UploadedFile;
+use Yiisoft\Validator\DataSet;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
 /**
@@ -28,12 +27,12 @@ class File extends Rule
      * extensions are allowed.
      * @see wrongExtension for the customized message for wrong file type.
      */
-    public $extensions;
+    private $extensions;
     /**
      * @var bool whether to check file type (extension) with mime-type. If extension produced by
      * file mime-type check differs from uploaded file extension, the file will be considered as invalid.
      */
-    public $checkExtensionByMimeType = true;
+    private $checkExtensionByMimeType = true;
     /**
      * @var array|string a list of file MIME types that are allowed to be uploaded.
      * This can be either an array or a string consisting of file MIME types
@@ -43,13 +42,13 @@ class File extends Rule
      * Mime type names are case-insensitive. Defaults to null, meaning all MIME types are allowed.
      * @see wrongMimeType for the customized message for wrong MIME type.
      */
-    public $mimeTypes;
+    private $mimeTypes;
     /**
      * @var int the minimum number of bytes required for the uploaded file.
      * Defaults to null, meaning no limit.
      * @see tooSmall for the customized message for a file that is too small.
      */
-    public $minSize;
+    private $minSize;
     /**
      * @var int the maximum number of bytes required for the uploaded file.
      * Defaults to null, meaning no limit.
@@ -60,7 +59,7 @@ class File extends Rule
      * @see getSizeLimit
      * @see tooBig for the customized message for a file that is too big.
      */
-    public $maxSize;
+    private $maxSize;
     /**
      * @var int the maximum file count the given attribute can hold.
      * Defaults to 1, meaning single file upload. By defining a higher number,
@@ -73,7 +72,7 @@ class File extends Rule
      * @see http://php.net/manual/en/ini.core.php#ini.max-file-uploads
      * @see tooMany for the customized message when too many files are uploaded.
      */
-    public $maxFiles = 1;
+    private $maxFiles = 1;
     /**
      * @var int the minimum file count the given attribute can hold.
      * Defaults to 0. Higher value means at least that number of files should be uploaded.
@@ -81,17 +80,17 @@ class File extends Rule
      * @see tooFew for the customized message when too few files are uploaded.
      * @since 2.0.14
      */
-    public $minFiles = 0;
+    private $minFiles = 0;
     /**
      * @var string the error message used when a file is not uploaded correctly.
      */
-    public $message;
+    private $message;
     /**
      * @var string the error message used when no file is uploaded.
      * Note that this is the text of the validation error message. To make uploading files required,
      * you have to set [[skipOnEmpty]] to `false`.
      */
-    public $uploadRequired;
+    private $uploadRequired;
     /**
      * @var string the error message used when the uploaded file is too large.
      * You may use the following tokens in the message:
@@ -102,7 +101,7 @@ class File extends Rule
      * - {formattedLimit}: the maximum size formatted
      *   with [[\yii\i18n\Formatter::asShortSize()|Formatter::asShortSize()]]
      */
-    public $tooBig;
+    private $tooBig;
     /**
      * @var string the error message used when the uploaded file is too small.
      * You may use the following tokens in the message:
@@ -113,7 +112,7 @@ class File extends Rule
      * - {formattedLimit}: the value of [[minSize]] formatted
      *   with [[\yii\i18n\Formatter::asShortSize()|Formatter::asShortSize()]
      */
-    public $tooSmall;
+    private $tooSmall;
     /**
      * @var string the error message used if the count of multiple uploads exceeds limit.
      * You may use the following tokens in the message:
@@ -121,7 +120,7 @@ class File extends Rule
      * - {attribute}: the attribute name
      * - {limit}: the value of [[maxFiles]]
      */
-    public $tooMany;
+    private $tooMany;
     /**
      * @var string the error message used if the count of multiple uploads less that minFiles.
      * You may use the following tokens in the message:
@@ -131,7 +130,7 @@ class File extends Rule
      *
      * @since 2.0.14
      */
-    public $tooFew;
+    private $tooFew;
     /**
      * @var string the error message used when the uploaded file has an extension name
      * that is not listed in [[extensions]]. You may use the following tokens in the message:
@@ -140,7 +139,7 @@ class File extends Rule
      * - {file}: the uploaded file name
      * - {extensions}: the list of the allowed extensions.
      */
-    public $wrongExtension;
+    private $wrongExtension;
     /**
      * @var string the error message used when the file has an mime type
      * that is not allowed by [[mimeTypes]] property.
@@ -150,15 +149,10 @@ class File extends Rule
      * - {file}: the uploaded file name
      * - {mimeTypes}: the value of [[mimeTypes]]
      */
-    public $wrongMimeType;
+    private $wrongMimeType;
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init(): void
+    public function __construct()
     {
-        parent::init();
         if ($this->message === null) {
             $this->message = $this->formatMessage('File upload failed.');
         }
@@ -196,51 +190,6 @@ class File extends Rule
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function validateAttribute($model, $attribute)
-    {
-        if ($this->maxFiles != 1 || $this->minFiles > 1) {
-            $rawFiles = $model->$attribute;
-            if (!is_array($rawFiles)) {
-                $this->addError($model, $attribute, $this->uploadRequired);
-
-                return;
-            }
-
-            $files = $this->filterFiles($rawFiles);
-            $model->$attribute = $files;
-
-            if (empty($files)) {
-                $this->addError($model, $attribute, $this->uploadRequired);
-
-                return;
-            }
-
-            $filesCount = count($files);
-            if ($this->maxFiles && $filesCount > $this->maxFiles) {
-                $this->addError($model, $attribute, $this->tooMany, ['limit' => $this->maxFiles]);
-            }
-            
-            if ($this->minFiles && $this->minFiles > $filesCount) {
-                $this->addError($model, $attribute, $this->tooFew, ['limit' => $this->minFiles]);
-            }
-
-            foreach ($files as $file) {
-                $result = $this->validateValue($file);
-                if (!empty($result)) {
-                    $this->addError($model, $attribute, $result[0], $result[1]);
-                }
-            }
-        } else {
-            $result = $this->validateValue($model->$attribute);
-            if (!empty($result)) {
-                $this->addError($model, $attribute, $result[0], $result[1]);
-            }
-        }
-    }
-
-    /**
      * Files filter.
      * @param array $files
      * @return UploadedFile[]
@@ -261,7 +210,7 @@ class File extends Rule
     /**
      * {@inheritdoc}
      */
-    protected function validateValue($value)
+    protected function validateValue($value): Result
     {
         if (!$value instanceof UploadedFile || $value->getError() == UPLOAD_ERR_NO_FILE) {
             return [$this->uploadRequired, []];

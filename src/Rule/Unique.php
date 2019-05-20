@@ -37,7 +37,7 @@ use Yiisoft\Validator\Rule;
 class Unique extends Rule
 {
     /**
-     * @var string the name of the ActiveRecord class that should be used to validate the uniqueness
+     * @var string the name of the ActiveRecord class that should be used to validateValue the uniqueness
      * of the current attribute value.
      * This must be a fully qualified class name.
      *
@@ -48,10 +48,10 @@ class Unique extends Rule
     public $targetClass;
     /**
      * @var string|array the name of the [[\yii\activerecord\ActiveRecord|ActiveRecord]] attribute that should be used to
-     * validate the uniqueness of the current attribute value. If not set, it will use the name
-     * of the attribute currently being validated. You may use an array to validate the uniqueness
+     * validateValue the uniqueness of the current attribute value. If not set, it will use the name
+     * of the attribute currently being validated. You may use an array to validateValue the uniqueness
      * of multiple columns at the same time. The array values are the attributes that will be
-     * used to validate the uniqueness, while the array keys are the attributes whose values are to be validated.
+     * used to validateValue the uniqueness, while the array keys are the attributes whose values are to be validated.
      */
     public $targetAttribute;
     /**
@@ -153,7 +153,7 @@ class Unique extends Rule
     /**
      * Checks whether the $model exists in the database.
      *
-     * @param string $targetClass the name of the ActiveRecord class that should be used to validate the uniqueness
+     * @param string $targetClass the name of the ActiveRecord class that should be used to validateValue the uniqueness
      * of the current attribute value.
      * @param array $conditions conditions, compatible with [[\yii\db\Query::where()|Query::where()]] key-value format.
      * @param Model $model the data model to be validated
@@ -206,7 +206,7 @@ class Unique extends Rule
      * Prepares a query by applying filtering conditions defined in $conditions method property
      * and [[filter]] class property.
      *
-     * @param ActiveRecordInterface $targetClass the name of the ActiveRecord class that should be used to validate
+     * @param ActiveRecordInterface $targetClass the name of the ActiveRecord class that should be used to validateValue
      * the uniqueness of the current attribute value.
      * @param array $conditions conditions, compatible with [[\yii\db\Query::where()|Query::where()]] key-value format
      *
@@ -230,9 +230,9 @@ class Unique extends Rule
      * [[\yii\db\Query::where()|Query::where()]] key-value format.
      *
      * @param string|array $targetAttribute the name of the [[\yii\activerecord\ActiveRecord|ActiveRecord]] attribute that
-     * should be used to validate the uniqueness of the current attribute value. You may use an array to validate
+     * should be used to validateValue the uniqueness of the current attribute value. You may use an array to validateValue
      * the uniqueness of multiple columns at the same time. The array values are the attributes that will be
-     * used to validate the uniqueness, while the array keys are the attributes whose values are to be validated.
+     * used to validateValue the uniqueness, while the array keys are the attributes whose values are to be validated.
      * If the key and the value are the same, you can just specify the value.
      * @param Model $model the data model to be validated
      * @param string $attribute the name of the attribute to be validated in the $model

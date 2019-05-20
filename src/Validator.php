@@ -3,31 +3,48 @@
 
 namespace Yiisoft\Validator;
 
+use Yiisoft\Validator\Rule\Callback;
+
 class Validator
 {
     /**
-     * @param mixed $value
-     * @param Rule[] $rules
-     * @return Result
+     * @var Rules[]
      */
-    public function validateValue($value, $rules): Result
+    private $attributeRules;
+
+    /**
+     * Validator constructor.
+     * @param $rules
+     */
+    public function __construct(array $rules = [])
     {
-        foreach ($rules as $rule)
+        foreach ($rules as $attribute => $ruleSets) {
+            foreach ($ruleSets as $rule) {
+                if (is_callable($rule)) {
+                    $rule = new Callback($rule);
+                }
+                $this->addRule($attribute, $rule);
+            }
+        }
+    }
+
+    public function validate(DataSet $dataSet): ResultSet
+    {
+        $results = new ResultSet();
+        foreach ($this->attributeRules as $attribute => $rules)
         {
-
+            $results->addResult($attribute, $rules->validate($dataSet->getValue($attribute)));
         }
+        return $results;
     }
 
-    public function validateData(DataSet $dataSet, $rules): ResultSet
+    public function addRule(string $attribute, Rule $rule): self
     {
-
-    }
-
-    public function validate($object): ResultSet
-    {
-        if (!$object instanceof DataSet) {
-            throw new \InvalidArgumentException('bla bla');
+        if (!isset($this->attributeRules[$attribute])) {
+            $this->attributeRules[$attribute] = new Rules();
         }
 
+        $this->attributeRules[$attribute]->add($rule);
+        return $this;
     }
 }

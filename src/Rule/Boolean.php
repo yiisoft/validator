@@ -26,9 +26,8 @@ class Boolean extends Rule
 
     /**
      * @var string
-     * @translate
      */
-    private $message = '{attribute} must be either "{true}" or "{false}".';
+    private $message;
 
     public function message(string $message): self
     {
@@ -54,10 +53,7 @@ class Boolean extends Rule
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validateValue($value): Result
+    protected function validateValue($value): Result
     {
         if ($this->strict) {
             $valid = $value === $this->trueValue || $value === $this->falseValue;
@@ -68,13 +64,23 @@ class Boolean extends Rule
         $result = new Result();
 
         if (!$valid) {
-            $message = $this->formatMessage($this->message, [
-                'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-            ]);
-            $result->addError($message);
+            $result->addError($this->getMessage());
         }
 
         return $result;
+    }
+
+    private function getMessage(): string
+    {
+        $arguments = [
+            'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+            'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+        ];
+
+        if ($this->message === null) {
+            return $this->formatMessage('The value must be either "{true}" or "{false}".', $arguments);
+        }
+
+        return $this->formatMessage($this->message, $arguments);
     }
 }

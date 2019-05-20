@@ -17,7 +17,7 @@ use Yiisoft\Validator\Rule;
 class Url extends Rule
 {
     /**
-     * @var string the regular expression used to validate the attribute value.
+     * @var string the regular expression used to validateValue the attribute value.
      * The pattern may contain a `{schemes}` token that will be replaced
      * by a regular expression which represents the [[validSchemes]].
      */
@@ -46,7 +46,7 @@ class Url extends Rule
         $this->message = '{attribute} is not a valid URL.';
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value): Result
     {
         $result = new Result();
 

@@ -1,6 +1,7 @@
 <?php
 namespace Yiisoft\Validator\Tests\Rule;
 
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Ip;
 
 /**
@@ -10,7 +11,7 @@ class IpTest extends TestCase
 {
     public function testInitException()
     {
-        $this->expectException('yii\exceptions\InvalidConfigException');
+        $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Both IPv4 and IPv6 checks can not be disabled at the same time');
         new Ip(['ipv4' => false, 'ipv6' => false]);
     }
@@ -59,7 +60,7 @@ class IpTest extends TestCase
      * @dataProvider provideBadIps
      * @param mixed $badIp
      */
-    public function testValidateValueNotAnIP($badIp)
+    public function testvalidateNotAnIP($badIp)
     {
         $validator = new Ip();
 
@@ -98,7 +99,7 @@ class IpTest extends TestCase
         $model->clearErrors();
     }
 
-    public function testValidateValueIPv4()
+    public function testvalidateIPv4()
     {
         $validator = new Ip();
 
@@ -133,7 +134,7 @@ class IpTest extends TestCase
     }
 
 
-    public function testValidateValueIPv6()
+    public function testvalidateIPv6()
     {
         $validator = new Ip();
 
@@ -168,7 +169,7 @@ class IpTest extends TestCase
         $this->assertFalse($validator->validate('!!2008:fa::0:1/64'));
     }
 
-    public function testValidateValueIPvBoth()
+    public function testvalidateIPvBoth()
     {
         $validator = new Ip();
 

@@ -12,7 +12,7 @@ use Yiisoft\Validator\Rule\Boolean;
 class BooleanTest extends TestCase
 {
 
-    public function validateValueProvider()
+    public function validateProvider()
     {
         return [
             [new Boolean(), true, true],
@@ -39,41 +39,10 @@ class BooleanTest extends TestCase
     }
 
     /**
-     * @dataProvider validateValueProvider
+     * @dataProvider validateProvider
      */
-    public function testValidateValue(Rule $rule, $value, $expected)
+    public function testValidate(Rule $rule, $value, $expected)
     {
-        $this->assertSame($expected, $rule->validateValue($value)->isValid());
+        $this->assertSame($expected, $rule->validate($value)->isValid());
     }
-
-//    public function testValidateAttributeAndError()
-//    {
-//        $obj = new FakedValidationModel();
-//        $obj->attrA = true;
-//        $obj->attrB = '1';
-//        $obj->attrC = '0';
-//        $obj->attrD = [];
-//        $val = new Boolean();
-//        $val->validateAttribute($obj, 'attrA');
-//        $this->assertFalse($obj->hasErrors('attrA'));
-//        $val->validateAttribute($obj, 'attrC');
-//        $this->assertFalse($obj->hasErrors('attrC'));
-//        $val->strict = true;
-//        $val->validateAttribute($obj, 'attrB');
-//        $this->assertFalse($obj->hasErrors('attrB'));
-//        $val->validateAttribute($obj, 'attrD');
-//        $this->assertTrue($obj->hasErrors('attrD'));
-//    }
-
-//    public function testErrorMessage()
-//    {
-//        $validator = new Boolean([
-//            'trueValue' => true,
-//            'falseValue' => false,
-//            'strict' => true,
-//        ]);
-//        $validator->validate('someIncorrectValue', $errorMessage);
-//
-//        $this->assertEquals('the input value must be either "true" or "false".', $errorMessage);
-//    }
 }

@@ -1,9 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
@@ -33,15 +28,7 @@ class Required extends Rule
      */
     private $message;
 
-    public function __construct()
-    {
-
-        if ($this->message === null) {
-            $this->message = $this->formatMessage('{attribute} cannot be blank.');
-        }
-    }
-
-    public function validateValue($value): Result
+    protected function validateValue($value): Result
     {
         $result = new Result();
 
@@ -49,7 +36,28 @@ class Required extends Rule
             return $result;
         }
 
-        $result->addError($this->message);
+        $result->addError($this->getMessage());
         return $result;
+    }
+
+    private function getMessage(): string
+    {
+        if ($this->message === null) {
+            return $this->formatMessage('Value cannot be blank.');
+        }
+
+        return $this->formatMessage($this->message);
+    }
+
+    public function message(string $message): self
+    {
+        $this->message = $message;
+        return $this;
+    }
+
+    public function strict(): self
+    {
+        $this->strict = true;
+        return $this;
     }
 }

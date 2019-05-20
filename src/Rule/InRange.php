@@ -14,7 +14,7 @@ use Yiisoft\Validator\Rule;
  * is NOT among the specified range.
  *
  */
-class Range extends Rule
+class InRange extends Rule
 {
     /**
      * @var array|\Traversable|\Closure a list of valid values that the attribute value should be among or an anonymous function that returns
@@ -82,7 +82,7 @@ class Range extends Rule
         return $this;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value): Result
     {
         $in = false;
 
@@ -104,13 +104,5 @@ class Range extends Rule
         }
 
         return $result;
-    }
-
-    public function validateAttribute(DataSet $data, string $attribute): Result
-    {
-        if ($this->range instanceof \Closure) {
-            $this->range = call_user_func($this->range, $data, $attribute);
-        }
-        return parent::validateAttribute($data, $attribute);
     }
 }
