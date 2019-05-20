@@ -40,27 +40,20 @@ class UrlTest extends TestCase
         $this->assertFalse($val->validateValue('http://äüö?=!"§$%&/()=}][{³²€.edu')->isValid());
     }
 
-    public function testValidateValueWithDefaultScheme()
-    {
-        $val = new Url(['defaultScheme' => 'https']);
-        $this->assertTrue($val->validateValue('yiiframework.com')->isValid());
-        $this->assertTrue($val->validateValue('http://yiiframework.com')->isValid());
-    }
-
     public function testValidateValueWithoutScheme()
     {
-        $val = new Url(['pattern' => '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i']);
+        $val = (new Url())
+            ->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i');
+
         $this->assertTrue($val->validateValue('yiiframework.com')->isValid());
     }
 
     public function testValidateWithCustomScheme()
     {
-        $val = new Url([
-            'validSchemes' => ['http', 'https', 'ftp', 'ftps'],
-            'defaultScheme' => 'http',
-        ]);
+        $val = (new Url())
+            ->schemes(['http', 'https', 'ftp', 'ftps']);
+
         $this->assertTrue($val->validateValue('ftp://ftp.ruhr-uni-bochum.de/')->isValid());
-        $this->assertTrue($val->validateValue('google.de')->isValid());
         $this->assertTrue($val->validateValue('http://google.de')->isValid());
         $this->assertTrue($val->validateValue('https://google.de')->isValid());
         $this->assertFalse($val->validateValue('htp://yiiframework.com')->isValid());
@@ -75,9 +68,9 @@ class UrlTest extends TestCase
 
             return;
         }
-        $val = new Url([
-            'enableIDN' => true,
-        ]);
+        $val = (new Url())
+            ->enableIDN();
+
         $this->assertTrue($val->validateValue('http://äüößìà.de')->isValid());
         // converted via http://mct.verisign-grs.com/convertServlet
         $this->assertTrue($val->validateValue('http://xn--zcack7ayc9a.de')->isValid());
@@ -89,24 +82,4 @@ class UrlTest extends TestCase
         $val = new Url();
         $this->assertFalse($val->validateValue($url)->isValid());
     }
-
-//    public function testValidateAttributeAndError()
-//    {
-//        $obj = new FakedValidationModel();
-//        $obj->attr_url = 'http://google.de';
-//        $val = new Url();
-//        $val->validateAttribute($obj, 'attr_url');
-//        $this->assertFalse($obj->hasErrors('attr_url'));
-//        $this->assertSame('http://google.de', $obj->attr_url);
-//        $obj = new FakedValidationModel();
-//        $val->defaultScheme = 'http';
-//        $obj->attr_url = 'google.de';
-//        $val->validateAttribute($obj, 'attr_url');
-//        $this->assertFalse($obj->hasErrors('attr_url'));
-//        $this->assertNotFalse(stripos($obj->attr_url, 'http'));
-//        $obj = new FakedValidationModel();
-//        $obj->attr_url = 'gttp;/invalid string';
-//        $val->validateAttribute($obj, 'attr_url');
-//        $this->assertTrue($obj->hasErrors('attr_url'));
-//    }
 }

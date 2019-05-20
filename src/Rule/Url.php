@@ -2,7 +2,6 @@
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSet;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -29,13 +28,6 @@ class Url extends Rule
      */
     private $validSchemes = ['http', 'https'];
     /**
-     * TODO: is it validation?!
-     * @var string the default URI scheme. If the input doesn't contain the scheme part, the default
-     * scheme will be prepended to it (thus changing the input). Defaults to null, meaning a URL must
-     * contain the scheme part.
-     */
-    private $defaultScheme;
-    /**
      * @var bool whether validation process should take into account IDN (internationalized
      * domain names). Defaults to false meaning that validation of URLs containing IDN will always
      * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
@@ -51,20 +43,7 @@ class Url extends Rule
             throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }
 
-        $this->message =  $this->formatMessage('{attribute} is not a valid URL.');
-    }
-
-    public function validateAttribute(DataSet $data, string $attribute): Result
-    {
-        $value = $model->$attribute;
-        $result = $this->validateValue($value);
-        if (!empty($result)) {
-            $result->addError($model, $attribute, $result[0], $result[1]);
-        } elseif ($this->defaultScheme !== null && strpos($value, '://') === false) {
-            $model->$attribute = $this->defaultScheme . '://' . $value;
-        }
-
-        return $result;
+        $this->message = '{attribute} is not a valid URL.';
     }
 
     public function validateValue($value): Result
@@ -73,10 +52,6 @@ class Url extends Rule
 
         // make sure the length is limited to avoid DOS attacks
         if (is_string($value) && strlen($value) < 2000) {
-            if ($this->defaultScheme !== null && strpos($value, '://') === false) {
-                $value = $this->defaultScheme . '://' . $value;
-            }
-
             if (strpos($this->pattern, '{schemes}') !== false) {
                 $pattern = str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
             } else {
@@ -94,7 +69,7 @@ class Url extends Rule
             }
         }
 
-        $result->addError($this->message);
+        $result->addError($this->formatMessage($this->message));
         return $result;
     }
 
@@ -102,4 +77,29 @@ class Url extends Rule
     {
         return idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
     }
+
+    public function pattern(string $pattern): self
+    {
+        $this->pattern = $pattern;
+        return $this;
+    }
+
+    public function enableIDN(): self
+    {
+        $this->enableIDN = true;
+        return $this;
+    }
+
+    public function schemes(array $schemes): self
+    {
+        $this->validSchemes = $schemes;
+        return $this;
+    }
+
+    public function message(string $message): self
+    {
+        $this->message = $message;
+        return $this;
+    }
+
 }
