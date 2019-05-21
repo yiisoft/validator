@@ -70,7 +70,6 @@ $moneyTransfer = new MoneyTransfer();
 
 $validator = new Validator([    
     'amount' => [
-        (new Number())->integer(),
         (new Number())->integer()->max(100),
         function ($value): Result {
             $result = new Result();
@@ -92,9 +91,9 @@ foreach ($results as $attribute => $result) {
 }
 ```
 
-### Creating your own valdation rules
+### Creating your own validation rules
 
-In order to create your own valdation rule you should extend `Rule` class:
+In order to create your own validation rule you should extend `Rule` class:
 
 ```php
 <?php
