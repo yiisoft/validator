@@ -53,7 +53,7 @@ class IpTest extends TestCase
 
     public function provideBadIps()
     {
-        return ['not.an.ip', 'what an array', '??', 123456, true, false, 'bad:forSure'];
+        return [['not.an.ip'], ['??'], [123456], [true], [false], ['bad:forSure']];
     }
 
     /**
