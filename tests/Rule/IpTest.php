@@ -26,17 +26,17 @@ class IpTest extends TestCase
         ];
     }
 
-//    /**
-//     * @dataProvider provideRangesForSubstitution
-//     * @param array $range
-//     * @param array $expectedRange
-//     */
-//    public function testRangesSubstitution($range, $expectedRange)
-//    {
-//        $validator = new Ip();
-//        $validator->setRanges($range);
-//        $this->assertEquals($expectedRange, $validator->ranges);
-//    }
+    /**
+     * @dataProvider provideRangesForSubstitution
+     * @param array $range
+     * @param array $expectedRange
+     */
+    public function testRangesSubstitution($range, $expectedRange)
+    {
+        $validator = new Ip();
+        $validator->setRanges($range);
+        $this->assertEquals($expectedRange, $validator->getRanges());
+    }
 
 
     public function testValidateOrder()
