@@ -2,7 +2,7 @@
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\IpHelper;
+use yii\helpers\IpHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
