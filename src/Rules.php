@@ -12,7 +12,7 @@ class Rules implements \IteratorAggregate
      */
     private $rules = [];
 
-    public function __construct(array $rules = [])
+    public function __construct(iterable $rules = [])
     {
         foreach ($rules as $rule) {
             if (is_callable($rule)) {
