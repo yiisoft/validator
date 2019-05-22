@@ -2,8 +2,7 @@
 
 namespace Yiisoft\Validator\Rule;
 
-use yii\helpers\IpHelper;
-use Yiisoft\Validator\DataSet;
+use Yiisoft\Validator\IpHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -249,41 +248,82 @@ class Ip extends Rule
         return $this->ranges;
     }
 
+    /**
+     * @param bool $ipv6
+     *
+     * @return Ip
+     */
+    public function useIpv6(bool $ipv6): self
+    {
+        $this->ipv6 = $ipv6;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $ipv4
+     *
+     * @return Ip
+     */
+    public function useIpv4($ipv4): self
+    {
+        $this->ipv4 = $ipv4;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $subnet
+     *
+     * @return Ip
+     */
+    public function useSubnet($subnet): self
+    {
+        $this->subnet = $subnet;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $negation
+     *
+     * @return Ip
+     */
+    public function useNegation(bool $negation): self
+    {
+        $this->negation = $negation;
+
+        return $this;
+    }
+
     protected function validateValue($value): Result
     {
-        $result = new Result();
-
         if (!$this->ipv4 && !$this->ipv6) {
             throw new \RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time');
         }
 
-        $result = $this->validateSubnet($value);
-        if (is_array($result)) {
-            $result[1] = array_merge(['ip' => is_array($value) ? 'array()' : $value], $result[1]);
-            return $result;
-        }
-
-        return $result;
+        return $this->validateSubnet($value);
     }
 
     /**
      * Validates an IPv4/IPv6 address or subnet.
      *
      * @param $ip string
-     * @return string|array
+     * @return Result
      * string - the validation was successful;
      * array  - an error occurred during the validation.
      * Array[0] contains the text of an error, array[1] contains values for the placeholders in the error message
      */
-    private function validateSubnet(string $ip)
+    private function validateSubnet(string $ip): Result
     {
+        $result = new Result();
         if (!is_string($ip)) {
-            return [$this->message, []];
+            $result->addError($this->message);
+            return $result;
         }
 
         $negation = null;
         $cidr = null;
-        $isCidrDefault = false;
 
         if (preg_match($this->getIpParsePattern(), $ip, $matches)) {
             $negation = ($matches[1] !== '') ? $matches[1] : null;
@@ -292,30 +332,35 @@ class Ip extends Rule
         }
 
         if ($this->subnet === true && $cidr === null) {
-            return [$this->noSubnet, []];
+            $result->addError($this->noSubnet);
+            return $result;
         }
         if ($this->subnet === false && $cidr !== null) {
-            return [$this->hasSubnet, []];
+            $result->addError($this->hasSubnet);
+            return $result;
         }
         if ($this->negation === false && $negation !== null) {
-            return [$this->message, []];
+            $result->addError($this->message);
+            return $result;
         }
 
         if ($this->getIpVersion($ip) === IpHelper::IPV6) {
             if ($cidr !== null) {
                 if ($cidr > IpHelper::IPV6_ADDRESS_LENGTH || $cidr < 0) {
-                    return [$this->wrongCidr, []];
+                    $result->addError($this->wrongCidr);
+                    return $result;
                 }
             } else {
-                $isCidrDefault = true;
                 $cidr = IpHelper::IPV6_ADDRESS_LENGTH;
             }
 
             if (!$this->validateIPv6($ip)) {
-                return [$this->message, []];
+                $result->addError($this->message);
+                return $result;
             }
             if (!$this->ipv6) {
-                return [$this->ipv6NotAllowed, []];
+                $result->addError($this->ipv6NotAllowed);
+                return $result;
             }
 
             if ($this->expandIPv6) {
@@ -324,29 +369,28 @@ class Ip extends Rule
         } else {
             if ($cidr !== null) {
                 if ($cidr > IpHelper::IPV4_ADDRESS_LENGTH || $cidr < 0) {
-                    return [$this->wrongCidr, []];
+                    $result->addError($this->wrongCidr);
+                    return $result;
                 }
             } else {
                 $isCidrDefault = true;
                 $cidr = IpHelper::IPV4_ADDRESS_LENGTH;
             }
             if (!$this->validateIPv4($ip)) {
-                return [$this->message, []];
+                $result->addError($this->message);
+                return $result;
             }
             if (!$this->ipv4) {
-                return [$this->ipv4NotAllowed, []];
+                $result->addError($this->ipv4NotAllowed);
+                return $result;
             }
         }
 
         if (!$this->isAllowed($ip, $cidr)) {
-            return [$this->notInRange, []];
+            $result->addError($this->notInRange);
+            return $result;
         }
 
-        $result = $negation . $ip;
-
-        if ($this->subnet !== false && (!$isCidrDefault || $isCidrDefault && $this->normalize)) {
-            $result .= "/$cidr";
-        }
 
         return $result;
     }
