@@ -16,7 +16,7 @@ class Validator
      * Validator constructor.
      * @param $rules
      */
-    public function __construct(array $rules = [])
+    public function __construct(iterable $rules = [])
     {
         foreach ($rules as $attribute => $ruleSets) {
             foreach ($ruleSets as $rule) {
