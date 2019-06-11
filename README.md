@@ -115,4 +115,39 @@ class Pi extends Rule
 }
 ```
 
+### Grouping common validation rules into rule sets
+
+In order to reuse multiple validation rules it is advised to group rules into validation sets:
+
+```php
+class UsernameRules
+{
+    public static function get(): array
+    {
+        return [
+            (new HasLength)->min(2)->max(20),
+            new MatchRegularExpression('~[a-z_\-]~i')
+        ];
+    }
+}
+```
+
+Then it could be used like the following:
+
+```php
+$validator = new Validator([    
+    'username' => UsernameRules::get(),
+    'email' => [new Email()]
+]);
+
+$results = $validator->validate($user);
+foreach ($results as $attribute => $result) {
+    if ($result->isValid() === false) {
+        foreach ($result->getErrors() as $error) {
+            // ...
+        }
+    }
+}
+```
+
  
