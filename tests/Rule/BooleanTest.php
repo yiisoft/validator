@@ -12,7 +12,7 @@ use Yiisoft\Validator\Rule\Boolean;
 class BooleanTest extends TestCase
 {
 
-    public function validateProvider()
+    public function validateProvider(): array
     {
         return [
             [new Boolean(), true, true],
@@ -41,7 +41,7 @@ class BooleanTest extends TestCase
     /**
      * @dataProvider validateProvider
      */
-    public function testValidate(Rule $rule, $value, $expected)
+    public function testValidate(Rule $rule, $value, bool $expected): void
     {
         $this->assertSame($expected, $rule->validate($value)->isValid());
     }

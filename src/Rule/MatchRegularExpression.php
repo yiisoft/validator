@@ -11,9 +11,6 @@ use Yiisoft\Validator\Rule;
  * RegularExpressionValidator validates that the attribute value matches the specified [[pattern]].
  *
  * If the [[not]] property is set true, the validator will ensure the attribute value do NOT match the [[pattern]].
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class MatchRegularExpression extends Rule
 {

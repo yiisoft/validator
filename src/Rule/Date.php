@@ -3,9 +3,6 @@ namespace Yiisoft\Validator\Rule;
 
 use DateTime;
 use IntlDateFormatter;
-use yii\helpers\Yii;
-use yii\exceptions\InvalidConfigException;
-use yii\helpers\FormatConverter;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -23,16 +20,11 @@ use Yiisoft\Validator\Rule;
  * property and the target timeZone will be UTC when [[timestampAttributeFormat]] is `null` (exporting as UNIX timestamp)
  * or [[timestampAttributeTimeZone]] otherwise. If you want to avoid the time zone conversion, make sure that [[timeZone]] and
  * [[timestampAttributeTimeZone]] are the same.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @author Carsten Brandt <mail@cebe.cc>
- * @since 2.0
  */
 class Date extends Rule
 {
     /**
      * Constant for specifying the validation [[type]] as a date value, used for validation with intl short format.
-     * @since 2.0.8
      * @see type
      *
      * TODO: split into 3 separate classes?
@@ -40,13 +32,11 @@ class Date extends Rule
     const TYPE_DATE = 'date';
     /**
      * Constant for specifying the validation [[type]] as a datetime value, used for validation with intl short format.
-     * @since 2.0.8
      * @see type
      */
     const TYPE_DATETIME = 'datetime';
     /**
      * Constant for specifying the validation [[type]] as a time value, used for validation with intl short format.
-     * @since 2.0.8
      * @see type
      */
     const TYPE_TIME = 'time';
@@ -64,7 +54,6 @@ class Date extends Rule
      * - [[TYPE_DATETIME]] - for validating datetime values, that contain a date part as well as a time part.
      * - [[TYPE_TIME]] - for validating time values, that contain no date information.
      *
-     * @since 2.0.8
      */
     public $type = self::TYPE_DATE;
     /**
@@ -139,7 +128,6 @@ class Date extends Rule
      * If [[timestampAttribute]] is not set, this property will be ignored.
      * @see format
      * @see timestampAttribute
-     * @since 2.0.4
      */
     public $timestampAttributeFormat;
     /**
@@ -151,7 +139,6 @@ class Date extends Rule
      *
      * If [[timestampAttributeFormat]] is not set, this property will be ignored.
      * @see timestampAttributeFormat
-     * @since 2.0.4
      */
     public $timestampAttributeTimeZone = 'UTC';
     /**
@@ -159,7 +146,6 @@ class Date extends Rule
      * This can be a unix timestamp or a string representing a date time value.
      * If this property is a string, [[format]] will be used to parse it.
      * @see tooBig for the customized message used when the date is too big.
-     * @since 2.0.4
      */
     public $max;
     /**
@@ -167,29 +153,24 @@ class Date extends Rule
      * This can be a unix timestamp or a string representing a date time value.
      * If this property is a string, [[format]] will be used to parse it.
      * @see tooSmall for the customized message used when the date is too small.
-     * @since 2.0.4
      */
     public $min;
     /**
      * @var string user-defined error message used when the value is bigger than [[max]].
-     * @since 2.0.4
      */
     public $tooBig;
     /**
      * @var string user-defined error message used when the value is smaller than [[min]].
-     * @since 2.0.4
      */
     public $tooSmall;
     /**
      * @var string user friendly value of upper limit to display in the error message.
      * If this property is null, the value of [[max]] will be used (before parsing).
-     * @since 2.0.4
      */
     public $maxString;
     /**
      * @var string user friendly value of lower limit to display in the error message.
      * If this property is null, the value of [[min]] will be used (before parsing).
-     * @since 2.0.4
      */
     public $minString;
 

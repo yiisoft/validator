@@ -78,7 +78,6 @@ class File extends Rule
      * Defaults to 0. Higher value means at least that number of files should be uploaded.
      *
      * @see tooFew for the customized message when too few files are uploaded.
-     * @since 2.0.14
      */
     private $minFiles = 0;
     /**
@@ -127,8 +126,6 @@ class File extends Rule
      *
      * - {attribute}: the attribute name
      * - {limit}: the value of [[minFiles]]
-     *
-     * @since 2.0.14
      */
     private $tooFew;
     /**
@@ -207,10 +204,7 @@ class File extends Rule
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
         if (!$value instanceof UploadedFile || $value->getError() == UPLOAD_ERR_NO_FILE) {
             return [$this->uploadRequired, []];
@@ -304,10 +298,6 @@ class File extends Rule
         return $limit;
     }
 
-    /**
-     * {@inheritdoc}
-     * @param bool $trim
-     */
     public function isEmpty($value, $trim = false)
     {
         $value = is_array($value) ? reset($value) : $value;
@@ -385,7 +375,6 @@ class File extends Rule
      * @return bool whether the $file mimeType is allowed
      * @throws \yii\exceptions\InvalidConfigException
      * @see mimeTypes
-     * @since 2.0.8
      */
     protected function validateMimeType($file)
     {

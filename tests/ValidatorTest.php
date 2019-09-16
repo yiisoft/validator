@@ -33,7 +33,7 @@ class ValidatorTest extends TestCase
         };
     }
 
-    public function testAddingRulesViaConstructor()
+    public function testAddingRulesViaConstructor(): void
     {
         $dataObject = $this->getDataObject([
             'bool' => true,
@@ -45,7 +45,7 @@ class ValidatorTest extends TestCase
             'int' => [
                 (new Number())->integer(),
                 (new Number())->integer()->min(44),
-                function ($value): Result {
+                static function ($value): Result {
                     $result = new Result();
                     if ($value !== 42) {
                         $result->addError('Value should be 42!');
@@ -64,7 +64,7 @@ class ValidatorTest extends TestCase
         $this->assertCount(2, $intResult->getErrors());
     }
 
-    public function testAddingRulesOneByOne()
+    public function testAddingRulesOneByOne(): void
     {
         $dataObject = $this->getDataObject([
             'bool' => true,

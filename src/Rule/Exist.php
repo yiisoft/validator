@@ -65,7 +65,6 @@ class Exist extends Rule
     /**
      * @var string the name of the relation that should be used to validateValue the existence of the current attribute value
      * This param overwrites $targetClass and $targetAttribute
-     * @since 2.0.14
      */
     public $targetRelation;
     /**
@@ -81,21 +80,16 @@ class Exist extends Rule
     public $allowArray = false;
     /**
      * @var string and|or define how target attributes are related
-     * @since 2.0.11
      */
     public $targetAttributeJunction = 'and';
     /**
      * @var bool whether this validator is forced to always use master DB
-     * @since 2.0.14
      */
     public $forceMasterDb = true;
 
 
     private $message;
 
-    /**
-     * {@inheritdoc}
-     */
     public function init(): void
     {
         parent::init();

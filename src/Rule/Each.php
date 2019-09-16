@@ -36,9 +36,6 @@ use Yiisoft\Validator\Rule;
  *
  * > Note: EachValidator is meant to be used only in basic cases, you should consider usage of tabular input,
  *   using several models for the more complex case.
- *
- * @author Paul Klimov <klimov.paul@gmail.com>
- * @since 2.0.4
  */
 class Each extends Rule
 {
@@ -68,7 +65,6 @@ class Each extends Rule
      * error messages mya appear: one per each invalid value.
      * Note that this option will affect only [[validateAttribute()]] value, while [[validateValue()]] will
      * not be affected.
-     * @since 2.0.11
      */
     private $stopOnFirstError = true;
 
@@ -109,7 +105,9 @@ class Each extends Rule
         $rule = $this->rule;
         if ($rule instanceof Rule) {
             return $rule;
-        } elseif (is_array($rule) && isset($rule[0])) { // validator type
+        }
+
+        if (is_array($rule) && isset($rule[0])) { // validator type
             if (!is_object($data)) {
                 $data = new Model(); // mock up context model
             }
@@ -162,10 +160,7 @@ class Each extends Rule
         $model->addErrors([$attribute => $detectedErrors]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
         $result = new Result();
         if (!is_array($value) && !$value instanceof \ArrayAccess) {

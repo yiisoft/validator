@@ -11,7 +11,7 @@ use Yiisoft\Validator\Rules;
 
 class RulesTest extends TestCase
 {
-    public function testMethodSyntax()
+    public function testMethodSyntax(): void
     {
         $rules = new Rules();
         $rules->add(new Required());
@@ -22,7 +22,7 @@ class RulesTest extends TestCase
         $this->assertCount(1, $result->getErrors());
     }
 
-    public function testArraySyntax()
+    public function testArraySyntax(): void
     {
         $rules = new Rules([
             new Required(),
@@ -34,10 +34,10 @@ class RulesTest extends TestCase
         $this->assertCount(1, $result->getErrors());
     }
 
-    public function testCallback()
+    public function testCallback(): void
     {
         $rules = new Rules([
-            function ($value): Result {
+            static function ($value): Result {
                 $result = new Result();
                 if ($value !== 42) {
                     $result->addError('Value should be 42!');

@@ -249,7 +249,7 @@ class Ip extends Rule
         return $this->ranges;
     }
 
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
         $result = new Result();
 

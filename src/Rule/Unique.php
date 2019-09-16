@@ -78,19 +78,14 @@ class Unique extends Rule
     public $message;
     /**
      * @var string and|or define how target attributes are related
-     * @since 2.0.11
      */
     public $targetAttributeJunction = 'and';
     /**
      * @var bool whether this validator is forced to always use master DB
-     * @since 2.0.14
      */
     public $forceMasterDb =  true;
 
 
-    /**
-     * {@inheritdoc}
-     */
     public function init(): void
     {
         parent::init();
@@ -178,7 +173,7 @@ class Unique extends Rule
                 // only select primary key to optimize query
                 $columnsCondition = array_flip($targetClass::primaryKey());
                 $query->select(array_flip($this->applyTableAlias($query, $columnsCondition)));
-                
+
                 // any with relation can't be loaded because related fields are not selected
                 $query->with = null;
             }

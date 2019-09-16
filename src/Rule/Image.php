@@ -86,9 +86,6 @@ class Image extends File
     public $overHeight;
 
 
-    /**
-     * {@inheritdoc}
-     */
     public function init(): void
     {
         parent::init();
@@ -110,10 +107,7 @@ class Image extends File
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
         $result = parent::validateValue($value);
 

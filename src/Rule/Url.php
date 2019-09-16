@@ -10,9 +10,6 @@ use Yiisoft\Validator\Rule;
  *
  * Note that this validator only checks if the URL scheme and host part are correct.
  * It does not check the remaining parts of a URL.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class Url extends Rule
 {
@@ -46,7 +43,7 @@ class Url extends Rule
         $this->message = '{attribute} is not a valid URL.';
     }
 
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
         $result = new Result();
 
