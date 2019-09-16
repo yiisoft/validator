@@ -4,7 +4,7 @@
 namespace Yiisoft\Validator;
 
 
-interface DataSet
+interface DataSetInterface
 {
     public function getValue(string $key);
 }

@@ -9,7 +9,7 @@ namespace Yiisoft\Validator\Rule;
 use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
 use yii\base\Model;
-use Yiisoft\Validator\DataSet;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -86,10 +86,10 @@ class Each extends Rule
 
     /**
      * Returns the validator declared in [[rule]].
-     * @param DataSet|null $data model in which context validator should be created.
+     * @param DataSetInterface|null $data model in which context validator should be created.
      * @return Rule the declared validator.
      */
-    private function getValidator(DataSet $data = null)
+    private function getValidator(DataSetInterface $data = null)
     {
         if ($this->_validator === null) {
             $this->_validator = $this->createEmbeddedValidator($data);
@@ -100,11 +100,11 @@ class Each extends Rule
 
     /**
      * Creates validator object based on the validation rule specified in [[rule]].
-     * @param DataSet|null $data model in which context validator should be created.
+     * @param DataSetInterface|null $data model in which context validator should be created.
      * @return Rule validator instance
      *@throws \yii\exceptions\InvalidConfigException
      */
-    private function createEmbeddedValidator(DataSet $data)
+    private function createEmbeddedValidator(DataSetInterface $data)
     {
         $rule = $this->rule;
         if ($rule instanceof Rule) {
@@ -120,7 +120,7 @@ class Each extends Rule
         throw new InvalidConfigException('Invalid validation rule: a rule must be an array specifying validator type.');
     }
 
-    public function validateAttribute(DataSet $data, string $attribute): Result
+    public function validateAttribute(DataSetInterface $data, string $attribute): Result
     {
         $result = new Result();
         $value = $data->getValue($attribute);

@@ -3,7 +3,7 @@
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\DataSet;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Number;
@@ -11,9 +11,9 @@ use Yiisoft\Validator\Validator;
 
 class ValidatorTest extends TestCase
 {
-    public function getDataObject(array $attributes): DataSet
+    public function getDataObject(array $attributes): DataSetInterface
     {
-        return new class ($attributes) implements DataSet
+        return new class ($attributes) implements DataSetInterface
         {
             private $data;
 

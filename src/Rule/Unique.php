@@ -8,7 +8,7 @@ use yii\activerecord\ActiveQueryInterface;
 use yii\activerecord\ActiveRecord;
 use yii\activerecord\ActiveRecordInterface;
 use yii\helpers\Inflector;
-use Yiisoft\Validator\DataSet;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -104,7 +104,7 @@ class Unique extends Rule
         }
     }
 
-    public function validateAttribute(DataSet $data, string $attribute): Result
+    public function validateAttribute(DataSetInterface $data, string $attribute): Result
     {
         /* @var $targetClass ActiveRecordInterface */
         $targetClass = $this->getTargetClass($model);

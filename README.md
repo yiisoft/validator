@@ -49,7 +49,7 @@ if ($result->isValid() === false) {
 
 ```php
 <?php
-class MoneyTransfer implements \Yiisoft\Validator\DataSet
+class MoneyTransfer implements \Yiisoft\Validator\DataSetInterface
 {
     private $amount;
     

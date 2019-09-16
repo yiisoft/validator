@@ -3,7 +3,7 @@
 namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\IpHelper;
-use Yiisoft\Validator\DataSet;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 

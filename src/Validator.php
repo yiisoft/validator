@@ -28,7 +28,7 @@ class Validator
         }
     }
 
-    public function validate(DataSet $dataSet): ResultSet
+    public function validate(DataSetInterface $dataSet): ResultSet
     {
         $results = new ResultSet();
         foreach ($this->attributeRules as $attribute => $rules)

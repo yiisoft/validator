@@ -3,7 +3,7 @@
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\DataSet;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Rule\Number;
 
 /**
@@ -285,9 +285,9 @@ class NumberTest extends TestCase
         $this->assertFalse($result->isValid());
     }
 
-    public function getDataSet(array $attributeValues): DataSet
+    public function getDataSet(array $attributeValues): DataSetInterface
     {
-        return new class ($attributeValues) implements DataSet
+        return new class ($attributeValues) implements DataSetInterface
         {
             private $data;
 
