@@ -16,7 +16,7 @@ abstract class Rule
         return $this->validateValue($value);
     }
 
-    abstract protected function validateValue($value): Result;
+    abstract public function validateValue($value): Result;
 
     protected function formatMessage(string $message, array $arguments = []): string
     {
