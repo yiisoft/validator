@@ -47,7 +47,7 @@ class MatchRegularExpression extends Rule
         return $this;
     }
 
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
         $result = new Result();
 

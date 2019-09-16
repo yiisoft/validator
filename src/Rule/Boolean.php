@@ -53,7 +53,7 @@ class Boolean extends Rule
         return $this;
     }
 
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
         if ($this->strict) {
             $valid = $value === $this->trueValue || $value === $this->falseValue;

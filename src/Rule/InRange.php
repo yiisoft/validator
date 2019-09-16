@@ -82,7 +82,7 @@ class InRange extends Rule
         return $this;
     }
 
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
         $in = false;
 

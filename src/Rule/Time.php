@@ -10,7 +10,7 @@ use Yiisoft\Validator\Rule;
 class Time extends Rule
 {
 
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
 
     }

@@ -16,7 +16,7 @@ class Callback extends Rule
         $this->callback = $callback;
     }
 
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
         $callback = $this->callback;
         return $callback($value);

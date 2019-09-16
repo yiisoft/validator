@@ -255,7 +255,7 @@ class Date extends Rule
         }
     }
 
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
         $result = new Result();
 

@@ -28,7 +28,7 @@ class Required extends Rule
      */
     private $message;
 
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
         $result = new Result();
 
