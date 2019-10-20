@@ -3,6 +3,7 @@ namespace Yiisoft\Validator\Rule;
 
 use DateTime;
 use IntlDateFormatter;
+use Yiisoft\Validator\FormatConverterHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -173,7 +174,9 @@ class Date extends Rule
      * If this property is null, the value of [[min]] will be used (before parsing).
      */
     public $minString;
-
+    /**
+     * @var string user-defined error message used when the value is invalid.
+     */
     private $message;
 
     /**
@@ -186,54 +189,83 @@ class Date extends Rule
         'full' => 0, // IntlDateFormatter::FULL,
     ];
 
-    public function __construct()
+    /**
+     * Date constructor.
+     * @param $format string date format
+     * @param $locale string locale code in ICU format
+     * @param $timeZone string timezone to use for parsing date and time values
+     */
+    public function __construct($format, $locale, $timeZone)
     {
         if ($this->message === null) {
-            $this->message = Yii::t('yii', 'The format of {attribute} is invalid.');
+            $this->message = 'The format of {attribute} is invalid.';
         }
-        if ($this->format === null) {
-            if ($this->type === self::TYPE_DATE) {
-                $this->format = Yii::getApp()->formatter->dateFormat;
-            } elseif ($this->type === self::TYPE_DATETIME) {
-                $this->format = Yii::getApp()->formatter->datetimeFormat;
-            } elseif ($this->type === self::TYPE_TIME) {
-                $this->format = Yii::getApp()->formatter->timeFormat;
+        $this->format = $format;
+        $this->locale = $locale;
+        $this->timeZone = $timeZone;
+
+//        if (!empty($type) && !in_array($type, [self::TYPE_DATE, self::TYPE_DATETIME, self::TYPE_TIME])) {
+//            throw new InvalidConfigException('Unknown validation type set for DateValidator::$type: ' . $this->type);
+//        }
+//        if (!empty($format)) {
+//            throw new InvalidConfigException('Unknown validation type set for DateValidator::$type: ' . $this->type);
+//        }
+
+//        if ($this->format === null) {
+//            if ($this->type === self::TYPE_DATE) {
+//                $this->format = Yii::getApp()->formatter->dateFormat;
+//            } elseif ($this->type === self::TYPE_DATETIME) {
+//                $this->format = Yii::getApp()->formatter->datetimeFormat;
+//            } elseif ($this->type === self::TYPE_TIME) {
+//                $this->format = Yii::getApp()->formatter->timeFormat;
+//            } else {
+//
+//            }
+//        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateAttribute($model, $attribute)
+    {
+        $result = new Result();
+
+        $value = $model->$attribute;
+        if ($this->isEmpty($value)) {
+            if ($this->timestampAttribute !== null) {
+                $model->{$this->timestampAttribute} = null;
+            }
+            return $result;
+        }
+
+        $timestamp = $this->parseDateValue($value);
+        if ($timestamp === false) {
+            if ($this->timestampAttribute === $attribute) {
+                if ($this->timestampAttributeFormat === null) {
+                    if (is_int($value)) {
+                        return $result;
+                    }
+                } else {
+                    if ($this->parseDateValueFormat($value, $this->timestampAttributeFormat) !== false) {
+                        return $result;
+                    }
+                }
+            }
+            $result->addError($this->message);
+        } elseif ($this->min !== null && $timestamp < $this->min) {
+            $result->addError($this->formatMessage($this->tooSmall, ['min' => $this->minString]));
+        } elseif ($this->max !== null && $timestamp > $this->max) {
+            $result->addError($this->formatMessage($this->tooBig, ['max' => $this->maxString]));
+        } elseif ($this->timestampAttribute !== null) {
+            if ($this->timestampAttributeFormat === null) {
+                $model->{$this->timestampAttribute} = $timestamp;
             } else {
-                throw new InvalidConfigException('Unknown validation type set for DateValidator::$type: ' . $this->type);
+                $model->{$this->timestampAttribute} = $this->formatTimestamp($timestamp, $this->timestampAttributeFormat);
             }
         }
-        if ($this->locale === null) {
-            $this->locale = Yii::getLocaleString();
-        }
-        if ($this->timeZone === null) {
-            $this->timeZone = Yii::getTimeZone();
-        }
-        if ($this->min !== null && $this->tooSmall === null) {
-            $this->tooSmall = Yii::t('yii', '{attribute} must be no less than {min}.');
-        }
-        if ($this->max !== null && $this->tooBig === null) {
-            $this->tooBig = Yii::t('yii', '{attribute} must be no greater than {max}.');
-        }
-        if ($this->maxString === null) {
-            $this->maxString = (string) $this->max;
-        }
-        if ($this->minString === null) {
-            $this->minString = (string) $this->min;
-        }
-        if ($this->max !== null && is_string($this->max)) {
-            $timestamp = $this->parseDateValue($this->max);
-            if ($timestamp === false) {
-                throw new InvalidConfigException("Invalid max date value: {$this->max}");
-            }
-            $this->max = $timestamp;
-        }
-        if ($this->min !== null && is_string($this->min)) {
-            $timestamp = $this->parseDateValue($this->min);
-            if ($timestamp === false) {
-                throw new InvalidConfigException("Invalid min date value: {$this->min}");
-            }
-            $this->min = $timestamp;
-        }
+
+        return $result;
     }
 
     public function validateValue($value): Result
@@ -363,7 +395,7 @@ class Date extends Rule
         if (strncmp($format, 'php:', 4) === 0) {
             $format = substr($format, 4);
         } else {
-            $format = FormatConverter::convertDateIcuToPhp($format, 'date');
+            $format = FormatConverterHelper::convertDateIcuToPhp($format, 'date', $this->locale);
         }
 
         $date = new DateTime();
@@ -371,4 +403,80 @@ class Date extends Rule
         $date->setTimezone(new \DateTimeZone($this->timestampAttributeTimeZone));
         return $date->format($format);
     }
+
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    public function type($type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function timestampAttribute($attribute): self
+    {
+        $this->timestampAttribute = $attribute;
+
+        return $this;
+    }
+
+    public function timestampAttributeFormat($format): self
+    {
+        $this->timestampAttributeFormat = $format;
+
+        return $this;
+    }
+
+    public function timestampAttributeTimeZone($timezone): self
+    {
+        $this->timestampAttributeTimeZone = $timezone;
+
+        return $this;
+    }
+
+    public function min($value): self
+    {
+        $this->min = $value;
+        if ($this->min !== null && $this->tooSmall === null) {
+            $this->tooSmall = '{attribute} must be no less than {min}.';
+        }
+
+        if ($this->minString === null) {
+            $this->minString = (string) $this->min;
+        }
+        if ($this->min !== null && is_string($this->min)) {
+            $timestamp = $this->parseDateValue($this->min);
+            if ($timestamp === false) {
+                throw new InvalidConfigException("Invalid min date value: {$this->min}");
+            }
+            $this->min = $timestamp;
+        }
+
+        return $this;
+    }
+
+    public function max($value): self
+    {
+        $this->max = $value;
+        if ($this->max !== null && $this->tooBig === null) {
+            $this->tooBig = '{attribute} must be no greater than {max}.';
+        }
+        if ($this->maxString === null) {
+            $this->maxString = (string) $this->max;
+        }
+        if ($this->max !== null && is_string($this->max)) {
+            $timestamp = $this->parseDateValue($this->max);
+            if ($timestamp === false) {
+                throw new InvalidConfigException("Invalid max date value: {$this->max}");
+            }
+            $this->max = $timestamp;
+        }
+
+        return $this;
+    }
+
+
 }
