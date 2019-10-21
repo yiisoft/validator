@@ -143,7 +143,7 @@ class NumberTest extends TestCase
         $this->assertTrue($rule->validate(1)->isValid());
         $this->assertFalse($rule->validate(-1)->isValid());
         $this->assertFalse($rule->validate('22e-12')->isValid());
-        $this->assertTrue($rule->validate(PHP_INT_MAX + 1)->isValid());
+        $this->assertFalse($rule->validate(PHP_INT_MAX + 1)->isValid());
     }
 
     public function testvalidateMax()

@@ -1,7 +1,6 @@
 <?php
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -114,7 +113,7 @@ class Number extends Rule
 
         $pattern = $this->asInteger ? $this->integerPattern : $this->numberPattern;
 
-        if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
+        if (!preg_match($pattern, static::normalizeNumber($value))) {
             $result->addError($this->getNotANumberMessage(['value' => $value]));
         } elseif ($this->min !== null && $value < $this->min) {
             $result->addError($this->getTooSmallMessage(['min' => $this->min]));
@@ -133,5 +132,22 @@ class Number extends Rule
         return is_array($value)
         || (is_object($value) && !method_exists($value, '__toString'))
         || (!is_object($value) && !is_scalar($value) && $value !== null);
+    }
+
+    /**
+     * Returns string representation of number value with replaced commas to dots, if decimal point
+     * of current locale is comma.
+     * @param int|float|string $value
+     * @return string
+     */
+    public static function normalizeNumber($value): string
+    {
+        $value = (string)$value;
+        $localeInfo = localeconv();
+        $decimalSeparator = $localeInfo['decimal_point'] ?? null;
+        if ($decimalSeparator !== null && $decimalSeparator !== '.') {
+            $value = str_replace($decimalSeparator, '.', $value);
+        }
+        return $value;
     }
 }
