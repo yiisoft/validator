@@ -26,9 +26,4 @@ final class Result
     {
         return $this->errors;
     }
-
-    public function hasErrors(): bool
-    {
-        return (bool)count($this->errors);
-    }
 }
