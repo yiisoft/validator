@@ -3,6 +3,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Ip;
+use Yiisoft\Validator\Tests\data\FakedValidationModel;
 
 /**
  * @group validators
@@ -13,7 +14,7 @@ class IpTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Both IPv4 and IPv6 checks can not be disabled at the same time');
-        new Ip(['ipv4' => false, 'ipv6' => false]);
+        (new Ip())->ipv4(false)->ipv6(false)->validateValue('any');
     }
 
     public function provideRangesForSubstitution()
@@ -33,22 +34,27 @@ class IpTest extends TestCase
      */
     public function testRangesSubstitution($range, $expectedRange)
     {
-        $validator = new Ip(['ranges' => $range]);
-        $this->assertEquals($expectedRange, $validator->ranges);
+        $validator = (new Ip())->ranges($range);
+
+        $reflection = new \ReflectionObject($validator);
+        $prop = $reflection->getProperty('ranges');
+        $prop->setAccessible(true);
+
+        $ranges = ($prop->getValue($validator));
+
+        $this->assertEquals($expectedRange, $ranges);
     }
 
 
     public function testValidateOrder()
     {
-        $validator = new Ip([
-            'ranges' => ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'],
-        ]);
+        $validator = (new Ip())->ranges(['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any']);
 
-        $this->assertTrue($validator->validate('10.0.0.1'));
-        $this->assertFalse($validator->validate('10.0.0.2'));
-        $this->assertTrue($validator->validate('192.168.5.101'));
-        $this->assertTrue($validator->validate('cafe::babe'));
-        $this->assertFalse($validator->validate('babe::cafe'));
+        $this->assertTrue($validator->validate('10.0.0.1')->isValid());
+        $this->assertFalse($validator->validate('10.0.0.2')->isValid());
+        $this->assertTrue($validator->validate('192.168.5.101')->isValid());
+        $this->assertTrue($validator->validate('cafe::babe')->isValid());
+        $this->assertFalse($validator->validate('babe::cafe')->isValid());
     }
 
     public function provideBadIps()
@@ -63,8 +69,11 @@ class IpTest extends TestCase
     public function testvalidateNotAnIP($badIp)
     {
         $validator = new Ip();
-
-        $this->assertFalse($validator->validate($badIp));
+        try {
+            $this->assertFalse($validator->validate($badIp)->isValid());
+        } catch (\Error $e) {
+            $this->assertInstanceOf('\TypeError', $e);
+        }
     }
 
     /**
@@ -77,60 +86,68 @@ class IpTest extends TestCase
         $model = new FakedValidationModel();
 
         $model->attr_ip = $badIp;
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertEquals('attr_ip must be a valid IP address.', $model->getFirstError('attr_ip'));
-        $model->clearErrors();
+        try {
+            $result = $validator->validateAttribute($model, 'attr_ip');
+            $this->assertTrue(in_array('{attribute} must be a valid IP address.', $result->getErrors()));
+        } catch (\Error $e) {
+            $this->assertInstanceOf('\TypeError', $e);
+        }
 
-
-        $validator->ipv4 = false;
-
-        $model->attr_ip = $badIp;
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertEquals('attr_ip must be a valid IP address.', $model->getFirstError('attr_ip'));
-        $model->clearErrors();
-
-
-        $validator->ipv4 = true;
-        $validator->ipv6 = false;
+        $validator->ipv4(false);
 
         $model->attr_ip = $badIp;
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertEquals('attr_ip must be a valid IP address.', $model->getFirstError('attr_ip'));
-        $model->clearErrors();
+        try {
+            $result = $validator->validateAttribute($model, 'attr_ip');
+            $this->assertTrue(in_array('{attribute} must be a valid IP address.',  $result->getErrors()));
+        } catch (\Error $e) {
+            $this->assertInstanceOf('\TypeError', $e);
+        }
+
+
+        $validator->ipv4(true);
+        $validator->ipv6(false);
+
+        $model->attr_ip = $badIp;
+        try {
+            $result = $validator->validateAttribute($model, 'attr_ip');
+            $this->assertTrue(in_array('{attribute} must be a valid IP address.', $result->getErrors()));
+        } catch (\Error $e) {
+            $this->assertInstanceOf('\TypeError', $e);
+        }
     }
 
     public function testvalidateIPv4()
     {
         $validator = new Ip();
 
-        $this->assertTrue($validator->validate('192.168.10.11'));
-        $this->assertTrue($validator->validate('192.168.005.001'));
-        $this->assertFalse($validator->validate('192.168.5.321'));
-        $this->assertFalse($validator->validate('!192.168.5.32'));
-        $this->assertFalse($validator->validate('192.168.5.32/11'));
+        $this->assertTrue($validator->validate('192.168.10.11')->isValid());
+        $this->assertTrue($validator->validate('192.168.005.001')->isValid());
+        $this->assertFalse($validator->validate('192.168.5.321')->isValid());
+        $this->assertFalse($validator->validate('!192.168.5.32')->isValid());
+        $this->assertFalse($validator->validate('192.168.5.32/11')->isValid());
 
-        $validator->ipv4 = false;
-        $this->assertFalse($validator->validate('192.168.10.11'));
+        $validator->ipv4(false);
+        $this->assertFalse($validator->validate('192.168.10.11')->isValid());
 
-        $validator->ipv4 = true;
-        $validator->subnet = null;
+        $validator->ipv4(true);
+        $validator->subnet(null);
 
-        $this->assertTrue($validator->validate('192.168.5.32/11'));
-        $this->assertTrue($validator->validate('192.168.5.32/32'));
-        $this->assertTrue($validator->validate('0.0.0.0/0'));
-        $this->assertFalse($validator->validate('192.168.5.32/33'));
-        $this->assertFalse($validator->validate('192.168.5.32/33'));
-        $this->assertFalse($validator->validate('192.168.5.32/af'));
-        $this->assertFalse($validator->validate('192.168.5.32/11/12'));
+        $this->assertTrue($validator->validate('192.168.5.32/11')->isValid());
+        $this->assertTrue($validator->validate('192.168.5.32/32')->isValid());
+        $this->assertTrue($validator->validate('0.0.0.0/0')->isValid());
+        $this->assertFalse($validator->validate('192.168.5.32/33')->isValid());
+        $this->assertFalse($validator->validate('192.168.5.32/33')->isValid());
+        $this->assertFalse($validator->validate('192.168.5.32/af')->isValid());
+        $this->assertFalse($validator->validate('192.168.5.32/11/12')->isValid());
 
-        $validator->subnet = true;
-        $this->assertTrue($validator->validate('10.0.0.1/24'));
-        $this->assertTrue($validator->validate('10.0.0.1/0'));
-        $this->assertFalse($validator->validate('10.0.0.1'));
+        $validator->subnet(true);
+        $this->assertTrue($validator->validate('10.0.0.1/24')->isValid());
+        $this->assertTrue($validator->validate('10.0.0.1/0')->isValid());
+        $this->assertFalse($validator->validate('10.0.0.1')->isValid());
 
-        $validator->negation = true;
-        $this->assertTrue($validator->validate('!192.168.5.32/32'));
-        $this->assertFalse($validator->validate('!!192.168.5.32/32'));
+        $validator->negation(true);
+        $this->assertTrue($validator->validate('!192.168.5.32/32')->isValid());
+        $this->assertFalse($validator->validate('!!192.168.5.32/32')->isValid());
     }
 
 
@@ -138,164 +155,160 @@ class IpTest extends TestCase
     {
         $validator = new Ip();
 
-        $this->assertTrue($validator->validate('2008:fa::1'));
-        $this->assertTrue($validator->validate('2008:00fa::0001'));
-        $this->assertFalse($validator->validate('2008:fz::0'));
-        $this->assertFalse($validator->validate('2008:fa::0::1'));
-        $this->assertFalse($validator->validate('!2008:fa::0::1'));
-        $this->assertFalse($validator->validate('2008:fa::0:1/64'));
+        $this->assertTrue($validator->validate('2008:fa::1')->isValid());
+        $this->assertTrue($validator->validate('2008:00fa::0001')->isValid());
+        $this->assertFalse($validator->validate('2008:fz::0')->isValid());
+        $this->assertFalse($validator->validate('2008:fa::0::1')->isValid());
+        $this->assertFalse($validator->validate('!2008:fa::0::1')->isValid());
+        $this->assertFalse($validator->validate('2008:fa::0:1/64')->isValid());
 
-        $validator->ipv4 = false;
-        $this->assertTrue($validator->validate('2008:fa::1'));
+        $validator->ipv4(false);
+        $this->assertTrue($validator->validate('2008:fa::1')->isValid());
 
-        $validator->ipv6 = false;
-        $this->assertFalse($validator->validate('2008:fa::1'));
+        $validator->ipv4(true);
+        $validator->ipv6(false);
+        $this->assertFalse($validator->validate('2008:fa::1')->isValid());
 
-        $validator->ipv6 = true;
-        $validator->subnet = null;
+        $validator->ipv4(false);
+        $validator->ipv6(true);
+        $validator->subnet(null);
 
-        $this->assertTrue($validator->validate('2008:fa::0:1/64'));
-        $this->assertTrue($validator->validate('2008:fa::0:1/128'));
-        $this->assertTrue($validator->validate('2008:fa::0:1/0'));
-        $this->assertFalse($validator->validate('!2008:fa::0:1/0'));
-        $this->assertFalse($validator->validate('2008:fz::0/129'));
+        $this->assertTrue($validator->validate('2008:fa::0:1/64')->isValid());
+        $this->assertTrue($validator->validate('2008:fa::0:1/128')->isValid());
+        $this->assertTrue($validator->validate('2008:fa::0:1/0')->isValid());
+        $this->assertFalse($validator->validate('!2008:fa::0:1/0')->isValid());
+        $this->assertFalse($validator->validate('2008:fz::0/129')->isValid());
 
-        $validator->subnet = true;
-        $this->assertTrue($validator->validate('2008:db0::1/64'));
-        $this->assertFalse($validator->validate('2008:db0::1'));
+        $validator->subnet(true);
+        $this->assertTrue($validator->validate('2008:db0::1/64')->isValid());
+        $this->assertFalse($validator->validate('2008:db0::1')->isValid());
 
-        $validator->negation = true;
-        $this->assertTrue($validator->validate('!2008:fa::0:1/64'));
-        $this->assertFalse($validator->validate('!!2008:fa::0:1/64'));
+        $validator->negation(true);
+        $this->assertTrue($validator->validate('!2008:fa::0:1/64')->isValid());
+        $this->assertFalse($validator->validate('!!2008:fa::0:1/64')->isValid());
     }
 
     public function testvalidateIPvBoth()
     {
         $validator = new Ip();
 
-        $this->assertTrue($validator->validate('192.168.10.11'));
-        $this->assertTrue($validator->validate('2008:fa::1'));
-        $this->assertTrue($validator->validate('2008:00fa::0001'));
-        $this->assertTrue($validator->validate('192.168.005.001'));
-        $this->assertFalse($validator->validate('192.168.5.321'));
-        $this->assertFalse($validator->validate('!192.168.5.32'));
-        $this->assertFalse($validator->validate('192.168.5.32/11'));
-        $this->assertFalse($validator->validate('2008:fz::0'));
-        $this->assertFalse($validator->validate('2008:fa::0::1'));
-        $this->assertFalse($validator->validate('!2008:fa::0::1'));
-        $this->assertFalse($validator->validate('2008:fa::0:1/64'));
+        $this->assertTrue($validator->validate('192.168.10.11')->isValid());
+        $this->assertTrue($validator->validate('2008:fa::1')->isValid());
+        $this->assertTrue($validator->validate('2008:00fa::0001')->isValid());
+        $this->assertTrue($validator->validate('192.168.005.001')->isValid());
+        $this->assertFalse($validator->validate('192.168.5.321')->isValid());
+        $this->assertFalse($validator->validate('!192.168.5.32')->isValid());
+        $this->assertFalse($validator->validate('192.168.5.32/11')->isValid());
+        $this->assertFalse($validator->validate('2008:fz::0')->isValid());
+        $this->assertFalse($validator->validate('2008:fa::0::1')->isValid());
+        $this->assertFalse($validator->validate('!2008:fa::0::1')->isValid());
+        $this->assertFalse($validator->validate('2008:fa::0:1/64')->isValid());
 
-        $validator->ipv4 = false;
-        $this->assertFalse($validator->validate('192.168.10.11'));
-        $this->assertTrue($validator->validate('2008:fa::1'));
+        $validator->ipv4(false);
+        $this->assertFalse($validator->validate('192.168.10.11')->isValid());
+        $this->assertTrue($validator->validate('2008:fa::1')->isValid());
 
-        $validator->ipv6 = false;
-        $validator->ipv4 = true;
-        $this->assertTrue($validator->validate('192.168.10.11'));
-        $this->assertFalse($validator->validate('2008:fa::1'));
+        $validator->ipv6(false);
+        $validator->ipv4(true);
+        $this->assertTrue($validator->validate('192.168.10.11')->isValid());
+        $this->assertFalse($validator->validate('2008:fa::1')->isValid());
 
-        $validator->ipv6 = true;
-        $validator->subnet = null;
+        $validator->ipv6(true);
+        $validator->subnet(null);
 
-        $this->assertTrue($validator->validate('192.168.5.32/11'));
-        $this->assertTrue($validator->validate('192.168.5.32/32'));
-        $this->assertTrue($validator->validate('0.0.0.0/0'));
-        $this->assertTrue($validator->validate('2008:fa::0:1/64'));
-        $this->assertTrue($validator->validate('2008:fa::0:1/128'));
-        $this->assertTrue($validator->validate('2008:fa::0:1/0'));
-        $this->assertFalse($validator->validate('!2008:fa::0:1/0'));
-        $this->assertFalse($validator->validate('192.168.5.32/33'));
-        $this->assertFalse($validator->validate('2008:fz::0/129'));
-        $this->assertFalse($validator->validate('192.168.5.32/33'));
-        $this->assertFalse($validator->validate('192.168.5.32/af'));
-        $this->assertFalse($validator->validate('192.168.5.32/11/12'));
+        $this->assertTrue($validator->validate('192.168.5.32/11')->isValid());
+        $this->assertTrue($validator->validate('192.168.5.32/32')->isValid());
+        $this->assertTrue($validator->validate('0.0.0.0/0')->isValid());
+        $this->assertTrue($validator->validate('2008:fa::0:1/64')->isValid());
+        $this->assertTrue($validator->validate('2008:fa::0:1/128')->isValid());
+        $this->assertTrue($validator->validate('2008:fa::0:1/0')->isValid());
+        $this->assertFalse($validator->validate('!2008:fa::0:1/0')->isValid());
+        $this->assertFalse($validator->validate('192.168.5.32/33')->isValid());
+        $this->assertFalse($validator->validate('2008:fz::0/129')->isValid());
+        $this->assertFalse($validator->validate('192.168.5.32/33')->isValid());
+        $this->assertFalse($validator->validate('192.168.5.32/af')->isValid());
+        $this->assertFalse($validator->validate('192.168.5.32/11/12')->isValid());
 
-        $validator->subnet = true;
-        $this->assertTrue($validator->validate('10.0.0.1/24'));
-        $this->assertTrue($validator->validate('10.0.0.1/0'));
-        $this->assertTrue($validator->validate('2008:db0::1/64'));
-        $this->assertFalse($validator->validate('2008:db0::1'));
-        $this->assertFalse($validator->validate('10.0.0.1'));
+        $validator->subnet(true);
+        $this->assertTrue($validator->validate('10.0.0.1/24')->isValid());
+        $this->assertTrue($validator->validate('10.0.0.1/0')->isValid());
+        $this->assertTrue($validator->validate('2008:db0::1/64')->isValid());
+        $this->assertFalse($validator->validate('2008:db0::1')->isValid());
+        $this->assertFalse($validator->validate('10.0.0.1')->isValid());
 
-        $validator->negation = true;
+        $validator->negation(true);
 
-        $this->assertTrue($validator->validate('!192.168.5.32/32'));
-        $this->assertTrue($validator->validate('!2008:fa::0:1/64'));
-        $this->assertFalse($validator->validate('!!192.168.5.32/32'));
-        $this->assertFalse($validator->validate('!!2008:fa::0:1/64'));
+        $this->assertTrue($validator->validate('!192.168.5.32/32')->isValid());
+        $this->assertTrue($validator->validate('!2008:fa::0:1/64')->isValid());
+        $this->assertFalse($validator->validate('!!192.168.5.32/32')->isValid());
+        $this->assertFalse($validator->validate('!!2008:fa::0:1/64')->isValid());
     }
 
     public function testValidateRangeIPv4()
     {
-        $validator = new Ip([
-            'ranges' => ['10.0.1.0/24'],
-        ]);
-        $this->assertTrue($validator->validate('10.0.1.2'));
-        $this->assertFalse($validator->validate('192.5.1.1'));
+        $validator = (new Ip())->ranges(['10.0.1.0/24']);
+        $this->assertTrue($validator->validate('10.0.1.2')->isValid());
+        $this->assertFalse($validator->validate('192.5.1.1')->isValid());
 
-        $validator->ranges = ['10.0.1.0/24'];
-        $this->assertTrue($validator->validate('10.0.1.2'));
-        $this->assertFalse($validator->validate('10.0.3.2'));
+        $validator->ranges(['10.0.1.0/24']);
+        $this->assertTrue($validator->validate('10.0.1.2')->isValid());
+        $this->assertFalse($validator->validate('10.0.3.2')->isValid());
 
-        $validator->ranges = ['!10.0.1.0/24', '10.0.0.0/8', 'localhost'];
-        $this->assertFalse($validator->validate('10.0.1.2'));
-        $this->assertTrue($validator->validate('127.0.0.1'));
+        $validator->ranges(['!10.0.1.0/24', '10.0.0.0/8', 'localhost']);
+        $this->assertFalse($validator->validate('10.0.1.2')->isValid());
+        $this->assertTrue($validator->validate('127.0.0.1')->isValid());
 
-        $validator->subnet = null;
-        $validator->ranges = ['10.0.1.0/24', '!10.0.0.0/8', 'localhost'];
-        $this->assertTrue($validator->validate('10.0.1.2'));
-        $this->assertTrue($validator->validate('127.0.0.1'));
-        $this->assertTrue($validator->validate('10.0.1.28/28'));
-        $this->assertFalse($validator->validate('10.2.2.2'));
-        $this->assertFalse($validator->validate('10.0.1.1/22'));
+        $validator->subnet(null);
+        $validator->ranges(['10.0.1.0/24', '!10.0.0.0/8', 'localhost']);
+        $this->assertTrue($validator->validate('10.0.1.2')->isValid());
+        $this->assertTrue($validator->validate('127.0.0.1')->isValid());
+        $this->assertTrue($validator->validate('10.0.1.28/28')->isValid());
+        $this->assertFalse($validator->validate('10.2.2.2')->isValid());
+        $this->assertFalse($validator->validate('10.0.1.1/22')->isValid());
     }
 
     public function testValidateRangeIPv6()
     {
-        $validator = new Ip([
-            'ranges' => '2001:db0:1:1::/64',
-        ]);
-        $this->assertTrue($validator->validate('2001:db0:1:1::6'));
-        $this->assertFalse($validator->validate('2001:db0:1:2::7'));
+        $validator = (new Ip())->ranges('2001:db0:1:1::/64');
+        $this->assertTrue($validator->validate('2001:db0:1:1::6')->isValid());
+        $this->assertFalse($validator->validate('2001:db0:1:2::7')->isValid());
 
-        $validator->ranges = ['2001:db0:1:2::/64'];
-        $this->assertTrue($validator->validate('2001:db0:1:2::7'));
+        $validator->ranges(['2001:db0:1:2::/64']);
+        $this->assertTrue($validator->validate('2001:db0:1:2::7')->isValid());
 
-        $validator->ranges = ['!2001:db0::/32', '2001:db0:1:2::/64'];
-        $this->assertFalse($validator->validate('2001:db0:1:2::7'));
+        $validator->ranges(['!2001:db0::/32', '2001:db0:1:2::/64']);
+        $this->assertFalse($validator->validate('2001:db0:1:2::7')->isValid());
 
-        $validator->subnet = null;
-        $validator->ranges = array_reverse($validator->ranges);
-        $this->assertTrue($validator->validate('2001:db0:1:2::7'));
+        $validator->subnet(null);
+        $validator->ranges(array_reverse($validator->getRanges()));
+        $this->assertTrue($validator->validate('2001:db0:1:2::7')->isValid());
     }
 
     public function testValidateRangeIPvBoth()
     {
-        $validator = new Ip([
-            'ranges' => '10.0.1.0/24',
-        ]);
-        $this->assertTrue($validator->validate('10.0.1.2'));
-        $this->assertFalse($validator->validate('192.5.1.1'));
-        $this->assertFalse($validator->validate('2001:db0:1:2::7'));
+        $validator = (new Ip())->ranges('10.0.1.0/24');
+        $this->assertTrue($validator->validate('10.0.1.2')->isValid());
+        $this->assertFalse($validator->validate('192.5.1.1')->isValid());
+        $this->assertFalse($validator->validate('2001:db0:1:2::7')->isValid());
 
-        $validator->ranges = ['10.0.1.0/24', '2001:db0:1:2::/64', '127.0.0.1'];
-        $this->assertTrue($validator->validate('2001:db0:1:2::7'));
-        $this->assertTrue($validator->validate('10.0.1.2'));
-        $this->assertFalse($validator->validate('10.0.3.2'));
+        $validator->ranges(['10.0.1.0/24', '2001:db0:1:2::/64', '127.0.0.1']);
+        $this->assertTrue($validator->validate('2001:db0:1:2::7')->isValid());
+        $this->assertTrue($validator->validate('10.0.1.2')->isValid());
+        $this->assertFalse($validator->validate('10.0.3.2')->isValid());
 
-        $validator->ranges = ['!system', 'any'];
-        $this->assertFalse($validator->validate('127.0.0.1'));
-        $this->assertFalse($validator->validate('fe80::face'));
-        $this->assertTrue($validator->validate('8.8.8.8'));
+        $validator->ranges(['!system', 'any']);
+        $this->assertFalse($validator->validate('127.0.0.1')->isValid());
+        $this->assertFalse($validator->validate('fe80::face')->isValid());
+        $this->assertTrue($validator->validate('8.8.8.8')->isValid());
 
-        $validator->subnet = null;
-        $validator->ranges = ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!all'];
-        $this->assertTrue($validator->validate('10.0.1.2'));
-        $this->assertTrue($validator->validate('2001:db0:1:2::7'));
-        $this->assertTrue($validator->validate('127.0.0.1'));
-        $this->assertTrue($validator->validate('10.0.1.28/28'));
-        $this->assertFalse($validator->validate('10.2.2.2'));
-        $this->assertFalse($validator->validate('10.0.1.1/22'));
+        $validator->subnet(null);
+        $validator->ranges(['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!all']);
+        $this->assertTrue($validator->validate('10.0.1.2')->isValid());
+        $this->assertTrue($validator->validate('2001:db0:1:2::7')->isValid());
+        $this->assertTrue($validator->validate('127.0.0.1')->isValid());
+        $this->assertTrue($validator->validate('10.0.1.28/28')->isValid());
+        $this->assertFalse($validator->validate('10.2.2.2')->isValid());
+        $this->assertFalse($validator->validate('10.0.1.1/22')->isValid());
     }
 
     public function testValidateAttributeIPv4()
@@ -303,32 +316,31 @@ class IpTest extends TestCase
         $validator = new Ip();
         $model = new FakedValidationModel();
 
-        $validator->subnet = null;
+        $validator->subnet(null);
 
         $model->attr_ip = '8.8.8.8';
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertFalse($model->hasErrors('attr_ip'));
+        $result = $validator->validateAttribute($model, 'attr_ip');
+        $this->assertTrue($result->isValid());
         $this->assertEquals('8.8.8.8', $model->attr_ip);
 
-        $validator->subnet = false;
+        $validator->subnet(false);
 
         $model->attr_ip = '8.8.8.8';
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertFalse($model->hasErrors('attr_ip'));
+        $result = $validator->validateAttribute($model, 'attr_ip');
+        $this->assertTrue($result->isValid());
         $this->assertEquals('8.8.8.8', $model->attr_ip);
 
         $model->attr_ip = '8.8.8.8/24';
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertTrue($model->hasErrors('attr_ip'));
-        $this->assertEquals('attr_ip must not be a subnet.', $model->getFirstError('attr_ip'));
-        $model->clearErrors();
+        $result = $validator->validateAttribute($model, 'attr_ip');
+        $this->assertFalse($result->isValid());
+        $this->assertTrue(in_array('{attribute} must not be a subnet.', $result->getErrors()));
 
-        $validator->subnet = null;
-        $validator->normalize = true;
+        $validator->subnet(null);
+        $validator->normalize(true);
 
         $model->attr_ip = '8.8.8.8';
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertFalse($model->hasErrors('attr_ip'));
+        $result = $validator->validateAttribute($model, 'attr_ip');
+        $this->assertTrue($result->isValid());
         $this->assertEquals('8.8.8.8/32', $model->attr_ip);
     }
 
@@ -338,50 +350,49 @@ class IpTest extends TestCase
         $validator = new Ip();
         $model = new FakedValidationModel();
 
-        $validator->subnet = null;
+        $validator->subnet(null);
 
         $model->attr_ip = '2001:db0:1:2::1';
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertFalse($model->hasErrors('attr_ip'));
+        $result = $validator->validateAttribute($model, 'attr_ip');
+        $this->assertTrue($result->isValid());
         $this->assertEquals('2001:db0:1:2::1', $model->attr_ip);
 
-        $validator->subnet = false;
+        $validator->subnet(false);
 
         $model->attr_ip = '2001:db0:1:2::7';
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertFalse($model->hasErrors('attr_ip'));
+        $result = $validator->validateAttribute($model, 'attr_ip');
+        $this->assertTrue($result->isValid());
         $this->assertEquals('2001:db0:1:2::7', $model->attr_ip);
 
         $model->attr_ip = '2001:db0:1:2::7/64';
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertTrue($model->hasErrors('attr_ip'));
-        $this->assertEquals('attr_ip must not be a subnet.', $model->getFirstError('attr_ip'));
-        $model->clearErrors();
+        $result = $validator->validateAttribute($model, 'attr_ip');
+        $this->assertFalse($result->isValid());
+        $this->assertTrue(in_array('{attribute} must not be a subnet.', $result->getErrors()));
 
-        $validator->subnet = null;
-        $validator->normalize = true;
+        $validator->subnet(null);
+        $validator->normalize(true);
 
         $model->attr_ip = 'fa01::1';
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertFalse($model->hasErrors('attr_ip'));
+        $result = $validator->validateAttribute($model, 'attr_ip');
+        $this->assertTrue($result->isValid());
         $this->assertEquals('fa01::1/128', $model->attr_ip);
 
         $model->attr_ip = 'fa01::1/64';
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertFalse($model->hasErrors('attr_ip'));
+        $result = $validator->validateAttribute($model, 'attr_ip');
+        $this->assertTrue($result->isValid());
         $this->assertEquals('fa01::1/64', $model->attr_ip);
 
-        $validator->expandIPv6 = true;
+        $validator->expandIPv6(true);
 
         $model->attr_ip = 'fa01::1/64';
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertFalse($model->hasErrors('attr_ip'));
+        $result = $validator->validateAttribute($model, 'attr_ip');
+        $this->assertTrue($result->isValid());
         $this->assertEquals('fa01:0000:0000:0000:0000:0000:0000:0001/64', $model->attr_ip);
 
         $model->attr_ip = 'fa01::2/614';
-        $validator->validateAttribute($model, 'attr_ip');
-        $this->assertTrue($model->hasErrors('attr_ip'));
+        $result = $validator->validateAttribute($model, 'attr_ip');
+        $this->assertFalse($result->isValid());
         $this->assertEquals('fa01::2/614', $model->attr_ip);
-        $this->assertEquals('attr_ip contains wrong subnet mask.', $model->getFirstError('attr_ip'));
+        $this->assertTrue(in_array('{attribute} contains wrong subnet mask.', $result->getErrors()));
     }
 }

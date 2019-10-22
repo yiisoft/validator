@@ -2,7 +2,6 @@
 
 namespace Yiisoft\Validator\Rule;
 
-use yii\helpers\IpHelper;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -25,11 +24,23 @@ use Yiisoft\Validator\Rule;
  * ['ip_address', 'ip', 'expandIPv6' => true], // expands IPv6 address to a full notation format
  * ```
  *
- * @property array $ranges The IPv4 or IPv6 ranges that are allowed or forbidden. See [[setRanges()]] for
+ * @property array $ranges The IPv4 or IPv6 ranges that are allowed or forbidden. See [[ranges()]] for
  * detailed description.
  */
 class Ip extends Rule
 {
+    const IPV4 = 4;
+    const IPV6 = 6;
+
+    /**
+     * The length of IPv6 address in bits
+     */
+    const IPV6_ADDRESS_LENGTH = 128;
+    /**
+     * The length of IPv4 address in bits
+     */
+    const IPV4_ADDRESS_LENGTH = 32;
+
     /**
      * Negation char.
      *
@@ -234,11 +245,14 @@ class Ip extends Rule
      * In this example, access is allowed for all the IPv4 and IPv6 addresses excluding the `192.168.10.0/24` subnet.
      * IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
      * @property array the IPv4 or IPv6 ranges that are allowed or forbidden.
-     * See [[setRanges()]] for detailed description.
+     * @return $this
+     * See [[ranges()]] for detailed description.
      */
-    public function setRanges($ranges)
+    public function ranges($ranges): self
     {
         $this->ranges = $this->prepareRanges((array)$ranges);
+
+        return $this;
     }
 
     /**
@@ -251,8 +265,6 @@ class Ip extends Rule
 
     public function validateValue($value): Result
     {
-        $result = new Result();
-
         if (!$this->ipv4 && !$this->ipv6) {
             throw new \RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time');
         }
@@ -267,6 +279,25 @@ class Ip extends Rule
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function validateAttribute(DataSetInterface $model, $attribute): Result
+    {
+        $value = $model->$attribute;
+
+        $result = $this->validateSubnet($value);
+        if ($value != $model->$attribute) {
+            $model->$attribute = $value;
+        }
+//        if (is_array($result)) {
+//            $result[1] = array_merge(['ip' => is_array($value) ? 'array()' : $value], $result[1]);
+//            $this->addError($model, $attribute, $result[0], $result[1]);
+//        }
+
+        return $result;
+    }
+
+    /**
      * Validates an IPv4/IPv6 address or subnet.
      *
      * @param $ip string
@@ -275,10 +306,15 @@ class Ip extends Rule
      * array  - an error occurred during the validation.
      * Array[0] contains the text of an error, array[1] contains values for the placeholders in the error message
      */
-    private function validateSubnet(string $ip)
+    private function validateSubnet(string &$ipAddress)
     {
+        $result = new Result();
+
+        $ip = $ipAddress;
+
         if (!is_string($ip)) {
-            return [$this->message, []];
+            $result->addError($this->message);
+            return $result;
         }
 
         $negation = null;
@@ -292,60 +328,70 @@ class Ip extends Rule
         }
 
         if ($this->subnet === true && $cidr === null) {
-            return [$this->noSubnet, []];
+            $result->addError($this->noSubnet);
+            return $result;
         }
         if ($this->subnet === false && $cidr !== null) {
-            return [$this->hasSubnet, []];
+            $result->addError($this->hasSubnet);
+            return $result;
         }
         if ($this->negation === false && $negation !== null) {
-            return [$this->message, []];
+            $result->addError($this->message);
+            return $result;
         }
 
-        if ($this->getIpVersion($ip) === IpHelper::IPV6) {
+        if (static::getIpVersion($ip) === self::IPV6) {
             if ($cidr !== null) {
-                if ($cidr > IpHelper::IPV6_ADDRESS_LENGTH || $cidr < 0) {
-                    return [$this->wrongCidr, []];
+                if ($cidr > self::IPV6_ADDRESS_LENGTH || $cidr < 0) {
+                    $result->addError($this->wrongCidr);
+                    return $result;
                 }
             } else {
                 $isCidrDefault = true;
-                $cidr = IpHelper::IPV6_ADDRESS_LENGTH;
+                $cidr = self::IPV6_ADDRESS_LENGTH;
             }
 
             if (!$this->validateIPv6($ip)) {
-                return [$this->message, []];
+                $result->addError($this->message);
+                return $result;
             }
             if (!$this->ipv6) {
-                return [$this->ipv6NotAllowed, []];
+                $result->addError($this->ipv6NotAllowed);
+                return $result;
             }
 
             if ($this->expandIPv6) {
-                $ip = $this->expandIPv6($ip);
+                $ip = self::_expandIPv6($ip);
             }
         } else {
             if ($cidr !== null) {
-                if ($cidr > IpHelper::IPV4_ADDRESS_LENGTH || $cidr < 0) {
-                    return [$this->wrongCidr, []];
+                if ($cidr > self::IPV4_ADDRESS_LENGTH || $cidr < 0) {
+                    $result->addError($this->wrongCidr);
+                    return $result;
                 }
             } else {
                 $isCidrDefault = true;
-                $cidr = IpHelper::IPV4_ADDRESS_LENGTH;
+                $cidr = self::IPV4_ADDRESS_LENGTH;
             }
             if (!$this->validateIPv4($ip)) {
-                return [$this->message, []];
+                $result->addError($this->message);
+                return $result;
             }
             if (!$this->ipv4) {
-                return [$this->ipv4NotAllowed, []];
+                $result->addError($this->ipv4NotAllowed);
+                return $result;
             }
         }
 
         if (!$this->isAllowed($ip, $cidr)) {
-            return [$this->notInRange, []];
+            $result->addError($this->notInRange);
+            return $result;
         }
 
-        $result = $negation . $ip;
+        $ipAddress = $negation . $ip;
 
         if ($this->subnet !== false && (!$isCidrDefault || $isCidrDefault && $this->normalize)) {
-            $result .= "/$cidr";
+            $ipAddress .= "/$cidr";
         }
 
         return $result;
@@ -354,14 +400,22 @@ class Ip extends Rule
     /**
      * Expands an IPv6 address to it's full notation.
      *
-     * For example `2001:db8::1` will be expanded to `2001:0db8:0000:0000:0000:0000:0000:0001`.
+     * For example `2001:db8::1` will be expanded to `2001:0db8:0000:0000:0000:0000:0000:0001`
      *
-     * @param string $ip the original IPv6
-     * @return string the expanded IPv6
+     * @param string $ip the original valid IPv6 address
+     * @return string the expanded IPv6 address
      */
-    private function expandIPv6($ip)
+    private static function _expandIPv6($ip)
     {
-        return IpHelper::expandIPv6($ip);
+        $hex = unpack('H*hex', inet_pton($ip));
+        return substr(preg_replace('/([a-f0-9]{4})/i', '$1:', $hex['hex']), 0, -1);
+    }
+
+    public function expandIPv6(bool $value): self
+    {
+        $this->expandIPv6 = $value;
+
+        return $this;
     }
 
     /**
@@ -454,14 +508,14 @@ class Ip extends Rule
     }
 
     /**
-     * Gets the IP version.
+     * Gets the IP version. Does not perform IP address validation.
      *
-     * @param string $ip
-     * @return int
+     * @param string $ip the valid IPv4 or IPv6 address.
+     * @return int [[IPV4]] or [[IPV6]]
      */
-    private function getIpVersion($ip)
+    public static function getIpVersion($ip)
     {
-        return IpHelper::getIpVersion($ip);
+        return strpos($ip, ':') === false ? self::IPV4 : self::IPV6;
     }
 
     /**
@@ -474,15 +528,108 @@ class Ip extends Rule
     }
 
     /**
-     * Checks whether the IP is in subnet range.
+     * Checks whether IP address or subnet $subnet is contained by $subnet.
      *
-     * @param string $ip an IPv4 or IPv6 address
+     * For example, the following code checks whether subnet `192.168.1.0/24` is in subnet `192.168.0.0/22`:
+     *
+     * ```php
+     * IpHelper::inRange('192.168.1.0/24', '192.168.0.0/22'); // true
+     * ```
+     *
+     * In case you need to check whether a single IP address `192.168.1.21` is in the subnet `192.168.1.0/24`,
+     * you can use any of theses examples:
+     *
+     * ```php
+     * IpHelper::inRange('192.168.1.21', '192.168.1.0/24'); // true
+     * IpHelper::inRange('192.168.1.21/32', '192.168.1.0/24'); // true
+     * ```
+     *
+     * @param string $ip the valid IPv4 or IPv6 address or CIDR range, e.g.: `10.0.0.0/8` or `2001:af::/64`
      * @param int $cidr
-     * @param string $range subnet in CIDR format e.g. `10.0.0.0/8` or `2001:af::/64`
-     * @return bool
+     * @param string $range the valid IPv4 or IPv6 CIDR range, e.g. `10.0.0.0/8` or `2001:af::/64`
+     * @return bool whether $subnet is contained by $range
+     *
+     * @see https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
      */
-    private function inRange($ip, $cidr, $range)
+    public static function inRange($ip, $cidr, $range)
     {
-        return IpHelper::inRange($ip . '/' . $cidr, $range);
+        $subnet = $ip . '/' . $cidr;
+        list($ip, $mask) = array_pad(explode('/', $subnet), 2, null);
+        list($net, $netMask) = array_pad(explode('/', $range), 2, null);
+
+        $ipVersion = static::getIpVersion($ip);
+        $netVersion = static::getIpVersion($net);
+        if ($ipVersion !== $netVersion) {
+            return false;
+        }
+
+        $maxMask = $ipVersion === self::IPV4 ? self::IPV4_ADDRESS_LENGTH : self::IPV6_ADDRESS_LENGTH;
+        $mask = isset($mask) ? $mask : $maxMask;
+        $netMask = isset($netMask) ? $netMask : $maxMask;
+
+        $binIp = static::ip2bin($ip);
+        $binNet = static::ip2bin($net);
+        return substr($binIp, 0, $netMask) === substr($binNet, 0, $netMask) && $mask >= $netMask;
+    }
+
+    /**
+     * Converts IP address to bits representation.
+     *
+     * @param string $ip the valid IPv4 or IPv6 address
+     * @return string bits as a string
+     */
+    public static function ip2bin($ip)
+    {
+        if (static::getIpVersion($ip) === self::IPV4) {
+            return str_pad(base_convert(ip2long($ip), 10, 2), self::IPV4_ADDRESS_LENGTH, '0', STR_PAD_LEFT);
+        }
+
+        $unpack = unpack('A16', inet_pton($ip));
+        $binStr = array_shift($unpack);
+        $bytes = self::IPV6_ADDRESS_LENGTH / 8; // 128 bit / 8 = 16 bytes
+        $result = '';
+        while ($bytes-- > 0) {
+            $result = sprintf('%08b', isset($binStr[$bytes]) ? ord($binStr[$bytes]) : '0') . $result;
+        }
+        return $result;
+    }
+
+    public function ipv4(bool $value): self
+    {
+        $this->ipv4 = $value;
+
+        return $this;
+    }
+
+    public function ipv6(bool $value): self
+    {
+        $this->ipv6 = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param bool|null $value
+     * @return $this
+     */
+    public function subnet(bool $value = null): self
+    {
+        $this->subnet = $value;
+
+        return $this;
+    }
+
+    public function negation(bool $value): self
+    {
+        $this->negation = $value;
+
+        return $this;
+    }
+
+    public function normalize(bool $value): self
+    {
+        $this->normalize = $value;
+
+        return $this;
     }
 }

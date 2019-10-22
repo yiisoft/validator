@@ -12,7 +12,9 @@ class FakedValidationModel implements DataSetInterface
 
     public function getValue(string $key)
     {
-        // TODO: Implement getValue() method.
+        if (property_exists(self::class, $key)) {
+            return $this->$key;
+        }
     }
 
     public static function createWithAttributes($attributes): FakedValidationModel
