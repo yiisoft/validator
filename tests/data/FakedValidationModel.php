@@ -5,7 +5,6 @@ use Yiisoft\Validator\DataSetInterface;
 
 class FakedValidationModel implements DataSetInterface
 {
-
     public $attr_timestamp = false;
 
     public $attr_date;

@@ -98,7 +98,7 @@ class IpTest extends TestCase
         $model->attr_ip = $badIp;
         try {
             $result = $validator->validateAttribute($model, 'attr_ip');
-            $this->assertTrue(in_array('{attribute} must be a valid IP address.',  $result->getErrors()));
+            $this->assertTrue(in_array('{attribute} must be a valid IP address.', $result->getErrors()));
         } catch (\Error $e) {
             $this->assertInstanceOf('\TypeError', $e);
         }

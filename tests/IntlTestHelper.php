@@ -1,8 +1,5 @@
 <?php
-
-
 namespace Yiisoft\Validator\Tests;
-
 
 class IntlTestHelper
 {

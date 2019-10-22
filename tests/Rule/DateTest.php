@@ -653,7 +653,7 @@ class DateTest extends TestCase
      */
     public function testIssue15628()
     {
-        $validator = (new Date('php:U' , $this->params['locale'], $this->params['timeZone']))
+        $validator = (new Date('php:U', $this->params['locale'], $this->params['timeZone']))
             ->type(Date::TYPE_DATETIME)->timestampAttribute('attr_date');
         $model = new FakedValidationModel();
         $value = 1518023610;
