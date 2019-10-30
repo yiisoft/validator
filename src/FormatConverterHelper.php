@@ -63,7 +63,7 @@ class FormatConverterHelper
      * If not given, `Yii::$app->language` will be used.
      * @return string The converted date format pattern.
      */
-    public static function convertDateIcuToPhp($pattern, $type = 'date', $locale): string
+    public static function convertDateIcuToPhp(string $pattern, string $type = 'date', string $locale): string
     {
         if (isset(self::$icuShortFormats[$pattern])) {
             if (extension_loaded('intl')) {
