@@ -11,15 +11,16 @@ final class ResultSet implements \IteratorAggregate
 
     public function addResult(string $attribute, Result $result): void
     {
-        if (isset($this->results[$attribute]) && !$result->isValid()) {
-            $errors = $result->getErrors();
-            $result = $this->results[$attribute];
-            foreach ($errors as $error) {
-                $result->addError($error);
-            }
+        if(!isset($this->results[$attribute])) {
+            $this->results[$attribute] = $result;
+            return;
         }
-
-        $this->results[$attribute] = $result;
+        if($result->isValid()) {
+            return;
+        }
+        foreach ($result->getErrors() as $error) {
+            $this->results[$attribute]->addError($error);
+        }
     }
 
     public function getIterator()
