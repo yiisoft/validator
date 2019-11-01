@@ -276,9 +276,10 @@ class Ip extends Rule
         $negation = !empty($matches['not'] ?? null);
         $ip = $matches['ip'];
         $cidr = $matches['cidr'] ?? null;
+        $ipCidr = $matches['ipCidr'];
 
         try {
-            $ipVersion = IpHelper::getIpVersion($ip, true);
+            $ipVersion = IpHelper::getIpVersion($ip, false);
         } catch(\InvalidArgumentException $e) {
             $result->addError($this->formatMessage($this->message));
             return $result;
@@ -303,14 +304,15 @@ class Ip extends Rule
         if(!$result->isValid()) {
             return $result;
         }
-
-        try {
-            $cidr = IpHelper::getCidrBits($ip.($cidr === null ? '': '/'.$cidr));
-        } catch(\InvalidArgumentException $e) {
-            $result->addError($this->formatMessage($this->wrongCidr));
-            return $result;
+        if($cidr !== null) {
+            try {
+                $cidr = IpHelper::getCidrBits($ipCidr);
+            } catch(\InvalidArgumentException $e) {
+                $result->addError($this->formatMessage($this->wrongCidr));
+                return $result;
+            }
         }
-        if (!$this->isAllowed($ip, $cidr)) {
+        if (!$this->isAllowed($ipCidr)) {
             $result->addError($this->formatMessage($this->notInRange));
         }
 
@@ -322,7 +324,7 @@ class Ip extends Rule
      *
      * @see ranges
      */
-    private function isAllowed(string $ip, int $cidr): bool
+    private function isAllowed(string $ip): bool
     {
         if (empty($this->ranges)) {
             return true;
@@ -330,7 +332,7 @@ class Ip extends Rule
 
         foreach ($this->ranges as $string) {
             [$isNegated, $range] = $this->parseNegatedRange($string);
-            if (IpHelper::inRange($ip . '/' . $cidr, $range)) {
+            if (IpHelper::inRange($ip, $range)) {
                 return !$isNegated;
             }
         }
@@ -387,6 +389,6 @@ class Ip extends Rule
      */
     public function getIpParsePattern(): string
     {
-        return '/^(?<not>' . preg_quote(static::NEGATION_CHAR, '/') . ')?(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?$/';
+        return '/^(?<not>' . preg_quote(static::NEGATION_CHAR, '/') . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 }
