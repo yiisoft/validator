@@ -83,6 +83,10 @@ class Ip extends Rule
      */
     private $allowSubnet = false;
     /**
+     * @var bool
+     */
+    private $requireSubnet = false;
+    /**
      * @var bool whether address may have a [[NEGATION_CHAR]] character at the beginning.
      * Defaults to `false`.
      */
@@ -252,9 +256,13 @@ class Ip extends Rule
     /**
      * @return static
      */
-    public function allowSubnet(bool $value = true)
+    public function allowSubnet(bool $allow = true, bool $required = false)
     {
-        $this->allowSubnet = $value;
+        if(!$allow && $required) {
+            throw new \InvalidArgumentException('If subnet is required then allow must be set.');
+        }
+        $this->allowSubnet = $allow;
+        $this->requireSubnet = $required;
         return $this;
     }
 
@@ -285,10 +293,9 @@ class Ip extends Rule
             return $result;
         }
 
-// @TODO: Makes sense?
-//        if ($this->allowSubnet === true && $cidr === false) {
-//            $result->addError($this->formatMessage($this->noSubnet));
-//        }
+        if ($this->requireSubnet === true && $cidr === null) {
+            $result->addError($this->formatMessage($this->noSubnet));
+        }
         if ($this->allowSubnet === false && $cidr !== null) {
             $result->addError($this->formatMessage($this->hasSubnet));
         }
