@@ -258,7 +258,7 @@ class Ip extends Rule
      */
     public function allowSubnet(bool $allow = true, bool $required = false)
     {
-        if(!$allow && $required) {
+        if (!$allow && $required) {
             throw new \InvalidArgumentException('If subnet is required then allow must be set.');
         }
         $this->allowSubnet = $allow;
@@ -288,7 +288,7 @@ class Ip extends Rule
 
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
-        } catch(\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException $e) {
             $result->addError($this->formatMessage($this->message));
             return $result;
         }
@@ -302,19 +302,19 @@ class Ip extends Rule
         if ($this->allowNegation === false && $negation) {
             $result->addError($this->formatMessage($this->message));
         }
-        if($ipVersion === IpHelper::IPV6 && !$this->allowIpv6) {
+        if ($ipVersion === IpHelper::IPV6 && !$this->allowIpv6) {
             $result->addError($this->formatMessage($this->ipv6NotAllowed));
         }
-        if($ipVersion === IpHelper::IPV4 && !$this->allowIpv4) {
+        if ($ipVersion === IpHelper::IPV4 && !$this->allowIpv4) {
             $result->addError($this->formatMessage($this->ipv4NotAllowed));
         }
-        if(!$result->isValid()) {
+        if (!$result->isValid()) {
             return $result;
         }
-        if($cidr !== null) {
+        if ($cidr !== null) {
             try {
                 $cidr = IpHelper::getCidrBits($ipCidr);
-            } catch(\InvalidArgumentException $e) {
+            } catch (\InvalidArgumentException $e) {
                 $result->addError($this->formatMessage($this->wrongCidr));
                 return $result;
             }
