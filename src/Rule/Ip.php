@@ -229,42 +229,84 @@ class Ip extends Rule
     /**
      * @return static
      */
-    public function allowIpv4(bool $value = true)
+    public function allowIpv4()
     {
-        $this->allowIpv4 = $value;
+        $this->allowIpv4 = true;
         return $this;
     }
 
     /**
      * @return static
      */
-    public function allowIpv6(bool $value = true)
-    {
-        $this->allowIpv6 = $value;
+    public function disallowIpv4() {
+        $this->allowIpv4 = false;
         return $this;
     }
 
     /**
      * @return static
      */
-    public function allowNegation(bool $value = true)
+    public function allowIpv6()
     {
-        $this->allowNegation = $value;
+        $this->allowIpv6 = true;
         return $this;
     }
 
     /**
      * @return static
      */
-    public function allowSubnet(bool $allow = true, bool $required = false)
-    {
-        if (!$allow && $required) {
-            throw new \InvalidArgumentException('If subnet is required then allow must be set.');
-        }
-        $this->allowSubnet = $allow;
-        $this->requireSubnet = $required;
+    public function disallowIpv6() {
+        $this->allowIpv6 = false;
         return $this;
     }
+
+    /**
+     * @return static
+     */
+    public function allowNegation()
+    {
+        $this->allowNegation = true;
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function disallowNegation() {
+        $this->allowNegation = false;
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function allowSubnet()
+    {
+        $this->allowSubnet = true;
+        $this->requireSubnet = false;
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function requireSubnet()
+    {
+        $this->allowSubnet = true;
+        $this->requireSubnet = true;
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function disallowSubnet()
+    {
+        $this->allowSubnet = false;
+        $this->requireSubnet = false;
+        return $this;
+    }
+
 
     public function validateValue($value): Result
     {

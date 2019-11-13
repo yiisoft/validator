@@ -14,7 +14,7 @@ class IpTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Both IPv4 and IPv6 checks can not be disabled at the same time');
-        (new Ip())->allowIpv4(false)->allowIpv6(false)->validate('');
+        (new Ip())->disallowIpv4()->disallowIpv6()->validate('');
     }
 
     public function provideRangesForSubstitution(): array
@@ -100,7 +100,7 @@ class IpTest extends TestCase
         $this->assertFalse($validator->validate('!192.168.5.32')->isValid());
         $this->assertFalse($validator->validate('192.168.5.32/11')->isValid());
 
-        $validator->allowIpv4(false);
+        $validator->disallowIpv4();
         $this->assertFalse($validator->validate('192.168.10.11')->isValid());
 
         $validator->allowIpv4();
@@ -114,7 +114,7 @@ class IpTest extends TestCase
         $this->assertFalse($validator->validate('192.168.5.32/af')->isValid());
         $this->assertFalse($validator->validate('192.168.5.32/11/12')->isValid());
 
-        $validator->allowSubnet(true, true);
+        $validator->requireSubnet();
         $this->assertTrue($validator->validate('10.0.0.1/24')->isValid());
         $this->assertTrue($validator->validate('10.0.0.1/0')->isValid());
         $this->assertFalse($validator->validate('10.0.0.1')->isValid());
@@ -136,7 +136,7 @@ class IpTest extends TestCase
         $this->assertFalse($validator->validate('!2008:fa::0::1')->isValid());
         $this->assertFalse($validator->validate('2008:fa::0:1/64')->isValid());
 
-        $validator->allowIpv4(false);
+        $validator->disallowIpv4();
         $this->assertTrue($validator->validate('2008:fa::1')->isValid());
 
         $validator->allowIpv6();
@@ -148,7 +148,7 @@ class IpTest extends TestCase
         $this->assertFalse($validator->validate('!2008:fa::0:1/0')->isValid());
         $this->assertFalse($validator->validate('2008:fz::0/129')->isValid());
 
-        $validator->allowSubnet(true, true);
+        $validator->requireSubnet();
         $this->assertTrue($validator->validate('2008:db0::1/64')->isValid());
         $this->assertFalse($validator->validate('2008:db0::1')->isValid());
 
@@ -173,17 +173,17 @@ class IpTest extends TestCase
         $this->assertFalse($validator->validate('!2008:fa::0::1')->isValid());
         $this->assertFalse($validator->validate('2008:fa::0:1/64')->isValid());
 
-        $validator->allowIpv4(false);
+        $validator->disallowIpv4();
         $this->assertFalse($validator->validate('192.168.10.11')->isValid());
         $this->assertTrue($validator->validate('2008:fa::1')->isValid());
 
-        $validator->allowIpv6(false);
+        $validator->disallowIpv6();
         $validator->allowIpv4();
         $this->assertTrue($validator->validate('192.168.10.11')->isValid());
         $this->assertFalse($validator->validate('2008:fa::1')->isValid());
 
         $validator->allowIpv6();
-        $validator->allowSubnet(true, true);
+        $validator->requireSubnet();
 
         $this->assertTrue($validator->validate('192.168.5.32/11')->isValid());
         $this->assertTrue($validator->validate('192.168.5.32/32')->isValid());
@@ -198,7 +198,7 @@ class IpTest extends TestCase
         $this->assertFalse($validator->validate('192.168.5.32/af')->isValid());
         $this->assertFalse($validator->validate('192.168.5.32/11/12')->isValid());
 
-        $validator->allowSubnet(true, true);
+        $validator->requireSubnet();
         $this->assertTrue($validator->validate('10.0.0.1/24')->isValid());
         $this->assertTrue($validator->validate('10.0.0.1/0')->isValid());
         $this->assertTrue($validator->validate('2008:db0::1/64')->isValid());
@@ -270,7 +270,7 @@ class IpTest extends TestCase
         $this->assertFalse($validator->validate('fe80::face')->isValid());
         $this->assertTrue($validator->validate('8.8.8.8')->isValid());
 
-        $validator->allowSubnet(true, false);
+        $validator->allowSubnet();
         $validator->ranges(['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any']);
         $this->assertTrue($validator->validate('10.0.1.2')->isValid());
         $this->assertTrue($validator->validate('2001:db0:1:2::7')->isValid());
@@ -280,15 +280,10 @@ class IpTest extends TestCase
         $this->assertFalse($validator->validate('10.0.1.1/22')->isValid());
     }
 
-    public function testNotAllowIpv4AndIpv6(): void
-    {
-        $this->expectException(\RuntimeException::class);
-        (new Ip())->allowIpv4(false)->allowIpv6(false)->validate('8.8.8.8');
-    }
-
     public function testIpv4LeadingZero(): void
     {
-        $this->expectException(\RuntimeException::class);
-        (new Ip())->allowIpv4(false)->allowIpv6(false)->validate('01.01.01.01');
+        $this->assertFalse((new Ip())->validate('01.01.01.01')->isValid());
+        $this->assertFalse((new Ip())->validate('010.010.010.010')->isValid());
+        $this->assertFalse((new Ip())->validate('001.001.001.001')->isValid());
     }
 }
