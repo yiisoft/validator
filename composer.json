@@ -28,9 +28,6 @@
         "yiisoft/network-utilities": "dev-master",
         "ext-intl": "*"
     },
-    "suggest": {
-        "yiisoft/network-utilities": "For IP and network validations"
-    },
     "require-dev": {
         "phpunit/phpunit": "^7.2"
     },
