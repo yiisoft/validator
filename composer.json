@@ -2,7 +2,10 @@
     "name": "yiisoft/validator",
     "type": "library",
     "description": "Yii validator",
-    "keywords": ["validation", "validator"],
+    "keywords": [
+        "validation",
+        "validator"
+    ],
     "homepage": "http://www.yiiframework.com/",
     "license": "BSD-3-Clause",
     "authors": [
@@ -45,5 +48,8 @@
         "branch-alias": {
             "dev-master": "3.0.x-dev"
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }
