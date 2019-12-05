@@ -9,7 +9,7 @@ use Yiisoft\Validator\Rule\MatchRegularExpression;
  */
 class MatchRegularExpressionTest extends TestCase
 {
-    public function testvalidate()
+    public function testvalidate(): void
     {
         $rule = new MatchRegularExpression('/^[a-zA-Z0-9](\.)?([^\/]*)$/m');
         $this->assertTrue($rule->validate('b.4')->isValid());

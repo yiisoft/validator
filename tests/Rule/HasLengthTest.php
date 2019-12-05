@@ -55,19 +55,19 @@ class HasLengthTest extends TestCase
         $this->assertFalse($val->validate('')->isValid());
     }
 
-    public function testvalidateMin()
+    public function testvalidateMin(): void
     {
         $rule = (new HasLength())
             ->min(1);
 
         $result = $rule->validate('');
         $this->assertFalse($result->isValid());
-        $this->assertContains('{attribute} should contain at least {min, number} {min, plural, one{character} other{characters}}.', $result->getErrors()[0]);
+        $this->assertStringContainsString('{attribute} should contain at least {min, number} {min, plural, one{character} other{characters}}.', $result->getErrors()[0]);
         $this->assertTrue($rule->validate(str_repeat('x', 5))->isValid());
     }
 
 
-    public function testvalidateMax()
+    public function testvalidateMax(): void
     {
         $rule = (new HasLength())
             ->max(100);
@@ -76,6 +76,6 @@ class HasLengthTest extends TestCase
 
         $result = $rule->validate(str_repeat('x', 1230));
         $this->assertFalse($result->isValid());
-        $this->assertContains('{attribute} should contain at most {max, number} {max, plural, one{character} other{characters}}.', $result->getErrors()[0]);
+        $this->assertStringContainsString('{attribute} should contain at most {max, number} {max, plural, one{character} other{characters}}.', $result->getErrors()[0]);
     }
 }

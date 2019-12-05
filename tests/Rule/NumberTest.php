@@ -26,7 +26,7 @@ class NumberTest extends TestCase
         }
     }
 
-    private function setPointDecimalLocale()
+    private function setPointDecimalLocale(): void
     {
         if ($this->oldLocale === false) {
             $this->markTestSkipped('Your platform does not support locales.');
@@ -37,12 +37,12 @@ class NumberTest extends TestCase
         }
     }
 
-    private function restoreLocale()
+    private function restoreLocale(): void
     {
         setlocale(LC_NUMERIC, $this->oldLocale);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -67,7 +67,7 @@ class NumberTest extends TestCase
         $this->assertFalse($rule->validate('12:45')->isValid());
     }
 
-    public function testvalidateSimpleInteger()
+    public function testvalidateSimpleInteger(): void
     {
         $rule = (new Number())
             ->integer();
@@ -82,7 +82,7 @@ class NumberTest extends TestCase
         $this->assertFalse($rule->validate('0x14')->isValid()); // todo check this
     }
 
-    public function testvalidateAdvanced()
+    public function testvalidateAdvanced(): void
     {
         $rule = new Number();
         $this->assertTrue($rule->validate('-1.23')->isValid()); // signed float
@@ -94,7 +94,7 @@ class NumberTest extends TestCase
         $this->assertFalse($rule->validate('12.23^4')->isValid()); // expression instead of value
     }
 
-    public function testvalidateAdvancedInteger()
+    public function testvalidateAdvancedInteger(): void
     {
         $rule = (new Number())->integer();
         $this->assertFalse($rule->validate('-1.23')->isValid());
@@ -119,7 +119,7 @@ class NumberTest extends TestCase
         $this->restoreLocale();
     }
 
-    public function testvalidateMin()
+    public function testvalidateMin(): void
     {
         $rule = (new Number())
             ->min(1);
@@ -128,25 +128,25 @@ class NumberTest extends TestCase
 
         $result = $rule->validate(-1);
         $this->assertFalse($result->isValid());
-        $this->assertContains('must be no less than 1.', $result->getErrors()[0]);
+        $this->assertStringContainsString('must be no less than 1.', $result->getErrors()[0]);
 
         $this->assertFalse($rule->validate('22e-12')->isValid());
         $this->assertTrue($rule->validate(PHP_INT_MAX + 1)->isValid());
     }
 
-    public function testvalidateMinInteger()
+    public function testvalidateMinInteger(): void
     {
         $rule = (new Number())
             ->min(1)
             ->integer();
 
-        $this->assertTrue($rule->validate(1)->isValid());
-        $this->assertFalse($rule->validate(-1)->isValid());
-        $this->assertFalse($rule->validate('22e-12')->isValid());
-        $this->assertTrue($rule->validate(PHP_INT_MAX + 1)->isValid());
+        $this->assertTrue($rule->validate(1)->isValid(), '1 is a valid integer');
+        $this->assertFalse($rule->validate(-1)->isValid(), '-1 is not a valid integer');
+        $this->assertFalse($rule->validate('22e-12')->isValid(), '22e-12 is not a valid integer');
+        $this->assertTrue($rule->validate(PHP_INT_MAX + 1)->isValid(), 'PHP_INT_MAX + 1 is a valid integer');
     }
 
-    public function testvalidateMax()
+    public function testvalidateMax(): void
     {
         $rule = (new Number())
             ->max(1.25);
@@ -157,7 +157,7 @@ class NumberTest extends TestCase
         $this->assertTrue($rule->validate('125e-2')->isValid());
     }
 
-    public function testvalidateMaxInteger()
+    public function testvalidateMaxInteger(): void
     {
         $rule = (new Number())
             ->max(1.25)
@@ -169,7 +169,7 @@ class NumberTest extends TestCase
         $this->assertFalse($rule->validate('125e-2')->isValid());
     }
 
-    public function testvalidateRange()
+    public function testvalidateRange(): void
     {
         $rule = (new Number())
             ->min(-10)
@@ -181,7 +181,7 @@ class NumberTest extends TestCase
         $this->assertFalse($rule->validate(21)->isValid());
     }
 
-    public function testvalidateRangeInteger()
+    public function testvalidateRangeInteger(): void
     {
         $rule = (new Number())
             ->min(-10)

@@ -48,7 +48,7 @@ class Number extends Rule
 
     private $message;
 
-    private function getNotANumberMessage(array $arguments)
+    private function getNotANumberMessage(array $arguments): string
     {
         if ($this->message !== null) {
             return $this->formatMessage($this->message, $arguments);
@@ -128,7 +128,7 @@ class Number extends Rule
     /*
      * @param mixed $value the data value to be checked.
      */
-    private function isNotNumber($value)
+    private function isNotNumber($value): bool
     {
         return is_array($value)
         || (is_object($value) && !method_exists($value, '__toString'))
