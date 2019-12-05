@@ -238,7 +238,8 @@ class Ip extends Rule
     /**
      * @return static
      */
-    public function disallowIpv4() {
+    public function disallowIpv4()
+    {
         $this->allowIpv4 = false;
         return $this;
     }
@@ -255,7 +256,8 @@ class Ip extends Rule
     /**
      * @return static
      */
-    public function disallowIpv6() {
+    public function disallowIpv6()
+    {
         $this->allowIpv6 = false;
         return $this;
     }
@@ -272,7 +274,8 @@ class Ip extends Rule
     /**
      * @return static
      */
-    public function disallowNegation() {
+    public function disallowNegation()
+    {
         $this->allowNegation = false;
         return $this;
     }

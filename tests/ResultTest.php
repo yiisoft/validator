@@ -9,8 +9,8 @@ use Yiisoft\Validator\ResultSet;
 
 class ResultTest extends TestCase
 {
-
-    public function testSetErrorAndSuccess(): void {
+    public function testSetErrorAndSuccess(): void
+    {
         $resultSet = new ResultSet();
         $result = new Result();
         $result->addError('test');

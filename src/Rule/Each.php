@@ -6,6 +6,7 @@
  */
 
 namespace Yiisoft\Validator\Rule;
+
 use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
 use yii\base\Model;

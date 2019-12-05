@@ -3,7 +3,6 @@
 
 namespace Yiisoft\Validator\Rule;
 
-
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 

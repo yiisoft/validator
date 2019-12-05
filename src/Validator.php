@@ -31,8 +31,7 @@ class Validator
     public function validate(DataSetInterface $dataSet): ResultSet
     {
         $results = new ResultSet();
-        foreach ($this->attributeRules as $attribute => $rules)
-        {
+        foreach ($this->attributeRules as $attribute => $rules) {
             $results->addResult($attribute, $rules->validate($dataSet->getValue($attribute)));
         }
         return $results;

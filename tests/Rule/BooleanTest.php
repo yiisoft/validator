@@ -5,13 +5,11 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Boolean;
 
-
 /**
  * @group validators
  */
 class BooleanTest extends TestCase
 {
-
     public function validateProvider(): array
     {
         return [
