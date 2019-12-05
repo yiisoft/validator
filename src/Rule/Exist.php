@@ -94,7 +94,7 @@ class Exist extends Rule
     {
         parent::init();
         if ($this->message === null) {
-            $this->message = $this->formatMessage( '{attribute} is invalid.');
+            $this->message = $this->formatMessage('{attribute} is invalid.');
         }
     }
 

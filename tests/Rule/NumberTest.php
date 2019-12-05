@@ -287,8 +287,7 @@ class NumberTest extends TestCase
 
     public function getDataSet(array $attributeValues): DataSetInterface
     {
-        return new class ($attributeValues) implements DataSetInterface
-        {
+        return new class($attributeValues) implements DataSetInterface {
             private $data;
 
             public function __construct(array $data)
@@ -346,8 +345,7 @@ class NumberTest extends TestCase
     public function testValidateToString(): void
     {
         $rule = new Number();
-        $object = new class('10')
-        {
+        $object = new class('10') {
             public $foo;
 
             public function __construct($foo)

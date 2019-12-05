@@ -98,5 +98,4 @@ class Url extends Rule
         $this->message = $message;
         return $this;
     }
-
 }

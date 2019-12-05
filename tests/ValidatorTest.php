@@ -13,8 +13,7 @@ class ValidatorTest extends TestCase
 {
     public function getDataObject(array $attributes): DataSetInterface
     {
-        return new class ($attributes) implements DataSetInterface
-        {
+        return new class($attributes) implements DataSetInterface {
             private $data;
 
             public function __construct(array $data)

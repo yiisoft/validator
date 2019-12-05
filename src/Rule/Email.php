@@ -44,7 +44,6 @@ class Email extends Rule
 
     public function __construct()
     {
-
         if ($this->enableIDN && !function_exists('idn_to_ascii')) {
             throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }
@@ -111,7 +110,7 @@ class Email extends Rule
         $this->allowName = $allowName;
 
         return $this;
-}
+    }
 
     /**
      * @param bool $checkDNS
@@ -123,7 +122,7 @@ class Email extends Rule
         $this->checkDNS = $checkDNS;
 
         return $this;
-}
+    }
 
     /**
      * @param bool $enableIDN
@@ -135,5 +134,5 @@ class Email extends Rule
         $this->enableIDN = $enableIDN;
 
         return $this;
-}
+    }
 }
