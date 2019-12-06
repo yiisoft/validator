@@ -10,7 +10,7 @@ The package provides data validation capabilities.
 
 [![Latest Stable Version](https://poser.pugx.org/yiisoft/validator/v/stable.png)](https://packagist.org/packages/yiisoft/validator)
 [![Total Downloads](https://poser.pugx.org/yiisoft/validator/downloads.png)](https://packagist.org/packages/yiisoft/validator)
-[![Build Status](https://travis-ci.org/yiisoft/validator.svg?branch=master)](https://travis-ci.org/yiisoft/validator)
+[![Build Status](https://travis-ci.com/yiisoft/validator.svg?branch=master)](https://travis-ci.com/yiisoft/validator)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/yiisoft/validator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/validator/?branch=master)
 
 ## Features
