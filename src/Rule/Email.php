@@ -56,9 +56,11 @@ class Email extends Rule
     {
         $result = new Result();
 
-        if (!is_string($value)) {
-            $valid = false;
-        } elseif (!preg_match('/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?(?:(?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))$/i', $value, $matches)) {
+        if (!is_string($value) || !preg_match(
+                '/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?(?:(?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))$/i',
+                $value,
+                $matches
+            )) {
             $valid = false;
         } else {
             if ($this->enableIDN) {
