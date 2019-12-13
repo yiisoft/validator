@@ -135,7 +135,7 @@ class Email extends Rule
      *
      * @return $this
      */
-    public function setMessage(string $message)
+    public function message(string $message)
     {
         $this->message = $message;
 
