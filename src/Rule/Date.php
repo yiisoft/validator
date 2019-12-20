@@ -2,6 +2,8 @@
 namespace Yiisoft\Validator\Rule;
 
 use DateTime;
+use DateTimeZone;
+use Exception;
 use IntlDateFormatter;
 use Yiisoft\Validator\FormatConverterHelper;
 use Yiisoft\Validator\Result;
@@ -197,31 +199,11 @@ class Date extends Rule
      */
     public function __construct($format, $locale, $timeZone)
     {
-        if ($this->message === null) {
-            $this->message = 'The format of {attribute} is invalid.';
-        }
+        $this->message = $this->formatMessage('The format of {attribute} is invalid.');
+
         $this->format = $format;
         $this->locale = $locale;
         $this->timeZone = $timeZone;
-
-//        if (!empty($type) && !in_array($type, [self::TYPE_DATE, self::TYPE_DATETIME, self::TYPE_TIME])) {
-//            throw new InvalidConfigException('Unknown validation type set for DateValidator::$type: ' . $this->type);
-//        }
-//        if (!empty($format)) {
-//            throw new InvalidConfigException('Unknown validation type set for DateValidator::$type: ' . $this->type);
-//        }
-
-//        if ($this->format === null) {
-//            if ($this->type === self::TYPE_DATE) {
-//                $this->format = Yii::getApp()->formatter->dateFormat;
-//            } elseif ($this->type === self::TYPE_DATETIME) {
-//                $this->format = Yii::getApp()->formatter->datetimeFormat;
-//            } elseif ($this->type === self::TYPE_TIME) {
-//                $this->format = Yii::getApp()->formatter->timeFormat;
-//            } else {
-//
-//            }
-//        }
     }
 
     /**
@@ -316,7 +298,7 @@ class Date extends Rule
             }
 
             // fallback to PHP if intl is not installed
-            $format = FormatConverter::convertDateIcuToPhp($format, 'date');
+            $format = FormatConverterHelper::convertDateIcuToPhp($format, 'date', $this->locale);
         }
 
         return $this->parseDateValuePHP($value, $format);
@@ -327,7 +309,7 @@ class Date extends Rule
      * @param string $value string representing date
      * @param string $format the expected date format
      * @return int|bool a UNIX timestamp or `false` on failure.
-     * @throws InvalidConfigException
+     * @throws Exception
      */
     private function parseDateValueIntl($value, $format)
     {
@@ -339,7 +321,7 @@ class Date extends Rule
             } elseif ($this->type === self::TYPE_TIME) {
                 $formatter = new IntlDateFormatter($this->locale, IntlDateFormatter::NONE, $this->_dateFormats[$format], $this->timeZone);
             } else {
-                throw new InvalidConfigException('Unknown validation type set for DateValidator::$type: ' . $this->type);
+                throw new Exception('Unknown validation type set for DateValidator::$type: ' . $this->type);
             }
         } else {
             // if no time was provided in the format string set time to 0 to get a simple date timestamp
@@ -371,7 +353,7 @@ class Date extends Rule
         // if no time was provided in the format string set time to 0 to get a simple date timestamp
         $hasTimeInfo = (strpbrk($format, 'HhGgisU') !== false);
 
-        $date = DateTime::createFromFormat($format, $value, new \DateTimeZone($hasTimeInfo ? $this->timeZone : 'UTC'));
+        $date = DateTime::createFromFormat($format, $value, new DateTimeZone($hasTimeInfo ? $this->timeZone : 'UTC'));
         $errors = DateTime::getLastErrors();
         if ($date === false || $errors['error_count'] || $errors['warning_count']) {
             return false;
@@ -400,7 +382,7 @@ class Date extends Rule
 
         $date = new DateTime();
         $date->setTimestamp($timestamp);
-        $date->setTimezone(new \DateTimeZone($this->timestampAttributeTimeZone));
+        $date->setTimezone(new DateTimeZone($this->timestampAttributeTimeZone));
         return $date->format($format);
     }
 
@@ -441,7 +423,7 @@ class Date extends Rule
     {
         $this->min = $value;
         if ($this->min !== null && $this->tooSmall === null) {
-            $this->tooSmall = '{attribute} must be no less than {min}.';
+            $this->tooSmall = $this->formatMessage('{attribute} must be no less than {min}.');
         }
 
         if ($this->minString === null) {
@@ -450,7 +432,7 @@ class Date extends Rule
         if ($this->min !== null && is_string($this->min)) {
             $timestamp = $this->parseDateValue($this->min);
             if ($timestamp === false) {
-                throw new InvalidConfigException("Invalid min date value: {$this->min}");
+                throw new Exception("Invalid min date value: {$this->min}");
             }
             $this->min = $timestamp;
         }
@@ -462,7 +444,7 @@ class Date extends Rule
     {
         $this->max = $value;
         if ($this->max !== null && $this->tooBig === null) {
-            $this->tooBig = '{attribute} must be no greater than {max}.';
+            $this->tooBig = $this->formatMessage('{attribute} must be no greater than {max}.');
         }
         if ($this->maxString === null) {
             $this->maxString = (string) $this->max;
@@ -470,13 +452,11 @@ class Date extends Rule
         if ($this->max !== null && is_string($this->max)) {
             $timestamp = $this->parseDateValue($this->max);
             if ($timestamp === false) {
-                throw new InvalidConfigException("Invalid max date value: {$this->max}");
+                throw new Exception("Invalid max date value: {$this->max}");
             }
             $this->max = $timestamp;
         }
 
         return $this;
     }
-
-
 }

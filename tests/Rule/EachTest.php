@@ -13,8 +13,8 @@ class EachTest extends TestCase
     {
         $validator = new Each(['rule' => ['required']]);
 
-        $this->assertFalse($validator->validate('not array'));
-        $this->assertTrue($validator->validate(['value']));
+        $this->assertFalse($validator->validate('not array')->isValid());
+        $this->assertTrue($validator->validate(['value'])->isValid());
     }
 
     /**

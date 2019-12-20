@@ -54,14 +54,14 @@ class DateTime extends Rule
      * `12.05.05` for the format `php:d.m.Y`, but the IntlDateFormatter will accept it for the format `dd.MM.yyyy`.
      * If you need to use the IntlDateFormatter you can avoid this problem by specifying a [[min|minimum date]].
      */
-    private $_format;
+    private $format;
     /**
      * @var string the locale ID that is used to localize the date parsing.
      * This is only effective when the [PHP intl extension](http://php.net/manual/en/book.intl.php) is installed.
      * If not set, the locale of the [[\yii\base\Application::formatter|formatter]] will be used.
      * See also [[\yii\i18n\Formatter::locale]].
      */
-    private $_locale;
+    private $locale;
     /**
      * @var string the timezone to use for parsing date and time values.
      * This can be any value that may be passed to [date_default_timezone_set()](http://www.php.net/manual/en/function.date-default-timezone-set.php)
@@ -69,48 +69,48 @@ class DateTime extends Rule
      * Refer to the [php manual](http://www.php.net/manual/en/timezones.php) for available timezones.
      * If this property is not set, [[\yii\base\Application::timeZone]] will be used.
      */
-    private $_timeZone;
+    private $timeZone;
     /**
      * @var int|string upper limit of the date. Defaults to null, meaning no upper limit.
      * This can be a unix timestamp or a string representing a date time value.
      * If this property is a string, [[format]] will be used to parse it.
      * @see tooBig for the customized message used when the date is too big.
      */
-    private $_max;
+    private $max;
     /**
      * @var int|string lower limit of the date. Defaults to null, meaning no lower limit.
      * This can be a unix timestamp or a string representing a date time value.
      * If this property is a string, [[format]] will be used to parse it.
      * @see tooSmall for the customized message used when the date is too small.
      */
-    private $_min;
+    private $min;
     /**
      * @var string user-defined error message used when the value is bigger than [[max]].
      */
-    private $_tooBig;
+    private $tooBig;
     /**
      * @var string user-defined error message used when the value is smaller than [[min]].
      */
-    private $_tooSmall;
+    private $tooSmall;
     /**
      * @var string user friendly value of upper limit to display in the error message.
      * If this property is null, the value of [[max]] will be used (before parsing).
      */
-    private $_maxString;
+    private $maxString;
     /**
      * @var string user friendly value of lower limit to display in the error message.
      * If this property is null, the value of [[min]] will be used (before parsing).
      */
-    private $_minString;
+    private $minString;
     /**
      * @var string user-defined error message used when the value is invalid.
      */
-    private $_message;
+    private $message;
 
     /**
      * @var array map of short format names to IntlDateFormatter constant values.
      */
-    private $_dateFormats = [
+    private $dateFormats = [
         'short' => 3, // IntlDateFormatter::SHORT,
         'medium' => 2, // IntlDateFormatter::MEDIUM,
         'long' => 1, // IntlDateFormatter::LONG,
@@ -125,11 +125,11 @@ class DateTime extends Rule
      */
     public function __construct($format, $locale, $timeZone)
     {
-        $this->_message = $this->formatMessage('The format of {attribute} is invalid.');
+        $this->message = $this->formatMessage('The format of {attribute} is invalid.');
 
-        $this->_format = $format;
-        $this->_locale = $locale;
-        $this->_timeZone = $timeZone;
+        $this->format = $format;
+        $this->locale = $locale;
+        $this->timeZone = $timeZone;
     }
 
     /**
@@ -147,11 +147,11 @@ class DateTime extends Rule
 
         $timestamp = $this->parseDateValue($value);
         if ($timestamp === false) {
-            $result->addError($this->_message);
-        } elseif ($this->_min !== null && $timestamp < $this->_min) {
-            $result->addError($this->formatMessage($this->_tooSmall, ['min' => $this->_minString]));
-        } elseif ($this->_max !== null && $timestamp > $this->_max) {
-            $result->addError($this->formatMessage($this->_tooBig, ['max' => $this->_maxString]));
+            $result->addError($this->message);
+        } elseif ($this->min !== null && $timestamp < $this->min) {
+            $result->addError($this->formatMessage($this->tooSmall, ['min' => $this->minString]));
+        } elseif ($this->max !== null && $timestamp > $this->max) {
+            $result->addError($this->formatMessage($this->tooBig, ['max' => $this->maxString]));
         }
 
         return $result;
@@ -163,11 +163,11 @@ class DateTime extends Rule
 
         $timestamp = $this->parseDateValue($value);
         if ($timestamp === false) {
-            $result->addError($this->_message);
-        } elseif ($this->_min !== null && $timestamp < $this->_min) {
-            $result->addError($this->formatMessage($this->_tooSmall, ['min' => $this->_minString]));
-        } elseif ($this->_max !== null && $timestamp > $this->_max) {
-            $result->addError($this->formatMessage($this->_tooBig, ['max' => $this->_maxString]));
+            $result->addError($this->message);
+        } elseif ($this->min !== null && $timestamp < $this->min) {
+            $result->addError($this->formatMessage($this->tooSmall, ['min' => $this->minString]));
+        } elseif ($this->max !== null && $timestamp > $this->max) {
+            $result->addError($this->formatMessage($this->tooBig, ['max' => $this->maxString]));
         }
 
         return $result;
@@ -182,7 +182,7 @@ class DateTime extends Rule
     protected function parseDateValue($value)
     {
         // TODO consider merging these methods into single one at 2.1
-        return $this->parseDateValueFormat($value, $this->_format);
+        return $this->parseDateValueFormat($value, $this->format);
     }
 
     /**
@@ -205,7 +205,7 @@ class DateTime extends Rule
             }
 
             // fallback to PHP if intl is not installed
-            $format = FormatConverterHelper::convertDateIcuToPhp($format, 'date', $this->_locale);
+            $format = FormatConverterHelper::convertDateIcuToPhp($format, 'date', $this->locale);
         }
 
         return $this->parseDateValuePHP($value, $format);
@@ -220,12 +220,12 @@ class DateTime extends Rule
      */
     private function parseDateValueIntl($value, $format)
     {
-        if (isset($this->_dateFormats[$format])) {
-            $formatter = new IntlDateFormatter($this->_locale, $this->_dateFormats[$format], $this->_dateFormats[$format], $this->_timeZone);
+        if (isset($this->dateFormats[$format])) {
+            $formatter = new IntlDateFormatter($this->locale, $this->dateFormats[$format], $this->dateFormats[$format], $this->timeZone);
         } else {
             // if no time was provided in the format string set time to 0 to get a simple date timestamp
             $hasTimeInfo = (strpbrk($format, 'ahHkKmsSA') !== false);
-            $formatter = new IntlDateFormatter($this->_locale, IntlDateFormatter::NONE, IntlDateFormatter::NONE, $hasTimeInfo ? $this->_timeZone : 'UTC', null, $format);
+            $formatter = new IntlDateFormatter($this->locale, IntlDateFormatter::NONE, IntlDateFormatter::NONE, $hasTimeInfo ? $this->timeZone : 'UTC', null, $format);
         }
         // enable strict parsing to avoid getting invalid date values
         $formatter->setLenient(false);
@@ -252,7 +252,7 @@ class DateTime extends Rule
         // if no time was provided in the format string set time to 0 to get a simple date timestamp
         $hasTimeInfo = (strpbrk($format, 'HhGgisU') !== false);
 
-        $date = \DateTime::createFromFormat($format, $value, new DateTimeZone($hasTimeInfo ? $this->_timeZone : 'UTC'));
+        $date = \DateTime::createFromFormat($format, $value, new DateTimeZone($hasTimeInfo ? $this->timeZone : 'UTC'));
         $errors = \DateTime::getLastErrors();
         if ($date === false || $errors['error_count'] || $errors['warning_count']) {
             return false;
@@ -267,32 +267,32 @@ class DateTime extends Rule
 
     public function getMessage()
     {
-        return $this->_message;
+        return $this->message;
     }
 
     public function format($format): self
     {
-        $this->_format = $format;
+        $this->format = $format;
 
         return $this;
     }
 
     public function min($value): self
     {
-        $this->_min = $value;
-        if ($this->_min !== null && $this->_tooSmall === null) {
-            $this->_tooSmall = $this->formatMessage('{attribute} must be no less than {min}.');
+        $this->min = $value;
+        if ($this->min !== null && $this->tooSmall === null) {
+            $this->tooSmall = $this->formatMessage('{attribute} must be no less than {min}.');
         }
 
-        if ($this->_minString === null) {
-            $this->_minString = (string) $this->_min;
+        if ($this->minString === null) {
+            $this->minString = (string) $this->min;
         }
-        if ($this->_min !== null && is_string($this->_min)) {
-            $timestamp = $this->parseDateValue($this->_min);
+        if ($this->min !== null && is_string($this->min)) {
+            $timestamp = $this->parseDateValue($this->min);
             if ($timestamp === false) {
-                throw new Exception("Invalid min date value: {$this->_min}");
+                throw new Exception("Invalid min date value: {$this->min}");
             }
-            $this->_min = $timestamp;
+            $this->min = $timestamp;
         }
 
         return $this;
@@ -300,19 +300,19 @@ class DateTime extends Rule
 
     public function max($value): self
     {
-        $this->_max = $value;
-        if ($this->_max !== null && $this->_tooBig === null) {
-            $this->_tooBig = $this->formatMessage('{attribute} must be no greater than {max}.');
+        $this->max = $value;
+        if ($this->max !== null && $this->tooBig === null) {
+            $this->tooBig = $this->formatMessage('{attribute} must be no greater than {max}.');
         }
-        if ($this->_maxString === null) {
-            $this->_maxString = (string) $this->_max;
+        if ($this->maxString === null) {
+            $this->maxString = (string) $this->max;
         }
-        if ($this->_max !== null && is_string($this->_max)) {
-            $timestamp = $this->parseDateValue($this->_max);
+        if ($this->max !== null && is_string($this->max)) {
+            $timestamp = $this->parseDateValue($this->max);
             if ($timestamp === false) {
-                throw new Exception("Invalid max date value: {$this->_max}");
+                throw new Exception("Invalid max date value: {$this->max}");
             }
-            $this->_max = $timestamp;
+            $this->max = $timestamp;
         }
 
         return $this;

@@ -75,9 +75,15 @@ class Each extends Rule
      */
     private $_validator;
 
-    public function __construct()
+    public function __construct($config)
     {
         $this->message = '{attribute} is invalid.';
+
+        if (is_array($config)) {
+            if (isset($config['rule'])) {
+                $this->rule =
+            }
+        }
     }
 
     /**
@@ -98,9 +104,9 @@ class Each extends Rule
      * Creates validator object based on the validation rule specified in [[rule]].
      * @param DataSetInterface|null $data model in which context validator should be created.
      * @return Rule validator instance
-     *@throws \yii\exceptions\InvalidConfigException
+     * @throws InvalidConfigException
      */
-    private function createEmbeddedValidator(DataSetInterface $data)
+    private function createEmbeddedValidator(DataSetInterface $data = null)
     {
         $rule = $this->rule;
         if ($rule instanceof Rule) {
@@ -115,7 +121,8 @@ class Each extends Rule
             return Rule::createValidator($rule[0], $data, $this->attributes, array_slice($rule, 1));
         }
 
-        throw new InvalidConfigException('Invalid validation rule: a rule must be an array specifying validator type.');
+        //throw new InvalidConfigException('Invalid validation rule: a rule must be an array specifying validator type.');
+        throw new \Exception('Invalid validation rule: a rule must be an array specifying validator type.');
     }
 
     public function validateAttribute(DataSetInterface $data, string $attribute): Result

@@ -39,7 +39,7 @@ class DateTimeTest extends TestCase
         $val = new DateTime($this->params['format'], $this->params['locale'], $this->params['timeZone']);
 
         $reflection = new \ReflectionObject($val);
-        $prop = $reflection->getProperty('_message');
+        $prop = $reflection->getProperty('message');
         $prop->setAccessible(true);
 
         $message = ($prop->getValue($val));

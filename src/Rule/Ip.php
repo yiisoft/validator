@@ -29,8 +29,8 @@ use Yiisoft\Validator\Rule;
  */
 class Ip extends Rule
 {
-    const IPV4 = 4;
-    const IPV6 = 6;
+    public const IPV4 = 4;
+    public const IPV6 = 6;
 
     /**
      * The length of IPv6 address in bits

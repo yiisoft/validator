@@ -208,13 +208,15 @@ class Exist extends Rule
         return $this->targetClass ?? get_class($model);
     }
 
-    protected function validateValue($value): Result
+    public function validateValue($value): Result
     {
         if ($this->targetClass === null) {
-            throw new InvalidConfigException('The "targetClass" property must be set.');
+            //throw new InvalidConfigException('The "targetClass" property must be set.');
+            throw new \Exception('The "targetClass" property must be set.');
         }
         if (!is_string($this->targetAttribute)) {
-            throw new InvalidConfigException('The "targetAttribute" property must be configured as a string.');
+//            throw new InvalidConfigException('The "targetAttribute" property must be configured as a string.');
+            throw new \Exception('The "targetAttribute" property must be configured as a string.');
         }
 
         if (is_array($value) && !$this->allowArray) {
@@ -313,5 +315,19 @@ class Exist extends Rule
         }
 
         return $prefixedConditions;
+    }
+
+    public function targetClass($class): self
+    {
+        $this->targetClass = $class;
+
+        return $this;
+    }
+
+    public function targetAttribute($attribute): self
+    {
+        $this->targetAttribute = $attribute;
+
+        return $this;
     }
 }
