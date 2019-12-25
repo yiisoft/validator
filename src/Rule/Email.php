@@ -43,16 +43,6 @@ class Email extends Rule
 
     private $message;
 
-    public function __construct()
-    {
-        if ($this->enableIDN && !function_exists('idn_to_ascii')) {
-            throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
-        }
-        if ($this->message === null) {
-            $this->message = $this->formatMessage('{attribute} is not a valid email address.');
-        }
-    }
-
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
