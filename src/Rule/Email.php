@@ -1,6 +1,7 @@
 <?php
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -52,7 +53,7 @@ class Email extends Rule
         }
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
 
@@ -89,7 +90,7 @@ class Email extends Rule
 
 
         if ($valid === false) {
-            $result->addError($this->message);
+            $result = $result->addError($this->message);
         }
 
         return $result;

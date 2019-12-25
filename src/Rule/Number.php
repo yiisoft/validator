@@ -2,6 +2,7 @@
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Strings\StringHelper;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -103,23 +104,22 @@ class Number extends Rule
         return $this;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
 
         if ($this->isNotNumber($value)) {
-            $result->addError($this->getNotANumberMessage(['value' => $value]));
-            return $result;
+            return $result->addError($this->getNotANumberMessage(['value' => $value]));
         }
 
         $pattern = $this->asInteger ? $this->integerPattern : $this->numberPattern;
 
         if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
-            $result->addError($this->getNotANumberMessage(['value' => $value]));
+            $result = $result->addError($this->getNotANumberMessage(['value' => $value]));
         } elseif ($this->min !== null && $value < $this->min) {
-            $result->addError($this->getTooSmallMessage(['min' => $this->min]));
+            $result = $result->addError($this->getTooSmallMessage(['min' => $this->min]));
         } elseif ($this->max !== null && $value > $this->max) {
-            $result->addError($this->getTooBigMessage(['max' => $this->max]));
+            $result = $result->addError($this->getTooBigMessage(['max' => $this->max]));
         }
 
         return $result;

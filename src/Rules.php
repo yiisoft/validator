@@ -5,49 +5,54 @@ namespace Yiisoft\Validator;
 
 use Yiisoft\Validator\Rule\Callback;
 
-class Rules implements \IteratorAggregate
+/**
+ * Rules represents multiple rules for a single value
+ */
+class Rules
 {
     /**
      * @var Rule[]
      */
-    private $rules = [];
+    private array $rules = [];
 
     public function __construct(iterable $rules = [])
     {
         foreach ($rules as $rule) {
-            if (is_callable($rule)) {
-                $rule = new Callback($rule);
-            }
-            $this->add($rule);
+            $this->rules[] = $this->normalizeRule($rule);
         }
     }
 
-    public function add(Rule $rule): void
+    private function normalizeRule($rule): Rule
     {
-        $this->rules[] = $rule;
+        if (is_callable($rule)) {
+            $rule = new Callback($rule);
+        }
+
+        if (!$rule instanceof Rule) {
+            throw new \InvalidArgumentException('Rule should be either instance of Rule class or a callable');
+        }
+
+        return $rule;
     }
 
-    public function getIterator()
+    public function add(Rule $rule): self
     {
-        return new \ArrayIterator($this->rules);
+        $new = clone $this;
+        $new->rules[] = $this->normalizeRule($rule);
+        return $new;
     }
 
-    public function validate($value): Result
+    public function validate($value, DataSetInterface $dataSet = null): Result
     {
         $compoundResult = new Result();
-        foreach ($this->getRules($value) as $rule) {
-            $ruleResult = $rule->validateValue($value);
+        foreach ($this->rules as $rule) {
+            $ruleResult = $rule->validate($value, $dataSet);
             if ($ruleResult->isValid() === false) {
                 foreach ($ruleResult->getErrors() as $error) {
-                    $compoundResult->addError($error);
+                    $compoundResult = $compoundResult->addError($error);
                 }
             }
         }
         return $compoundResult;
-    }
-
-    protected function getRules($value)
-    {
-        return $this->rules;
     }
 }

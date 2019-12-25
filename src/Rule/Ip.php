@@ -3,6 +3,7 @@
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\NetworkUtilities\IpHelper;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -311,20 +312,18 @@ class Ip extends Rule
     }
 
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         if (!$this->allowIpv4 && !$this->allowIpv6) {
             throw new \RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time');
         }
         $result = new Result();
         if (!is_string($value)) {
-            $result->addError($this->formatMessage($this->message));
-            return $result;
+            return $result->addError($this->formatMessage($this->message));
         }
 
         if (preg_match($this->getIpParsePattern(), $value, $matches) === 0) {
-            $result->addError($this->formatMessage($this->message));
-            return $result;
+            return $result->addError($this->formatMessage($this->message));
         }
         $negation = !empty($matches['not'] ?? null);
         $ip = $matches['ip'];
@@ -334,24 +333,23 @@ class Ip extends Rule
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
         } catch (\InvalidArgumentException $e) {
-            $result->addError($this->formatMessage($this->message));
-            return $result;
+            return $result->addError($this->formatMessage($this->message));
         }
 
         if ($this->requireSubnet === true && $cidr === null) {
-            $result->addError($this->formatMessage($this->noSubnet));
+            $result = $result->addError($this->formatMessage($this->noSubnet));
         }
         if ($this->allowSubnet === false && $cidr !== null) {
-            $result->addError($this->formatMessage($this->hasSubnet));
+            $result = $result->addError($this->formatMessage($this->hasSubnet));
         }
         if ($this->allowNegation === false && $negation) {
-            $result->addError($this->formatMessage($this->message));
+            $result = $result->addError($this->formatMessage($this->message));
         }
         if ($ipVersion === IpHelper::IPV6 && !$this->allowIpv6) {
-            $result->addError($this->formatMessage($this->ipv6NotAllowed));
+            $result = $result->addError($this->formatMessage($this->ipv6NotAllowed));
         }
         if ($ipVersion === IpHelper::IPV4 && !$this->allowIpv4) {
-            $result->addError($this->formatMessage($this->ipv4NotAllowed));
+            $result = $result->addError($this->formatMessage($this->ipv4NotAllowed));
         }
         if (!$result->isValid()) {
             return $result;
@@ -360,12 +358,11 @@ class Ip extends Rule
             try {
                 $cidr = IpHelper::getCidrBits($ipCidr);
             } catch (\InvalidArgumentException $e) {
-                $result->addError($this->formatMessage($this->wrongCidr));
-                return $result;
+                return $result->addError($this->formatMessage($this->wrongCidr));
             }
         }
         if (!$this->isAllowed($ipCidr)) {
-            $result->addError($this->formatMessage($this->notInRange));
+            $result = $result->addError($this->formatMessage($this->notInRange));
         }
 
         return $result;

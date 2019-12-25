@@ -4,6 +4,7 @@ namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use yii\exceptions\InvalidConfigException;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -44,7 +45,7 @@ class MatchRegularExpression extends Rule
         return $this;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
 
@@ -53,7 +54,7 @@ class MatchRegularExpression extends Rule
             || ($this->not && !preg_match($this->pattern, $value)));
 
         if (!$valid) {
-            $result->addError($this->message);
+            $result = $result->addError($this->message);
         }
 
         return $result;

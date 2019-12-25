@@ -82,7 +82,7 @@ class InRange extends Rule
         return $this;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $in = false;
 
@@ -100,7 +100,7 @@ class InRange extends Rule
         $result = new Result();
 
         if ($this->not === $in) {
-            $result->addError($this->message);
+            $result = $result->addError($this->message);
         }
 
         return $result;

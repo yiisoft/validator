@@ -5,6 +5,9 @@ namespace Yiisoft\Validator;
 
 use Yiisoft\Validator\Rule\Callback;
 
+/**
+ * Validator validates {@link DataSetInterface} against rules set for data set attributes.
+ */
 class Validator
 {
     /**

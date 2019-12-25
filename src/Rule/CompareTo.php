@@ -142,7 +142,7 @@ class CompareTo extends Rule
         $this->type = self::TYPE_NUMBER;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
 
@@ -150,7 +150,7 @@ class CompareTo extends Rule
             throw new \RuntimeException('CompareValidator::compareValue must be set.');
         }
         if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
-            $result->addError($this->getMessage([
+            $result = $result->addError($this->getMessage([
                 'value' => $this->compareValue,
             ]));
         }

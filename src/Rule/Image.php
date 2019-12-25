@@ -9,6 +9,7 @@ namespace Yiisoft\Validator\Rule;
 
 use yii\helpers\Yii;
 use yii\http\UploadedFile;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 
 /**
@@ -107,7 +108,7 @@ class Image extends File
         }
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = parent::validateValue($value);
 

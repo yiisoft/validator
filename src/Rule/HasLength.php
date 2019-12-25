@@ -7,6 +7,7 @@
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -64,22 +65,21 @@ class HasLength extends Rule
         return $this;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($this->formatMessage($this->message));
-            return $result;
+            return $result->addError($this->formatMessage($this->message));
         }
 
         $length = mb_strlen($value, $this->encoding);
 
         if ($this->min !== null && $length < $this->min) {
-            $result->addError($this->formatMessage($this->tooShortMessage, ['min' => $this->min]));
+            $result = $result->addError($this->formatMessage($this->tooShortMessage, ['min' => $this->min]));
         }
         if ($this->max !== null && $length > $this->max) {
-            $result->addError($this->formatMessage($this->tooLongMessage, ['min' => $this->max]));
+            $result = $result->addError($this->formatMessage($this->tooLongMessage, ['min' => $this->max]));
         }
 
         return $result;

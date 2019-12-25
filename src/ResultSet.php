@@ -2,38 +2,46 @@
 
 namespace Yiisoft\Validator;
 
+/**
+ * ResultSet stores validation result of each attribute from {@link DataSetInterface}.
+ * It is typically obtained by validating data set with {@link Validator}.
+ */
 final class ResultSet implements \IteratorAggregate
 {
     /**
      * @var Result[]
      */
-    private $results = [];
+    private array $results = [];
 
-    public function addResult(string $attribute, Result $result): void
+    public function addResult(string $attribute, Result $result): self
     {
-        if (!isset($this->results[$attribute])) {
-            $this->results[$attribute] = $result;
-            return;
+        $new = clone $this;
+
+        if (!isset($new->results[$attribute])) {
+            $new->results[$attribute] = $result;
+            return $new;
         }
         if ($result->isValid()) {
-            return;
+            return $new;
         }
         foreach ($result->getErrors() as $error) {
-            $this->results[$attribute]->addError($error);
+            $new->results[$attribute] = $new->results[$attribute]->addError($error);
         }
-    }
 
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->results);
+        return $new;
     }
 
     public function getResult(string $attribute): Result
     {
         if (!isset($this->results[$attribute])) {
-            throw new \InvalidArgumentException("There is no results for attribute \"$attribute\"");
+            throw new \InvalidArgumentException("There is no result for attribute \"$attribute\"");
         }
 
         return $this->results[$attribute];
+    }
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->results);
     }
 }

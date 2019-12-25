@@ -3,6 +3,7 @@ namespace Yiisoft\Validator\Rule;
 
 use DateTime;
 use IntlDateFormatter;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -236,17 +237,17 @@ class Date extends Rule
         }
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
 
         $timestamp = $this->parseDateValue($value);
         if ($timestamp === false) {
-            $result->addError($this->message);
+            $result = $result->addError($this->message);
         } elseif ($this->min !== null && $timestamp < $this->min) {
-            $result->addError($this->formatMessage($this->tooSmall, ['min' => $this->minString]));
+            $result = $result->addError($this->formatMessage($this->tooSmall, ['min' => $this->minString]));
         } elseif ($this->max !== null && $timestamp > $this->max) {
-            $result->addError($this->formatMessage($this->tooBig, ['max' => $this->maxString]));
+            $result = $result->addError($this->formatMessage($this->tooBig, ['max' => $this->maxString]));
         }
 
         return $result;

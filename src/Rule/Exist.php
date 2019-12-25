@@ -12,6 +12,7 @@ use yii\base\Model;
 use Yiisoft\ActiveRecord\ActiveQuery;
 use Yiisoft\ActiveRecord\ActiveRecord;
 use Yiisoft\Db\QueryInterface;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -208,7 +209,7 @@ class Exist extends Rule
         return $this->targetClass ?? get_class($model);
     }
 
-    protected function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         if ($this->targetClass === null) {
             throw new InvalidConfigException('The "targetClass" property must be set.');

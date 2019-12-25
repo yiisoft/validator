@@ -124,8 +124,7 @@ class Each extends Rule
         $result = new Result();
         $value = $data->getValue($attribute);
         if (!is_array($value) && !$value instanceof \ArrayAccess) {
-            $result->addError($this->formatMessage($this->message));
-            return $result;
+            return $result->addError($this->formatMessage($this->message));
         }
 
         $validator = $this->getValidator($data); // ensure model context while validator creation
@@ -145,7 +144,7 @@ class Each extends Rule
                     $detectedErrors = array_merge($detectedErrors, $validationErrors);
                 } else {
                     $model->clearErrors($attribute);
-                    $result->addError($this->formatMessage($this->message, ['value' => $v]));
+                    $result = $result->addError($this->formatMessage($this->message, ['value' => $v]));
                     $detectedErrors[] = $model->getFirstError($attribute);
                 }
                 $model->$attribute = $value;
@@ -161,7 +160,7 @@ class Each extends Rule
         $model->addErrors([$attribute => $detectedErrors]);
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
         if (!is_array($value) && !$value instanceof \ArrayAccess) {

@@ -204,7 +204,7 @@ class File extends Rule
         return $result;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         if (!$value instanceof UploadedFile || $value->getError() == UPLOAD_ERR_NO_FILE) {
             return [$this->uploadRequired, []];
@@ -298,7 +298,7 @@ class File extends Rule
         return $limit;
     }
 
-    public function isEmpty($value, $trim = false)
+    public function isEmpty($value, $trim = false): bool
     {
         $value = is_array($value) ? reset($value) : $value;
         return !($value instanceof UploadedFile) || $value->error == UPLOAD_ERR_NO_FILE;

@@ -4,22 +4,25 @@
 namespace Yiisoft\Validator;
 
 /**
- * Result represents validation result
+ * Result represents a single value validation result.
+ * It may either be success or contain one or multiple errors.
  */
 final class Result
 {
-    private $valid = true;
-    private $errors = [];
+    private bool $valid = true;
+    private array $errors = [];
 
     public function isValid(): bool
     {
         return $this->valid;
     }
 
-    public function addError(string $message): void
+    public function addError(string $message): self
     {
-        $this->valid = false;
-        $this->errors[] = $message;
+        $new = clone $this;
+        $new->valid = false;
+        $new->errors[] = $message;
+        return $new;
     }
 
     public function getErrors(): array

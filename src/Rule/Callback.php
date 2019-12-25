@@ -3,6 +3,7 @@
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -15,9 +16,9 @@ class Callback extends Rule
         $this->callback = $callback;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $callback = $this->callback;
-        return $callback($value);
+        return $callback($value, $dataSet);
     }
 }

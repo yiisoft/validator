@@ -1,6 +1,7 @@
 <?php
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -28,7 +29,7 @@ class Required extends Rule
      */
     private $message;
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
 
@@ -36,8 +37,7 @@ class Required extends Rule
             return $result;
         }
 
-        $result->addError($this->getMessage());
-        return $result;
+        return $result->addError($this->getMessage());
     }
 
     private function getMessage(): string

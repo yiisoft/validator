@@ -2,6 +2,7 @@
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -43,7 +44,7 @@ class Url extends Rule
         $this->message = '{attribute} is not a valid URL.';
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
 
@@ -66,8 +67,7 @@ class Url extends Rule
             }
         }
 
-        $result->addError($this->formatMessage($this->message));
-        return $result;
+        return $result->addError($this->formatMessage($this->message));
     }
 
     private function idnToAscii($idn)
