@@ -90,7 +90,7 @@ class Email extends Rule
 
 
         if ($valid === false) {
-            $result = $result->addError($this->message);
+            $result = $result->addError($this->message ?? $this->formatMessage('{attribute} is not a valid email address.'));
         }
 
         return $result;
@@ -132,7 +132,23 @@ class Email extends Rule
      */
     public function enableIDN(bool $enableIDN): self
     {
+        if ($enableIDN && !function_exists('idn_to_ascii')) {
+            throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
+        }
+        
         $this->enableIDN = $enableIDN;
+
+        return $this;
+    }
+
+    /**
+     * @param string $message
+     *
+     * @return $this
+     */
+    public function message(string $message)
+    {
+        $this->message = $message;
 
         return $this;
     }
