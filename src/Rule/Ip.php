@@ -227,84 +227,57 @@ class Ip extends Rule
         return $this->ranges;
     }
 
-    /**
-     * @return static
-     */
-    public function allowIpv4()
+    public function allowIpv4(): self
     {
         $this->allowIpv4 = true;
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function disallowIpv4()
+    public function disallowIpv4(): self
     {
         $this->allowIpv4 = false;
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function allowIpv6()
+    public function allowIpv6(): self
     {
         $this->allowIpv6 = true;
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function disallowIpv6()
+    public function disallowIpv6(): self
     {
         $this->allowIpv6 = false;
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function allowNegation()
+    public function allowNegation(): self
     {
         $this->allowNegation = true;
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function disallowNegation()
+    public function disallowNegation(): self
     {
         $this->allowNegation = false;
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function allowSubnet()
+    public function allowSubnet(): self
     {
         $this->allowSubnet = true;
         $this->requireSubnet = false;
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function requireSubnet()
+    public function requireSubnet(): self
     {
         $this->allowSubnet = true;
         $this->requireSubnet = true;
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function disallowSubnet()
+    public function disallowSubnet(): self
     {
         $this->allowSubnet = false;
         $this->requireSubnet = false;
@@ -407,7 +380,7 @@ class Ip extends Rule
      *  - boolean: whether the string is negated
      *  - string: the string without negation (when the negation were present)
      */
-    private function parseNegatedRange($string)
+    private function parseNegatedRange($string): array
     {
         $isNegated = strpos($string, static::NEGATION_CHAR) === 0;
         return [$isNegated, $isNegated ? substr($string, strlen(static::NEGATION_CHAR)) : $string];
@@ -419,11 +392,11 @@ class Ip extends Rule
      *  - Recursively substitutes aliases, described in [[networks]] with their values,
      *  - Removes duplicates.
      *
-     * @param $ranges
+     * @param array $ranges
      * @return array
      * @see networks
      */
-    private function prepareRanges($ranges)
+    private function prepareRanges(array $ranges): array
     {
         $result = [];
         foreach ($ranges as $string) {

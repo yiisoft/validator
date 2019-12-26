@@ -31,18 +31,18 @@ class InRange extends Rule
     /**
      * @var bool whether the comparison is strict (both type and value must be the same)
      */
-    private $strict = false;
+    private bool $strict = false;
     /**
      * @var bool whether to invert the validation logic. Defaults to false. If set to true,
      * the attribute value should NOT be among the list of values defined via [[range]].
      */
-    private $not = false;
+    private bool $not = false;
     /**
      * @var bool whether to allow array type attribute.
      */
-    private $allowArray = false;
+    private bool $allowArray = false;
 
-    private $message;
+    private string $message;
 
     public function __construct($range)
     {

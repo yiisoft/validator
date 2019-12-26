@@ -18,19 +18,18 @@ class MatchRegularExpression extends Rule
     /**
      * @var string the regular expression to be matched with
      */
-    private $pattern;
+    private string $pattern;
     /**
      * @var bool whether to invert the validation logic. Defaults to false. If set to true,
      * the regular expression defined via [[pattern]] should NOT match the attribute value.
      */
-    private $not = false;
+    private bool $not = false;
 
-    private $message;
+    private string $message = 'Value is invalid.';
 
     public function __construct(string $pattern)
     {
         $this->pattern = $pattern;
-        $this->message = $this->formatMessage('{attribute} is invalid.');
     }
 
     public function not(): self
@@ -54,7 +53,7 @@ class MatchRegularExpression extends Rule
             || ($this->not && !preg_match($this->pattern, $value)));
 
         if (!$valid) {
-            $result->addError($this->message);
+            $result->addError($this->formatMessage($this->message));
         }
 
         return $result;
