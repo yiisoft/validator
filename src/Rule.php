@@ -11,8 +11,10 @@ abstract class Rule
     private bool $skipOnEmpty = false;
 
     /**
-     * @param mixed $value
-     * @param DataSetInterface|null $dataSet
+     * Validates the value
+     *
+     * @param mixed $value value to be validated
+     * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
      * @return Result
      */
     final public function validate($value, DataSetInterface $dataSet = null): Result
@@ -24,6 +26,13 @@ abstract class Rule
         return $this->validateValue($value, $dataSet);
     }
 
+    /**
+     * Validates the value. The method should be implemented by concrete validation rules.
+     *
+     * @param mixed $value value to be validated
+     * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
+     * @return Result
+     */
     abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
 
     protected function formatMessage(string $message, array $arguments = []): string
@@ -46,7 +55,7 @@ abstract class Rule
     }
 
     /**
-     * @param bool $value
+     * @param bool $value if validation should be skipped if value validated is empty
      * @return self
      */
     public function skipOnEmpty(bool $value): self
