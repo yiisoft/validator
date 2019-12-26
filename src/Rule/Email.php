@@ -41,7 +41,7 @@ class Email extends Rule
     private bool $enableIDN = false;
 
 
-    private string $message;
+    private string $message = '{attribute} is not a valid email address.';
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
@@ -80,7 +80,7 @@ class Email extends Rule
 
 
         if ($valid === false) {
-            $result->addError($this->message ?? $this->formatMessage('{attribute} is not a valid email address.'));
+            $result->addError($this->formatMessage($this->message));
         }
 
         return $result;

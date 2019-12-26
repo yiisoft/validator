@@ -45,7 +45,7 @@ class Number extends Rule
      * @var string the regular expression for matching numbers. It defaults to a pattern
      * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
      */
-    private string $numberPattern = '/^\s*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/';
+    private string $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/';
 
     private function getNotANumberMessage(array $arguments): string
     {
