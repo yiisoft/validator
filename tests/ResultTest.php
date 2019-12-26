@@ -3,7 +3,6 @@
 
 namespace Yiisoft\Validator\Tests;
 
-
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
 
