@@ -1,6 +1,7 @@
 <?php
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -22,12 +23,12 @@ class Boolean extends Rule
      * When this is true, the attribute value and type must both match those of [[trueValue]] or [[falseValue]].
      * Defaults to false, meaning only the value needs to be matched.
      */
-    private $strict = false;
+    private bool $strict = false;
 
     /**
      * @var string
      */
-    private $message;
+    private string $message = 'The value must be either "{true}" or "{false}".';
 
     public function message(string $message): self
     {
@@ -53,7 +54,7 @@ class Boolean extends Rule
         return $this;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         if ($this->strict) {
             $valid = $value === $this->trueValue || $value === $this->falseValue;
@@ -76,10 +77,6 @@ class Boolean extends Rule
             'true' => $this->trueValue === true ? 'true' : $this->trueValue,
             'false' => $this->falseValue === false ? 'false' : $this->falseValue,
         ];
-
-        if ($this->message === null) {
-            return $this->formatMessage('The value must be either "{true}" or "{false}".', $arguments);
-        }
 
         return $this->formatMessage($this->message, $arguments);
     }

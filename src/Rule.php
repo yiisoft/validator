@@ -3,20 +3,37 @@
 
 namespace Yiisoft\Validator;
 
+/**
+ * Rule represents a single value validation rule.
+ */
 abstract class Rule
 {
-    private $skipOnEmpty = false;
+    private bool $skipOnEmpty = false;
 
-    public function validate($value): Result
+    /**
+     * Validates the value
+     *
+     * @param mixed $value value to be validated
+     * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
+     * @return Result
+     */
+    final public function validate($value, DataSetInterface $dataSet = null): Result
     {
-        if ($this->skipOnEmpty && empty($value)) {
+        if ($this->skipOnEmpty && $this->isEmpty($value)) {
             return new Result();
         }
 
-        return $this->validateValue($value);
+        return $this->validateValue($value, $dataSet);
     }
 
-    abstract public function validateValue($value): Result;
+    /**
+     * Validates the value. The method should be implemented by concrete validation rules.
+     *
+     * @param mixed $value value to be validated
+     * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
+     * @return Result
+     */
+    abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
 
     protected function formatMessage(string $message, array $arguments = []): string
     {
@@ -38,13 +55,14 @@ abstract class Rule
     }
 
     /**
-     * @param bool $value
-     * @return $this
+     * @param bool $value if validation should be skipped if value validated is empty
+     * @return self
      */
     public function skipOnEmpty(bool $value): self
     {
-        $this->skipOnEmpty = $value;
-        return $this;
+        $new = clone $this;
+        $new->skipOnEmpty = $value;
+        return $new;
     }
 
     /**
@@ -54,7 +72,7 @@ abstract class Rule
      * @param mixed $value the value to be checked
      * @return bool whether the value is empty
      */
-    protected function isEmpty($value)
+    protected function isEmpty($value): bool
     {
         return $value === null || $value === [] || $value === '';
     }

@@ -2,12 +2,16 @@
 
 namespace Yiisoft\Validator;
 
+/**
+ * ResultSet stores validation result of each attribute from {@link DataSetInterface}.
+ * It is typically obtained by validating data set with {@link Validator}.
+ */
 final class ResultSet implements \IteratorAggregate
 {
     /**
      * @var Result[]
      */
-    private $results = [];
+    private array $results = [];
 
     public function addResult(string $attribute, Result $result): void
     {
@@ -23,17 +27,17 @@ final class ResultSet implements \IteratorAggregate
         }
     }
 
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->results);
-    }
-
     public function getResult(string $attribute): Result
     {
         if (!isset($this->results[$attribute])) {
-            throw new \InvalidArgumentException("There is no results for attribute \"$attribute\"");
+            throw new \InvalidArgumentException("There is no result for attribute \"$attribute\"");
         }
 
         return $this->results[$attribute];
+    }
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->results);
     }
 }

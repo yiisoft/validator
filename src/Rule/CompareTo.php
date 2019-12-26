@@ -48,7 +48,7 @@ class CompareTo extends Rule
      * - [[TYPE_STRING|string]]: the values are being compared as strings. No conversion will be done before comparison.
      * - [[TYPE_NUMBER|number]]: the values are being compared as numbers. String values will be converted into numbers before comparison.
      */
-    private $type = self::TYPE_STRING;
+    private string $type = self::TYPE_STRING;
     /**
      * @var string the operator for comparison. The following operators are supported:
      *
@@ -63,20 +63,9 @@ class CompareTo extends Rule
      *
      * When you want to compare numbers, make sure to also set [[type]] to `number`.
      */
-    private $operator = '==';
-    /**
-     * @var string the user-defined error message. It may contain the following placeholders which
-     * will be replaced accordingly by the validator:
-     *
-     * - `{attribute}`: the label of the attribute being validated
-     * - `{value}`: the value of the attribute being validated
-     * - `{compareValue}`: the value or the attribute label to be compared with
-     * - `{compareAttribute}`: the label of the attribute to be compared with
-     * - `{compareValueOrAttribute}`: the value or the attribute label to be compared with
-     */
-    private $message;
+    private string $operator = '==';
 
-    private $validOperators = [
+    private array $validOperators = [
         '==' => 1,
         '===' => 1,
         '!=' => 1,
@@ -87,27 +76,25 @@ class CompareTo extends Rule
         '<=' => 1,
     ];
 
-    public function getMessage(array $arguments): string
+    private function getMessage(array $arguments): string
     {
-        if ($this->message === null) {
-            switch ($this->operator) {
-                case '==':
-                case '===':
-                    return $this->formatMessage('Value must be equal to "{value}".', $arguments);
-                case '!=':
-                case '!==':
-                    return $this->formatMessage('Value must not be equal to "{value}".', $arguments);
-                case '>':
-                    return $this->formatMessage('Value must be greater than "{value}".', $arguments);
-                case '>=':
-                    return $this->formatMessage('Value must be greater than or equal to "{value}".', $arguments);
-                case '<':
-                    return $this->formatMessage('Value must be less than "{value}".', $arguments);
-                case '<=':
-                    return $this->formatMessage('Value must be less than or equal to "{value}".', $arguments);
-                default:
-                    throw new \RuntimeException("Unknown operator: {$this->operator}");
-            }
+        switch ($this->operator) {
+            case '==':
+            case '===':
+                return $this->formatMessage('Value must be equal to "{value}".', $arguments);
+            case '!=':
+            case '!==':
+                return $this->formatMessage('Value must not be equal to "{value}".', $arguments);
+            case '>':
+                return $this->formatMessage('Value must be greater than "{value}".', $arguments);
+            case '>=':
+                return $this->formatMessage('Value must be greater than or equal to "{value}".', $arguments);
+            case '<':
+                return $this->formatMessage('Value must be less than "{value}".', $arguments);
+            case '<=':
+                return $this->formatMessage('Value must be less than or equal to "{value}".', $arguments);
+            default:
+                throw new \RuntimeException("Unknown operator: {$this->operator}");
         }
     }
 
@@ -126,23 +113,19 @@ class CompareTo extends Rule
         return $this;
     }
 
-    public function message(string $message): self
-    {
-        $this->message = $message;
-        return $this;
-    }
-
     public function asString(): self
     {
         $this->type = self::TYPE_STRING;
+        return $this;
     }
 
     public function asNumber(): self
     {
         $this->type = self::TYPE_NUMBER;
+        return $this;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
 

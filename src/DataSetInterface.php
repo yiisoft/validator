@@ -3,7 +3,10 @@
 
 namespace Yiisoft\Validator;
 
+/**
+ * DataSetInterface represents a key-value data set
+ */
 interface DataSetInterface
 {
-    public function getValue(string $key);
+    public function getValue(string $attribute);
 }

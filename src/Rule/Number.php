@@ -2,6 +2,7 @@
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Strings\StringHelper;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -17,7 +18,7 @@ class Number extends Rule
     /**
      * @var bool whether the attribute value can only be an integer. Defaults to false.
      */
-    private $asInteger = false;
+    private bool $asInteger = false;
     /**
      * @var int|float upper limit of the number. Defaults to null, meaning no upper limit.
      * @see tooBigMessage for the customized message used when the number is too big.
@@ -29,31 +30,25 @@ class Number extends Rule
      */
     private $min;
     /**
-     * @var string user-defined error message used when the value is bigger than [[max]].
+     * @var string user-defined error message used when the value is bigger than {@link $max}.
      */
-    private $tooBigMessage;
+    private string $tooBigMessage = 'Value must be no greater than {max}.';
     /**
-     * @var string user-defined error message used when the value is smaller than [[min]].
+     * @var string user-defined error message used when the value is smaller than {@link $min}.
      */
-    private $tooSmallMessage;
+    private string $tooSmallMessage = 'Value must be no less than {min}.';
     /**
      * @var string the regular expression for matching integers.
      */
-    private $integerPattern = '/^\s*[+-]?\d+\s*$/';
+    private string $integerPattern = '/^\s*[+-]?\d+\s*$/';
     /**
      * @var string the regular expression for matching numbers. It defaults to a pattern
      * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
      */
-    private $numberPattern = '/^\s*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/';
-
-    private $message;
+    private string $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/';
 
     private function getNotANumberMessage(array $arguments): string
     {
-        if ($this->message !== null) {
-            return $this->formatMessage($this->message, $arguments);
-        }
-
         if ($this->asInteger === true) {
             return $this->formatMessage('Value must be an integer.', $arguments);
         }
@@ -63,19 +58,11 @@ class Number extends Rule
 
     private function getTooBigMessage(array $arguments): string
     {
-        if ($this->tooBigMessage === null) {
-            return $this->formatMessage('Value must be no greater than {max}.', $arguments);
-        }
-
         return $this->formatMessage($this->tooBigMessage, $arguments);
     }
 
     private function getTooSmallMessage(array $arguments): string
     {
-        if ($this->tooSmallMessage === null) {
-            return $this->formatMessage('Value must be no less than {min}.', $arguments);
-        }
-
         return $this->formatMessage($this->tooSmallMessage, $arguments);
     }
 
@@ -103,7 +90,7 @@ class Number extends Rule
         return $this;
     }
 
-    public function validateValue($value): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
 

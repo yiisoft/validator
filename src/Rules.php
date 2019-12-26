@@ -5,38 +5,46 @@ namespace Yiisoft\Validator;
 
 use Yiisoft\Validator\Rule\Callback;
 
-class Rules implements \IteratorAggregate
+/**
+ * Rules represents multiple rules for a single value
+ */
+class Rules
 {
     /**
      * @var Rule[]
      */
-    private $rules = [];
+    private array $rules = [];
 
     public function __construct(iterable $rules = [])
     {
         foreach ($rules as $rule) {
-            if (is_callable($rule)) {
-                $rule = new Callback($rule);
-            }
-            $this->add($rule);
+            $this->rules[] = $this->normalizeRule($rule);
         }
+    }
+
+    private function normalizeRule($rule): Rule
+    {
+        if (is_callable($rule)) {
+            $rule = new Callback($rule);
+        }
+
+        if (!$rule instanceof Rule) {
+            throw new \InvalidArgumentException('Rule should be either instance of Rule class or a callable');
+        }
+
+        return $rule;
     }
 
     public function add(Rule $rule): void
     {
-        $this->rules[] = $rule;
+        $this->rules[] = $this->normalizeRule($rule);
     }
 
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->rules);
-    }
-
-    public function validate($value): Result
+    public function validate($value, DataSetInterface $dataSet = null): Result
     {
         $compoundResult = new Result();
-        foreach ($this->getRules($value) as $rule) {
-            $ruleResult = $rule->validateValue($value);
+        foreach ($this->rules as $rule) {
+            $ruleResult = $rule->validate($value, $dataSet);
             if ($ruleResult->isValid() === false) {
                 foreach ($ruleResult->getErrors() as $error) {
                     $compoundResult->addError($error);
@@ -44,10 +52,5 @@ class Rules implements \IteratorAggregate
             }
         }
         return $compoundResult;
-    }
-
-    protected function getRules($value)
-    {
-        return $this->rules;
     }
 }
