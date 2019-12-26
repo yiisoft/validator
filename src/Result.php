@@ -17,12 +17,10 @@ final class Result
         return $this->valid;
     }
 
-    public function addError(string $message): self
+    public function addError(string $message): void
     {
-        $new = clone $this;
-        $new->valid = false;
-        $new->errors[] = $message;
-        return $new;
+        $this->valid = false;
+        $this->errors[] = $message;
     }
 
     public function getErrors(): array

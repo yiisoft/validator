@@ -243,11 +243,11 @@ class Date extends Rule
 
         $timestamp = $this->parseDateValue($value);
         if ($timestamp === false) {
-            $result = $result->addError($this->message);
+            $result->addError($this->message);
         } elseif ($this->min !== null && $timestamp < $this->min) {
-            $result = $result->addError($this->formatMessage($this->tooSmall, ['min' => $this->minString]));
+            $result->addError($this->formatMessage($this->tooSmall, ['min' => $this->minString]));
         } elseif ($this->max !== null && $timestamp > $this->max) {
-            $result = $result->addError($this->formatMessage($this->tooBig, ['max' => $this->maxString]));
+            $result->addError($this->formatMessage($this->tooBig, ['max' => $this->maxString]));
         }
 
         return $result;

@@ -14,7 +14,7 @@ class CallbackTest extends TestCase
         $rule = new Callback(static function ($value): Result {
             $result = new Result();
             if ($value !== 42) {
-                $result = $result->addError('Value should be 42!');
+                $result->addError('Value should be 42!');
             }
             return $result;
         });

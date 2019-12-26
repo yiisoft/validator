@@ -150,7 +150,7 @@ class CompareTo extends Rule
             throw new \RuntimeException('CompareValidator::compareValue must be set.');
         }
         if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
-            $result = $result->addError($this->getMessage([
+            $result->addError($this->getMessage([
                 'value' => $this->compareValue,
             ]));
         }

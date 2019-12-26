@@ -14,12 +14,13 @@ class ResultSetTest extends TestCase
      */
     public function successShouldNotOverrideError(): void
     {
-        $error = (new Result())->addError('error');
+        $error = new Result();
+        $error->addError('error');
         $success = new Result();
 
-        $resultSet = (new ResultSet())
-            ->addResult('x', $error)
-            ->addResult('x', $success);
+        $resultSet = new ResultSet();
+        $resultSet->addResult('x', $error);
+        $resultSet->addResult('x', $success);
 
         $errors = $resultSet->getResult('x')->getErrors();
 
@@ -33,12 +34,15 @@ class ResultSetTest extends TestCase
      */
     public function errorsShouldAdd(): void
     {
-        $error1 = (new Result())->addError('error1');
-        $error2 = (new Result())->addError('error2');
+        $error1 = new Result();
+        $error1->addError('error1');
 
-        $resultSet = (new ResultSet())
-            ->addResult('x', $error1)
-            ->addResult('x', $error2);
+        $error2 = new Result();
+        $error2->addError('error2');
+
+        $resultSet = new ResultSet();
+        $resultSet->addResult('x', $error1);
+        $resultSet->addResult('x', $error2);
 
         $errors = $resultSet->getResult('x')->getErrors();
 

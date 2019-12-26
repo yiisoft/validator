@@ -35,11 +35,9 @@ class Rules
         return $rule;
     }
 
-    public function add(Rule $rule): self
+    public function add(Rule $rule): void
     {
-        $new = clone $this;
-        $new->rules[] = $this->normalizeRule($rule);
-        return $new;
+        $this->rules[] = $this->normalizeRule($rule);
     }
 
     public function validate($value, DataSetInterface $dataSet = null): Result
@@ -49,7 +47,7 @@ class Rules
             $ruleResult = $rule->validate($value, $dataSet);
             if ($ruleResult->isValid() === false) {
                 foreach ($ruleResult->getErrors() as $error) {
-                    $compoundResult = $compoundResult->addError($error);
+                    $compoundResult->addError($error);
                 }
             }
         }

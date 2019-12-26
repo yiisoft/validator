@@ -54,7 +54,7 @@ class MatchRegularExpression extends Rule
             || ($this->not && !preg_match($this->pattern, $value)));
 
         if (!$valid) {
-            $result = $result->addError($this->message);
+            $result->addError($this->message);
         }
 
         return $result;

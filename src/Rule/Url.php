@@ -67,7 +67,8 @@ class Url extends Rule
             }
         }
 
-        return $result->addError($this->formatMessage($this->message));
+        $result->addError($this->formatMessage($this->message));
+        return $result;
     }
 
     private function idnToAscii($idn)

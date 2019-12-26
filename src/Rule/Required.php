@@ -37,7 +37,8 @@ class Required extends Rule
             return $result;
         }
 
-        return $result->addError($this->getMessage());
+        $result->addError($this->getMessage());
+        return $result;
     }
 
     private function getMessage(): string

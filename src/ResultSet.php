@@ -13,22 +13,18 @@ final class ResultSet implements \IteratorAggregate
      */
     private array $results = [];
 
-    public function addResult(string $attribute, Result $result): self
+    public function addResult(string $attribute, Result $result): void
     {
-        $new = clone $this;
-
-        if (!isset($new->results[$attribute])) {
-            $new->results[$attribute] = $result;
-            return $new;
+        if (!isset($this->results[$attribute])) {
+            $this->results[$attribute] = $result;
+            return;
         }
         if ($result->isValid()) {
-            return $new;
+            return;
         }
         foreach ($result->getErrors() as $error) {
-            $new->results[$attribute] = $new->results[$attribute]->addError($error);
+            $this->results[$attribute]->addError($error);
         }
-
-        return $new;
     }
 
     public function getResult(string $attribute): Result

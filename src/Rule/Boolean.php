@@ -65,7 +65,7 @@ class Boolean extends Rule
         $result = new Result();
 
         if (!$valid) {
-            $result = $result->addError($this->getMessage());
+            $result->addError($this->getMessage());
         }
 
         return $result;

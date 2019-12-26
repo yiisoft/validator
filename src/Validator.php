@@ -13,7 +13,7 @@ class Validator
     /**
      * @var Rules[]
      */
-    private $attributeRules;
+    private array $attributeRules;
 
     /**
      * Validator constructor.
@@ -40,13 +40,12 @@ class Validator
         return $results;
     }
 
-    public function addRule(string $attribute, Rule $rule): self
+    public function addRule(string $attribute, Rule $rule): void
     {
         if (!isset($this->attributeRules[$attribute])) {
             $this->attributeRules[$attribute] = new Rules();
         }
 
         $this->attributeRules[$attribute]->add($rule);
-        return $this;
     }
 }

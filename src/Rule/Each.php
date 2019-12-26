@@ -25,7 +25,8 @@ class Each extends Rule
     {
         $result = new Result();
         if (!is_iterable($value)) {
-            return $result->addError($this->incorrectInputMessage);
+            $result->addError($this->incorrectInputMessage);
+            return $result;
         }
 
         foreach ($value as $item) {
@@ -36,7 +37,7 @@ class Each extends Rule
                         'error' => $error,
                         'value' => $item,
                     ]);
-                    $result = $result->addError($message);
+                    $result->addError($message);
                 }
             }
         }

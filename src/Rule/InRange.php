@@ -100,7 +100,7 @@ class InRange extends Rule
         $result = new Result();
 
         if ($this->not === $in) {
-            $result = $result->addError($this->message);
+            $result->addError($this->message);
         }
 
         return $result;

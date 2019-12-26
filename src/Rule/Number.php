@@ -109,17 +109,18 @@ class Number extends Rule
         $result = new Result();
 
         if ($this->isNotNumber($value)) {
-            return $result->addError($this->getNotANumberMessage(['value' => $value]));
+            $result->addError($this->getNotANumberMessage(['value' => $value]));
+            return $result;
         }
 
         $pattern = $this->asInteger ? $this->integerPattern : $this->numberPattern;
 
         if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
-            $result = $result->addError($this->getNotANumberMessage(['value' => $value]));
+            $result->addError($this->getNotANumberMessage(['value' => $value]));
         } elseif ($this->min !== null && $value < $this->min) {
-            $result = $result->addError($this->getTooSmallMessage(['min' => $this->min]));
+            $result->addError($this->getTooSmallMessage(['min' => $this->min]));
         } elseif ($this->max !== null && $value > $this->max) {
-            $result = $result->addError($this->getTooBigMessage(['max' => $this->max]));
+            $result->addError($this->getTooBigMessage(['max' => $this->max]));
         }
 
         return $result;

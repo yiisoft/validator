@@ -12,16 +12,6 @@ class ResultTest extends TestCase
     /**
      * @test
      */
-    public function addErrorIsImmutable(): void
-    {
-        $result1 = $result2 = new Result();
-        $result1 = $result1->addError('Error');
-        $this->assertNotSame($result1, $result2);
-    }
-
-    /**
-     * @test
-     */
     public function isValidByDefault(): void
     {
         $result = new Result();
@@ -42,7 +32,8 @@ class ResultTest extends TestCase
      */
     public function errorIsProperlyAdded(): void
     {
-        $result = (new Result())->addError('Error');
+        $result = new Result();
+        $result->addError('Error');
         $this->assertContains('Error', $result->getErrors());
     }
 
@@ -51,7 +42,8 @@ class ResultTest extends TestCase
      */
     public function addingErrorChangesIsValid(): void
     {
-        $result = (new Result())->addError('Error');
+        $result = new Result();
+        $result->addError('Error');
         $this->assertFalse($result->isValid());
     }
 }

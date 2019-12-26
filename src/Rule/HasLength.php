@@ -70,16 +70,17 @@ class HasLength extends Rule
         $result = new Result();
 
         if (!is_string($value)) {
-            return $result->addError($this->formatMessage($this->message));
+            $result->addError($this->formatMessage($this->message));
+            return $result;
         }
 
         $length = mb_strlen($value, $this->encoding);
 
         if ($this->min !== null && $length < $this->min) {
-            $result = $result->addError($this->formatMessage($this->tooShortMessage, ['min' => $this->min]));
+            $result->addError($this->formatMessage($this->tooShortMessage, ['min' => $this->min]));
         }
         if ($this->max !== null && $length > $this->max) {
-            $result = $result->addError($this->formatMessage($this->tooLongMessage, ['min' => $this->max]));
+            $result->addError($this->formatMessage($this->tooLongMessage, ['min' => $this->max]));
         }
 
         return $result;
