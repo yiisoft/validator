@@ -24,9 +24,7 @@ class EachTest extends TestCase
             (new Number())->max(13)
         ]);
 
-        $eachRule = new Each($rules);
-
-        $result = $eachRule->validate($values);
+        $result = (new Each($rules))->validate($values);
         $errors = $result->getErrors();
 
         $this->assertFalse($result->isValid());
