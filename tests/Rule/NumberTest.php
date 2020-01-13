@@ -4,6 +4,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\MissingAttributeException;
 use Yiisoft\Validator\Rule\Number;
 
 /**
@@ -287,20 +288,25 @@ class NumberTest extends TestCase
     public function getDataSet(array $attributeValues): DataSetInterface
     {
         return new class($attributeValues) implements DataSetInterface {
-            private $data;
+            private array $data;
 
             public function __construct(array $data)
             {
                 $this->data = $data;
             }
 
-            public function getValue(string $key)
+            public function getAttributeValue(string $attribute)
             {
-                if (isset($this->data[$key])) {
-                    return $this->data[$key];
+                if (!$this->hasAttribute($attribute)) {
+                    throw new MissingAttributeException("There is no \"$attribute\" attribute in the class.");
                 }
 
-                throw new \RuntimeException("There is no $key in the class.");
+                return $this->data[$attribute];
+            }
+
+            public function hasAttribute(string $attribute): bool
+            {
+                return isset($this->data[$attribute]);
             }
         };
     }

@@ -65,7 +65,7 @@ class MoneyTransfer implements DataSetInterface
         $this->amount = $amount;
     }
     
-    public function getValue(string $key){
+    public function getAttributeValue(string $key){
         if (!isset($this->$key)) {
             throw new \InvalidArgumentException("There is no \"$key\" in MoneyTransfer.");
         }
@@ -139,7 +139,7 @@ class CompanyName extends Rule
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
-        $hasCompany = $dataSet !== null && $dataSet->getValue('hasCompany') === true;
+        $hasCompany = $dataSet !== null && $dataSet->getAttributeValue('hasCompany') === true;
 
         if ($hasCompany && $this->isCompanyNameValid($value) === false) {
             

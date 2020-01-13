@@ -8,5 +8,14 @@ namespace Yiisoft\Validator;
  */
 interface DataSetInterface
 {
-    public function getValue(string $attribute);
+    /**
+     * Get specified attribute value
+     * @throws MissingAttributeException if there is no such value
+     */
+    public function getAttributeValue(string $attribute);
+
+    /**
+     * If there is such attribute in the set
+     */
+    public function hasAttribute(string $attribute): bool;
 }

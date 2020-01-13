@@ -4,6 +4,7 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\MissingAttributeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Number;
@@ -21,13 +22,18 @@ class ValidatorTest extends TestCase
                 $this->data = $data;
             }
 
-            public function getValue(string $key)
+            public function getAttributeValue(string $attribute)
             {
-                if (isset($this->data[$key])) {
-                    return $this->data[$key];
+                if (!$this->hasAttribute($attribute)) {
+                    throw new MissingAttributeException("There is no \"$attribute\" attribute in the class.");
                 }
 
-                throw new \RuntimeException("There is no $key in the class.");
+                return $this->data[$attribute];
+            }
+
+            public function hasAttribute(string $attribute): bool
+            {
+                return isset($this->data[$attribute]);
             }
         };
     }
