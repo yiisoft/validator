@@ -35,7 +35,7 @@ class Validator
     {
         $results = new ResultSet();
         foreach ($this->attributeRules as $attribute => $rules) {
-            $results->addResult($attribute, $rules->validate($dataSet->getValue($attribute)));
+            $results->addResult($attribute, $rules->validate($dataSet->getAttributeValue($attribute)));
         }
         return $results;
     }
