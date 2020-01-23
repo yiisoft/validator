@@ -1,4 +1,5 @@
 <?php
+
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
@@ -39,7 +40,7 @@ class InRangeTest extends TestCase
         $rule = (new InRange(range(10, 20, 1)))
             ->skipOnEmpty(false)
             ->allowArray(true);
-        
+
         $this->assertTrue($rule->validate([])->isValid());
     }
 
@@ -47,7 +48,7 @@ class InRangeTest extends TestCase
     {
         $rule = (new InRange(range(1, 10, 1)))
             ->allowArray(true);
-        
+
         $this->assertTrue($rule->validate([1, 2, 3, 4, 5])->isValid());
         $this->assertTrue($rule->validate([6, 7, 8, 9, 10])->isValid());
         $this->assertFalse($rule->validate([0, 1, 2])->isValid());
@@ -82,7 +83,7 @@ class InRangeTest extends TestCase
     {
         $rule = (new InRange(range(1, 10, 1)))
             ->not();
-        
+
         $this->assertFalse($rule->validate(1)->isValid());
         $this->assertTrue($rule->validate(0)->isValid());
         $this->assertTrue($rule->validate(11)->isValid());
@@ -97,7 +98,7 @@ class InRangeTest extends TestCase
         // Test in array, values are arrays. IE: ['a'] in [['a'], ['b']]
         $rule = (new InRange([['a'], ['b']]))
             ->allowArray(false);
-        
+
         $this->assertTrue($rule->validate(['a'])->isValid());
 
         // Test in array, values are arrays. IE: ['a', 'b'] subset [['a', 'b', 'c']

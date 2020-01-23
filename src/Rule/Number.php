@@ -1,4 +1,5 @@
 <?php
+
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Strings\StringHelper;
