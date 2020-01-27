@@ -17,7 +17,7 @@ class InRangeTest extends TestCase
         new InRange('not an array');
     }
 
-    public function testvalidate(): void
+    public function testValidate(): void
     {
         $val = new InRange(range(1, 10, 1));
         $this->assertTrue($val->validate(1)->isValid());
@@ -29,7 +29,7 @@ class InRangeTest extends TestCase
         $this->assertTrue($val->validate('5')->isValid());
     }
 
-    public function testvalidateEmpty(): void
+    public function testValidateEmpty(): void
     {
         $rule = (new InRange(range(10, 20, 1)))->skipOnEmpty(false);
         $this->assertFalse($rule->validate(null)->isValid()); //row RangeValidatorTest.php:101
@@ -56,7 +56,7 @@ class InRangeTest extends TestCase
         $this->assertTrue($rule->validate(['1', '2', '3', 4, 5, 6])->isValid());
     }
 
-    public function testvalidateStrict(): void
+    public function testValidateStrict(): void
     {
         $rule = (new InRange(range(1, 10, 1)))
             ->strict();
@@ -79,7 +79,7 @@ class InRangeTest extends TestCase
         $this->assertFalse($rule->validate(['1', '2', '3', 4, 5, 6])->isValid());
     }
 
-    public function testvalidateNot()
+    public function testValidateNot()
     {
         $rule = (new InRange(range(1, 10, 1)))
             ->not();

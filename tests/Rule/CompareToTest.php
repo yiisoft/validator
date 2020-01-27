@@ -10,7 +10,7 @@ use Yiisoft\Validator\Rule\CompareTo;
  */
 class CompareToTest extends TestCase
 {
-    public function testvalidate(): void
+    public function testValidate(): void
     {
         $value = 18449;
         // default config

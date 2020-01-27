@@ -10,7 +10,7 @@ use Yiisoft\Validator\Rule\Url;
  */
 class UrlTest extends TestCase
 {
-    public function testvalidate()
+    public function testValidate()
     {
         $val = new Url();
         $this->assertFalse($val->validate('google.de')->isValid());
@@ -41,7 +41,7 @@ class UrlTest extends TestCase
         $this->assertFalse($val->validate('http://äüö?=!"§$%&/()=}][{³²€.edu')->isValid());
     }
 
-    public function testvalidateWithoutScheme()
+    public function testValidateWithoutScheme()
     {
         $val = (new Url())
             ->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i');

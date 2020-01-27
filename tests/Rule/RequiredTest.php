@@ -10,7 +10,7 @@ use Yiisoft\Validator\Rule\Required;
  */
 class RequiredTest extends TestCase
 {
-    public function testvalidateWithDefaults()
+    public function testValidateWithDefaults()
     {
         $val = new Required();
         $this->assertFalse($val->validate(null)->isValid());
