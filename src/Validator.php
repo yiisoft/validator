@@ -13,7 +13,7 @@ class Validator
     /**
      * @var Rules[]
      */
-    private array $attributeRules;
+    private array $attributeRules = [];
 
     /**
      * Validator constructor.
