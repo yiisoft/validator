@@ -20,7 +20,7 @@ class HasLengthTest extends TestCase
         $this->assertFalse($val->validate(false)->isValid());
     }
 
-    public function testvalidateLength(): void
+    public function testValidateLength(): void
     {
         $val = (new HasLength())
             ->min(25)
@@ -55,7 +55,7 @@ class HasLengthTest extends TestCase
         $this->assertFalse($val->validate('')->isValid());
     }
 
-    public function testvalidateMin(): void
+    public function testValidateMin(): void
     {
         $rule = (new HasLength())
             ->min(1);
@@ -67,7 +67,7 @@ class HasLengthTest extends TestCase
     }
 
 
-    public function testvalidateMax(): void
+    public function testValidateMax(): void
     {
         $rule = (new HasLength())
             ->max(100);
@@ -77,5 +77,19 @@ class HasLengthTest extends TestCase
         $result = $rule->validate(str_repeat('x', 1230));
         $this->assertFalse($result->isValid());
         $this->assertStringContainsString('{attribute} should contain at most {max, number} {max, plural, one{character} other{characters}}.', $result->getErrors()[0]);
+    }
+
+    public function testValidateMessages()
+    {
+        $rule = (new HasLength())
+            ->message('is not string error')
+            ->tooShortMessage('is to short test')
+            ->tooLongMessage('is to long test')
+            ->min(3)
+            ->max(5);
+
+        $this->assertEquals('is not string error', $rule->validate(null)->getErrors()[0]);
+        $this->assertEquals('is to short test', $rule->validate(str_repeat('x', 1))->getErrors()[0]);
+        $this->assertEquals('is to long test', $rule->validate(str_repeat('x', 6))->getErrors()[0]);
     }
 }

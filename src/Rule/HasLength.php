@@ -85,4 +85,25 @@ class HasLength extends Rule
 
         return $result;
     }
+
+    public function message(string $message): self
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    public function tooShortMessage(string $message): self
+    {
+        $this->tooShortMessage = $message;
+
+        return $this;
+    }
+
+    public function tooLongMessage(string $message): self
+    {
+        $this->tooLongMessage = $message;
+
+        return $this;
+    }
 }
