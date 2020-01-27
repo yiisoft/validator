@@ -10,7 +10,7 @@ use Yiisoft\Validator\Rule\Email;
  */
 class EmailTest extends TestCase
 {
-    public function testvalidate(): void
+    public function testValidate(): void
     {
         $validator = new Email();
 
@@ -49,7 +49,7 @@ class EmailTest extends TestCase
         $this->assertFalse($validator->validate(['developer@yiiframework.com'])->isValid());
     }
 
-    public function testvalidateIdn(): void
+    public function testValidateIdn(): void
     {
         if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('Intl extension required');
@@ -93,7 +93,7 @@ class EmailTest extends TestCase
         $this->assertFalse($validator->validate('Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.com>')->isValid());
     }
 
-    public function testvalidateMx(): void
+    public function testValidateMx(): void
     {
         $this->markTestSkipped('Too slow :(');
 

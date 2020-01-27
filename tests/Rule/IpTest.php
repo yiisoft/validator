@@ -90,7 +90,7 @@ class IpTest extends TestCase
         $this->assertFalse($validator->validate($badIp)->isValid());
     }
 
-    public function testvalidateIPv4()
+    public function testValidateIPv4()
     {
         $validator = new Ip();
 
@@ -125,7 +125,7 @@ class IpTest extends TestCase
     }
 
 
-    public function testvalidateIPv6()
+    public function testValidateIPv6()
     {
         $validator = new Ip();
 
@@ -157,7 +157,7 @@ class IpTest extends TestCase
         $this->assertFalse($validator->validate('!!2008:fa::0:1/64')->isValid());
     }
 
-    public function testvalidateIPvBoth()
+    public function testValidateIPvBoth()
     {
         $validator = new Ip();
 
