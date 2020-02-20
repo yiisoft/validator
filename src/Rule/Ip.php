@@ -210,6 +210,22 @@ class Ip extends Rule
         return $this;
     }
 
+    /**
+     * Set network alias
+     *
+     * @param string $aliasName
+     * @param array $ranges
+     * @return self
+     */
+    public function withNetworkAlias(string $aliasName, array $ranges): self
+    {
+        if (array_key_exists($aliasName, $this->networks)) {
+            throw new \RuntimeException("Network alias \"{$aliasName}\" already set");
+        }
+        $this->networks[$aliasName] = $ranges;
+        return $this;
+    }
+
     public function getRanges(): array
     {
         return $this->ranges;
