@@ -293,6 +293,12 @@ class IpTest extends TestCase
             ->ranges(['myNetworkEu']);
         $this->assertTrue($validator->validate('1.2.3.4')->isValid());
         $this->assertTrue($validator->validate('5.6.7.8')->isValid());
+    }
+
+    public function testWithNetworkAliasException(): void
+    {
+        $validator = (new Ip())->withNetworkAlias('myNetworkEu', ['1.2.3.4/10', '5.6.7.8'])
+            ->ranges(['myNetworkEu']);
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Network alias "myNetworkEu" already set');
