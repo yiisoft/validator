@@ -42,7 +42,7 @@ class Ip extends Rule
     private const NEGATION_CHAR = '!';
 
     /**
-     * @var array The network aliases, that can be used in [[ranges]].
+     * @var array The network aliases, that can be used in {@see ranges()}.
      *  - key - alias name
      *  - value - array of strings. String can be an IP range, IP address or another alias. String can be
      *    negated with [[NEGATION_CHAR]] (independent of `negation` option).
@@ -207,6 +207,22 @@ class Ip extends Rule
     public function ranges(array $ranges): self
     {
         $this->ranges = $this->prepareRanges($ranges);
+        return $this;
+    }
+
+    /**
+     * Define network alias to be used in {@see ranges()}
+     *
+     * @param string $name name of the network
+     * @param array $ranges ranges
+     * @return self
+     */
+    public function network(string $name, array $ranges): self
+    {
+        if (array_key_exists($name, $this->networks)) {
+            throw new \RuntimeException("Network alias \"{$name}\" already set");
+        }
+        $this->networks[$name] = $ranges;
         return $this;
     }
 
