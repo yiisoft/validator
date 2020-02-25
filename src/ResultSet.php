@@ -12,6 +12,20 @@ use Yiisoft\I18n\TranslatorInterface;
  */
 final class ResultSet implements \IteratorAggregate
 {
+    private ?TranslatorInterface $translator;
+    private ?string $translationDomain;
+    private ?string $translationLocale;
+
+    public function __construct(
+        ?TranslatorInterface $translator = null,
+        ?string $translationDomain = null,
+        ?string $translationLocale = null
+    ) {
+        $this->translator = $translator;
+        $this->translationDomain = $translationDomain;
+        $this->translationLocale = $translationLocale;
+    }
+
     /**
      * @var Result[]
      */
@@ -19,10 +33,7 @@ final class ResultSet implements \IteratorAggregate
 
     public function addResult(
         string $attribute,
-        Result $result,
-        ?TranslatorInterface $translator = null,
-        ?string $translationDomain = null,
-        ?string $translationLocale = null
+        Result $result
     ): void {
         if (!isset($this->results[$attribute])) {
             $this->results[$attribute] = $result;
@@ -31,7 +42,7 @@ final class ResultSet implements \IteratorAggregate
         if ($result->isValid()) {
             return;
         }
-        foreach ($result->getErrors($translator, $translationDomain, $translationLocale) as $error) {
+        foreach ($result->getErrors($this->translator, $this->translationDomain, $this->translationLocale) as $error) {
             $this->results[$attribute]->addError($error);
         }
     }

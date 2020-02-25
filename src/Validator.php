@@ -43,14 +43,16 @@ class Validator implements ValidatorInterface
 
     public function validate(DataSetInterface $dataSet): ResultSet
     {
-        $results = new ResultSet();
+        $results = new ResultSet(
+            $this->translator,
+            $this->translationDomain,
+            $this->translationLocale
+        );
+
         foreach ($this->attributeRules as $attribute => $rules) {
             $results->addResult(
                 $attribute,
-                $rules->validate($dataSet->getAttributeValue($attribute)),
-                $this->translator,
-                $this->translationDomain,
-                $this->translationLocale
+                $rules->validate($dataSet->getAttributeValue($attribute))
             );
         }
         return $results;
