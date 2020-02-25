@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\DataSetInterface;
 
 class Callback extends Rule
 {
@@ -16,7 +17,7 @@ class Callback extends Rule
         $this->callback = $callback;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
     {
         $callback = $this->callback;
         return $callback($value, $dataSet);

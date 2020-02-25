@@ -1,26 +1,33 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
 use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\I18n\TranslatorInterface;
 
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
  */
 class Validator
 {
+    private ?TranslatorInterface $translator = null;
+    private string $domain;
+
     /**
      * @var Rules[]
      */
     private array $attributeRules = [];
 
-    /**
-     * Validator constructor.
-     * @param $rules
-     */
-    public function __construct(iterable $rules = [])
-    {
+    public function __construct(
+        iterable $rules = [],
+        TranslatorInterface $translator = null,
+        string $domain = null
+    ) {
+        $this->translator = $translator;
+        $this->domain = $domain ?? 'validators';
+
         foreach ($rules as $attribute => $ruleSets) {
             foreach ($ruleSets as $rule) {
                 if (is_callable($rule)) {
@@ -35,7 +42,10 @@ class Validator
     {
         $results = new ResultSet();
         foreach ($this->attributeRules as $attribute => $rules) {
-            $results->addResult($attribute, $rules->validate($dataSet->getAttributeValue($attribute)));
+            $results->addResult(
+                $attribute,
+                $this->translateMessages($rules->validate($dataSet->getAttributeValue($attribute)))
+            );
         }
         return $results;
     }
@@ -47,5 +57,19 @@ class Validator
         }
 
         $this->attributeRules[$attribute]->add($rule);
+    }
+
+    private function translateMessages(RuleResult $ruleResult): Result
+    {
+        $result = new Result();
+
+        if ($ruleResult->isValid() === false) {
+            foreach ($ruleResult->getErrors() as $error) {
+                [$message, $arguments] = $error;
+                $result->addError($this->translator->translate($message, $arguments, $this->domain));
+            }
+        }
+
+        return $result;
     }
 }

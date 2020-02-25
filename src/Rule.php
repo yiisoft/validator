@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
@@ -15,12 +16,12 @@ abstract class Rule
      *
      * @param mixed $value value to be validated
      * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
-     * @return Result
+     * @return RuleResult
      */
-    final public function validate($value, DataSetInterface $dataSet = null): Result
+    final public function validate($value, DataSetInterface $dataSet = null): RuleResult
     {
         if ($this->skipOnEmpty && $this->isEmpty($value)) {
-            return new Result();
+            return new RuleResult();
         }
 
         return $this->validateValue($value, $dataSet);
@@ -31,28 +32,9 @@ abstract class Rule
      *
      * @param mixed $value value to be validated
      * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
-     * @return Result
+     * @return RuleResult
      */
-    abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
-
-    protected function formatMessage(string $message, array $arguments = []): string
-    {
-        $replacements = [];
-        foreach ($arguments as $key => $value) {
-            if (is_array($value)) {
-                $value = 'array';
-            } elseif (is_object($value)) {
-                $value = 'object';
-            } elseif (is_resource($value)) {
-                $value = 'resource';
-            }
-
-            $replacements['{' . $key . '}'] = $value;
-        }
-
-        // TODO: move it to upper level and make it configurable?
-        return strtr($message, $replacements);
-    }
+    abstract protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult;
 
     /**
      * @param bool $value if validation should be skipped if value validated is empty

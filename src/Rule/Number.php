@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\RuleResult;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
 
 /**
  * NumberValidator validates that the attribute value is a number.
@@ -48,23 +50,26 @@ class Number extends Rule
      */
     private string $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/';
 
-    private function getNotANumberMessage(array $arguments): string
+    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
     {
-        if ($this->asInteger === true) {
-            return $this->formatMessage('Value must be an integer.', $arguments);
+        $result = new RuleResult();
+
+        if ($this->isNotNumber($value)) {
+            $result->addError($this->getNotANumberMessage(), ['value' => $value]);
+            return $result;
         }
 
-        return $this->formatMessage('Value must be a number.', $arguments);
-    }
+        $pattern = $this->asInteger ? $this->integerPattern : $this->numberPattern;
 
-    private function getTooBigMessage(array $arguments): string
-    {
-        return $this->formatMessage($this->tooBigMessage, $arguments);
-    }
+        if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
+            $result->addError($this->getNotANumberMessage(), ['value' => $value]);
+        } elseif ($this->min !== null && $value < $this->min) {
+            $result->addError($this->tooSmallMessage, ['min' => $this->min]);
+        } elseif ($this->max !== null && $value > $this->max) {
+            $result->addError($this->tooBigMessage, ['max' => $this->max]);
+        }
 
-    private function getTooSmallMessage(array $arguments): string
-    {
-        return $this->formatMessage($this->tooSmallMessage, $arguments);
+        return $result;
     }
 
     public function integer(): self
@@ -91,35 +96,27 @@ class Number extends Rule
         return $this;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    public function tooBigMessage(string $message): self
     {
-        $result = new Result();
-
-        if ($this->isNotNumber($value)) {
-            $result->addError($this->getNotANumberMessage(['value' => $value]));
-            return $result;
-        }
-
-        $pattern = $this->asInteger ? $this->integerPattern : $this->numberPattern;
-
-        if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
-            $result->addError($this->getNotANumberMessage(['value' => $value]));
-        } elseif ($this->min !== null && $value < $this->min) {
-            $result->addError($this->getTooSmallMessage(['min' => $this->min]));
-        } elseif ($this->max !== null && $value > $this->max) {
-            $result->addError($this->getTooBigMessage(['max' => $this->max]));
-        }
-
-        return $result;
+        $this->tooBigMessage = $message;
+        return $this;
     }
 
-    /*
+    private function getNotANumberMessage(): string
+    {
+        if ($this->asInteger === true) {
+            return 'Value must be an integer.';
+        }
+        return 'Value must be a number.';
+    }
+
+    /**
      * @param mixed $value the data value to be checked.
      */
     private function isNotNumber($value): bool
     {
         return is_array($value)
-        || (is_object($value) && !method_exists($value, '__toString'))
-        || (!is_object($value) && !is_scalar($value) && $value !== null);
+            || (is_object($value) && !method_exists($value, '__toString'))
+            || (!is_object($value) && !is_scalar($value) && $value !== null);
     }
 }

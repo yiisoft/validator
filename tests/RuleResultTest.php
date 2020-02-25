@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
+use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\RuleResult;
 
-class ResultTest extends TestCase
+class RuleResultTest extends TestCase
 {
     /**
      * @test
      */
     public function isValidByDefault(): void
     {
-        $result = new Result();
+        $result = new RuleResult();
         $this->assertTrue($result->isValid());
     }
 
@@ -23,7 +24,7 @@ class ResultTest extends TestCase
      */
     public function errorsAreEmptyByDefault(): void
     {
-        $result = new Result();
+        $result = new RuleResult();
         $this->assertEmpty($result->getErrors());
     }
 
@@ -32,9 +33,16 @@ class ResultTest extends TestCase
      */
     public function errorIsProperlyAdded(): void
     {
-        $result = new Result();
+        $result = new RuleResult();
         $result->addError('Error');
-        $this->assertContains('Error', $result->getErrors());
+        $this->assertEquals([['Error', []]], $result->getErrors());
+    }
+
+    public function errorIsProperlyAddedWithArguments(): void
+    {
+        $result = new RuleResult();
+        $result->addError('Error', ['value' => 'test']);
+        $this->assertEquals([['Error', ['value' => 'test']]], $result->getErrors());
     }
 
     /**

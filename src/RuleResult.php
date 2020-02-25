@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-final class Result
+/**
+ * Result represents a single value validation result.
+ * It may either be success or contain one or multiple errors.
+ */
+final class RuleResult
 {
     private array $errors = [];
 
@@ -13,9 +17,9 @@ final class Result
         return $this->errors === [];
     }
 
-    public function addError(string $message): void
+    public function addError(string $message, array $arguments = []): void
     {
-        $this->errors[] = $message;
+        $this->errors[] = [$message, $arguments];
     }
 
     public function getErrors(): array

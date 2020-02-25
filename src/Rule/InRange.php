@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\DataSetInterface;
 
 /**
  * In validates that the attribute value is among a list of values.
@@ -18,15 +20,7 @@ use Yiisoft\Validator\Rule;
 class InRange extends Rule
 {
     /**
-     * @var array|\Traversable|\Closure a list of valid values that the attribute value should be among or an anonymous function that returns
-     * such a list. The signature of the anonymous function should be as follows,
-     *
-     * ```php
-     * function($model, $attribute) {
-     *     // compute range
-     *     return $range;
-     * }
-     * ```
+     * @var array|\Traversable
      */
     private $range;
     /**
@@ -38,25 +32,42 @@ class InRange extends Rule
      * the attribute value should NOT be among the list of values defined via [[range]].
      */
     private bool $not = false;
-    /**
-     * @var bool whether to allow array type attribute.
-     */
-    private bool $allowArray = false;
 
-    private string $message;
+    private string $message = 'This value is invalid.';
 
     public function __construct($range)
     {
-        if (!is_array($range)
-            && !($range instanceof \Closure)
-            && !($range instanceof \Traversable)
-        ) {
+        if (!is_array($range) && !($range instanceof \Traversable)) {
             throw new \RuntimeException('The "range" property must be set.');
         }
 
         $this->range = $range;
-        $this->message = $this->formatMessage('{attribute} is invalid.');
     }
+
+    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
+    {
+        $in = false;
+
+        if (
+            ($value instanceof \Traversable || is_array($value)) &&
+            ArrayHelper::isSubset($value, $this->range, $this->strict)
+        ) {
+            $in = true;
+        }
+
+        if (!$in && ArrayHelper::isIn($value, $this->range, $this->strict)) {
+            $in = true;
+        }
+
+        $result = new RuleResult();
+
+        if ($this->not === $in) {
+            $result->addError($this->message);
+        }
+
+        return $result;
+    }
+
 
     public function strict(): self
     {
@@ -74,36 +85,5 @@ class InRange extends Rule
     {
         $this->message = $message;
         return $this;
-    }
-
-    public function allowArray(bool $value): self
-    {
-        // TODO: do we really need this option?
-        $this->allowArray = $value;
-        return $this;
-    }
-
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
-    {
-        $in = false;
-
-        if ($this->allowArray
-            && ($value instanceof \Traversable || is_array($value))
-            && ArrayHelper::isSubset($value, $this->range, $this->strict)
-        ) {
-            $in = true;
-        }
-
-        if (!$in && ArrayHelper::isIn($value, $this->range, $this->strict)) {
-            $in = true;
-        }
-
-        $result = new Result();
-
-        if ($this->not === $in) {
-            $result->addError($this->message);
-        }
-
-        return $result;
     }
 }

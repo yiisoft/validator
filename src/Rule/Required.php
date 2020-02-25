@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\DataSetInterface;
 
 /**
  * RequiredValidator validates that the specified attribute does not have null or empty value.
@@ -20,25 +22,22 @@ class Required extends Rule
      * to check if the attribute value is empty.
      */
     private bool $strict = false;
-    /**
-     * @var string the user-defined error message. It may contain the following placeholders which
-     * will be replaced accordingly by the validator:
-     *
-     * - `{attribute}`: the label of the attribute being validated
-     * - `{value}`: the value of the attribute being validated
-     * - `{requiredValue}`: the value of [[requiredValue]]
-     */
+
     private string $message = 'Value cannot be blank.';
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
     {
-        $result = new Result();
+        $result = new RuleResult();
 
-        if (($this->strict && $value !== null) || (!$this->strict && !$this->isEmpty(is_string($value) ? trim($value) : $value))) {
+        if (
+            ($this->strict && $value !== null) ||
+            (!$this->strict && !$this->isEmpty(is_string($value) ? trim($value) : $value))
+        ) {
             return $result;
         }
 
-        $result->addError($this->formatMessage($this->message));
+        $result->addError($this->message);
+
         return $result;
     }
 

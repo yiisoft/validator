@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\DataSetInterface;
 
 /**
  * EmailValidator validates that the attribute value is a valid email address.
@@ -41,16 +43,19 @@ class Email extends Rule
      */
     private bool $enableIDN = false;
 
-
     private string $message = '{attribute} is not a valid email address.';
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
     {
-        $result = new Result();
+        $result = new RuleResult();
 
         if (!is_string($value)) {
             $valid = false;
-        } elseif (!preg_match('/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?(?:(?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))$/i', $value, $matches)) {
+        } elseif (!preg_match(
+            '/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?(?:(?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))$/i',
+            $value,
+            $matches
+        )) {
             $valid = false;
         } else {
             if ($this->enableIDN) {
@@ -72,16 +77,18 @@ class Email extends Rule
                 // http://www.rfc-editor.org/errata_search.php?eid=1690
                 $valid = false;
             } else {
-                $valid = preg_match($this->pattern, $value) || ($this->allowName && preg_match($this->fullPattern, $value));
+                $valid = preg_match($this->pattern, $value) || ($this->allowName && preg_match(
+                            $this->fullPattern,
+                            $value
+                        ));
                 if ($valid && $this->checkDNS) {
                     $valid = checkdnsrr($matches['domain'] . '.', 'MX') || checkdnsrr($matches['domain'] . '.', 'A');
                 }
             }
         }
 
-
         if ($valid === false) {
-            $result->addError($this->formatMessage($this->message));
+            $result->addError($this->message);
         }
 
         return $result;

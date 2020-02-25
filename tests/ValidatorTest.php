@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -40,25 +42,29 @@ class ValidatorTest extends TestCase
 
     public function testAddingRulesViaConstructor(): void
     {
-        $dataObject = $this->getDataObject([
-            'bool' => true,
-            'int' => 41,
-        ]);
+        $dataObject = $this->getDataObject(
+            [
+                'bool' => true,
+                'int' => 41,
+            ]
+        );
 
-        $validator = new Validator([
-            'bool' => [new Boolean()],
-            'int' => [
-                (new Number())->integer(),
-                (new Number())->integer()->min(44),
-                static function ($value): Result {
-                    $result = new Result();
-                    if ($value !== 42) {
-                        $result->addError('Value should be 42!');
+        $validator = new Validator(
+            [
+                'bool' => [new Boolean()],
+                'int' => [
+                    (new Number())->integer(),
+                    (new Number())->integer()->min(44),
+                    static function ($value): Result {
+                        $result = new Result();
+                        if ($value !== 42) {
+                            $result->addError('Value should be 42!');
+                        }
+                        return $result;
                     }
-                    return $result;
-                }
-            ],
-        ]);
+                ],
+            ]
+        );
 
         $results = $validator->validate($dataObject);
 
@@ -71,10 +77,12 @@ class ValidatorTest extends TestCase
 
     public function testAddingRulesOneByOne(): void
     {
-        $dataObject = $this->getDataObject([
-            'bool' => true,
-            'int' => 42,
-        ]);
+        $dataObject = $this->getDataObject(
+            [
+                'bool' => true,
+                'int' => 42,
+            ]
+        );
 
         $validator = new Validator();
         $validator->addRule('bool', new Boolean());

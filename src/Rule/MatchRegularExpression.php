@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Rule;
 
-use yii\helpers\Yii;
-use yii\exceptions\InvalidConfigException;
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\DataSetInterface;
 
 /**
  * RegularExpressionValidator validates that the attribute value matches the specified [[pattern]].
@@ -32,6 +32,21 @@ class MatchRegularExpression extends Rule
         $this->pattern = $pattern;
     }
 
+    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
+    {
+        $result = new RuleResult();
+
+        $valid = !is_array($value) &&
+            ((!$this->not && preg_match($this->pattern, $value))
+                || ($this->not && !preg_match($this->pattern, $value)));
+
+        if (!$valid) {
+            $result->addError($this->message);
+        }
+
+        return $result;
+    }
+
     public function not(): self
     {
         $this->not = true;
@@ -42,20 +57,5 @@ class MatchRegularExpression extends Rule
     {
         $this->message = $message;
         return $this;
-    }
-
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
-    {
-        $result = new Result();
-
-        $valid = !is_array($value) &&
-            ((!$this->not && preg_match($this->pattern, $value))
-            || ($this->not && !preg_match($this->pattern, $value)));
-
-        if (!$valid) {
-            $result->addError($this->formatMessage($this->message));
-        }
-
-        return $result;
     }
 }

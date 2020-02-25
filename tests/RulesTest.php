@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use Yiisoft\Validator\Rules;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\RuleResult;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\Rules;
 
 class RulesTest extends TestCase
 {
@@ -24,10 +25,12 @@ class RulesTest extends TestCase
 
     public function testArraySyntax(): void
     {
-        $rules = new Rules([
-            new Required(),
-            (new Number())->max(10)
-        ]);
+        $rules = new Rules(
+            [
+                new Required(),
+                (new Number())->max(10)
+            ]
+        );
 
         $result = $rules->validate(42);
         $this->assertFalse($result->isValid());
@@ -36,15 +39,17 @@ class RulesTest extends TestCase
 
     public function testCallback(): void
     {
-        $rules = new Rules([
-            static function ($value): Result {
-                $result = new Result();
-                if ($value !== 42) {
-                    $result->addError('Value should be 42!');
+        $rules = new Rules(
+            [
+                static function ($value): RuleResult {
+                    $result = new RuleResult();
+                    if ($value !== 42) {
+                        $result->addError('Value should be 42!');
+                    }
+                    return $result;
                 }
-                return $result;
-            }
-        ]);
+            ]
+        );
 
         $result = $rules->validate(41);
         $this->assertFalse($result->isValid());

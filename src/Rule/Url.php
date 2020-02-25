@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\DataSetInterface;
 
 /**
  * UrlValidator validates that the attribute value is a valid http or https URL.
@@ -33,7 +35,7 @@ class Url extends Rule
      */
     private bool $enableIDN = false;
 
-    private string $message = '{attribute} is not a valid URL.';
+    private string $message = 'This value is not a valid URL.';
 
     public function __construct()
     {
@@ -42,9 +44,9 @@ class Url extends Rule
         }
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
     {
-        $result = new Result();
+        $result = new RuleResult();
 
         // make sure the length is limited to avoid DOS attacks
         if (is_string($value) && strlen($value) < 2000) {
@@ -65,7 +67,8 @@ class Url extends Rule
             }
         }
 
-        $result->addError($this->formatMessage($this->message));
+        $result->addError($this->message);
+
         return $result;
     }
 

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\DataSetInterface;
 
 /**
  * BooleanValidator checks if the attribute value is a boolean value or a value corresponding to it.
@@ -55,7 +57,7 @@ class Boolean extends Rule
         return $this;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
     {
         if ($this->strict) {
             $valid = $value === $this->trueValue || $value === $this->falseValue;
@@ -63,22 +65,18 @@ class Boolean extends Rule
             $valid = $value == $this->trueValue || $value == $this->falseValue;
         }
 
-        $result = new Result();
+        $result = new RuleResult();
 
         if (!$valid) {
-            $result->addError($this->getMessage());
+            $result->addError(
+                $this->message,
+                [
+                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+                ]
+            );
         }
 
         return $result;
-    }
-
-    private function getMessage(): string
-    {
-        $arguments = [
-            'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-            'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-        ];
-
-        return $this->formatMessage($this->message, $arguments);
     }
 }
