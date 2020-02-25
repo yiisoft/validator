@@ -47,8 +47,7 @@ class Rules
         foreach ($this->rules as $rule) {
             $ruleResult = $rule->validate($value, $dataSet);
             if ($ruleResult->isValid() === false) {
-                foreach ($ruleResult->getErrors() as $error) {
-                    [$message, $arguments] = $error;
+                foreach ($ruleResult->getErrors() as [$message, $arguments]) {
                     $compoundResult->addError($message, $arguments);
                 }
             }
