@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\Result;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\DataSetInterface;
 
@@ -50,9 +50,9 @@ class Number extends Rule
      */
     private string $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/';
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
-        $result = new RuleResult();
+        $result = new Result();
 
         if ($this->isNotNumber($value)) {
             $result->addError($this->getNotANumberMessage(), ['value' => $value]);

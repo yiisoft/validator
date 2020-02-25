@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
 
 /**
@@ -57,7 +57,7 @@ class Boolean extends Rule
         return $this;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         if ($this->strict) {
             $valid = $value === $this->trueValue || $value === $this->falseValue;
@@ -65,7 +65,7 @@ class Boolean extends Rule
             $valid = $value == $this->trueValue || $value == $this->falseValue;
         }
 
-        $result = new RuleResult();
+        $result = new Result();
 
         if (!$valid) {
             $result->addError(

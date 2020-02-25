@@ -41,9 +41,9 @@ class Rules
         $this->rules[] = $this->normalizeRule($rule);
     }
 
-    public function validate($value, DataSetInterface $dataSet = null): RuleResult
+    public function validate($value, DataSetInterface $dataSet = null): Result
     {
-        $compoundResult = new RuleResult();
+        $compoundResult = new Result();
         foreach ($this->rules as $rule) {
             $ruleResult = $rule->validate($value, $dataSet);
             if ($ruleResult->isValid() === false) {

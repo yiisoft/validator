@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests;
 
 use Yiisoft\Validator\Rules;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
@@ -41,8 +41,8 @@ class RulesTest extends TestCase
     {
         $rules = new Rules(
             [
-                static function ($value): RuleResult {
-                    $result = new RuleResult();
+                static function ($value): Result {
+                    $result = new Result();
                     if ($value !== 42) {
                         $result->addError('Value should be 42!');
                     }

@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Rule;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
 
 /**
@@ -44,7 +44,7 @@ class InRange extends Rule
         $this->range = $range;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $in = false;
 
@@ -59,7 +59,7 @@ class InRange extends Rule
             $in = true;
         }
 
-        $result = new RuleResult();
+        $result = new Result();
 
         if ($this->not === $in) {
             $result->addError($this->message);

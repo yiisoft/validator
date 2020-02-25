@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rules;
-use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
 
 /**
@@ -24,9 +24,9 @@ class Each extends Rule
         $this->rules = $rules;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
-        $result = new RuleResult();
+        $result = new Result();
         if (!is_iterable($value)) {
             $result->addError($this->incorrectInputMessage);
             return $result;

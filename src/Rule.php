@@ -16,12 +16,12 @@ abstract class Rule
      *
      * @param mixed $value value to be validated
      * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
-     * @return RuleResult
+     * @return Result
      */
-    final public function validate($value, DataSetInterface $dataSet = null): RuleResult
+    final public function validate($value, DataSetInterface $dataSet = null): Result
     {
         if ($this->skipOnEmpty && $this->isEmpty($value)) {
-            return new RuleResult();
+            return new Result();
         }
 
         return $this->validateValue($value, $dataSet);
@@ -32,9 +32,9 @@ abstract class Rule
      *
      * @param mixed $value value to be validated
      * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
-     * @return RuleResult
+     * @return Result
      */
-    abstract protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult;
+    abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
 
     /**
      * @param bool $value if validation should be skipped if value validated is empty

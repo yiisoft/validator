@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\RuleResult;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
 
 /**
@@ -127,9 +127,9 @@ class CompareTo extends Rule
         return $this;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): RuleResult
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
-        $result = new RuleResult();
+        $result = new Result();
 
         if ($this->compareValue === null) {
             throw new \RuntimeException('CompareValidator::compareValue must be set.');

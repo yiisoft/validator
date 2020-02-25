@@ -10,10 +10,11 @@ use Yiisoft\I18n\TranslatorInterface;
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
  */
-class Validator
+class Validator implements ValidatorInterface
 {
-    private ?TranslatorInterface $translator = null;
-    private string $domain;
+    private ?TranslatorInterface $translator;
+    private ?string $translationDomain;
+    private ?string $translationLocale;
 
     /**
      * @var Rules[]
@@ -23,11 +24,9 @@ class Validator
     public function __construct(
         iterable $rules = [],
         TranslatorInterface $translator = null,
-        string $domain = null
+        string $translationDomain = null,
+        string $translationLocale = null
     ) {
-        $this->translator = $translator;
-        $this->domain = $domain ?? 'validators';
-
         foreach ($rules as $attribute => $ruleSets) {
             foreach ($ruleSets as $rule) {
                 if (is_callable($rule)) {
@@ -36,6 +35,10 @@ class Validator
                 $this->addRule($attribute, $rule);
             }
         }
+
+        $this->translator = $translator;
+        $this->translationDomain = $translationDomain;
+        $this->translationLocale = $translationLocale;
     }
 
     public function validate(DataSetInterface $dataSet): ResultSet
@@ -44,7 +47,10 @@ class Validator
         foreach ($this->attributeRules as $attribute => $rules) {
             $results->addResult(
                 $attribute,
-                $this->translateMessages($rules->validate($dataSet->getAttributeValue($attribute)))
+                $rules->validate($dataSet->getAttributeValue($attribute)),
+                $this->translator,
+                $this->translationDomain,
+                $this->translationLocale
             );
         }
         return $results;
@@ -57,19 +63,5 @@ class Validator
         }
 
         $this->attributeRules[$attribute]->add($rule);
-    }
-
-    private function translateMessages(RuleResult $ruleResult): Result
-    {
-        $result = new Result();
-
-        if ($ruleResult->isValid() === false) {
-            foreach ($ruleResult->getErrors() as $error) {
-                [$message, $arguments] = $error;
-                $result->addError($this->translator->translate($message, $arguments, $this->domain));
-            }
-        }
-
-        return $result;
     }
 }
