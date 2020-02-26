@@ -43,7 +43,7 @@ class Email extends Rule
      */
     private bool $enableIDN = false;
 
-    private string $message = '{attribute} is not a valid email address.';
+    private string $message = 'This value is not a valid email address.';
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
@@ -88,7 +88,7 @@ class Email extends Rule
         }
 
         if ($valid === false) {
-            $result->addError($this->message);
+            $result->addError($this->translateMessage($this->message));
         }
 
         return $result;
@@ -99,50 +99,30 @@ class Email extends Rule
         return idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
     }
 
-    /**
-     * @param bool $allowName
-     *
-     * @return Email
-     */
     public function allowName(bool $allowName): self
     {
         $this->allowName = $allowName;
-
         return $this;
     }
 
-    /**
-     * @param bool $checkDNS
-     *
-     * @return Email
-     */
     public function checkDNS(bool $checkDNS): self
     {
         $this->checkDNS = $checkDNS;
-
         return $this;
     }
 
-    /**
-     * @param bool $enableIDN
-     *
-     * @return Email
-     */
     public function enableIDN(bool $enableIDN): self
     {
         if ($enableIDN && !function_exists('idn_to_ascii')) {
             throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }
-
         $this->enableIDN = $enableIDN;
-
         return $this;
     }
 
     public function message(string $message): self
     {
         $this->message = $message;
-
         return $this;
     }
 }

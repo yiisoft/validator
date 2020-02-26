@@ -137,10 +137,12 @@ class CompareTo extends Rule
 
         if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
             $result->addError(
-                $this->getMessage(),
-                [
-                    'value' => $this->compareValue,
-                ]
+                $this->translateMessage(
+                    $this->getMessage(),
+                    [
+                        'value' => $this->compareValue,
+                    ]
+                )
             );
         }
 

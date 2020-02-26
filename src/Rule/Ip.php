@@ -196,12 +196,12 @@ class Ip extends Rule
         }
         $result = new Result();
         if (!is_string($value)) {
-            $result->addError($this->message);
+            $result->addError($this->translateMessage($this->message));
             return $result;
         }
 
         if (preg_match($this->getIpParsePattern(), $value, $matches) === 0) {
-            $result->addError($this->message);
+            $result->addError($this->translateMessage($this->message));
             return $result;
         }
         $negation = !empty($matches['not'] ?? null);
@@ -212,28 +212,28 @@ class Ip extends Rule
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
         } catch (\InvalidArgumentException $e) {
-            $result->addError($this->message);
+            $result->addError($this->translateMessage($this->message));
             return $result;
         }
 
         if ($this->requireSubnet === true && $cidr === null) {
-            $result->addError($this->noSubnet);
+            $result->addError($this->translateMessage($this->noSubnet));
             return $result;
         }
         if ($this->allowSubnet === false && $cidr !== null) {
-            $result->addError($this->hasSubnet);
+            $result->addError($this->translateMessage($this->hasSubnet));
             return $result;
         }
         if ($this->allowNegation === false && $negation) {
-            $result->addError($this->message);
+            $result->addError($this->translateMessage($this->message));
             return $result;
         }
         if ($ipVersion === IpHelper::IPV6 && !$this->allowIpv6) {
-            $result->addError($this->ipv6NotAllowed);
+            $result->addError($this->translateMessage($this->ipv6NotAllowed));
             return $result;
         }
         if ($ipVersion === IpHelper::IPV4 && !$this->allowIpv4) {
-            $result->addError($this->ipv4NotAllowed);
+            $result->addError($this->translateMessage($this->ipv4NotAllowed));
             return $result;
         }
         if (!$result->isValid()) {
@@ -241,14 +241,14 @@ class Ip extends Rule
         }
         if ($cidr !== null) {
             try {
-                $cidr = IpHelper::getCidrBits($ipCidr);
+                IpHelper::getCidrBits($ipCidr);
             } catch (\InvalidArgumentException $e) {
-                $result->addError($this->wrongCidr);
+                $result->addError($this->translateMessage($this->wrongCidr));
                 return $result;
             }
         }
         if (!$this->isAllowed($ipCidr)) {
-            $result->addError($this->notInRange);
+            $result->addError($this->translateMessage($this->notInRange));
             return $result;
         }
 

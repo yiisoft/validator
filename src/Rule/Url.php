@@ -57,9 +57,13 @@ class Url extends Rule
             }
 
             if ($this->enableIDN) {
-                $value = preg_replace_callback('/:\/\/([^\/]+)/', function ($matches) {
-                    return '://' . $this->idnToAscii($matches[1]);
-                }, $value);
+                $value = preg_replace_callback(
+                    '/:\/\/([^\/]+)/',
+                    function ($matches) {
+                        return '://' . $this->idnToAscii($matches[1]);
+                    },
+                    $value
+                );
             }
 
             if (preg_match($pattern, $value)) {
@@ -67,7 +71,7 @@ class Url extends Rule
             }
         }
 
-        $result->addError($this->message);
+        $result->addError($this->translateMessage($this->message));
 
         return $result;
     }

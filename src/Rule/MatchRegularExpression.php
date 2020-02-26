@@ -41,7 +41,7 @@ class MatchRegularExpression extends Rule
                 || ($this->not && !preg_match($this->pattern, $value)));
 
         if (!$valid) {
-            $result->addError($this->message);
+            $result->addError($this->translateMessage($this->message));
         }
 
         return $result;

@@ -43,11 +43,7 @@ class Validator implements ValidatorInterface
 
     public function validate(DataSetInterface $dataSet): ResultSet
     {
-        $results = new ResultSet(
-            $this->translator,
-            $this->translationDomain,
-            $this->translationLocale
-        );
+        $results = new ResultSet();
 
         foreach ($this->attributeRules as $attribute => $rules) {
             $results->addResult(
@@ -61,7 +57,12 @@ class Validator implements ValidatorInterface
     public function addRule(string $attribute, Rule $rule): void
     {
         if (!isset($this->attributeRules[$attribute])) {
-            $this->attributeRules[$attribute] = new Rules();
+            $this->attributeRules[$attribute] = new Rules(
+                [],
+                $this->translator,
+                $this->translationDomain,
+                $this->translationLocale
+            );
         }
 
         $this->attributeRules[$attribute]->add($rule);

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\I18n\TranslatorInterface;
-
 final class Result
 {
     private array $errors = [];
@@ -15,30 +13,13 @@ final class Result
         return $this->errors === [];
     }
 
-    public function addError(string $message, array $arguments = []): void
+    public function addError(string $message): void
     {
-        $this->errors[] = [$message, $arguments];
+        $this->errors[] = $message;
     }
 
-    public function getErrors(
-        TranslatorInterface $translator = null,
-        string $translationDomain = null,
-        string $translationLocale = null
-    ): array {
-        if ($translator === null) {
-            return $this->errors;
-        }
-
-        $errors = [];
-        foreach ($this->errors as [$message, $parameters]) {
-            $errors[] = $translator->translate(
-                $message,
-                $parameters,
-                $translationDomain ?? 'validators',
-                $translationLocale
-            );
-        }
-
-        return $errors;
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 }

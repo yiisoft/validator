@@ -28,9 +28,6 @@ class Boolean extends Rule
      */
     private bool $strict = false;
 
-    /**
-     * @var string
-     */
     private string $message = 'The value must be either "{true}" or "{false}".';
 
     public function message(string $message): self
@@ -69,11 +66,13 @@ class Boolean extends Rule
 
         if (!$valid) {
             $result->addError(
-                $this->message,
-                [
-                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                ]
+                $this->translateMessage(
+                    $this->message,
+                    [
+                        'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                        'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+                    ]
+                )
             );
         }
 

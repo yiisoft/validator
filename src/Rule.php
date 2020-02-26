@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Yiisoft\I18n\TranslatorInterface;
+
 /**
  * Rule represents a single value validation rule.
  */
 abstract class Rule
 {
+    private ?TranslatorInterface $translator = null;
+    private ?string $translationDomain = null;
+    private ?string $translationLocale = null;
     private bool $skipOnEmpty = false;
 
     /**
@@ -35,6 +40,32 @@ abstract class Rule
      * @return Result
      */
     abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
+
+    public function setTranslator(TranslatorInterface $translator): self
+    {
+        $this->translator = $translator;
+        return $this;
+    }
+
+    public function setTranslationDomain(string $translation): self
+    {
+        $this->translationDomain = $translation;
+        return $this;
+    }
+
+    public function setTranslationLocale(string $locale): self
+    {
+        $this->translationLocale = $locale;
+        return $this;
+    }
+
+    public function translateMessage(string $message, array $arguments = []): string
+    {
+        if ($this->translator === null) {
+            return $message;
+        }
+        return $this->translator->translate($message, $arguments, $this->translationDomain, $this->translationLocale);
+    }
 
     /**
      * @param bool $value if validation should be skipped if value validated is empty

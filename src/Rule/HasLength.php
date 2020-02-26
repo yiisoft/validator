@@ -56,10 +56,10 @@ class HasLength extends Rule
         $length = mb_strlen($value, $this->encoding);
 
         if ($this->min !== null && $length < $this->min) {
-            $result->addError($this->tooShortMessage, ['min' => $this->min]);
+            $result->addError($this->translateMessage($this->tooShortMessage, ['min' => $this->min]));
         }
         if ($this->max !== null && $length > $this->max) {
-            $result->addError($this->tooLongMessage, ['min' => $this->max]);
+            $result->addError($this->translateMessage($this->tooLongMessage, ['min' => $this->max]));
         }
 
         return $result;
@@ -86,21 +86,18 @@ class HasLength extends Rule
     public function message(string $message): self
     {
         $this->message = $message;
-
         return $this;
     }
 
     public function tooShortMessage(string $message): self
     {
         $this->tooShortMessage = $message;
-
         return $this;
     }
 
     public function tooLongMessage(string $message): self
     {
         $this->tooLongMessage = $message;
-
         return $this;
     }
 }
