@@ -27,6 +27,10 @@ class Validator implements ValidatorInterface
         string $translationDomain = null,
         string $translationLocale = null
     ) {
+        $this->translator = $translator;
+        $this->translationDomain = $translationDomain;
+        $this->translationLocale = $translationLocale;
+
         foreach ($rules as $attribute => $ruleSets) {
             foreach ($ruleSets as $rule) {
                 if (is_callable($rule)) {
@@ -35,10 +39,6 @@ class Validator implements ValidatorInterface
                 $this->addRule($attribute, $rule);
             }
         }
-
-        $this->translator = $translator;
-        $this->translationDomain = $translationDomain;
-        $this->translationLocale = $translationLocale;
     }
 
     public function validate(DataSetInterface $dataSet): ResultSet

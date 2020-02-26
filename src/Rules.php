@@ -26,13 +26,13 @@ class Rules
         ?string $translationDomain = null,
         ?string $translationLocale = null
     ) {
-        foreach ($rules as $rule) {
-            $this->rules[] = $this->normalizeRule($rule);
-        }
-
         $this->translator = $translator;
         $this->translationDomain = $translationDomain;
         $this->translationLocale = $translationLocale;
+
+        foreach ($rules as $rule) {
+            $this->rules[] = $this->normalizeRule($rule);
+        }
     }
 
     private function normalizeRule($rule): Rule
