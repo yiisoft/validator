@@ -62,8 +62,9 @@ abstract class Rule
     public function translateMessage(string $message, array $arguments = []): string
     {
         if ($this->translator === null) {
-            return $message;
+            return $this->formatMessage($message);
         }
+
         return $this->translator->translate(
             $message,
             $arguments,
@@ -81,6 +82,24 @@ abstract class Rule
         $new = clone $this;
         $new->skipOnEmpty = $value;
         return $new;
+    }
+
+    protected function formatMessage(string $message, array $arguments = []): string
+    {
+        $replacements = [];
+        foreach ($arguments as $key => $value) {
+            if (is_array($value)) {
+                $value = 'array';
+            } elseif (is_object($value)) {
+                $value = 'object';
+            } elseif (is_resource($value)) {
+                $value = 'resource';
+            }
+
+            $replacements['{' . $key . '}'] = $value;
+        }
+
+        return strtr($message, $replacements);
     }
 
     /**
