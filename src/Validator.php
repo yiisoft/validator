@@ -1,26 +1,36 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
 use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\I18n\TranslatorInterface;
 
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
  */
-class Validator
+class Validator implements ValidatorInterface
 {
+    private ?TranslatorInterface $translator;
+    private ?string $translationDomain;
+    private ?string $translationLocale;
+
     /**
      * @var Rules[]
      */
     private array $attributeRules = [];
 
-    /**
-     * Validator constructor.
-     * @param $rules
-     */
-    public function __construct(iterable $rules = [])
-    {
+    public function __construct(
+        iterable $rules = [],
+        TranslatorInterface $translator = null,
+        string $translationDomain = null,
+        string $translationLocale = null
+    ) {
+        $this->translator = $translator;
+        $this->translationDomain = $translationDomain;
+        $this->translationLocale = $translationLocale;
+
         foreach ($rules as $attribute => $ruleSets) {
             foreach ($ruleSets as $rule) {
                 if (is_callable($rule)) {
@@ -34,8 +44,12 @@ class Validator
     public function validate(DataSetInterface $dataSet): ResultSet
     {
         $results = new ResultSet();
+
         foreach ($this->attributeRules as $attribute => $rules) {
-            $results->addResult($attribute, $rules->validate($dataSet->getAttributeValue($attribute)));
+            $results->addResult(
+                $attribute,
+                $rules->validate($dataSet->getAttributeValue($attribute))
+            );
         }
         return $results;
     }
@@ -43,7 +57,12 @@ class Validator
     public function addRule(string $attribute, Rule $rule): void
     {
         if (!isset($this->attributeRules[$attribute])) {
-            $this->attributeRules[$attribute] = new Rules();
+            $this->attributeRules[$attribute] = new Rules(
+                [],
+                $this->translator,
+                $this->translationDomain,
+                $this->translationLocale
+            );
         }
 
         $this->attributeRules[$attribute]->add($rule);

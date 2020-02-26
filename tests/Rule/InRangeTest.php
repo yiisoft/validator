@@ -19,7 +19,7 @@ class InRangeTest extends TestCase
 
     public function testValidate(): void
     {
-        $val = new InRange(range(1, 10, 1));
+        $val = new InRange(range(1, 10));
         $this->assertTrue($val->validate(1)->isValid());
         $this->assertFalse($val->validate(0)->isValid());
         $this->assertFalse($val->validate(11)->isValid());
@@ -31,23 +31,21 @@ class InRangeTest extends TestCase
 
     public function testValidateEmpty(): void
     {
-        $rule = (new InRange(range(10, 20, 1)))->skipOnEmpty(false);
+        $rule = (new InRange(range(10, 20)))->skipOnEmpty(false);
         $this->assertFalse($rule->validate(null)->isValid()); //row RangeValidatorTest.php:101
         $this->assertFalse($rule->validate('0')->isValid());
         $this->assertFalse($rule->validate(0)->isValid());
         $this->assertFalse($rule->validate('')->isValid());
 
         $rule = (new InRange(range(10, 20, 1)))
-            ->skipOnEmpty(false)
-            ->allowArray(true);
+            ->skipOnEmpty(false);
 
         $this->assertTrue($rule->validate([])->isValid());
     }
 
     public function testValidateArrayValue(): void
     {
-        $rule = (new InRange(range(1, 10, 1)))
-            ->allowArray(true);
+        $rule = (new InRange(range(1, 10)));
 
         $this->assertTrue($rule->validate([1, 2, 3, 4, 5])->isValid());
         $this->assertTrue($rule->validate([6, 7, 8, 9, 10])->isValid());
@@ -58,7 +56,7 @@ class InRangeTest extends TestCase
 
     public function testValidateStrict(): void
     {
-        $rule = (new InRange(range(1, 10, 1)))
+        $rule = (new InRange(range(1, 10)))
             ->strict();
 
         $this->assertTrue($rule->validate(1)->isValid());
@@ -72,8 +70,7 @@ class InRangeTest extends TestCase
     public function testValidateArrayValueStrict(): void
     {
         $rule = (new InRange(range(1, 10, 1)))
-            ->strict()
-            ->allowArray(true);
+            ->strict();
 
         $this->assertFalse($rule->validate(['1', '2', '3', '4', '5', '6'])->isValid());
         $this->assertFalse($rule->validate(['1', '2', '3', 4, 5, 6])->isValid());
@@ -96,27 +93,23 @@ class InRangeTest extends TestCase
     public function testValidateSubsetArrayable(): void
     {
         // Test in array, values are arrays. IE: ['a'] in [['a'], ['b']]
-        $rule = (new InRange([['a'], ['b']]))
-            ->allowArray(false);
+        $rule = (new InRange([['a'], ['b']]));
 
         $this->assertTrue($rule->validate(['a'])->isValid());
 
         // Test in array, values are arrays. IE: ['a', 'b'] subset [['a', 'b', 'c']
-        $rule = (new InRange(['a', 'b', 'c']))
-            ->allowArray(true);
+        $rule = (new InRange(['a', 'b', 'c']));
 
         $this->assertTrue($rule->validate(['a', 'b'])->isValid());
 
         // Test in array, values are arrays. IE: ['a', 'b'] subset [['a', 'b', 'c']
-        $rule = (new InRange(['a', 'b', 'c']))
-            ->allowArray(true);
+        $rule = (new InRange(['a', 'b', 'c']));
 
         $this->assertTrue($rule->validate(new \ArrayObject(['a', 'b']))->isValid());
 
 
         // Test range as ArrayObject.
-        $rule = (new InRange(new \ArrayObject(['a', 'b'])))
-            ->allowArray(false);
+        $rule = (new InRange(new \ArrayObject(['a', 'b'])));
 
         $this->assertTrue($rule->validate('a')->isValid());
     }

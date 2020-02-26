@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\DataSetInterface;
 
 /**
  * BooleanValidator checks if the attribute value is a boolean value or a value corresponding to it.
@@ -26,9 +28,6 @@ class Boolean extends Rule
      */
     private bool $strict = false;
 
-    /**
-     * @var string
-     */
     private string $message = 'The value must be either "{true}" or "{false}".';
 
     public function message(string $message): self
@@ -66,19 +65,17 @@ class Boolean extends Rule
         $result = new Result();
 
         if (!$valid) {
-            $result->addError($this->getMessage());
+            $result->addError(
+                $this->translateMessage(
+                    $this->message,
+                    [
+                        'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                        'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+                    ]
+                )
+            );
         }
 
         return $result;
-    }
-
-    private function getMessage(): string
-    {
-        $arguments = [
-            'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-            'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-        ];
-
-        return $this->formatMessage($this->message, $arguments);
     }
 }

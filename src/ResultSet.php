@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator;
 
 /**
@@ -13,8 +15,10 @@ final class ResultSet implements \IteratorAggregate
      */
     private array $results = [];
 
-    public function addResult(string $attribute, Result $result): void
-    {
+    public function addResult(
+        string $attribute,
+        Result $result
+    ): void {
         if (!isset($this->results[$attribute])) {
             $this->results[$attribute] = $result;
             return;

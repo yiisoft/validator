@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
@@ -62,7 +64,11 @@ class HasLengthTest extends TestCase
 
         $result = $rule->validate('');
         $this->assertFalse($result->isValid());
-        $this->assertStringContainsString('{attribute} should contain at least {min, number} {min, plural, one{character} other{characters}}.', $result->getErrors()[0]);
+
+        $this->assertStringContainsString(
+            'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+            $result->getErrors()[0]
+        );
         $this->assertTrue($rule->validate(str_repeat('x', 5))->isValid());
     }
 
@@ -76,7 +82,10 @@ class HasLengthTest extends TestCase
 
         $result = $rule->validate(str_repeat('x', 1230));
         $this->assertFalse($result->isValid());
-        $this->assertStringContainsString('{attribute} should contain at most {max, number} {max, plural, one{character} other{characters}}.', $result->getErrors()[0]);
+        $this->assertStringContainsString(
+            'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+            $result->getErrors()[0]
+        );
     }
 
     public function testValidateMessages()

@@ -1,25 +1,20 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-/**
- * Result represents a single value validation result.
- * It may either be success or contain one or multiple errors.
- */
 final class Result
 {
-    private bool $valid = true;
     private array $errors = [];
 
     public function isValid(): bool
     {
-        return $this->valid;
+        return $this->errors === [];
     }
 
     public function addError(string $message): void
     {
-        $this->valid = false;
         $this->errors[] = $message;
     }
 

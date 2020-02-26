@@ -1,13 +1,19 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Yiisoft\Validator;
+
+use Yiisoft\I18n\TranslatorInterface;
 
 /**
  * Rule represents a single value validation rule.
  */
 abstract class Rule
 {
+    private ?TranslatorInterface $translator = null;
+    private ?string $translationDomain = null;
+    private ?string $translationLocale = null;
     private bool $skipOnEmpty = false;
 
     /**
@@ -35,23 +41,36 @@ abstract class Rule
      */
     abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
 
-    protected function formatMessage(string $message, array $arguments = []): string
+    public function setTranslator(TranslatorInterface $translator): self
     {
-        $replacements = [];
-        foreach ($arguments as $key => $value) {
-            if (is_array($value)) {
-                $value = 'array';
-            } elseif (is_object($value)) {
-                $value = 'object';
-            } elseif (is_resource($value)) {
-                $value = 'resource';
-            }
+        $this->translator = $translator;
+        return $this;
+    }
 
-            $replacements['{' . $key . '}'] = $value;
+    public function setTranslationDomain(string $translation): self
+    {
+        $this->translationDomain = $translation;
+        return $this;
+    }
+
+    public function setTranslationLocale(string $locale): self
+    {
+        $this->translationLocale = $locale;
+        return $this;
+    }
+
+    public function translateMessage(string $message, array $arguments = []): string
+    {
+        if ($this->translator === null) {
+            return $this->formatMessage($message, $arguments);
         }
 
-        // TODO: move it to upper level and make it configurable?
-        return strtr($message, $replacements);
+        return $this->translator->translate(
+            $message,
+            $arguments,
+            $this->translationDomain ?? 'validators',
+            $this->translationLocale
+        );
     }
 
     /**
@@ -63,6 +82,22 @@ abstract class Rule
         $new = clone $this;
         $new->skipOnEmpty = $value;
         return $new;
+    }
+
+    private function formatMessage(string $message, array $arguments = []): string
+    {
+        $replacements = [];
+        foreach ($arguments as $key => $value) {
+            if (is_array($value)) {
+                $value = 'array';
+            } elseif (is_object($value)) {
+                $value = 'object';
+            } elseif (is_resource($value)) {
+                $value = 'resource';
+            }
+            $replacements['{' . $key . '}'] = $value;
+        }
+        return strtr($message, $replacements);
     }
 
     /**

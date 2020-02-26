@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\DataSetInterface;
 
 /**
  * CompareValidator compares the specified attribute value with another value.
@@ -76,23 +78,23 @@ class CompareTo extends Rule
         '<=' => 1,
     ];
 
-    private function getMessage(array $arguments): string
+    private function getMessage(): string
     {
         switch ($this->operator) {
             case '==':
             case '===':
-                return $this->formatMessage('Value must be equal to "{value}".', $arguments);
+                return 'Value must be equal to "{value}".';
             case '!=':
             case '!==':
-                return $this->formatMessage('Value must not be equal to "{value}".', $arguments);
+                return 'Value must not be equal to "{value}".';
             case '>':
-                return $this->formatMessage('Value must be greater than "{value}".', $arguments);
+                return 'Value must be greater than "{value}".';
             case '>=':
-                return $this->formatMessage('Value must be greater than or equal to "{value}".', $arguments);
+                return 'Value must be greater than or equal to "{value}".';
             case '<':
-                return $this->formatMessage('Value must be less than "{value}".', $arguments);
+                return 'Value must be less than "{value}".';
             case '<=':
-                return $this->formatMessage('Value must be less than or equal to "{value}".', $arguments);
+                return 'Value must be less than or equal to "{value}".';
             default:
                 throw new \RuntimeException("Unknown operator: {$this->operator}");
         }
@@ -132,10 +134,16 @@ class CompareTo extends Rule
         if ($this->compareValue === null) {
             throw new \RuntimeException('CompareValidator::compareValue must be set.');
         }
+
         if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
-            $result->addError($this->getMessage([
-                'value' => $this->compareValue,
-            ]));
+            $result->addError(
+                $this->translateMessage(
+                    $this->getMessage(),
+                    [
+                        'value' => $this->compareValue,
+                    ]
+                )
+            );
         }
 
         return $result;

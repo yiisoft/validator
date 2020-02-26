@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\DataSetInterface;
 
 /**
  * Each validator validates an array by checking each of its elements against a set of rules
@@ -34,15 +36,31 @@ class Each extends Rule
             $itemResult = $this->rules->validate($item, $dataSet);
             if ($itemResult->isValid() === false) {
                 foreach ($itemResult->getErrors() as $error) {
-                    $message = $this->formatMessage($this->message, [
-                        'error' => $error,
-                        'value' => $item,
-                    ]);
-                    $result->addError($message);
+                    $result->addError(
+                        $this->translateMessage(
+                            $this->message,
+                            [
+                                'error' => $error,
+                                'value' => $item,
+                            ]
+                        )
+                    );
                 }
             }
         }
 
         return $result;
+    }
+
+    public function incorrectInputMessage(string $message): self
+    {
+        $this->incorrectInputMessage = $message;
+        return $this;
+    }
+
+    public function message(string $message): self
+    {
+        $this->message = $message;
+        return $this;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
@@ -42,10 +44,22 @@ class EmailTest extends TestCase
         $this->assertFalse($validator->validate('Informtation info@oertliches.de')->isValid());
         $this->assertTrue($validator->validate('test@example.com')->isValid());
         $this->assertTrue($validator->validate('John Smith <john.smith@example.com>')->isValid());
-        $this->assertTrue($validator->validate('"This name is longer than 64 characters. Blah blah blah blah blah" <shortmail@example.com>')->isValid());
+        $this->assertTrue(
+            $validator->validate(
+                '"This name is longer than 64 characters. Blah blah blah blah blah" <shortmail@example.com>'
+            )->isValid()
+        );
         $this->assertFalse($validator->validate('John Smith <example.com>')->isValid());
-        $this->assertFalse($validator->validate('Short Name <localPartMoreThan64Characters-blah-blah-blah-blah-blah-blah-blah-blah@example.com>')->isValid());
-        $this->assertFalse($validator->validate('Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah.com>')->isValid());
+        $this->assertFalse(
+            $validator->validate(
+                'Short Name <localPartMoreThan64Characters-blah-blah-blah-blah-blah-blah-blah-blah@example.com>'
+            )->isValid()
+        );
+        $this->assertFalse(
+            $validator->validate(
+                'Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah.com>'
+            )->isValid()
+        );
         $this->assertFalse($validator->validate(['developer@yiiframework.com'])->isValid());
     }
 
@@ -87,10 +101,22 @@ class EmailTest extends TestCase
         $this->assertTrue($validator->validate('<mail@cebe.cc>')->isValid());
         $this->assertTrue($validator->validate('test@example.com')->isValid());
         $this->assertTrue($validator->validate('John Smith <john.smith@example.com>')->isValid());
-        $this->assertTrue($validator->validate('"Такое имя достаточно длинное, но оно все равно может пройти валидацию" <shortmail@example.com>')->isValid());
+        $this->assertTrue(
+            $validator->validate(
+                '"Такое имя достаточно длинное, но оно все равно может пройти валидацию" <shortmail@example.com>'
+            )->isValid()
+        );
         $this->assertFalse($validator->validate('John Smith <example.com>')->isValid());
-        $this->assertFalse($validator->validate('Короткое имя <после-преобразования-в-idn-тут-будет-больше-чем-64-символа@пример.com>')->isValid());
-        $this->assertFalse($validator->validate('Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.com>')->isValid());
+        $this->assertFalse(
+            $validator->validate(
+                'Короткое имя <после-преобразования-в-idn-тут-будет-больше-чем-64-символа@пример.com>'
+            )->isValid()
+        );
+        $this->assertFalse(
+            $validator->validate(
+                'Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.com>'
+            )->isValid()
+        );
     }
 
     public function testValidateMx(): void
@@ -114,8 +140,10 @@ class EmailTest extends TestCase
             'Ivan Petrov <ipetrov@gmail.com>',
         ];
         foreach ($emails as $email) {
-            $this->assertTrue($validator->validate($email)->isValid(),
-                "Email: '$email' failed to validate(checkDNS=true, allowName=true)");
+            $this->assertTrue(
+                $validator->validate($email)->isValid(),
+                "Email: '$email' failed to validate(checkDNS=true, allowName=true)"
+            );
         }
     }
 
