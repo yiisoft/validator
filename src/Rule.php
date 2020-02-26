@@ -62,7 +62,7 @@ abstract class Rule
     public function translateMessage(string $message, array $arguments = []): string
     {
         if ($this->translator === null) {
-            return $this->formatMessage($message);
+            return $this->formatMessage($message, $arguments);
         }
 
         return $this->translator->translate(

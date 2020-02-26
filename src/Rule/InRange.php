@@ -68,7 +68,6 @@ class InRange extends Rule
         return $result;
     }
 
-
     public function strict(): self
     {
         $this->strict = true;

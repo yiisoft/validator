@@ -26,5 +26,6 @@ class CallbackTest extends TestCase
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
+        $this->assertEquals('Value should be 42!', $result->getErrors()[0]);
     }
 }

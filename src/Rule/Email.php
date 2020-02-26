@@ -64,11 +64,11 @@ class Email extends Rule
                 $value = $matches['name'] . $matches['open'] . $matches['local'] . '@' . $matches['domain'] . $matches['close'];
             }
 
-            if (strlen($matches['local']) > 64) {
+            if (is_string($matches['local']) && strlen($matches['local']) > 64) {
                 // The maximum total length of a user name or other local-part is 64 octets. RFC 5322 section 4.5.3.1.1
                 // http://tools.ietf.org/html/rfc5321#section-4.5.3.1.1
                 $valid = false;
-            } elseif (strlen($matches['local'] . '@' . $matches['domain']) > 254) {
+            } elseif (is_string($matches['local']) && strlen($matches['local'] . '@' . $matches['domain']) > 254) {
                 // There is a restriction in RFC 2821 on the length of an address in MAIL and RCPT commands
                 // of 254 characters. Since addresses that do not fit in those fields are not normally useful, the
                 // upper limit on address lengths should normally be considered to be 254.
