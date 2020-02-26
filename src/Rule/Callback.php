@@ -19,7 +19,17 @@ class Callback extends Rule
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
+        $result = new Result();
         $callback = $this->callback;
-        return $callback($value, $dataSet);
+        /**
+         * @var $callbackResult Result
+         */
+        $callbackResult = $callback($value, $dataSet);
+        if ($callbackResult->isValid() === false) {
+            foreach ($callbackResult->getErrors() as $message) {
+                $result->addError($this->translateMessage($message));
+            }
+        }
+        return $result;
     }
 }
