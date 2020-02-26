@@ -64,7 +64,12 @@ abstract class Rule
         if ($this->translator === null) {
             return $message;
         }
-        return $this->translator->translate($message, $arguments, $this->translationDomain, $this->translationLocale);
+        return $this->translator->translate(
+            $message,
+            $arguments,
+            $this->translationDomain ?? 'validators',
+            $this->translationLocale
+        );
     }
 
     /**
