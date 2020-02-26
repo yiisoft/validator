@@ -84,7 +84,7 @@ abstract class Rule
         return $new;
     }
 
-    protected function formatMessage(string $message, array $arguments = []): string
+    private function formatMessage(string $message, array $arguments = []): string
     {
         $replacements = [];
         foreach ($arguments as $key => $value) {
@@ -95,10 +95,8 @@ abstract class Rule
             } elseif (is_resource($value)) {
                 $value = 'resource';
             }
-
             $replacements['{' . $key . '}'] = $value;
         }
-
         return strtr($message, $replacements);
     }
 
