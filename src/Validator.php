@@ -47,7 +47,7 @@ class Validator implements ValidatorInterface
         foreach ($this->attributeRules as $attribute => $rules) {
             $results->addResult(
                 $attribute,
-                $rules->validate($dataSet->getAttributeValue($attribute), null, $results)
+                $rules->validate($dataSet->getAttributeValue($attribute), $dataSet)
             );
         }
         return $results;
