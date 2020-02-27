@@ -20,6 +20,7 @@ abstract class Rule
     private bool $skipOnEmpty = false;
     private bool $skipOnError = true;
     private int $skipErrorMode = self::SKIP_ON_ATTRIBUTE_ERROR;
+    private $when = null;
 
     /**
      * Validates the value
@@ -31,6 +32,10 @@ abstract class Rule
     final public function validate($value, DataSetInterface $dataSet = null): Result
     {
         if ($this->skipOnEmpty && $this->isEmpty($value)) {
+            return new Result();
+        }
+
+        if ($this->when !== null && !call_user_func($this->when)) {
             return new Result();
         }
 
@@ -79,6 +84,13 @@ abstract class Rule
             $this->translationDomain ?? 'validators',
             $this->translationLocale
         );
+    }
+
+    public function when(callable $callback): self
+    {
+        $new = clone $this;
+        $new->when = $callback;
+        return $new;
     }
 
     public function getSkipOnError(): bool
