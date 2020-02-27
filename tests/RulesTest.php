@@ -55,4 +55,20 @@ class RulesTest extends TestCase
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
     }
+
+    public function testSkipOnError()
+    {
+        $rules = new Rules(
+            [
+                (new Number())->min(10),
+                (new Number())->min(10)->skipOnError(false),
+                (new Number())->min(10)
+            ]
+        );
+
+        $result = $rules->validate(1);
+
+        $this->assertFalse($result->isValid());
+        $this->assertCount(2, $result->getErrors());
+    }
 }

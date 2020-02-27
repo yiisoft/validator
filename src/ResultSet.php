@@ -14,11 +14,15 @@ final class ResultSet implements \IteratorAggregate
      * @var Result[]
      */
     private array $results = [];
+    private bool $hasErrors = false;
 
     public function addResult(
         string $attribute,
         Result $result
     ): void {
+        if ($this->hasErrors === false && $result->isValid() === false) {
+            $this->hasErrors = true;
+        }
         if (!isset($this->results[$attribute])) {
             $this->results[$attribute] = $result;
             return;
@@ -29,6 +33,11 @@ final class ResultSet implements \IteratorAggregate
         foreach ($result->getErrors() as $error) {
             $this->results[$attribute]->addError($error);
         }
+    }
+
+    public function hasErrors(): bool
+    {
+        return $this->hasErrors;
     }
 
     public function getResult(string $attribute): Result

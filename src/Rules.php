@@ -46,15 +46,15 @@ class Rules
         }
 
         if ($this->translator !== null) {
-            $rule->setTranslator($this->translator);
+            $rule->withTranslator($this->translator);
         }
 
         if ($this->translationDomain !== null) {
-            $rule->setTranslationDomain($this->translationDomain);
+            $rule->withTranslationDomain($this->translationDomain);
         }
 
         if ($this->translationLocale !== null) {
-            $rule->setTranslationLocale($this->translationLocale);
+            $rule->withTranslationLocale($this->translationLocale);
         }
 
         return $rule;
@@ -65,10 +65,16 @@ class Rules
         $this->rules[] = $this->normalizeRule($rule);
     }
 
-    public function validate($value, DataSetInterface $dataSet = null): Result
+    public function validate($value, DataSetInterface $dataSet = null, ResultSet $resultSet = null): Result
     {
         $compoundResult = new Result();
+        /**
+         * @var $rule Rule
+         */
         foreach ($this->rules as $rule) {
+            if ($this->skipValidate($rule, $compoundResult, $resultSet)) {
+                continue;
+            }
             $ruleResult = $rule->validate($value, $dataSet);
             if ($ruleResult->isValid() === false) {
                 foreach ($ruleResult->getErrors() as $message) {
@@ -77,5 +83,18 @@ class Rules
             }
         }
         return $compoundResult;
+    }
+
+    private function skipValidate(Rule $rule, Result $result, ResultSet $resultSet = null): bool
+    {
+        if ($rule->getSkipOnError() === true) {
+            if (
+                ($rule->getSkipErrorMode() === Rule::SKIP_ON_ATTRIBUTE_ERROR && $result->isValid() === false) ||
+                ($rule->getSkipErrorMode() === Rule::SKIP_ON_ANY_ERROR && $resultSet->hasErrors() === true)
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 }

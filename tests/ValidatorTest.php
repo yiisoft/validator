@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use Yiisoft\Validator\Rule;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\MissingAttributeException;
@@ -72,7 +73,7 @@ class ValidatorTest extends TestCase
 
         $intResult = $results->getResult('int');
         $this->assertFalse($intResult->isValid());
-        $this->assertCount(2, $intResult->getErrors());
+        $this->assertCount(1, $intResult->getErrors());
     }
 
     public function testAddingRulesOneByOne(): void
@@ -96,5 +97,39 @@ class ValidatorTest extends TestCase
         $intResult = $results->getResult('int');
         $this->assertFalse($intResult->isValid());
         $this->assertCount(1, $intResult->getErrors());
+    }
+
+    public function testSkipOnErrorWithAnyError()
+    {
+        $dataObject = $this->getDataObject(
+            [
+                'first_attribute' => 30,
+                'second_attribute' => 30,
+                'third_attribute' => 30,
+            ]
+        );
+
+        $validator = new Validator(
+            [
+                'first_attribute' => [
+                    (new Number())->min(35),
+                    (new Number())->min(35)
+                ],
+                'second_attribute' => [
+                    (new Number())->min(35)->skipErrorMode(Rule::SKIP_ON_ANY_ERROR),
+                    (new Number())->min(35)
+                ],
+                'third_attribute' => [
+                    (new Number())->min(35),
+                    (new Number())->min(35)->skipOnError(false),
+                ]
+            ]
+        );
+
+        $results = $validator->validate($dataObject);
+
+        $this->assertCount(1, $results->getResult('first_attribute')->getErrors());
+        $this->assertCount(1, $results->getResult('second_attribute')->getErrors());
+        $this->assertCount(2, $results->getResult('third_attribute')->getErrors());
     }
 }

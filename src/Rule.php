@@ -11,10 +11,15 @@ use Yiisoft\I18n\TranslatorInterface;
  */
 abstract class Rule
 {
+    const SKIP_ON_ANY_ERROR = 1;
+    const SKIP_ON_ATTRIBUTE_ERROR = 2;
+
     private ?TranslatorInterface $translator = null;
     private ?string $translationDomain = null;
     private ?string $translationLocale = null;
     private bool $skipOnEmpty = false;
+    private bool $skipOnError = true;
+    private int $skipErrorMode = self::SKIP_ON_ATTRIBUTE_ERROR;
 
     /**
      * Validates the value
@@ -41,22 +46,25 @@ abstract class Rule
      */
     abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
 
-    public function setTranslator(TranslatorInterface $translator): self
+    public function withTranslator(TranslatorInterface $translator): self
     {
-        $this->translator = $translator;
-        return $this;
+        $new = clone $this;
+        $new->translator = $translator;
+        return $new;
     }
 
-    public function setTranslationDomain(string $translation): self
+    public function withTranslationDomain(string $translation): self
     {
-        $this->translationDomain = $translation;
-        return $this;
+        $new = clone $this;
+        $new->translationDomain = $translation;
+        return $new;
     }
 
-    public function setTranslationLocale(string $locale): self
+    public function withTranslationLocale(string $locale): self
     {
-        $this->translationLocale = $locale;
-        return $this;
+        $new = clone $this;
+        $new->translationLocale = $locale;
+        return $new;
     }
 
     public function translateMessage(string $message, array $arguments = []): string
@@ -71,6 +79,36 @@ abstract class Rule
             $this->translationDomain ?? 'validators',
             $this->translationLocale
         );
+    }
+
+    public function getSkipOnError(): bool
+    {
+        return $this->skipOnError;
+    }
+
+    public function getSkipErrorMode(): int
+    {
+        return $this->skipErrorMode;
+    }
+
+    public function skipOnError(bool $value): self
+    {
+        $new = clone $this;
+        $new->skipOnError = $value;
+        return $new;
+    }
+
+    public function skipErrorMode(int $mode): self
+    {
+        $modes = [self::SKIP_ON_ANY_ERROR, self::SKIP_ON_ATTRIBUTE_ERROR];
+        if (!in_array($mode, $modes, true)) {
+            throw new \InvalidArgumentException(
+                sprintf('Unknown mode given %s, supported modes %s.', $mode, implode(', ', $modes))
+            );
+        }
+        $new = clone $this;
+        $new->skipErrorMode = $mode;
+        return $new;
     }
 
     /**
