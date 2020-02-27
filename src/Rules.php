@@ -72,7 +72,7 @@ class Rules
          * @var $rule Rule
          */
         foreach ($this->rules as $rule) {
-            if ($this->skipValidate($rule, $compoundResult, $resultSet)) {
+            if ($rule->getSkipOnError() === true && $this->skipValidate($rule, $compoundResult, $resultSet)) {
                 continue;
             }
             $ruleResult = $rule->validate($value, $dataSet);
@@ -87,14 +87,13 @@ class Rules
 
     private function skipValidate(Rule $rule, Result $result, ResultSet $resultSet = null): bool
     {
-        if ($rule->getSkipOnError() === true) {
-            if (
-                ($rule->getSkipErrorMode() === Rule::SKIP_ON_ATTRIBUTE_ERROR && $result->isValid() === false) ||
-                ($rule->getSkipErrorMode() === Rule::SKIP_ON_ANY_ERROR && $resultSet->hasErrors() === true)
-            ) {
-                return true;
-            }
+        if (
+            ($rule->getSkipErrorMode() === Rule::SKIP_ON_ATTRIBUTE_ERROR && $result->isValid() === false) ||
+            ($rule->getSkipErrorMode() === Rule::SKIP_ON_ANY_ERROR && $resultSet->hasErrors() === true)
+        ) {
+            return true;
         }
+
         return false;
     }
 }
