@@ -46,15 +46,15 @@ class Rules
         }
 
         if ($this->translator !== null) {
-            $rule->withTranslator($this->translator);
+            $rule = $rule->withTranslator($this->translator);
         }
 
         if ($this->translationDomain !== null) {
-            $rule->withTranslationDomain($this->translationDomain);
+            $rule = $rule->withTranslationDomain($this->translationDomain);
         }
 
         if ($this->translationLocale !== null) {
-            $rule->withTranslationLocale($this->translationLocale);
+            $rule = $rule->withTranslationLocale($this->translationLocale);
         }
 
         return $rule;
