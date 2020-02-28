@@ -16,7 +16,7 @@ class Callback extends Rule
     {
         if (!(is_callable($callback) || (is_array($callback) && count($callback) === 2))) {
             throw new \InvalidArgumentException(
-                'The argument must be a callback or an array with the class and method name.'
+                'The argument must be a callable or an array with the class and method name.'
             );
         }
 
