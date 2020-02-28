@@ -21,7 +21,7 @@
         "forum": "http://www.yiiframework.com/forum/",
         "wiki": "http://www.yiiframework.com/wiki/",
         "irc": "irc://irc.freenode.net/yii",
-        "source": "https://github.com/yiisoft/i18n"
+        "source": "https://github.com/yiisoft/validator"
     },
     "require": {
         "php": "^7.4",

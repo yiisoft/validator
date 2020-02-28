@@ -11,15 +11,11 @@ use Yiisoft\I18n\TranslatorInterface;
  */
 abstract class Rule
 {
-    const SKIP_ON_ANY_ERROR = 1;
-    const SKIP_ON_ATTRIBUTE_ERROR = 2;
-
     private ?TranslatorInterface $translator = null;
     private ?string $translationDomain = null;
     private ?string $translationLocale = null;
     private bool $skipOnEmpty = false;
     private bool $skipOnError = true;
-    private int $skipErrorMode = self::SKIP_ON_ATTRIBUTE_ERROR;
     private $when = null;
 
     /**
@@ -27,15 +23,19 @@ abstract class Rule
      *
      * @param mixed $value value to be validated
      * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
+     * @param bool $previousRulesErrored set to true if rule is part of a group of rules and one of the previous validations failed
      * @return Result
      */
-    final public function validate($value, DataSetInterface $dataSet = null): Result
+    final public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
     {
         if ($this->skipOnEmpty && $this->isEmpty($value)) {
             return new Result();
         }
 
-        if ($this->when !== null && !call_user_func($this->when)) {
+        if (
+          ($this->skipOnError && $previousRulesErrored) ||
+          ($this->when !== null && !call_user_func($this->when))
+        ) {
             return new Result();
         }
 
@@ -93,33 +93,10 @@ abstract class Rule
         return $new;
     }
 
-    public function getSkipOnError(): bool
-    {
-        return $this->skipOnError;
-    }
-
-    public function getSkipErrorMode(): int
-    {
-        return $this->skipErrorMode;
-    }
-
     public function skipOnError(bool $value): self
     {
         $new = clone $this;
         $new->skipOnError = $value;
-        return $new;
-    }
-
-    public function skipErrorMode(int $mode): self
-    {
-        $modes = [self::SKIP_ON_ANY_ERROR, self::SKIP_ON_ATTRIBUTE_ERROR];
-        if (!in_array($mode, $modes, true)) {
-            throw new \InvalidArgumentException(
-                sprintf('Unknown mode given %s, supported modes %s.', $mode, implode(', ', $modes))
-            );
-        }
-        $new = clone $this;
-        $new->skipErrorMode = $mode;
         return $new;
     }
 

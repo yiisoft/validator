@@ -65,35 +65,21 @@ class Rules
         $this->rules[] = $this->normalizeRule($rule);
     }
 
-    public function validate($value, DataSetInterface $dataSet = null, ResultSet $resultSet = null): Result
+    public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
     {
         $compoundResult = new Result();
         /**
          * @var $rule Rule
          */
         foreach ($this->rules as $rule) {
-            if ($rule->getSkipOnError() === true && $this->skipValidate($rule, $compoundResult, $resultSet)) {
-                continue;
-            }
-            $ruleResult = $rule->validate($value, $dataSet);
+            $ruleResult = $rule->validate($value, $dataSet, $previousRulesErrored);
             if ($ruleResult->isValid() === false) {
+                $previousRulesErrored = true;
                 foreach ($ruleResult->getErrors() as $message) {
                     $compoundResult->addError($message);
                 }
             }
         }
         return $compoundResult;
-    }
-
-    private function skipValidate(Rule $rule, Result $result, ResultSet $resultSet = null): bool
-    {
-        if (
-            ($rule->getSkipErrorMode() === Rule::SKIP_ON_ATTRIBUTE_ERROR && $result->isValid() === false) ||
-            ($rule->getSkipErrorMode() === Rule::SKIP_ON_ANY_ERROR && $resultSet->hasErrors() === true)
-        ) {
-            return true;
-        }
-
-        return false;
     }
 }
