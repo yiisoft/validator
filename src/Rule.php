@@ -15,17 +15,23 @@ abstract class Rule
     private ?string $translationDomain = null;
     private ?string $translationLocale = null;
     private bool $skipOnEmpty = false;
+    private bool $skipOnError = true;
 
     /**
      * Validates the value
      *
      * @param mixed $value value to be validated
      * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
+     * @param bool $previousRulesErrored set to true if rule is part of a group of rules and one of the previous validations failed
      * @return Result
      */
-    final public function validate($value, DataSetInterface $dataSet = null): Result
+    final public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
     {
         if ($this->skipOnEmpty && $this->isEmpty($value)) {
+            return new Result();
+        }
+
+        if ($this->skipOnError && $previousRulesErrored) {
             return new Result();
         }
 
@@ -41,22 +47,25 @@ abstract class Rule
      */
     abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
 
-    public function setTranslator(TranslatorInterface $translator): self
+    public function withTranslator(TranslatorInterface $translator): self
     {
-        $this->translator = $translator;
-        return $this;
+        $new = clone $this;
+        $new->translator = $translator;
+        return $new;
     }
 
-    public function setTranslationDomain(string $translation): self
+    public function withTranslationDomain(string $translation): self
     {
-        $this->translationDomain = $translation;
-        return $this;
+        $new = clone $this;
+        $new->translationDomain = $translation;
+        return $new;
     }
 
-    public function setTranslationLocale(string $locale): self
+    public function withTranslationLocale(string $locale): self
     {
-        $this->translationLocale = $locale;
-        return $this;
+        $new = clone $this;
+        $new->translationLocale = $locale;
+        return $new;
     }
 
     public function translateMessage(string $message, array $arguments = []): string
@@ -71,6 +80,13 @@ abstract class Rule
             $this->translationDomain ?? 'validators',
             $this->translationLocale
         );
+    }
+
+    public function skipOnError(bool $value): self
+    {
+        $new = clone $this;
+        $new->skipOnError = $value;
+        return $new;
     }
 
     /**

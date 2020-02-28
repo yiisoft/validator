@@ -46,15 +46,15 @@ class Rules
         }
 
         if ($this->translator !== null) {
-            $rule->setTranslator($this->translator);
+            $rule->withTranslator($this->translator);
         }
 
         if ($this->translationDomain !== null) {
-            $rule->setTranslationDomain($this->translationDomain);
+            $rule->withTranslationDomain($this->translationDomain);
         }
 
         if ($this->translationLocale !== null) {
-            $rule->setTranslationLocale($this->translationLocale);
+            $rule->withTranslationLocale($this->translationLocale);
         }
 
         return $rule;
@@ -65,12 +65,16 @@ class Rules
         $this->rules[] = $this->normalizeRule($rule);
     }
 
-    public function validate($value, DataSetInterface $dataSet = null): Result
+    public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
     {
         $compoundResult = new Result();
+        /**
+         * @var $rule Rule
+         */
         foreach ($this->rules as $rule) {
-            $ruleResult = $rule->validate($value, $dataSet);
+            $ruleResult = $rule->validate($value, $dataSet, $previousRulesErrored);
             if ($ruleResult->isValid() === false) {
+                $previousRulesErrored = true;
                 foreach ($ruleResult->getErrors() as $message) {
                     $compoundResult->addError($message);
                 }
