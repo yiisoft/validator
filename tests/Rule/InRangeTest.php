@@ -31,14 +31,14 @@ class InRangeTest extends TestCase
 
     public function testValidateEmpty(): void
     {
-        $rule = (new InRange(range(10, 20)))->skipOnEmpty(false);
+        $rule = (new InRange(range(10, 20)))->withSkipOnEmpty(false);
         $this->assertFalse($rule->validate(null)->isValid()); //row RangeValidatorTest.php:101
         $this->assertFalse($rule->validate('0')->isValid());
         $this->assertFalse($rule->validate(0)->isValid());
         $this->assertFalse($rule->validate('')->isValid());
 
         $rule = (new InRange(range(10, 20, 1)))
-            ->skipOnEmpty(false);
+            ->withSkipOnEmpty(false);
 
         $this->assertTrue($rule->validate([])->isValid());
     }
