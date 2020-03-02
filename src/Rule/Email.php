@@ -101,14 +101,16 @@ class Email extends Rule
 
     public function allowName(bool $allowName): self
     {
-        $this->allowName = $allowName;
-        return $this;
+        $new = clone $this;
+        $new->allowName = $allowName;
+        return $new;
     }
 
     public function checkDNS(bool $checkDNS): self
     {
-        $this->checkDNS = $checkDNS;
-        return $this;
+        $new = clone $this;
+        $new->checkDNS = $checkDNS;
+        return $new;
     }
 
     public function enableIDN(bool $enableIDN): self
@@ -116,13 +118,16 @@ class Email extends Rule
         if ($enableIDN && !function_exists('idn_to_ascii')) {
             throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }
-        $this->enableIDN = $enableIDN;
-        return $this;
+
+        $new = clone $this;
+        $new->enableIDN = $enableIDN;
+        return $new;
     }
 
     public function message(string $message): self
     {
-        $this->message = $message;
-        return $this;
+        $new = clone $this;
+        $new->message = $message;
+        return $new;
     }
 }

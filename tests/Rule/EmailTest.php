@@ -30,7 +30,7 @@ class EmailTest extends TestCase
         $this->assertFalse($validator->validate('ex..ample@example.com')->isValid());
         $this->assertFalse($validator->validate(['developer@yiiframework.com'])->isValid());
 
-        $validator->allowName(true);
+        $validator = $validator->allowName(true);
 
         $this->assertTrue($validator->validate('sam@rmcreative.ru')->isValid());
         $this->assertTrue($validator->validate('5011@gmail.com')->isValid());
@@ -70,8 +70,8 @@ class EmailTest extends TestCase
 
             return;
         }
-        $validator = new Email();
-        $validator->enableIDN(true);
+        $validator = (new Email())
+            ->enableIDN(true);
 
         $this->assertTrue($validator->validate('5011@example.com')->isValid());
         $this->assertTrue($validator->validate('example@äüößìà.de')->isValid());
@@ -86,7 +86,7 @@ class EmailTest extends TestCase
         $this->assertFalse($validator->validate('"Carsten Brandt" <mail@cebe.cc>')->isValid());
         $this->assertFalse($validator->validate('<mail@cebe.cc>')->isValid());
 
-        $validator->allowName(true);
+        $validator = $validator->allowName(true);
 
         $this->assertTrue($validator->validate('info@örtliches.de')->isValid());
         $this->assertTrue($validator->validate('Informtation <info@örtliches.de>')->isValid());
@@ -123,18 +123,19 @@ class EmailTest extends TestCase
     {
         $this->markTestSkipped('Too slow :(');
 
-        $validator = new Email();
+        $validator = (new Email())
+            ->checkDNS(true);
 
-        $validator->checkDNS(true);
         $this->assertTrue($validator->validate('5011@gmail.com')->isValid());
 
-        $validator->checkDNS(false);
+        $validator = $validator->checkDNS(false);
         $this->assertTrue($validator->validate('test@nonexistingsubdomain.example.com')->isValid());
-        $validator->checkDNS(true);
+
+        $validator = $validator->checkDNS(true);
         $this->assertFalse($validator->validate('test@nonexistingsubdomain.example.com')->isValid());
 
-        $validator->checkDns(true);
-        $validator->allowName(true);
+        $validator = $validator->checkDns(true);
+        $validator = $validator->allowName(true);
         $emails = [
             'ipetrov@gmail.com',
             'Ivan Petrov <ipetrov@gmail.com>',
@@ -184,8 +185,8 @@ class EmailTest extends TestCase
      */
     public function testMalformedAddressesIdnDisabled($value): void
     {
-        $validator = new Email();
-        $validator->enableIDN(true);
+        $validator = (new Email())
+            ->enableIDN(true);
         $this->assertFalse($validator->validate($value)->isValid());
     }
 
@@ -205,8 +206,8 @@ class EmailTest extends TestCase
             return;
         }
 
-        $val = new Email();
-        $val->enableIDN(true);
-        $this->assertFalse($val->validate($value)->isValid());
+        $validator = (new Email())
+            ->enableIDN(true);
+        $this->assertFalse($validator->validate($value)->isValid());
     }
 }

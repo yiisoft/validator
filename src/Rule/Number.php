@@ -74,32 +74,37 @@ class Number extends Rule
 
     public function integer(): self
     {
-        $this->asInteger = true;
-        return $this;
+        $new = clone $this;
+        $new->asInteger = true;
+        return $new;
     }
 
     public function min($value): self
     {
-        $this->min = $value;
-        return $this;
+        $new = clone $this;
+        $new->min = $value;
+        return $new;
     }
 
     public function max($value): self
     {
-        $this->max = $value;
-        return $this;
+        $new = clone $this;
+        $new->max = $value;
+        return $new;
     }
 
     public function tooSmallMessage(string $message): self
     {
-        $this->tooSmallMessage = $message;
-        return $this;
+        $new = clone $this;
+        $new->tooSmallMessage = $message;
+        return $new;
     }
 
     public function tooBigMessage(string $message): self
     {
-        $this->tooBigMessage = $message;
-        return $this;
+        $new = clone $this;
+        $new->tooBigMessage = $message;
+        return $new;
     }
 
     private function getNotANumberMessage(): string

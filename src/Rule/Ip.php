@@ -285,8 +285,9 @@ class Ip extends Rule
      */
     public function ranges(array $ranges): self
     {
-        $this->ranges = $this->prepareRanges($ranges);
-        return $this;
+        $new = clone $this;
+        $new->ranges = $this->prepareRanges($ranges);
+        return $new;
     }
 
     /**
@@ -301,8 +302,10 @@ class Ip extends Rule
         if (array_key_exists($name, $this->networks)) {
             throw new \RuntimeException("Network alias \"{$name}\" already set");
         }
-        $this->networks[$name] = $ranges;
-        return $this;
+
+        $new = clone $this;
+        $new->networks[$name] = $ranges;
+        return $new;
     }
 
     public function getRanges(): array
@@ -312,59 +315,68 @@ class Ip extends Rule
 
     public function allowIpv4(): self
     {
-        $this->allowIpv4 = true;
-        return $this;
+        $new = clone $this;
+        $new->allowIpv4 = true;
+        return $new;
     }
 
     public function disallowIpv4(): self
     {
-        $this->allowIpv4 = false;
-        return $this;
+        $new = clone $this;
+        $new->allowIpv4 = false;
+        return $new;
     }
 
     public function allowIpv6(): self
     {
-        $this->allowIpv6 = true;
-        return $this;
+        $new = clone $this;
+        $new->allowIpv6 = true;
+        return $new;
     }
 
     public function disallowIpv6(): self
     {
-        $this->allowIpv6 = false;
-        return $this;
+        $new = clone $this;
+        $new->allowIpv6 = false;
+        return $new;
     }
 
     public function allowNegation(): self
     {
-        $this->allowNegation = true;
-        return $this;
+        $new = clone $this;
+        $new->allowNegation = true;
+        return $new;
     }
 
     public function disallowNegation(): self
     {
-        $this->allowNegation = false;
-        return $this;
+        $new = clone $this;
+        $new->allowNegation = false;
+        return $new;
     }
 
     public function allowSubnet(): self
     {
-        $this->allowSubnet = true;
-        $this->requireSubnet = false;
-        return $this;
+        $new = clone $this;
+        $new->allowSubnet = true;
+        $new->requireSubnet = false;
+        return $new;
     }
 
     public function requireSubnet(): self
     {
-        $this->allowSubnet = true;
-        $this->requireSubnet = true;
-        return $this;
+        $new = clone $this;
+        $new->allowSubnet = true;
+        $new->requireSubnet = true;
+        return $new;
     }
 
     public function disallowSubnet(): self
     {
-        $this->allowSubnet = false;
-        $this->requireSubnet = false;
-        return $this;
+        $new = clone $this;
+        $new->allowSubnet = false;
+        $new->requireSubnet = false;
+        return $new;
     }
 
     /**

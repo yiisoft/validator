@@ -16,16 +16,17 @@ class CompareToTest extends TestCase
     {
         $value = 18449;
         // default config
-        $val = new CompareTo($value);
+        $validator = new CompareTo($value);
 
-        $this->assertTrue($val->validate($value)->isValid());
-        $this->assertTrue($val->validate((string)$value)->isValid());
-        $this->assertFalse($val->validate($value + 1)->isValid());
+        $this->assertTrue($validator->validate($value)->isValid());
+        $this->assertTrue($validator->validate((string)$value)->isValid());
+        $this->assertFalse($validator->validate($value + 1)->isValid());
         foreach ($this->getOperationTestData($value) as $operator => $tests) {
-            $val = new CompareTo($value);
-            $val->operator($operator);
+            $validator = (new CompareTo($value))
+                ->operator($operator);
+
             foreach ($tests as $test) {
-                $this->assertEquals($test[1], $val->validate($test[0])->isValid(), "Testing $operator");
+                $this->assertEquals($test[1], $validator->validate($test[0])->isValid(), "Testing $operator");
             }
         }
     }

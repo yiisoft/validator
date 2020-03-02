@@ -47,21 +47,21 @@ abstract class Rule
      */
     abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
 
-    public function withTranslator(TranslatorInterface $translator): self
+    public function translator(TranslatorInterface $translator): self
     {
         $new = clone $this;
         $new->translator = $translator;
         return $new;
     }
 
-    public function withTranslationDomain(string $translation): self
+    public function translationDomain(string $translation): self
     {
         $new = clone $this;
         $new->translationDomain = $translation;
         return $new;
     }
 
-    public function withTranslationLocale(string $locale): self
+    public function translationLocale(string $locale): self
     {
         $new = clone $this;
         $new->translationLocale = $locale;

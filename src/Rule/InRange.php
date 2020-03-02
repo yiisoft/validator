@@ -70,19 +70,22 @@ class InRange extends Rule
 
     public function strict(): self
     {
-        $this->strict = true;
-        return $this;
+        $new = clone $this;
+        $new->strict = true;
+        return $new;
     }
 
     public function not(): self
     {
-        $this->not = true;
-        return $this;
+        $new = clone $this;
+        $new->not = true;
+        return $new;
     }
 
     public function message(string $message): self
     {
-        $this->message = $message;
-        return $this;
+        $new = clone $this;
+        $new->message = $message;
+        return $new;
     }
 }

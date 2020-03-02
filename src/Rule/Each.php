@@ -54,13 +54,15 @@ class Each extends Rule
 
     public function incorrectInputMessage(string $message): self
     {
-        $this->incorrectInputMessage = $message;
-        return $this;
+        $new = clone $this;
+        $new->incorrectInputMessage = $message;
+        return $new;
     }
 
     public function message(string $message): self
     {
-        $this->message = $message;
-        return $this;
+        $new = clone $this;
+        $new->message = $message;
+        return $new;
     }
 }
