@@ -49,13 +49,15 @@ class MatchRegularExpression extends Rule
 
     public function not(): self
     {
-        $this->not = true;
-        return $this;
+        $new = clone $this;
+        $new->not = true;
+        return $new;
     }
 
     public function message(string $message): self
     {
-        $this->message = $message;
-        return $this;
+        $new = clone $this;
+        $new->message = $message;
+        return $new;
     }
 }

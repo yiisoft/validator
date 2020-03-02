@@ -67,37 +67,43 @@ class HasLength extends Rule
 
     public function min(int $value): self
     {
-        $this->min = $value;
-        return $this;
+        $new = clone $this;
+        $new->min = $value;
+        return $new;
     }
 
     public function max(int $value): self
     {
-        $this->max = $value;
-        return $this;
+        $new = clone $this;
+        $new->max = $value;
+        return $new;
     }
 
     public function encoding(string $encoding): self
     {
-        $this->encoding = $encoding;
-        return $this;
+        $new = clone $this;
+        $new->encoding = $encoding;
+        return $new;
     }
 
     public function message(string $message): self
     {
-        $this->message = $message;
-        return $this;
+        $new = clone $this;
+        $new->message = $message;
+        return $new;
     }
 
     public function tooShortMessage(string $message): self
     {
-        $this->tooShortMessage = $message;
-        return $this;
+        $new = clone $this;
+        $new->tooShortMessage = $message;
+        return $new;
     }
 
     public function tooLongMessage(string $message): self
     {
-        $this->tooLongMessage = $message;
-        return $this;
+        $new = clone $this;
+        $new->tooLongMessage = $message;
+        return $new;
     }
 }

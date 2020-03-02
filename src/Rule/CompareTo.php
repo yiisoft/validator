@@ -111,20 +111,23 @@ class CompareTo extends Rule
             throw new \InvalidArgumentException("Operator \"$operator\" is not supported.");
         }
 
-        $this->operator = $operator;
-        return $this;
+        $new = clone $this;
+        $new->operator = $operator;
+        return $new;
     }
 
     public function asString(): self
     {
-        $this->type = self::TYPE_STRING;
-        return $this;
+        $new = clone $this;
+        $new->type = self::TYPE_STRING;
+        return $new;
     }
 
     public function asNumber(): self
     {
-        $this->type = self::TYPE_NUMBER;
-        return $this;
+        $new = clone $this;
+        $new->type = self::TYPE_NUMBER;
+        return $new;
     }
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result

@@ -83,25 +83,29 @@ class Url extends Rule
 
     public function pattern(string $pattern): self
     {
-        $this->pattern = $pattern;
-        return $this;
+        $new = clone $this;
+        $new->pattern = $pattern;
+        return $new;
     }
 
     public function enableIDN(): self
     {
-        $this->enableIDN = true;
-        return $this;
+        $new = clone $this;
+        $new->enableIDN = true;
+        return $new;
     }
 
     public function schemes(array $schemes): self
     {
-        $this->validSchemes = $schemes;
-        return $this;
+        $new = clone $this;
+        $new->validSchemes = $schemes;
+        return $new;
     }
 
     public function message(string $message): self
     {
-        $this->message = $message;
-        return $this;
+        $new = clone $this;
+        $new->message = $message;
+        return $new;
     }
 }

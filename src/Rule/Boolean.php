@@ -32,26 +32,30 @@ class Boolean extends Rule
 
     public function message(string $message): self
     {
-        $this->message = $message;
-        return $this;
+        $new = clone $this;
+        $new->message = $message;
+        return $new;
     }
 
     public function trueValue($value): self
     {
-        $this->trueValue = $value;
-        return $this;
+        $new = clone $this;
+        $new->trueValue = $value;
+        return $new;
     }
 
     public function falseValue($value): self
     {
-        $this->falseValue = $value;
-        return $this;
+        $new = clone $this;
+        $new->falseValue = $value;
+        return $new;
     }
 
     public function strict(bool $value): self
     {
-        $this->strict = $value;
-        return $this;
+        $new = clone $this;
+        $new->strict = $value;
+        return $new;
     }
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
