@@ -34,7 +34,7 @@ abstract class Rule
 
         if (
           ($this->skipOnError && $previousRulesErrored) ||
-          ($this->when !== null && !call_user_func($this->when))
+          (is_callable($this->when) && !call_user_func($this->when))
         ) {
             return new Result();
         }
