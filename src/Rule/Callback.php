@@ -8,6 +8,10 @@ use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
 
+/**
+ * Callback rule could be used to create custom rules without defining a class.
+ * If callback is specified as [className, methodName], the method of the class could be private.
+ */
 class Callback extends Rule
 {
     private $callback;
@@ -55,18 +59,18 @@ class Callback extends Rule
                 )
             );
         }
-        $reflMethod = new \ReflectionMethod($class, $method);
-        if (is_string($class) && !$reflMethod->isStatic()) {
+        $reflectionMethod = new \ReflectionMethod($class, $method);
+        if (is_string($class) && !$reflectionMethod->isStatic()) {
             throw new \InvalidArgumentException(
                 sprintf('Method "%s" targeted by Callback rule must be static.', $method)
             );
         }
-        if (!$reflMethod->isPublic()) {
-            $reflMethod->setAccessible(true);
+        if (!$reflectionMethod->isPublic()) {
+            $reflectionMethod->setAccessible(true);
         }
-        if ($reflMethod->isStatic()) {
-            return $reflMethod->invoke(null, $value);
+        if ($reflectionMethod->isStatic()) {
+            return $reflectionMethod->invoke(null, $value);
         }
-        return $reflMethod->invoke($class, $value);
+        return $reflectionMethod->invoke($class, $value);
     }
 }
