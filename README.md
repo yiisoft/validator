@@ -15,7 +15,13 @@ The package provides data validation capabilities.
 
 ## Features
 
-- Could be used with any object. 
+- Could be used with any object.
+- Skip further validation if an error occurred for the same field.
+- Skip validation of empty value.
+- Error message translations.
+- Conditional validation.
+- Could pass context to validation rule.
+- Common rules bundled.
 
 ## General usage
 
@@ -99,9 +105,39 @@ foreach ($results as $attribute => $result) {
 }
 ```
 
+#### Skipping validation on error
+
+By default, if an error occurred during validation of an attribute, further rules for this attribute are skipped.
+To change this behavior use `skipOnError(false)` when configuring rules:  
+
+```php
+(new Number())->integer()->max(100)->skipOnError(false)
+```
+
+#### Skipping empty values
+
+By default, empty values are validated. That is undesirable if you need to allow not specifying a field.
+To change this behavior use `skipOnEmpty(true)`:
+
+```php
+(new Number())->integer()->max(100)->skipOnEmpty(true)
+```
+
+### Conditional validation
+
+In some cases there is a need to apply rule conditionally. It could be performed by using `when()`:
+
+```php
+(new Number())->integer()->min(100)->when(static function ($value, DataSetInterface $dataSet) {
+    return $dataSet->getAttributeValue('country') === Country::USA;
+});
+```
+
+If callable returns `true` rule is applied, when the value returned is `false`, rule is skipped.
+
 ### Creating your own validation rules
 
-In order to create your own validation rule you should extend `Rule` class:
+To create your own validation rule you should extend `Rule` class:
 
 ```php
 namespace MyVendor\Rules;
@@ -157,7 +193,7 @@ class CompanyName extends Rule
 
 ### Grouping common validation rules into rule sets
 
-In order to reuse multiple validation rules it is advised to group rules into validation sets:
+To reuse multiple validation rules it is advised to group rules into validation sets:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -168,7 +204,7 @@ class UsernameRules
     public static function get(): array
     {
         return [
-            (new HasLength)->min(2)->max(20),
+            (new HasLength())->min(2)->max(20),
             new MatchRegularExpression('~[a-z_\-]~i')
         ];
     }
