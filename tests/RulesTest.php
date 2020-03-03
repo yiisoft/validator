@@ -61,7 +61,7 @@ class RulesTest extends TestCase
         $rules = new Rules(
             [
                 (new Number())->min(10),
-                (new Number())->min(10)->when(fn() => false)->skipOnError(false),
+                (new Number())->min(10)->when(fn () => false)->skipOnError(false),
                 (new Number())->min(10)->skipOnError(false)
             ]
         );
