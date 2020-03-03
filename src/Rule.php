@@ -16,6 +16,10 @@ abstract class Rule
     private ?string $translationLocale = null;
     private bool $skipOnEmpty = false;
     private bool $skipOnError = true;
+
+    /**
+     * @var callable|null
+     */
     private $when = null;
 
     /**
@@ -34,7 +38,7 @@ abstract class Rule
 
         if (
           ($this->skipOnError && $previousRulesErrored) ||
-          (is_callable($this->when) && !call_user_func($this->when))
+          (is_callable($this->when) && !call_user_func($this->when, $value, $dataSet))
         ) {
             return new Result();
         }
@@ -86,6 +90,25 @@ abstract class Rule
         );
     }
 
+    /**
+     * Add a PHP callable whose return value determines whether this rule should be applied.
+     * By default rule will be always applied.
+     *
+     * The signature of the callable should be `function ($value, DataSetInterface $dataSet): bool`, where $value and $dataSet
+     * refer to the value validated and the data set in which context it is validated. The callable should return
+     * a boolean value.
+     *
+     * The following example will enable the validator only when the country currently selected is USA:
+     *
+     * ```php
+     * function ($value, DataSetInterface $dataSet) {
+         return $dataSet->getAttributeValue('country') === Country::USA;
+     }
+     * ```
+     *
+     * @param callable $callback
+     * @return $this
+     */
     public function when(callable $callback): self
     {
         $new = clone $this;
