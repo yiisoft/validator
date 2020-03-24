@@ -450,8 +450,8 @@ class Ip extends Rule
     public function getIpParsePattern(): string
     {
         return '/^(?<not>' . preg_quote(
-                static::NEGATION_CHAR,
-                '/'
-            ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
+            static::NEGATION_CHAR,
+            '/'
+        ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 }

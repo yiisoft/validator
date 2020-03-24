@@ -78,9 +78,9 @@ class Email extends Rule
                 $valid = false;
             } else {
                 $valid = preg_match($this->pattern, $value) || ($this->allowName && preg_match(
-                            $this->fullPattern,
-                            $value
-                        ));
+                    $this->fullPattern,
+                    $value
+                ));
                 if ($valid && $this->checkDNS) {
                     $valid = checkdnsrr($matches['domain'] . '.', 'MX') || checkdnsrr($matches['domain'] . '.', 'A');
                 }
