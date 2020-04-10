@@ -32,7 +32,7 @@ class AtLeast extends Rule
     /**
      * Message to display in case of error
      */
-    private string $message = 'Model should have "{min}" error attributes.';
+    private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.';
 
     public function __construct(array $data)
     {

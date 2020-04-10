@@ -62,7 +62,7 @@ class AtLeastTest extends TestCase
 
         $this->assertFalse($rule->validate($model)->isValid());
         $this->assertCount(1, $rule->validate($model)->getErrors());
-        $this->assertEquals(['Model should have "1" error attributes.'], $rule->validate($model)->getErrors());
+        $this->assertEquals(['The model is not valid. Must have at least "1" filled attributes.'], $rule->validate($model)->getErrors());
     }
 
     public function testAtLeastMinAttribute(): void
@@ -75,7 +75,7 @@ class AtLeastTest extends TestCase
 
         $this->assertFalse($rule->validate($model)->isValid());
         $this->assertCount(1, $rule->validate($model)->getErrors());
-        $this->assertEquals(['Model should have "2" error attributes.'], $rule->validate($model)->getErrors());
+        $this->assertEquals(['The model is not valid. Must have at least "2" filled attributes.'], $rule->validate($model)->getErrors());
     }
 
     public function testAtLeastWithInvalidParams(): void
@@ -88,6 +88,6 @@ class AtLeastTest extends TestCase
 
         $this->assertFalse($rule->validate($model)->isValid());
         $this->assertCount(1, $rule->validate($model)->getErrors());
-        $this->assertEquals(['Model should have "1" error attributes.'], $rule->validate($model)->getErrors());
+        $this->assertEquals(['The model is not valid. Must have at least "1" filled attributes.'], $rule->validate($model)->getErrors());
     }
 }
