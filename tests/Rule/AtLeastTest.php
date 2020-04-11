@@ -19,7 +19,7 @@ class AtLeastTest extends TestCase
         $model->attr2 = null;
         $model->attr3 = null;
 
-        $rule = new AtLeast(['attributes' => ['attr1'], 'alternativeAttributes' => ['attr2']]);
+        $rule = new AtLeast(['attr1', 'attr2']);
 
         $this->assertTrue($rule->validate($model)->isValid());
         $this->assertEquals([], $rule->validate($model)->getErrors());
@@ -32,20 +32,7 @@ class AtLeastTest extends TestCase
         $model->attr2 = 1;
         $model->attr3 = null;
 
-        $rule = new AtLeast(['attributes' => ['attr2']]);
-
-        $this->assertTrue($rule->validate($model)->isValid());
-        $this->assertEquals([], $rule->validate($model)->getErrors());
-    }
-
-    public function testAtLeastOneWithOnlyAlternativeAttributes(): void
-    {
-        $model = new \stdClass();
-        $model->attr1 = null;
-        $model->attr2 = 1;
-        $model->attr3 = null;
-
-        $rule = new AtLeast(['alternativeAttributes' => ['attr2']]);
+        $rule = new AtLeast(['attr2']);
 
         $this->assertTrue($rule->validate($model)->isValid());
         $this->assertEquals([], $rule->validate($model)->getErrors());
@@ -58,7 +45,7 @@ class AtLeastTest extends TestCase
         $model->attr2 = null;
         $model->attr3 = 1;
 
-        $rule = new AtLeast(['attributes' => ['attr1'], 'alternativeAttributes' => ['attr2']]);
+        $rule = new AtLeast(['attr1', 'attr2']);
 
         $this->assertFalse($rule->validate($model)->isValid());
         $this->assertCount(1, $rule->validate($model)->getErrors());
@@ -71,23 +58,10 @@ class AtLeastTest extends TestCase
         $model->attr1 = 1;
         $model->attr2 = null;
 
-        $rule = new AtLeast(['attributes' => ['attr1'], 'alternativeAttributes' => ['attr2'], 'min' => 2]);
+        $rule = new AtLeast(['attr1', 'attr2'], 2);
 
         $this->assertFalse($rule->validate($model)->isValid());
         $this->assertCount(1, $rule->validate($model)->getErrors());
         $this->assertEquals(['The model is not valid. Must have at least "2" filled attributes.'], $rule->validate($model)->getErrors());
-    }
-
-    public function testAtLeastWithInvalidParams(): void
-    {
-        $model = new \stdClass();
-        $model->attr1 = 1;
-        $model->attr2 = null;
-
-        $rule = new AtLeast(['at1' => ['attr1'], 'at2' => ['attr2']]);
-
-        $this->assertFalse($rule->validate($model)->isValid());
-        $this->assertCount(1, $rule->validate($model)->getErrors());
-        $this->assertEquals(['The model is not valid. Must have at least "1" filled attributes.'], $rule->validate($model)->getErrors());
     }
 }

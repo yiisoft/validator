@@ -25,26 +25,14 @@ class AtLeast extends Rule
     private array $attributes = [];
 
     /**
-     * The list of alternative required attributes that will be checked.
-     */
-    private array $alternativeAttributes = [];
-
-    /**
      * Message to display in case of error
      */
     private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.';
 
-    public function __construct(array $data)
+    public function __construct(array $attributes, int $min = 1)
     {
-        foreach ($data as $name => $value) {
-            $this->{$name} = $value;
-        }
-
-        if (empty($this->alternativeAttributes)) {
-            $this->alternativeAttributes = $this->attributes;
-        } else {
-            $this->alternativeAttributes = array_merge($this->attributes, $this->alternativeAttributes);
-        }
+        $this->attributes = $attributes;
+        $this->min = $min;
     }
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
@@ -52,7 +40,7 @@ class AtLeast extends Rule
         $valid = false;
         $filledCount = 0;
 
-        foreach ($this->alternativeAttributes as $attribute) {
+        foreach ($this->attributes as $attribute) {
             $filledCount += $this->isEmpty($value->{$attribute}) ? 0 : 1;
         }
 
