@@ -16,7 +16,7 @@ class Required extends Rule
 {
     use HasValidationMessage;
 
-    protected string $message = 'Value cannot be blank.';
+    private string $message = 'Value cannot be blank.';
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {

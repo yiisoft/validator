@@ -36,7 +36,7 @@ class InRange extends Rule
      */
     private bool $not = false;
 
-    protected string $message = 'This value is invalid.';
+    private string $message = 'This value is invalid.';
 
     public function __construct($range)
     {

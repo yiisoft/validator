@@ -28,7 +28,7 @@ class MatchRegularExpression extends Rule
      */
     private bool $not = false;
 
-    protected string $message = 'Value is invalid.';
+    private string $message = 'Value is invalid.';
 
     public function __construct(string $pattern)
     {

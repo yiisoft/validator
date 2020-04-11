@@ -38,7 +38,7 @@ class Url extends Rule
      */
     private bool $enableIDN = false;
 
-    protected string $message = 'This value is not a valid URL.';
+    private string $message = 'This value is not a valid URL.';
 
     public function __construct()
     {

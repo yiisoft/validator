@@ -20,7 +20,7 @@ class Each extends Rule
     private Rules $rules;
 
     private string $incorrectInputMessage = 'Value should be array or iterable';
-    protected string $message = '{error} {value} given.';
+    private string $message = '{error} {value} given.';
 
     public function __construct(Rules $rules)
     {

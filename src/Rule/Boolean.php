@@ -15,7 +15,6 @@ use Yiisoft\Validator\DataSetInterface;
 class Boolean extends Rule
 {
     use HasValidationMessage;
-
     /**
      * @var mixed the value representing true status. Defaults to '1'.
      */
@@ -31,7 +30,7 @@ class Boolean extends Rule
      */
     private bool $strict = false;
 
-    protected string $message = 'The value must be either "{true}" or "{false}".';
+    private string $message = 'The value must be either "{true}" or "{false}".';
 
     public function trueValue($value): self
     {

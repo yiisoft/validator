@@ -40,7 +40,7 @@ class HasLength extends Rule
     /**
      * @var string user-defined error message used when the value is not a string.
      */
-    protected string $message = 'This value must be a string.';
+    private string $message = 'This value must be a string.';
     /**
      * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
      * If this property is not set, application wide encoding will be used.

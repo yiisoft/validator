@@ -46,7 +46,7 @@ class Email extends Rule
      */
     private bool $enableIDN = false;
 
-    protected string $message = 'This value is not a valid email address.';
+    private string $message = 'This value is not a valid email address.';
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
