@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\HasValidationMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
@@ -19,6 +20,8 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class InRange extends Rule
 {
+    use HasValidationMessage;
+
     /**
      * @var array|\Traversable
      */
@@ -33,7 +36,7 @@ class InRange extends Rule
      */
     private bool $not = false;
 
-    private string $message = 'This value is invalid.';
+    protected string $message = 'This value is invalid.';
 
     public function __construct($range)
     {
@@ -79,13 +82,6 @@ class InRange extends Rule
     {
         $new = clone $this;
         $new->not = true;
-        return $new;
-    }
-
-    public function message(string $message): self
-    {
-        $new = clone $this;
-        $new->message = $message;
         return $new;
     }
 }

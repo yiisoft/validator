@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\HasValidationMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
@@ -13,6 +14,8 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class Email extends Rule
 {
+    use HasValidationMessage;
+
     /**
      * @var string the regular expression used to validateValue the attribute value.
      * @see http://www.regular-expressions.info/email.html
@@ -43,7 +46,7 @@ class Email extends Rule
      */
     private bool $enableIDN = false;
 
-    private string $message = 'This value is not a valid email address.';
+    protected string $message = 'This value is not a valid email address.';
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
@@ -121,13 +124,6 @@ class Email extends Rule
 
         $new = clone $this;
         $new->enableIDN = $enableIDN;
-        return $new;
-    }
-
-    public function message(string $message): self
-    {
-        $new = clone $this;
-        $new->message = $message;
         return $new;
     }
 }

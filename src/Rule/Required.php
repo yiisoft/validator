@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\HasValidationMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
@@ -13,7 +14,9 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class Required extends Rule
 {
-    private string $message = 'Value cannot be blank.';
+    use HasValidationMessage;
+
+    protected string $message = 'Value cannot be blank.';
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
@@ -24,12 +27,5 @@ class Required extends Rule
         }
 
         return $result;
-    }
-
-    public function message(string $message): self
-    {
-        $new = clone $this;
-        $new->message = $message;
-        return $new;
     }
 }
