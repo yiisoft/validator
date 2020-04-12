@@ -58,7 +58,7 @@ class AtLeastTest extends TestCase
         $model->attr1 = 1;
         $model->attr2 = null;
 
-        $rule = new AtLeast(['attr1', 'attr2'], 2);
+        $rule = (new AtLeast(['attr1', 'attr2']))->min(2);
 
         $this->assertFalse($rule->validate($model)->isValid());
         $this->assertCount(1, $rule->validate($model)->getErrors());

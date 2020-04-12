@@ -17,7 +17,7 @@ class AtLeast extends Rule
      * The minimum required quantity of filled attributes to pass the validation.
      * Defaults to 1.
      */
-    private int $min;
+    private int $min = 1;
 
     /**
      * The list of required attributes that will be checked.
@@ -31,12 +31,10 @@ class AtLeast extends Rule
 
     /**
      * @param array $attributes The list of required attributes that will be checked.
-     * @param int $min The minimum required quantity of filled attributes to pass the validation. Defaults to 1.
      */
-    public function __construct(array $attributes, int $min = 1)
+    public function __construct(array $attributes)
     {
         $this->attributes = $attributes;
-        $this->min = $min;
     }
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
@@ -69,6 +67,17 @@ class AtLeast extends Rule
     {
         $new = clone $this;
         $new->message = $message;
+        return $new;
+    }
+
+    /**
+     * @param int $value The minimum required quantity of filled attributes to pass the validation.
+     * @return self
+     */
+    public function min(int $value): self
+    {
+        $new = clone $this;
+        $new->min = $value;
         return $new;
     }
 }
