@@ -17,18 +17,22 @@ class AtLeast extends Rule
      * The minimum required quantity of filled attributes to pass the validation.
      * Defaults to 1.
      */
-    private int $min = 1;
+    private int $min;
 
     /**
      * The list of required attributes that will be checked.
      */
-    private array $attributes = [];
+    private array $attributes;
 
     /**
-     * Message to display in case of error
+     * Message to display in case of error.
      */
     private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.';
 
+    /**
+     * @param array $attributes The list of required attributes that will be checked.
+     * @param int $min The minimum required quantity of filled attributes to pass the validation. Defaults to 1.
+     */
     public function __construct(array $attributes, int $min = 1)
     {
         $this->attributes = $attributes;
@@ -37,20 +41,17 @@ class AtLeast extends Rule
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
-        $valid = false;
         $filledCount = 0;
 
         foreach ($this->attributes as $attribute) {
-            $filledCount += $this->isEmpty($value->{$attribute}) ? 0 : 1;
-        }
-
-        if ($filledCount >= $this->min) {
-            $valid = true;
+            if (!$this->isEmpty($value->{$attribute})) {
+                $filledCount++;
+            }
         }
 
         $result = new Result();
 
-        if (!$valid) {
+        if ($filledCount < $this->min) {
             $result->addError(
                 $this->translateMessage(
                     $this->message,
@@ -62,5 +63,12 @@ class AtLeast extends Rule
         }
 
         return $result;
+    }
+
+    public function message(string $message): self
+    {
+        $new = clone $this;
+        $new->message = $message;
+        return $new;
     }
 }
