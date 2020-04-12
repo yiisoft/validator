@@ -31,4 +31,21 @@ class JsonTest extends TestCase
     {
         $this->assertTrue((new Json())->validate('{"name": "tester"}')->isValid());
     }
+
+    public function testValidationMessage(): void
+    {
+        $this->assertEquals(
+            [
+                'The value is not json'
+            ],
+            (new Json())->validate('')->getErrors()
+        );
+
+        $this->assertEquals(
+            [
+                'bad json'
+            ],
+            (new Json())->message('bad json')->validate('')->getErrors()
+        );
+    }
 }
