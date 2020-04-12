@@ -36,7 +36,7 @@ class JsonTest extends TestCase
     {
         $this->assertEquals(
             [
-                'The value is not json'
+                'The value is not JSON.'
             ],
             (new Json())->validate('')->getErrors()
         );
