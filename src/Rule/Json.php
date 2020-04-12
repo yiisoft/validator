@@ -17,7 +17,7 @@ class Json extends Rule
 {
     use HasValidationMessage;
 
-    private string $message = 'The value is not json';
+    private string $message = 'The value is not JSON.';
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
