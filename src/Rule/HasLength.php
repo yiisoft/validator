@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\HasValidationMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
@@ -15,6 +16,8 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class HasLength extends Rule
 {
+    use HasValidationMessage;
+
     /**
      * @var int|null maximum length. null means no maximum length limit.
      * @see tooLongMessage for the customized message for a too long string.
@@ -37,7 +40,6 @@ class HasLength extends Rule
      * @var string user-defined error message used when the length of the value is greater than {@see $max}.
      */
     private string $tooLongMessage = 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.';
-
     /**
      * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
      * If this property is not set, application wide encoding will be used.
@@ -83,13 +85,6 @@ class HasLength extends Rule
     {
         $new = clone $this;
         $new->encoding = $encoding;
-        return $new;
-    }
-
-    public function message(string $message): self
-    {
-        $new = clone $this;
-        $new->message = $message;
         return $new;
     }
 

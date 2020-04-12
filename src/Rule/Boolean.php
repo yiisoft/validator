@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\HasValidationMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
@@ -13,6 +14,7 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class Boolean extends Rule
 {
+    use HasValidationMessage;
     /**
      * @var mixed the value representing true status. Defaults to '1'.
      */
@@ -29,13 +31,6 @@ class Boolean extends Rule
     private bool $strict = false;
 
     private string $message = 'The value must be either "{true}" or "{false}".';
-
-    public function message(string $message): self
-    {
-        $new = clone $this;
-        $new->message = $message;
-        return $new;
-    }
 
     public function trueValue($value): self
     {

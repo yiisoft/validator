@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\HasValidationMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
@@ -13,6 +14,8 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class AtLeast extends Rule
 {
+    use HasValidationMessage;
+
     /**
      * The minimum required quantity of filled attributes to pass the validation.
      * Defaults to 1.
@@ -61,13 +64,6 @@ class AtLeast extends Rule
         }
 
         return $result;
-    }
-
-    public function message(string $message): self
-    {
-        $new = clone $this;
-        $new->message = $message;
-        return $new;
     }
 
     /**
