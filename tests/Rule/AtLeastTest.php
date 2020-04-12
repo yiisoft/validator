@@ -3,8 +3,6 @@
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\MissingAttributeException;
 use Yiisoft\Validator\Rule\AtLeast;
 
 /**
