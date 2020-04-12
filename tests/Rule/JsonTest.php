@@ -40,7 +40,10 @@ class JsonTest extends TestCase
             ],
             (new Json())->validate('')->getErrors()
         );
+    }
 
+    public function testCustomValidationMessage(): void
+    {
         $this->assertEquals(
             [
                 'bad json'

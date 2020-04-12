@@ -8,7 +8,7 @@ use Yiisoft\Validator\HasValidationMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
-use Exception;
+use JsonException;
 
 /**
  * JsonValidator validates that the attribute value is a valid json
@@ -38,9 +38,10 @@ class Json extends Rule
 
         try {
             json_decode($value, false, 512, JSON_THROW_ON_ERROR);
-            return true;
-        } catch (Exception $e) {
+        } catch (JsonException $e) {
             return false;
         }
+
+        return true;
     }
 }
