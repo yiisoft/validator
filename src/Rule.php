@@ -76,15 +76,15 @@ abstract class Rule
         return $new;
     }
 
-    protected function translateMessage(string $message, array $params = []): string
+    protected function translateMessage(string $message, array $parameters = []): string
     {
         if ($this->translator === null) {
-            return $this->formatMessage($message, $params);
+            return $this->formatMessage($message, $parameters);
         }
 
         return $this->translator->translate(
             $message,
-            $params,
+            $parameters,
             $this->translationDomain ?? 'validators',
             $this->translationLocale
         );
