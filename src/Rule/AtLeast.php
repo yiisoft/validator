@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\HasValidationMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
@@ -13,6 +14,8 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class AtLeast extends Rule
 {
+    use HasValidationMessage;
+
     /**
      * The minimum required quantity of filled attributes to pass the validation.
      * Defaults to 1.
@@ -22,35 +25,34 @@ class AtLeast extends Rule
     /**
      * The list of required attributes that will be checked.
      */
-    private array $attributes = [];
+    private array $attributes;
 
     /**
-     * Message to display in case of error
+     * Message to display in case of error.
      */
     private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.';
 
-    public function __construct(array $attributes, int $min = 1)
+    /**
+     * @param array $attributes The list of required attributes that will be checked.
+     */
+    public function __construct(array $attributes)
     {
         $this->attributes = $attributes;
-        $this->min = $min;
     }
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
-        $valid = false;
         $filledCount = 0;
 
         foreach ($this->attributes as $attribute) {
-            $filledCount += $this->isEmpty($value->{$attribute}) ? 0 : 1;
-        }
-
-        if ($filledCount >= $this->min) {
-            $valid = true;
+            if (!$this->isEmpty($value->{$attribute})) {
+                $filledCount++;
+            }
         }
 
         $result = new Result();
 
-        if (!$valid) {
+        if ($filledCount < $this->min) {
             $result->addError(
                 $this->translateMessage(
                     $this->message,
@@ -62,5 +64,16 @@ class AtLeast extends Rule
         }
 
         return $result;
+    }
+
+    /**
+     * @param int $value The minimum required quantity of filled attributes to pass the validation.
+     * @return self
+     */
+    public function min(int $value): self
+    {
+        $new = clone $this;
+        $new->min = $value;
+        return $new;
     }
 }
