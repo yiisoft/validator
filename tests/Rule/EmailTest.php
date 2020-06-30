@@ -121,8 +121,6 @@ class EmailTest extends TestCase
 
     public function testValidateMx(): void
     {
-        $this->markTestSkipped('Too slow :(');
-
         $validator = (new Email())
             ->checkDNS(true);
 
