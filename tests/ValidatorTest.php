@@ -49,7 +49,9 @@ class ValidatorTest extends TestCase
             ]
         );
 
-        $validator = new Validator(
+        $validator = new Validator();
+
+        $validator->addRules(
             [
                 'bool' => [new Boolean()],
                 'int' => [

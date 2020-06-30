@@ -30,15 +30,6 @@ class Validator implements ValidatorInterface
         $this->translator = $translator;
         $this->translationDomain = $translationDomain;
         $this->translationLocale = $translationLocale;
-
-        foreach ($rules as $attribute => $ruleSets) {
-            foreach ($ruleSets as $rule) {
-                if (is_callable($rule)) {
-                    $rule = new Callback($rule);
-                }
-                $this->addRule($attribute, $rule);
-            }
-        }
     }
 
     public function validate(DataSetInterface $dataSet): ResultSet
@@ -65,5 +56,17 @@ class Validator implements ValidatorInterface
         }
 
         $this->attributeRules[$attribute]->add($rule);
+    }
+
+    public function addRules(iterable $rules = []): void
+    {
+        foreach ($rules as $attribute => $ruleSets) {
+            foreach ($ruleSets as $rule) {
+                if (is_callable($rule)) {
+                    $rule = new Callback($rule);
+                }
+                $this->addRule($attribute, $rule);
+            }
+        }
     }
 }
