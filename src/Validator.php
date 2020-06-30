@@ -15,22 +15,6 @@ class Validator
      */
     private array $attributeRules;
 
-    /**
-     * Validator constructor.
-     * @param $rules
-     */
-    public function __construct(iterable $rules = [])
-    {
-        foreach ($rules as $attribute => $ruleSets) {
-            foreach ($ruleSets as $rule) {
-                if (is_callable($rule)) {
-                    $rule = new Callback($rule);
-                }
-                $this->addRule($attribute, $rule);
-            }
-        }
-    }
-
     public function validate(DataSetInterface $dataSet): ResultSet
     {
         $results = new ResultSet();
@@ -47,5 +31,17 @@ class Validator
         }
 
         $this->attributeRules[$attribute]->add($rule);
+    }
+
+    public function addRules(iterable $rules = []): void
+    {
+        foreach ($rules as $attribute => $ruleSets) {
+            foreach ($ruleSets as $rule) {
+                if (is_callable($rule)) {
+                    $rule = new Callback($rule);
+                }
+                $this->addRule($attribute, $rule);
+            }
+        }
     }
 }

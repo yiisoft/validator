@@ -45,20 +45,24 @@ class ValidatorTest extends TestCase
             'int' => 41,
         ]);
 
-        $validator = new Validator([
-            'bool' => [new Boolean()],
-            'int' => [
-                (new Number())->integer(),
-                (new Number())->integer()->min(44),
-                static function ($value): Result {
-                    $result = new Result();
-                    if ($value !== 42) {
-                        $result->addError('Value should be 42!');
-                    }
-                    return $result;
-                }
-            ],
-        ]);
+        $validator = new Validator();
+
+        $validator->addRules(
+            [
+                'bool' => [new Boolean()],
+                'int' => [
+                    (new Number())->integer(),
+                    (new Number())->integer()->min(44),
+                        static function ($value): Result {
+                            $result = new Result();
+                            if ($value !== 42) {
+                                $result->addError('Value should be 42!');
+                            }
+                            return $result;
+                        }
+                ],
+            ]
+        );
 
         $results = $validator->validate($dataObject);
 
