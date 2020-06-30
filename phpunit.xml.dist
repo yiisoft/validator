@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
-         backupGlobals="false"
+<phpunit backupGlobals="false"
          colors="true"
          verbose="true"
          bootstrap="vendor/autoload.php"
          failOnRisky="true"
-         failOnWarning="true"
+         failOnWarning="true">
 >
     <php>
         <ini name="error_reporting" value="-1" />
     </php>
 
     <testsuites>
-        <testsuite name="Yii i18n tests">
+        <testsuite name="Yii Validator tests">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>./</directory>
+            <directory>./src</directory>
             <exclude>
                 <directory>./tests</directory>
                 <directory>./vendor</directory>
