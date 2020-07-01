@@ -22,7 +22,6 @@ class Validator implements ValidatorInterface
     private array $attributeRules = [];
 
     public function __construct(
-        iterable $rules = [],
         TranslatorInterface $translator = null,
         string $translationDomain = null,
         string $translationLocale = null
