@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 use Yiisoft\I18n\TranslatorInterface;
 use Yiisoft\Validator\Rule\Callback;
 
-final class Validation implements ValidationInterface
+final class ValidatorFactory implements ValidatorFactoryInterface
 {
     private ?TranslatorInterface $translator;
     private ?string $translationDomain;

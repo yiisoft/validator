@@ -8,13 +8,13 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\I18n\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Validation;
+use Yiisoft\Validator\ValidatorFactory;
 
-class ValidationTest extends TestCase
+class ValidatorFactoryTest extends TestCase
 {
     public function testCreate()
     {
-        $validation = new Validation();
+        $validation = new ValidatorFactory();
 
         $attribute = 'test';
         $errorMessage = 'error message';
@@ -39,7 +39,7 @@ class ValidationTest extends TestCase
     public function testCreateWithTranslator()
     {
         $translatableMessage = 'test message';
-        $validation = new Validation($this->createTranslatorMock($translatableMessage));
+        $validation = new ValidatorFactory($this->createTranslatorMock($translatableMessage));
 
         $attribute = 'test';
         $validator = $validation->create(
@@ -62,7 +62,7 @@ class ValidationTest extends TestCase
 
     public function testCreateWithInvalidRule()
     {
-        $validation = new Validation();
+        $validation = new ValidatorFactory();
 
         $this->expectException(\InvalidArgumentException::class);
 

@@ -59,7 +59,7 @@ if ($result->isValid() === false) {
 
 ```php
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\ValidatorFactory;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
 
@@ -82,7 +82,7 @@ class MoneyTransfer implements DataSetInterface
 
 $moneyTransfer = new MoneyTransfer(142);
 
-$validator = new Validator([    
+$validator = new ValidatorFactory([    
     'amount' => [
         (new Number())->integer()->max(100),
         static function ($value): Result {
@@ -214,10 +214,10 @@ class UsernameRules
 Then it could be used like the following:
 
 ```php
-use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\ValidatorFactory;
 use Yiisoft\Validator\Rule\Email;
 
-$validator = new Validator([    
+$validator = new ValidatorFactory([    
     'username' => UsernameRules::get(),
     'email' => [new Email()]
 ]);

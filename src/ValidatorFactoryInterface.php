@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-interface ValidationInterface
+interface ValidatorFactoryInterface
 {
     /**
      * @param Rule[]
