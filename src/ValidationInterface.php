@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 interface ValidationInterface
 {
     /**
-     * @param Rule[]|callable[]
+     * @param Rule[]
      */
     public function create(array $rules): ValidatorInterface;
 }

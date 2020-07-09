@@ -30,27 +30,42 @@ final class Validation implements ValidationInterface
 
     private function normalizeRules(array $rules)
     {
-        return array_map(
-            function ($rule) {
-                if (is_callable($rule)) {
-                    $rule = new Callback($rule);
-                }
+        foreach ($rules as $attribute => $ruleSets) {
+            foreach ($ruleSets as $index => $rule) {
+                $ruleSets[$index] = $this->normalizeRule($rule);
+            }
+            $rules[$attribute] = $ruleSets;
+        }
+        return $rules;
+    }
 
-                if ($this->translator !== null) {
-                    $rule = $rule->withTranslator($this->translator);
-                }
+    /**
+     * @param Rule|callable
+     */
+    private function normalizeRule($rule): Rule
+    {
+        if (is_callable($rule)) {
+            $rule = new Callback($rule);
+        }
 
-                if ($this->translationDomain !== null) {
-                    $rule = $rule->withTranslationDomain($this->translationDomain);
-                }
+        if (!$rule instanceof Rule) {
+            throw new \InvalidArgumentException(
+                'Rule should be either instance of Rule class or a callable'
+            );
+        }
 
-                if ($this->translationLocale !== null) {
-                    $rule = $rule->withTranslationLocale($this->translationLocale);
-                }
+        if ($this->translator !== null) {
+            $rule = $rule->translator($this->translator);
+        }
 
-                return $rule;
-            },
-            $rules
-        );
+        if ($this->translationDomain !== null) {
+            $rule = $rule->translationDomain($this->translationDomain);
+        }
+
+        if ($this->translationLocale !== null) {
+            $rule = $rule->translationLocale($this->translationLocale);
+        }
+
+        return $rule;
     }
 }
