@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\Exception\CallbackRuleException;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
@@ -26,8 +27,12 @@ class Callback extends Rule
         $callbackResult = $callback($value, $dataSet);
 
         if (!$callbackResult instanceof Result) {
-            throw new \RuntimeException(
-                sprintf('Callback must be return "%s", %s given.', Result::class, gettype($callbackResult))
+            throw new CallbackRuleException(
+                sprintf(
+                    'Return value of callback must be an instance of %s, %s returned.',
+                    Result::class,
+                    gettype($callbackResult)
+                )
             );
         }
 
