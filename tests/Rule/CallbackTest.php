@@ -28,4 +28,13 @@ class CallbackTest extends TestCase
         $this->assertCount(1, $result->getErrors());
         $this->assertEquals('Value should be 42!', $result->getErrors()[0]);
     }
+
+    public function testThrowExceptionWithInvalidReturn()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        (new Callback(
+            static fn() => 'invalid return'
+        ))->validate(null);
+    }
 }
