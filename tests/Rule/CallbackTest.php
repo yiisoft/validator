@@ -31,7 +31,7 @@ class CallbackTest extends TestCase
 
     public function testThrowExceptionWithInvalidReturn()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\RuntimeException::class);
 
         (new Callback(
             static fn() => 'invalid return'

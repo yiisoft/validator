@@ -26,7 +26,7 @@ class Callback extends Rule
         $callbackResult = $callback($value, $dataSet);
 
         if (!$callbackResult instanceof Result) {
-            throw new \InvalidArgumentException(
+            throw new \RuntimeException(
                 sprintf('Callback must be return "%s", %s given.', Result::class, gettype($callbackResult))
             );
         }
