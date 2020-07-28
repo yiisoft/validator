@@ -10,7 +10,7 @@ class CallbackRuleException extends \Exception implements FriendlyExceptionInter
 {
     public function getName(): string
     {
-        return 'Invalid callable returned value';
+        return 'Invalid callable return value';
     }
 
     public function getSolution(): ?string
