@@ -31,7 +31,7 @@ class Callback extends Rule
                 sprintf(
                     'Return value of callback must be an instance of %s, %s returned.',
                     Result::class,
-                    gettype($callbackResult)
+                    is_object($callbackResult) ? get_class($callbackResult) : gettype($callbackResult)
                 )
             );
         }
