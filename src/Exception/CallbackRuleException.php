@@ -17,7 +17,7 @@ class CallbackRuleException extends \Exception implements FriendlyExceptionInter
     {
         return <<<SOLUTION
             The callback must return an instance of \\Yiisoft\\Validator\\Result. An example of a valid callback:
-                static function (): \Yiisoft\Validator\Result
+                static function (): \\Yiisoft\\Validator\\Result
                 {
                     \$result = new \\Yiisoft\\Validator\\Result();
 
