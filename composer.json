@@ -26,6 +26,7 @@
     "require": {
         "php": "^7.4",
         "ext-mbstring": "*",
+        "yiisoft/friendly-exception": "^1.0",
         "yiisoft/strings": "dev-master",
         "yiisoft/arrays": "dev-master",
         "yiisoft/i18n": "dev-master",
