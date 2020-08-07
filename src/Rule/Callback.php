@@ -27,13 +27,7 @@ class Callback extends Rule
         $callbackResult = $callback($value, $dataSet);
 
         if (!$callbackResult instanceof Result) {
-            throw new CallbackRuleException(
-                sprintf(
-                    'Return value of callback must be an instance of %s, %s returned.',
-                    Result::class,
-                    is_object($callbackResult) ? get_class($callbackResult) : gettype($callbackResult)
-                )
-            );
+            throw new CallbackRuleException($callbackResult);
         }
 
         $result = new Result();
