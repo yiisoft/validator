@@ -35,7 +35,7 @@ class CallbackTest extends TestCase
         $this->expectException(CallbackRuleException::class);
 
         (new Callback(
-            static fn() => 'invalid return'
+            static fn () => 'invalid return'
         ))->validate(null);
     }
 }
