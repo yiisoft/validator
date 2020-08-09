@@ -24,7 +24,7 @@
         "source": "https://github.com/yiisoft/validator"
     },
     "require": {
-        "php": "^7.4",
+        "php": "^7.4|^8.0",
         "ext-mbstring": "*",
         "yiisoft/friendly-exception": "^1.0",
         "yiisoft/strings": "dev-master",
@@ -34,7 +34,8 @@
         "ext-json": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^9.3",
+        "phan/phan": "^3.0"
     },
     "autoload": {
         "psr-4": {
@@ -53,5 +54,7 @@
     },
     "config": {
         "sort-packages": true
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
