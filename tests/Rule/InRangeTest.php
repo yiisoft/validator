@@ -10,13 +10,6 @@ use Yiisoft\Validator\Rule\InRange;
  */
 class InRangeTest extends TestCase
 {
-    public function testInitException(): void
-    {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('The "range" property must be set.');
-        new InRange('not an array');
-    }
-
     public function testValidate(): void
     {
         $val = new InRange(range(1, 10));
