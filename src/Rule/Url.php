@@ -80,7 +80,7 @@ class Url extends Rule
 
         return preg_replace_callback(
             '/:\/\/([^\/]+)/',
-            fn($matches) => '://' . $this->idnToAscii($matches[1]),
+            fn ($matches) => '://' . $this->idnToAscii($matches[1]),
             $value
         );
     }
