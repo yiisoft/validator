@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\HasValidationMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rules;
 use Yiisoft\Validator\Result;
@@ -14,6 +15,8 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class Each extends Rule
 {
+    use HasValidationMessage;
+
     private Rules $rules;
 
     private string $incorrectInputMessage = 'Value should be array or iterable';
@@ -56,13 +59,6 @@ class Each extends Rule
     {
         $new = clone $this;
         $new->incorrectInputMessage = $message;
-        return $new;
-    }
-
-    public function message(string $message): self
-    {
-        $new = clone $this;
-        $new->message = $message;
         return $new;
     }
 }

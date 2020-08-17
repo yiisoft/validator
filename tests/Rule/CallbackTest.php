@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Exception\CallbackRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 
@@ -27,5 +28,14 @@ class CallbackTest extends TestCase
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
         $this->assertEquals('Value should be 42!', $result->getErrors()[0]);
+    }
+
+    public function testThrowExceptionWithInvalidReturn()
+    {
+        $this->expectException(CallbackRuleException::class);
+
+        (new Callback(
+            static fn () => 'invalid return'
+        ))->validate(null);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\HasValidationMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
@@ -16,6 +17,8 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class Url extends Rule
 {
+    use HasValidationMessage;
+
     /**
      * @var string the regular expression used to validateValue the attribute value.
      * The pattern may contain a `{schemes}` token that will be replaced
@@ -99,13 +102,6 @@ class Url extends Rule
     {
         $new = clone $this;
         $new->validSchemes = $schemes;
-        return $new;
-    }
-
-    public function message(string $message): self
-    {
-        $new = clone $this;
-        $new->message = $message;
         return $new;
     }
 }

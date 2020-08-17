@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Yiisoft\Validator\Exception\MissingAttributeException;
+
 /**
  * DataSetInterface represents a key-value data set
  */

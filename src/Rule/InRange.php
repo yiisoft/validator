@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\HasValidationMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+
+use function is_iterable;
 
 /**
  * In validates that the attribute value is among a list of values.
@@ -19,10 +22,12 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class InRange extends Rule
 {
+    use HasValidationMessage;
+
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
-    private $range;
+    private iterable $range;
     /**
      * @var bool whether the comparison is strict (both type and value must be the same)
      */
@@ -35,12 +40,8 @@ class InRange extends Rule
 
     private string $message = 'This value is invalid.';
 
-    public function __construct($range)
+    public function __construct(iterable $range)
     {
-        if (!is_array($range) && !($range instanceof \Traversable)) {
-            throw new \RuntimeException('The "range" property must be set.');
-        }
-
         $this->range = $range;
     }
 
@@ -49,7 +50,7 @@ class InRange extends Rule
         $in = false;
 
         if (
-            ($value instanceof \Traversable || is_array($value)) &&
+            (is_iterable($value)) &&
             ArrayHelper::isSubset($value, $this->range, $this->strict)
         ) {
             $in = true;
@@ -79,13 +80,6 @@ class InRange extends Rule
     {
         $new = clone $this;
         $new->not = true;
-        return $new;
-    }
-
-    public function message(string $message): self
-    {
-        $new = clone $this;
-        $new->message = $message;
         return $new;
     }
 }
