@@ -53,23 +53,11 @@ class Url extends Rule
 
         // make sure the length is limited to avoid DOS attacks
         if (is_string($value) && strlen($value) < 2000) {
-            if (strpos($this->pattern, '{schemes}') !== false) {
-                $pattern = str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
-            } else {
-                $pattern = $this->pattern;
-            }
-
             if ($this->enableIDN) {
-                $value = preg_replace_callback(
-                    '/:\/\/([^\/]+)/',
-                    function ($matches) {
-                        return '://' . $this->idnToAscii($matches[1]);
-                    },
-                    $value
-                );
+                $value = $this->convertIdn($value);
             }
 
-            if (preg_match($pattern, $value)) {
+            if (preg_match($this->getPattern(), $value)) {
                 return $result;
             }
         }
@@ -82,6 +70,28 @@ class Url extends Rule
     private function idnToAscii($idn)
     {
         return idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
+    }
+
+    private function convertIdn($value): string
+    {
+        if (!str_contains($value, '://')) {
+            return $this->idnToAscii($value);
+        }
+
+        return preg_replace_callback(
+            '/:\/\/([^\/]+)/',
+            fn($matches) => '://' . $this->idnToAscii($matches[1]),
+            $value
+        );
+    }
+
+    private function getPattern(): string
+    {
+        if (str_contains($this->pattern, '{schemes}')) {
+            return str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
+        }
+
+        return $this->pattern;
     }
 
     public function pattern(string $pattern): self
