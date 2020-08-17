@@ -17,12 +17,8 @@ class UrlTest extends TestCase
         $this->assertTrue($val->validate('http://google.de')->isValid());
         $this->assertTrue($val->validate('https://google.de')->isValid());
         $this->assertFalse($val->validate('htp://yiiframework.com')->isValid());
-        $this->assertTrue(
-            $val->validate(
-                'https://www.google.de/search?q=yii+framework&ie=utf-8&oe=utf-8'
-                . '&rls=org.mozilla:de:official&client=firefox-a&gws_rd=cr'
-            )->isValid()
-        );
+        $this->assertTrue($val->validate('https://www.google.de/search?q=yii+framework&ie=utf-8&oe=utf-8'
+                                         . '&rls=org.mozilla:de:official&client=firefox-a&gws_rd=cr')->isValid());
         $this->assertFalse($val->validate('ftp://ftp.ruhr-uni-bochum.de/')->isValid());
         $this->assertFalse($val->validate('http://invalid,domain')->isValid());
         $this->assertFalse($val->validate('http://example.com,')->isValid());
