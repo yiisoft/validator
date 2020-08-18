@@ -10,7 +10,9 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Rules;
 
-
+/**
+ * GroupRule validates a single value for a set of custom rules
+ */
 abstract class GroupRule extends Rule
 {
     use HasValidationMessage;
@@ -27,5 +29,9 @@ abstract class GroupRule extends Rule
         return $result;
     }
 
+    /**
+     * Return custom rules set
+     * @return Rules
+     */
     abstract protected function getRules(): Rules;
 }
