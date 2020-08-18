@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationMessage;
+use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
@@ -15,7 +15,7 @@ use Yiisoft\Validator\Rules;
  */
 abstract class GroupRule extends Rule
 {
-    use HasValidationMessage;
+    use HasValidationErrorMessage;
 
     protected string $message = 'This value is not a valid.';
 

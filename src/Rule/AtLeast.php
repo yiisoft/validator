@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationMessage;
+use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
@@ -14,7 +14,7 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class AtLeast extends Rule
 {
-    use HasValidationMessage;
+    use HasValidationErrorMessage;
 
     /**
      * The minimum required quantity of filled attributes to pass the validation.

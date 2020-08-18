@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationMessage;
+use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
@@ -22,7 +22,7 @@ use function is_iterable;
  */
 class InRange extends Rule
 {
-    use HasValidationMessage;
+    use HasValidationErrorMessage;
 
     /**
      * @var iterable

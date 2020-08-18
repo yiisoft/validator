@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationMessage;
+use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
@@ -16,7 +16,7 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class HasLength extends Rule
 {
-    use HasValidationMessage;
+    use HasValidationErrorMessage;
 
     /**
      * @var int|null maximum length. null means no maximum length limit.
