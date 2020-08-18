@@ -63,7 +63,7 @@ use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
 
-class MoneyTransfer implements DataSetInterface
+final class MoneyTransfer implements DataSetInterface
 {
     private $amount;
     
@@ -146,7 +146,7 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
-class Pi extends Rule
+final class Pi extends Rule
 {
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
@@ -170,7 +170,7 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
-class CompanyName extends Rule
+final class CompanyName extends Rule
 {
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
@@ -191,22 +191,24 @@ class CompanyName extends Rule
 }
 ```
 
-### Grouping common validation rules into rule sets
+### Grouping multiple validation rules
 
-To reuse multiple validation rules it is advised to group rules into validation sets:
+To reuse multiple validation rules it is advised to group rules like the following:
 
 ```php
+use Yiisoft\Validator\Rules;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\MatchRegularExpression;
+use \Yiisoft\Validator\Rule\GroupRule;
 
-class UsernameRules
+final class UsernameRule extends GroupRule
 {
-    public static function get(): array
+    public function getRules(): Rules
     {
-        return [
+        return new Rules([
             (new HasLength())->min(2)->max(20),
             new MatchRegularExpression('~[a-z_\-]~i')
-        ];
+        ]);
     }
 }
 ```
@@ -218,7 +220,7 @@ use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\Rule\Email;
 
 $validator = new Validator([    
-    'username' => UsernameRules::get(),
+    'username' => new UsernameRule(),
     'email' => [new Email()]
 ]);
 
