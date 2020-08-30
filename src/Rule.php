@@ -161,4 +161,27 @@ abstract class Rule
     {
         return $value === null || $value === [] || $value === '';
     }
+
+    /**
+     * Returns name of class in short format, lowercase
+     * @return string
+     * @throws \ReflectionException
+     */
+    public function getName(): string
+    {
+        return strtolower((new \ReflectionClass($this))->getShortName());
+    }
+
+    /**
+     * Returns rule options
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return array_merge(
+            $this->skipOnEmpty ? ['skipOnEmpty' => true] : [],
+            $this->skipOnError ? [] : ['skipOnError' => false]
+        );
+    }
+
 }

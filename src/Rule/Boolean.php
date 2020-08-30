@@ -77,4 +77,19 @@ class Boolean extends Rule
 
         return $result;
     }
+
+    /**
+     * @inheritDoc
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return array_merge(
+            $this->strict ? ['strict' => true] : [],
+            $this->trueValue !== '1' ? ['trueValue' => $this->trueValue] : [],
+            $this->falseValue !== '0' ? ['falseValue' => $this->falseValue] : [],
+            parent::getOptions()
+        );
+    }
+
 }
