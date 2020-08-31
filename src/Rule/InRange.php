@@ -82,4 +82,27 @@ class InRange extends Rule
         $new->not = true;
         return $new;
     }
+
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'inRange';
+    }
+
+    /**
+     * @inheritDoc
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return array_merge(
+            ['range' => $this->range],
+            $this->strict ? ['strict' => true] : [],
+            $this->not ? ['not' => true] : [],
+            parent::getOptions()
+        );
+    }
 }

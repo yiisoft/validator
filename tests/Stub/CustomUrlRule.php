@@ -22,4 +22,10 @@ final class CustomUrlRule extends GroupRule
             ]
         );
     }
+
+    public function getName(): string
+    {
+        return 'customUrlRule';
+    }
+
 }

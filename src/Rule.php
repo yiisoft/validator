@@ -165,12 +165,8 @@ abstract class Rule
     /**
      * Returns name of class in short format, lowercase
      * @return string
-     * @throws \ReflectionException
      */
-    public function getName(): string
-    {
-        return strtolower((new \ReflectionClass($this))->getShortName());
-    }
+    abstract public function getName(): string;
 
     /**
      * Returns rule options

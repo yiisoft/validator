@@ -35,4 +35,11 @@ class EachTest extends TestCase
         $this->assertContains('Value must be no greater than 13. 20 given.', $errors);
         $this->assertContains('Value must be no greater than 13. 30 given.', $errors);
     }
+
+    public function testName(): void
+    {
+        $this->assertEquals('each', (new Each(new Rules([(new Number())->max(13)])))->getName());
+    }
+
+
 }

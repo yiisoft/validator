@@ -124,4 +124,27 @@ class Number extends Rule
             || (is_object($value) && !method_exists($value, '__toString'))
             || (!is_object($value) && !is_scalar($value) && $value !== null);
     }
+
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'number';
+    }
+
+    /**
+     * @inheritDoc
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return array_merge(
+            $this->asInteger ? ['asInteger' => true] : [],
+            $this->min!==null ? ['min' => $this->min] : [],
+            $this->max!==null ? ['max' => $this->max] : [],
+            parent::getOptions()
+        );
+    }
 }

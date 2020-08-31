@@ -28,4 +28,22 @@ class Required extends Rule
 
         return $result;
     }
+
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'required';
+    }
+
+    /**
+     * @inheritDoc
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return parent::getOptions();
+    }
 }

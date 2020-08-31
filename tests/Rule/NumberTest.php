@@ -5,6 +5,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\MissingAttributeException;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Number;
 
 /**
@@ -364,5 +365,31 @@ class NumberTest extends TestCase
             }
         };
         $this->assertTrue($rule->validate($object)->isValid());
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('number', (new Number())->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [(new Number()), []],
+            [(new Number())->min(1), ['min' => 1]],
+            [(new Number())->max(1), ['max' => 1]],
+            [(new Number())->min(2)->max(10), ['min' => 2, 'max' => 10]],
+            [(new Number())->integer(), ['asInteger' => true]],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

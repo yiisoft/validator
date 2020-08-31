@@ -50,4 +50,22 @@ REGEX;
 
         return is_string($value) && preg_match($regex, $value) === 1;
     }
+
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'json';
+    }
+
+    /**
+     * @inheritDoc
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return parent::getOptions();
+    }
 }

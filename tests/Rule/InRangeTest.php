@@ -3,6 +3,7 @@
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\InRange;
 
 /**
@@ -105,5 +106,29 @@ class InRangeTest extends TestCase
         $rule = (new InRange(new \ArrayObject(['a', 'b'])));
 
         $this->assertTrue($rule->validate('a')->isValid());
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('inRange', (new InRange(range(1, 10)))->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [(new InRange(range(1, 10))), ['range' => range(1, 10)]],
+            [(new InRange(range(1, 2)))->strict(), ['range' => [1, 2], 'strict' => true]],
+            [(new InRange(range(1, 2)))->not(), ['range' => [1, 2], 'not' => true]],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

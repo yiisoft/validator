@@ -3,6 +3,7 @@
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Url;
 
 /**
@@ -92,5 +93,31 @@ class UrlTest extends TestCase
 
         $validator = (new Url())->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN();
         $this->assertTrue($validator->validate('домен.рф')->isValid());
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('url', (new Url())->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [(new Url()), []],
+            [(new Url())->enableIDN(), ['enableIDN' => true]],
+            [(new Url())->schemes(['http']), ['validSchemes' => ['http']]],
+            [(new Url())->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN(),
+                ['enableIDN' => true, 'pattern' => '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i']],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

@@ -101,4 +101,27 @@ class HasLength extends Rule
         $new->tooLongMessage = $message;
         return $new;
     }
+
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'hasLength';
+    }
+
+    /**
+     * @inheritDoc
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return array_merge(
+            $this->min !== null ? ['min' => $this->min] : [],
+            $this->max !== null ? ['max' => $this->max] : [],
+            $this->encoding !== 'UTF-8' ? ['encoding' => $this->encoding] : [],
+            parent::getOptions()
+        );
+    }
 }

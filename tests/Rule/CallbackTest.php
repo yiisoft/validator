@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Exception\CallbackRuleException;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Callback;
 
 class CallbackTest extends TestCase
@@ -37,5 +38,28 @@ class CallbackTest extends TestCase
         (new Callback(
             static fn () => 'invalid return'
         ))->validate(null);
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('callback', (new Callback(function($value) {return $value;}))->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [(new Callback(function($value) {return $value;})), []],
+            [(new Callback(function($value) {return $value;}))->skipOnEmpty(true), ['skipOnEmpty' => true]],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

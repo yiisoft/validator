@@ -190,4 +190,24 @@ class CompareTo extends Rule
                 return false;
         }
     }
+
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'compareTo';
+    }
+
+    /**
+     * @inheritDoc
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return array_merge(
+            ['type' => $this->type, 'operator' => $this->operator, 'compareValue' => $this->compareValue],
+            parent::getOptions());
+    }
 }

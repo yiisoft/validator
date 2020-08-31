@@ -39,4 +39,22 @@ class Callback extends Rule
         }
         return $result;
     }
+
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'callback';
+    }
+
+    /**
+     * @inheritDoc
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return parent::getOptions();
+    }
 }

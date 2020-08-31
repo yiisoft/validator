@@ -26,10 +26,18 @@ class Url extends Rule
      */
     private string $pattern = '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i';
     /**
+     * @var bool set to true if not default pattern
+     */
+    private bool $patternIsChanged = false;
+    /**
      * @var array list of URI schemes which should be considered valid. By default, http and https
      * are considered to be valid schemes.
      */
     private array $validSchemes = ['http', 'https'];
+    /**
+     * @var bool set to true if not default schemes
+     */
+    private bool $schemesIsChanged = false;
     /**
      * @var bool whether validation process should take into account IDN (internationalized
      * domain names). Defaults to false meaning that validation of URLs containing IDN will always
@@ -98,6 +106,7 @@ class Url extends Rule
     {
         $new = clone $this;
         $new->pattern = $pattern;
+        $new->patternIsChanged = true;
         return $new;
     }
 
@@ -112,6 +121,30 @@ class Url extends Rule
     {
         $new = clone $this;
         $new->validSchemes = $schemes;
+        $new->schemesIsChanged = true;
         return $new;
+    }
+
+    /**
+     * @inheritDoc
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'url';
+    }
+
+    /**
+     * @inheritDoc
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return array_merge(
+            $this->enableIDN ? ['enableIDN' => true] : [],
+            $this->schemesIsChanged ? ['validSchemes' => $this->validSchemes] : [],
+            $this->patternIsChanged ? ['pattern' => $this->pattern] : [],
+            parent::getOptions()
+        );
     }
 }

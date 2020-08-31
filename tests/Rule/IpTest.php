@@ -3,6 +3,7 @@
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Ip;
 
 /**
@@ -292,5 +293,36 @@ class IpTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Network alias "myNetworkEu" already set');
         $validator->network('myNetworkEu', ['!1.2.3.4/10', '!5.6.7.8']);
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('ip', (new Ip())->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [(new Ip()), []],
+            [(new Ip())->allowIpv4(), []],
+            [(new Ip())->disallowIpv4(), ['allowIpv4' => false]],
+            [(new Ip())->disallowIpv6(), ['allowIpv6' => false]],
+            [(new Ip())->allowSubnet(), ['allowSubnet' => true]],
+            [(new Ip())->requireSubnet(), ['allowSubnet' => true, 'requireSubnet' => true]],
+            [(new Ip())->requireSubnet()->disallowSubnet(), []],
+            [(new Ip())->allowNegation(), ['allowNegation' => true]],
+            [(new Ip())->allowNegation()->disallowNegation(), []],
+            [(new Ip())->ranges(['private']), ['ranges' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8']]],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

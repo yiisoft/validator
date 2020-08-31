@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\HasLength;
 
 /**
@@ -100,5 +101,31 @@ class HasLengthTest extends TestCase
         $this->assertEquals('is not string error', $rule->validate(null)->getErrors()[0]);
         $this->assertEquals('is to short test', $rule->validate(str_repeat('x', 1))->getErrors()[0]);
         $this->assertEquals('is to long test', $rule->validate(str_repeat('x', 6))->getErrors()[0]);
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('hasLength', (new HasLength())->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [(new HasLength()), []],
+            [(new HasLength())->min(3), ['min' => 3]],
+            [(new HasLength())->max(3), ['max' => 3]],
+            [(new HasLength())->encoding('windows-1251'), ['encoding' => 'windows-1251']],
+            [(new HasLength())->min(3)->max(4)->encoding('windows-1251'), ['min' => 3, 'max' => 4, 'encoding' => 'windows-1251']],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Json;
 
 /**
@@ -125,5 +126,27 @@ JSON;
             ],
             (new Json())->message('bad json')->validate('')->getErrors()
         );
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('json', (new Json())->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [(new Json()), []],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

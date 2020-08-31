@@ -38,6 +38,6 @@ class CallbackRuleException extends \Exception implements FriendlyExceptionInter
 
                     return \$result;
                 }
-        SOLUTION;
+SOLUTION;
     }
 }

@@ -80,6 +80,15 @@ class Boolean extends Rule
 
     /**
      * @inheritDoc
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'boolean';
+    }
+
+    /**
+     * @inheritDoc
      * @return array
      */
     public function getOptions(): array
@@ -91,5 +100,4 @@ class Boolean extends Rule
             parent::getOptions()
         );
     }
-
 }

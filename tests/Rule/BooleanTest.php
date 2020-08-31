@@ -46,4 +46,33 @@ class BooleanTest extends TestCase
     {
         $this->assertSame($expected, $rule->validate($value)->isValid());
     }
+
+    public function testName(): void
+    {
+        $this->assertEquals('boolean', (new Boolean())->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [(new Boolean()), []],
+            [(new Boolean())->skipOnEmpty(true), ['skipOnEmpty' => true]],
+            [(new Boolean())->skipOnEmpty(true)->skipOnError(false), ['skipOnEmpty' => true, 'skipOnError' => false]],
+            [(new Boolean())->skipOnEmpty(true)->skipOnError(false)->strict(true), ['skipOnEmpty' => true, 'skipOnError' => false, 'strict' => true]],
+            [(new Boolean())->trueValue('YES'), ['trueValue' => 'YES']],
+            [(new Boolean())->falseValue('NO'), ['falseValue' => 'NO']],
+            [(new Boolean())->trueValue('YES')->falseValue('NO')->strict(true), ['strict' => true, 'trueValue' => 'YES', 'falseValue' => 'NO']],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
+    }
+
 }

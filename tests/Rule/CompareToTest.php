@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\CompareTo;
 
 /**
@@ -74,5 +75,32 @@ class CompareToTest extends TestCase
                 [$value - 1, true],
             ],
         ];
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('compareTo', (new CompareTo(1))->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [(new CompareTo(1)), ['type' => 'string', 'operator' => '==', 'compareValue' => 1]],
+            [(new CompareTo(1))->asNumber(), ['type' => 'number', 'operator' => '==', 'compareValue' => 1]],
+            [(new CompareTo(1))->asNumber()->operator('>='), ['type' => 'number', 'operator' => '>=', 'compareValue' => 1]],
+            [(new CompareTo('YES')), ['type' => 'string', 'operator' => '==', 'compareValue' => 'YES']],
+            [(new CompareTo('YES'))->asString()->skipOnEmpty(true), ['type' => 'string', 'operator' => '==', 'compareValue' => 'YES', 'skipOnEmpty' => true]],
+            [(new CompareTo('YES'))->asString()->operator('!=='), ['type' => 'string', 'operator' => '!==', 'compareValue' => 'YES']],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }
