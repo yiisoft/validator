@@ -27,7 +27,7 @@
         "php": "^7.4|^8.0",
         "ext-mbstring": "*",
         "yiisoft/friendly-exception": "^1.0",
-        "yiisoft/strings": "dev-master",
+        "yiisoft/strings": "^1.0",
         "yiisoft/arrays": "dev-master",
         "yiisoft/i18n": "dev-master",
         "yiisoft/network-utilities": "dev-master",
