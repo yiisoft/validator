@@ -4,7 +4,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\MissingAttributeException;
+use Yiisoft\Validator\Exception\MissingAttributeException;
 use Yiisoft\Validator\Rule\Number;
 
 /**
@@ -12,44 +12,6 @@ use Yiisoft\Validator\Rule\Number;
  */
 class NumberTest extends TestCase
 {
-    private $commaDecimalLocales = ['fr_FR.UTF-8', 'fr_FR.UTF8', 'fr_FR.utf-8', 'fr_FR.utf8', 'French_France.1252'];
-    private $pointDecimalLocales = ['en_US.UTF-8', 'en_US.UTF8', 'en_US.utf-8', 'en_US.utf8', 'English_United States.1252'];
-    private $oldLocale;
-
-    private function setCommaDecimalLocale(): void
-    {
-        if ($this->oldLocale === false) {
-            $this->markTestSkipped('Your platform does not support locales.');
-        }
-
-        if (setlocale(LC_NUMERIC, $this->commaDecimalLocales) === false) {
-            $this->markTestSkipped('Could not set any of required locales: ' . implode(', ', $this->commaDecimalLocales));
-        }
-    }
-
-    private function setPointDecimalLocale(): void
-    {
-        if ($this->oldLocale === false) {
-            $this->markTestSkipped('Your platform does not support locales.');
-        }
-
-        if (setlocale(LC_NUMERIC, $this->pointDecimalLocales) === false) {
-            $this->markTestSkipped('Could not set any of required locales: ' . implode(', ', $this->pointDecimalLocales));
-        }
-    }
-
-    private function restoreLocale(): void
-    {
-        setlocale(LC_NUMERIC, $this->oldLocale);
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->oldLocale = setlocale(LC_NUMERIC, 0);
-    }
-
     public function testValidateSimple(): void
     {
         $rule = new Number();
@@ -58,13 +20,7 @@ class NumberTest extends TestCase
         $this->assertTrue($rule->validate(-20)->isValid());
         $this->assertTrue($rule->validate('20')->isValid());
         $this->assertTrue($rule->validate(25.45)->isValid());
-
-        $this->setPointDecimalLocale();
-        $this->assertFalse($rule->validate('25,45')->isValid());
-        $this->setCommaDecimalLocale();
         $this->assertTrue($rule->validate('25,45')->isValid());
-        $this->restoreLocale();
-
         $this->assertFalse($rule->validate('12:45')->isValid());
     }
 
@@ -107,17 +63,10 @@ class NumberTest extends TestCase
         $this->assertFalse($rule->validate('12.23^4')->isValid());
     }
 
-    public function testValidateWithLocaleWhereDecimalPointIsComma(): void
+    public function testValidateWhereDecimalPointIsComma(): void
     {
         $rule = new Number();
-
-        $this->setPointDecimalLocale();
         $this->assertTrue($rule->validate(.5)->isValid());
-
-        $this->setCommaDecimalLocale();
-        $this->assertTrue($rule->validate(.5)->isValid());
-
-        $this->restoreLocale();
     }
 
     public function testValidateMin(): void
@@ -345,24 +294,5 @@ class NumberTest extends TestCase
         if (is_resource($fp)) {
             fclose($fp);
         }
-    }
-
-    public function testValidateToString(): void
-    {
-        $rule = new Number();
-        $object = new class('10') {
-            public $foo;
-
-            public function __construct($foo)
-            {
-                $this->foo = $foo;
-            }
-
-            public function __toString(): string
-            {
-                return $this->foo;
-            }
-        };
-        $this->assertTrue($rule->validate($object)->isValid());
     }
 }
