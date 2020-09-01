@@ -208,6 +208,7 @@ class CompareTo extends Rule
     {
         return array_merge(
             ['type' => $this->type, 'operator' => $this->operator, 'compareValue' => $this->compareValue],
+            ['message' => $this->translateMessage($this->getMessage(), ['value' => $this->compareValue])],
             parent::getOptions());
     }
 }

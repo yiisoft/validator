@@ -66,6 +66,9 @@ REGEX;
      */
     public function getOptions(): array
     {
-        return parent::getOptions();
+        return array_merge(
+            ['message' => $this->translateMessage($this->message)],
+            parent::getOptions()
+        );
     }
 }

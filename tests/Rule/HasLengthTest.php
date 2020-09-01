@@ -111,11 +111,15 @@ class HasLengthTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new HasLength()), []],
-            [(new HasLength())->min(3), ['min' => 3]],
-            [(new HasLength())->max(3), ['max' => 3]],
-            [(new HasLength())->encoding('windows-1251'), ['encoding' => 'windows-1251']],
-            [(new HasLength())->min(3)->max(4)->encoding('windows-1251'), ['min' => 3, 'max' => 4, 'encoding' => 'windows-1251']],
+            [(new HasLength()), ['message' => 'This value must be a string.']],
+            [(new HasLength())->min(3), ['min' => 3, 'message' => 'This value must be a string.',
+                'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.']],
+            [(new HasLength())->max(3), ['max' => 3, 'message' => 'This value must be a string.',
+                'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.']],
+            [(new HasLength())->min(3)->max(4)->encoding('windows-1251'), ['min' => 3, 'max' => 4,
+                'encoding' => 'windows-1251', 'message' => 'This value must be a string.',
+                'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.']],
         ];
     }
 

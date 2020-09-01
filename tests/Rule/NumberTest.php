@@ -375,11 +375,12 @@ class NumberTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new Number()), []],
-            [(new Number())->min(1), ['min' => 1]],
-            [(new Number())->max(1), ['max' => 1]],
-            [(new Number())->min(2)->max(10), ['min' => 2, 'max' => 10]],
-            [(new Number())->integer(), ['asInteger' => true]],
+            [(new Number()), ['notANumberMessage' => 'Value must be a number.']],
+            [(new Number())->min(1), ['min' => 1, 'notANumberMessage' => 'Value must be a number.', 'tooSmallMessage' => 'Value must be no less than 1.']],
+            [(new Number())->max(1), ['max' => 1, 'notANumberMessage' => 'Value must be a number.', 'tooBigMessage' => 'Value must be no greater than 1.']],
+            [(new Number())->min(2)->max(10), ['min' => 2, 'max' => 10, 'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than 2.', 'tooBigMessage' => 'Value must be no greater than 10.']],
+            [(new Number())->integer(), ['asInteger' => true, 'notANumberMessage' => 'Value must be an integer.']],
         ];
     }
 

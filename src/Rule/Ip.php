@@ -471,12 +471,14 @@ class Ip extends Rule
     public function getOptions(): array
     {
         return array_merge(
-            $this->allowIpv4 ? [] : ['allowIpv4' => $this->allowIpv4],
-            $this->allowIpv6 ? [] : ['allowIpv6' => $this->allowIpv6],
-            $this->allowSubnet ? ['allowSubnet' => $this->allowSubnet] : [],
-            $this->requireSubnet ? ['requireSubnet' => $this->requireSubnet] : [],
+            $this->allowIpv4 ? [] : ['allowIpv4' => $this->allowIpv4, 'ipv4NotAllowedMessage' => $this->translateMessage($this->ipv4NotAllowed)],
+            $this->allowIpv6 ? [] : ['allowIpv6' => $this->allowIpv6, 'ipv6NotAllowedMessage' => $this->translateMessage($this->ipv6NotAllowed)],
+            $this->allowSubnet ? ['allowSubnet' => $this->allowSubnet] : ['hasSubnetMessage' => $this->translateMessage($this->hasSubnet)],
+            $this->requireSubnet ? ['requireSubnet' => $this->requireSubnet, 'noSubnetMessage' => $this->translateMessage($this->noSubnet)] : [],
             $this->allowNegation ? ['allowNegation' => $this->allowNegation] : [],
-            empty($this->ranges) ? [] : ['ranges' => $this->ranges],
+            ['message' => $this->translateMessage($this->message)],
+            ['wrongCidrMessage' => $this->translateMessage($this->wrongCidr)],
+            empty($this->ranges) ? [] : ['ranges' => $this->ranges, 'notInRangeMessage' => $this->translateMessage($this->notInRange)],
             parent::getOptions()
         );
     }

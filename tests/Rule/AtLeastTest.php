@@ -72,8 +72,8 @@ class AtLeastTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new AtLeast(['attr1', 'attr2'])), ['min' => 1]],
-            [(new AtLeast(['attr1', 'attr2']))->min(9), ['min' => 9]],
+            [(new AtLeast(['attr1', 'attr2'])), ['min' => 1, 'message' => 'The model is not valid. Must have at least "1" filled attributes.']],
+            [(new AtLeast(['attr1', 'attr2']))->min(2), ['min' => 2, 'message' => 'The model is not valid. Must have at least "2" filled attributes.']],
         ];
     }
 

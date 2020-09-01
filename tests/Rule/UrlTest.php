@@ -103,11 +103,12 @@ class UrlTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new Url()), []],
-            [(new Url())->enableIDN(), ['enableIDN' => true]],
-            [(new Url())->schemes(['http']), ['validSchemes' => ['http']]],
+            [(new Url()), ['message' => 'This value is not a valid URL.']],
+            [(new Url())->enableIDN(), ['enableIDN' => true, 'message' => 'This value is not a valid URL.']],
+            [(new Url())->schemes(['http']), ['validSchemes' => ['http'], 'message' => 'This value is not a valid URL.']],
             [(new Url())->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN(),
-                ['enableIDN' => true, 'pattern' => '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i']],
+                ['enableIDN' => true, 'pattern' => '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i',
+                    'message' => 'This value is not a valid URL.']],
         ];
     }
 

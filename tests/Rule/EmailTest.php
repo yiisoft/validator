@@ -220,10 +220,12 @@ class EmailTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new Email()), []],
-            [(new Email())->allowName(true), ['allowName' => true]],
-            [(new Email())->allowName(true)->checkDNS(true), ['allowName' => true, 'checkDNS' => true]],
-            [(new Email())->allowName(true)->enableIDN(true), ['allowName' => true, 'enableIDN' => true]],
+            [(new Email()), ['message' => 'This value is not a valid email address.']],
+            [(new Email())->allowName(true), ['allowName' => true, 'message' => 'This value is not a valid email address.']],
+            [(new Email())->allowName(true)->checkDNS(true),
+                ['allowName' => true, 'checkDNS' => true, 'message' => 'This value is not a valid email address.']],
+            [(new Email())->allowName(true)->enableIDN(true),
+                ['allowName' => true, 'enableIDN' => true, 'message' => 'This value is not a valid email address.']],
         ];
     }
 

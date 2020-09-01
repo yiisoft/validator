@@ -146,6 +146,7 @@ class Email extends Rule
             $this->allowName ? ['allowName' => true] : [],
             $this->checkDNS ? ['checkDNS' => true] : [],
             $this->enableIDN ? ['enableIDN' => true] : [],
+            ['message' => $this->translateMessage($this->message)],
             parent::getOptions()
         );
     }

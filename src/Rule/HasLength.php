@@ -51,7 +51,7 @@ class HasLength extends Rule
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($this->message);
+            $result->addError($this->translateMessage($this->message));
             return $result;
         }
 
@@ -61,7 +61,7 @@ class HasLength extends Rule
             $result->addError($this->translateMessage($this->tooShortMessage, ['min' => $this->min]));
         }
         if ($this->max !== null && $length > $this->max) {
-            $result->addError($this->translateMessage($this->tooLongMessage, ['min' => $this->max]));
+            $result->addError($this->translateMessage($this->tooLongMessage, ['max' => $this->max]));
         }
 
         return $result;
@@ -118,8 +118,9 @@ class HasLength extends Rule
     public function getOptions(): array
     {
         return array_merge(
-            $this->min !== null ? ['min' => $this->min] : [],
-            $this->max !== null ? ['max' => $this->max] : [],
+            ['message' => $this->translateMessage($this->message)],
+            $this->min !== null ? ['min' => $this->min, 'tooShortMessage' => $this->translateMessage($this->tooShortMessage, ['min' => $this->min])] : [],
+            $this->max !== null ? ['max' => $this->max, 'tooLongMessage' => $this->translateMessage($this->tooLongMessage, ['max' => $this->max])] : [],
             $this->encoding !== 'UTF-8' ? ['encoding' => $this->encoding] : [],
             parent::getOptions()
         );

@@ -100,6 +100,7 @@ class InRange extends Rule
     {
         return array_merge(
             ['range' => $this->range],
+            ['message' => $this->translateMessage($this->message)],
             $this->strict ? ['strict' => true] : [],
             $this->not ? ['not' => true] : [],
             parent::getOptions()

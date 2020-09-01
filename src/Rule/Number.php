@@ -141,9 +141,10 @@ class Number extends Rule
     public function getOptions(): array
     {
         return array_merge(
+            ['notANumberMessage' => $this->translateMessage($this->getNotANumberMessage())],
             $this->asInteger ? ['asInteger' => true] : [],
-            $this->min!==null ? ['min' => $this->min] : [],
-            $this->max!==null ? ['max' => $this->max] : [],
+            $this->min !== null ? ['min' => $this->min, 'tooSmallMessage' => $this->translateMessage($this->tooSmallMessage, ['min' => $this->min])] : [],
+            $this->max !== null ? ['max' => $this->max, 'tooBigMessage' => $this->translateMessage($this->tooBigMessage, ['max' => $this->max])] : [],
             parent::getOptions()
         );
     }

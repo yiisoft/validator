@@ -55,13 +55,16 @@ class BooleanTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new Boolean()), []],
-            [(new Boolean())->skipOnEmpty(true), ['skipOnEmpty' => true]],
-            [(new Boolean())->skipOnEmpty(true)->skipOnError(false), ['skipOnEmpty' => true, 'skipOnError' => false]],
-            [(new Boolean())->skipOnEmpty(true)->skipOnError(false)->strict(true), ['skipOnEmpty' => true, 'skipOnError' => false, 'strict' => true]],
-            [(new Boolean())->trueValue('YES'), ['trueValue' => 'YES']],
-            [(new Boolean())->falseValue('NO'), ['falseValue' => 'NO']],
-            [(new Boolean())->trueValue('YES')->falseValue('NO')->strict(true), ['strict' => true, 'trueValue' => 'YES', 'falseValue' => 'NO']],
+            [(new Boolean()), ['message' =>'The value must be either "1" or "0".']],
+            [(new Boolean())->skipOnEmpty(true), ['skipOnEmpty' => true, 'message' =>'The value must be either "1" or "0".']],
+            [(new Boolean())->skipOnEmpty(true)->skipOnError(false),
+                ['skipOnEmpty' => true, 'skipOnError' => false, 'message' =>'The value must be either "1" or "0".']],
+            [(new Boolean())->skipOnEmpty(true)->skipOnError(false)->strict(true),
+                ['skipOnEmpty' => true, 'skipOnError' => false, 'strict' => true, 'message' =>'The value must be either "1" or "0".']],
+            [(new Boolean())->trueValue('YES'), ['trueValue' => 'YES', 'message' =>'The value must be either "YES" or "0".']],
+            [(new Boolean())->falseValue('NO'), ['falseValue' => 'NO', 'message' =>'The value must be either "1" or "NO".']],
+            [(new Boolean())->trueValue('YES')->falseValue('NO')->strict(true),
+                ['strict' => true, 'trueValue' => 'YES', 'falseValue' => 'NO', 'message' =>'The value must be either "YES" or "NO".']],
         ];
     }
 

@@ -141,6 +141,7 @@ class Url extends Rule
     public function getOptions(): array
     {
         return array_merge(
+            ['message' => $this->translateMessage($this->message)],
             $this->enableIDN ? ['enableIDN' => true] : [],
             $this->schemesIsChanged ? ['validSchemes' => $this->validSchemes] : [],
             $this->patternIsChanged ? ['pattern' => $this->pattern] : [],
