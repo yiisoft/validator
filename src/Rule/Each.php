@@ -77,8 +77,6 @@ class Each extends Rule
      */
     public function getOptions(): array
     {
-        return [];
-        // @TODO - after implement of Rules::asArray()
-        // $this->rules->asArray();
+        return $this->rules->asArray();
     }
 }

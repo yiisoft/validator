@@ -41,5 +41,17 @@ class EachTest extends TestCase
         $this->assertEquals('each', (new Each(new Rules([(new Number())->max(13)])))->getName());
     }
 
+    public function testOptions()
+    {
+        $rules = new Rules([
+            (new Number())->max(13),
+            (new Number())->max(14)
+        ]);
 
+        $this->assertEquals([
+            ['number', 'notANumberMessage' => 'Value must be a number.', 'max' => 13, 'tooBigMessage' => 'Value must be no greater than 13.'],
+            ['number', 'notANumberMessage' => 'Value must be a number.', 'max' => 14, 'tooBigMessage' => 'Value must be no greater than 14.']
+        ], (new Each($rules))->getOptions());
+
+    }
 }

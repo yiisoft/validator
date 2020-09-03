@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rules;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
@@ -86,5 +87,46 @@ class RulesTest extends TestCase
 
         $this->assertFalse($result->isValid());
         $this->assertCount(2, $result->getErrors());
+    }
+
+    public function testAsArray()
+    {
+        $rules = new Rules();
+        $rules->add(new Required());
+        $rules->add((new Number())->max(10));
+
+        $this->assertEquals([
+            ['required', 'message' => 'Value cannot be blank.'],
+            ['number', 'notANumberMessage' => 'Value must be a number.', 'max' => 10, 'tooBigMessage' => 'Value must be no greater than 10.']
+        ], $rules->asArray());
+
+        $rules = new Rules(
+            [
+                (new Number())->min(10),
+                (new Number())->min(10)->skipOnError(false),
+                (new Number())->min(10)->integer()
+            ]
+        );
+        $this->assertEquals([
+            ['number', 'min' => 10, 'notANumberMessage' => 'Value must be a number.', 'tooSmallMessage' => 'Value must be no less than 10.'],
+            ['number', 'min' => 10, 'notANumberMessage' => 'Value must be a number.', 'tooSmallMessage' => 'Value must be no less than 10.', 'skipOnError' => false],
+            ['number', 'min' => 10, 'asInteger' => true, 'notANumberMessage' => 'Value must be an integer.', 'tooSmallMessage' => 'Value must be no less than 10.'],
+        ], $rules->asArray());
+
+        $rules = new Rules([
+            (new Each(new Rules([
+                (new Number())->max(13),
+                (new Number())->max(14)
+            ]))),
+            (new Number())->min(10),
+        ]);
+
+        $this->assertEquals([
+            ['each',
+                ['number', 'max' => 13, 'notANumberMessage' => 'Value must be a number.', 'tooBigMessage' => 'Value must be no greater than 13.'],
+                ['number', 'max' => 14, 'notANumberMessage' => 'Value must be a number.', 'tooBigMessage' => 'Value must be no greater than 14.']
+            ],
+            ['number', 'min' => 10, 'notANumberMessage' => 'Value must be a number.', 'tooSmallMessage' => 'Value must be no less than 10.'],
+        ], $rules->asArray());
     }
 }
