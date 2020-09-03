@@ -17,6 +17,11 @@ final class Validator implements ValidatorInterface
     public function __construct(iterable $rules = [])
     {
         foreach ($rules as $attribute => $ruleSets) {
+            if ($ruleSets instanceof Rule) {
+                $ruleSets = [$ruleSets];
+            } elseif (!is_iterable($ruleSets)) {
+                throw new \InvalidArgumentException('Rules should be either instance of Rule class or a array of instances of Rule class');
+            }
             foreach ($ruleSets as $rule) {
                 $this->addRule($attribute, $rule);
             }
@@ -45,5 +50,28 @@ final class Validator implements ValidatorInterface
             $this->attributeRules[$attribute] = new Rules([]);
         }
         $this->attributeRules[$attribute]->add($rule);
+    }
+
+    /**
+     * Return rules for attributes as array.
+     * For example:
+     * [
+     *    'amount' => [
+     *      ['number', 'integer' => true, 'max' => 100, 'notANumberMessage' => 'Value must be an integer.',
+     *          'tooBigMessage' => 'Value must be no greater than 100.'],
+     *      ['callback'],
+     *    ],
+     *    'name' => ['hasLength', 'max' => 20, 'message' => 'This value must be a string.',
+     *      'This value should contain at most 20 characters.'],
+     * ]
+     * @return array
+     */
+    public function asArray(): array
+    {
+        $rulesOfArray = [];
+        foreach ($this->attributeRules as $attribute => $rules) {
+            $rulesOfArray[$attribute] = $rules->asArray();
+        }
+        return $rulesOfArray;
     }
 }

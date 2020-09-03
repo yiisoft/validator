@@ -97,4 +97,33 @@ class ValidatorTest extends TestCase
         $this->assertFalse($intResult->isValid());
         $this->assertCount(1, $intResult->getErrors());
     }
+
+    public function testAsArray()
+    {
+        $validator = new Validator(
+            [
+                'bool' => (new Boolean()),
+                'int' => [
+                    (new Number())->integer(),
+                    (new Number())->integer()->min(44),
+                    static function ($value): Result {
+                        $result = new Result();
+                        if ($value !== 42) {
+                            $result->addError('Value should be 42!');
+                        }
+                        return $result;
+                    }
+                ],
+            ]
+        );
+
+        $this->assertEquals([
+            'bool' => [['boolean', 'message' => 'The value must be either "1" or "0".']],
+            'int' => [
+                ['number', 'asInteger' => true, 'notANumberMessage' => 'Value must be an integer.'],
+                ['number', 'asInteger' => true, 'min' => 44, 'notANumberMessage' => 'Value must be an integer.', 'tooSmallMessage' => 'Value must be no less than 44.'],
+                ['callback'],
+            ],
+        ], $validator->asArray());
+    }
 }
