@@ -42,14 +42,20 @@ class CallbackTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('callback', (new Callback(function($value) {return $value;}))->getName());
+        $this->assertEquals('callback', (new Callback(function($value) {
+            return $value;
+        }))->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
-            [(new Callback(function($value) {return $value;})), []],
-            [(new Callback(function($value) {return $value;}))->skipOnEmpty(true), ['skipOnEmpty' => true]],
+            [(new Callback(function($value) {
+                return $value;
+            })), []],
+            [(new Callback(function($value) {
+                return $value;
+            }))->skipOnEmpty(true), ['skipOnEmpty' => true]],
         ];
     }
 

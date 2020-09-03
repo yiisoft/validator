@@ -97,7 +97,8 @@ class Boolean extends Rule
             $this->strict ? ['strict' => true] : [],
             $this->trueValue !== '1' ? ['trueValue' => $this->trueValue] : [],
             $this->falseValue !== '0' ? ['falseValue' => $this->falseValue] : [],
-            ['message' => $this->translateMessage($this->message,
+            ['message' => $this->translateMessage(
+                $this->message,
                 [
                     'true' => $this->trueValue === true ? 'true' : $this->trueValue,
                     'false' => $this->falseValue === false ? 'false' : $this->falseValue

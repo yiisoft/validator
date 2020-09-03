@@ -77,5 +77,4 @@ class BooleanTest extends TestCase
     {
         $this->assertEquals($expected, $rule->getOptions());
     }
-
 }
