@@ -179,5 +179,4 @@ abstract class Rule
             $this->skipOnError ? [] : ['skipOnError' => false]
         );
     }
-
 }
