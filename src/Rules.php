@@ -60,14 +60,15 @@ final class Rules
     }
 
     /**
+     * Return rules as array
      * @return array
      */
-    public function asArray()
+    public function asArray(): array
     {
-        $ruleses = [];
+        $arrayOfRules = [];
         foreach ($this->rules as $rule) {
-            $ruleses[] = array_merge([$rule->getName()], $rule->getOptions());
+            $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
         }
-        return $ruleses;
+        return $arrayOfRules;
     }
 }
