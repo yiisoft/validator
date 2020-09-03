@@ -27,5 +27,4 @@ final class CustomUrlRule extends GroupRule
     {
         return 'customUrlRule';
     }
-
 }
