@@ -4,9 +4,9 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Exception\MissingAttributeException;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule;
 
 /**
  * @group validators
@@ -295,25 +295,6 @@ class NumberTest extends TestCase
         if (is_resource($fp)) {
             fclose($fp);
         }
-    }
-
-    public function testValidateToString(): void
-    {
-        $rule = new Number();
-        $object = new class('10') {
-            public $foo;
-
-            public function __construct($foo)
-            {
-                $this->foo = $foo;
-            }
-
-            public function __toString(): string
-            {
-                return $this->foo;
-            }
-        };
-        $this->assertTrue($rule->validate($object)->isValid());
     }
 
     public function testName(): void
