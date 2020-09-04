@@ -55,16 +55,16 @@ class BooleanTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new Boolean()), ['message' =>'The value must be either "1" or "0".']],
-            [(new Boolean())->skipOnEmpty(true), ['skipOnEmpty' => true, 'message' =>'The value must be either "1" or "0".']],
+            [(new Boolean()), ['message' => 'The value must be either "1" or "0".']],
+            [(new Boolean())->skipOnEmpty(true), ['skipOnEmpty' => true, 'message' => 'The value must be either "1" or "0".']],
             [(new Boolean())->skipOnEmpty(true)->skipOnError(false),
-                ['skipOnEmpty' => true, 'skipOnError' => false, 'message' =>'The value must be either "1" or "0".']],
+                ['skipOnEmpty' => true, 'skipOnError' => false, 'message' => 'The value must be either "1" or "0".']],
             [(new Boolean())->skipOnEmpty(true)->skipOnError(false)->strict(true),
-                ['skipOnEmpty' => true, 'skipOnError' => false, 'strict' => true, 'message' =>'The value must be either "1" or "0".']],
-            [(new Boolean())->trueValue('YES'), ['trueValue' => 'YES', 'message' =>'The value must be either "YES" or "0".']],
-            [(new Boolean())->falseValue('NO'), ['falseValue' => 'NO', 'message' =>'The value must be either "1" or "NO".']],
+                ['skipOnEmpty' => true, 'skipOnError' => false, 'strict' => true, 'message' => 'The value must be either "1" or "0".']],
+            [(new Boolean())->trueValue('YES'), ['trueValue' => 'YES', 'message' => 'The value must be either "YES" or "0".']],
+            [(new Boolean())->falseValue('NO'), ['falseValue' => 'NO', 'message' => 'The value must be either "1" or "NO".']],
             [(new Boolean())->trueValue('YES')->falseValue('NO')->strict(true),
-                ['strict' => true, 'trueValue' => 'YES', 'falseValue' => 'NO', 'message' =>'The value must be either "YES" or "NO".']],
+                ['strict' => true, 'trueValue' => 'YES', 'falseValue' => 'NO', 'message' => 'The value must be either "YES" or "NO".']],
         ];
     }
 

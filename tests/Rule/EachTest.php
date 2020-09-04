@@ -41,7 +41,7 @@ class EachTest extends TestCase
         $this->assertEquals('each', (new Each(new Rules([(new Number())->max(13)])))->getName());
     }
 
-    public function testOptions()
+    public function testOptions(): void
     {
         $rules = new Rules([
             (new Number())->max(13),

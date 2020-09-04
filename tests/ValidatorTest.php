@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\MissingAttributeException;
+use Yiisoft\Validator\Exception\MissingAttributeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Number;
@@ -98,7 +98,7 @@ class ValidatorTest extends TestCase
         $this->assertCount(1, $intResult->getErrors());
     }
 
-    public function testAsArray()
+    public function testAsArray(): void
     {
         $validator = new Validator(
             [

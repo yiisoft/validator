@@ -57,7 +57,7 @@ class RulesTest extends TestCase
         $this->assertCount(1, $result->getErrors());
     }
 
-    public function testWhenValidate()
+    public function testWhenValidate(): void
     {
         $rules = new Rules(
             [
@@ -73,7 +73,7 @@ class RulesTest extends TestCase
         $this->assertCount(2, $result->getErrors());
     }
 
-    public function testSkipOnError()
+    public function testSkipOnError(): void
     {
         $rules = new Rules(
             [
@@ -89,7 +89,7 @@ class RulesTest extends TestCase
         $this->assertCount(2, $result->getErrors());
     }
 
-    public function testAsArray()
+    public function testAsArray(): void
     {
         $rules = new Rules();
         $rules->add(new Required());
