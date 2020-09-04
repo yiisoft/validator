@@ -20,7 +20,7 @@ final class Validator implements ValidatorInterface
             if ($ruleSets instanceof Rule) {
                 $ruleSets = [$ruleSets];
             } elseif (!is_iterable($ruleSets)) {
-                throw new \InvalidArgumentException('Rules should be either instance of Rule class or a array of instances of Rule class');
+                throw new \InvalidArgumentException('Attribute rules should be either an instance of Rule class or an array of instances of Rule class.');
             }
             foreach ($ruleSets as $rule) {
                 $this->addRule($attribute, $rule);
@@ -53,17 +53,30 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * Return rules for attributes as array.
+     * Return all attribute rules as array.
+     *
      * For example:
+     *
+     * ```php
      * [
      *    'amount' => [
-     *      ['number', 'integer' => true, 'max' => 100, 'notANumberMessage' => 'Value must be an integer.',
-     *          'tooBigMessage' => 'Value must be no greater than 100.'],
-     *      ['callback'],
+     *        [
+     *            'number',
+     *            'integer' => true,
+     *            'max' => 100,
+     *            'notANumberMessage' => 'Value must be an integer.',
+     *            'tooBigMessage' => 'Value must be no greater than 100.'
+     *        ],
+     *        ['callback'],
      *    ],
-     *    'name' => ['hasLength', 'max' => 20, 'message' => 'This value must be a string.',
-     *      'This value should contain at most 20 characters.'],
+     *    'name' => [
+     *        'hasLength',
+     *        'max' => 20,
+     *        'message' => 'Value must contain at most 20 characters.'
+     *    ],
      * ]
+     * ```
+     *
      * @return array
      */
     public function asArray(): array
