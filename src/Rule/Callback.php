@@ -44,9 +44,4 @@ class Callback extends Rule
     {
         return 'callback';
     }
-
-    public function getOptions(): array
-    {
-        return parent::getOptions();
-    }
 }
