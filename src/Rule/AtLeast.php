@@ -77,19 +77,11 @@ class AtLeast extends Rule
         return $new;
     }
 
-    /**
-     * @inheritDoc
-     * @return string
-     */
     public function getName(): string
     {
         return 'atLeast';
     }
 
-    /**
-     * @inheritDoc
-     * @return array
-     */
     public function getOptions(): array
     {
         return array_merge(

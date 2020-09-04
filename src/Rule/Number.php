@@ -125,19 +125,11 @@ class Number extends Rule
             || (!is_object($value) && !is_scalar($value) && $value !== null);
     }
 
-    /**
-     * @inheritDoc
-     * @return string
-     */
     public function getName(): string
     {
         return 'number';
     }
 
-    /**
-     * @inheritDoc
-     * @return array
-     */
     public function getOptions(): array
     {
         return array_merge(

@@ -62,19 +62,11 @@ class Each extends Rule
         return $new;
     }
 
-    /**
-     * @inheritDoc
-     * @return string
-     */
     public function getName(): string
     {
         return 'each';
     }
 
-    /**
-     * @inheritDoc
-     * @return array
-     */
     public function getOptions(): array
     {
         return $this->rules->asArray();

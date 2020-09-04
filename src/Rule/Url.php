@@ -125,19 +125,11 @@ class Url extends Rule
         return $new;
     }
 
-    /**
-     * @inheritDoc
-     * @return string
-     */
     public function getName(): string
     {
         return 'url';
     }
 
-    /**
-     * @inheritDoc
-     * @return array
-     */
     public function getOptions(): array
     {
         return array_merge(

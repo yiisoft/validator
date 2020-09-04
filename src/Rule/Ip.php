@@ -455,19 +455,11 @@ class Ip extends Rule
         ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
-    /**
-     * @inheritDoc
-     * @return string
-     */
     public function getName(): string
     {
         return 'ip';
     }
 
-    /**
-     * @inheritDoc
-     * @return array
-     */
     public function getOptions(): array
     {
         return array_merge(

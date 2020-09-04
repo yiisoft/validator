@@ -60,7 +60,7 @@ final class Rules
     }
 
     /**
-     * Return rules as array
+     * Return rules as array.
      * @return array
      */
     public function asArray(): array

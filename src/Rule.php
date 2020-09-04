@@ -163,13 +163,13 @@ abstract class Rule
     }
 
     /**
-     * Returns name of class in short format, lowercase
+     * Returns name of class in short format, lowercase.
      * @return string
      */
     abstract public function getName(): string;
 
     /**
-     * Returns rule options
+     * Returns rule options.
      * @return array
      */
     public function getOptions(): array
