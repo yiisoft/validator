@@ -174,9 +174,16 @@ abstract class Rule
      */
     public function getOptions(): array
     {
-        return array_merge(
-            $this->skipOnEmpty ? ['skipOnEmpty' => true] : [],
-            $this->skipOnError ? [] : ['skipOnError' => false]
-        );
+        $options = [];
+
+        if ($this->skipOnEmpty) {
+            $options['skipOnEmpty'] = true;
+        }
+
+        if (!$this->skipOnError) {
+            $options['skipOnError'] = false;
+        }
+
+        return $options;
     }
 }
