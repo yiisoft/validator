@@ -86,16 +86,18 @@ class Boolean extends Rule
     public function getOptions(): array
     {
         return array_merge(
-            $this->strict ? ['strict' => true] : [],
-            $this->trueValue !== '1' ? ['trueValue' => $this->trueValue] : [],
-            $this->falseValue !== '0' ? ['falseValue' => $this->falseValue] : [],
-            ['message' => $this->translateMessage(
-                $this->message,
-                [
-                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                    'false' => $this->falseValue === false ? 'false' : $this->falseValue
-                ]
-            )],
+            [
+                'strict' => $this->strict,
+                'trueValue' => $this->trueValue,
+                'falseValue' => $this->falseValue,
+                'message' => $this->translateMessage(
+                    $this->message,
+                    [
+                        'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                        'false' => $this->falseValue === false ? 'false' : $this->falseValue
+                    ]
+                )
+            ],
             parent::getOptions()
         );
     }
