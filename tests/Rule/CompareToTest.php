@@ -85,18 +85,72 @@ class CompareToTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new CompareTo(1)),
-                ['type' => 'string', 'operator' => '==', 'compareValue' => 1, 'message' => 'Value must be equal to "1".']],
-            [(new CompareTo(1))->asNumber(),
-                ['type' => 'number', 'operator' => '==', 'compareValue' => 1, 'message' => 'Value must be equal to "1".']],
-            [(new CompareTo(1))->asNumber()->operator('>='),
-                ['type' => 'number', 'operator' => '>=', 'compareValue' => 1, 'message' => 'Value must be greater than or equal to "1".']],
-            [(new CompareTo('YES')),
-                ['type' => 'string', 'operator' => '==', 'compareValue' => 'YES', 'message' => 'Value must be equal to "YES".']],
-            [(new CompareTo('YES'))->asString()->skipOnEmpty(true),
-                ['type' => 'string', 'operator' => '==', 'compareValue' => 'YES', 'skipOnEmpty' => true, 'message' => 'Value must be equal to "YES".']],
-            [(new CompareTo('YES'))->asString()->operator('!=='),
-                ['type' => 'string', 'operator' => '!==', 'compareValue' => 'YES', 'message' => 'Value must not be equal to "YES".']],
+            [
+                (new CompareTo(1)),
+                [
+                    'type' => 'string',
+                    'operator' => '==',
+                    'compareValue' => 1,
+                    'message' => 'Value must be equal to "1".',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new CompareTo(1))->asNumber(),
+                [
+                    'type' => 'number',
+                    'operator' => '==',
+                    'compareValue' => 1,
+                    'message' => 'Value must be equal to "1".',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new CompareTo(1))->asNumber()->operator('>='),
+                [
+                    'type' => 'number',
+                    'operator' => '>=',
+                    'compareValue' => 1,
+                    'message' => 'Value must be greater than or equal to "1".',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new CompareTo('YES')),
+                [
+                    'type' => 'string',
+                    'operator' => '==',
+                    'compareValue' => 'YES',
+                    'message' => 'Value must be equal to "YES".',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new CompareTo('YES'))->asString()->skipOnEmpty(true),
+                [
+                    'type' => 'string',
+                    'operator' => '==',
+                    'compareValue' => 'YES',
+                    'message' => 'Value must be equal to "YES".',
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new CompareTo('YES'))->asString()->operator('!=='),
+                [
+                    'type' => 'string',
+                    'operator' => '!==',
+                    'compareValue' => 'YES',
+                    'message' => 'Value must not be equal to "YES".',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
         ];
     }
 

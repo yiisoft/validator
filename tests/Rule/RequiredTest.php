@@ -28,7 +28,14 @@ class RequiredTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new Required()), ['message' => 'Value cannot be blank.']],
+            [
+                (new Required()),
+                [
+                    'message' => 'Value cannot be blank.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
         ];
     }
 

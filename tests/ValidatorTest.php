@@ -118,11 +118,45 @@ class ValidatorTest extends TestCase
         );
 
         $this->assertEquals([
-            'bool' => [['boolean', 'message' => 'The value must be either "1" or "0".']],
+            'bool' => [
+                [
+                    'boolean',
+                    'message' => 'The value must be either "1" or "0".',
+                    'strict' => false,
+                    'trueValue' => '1',
+                    'falseValue' => '0',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
             'int' => [
-                ['number', 'asInteger' => true, 'notANumberMessage' => 'Value must be an integer.'],
-                ['number', 'asInteger' => true, 'min' => 44, 'notANumberMessage' => 'Value must be an integer.', 'tooSmallMessage' => 'Value must be no less than 44.'],
-                ['callback'],
+                [
+                    'number',
+                    'notANumberMessage' => 'Value must be an integer.',
+                    'asInteger' => true,
+                    'min' => null,
+                    'tooSmallMessage' => 'Value must be no less than .',
+                    'max' => null,
+                    'tooBigMessage' => 'Value must be no greater than .',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+                [
+                    'number',
+                    'notANumberMessage' => 'Value must be an integer.',
+                    'asInteger' => true,
+                    'min' => 44,
+                    'tooSmallMessage' => 'Value must be no less than 44.',
+                    'max' => null,
+                    'tooBigMessage' => 'Value must be no greater than .',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+                [
+                    'callback',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
             ],
         ], $validator->asArray());
     }

@@ -55,62 +55,83 @@ class BooleanTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new Boolean()), [
-                'strict' => false,
-                'trueValue' => '1',
-                'falseValue' => '0',
-                'message' => 'The value must be either "1" or "0".',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ]],
-            [(new Boolean())->skipOnEmpty(true), [
-                'strict' => false,
-                'trueValue' => '1',
-                'falseValue' => '0',
-                'message' => 'The value must be either "1" or "0".',
-                'skipOnEmpty' => true,
-                'skipOnError' => true,
-            ]],
-            [(new Boolean())->skipOnEmpty(true)->skipOnError(false), [
-                'strict' => false,
-                'trueValue' => '1',
-                'falseValue' => '0',
-                'message' => 'The value must be either "1" or "0".',
-                'skipOnEmpty' => true,
-                'skipOnError' => false,
-            ]],
-            [(new Boolean())->skipOnEmpty(true)->skipOnError(false)->strict(true), [
-                'strict' => true,
-                'trueValue' => '1',
-                'falseValue' => '0',
-                'message' => 'The value must be either "1" or "0".',
-                'skipOnEmpty' => true,
-                'skipOnError' => false,
-            ]],
-            [(new Boolean())->trueValue('YES'), [
-                'strict' => false,
-                'trueValue' => 'YES',
-                'falseValue' => '0',
-                'message' => 'The value must be either "YES" or "0".',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ]],
-            [(new Boolean())->falseValue('NO'), [
-                'strict' => false,
-                'trueValue' => '1',
-                'falseValue' => 'NO',
-                'message' => 'The value must be either "1" or "NO".',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ]],
-            [(new Boolean())->trueValue('YES')->falseValue('NO')->strict(true), [
-                'strict' => true,
-                'trueValue' => 'YES',
-                'falseValue' => 'NO',
-                'message' => 'The value must be either "YES" or "NO".',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ]],
+            [
+                (new Boolean()),
+                [
+                    'strict' => false,
+                    'trueValue' => '1',
+                    'falseValue' => '0',
+                    'message' => 'The value must be either "1" or "0".',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Boolean())->skipOnEmpty(true),
+                [
+                    'strict' => false,
+                    'trueValue' => '1',
+                    'falseValue' => '0',
+                    'message' => 'The value must be either "1" or "0".',
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Boolean())->skipOnEmpty(true)->skipOnError(false),
+                [
+                    'strict' => false,
+                    'trueValue' => '1',
+                    'falseValue' => '0',
+                    'message' => 'The value must be either "1" or "0".',
+                    'skipOnEmpty' => true,
+                    'skipOnError' => false,
+                ]
+            ],
+            [
+                (new Boolean())->skipOnEmpty(true)->skipOnError(false)->strict(true),
+                [
+                    'strict' => true,
+                    'trueValue' => '1',
+                    'falseValue' => '0',
+                    'message' => 'The value must be either "1" or "0".',
+                    'skipOnEmpty' => true,
+                    'skipOnError' => false,
+                ]
+            ],
+            [
+                (new Boolean())->trueValue('YES'),
+                [
+                    'strict' => false,
+                    'trueValue' => 'YES',
+                    'falseValue' => '0',
+                    'message' => 'The value must be either "YES" or "0".',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Boolean())->falseValue('NO'),
+                [
+                    'strict' => false,
+                    'trueValue' => '1',
+                    'falseValue' => 'NO',
+                    'message' => 'The value must be either "1" or "NO".',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Boolean())->trueValue('YES')->falseValue('NO')->strict(true),
+                [
+                    'strict' => true,
+                    'trueValue' => 'YES',
+                    'falseValue' => 'NO',
+                    'message' => 'The value must be either "YES" or "NO".',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
         ];
     }
 

@@ -65,9 +65,11 @@ class MatchRegularExpression extends Rule
     public function getOptions(): array
     {
         return array_merge(
-            ['message' => $this->translateMessage($this->message)],
-            $this->not ? ['not' => true] : [],
-            ['pattern' => $this->pattern],
+            [
+                'message' => $this->translateMessage($this->message),
+                'not' => $this->not,
+                'pattern' => $this->pattern
+            ],
             parent::getOptions()
         );
     }

@@ -33,8 +33,26 @@ class MatchRegularExpressionTest extends TestCase
     {
         $pattern = '/^[a-zA-Z0-9](\.)?([^\/]*)$/m';
         return [
-            [(new MatchRegularExpression($pattern)), ['pattern' => $pattern, 'message' => 'Value is invalid.']],
-            [(new MatchRegularExpression($pattern))->not(), ['pattern' => $pattern, 'not' => true, 'message' => 'Value is invalid.']],
+            [
+                (new MatchRegularExpression($pattern)),
+                [
+                    'message' => 'Value is invalid.',
+                    'not' => false,
+                    'pattern' => $pattern,
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new MatchRegularExpression($pattern))->not(),
+                [
+                    'message' => 'Value is invalid.',
+                    'not' => true,
+                    'pattern' => $pattern,
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
         ];
     }
 

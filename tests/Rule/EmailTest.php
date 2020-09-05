@@ -220,12 +220,50 @@ class EmailTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new Email()), ['message' => 'This value is not a valid email address.']],
-            [(new Email())->allowName(true), ['allowName' => true, 'message' => 'This value is not a valid email address.']],
-            [(new Email())->allowName(true)->checkDNS(true),
-                ['allowName' => true, 'checkDNS' => true, 'message' => 'This value is not a valid email address.']],
-            [(new Email())->allowName(true)->enableIDN(true),
-                ['allowName' => true, 'enableIDN' => true, 'message' => 'This value is not a valid email address.']],
+            [
+                (new Email()),
+                [
+                    'allowName' => false,
+                    'checkDNS' => false,
+                    'enableIDN' => false,
+                    'message' => 'This value is not a valid email address.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Email())->allowName(true),
+                [
+                    'allowName' => true,
+                    'checkDNS' => false,
+                    'enableIDN' => false,
+                    'message' => 'This value is not a valid email address.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Email())->allowName(true)->checkDNS(true),
+                [
+                    'allowName' => true,
+                    'checkDNS' => true,
+                    'enableIDN' => false,
+                    'message' => 'This value is not a valid email address.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Email())->allowName(true)->enableIDN(true),
+                [
+                    'allowName' => true,
+                    'checkDNS' => false,
+                    'enableIDN' => true,
+                    'message' => 'This value is not a valid email address.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
         ];
     }
 

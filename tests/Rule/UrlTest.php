@@ -103,12 +103,49 @@ class UrlTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new Url()), ['message' => 'This value is not a valid URL.']],
-            [(new Url())->enableIDN(), ['enableIDN' => true, 'message' => 'This value is not a valid URL.']],
-            [(new Url())->schemes(['http']), ['validSchemes' => ['http'], 'message' => 'This value is not a valid URL.']],
+            [
+                (new Url()),
+                [
+                    'message' => 'This value is not a valid URL.',
+                    'enableIDN' => false,
+                    'validSchemes' => ['http', 'https'],
+                    'pattern' => '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Url())->enableIDN(),
+                [
+                    'message' => 'This value is not a valid URL.',
+                    'enableIDN' => true,
+                    'validSchemes' => ['http', 'https'],
+                    'pattern' => '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Url())->schemes(['http']),
+                [
+                    'message' => 'This value is not a valid URL.',
+                    'enableIDN' => false,
+                    'validSchemes' => ['http'],
+                    'pattern' => '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
             [(new Url())->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN(),
-                ['enableIDN' => true, 'pattern' => '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i',
-                    'message' => 'This value is not a valid URL.']],
+                [
+                    'message' => 'This value is not a valid URL.',
+                    'enableIDN' => true,
+                    'validSchemes' => ['http', 'https'],
+                    'pattern' => '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ]
         ];
     }
 

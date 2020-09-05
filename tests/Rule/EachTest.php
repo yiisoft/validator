@@ -49,8 +49,28 @@ class EachTest extends TestCase
         ]);
 
         $this->assertEquals([
-            ['number', 'notANumberMessage' => 'Value must be a number.', 'max' => 13, 'tooBigMessage' => 'Value must be no greater than 13.'],
-            ['number', 'notANumberMessage' => 'Value must be a number.', 'max' => 14, 'tooBigMessage' => 'Value must be no greater than 14.']
+            [
+                'number',
+                'notANumberMessage' => 'Value must be a number.',
+                'asInteger' => false,
+                'min' => null,
+                'tooSmallMessage' => 'Value must be no less than .',
+                'max' => 13,
+                'tooBigMessage' => 'Value must be no greater than 13.',
+                'skipOnEmpty' => false,
+                'skipOnError' => true,
+            ],
+            [
+                'number',
+                'notANumberMessage' => 'Value must be a number.',
+                'asInteger' => false,
+                'min' => null,
+                'tooSmallMessage' => 'Value must be no less than .',
+                'max' => 14,
+                'tooBigMessage' => 'Value must be no greater than 14.',
+                'skipOnEmpty' => false,
+                'skipOnError' => true,
+            ]
         ], (new Each($rules))->getOptions());
     }
 }

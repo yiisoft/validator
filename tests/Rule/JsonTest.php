@@ -136,7 +136,14 @@ JSON;
     public function optionsProvider(): array
     {
         return [
-            [(new Json()), ['message' => 'The value is not JSON.']],
+            [
+                (new Json()),
+                [
+                    'message' => 'The value is not JSON.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
         ];
     }
 

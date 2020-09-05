@@ -111,15 +111,58 @@ class HasLengthTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new HasLength()), ['message' => 'This value must be a string.']],
-            [(new HasLength())->min(3), ['min' => 3, 'message' => 'This value must be a string.',
-                'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.']],
-            [(new HasLength())->max(3), ['max' => 3, 'message' => 'This value must be a string.',
-                'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.']],
-            [(new HasLength())->min(3)->max(4)->encoding('windows-1251'), ['min' => 3, 'max' => 4,
-                'encoding' => 'windows-1251', 'message' => 'This value must be a string.',
-                'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
-                'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.']],
+            [
+                (new HasLength()),
+                [
+                    'message' => 'This value must be a string.',
+                    'min' => null,
+                    'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                    'max' => null,
+                    'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                    'encoding' => 'UTF-8',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new HasLength())->min(3),
+                [
+                    'message' => 'This value must be a string.',
+                    'min' => 3,
+                    'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                    'max' => null,
+                    'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                    'encoding' => 'UTF-8',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new HasLength())->max(3),
+                [
+                    'message' => 'This value must be a string.',
+                    'min' => null,
+                    'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                    'max' => 3,
+                    'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                    'encoding' => 'UTF-8',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new HasLength())->min(3)->max(4)->encoding('windows-1251'),
+                [
+                    'message' => 'This value must be a string.',
+                    'min' => 3,
+                    'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                    'max' => 4,
+                    'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                    'encoding' => 'windows-1251',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ]
         ];
     }
 

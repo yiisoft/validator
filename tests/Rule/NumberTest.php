@@ -305,12 +305,71 @@ class NumberTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new Number()), ['notANumberMessage' => 'Value must be a number.']],
-            [(new Number())->min(1), ['min' => 1, 'notANumberMessage' => 'Value must be a number.', 'tooSmallMessage' => 'Value must be no less than 1.']],
-            [(new Number())->max(1), ['max' => 1, 'notANumberMessage' => 'Value must be a number.', 'tooBigMessage' => 'Value must be no greater than 1.']],
-            [(new Number())->min(2)->max(10), ['min' => 2, 'max' => 10, 'notANumberMessage' => 'Value must be a number.',
-                'tooSmallMessage' => 'Value must be no less than 2.', 'tooBigMessage' => 'Value must be no greater than 10.']],
-            [(new Number())->integer(), ['asInteger' => true, 'notANumberMessage' => 'Value must be an integer.']],
+            [
+                (new Number()),
+                [
+                    'notANumberMessage' => 'Value must be a number.',
+                    'asInteger' => false,
+                    'min' => null,
+                    'tooSmallMessage' => 'Value must be no less than .',
+                    'max' => null,
+                    'tooBigMessage' => 'Value must be no greater than .',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Number())->min(1),
+                [
+                    'notANumberMessage' => 'Value must be a number.',
+                    'asInteger' => false,
+                    'min' => 1,
+                    'tooSmallMessage' => 'Value must be no less than 1.',
+                    'max' => null,
+                    'tooBigMessage' => 'Value must be no greater than .',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Number())->max(1),
+                [
+                    'notANumberMessage' => 'Value must be a number.',
+                    'asInteger' => false,
+                    'min' => null,
+                    'tooSmallMessage' => 'Value must be no less than .',
+                    'max' => 1,
+                    'tooBigMessage' => 'Value must be no greater than 1.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Number())->min(2)->max(10),
+                [
+                    'notANumberMessage' => 'Value must be a number.',
+                    'asInteger' => false,
+                    'min' => 2,
+                    'tooSmallMessage' => 'Value must be no less than 2.',
+                    'max' => 10,
+                    'tooBigMessage' => 'Value must be no greater than 10.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Number())->integer(),
+                [
+                    'notANumberMessage' => 'Value must be an integer.',
+                    'asInteger' => true,
+                    'min' => null,
+                    'tooSmallMessage' => 'Value must be no less than .',
+                    'max' => null,
+                    'tooBigMessage' => 'Value must be no greater than .',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
         ];
     }
 

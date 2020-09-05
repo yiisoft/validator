@@ -50,12 +50,24 @@ class CallbackTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new Callback(static function ($value) {
-                return $value;
-            })), []],
-            [(new Callback(static function ($value) {
-                return $value;
-            }))->skipOnEmpty(true), ['skipOnEmpty' => true]],
+            [
+                (new Callback(static function ($value) {
+                    return $value;
+                })),
+                [
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Callback(static function ($value) {
+                    return $value;
+                }))->skipOnEmpty(true),
+                [
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
+                ]
+            ],
         ];
     }
 

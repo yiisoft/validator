@@ -116,9 +116,39 @@ class InRangeTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [(new InRange(range(1, 10))), ['range' => range(1, 10), 'message' => 'This value is invalid.']],
-            [(new InRange(range(1, 2)))->strict(), ['range' => [1, 2], 'strict' => true, 'message' => 'This value is invalid.']],
-            [(new InRange(range(1, 2)))->not(), ['range' => [1, 2], 'not' => true, 'message' => 'This value is invalid.']],
+            [
+                (new InRange(range(1, 10))),
+                [
+                    'message' => 'This value is invalid.',
+                    'range' => range(1, 10),
+                    'strict' => false,
+                    'not' => false,
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new InRange(range(1, 2)))->strict(),
+                [
+                    'message' => 'This value is invalid.',
+                    'range' => [1, 2],
+                    'strict' => true,
+                    'not' => false,
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new InRange(range(1, 2)))->not(),
+                [
+                    'message' => 'This value is invalid.',
+                    'range' => [1, 2],
+                    'strict' => false,
+                    'not' => true,
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
         ];
     }
 
