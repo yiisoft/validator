@@ -174,16 +174,9 @@ abstract class Rule
      */
     public function getOptions(): array
     {
-        $options = [];
-
-        if ($this->skipOnEmpty) {
-            $options['skipOnEmpty'] = true;
-        }
-
-        if (!$this->skipOnError) {
-            $options['skipOnError'] = false;
-        }
-
-        return $options;
+        return [
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }
