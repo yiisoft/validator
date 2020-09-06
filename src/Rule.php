@@ -166,7 +166,10 @@ abstract class Rule
      * Returns name of class in short format, lowercase.
      * @return string
      */
-    abstract public function getName(): string;
+    public function getName(): string
+    {
+        return strtolower(basename(str_replace('\\', '/', static::class)));
+    }
 
     /**
      * Returns rule options.
