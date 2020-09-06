@@ -3,6 +3,7 @@
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Ip;
 
 /**
@@ -292,5 +293,225 @@ class IpTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Network alias "myNetworkEu" already set');
         $validator->network('myNetworkEu', ['!1.2.3.4/10', '!5.6.7.8']);
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('ip', (new Ip())->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [
+                (new Ip()),
+                [
+                    'message' => 'Must be a valid IP address.',
+                    'allowIpv4' => true,
+                    'ipv4NotAllowedMessage' => 'Must not be an IPv4 address.',
+                    'allowIpv6' => true,
+                    'ipv6NotAllowedMessage' => 'Must not be an IPv6 address.',
+                    'allowSubnet' => false,
+                    'hasSubnetMessage' => 'Must not be a subnet.',
+                    'requireSubnet' => false,
+                    'noSubnetMessage' => 'Must be an IP address with specified subnet.',
+                    'allowNegation' => false,
+                    'wrongCidrMessage' => 'Contains wrong subnet mask.',
+                    'ranges' => [],
+                    'notInRangeMessage' => 'Is not in the allowed range.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Ip())->allowIpv4(),
+                [
+                    'message' => 'Must be a valid IP address.',
+                    'allowIpv4' => true,
+                    'ipv4NotAllowedMessage' => 'Must not be an IPv4 address.',
+                    'allowIpv6' => true,
+                    'ipv6NotAllowedMessage' => 'Must not be an IPv6 address.',
+                    'allowSubnet' => false,
+                    'hasSubnetMessage' => 'Must not be a subnet.',
+                    'requireSubnet' => false,
+                    'noSubnetMessage' => 'Must be an IP address with specified subnet.',
+                    'allowNegation' => false,
+                    'wrongCidrMessage' => 'Contains wrong subnet mask.',
+                    'ranges' => [],
+                    'notInRangeMessage' => 'Is not in the allowed range.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Ip())->disallowIpv4(),
+                [
+                    'message' => 'Must be a valid IP address.',
+                    'allowIpv4' => false,
+                    'ipv4NotAllowedMessage' => 'Must not be an IPv4 address.',
+                    'allowIpv6' => true,
+                    'ipv6NotAllowedMessage' => 'Must not be an IPv6 address.',
+                    'allowSubnet' => false,
+                    'hasSubnetMessage' => 'Must not be a subnet.',
+                    'wrongCidrMessage' => 'Contains wrong subnet mask.',
+                    'requireSubnet' => false,
+                    'noSubnetMessage' => 'Must be an IP address with specified subnet.',
+                    'allowNegation' => false,
+                    'ranges' => [],
+                    'notInRangeMessage' => 'Is not in the allowed range.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Ip())->disallowIpv6(),
+                [
+                    'message' => 'Must be a valid IP address.',
+                    'allowIpv4' => true,
+                    'ipv4NotAllowedMessage' => 'Must not be an IPv4 address.',
+                    'allowIpv6' => false,
+                    'ipv6NotAllowedMessage' => 'Must not be an IPv6 address.',
+                    'allowSubnet' => false,
+                    'hasSubnetMessage' => 'Must not be a subnet.',
+                    'wrongCidrMessage' => 'Contains wrong subnet mask.',
+                    'requireSubnet' => false,
+                    'noSubnetMessage' => 'Must be an IP address with specified subnet.',
+                    'allowNegation' => false,
+                    'ranges' => [],
+                    'notInRangeMessage' => 'Is not in the allowed range.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Ip())->allowSubnet(),
+                [
+                    'message' => 'Must be a valid IP address.',
+                    'allowIpv4' => true,
+                    'ipv4NotAllowedMessage' => 'Must not be an IPv4 address.',
+                    'allowIpv6' => true,
+                    'ipv6NotAllowedMessage' => 'Must not be an IPv6 address.',
+                    'allowSubnet' => true,
+                    'hasSubnetMessage' => 'Must not be a subnet.',
+                    'wrongCidrMessage' => 'Contains wrong subnet mask.',
+                    'requireSubnet' => false,
+                    'noSubnetMessage' => 'Must be an IP address with specified subnet.',
+                    'allowNegation' => false,
+                    'ranges' => [],
+                    'notInRangeMessage' => 'Is not in the allowed range.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Ip())->requireSubnet(),
+                [
+                    'message' => 'Must be a valid IP address.',
+                    'allowIpv4' => true,
+                    'ipv4NotAllowedMessage' => 'Must not be an IPv4 address.',
+                    'allowIpv6' => true,
+                    'ipv6NotAllowedMessage' => 'Must not be an IPv6 address.',
+                    'allowSubnet' => true,
+                    'hasSubnetMessage' => 'Must not be a subnet.',
+                    'wrongCidrMessage' => 'Contains wrong subnet mask.',
+                    'requireSubnet' => true,
+                    'noSubnetMessage' => 'Must be an IP address with specified subnet.',
+                    'allowNegation' => false,
+                    'ranges' => [],
+                    'notInRangeMessage' => 'Is not in the allowed range.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Ip())->requireSubnet()->disallowSubnet(),
+                [
+                    'message' => 'Must be a valid IP address.',
+                    'allowIpv4' => true,
+                    'ipv4NotAllowedMessage' => 'Must not be an IPv4 address.',
+                    'allowIpv6' => true,
+                    'ipv6NotAllowedMessage' => 'Must not be an IPv6 address.',
+                    'allowSubnet' => false,
+                    'hasSubnetMessage' => 'Must not be a subnet.',
+                    'wrongCidrMessage' => 'Contains wrong subnet mask.',
+                    'requireSubnet' => false,
+                    'noSubnetMessage' => 'Must be an IP address with specified subnet.',
+                    'allowNegation' => false,
+                    'ranges' => [],
+                    'notInRangeMessage' => 'Is not in the allowed range.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [(new Ip())->allowNegation(),
+                [
+                    'message' => 'Must be a valid IP address.',
+                    'allowIpv4' => true,
+                    'ipv4NotAllowedMessage' => 'Must not be an IPv4 address.',
+                    'allowIpv6' => true,
+                    'ipv6NotAllowedMessage' => 'Must not be an IPv6 address.',
+                    'allowSubnet' => false,
+                    'hasSubnetMessage' => 'Must not be a subnet.',
+                    'wrongCidrMessage' => 'Contains wrong subnet mask.',
+                    'requireSubnet' => false,
+                    'noSubnetMessage' => 'Must be an IP address with specified subnet.',
+                    'allowNegation' => true,
+                    'ranges' => [],
+                    'notInRangeMessage' => 'Is not in the allowed range.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Ip())->allowNegation()->disallowNegation(),
+                [
+                    'message' => 'Must be a valid IP address.',
+                    'allowIpv4' => true,
+                    'ipv4NotAllowedMessage' => 'Must not be an IPv4 address.',
+                    'allowIpv6' => true,
+                    'ipv6NotAllowedMessage' => 'Must not be an IPv6 address.',
+                    'allowSubnet' => false,
+                    'hasSubnetMessage' => 'Must not be a subnet.',
+                    'wrongCidrMessage' => 'Contains wrong subnet mask.',
+                    'requireSubnet' => false,
+                    'noSubnetMessage' => 'Must be an IP address with specified subnet.',
+                    'allowNegation' => false,
+                    'ranges' => [],
+                    'notInRangeMessage' => 'Is not in the allowed range.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Ip())->ranges(['private']),
+                [
+                    'message' => 'Must be a valid IP address.',
+                    'allowIpv4' => true,
+                    'ipv4NotAllowedMessage' => 'Must not be an IPv4 address.',
+                    'allowIpv6' => true,
+                    'ipv6NotAllowedMessage' => 'Must not be an IPv6 address.',
+                    'allowSubnet' => false,
+                    'hasSubnetMessage' => 'Must not be a subnet.',
+                    'wrongCidrMessage' => 'Contains wrong subnet mask.',
+                    'requireSubnet' => false,
+                    'noSubnetMessage' => 'Must be an IP address with specified subnet.',
+                    'allowNegation' => false,
+                    'ranges' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
+                    'notInRangeMessage' => 'Is not in the allowed range.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

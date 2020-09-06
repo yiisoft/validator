@@ -39,4 +39,9 @@ class Callback extends Rule
         }
         return $result;
     }
+
+    public function getName(): string
+    {
+        return 'callback';
+    }
 }

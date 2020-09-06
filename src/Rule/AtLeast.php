@@ -76,4 +76,18 @@ class AtLeast extends Rule
         $new->min = $value;
         return $new;
     }
+
+    public function getName(): string
+    {
+        return 'atLeast';
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            ['min' => $this->min],
+            ['message' => $this->translateMessage($this->message, ['min' => $this->min])],
+        );
+    }
 }

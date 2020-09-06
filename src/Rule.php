@@ -161,4 +161,28 @@ abstract class Rule
     {
         return $value === null || $value === [] || $value === '';
     }
+
+    /**
+     * Get name of the rule to be used when rule is converted to array.
+     * By default it returns base name of the class, first letter in lowercase.
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        $className = static::class;
+        return lcfirst(substr($className, strrpos($className, '\\') + 1));
+    }
+
+    /**
+     * Returns rule options as array.
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return [
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
+    }
 }

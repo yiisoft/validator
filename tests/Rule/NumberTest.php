@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Exception\MissingAttributeException;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule;
 
 /**
  * @group validators
@@ -294,5 +295,91 @@ class NumberTest extends TestCase
         if (is_resource($fp)) {
             fclose($fp);
         }
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('number', (new Number())->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [
+                (new Number()),
+                [
+                    'notANumberMessage' => 'Value must be a number.',
+                    'asInteger' => false,
+                    'min' => null,
+                    'tooSmallMessage' => 'Value must be no less than .',
+                    'max' => null,
+                    'tooBigMessage' => 'Value must be no greater than .',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Number())->min(1),
+                [
+                    'notANumberMessage' => 'Value must be a number.',
+                    'asInteger' => false,
+                    'min' => 1,
+                    'tooSmallMessage' => 'Value must be no less than 1.',
+                    'max' => null,
+                    'tooBigMessage' => 'Value must be no greater than .',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Number())->max(1),
+                [
+                    'notANumberMessage' => 'Value must be a number.',
+                    'asInteger' => false,
+                    'min' => null,
+                    'tooSmallMessage' => 'Value must be no less than .',
+                    'max' => 1,
+                    'tooBigMessage' => 'Value must be no greater than 1.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Number())->min(2)->max(10),
+                [
+                    'notANumberMessage' => 'Value must be a number.',
+                    'asInteger' => false,
+                    'min' => 2,
+                    'tooSmallMessage' => 'Value must be no less than 2.',
+                    'max' => 10,
+                    'tooBigMessage' => 'Value must be no greater than 10.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            [
+                (new Number())->integer(),
+                [
+                    'notANumberMessage' => 'Value must be an integer.',
+                    'asInteger' => true,
+                    'min' => null,
+                    'tooSmallMessage' => 'Value must be no less than .',
+                    'max' => null,
+                    'tooBigMessage' => 'Value must be no greater than .',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

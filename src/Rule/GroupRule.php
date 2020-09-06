@@ -34,4 +34,9 @@ abstract class GroupRule extends Rule
      * @return Rules
      */
     abstract protected function getRules(): Rules;
+
+    public function getOptions(): array
+    {
+        return $this->getRules()->asArray();
+    }
 }

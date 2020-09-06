@@ -50,4 +50,19 @@ REGEX;
 
         return is_string($value) && preg_match($regex, $value) === 1;
     }
+
+    public function getName(): string
+    {
+        return 'json';
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'message' => $this->translateMessage($this->message),
+            ],
+        );
+    }
 }

@@ -114,4 +114,24 @@ class Number extends Rule
         }
         return 'Value must be a number.';
     }
+
+    public function getName(): string
+    {
+        return 'number';
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'notANumberMessage' => $this->translateMessage($this->getNotANumberMessage()),
+                'asInteger' => $this->asInteger,
+                'min' => $this->min,
+                'tooSmallMessage' => $this->translateMessage($this->tooSmallMessage, ['min' => $this->min]),
+                'max' => $this->max,
+                'tooBigMessage' => $this->translateMessage($this->tooBigMessage, ['max' => $this->max]),
+            ],
+        );
+    }
 }

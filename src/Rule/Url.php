@@ -114,4 +114,22 @@ class Url extends Rule
         $new->validSchemes = $schemes;
         return $new;
     }
+
+    public function getName(): string
+    {
+        return 'url';
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'message' => $this->translateMessage($this->message),
+                'enableIDN' => $this->enableIDN,
+                'validSchemes' => $this->validSchemes,
+                'pattern' => $this->pattern,
+            ],
+        );
+    }
 }

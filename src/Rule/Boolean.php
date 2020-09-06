@@ -77,4 +77,28 @@ class Boolean extends Rule
 
         return $result;
     }
+
+    public function getName(): string
+    {
+        return 'boolean';
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'strict' => $this->strict,
+                'trueValue' => $this->trueValue,
+                'falseValue' => $this->falseValue,
+                'message' => $this->translateMessage(
+                    $this->message,
+                    [
+                        'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                        'false' => $this->falseValue === false ? 'false' : $this->falseValue
+                    ]
+                )
+            ],
+        );
+    }
 }

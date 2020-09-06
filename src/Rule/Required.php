@@ -28,4 +28,19 @@ class Required extends Rule
 
         return $result;
     }
+
+    public function getName(): string
+    {
+        return 'required';
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'message' => $this->translateMessage($this->message)
+            ],
+        );
+    }
 }

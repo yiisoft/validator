@@ -61,4 +61,14 @@ class Each extends Rule
         $new->incorrectInputMessage = $message;
         return $new;
     }
+
+    public function getName(): string
+    {
+        return 'each';
+    }
+
+    public function getOptions(): array
+    {
+        return $this->rules->asArray();
+    }
 }

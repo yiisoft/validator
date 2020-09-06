@@ -126,4 +126,22 @@ class Email extends Rule
         $new->enableIDN = $enableIDN;
         return $new;
     }
+
+    public function getName(): string
+    {
+        return 'email';
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'allowName' => $this->allowName,
+                'checkDNS' => $this->checkDNS,
+                'enableIDN' => $this->enableIDN,
+                'message' => $this->translateMessage($this->message)
+            ],
+        );
+    }
 }

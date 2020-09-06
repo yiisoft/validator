@@ -56,4 +56,21 @@ class MatchRegularExpression extends Rule
         $new->not = true;
         return $new;
     }
+
+    public function getName(): string
+    {
+        return 'matchRegularExpression';
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'message' => $this->translateMessage($this->message),
+                'not' => $this->not,
+                'pattern' => $this->pattern
+            ],
+        );
+    }
 }

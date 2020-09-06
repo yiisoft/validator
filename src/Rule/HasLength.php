@@ -51,7 +51,7 @@ class HasLength extends Rule
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($this->message);
+            $result->addError($this->translateMessage($this->message));
             return $result;
         }
 
@@ -61,7 +61,7 @@ class HasLength extends Rule
             $result->addError($this->translateMessage($this->tooShortMessage, ['min' => $this->min]));
         }
         if ($this->max !== null && $length > $this->max) {
-            $result->addError($this->translateMessage($this->tooLongMessage, ['min' => $this->max]));
+            $result->addError($this->translateMessage($this->tooLongMessage, ['max' => $this->max]));
         }
 
         return $result;
@@ -100,5 +100,25 @@ class HasLength extends Rule
         $new = clone $this;
         $new->tooLongMessage = $message;
         return $new;
+    }
+
+    public function getName(): string
+    {
+        return 'hasLength';
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'message' => $this->translateMessage($this->message),
+                'min' => $this->min,
+                'tooShortMessage' => $this->translateMessage($this->tooShortMessage, ['min' => $this->min]),
+                'max' => $this->max,
+                'tooLongMessage' => $this->translateMessage($this->tooLongMessage, ['max' => $this->max]),
+                'encoding' => $this->encoding,
+            ],
+        );
     }
 }

@@ -454,4 +454,31 @@ class Ip extends Rule
             '/'
         ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
+
+    public function getName(): string
+    {
+        return 'ip';
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'message' => $this->translateMessage($this->message),
+                'allowIpv4' => $this->allowIpv4,
+                'ipv4NotAllowedMessage' => $this->translateMessage($this->ipv4NotAllowed),
+                'allowIpv6' => $this->allowIpv6,
+                'ipv6NotAllowedMessage' => $this->translateMessage($this->ipv6NotAllowed),
+                'allowSubnet' => $this->allowSubnet,
+                'hasSubnetMessage' => $this->translateMessage($this->hasSubnet),
+                'requireSubnet' => $this->requireSubnet,
+                'noSubnetMessage' => $this->translateMessage($this->noSubnet),
+                'allowNegation' => $this->allowNegation,
+                'wrongCidrMessage' => $this->translateMessage($this->wrongCidr),
+                'ranges' => $this->ranges,
+                'notInRangeMessage' => $this->translateMessage($this->notInRange)
+            ],
+        );
+    }
 }
