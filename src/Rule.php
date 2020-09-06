@@ -163,7 +163,9 @@ abstract class Rule
     }
 
     /**
-     * Returns name of class in short format, lowercase.
+     * Get name of the rule to be used when rule is converted to array.
+     * By default it returns base name of the class, lowercase.
+     *
      * @return string
      */
     public function getName(): string
@@ -173,7 +175,7 @@ abstract class Rule
     }
 
     /**
-     * Returns rule options.
+     * Returns rule options as array.
      * @return array
      */
     public function getOptions(): array
