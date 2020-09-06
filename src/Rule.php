@@ -168,7 +168,8 @@ abstract class Rule
      */
     public function getName(): string
     {
-        return strtolower(basename(str_replace('\\', '/', static::class)));
+        $className = static::class;
+        return lcfirst(substr($className, strrpos($className, '\\') + 1));
     }
 
     /**
