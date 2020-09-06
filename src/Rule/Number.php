@@ -115,16 +115,6 @@ class Number extends Rule
         return 'Value must be a number.';
     }
 
-    /**
-     * @param mixed $value the data value to be checked.
-     */
-    private function isNotNumber($value): bool
-    {
-        return is_array($value)
-            || (is_object($value) && !method_exists($value, '__toString'))
-            || (!is_object($value) && !is_scalar($value) && $value !== null);
-    }
-
     public function getName(): string
     {
         return 'number';
