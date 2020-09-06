@@ -133,6 +133,7 @@ class Number extends Rule
     public function getOptions(): array
     {
         return array_merge(
+            parent::getOptions(),
             [
                 'notANumberMessage' => $this->translateMessage($this->getNotANumberMessage()),
                 'asInteger' => $this->asInteger,
@@ -141,7 +142,6 @@ class Number extends Rule
                 'max' => $this->max,
                 'tooBigMessage' => $this->translateMessage($this->tooBigMessage, ['max' => $this->max]),
             ],
-            parent::getOptions()
         );
     }
 }

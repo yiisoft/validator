@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
 class RulesTest extends TestCase
 {
@@ -201,6 +202,51 @@ class RulesTest extends TestCase
                 'tooBigMessage' => 'Value must be no greater than .',
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
+            ],
+        ], $rules->asArray());
+    }
+
+    public function testAsArrayWithGroupRule(): void
+    {
+        $rules = new Rules();
+        $rules->add(new Required());
+        $rules->add(new CustomUrlRule());
+
+        $this->assertEquals([
+            [
+                'required',
+                'message' => 'Value cannot be blank.',
+                'skipOnEmpty' => false,
+                'skipOnError' => true,
+            ],
+            [
+                'customUrlRule',
+                [
+                    'required',
+                    'message' => 'Value cannot be blank.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+                [
+                    'url',
+                    'message' => 'This value is not a valid URL.',
+                    'enableIDN' => true,
+                    'validSchemes' => ['http', 'https',],
+                    'pattern' => '/^{schemes}:\\/\\/(([A-Z0-9][A-Z0-9_-]*)(\\.[A-Z0-9][A-Z0-9_-]*)+)(?::\\d{1,5})?(?:$|[?\\/#])/i',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+                [
+                    'hasLength',
+                    'message' => 'This value must be a string.',
+                    'min' => null,
+                    'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                    'max' => 20,
+                    'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                    'encoding' => 'UTF-8',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
             ],
         ], $rules->asArray());
     }

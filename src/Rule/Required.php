@@ -37,10 +37,10 @@ class Required extends Rule
     public function getOptions(): array
     {
         return array_merge(
+            parent::getOptions(),
             [
                 'message' => $this->translateMessage($this->message)
             ],
-            parent::getOptions()
         );
     }
 }

@@ -135,13 +135,13 @@ class Email extends Rule
     public function getOptions(): array
     {
         return array_merge(
+            parent::getOptions(),
             [
                 'allowName' => $this->allowName,
                 'checkDNS' => $this->checkDNS,
                 'enableIDN' => $this->enableIDN,
                 'message' => $this->translateMessage($this->message)
             ],
-            parent::getOptions()
         );
     }
 }

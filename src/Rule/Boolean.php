@@ -86,6 +86,7 @@ class Boolean extends Rule
     public function getOptions(): array
     {
         return array_merge(
+            parent::getOptions(),
             [
                 'strict' => $this->strict,
                 'trueValue' => $this->trueValue,
@@ -98,7 +99,6 @@ class Boolean extends Rule
                     ]
                 )
             ],
-            parent::getOptions()
         );
     }
 }

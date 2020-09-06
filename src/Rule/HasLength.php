@@ -110,6 +110,7 @@ class HasLength extends Rule
     public function getOptions(): array
     {
         return array_merge(
+            parent::getOptions(),
             [
                 'message' => $this->translateMessage($this->message),
                 'min' => $this->min,
@@ -118,7 +119,6 @@ class HasLength extends Rule
                 'tooLongMessage' => $this->translateMessage($this->tooLongMessage, ['max' => $this->max]),
                 'encoding' => $this->encoding,
             ],
-            parent::getOptions()
         );
     }
 }

@@ -10,6 +10,8 @@ use Yiisoft\Validator\Exception\MissingAttributeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 use Yiisoft\Validator\Validator;
 
 class ValidatorTest extends TestCase
@@ -38,6 +40,18 @@ class ValidatorTest extends TestCase
                 return isset($this->data[$attribute]);
             }
         };
+    }
+
+    public function testThrowExceptionWithInvalidRule(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Attribute rules should be either an instance of Rule class or an array of instances of Rule class.');
+
+        $validator = new Validator(
+            [
+                'bool' => 'Invalid argument',
+            ]
+        );
     }
 
     public function testAddingRulesViaConstructor(): void
@@ -156,6 +170,70 @@ class ValidatorTest extends TestCase
                     'callback',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
+                ],
+            ],
+        ], $validator->asArray());
+    }
+
+    public function testAsArrayWithGroupRule(): void
+    {
+        $validator = new Validator(
+            [
+                'bool' => (new Boolean()),
+                'int' => [
+                    new Required(),
+                    new CustomUrlRule()
+                ],
+            ]
+        );
+
+        $this->assertEquals([
+            'bool' => [
+                [
+                    'boolean',
+                    'message' => 'The value must be either "1" or "0".',
+                    'strict' => false,
+                    'trueValue' => '1',
+                    'falseValue' => '0',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ]
+            ],
+            'int' => [
+                [
+                    'required',
+                    'message' => 'Value cannot be blank.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+                [
+                    'customUrlRule',
+                    [
+                        'required',
+                        'message' => 'Value cannot be blank.',
+                        'skipOnEmpty' => false,
+                        'skipOnError' => true,
+                    ],
+                    [
+                        'url',
+                        'message' => 'This value is not a valid URL.',
+                        'enableIDN' => true,
+                        'validSchemes' => ['http', 'https',],
+                        'pattern' => '/^{schemes}:\\/\\/(([A-Z0-9][A-Z0-9_-]*)(\\.[A-Z0-9][A-Z0-9_-]*)+)(?::\\d{1,5})?(?:$|[?\\/#])/i',
+                        'skipOnEmpty' => false,
+                        'skipOnError' => true,
+                    ],
+                    [
+                        'hasLength',
+                        'message' => 'This value must be a string.',
+                        'min' => null,
+                        'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                        'max' => 20,
+                        'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                        'encoding' => 'UTF-8',
+                        'skipOnEmpty' => false,
+                        'skipOnError' => true,
+                    ],
                 ],
             ],
         ], $validator->asArray());

@@ -85,9 +85,9 @@ class AtLeast extends Rule
     public function getOptions(): array
     {
         return array_merge(
+            parent::getOptions(),
             ['min' => $this->min],
             ['message' => $this->translateMessage($this->message, ['min' => $this->min])],
-            parent::getOptions()
         );
     }
 }

@@ -123,13 +123,13 @@ class Url extends Rule
     public function getOptions(): array
     {
         return array_merge(
+            parent::getOptions(),
             [
                 'message' => $this->translateMessage($this->message),
                 'enableIDN' => $this->enableIDN,
                 'validSchemes' => $this->validSchemes,
                 'pattern' => $this->pattern,
             ],
-            parent::getOptions()
         );
     }
 }

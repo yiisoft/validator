@@ -91,13 +91,13 @@ class InRange extends Rule
     public function getOptions(): array
     {
         return array_merge(
+            parent::getOptions(),
             [
                 'message' => $this->translateMessage($this->message),
                 'range' => $this->range,
                 'strict' => $this->strict,
                 'not' => $this->not,
             ],
-            parent::getOptions()
         );
     }
 }
