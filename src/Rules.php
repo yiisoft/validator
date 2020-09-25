@@ -9,7 +9,7 @@ use Yiisoft\Validator\Rule\Callback;
 /**
  * Rules represents multiple rules for a single value
  */
-final class Rules
+final class Rules implements Validateable
 {
     /**
      * @var Rule[]
