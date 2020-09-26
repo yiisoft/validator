@@ -63,7 +63,7 @@ class RulesTest extends TestCase
         $rules = new Rules(
             [
                 (new Number())->min(10),
-                (new Number())->min(10)->when(fn () => false)->skipOnError(false),
+                (new Number())->min(10)->when(fn() => false)->skipOnError(false),
                 (new Number())->min(10)->skipOnError(false)
             ]
         );
@@ -88,6 +88,37 @@ class RulesTest extends TestCase
 
         $this->assertFalse($result->isValid());
         $this->assertCount(2, $result->getErrors());
+    }
+
+    public function testSkipOnErrorGroup(): void
+    {
+        $rules = new Rules(
+            [
+                (new Number())->min(10),
+                (new Number())->min(10),
+                (new Number())->min(10)
+            ]
+        );
+
+        $result = $rules->skipOnError(false)->validate(1);
+
+        $this->assertFalse($result->isValid());
+        $this->assertCount(3, $result->getErrors());
+    }
+
+    public function testSkipOnEmptyGroup(): void
+    {
+        $rules = new Rules(
+            [
+                (new Number())->min(10),
+                (new Number())->max(100)
+            ]
+        );
+
+        $result = $rules->skipOnEmpty(true)->validate('');
+
+        $this->assertTrue($result->isValid());
+        $this->assertCount(0, $result->getErrors());
     }
 
     public function testAsArray(): void

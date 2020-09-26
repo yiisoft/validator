@@ -7,10 +7,9 @@ namespace Yiisoft\Validator;
 /**
  * Rule represents a single value validation rule.
  */
-abstract class Rule implements Validateable
+abstract class Rule implements RuleInterface
 {
-    private bool $skipOnEmpty = false;
-    private bool $skipOnError = true;
+    use SkippableTrait, ValueTrait;
 
     /**
      * @var callable|null
@@ -74,36 +73,6 @@ abstract class Rule implements Validateable
         $new = clone $this;
         $new->when = $callback;
         return $new;
-    }
-
-    public function skipOnError(bool $value): self
-    {
-        $new = clone $this;
-        $new->skipOnError = $value;
-        return $new;
-    }
-
-    /**
-     * @param bool $value if validation should be skipped if value validated is empty
-     * @return self
-     */
-    public function skipOnEmpty(bool $value): self
-    {
-        $new = clone $this;
-        $new->skipOnEmpty = $value;
-        return $new;
-    }
-
-    /**
-     * Checks if the given value is empty.
-     * A value is considered empty if it is null, an empty array, or an empty string.
-     * Note that this method is different from PHP empty(). It will return false when the value is 0.
-     * @param mixed $value the value to be checked
-     * @return bool whether the value is empty
-     */
-    protected function isEmpty($value): bool
-    {
-        return $value === null || $value === [] || $value === '';
     }
 
     /**

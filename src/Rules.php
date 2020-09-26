@@ -9,8 +9,10 @@ use Yiisoft\Validator\Rule\Callback;
 /**
  * Rules represents multiple rules for a single value
  */
-final class Rules implements Validateable
+final class Rules implements RuleInterface
 {
+    use SkippableTrait, ValueTrait;
+
     /**
      * @var Rule[]
      */
@@ -18,6 +20,7 @@ final class Rules implements Validateable
 
     public function __construct(iterable $rules = [])
     {
+        $this->resetSkipOptions();
         foreach ($rules as $rule) {
             $this->add($rule);
         }
@@ -35,7 +38,7 @@ final class Rules implements Validateable
     {
         $compoundResult = new Result();
         foreach ($this->rules as $rule) {
-            $ruleResult = $rule->validate($value, $dataSet, $previousRulesErrored);
+            $ruleResult = $this->mutateRule($rule)->validate($value, $dataSet, $previousRulesErrored);
             if ($ruleResult->isValid() === false) {
                 $previousRulesErrored = true;
                 foreach ($ruleResult->getErrors() as $message) {
@@ -57,6 +60,30 @@ final class Rules implements Validateable
         }
 
         return $rule;
+    }
+
+    /**
+     * Apply composite options to each rule in composite.
+     * @param Rule $rule
+     * @return Rule
+     */
+    private function mutateRule(Rule $rule)
+    {
+        if ($this->skipOnError !== null) {
+            $rule = $rule->skipOnError($this->skipOnError);
+        }
+
+        if ($this->skipOnEmpty !== null) {
+            $rule = $rule->skipOnEmpty($this->skipOnEmpty);
+        }
+
+        return $rule;
+    }
+
+    private function resetSkipOptions(): void
+    {
+        $this->skipOnEmpty = null;
+        $this->skipOnError = null;
     }
 
     /**
