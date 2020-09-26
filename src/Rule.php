@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\I18n\TranslatorInterface;
-
 /**
  * Rule represents a single value validation rule.
  */
 abstract class Rule implements Validateable
 {
-    private ?TranslatorInterface $translator = null;
-    private ?string $translationDomain = null;
-    private ?string $translationLocale = null;
     private bool $skipOnEmpty = false;
     private bool $skipOnError = true;
 
@@ -37,8 +32,8 @@ abstract class Rule implements Validateable
         }
 
         if (
-          ($this->skipOnError && $previousRulesErrored) ||
-          (is_callable($this->when) && !call_user_func($this->when, $value, $dataSet))
+            ($this->skipOnError && $previousRulesErrored) ||
+            (is_callable($this->when) && !call_user_func($this->when, $value, $dataSet))
         ) {
             return new Result();
         }
@@ -55,41 +50,6 @@ abstract class Rule implements Validateable
      */
     abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
 
-    public function translator(TranslatorInterface $translator): self
-    {
-        $new = clone $this;
-        $new->translator = $translator;
-        return $new;
-    }
-
-    public function translationDomain(string $translation): self
-    {
-        $new = clone $this;
-        $new->translationDomain = $translation;
-        return $new;
-    }
-
-    public function translationLocale(string $locale): self
-    {
-        $new = clone $this;
-        $new->translationLocale = $locale;
-        return $new;
-    }
-
-    protected function translateMessage(string $message, array $parameters = []): string
-    {
-        if ($this->translator === null) {
-            return $this->formatMessage($message, $parameters);
-        }
-
-        return $this->translator->translate(
-            $message,
-            $parameters,
-            $this->translationDomain ?? 'validators',
-            $this->translationLocale
-        );
-    }
-
     /**
      * Add a PHP callable whose return value determines whether this rule should be applied.
      * By default rule will be always applied.
@@ -102,8 +62,8 @@ abstract class Rule implements Validateable
      *
      * ```php
      * function ($value, DataSetInterface $dataSet) {
-         return $dataSet->getAttributeValue('country') === Country::USA;
-     }
+     * return $dataSet->getAttributeValue('country') === Country::USA;
+     * }
      * ```
      *
      * @param callable $callback
@@ -132,22 +92,6 @@ abstract class Rule implements Validateable
         $new = clone $this;
         $new->skipOnEmpty = $value;
         return $new;
-    }
-
-    private function formatMessage(string $message, array $arguments = []): string
-    {
-        $replacements = [];
-        foreach ($arguments as $key => $value) {
-            if (is_array($value)) {
-                $value = 'array';
-            } elseif (is_object($value)) {
-                $value = 'object';
-            } elseif (is_resource($value)) {
-                $value = 'resource';
-            }
-            $replacements['{' . $key . '}'] = $value;
-        }
-        return strtr($message, $replacements);
     }
 
     /**

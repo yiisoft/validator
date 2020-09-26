@@ -61,7 +61,7 @@ class BooleanTest extends TestCase
                     'strict' => false,
                     'trueValue' => '1',
                     'falseValue' => '0',
-                    'message' => 'The value must be either "1" or "0".',
+                    'message' => 'The value must be either "{true}" or "{false}".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ]
@@ -72,7 +72,7 @@ class BooleanTest extends TestCase
                     'strict' => false,
                     'trueValue' => '1',
                     'falseValue' => '0',
-                    'message' => 'The value must be either "1" or "0".',
+                    'message' => 'The value must be either "{true}" or "{false}".',
                     'skipOnEmpty' => true,
                     'skipOnError' => true,
                 ]
@@ -83,7 +83,7 @@ class BooleanTest extends TestCase
                     'strict' => false,
                     'trueValue' => '1',
                     'falseValue' => '0',
-                    'message' => 'The value must be either "1" or "0".',
+                    'message' => 'The value must be either "{true}" or "{false}".',
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
                 ]
@@ -94,7 +94,7 @@ class BooleanTest extends TestCase
                     'strict' => true,
                     'trueValue' => '1',
                     'falseValue' => '0',
-                    'message' => 'The value must be either "1" or "0".',
+                    'message' => 'The value must be either "{true}" or "{false}".',
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
                 ]
@@ -105,7 +105,7 @@ class BooleanTest extends TestCase
                     'strict' => false,
                     'trueValue' => 'YES',
                     'falseValue' => '0',
-                    'message' => 'The value must be either "YES" or "0".',
+                    'message' => 'The value must be either "{true}" or "{false}".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ]
@@ -116,7 +116,7 @@ class BooleanTest extends TestCase
                     'strict' => false,
                     'trueValue' => '1',
                     'falseValue' => 'NO',
-                    'message' => 'The value must be either "1" or "NO".',
+                    'message' => 'The value must be either "{true}" or "{false}".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ]
@@ -127,7 +127,7 @@ class BooleanTest extends TestCase
                     'strict' => true,
                     'trueValue' => 'YES',
                     'falseValue' => 'NO',
-                    'message' => 'The value must be either "YES" or "NO".',
+                    'message' => 'The value must be either "{true}" or "{false}".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ]

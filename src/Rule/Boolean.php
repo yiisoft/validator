@@ -65,13 +65,11 @@ class Boolean extends Rule
 
         if (!$valid) {
             $result->addError(
-                $this->translateMessage(
-                    $this->message,
-                    [
-                        'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                        'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                    ]
-                )
+                $this->message,
+                [
+                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+                ]
             );
         }
 
@@ -91,13 +89,7 @@ class Boolean extends Rule
                 'strict' => $this->strict,
                 'trueValue' => $this->trueValue,
                 'falseValue' => $this->falseValue,
-                'message' => $this->translateMessage(
-                    $this->message,
-                    [
-                        'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                        'false' => $this->falseValue === false ? 'false' : $this->falseValue
-                    ]
-                )
+                'message' => $this->message,
             ],
         );
     }

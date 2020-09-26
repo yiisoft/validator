@@ -63,7 +63,7 @@ class InRange extends Rule
         $result = new Result();
 
         if ($this->not === $in) {
-            $result->addError($this->translateMessage($this->message));
+            $result->addError($this->message);
         }
 
         return $result;
@@ -93,7 +93,7 @@ class InRange extends Rule
         return array_merge(
             parent::getOptions(),
             [
-                'message' => $this->translateMessage($this->message),
+                'message' => $this->message,
                 'range' => $this->range,
                 'strict' => $this->strict,
                 'not' => $this->not,

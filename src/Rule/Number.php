@@ -55,18 +55,18 @@ class Number extends Rule
         $result = new Result();
 
         if (!is_scalar($value)) {
-            $result->addError($this->translateMessage($this->getNotANumberMessage(), ['value' => $value]));
+            $result->addError($this->getNotANumberMessage(), ['value' => $value]);
             return $result;
         }
 
         $pattern = $this->asInteger ? $this->integerPattern : $this->numberPattern;
 
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
-            $result->addError($this->translateMessage($this->getNotANumberMessage(), ['value' => $value]));
+            $result->addError($this->getNotANumberMessage(), ['value' => $value]);
         } elseif ($this->min !== null && $value < $this->min) {
-            $result->addError($this->translateMessage($this->tooSmallMessage, ['min' => $this->min]));
+            $result->addError($this->tooSmallMessage, ['min' => $this->min]);
         } elseif ($this->max !== null && $value > $this->max) {
-            $result->addError($this->translateMessage($this->tooBigMessage, ['max' => $this->max]));
+            $result->addError($this->tooBigMessage, ['max' => $this->max]);
         }
 
         return $result;
@@ -125,12 +125,12 @@ class Number extends Rule
         return array_merge(
             parent::getOptions(),
             [
-                'notANumberMessage' => $this->translateMessage($this->getNotANumberMessage()),
+                'notANumberMessage' => $this->getNotANumberMessage(),
                 'asInteger' => $this->asInteger,
                 'min' => $this->min,
-                'tooSmallMessage' => $this->translateMessage($this->tooSmallMessage, ['min' => $this->min]),
+                'tooSmallMessage' => $this->tooSmallMessage,
                 'max' => $this->max,
-                'tooBigMessage' => $this->translateMessage($this->tooBigMessage, ['max' => $this->max]),
+                'tooBigMessage' => $this->tooBigMessage,
             ],
         );
     }

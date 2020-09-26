@@ -91,7 +91,7 @@ class CompareToTest extends TestCase
                     'type' => 'string',
                     'operator' => '==',
                     'compareValue' => 1,
-                    'message' => 'Value must be equal to "1".',
+                    'message' => 'Value must be equal to "{value}".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ]
@@ -102,7 +102,7 @@ class CompareToTest extends TestCase
                     'type' => 'number',
                     'operator' => '==',
                     'compareValue' => 1,
-                    'message' => 'Value must be equal to "1".',
+                    'message' => 'Value must be equal to "{value}".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ]
@@ -113,7 +113,7 @@ class CompareToTest extends TestCase
                     'type' => 'number',
                     'operator' => '>=',
                     'compareValue' => 1,
-                    'message' => 'Value must be greater than or equal to "1".',
+                    'message' => 'Value must be greater than or equal to "{value}".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ]
@@ -124,7 +124,7 @@ class CompareToTest extends TestCase
                     'type' => 'string',
                     'operator' => '==',
                     'compareValue' => 'YES',
-                    'message' => 'Value must be equal to "YES".',
+                    'message' => 'Value must be equal to "{value}".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ]
@@ -135,7 +135,7 @@ class CompareToTest extends TestCase
                     'type' => 'string',
                     'operator' => '==',
                     'compareValue' => 'YES',
-                    'message' => 'Value must be equal to "YES".',
+                    'message' => 'Value must be equal to "{value}".',
                     'skipOnEmpty' => true,
                     'skipOnError' => true,
                 ]
@@ -146,7 +146,7 @@ class CompareToTest extends TestCase
                     'type' => 'string',
                     'operator' => '!==',
                     'compareValue' => 'YES',
-                    'message' => 'Value must not be equal to "YES".',
+                    'message' => 'Value must not be equal to "{value}".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ]

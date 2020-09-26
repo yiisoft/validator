@@ -135,7 +135,7 @@ class ValidatorTest extends TestCase
             'bool' => [
                 [
                     'boolean',
-                    'message' => 'The value must be either "1" or "0".',
+                    'message' => 'The value must be either "{true}" or "{false}".',
                     'strict' => false,
                     'trueValue' => '1',
                     'falseValue' => '0',
@@ -149,9 +149,9 @@ class ValidatorTest extends TestCase
                     'notANumberMessage' => 'Value must be an integer.',
                     'asInteger' => true,
                     'min' => null,
-                    'tooSmallMessage' => 'Value must be no less than .',
+                    'tooSmallMessage' => 'Value must be no less than {min}.',
                     'max' => null,
-                    'tooBigMessage' => 'Value must be no greater than .',
+                    'tooBigMessage' => 'Value must be no greater than {max}.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ],
@@ -160,9 +160,9 @@ class ValidatorTest extends TestCase
                     'notANumberMessage' => 'Value must be an integer.',
                     'asInteger' => true,
                     'min' => 44,
-                    'tooSmallMessage' => 'Value must be no less than 44.',
+                    'tooSmallMessage' => 'Value must be no less than {min}.',
                     'max' => null,
-                    'tooBigMessage' => 'Value must be no greater than .',
+                    'tooBigMessage' => 'Value must be no greater than {max}.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ],
@@ -191,7 +191,7 @@ class ValidatorTest extends TestCase
             'bool' => [
                 [
                     'boolean',
-                    'message' => 'The value must be either "1" or "0".',
+                    'message' => 'The value must be either "{true}" or "{false}".',
                     'strict' => false,
                     'trueValue' => '1',
                     'falseValue' => '0',

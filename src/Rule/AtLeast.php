@@ -54,12 +54,10 @@ class AtLeast extends Rule
 
         if ($filledCount < $this->min) {
             $result->addError(
-                $this->translateMessage(
-                    $this->message,
-                    [
-                        'min' => $this->min,
-                    ]
-                )
+                $this->message,
+                [
+                    'min' => $this->min,
+                ]
             );
         }
 
@@ -87,7 +85,7 @@ class AtLeast extends Rule
         return array_merge(
             parent::getOptions(),
             ['min' => $this->min],
-            ['message' => $this->translateMessage($this->message, ['min' => $this->min])],
+            ['message' => $this->message],
         );
     }
 }

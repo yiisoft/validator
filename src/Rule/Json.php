@@ -23,7 +23,7 @@ class Json extends Rule
         $result = new Result();
 
         if (!$this->isValidJson($value)) {
-            $result->addError($this->translateMessage($this->message));
+            $result->addError($this->message);
         }
 
         return $result;
@@ -61,7 +61,7 @@ REGEX;
         return array_merge(
             parent::getOptions(),
             [
-                'message' => $this->translateMessage($this->message),
+                'message' => $this->message,
             ],
         );
     }

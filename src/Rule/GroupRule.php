@@ -23,7 +23,7 @@ abstract class GroupRule extends Rule
     {
         $result = new Result();
         if (!$this->getRules()->validate($value, $dataSet)->isValid()) {
-            $result->addError($this->translateMessage($this->message));
+            $result->addError($this->message);
         }
 
         return $result;
