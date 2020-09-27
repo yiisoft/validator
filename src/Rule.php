@@ -12,11 +12,6 @@ abstract class Rule implements RuleInterface
     use SkippableTrait, ValueTrait;
 
     /**
-     * @var callable|null
-     */
-    private $when = null;
-
-    /**
      * Validates the value
      *
      * @param mixed $value value to be validated
@@ -30,10 +25,7 @@ abstract class Rule implements RuleInterface
             return new Result();
         }
 
-        if (
-            ($this->skipOnError && $previousRulesErrored) ||
-            (is_callable($this->when) && !call_user_func($this->when, $value, $dataSet))
-        ) {
+        if ($this->skipOnError && $previousRulesErrored) {
             return new Result();
         }
 
@@ -48,32 +40,6 @@ abstract class Rule implements RuleInterface
      * @return Result
      */
     abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
-
-    /**
-     * Add a PHP callable whose return value determines whether this rule should be applied.
-     * By default rule will be always applied.
-     *
-     * The signature of the callable should be `function ($value, DataSetInterface $dataSet): bool`, where $value and $dataSet
-     * refer to the value validated and the data set in which context it is validated. The callable should return
-     * a boolean value.
-     *
-     * The following example will enable the validator only when the country currently selected is USA:
-     *
-     * ```php
-     * function ($value, DataSetInterface $dataSet) {
-     * return $dataSet->getAttributeValue('country') === Country::USA;
-     * }
-     * ```
-     *
-     * @param callable $callback
-     * @return $this
-     */
-    public function when(callable $callback): self
-    {
-        $new = clone $this;
-        $new->when = $callback;
-        return $new;
-    }
 
     /**
      * Get name of the rule to be used when rule is converted to array.

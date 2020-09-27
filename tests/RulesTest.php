@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\When;
 use Yiisoft\Validator\Rules;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
@@ -63,7 +64,10 @@ class RulesTest extends TestCase
         $rules = new Rules(
             [
                 (new Number())->min(10),
-                (new Number())->min(10)->when(fn() => false)->skipOnError(false),
+                (new When(
+                    fn() => false,
+                    (new Number())->min(10)
+                ))->skipOnError(false),
                 (new Number())->min(10)->skipOnError(false)
             ]
         );
