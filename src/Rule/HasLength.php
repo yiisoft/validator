@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\DataSetInterface;
 
 /**
@@ -46,9 +46,9 @@ class HasLength extends Rule
      */
     protected string $encoding = 'UTF-8';
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Error
     {
-        $result = new Result();
+        $result = new Error();
 
         if (!is_string($value)) {
             $result->addError($this->message);

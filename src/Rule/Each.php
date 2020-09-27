@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rules;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\DataSetInterface;
 
 /**
@@ -27,9 +27,9 @@ class Each extends Rule
         $this->rules = $rules;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Error
     {
-        $result = new Result();
+        $result = new Error();
         if (!is_iterable($value)) {
             $result->addError($this->incorrectInputMessage);
             return $result;
@@ -67,6 +67,6 @@ class Each extends Rule
 
     public function getOptions(): array
     {
-        return $this->rules->asArray();
+        return $this->rules->getOptions();
     }
 }

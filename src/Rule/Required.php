@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\DataSetInterface;
 
 /**
@@ -18,9 +18,9 @@ class Required extends Rule
 
     private string $message = 'Value cannot be blank.';
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Error
     {
-        $result = new Result();
+        $result = new Error();
 
         if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
             $result->addError($this->message);

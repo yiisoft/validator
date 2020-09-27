@@ -1,40 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Yiisoft\Validator;
 
 use Yiisoft\I18n\TranslatorInterface;
 
-final class Result
+trait TranslatableTrait
 {
     private ?TranslatorInterface $translator = null;
     private ?string $translationDomain = null;
     private ?string $translationLocale = null;
-
-    private array $errors = [];
-
-    public function isValid(): bool
-    {
-        return $this->errors === [];
-    }
-
-    /**
-     * @param string $message
-     * @param array $parameters
-     */
-    public function addError(string $message, array $parameters = []): void
-    {
-        $this->errors[] = [$message, $parameters];
-    }
-
-    public function getErrors(): array
-    {
-        return array_map(function ($error) {
-            [$message, $parameters] = $error;
-            return $this->translateMessage($message, $parameters);
-        }, $this->errors);
-    }
 
     public function translator(TranslatorInterface $translator): self
     {

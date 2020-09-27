@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\DataSetInterface;
 
 /**
@@ -35,9 +35,9 @@ class MatchRegularExpression extends Rule
         $this->pattern = $pattern;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Error
     {
-        $result = new Result();
+        $result = new Error();
 
         $valid = !is_array($value) &&
             ((!$this->not && preg_match($this->pattern, $value))

@@ -33,13 +33,13 @@ Library could be used in two ways: validating a single value and validating a se
 use Yiisoft\Validator\Rules;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 
 $rules = new Rules([
     new Required(),
     (new Number())->min(10),
-    static function ($value): Result {
-        $result = new Result();
+    static function ($value): Error {
+        $result = new Error();
         if ($value !== 42) {
             $result->addError('Value should be 42!');
         }
@@ -61,7 +61,7 @@ if ($result->isValid() === false) {
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 
 final class MoneyTransfer implements DataSetInterface
 {
@@ -85,8 +85,8 @@ $moneyTransfer = new MoneyTransfer(142);
 $validator = new Validator([    
     'amount' => [
         (new Number())->integer()->max(100),
-        static function ($value): Result {
-            $result = new Result();
+        static function ($value): Error {
+            $result = new Error();
             if ($value === 13) {
                 $result->addError('Value should not be 13!');
             }
@@ -143,14 +143,14 @@ To create your own validation rule you should extend `Rule` class:
 namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule;
 
 final class Pi extends Rule
 {
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Error
     {
-        $result = new Result();
+        $result = new Error();
         if ($value != M_PI) {
             $result->addError('Value is not PI');
         }
@@ -167,14 +167,14 @@ property only if "hasCompany" is true:
 namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule;
 
 final class CompanyName extends Rule
 {
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Error
     {
-        $result = new Result();
+        $result = new Error();
         $hasCompany = $dataSet !== null && $dataSet->getAttributeValue('hasCompany') === true;
 
         if ($hasCompany && $this->isCompanyNameValid($value) === false) {

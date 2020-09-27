@@ -37,32 +37,48 @@ class GroupRuleTest extends TestCase
     {
         $validator = new CustomUrlRule();
         $this->assertEquals([
-            [
-                'required',
-                'message' => 'Value cannot be blank.',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ],
-            [
-                'url',
-                'message' => 'This value is not a valid URL.',
-                'enableIDN' => true,
-                'validSchemes' => ['http', 'https',],
-                'pattern' => '/^{schemes}:\\/\\/(([A-Z0-9][A-Z0-9_-]*)(\\.[A-Z0-9][A-Z0-9_-]*)+)(?::\\d{1,5})?(?:$|[?\\/#])/i',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ],
-            [
-                'hasLength',
-                'message' => 'This value must be a string.',
-                'min' => null,
-                'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
-                'max' => 20,
-                'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
-                'encoding' => 'UTF-8',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ],
+            0 =>
+                [
+                    0 => 'required',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'message' => 'Value cannot be blank.',
+                        ],
+                ],
+            1 =>
+                [
+                    0 => 'url',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'message' => 'This value is not a valid URL.',
+                            'enableIDN' => true,
+                            'validSchemes' =>
+                                [
+                                    0 => 'http',
+                                    1 => 'https',
+                                ],
+                            'pattern' => '/^{schemes}:\\/\\/(([A-Z0-9][A-Z0-9_-]*)(\\.[A-Z0-9][A-Z0-9_-]*)+)(?::\\d{1,5})?(?:$|[?\\/#])/i',
+                        ],
+                ],
+            2 =>
+                [
+                    0 => 'hasLength',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'message' => 'This value must be a string.',
+                            'min' => NULL,
+                            'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                            'max' => 20,
+                            'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                            'encoding' => 'UTF-8',
+                        ],
+                ],
         ], $validator->getOptions());
     }
 }

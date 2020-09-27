@@ -34,15 +34,17 @@ final class Rules implements RuleInterface
         $this->rules[] = $this->normalizeRule($rule);
     }
 
-    public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
+    public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Error
     {
-        $compoundResult = new Result();
+        $compoundResult = new Error();
         foreach ($this->rules as $rule) {
             $ruleResult = $this->mutateRule($rule)->validate($value, $dataSet, $previousRulesErrored);
             if ($ruleResult->isValid() === false) {
                 $previousRulesErrored = true;
-                foreach ($ruleResult->getErrors() as $message) {
-                    $compoundResult->addError($message);
+                $rawErrors = $ruleResult->getRawErrors();
+                foreach ($rawErrors as $errorItem) {
+                    [$message, $parameters] = $errorItem;
+                    $compoundResult->addError($message, $parameters);
                 }
             }
         }
@@ -87,20 +89,6 @@ final class Rules implements RuleInterface
     }
 
     /**
-     * Return rules as array.
-     * @return array
-     * @deprecated
-     */
-    public function asArray(): array
-    {
-        $arrayOfRules = [];
-        foreach ($this->rules as $rule) {
-            $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
-        }
-        return $arrayOfRules;
-    }
-
-    /**
      * @inheritDoc
      */
     public function getName(): string
@@ -113,6 +101,6 @@ final class Rules implements RuleInterface
      */
     public function getOptions(): array
     {
-        return array_map(static fn($r) => [$r->getName(), $r->getOptions()], $this->rules);
+        return array_map(static fn($r) => array_merge([$r->getName()], [$r->getOptions()]), $this->rules);
     }
 }

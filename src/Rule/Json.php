@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\DataSetInterface;
 
 /**
@@ -18,9 +18,9 @@ class Json extends Rule
 
     private string $message = 'The value is not JSON.';
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Error
     {
-        $result = new Result();
+        $result = new Error();
 
         if (!$this->isValidJson($value)) {
             $result->addError($this->message);

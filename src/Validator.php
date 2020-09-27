@@ -16,21 +16,17 @@ final class Validator implements ValidatorInterface
 
     public function __construct(iterable $rules = [])
     {
-        foreach ($rules as $attribute => $ruleSets) {
-            if ($ruleSets instanceof Rule) {
-                $ruleSets = [$ruleSets];
-            } elseif (!is_iterable($ruleSets)) {
-                throw new \InvalidArgumentException('Attribute rules should be either an instance of Rule class or an array of instances of Rule class.');
+        foreach ($rules as $attribute => $rule) {
+            if (!($rule instanceof RuleInterface)) {
+                throw new \InvalidArgumentException('Attribute rules should be either an instance of RuleInterface.');
             }
-            foreach ($ruleSets as $rule) {
-                $this->addRule($attribute, $rule);
-            }
+            $this->attributeRules[$attribute] = $rule;
         }
     }
 
-    public function validate(DataSetInterface $dataSet): ResultSet
+    public function validate(DataSetInterface $dataSet): Errors
     {
-        $results = new ResultSet();
+        $results = new Errors();
         foreach ($this->attributeRules as $attribute => $rules) {
             $results->addResult(
                 $attribute,
@@ -82,8 +78,10 @@ final class Validator implements ValidatorInterface
     public function asArray(): array
     {
         $rulesOfArray = [];
-        foreach ($this->attributeRules as $attribute => $rules) {
-            $rulesOfArray[$attribute] = $rules->asArray();
+        foreach ($this->attributeRules as $attribute => $rule) {
+            $options = $rule->getOptions();
+            $rulesOfArray[$attribute] = $rule instanceof Rule ?
+                array_merge([$rule->getName()], [$options]) : $options[1] ?? [];
         }
         return $rulesOfArray;
     }

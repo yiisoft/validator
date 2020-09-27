@@ -49,28 +49,36 @@ class EachTest extends TestCase
         ]);
 
         $this->assertEquals([
-            [
-                'number',
-                'notANumberMessage' => 'Value must be a number.',
-                'asInteger' => false,
-                'min' => null,
-                'tooSmallMessage' => 'Value must be no less than {min}.',
-                'max' => 13,
-                'tooBigMessage' => 'Value must be no greater than {max}.',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ],
-            [
-                'number',
-                'notANumberMessage' => 'Value must be a number.',
-                'asInteger' => false,
-                'min' => null,
-                'tooSmallMessage' => 'Value must be no less than {min}.',
-                'max' => 14,
-                'tooBigMessage' => 'Value must be no greater than {max}.',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ]
+            0 =>
+                [
+                    0 => 'number',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'notANumberMessage' => 'Value must be a number.',
+                            'asInteger' => false,
+                            'min' => NULL,
+                            'tooSmallMessage' => 'Value must be no less than {min}.',
+                            'max' => 13,
+                            'tooBigMessage' => 'Value must be no greater than {max}.',
+                        ],
+                ],
+            1 =>
+                [
+                    0 => 'number',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'notANumberMessage' => 'Value must be a number.',
+                            'asInteger' => false,
+                            'min' => NULL,
+                            'tooSmallMessage' => 'Value must be no less than {min}.',
+                            'max' => 14,
+                            'tooBigMessage' => 'Value must be no greater than {max}.',
+                        ],
+                ],
         ], (new Each($rules))->getOptions());
     }
 }

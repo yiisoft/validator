@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Exception\CallbackRuleException;
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\DataSetInterface;
 
 class Callback extends Rule
@@ -21,16 +21,16 @@ class Callback extends Rule
         $this->callback = $callback;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Error
     {
         $callback = $this->callback;
         $callbackResult = $callback($value, $dataSet);
 
-        if (!$callbackResult instanceof Result) {
+        if (!$callbackResult instanceof Error) {
             throw new CallbackRuleException($callbackResult);
         }
 
-        $result = new Result();
+        $result = new Error();
 
         if ($callbackResult->isValid() === false) {
             foreach ($callbackResult->getErrors() as $message) {

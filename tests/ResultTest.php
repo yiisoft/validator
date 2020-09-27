@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 
 class ResultTest extends TestCase
 {
@@ -14,7 +14,7 @@ class ResultTest extends TestCase
      */
     public function isValidByDefault(): void
     {
-        $result = new Result();
+        $result = new Error();
         $this->assertTrue($result->isValid());
     }
 
@@ -23,7 +23,7 @@ class ResultTest extends TestCase
      */
     public function errorsAreEmptyByDefault(): void
     {
-        $result = new Result();
+        $result = new Error();
         $this->assertEmpty($result->getErrors());
     }
 
@@ -32,7 +32,7 @@ class ResultTest extends TestCase
      */
     public function errorIsProperlyAdded(): void
     {
-        $result = new Result();
+        $result = new Error();
         $result->addError('Error');
         $this->assertContains('Error', $result->getErrors());
     }
@@ -42,7 +42,7 @@ class ResultTest extends TestCase
      */
     public function addingErrorChangesIsValid(): void
     {
-        $result = new Result();
+        $result = new Error();
         $result->addError('Error');
         $this->assertFalse($result->isValid());
     }

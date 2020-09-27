@@ -8,9 +8,9 @@ interface RuleInterface
      * @param mixed $value
      * @param DataSetInterface|null $dataSet
      * @param bool $previousRulesErrored
-     * @return Result
+     * @return Error
      */
-    public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result;
+    public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Error;
 
     /**
      * @param bool $value if validation should be skipped if value validated is empty

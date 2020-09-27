@@ -17,16 +17,16 @@ abstract class Rule implements RuleInterface
      * @param mixed $value value to be validated
      * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
      * @param bool $previousRulesErrored set to true if rule is part of a group of rules and one of the previous validations failed
-     * @return Result
+     * @return Error
      */
-    final public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
+    final public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Error
     {
         if ($this->skipOnEmpty && $this->isEmpty($value)) {
-            return new Result();
+            return new Error();
         }
 
         if ($this->skipOnError && $previousRulesErrored) {
-            return new Result();
+            return new Error();
         }
 
         return $this->validateValue($value, $dataSet);
@@ -37,9 +37,9 @@ abstract class Rule implements RuleInterface
      *
      * @param mixed $value value to be validated
      * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
-     * @return Result
+     * @return Error
      */
-    abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
+    abstract protected function validateValue($value, DataSetInterface $dataSet = null): Error;
 
     /**
      * Get name of the rule to be used when rule is converted to array.

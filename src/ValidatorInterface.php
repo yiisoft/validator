@@ -6,5 +6,5 @@ namespace Yiisoft\Validator;
 
 interface ValidatorInterface
 {
-    public function validate(DataSetInterface $dataSet): ResultSet;
+    public function validate(DataSetInterface $dataSet): Errors;
 }

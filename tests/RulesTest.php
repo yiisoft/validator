@@ -9,7 +9,7 @@ use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\When;
 use Yiisoft\Validator\Rules;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
@@ -45,8 +45,8 @@ class RulesTest extends TestCase
     {
         $rules = new Rules(
             [
-                static function ($value): Result {
-                    $result = new Result();
+                static function ($value): Error {
+                    $result = new Error();
                     if ($value !== 42) {
                         $result->addError('Value should be 42!');
                     }
@@ -133,24 +133,32 @@ class RulesTest extends TestCase
         $rules->add((new Number())->max(10));
 
         $this->assertEquals([
-            [
-                'required',
-                'message' => 'Value cannot be blank.',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ],
-            [
-                'number',
-                'notANumberMessage' => 'Value must be a number.',
-                'asInteger' => false,
-                'min' => null,
-                'tooSmallMessage' => 'Value must be no less than {min}.',
-                'max' => 10,
-                'tooBigMessage' => 'Value must be no greater than {max}.',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ]
-        ], $rules->asArray());
+            0 =>
+                [
+                    0 => 'required',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'message' => 'Value cannot be blank.',
+                        ],
+                ],
+            1 =>
+                [
+                    0 => 'number',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'notANumberMessage' => 'Value must be a number.',
+                            'asInteger' => false,
+                            'min' => NULL,
+                            'tooSmallMessage' => 'Value must be no less than {min}.',
+                            'max' => 10,
+                            'tooBigMessage' => 'Value must be no greater than {max}.',
+                        ],
+                ],
+        ], $rules->getOptions());
 
         $rules = new Rules(
             [
@@ -160,40 +168,52 @@ class RulesTest extends TestCase
             ]
         );
         $this->assertEquals([
-            [
-                'number',
-                'notANumberMessage' => 'Value must be a number.',
-                'asInteger' => false,
-                'min' => 10,
-                'tooSmallMessage' => 'Value must be no less than {min}.',
-                'max' => null,
-                'tooBigMessage' => 'Value must be no greater than {max}.',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ],
-            [
-                'number',
-                'notANumberMessage' => 'Value must be a number.',
-                'asInteger' => false,
-                'min' => 10,
-                'tooSmallMessage' => 'Value must be no less than {min}.',
-                'max' => null,
-                'tooBigMessage' => 'Value must be no greater than {max}.',
-                'skipOnEmpty' => false,
-                'skipOnError' => false,
-            ],
-            [
-                'number',
-                'notANumberMessage' => 'Value must be an integer.',
-                'asInteger' => true,
-                'min' => 10,
-                'tooSmallMessage' => 'Value must be no less than {min}.',
-                'max' => null,
-                'tooBigMessage' => 'Value must be no greater than {max}.',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ],
-        ], $rules->asArray());
+            0 =>
+                [
+                    0 => 'number',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'notANumberMessage' => 'Value must be a number.',
+                            'asInteger' => false,
+                            'min' => 10,
+                            'tooSmallMessage' => 'Value must be no less than {min}.',
+                            'max' => NULL,
+                            'tooBigMessage' => 'Value must be no greater than {max}.',
+                        ],
+                ],
+            1 =>
+                [
+                    0 => 'number',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => false,
+                            'notANumberMessage' => 'Value must be a number.',
+                            'asInteger' => false,
+                            'min' => 10,
+                            'tooSmallMessage' => 'Value must be no less than {min}.',
+                            'max' => NULL,
+                            'tooBigMessage' => 'Value must be no greater than {max}.',
+                        ],
+                ],
+            2 =>
+                [
+                    0 => 'number',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'notANumberMessage' => 'Value must be an integer.',
+                            'asInteger' => true,
+                            'min' => 10,
+                            'tooSmallMessage' => 'Value must be no less than {min}.',
+                            'max' => NULL,
+                            'tooBigMessage' => 'Value must be no greater than {max}.',
+                        ],
+                ],
+        ], $rules->getOptions());
 
         $rules = new Rules([
             (new Each(new Rules([
@@ -204,42 +224,59 @@ class RulesTest extends TestCase
         ]);
 
         $this->assertEquals([
-            ['each',
+            0 =>
                 [
-                    'number',
-                    'notANumberMessage' => 'Value must be a number.',
-                    'asInteger' => false,
-                    'min' => null,
-                    'tooSmallMessage' => 'Value must be no less than {min}.',
-                    'max' => 13,
-                    'tooBigMessage' => 'Value must be no greater than {max}.',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    0 => 'each',
+                    1 =>
+                        [
+                            0 =>
+                                [
+                                    0 => 'number',
+                                    1 =>
+                                        [
+                                            'skipOnEmpty' => false,
+                                            'skipOnError' => true,
+                                            'notANumberMessage' => 'Value must be a number.',
+                                            'asInteger' => false,
+                                            'min' => NULL,
+                                            'tooSmallMessage' => 'Value must be no less than {min}.',
+                                            'max' => 13,
+                                            'tooBigMessage' => 'Value must be no greater than {max}.',
+                                        ],
+                                ],
+                            1 =>
+                                [
+                                    0 => 'number',
+                                    1 =>
+                                        [
+                                            'skipOnEmpty' => false,
+                                            'skipOnError' => true,
+                                            'notANumberMessage' => 'Value must be a number.',
+                                            'asInteger' => false,
+                                            'min' => NULL,
+                                            'tooSmallMessage' => 'Value must be no less than {min}.',
+                                            'max' => 14,
+                                            'tooBigMessage' => 'Value must be no greater than {max}.',
+                                        ],
+                                ],
+                        ],
                 ],
+            1 =>
                 [
-                    'number',
-                    'notANumberMessage' => 'Value must be a number.',
-                    'asInteger' => false,
-                    'min' => null,
-                    'tooSmallMessage' => 'Value must be no less than {min}.',
-                    'max' => 14,
-                    'tooBigMessage' => 'Value must be no greater than {max}.',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => true,
-                ]
-            ],
-            [
-                'number',
-                'notANumberMessage' => 'Value must be a number.',
-                'asInteger' => false,
-                'min' => 10,
-                'tooSmallMessage' => 'Value must be no less than {min}.',
-                'max' => null,
-                'tooBigMessage' => 'Value must be no greater than {max}.',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ],
-        ], $rules->asArray());
+                    0 => 'number',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'notANumberMessage' => 'Value must be a number.',
+                            'asInteger' => false,
+                            'min' => 10,
+                            'tooSmallMessage' => 'Value must be no less than {min}.',
+                            'max' => NULL,
+                            'tooBigMessage' => 'Value must be no greater than {max}.',
+                        ],
+                ],
+        ], $rules->getOptions());
     }
 
     public function testAsArrayWithGroupRule(): void
@@ -248,43 +285,67 @@ class RulesTest extends TestCase
         $rules->add(new Required());
         $rules->add(new CustomUrlRule());
 
-        $this->assertEquals([
-            [
-                'required',
-                'message' => 'Value cannot be blank.',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
-            ],
-            [
-                'customUrlRule',
-                [
-                    'required',
-                    'message' => 'Value cannot be blank.',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => true,
-                ],
-                [
-                    'url',
-                    'message' => 'This value is not a valid URL.',
-                    'enableIDN' => true,
-                    'validSchemes' => ['http', 'https',],
-                    'pattern' => '/^{schemes}:\\/\\/(([A-Z0-9][A-Z0-9_-]*)(\\.[A-Z0-9][A-Z0-9_-]*)+)(?::\\d{1,5})?(?:$|[?\\/#])/i',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => true,
-                ],
-                [
-                    'hasLength',
-                    'message' => 'This value must be a string.',
-                    'min' => null,
-                    'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
-                    'max' => 20,
-                    'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
-                    'encoding' => 'UTF-8',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => true,
-                ],
-            ],
-        ], $rules->asArray());
+        $this->assertEquals(array(
+            0 =>
+                array(
+                    0 => 'required',
+                    1 =>
+                        array(
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'message' => 'Value cannot be blank.',
+                        ),
+                ),
+            1 =>
+                array(
+                    0 => 'customUrlRule',
+                    1 =>
+                        array(
+                            0 =>
+                                array(
+                                    0 => 'required',
+                                    1 =>
+                                        array(
+                                            'skipOnEmpty' => false,
+                                            'skipOnError' => true,
+                                            'message' => 'Value cannot be blank.',
+                                        ),
+                                ),
+                            1 =>
+                                array(
+                                    0 => 'url',
+                                    1 =>
+                                        array(
+                                            'skipOnEmpty' => false,
+                                            'skipOnError' => true,
+                                            'message' => 'This value is not a valid URL.',
+                                            'enableIDN' => true,
+                                            'validSchemes' =>
+                                                array(
+                                                    0 => 'http',
+                                                    1 => 'https',
+                                                ),
+                                            'pattern' => '/^{schemes}:\\/\\/(([A-Z0-9][A-Z0-9_-]*)(\\.[A-Z0-9][A-Z0-9_-]*)+)(?::\\d{1,5})?(?:$|[?\\/#])/i',
+                                        ),
+                                ),
+                            2 =>
+                                array(
+                                    0 => 'hasLength',
+                                    1 =>
+                                        array(
+                                            'skipOnEmpty' => false,
+                                            'skipOnError' => true,
+                                            'message' => 'This value must be a string.',
+                                            'min' => NULL,
+                                            'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                                            'max' => 20,
+                                            'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                                            'encoding' => 'UTF-8',
+                                        ),
+                                ),
+                        ),
+                ),
+        ), $rules->getOptions());
     }
 
     public function testGroupNames(): void

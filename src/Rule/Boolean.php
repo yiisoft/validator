@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\DataSetInterface;
 
 /**
@@ -53,7 +53,7 @@ class Boolean extends Rule
         return $new;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Error
     {
         if ($this->strict) {
             $valid = $value === $this->trueValue || $value === $this->falseValue;
@@ -61,7 +61,7 @@ class Boolean extends Rule
             $valid = $value == $this->trueValue || $value == $this->falseValue;
         }
 
-        $result = new Result();
+        $result = new Error();
 
         if (!$valid) {
             $result->addError(

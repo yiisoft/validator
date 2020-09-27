@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\DataSetInterface;
 
 /**
@@ -40,7 +40,7 @@ class AtLeast extends Rule
         $this->attributes = $attributes;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Error
     {
         $filledCount = 0;
 
@@ -50,7 +50,7 @@ class AtLeast extends Rule
             }
         }
 
-        $result = new Result();
+        $result = new Error();
 
         if ($filledCount < $this->min) {
             $result->addError(

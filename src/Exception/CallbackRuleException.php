@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Exception;
 
 use Throwable;
 use Yiisoft\FriendlyException\FriendlyExceptionInterface;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 
 class CallbackRuleException extends \Exception implements FriendlyExceptionInterface
 {
@@ -14,7 +14,7 @@ class CallbackRuleException extends \Exception implements FriendlyExceptionInter
     {
         $message = sprintf(
             'Return value of callback must be an instance of %s, %s returned.',
-            Result::class,
+            Error::class,
             is_object($result) ? get_class($result) : gettype($result)
         );
 

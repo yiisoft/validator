@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\DataSetInterface;
 
 use function is_iterable;
@@ -45,7 +45,7 @@ class InRange extends Rule
         $this->range = $range;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Error
     {
         $in = false;
 
@@ -60,7 +60,7 @@ class InRange extends Rule
             $in = true;
         }
 
-        $result = new Result();
+        $result = new Error();
 
         if ($this->not === $in) {
             $result->addError($this->message);

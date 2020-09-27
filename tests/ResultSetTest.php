@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\ResultSet;
+use Yiisoft\Validator\Error;
+use Yiisoft\Validator\Errors;
 
 class ResultSetTest extends TestCase
 {
@@ -15,11 +15,11 @@ class ResultSetTest extends TestCase
      */
     public function successShouldNotOverrideError(): void
     {
-        $error = new Result();
+        $error = new Error();
         $error->addError('error');
-        $success = new Result();
+        $success = new Error();
 
-        $resultSet = new ResultSet();
+        $resultSet = new Errors();
         $resultSet->addResult('x', $error);
         $resultSet->addResult('x', $success);
 
@@ -35,13 +35,13 @@ class ResultSetTest extends TestCase
      */
     public function errorsShouldAdd(): void
     {
-        $error1 = new Result();
+        $error1 = new Error();
         $error1->addError('error1');
 
-        $error2 = new Result();
+        $error2 = new Error();
         $error2->addError('error2');
 
-        $resultSet = new ResultSet();
+        $resultSet = new Errors();
         $resultSet->addResult('x', $error1);
         $resultSet->addResult('x', $error2);
 

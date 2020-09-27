@@ -7,10 +7,11 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Exception\MissingAttributeException;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rules;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 use Yiisoft\Validator\Validator;
 
@@ -45,7 +46,7 @@ class ValidatorTest extends TestCase
     public function testThrowExceptionWithInvalidRule(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Attribute rules should be either an instance of Rule class or an array of instances of Rule class.');
+        $this->expectExceptionMessage('Attribute rules should be either an instance of RuleInterface.');
 
         $validator = new Validator(
             [
@@ -65,18 +66,18 @@ class ValidatorTest extends TestCase
 
         $validator = new Validator(
             [
-                'bool' => [new Boolean()],
-                'int' => [
+                'bool' => new Boolean(),
+                'int' => new Rules([
                     (new Number())->integer(),
                     (new Number())->integer()->min(44),
-                    static function ($value): Result {
-                        $result = new Result();
+                    static function ($value): Error {
+                        $result = new Error();
                         if ($value !== 42) {
                             $result->addError('Value should be 42!');
                         }
                         return $result;
                     }
-                ],
+                ]),
             ]
         );
 
@@ -117,61 +118,49 @@ class ValidatorTest extends TestCase
         $validator = new Validator(
             [
                 'bool' => (new Boolean()),
-                'int' => [
+                'int' => new Rules([
                     (new Number())->integer(),
                     (new Number())->integer()->min(44),
-                    static function ($value): Result {
-                        $result = new Result();
+                    static function ($value): Error {
+                        $result = new Error();
                         if ($value !== 42) {
                             $result->addError('Value should be 42!');
                         }
                         return $result;
                     }
-                ],
+                ]),
             ]
         );
 
         $this->assertEquals([
-            'bool' => [
+            'bool' =>
                 [
-                    'boolean',
-                    'message' => 'The value must be either "{true}" or "{false}".',
-                    'strict' => false,
-                    'trueValue' => '1',
-                    'falseValue' => '0',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => true,
-                ]
-            ],
-            'int' => [
-                [
-                    'number',
-                    'notANumberMessage' => 'Value must be an integer.',
-                    'asInteger' => true,
-                    'min' => null,
-                    'tooSmallMessage' => 'Value must be no less than {min}.',
-                    'max' => null,
-                    'tooBigMessage' => 'Value must be no greater than {max}.',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    0 => 'boolean',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'strict' => false,
+                            'trueValue' => '1',
+                            'falseValue' => '0',
+                            'message' => 'The value must be either "{true}" or "{false}".',
+                        ],
                 ],
+            'int' =>
                 [
-                    'number',
-                    'notANumberMessage' => 'Value must be an integer.',
-                    'asInteger' => true,
-                    'min' => 44,
-                    'tooSmallMessage' => 'Value must be no less than {min}.',
-                    'max' => null,
-                    'tooBigMessage' => 'Value must be no greater than {max}.',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    0 => 'number',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'notANumberMessage' => 'Value must be an integer.',
+                            'asInteger' => true,
+                            'min' => 44,
+                            'tooSmallMessage' => 'Value must be no less than {min}.',
+                            'max' => NULL,
+                            'tooBigMessage' => 'Value must be no greater than {max}.',
+                        ],
                 ],
-                [
-                    'callback',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => true,
-                ],
-            ],
         ], $validator->asArray());
     }
 
@@ -180,62 +169,76 @@ class ValidatorTest extends TestCase
         $validator = new Validator(
             [
                 'bool' => (new Boolean()),
-                'int' => [
+                'int' => new Rules([
                     new Required(),
                     new CustomUrlRule()
-                ],
+                ]),
             ]
         );
 
         $this->assertEquals([
-            'bool' => [
+            'bool' =>
                 [
-                    'boolean',
-                    'message' => 'The value must be either "{true}" or "{false}".',
-                    'strict' => false,
-                    'trueValue' => '1',
-                    'falseValue' => '0',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => true,
-                ]
-            ],
-            'int' => [
-                [
-                    'required',
-                    'message' => 'Value cannot be blank.',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    0 => 'boolean',
+                    1 =>
+                        [
+                            'skipOnEmpty' => false,
+                            'skipOnError' => true,
+                            'strict' => false,
+                            'trueValue' => '1',
+                            'falseValue' => '0',
+                            'message' => 'The value must be either "{true}" or "{false}".',
+                        ],
                 ],
+            'int' =>
                 [
-                    'customUrlRule',
-                    [
-                        'required',
-                        'message' => 'Value cannot be blank.',
-                        'skipOnEmpty' => false,
-                        'skipOnError' => true,
-                    ],
-                    [
-                        'url',
-                        'message' => 'This value is not a valid URL.',
-                        'enableIDN' => true,
-                        'validSchemes' => ['http', 'https',],
-                        'pattern' => '/^{schemes}:\\/\\/(([A-Z0-9][A-Z0-9_-]*)(\\.[A-Z0-9][A-Z0-9_-]*)+)(?::\\d{1,5})?(?:$|[?\\/#])/i',
-                        'skipOnEmpty' => false,
-                        'skipOnError' => true,
-                    ],
-                    [
-                        'hasLength',
-                        'message' => 'This value must be a string.',
-                        'min' => null,
-                        'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
-                        'max' => 20,
-                        'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
-                        'encoding' => 'UTF-8',
-                        'skipOnEmpty' => false,
-                        'skipOnError' => true,
-                    ],
+                    0 => 'customUrlRule',
+                    1 =>
+                        [
+                            0 =>
+                                [
+                                    0 => 'required',
+                                    1 =>
+                                        [
+                                            'skipOnEmpty' => false,
+                                            'skipOnError' => true,
+                                            'message' => 'Value cannot be blank.',
+                                        ],
+                                ],
+                            1 =>
+                                [
+                                    0 => 'url',
+                                    1 =>
+                                        [
+                                            'skipOnEmpty' => false,
+                                            'skipOnError' => true,
+                                            'message' => 'This value is not a valid URL.',
+                                            'enableIDN' => true,
+                                            'validSchemes' =>
+                                                [
+                                                    0 => 'http',
+                                                    1 => 'https',
+                                                ],
+                                            'pattern' => '/^{schemes}:\\/\\/(([A-Z0-9][A-Z0-9_-]*)(\\.[A-Z0-9][A-Z0-9_-]*)+)(?::\\d{1,5})?(?:$|[?\\/#])/i',
+                                        ],
+                                ],
+                            2 =>
+                                [
+                                    0 => 'hasLength',
+                                    1 =>
+                                        [
+                                            'skipOnEmpty' => false,
+                                            'skipOnError' => true,
+                                            'message' => 'This value must be a string.',
+                                            'min' => NULL,
+                                            'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                                            'max' => 20,
+                                            'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                                            'encoding' => 'UTF-8',
+                                        ],
+                                ],
+                        ],
                 ],
-            ],
         ], $validator->asArray());
     }
 }

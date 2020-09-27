@@ -3,7 +3,7 @@
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule;
 
 class When extends Rule
@@ -27,12 +27,12 @@ class When extends Rule
     /**
      * @inheritDoc
      */
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, DataSetInterface $dataSet = null): Error
     {
         if (call_user_func($this->callback, $value, $dataSet)) {
             return $this->rule->validate($value, $dataSet);
         }
 
-        return new Result();
+        return new Error();
     }
 }
