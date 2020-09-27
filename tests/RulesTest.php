@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\When;
 use Yiisoft\Validator\Rules;
 use PHPUnit\Framework\TestCase;
@@ -284,5 +285,61 @@ class RulesTest extends TestCase
                 ],
             ],
         ], $rules->asArray());
+    }
+
+    public function testGroupNames(): void
+    {
+        $rules = new Rules(
+            [
+                (new Number())->min(10),
+                (new InRange([10, 20]))->skipOnError(false)
+            ]
+        );
+        self::assertEquals('number,inRange', $rules->getName());
+    }
+
+    public function testGroupOptions(): void
+    {
+        $rules = new Rules(
+            [
+                (new Number())->min(10),
+                (new InRange([10, 20]))->skipOnError(false)
+            ]
+        );
+        self::assertEquals(
+            [
+                0 =>
+                    [
+                        0 => 'number',
+                        1 =>
+                            [
+                                'skipOnEmpty' => false,
+                                'skipOnError' => true,
+                                'notANumberMessage' => 'Value must be a number.',
+                                'asInteger' => false,
+                                'min' => 10,
+                                'tooSmallMessage' => 'Value must be no less than {min}.',
+                                'max' => NULL,
+                                'tooBigMessage' => 'Value must be no greater than {max}.',
+                            ],
+                    ],
+                1 =>
+                    [
+                        0 => 'inRange',
+                        1 =>
+                            [
+                                'skipOnEmpty' => false,
+                                'skipOnError' => false,
+                                'message' => 'This value is invalid.',
+                                'range' =>
+                                    [
+                                        0 => 10,
+                                        1 => 20,
+                                    ],
+                                'strict' => false,
+                                'not' => false,
+                            ],
+                    ],
+            ], $rules->getOptions());
     }
 }

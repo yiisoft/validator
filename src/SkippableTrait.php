@@ -16,7 +16,7 @@ trait SkippableTrait
 
     /**
      * @param bool $value
-     * @return $this
+     * @return self
      */
     public function skipOnError(bool $value): self
     {

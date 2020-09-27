@@ -67,7 +67,7 @@ final class Rules implements RuleInterface
      * @param Rule $rule
      * @return Rule
      */
-    private function mutateRule(Rule $rule)
+    private function mutateRule(Rule $rule): Rule
     {
         if ($this->skipOnError !== null) {
             $rule = $rule->skipOnError($this->skipOnError);
@@ -89,6 +89,7 @@ final class Rules implements RuleInterface
     /**
      * Return rules as array.
      * @return array
+     * @deprecated
      */
     public function asArray(): array
     {
@@ -97,5 +98,21 @@ final class Rules implements RuleInterface
             $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
         }
         return $arrayOfRules;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
+    {
+        return implode(',', array_map(static fn($r) => $r->getName(), $this->rules));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOptions(): array
+    {
+        return array_map(static fn($r) => [$r->getName(), $r->getOptions()], $this->rules);
     }
 }
