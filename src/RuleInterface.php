@@ -18,6 +18,10 @@ interface RuleInterface
      */
     public function skipOnError(bool $value);
 
+    /**
+     * @param bool $value
+     * @return self
+     */
     public function skipOnEmpty(bool $value);
 
     /**
