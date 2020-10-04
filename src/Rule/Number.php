@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
-use Yiisoft\Strings\StringHelper;
+use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * NumberValidator validates that the attribute value is a number.
@@ -61,7 +61,7 @@ class Number extends Rule
 
         $pattern = $this->asInteger ? $this->integerPattern : $this->numberPattern;
 
-        if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
+        if (!preg_match($pattern, NumericHelper::normalize((string)$value))) {
             $result->addError($this->translateMessage($this->getNotANumberMessage(), ['value' => $value]));
         } elseif ($this->min !== null && $value < $this->min) {
             $result->addError($this->translateMessage($this->tooSmallMessage, ['min' => $this->min]));
