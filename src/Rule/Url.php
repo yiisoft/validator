@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * UrlValidator validates that the attribute value is a valid http or https URL.
@@ -74,7 +74,7 @@ class Url extends Rule
 
     private function convertIdn($value): string
     {
-        if (!str_contains($value, '://')) {
+        if (strpos($value, '://') === false) {
             return $this->idnToAscii($value);
         }
 
@@ -87,7 +87,7 @@ class Url extends Rule
 
     private function getPattern(): string
     {
-        if (str_contains($this->pattern, '{schemes}')) {
+        if (strpos($this->pattern, '{schemes}') !== false) {
             return str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
         }
 
