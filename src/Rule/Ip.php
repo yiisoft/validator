@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Result;
 use Yiisoft\NetworkUtilities\IpHelper;
+use Yiisoft\Validator\AbstractRule;
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\Result;
 
 /**
  * The validator checks if the attribute value is a valid IPv4/IPv6 address or subnet.
@@ -30,7 +30,7 @@ use Yiisoft\Validator\Rule;
  * @property array $ranges The IPv4 or IPv6 ranges that are allowed or forbidden. See [[setRanges()]] for
  * detailed description.
  */
-class Ip extends Rule
+class Ip extends AbstractRule
 {
     /**
      * Negation char.

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\AbstractRule;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
 
 use function is_iterable;
 
@@ -20,7 +20,7 @@ use function is_iterable;
  * is NOT among the specified range.
  *
  */
-class InRange extends Rule
+class InRange extends AbstractRule
 {
     use HasValidationErrorMessage;
 

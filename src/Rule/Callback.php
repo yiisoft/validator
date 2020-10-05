@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Exception\CallbackRuleException;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\AbstractRule;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\Exception\CallbackRuleException;
+use Yiisoft\Validator\Result;
 
-class Callback extends Rule
+class Callback extends AbstractRule
 {
     /**
      * @var callable

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\AbstractRule;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
 
 /**
  * AtLeastValidator checks if at least $min of many attributes are filled.
  */
-class AtLeast extends Rule
+class AtLeast extends AbstractRule
 {
     use HasValidationErrorMessage;
 

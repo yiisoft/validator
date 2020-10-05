@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\AbstractRule;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rules;
 
 /**
  * GroupRule validates a single value for a set of custom rules
  */
-abstract class GroupRule extends Rule
+abstract class GroupAbstractRule extends AbstractRule
 {
     use HasValidationErrorMessage;
 

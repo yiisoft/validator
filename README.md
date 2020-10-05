@@ -144,9 +144,9 @@ namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\AbstractRule;
 
-final class Pi extends Rule
+final class Pi extends AbstractRule
 {
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
@@ -168,9 +168,9 @@ namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\AbstractRule;
 
-final class CompanyName extends Rule
+final class CompanyName extends AbstractRule
 {
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
@@ -199,9 +199,9 @@ To reuse multiple validation rules it is advised to group rules like the followi
 use Yiisoft\Validator\Rules;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\MatchRegularExpression;
-use \Yiisoft\Validator\Rule\GroupRule;
+use \Yiisoft\Validator\Rule\GroupAbstractRule;
 
-final class UsernameRule extends GroupRule
+final class UsernameRule extends GroupAbstractRule
 {
     public function getRules(): Rules
     {

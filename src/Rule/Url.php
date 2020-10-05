@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\AbstractRule;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
 
 /**
  * UrlValidator validates that the attribute value is a valid http or https URL.
@@ -15,7 +15,7 @@ use Yiisoft\Validator\Rule;
  * Note that this validator only checks if the URL scheme and host part are correct.
  * It does not check the remaining parts of a URL.
  */
-class Url extends Rule
+class Url extends AbstractRule
 {
     use HasValidationErrorMessage;
 

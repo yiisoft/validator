@@ -40,15 +40,15 @@ final class ValidatorFactory implements ValidatorFactoryInterface
     }
 
     /**
-     * @param Rule|callable
+     * @param AbstractRule|callable
      */
-    private function normalizeRule($rule): Rule
+    private function normalizeRule($rule): AbstractRule
     {
         if (is_callable($rule)) {
             $rule = new Callback($rule);
         }
 
-        if (!$rule instanceof Rule) {
+        if (!$rule instanceof AbstractRule) {
             throw new \InvalidArgumentException(
                 'Rule should be either instance of Rule class or a callable'
             );

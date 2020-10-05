@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\AbstractRule;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\Result;
 
 /**
  * CompareValidator compares the specified attribute value with another value.
@@ -25,7 +25,7 @@ use Yiisoft\Validator\DataSetInterface;
  * are compared byte by byte. When comparing numbers, make sure to set the [[$type]]
  * to [[TYPE_NUMBER]] to enable numeric comparison.
  */
-class CompareTo extends Rule
+class CompareTo extends AbstractRule
 {
     /**
      * Constant for specifying the comparison [[type]] by numeric values.

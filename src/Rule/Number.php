@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Strings\NumericHelper;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\AbstractRule;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\Result;
 
 /**
  * NumberValidator validates that the attribute value is a number.
@@ -16,7 +16,7 @@ use Yiisoft\Validator\DataSetInterface;
  * Optionally, you may configure the [[max]] and [[min]] properties to ensure the number
  * is within certain range.
  */
-class Number extends Rule
+class Number extends AbstractRule
 {
     /**
      * @var bool whether the attribute value can only be an integer. Defaults to false.

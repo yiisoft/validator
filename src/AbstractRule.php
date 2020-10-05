@@ -9,7 +9,7 @@ use Yiisoft\I18n\TranslatorInterface;
 /**
  * Rule represents a single value validation rule.
  */
-abstract class Rule
+abstract class AbstractRule
 {
     private ?TranslatorInterface $translator = null;
     private ?string $translationDomain = null;

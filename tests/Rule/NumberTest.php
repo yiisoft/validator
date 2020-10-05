@@ -3,10 +3,10 @@
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\AbstractRule;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Exception\MissingAttributeException;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Rule;
 
 /**
  * @group validators
@@ -375,10 +375,10 @@ class NumberTest extends TestCase
 
     /**
      * @dataProvider optionsProvider
-     * @param Rule $rule
+     * @param AbstractRule $rule
      * @param array $expected
      */
-    public function testOptions(Rule $rule, array $expected): void
+    public function testOptions(AbstractRule $rule, array $expected): void
     {
         $this->assertEquals($expected, $rule->getOptions());
     }

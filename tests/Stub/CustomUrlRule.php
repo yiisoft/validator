@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Stub;
 
-use Yiisoft\Validator\Rule\GroupRule;
+use Yiisoft\Validator\Rule\GroupAbstractRule;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rules;
 
-final class CustomUrlRule extends GroupRule
+final class CustomUrlRule extends GroupAbstractRule
 {
     protected function getRules(): Rules
     {

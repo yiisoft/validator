@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\AbstractRule;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
 
 /**
  * RegularExpressionValidator validates that the attribute value matches the specified [[pattern]].
  *
  * If the [[not]] property is set true, the validator will ensure the attribute value do NOT match the [[pattern]].
  */
-class MatchRegularExpression extends Rule
+class MatchRegularExpression extends AbstractRule
 {
     use HasValidationErrorMessage;
 
