@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Strings\NumericHelper;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * NumberValidator validates that the attribute value is a number.
@@ -113,11 +113,6 @@ class Number extends Rule
             return 'Value must be an integer.';
         }
         return 'Value must be a number.';
-    }
-
-    public function getName(): string
-    {
-        return 'number';
     }
 
     public function getOptions(): array

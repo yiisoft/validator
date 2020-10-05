@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Exception\CallbackRuleException;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\Exception\CallbackRuleException;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 class Callback extends Rule
 {
@@ -38,10 +38,5 @@ class Callback extends Rule
             }
         }
         return $result;
-    }
-
-    public function getName(): string
-    {
-        return 'callback';
     }
 }

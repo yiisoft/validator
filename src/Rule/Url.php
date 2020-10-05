@@ -115,11 +115,6 @@ class Url extends Rule
         return $new;
     }
 
-    public function getName(): string
-    {
-        return 'url';
-    }
-
     public function getOptions(): array
     {
         return array_merge(

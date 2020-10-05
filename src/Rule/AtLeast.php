@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * AtLeastValidator checks if at least $min of many attributes are filled.
@@ -75,11 +75,6 @@ class AtLeast extends Rule
         $new = clone $this;
         $new->min = $value;
         return $new;
-    }
-
-    public function getName(): string
-    {
-        return 'atLeast';
     }
 
     public function getOptions(): array

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * StringValidator validates that the attribute value is of certain length.
@@ -100,11 +100,6 @@ class HasLength extends Rule
         $new = clone $this;
         $new->tooLongMessage = $message;
         return $new;
-    }
-
-    public function getName(): string
-    {
-        return 'hasLength';
     }
 
     public function getOptions(): array
