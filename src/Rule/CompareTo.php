@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * CompareValidator compares the specified attribute value with another value.
@@ -189,11 +189,6 @@ class CompareTo extends Rule
             default:
                 return false;
         }
-    }
-
-    public function getName(): string
-    {
-        return 'compareTo';
     }
 
     public function getOptions(): array

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * EmailValidator validates that the attribute value is a valid email address.
@@ -125,11 +125,6 @@ class Email extends Rule
         $new = clone $this;
         $new->enableIDN = $enableIDN;
         return $new;
-    }
-
-    public function getName(): string
-    {
-        return 'email';
     }
 
     public function getOptions(): array

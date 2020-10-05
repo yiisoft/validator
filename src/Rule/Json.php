@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * JsonValidator validates that the attribute value is a valid json
@@ -49,11 +49,6 @@ class Json extends Rule
 REGEX;
 
         return is_string($value) && preg_match($regex, $value) === 1;
-    }
-
-    public function getName(): string
-    {
-        return 'json';
     }
 
     public function getOptions(): array

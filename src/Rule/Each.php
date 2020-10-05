@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rules;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\DataSetInterface;
 
 /**
  * Each validator validates an array by checking each of its elements against a set of rules
@@ -60,11 +60,6 @@ class Each extends Rule
         $new = clone $this;
         $new->incorrectInputMessage = $message;
         return $new;
-    }
-
-    public function getName(): string
-    {
-        return 'each';
     }
 
     public function getOptions(): array

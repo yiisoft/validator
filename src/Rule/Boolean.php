@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * BooleanValidator checks if the attribute value is a boolean value or a value corresponding to it.
@@ -76,11 +76,6 @@ class Boolean extends Rule
         }
 
         return $result;
-    }
-
-    public function getName(): string
-    {
-        return 'boolean';
     }
 
     public function getOptions(): array
