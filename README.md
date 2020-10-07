@@ -66,24 +66,29 @@ use Yiisoft\Validator\Error;
 final class MoneyTransfer implements DataSetInterface
 {
     private $amount;
-    
+
     public function __construct($amount) {
         $this->amount = $amount;
     }
-    
+
     public function getAttributeValue(string $key){
         if (!isset($this->$key)) {
             throw new \InvalidArgumentException("There is no \"$key\" in MoneyTransfer.");
         }
-        
+
         return $this->$key;
+    }
+
+    public function hasAttribute(string $attribute): bool
+    {
+        // TODO: Implement hasAttribute() method.
     }
 }
 
 $moneyTransfer = new MoneyTransfer(142);
 
-$validator = new Validator([    
-    'amount' => [
+$validator = new Validator([
+    'amount' => (new Rules([
         (new Number())->integer()->max(100),
         static function ($value): Error {
             $result = new Error();
@@ -92,14 +97,14 @@ $validator = new Validator([
             }
             return $result;
         }
-    ],
+    ])),
 ]);
 
 $results = $validator->validate($moneyTransfer);
 foreach ($results as $attribute => $result) {
     if ($result->isValid() === false) {
         foreach ($result->getErrors() as $error) {
-            // ...
+            //...
         }
     }
 }
@@ -125,12 +130,12 @@ To change this behavior use `skipOnEmpty(true)`:
 
 ### Conditional validation
 
-In some cases there is a need to apply rule conditionally. It could be performed by using `when()`:
+In some cases there is a need to apply rule conditionally. It could be performed by using `when() rule`:
 
 ```php
-(new Number())->integer()->min(100)->when(static function ($value, DataSetInterface $dataSet) {
+(new When(static function ($value, DataSetInterface $dataSet) {
     return $dataSet->getAttributeValue('country') === Country::USA;
-});
+}, (new Number())->integer()->min(100)));
 ```
 
 If callable returns `true` rule is applied, when the value returned is `false`, rule is skipped.
