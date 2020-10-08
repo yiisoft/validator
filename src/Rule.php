@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\I18n\TranslatorInterface;
+use Yiisoft\Translator\TranslatorInterface;
 
 /**
  * Rule represents a single value validation rule.
