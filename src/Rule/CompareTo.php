@@ -11,12 +11,8 @@ use Yiisoft\Validator\Rule;
 /**
  * CompareValidator compares the specified attribute value with another value.
  *
- * The value being compared with can be another attribute value
- * (specified via [[compareAttribute]]) or a constant (specified via
- * [[compareValue]]. When both are specified, the latter takes
- * precedence. If neither is specified, the attribute will be compared
- * with another attribute whose name is by appending "_repeat" to the source
- * attribute name.
+ * The value being compared with a constant [[compareValue]], which is set
+ * in the constructor.
  *
  * CompareValidator supports different comparison operators, specified
  * via the [[operator]] property.
@@ -39,9 +35,7 @@ class CompareTo extends Rule
     private const TYPE_NUMBER = 'number';
 
     /**
-     * @var mixed the constant value to be compared with. When both this property
-     * and [[compareAttribute]] are set, this property takes precedence.
-     * @see compareAttribute
+     * @var mixed the constant value to be compared with.
      */
     private $compareValue;
     /**
@@ -99,6 +93,7 @@ class CompareTo extends Rule
                 throw new \RuntimeException("Unknown operator: {$this->operator}");
         }
     }
+
 
     public function __construct($value)
     {
