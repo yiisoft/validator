@@ -282,6 +282,7 @@ class Ip extends Rule
      *
      * In this example, access is allowed for all the IPv4 and IPv6 addresses excluding the `192.168.10.0/24` subnet.
      * IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
+     * @return self
      */
     public function ranges(array $ranges): self
     {
@@ -382,6 +383,8 @@ class Ip extends Rule
     /**
      * The method checks whether the IP address with specified CIDR is allowed according to the [[ranges]] list.
      *
+     * @param string $ip
+     * @return bool
      * @see ranges
      */
     private function isAllowed(string $ip): bool
