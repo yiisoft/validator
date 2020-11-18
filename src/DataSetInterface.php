@@ -19,6 +19,7 @@ interface DataSetInterface
 
     /**
      * If there is such attribute in the set
+     * @return bool
      */
     public function hasAttribute(string $attribute): bool;
 }

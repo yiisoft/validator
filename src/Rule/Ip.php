@@ -382,6 +382,7 @@ class Ip extends Rule
     /**
      * The method checks whether the IP address with specified CIDR is allowed according to the [[ranges]] list.
      *
+     * @return bool
      * @see ranges
      */
     private function isAllowed(string $ip): bool
