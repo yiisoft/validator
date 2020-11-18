@@ -34,8 +34,9 @@
         "yiisoft/network-utilities": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.3",
-        "phan/phan": "^3.0"
+        "phpunit/phpunit": "^9.4",
+        "roave/infection-static-analysis-plugin": "^1.4",
+        "vimeo/psalm": "^4.1"
     },
     "autoload": {
         "psr-4": {
