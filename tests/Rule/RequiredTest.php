@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
@@ -34,13 +36,14 @@ class RequiredTest extends TestCase
                     'message' => 'Value cannot be blank.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
         ];
     }
 
     /**
      * @dataProvider optionsProvider
+     *
      * @param Rule $rule
      * @param array $expected
      */

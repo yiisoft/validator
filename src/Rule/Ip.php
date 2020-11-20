@@ -141,6 +141,7 @@ class Ip extends Rule
      *
      * - `{attribute}`: the label of the attribute being validated
      * - `{value}`: the value of the attribute being validated
+     *
      * @see allowSubnet
      */
     private string $wrongCidr = 'Contains wrong subnet mask.';
@@ -295,6 +296,7 @@ class Ip extends Rule
      *
      * @param string $name name of the network
      * @param array $ranges ranges
+     *
      * @return self
      */
     public function network(string $name, array $ranges): self
@@ -383,6 +385,7 @@ class Ip extends Rule
      * The method checks whether the IP address with specified CIDR is allowed according to the [[ranges]] list.
      *
      * @return bool
+     *
      * @see ranges
      */
     private function isAllowed(string $ip): bool
@@ -405,6 +408,7 @@ class Ip extends Rule
      * Parses IP address/range for the negation with [[NEGATION_CHAR]].
      *
      * @param $string
+     *
      * @return array `[0 => bool, 1 => string]`
      *  - boolean: whether the string is negated
      *  - string: the string without negation (when the negation were present)
@@ -422,7 +426,9 @@ class Ip extends Rule
      *  - Removes duplicates.
      *
      * @param array $ranges
+     *
      * @return array
+     *
      * @see networks
      */
     private function prepareRanges(array $ranges): array
@@ -446,6 +452,7 @@ class Ip extends Rule
 
     /**
      * Used to get the Regexp pattern for initial IP address parsing.
+     *
      * @return string
      */
     public function getIpParsePattern(): string
@@ -473,7 +480,7 @@ class Ip extends Rule
                 'allowNegation' => $this->allowNegation,
                 'wrongCidrMessage' => $this->translateMessage($this->wrongCidr),
                 'ranges' => $this->ranges,
-                'notInRangeMessage' => $this->translateMessage($this->notInRange)
+                'notInRangeMessage' => $this->translateMessage($this->notInRange),
             ],
         );
     }

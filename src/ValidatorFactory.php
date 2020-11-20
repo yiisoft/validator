@@ -40,7 +40,7 @@ final class ValidatorFactory implements ValidatorFactoryInterface
     }
 
     /**
-     * @param Rule|callable $rule
+     * @param callable|Rule $rule
      */
     private function normalizeRule($rule): Rule
     {

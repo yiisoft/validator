@@ -28,6 +28,7 @@ abstract class Rule
      * @param mixed $value value to be validated
      * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
      * @param bool $previousRulesErrored set to true if rule is part of a group of rules and one of the previous validations failed
+     *
      * @return Result
      */
     final public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
@@ -38,7 +39,7 @@ abstract class Rule
 
         if (
           ($this->skipOnError && $previousRulesErrored) ||
-          (is_callable($this->when) && !call_user_func($this->when, $value, $dataSet))
+          (is_callable($this->when) && !($this->when)($value, $dataSet))
         ) {
             return new Result();
         }
@@ -51,6 +52,7 @@ abstract class Rule
      *
      * @param mixed $value value to be validated
      * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
+     *
      * @return Result
      */
     abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
@@ -107,6 +109,7 @@ abstract class Rule
      * ```
      *
      * @param callable $callback
+     *
      * @return $this
      */
     public function when(callable $callback): self
@@ -125,6 +128,7 @@ abstract class Rule
 
     /**
      * @param bool $value if validation should be skipped if value validated is empty
+     *
      * @return self
      */
     public function skipOnEmpty(bool $value): self
@@ -154,7 +158,9 @@ abstract class Rule
      * Checks if the given value is empty.
      * A value is considered empty if it is null, an empty array, or an empty string.
      * Note that this method is different from PHP empty(). It will return false when the value is 0.
+     *
      * @param mixed $value the value to be checked
+     *
      * @return bool whether the value is empty
      */
     protected function isEmpty($value): bool
@@ -176,6 +182,7 @@ abstract class Rule
 
     /**
      * Returns rule options as array.
+     *
      * @return array
      */
     public function getOptions(): array
