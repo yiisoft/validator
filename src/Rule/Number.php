@@ -23,21 +23,23 @@ class Number extends Rule
      */
     private bool $asInteger = false;
     /**
-     * @var int|float upper limit of the number. Defaults to null, meaning no upper limit.
+     * @var float|int upper limit of the number. Defaults to null, meaning no upper limit.
+     *
      * @see tooBigMessage for the customized message used when the number is too big.
      */
     private $max;
     /**
-     * @var int|float lower limit of the number. Defaults to null, meaning no lower limit.
+     * @var float|int lower limit of the number. Defaults to null, meaning no lower limit.
+     *
      * @see tooSmallMessage for the customized message used when the number is too small.
      */
     private $min;
     /**
-     * @var string user-defined error message used when the value is bigger than {@link $max}.
+     * @var string user-defined error message used when the value is bigger than {@link}.
      */
     private string $tooBigMessage = 'Value must be no greater than {max}.';
     /**
-     * @var string user-defined error message used when the value is smaller than {@link $min}.
+     * @var string user-defined error message used when the value is smaller than {@link}.
      */
     private string $tooSmallMessage = 'Value must be no less than {min}.';
     /**

@@ -20,11 +20,13 @@ class HasLength extends Rule
 
     /**
      * @var int|null maximum length. null means no maximum length limit.
+     *
      * @see tooLongMessage for the customized message for a too long string.
      */
     private ?int $max = null;
     /**
      * @var int|null minimum length. null means no minimum length limit.
+     *
      * @see tooShortMessage for the customized message for a too short string.
      */
     private ?int $min = null;
@@ -33,11 +35,11 @@ class HasLength extends Rule
      */
     private string $message = 'This value must be a string.';
     /**
-     * @var string user-defined error message used when the length of the value is smaller than {@see $min}.
+     * @var string user-defined error message used when the length of the value is smaller than {@see}.
      */
     private string $tooShortMessage = 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.';
     /**
-     * @var string user-defined error message used when the length of the value is greater than {@see $max}.
+     * @var string user-defined error message used when the length of the value is greater than {@see}.
      */
     private string $tooLongMessage = 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.';
     /**

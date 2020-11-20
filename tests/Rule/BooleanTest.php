@@ -64,7 +64,7 @@ class BooleanTest extends TestCase
                     'message' => 'The value must be either "1" or "0".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
             [
                 (new Boolean())->skipOnEmpty(true),
@@ -75,7 +75,7 @@ class BooleanTest extends TestCase
                     'message' => 'The value must be either "1" or "0".',
                     'skipOnEmpty' => true,
                     'skipOnError' => true,
-                ]
+                ],
             ],
             [
                 (new Boolean())->skipOnEmpty(true)->skipOnError(false),
@@ -86,7 +86,7 @@ class BooleanTest extends TestCase
                     'message' => 'The value must be either "1" or "0".',
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
-                ]
+                ],
             ],
             [
                 (new Boolean())->skipOnEmpty(true)->skipOnError(false)->strict(true),
@@ -97,7 +97,7 @@ class BooleanTest extends TestCase
                     'message' => 'The value must be either "1" or "0".',
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
-                ]
+                ],
             ],
             [
                 (new Boolean())->trueValue('YES'),
@@ -108,7 +108,7 @@ class BooleanTest extends TestCase
                     'message' => 'The value must be either "YES" or "0".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
             [
                 (new Boolean())->falseValue('NO'),
@@ -119,7 +119,7 @@ class BooleanTest extends TestCase
                     'message' => 'The value must be either "1" or "NO".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
             [
                 (new Boolean())->trueValue('YES')->falseValue('NO')->strict(true),
@@ -130,13 +130,14 @@ class BooleanTest extends TestCase
                     'message' => 'The value must be either "YES" or "NO".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
         ];
     }
 
     /**
      * @dataProvider optionsProvider
+     *
      * @param Rule $rule
      * @param array $expected
      */

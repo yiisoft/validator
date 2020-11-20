@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use function is_iterable;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
 
-use function is_iterable;
+use Yiisoft\Validator\Rule;
 
 /**
  * In validates that the attribute value is among a list of values.
@@ -18,7 +18,6 @@ use function is_iterable;
  * The range can be specified via the [[range]] property.
  * If the [[not]] property is set true, the validator will ensure the attribute value
  * is NOT among the specified range.
- *
  */
 class InRange extends Rule
 {

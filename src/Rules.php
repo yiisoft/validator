@@ -12,7 +12,7 @@ use Yiisoft\Validator\Rule\Callback;
 final class Rules
 {
     /**
-     * @var Rule[] $rules
+     * @var Rule[]
      */
     private array $rules = [];
 
@@ -24,7 +24,7 @@ final class Rules
     }
 
     /**
-     * @param Rule|callable $rule
+     * @param callable|Rule $rule
      */
     public function add($rule): void
     {
@@ -61,6 +61,7 @@ final class Rules
 
     /**
      * Return rules as array.
+     *
      * @return array
      */
     public function asArray(): array

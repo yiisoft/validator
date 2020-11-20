@@ -20,11 +20,11 @@ class EachTest extends TestCase
     public function validateValues(): void
     {
         $values = [
-            10, 20, 30
+            10, 20, 30,
         ];
 
         $rules = new Rules([
-            (new Number())->max(13)
+            (new Number())->max(13),
         ]);
 
         $result = (new Each($rules))->validate($values);
@@ -45,7 +45,7 @@ class EachTest extends TestCase
     {
         $rules = new Rules([
             (new Number())->max(13),
-            (new Number())->max(14)
+            (new Number())->max(14),
         ]);
 
         $this->assertEquals([
@@ -70,7 +70,7 @@ class EachTest extends TestCase
                 'tooBigMessage' => 'Value must be no greater than 14.',
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
-            ]
+            ],
         ], (new Each($rules))->getOptions());
     }
 }
