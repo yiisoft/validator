@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
@@ -79,7 +81,7 @@ class AtLeastTest extends TestCase
                     'message' => 'The model is not valid. Must have at least "1" filled attributes.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
             [
                 (new AtLeast(['attr1', 'attr2']))->min(2),
@@ -88,13 +90,14 @@ class AtLeastTest extends TestCase
                     'message' => 'The model is not valid. Must have at least "2" filled attributes.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
         ];
     }
 
     /**
      * @dataProvider optionsProvider
+     *
      * @param Rule $rule
      * @param array $expected
      */

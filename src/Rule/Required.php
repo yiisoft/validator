@@ -34,7 +34,7 @@ class Required extends Rule
         return array_merge(
             parent::getOptions(),
             [
-                'message' => $this->translateMessage($this->message)
+                'message' => $this->translateMessage($this->message),
             ],
         );
     }

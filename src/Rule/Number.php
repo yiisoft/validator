@@ -23,12 +23,14 @@ class Number extends Rule
      */
     private bool $asInteger = false;
     /**
-     * @var int|float upper limit of the number. Defaults to null, meaning no upper limit.
+     * @var float|int upper limit of the number. Defaults to null, meaning no upper limit.
+     *
      * @see tooBigMessage for the customized message used when the number is too big.
      */
     private $max;
     /**
-     * @var int|float lower limit of the number. Defaults to null, meaning no lower limit.
+     * @var float|int lower limit of the number. Defaults to null, meaning no lower limit.
+     *
      * @see tooSmallMessage for the customized message used when the number is too small.
      */
     private $min;

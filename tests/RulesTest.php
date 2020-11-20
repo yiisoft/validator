@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
-use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rules;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rules;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
 class RulesTest extends TestCase
@@ -30,7 +30,7 @@ class RulesTest extends TestCase
         $rules = new Rules(
             [
                 new Required(),
-                (new Number())->max(10)
+                (new Number())->max(10),
             ]
         );
 
@@ -49,7 +49,7 @@ class RulesTest extends TestCase
                         $result->addError('Value should be 42!');
                     }
                     return $result;
-                }
+                },
             ]
         );
 
@@ -64,7 +64,7 @@ class RulesTest extends TestCase
             [
                 (new Number())->min(10),
                 (new Number())->min(10)->when(fn () => false)->skipOnError(false),
-                (new Number())->min(10)->skipOnError(false)
+                (new Number())->min(10)->skipOnError(false),
             ]
         );
 
@@ -80,7 +80,7 @@ class RulesTest extends TestCase
             [
                 (new Number())->min(10),
                 (new Number())->min(10)->skipOnError(false),
-                (new Number())->min(10)
+                (new Number())->min(10),
             ]
         );
 
@@ -113,14 +113,14 @@ class RulesTest extends TestCase
                 'tooBigMessage' => 'Value must be no greater than 10.',
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
-            ]
+            ],
         ], $rules->asArray());
 
         $rules = new Rules(
             [
                 (new Number())->min(10),
                 (new Number())->min(10)->skipOnError(false),
-                (new Number())->min(10)->integer()
+                (new Number())->min(10)->integer(),
             ]
         );
         $this->assertEquals([
@@ -162,7 +162,7 @@ class RulesTest extends TestCase
         $rules = new Rules([
             (new Each(new Rules([
                 (new Number())->max(13),
-                (new Number())->max(14)
+                (new Number())->max(14),
             ]))),
             (new Number())->min(10),
         ]);
@@ -190,7 +190,7 @@ class RulesTest extends TestCase
                     'tooBigMessage' => 'Value must be no greater than 14.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
             [
                 'number',

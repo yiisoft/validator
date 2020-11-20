@@ -41,7 +41,7 @@ final class ResultSet implements \IteratorAggregate
     }
 
     /**
-     * @return \ArrayIterator|\Traversable|Result[]
+     * @return \ArrayIterator|Result[]|\Traversable
      */
     public function getIterator()
     {

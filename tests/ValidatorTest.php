@@ -75,7 +75,7 @@ class ValidatorTest extends TestCase
                             $result->addError('Value should be 42!');
                         }
                         return $result;
-                    }
+                    },
                 ],
             ]
         );
@@ -126,7 +126,7 @@ class ValidatorTest extends TestCase
                             $result->addError('Value should be 42!');
                         }
                         return $result;
-                    }
+                    },
                 ],
             ]
         );
@@ -141,7 +141,7 @@ class ValidatorTest extends TestCase
                     'falseValue' => '0',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
             'int' => [
                 [
@@ -182,7 +182,7 @@ class ValidatorTest extends TestCase
                 'bool' => (new Boolean()),
                 'int' => [
                     new Required(),
-                    new CustomUrlRule()
+                    new CustomUrlRule(),
                 ],
             ]
         );
@@ -197,7 +197,7 @@ class ValidatorTest extends TestCase
                     'falseValue' => '0',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
             'int' => [
                 [

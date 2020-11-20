@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
@@ -125,7 +127,7 @@ class InRangeTest extends TestCase
                     'not' => false,
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
             [
                 (new InRange(range(1, 2)))->strict(),
@@ -136,7 +138,7 @@ class InRangeTest extends TestCase
                     'not' => false,
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
             [
                 (new InRange(range(1, 2)))->not(),
@@ -147,13 +149,14 @@ class InRangeTest extends TestCase
                     'not' => true,
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ]
+                ],
             ],
         ];
     }
 
     /**
      * @dataProvider optionsProvider
+     *
      * @param Rule $rule
      * @param array $expected
      */

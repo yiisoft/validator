@@ -20,11 +20,13 @@ class HasLength extends Rule
 
     /**
      * @var int|null maximum length. null means no maximum length limit.
+     *
      * @see tooLongMessage for the customized message for a too long string.
      */
     private ?int $max = null;
     /**
      * @var int|null minimum length. null means no minimum length limit.
+     *
      * @see tooShortMessage for the customized message for a too short string.
      */
     private ?int $min = null;

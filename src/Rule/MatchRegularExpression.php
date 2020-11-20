@@ -64,7 +64,7 @@ class MatchRegularExpression extends Rule
             [
                 'message' => $this->translateMessage($this->message),
                 'not' => $this->not,
-                'pattern' => $this->pattern
+                'pattern' => $this->pattern,
             ],
         );
     }
