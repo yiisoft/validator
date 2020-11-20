@@ -73,6 +73,7 @@ class HasLengthTest extends TestCase
         $this->assertTrue($rule->validate(str_repeat('x', 5))->isValid());
     }
 
+
     public function testValidateMax(): void
     {
         $rule = (new HasLength())
@@ -121,7 +122,7 @@ class HasLengthTest extends TestCase
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new HasLength())->min(3),
@@ -134,7 +135,7 @@ class HasLengthTest extends TestCase
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new HasLength())->max(3),
@@ -147,7 +148,7 @@ class HasLengthTest extends TestCase
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new HasLength())->min(3)->max(4)->encoding('windows-1251'),
@@ -160,14 +161,13 @@ class HasLengthTest extends TestCase
                     'encoding' => 'windows-1251',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
-            ],
+                ]
+            ]
         ];
     }
 
     /**
      * @dataProvider optionsProvider
-     *
      * @param Rule $rule
      * @param array $expected
      */

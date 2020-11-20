@@ -10,7 +10,7 @@ namespace Yiisoft\Validator;
 final class Validator implements ValidatorInterface
 {
     /**
-     * @var Rules[]
+     * @var Rules[] $attributeRules
      */
     private array $attributeRules = [];
 
@@ -42,7 +42,7 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param string $attribute
-     * @param callable|Rule $rule
+     * @param Rule|callable $rule
      */
     public function addRule(string $attribute, $rule): void
     {

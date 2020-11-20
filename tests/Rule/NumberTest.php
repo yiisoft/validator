@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Exception\MissingAttributeException;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule;
 
 /**
  * @group validators
@@ -318,7 +316,7 @@ class NumberTest extends TestCase
                     'tooBigMessage' => 'Value must be no greater than .',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Number())->min(1),
@@ -331,7 +329,7 @@ class NumberTest extends TestCase
                     'tooBigMessage' => 'Value must be no greater than .',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Number())->max(1),
@@ -344,7 +342,7 @@ class NumberTest extends TestCase
                     'tooBigMessage' => 'Value must be no greater than 1.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Number())->min(2)->max(10),
@@ -357,7 +355,7 @@ class NumberTest extends TestCase
                     'tooBigMessage' => 'Value must be no greater than 10.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Number())->integer(),
@@ -370,14 +368,13 @@ class NumberTest extends TestCase
                     'tooBigMessage' => 'Value must be no greater than .',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
         ];
     }
 
     /**
      * @dataProvider optionsProvider
-     *
      * @param Rule $rule
      * @param array $expected
      */

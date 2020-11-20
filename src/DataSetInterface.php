@@ -13,14 +13,12 @@ interface DataSetInterface
 {
     /**
      * Get specified attribute value
-     *
      * @throws MissingAttributeException if there is no such value
      */
     public function getAttributeValue(string $attribute);
 
     /**
      * If there is such attribute in the set
-     *
      * @return bool
      */
     public function hasAttribute(string $attribute): bool;

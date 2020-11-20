@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
@@ -78,6 +76,7 @@ class UrlTest extends TestCase
         $this->assertTrue($val->validate('http://xn--zcack7ayc9a.de')->isValid());
     }
 
+
     public function testValidateLength(): void
     {
         $url = 'http://' . str_pad('base', 2000, 'url') . '.de';
@@ -113,7 +112,7 @@ class UrlTest extends TestCase
                     'pattern' => '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Url())->enableIDN(),
@@ -124,7 +123,7 @@ class UrlTest extends TestCase
                     'pattern' => '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Url())->schemes(['http']),
@@ -135,7 +134,7 @@ class UrlTest extends TestCase
                     'pattern' => '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [(new Url())->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN(),
                 [
@@ -145,14 +144,13 @@ class UrlTest extends TestCase
                     'pattern' => '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
-            ],
+                ]
+            ]
         ];
     }
 
     /**
      * @dataProvider optionsProvider
-     *
      * @param Rule $rule
      * @param array $expected
      */

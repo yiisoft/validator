@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
@@ -27,7 +25,7 @@ class IpTest extends TestCase
             'any' => [['192.168.0.32', 'fa::/32', 'any'], ['192.168.0.32', 'fa::/32', '0.0.0.0/0', '::/0']],
             'ipv4+!private' => [
                 ['10.0.0.1', '!private'],
-                ['10.0.0.1', '!10.0.0.0/8', '!172.16.0.0/12', '!192.168.0.0/16', '!fd00::/8'],
+                ['10.0.0.1', '!10.0.0.0/8', '!172.16.0.0/12', '!192.168.0.0/16', '!fd00::/8']
             ],
             'private+!system' => [
                 ['private', '!system'],
@@ -45,8 +43,8 @@ class IpTest extends TestCase
                     '!192.0.2.0/24',
                     '!198.51.100.0/24',
                     '!203.0.113.0/24',
-                    '!2001:db8::/32',
-                ],
+                    '!2001:db8::/32'
+                ]
             ],
         ];
     }
@@ -59,6 +57,7 @@ class IpTest extends TestCase
         $validator = (new Ip())->ranges($range);
         $this->assertEquals($expectedRange, $validator->getRanges());
     }
+
 
     public function testValidateOrder(): void
     {
@@ -123,6 +122,7 @@ class IpTest extends TestCase
         $this->assertTrue($validator->validate('!192.168.5.32/32')->isValid());
         $this->assertFalse($validator->validate('!!192.168.5.32/32')->isValid());
     }
+
 
     public function testValidateIPv6(): void
     {
@@ -321,7 +321,7 @@ class IpTest extends TestCase
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Ip())->allowIpv4(),
@@ -341,7 +341,7 @@ class IpTest extends TestCase
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Ip())->disallowIpv4(),
@@ -361,7 +361,7 @@ class IpTest extends TestCase
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Ip())->disallowIpv6(),
@@ -381,7 +381,7 @@ class IpTest extends TestCase
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Ip())->allowSubnet(),
@@ -401,7 +401,7 @@ class IpTest extends TestCase
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Ip())->requireSubnet(),
@@ -421,7 +421,7 @@ class IpTest extends TestCase
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Ip())->requireSubnet()->disallowSubnet(),
@@ -441,7 +441,7 @@ class IpTest extends TestCase
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [(new Ip())->allowNegation(),
                 [
@@ -460,7 +460,7 @@ class IpTest extends TestCase
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Ip())->allowNegation()->disallowNegation(),
@@ -480,7 +480,7 @@ class IpTest extends TestCase
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Ip())->ranges(['private']),
@@ -500,14 +500,13 @@ class IpTest extends TestCase
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
         ];
     }
 
     /**
      * @dataProvider optionsProvider
-     *
      * @param Rule $rule
      * @param array $expected
      */

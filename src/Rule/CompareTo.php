@@ -25,13 +25,11 @@ class CompareTo extends Rule
 {
     /**
      * Constant for specifying the comparison [[type]] by numeric values.
-     *
      * @see type
      */
     private const TYPE_STRING = 'string';
     /**
      * Constant for specifying the comparison [[type]] by numeric values.
-     *
      * @see type
      */
     private const TYPE_NUMBER = 'number';
@@ -96,6 +94,7 @@ class CompareTo extends Rule
         }
     }
 
+
     public function __construct($value)
     {
         $this->compareValue = $value;
@@ -150,12 +149,10 @@ class CompareTo extends Rule
 
     /**
      * Compares two values with the specified operator.
-     *
      * @param string $operator the comparison operator
      * @param string $type the type of the values being compared
      * @param mixed $value the value being compared
      * @param mixed $compareValue another value being compared
-     *
      * @return bool whether the comparison using the specified operator is true.
      */
     protected function compareValues(string $operator, string $type, $value, $compareValue): bool
@@ -197,7 +194,7 @@ class CompareTo extends Rule
                 'type' => $this->type,
                 'operator' => $this->operator,
                 'compareValue' => $this->compareValue,
-                'message' => $this->translateMessage($this->getMessage(), ['value' => $this->compareValue]),
+                'message' => $this->translateMessage($this->getMessage(), ['value' => $this->compareValue])
             ],
         );
     }

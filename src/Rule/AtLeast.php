@@ -68,7 +68,6 @@ class AtLeast extends Rule
 
     /**
      * @param int $value The minimum required quantity of filled attributes to pass the validation.
-     *
      * @return self
      */
     public function min(int $value): self

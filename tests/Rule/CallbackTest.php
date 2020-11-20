@@ -57,7 +57,7 @@ class CallbackTest extends TestCase
                 [
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new Callback(static function ($value) {
@@ -66,14 +66,13 @@ class CallbackTest extends TestCase
                 [
                     'skipOnEmpty' => true,
                     'skipOnError' => true,
-                ],
+                ]
             ],
         ];
     }
 
     /**
      * @dataProvider optionsProvider
-     *
      * @param Rule $rule
      * @param array $expected
      */

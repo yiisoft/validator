@@ -112,7 +112,7 @@ JSON;
     {
         $this->assertEquals(
             [
-                'The value is not JSON.',
+                'The value is not JSON.'
             ],
             (new Json())->validate('')->getErrors()
         );
@@ -122,7 +122,7 @@ JSON;
     {
         $this->assertEquals(
             [
-                'bad json',
+                'bad json'
             ],
             (new Json())->message('bad json')->validate('')->getErrors()
         );
@@ -142,14 +142,13 @@ JSON;
                     'message' => 'The value is not JSON.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
         ];
     }
 
     /**
      * @dataProvider optionsProvider
-     *
      * @param Rule $rule
      * @param array $expected
      */

@@ -26,8 +26,8 @@ class ValidatorFactoryTest extends TestCase
                         $result = new Result();
                         $result->addError($errorMessage);
                         return $result;
-                    },
-                ],
+                    }
+                ]
             ]
         );
 
@@ -49,8 +49,8 @@ class ValidatorFactoryTest extends TestCase
                         $result = new Result();
                         $result->addError('error');
                         return $result;
-                    },
-                ],
+                    }
+                ]
             ]
         );
 
@@ -58,6 +58,7 @@ class ValidatorFactoryTest extends TestCase
 
         $this->assertSame($translatableMessage, $result->getResult($attribute)->getErrors()[0]);
     }
+
 
     public function testCreateWithInvalidRule()
     {
@@ -69,8 +70,8 @@ class ValidatorFactoryTest extends TestCase
         $validation->create(
             [
                 $attribute => [
-                    'invalid rule',
-                ],
+                    'invalid rule'
+                ]
             ]
         );
     }

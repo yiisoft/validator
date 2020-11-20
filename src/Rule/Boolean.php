@@ -90,9 +90,9 @@ class Boolean extends Rule
                     $this->message,
                     [
                         'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                        'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+                        'false' => $this->falseValue === false ? 'false' : $this->falseValue
                     ]
-                ),
+                )
             ],
         );
     }

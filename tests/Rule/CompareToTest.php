@@ -94,7 +94,7 @@ class CompareToTest extends TestCase
                     'message' => 'Value must be equal to "1".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new CompareTo(1))->asNumber(),
@@ -105,7 +105,7 @@ class CompareToTest extends TestCase
                     'message' => 'Value must be equal to "1".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new CompareTo(1))->asNumber()->operator('>='),
@@ -116,7 +116,7 @@ class CompareToTest extends TestCase
                     'message' => 'Value must be greater than or equal to "1".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new CompareTo('YES')),
@@ -127,7 +127,7 @@ class CompareToTest extends TestCase
                     'message' => 'Value must be equal to "YES".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new CompareTo('YES'))->asString()->skipOnEmpty(true),
@@ -138,7 +138,7 @@ class CompareToTest extends TestCase
                     'message' => 'Value must be equal to "YES".',
                     'skipOnEmpty' => true,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new CompareTo('YES'))->asString()->operator('!=='),
@@ -149,14 +149,13 @@ class CompareToTest extends TestCase
                     'message' => 'Value must not be equal to "YES".',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
         ];
     }
 
     /**
      * @dataProvider optionsProvider
-     *
      * @param Rule $rule
      * @param array $expected
      */

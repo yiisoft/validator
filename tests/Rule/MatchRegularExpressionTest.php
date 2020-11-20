@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
@@ -43,7 +41,7 @@ class MatchRegularExpressionTest extends TestCase
                     'pattern' => $pattern,
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
             [
                 (new MatchRegularExpression($pattern))->not(),
@@ -53,14 +51,13 @@ class MatchRegularExpressionTest extends TestCase
                     'pattern' => $pattern,
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
-                ],
+                ]
             ],
         ];
     }
 
     /**
      * @dataProvider optionsProvider
-     *
      * @param Rule $rule
      * @param array $expected
      */
