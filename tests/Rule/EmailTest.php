@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Email;
 
 /**
@@ -121,8 +122,6 @@ class EmailTest extends TestCase
 
     public function testValidateMx(): void
     {
-        $this->markTestSkipped('Too slow :(');
-
         $validator = (new Email())
             ->checkDNS(true);
 
@@ -178,6 +177,7 @@ class EmailTest extends TestCase
     /**
      * Test malicious email addresses that can be used to exploit SwiftMailer vulnerability CVE-2016-10074 while IDN is
      * disabled.
+     *
      * @see https://legalhackers.com/advisories/SwiftMailer-Exploit-Remote-Code-Exec-CVE-2016-10074-Vuln.html
      * @dataProvider malformedAddressesProvider
      *
@@ -193,6 +193,7 @@ class EmailTest extends TestCase
     /**
      * Test malicious email addresses that can be used to exploit SwiftMailer vulnerability CVE-2016-10074 while IDN is
      * enabled.
+     *
      * @see https://legalhackers.com/advisories/SwiftMailer-Exploit-Remote-Code-Exec-CVE-2016-10074-Vuln.html
      * @dataProvider malformedAddressesProvider
      *
@@ -209,5 +210,71 @@ class EmailTest extends TestCase
         $validator = (new Email())
             ->enableIDN(true);
         $this->assertFalse($validator->validate($value)->isValid());
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('email', (new Email())->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [
+                (new Email()),
+                [
+                    'allowName' => false,
+                    'checkDNS' => false,
+                    'enableIDN' => false,
+                    'message' => 'This value is not a valid email address.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+            [
+                (new Email())->allowName(true),
+                [
+                    'allowName' => true,
+                    'checkDNS' => false,
+                    'enableIDN' => false,
+                    'message' => 'This value is not a valid email address.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+            [
+                (new Email())->allowName(true)->checkDNS(true),
+                [
+                    'allowName' => true,
+                    'checkDNS' => true,
+                    'enableIDN' => false,
+                    'message' => 'This value is not a valid email address.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+            [
+                (new Email())->allowName(true)->enableIDN(true),
+                [
+                    'allowName' => true,
+                    'checkDNS' => false,
+                    'enableIDN' => true,
+                    'message' => 'This value is not a valid email address.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     *
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

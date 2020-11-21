@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * RegularExpressionValidator validates that the attribute value matches the specified [[pattern]].
@@ -16,7 +16,7 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class MatchRegularExpression extends Rule
 {
-    use HasValidationMessage;
+    use HasValidationErrorMessage;
 
     /**
      * @var string the regular expression to be matched with
@@ -55,5 +55,17 @@ class MatchRegularExpression extends Rule
         $new = clone $this;
         $new->not = true;
         return $new;
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'message' => $this->translateMessage($this->message),
+                'not' => $this->not,
+                'pattern' => $this->pattern,
+            ],
+        );
     }
 }

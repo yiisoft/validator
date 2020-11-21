@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\HasLength;
 
 /**
@@ -72,7 +73,6 @@ class HasLengthTest extends TestCase
         $this->assertTrue($rule->validate(str_repeat('x', 5))->isValid());
     }
 
-
     public function testValidateMax(): void
     {
         $rule = (new HasLength())
@@ -100,5 +100,79 @@ class HasLengthTest extends TestCase
         $this->assertEquals('is not string error', $rule->validate(null)->getErrors()[0]);
         $this->assertEquals('is to short test', $rule->validate(str_repeat('x', 1))->getErrors()[0]);
         $this->assertEquals('is to long test', $rule->validate(str_repeat('x', 6))->getErrors()[0]);
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('hasLength', (new HasLength())->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [
+                (new HasLength()),
+                [
+                    'message' => 'This value must be a string.',
+                    'min' => null,
+                    'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                    'max' => null,
+                    'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                    'encoding' => 'UTF-8',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+            [
+                (new HasLength())->min(3),
+                [
+                    'message' => 'This value must be a string.',
+                    'min' => 3,
+                    'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                    'max' => null,
+                    'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                    'encoding' => 'UTF-8',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+            [
+                (new HasLength())->max(3),
+                [
+                    'message' => 'This value must be a string.',
+                    'min' => null,
+                    'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                    'max' => 3,
+                    'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                    'encoding' => 'UTF-8',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+            [
+                (new HasLength())->min(3)->max(4)->encoding('windows-1251'),
+                [
+                    'message' => 'This value must be a string.',
+                    'min' => 3,
+                    'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                    'max' => 4,
+                    'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                    'encoding' => 'windows-1251',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     *
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

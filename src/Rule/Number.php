@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
-use Yiisoft\Strings\StringHelper;
+use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * NumberValidator validates that the attribute value is a number.
@@ -23,12 +23,14 @@ class Number extends Rule
      */
     private bool $asInteger = false;
     /**
-     * @var int|float upper limit of the number. Defaults to null, meaning no upper limit.
+     * @var float|int upper limit of the number. Defaults to null, meaning no upper limit.
+     *
      * @see tooBigMessage for the customized message used when the number is too big.
      */
     private $max;
     /**
-     * @var int|float lower limit of the number. Defaults to null, meaning no lower limit.
+     * @var float|int lower limit of the number. Defaults to null, meaning no lower limit.
+     *
      * @see tooSmallMessage for the customized message used when the number is too small.
      */
     private $min;
@@ -54,14 +56,14 @@ class Number extends Rule
     {
         $result = new Result();
 
-        if ($this->isNotNumber($value)) {
+        if (!is_scalar($value)) {
             $result->addError($this->translateMessage($this->getNotANumberMessage(), ['value' => $value]));
             return $result;
         }
 
         $pattern = $this->asInteger ? $this->integerPattern : $this->numberPattern;
 
-        if (!preg_match($pattern, StringHelper::normalizeNumber($value))) {
+        if (!preg_match($pattern, NumericHelper::normalize($value))) {
             $result->addError($this->translateMessage($this->getNotANumberMessage(), ['value' => $value]));
         } elseif ($this->min !== null && $value < $this->min) {
             $result->addError($this->translateMessage($this->tooSmallMessage, ['min' => $this->min]));
@@ -115,13 +117,18 @@ class Number extends Rule
         return 'Value must be a number.';
     }
 
-    /**
-     * @param mixed $value the data value to be checked.
-     */
-    private function isNotNumber($value): bool
+    public function getOptions(): array
     {
-        return is_array($value)
-            || (is_object($value) && !method_exists($value, '__toString'))
-            || (!is_object($value) && !is_scalar($value) && $value !== null);
+        return array_merge(
+            parent::getOptions(),
+            [
+                'notANumberMessage' => $this->translateMessage($this->getNotANumberMessage()),
+                'asInteger' => $this->asInteger,
+                'min' => $this->min,
+                'tooSmallMessage' => $this->translateMessage($this->tooSmallMessage, ['min' => $this->min]),
+                'max' => $this->max,
+                'tooBigMessage' => $this->translateMessage($this->tooBigMessage, ['max' => $this->max]),
+            ],
+        );
     }
 }

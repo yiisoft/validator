@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-trait HasValidationMessage
+trait HasValidationErrorMessage
 {
     public function message(string $message): self
     {

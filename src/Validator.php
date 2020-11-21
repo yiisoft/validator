@@ -4,38 +4,25 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\Validator\Rule\Callback;
-use Yiisoft\I18n\TranslatorInterface;
-
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
  */
-class Validator implements ValidatorInterface
+final class Validator implements ValidatorInterface
 {
-    private ?TranslatorInterface $translator;
-    private ?string $translationDomain;
-    private ?string $translationLocale;
-
     /**
-     * @var Rules[]
+     * @var Rules[] $attributeRules
      */
     private array $attributeRules = [];
 
-    public function __construct(
-        iterable $rules = [],
-        TranslatorInterface $translator = null,
-        string $translationDomain = null,
-        string $translationLocale = null
-    ) {
-        $this->translator = $translator;
-        $this->translationDomain = $translationDomain;
-        $this->translationLocale = $translationLocale;
-
+    public function __construct(iterable $rules = [])
+    {
         foreach ($rules as $attribute => $ruleSets) {
+            if ($ruleSets instanceof Rule) {
+                $ruleSets = [$ruleSets];
+            } elseif (!is_iterable($ruleSets)) {
+                throw new \InvalidArgumentException('Attribute rules should be either an instance of Rule class or an array of instances of Rule class.');
+            }
             foreach ($ruleSets as $rule) {
-                if (is_callable($rule)) {
-                    $rule = new Callback($rule);
-                }
                 $this->addRule($attribute, $rule);
             }
         }
@@ -53,17 +40,51 @@ class Validator implements ValidatorInterface
         return $results;
     }
 
-    public function addRule(string $attribute, Rule $rule): void
+    /**
+     * @param string $attribute
+     * @param callable|Rule $rule
+     */
+    public function addRule(string $attribute, $rule): void
     {
         if (!isset($this->attributeRules[$attribute])) {
-            $this->attributeRules[$attribute] = new Rules(
-                [],
-                $this->translator,
-                $this->translationDomain,
-                $this->translationLocale
-            );
+            $this->attributeRules[$attribute] = new Rules([]);
         }
-
         $this->attributeRules[$attribute]->add($rule);
+    }
+
+    /**
+     * Return all attribute rules as array.
+     *
+     * For example:
+     *
+     * ```php
+     * [
+     *    'amount' => [
+     *        [
+     *            'number',
+     *            'integer' => true,
+     *            'max' => 100,
+     *            'notANumberMessage' => 'Value must be an integer.',
+     *            'tooBigMessage' => 'Value must be no greater than 100.'
+     *        ],
+     *        ['callback'],
+     *    ],
+     *    'name' => [
+     *        'hasLength',
+     *        'max' => 20,
+     *        'message' => 'Value must contain at most 20 characters.'
+     *    ],
+     * ]
+     * ```
+     *
+     * @return array
+     */
+    public function asArray(): array
+    {
+        $rulesOfArray = [];
+        foreach ($this->attributeRules as $attribute => $rules) {
+            $rulesOfArray[$attribute] = $rules->asArray();
+        }
+        return $rulesOfArray;
     }
 }

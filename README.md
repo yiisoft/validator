@@ -10,8 +10,12 @@ The package provides data validation capabilities.
 
 [![Latest Stable Version](https://poser.pugx.org/yiisoft/validator/v/stable.png)](https://packagist.org/packages/yiisoft/validator)
 [![Total Downloads](https://poser.pugx.org/yiisoft/validator/downloads.png)](https://packagist.org/packages/yiisoft/validator)
-[![Build Status](https://travis-ci.com/yiisoft/validator.svg?branch=master)](https://travis-ci.com/yiisoft/validator)
+[![Build status](https://github.com/yiisoft/validator/workflows/build/badge.svg)](https://github.com/yiisoft/validator/actions?query=workflow%3Abuild)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/yiisoft/validator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/validator/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/yiisoft/validator/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/validator/?branch=master)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyiisoft%2Fwidget%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/yiisoft/validator/master)
+[![static analysis](https://github.com/yiisoft/validator/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/validator/actions?query=workflow%3A%22static+analysis%22)
+[![type-coverage](https://shepherd.dev/github/yiisoft/validator/coverage.svg)](https://shepherd.dev/github/yiisoft/validator)
 
 ## Features
 
@@ -63,7 +67,7 @@ use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
 
-class MoneyTransfer implements DataSetInterface
+final class MoneyTransfer implements DataSetInterface
 {
     private $amount;
     
@@ -146,7 +150,7 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
-class Pi extends Rule
+final class Pi extends Rule
 {
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
@@ -170,7 +174,7 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
-class CompanyName extends Rule
+final class CompanyName extends Rule
 {
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
@@ -191,22 +195,24 @@ class CompanyName extends Rule
 }
 ```
 
-### Grouping common validation rules into rule sets
+### Grouping multiple validation rules
 
-To reuse multiple validation rules it is advised to group rules into validation sets:
+To reuse multiple validation rules it is advised to group rules like the following:
 
 ```php
+use Yiisoft\Validator\Rules;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\MatchRegularExpression;
+use \Yiisoft\Validator\Rule\GroupRule;
 
-class UsernameRules
+final class UsernameRule extends GroupRule
 {
-    public static function get(): array
+    public function getRules(): Rules
     {
-        return [
+        return new Rules([
             (new HasLength())->min(2)->max(20),
             new MatchRegularExpression('~[a-z_\-]~i')
-        ];
+        ]);
     }
 }
 ```
@@ -218,7 +224,7 @@ use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\Rule\Email;
 
 $validator = new Validator([    
-    'username' => UsernameRules::get(),
+    'username' => new UsernameRule(),
     'email' => [new Email()]
 ]);
 
@@ -232,4 +238,46 @@ foreach ($results as $attribute => $result) {
 }
 ```
 
- 
+### Unit testing
+
+The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
+
+```shell
+./vendor/bin/phpunit
+```
+
+### Mutation testing
+
+The package tests are checked with [Infection](https://infection.github.io/) mutation framework. To run it:
+
+```shell
+./vendor/bin/infection
+```
+
+### Static analysis
+
+The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
+
+```shell
+./vendor/bin/psalm
+```
+
+### Support the project
+
+[![Open Collective](https://img.shields.io/badge/Open%20Collective-sponsor-7eadf1?logo=open%20collective&logoColor=7eadf1&labelColor=555555)](https://opencollective.com/yiisoft)
+
+### Follow updates
+
+[![Official website](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](https://www.yiiframework.com/)
+[![Twitter](https://img.shields.io/badge/twitter-follow-1DA1F2?logo=twitter&logoColor=1DA1F2&labelColor=555555?style=flat)](https://twitter.com/yiiframework)
+[![Telegram](https://img.shields.io/badge/telegram-join-1DA1F2?style=flat&logo=telegram)](https://t.me/yii3en)
+[![Facebook](https://img.shields.io/badge/facebook-join-1DA1F2?style=flat&logo=facebook&logoColor=ffffff)](https://www.facebook.com/groups/yiitalk)
+[![Slack](https://img.shields.io/badge/slack-join-1DA1F2?style=flat&logo=slack)](https://yiiframework.com/go/slack)
+
+## License
+
+The Yii Validator is free software. It is released under the terms of the BSD License.
+Please see [`LICENSE`](./LICENSE.md) for more information.
+
+Maintained by [Yii Software](https://www.yiiframework.com/).
+

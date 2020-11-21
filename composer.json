@@ -24,16 +24,19 @@
         "source": "https://github.com/yiisoft/validator"
     },
     "require": {
-        "php": "^7.4",
+        "php": "^7.4|^8.0",
+        "ext-json": "*",
         "ext-mbstring": "*",
-        "yiisoft/strings": "dev-master",
+        "yiisoft/friendly-exception": "^1.0",
+        "yiisoft/strings": "^1.0",
         "yiisoft/arrays": "dev-master",
-        "yiisoft/i18n": "dev-master",
-        "yiisoft/network-utilities": "dev-master",
-        "ext-json": "*"
+        "yiisoft/translator": "dev-master",
+        "yiisoft/network-utilities": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^9.4",
+        "roave/infection-static-analysis-plugin": "^1.4",
+        "vimeo/psalm": "^4.1"
     },
     "autoload": {
         "psr-4": {
@@ -48,9 +51,19 @@
     "extra": {
         "branch-alias": {
             "dev-master": "3.0.x-dev"
+        },
+        "config-plugin": {
+            "common": "config/common.php"
         }
     },
     "config": {
         "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "test": [
+            "phpunit --colors --no-interaction"
+        ]
     }
 }

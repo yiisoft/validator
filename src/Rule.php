@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\I18n\TranslatorInterface;
+use Yiisoft\Translator\TranslatorInterface;
 
 /**
  * Rule represents a single value validation rule.
@@ -28,6 +28,7 @@ abstract class Rule
      * @param mixed $value value to be validated
      * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
      * @param bool $previousRulesErrored set to true if rule is part of a group of rules and one of the previous validations failed
+     *
      * @return Result
      */
     final public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
@@ -38,7 +39,7 @@ abstract class Rule
 
         if (
           ($this->skipOnError && $previousRulesErrored) ||
-          (is_callable($this->when) && !call_user_func($this->when, $value, $dataSet))
+          (is_callable($this->when) && !($this->when)($value, $dataSet))
         ) {
             return new Result();
         }
@@ -51,6 +52,7 @@ abstract class Rule
      *
      * @param mixed $value value to be validated
      * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
+     *
      * @return Result
      */
     abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
@@ -76,15 +78,15 @@ abstract class Rule
         return $new;
     }
 
-    public function translateMessage(string $message, array $arguments = []): string
+    protected function translateMessage(string $message, array $parameters = []): string
     {
         if ($this->translator === null) {
-            return $this->formatMessage($message, $arguments);
+            return $this->formatMessage($message, $parameters);
         }
 
         return $this->translator->translate(
             $message,
-            $arguments,
+            $parameters,
             $this->translationDomain ?? 'validators',
             $this->translationLocale
         );
@@ -107,6 +109,7 @@ abstract class Rule
      * ```
      *
      * @param callable $callback
+     *
      * @return $this
      */
     public function when(callable $callback): self
@@ -125,6 +128,7 @@ abstract class Rule
 
     /**
      * @param bool $value if validation should be skipped if value validated is empty
+     *
      * @return self
      */
     public function skipOnEmpty(bool $value): self
@@ -154,11 +158,38 @@ abstract class Rule
      * Checks if the given value is empty.
      * A value is considered empty if it is null, an empty array, or an empty string.
      * Note that this method is different from PHP empty(). It will return false when the value is 0.
+     *
      * @param mixed $value the value to be checked
+     *
      * @return bool whether the value is empty
      */
     protected function isEmpty($value): bool
     {
         return $value === null || $value === [] || $value === '';
+    }
+
+    /**
+     * Get name of the rule to be used when rule is converted to array.
+     * By default it returns base name of the class, first letter in lowercase.
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        $className = static::class;
+        return lcfirst(substr($className, strrpos($className, '\\') + 1));
+    }
+
+    /**
+     * Returns rule options as array.
+     *
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return [
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

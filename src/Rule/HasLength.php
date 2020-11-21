@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * StringValidator validates that the attribute value is of certain length.
@@ -16,15 +16,17 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class HasLength extends Rule
 {
-    use HasValidationMessage;
+    use HasValidationErrorMessage;
 
     /**
      * @var int|null maximum length. null means no maximum length limit.
+     *
      * @see tooLongMessage for the customized message for a too long string.
      */
     private ?int $max = null;
     /**
      * @var int|null minimum length. null means no minimum length limit.
+     *
      * @see tooShortMessage for the customized message for a too short string.
      */
     private ?int $min = null;
@@ -51,7 +53,7 @@ class HasLength extends Rule
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($this->message);
+            $result->addError($this->translateMessage($this->message));
             return $result;
         }
 
@@ -61,7 +63,7 @@ class HasLength extends Rule
             $result->addError($this->translateMessage($this->tooShortMessage, ['min' => $this->min]));
         }
         if ($this->max !== null && $length > $this->max) {
-            $result->addError($this->translateMessage($this->tooLongMessage, ['min' => $this->max]));
+            $result->addError($this->translateMessage($this->tooLongMessage, ['max' => $this->max]));
         }
 
         return $result;
@@ -100,5 +102,20 @@ class HasLength extends Rule
         $new = clone $this;
         $new->tooLongMessage = $message;
         return $new;
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'message' => $this->translateMessage($this->message),
+                'min' => $this->min,
+                'tooShortMessage' => $this->translateMessage($this->tooShortMessage, ['min' => $this->min]),
+                'max' => $this->max,
+                'tooLongMessage' => $this->translateMessage($this->tooLongMessage, ['max' => $this->max]),
+                'encoding' => $this->encoding,
+            ],
+        );
     }
 }

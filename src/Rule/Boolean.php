@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * BooleanValidator checks if the attribute value is a boolean value or a value corresponding to it.
  */
 class Boolean extends Rule
 {
-    use HasValidationMessage;
+    use HasValidationErrorMessage;
     /**
      * @var mixed the value representing true status. Defaults to '1'.
      */
@@ -76,5 +76,24 @@ class Boolean extends Rule
         }
 
         return $result;
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'strict' => $this->strict,
+                'trueValue' => $this->trueValue,
+                'falseValue' => $this->falseValue,
+                'message' => $this->translateMessage(
+                    $this->message,
+                    [
+                        'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                        'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+                    ]
+                ),
+            ],
+        );
     }
 }

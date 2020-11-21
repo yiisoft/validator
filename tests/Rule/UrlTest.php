@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Url;
 
 /**
@@ -10,7 +13,7 @@ use Yiisoft\Validator\Rule\Url;
  */
 class UrlTest extends TestCase
 {
-    public function testValidate()
+    public function testValidate(): void
     {
         $val = new Url();
         $this->assertFalse($val->validate('google.de')->isValid());
@@ -41,7 +44,7 @@ class UrlTest extends TestCase
         $this->assertFalse($val->validate('http://äüö?=!"§$%&/()=}][{³²€.edu')->isValid());
     }
 
-    public function testValidateWithoutScheme()
+    public function testValidateWithoutScheme(): void
     {
         $val = (new Url())
             ->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i');
@@ -49,7 +52,7 @@ class UrlTest extends TestCase
         $this->assertTrue($val->validate('yiiframework.com')->isValid());
     }
 
-    public function testValidateWithCustomScheme()
+    public function testValidateWithCustomScheme(): void
     {
         $val = (new Url())
             ->schemes(['http', 'https', 'ftp', 'ftps']);
@@ -62,25 +65,99 @@ class UrlTest extends TestCase
         $this->assertFalse($val->validate('//yiiframework.com')->isValid());
     }
 
-    public function testValidateWithIdn()
+    public function testValidateWithIdn(): void
     {
         if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('intl package required');
-
             return;
         }
-        $val = (new Url())
-            ->enableIDN();
 
+        $val = (new Url())->enableIDN();
         $this->assertTrue($val->validate('http://äüößìà.de')->isValid());
         // converted via http://mct.verisign-grs.com/convertServlet
         $this->assertTrue($val->validate('http://xn--zcack7ayc9a.de')->isValid());
     }
 
-    public function testValidateLength()
+    public function testValidateLength(): void
     {
         $url = 'http://' . str_pad('base', 2000, 'url') . '.de';
         $val = new Url();
         $this->assertFalse($val->validate($url)->isValid());
+    }
+
+    public function testValidateWithIdnWithoutScheme(): void
+    {
+        if (!function_exists('idn_to_ascii')) {
+            $this->markTestSkipped('intl package required');
+            return;
+        }
+
+        $validator = (new Url())->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN();
+        $this->assertTrue($validator->validate('домен.рф')->isValid());
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('url', (new Url())->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [
+                (new Url()),
+                [
+                    'message' => 'This value is not a valid URL.',
+                    'enableIDN' => false,
+                    'validSchemes' => ['http', 'https'],
+                    'pattern' => '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+            [
+                (new Url())->enableIDN(),
+                [
+                    'message' => 'This value is not a valid URL.',
+                    'enableIDN' => true,
+                    'validSchemes' => ['http', 'https'],
+                    'pattern' => '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+            [
+                (new Url())->schemes(['http']),
+                [
+                    'message' => 'This value is not a valid URL.',
+                    'enableIDN' => false,
+                    'validSchemes' => ['http'],
+                    'pattern' => '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+            [(new Url())->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN(),
+                [
+                    'message' => 'This value is not a valid URL.',
+                    'enableIDN' => true,
+                    'validSchemes' => ['http', 'https'],
+                    'pattern' => '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     *
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

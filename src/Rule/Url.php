@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * UrlValidator validates that the attribute value is a valid http or https URL.
@@ -17,7 +17,7 @@ use Yiisoft\Validator\DataSetInterface;
  */
 class Url extends Rule
 {
-    use HasValidationMessage;
+    use HasValidationErrorMessage;
 
     /**
      * @var string the regular expression used to validateValue the attribute value.
@@ -53,23 +53,11 @@ class Url extends Rule
 
         // make sure the length is limited to avoid DOS attacks
         if (is_string($value) && strlen($value) < 2000) {
-            if (strpos($this->pattern, '{schemes}') !== false) {
-                $pattern = str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
-            } else {
-                $pattern = $this->pattern;
-            }
-
             if ($this->enableIDN) {
-                $value = preg_replace_callback(
-                    '/:\/\/([^\/]+)/',
-                    function ($matches) {
-                        return '://' . $this->idnToAscii($matches[1]);
-                    },
-                    $value
-                );
+                $value = $this->convertIdn($value);
             }
 
-            if (preg_match($pattern, $value)) {
+            if (preg_match($this->getPattern(), $value)) {
                 return $result;
             }
         }
@@ -82,6 +70,28 @@ class Url extends Rule
     private function idnToAscii($idn)
     {
         return idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
+    }
+
+    private function convertIdn($value): string
+    {
+        if (strpos($value, '://') === false) {
+            return $this->idnToAscii($value);
+        }
+
+        return preg_replace_callback(
+            '/:\/\/([^\/]+)/',
+            fn ($matches) => '://' . $this->idnToAscii($matches[1]),
+            $value
+        );
+    }
+
+    private function getPattern(): string
+    {
+        if (strpos($this->pattern, '{schemes}') !== false) {
+            return str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
+        }
+
+        return $this->pattern;
     }
 
     public function pattern(string $pattern): self
@@ -103,5 +113,18 @@ class Url extends Rule
         $new = clone $this;
         $new->validSchemes = $schemes;
         return $new;
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'message' => $this->translateMessage($this->message),
+                'enableIDN' => $this->enableIDN,
+                'validSchemes' => $this->validSchemes,
+                'pattern' => $this->pattern,
+            ],
+        );
     }
 }

@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * CompareValidator compares the specified attribute value with another value.
  *
- * The value being compared with can be another attribute value
- * (specified via [[compareAttribute]]) or a constant (specified via
- * [[compareValue]]. When both are specified, the latter takes
- * precedence. If neither is specified, the attribute will be compared
- * with another attribute whose name is by appending "_repeat" to the source
- * attribute name.
+ * The value being compared with a constant [[compareValue]], which is set
+ * in the constructor.
  *
  * CompareValidator supports different comparison operators, specified
  * via the [[operator]] property.
@@ -29,19 +25,19 @@ class CompareTo extends Rule
 {
     /**
      * Constant for specifying the comparison [[type]] by numeric values.
+     *
      * @see type
      */
     private const TYPE_STRING = 'string';
     /**
      * Constant for specifying the comparison [[type]] by numeric values.
+     *
      * @see type
      */
     private const TYPE_NUMBER = 'number';
 
     /**
-     * @var mixed the constant value to be compared with. When both this property
-     * and [[compareAttribute]] are set, this property takes precedence.
-     * @see compareAttribute
+     * @var mixed the constant value to be compared with.
      */
     private $compareValue;
     /**
@@ -154,10 +150,12 @@ class CompareTo extends Rule
 
     /**
      * Compares two values with the specified operator.
+     *
      * @param string $operator the comparison operator
      * @param string $type the type of the values being compared
      * @param mixed $value the value being compared
      * @param mixed $compareValue another value being compared
+     *
      * @return bool whether the comparison using the specified operator is true.
      */
     protected function compareValues(string $operator, string $type, $value, $compareValue): bool
@@ -189,5 +187,18 @@ class CompareTo extends Rule
             default:
                 return false;
         }
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'type' => $this->type,
+                'operator' => $this->operator,
+                'compareValue' => $this->compareValue,
+                'message' => $this->translateMessage($this->getMessage(), ['value' => $this->compareValue]),
+            ],
+        );
     }
 }

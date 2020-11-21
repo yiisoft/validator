@@ -4,31 +4,34 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * EmailValidator validates that the attribute value is a valid email address.
  */
 class Email extends Rule
 {
-    use HasValidationMessage;
+    use HasValidationErrorMessage;
 
     /**
      * @var string the regular expression used to validateValue the attribute value.
+     *
      * @see http://www.regular-expressions.info/email.html
      */
     private string $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/';
     /**
      * @var string the regular expression used to validateValue email addresses with the name part.
      * This property is used only when [[allowName]] is true.
+     *
      * @see allowName
      */
     private string $fullPattern = '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/';
     /**
      * @var bool whether to allow name in the email address (e.g. "John Smith <john.smith@example.com>"). Defaults to false.
+     *
      * @see fullPattern
      */
     private bool $allowName = false;
@@ -125,5 +128,18 @@ class Email extends Rule
         $new = clone $this;
         $new->enableIDN = $enableIDN;
         return $new;
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'allowName' => $this->allowName,
+                'checkDNS' => $this->checkDNS,
+                'enableIDN' => $this->enableIDN,
+                'message' => $this->translateMessage($this->message),
+            ],
+        );
     }
 }

@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationMessage;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 
 /**
  * AtLeastValidator checks if at least $min of many attributes are filled.
  */
 class AtLeast extends Rule
 {
-    use HasValidationMessage;
+    use HasValidationErrorMessage;
 
     /**
      * The minimum required quantity of filled attributes to pass the validation.
@@ -68,6 +68,7 @@ class AtLeast extends Rule
 
     /**
      * @param int $value The minimum required quantity of filled attributes to pass the validation.
+     *
      * @return self
      */
     public function min(int $value): self
@@ -75,5 +76,14 @@ class AtLeast extends Rule
         $new = clone $this;
         $new->min = $value;
         return $new;
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            ['min' => $this->min],
+            ['message' => $this->translateMessage($this->message, ['min' => $this->min])],
+        );
     }
 }

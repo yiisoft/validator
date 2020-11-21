@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Result;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
 /**
@@ -141,6 +141,7 @@ class Ip extends Rule
      *
      * - `{attribute}`: the label of the attribute being validated
      * - `{value}`: the value of the attribute being validated
+     *
      * @see allowSubnet
      */
     private string $wrongCidr = 'Contains wrong subnet mask.';
@@ -295,6 +296,7 @@ class Ip extends Rule
      *
      * @param string $name name of the network
      * @param array $ranges ranges
+     *
      * @return self
      */
     public function network(string $name, array $ranges): self
@@ -382,6 +384,8 @@ class Ip extends Rule
     /**
      * The method checks whether the IP address with specified CIDR is allowed according to the [[ranges]] list.
      *
+     * @return bool
+     *
      * @see ranges
      */
     private function isAllowed(string $ip): bool
@@ -404,6 +408,7 @@ class Ip extends Rule
      * Parses IP address/range for the negation with [[NEGATION_CHAR]].
      *
      * @param $string
+     *
      * @return array `[0 => bool, 1 => string]`
      *  - boolean: whether the string is negated
      *  - string: the string without negation (when the negation were present)
@@ -421,7 +426,9 @@ class Ip extends Rule
      *  - Removes duplicates.
      *
      * @param array $ranges
+     *
      * @return array
+     *
      * @see networks
      */
     private function prepareRanges(array $ranges): array
@@ -445,6 +452,7 @@ class Ip extends Rule
 
     /**
      * Used to get the Regexp pattern for initial IP address parsing.
+     *
      * @return string
      */
     public function getIpParsePattern(): string
@@ -453,5 +461,27 @@ class Ip extends Rule
             static::NEGATION_CHAR,
             '/'
         ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
+    }
+
+    public function getOptions(): array
+    {
+        return array_merge(
+            parent::getOptions(),
+            [
+                'message' => $this->translateMessage($this->message),
+                'allowIpv4' => $this->allowIpv4,
+                'ipv4NotAllowedMessage' => $this->translateMessage($this->ipv4NotAllowed),
+                'allowIpv6' => $this->allowIpv6,
+                'ipv6NotAllowedMessage' => $this->translateMessage($this->ipv6NotAllowed),
+                'allowSubnet' => $this->allowSubnet,
+                'hasSubnetMessage' => $this->translateMessage($this->hasSubnet),
+                'requireSubnet' => $this->requireSubnet,
+                'noSubnetMessage' => $this->translateMessage($this->noSubnet),
+                'allowNegation' => $this->allowNegation,
+                'wrongCidrMessage' => $this->translateMessage($this->wrongCidr),
+                'ranges' => $this->ranges,
+                'notInRangeMessage' => $this->translateMessage($this->notInRange),
+            ],
+        );
     }
 }

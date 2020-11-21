@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\AtLeast;
 
 /**
@@ -61,5 +64,45 @@ class AtLeastTest extends TestCase
         $this->assertFalse($rule->validate($model)->isValid());
         $this->assertCount(1, $rule->validate($model)->getErrors());
         $this->assertEquals(['The model is not valid. Must have at least "2" filled attributes.'], $rule->validate($model)->getErrors());
+    }
+
+    public function testName(): void
+    {
+        $this->assertEquals('atLeast', (new AtLeast(['attr1', 'attr2']))->getName());
+    }
+
+    public function optionsProvider(): array
+    {
+        return [
+            [
+                (new AtLeast(['attr1', 'attr2'])),
+                [
+                    'min' => 1,
+                    'message' => 'The model is not valid. Must have at least "1" filled attributes.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+            [
+                (new AtLeast(['attr1', 'attr2']))->min(2),
+                [
+                    'min' => 2,
+                    'message' => 'The model is not valid. Must have at least "2" filled attributes.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     *
+     * @param Rule $rule
+     * @param array $expected
+     */
+    public function testOptions(Rule $rule, array $expected): void
+    {
+        $this->assertEquals($expected, $rule->getOptions());
     }
 }

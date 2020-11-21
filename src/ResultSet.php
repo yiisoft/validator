@@ -40,6 +40,9 @@ final class ResultSet implements \IteratorAggregate
         return $this->results[$attribute];
     }
 
+    /**
+     * @return \ArrayIterator|Result[]|\Traversable
+     */
     public function getIterator()
     {
         return new \ArrayIterator($this->results);

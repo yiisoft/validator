@@ -8,34 +8,36 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\Rules;
 
 /**
- * RequiredValidator validates that the specified attribute does not have null or empty value.
+ * GroupRule validates a single value for a set of custom rules
  */
-class Required extends Rule
+abstract class GroupRule extends Rule
 {
     use HasValidationErrorMessage;
 
-    private string $message = 'Value cannot be blank.';
+    protected string $message = 'This value is not a valid.';
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
-
-        if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
+        if (!$this->getRules()->validate($value, $dataSet)->isValid()) {
             $result->addError($this->translateMessage($this->message));
         }
 
         return $result;
     }
 
+    /**
+     * Return custom rules set
+     *
+     * @return Rules
+     */
+    abstract protected function getRules(): Rules;
+
     public function getOptions(): array
     {
-        return array_merge(
-            parent::getOptions(),
-            [
-                'message' => $this->translateMessage($this->message),
-            ],
-        );
+        return $this->getRules()->asArray();
     }
 }
