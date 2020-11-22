@@ -53,6 +53,7 @@ class Email extends Rule
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
+        $originalValue = $value;
         $result = new Result();
 
         if (!is_string($value)) {
@@ -91,6 +92,10 @@ class Email extends Rule
                     $valid = checkdnsrr($matches['domain'] . '.', 'MX') || checkdnsrr($matches['domain'] . '.', 'A');
                 }
             }
+        }
+
+        if ($this->enableIDN && $valid === false) {
+            $valid = filter_var($originalValue, FILTER_VALIDATE_EMAIL) ? true : false;
         }
 
         if ($valid === false) {
