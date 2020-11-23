@@ -95,7 +95,8 @@ class Email extends Rule
         }
 
         if ($this->enableIDN && $valid === false) {
-            $valid = (bool)filter_var($originalValue, FILTER_VALIDATE_EMAIL);
+            $pattern = '/^([a-zA-Z0-9._%+-]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/';
+            $valid = (bool) preg_match($pattern, $originalValue);
         }
 
         if ($valid === false) {
