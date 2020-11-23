@@ -95,7 +95,7 @@ class Email extends Rule
         }
 
         if ($this->enableIDN && $valid === false) {
-            $valid = filter_var($originalValue, FILTER_VALIDATE_EMAIL) ? true : false;
+            $valid = (bool)filter_var($originalValue, FILTER_VALIDATE_EMAIL);
         }
 
         if ($valid === false) {
