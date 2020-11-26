@@ -30,6 +30,10 @@ class Email extends Rule
      */
     private string $fullPattern = '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/';
     /**
+     * @var string the regular expression used to validate complex emails when idn is enabled.
+     */
+    private string $patternIdnEmail = '/^([a-zA-Z0-9._%+-]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/';
+    /**
      * @var bool whether to allow name in the email address (e.g. "John Smith <john.smith@example.com>"). Defaults to false.
      *
      * @see fullPattern
@@ -53,6 +57,7 @@ class Email extends Rule
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
+        $originalValue = $value;
         $result = new Result();
 
         if (!is_string($value)) {
@@ -93,6 +98,10 @@ class Email extends Rule
             }
         }
 
+        if ($this->enableIDN && $valid === false) {
+            $valid = (bool) preg_match($this->patternIdnEmail, $originalValue);
+        }
+
         if ($valid === false) {
             $result->addError($this->translateMessage($this->message));
         }
@@ -103,6 +112,13 @@ class Email extends Rule
     private function idnToAscii($idn)
     {
         return idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
+    }
+
+    public function patternIdnEmail(string $patternIdnEmail): self
+    {
+        $new = clone $this;
+        $new->patternIdnEmail = $patternIdnEmail;
+        return $new;
     }
 
     public function allowName(bool $allowName): self

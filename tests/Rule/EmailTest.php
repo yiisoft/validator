@@ -75,6 +75,7 @@ class EmailTest extends TestCase
             ->enableIDN(true);
 
         $this->assertTrue($validator->validate('5011@example.com')->isValid());
+        $this->assertTrue($validator->validate('test-@dummy.com')->isValid());
         $this->assertTrue($validator->validate('example@äüößìà.de')->isValid());
         $this->assertTrue($validator->validate('example@xn--zcack7ayc9a.de')->isValid());
         $this->assertTrue($validator->validate('info@örtliches.de')->isValid());
