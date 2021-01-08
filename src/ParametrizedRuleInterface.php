@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 /**
  * Rule represents a single value validation rule.
  */
-interface ParametrizedValidatorRuleInterface extends ValidatorRuleInterface
+interface ParametrizedRuleInterface extends RuleInterface
 {
     /**
      * Get name of the rule to be used when rule is converted to array.

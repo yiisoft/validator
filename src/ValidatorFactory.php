@@ -40,22 +40,22 @@ final class ValidatorFactory implements ValidatorFactoryInterface
     }
 
     /**
-     * @param callable|ValidatorRuleInterface $rule
+     * @param callable|RuleInterface $rule
      */
-    private function normalizeRule($rule): ValidatorRuleInterface
+    private function normalizeRule($rule): RuleInterface
     {
         if (is_callable($rule)) {
             $rule = new Callback($rule);
         }
 
-        if (!$rule instanceof ValidatorRuleInterface) {
+        if (!$rule instanceof RuleInterface) {
             throw new \InvalidArgumentException(sprintf(
                 'Rule should be either instance of %s or a callable',
-                ValidatorRuleInterface::class
+                RuleInterface::class
             ));
         }
 
-        if ($rule instanceof TranslatableValidatorRuleInterface) {
+        if ($rule instanceof TranslatableRuleInterface) {
             if ($this->translator !== null) {
                 $rule = $rule->translator($this->translator);
             }

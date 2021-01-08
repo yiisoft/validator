@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 /**
  * Rule represents a single value validation rule.
  */
-interface ValidatorRuleInterface
+interface RuleInterface
 {
     /**
      * Validates the value
