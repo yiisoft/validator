@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorFactory;
 
 class ValidatorFactoryTest extends TestCase
@@ -19,7 +20,9 @@ class ValidatorFactoryTest extends TestCase
         $attribute = 'test';
         $errorMessage = 'error message';
 
-        $validator = $validation->create(
+        $validator = $validation->create();
+
+        $result = $validator->validate($this->createDataSet([$attribute => '']),
             [
                 $attribute => [
                     static function () use ($errorMessage) {
@@ -28,51 +31,32 @@ class ValidatorFactoryTest extends TestCase
                         return $result;
                     },
                 ],
-            ]
-        );
-
-        $result = $validator->validate($this->createDataSet([$attribute => '']));
+            ]);
 
         $this->assertSame($errorMessage, $result->getResult($attribute)->getErrors()[0]);
     }
 
-    public function testCreateWithTranslator()
+    public function testCreateWithTranslator(): void
     {
         $translatableMessage = 'test message';
-        $validation = new ValidatorFactory($this->createTranslatorMock($translatableMessage));
 
         $attribute = 'test';
-        $validator = $validation->create(
-            [
-                $attribute => [
-                    static function () {
-                        $result = new Result();
-                        $result->addError('error');
-                        return $result;
-                    },
-                ],
-            ]
-        );
+        $translator = $this->createTranslatorMock($translatableMessage);
 
-        $result = $validator->validate($this->createDataSet([$attribute => '']));
+        $validator = new Validator();
+        $validator = $validator->withTranslator($translator);
+
+        $result = $validator->validate($this->createDataSet([$attribute => '']), [
+            $attribute => [
+                static function () {
+                    $result = new Result();
+                    $result->addError('error');
+                    return $result;
+                },
+            ],
+        ]);
 
         $this->assertSame($translatableMessage, $result->getResult($attribute)->getErrors()[0]);
-    }
-
-    public function testCreateWithInvalidRule()
-    {
-        $validation = new ValidatorFactory();
-
-        $this->expectException(\InvalidArgumentException::class);
-
-        $attribute = 'test';
-        $validation->create(
-            [
-                $attribute => [
-                    'invalid rule',
-                ],
-            ]
-        );
     }
 
     private function createTranslatorMock(string $returnMessage = null): TranslatorInterface

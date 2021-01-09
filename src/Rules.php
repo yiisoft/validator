@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Rule\Callback;
 
 /**
@@ -11,6 +12,8 @@ use Yiisoft\Validator\Rule\Callback;
  */
 final class Rules
 {
+    private ?TranslatorInterface $translator = null;
+
     /**
      * @var Rule[] $rules
      */
@@ -28,7 +31,11 @@ final class Rules
      */
     public function add($rule): void
     {
-        $this->rules[] = $this->normalizeRule($rule);
+        $rule = $this->normalizeRule($rule);
+        if ($this->translator !== null) {
+            $rule = $rule->translator($this->translator);
+        }
+        $this->rules[] = $rule;
     }
 
     public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
@@ -53,10 +60,21 @@ final class Rules
         }
 
         if (!$rule instanceof Rule) {
-            throw new \InvalidArgumentException('Rule should be either instance of Rule class or a callable');
+            throw new \InvalidArgumentException(sprintf(
+                'Rule should be either instance of Rule class or a callable, %s given.',
+                gettype($rule)
+            ));
         }
 
         return $rule;
+    }
+
+    public function withTranslator(TranslatorInterface $translator): self
+    {
+        $new = clone $this;
+        $new->translator = $translator;
+        $new->addTranslatorToRules($translator);
+        return $new;
     }
 
     /**
@@ -71,5 +89,12 @@ final class Rules
             $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
         }
         return $arrayOfRules;
+    }
+
+    private function addTranslatorToRules(TranslatorInterface $translator): void
+    {
+        foreach ($this->rules as &$rule) {
+            $rule = $rule->translator($translator);
+        }
     }
 }

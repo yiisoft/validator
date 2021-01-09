@@ -11,5 +11,5 @@ interface ValidatorFactoryInterface
      *
      * @return ValidatorInterface
      */
-    public function create(array $rules): ValidatorInterface;
+    public function create(): ValidatorInterface;
 }
