@@ -21,6 +21,7 @@ final class Validator implements ValidatorInterface
     /**
      * @param DataSetInterface $dataSet
      * @param Rule[] $rules
+     *
      * @return ResultSet
      */
     public function validate(DataSetInterface $dataSet, iterable $rules): ResultSet

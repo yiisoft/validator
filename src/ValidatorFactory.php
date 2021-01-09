@@ -16,8 +16,7 @@ final class ValidatorFactory implements ValidatorFactoryInterface
         TranslatorInterface $translator = null,
         string $translationDomain = null,
         string $translationLocale = null
-    )
-    {
+    ) {
         $this->translator = $translator;
         $this->translationDomain = $translationDomain;
         $this->translationLocale = $translationLocale;

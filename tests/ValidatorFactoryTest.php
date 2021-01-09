@@ -22,7 +22,8 @@ class ValidatorFactoryTest extends TestCase
 
         $validator = $validation->create();
 
-        $result = $validator->validate($this->createDataSet([$attribute => '']),
+        $result = $validator->validate(
+            $this->createDataSet([$attribute => '']),
             [
                 $attribute => [
                     static function () use ($errorMessage) {
@@ -31,7 +32,8 @@ class ValidatorFactoryTest extends TestCase
                         return $result;
                     },
                 ],
-            ]);
+            ]
+        );
 
         $this->assertSame($errorMessage, $result->getResult($attribute)->getErrors()[0]);
     }
