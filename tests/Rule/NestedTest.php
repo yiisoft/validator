@@ -17,6 +17,7 @@ class NestedTest extends TestCase
 {
     /**
      * @dataProvider validateDataProvider
+     *
      * @param Rule[] $rules
      */
     public function testValidate(array $rules, bool $expectedResult): void
@@ -24,7 +25,7 @@ class NestedTest extends TestCase
         $values = [
             'author' => [
                 'name' => 'Dmitry',
-                'age' => 18
+                'age' => 18,
             ],
         ];
 
