@@ -11,9 +11,6 @@ use Yiisoft\Translator\TranslatorInterface;
  */
 abstract class Rule
 {
-    private ?TranslatorInterface $translator = null;
-    private ?string $translationDomain = null;
-    private ?string $translationLocale = null;
     private bool $skipOnEmpty = false;
     private bool $skipOnError = true;
 
@@ -56,41 +53,6 @@ abstract class Rule
      * @return Result
      */
     abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
-
-    public function translator(TranslatorInterface $translator): self
-    {
-        $new = clone $this;
-        $new->translator = $translator;
-        return $new;
-    }
-
-    public function translationDomain(string $translation): self
-    {
-        $new = clone $this;
-        $new->translationDomain = $translation;
-        return $new;
-    }
-
-    public function translationLocale(string $locale): self
-    {
-        $new = clone $this;
-        $new->translationLocale = $locale;
-        return $new;
-    }
-
-    protected function translateMessage(string $message, array $parameters = []): string
-    {
-        if ($this->translator === null) {
-            return $this->formatMessage($message, $parameters);
-        }
-
-        return $this->translator->translate(
-            $message,
-            $parameters,
-            $this->translationDomain ?? 'validators',
-            $this->translationLocale
-        );
-    }
 
     /**
      * Add a PHP callable whose return value determines whether this rule should be applied.
@@ -185,7 +147,7 @@ abstract class Rule
      *
      * @return array
      */
-    public function getOptions(): array
+    public function getOptions(?TranslatorInterface $translator = null): array
     {
         return [
             'skipOnEmpty' => $this->skipOnEmpty,

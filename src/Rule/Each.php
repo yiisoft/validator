@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
@@ -40,13 +41,11 @@ class Each extends Rule
             if ($itemResult->isValid() === false) {
                 foreach ($itemResult->getErrors() as $error) {
                     $result->addError(
-                        $this->translateMessage(
-                            $this->message,
-                            [
-                                'error' => $error,
-                                'value' => $item,
-                            ]
-                        )
+                        $this->message,
+                        [
+                            'error' => $error->getMessage(),
+                            'value' => $item,
+                        ]
                     );
                 }
             }
@@ -62,8 +61,8 @@ class Each extends Rule
         return $new;
     }
 
-    public function getOptions(): array
+    public function getOptions(?TranslatorInterface $translator = null): array
     {
-        return $this->rules->asArray();
+        return $this->rules->asArray($translator);
     }
 }

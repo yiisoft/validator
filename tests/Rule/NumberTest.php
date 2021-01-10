@@ -81,7 +81,7 @@ class NumberTest extends TestCase
 
         $result = $rule->validate(-1);
         $this->assertFalse($result->isValid());
-        $this->assertStringContainsString('must be no less than 1.', $result->getErrors()[0]);
+        $this->assertStringContainsString('must be no less than 1.', $result->getErrors()[0]->getMessage());
 
         $this->assertFalse($rule->validate('22e-12')->isValid());
         $this->assertTrue($rule->validate(PHP_INT_MAX + 1)->isValid());
@@ -273,7 +273,7 @@ class NumberTest extends TestCase
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
         $errors = $result->getErrors();
-        $this->assertSame('Value is too small.', $errors[0]);
+        $this->assertSame('Value is too small.', $errors[0]->getMessage());
     }
 
     public function testValidateObject(): void
@@ -378,7 +378,7 @@ class NumberTest extends TestCase
     /**
      * @dataProvider optionsProvider
      *
-     * @param Rule $rule
+     * @param RuleTest $rule
      * @param array $expected
      */
     public function testOptions(Rule $rule, array $expected): void

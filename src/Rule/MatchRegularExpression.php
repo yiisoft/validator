@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -44,7 +46,7 @@ class MatchRegularExpression extends Rule
                 || ($this->not && !preg_match($this->pattern, $value)));
 
         if (!$valid) {
-            $result->addError($this->translateMessage($this->message));
+            $result->addError($this->message);
         }
 
         return $result;
@@ -57,12 +59,12 @@ class MatchRegularExpression extends Rule
         return $new;
     }
 
-    public function getOptions(): array
+    public function getOptions(?TranslatorInterface $translator = null): array
     {
         return array_merge(
             parent::getOptions(),
             [
-                'message' => $this->translateMessage($this->message),
+                'message' => (new ErrorMessage($this->message))->withTranslator($translator),
                 'not' => $this->not,
                 'pattern' => $this->pattern,
             ],

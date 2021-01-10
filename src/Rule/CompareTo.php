@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -136,12 +138,10 @@ class CompareTo extends Rule
 
         if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
             $result->addError(
-                $this->translateMessage(
-                    $this->getMessage(),
-                    [
-                        'value' => $this->compareValue,
-                    ]
-                )
+                $this->getMessage(),
+                [
+                    'value' => $this->compareValue,
+                ]
             );
         }
 
@@ -189,7 +189,7 @@ class CompareTo extends Rule
         }
     }
 
-    public function getOptions(): array
+    public function getOptions(?TranslatorInterface $translator = null): array
     {
         return array_merge(
             parent::getOptions(),
@@ -197,7 +197,7 @@ class CompareTo extends Rule
                 'type' => $this->type,
                 'operator' => $this->operator,
                 'compareValue' => $this->compareValue,
-                'message' => $this->translateMessage($this->getMessage(), ['value' => $this->compareValue]),
+                'message' => new ErrorMessage($this->getMessage(), ['value' => $this->compareValue], $translator),
             ],
         );
     }

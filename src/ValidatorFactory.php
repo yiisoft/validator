@@ -10,17 +10,11 @@ use Yiisoft\Validator\Rule\Callback;
 final class ValidatorFactory implements ValidatorFactoryInterface
 {
     private ?TranslatorInterface $translator;
-    private ?string $translationDomain;
-    private ?string $translationLocale;
 
     public function __construct(
-        TranslatorInterface $translator = null,
-        string $translationDomain = null,
-        string $translationLocale = null
+        TranslatorInterface $translator = null
     ) {
         $this->translator = $translator;
-        $this->translationDomain = $translationDomain;
-        $this->translationLocale = $translationLocale;
     }
 
     public function create(array $rules): ValidatorInterface
@@ -52,18 +46,6 @@ final class ValidatorFactory implements ValidatorFactoryInterface
             throw new \InvalidArgumentException(
                 'Rule should be either instance of Rule class or a callable'
             );
-        }
-
-        if ($this->translator !== null) {
-            $rule = $rule->translator($this->translator);
-        }
-
-        if ($this->translationDomain !== null) {
-            $rule = $rule->translationDomain($this->translationDomain);
-        }
-
-        if ($this->translationLocale !== null) {
-            $rule = $rule->translationLocale($this->translationLocale);
         }
 
         return $rule;

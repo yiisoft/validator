@@ -10,7 +10,7 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidatorFactory;
 
-class ValidatorFactoryTest extends TestCase
+class ValidatorFactoryTest extends TranslatorMock
 {
     public function testCreate()
     {
@@ -33,13 +33,13 @@ class ValidatorFactoryTest extends TestCase
 
         $result = $validator->validate($this->createDataSet([$attribute => '']));
 
-        $this->assertSame($errorMessage, $result->getResult($attribute)->getErrors()[0]);
+        $this->assertSame($errorMessage, $result->getResult($attribute)->getErrors()[0]->getMessage());
     }
 
     public function testCreateWithTranslator()
     {
         $translatableMessage = 'test message';
-        $validation = new ValidatorFactory($this->createTranslatorMock($translatableMessage));
+        $validation = new ValidatorFactory($this->createTranslatorMock(['error' => $translatableMessage]));
 
         $attribute = 'test';
         $validator = $validation->create(
@@ -56,7 +56,7 @@ class ValidatorFactoryTest extends TestCase
 
         $result = $validator->validate($this->createDataSet([$attribute => '']));
 
-        $this->assertSame($translatableMessage, $result->getResult($attribute)->getErrors()[0]);
+        $this->assertSame($translatableMessage, $result->getResult($attribute)->getErrors()[0]->getMessage($this->createTranslatorMock(['error' => $translatableMessage])));
     }
 
     public function testCreateWithInvalidRule()
@@ -73,19 +73,6 @@ class ValidatorFactoryTest extends TestCase
                 ],
             ]
         );
-    }
-
-    private function createTranslatorMock(string $returnMessage = null): TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-
-        if ($returnMessage) {
-            $translator
-                ->method('translate')
-                ->willReturn($returnMessage);
-        }
-
-        return $translator;
     }
 
     private function createDataSet(array $attributes): DataSetInterface

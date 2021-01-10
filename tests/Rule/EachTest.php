@@ -8,11 +8,12 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\Tests\TranslatorMock;
 
 /**
  * @group validators
  */
-class EachTest extends TestCase
+class EachTest extends TranslatorMock
 {
     /**
      * @test
@@ -28,7 +29,7 @@ class EachTest extends TestCase
         ]);
 
         $result = (new Each($rules))->validate($values);
-        $errors = $result->getErrors();
+        $errors = $result->getErrors($this->createTranslatorMock());
 
         $this->assertFalse($result->isValid());
         $this->assertCount(2, $errors);

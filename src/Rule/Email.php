@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -103,7 +105,7 @@ class Email extends Rule
         }
 
         if ($valid === false) {
-            $result->addError($this->translateMessage($this->message));
+            $result->addError($this->message);
         }
 
         return $result;
@@ -146,7 +148,7 @@ class Email extends Rule
         return $new;
     }
 
-    public function getOptions(): array
+    public function getOptions(?TranslatorInterface $translator = null): array
     {
         return array_merge(
             parent::getOptions(),
@@ -154,7 +156,7 @@ class Email extends Rule
                 'allowName' => $this->allowName,
                 'checkDNS' => $this->checkDNS,
                 'enableIDN' => $this->enableIDN,
-                'message' => $this->translateMessage($this->message),
+                'message' => (new ErrorMessage($this->message))->withTranslator($translator),
             ],
         );
     }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -62,7 +64,7 @@ class Url extends Rule
             }
         }
 
-        $result->addError($this->translateMessage($this->message));
+        $result->addError($this->message);
 
         return $result;
     }
@@ -115,12 +117,12 @@ class Url extends Rule
         return $new;
     }
 
-    public function getOptions(): array
+    public function getOptions(?TranslatorInterface $translator = null): array
     {
         return array_merge(
             parent::getOptions(),
             [
-                'message' => $this->translateMessage($this->message),
+                'message' => (new ErrorMessage($this->message))->withTranslator($translator),
                 'enableIDN' => $this->enableIDN,
                 'validSchemes' => $this->validSchemes,
                 'pattern' => $this->pattern,

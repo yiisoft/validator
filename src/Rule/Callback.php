@@ -33,8 +33,8 @@ class Callback extends Rule
         $result = new Result();
 
         if ($callbackResult->isValid() === false) {
-            foreach ($callbackResult->getErrors() as $message) {
-                $result->addError($this->translateMessage($message));
+            foreach ($callbackResult->getErrors() as $error) {
+                $result->addError($error->message, $error->params);
             }
         }
         return $result;

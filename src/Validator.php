@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Yiisoft\Translator\TranslatorInterface;
+
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
  */
@@ -79,11 +81,11 @@ final class Validator implements ValidatorInterface
      *
      * @return array
      */
-    public function asArray(): array
+    public function asArray(?TranslatorInterface $translator = null): array
     {
         $rulesOfArray = [];
         foreach ($this->attributeRules as $attribute => $rules) {
-            $rulesOfArray[$attribute] = $rules->asArray();
+            $rulesOfArray[$attribute] = $rules->asArray($translator);
         }
         return $rulesOfArray;
     }

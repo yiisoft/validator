@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ResultSet;
 
-class ResultSetTest extends TestCase
+class ResultSetTest extends TranslatorMock
 {
     /**
      * @test
@@ -23,7 +22,7 @@ class ResultSetTest extends TestCase
         $resultSet->addResult('x', $error);
         $resultSet->addResult('x', $success);
 
-        $errors = $resultSet->getResult('x')->getErrors();
+        $errors = $resultSet->getResult('x')->getErrors($this->createTranslatorMock());
 
         $this->assertFalse($resultSet->getResult('x')->isValid());
         $this->assertCount(1, $errors);
@@ -45,7 +44,7 @@ class ResultSetTest extends TestCase
         $resultSet->addResult('x', $error1);
         $resultSet->addResult('x', $error2);
 
-        $errors = $resultSet->getResult('x')->getErrors();
+        $errors = $resultSet->getResult('x')->getErrors($this->createTranslatorMock());
 
         $this->assertFalse($resultSet->getResult('x')->isValid());
         $this->assertCount(2, $errors);

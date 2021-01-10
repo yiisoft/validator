@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
 
-class ResultTest extends TestCase
+class ResultTest extends TranslatorMock
 {
     /**
      * @test
@@ -34,7 +34,7 @@ class ResultTest extends TestCase
     {
         $result = new Result();
         $result->addError('Error');
-        $this->assertContains('Error', $result->getErrors());
+        $this->assertContains('Error', $result->getErrors($this->createTranslatorMock()));
     }
 
     /**

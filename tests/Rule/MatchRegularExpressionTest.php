@@ -61,7 +61,7 @@ class MatchRegularExpressionTest extends TestCase
     /**
      * @dataProvider optionsProvider
      *
-     * @param Rule $rule
+     * @param RuleTest $rule
      * @param array $expected
      */
     public function testOptions(Rule $rule, array $expected): void

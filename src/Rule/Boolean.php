@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -65,20 +67,18 @@ class Boolean extends Rule
 
         if (!$valid) {
             $result->addError(
-                $this->translateMessage(
-                    $this->message,
-                    [
-                        'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                        'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                    ]
-                )
+                $this->message,
+                [
+                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+                ]
             );
         }
 
         return $result;
     }
 
-    public function getOptions(): array
+    public function getOptions(?TranslatorInterface $translator = null): array
     {
         return array_merge(
             parent::getOptions(),
@@ -86,12 +86,13 @@ class Boolean extends Rule
                 'strict' => $this->strict,
                 'trueValue' => $this->trueValue,
                 'falseValue' => $this->falseValue,
-                'message' => $this->translateMessage(
+                'message' => new ErrorMessage(
                     $this->message,
                     [
                         'true' => $this->trueValue === true ? 'true' : $this->trueValue,
                         'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                    ]
+                    ],
+                    $translator
                 ),
             ],
         );
