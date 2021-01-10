@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
 
 class ResultTest extends TranslatorMock

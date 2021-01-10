@@ -25,6 +25,8 @@ final class Result
         if ($translator === null) {
             return $this->errors;
         }
-        return array_map(function($error) use ($translator) {return $error->getMessage($translator);}, $this->errors);
+        return array_map(function ($error) use ($translator) {
+            return $error->getMessage($translator);
+        }, $this->errors);
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Exception\MissingAttributeException;
 use Yiisoft\Validator\Result;
@@ -89,7 +88,7 @@ class ValidatorTest extends TranslatorMock
         $this->assertCount(1, $intResult->getErrors());
 
         $translator = $this->createTranslatorMock([
-            'Value must be no less than {min}.' => 'Translate of: Value must be no less than {min}.'
+            'Value must be no less than {min}.' => 'Translate of: Value must be no less than {min}.',
         ]);
         $this->assertEquals('Translate of: Value must be no less than 44.', $intResult->getErrors($translator)[0]);
     }
@@ -125,7 +124,7 @@ class ValidatorTest extends TranslatorMock
         $intResult = $results->getResult('int');
 
         $translator = $this->createTranslatorMock([
-            'Value must be no less than {min}.' => 'Translate of: Value must be no less than {min}.'
+            'Value must be no less than {min}.' => 'Translate of: Value must be no less than {min}.',
         ]);
         $this->assertEquals('Translate of: Value must be no less than 44.', $intResult->getErrors($translator)[0]);
     }
