@@ -65,6 +65,7 @@ class Number extends Rule
 
         $pattern = $this->asInteger ? $this->integerPattern : $this->numberPattern;
 
+        /** @psalm-var float|int|string $value */
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
             $result->addError($this->getNotANumberMessage(), ['value' => $value]);
         } elseif ($this->min !== null && $value < $this->min) {

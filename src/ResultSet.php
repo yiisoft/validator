@@ -42,6 +42,7 @@ final class ResultSet implements \IteratorAggregate
 
     /**
      * @return \ArrayIterator|Result[]|\Traversable
+     * @psalm-return \ArrayIterator
      */
     public function getIterator()
     {
