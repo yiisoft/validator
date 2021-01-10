@@ -14,7 +14,7 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 use Yiisoft\Validator\Validator;
 
-class ValidatorTest extends TestCase
+class ValidatorTest extends TranslatorMock
 {
     public function getDataObject(array $attributes): DataSetInterface
     {
@@ -87,6 +87,47 @@ class ValidatorTest extends TestCase
         $intResult = $results->getResult('int');
         $this->assertFalse($intResult->isValid());
         $this->assertCount(1, $intResult->getErrors());
+
+        $translator = $this->createTranslatorMock([
+            'Value must be no less than {min}.' => 'Translate of: Value must be no less than {min}.'
+        ]);
+        $this->assertEquals('Translate of: Value must be no less than 44.', $intResult->getErrors($translator)[0]);
+    }
+
+    public function testAddingRulesViaConstructorAndTranslator(): void
+    {
+        $dataObject = $this->getDataObject(
+            [
+                'bool' => true,
+                'int' => 41,
+            ]
+        );
+
+        $validator = new Validator(
+            [
+                'bool' => [new Boolean()],
+                'int' => [
+                    (new Number())->integer(),
+                    (new Number())->integer()->min(44),
+                    static function ($value): Result {
+                        $result = new Result();
+                        if ($value !== 42) {
+                            $result->addError('Value should be 42!');
+                        }
+                        return $result;
+                    },
+                ],
+            ]
+        );
+
+        $results = $validator->validate($dataObject);
+
+        $intResult = $results->getResult('int');
+
+        $translator = $this->createTranslatorMock([
+            'Value must be no less than {min}.' => 'Translate of: Value must be no less than {min}.'
+        ]);
+        $this->assertEquals('Translate of: Value must be no less than 44.', $intResult->getErrors($translator)[0]);
     }
 
     public function testAddingRulesOneByOne(): void
@@ -237,5 +278,77 @@ class ValidatorTest extends TestCase
                 ],
             ],
         ], $validator->asArray());
+    }
+
+    public function testAsArrayWithGroupRuleAndTranslator(): void
+    {
+        $validator = new Validator(
+            [
+                'bool' => (new Boolean()),
+                'int' => [
+                    new Required(),
+                    new CustomUrlRule(),
+                ],
+            ]
+        );
+        $translator = $this->createTranslatorMock([
+            'The value must be either "{true}" or "{false}".' => 'Translate of: The value must be either "{true}" or "{false}".',
+            'Value cannot be blank.' => 'Translate of: Value cannot be blank.',
+            'This value is not a valid URL.' => 'Translate of: This value is not a valid URL.',
+            'This value must be a string.' => 'Translate of: This value must be a string.',
+            'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.' => 'Translate of: This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+            'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.' => 'Translate of: This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+        ]);
+
+        $this->assertEquals([
+            'bool' => [
+                [
+                    'boolean',
+                    'message' => 'Translate of: The value must be either "1" or "0".',
+                    'strict' => false,
+                    'trueValue' => '1',
+                    'falseValue' => '0',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
+            'int' => [
+                [
+                    'required',
+                    'message' => 'Translate of: Value cannot be blank.',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+                [
+                    'customUrlRule',
+                    [
+                        'required',
+                        'message' => 'Translate of: Value cannot be blank.',
+                        'skipOnEmpty' => false,
+                        'skipOnError' => true,
+                    ],
+                    [
+                        'url',
+                        'message' => 'Translate of: This value is not a valid URL.',
+                        'enableIDN' => true,
+                        'validSchemes' => ['http', 'https',],
+                        'pattern' => '/^{schemes}:\\/\\/(([A-Z0-9][A-Z0-9_-]*)(\\.[A-Z0-9][A-Z0-9_-]*)+)(?::\\d{1,5})?(?:$|[?\\/#])/i',
+                        'skipOnEmpty' => false,
+                        'skipOnError' => true,
+                    ],
+                    [
+                        'hasLength',
+                        'message' => 'Translate of: This value must be a string.',
+                        'min' => null,
+                        'tooShortMessage' => 'Translate of: This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                        'max' => 20,
+                        'tooLongMessage' => 'Translate of: This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                        'encoding' => 'UTF-8',
+                        'skipOnEmpty' => false,
+                        'skipOnError' => true,
+                    ],
+                ],
+            ],
+        ], $validator->asArray($translator));
     }
 }

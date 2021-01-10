@@ -21,7 +21,7 @@ class Each extends Rule
     private Rules $rules;
 
     private string $incorrectInputMessage = 'Value should be array or iterable';
-    private string $message = '{error} {value} given.';
+    private string $additionalMessage = ' {value} given.';
 
     public function __construct(Rules $rules)
     {
@@ -41,11 +41,8 @@ class Each extends Rule
             if ($itemResult->isValid() === false) {
                 foreach ($itemResult->getErrors() as $error) {
                     $result->addError(
-                        $this->message,
-                        [
-                            'error' => $error->getMessage(),
-                            'value' => $item,
-                        ]
+                        $error->message.$this->additionalMessage,
+                        array_merge(['value' => $item], $error->params)
                     );
                 }
             }
