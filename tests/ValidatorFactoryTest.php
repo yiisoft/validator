@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidatorFactory;
