@@ -38,7 +38,6 @@ class Nested extends Rule
             ));
         }
         $this->rules = $rules;
-
     }
 
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
@@ -102,7 +101,8 @@ class Nested extends Rule
     {
         return array_reduce(
             $rules,
-            fn(bool $carry, $rule) => $carry || is_array($rule) ? $this->checkRules($rule) : !$rule instanceof Rule, false
+            fn (bool $carry, $rule) => $carry || is_array($rule) ? $this->checkRules($rule) : !$rule instanceof Rule,
+            false
         );
     }
 }
