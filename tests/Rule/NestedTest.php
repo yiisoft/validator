@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 
@@ -24,7 +25,7 @@ class NestedTest extends TestCase
         $values = [
             'author' => [
                 'name' => 'Dmitry',
-                'age' => 18
+                'age' => 18,
             ],
         ];
 
@@ -33,7 +34,7 @@ class NestedTest extends TestCase
         $this->assertEquals($expectedResult, $actualResult->isValid());
     }
 
-    public function validateDataProvider()
+    public function validateDataProvider(): array
     {
         return [
             'success' => [
@@ -54,11 +55,19 @@ class NestedTest extends TestCase
             ],
             'key not exists' => [
                 [
-                    'author' => [
-                        (new Number())->min(18)->skipOnEmpty(true)->skipOnError(true),
+                    'author.sex' => [
+                        (new InRange(['male', 'female'])),
                     ],
                 ],
                 false,
+            ],
+            'key not exists, skip empty' => [
+                [
+                    'author.sex' => [
+                        (new InRange(['male', 'female']))->skipOnEmpty(true),
+                    ],
+                ],
+                true,
             ],
         ];
     }
