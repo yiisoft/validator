@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rules;
@@ -18,8 +17,6 @@ use Yiisoft\Validator\Rules;
  */
 class Nested extends Rule
 {
-    use HasValidationErrorMessage;
-
     /**
      * @var Rule[][]
      */
@@ -27,8 +24,6 @@ class Nested extends Rule
 
     private bool $errorWhenPropertyPathIsNotFound = false;
     private string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.';
-
-    private string $message = 'Nested validation error.';
 
     public function __construct(iterable $rules)
     {

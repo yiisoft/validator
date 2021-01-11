@@ -68,16 +68,6 @@ class NestedTest extends TestCase
         $this->assertEquals(['Value cannot be blank.'], $result->getErrors());
     }
 
-    public function testCustomValidationMessage(): void
-    {
-        $validator = (new Nested(['value' => (new Required())]))
-            ->message('Custom message');
-
-        $result = $validator->validate([]);
-
-        $this->assertEquals(['Value cannot be blank.'], $result->getErrors());
-    }
-
     public function testErrorWhenValuePathNotFound(): void
     {
         $validator = (new Nested(['value' => (new Required())]))
