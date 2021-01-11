@@ -18,6 +18,7 @@ class NestedTest extends TestCase
 {
     /**
      * @dataProvider validateDataProvider
+     *
      * @param Rule[] $rules
      */
     public function testValidate(array $rules, bool $expectedResult): void
