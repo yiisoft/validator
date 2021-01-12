@@ -13,10 +13,10 @@ final class ErrorMessage
 
     private ?TranslatorInterface $translator;
 
-    public function __construct(string $message, ?array $params = null, ?TranslatorInterface $translator = null)
+    public function __construct(string $message, array $params = [], ?TranslatorInterface $translator = null)
     {
         $this->message = $message;
-        $this->params = $params?? [];
+        $this->params = $params;
         $this->translator = $translator;
     }
 
@@ -36,6 +36,11 @@ final class ErrorMessage
             $translator = $this->translator;
         }
         if ($translator !== null) {
+            foreach ($this->params as &$value) {
+                if ($value instanceof ErrorMessage) {
+                    $value = $value->getMessage($translator);
+                }
+            }
             return $translator->translate($this->message, $this->params);
         }
         return $this->format($this->message, $this->params);

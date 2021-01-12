@@ -15,7 +15,7 @@ final class Result
         return $this->errors === [];
     }
 
-    public function addError(string $message, ?array $params = null): void
+    public function addError(string $message, array $params = []): void
     {
         $this->errors[] = new ErrorMessage($message, $params);
     }

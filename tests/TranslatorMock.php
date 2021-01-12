@@ -13,12 +13,12 @@ use PHPUnit\Framework\TestCase;
 
 abstract class TranslatorMock extends TestCase
 {
-    protected function createTranslatorMock(?array $returnMessage = null): TranslatorInterface
+    protected function createTranslatorMock(array $returnMessages = []): TranslatorInterface
     {
         return new Translator(
             new Category(
                 'app',
-                $this->createMessageReader($returnMessage??[]),
+                $this->createMessageReader($returnMessages),
                 $this->createMessageFormatter()
             ),
             'en'
