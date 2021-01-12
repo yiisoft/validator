@@ -107,7 +107,7 @@ final class Validator implements ValidatorInterface
         }
 
         foreach ($translatableObject as &$value) {
-            $value = static::translate($value, $translator);
+            $value = self::translate($value, $translator);
         }
 
         return $translatableObject;
