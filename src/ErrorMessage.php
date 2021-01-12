@@ -37,7 +37,7 @@ final class ErrorMessage
         }
         if ($translator !== null) {
             foreach ($this->params as &$value) {
-                if ($value instanceof ErrorMessage) {
+                if ($value instanceof self) {
                     $value = $value->getMessage($translator);
                 }
             }

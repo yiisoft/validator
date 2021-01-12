@@ -93,6 +93,7 @@ final class Validator implements ValidatorInterface
     /**
      * @param mixed $translatableObject
      * @param TranslatorInterface|null $translator
+     *
      * @return mixed
      */
     public static function translate($translatableObject, ?TranslatorInterface $translator)

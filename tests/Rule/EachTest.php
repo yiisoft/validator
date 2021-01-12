@@ -53,7 +53,7 @@ class EachTest extends TranslatorMock
 
         $translator = $this->createTranslatorMock([
             'Value must be no greater than {max}.' => '(Translate1)Value must be no greater than {max}.',
-            '{error} {value} given.' => '(Translate2){error} {value} given.'
+            '{error} {value} given.' => '(Translate2){error} {value} given.',
         ]);
         $errors = $result->getErrors($translator);
 
