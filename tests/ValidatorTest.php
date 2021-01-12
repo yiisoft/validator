@@ -130,7 +130,7 @@ class ValidatorTest extends TranslatorMock
             'Value must be no less than {min}.' => 'Translate of: Value must be no less than {min}.',
         ]);
         $this->assertSame('Translate of: Value must be no less than 44.', $intResult->getErrors($translator)[0]);
-        $this->assertSame('Translate of: Value must be no less than 44.', Validator::translate($intResult->getErrors()[0], $translator));
+        $this->assertSame('Translate of: Value must be no less than 44.', Validator::translate($intResult->getErrors(), $translator)[0]);
     }
 
     public function testAddingRulesOneByOne(): void
