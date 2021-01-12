@@ -90,7 +90,10 @@ class ValidatorTest extends TranslatorMock
         $translator = $this->createTranslatorMock([
             'Value must be no less than {min}.' => 'Translate of: Value must be no less than {min}.',
         ]);
-        $this->assertEquals('Translate of: Value must be no less than 44.', $intResult->getErrors($translator)[0]);
+        $this->assertEquals('Value must be no less than 44.', $intResult->getErrors()[0]);
+        $this->assertSame('Translate of: Value must be no less than 44.', $intResult->getErrors($translator)[0]);
+        $this->assertSame('Translate of: Value must be no less than 44.', $intResult->getErrors()[0]->getMessage($translator));
+        $this->assertSame('Translate of: Value must be no less than 44.', Validator::translate($intResult->getErrors(), $translator)[0]);
     }
 
     public function testAddingRulesViaConstructorAndTranslator(): void
@@ -126,7 +129,8 @@ class ValidatorTest extends TranslatorMock
         $translator = $this->createTranslatorMock([
             'Value must be no less than {min}.' => 'Translate of: Value must be no less than {min}.',
         ]);
-        $this->assertEquals('Translate of: Value must be no less than 44.', $intResult->getErrors($translator)[0]);
+        $this->assertSame('Translate of: Value must be no less than 44.', $intResult->getErrors($translator)[0]);
+        $this->assertSame('Translate of: Value must be no less than 44.', Validator::translate($intResult->getErrors()[0], $translator));
     }
 
     public function testAddingRulesOneByOne(): void
@@ -299,55 +303,58 @@ class ValidatorTest extends TranslatorMock
             'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.' => 'Translate of: This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
         ]);
 
-        $this->assertEquals([
+        $translatedAsArray = [
             'bool' => [
                 [
                     'boolean',
-                    'message' => 'Translate of: The value must be either "1" or "0".',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
                     'strict' => false,
                     'trueValue' => '1',
                     'falseValue' => '0',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'message' => 'Translate of: The value must be either "1" or "0".',
                 ],
             ],
             'int' => [
                 [
                     'required',
-                    'message' => 'Translate of: Value cannot be blank.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
+                    'message' => 'Translate of: Value cannot be blank.',
                 ],
                 [
                     'customUrlRule',
                     [
                         'required',
-                        'message' => 'Translate of: Value cannot be blank.',
                         'skipOnEmpty' => false,
                         'skipOnError' => true,
+                        'message' => 'Translate of: Value cannot be blank.',
                     ],
                     [
                         'url',
+                        'skipOnEmpty' => false,
+                        'skipOnError' => true,
                         'message' => 'Translate of: This value is not a valid URL.',
                         'enableIDN' => true,
                         'validSchemes' => ['http', 'https',],
                         'pattern' => '/^{schemes}:\\/\\/(([A-Z0-9][A-Z0-9_-]*)(\\.[A-Z0-9][A-Z0-9_-]*)+)(?::\\d{1,5})?(?:$|[?\\/#])/i',
-                        'skipOnEmpty' => false,
-                        'skipOnError' => true,
                     ],
                     [
                         'hasLength',
+                        'skipOnEmpty' => false,
+                        'skipOnError' => true,
                         'message' => 'Translate of: This value must be a string.',
                         'min' => null,
                         'tooShortMessage' => 'Translate of: This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'max' => 20,
                         'tooLongMessage' => 'Translate of: This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
                         'encoding' => 'UTF-8',
-                        'skipOnEmpty' => false,
-                        'skipOnError' => true,
                     ],
                 ],
             ],
-        ], $validator->asArray($translator));
+        ];
+
+        $this->assertEquals($translatedAsArray, $validator->asArray($translator));
+        $this->assertSame($translatedAsArray, Validator::translate($validator->asArray(), $translator));
     }
 }

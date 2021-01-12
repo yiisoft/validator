@@ -89,4 +89,26 @@ final class Validator implements ValidatorInterface
         }
         return $rulesOfArray;
     }
+
+    /**
+     * @param mixed $translatableObject
+     * @param TranslatorInterface|null $translator
+     * @return mixed
+     */
+    public static function translate($translatableObject, ?TranslatorInterface $translator)
+    {
+        if ($translatableObject instanceof ErrorMessage) {
+            return $translatableObject->getMessage($translator);
+        }
+
+        if (!is_iterable($translatableObject)) {
+            return $translatableObject;
+        }
+
+        foreach ($translatableObject as &$value) {
+            $value = static::translate($value, $translator);
+        }
+
+        return $translatableObject;
+    }
 }

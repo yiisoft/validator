@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Yiisoft\Translator\Category;
 use Yiisoft\Translator\MessageFormatterInterface;
 use Yiisoft\Translator\MessageReaderInterface;
@@ -22,8 +21,7 @@ abstract class TranslatorMock extends TestCase
                 $this->createMessageReader($returnMessage??[]),
                 $this->createMessageFormatter()
             ),
-            'en',
-            $this->createMock(EventDispatcherInterface::class)
+            'en'
         );
     }
 
