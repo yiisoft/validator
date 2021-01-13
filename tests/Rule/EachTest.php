@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rules;
 use Yiisoft\Validator\Tests\TranslatorMock;
-use Yiisoft\Validator\Validator;
 
 /**
  * @group validators
