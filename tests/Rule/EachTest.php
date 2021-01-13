@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rules;
@@ -31,8 +32,23 @@ class EachTest extends TranslatorMock
         $errors = $result->getErrors();
         $this->assertFalse($result->isValid());
         $this->assertCount(2, $errors);
-//        $this->assertContains(new ErrorMessage('{error}'), $errors);
-//        $this->assertContains('Value must be no greater than 13. 30 given.', $errors);
+
+        $this->assertEquals([
+            new ErrorMessage(
+                '{error} {value} given.',
+                [
+                    'error' => new ErrorMessage('Value must be no greater than {max}.', ['max' => 13]),
+                    'value' => 20,
+                ]
+            ),
+            new ErrorMessage(
+                '{error} {value} given.',
+                [
+                    'error' => new ErrorMessage('Value must be no greater than {max}.', ['max' => 13]),
+                    'value' => 30,
+                ]
+            ),
+        ], $errors);
     }
 
     public function testName(): void
