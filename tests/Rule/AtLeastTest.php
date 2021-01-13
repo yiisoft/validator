@@ -104,7 +104,7 @@ class AtLeastTest extends TestCase
     /**
      * @dataProvider optionsProvider
      *
-     * @param RuleTest $rule
+     * @param Rule $rule
      * @param array $expected
      */
     public function testOptions(Rule $rule, array $expected): void

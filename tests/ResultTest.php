@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
 
-class ResultTest extends TranslatorMock
+class ResultTest extends TestCase
 {
     /**
      * @test
@@ -32,8 +34,8 @@ class ResultTest extends TranslatorMock
     public function errorIsProperlyAdded(): void
     {
         $result = new Result();
-        $result->addError('Error');
-        $this->assertContains('Error', $result->getErrors($this->createTranslatorMock()));
+        $result->addError(new ErrorMessage('Error'));
+        $this->assertEquals([new ErrorMessage('Error')], $result->getErrors());
     }
 
     /**
@@ -42,7 +44,7 @@ class ResultTest extends TranslatorMock
     public function addingErrorChangesIsValid(): void
     {
         $result = new Result();
-        $result->addError('Error');
+        $result->addError(new ErrorMessage('Error'));
         $this->assertFalse($result->isValid());
     }
 }

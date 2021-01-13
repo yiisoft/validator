@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -24,7 +24,7 @@ abstract class GroupRule extends Rule
     {
         $result = new Result();
         if (!$this->getRules()->validate($value, $dataSet)->isValid()) {
-            $result->addError($this->message);
+            $result->addError(new ErrorMessage($this->message));
         }
 
         return $result;
@@ -37,8 +37,8 @@ abstract class GroupRule extends Rule
      */
     abstract protected function getRules(): Rules;
 
-    public function getOptions(?TranslatorInterface $translator = null): array
+    public function getOptions(): array
     {
-        return $this->getRules()->asArray($translator);
+        return $this->getRules()->asArray();
     }
 }

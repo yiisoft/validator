@@ -4,51 +4,35 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\Translator\TranslatorInterface;
-
 final class ErrorMessage
 {
-    public string $message = '';
-    public array $params = [];
+    private string $message = '';
+    private array $parameters = [];
 
-    private ?TranslatorInterface $translator;
-
-    public function __construct(string $message, array $params = [], ?TranslatorInterface $translator = null)
+    public function __construct(string $message, array $parameters = [])
     {
         $this->message = $message;
-        $this->params = $params;
-        $this->translator = $translator;
+        $this->parameters = $parameters;
     }
 
-    public function withTranslator(?TranslatorInterface $translator = null): self
+    public function getMessage(): string
     {
-        if ($translator !== null) {
-            $new = clone $this;
-            $new->translator = $translator;
-            return $new;
-        }
-        return $this;
+        return $this->message;
     }
 
-    public function getMessage(?TranslatorInterface $translator = null): string
+    public function getParameters(): string
     {
-        if ($translator === null) {
-            $translator = $this->translator;
-        }
-        if ($translator !== null) {
-            foreach ($this->params as &$value) {
-                if ($value instanceof self) {
-                    $value = $value->getMessage($translator);
-                }
-            }
-            return $translator->translate($this->message, $this->params);
-        }
-        return $this->format($this->message, $this->params);
+        return $this->message;
+    }
+
+    public function getFormattedMessage(): string
+    {
+        return $this->format($this->message, $this->parameters);
     }
 
     public function __toString(): string
     {
-        return $this->getMessage();
+        return $this->getFormattedMessage();
     }
 
     private function format(string $message, array $params = []): string

@@ -27,7 +27,7 @@ final class ResultSet implements \IteratorAggregate
             return;
         }
         foreach ($result->getErrors() as $error) {
-            $this->results[$attribute]->addError($error->message, $error->params);
+            $this->results[$attribute]->addError($error);
         }
     }
 

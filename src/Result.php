@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\Translator\TranslatorInterface;
-
 final class Result
 {
+    /**
+     * @var ErrorMessage[]
+     */
     private array $errors = [];
 
     public function isValid(): bool
@@ -15,18 +16,16 @@ final class Result
         return $this->errors === [];
     }
 
-    public function addError(string $message, array $params = []): void
+    public function addError(ErrorMessage $error): void
     {
-        $this->errors[] = new ErrorMessage($message, $params);
+        $this->errors[] = $error;
     }
 
-    public function getErrors(?TranslatorInterface $translator = null): array
+    /**
+     * @return ErrorMessage[]
+     */
+    public function getErrors(): array
     {
-        if ($translator === null) {
-            return $this->errors;
-        }
-        return array_map(function ($error) use ($translator) {
-            return $error->getMessage($translator);
-        }, $this->errors);
+        return $this->errors;
     }
 }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidatorFactory;
 
@@ -22,7 +24,7 @@ class ValidatorFactoryTest extends TranslatorMock
                 $attribute => [
                     static function () use ($errorMessage) {
                         $result = new Result();
-                        $result->addError($errorMessage);
+                        $result->addError(new ErrorMessage($errorMessage));
                         return $result;
                     },
                 ],
@@ -31,7 +33,7 @@ class ValidatorFactoryTest extends TranslatorMock
 
         $result = $validator->validate($this->createDataSet([$attribute => '']));
 
-        $this->assertSame($errorMessage, $result->getResult($attribute)->getErrors()[0]->getMessage());
+        $this->assertEquals(new ErrorMessage($errorMessage), $result->getResult($attribute)->getErrors()[0]);
     }
 
     public function testCreateWithTranslator()
@@ -45,7 +47,7 @@ class ValidatorFactoryTest extends TranslatorMock
                 $attribute => [
                     static function () {
                         $result = new Result();
-                        $result->addError('error');
+                        $result->addError(new ErrorMessage('error'));
                         return $result;
                     },
                 ],
@@ -54,7 +56,7 @@ class ValidatorFactoryTest extends TranslatorMock
 
         $result = $validator->validate($this->createDataSet([$attribute => '']));
 
-        $this->assertSame($translatableMessage, $result->getResult($attribute)->getErrors()[0]->getMessage($this->createTranslatorMock(['error' => $translatableMessage])));
+        $this->assertEquals(new ErrorMessage('error'), $result->getResult($attribute)->getErrors()[0]);
     }
 
     public function testCreateWithInvalidRule()

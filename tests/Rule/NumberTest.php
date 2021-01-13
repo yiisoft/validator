@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Exception\MissingAttributeException;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Number;
@@ -81,7 +82,7 @@ class NumberTest extends TestCase
 
         $result = $rule->validate(-1);
         $this->assertFalse($result->isValid());
-        $this->assertStringContainsString('must be no less than 1.', $result->getErrors()[0]->getMessage());
+        $this->assertStringContainsString('must be no less than 1.', (string)$result->getErrors()[0]);
 
         $this->assertFalse($rule->validate('22e-12')->isValid());
         $this->assertTrue($rule->validate(PHP_INT_MAX + 1)->isValid());
@@ -273,7 +274,8 @@ class NumberTest extends TestCase
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
         $errors = $result->getErrors();
-        $this->assertSame('Value is too small.', $errors[0]->getMessage());
+
+        $this->assertEquals(new ErrorMessage('Value is too small.', ['min' => 5]), $errors[0]);
     }
 
     public function testValidateObject(): void
@@ -378,7 +380,7 @@ class NumberTest extends TestCase
     /**
      * @dataProvider optionsProvider
      *
-     * @param RuleTest $rule
+     * @param Rule $rule
      * @param array $expected
      */
     public function testOptions(Rule $rule, array $expected): void

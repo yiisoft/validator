@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Strings\NumericHelper;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
@@ -59,7 +58,7 @@ class Number extends Rule
         $result = new Result();
 
         if (!is_scalar($value)) {
-            $result->addError($this->getNotANumberMessage(), ['value' => $value]);
+            $result->addError(new ErrorMessage($this->getNotANumberMessage(), ['value' => $value]));
             return $result;
         }
 
@@ -67,11 +66,11 @@ class Number extends Rule
 
         /** @psalm-var float|int|string $value */
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
-            $result->addError($this->getNotANumberMessage(), ['value' => $value]);
+            $result->addError(new ErrorMessage($this->getNotANumberMessage(), ['value' => $value]));
         } elseif ($this->min !== null && $value < $this->min) {
-            $result->addError($this->tooSmallMessage, ['min' => $this->min]);
+            $result->addError(new ErrorMessage($this->tooSmallMessage, ['min' => $this->min]));
         } elseif ($this->max !== null && $value > $this->max) {
-            $result->addError($this->tooBigMessage, ['max' => $this->max]);
+            $result->addError(new ErrorMessage($this->tooBigMessage, ['max' => $this->max]));
         }
 
         return $result;
@@ -120,17 +119,17 @@ class Number extends Rule
         return 'Value must be a number.';
     }
 
-    public function getOptions(?TranslatorInterface $translator = null): array
+    public function getOptions(): array
     {
         return array_merge(
             parent::getOptions(),
             [
-                'notANumberMessage' => (new ErrorMessage($this->getNotANumberMessage()))->withTranslator($translator),
+                'notANumberMessage' => new ErrorMessage($this->getNotANumberMessage()),
                 'asInteger' => $this->asInteger,
                 'min' => $this->min,
-                'tooSmallMessage' => (new ErrorMessage($this->tooSmallMessage, ['min' => $this->min]))->withTranslator($translator),
+                'tooSmallMessage' => new ErrorMessage($this->tooSmallMessage, ['min' => $this->min]),
                 'max' => $this->max,
-                'tooBigMessage' => (new ErrorMessage($this->tooBigMessage, ['max' => $this->max]))->withTranslator(),
+                'tooBigMessage' => new ErrorMessage($this->tooBigMessage, ['max' => $this->max]),
             ],
         );
     }

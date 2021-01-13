@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\HasValidationErrorMessage;
@@ -25,7 +24,7 @@ class Json extends Rule
         $result = new Result();
 
         if (!$this->isValidJson($value)) {
-            $result->addError($this->message);
+            $result->addError(new ErrorMessage($this->message));
         }
 
         return $result;
@@ -53,12 +52,12 @@ class Json extends Rule
         return is_string($value) && preg_match($regex, $value) === 1;
     }
 
-    public function getOptions(?TranslatorInterface $translator = null): array
+    public function getOptions(): array
     {
         return array_merge(
             parent::getOptions(),
             [
-                'message' => (new ErrorMessage($this->message))->withTranslator($translator),
+                'message' => new ErrorMessage($this->message),
             ],
         );
     }

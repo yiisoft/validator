@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Exception\CallbackRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -18,7 +19,7 @@ class CallbackTest extends TestCase
             static function ($value): Result {
                 $result = new Result();
                 if ($value !== 42) {
-                    $result->addError('Value should be 42!');
+                    $result->addError(new ErrorMessage('Value should be 42!'));
                 }
                 return $result;
             }
@@ -74,7 +75,7 @@ class CallbackTest extends TestCase
     /**
      * @dataProvider optionsProvider
      *
-     * @param RuleTest $rule
+     * @param Rule $rule
      * @param array $expected
      */
     public function testOptions(Rule $rule, array $expected): void

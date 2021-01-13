@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\NetworkUtilities\IpHelper;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
@@ -199,12 +198,12 @@ class Ip extends Rule
         }
         $result = new Result();
         if (!is_string($value)) {
-            $result->addError($this->message);
+            $result->addError(new ErrorMessage($this->message));
             return $result;
         }
 
         if (preg_match($this->getIpParsePattern(), $value, $matches) === 0) {
-            $result->addError($this->message);
+            $result->addError(new ErrorMessage($this->message));
             return $result;
         }
         $negation = !empty($matches['not'] ?? null);
@@ -215,28 +214,28 @@ class Ip extends Rule
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
         } catch (\InvalidArgumentException $e) {
-            $result->addError($this->message);
+            $result->addError(new ErrorMessage($this->message));
             return $result;
         }
 
         if ($this->requireSubnet === true && $cidr === null) {
-            $result->addError($this->noSubnet);
+            $result->addError(new ErrorMessage($this->noSubnet));
             return $result;
         }
         if ($this->allowSubnet === false && $cidr !== null) {
-            $result->addError($this->hasSubnet);
+            $result->addError(new ErrorMessage($this->hasSubnet));
             return $result;
         }
         if ($this->allowNegation === false && $negation) {
-            $result->addError($this->message);
+            $result->addError(new ErrorMessage($this->message));
             return $result;
         }
         if ($ipVersion === IpHelper::IPV6 && !$this->allowIpv6) {
-            $result->addError($this->ipv6NotAllowed);
+            $result->addError(new ErrorMessage($this->ipv6NotAllowed));
             return $result;
         }
         if ($ipVersion === IpHelper::IPV4 && !$this->allowIpv4) {
-            $result->addError($this->ipv4NotAllowed);
+            $result->addError(new ErrorMessage($this->ipv4NotAllowed));
             return $result;
         }
         if (!$result->isValid()) {
@@ -246,12 +245,12 @@ class Ip extends Rule
             try {
                 IpHelper::getCidrBits($ipCidr);
             } catch (\InvalidArgumentException $e) {
-                $result->addError($this->wrongCidr);
+                $result->addError(new ErrorMessage($this->wrongCidr));
                 return $result;
             }
         }
         if (!$this->isAllowed($ipCidr)) {
-            $result->addError($this->notInRange);
+            $result->addError(new ErrorMessage($this->notInRange));
             return $result;
         }
 
@@ -465,24 +464,24 @@ class Ip extends Rule
         ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
-    public function getOptions(?TranslatorInterface $translator = null): array
+    public function getOptions(): array
     {
         return array_merge(
             parent::getOptions(),
             [
-                'message' => (new ErrorMessage($this->message))->withTranslator($translator),
+                'message' => new ErrorMessage($this->message),
                 'allowIpv4' => $this->allowIpv4,
-                'ipv4NotAllowedMessage' => (new ErrorMessage($this->ipv4NotAllowed))->withTranslator($translator),
+                'ipv4NotAllowedMessage' => new ErrorMessage($this->ipv4NotAllowed),
                 'allowIpv6' => $this->allowIpv6,
-                'ipv6NotAllowedMessage' => (new ErrorMessage($this->ipv6NotAllowed))->withTranslator($translator),
+                'ipv6NotAllowedMessage' => new ErrorMessage($this->ipv6NotAllowed),
                 'allowSubnet' => $this->allowSubnet,
-                'hasSubnetMessage' => (new ErrorMessage($this->hasSubnet))->withTranslator($translator),
+                'hasSubnetMessage' => new ErrorMessage($this->hasSubnet),
                 'requireSubnet' => $this->requireSubnet,
-                'noSubnetMessage' => (new ErrorMessage($this->noSubnet))->withTranslator($translator),
+                'noSubnetMessage' => new ErrorMessage($this->noSubnet),
                 'allowNegation' => $this->allowNegation,
-                'wrongCidrMessage' => (new ErrorMessage($this->wrongCidr))->withTranslator($translator),
+                'wrongCidrMessage' => new ErrorMessage($this->wrongCidr),
                 'ranges' => $this->ranges,
-                'notInRangeMessage' => (new ErrorMessage($this->notInRange))->withTranslator($translator),
+                'notInRangeMessage' => new ErrorMessage($this->notInRange),
             ],
         );
     }

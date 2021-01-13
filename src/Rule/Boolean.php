@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\HasValidationErrorMessage;
@@ -67,18 +66,20 @@ class Boolean extends Rule
 
         if (!$valid) {
             $result->addError(
-                $this->message,
-                [
-                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                ]
+                new ErrorMessage(
+                    $this->message,
+                    [
+                        'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                        'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+                    ]
+                )
             );
         }
 
         return $result;
     }
 
-    public function getOptions(?TranslatorInterface $translator = null): array
+    public function getOptions(): array
     {
         return array_merge(
             parent::getOptions(),
@@ -91,8 +92,7 @@ class Boolean extends Rule
                     [
                         'true' => $this->trueValue === true ? 'true' : $this->trueValue,
                         'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                    ],
-                    $translator
+                    ]
                 ),
             ],
         );

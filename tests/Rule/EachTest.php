@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rules;
@@ -29,41 +30,11 @@ class EachTest extends TranslatorMock
         ]);
 
         $result = (new Each($rules))->validate($values);
-        $errors = $result->getErrors($this->createTranslatorMock());
+        $errors = $result->getErrors();
         $this->assertFalse($result->isValid());
         $this->assertCount(2, $errors);
-        $this->assertContains('Value must be no greater than 13. 20 given.', $errors);
-        $this->assertContains('Value must be no greater than 13. 30 given.', $errors);
-    }
-
-    /**
-     * @test
-     */
-    public function validateValuesWithTranslator(): void
-    {
-        $values = [
-            10, 20, 30,
-        ];
-
-        $rules = new Rules([
-            (new Number())->max(13),
-        ]);
-
-        $result = (new Each($rules))->validate($values);
-
-        $translator = $this->createTranslatorMock([
-            'Value must be no greater than {max}.' => '(Translate1)Value must be no greater than {max}.',
-            '{error} {value} given.' => '(Translate2){error} {value} given.',
-        ]);
-        $errors = $result->getErrors($translator);
-
-        $this->assertContains('(Translate2)(Translate1)Value must be no greater than 13. 20 given.', $errors);
-        $this->assertContains('(Translate2)(Translate1)Value must be no greater than 13. 30 given.', $errors);
-
-        $errors = Validator::translate($result->getErrors(), $translator);
-
-        $this->assertContains('(Translate2)(Translate1)Value must be no greater than 13. 20 given.', $errors);
-        $this->assertContains('(Translate2)(Translate1)Value must be no greater than 13. 30 given.', $errors);
+//        $this->assertContains(new ErrorMessage('{error}'), $errors);
+//        $this->assertContains('Value must be no greater than 13. 30 given.', $errors);
     }
 
     public function testName(): void

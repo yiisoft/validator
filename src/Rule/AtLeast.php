@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\HasValidationErrorMessage;
@@ -56,10 +55,12 @@ class AtLeast extends Rule
 
         if ($filledCount < $this->min) {
             $result->addError(
-                $this->message,
-                [
-                    'min' => $this->min,
-                ]
+                new ErrorMessage(
+                    $this->message,
+                    [
+                        'min' => $this->min,
+                    ]
+                )
             );
         }
 
@@ -78,12 +79,12 @@ class AtLeast extends Rule
         return $new;
     }
 
-    public function getOptions(?TranslatorInterface $translator = null): array
+    public function getOptions(): array
     {
         return array_merge(
             parent::getOptions(),
             ['min' => $this->min],
-            ['message' => new ErrorMessage($this->message, ['min' => $this->min], $translator)],
+            ['message' => new ErrorMessage($this->message, ['min' => $this->min])],
         );
     }
 }

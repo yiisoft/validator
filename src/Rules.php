@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Rule\Callback;
 
 /**
@@ -40,7 +39,7 @@ final class Rules
             if ($ruleResult->isValid() === false) {
                 $previousRulesErrored = true;
                 foreach ($ruleResult->getErrors() as $error) {
-                    $compoundResult->addError($error->message, $error->params);
+                    $compoundResult->addError($error);
                 }
             }
         }
@@ -62,12 +61,14 @@ final class Rules
 
     /**
      * Return rules as array.
+     *
+     * @return array
      */
-    public function asArray(?TranslatorInterface $translator = null): array
+    public function asArray(): array
     {
         $arrayOfRules = [];
         foreach ($this->rules as $rule) {
-            $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions($translator));
+            $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
         }
         return $arrayOfRules;
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\ErrorMessage;
 use function is_iterable;
 use Yiisoft\Arrays\ArrayHelper;
@@ -64,7 +63,7 @@ class InRange extends Rule
         $result = new Result();
 
         if ($this->not === $in) {
-            $result->addError($this->message);
+            $result->addError(new ErrorMessage($this->message));
         }
 
         return $result;
@@ -84,12 +83,12 @@ class InRange extends Rule
         return $new;
     }
 
-    public function getOptions(?TranslatorInterface $translator = null): array
+    public function getOptions(): array
     {
         return array_merge(
             parent::getOptions(),
             [
-                'message' => (new ErrorMessage($this->message))->withTranslator($translator),
+                'message' => new ErrorMessage($this->message),
                 'range' => $this->range,
                 'strict' => $this->strict,
                 'not' => $this->not,

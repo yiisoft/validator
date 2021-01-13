@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\Translator\TranslatorInterface;
-
 /**
  * Rule represents a single value validation rule.
  */
@@ -100,22 +98,6 @@ abstract class Rule
         return $new;
     }
 
-    private function formatMessage(string $message, array $arguments = []): string
-    {
-        $replacements = [];
-        foreach ($arguments as $key => $value) {
-            if (is_array($value)) {
-                $value = 'array';
-            } elseif (is_object($value)) {
-                $value = 'object';
-            } elseif (is_resource($value)) {
-                $value = 'resource';
-            }
-            $replacements['{' . $key . '}'] = $value;
-        }
-        return strtr($message, $replacements);
-    }
-
     /**
      * Checks if the given value is empty.
      * A value is considered empty if it is null, an empty array, or an empty string.
@@ -147,7 +129,7 @@ abstract class Rule
      *
      * @return array
      */
-    public function getOptions(?TranslatorInterface $translator = null): array
+    public function getOptions(): array
     {
         return [
             'skipOnEmpty' => $this->skipOnEmpty,

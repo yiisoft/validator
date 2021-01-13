@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\HasValidationErrorMessage;
@@ -25,18 +24,18 @@ class Required extends Rule
         $result = new Result();
 
         if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
-            $result->addError($this->message);
+            $result->addError(new ErrorMessage($this->message));
         }
 
         return $result;
     }
 
-    public function getOptions(?TranslatorInterface $translator = null): array
+    public function getOptions(): array
     {
         return array_merge(
             parent::getOptions(),
             [
-                'message' => (new ErrorMessage($this->message))->withTranslator($translator),
+                'message' => new ErrorMessage($this->message),
             ],
         );
     }

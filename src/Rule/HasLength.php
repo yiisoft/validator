@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\HasValidationErrorMessage;
@@ -55,17 +54,17 @@ class HasLength extends Rule
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($this->message);
+            $result->addError(new ErrorMessage($this->message));
             return $result;
         }
 
         $length = mb_strlen($value, $this->encoding);
 
         if ($this->min !== null && $length < $this->min) {
-            $result->addError($this->tooShortMessage, ['min' => $this->min]);
+            $result->addError(new ErrorMessage($this->tooShortMessage, ['min' => $this->min]));
         }
         if ($this->max !== null && $length > $this->max) {
-            $result->addError($this->tooLongMessage, ['max' => $this->max]);
+            $result->addError(new ErrorMessage($this->tooLongMessage, ['max' => $this->max]));
         }
 
         return $result;
@@ -106,16 +105,16 @@ class HasLength extends Rule
         return $new;
     }
 
-    public function getOptions(?TranslatorInterface $translator = null): array
+    public function getOptions(): array
     {
         return array_merge(
             parent::getOptions(),
             [
-                'message' => (new ErrorMessage($this->message))->withTranslator($translator),
+                'message' => new ErrorMessage($this->message),
                 'min' => $this->min,
-                'tooShortMessage' => (new ErrorMessage($this->tooShortMessage, ['min' => $this->min]))->withTranslator($translator),
+                'tooShortMessage' => new ErrorMessage($this->tooShortMessage, ['min' => $this->min]),
                 'max' => $this->max,
-                'tooLongMessage' => (new ErrorMessage($this->tooLongMessage, ['max' => $this->max]))->withTranslator($translator),
+                'tooLongMessage' => new ErrorMessage($this->tooLongMessage, ['max' => $this->max]),
                 'encoding' => $this->encoding,
             ],
         );
