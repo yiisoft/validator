@@ -69,6 +69,7 @@ class Email extends Rule
         )) {
             $valid = false;
         } else {
+            /** @psalm-var array{name:string,local:string,open:string,domain:string,close:string} $matches */
             if ($this->enableIDN) {
                 $matches['local'] = $this->idnToAscii($matches['local']);
                 $matches['domain'] = $this->idnToAscii($matches['domain']);

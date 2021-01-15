@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use ArrayIterator;
+use InvalidArgumentException;
+use IteratorAggregate;
+
 /**
  * ResultSet stores validation result of each attribute from {@link DataSetInterface}.
  * It is typically obtained by validating data set with {@link Validator}.
  */
-final class ResultSet implements \IteratorAggregate
+final class ResultSet implements IteratorAggregate
 {
     /**
      * @var Result[]
@@ -34,17 +38,14 @@ final class ResultSet implements \IteratorAggregate
     public function getResult(string $attribute): Result
     {
         if (!isset($this->results[$attribute])) {
-            throw new \InvalidArgumentException("There is no result for attribute \"$attribute\"");
+            throw new InvalidArgumentException("There is no result for attribute \"$attribute\"");
         }
 
         return $this->results[$attribute];
     }
 
-    /**
-     * @return \ArrayIterator|Result[]|\Traversable
-     */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
-        return new \ArrayIterator($this->results);
+        return new ArrayIterator($this->results);
     }
 }
