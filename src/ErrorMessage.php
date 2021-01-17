@@ -20,9 +20,9 @@ final class ErrorMessage
         return $this->message;
     }
 
-    public function getParameters(): string
+    public function getParameters(): array
     {
-        return $this->message;
+        return $this->parameters;
     }
 
     public function getFormattedMessage(): string

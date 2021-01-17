@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Exception\MissingAttributeException;
@@ -14,7 +15,7 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 use Yiisoft\Validator\Validator;
 
-class ValidatorTest extends TranslatorMock
+class ValidatorTest extends TestCase
 {
     public function getDataObject(array $attributes): DataSetInterface
     {
@@ -52,6 +53,28 @@ class ValidatorTest extends TranslatorMock
                 'bool' => 'Invalid argument',
             ]
         );
+    }
+
+    public function testErrorMessagePublicMethods(): void
+    {
+        $dataObject = $this->getDataObject(
+            [
+                'bool' => 2,
+            ]
+        );
+
+        $validator = new Validator(
+            [
+                'bool' => [new Boolean()],
+            ]
+        );
+
+        $results = $validator->validate($dataObject);
+        $boolResult = $results->getResult('bool');
+
+        $this->assertSame('The value must be either "1" or "0".', $boolResult->getErrors()[0]->getFormattedMessage());
+        $this->assertSame('The value must be either "{true}" or "{false}".', $boolResult->getErrors()[0]->getMessage());
+        $this->assertSame(['true' => '1', 'false' => '0'], $boolResult->getErrors()[0]->getParameters());
     }
 
     public function testAddingRulesViaConstructor(): void
