@@ -67,6 +67,7 @@ final class OptionalRule extends Rule
 
     /**
      * @param callable|null $callback
+     *
      * @return self
      */
     public function emptyCallback($callback): self
