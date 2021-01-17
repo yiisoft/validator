@@ -60,8 +60,7 @@ class Email extends Rule
     {
         $originalValue = $value;
         $result = new Result();
-        /** @var ?array $matches */
-        $matches = null;
+        $matches = [];
 
         if (!is_string($value)) {
             $valid = false;
