@@ -19,6 +19,11 @@ final class OptionalRule extends Rule
      */
     private $emptyCallback = null;
 
+    public function __construct(Rule ...$rules)
+    {
+        $this->setRules($rules);
+    }
+
     protected function validateValue($value, ValidationContext $context = null): Result
     {
         if ($this->checkDoValidate($context)) {
@@ -51,10 +56,10 @@ final class OptionalRule extends Rule
         return true;
     }
 
-    public function rules(array $rules): self
+    public function rules(Rule ...$rules): self
     {
         $new = clone $this;
-        $new->rules = new Rules($rules);
+        $new->setRules($rules);
         return $new;
     }
 
@@ -75,5 +80,10 @@ final class OptionalRule extends Rule
         $new = clone $this;
         $new->emptyCallback = $callback;
         return $new;
+    }
+
+    private function setRules(array $rules): void
+    {
+        $this->rules = new Rules($rules);
     }
 }

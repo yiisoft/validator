@@ -14,10 +14,9 @@ final class OptionalRuleTest extends TestCase
 {
     public function testBase(): void
     {
-        $rule = (new OptionalRule())
-            ->rules([
-                new Number(),
-            ]);
+        $rule = new OptionalRule(
+            new Number()
+        );
 
         $context = new ValidationContext(
             $this->createDataSet(['code' => '42']),
@@ -29,10 +28,9 @@ final class OptionalRuleTest extends TestCase
 
     public function testEmpty(): void
     {
-        $rule = (new OptionalRule())
-            ->rules([
-                new Number(),
-            ]);
+        $rule = new OptionalRule(
+            new Number()
+        );
 
         $context = new ValidationContext(
             $this->createDataSet(['code' => '']),
@@ -44,10 +42,7 @@ final class OptionalRuleTest extends TestCase
 
     public function testEmptyCallback(): void
     {
-        $rule = (new OptionalRule())
-            ->rules([
-                new Number(),
-            ])
+        $rule = (new OptionalRule(new Number()))
             ->emptyCallback(fn ($value) => $value == '0');
 
         $context = new ValidationContext(
@@ -65,10 +60,7 @@ final class OptionalRuleTest extends TestCase
 
     public function testCheckEmpty(): void
     {
-        $rule = (new OptionalRule())
-            ->rules([
-                new Number(),
-            ])
+        $rule = (new OptionalRule(new Number()))
             ->checkEmpty(false);
 
         $context = new ValidationContext(
