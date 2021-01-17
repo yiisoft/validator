@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * GroupRule validates a single value for a set of custom rules
@@ -19,10 +19,10 @@ abstract class GroupRule extends Rule
 
     protected string $message = 'This value is not a valid.';
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();
-        if (!$this->getRules()->validate($value, $dataSet)->isValid()) {
+        if (!$this->getRules()->validate($value, $context)->isValid()) {
             $result->addError($this->translateMessage($this->message));
         }
 

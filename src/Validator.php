@@ -30,11 +30,12 @@ final class Validator implements ValidatorInterface
 
     public function validate(DataSetInterface $dataSet): ResultSet
     {
+        $context = new ValidationContext($dataSet);
         $results = new ResultSet();
         foreach ($this->attributeRules as $attribute => $rules) {
             $results->addResult(
                 $attribute,
-                $rules->validate($dataSet->getAttributeValue($attribute), $dataSet)
+                $rules->validate($dataSet->getAttributeValue($attribute), $context->withAttribute($attribute))
             );
         }
         return $results;

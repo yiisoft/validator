@@ -31,13 +31,17 @@ final class Rules
         $this->rules[] = $this->normalizeRule($rule);
     }
 
-    public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
+    public function validate($value, ValidationContext $context = null): Result
     {
+        $context = $context ?? new ValidationContext();
+
         $compoundResult = new Result();
         foreach ($this->rules as $rule) {
-            $ruleResult = $rule->validate($value, $dataSet, $previousRulesErrored);
+            $ruleResult = $rule->validate($value, $context);
             if ($ruleResult->isValid() === false) {
-                $previousRulesErrored = true;
+                if (!$context->isPreviousRulesErrored()) {
+                    $context = $context->withPreviousRulesErrored(true);
+                }
                 foreach ($ruleResult->getErrors() as $message) {
                     $compoundResult->addError($message);
                 }
