@@ -8,10 +8,6 @@ use Yiisoft\Validator\Rule\Callback;
 
 final class ValidatorFactory implements ValidatorFactoryInterface
 {
-    public function __construct()
-    {
-    }
-
     public function create(array $rules): ValidatorInterface
     {
         return new Validator($this->normalizeRules($rules));
