@@ -8,11 +8,13 @@ final class ErrorMessage
 {
     private string $message = '';
     private array $parameters = [];
+    private ErrorMessageFormatterInterface $formatter;
 
-    public function __construct(string $message, array $parameters = [])
+    public function __construct(string $message, array $parameters = [], ?ErrorMessageFormatterInterface $formatter = null)
     {
         $this->message = $message;
         $this->parameters = $parameters;
+        $this->formatter = $formatter ?? new ErrorMessageFormatter();
     }
 
     public function getMessage(): string
@@ -27,27 +29,11 @@ final class ErrorMessage
 
     public function getFormattedMessage(): string
     {
-        return $this->format($this->message, $this->parameters);
+        return $this->formatter->format($this);
     }
 
     public function __toString(): string
     {
         return $this->getFormattedMessage();
-    }
-
-    private function format(string $message, array $params = []): string
-    {
-        $replacements = [];
-        foreach ($params as $key => $value) {
-            if (is_array($value)) {
-                $value = 'array';
-            } elseif (is_object($value)) {
-                $value = 'object';
-            } elseif (is_resource($value)) {
-                $value = 'resource';
-            }
-            $replacements['{' . $key . '}'] = $value;
-        }
-        return strtr($message, $replacements);
     }
 }
