@@ -83,8 +83,10 @@ class AtLeast extends Rule
     {
         return array_merge(
             parent::getOptions(),
-            ['min' => $this->min],
-            ['message' => new ErrorMessage($this->message, ['min' => $this->min])],
+            [
+                'min' => $this->min,
+                'message' => new ErrorMessage($this->message, ['min' => $this->min]),
+            ],
         );
     }
 }
