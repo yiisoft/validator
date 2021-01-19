@@ -32,5 +32,4 @@ abstract class FormatterMock extends TestCase
             }
         };
     }
-
 }
