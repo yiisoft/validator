@@ -49,7 +49,7 @@ class ResultSetTest extends TestCase
 
         $this->assertSame(
             ['attribute1' => $error],
-            $resultSet->getErrors()->getIterator()->getArrayCopy()
+            $resultSet->getErrors()
         );
     }
 
