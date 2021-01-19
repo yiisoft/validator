@@ -10,13 +10,9 @@ use Yiisoft\Validator\ResultSet;
 
 class ResultSetTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function successShouldNotOverrideError(): void
+    public function testSuccessShouldNotOverrideError(): void
     {
-        $error = new Result();
-        $error->addError('error');
+        $error = $this->createErrorResult('error');
         $success = new Result();
 
         $resultSet = new ResultSet();
@@ -30,20 +26,11 @@ class ResultSetTest extends TestCase
         $this->assertContains('error', $errors);
     }
 
-    /**
-     * @test
-     */
-    public function errorsShouldAdd(): void
+    public function testErrorsShouldAdd(): void
     {
-        $error1 = new Result();
-        $error1->addError('error1');
-
-        $error2 = new Result();
-        $error2->addError('error2');
-
         $resultSet = new ResultSet();
-        $resultSet->addResult('x', $error1);
-        $resultSet->addResult('x', $error2);
+        $resultSet->addResult('x', $this->createErrorResult('error1'));
+        $resultSet->addResult('x', $this->createErrorResult('error2'));
 
         $errors = $resultSet->getResult('x')->getErrors();
 
@@ -51,5 +38,42 @@ class ResultSetTest extends TestCase
         $this->assertCount(2, $errors);
         $this->assertContains('error1', $errors);
         $this->assertContains('error2', $errors);
+    }
+
+    public function testGetErrors(): void
+    {
+        $error = $this->createErrorResult('error1');
+        $resultSet = new ResultSet();
+        $resultSet->addResult('attribute1', $error);
+        $resultSet->addResult('attribute2', new Result());
+
+        $this->assertSame(
+            ['attribute1' => $error],
+            $resultSet->getErrors()->getIterator()->getArrayCopy()
+        );
+    }
+
+    public function testIsValidReturnTrue(): void
+    {
+        $resultSet = new ResultSet();
+        $resultSet->addResult('attribute1', new Result());
+
+        $this->assertTrue($resultSet->isValid());
+    }
+
+    public function testIsValidReturnFalse(): void
+    {
+        $resultSet = new ResultSet();
+        $resultSet->addResult('attribute1', $this->createErrorResult('error1'));
+
+        $this->assertFalse($resultSet->isValid());
+    }
+
+    private function createErrorResult(string $error): Result
+    {
+        $result = new Result();
+        $result->addError($error);
+
+        return $result;
     }
 }

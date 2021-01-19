@@ -48,4 +48,27 @@ final class ResultSet implements IteratorAggregate
     {
         return new ArrayIterator($this->results);
     }
+
+    public function getErrors(): self
+    {
+        $resultSet = new self();
+        foreach ($this->results as $attribute => $result) {
+            if (!$result->isValid()) {
+                $resultSet->addResult($attribute, $result);
+            }
+        }
+
+        return $resultSet;
+    }
+
+    public function isValid(): bool
+    {
+        foreach ($this->results as $result) {
+            if (!$result->isValid()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
