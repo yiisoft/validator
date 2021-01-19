@@ -18,12 +18,12 @@ final class ResultSet implements IteratorAggregate
      * @var Result[]
      */
     private array $results = [];
-    private bool $hasErrors = false;
+    private bool $isValid = true;
 
     public function addResult(string $attribute, Result $result): void
     {
         if (!$result->isValid()) {
-            $this->hasErrors = true;
+            $this->isValid = false;
         }
 
         if (!isset($this->results[$attribute])) {
@@ -66,8 +66,8 @@ final class ResultSet implements IteratorAggregate
         return $resultSet;
     }
 
-    public function hasErrors(): bool
+    public function isValid(): bool
     {
-        return $this->hasErrors;
+        return $this->isValid;
     }
 }

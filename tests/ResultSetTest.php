@@ -53,20 +53,20 @@ class ResultSetTest extends TestCase
         );
     }
 
-    public function testHasErrorsReturnFalse(): void
+    public function testIsValidReturnTrue(): void
     {
         $resultSet = new ResultSet();
         $resultSet->addResult('attribute1', new Result());
 
-        $this->assertFalse($resultSet->hasErrors());
+        $this->assertTrue($resultSet->isValid());
     }
 
-    public function testHasErrorsReturnTrue(): void
+    public function testIsValidReturnFalse(): void
     {
         $resultSet = new ResultSet();
         $resultSet->addResult('attribute1', $this->createErrorResult('error1'));
 
-        $this->assertTrue($resultSet->hasErrors());
+        $this->assertFalse($resultSet->isValid());
     }
 
     private function createErrorResult(string $error): Result
