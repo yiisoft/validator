@@ -18,18 +18,23 @@ final class ResultSet implements IteratorAggregate
      * @var Result[]
      */
     private array $results = [];
+    private bool $hasErrors = false;
 
-    public function addResult(
-        string $attribute,
-        Result $result
-    ): void {
+    public function addResult(string $attribute, Result $result): void
+    {
+        if (!$result->isValid()) {
+            $this->hasErrors = true;
+        }
+
         if (!isset($this->results[$attribute])) {
             $this->results[$attribute] = $result;
             return;
         }
+
         if ($result->isValid()) {
             return;
         }
+
         foreach ($result->getErrors() as $error) {
             $this->results[$attribute]->addError($error);
         }
@@ -61,14 +66,8 @@ final class ResultSet implements IteratorAggregate
         return $resultSet;
     }
 
-    public function isValid(): bool
+    public function hasErrors(): bool
     {
-        foreach ($this->results as $result) {
-            if (!$result->isValid()) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->hasErrors === false;
     }
 }
