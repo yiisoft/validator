@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
+use Yiisoft\Validator\ErrorMessageFormatterInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -52,12 +53,12 @@ class Json extends Rule
         return is_string($value) && preg_match($regex, $value) === 1;
     }
 
-    public function getOptions(): array
+    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return array_merge(
-            parent::getOptions(),
+            parent::getOptions($formatter),
             [
-                'message' => new ErrorMessage($this->message),
+                'message' => new ErrorMessage($this->message, [], $formatter),
             ],
         );
     }

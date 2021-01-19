@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
+use Yiisoft\Validator\ErrorMessageFormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -464,24 +465,24 @@ class Ip extends Rule
         ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
-    public function getOptions(): array
+    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return array_merge(
-            parent::getOptions(),
+            parent::getOptions($formatter),
             [
-                'message' => new ErrorMessage($this->message),
+                'message' => new ErrorMessage($this->message, [], $formatter),
                 'allowIpv4' => $this->allowIpv4,
-                'ipv4NotAllowedMessage' => new ErrorMessage($this->ipv4NotAllowed),
+                'ipv4NotAllowedMessage' => new ErrorMessage($this->ipv4NotAllowed, [], $formatter),
                 'allowIpv6' => $this->allowIpv6,
-                'ipv6NotAllowedMessage' => new ErrorMessage($this->ipv6NotAllowed),
+                'ipv6NotAllowedMessage' => new ErrorMessage($this->ipv6NotAllowed, [], $formatter),
                 'allowSubnet' => $this->allowSubnet,
-                'hasSubnetMessage' => new ErrorMessage($this->hasSubnet),
+                'hasSubnetMessage' => new ErrorMessage($this->hasSubnet, [], $formatter),
                 'requireSubnet' => $this->requireSubnet,
-                'noSubnetMessage' => new ErrorMessage($this->noSubnet),
+                'noSubnetMessage' => new ErrorMessage($this->noSubnet, [], $formatter),
                 'allowNegation' => $this->allowNegation,
-                'wrongCidrMessage' => new ErrorMessage($this->wrongCidr),
+                'wrongCidrMessage' => new ErrorMessage($this->wrongCidr, [], $formatter),
                 'ranges' => $this->ranges,
-                'notInRangeMessage' => new ErrorMessage($this->notInRange),
+                'notInRangeMessage' => new ErrorMessage($this->notInRange, [], $formatter),
             ],
         );
     }

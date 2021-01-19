@@ -27,9 +27,10 @@ final class ErrorMessage
         return $this->parameters;
     }
 
-    public function getFormattedMessage(): string
+    public function getFormattedMessage(?ErrorMessageFormatterInterface $formatter = null): string
     {
-        return $this->formatter->format($this);
+        $formatter = $formatter ?? $this->formatter;
+        return $formatter->format($this);
     }
 
     public function __toString(): string

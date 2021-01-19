@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
+use Yiisoft\Validator\ErrorMessageFormatterInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -105,16 +106,16 @@ class HasLength extends Rule
         return $new;
     }
 
-    public function getOptions(): array
+    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return array_merge(
-            parent::getOptions(),
+            parent::getOptions($formatter),
             [
-                'message' => new ErrorMessage($this->message),
+                'message' => new ErrorMessage($this->message, [], $formatter),
                 'min' => $this->min,
-                'tooShortMessage' => new ErrorMessage($this->tooShortMessage, ['min' => $this->min]),
+                'tooShortMessage' => new ErrorMessage($this->tooShortMessage, ['min' => $this->min], $formatter),
                 'max' => $this->max,
-                'tooLongMessage' => new ErrorMessage($this->tooLongMessage, ['max' => $this->max]),
+                'tooLongMessage' => new ErrorMessage($this->tooLongMessage, ['max' => $this->max], $formatter),
                 'encoding' => $this->encoding,
             ],
         );

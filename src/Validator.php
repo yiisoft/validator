@@ -76,14 +76,15 @@ final class Validator implements ValidatorInterface
      *    ],
      * ]
      * ```
+     * @param ErrorMessageFormatterInterface|null $formatter
      *
      * @return array
      */
-    public function asArray(): array
+    public function asArray(?ErrorMessageFormatterInterface $formatter = null): array
     {
         $rulesOfArray = [];
         foreach ($this->attributeRules as $attribute => $rules) {
-            $rulesOfArray[$attribute] = $rules->asArray();
+            $rulesOfArray[$attribute] = $rules->asArray($formatter);
         }
         return $rulesOfArray;
     }

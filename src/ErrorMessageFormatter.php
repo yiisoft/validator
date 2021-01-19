@@ -10,7 +10,9 @@ final class ErrorMessageFormatter implements ErrorMessageFormatterInterface
     {
         $replacements = [];
         foreach ($errorMessage->getParameters() as $key => $value) {
-            if (is_array($value)) {
+            if ($value instanceof ErrorMessage) {
+                $value = $this->format($value);
+            } elseif (is_array($value)) {
                 $value = 'array';
             } elseif (is_object($value)) {
                 $value = 'object';

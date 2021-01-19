@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
+use Yiisoft\Validator\ErrorMessageFormatterInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -149,15 +150,15 @@ class Email extends Rule
         return $new;
     }
 
-    public function getOptions(): array
+    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return array_merge(
-            parent::getOptions(),
+            parent::getOptions($formatter),
             [
                 'allowName' => $this->allowName,
                 'checkDNS' => $this->checkDNS,
                 'enableIDN' => $this->enableIDN,
-                'message' => new ErrorMessage($this->message),
+                'message' => new ErrorMessage($this->message, [], $formatter),
             ],
         );
     }

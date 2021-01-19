@@ -15,7 +15,7 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 use Yiisoft\Validator\Validator;
 
-class ValidatorTest extends TestCase
+class ValidatorTest extends FormatterMock
 {
     public function getDataObject(array $attributes): DataSetInterface
     {
@@ -112,6 +112,11 @@ class ValidatorTest extends TestCase
         $this->assertCount(1, $intResult->getErrors());
 
         $this->assertEquals(new ErrorMessage('Value must be no less than {min}.', ['min' => 44]), $intResult->getErrors()[0]);
+        $this->assertSame('Value must be no less than 44.', (string)$intResult->getErrors()[0]);
+
+        $formatter = $this->createFormatterMock();
+        $this->assertSame('Translate: Value must be no less than 44.', (string)$intResult->getErrors($formatter)[0]);
+        $this->assertSame('Translate: Value must be no less than 44.', $intResult->getErrors()[0]->getFormattedMessage($formatter));
     }
 
     public function testAddingRulesOneByOne(): void

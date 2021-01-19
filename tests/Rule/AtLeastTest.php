@@ -7,11 +7,12 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Tests\FormatterMock;
 
 /**
  * @group validators
  */
-class AtLeastTest extends TestCase
+class AtLeastTest extends FormatterMock
 {
     public function testAtLeastOne(): void
     {
@@ -109,6 +110,14 @@ class AtLeastTest extends TestCase
      */
     public function testOptions(Rule $rule, array $expected): void
     {
+        $this->assertEquals(
+            array_merge(
+                $expected,
+                ['message' => 'Translate: ' . $expected['message']]
+            ),
+            $rule->getOptions($this->createFormatterMock())
+        );
+
         $this->assertEquals($expected, $rule->getOptions());
     }
 }

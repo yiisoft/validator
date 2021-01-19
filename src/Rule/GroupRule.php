@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
+use Yiisoft\Validator\ErrorMessageFormatterInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -37,8 +38,8 @@ abstract class GroupRule extends Rule
      */
     abstract protected function getRules(): Rules;
 
-    public function getOptions(): array
+    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
-        return $this->getRules()->asArray();
+        return $this->getRules()->asArray($formatter);
     }
 }

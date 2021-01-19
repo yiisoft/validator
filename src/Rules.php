@@ -64,11 +64,11 @@ final class Rules
      *
      * @return array
      */
-    public function asArray(): array
+    public function asArray(?ErrorMessageFormatterInterface $formatter = null): array
     {
         $arrayOfRules = [];
         foreach ($this->rules as $rule) {
-            $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
+            $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions($formatter));
         }
         return $arrayOfRules;
     }

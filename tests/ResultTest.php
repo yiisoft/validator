@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
 
-class ResultTest extends TestCase
+class ResultTest extends FormatterMock
 {
     /**
      * @test
@@ -36,6 +36,16 @@ class ResultTest extends TestCase
         $result = new Result();
         $result->addError(new ErrorMessage('Error'));
         $this->assertEquals([new ErrorMessage('Error')], $result->getErrors());
+    }
+
+    /**
+     * @test
+     */
+    public function errorIsProperlyAddedWithFormatter(): void
+    {
+        $result = new Result();
+        $result->addError(new ErrorMessage('Error'));
+        $this->assertEquals(['Translate: Error'], $result->getErrors($this->createFormatterMock()));
     }
 
     /**

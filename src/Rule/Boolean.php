@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
+use Yiisoft\Validator\ErrorMessageFormatterInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -79,10 +80,10 @@ class Boolean extends Rule
         return $result;
     }
 
-    public function getOptions(): array
+    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return array_merge(
-            parent::getOptions(),
+            parent::getOptions($formatter),
             [
                 'strict' => $this->strict,
                 'trueValue' => $this->trueValue,
@@ -92,7 +93,8 @@ class Boolean extends Rule
                     [
                         'true' => $this->trueValue === true ? 'true' : $this->trueValue,
                         'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                    ]
+                    ],
+                    $formatter
                 ),
             ],
         );

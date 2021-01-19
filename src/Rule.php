@@ -129,7 +129,7 @@ abstract class Rule
      *
      * @return array
      */
-    public function getOptions(): array
+    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return [
             'skipOnEmpty' => $this->skipOnEmpty,
