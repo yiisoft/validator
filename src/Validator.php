@@ -76,6 +76,7 @@ final class Validator implements ValidatorInterface
      *    ],
      * ]
      * ```
+     *
      * @param ErrorMessageFormatterInterface|null $formatter
      *
      * @return array

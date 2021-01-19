@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
 

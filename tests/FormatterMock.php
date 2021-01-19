@@ -28,7 +28,7 @@ abstract class FormatterMock extends TestCase
                     }
                     $replacements['{' . $key . '}'] = $value;
                 }
-                return 'Translate: '.strtr($errorMessage->getMessage(), $replacements);
+                return 'Translate: ' . strtr($errorMessage->getMessage(), $replacements);
             }
         };
     }

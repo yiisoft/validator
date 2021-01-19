@@ -28,7 +28,7 @@ final class Result
     {
         if ($formatter instanceof ErrorMessageFormatterInterface) {
             return array_map(
-                function($error) use ($formatter) {
+                function ($error) use ($formatter) {
                     return new ErrorMessage($error->getMessage(), $error->getParameters(), $formatter);
                 },
                 $this->errors
