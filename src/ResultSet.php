@@ -68,6 +68,6 @@ final class ResultSet implements IteratorAggregate
 
     public function hasErrors(): bool
     {
-        return $this->hasErrors === false;
+        return $this->hasErrors;
     }
 }
