@@ -5,19 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ResultSet;
 
 class ResultSetTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function successShouldNotOverrideError(): void
+    public function testSuccessShouldNotOverrideError(): void
     {
-        $error = new Result();
-        $error->addError(new ErrorMessage('error'));
+        $error = $this->createErrorResult('error');
         $success = new Result();
 
         $resultSet = new ResultSet();
@@ -28,38 +23,57 @@ class ResultSetTest extends TestCase
 
         $this->assertFalse($resultSet->getResult('x')->isValid());
         $this->assertCount(1, $errors);
-        $this->assertEquals([new ErrorMessage('error')], $errors);
+        $this->assertContains('error', $errors);
     }
 
-    /**
-     * @test
-     */
-    public function errorsShouldAdd(): void
+    public function testErrorsShouldAdd(): void
     {
-        $error1 = new Result();
-        $error1->addError(new ErrorMessage('error1'));
-
-        $error2 = new Result();
-        $error2->addError(new ErrorMessage('error2'));
-
         $resultSet = new ResultSet();
-        $resultSet->addResult('x', $error1);
-        $resultSet->addResult('x', $error2);
+        $resultSet->addResult('x', $this->createErrorResult('error1'));
+        $resultSet->addResult('x', $this->createErrorResult('error2'));
 
         $errors = $resultSet->getResult('x')->getErrors();
 
         $this->assertFalse($resultSet->getResult('x')->isValid());
         $this->assertCount(2, $errors);
-        $this->assertSame([
-            'error1',
-            'error2',
-        ], $errors);
+        $this->assertContains('error1', $errors);
+        $this->assertContains('error2', $errors);
+    }
 
-        $errorsRaw = $resultSet->getResult('x')->getRawErrors();
-        $this->assertContainsOnlyInstancesOf(ErrorMessage::class, $errorsRaw);
-        $this->assertEquals([
-            new ErrorMessage('error1'),
-            new ErrorMessage('error2'),
-        ], $errorsRaw);
+    public function testGetErrors(): void
+    {
+        $resultSet = new ResultSet();
+        $resultSet->addResult('attribute1', $this->createErrorResult('error1'));
+        $resultSet->addResult('attribute1', $this->createErrorResult('error2'));
+        $resultSet->addResult('attribute2', new Result());
+
+        $this->assertSame(
+            ['attribute1' => ['error1', 'error2']],
+            $resultSet->getErrors()
+        );
+    }
+
+    public function testIsValidReturnTrue(): void
+    {
+        $resultSet = new ResultSet();
+        $resultSet->addResult('attribute1', new Result());
+
+        $this->assertTrue($resultSet->isValid());
+    }
+
+    public function testIsValidReturnFalse(): void
+    {
+        $resultSet = new ResultSet();
+        $resultSet->addResult('attribute1', $this->createErrorResult('error1'));
+
+        $this->assertFalse($resultSet->isValid());
+    }
+
+    private function createErrorResult(string $error): Result
+    {
+        $result = new Result();
+        $result->addError($error);
+
+        return $result;
     }
 }
