@@ -55,15 +55,37 @@ final class ResultSet implements IteratorAggregate
     }
 
     /**
-     * @return string[]
+     * @param ErrorMessageFormatterInterface|null $formatter
+     *
+     * @return ErrorMessage[][]
      */
-    public function getErrors(): array
+    public function getRawErrors(): array
     {
         $errors = [];
         foreach ($this->results as $attribute => $result) {
             if (!$result->isValid()) {
-                $errors[$attribute] = $result->getErrors();
+                $errors[$attribute] = $result->getRawErrors();
             }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param ErrorMessageFormatterInterface|null $formatter
+     *
+     * @return string[][]
+     */
+    public function getErrors(?ErrorMessageFormatterInterface $formatter = null): array
+    {
+        $errors = $this->getRawErrors();
+        foreach ($errors as $attribute => $attributeErrors) {
+            $errors[$attribute] = array_map(
+                function ($error) use ($formatter) {
+                    return $error->getFormattedMessage($formatter);
+                },
+                $attributeErrors
+            );
         }
 
         return $errors;

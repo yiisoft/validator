@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ResultSet;
 
@@ -38,6 +39,13 @@ class ResultSetTest extends TestCase
         $this->assertCount(2, $errors);
         $this->assertContains('error1', $errors);
         $this->assertContains('error2', $errors);
+
+        $errorsRaw = $resultSet->getResult('x')->getRawErrors();
+        $this->assertContainsOnlyInstancesOf(ErrorMessage::class, $errorsRaw);
+        $this->assertEquals([
+            new ErrorMessage('error1'),
+            new ErrorMessage('error2'),
+        ], $errorsRaw);
     }
 
     public function testGetErrors(): void
@@ -72,7 +80,7 @@ class ResultSetTest extends TestCase
     private function createErrorResult(string $error): Result
     {
         $result = new Result();
-        $result->addError($error);
+        $result->addError(new ErrorMessage($error));
 
         return $result;
     }
