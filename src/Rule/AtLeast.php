@@ -80,13 +80,13 @@ class AtLeast extends Rule
         return $new;
     }
 
-    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
+    public function getRawOptions(): array
     {
         return array_merge(
-            parent::getOptions($formatter),
+            parent::getRawOptions(),
             [
                 'min' => $this->min,
-                'message' => new ErrorMessage($this->message, ['min' => $this->min], $formatter),
+                'message' => new ErrorMessage($this->message, ['min' => $this->min]),
             ],
         );
     }

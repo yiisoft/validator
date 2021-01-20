@@ -106,16 +106,16 @@ class HasLength extends Rule
         return $new;
     }
 
-    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
+    public function getRawOptions(): array
     {
         return array_merge(
-            parent::getOptions($formatter),
+            parent::getRawOptions(),
             [
-                'message' => new ErrorMessage($this->message, [], $formatter),
+                'message' => new ErrorMessage($this->message),
                 'min' => $this->min,
-                'tooShortMessage' => new ErrorMessage($this->tooShortMessage, ['min' => $this->min], $formatter),
+                'tooShortMessage' => new ErrorMessage($this->tooShortMessage, ['min' => $this->min]),
                 'max' => $this->max,
-                'tooLongMessage' => new ErrorMessage($this->tooLongMessage, ['max' => $this->max], $formatter),
+                'tooLongMessage' => new ErrorMessage($this->tooLongMessage, ['max' => $this->max]),
                 'encoding' => $this->encoding,
             ],
         );

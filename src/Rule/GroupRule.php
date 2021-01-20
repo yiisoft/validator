@@ -38,7 +38,7 @@ abstract class GroupRule extends Rule
      */
     abstract protected function getRules(): Rules;
 
-    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
+    public function getRawOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return $this->getRules()->asArray($formatter);
     }

@@ -120,17 +120,17 @@ class Number extends Rule
         return 'Value must be a number.';
     }
 
-    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
+    public function getRawOptions(): array
     {
         return array_merge(
-            parent::getOptions($formatter),
+            parent::getRawOptions(),
             [
-                'notANumberMessage' => new ErrorMessage($this->getNotANumberMessage(), [], $formatter),
+                'notANumberMessage' => new ErrorMessage($this->getNotANumberMessage()),
                 'asInteger' => $this->asInteger,
                 'min' => $this->min,
-                'tooSmallMessage' => new ErrorMessage($this->tooSmallMessage, ['min' => $this->min], $formatter),
+                'tooSmallMessage' => new ErrorMessage($this->tooSmallMessage, ['min' => $this->min]),
                 'max' => $this->max,
-                'tooBigMessage' => new ErrorMessage($this->tooBigMessage, ['max' => $this->max], $formatter),
+                'tooBigMessage' => new ErrorMessage($this->tooBigMessage, ['max' => $this->max]),
             ],
         );
     }

@@ -10,11 +10,11 @@ final class ErrorMessage
     private array $parameters = [];
     private ErrorMessageFormatterInterface $formatter;
 
-    public function __construct(string $message, array $parameters = [], ?ErrorMessageFormatterInterface $formatter = null)
+    public function __construct(string $message, array $parameters = [])
     {
         $this->message = $message;
         $this->parameters = $parameters;
-        $this->formatter = $formatter ?? new ErrorMessageFormatter();
+        $this->formatter = new ErrorMessageFormatter();
     }
 
     public function getMessage(): string

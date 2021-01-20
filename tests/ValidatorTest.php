@@ -71,9 +71,9 @@ class ValidatorTest extends FormatterMock
         $results = $validator->validate($dataObject);
         $boolResult = $results->getResult('bool');
 
-        $this->assertSame('The value must be either "1" or "0".', $boolResult->getErrors()[0]->getFormattedMessage());
-        $this->assertSame('The value must be either "{true}" or "{false}".', $boolResult->getErrors()[0]->getMessage());
-        $this->assertSame(['true' => '1', 'false' => '0'], $boolResult->getErrors()[0]->getParameters());
+        $this->assertSame('The value must be either "1" or "0".', $boolResult->getRawErrors()[0]->getFormattedMessage());
+        $this->assertSame('The value must be either "{true}" or "{false}".', $boolResult->getRawErrors()[0]->getMessage());
+        $this->assertSame(['true' => '1', 'false' => '0'], $boolResult->getRawErrors()[0]->getParameters());
     }
 
     public function testAddingRulesViaConstructor(): void
@@ -115,7 +115,7 @@ class ValidatorTest extends FormatterMock
 
         $formatter = $this->createFormatterMock();
         $this->assertSame('Translate: Value must be no less than 44.', (string)$intResult->getErrors($formatter)[0]);
-        $this->assertSame('Translate: Value must be no less than 44.', $intResult->getErrors()[0]->getFormattedMessage($formatter));
+        $this->assertSame('Translate: Value must be no less than 44.', $intResult->getRawErrors()[0]->getFormattedMessage($formatter));
     }
 
     public function testAddingRulesOneByOne(): void

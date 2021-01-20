@@ -38,7 +38,7 @@ final class Rules
             $ruleResult = $rule->validate($value, $dataSet, $previousRulesErrored);
             if ($ruleResult->isValid() === false) {
                 $previousRulesErrored = true;
-                foreach ($ruleResult->getErrors() as $error) {
+                foreach ($ruleResult->getRawErrors() as $error) {
                     $compoundResult->addError($error);
                 }
             }
@@ -57,6 +57,20 @@ final class Rules
         }
 
         return $rule;
+    }
+
+    /**
+     * Return rules as unformatted data array.
+     *
+     * @return array
+     */
+    public function asRawArray(): array
+    {
+        $arrayOfRules = [];
+        foreach ($this->rules as $rule) {
+            $arrayOfRules[] = array_merge([$rule->getName()], $rule->getRawOptions());
+        }
+        return $arrayOfRules;
     }
 
     /**

@@ -80,10 +80,10 @@ class Boolean extends Rule
         return $result;
     }
 
-    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
+    public function getRawOptions(): array
     {
         return array_merge(
-            parent::getOptions($formatter),
+            parent::getRawOptions(),
             [
                 'strict' => $this->strict,
                 'trueValue' => $this->trueValue,
@@ -93,8 +93,7 @@ class Boolean extends Rule
                     [
                         'true' => $this->trueValue === true ? 'true' : $this->trueValue,
                         'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                    ],
-                    $formatter
+                    ]
                 ),
             ],
         );

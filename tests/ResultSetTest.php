@@ -50,11 +50,16 @@ class ResultSetTest extends TestCase
 
         $this->assertFalse($resultSet->getResult('x')->isValid());
         $this->assertCount(2, $errors);
+        $this->assertSame([
+            'error1',
+            'error2',
+        ], $errors);
 
-        $this->assertContainsOnlyInstancesOf(ErrorMessage::class, $errors);
+        $errorsRaw = $resultSet->getResult('x')->getRawErrors();
+        $this->assertContainsOnlyInstancesOf(ErrorMessage::class, $errorsRaw);
         $this->assertEquals([
             new ErrorMessage('error1'),
             new ErrorMessage('error2'),
-        ], $errors);
+        ], $errorsRaw);
     }
 }

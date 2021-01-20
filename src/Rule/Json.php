@@ -53,12 +53,12 @@ class Json extends Rule
         return is_string($value) && preg_match($regex, $value) === 1;
     }
 
-    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
+    public function getRawOptions(): array
     {
         return array_merge(
-            parent::getOptions($formatter),
+            parent::getRawOptions(),
             [
-                'message' => new ErrorMessage($this->message, [], $formatter),
+                'message' => new ErrorMessage($this->message),
             ],
         );
     }

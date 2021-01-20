@@ -22,18 +22,27 @@ final class Result
     }
 
     /**
+     * @param ErrorMessageFormatterInterface|null $formatter
+     *
      * @return ErrorMessage[]
+     */
+    public function getRawErrors(): array
+    {
+        return $this->errors;
+    }
+
+    /**
+     * @param ErrorMessageFormatterInterface|null $formatter
+     *
+     * @return string[]
      */
     public function getErrors(?ErrorMessageFormatterInterface $formatter = null): array
     {
-        if ($formatter instanceof ErrorMessageFormatterInterface) {
-            return array_map(
-                function ($error) use ($formatter) {
-                    return new ErrorMessage($error->getMessage(), $error->getParameters(), $formatter);
-                },
-                $this->errors
-            );
-        }
-        return $this->errors;
+        return array_map(
+            function ($error) use ($formatter) {
+                return $error->getFormattedMessage($formatter);
+            },
+            $this->errors
+        );
     }
 }

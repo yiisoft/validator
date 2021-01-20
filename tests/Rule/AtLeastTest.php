@@ -50,9 +50,13 @@ class AtLeastTest extends FormatterMock
 
         $this->assertFalse($rule->validate($model)->isValid());
         $this->assertCount(1, $rule->validate($model)->getErrors());
-        $this->assertEquals(
+        $this->assertSame(
             ['The model is not valid. Must have at least "1" filled attributes.'],
             $rule->validate($model)->getErrors()
+        );
+        $this->assertEquals(
+            ['The model is not valid. Must have at least "1" filled attributes.'],
+            $rule->validate($model)->getRawErrors()
         );
     }
 
@@ -83,19 +87,19 @@ class AtLeastTest extends FormatterMock
             [
                 (new AtLeast(['attr1', 'attr2'])),
                 [
-                    'min' => 1,
-                    'message' => 'The model is not valid. Must have at least "1" filled attributes.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
+                    'min' => 1,
+                    'message' => 'The model is not valid. Must have at least "1" filled attributes.',
                 ],
             ],
             [
                 (new AtLeast(['attr1', 'attr2']))->min(2),
                 [
-                    'min' => 2,
-                    'message' => 'The model is not valid. Must have at least "2" filled attributes.',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
+                    'min' => 2,
+                    'message' => 'The model is not valid. Must have at least "2" filled attributes.',
                 ],
             ],
         ];
@@ -109,7 +113,7 @@ class AtLeastTest extends FormatterMock
      */
     public function testOptions(Rule $rule, array $expected): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             array_merge(
                 $expected,
                 ['message' => 'Translate: ' . $expected['message']]
@@ -117,6 +121,7 @@ class AtLeastTest extends FormatterMock
             $rule->getOptions($this->createFormatterMock())
         );
 
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertSame($expected, $rule->getOptions());
+        $this->assertEquals($expected, $rule->getRawOptions());
     }
 }

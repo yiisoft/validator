@@ -97,23 +97,23 @@ class RulesTest extends TestCase
         $rules->add(new Required());
         $rules->add((new Number())->max(10));
 
-        $this->assertEquals([
+        $this->assertSame([
             [
                 'required',
-                'message' => 'Value cannot be blank.',
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
+                'message' => 'Value cannot be blank.',
             ],
             [
                 'number',
+                'skipOnEmpty' => false,
+                'skipOnError' => true,
                 'notANumberMessage' => 'Value must be a number.',
                 'asInteger' => false,
                 'min' => null,
                 'tooSmallMessage' => 'Value must be no less than .',
                 'max' => 10,
                 'tooBigMessage' => 'Value must be no greater than 10.',
-                'skipOnEmpty' => false,
-                'skipOnError' => true,
             ],
         ], $rules->asArray());
 
@@ -158,7 +158,7 @@ class RulesTest extends TestCase
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
             ],
-        ], $rules->asArray());
+        ], $rules->asRawArray());
 
         $rules = new Rules([
             (new Each(new Rules([

@@ -32,7 +32,12 @@ class EachTest extends FormatterMock
         $errors = $result->getErrors();
         $this->assertFalse($result->isValid());
         $this->assertCount(2, $errors);
+        $this->assertEquals([
+            'Value must be no greater than 13. 20 given.',
+            'Value must be no greater than 13. 30 given.',
+        ], $errors);
 
+        $rawErrors = $result->getRawErrors();
         $this->assertEquals([
             new ErrorMessage(
                 '{error} {value} given.',
@@ -48,7 +53,7 @@ class EachTest extends FormatterMock
                     'value' => 30,
                 ]
             ),
-        ], $errors);
+        ], $rawErrors);
     }
 
     /**

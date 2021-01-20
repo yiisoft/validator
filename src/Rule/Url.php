@@ -117,12 +117,12 @@ class Url extends Rule
         return $new;
     }
 
-    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
+    public function getRawOptions(): array
     {
         return array_merge(
-            parent::getOptions($formatter),
+            parent::getRawOptions(),
             [
-                'message' => new ErrorMessage($this->message, [], $formatter),
+                'message' => new ErrorMessage($this->message, []),
                 'enableIDN' => $this->enableIDN,
                 'validSchemes' => $this->validSchemes,
                 'pattern' => $this->pattern,

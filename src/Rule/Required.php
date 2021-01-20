@@ -31,12 +31,12 @@ class Required extends Rule
         return $result;
     }
 
-    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
+    public function getRawOptions(): array
     {
         return array_merge(
-            parent::getOptions($formatter),
+            parent::getRawOptions(),
             [
-                'message' => new ErrorMessage($this->message, [], $formatter),
+                'message' => new ErrorMessage($this->message),
             ],
         );
     }

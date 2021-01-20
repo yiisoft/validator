@@ -191,15 +191,15 @@ class CompareTo extends Rule
         }
     }
 
-    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
+    public function getRawOptions(): array
     {
         return array_merge(
-            parent::getOptions($formatter),
+            parent::getRawOptions(),
             [
                 'type' => $this->type,
                 'operator' => $this->operator,
                 'compareValue' => $this->compareValue,
-                'message' => new ErrorMessage($this->getMessage(), ['value' => $this->compareValue], $formatter),
+                'message' => new ErrorMessage($this->getMessage(), ['value' => $this->compareValue]),
             ],
         );
     }

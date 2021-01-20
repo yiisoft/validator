@@ -40,7 +40,7 @@ class Each extends Rule
         foreach ($value as $item) {
             $itemResult = $this->rules->validate($item, $dataSet);
             if ($itemResult->isValid() === false) {
-                foreach ($itemResult->getErrors() as $error) {
+                foreach ($itemResult->getRawErrors() as $error) {
                     $result->addError(
                         new ErrorMessage(
                             $this->message,
@@ -64,7 +64,7 @@ class Each extends Rule
         return $new;
     }
 
-    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
+    public function getRawOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return $this->rules->asArray($formatter);
     }

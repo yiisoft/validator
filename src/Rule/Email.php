@@ -150,15 +150,15 @@ class Email extends Rule
         return $new;
     }
 
-    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
+    public function getRawOptions(): array
     {
         return array_merge(
-            parent::getOptions($formatter),
+            parent::getRawOptions(),
             [
                 'allowName' => $this->allowName,
                 'checkDNS' => $this->checkDNS,
                 'enableIDN' => $this->enableIDN,
-                'message' => new ErrorMessage($this->message, [], $formatter),
+                'message' => new ErrorMessage($this->message),
             ],
         );
     }

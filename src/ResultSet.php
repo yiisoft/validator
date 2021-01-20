@@ -30,7 +30,7 @@ final class ResultSet implements IteratorAggregate
         if ($result->isValid()) {
             return;
         }
-        foreach ($result->getErrors() as $error) {
+        foreach ($result->getRawErrors() as $error) {
             $this->results[$attribute]->addError($error);
         }
     }

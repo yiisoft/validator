@@ -34,7 +34,8 @@ class ResultTest extends FormatterMock
     {
         $result = new Result();
         $result->addError(new ErrorMessage('Error'));
-        $this->assertEquals([new ErrorMessage('Error')], $result->getErrors());
+        $this->assertEquals([new ErrorMessage('Error')], $result->getRawErrors());
+        $this->assertEquals(['Error'], $result->getErrors());
     }
 
     /**
