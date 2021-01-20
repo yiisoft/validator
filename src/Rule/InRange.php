@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\ErrorMessage;
-use Yiisoft\Validator\ErrorMessageFormatterInterface;
 use function is_iterable;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\DataSetInterface;

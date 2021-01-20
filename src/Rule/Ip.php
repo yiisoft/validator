@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
-use Yiisoft\Validator\ErrorMessageFormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
