@@ -16,6 +16,7 @@ final class ResultSet implements IteratorAggregate
 {
     /**
      * @var Result[]
+     * @psalm-var array<string, Result>
      */
     private array $results = [];
     private bool $isValid = true;
@@ -55,7 +56,8 @@ final class ResultSet implements IteratorAggregate
     }
 
     /**
-     * @return string[]
+     * @return string[][]
+     * @psalm-return array<string, list<string>>
      */
     public function getErrors(): array
     {
