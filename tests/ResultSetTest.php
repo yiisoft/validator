@@ -42,13 +42,13 @@ class ResultSetTest extends TestCase
 
     public function testGetErrors(): void
     {
-        $error = $this->createErrorResult('error1');
         $resultSet = new ResultSet();
-        $resultSet->addResult('attribute1', $error);
+        $resultSet->addResult('attribute1', $this->createErrorResult('error1'));
+        $resultSet->addResult('attribute1', $this->createErrorResult('error2'));
         $resultSet->addResult('attribute2', new Result());
 
         $this->assertSame(
-            ['attribute1' => $error],
+            ['attribute1' => ['error1', 'error2']],
             $resultSet->getErrors()
         );
     }

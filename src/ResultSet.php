@@ -54,12 +54,15 @@ final class ResultSet implements IteratorAggregate
         return new ArrayIterator($this->results);
     }
 
+    /**
+     * @return string[]
+     */
     public function getErrors(): array
     {
         $errors = [];
         foreach ($this->results as $attribute => $result) {
             if (!$result->isValid()) {
-                $errors[$attribute] = $result;
+                $errors[$attribute] = $result->getErrors();
             }
         }
 
