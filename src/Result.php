@@ -6,6 +6,9 @@ namespace Yiisoft\Validator;
 
 final class Result
 {
+    /**
+     * @psalm-var list<string>
+     */
     private array $errors = [];
 
     public function isValid(): bool
@@ -18,6 +21,9 @@ final class Result
         $this->errors[] = $message;
     }
 
+    /**
+     * @psalm-return list<string>
+     */
     public function getErrors(): array
     {
         return $this->errors;
