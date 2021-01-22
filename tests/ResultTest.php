@@ -59,8 +59,31 @@ class ResultTest extends TestCase
         $this->assertFalse($result->isValid());
     }
 
-//    public function testAddResult(): void
-//    {
-//
-//    }
+    public function testAddResult(): void
+    {
+        $result = new Result();
+        $result->addError(new ErrorMessage('Error 1.1'));
+        $result->addError(new ErrorMessage('Error 1.2'));
+        $this->assertCount(2, $result->getErrors());
+
+        $result2 = new Result();
+        $result2->addError(new ErrorMessage('Error 2.1'));
+        $result2->addError(new ErrorMessage('Error 2.2'));
+        $this->assertCount(2, $result2->getErrors());
+
+        $result->addResult($result2);
+
+        $this->assertCount(2, $result2->getErrors());
+        $this->assertCount(4, $result->getErrors());
+
+        $this->assertSame(
+            [
+                'Error 1.1',
+                'Error 1.2',
+                'Error 2.1',
+                'Error 2.2',
+            ],
+            $result->getErrors()
+        );
+    }
 }
