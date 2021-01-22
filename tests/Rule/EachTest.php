@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rules;
-use Yiisoft\Validator\Tests\FormatterMock;
+use Yiisoft\Validator\Tests\FormatterMockFactory;
 
 /**
  * @group validators
  */
-class EachTest extends FormatterMock
+class EachTest extends TestCase
 {
     /**
      * @test
@@ -36,24 +37,6 @@ class EachTest extends FormatterMock
             'Value must be no greater than 13. 20 given.',
             'Value must be no greater than 13. 30 given.',
         ], $errors);
-
-        $rawErrors = $result->getRawErrors();
-        $this->assertEquals([
-            new ErrorMessage(
-                '{error} {value} given.',
-                [
-                    'error' => new ErrorMessage('Value must be no greater than {max}.', ['max' => 13]),
-                    'value' => 20,
-                ]
-            ),
-            new ErrorMessage(
-                '{error} {value} given.',
-                [
-                    'error' => new ErrorMessage('Value must be no greater than {max}.', ['max' => 13]),
-                    'value' => 30,
-                ]
-            ),
-        ], $rawErrors);
     }
 
     /**
@@ -71,7 +54,7 @@ class EachTest extends FormatterMock
 
         $result = (new Each($rules))->validate($values);
 
-        $formatter = $this->createFormatterMock();
+        $formatter = (new FormatterMockFactory())->create();
         $errors = $result->getErrors($formatter);
 
         $this->assertSame('Translate: Translate: Value must be no greater than 13. 20 given.', (string)$errors[0]);

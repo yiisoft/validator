@@ -33,9 +33,7 @@ class Callback extends Rule
         $result = new Result();
 
         if ($callbackResult->isValid() === false) {
-            foreach ($callbackResult->getRawErrors() as $error) {
-                $result->addError($error);
-            }
+            $result->addResult($callbackResult);
         }
         return $result;
     }

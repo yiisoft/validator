@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
+use Yiisoft\Validator\ErrorMessageFormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -119,17 +120,17 @@ class Number extends Rule
         return 'Value must be a number.';
     }
 
-    public function getRawOptions(): array
+    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return array_merge(
-            parent::getRawOptions(),
+            parent::getOptions($formatter),
             [
-                'notANumberMessage' => new ErrorMessage($this->getNotANumberMessage()),
+                'notANumberMessage' => (new ErrorMessage($this->getNotANumberMessage()))->getFormattedMessage($formatter),
                 'asInteger' => $this->asInteger,
                 'min' => $this->min,
-                'tooSmallMessage' => new ErrorMessage($this->tooSmallMessage, ['min' => $this->min]),
+                'tooSmallMessage' => (new ErrorMessage($this->tooSmallMessage, ['min' => $this->min]))->getFormattedMessage($formatter),
                 'max' => $this->max,
-                'tooBigMessage' => new ErrorMessage($this->tooBigMessage, ['max' => $this->max]),
+                'tooBigMessage' => (new ErrorMessage($this->tooBigMessage, ['max' => $this->max]))->getFormattedMessage($formatter),
             ],
         );
     }

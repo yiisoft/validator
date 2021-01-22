@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\ErrorMessageFormatterInterface;
 
-abstract class FormatterMock extends TestCase
+final class FormatterMockFactory
 {
-    protected function createFormatterMock(): ErrorMessageFormatterInterface
+    public function create(): ErrorMessageFormatterInterface
     {
         return new class() implements ErrorMessageFormatterInterface {
             public function format(ErrorMessage $errorMessage): string

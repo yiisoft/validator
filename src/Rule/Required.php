@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
+use Yiisoft\Validator\ErrorMessageFormatterInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -30,12 +31,12 @@ class Required extends Rule
         return $result;
     }
 
-    public function getRawOptions(): array
+    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return array_merge(
-            parent::getRawOptions(),
+            parent::getOptions($formatter),
             [
-                'message' => new ErrorMessage($this->message),
+                'message' => (new ErrorMessage($this->message))->getFormattedMessage($formatter),
             ],
         );
     }

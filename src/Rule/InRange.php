@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\ErrorMessage;
+use Yiisoft\Validator\ErrorMessageFormatterInterface;
 use function is_iterable;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\DataSetInterface;
@@ -83,12 +84,12 @@ class InRange extends Rule
         return $new;
     }
 
-    public function getRawOptions(): array
+    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return array_merge(
-            parent::getRawOptions(),
+            parent::getOptions($formatter),
             [
-                'message' => new ErrorMessage($this->message),
+                'message' => (new ErrorMessage($this->message))->getFormattedMessage($formatter),
                 'range' => $this->range,
                 'strict' => $this->strict,
                 'not' => $this->not,

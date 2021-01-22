@@ -144,6 +144,5 @@ class BooleanTest extends TestCase
     public function testOptions(Rule $rule, array $expected): void
     {
         $this->assertSame($expected, $rule->getOptions());
-        $this->assertEquals($expected, $rule->getRawOptions());
     }
 }

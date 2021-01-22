@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Exception\MissingAttributeException;
@@ -14,7 +15,7 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 use Yiisoft\Validator\Validator;
 
-class ValidatorTest extends FormatterMock
+class ValidatorTest extends TestCase
 {
     public function getDataObject(array $attributes): DataSetInterface
     {
@@ -71,9 +72,7 @@ class ValidatorTest extends FormatterMock
         $results = $validator->validate($dataObject);
         $boolResult = $results->getResult('bool');
 
-        $this->assertSame('The value must be either "1" or "0".', $boolResult->getRawErrors()[0]->getFormattedMessage());
-        $this->assertSame('The value must be either "{true}" or "{false}".', $boolResult->getRawErrors()[0]->getMessage());
-        $this->assertSame(['true' => '1', 'false' => '0'], $boolResult->getRawErrors()[0]->getParameters());
+        $this->assertSame('The value must be either "1" or "0".', $boolResult->getErrors()[0]);
     }
 
     public function testAddingRulesViaConstructor(): void
@@ -113,9 +112,8 @@ class ValidatorTest extends FormatterMock
         $this->assertEquals(new ErrorMessage('Value must be no less than {min}.', ['min' => 44]), $intResult->getErrors()[0]);
         $this->assertSame('Value must be no less than 44.', (string)$intResult->getErrors()[0]);
 
-        $formatter = $this->createFormatterMock();
+        $formatter = (new FormatterMockFactory())->create();
         $this->assertSame('Translate: Value must be no less than 44.', (string)$intResult->getErrors($formatter)[0]);
-        $this->assertSame('Translate: Value must be no less than 44.', $intResult->getRawErrors()[0]->getFormattedMessage($formatter));
     }
 
     public function testAddingRulesOneByOne(): void

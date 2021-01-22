@@ -125,19 +125,6 @@ abstract class Rule
     }
 
     /**
-     * Returns rule options as unformatted data array.
-     *
-     * @return array
-     */
-    public function getRawOptions(): array
-    {
-        return [
-            'skipOnEmpty' => $this->skipOnEmpty,
-            'skipOnError' => $this->skipOnError,
-        ];
-    }
-
-    /**
      * Returns rule options as array.
      *
      * @param ErrorMessageFormatterInterface|null $formatter
@@ -146,14 +133,9 @@ abstract class Rule
      */
     public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
-        return array_map(
-            function ($element) use ($formatter) {
-                if ($element instanceof ErrorMessage) {
-                    return $element->getFormattedMessage($formatter);
-                }
-                return $element;
-            },
-            $this->getRawOptions()
-        );
+        return [
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

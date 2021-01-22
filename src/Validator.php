@@ -89,20 +89,4 @@ final class Validator implements ValidatorInterface
         }
         return $rulesOfArray;
     }
-
-    /**
-     * Return all attribute rules as array of unformatted data.
-     *
-     * @see self::asArray
-     *
-     * @return array
-     */
-    public function asRawArray(): array
-    {
-        $rulesOfArray = [];
-        foreach ($this->attributeRules as $attribute => $rules) {
-            $rulesOfArray[$attribute] = $rules->asRawArray();
-        }
-        return $rulesOfArray;
-    }
 }

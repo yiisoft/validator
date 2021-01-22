@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
 
-class ResultTest extends FormatterMock
+class ResultTest extends TestCase
 {
     /**
      * @test
@@ -34,8 +35,7 @@ class ResultTest extends FormatterMock
     {
         $result = new Result();
         $result->addError(new ErrorMessage('Error'));
-        $this->assertEquals([new ErrorMessage('Error')], $result->getRawErrors());
-        $this->assertEquals(['Error'], $result->getErrors());
+        $this->assertSame(['Error'], $result->getErrors());
     }
 
     /**
@@ -45,7 +45,8 @@ class ResultTest extends FormatterMock
     {
         $result = new Result();
         $result->addError(new ErrorMessage('Error'));
-        $this->assertEquals(['Translate: Error'], $result->getErrors($this->createFormatterMock()));
+        $formatter = (new FormatterMockFactory())->create();
+        $this->assertEquals(['Translate: Error'], $result->getErrors($formatter));
     }
 
     /**
@@ -57,4 +58,9 @@ class ResultTest extends FormatterMock
         $result->addError(new ErrorMessage('Error'));
         $this->assertFalse($result->isValid());
     }
+
+//    public function testAddResult(): void
+//    {
+//
+//    }
 }

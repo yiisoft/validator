@@ -40,17 +40,7 @@ class Each extends Rule
         foreach ($value as $item) {
             $itemResult = $this->rules->validate($item, $dataSet);
             if ($itemResult->isValid() === false) {
-                foreach ($itemResult->getRawErrors() as $error) {
-                    $result->addError(
-                        new ErrorMessage(
-                            $this->message,
-                            [
-                                'error' => $error,
-                                'value' => $item,
-                            ]
-                        )
-                    );
-                }
+                $result->addResultWithWrapper($itemResult, $this->message, ['value' => $item]);
             }
         }
 
@@ -64,7 +54,7 @@ class Each extends Rule
         return $new;
     }
 
-    public function getRawOptions(?ErrorMessageFormatterInterface $formatter = null): array
+    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return $this->rules->asArray($formatter);
     }

@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\AtLeast;
-use Yiisoft\Validator\Tests\FormatterMock;
+use Yiisoft\Validator\Tests\FormatterMockFactory;
 
 /**
  * @group validators
  */
-class AtLeastTest extends FormatterMock
+class AtLeastTest extends TestCase
 {
     public function testAtLeastOne(): void
     {
@@ -53,10 +54,6 @@ class AtLeastTest extends FormatterMock
         $this->assertSame(
             ['The model is not valid. Must have at least "1" filled attributes.'],
             $rule->validate($model)->getErrors()
-        );
-        $this->assertEquals(
-            ['The model is not valid. Must have at least "1" filled attributes.'],
-            $rule->validate($model)->getRawErrors()
         );
     }
 
@@ -113,15 +110,15 @@ class AtLeastTest extends FormatterMock
      */
     public function testOptions(Rule $rule, array $expected): void
     {
+        $formatter = (new FormatterMockFactory())->create();
         $this->assertSame(
             array_merge(
                 $expected,
                 ['message' => 'Translate: ' . $expected['message']]
             ),
-            $rule->getOptions($this->createFormatterMock())
+            $rule->getOptions($formatter)
         );
 
         $this->assertSame($expected, $rule->getOptions());
-        $this->assertEquals($expected, $rule->getRawOptions());
     }
 }

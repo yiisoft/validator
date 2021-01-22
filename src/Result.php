@@ -21,14 +21,22 @@ final class Result
         $this->errors[] = $error;
     }
 
-    /**
-     * @param ErrorMessageFormatterInterface|null $formatter
-     *
-     * @return ErrorMessage[]
-     */
-    public function getRawErrors(): array
+    public function addResult(self $result): void
     {
-        return $this->errors;
+        $this->errors = array_merge($this->errors, $result->errors);
+    }
+
+    public function addResultWithWrapper(self $result, string $message='', array $params = []): void
+    {
+        foreach ($result->errors as $error) {
+            if (!empty($message)) {
+                $error = new ErrorMessage(
+                    $message,
+                    array_merge(['error' => $error], $params)
+                );
+            }
+            $this->errors[] = $error;
+        }
     }
 
     /**

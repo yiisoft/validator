@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ErrorMessage;
+use Yiisoft\Validator\ErrorMessageFormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
@@ -190,15 +191,15 @@ class CompareTo extends Rule
         }
     }
 
-    public function getRawOptions(): array
+    public function getOptions(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return array_merge(
-            parent::getRawOptions(),
+            parent::getOptions($formatter),
             [
                 'type' => $this->type,
                 'operator' => $this->operator,
                 'compareValue' => $this->compareValue,
-                'message' => new ErrorMessage($this->getMessage(), ['value' => $this->compareValue]),
+                'message' => (new ErrorMessage($this->getMessage(), ['value' => $this->compareValue]))->getFormattedMessage($formatter),
             ],
         );
     }

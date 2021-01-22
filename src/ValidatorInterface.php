@@ -15,6 +15,4 @@ interface ValidatorInterface
     public function addRule(string $attribute, $rule): void;
 
     public function asArray(?ErrorMessageFormatterInterface $formatter = null): array;
-
-    public function asRawArray(): array;
 }

@@ -124,6 +124,7 @@ class RulesTest extends TestCase
                 (new Number())->min(10)->integer(),
             ]
         );
+
         $this->assertEquals([
             [
                 'number',
@@ -158,7 +159,7 @@ class RulesTest extends TestCase
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
             ],
-        ], $rules->asRawArray());
+        ], $rules->asArray());
 
         $rules = new Rules([
             (new Each(new Rules([
