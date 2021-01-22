@@ -26,16 +26,13 @@ final class Result
         $this->errors = array_merge($this->errors, $result->errors);
     }
 
-    public function addResultWithWrapper(self $result, string $message = '', array $params = []): void
+    public function addResultWithErrorMessageWrapper(self $result, ErrorMessage $errorMessage): void
     {
         foreach ($result->errors as $error) {
-            if (!empty($message)) {
-                $error = new ErrorMessage(
-                    $message,
-                    array_merge(['error' => $error], $params)
-                );
-            }
-            $this->errors[] = $error;
+            $this->errors[] = new ErrorMessage(
+                $errorMessage->getMessage(),
+                array_merge(['error' => $error], $errorMessage->getParameters())
+            );
         }
     }
 
@@ -47,7 +44,7 @@ final class Result
     public function getErrors(?ErrorMessageFormatterInterface $formatter = null): array
     {
         return array_map(
-            function ($error) use ($formatter) {
+            static function ($error) use ($formatter) {
                 return $error->getFormattedMessage($formatter);
             },
             $this->errors

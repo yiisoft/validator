@@ -40,7 +40,10 @@ class Each extends Rule
         foreach ($value as $item) {
             $itemResult = $this->rules->validate($item, $dataSet);
             if ($itemResult->isValid() === false) {
-                $result->addResultWithWrapper($itemResult, $this->message, ['value' => $item]);
+                $result->addResultWithErrorMessageWrapper(
+                    $itemResult,
+                    new ErrorMessage($this->message, ['value' => $item])
+                );
             }
         }
 
