@@ -26,7 +26,7 @@ final class Result
         $this->errors = array_merge($this->errors, $result->errors);
     }
 
-    public function addResultWithWrapper(self $result, string $message='', array $params = []): void
+    public function addResultWithWrapper(self $result, string $message = '', array $params = []): void
     {
         foreach ($result->errors as $error) {
             if (!empty($message)) {
