@@ -17,7 +17,7 @@ final class Validator implements ValidatorInterface
     public function __construct(iterable $rules = [])
     {
         foreach ($rules as $attribute => $ruleSets) {
-            if ($ruleSets instanceof Rule) {
+            if ($ruleSets instanceof RuleInterface) {
                 $ruleSets = [$ruleSets];
             } elseif (!is_iterable($ruleSets)) {
                 throw new \InvalidArgumentException('Attribute rules should be either an instance of Rule class or an array of instances of Rule class.');
@@ -42,7 +42,7 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param string $attribute
-     * @param callable|Rule $rule
+     * @param callable|RuleInterface $rule
      */
     public function addRule(string $attribute, $rule): void
     {

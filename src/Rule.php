@@ -7,11 +7,9 @@ namespace Yiisoft\Validator;
 /**
  * Rule represents a single value validation rule.
  */
-abstract class Rule
+abstract class Rule implements RuleInterface, ParametrizedRuleInterface, FormattableRuleInterface
 {
     private ?FormatterInterface $formatter = null;
-    private ?string $translationDomain = null;
-    private ?string $translationLocale = null;
     private bool $skipOnEmpty = false;
     private bool $skipOnError = true;
 
