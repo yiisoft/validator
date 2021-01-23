@@ -22,7 +22,7 @@ The package provides data validation capabilities.
 - Could be used with any object.
 - Skip further validation if an error occurred for the same field.
 - Skip validation of empty value.
-- Error message translations.
+- Error message formatting.
 - Conditional validation.
 - Could pass context to validation rule.
 - Common rules bundled.
@@ -98,7 +98,9 @@ final class MoneyTransfer implements DataSetInterface
 
 $moneyTransfer = new MoneyTransfer(142);
 
-$validator = new Validator([    
+$validator = new Validator();
+
+$results = $validator->validate($moneyTransfer, [    
     'amount' => [
         (new Number())->integer()->max(100),
         static function ($value): Result {
@@ -110,8 +112,6 @@ $validator = new Validator([
         }
     ],
 ]);
-
-$results = $validator->validate($moneyTransfer);
 foreach ($results as $attribute => $result) {
     if ($result->isValid() === false) {
         foreach ($result->getErrors() as $error) {
@@ -235,12 +235,12 @@ Then it could be used like the following:
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\Rule\Email;
 
-$validator = new Validator([    
+$validator = new Validator();
+
+$results = $validator->validate($user, [
     'username' => new UsernameRule(),
     'email' => [new Email()]
 ]);
-
-$results = $validator->validate($user);
 foreach ($results as $attribute => $result) {
     if ($result->isValid() === false) {
         foreach ($result->getErrors() as $error) {
