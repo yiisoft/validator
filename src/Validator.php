@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\Translator\TranslatorInterface;
-
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
  */
 final class Validator implements ValidatorInterface
 {
-    private ?TranslatorInterface $translator;
+    private ?FormatterInterface $formatter;
 
-    public function __construct(?TranslatorInterface $translator = null)
+    public function __construct(?FormatterInterface $formatter = null)
     {
-        $this->translator = $translator;
+        $this->formatter = $formatter;
     }
 
     /**
@@ -29,8 +27,8 @@ final class Validator implements ValidatorInterface
         $results = new ResultSet();
         foreach ($rules as $attribute => $attributeRules) {
             $aggregateRule = new Rules($attributeRules);
-            if ($this->translator !== null) {
-                $aggregateRule = $aggregateRule->withTranslator($this->translator);
+            if ($this->formatter !== null) {
+                $aggregateRule = $aggregateRule->withFormatter($this->formatter);
             }
             $results->addResult(
                 $attribute,
@@ -38,12 +36,5 @@ final class Validator implements ValidatorInterface
             );
         }
         return $results;
-    }
-
-    public function withTranslator(?TranslatorInterface $translator): self
-    {
-        $new = clone $this;
-        $new->translator = $translator;
-        return $new;
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Rule\Callback;
 
 /**
@@ -12,7 +11,7 @@ use Yiisoft\Validator\Rule\Callback;
  */
 final class Rules
 {
-    private ?TranslatorInterface $translator = null;
+    private ?FormatterInterface $formatter = null;
 
     /**
      * @var RuleInterface[]
@@ -32,8 +31,8 @@ final class Rules
     public function add($rule): void
     {
         $rule = $this->normalizeRule($rule);
-        if ($this->translator !== null) {
-            $rule = $rule->translator($this->translator);
+        if ($this->formatter !== null && $rule instanceof FormattableRuleInterface) {
+            $rule = $rule->formatter($this->formatter);
         }
         $this->rules[] = $rule;
     }
@@ -70,11 +69,11 @@ final class Rules
         return $rule;
     }
 
-    public function withTranslator(TranslatorInterface $translator): self
+    public function withFormatter(FormatterInterface $formatter): self
     {
         $new = clone $this;
-        $new->translator = $translator;
-        $new->addTranslatorToRules($translator);
+        $new->formatter = $formatter;
+        $new->addFormatterToRules($formatter);
         return $new;
     }
 
@@ -94,10 +93,12 @@ final class Rules
         return $arrayOfRules;
     }
 
-    private function addTranslatorToRules(TranslatorInterface $translator): void
+    private function addFormatterToRules(FormatterInterface $formatter): void
     {
         foreach ($this->rules as &$rule) {
-            $rule = $rule->translator($translator);
+            if ($rule instanceof FormattableRuleInterface) {
+                $rule = $rule->formatter($formatter);
+            }
         }
     }
 }
