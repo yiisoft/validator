@@ -96,9 +96,12 @@ final class MoneyTransfer implements DataSetInterface
     }
 }
 
+// Usually obtained from container
+$validator = new Validator();
+
 $moneyTransfer = new MoneyTransfer(142);
 
-$validator = new Validator([    
+$rules = [    
     'amount' => [
         (new Number())->integer()->max(100),
         static function ($value): Result {
@@ -109,9 +112,9 @@ $validator = new Validator([
             return $result;
         }
     ],
-]);
+];
 
-$results = $validator->validate($moneyTransfer);
+$results = $validator->validate($moneyTransfer, $rules);
 foreach ($results as $attribute => $result) {
     if ($result->isValid() === false) {
         foreach ($result->getErrors() as $error) {
