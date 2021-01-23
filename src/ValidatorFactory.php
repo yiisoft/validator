@@ -48,7 +48,7 @@ final class ValidatorFactory implements ValidatorFactoryInterface
             ));
         }
 
-        if ($this->formatter !== null && $rule instanceof FormatableRuleInterface) {
+        if ($this->formatter !== null && $rule instanceof FormattableRuleInterface) {
             $rule = $rule->formatter($this->formatter);
         }
 
