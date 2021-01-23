@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use function is_iterable;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
-
 use Yiisoft\Validator\Rule;
+use function is_iterable;
 
 /**
  * In validates that the attribute value is among a list of values.
@@ -62,7 +61,7 @@ class InRange extends Rule
         $result = new Result();
 
         if ($this->not === $in) {
-            $result->addError($this->translateMessage($this->message));
+            $result->addError($this->formatMessage($this->message));
         }
 
         return $result;
@@ -87,7 +86,7 @@ class InRange extends Rule
         return array_merge(
             parent::getOptions(),
             [
-                'message' => $this->translateMessage($this->message),
+                'message' => $this->formatMessage($this->message),
                 'range' => $this->range,
                 'strict' => $this->strict,
                 'not' => $this->not,

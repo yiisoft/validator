@@ -15,7 +15,7 @@ final class Rules
     private ?TranslatorInterface $translator = null;
 
     /**
-     * @var Rule[] $rules
+     * @var RuleInterface[]
      */
     private array $rules = [];
 
@@ -27,7 +27,7 @@ final class Rules
     }
 
     /**
-     * @param callable|Rule $rule
+     * @param callable|RuleInterface $rule
      */
     public function add($rule): void
     {
@@ -53,15 +53,16 @@ final class Rules
         return $compoundResult;
     }
 
-    private function normalizeRule($rule): Rule
+    private function normalizeRule($rule): RuleInterface
     {
         if (is_callable($rule)) {
             $rule = new Callback($rule);
         }
 
-        if (!$rule instanceof Rule) {
+        if (!$rule instanceof RuleInterface) {
             throw new \InvalidArgumentException(sprintf(
-                'Rule should be either instance of Rule class or a callable, %s given.',
+                'Rule should be either instance of %s or a callable, %s given.',
+                RuleInterface::class,
                 gettype($rule)
             ));
         }
@@ -86,7 +87,9 @@ final class Rules
     {
         $arrayOfRules = [];
         foreach ($this->rules as $rule) {
-            $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
+            if ($rule instanceof ParametrizedRuleInterface) {
+                $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
+            }
         }
         return $arrayOfRules;
     }

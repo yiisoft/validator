@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorFactory;
 
 class ValidatorFactoryTest extends TestCase
@@ -20,10 +19,7 @@ class ValidatorFactoryTest extends TestCase
         $attribute = 'test';
         $errorMessage = 'error message';
 
-        $validator = $validation->create();
-
-        $result = $validator->validate(
-            $this->createDataSet([$attribute => '']),
+        $validator = $validation->create(
             [
                 $attribute => [
                     static function () use ($errorMessage) {
@@ -35,43 +31,61 @@ class ValidatorFactoryTest extends TestCase
             ]
         );
 
+        $result = $validator->validate($this->createDataSet([$attribute => '']));
+
         $this->assertSame($errorMessage, $result->getResult($attribute)->getErrors()[0]);
     }
 
-    public function testCreateWithTranslator(): void
+    public function testCreateWithFormatter()
     {
         $translatableMessage = 'test message';
+        $validation = new ValidatorFactory($this->createFormatterMock($translatableMessage));
 
         $attribute = 'test';
-        $translator = $this->createTranslatorMock($translatableMessage);
+        $validator = $validation->create(
+            [
+                $attribute => [
+                    static function () {
+                        $result = new Result();
+                        $result->addError('error');
+                        return $result;
+                    },
+                ],
+            ]
+        );
 
-        $validator = new Validator();
-        $validator = $validator->withTranslator($translator);
-
-        $result = $validator->validate($this->createDataSet([$attribute => '']), [
-            $attribute => [
-                static function () {
-                    $result = new Result();
-                    $result->addError('error');
-                    return $result;
-                },
-            ],
-        ]);
+        $result = $validator->validate($this->createDataSet([$attribute => '']));
 
         $this->assertSame($translatableMessage, $result->getResult($attribute)->getErrors()[0]);
     }
 
-    private function createTranslatorMock(string $returnMessage = null): TranslatorInterface
+    public function testCreateWithInvalidRule()
     {
-        $translator = $this->createMock(TranslatorInterface::class);
+        $validation = new ValidatorFactory();
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $attribute = 'test';
+        $validation->create(
+            [
+                $attribute => [
+                    'invalid rule',
+                ],
+            ]
+        );
+    }
+
+    private function createFormatterMock(string $returnMessage = null): FormatterInterface
+    {
+        $formatter = $this->createMock(FormatterInterface::class);
 
         if ($returnMessage) {
-            $translator
-                ->method('translate')
+            $formatter
+                ->method('format')
                 ->willReturn($returnMessage);
         }
 
-        return $translator;
+        return $formatter;
     }
 
     private function createDataSet(array $attributes): DataSetInterface
