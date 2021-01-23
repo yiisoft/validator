@@ -80,7 +80,7 @@ class NestedTest extends TestCase
 
     public function testPropertyPathIsNotFoundMessage(): void
     {
-        $validator = (new Nested(['value' => (new Required())]))
+        $validator = (new Nested(['value' => new Required()]))
             ->errorWhenPropertyPathIsNotFound(true)
             ->propertyPathIsNotFoundMessage('Property is not found.');
 
