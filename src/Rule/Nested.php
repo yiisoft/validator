@@ -27,7 +27,7 @@ class Nested extends Rule
 
     public function __construct(iterable $rules)
     {
-        $rules = $rules instanceof Traversable ? iterator_to_array($rules) : (array)$rules;
+        $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         if (empty($rules)) {
             throw new InvalidArgumentException('Rules should not be empty.');
         }
