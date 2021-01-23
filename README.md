@@ -96,11 +96,12 @@ final class MoneyTransfer implements DataSetInterface
     }
 }
 
-$moneyTransfer = new MoneyTransfer(142);
-
+// Usually obtained from container
 $validator = new Validator();
 
-$results = $validator->validate($moneyTransfer, [    
+$moneyTransfer = new MoneyTransfer(142);
+
+$rules = [    
     'amount' => [
         (new Number())->integer()->max(100),
         static function ($value): Result {
@@ -111,7 +112,9 @@ $results = $validator->validate($moneyTransfer, [
             return $result;
         }
     ],
-]);
+];
+
+$results = $validator->validate($moneyTransfer, $rules);
 foreach ($results as $attribute => $result) {
     if ($result->isValid() === false) {
         foreach ($result->getErrors() as $error) {
@@ -237,10 +240,11 @@ use Yiisoft\Validator\Rule\Email;
 
 $validator = new Validator();
 
-$results = $validator->validate($user, [
+$rules=[
     'username' => new UsernameRule(),
     'email' => [new Email()]
-]);
+];
+$results = $validator->validate($user, $rules);
 foreach ($results as $attribute => $result) {
     if ($result->isValid() === false) {
         foreach ($result->getErrors() as $error) {
