@@ -62,7 +62,7 @@ class Url extends Rule
             }
         }
 
-        $result->addError($this->translateMessage($this->message));
+        $result->addError($this->formatMessage($this->message));
 
         return $result;
     }
@@ -120,7 +120,7 @@ class Url extends Rule
         return array_merge(
             parent::getOptions(),
             [
-                'message' => $this->translateMessage($this->message),
+                'message' => $this->formatMessage($this->message),
                 'enableIDN' => $this->enableIDN,
                 'validSchemes' => $this->validSchemes,
                 'pattern' => $this->pattern,

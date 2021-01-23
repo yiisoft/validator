@@ -40,7 +40,7 @@ class Each extends Rule
             if ($itemResult->isValid() === false) {
                 foreach ($itemResult->getErrors() as $error) {
                     $result->addError(
-                        $this->translateMessage(
+                        $this->formatMessage(
                             $this->message,
                             [
                                 'error' => $error,
