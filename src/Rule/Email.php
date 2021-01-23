@@ -69,6 +69,7 @@ class Email extends Rule
         )) {
             $valid = false;
         } else {
+            /** @psalm-var array{name:string,local:string,open:string,domain:string,close:string} $matches */
             if ($this->enableIDN) {
                 $matches['local'] = $this->idnToAscii($matches['local']);
                 $matches['domain'] = $this->idnToAscii($matches['domain']);
@@ -103,7 +104,7 @@ class Email extends Rule
         }
 
         if ($valid === false) {
-            $result->addError($this->translateMessage($this->message));
+            $result->addError($this->formatMessage($this->message));
         }
 
         return $result;
@@ -154,7 +155,7 @@ class Email extends Rule
                 'allowName' => $this->allowName,
                 'checkDNS' => $this->checkDNS,
                 'enableIDN' => $this->enableIDN,
-                'message' => $this->translateMessage($this->message),
+                'message' => $this->formatMessage($this->message),
             ],
         );
     }

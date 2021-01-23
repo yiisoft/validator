@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidatorFactory;
 
@@ -36,10 +36,10 @@ class ValidatorFactoryTest extends TestCase
         $this->assertSame($errorMessage, $result->getResult($attribute)->getErrors()[0]);
     }
 
-    public function testCreateWithTranslator()
+    public function testCreateWithFormatter()
     {
         $translatableMessage = 'test message';
-        $validation = new ValidatorFactory($this->createTranslatorMock($translatableMessage));
+        $validation = new ValidatorFactory($this->createFormatterMock($translatableMessage));
 
         $attribute = 'test';
         $validator = $validation->create(
@@ -75,17 +75,17 @@ class ValidatorFactoryTest extends TestCase
         );
     }
 
-    private function createTranslatorMock(string $returnMessage = null): TranslatorInterface
+    private function createFormatterMock(string $returnMessage = null): FormatterInterface
     {
-        $translator = $this->createMock(TranslatorInterface::class);
+        $formatter = $this->createMock(FormatterInterface::class);
 
         if ($returnMessage) {
-            $translator
-                ->method('translate')
+            $formatter
+                ->method('format')
                 ->willReturn($returnMessage);
         }
 
-        return $translator;
+        return $formatter;
     }
 
     private function createDataSet(array $attributes): DataSetInterface

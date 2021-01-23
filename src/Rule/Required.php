@@ -23,7 +23,7 @@ class Required extends Rule
         $result = new Result();
 
         if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
-            $result->addError($this->translateMessage($this->message));
+            $result->addError($this->formatMessage($this->message));
         }
 
         return $result;
@@ -34,7 +34,7 @@ class Required extends Rule
         return array_merge(
             parent::getOptions(),
             [
-                'message' => $this->translateMessage($this->message),
+                'message' => $this->formatMessage($this->message),
             ],
         );
     }

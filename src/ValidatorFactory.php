@@ -4,23 +4,16 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Rule\Callback;
 
 final class ValidatorFactory implements ValidatorFactoryInterface
 {
-    private ?TranslatorInterface $translator;
-    private ?string $translationDomain;
-    private ?string $translationLocale;
+    private ?FormatterInterface $formatter;
 
     public function __construct(
-        TranslatorInterface $translator = null,
-        string $translationDomain = null,
-        string $translationLocale = null
+        FormatterInterface $formatter = null
     ) {
-        $this->translator = $translator;
-        $this->translationDomain = $translationDomain;
-        $this->translationLocale = $translationLocale;
+        $this->formatter = $formatter;
     }
 
     public function create(array $rules): ValidatorInterface
@@ -55,18 +48,8 @@ final class ValidatorFactory implements ValidatorFactoryInterface
             ));
         }
 
-        if ($rule instanceof TranslatableRuleInterface) {
-            if ($this->translator !== null) {
-                $rule = $rule->translator($this->translator);
-            }
-
-            if ($this->translationDomain !== null) {
-                $rule = $rule->translationDomain($this->translationDomain);
-            }
-
-            if ($this->translationLocale !== null) {
-                $rule = $rule->translationLocale($this->translationLocale);
-            }
+        if ($this->formatter !== null && $rule instanceof TranslatableRuleInterface) {
+            $rule = $rule->formatter($this->formatter);
         }
 
         return $rule;
