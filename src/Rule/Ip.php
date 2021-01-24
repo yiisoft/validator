@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use InvalidArgumentException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use function array_key_exists;
+use function is_string;
+use function strlen;
 
 /**
  * The validator checks if the attribute value is a valid IPv4/IPv6 address or subnet.
@@ -212,7 +216,7 @@ class Ip extends Rule
 
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $result->addError($this->formatMessage($this->message));
             return $result;
         }
@@ -243,7 +247,7 @@ class Ip extends Rule
         if ($cidr !== null) {
             try {
                 IpHelper::getCidrBits($ipCidr);
-            } catch (\InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
                 $result->addError($this->formatMessage($this->wrongCidr));
                 return $result;
             }
@@ -382,11 +386,7 @@ class Ip extends Rule
     }
 
     /**
-     * The method checks whether the IP address with specified CIDR is allowed according to the [[ranges]] list.
-     *
-     * @return bool
-     *
-     * @see ranges
+     * The method checks whether the IP address with specified CIDR is allowed according to the {@see ranges} list.
      */
     private function isAllowed(string $ip): bool
     {

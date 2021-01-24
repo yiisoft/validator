@@ -7,6 +7,8 @@ namespace Yiisoft\Validator\Exception;
 use Throwable;
 use Yiisoft\FriendlyException\FriendlyExceptionInterface;
 use Yiisoft\Validator\Result;
+use function get_class;
+use function is_object;
 
 class CallbackRuleException extends \Exception implements FriendlyExceptionInterface
 {

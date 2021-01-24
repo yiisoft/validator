@@ -8,6 +8,7 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use function is_array;
 
 /**
  * RegularExpressionValidator validates that the attribute value matches the specified [[pattern]].

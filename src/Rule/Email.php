@@ -8,6 +8,9 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use function function_exists;
+use function is_string;
+use function strlen;
 
 /**
  * EmailValidator validates that the attribute value is a valid email address.
