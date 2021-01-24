@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
@@ -48,10 +49,10 @@ final class RulesDumperTest extends TestCase
                             'notANumberMessage' => 'Value must be an integer.',
                             'tooBigMessage' => 'Value must be no greater than 100.',
                             'tooSmallMessage' => 'Value must be greater than 10.',
-                        ]
+                        ],
                     ],
                 ],
-            ]
+            ],
         ];
     }
 }
