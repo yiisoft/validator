@@ -26,6 +26,16 @@ final class OptionalTest extends TestCase
         $this->assertTrue($rule->validate('42', $context)->isValid());
     }
 
+    public function testWithoutContext(): void
+    {
+        $rule = new Optional(
+            new Number()
+        );
+
+        $this->assertTrue($rule->validate('42')->isValid());
+        $this->assertFalse($rule->validate('hello')->isValid());
+    }
+
     public function testEmpty(): void
     {
         $rule = new Optional(
@@ -50,12 +60,6 @@ final class OptionalTest extends TestCase
             'code',
         );
         $this->assertFalse($rule->validate('', $context)->isValid());
-
-        $context = new ValidationContext(
-            $this->createDataSet(['code' => '0']),
-            'code',
-        );
-        $this->assertTrue($rule->validate('0', $context)->isValid());
     }
 
     public function testCheckEmpty(): void
@@ -74,6 +78,14 @@ final class OptionalTest extends TestCase
             'code',
         );
         $this->assertTrue($rule->validate(null, $context)->isValid());
+    }
+
+    public function testImmutability(): void
+    {
+        $rule = new Optional();
+        $this->assertNotSame($rule, $rule->rules());
+        $this->assertNotSame($rule, $rule->checkEmpty(false));
+        $this->assertNotSame($rule, $rule->emptyCallback(null));
     }
 
     private function createDataSet(array $attributes): DataSetInterface
