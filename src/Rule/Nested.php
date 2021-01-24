@@ -56,7 +56,7 @@ class Nested extends Rule
             $rulesSet = is_array($rules) ? $rules : [$rules];
             if ($this->errorWhenPropertyPathIsNotFound && !ArrayHelper::pathExists($value, $valuePath)) {
                 $result->addError(
-                    $this->translateMessage(
+                    $this->formatMessage(
                         $this->propertyPathIsNotFoundMessage,
                         [
                             'path' => $valuePath,
