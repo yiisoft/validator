@@ -5,49 +5,20 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Exception\MissingAttributeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Validator;
 
 class ValidatorTest extends TestCase
 {
-    public function getDataObject(array $attributes): DataSetInterface
-    {
-        return new class($attributes) implements DataSetInterface {
-            private array $data;
-
-            public function __construct(array $data)
-            {
-                $this->data = $data;
-            }
-
-            public function getAttributeValue(string $attribute)
-            {
-                if (!$this->hasAttribute($attribute)) {
-                    throw new MissingAttributeException("There is no \"$attribute\" attribute in the class.");
-                }
-
-                return $this->data[$attribute];
-            }
-
-            public function hasAttribute(string $attribute): bool
-            {
-                return isset($this->data[$attribute]);
-            }
-        };
-    }
-
     public function testAddingRulesViaConstructor(): void
     {
-        $dataObject = $this->getDataObject(
-            [
-                'bool' => true,
-                'int' => 41,
-            ]
-        );
+        $dataObject = new DataSet([
+            'bool' => true,
+            'int' => 41,
+        ]);
 
         $validator = new Validator();
 

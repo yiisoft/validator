@@ -9,6 +9,7 @@ final class ValidationContext
     private ?DataSetInterface $dataSet;
     private ?string $attribute = null;
     private bool $previousRulesErrored = false;
+    private array $params = [];
 
     public function __construct(
         ?DataSetInterface $dataSet = null,
@@ -50,6 +51,18 @@ final class ValidationContext
     {
         $new = clone $this;
         $new->previousRulesErrored = $previousRulesErrored;
+        return $new;
+    }
+
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    public function withParams(array $params): self
+    {
+        $new = clone $this;
+        $new->params = $params;
         return $new;
     }
 }
