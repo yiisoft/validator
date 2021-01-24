@@ -35,7 +35,7 @@ final class Optional extends Rule
 
     private function checkDoValidate(?ValidationContext $context): bool
     {
-        if (!$context || !$context->getDataSet() || !$context->getAttribute()) {
+        if ($context === null || $context->getDataSet() === null || $context->getAttribute() === null) {
             return true;
         }
 
@@ -75,7 +75,7 @@ final class Optional extends Rule
      *
      * @return self
      */
-    public function emptyCallback($callback): self
+    public function emptyCallback(?callable $callback): self
     {
         $new = clone $this;
         $new->emptyCallback = $callback;
