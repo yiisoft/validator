@@ -34,7 +34,7 @@ final class Validator implements ValidatorInterface
             }
             $results->addResult(
                 $attribute,
-                $aggregateRule->validate($dataSet->getAttributeValue($attribute), $context)
+                $aggregateRule->validate($dataSet->getAttributeValue($attribute), $context->withAttribute($attribute))
             );
         }
         return $results;

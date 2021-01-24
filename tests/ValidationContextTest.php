@@ -10,51 +10,49 @@ use Yiisoft\Validator\ValidationContext;
 
 final class ValidationContextTest extends TestCase
 {
-    public function testDataSet(): void
+    public function testDefault(): void
     {
         $context = new ValidationContext();
         $this->assertNull($context->getDataSet());
-
-        $dataSet = new DataSet();
-        $context = new ValidationContext($dataSet);
-        $this->assertSame($dataSet, $context->getDataSet());
-    }
-
-    public function testAttribute(): void
-    {
-        $context = new ValidationContext();
-
         $this->assertNull($context->getAttribute());
-
-        $context = $context->withAttribute('key');
-        $this->assertSame('key', $context->getAttribute());
+        $this->assertSame([], $context->getParams());
     }
 
-    public function testParams(): void
+    public function testConstructor(): void
     {
-        $context = new ValidationContext();
+        $dataSet = new DataSet();
 
-        $this->assertSame([], $context->getParams());
+        $context = new ValidationContext($dataSet, 'name', ['key' => 42]);
 
-        $context = $context->withParams(['key' => 42]);
+        $this->assertSame($dataSet, $context->getDataSet());
+        $this->assertSame('name', $context->getAttribute());
         $this->assertSame(['key' => 42], $context->getParams());
     }
 
-    public function testPreviousRulesErrored(): void
+    public function testWithAttribute(): void
     {
-        $context = new ValidationContext();
+        $context = new ValidationContext(null, 'key');
 
-        $this->assertFalse($context->isPreviousRulesErrored());
+        $newContext = $context->withAttribute('newKey');
 
-        $context = $context->withPreviousRulesErrored(true);
-        $this->assertTrue($context->isPreviousRulesErrored());
+        $this->assertNotSame($context, $newContext);
+        $this->assertSame('key', $context->getAttribute());
+        $this->assertSame('newKey', $newContext->getAttribute());
     }
 
-    public function testImmutability(): void
+    public function testSetParam(): void
     {
         $context = new ValidationContext();
-        $this->assertNotSame($context, $context->withAttribute(null));
-        $this->assertNotSame($context, $context->withParams([]));
-        $this->assertNotSame($context, $context->withPreviousRulesErrored(false));
+        $context->setParam('key', 42);
+        $this->assertSame(['key' => 42], $context->getParams());
+    }
+
+    public function testGetParam(): void
+    {
+        $context = new ValidationContext(null, null, ['key' => 42]);
+
+        $this->assertSame(42, $context->getParam('key'));
+        $this->assertSame(null, $context->getParam('non-exists'));
+        $this->assertSame(7, $context->getParam('non-exists', 7));
     }
 }

@@ -13,6 +13,8 @@ use function is_callable;
  */
 final class Rules
 {
+    public const PARAM_RREVIOUS_RULES_ERRORED = 'previousRulesErrored';
+
     private ?FormatterInterface $formatter = null;
 
     /**
@@ -47,9 +49,7 @@ final class Rules
         foreach ($this->rules as $rule) {
             $ruleResult = $rule->validate($value, $context);
             if ($ruleResult->isValid() === false) {
-                if (!$context->isPreviousRulesErrored()) {
-                    $context = $context->withPreviousRulesErrored(true);
-                }
+                $context->setParam(self::PARAM_RREVIOUS_RULES_ERRORED, true);
                 foreach ($ruleResult->getErrors() as $message) {
                     $compoundResult->addError($message);
                 }

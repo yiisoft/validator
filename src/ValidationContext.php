@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Yiisoft\Arrays\ArrayHelper;
+
 final class ValidationContext
 {
     private ?DataSetInterface $dataSet;
     private ?string $attribute = null;
-    private bool $previousRulesErrored = false;
     private array $params = [];
 
     public function __construct(
         ?DataSetInterface $dataSet = null,
-        ?string $attribute = null
+        ?string $attribute = null,
+        array $params = []
     ) {
         $this->dataSet = $dataSet;
         $this->attribute = $attribute;
+        $this->params = $params;
     }
 
     /**
@@ -39,30 +42,24 @@ final class ValidationContext
         return $new;
     }
 
-    /**
-     * @return bool set to true if rule is part of a group of rules and one of the previous validations failed
-     */
-    public function isPreviousRulesErrored(): bool
-    {
-        return $this->previousRulesErrored;
-    }
-
-    public function withPreviousRulesErrored(bool $previousRulesErrored): self
-    {
-        $new = clone $this;
-        $new->previousRulesErrored = $previousRulesErrored;
-        return $new;
-    }
-
     public function getParams(): array
     {
         return $this->params;
     }
 
-    public function withParams(array $params): self
+    /**
+     * @param string $key
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    public function getParam(string $key, $default = null)
     {
-        $new = clone $this;
-        $new->params = $params;
-        return $new;
+        return ArrayHelper::getValue($this->params, $key, $default);
+    }
+
+    public function setParam(string $key, $value): void
+    {
+        $this->params[$key] = $value;
     }
 }
