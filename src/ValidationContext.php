@@ -19,7 +19,7 @@ final class ValidationContext
     }
 
     /**
-     * @return DataSetInterface|null optional data set
+     * @return DataSetInterface|null Optional data set.
      */
     public function getDataSet(): ?DataSetInterface
     {

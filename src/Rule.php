@@ -83,7 +83,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      *
      * ```php
      * function ($value, DataSetInterface $dataSet) {
-     * return $dataSet->getAttributeValue('country') === Country::USA;
+     *     return $dataSet->getAttributeValue('country') === Country::USA;
      * }
      * ```
      *
