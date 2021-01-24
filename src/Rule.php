@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use function is_callable;
+
 /**
  * Rule represents a single value validation rule.
  */

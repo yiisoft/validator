@@ -240,7 +240,7 @@ use Yiisoft\Validator\Rule\Email;
 
 $validator = new Validator();
 
-$rules=[
+$rules= [
     'username' => new UsernameRule(),
     'email' => [new Email()]
 ];
@@ -256,17 +256,18 @@ foreach ($results as $attribute => $result) {
 
 ### Setting up your own formatter
 
-If you want to customize error message formatter in a certain case you need to use immutable `withFormatter` method:
+If you want to customize error message formatter in a certain case you need to use immutable `withFormatter()` method:
 
 ```php
 use Yiisoft\Validator\Validator;
 
-class PostController
+final class PostController
 {
-    public function actionIndex(Validator $validator): void
+    public function actionIndex(Validator $validator): ResponseInterface
     {
-        ...
+        // ...
         $result = $validator->withFormatter(new CustomFormatter())->validate($dataSet, $rules);
+        // ...
     }
 }
 ```

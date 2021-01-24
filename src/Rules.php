@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Callback;
+use function is_callable;
 
 /**
  * Rules represents multiple rules for a single value
@@ -59,8 +61,8 @@ final class Rules
         }
 
         if (!$rule instanceof RuleInterface) {
-            throw new \InvalidArgumentException(sprintf(
-                'Rule should be either instance of %s or a callable, %s given.',
+            throw new InvalidArgumentException(sprintf(
+                'Rule should be either an instance of %s or a callable, %s given.',
                 RuleInterface::class,
                 gettype($rule)
             ));

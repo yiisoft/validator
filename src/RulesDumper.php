@@ -4,6 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use InvalidArgumentException;
+use function get_class;
+use function is_array;
+use function is_object;
+
+/**
+ * RulesDumper allows to get an array of rule names and corresponding settings from a set of rules.
+ * The array is usually passed to the client to use it in client-side validation.
+ *
+ * * @see ParametrizedRuleInterface
+ */
 final class RulesDumper
 {
     private ?FormatterInterface $formatter;
@@ -52,8 +63,8 @@ final class RulesDumper
                 $rulesSet = new Rules($rulesSet);
             }
             if (!$rulesSet instanceof Rules) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Value should be instance of %s or an array of rules, %s given.',
+                throw new InvalidArgumentException(sprintf(
+                    'Value should be an instance of %s or an array of rules, %s given.',
                     Rules::class,
                     is_object($rulesSet) ? get_class($rulesSet) : gettype($rulesSet)
                 ));
