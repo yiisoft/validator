@@ -10,5 +10,5 @@ namespace Yiisoft\Validator;
  */
 interface FormattableRuleInterface extends RuleInterface
 {
-    public function formatter(FormatterInterface $formatter): self;
+    public function withFormatter(?FormatterInterface $formatter): self;
 }

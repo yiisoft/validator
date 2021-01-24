@@ -53,7 +53,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      */
     abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
 
-    public function formatter(FormatterInterface $formatter): self
+    public function withFormatter(?FormatterInterface $formatter): self
     {
         $new = clone $this;
         $new->formatter = $formatter;

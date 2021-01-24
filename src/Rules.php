@@ -32,7 +32,7 @@ final class Rules
     {
         $rule = $this->normalizeRule($rule);
         if ($this->formatter !== null && $rule instanceof FormattableRuleInterface) {
-            $rule = $rule->formatter($this->formatter);
+            $rule = $rule->withFormatter($this->formatter);
         }
         $this->rules[] = $rule;
     }
@@ -69,7 +69,7 @@ final class Rules
         return $rule;
     }
 
-    public function withFormatter(FormatterInterface $formatter): self
+    public function withFormatter(?FormatterInterface $formatter): self
     {
         $new = clone $this;
         $new->formatter = $formatter;
@@ -93,11 +93,11 @@ final class Rules
         return $arrayOfRules;
     }
 
-    private function addFormatterToRules(FormatterInterface $formatter): void
+    private function addFormatterToRules(?FormatterInterface $formatter): void
     {
         foreach ($this->rules as &$rule) {
             if ($rule instanceof FormattableRuleInterface) {
-                $rule = $rule->formatter($formatter);
+                $rule = $rule->withFormatter($formatter);
             }
         }
     }
