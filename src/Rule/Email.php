@@ -104,7 +104,7 @@ class Email extends Rule
         }
 
         if ($valid === false) {
-            $result->addError($this->translateMessage($this->message));
+            $result->addError($this->formatMessage($this->message));
         }
 
         return $result;
@@ -155,7 +155,7 @@ class Email extends Rule
                 'allowName' => $this->allowName,
                 'checkDNS' => $this->checkDNS,
                 'enableIDN' => $this->enableIDN,
-                'message' => $this->translateMessage($this->message),
+                'message' => $this->formatMessage($this->message),
             ],
         );
     }

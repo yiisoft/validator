@@ -66,7 +66,7 @@ class Boolean extends Rule
 
         if (!$valid) {
             $result->addError(
-                $this->translateMessage(
+                $this->formatMessage(
                     $this->message,
                     [
                         'true' => $this->trueValue === true ? 'true' : $this->trueValue,
@@ -87,7 +87,7 @@ class Boolean extends Rule
                 'strict' => $this->strict,
                 'trueValue' => $this->trueValue,
                 'falseValue' => $this->falseValue,
-                'message' => $this->translateMessage(
+                'message' => $this->formatMessage(
                     $this->message,
                     [
                         'true' => $this->trueValue === true ? 'true' : $this->trueValue,

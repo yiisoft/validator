@@ -53,17 +53,17 @@ class HasLength extends Rule
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($this->translateMessage($this->message));
+            $result->addError($this->formatMessage($this->message));
             return $result;
         }
 
         $length = mb_strlen($value, $this->encoding);
 
         if ($this->min !== null && $length < $this->min) {
-            $result->addError($this->translateMessage($this->tooShortMessage, ['min' => $this->min]));
+            $result->addError($this->formatMessage($this->tooShortMessage, ['min' => $this->min]));
         }
         if ($this->max !== null && $length > $this->max) {
-            $result->addError($this->translateMessage($this->tooLongMessage, ['max' => $this->max]));
+            $result->addError($this->formatMessage($this->tooLongMessage, ['max' => $this->max]));
         }
 
         return $result;
@@ -109,11 +109,11 @@ class HasLength extends Rule
         return array_merge(
             parent::getOptions(),
             [
-                'message' => $this->translateMessage($this->message),
+                'message' => $this->formatMessage($this->message),
                 'min' => $this->min,
-                'tooShortMessage' => $this->translateMessage($this->tooShortMessage, ['min' => $this->min]),
+                'tooShortMessage' => $this->formatMessage($this->tooShortMessage, ['min' => $this->min]),
                 'max' => $this->max,
-                'tooLongMessage' => $this->translateMessage($this->tooLongMessage, ['max' => $this->max]),
+                'tooLongMessage' => $this->formatMessage($this->tooLongMessage, ['max' => $this->max]),
                 'encoding' => $this->encoding,
             ],
         );
