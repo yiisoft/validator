@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Yiisoft\Validator;
@@ -40,6 +41,7 @@ final class RulesDumper
      * ```
      *
      * @param iterable $rules
+     *
      * @return array
      */
     public function asArray(iterable $rules): array
@@ -51,7 +53,7 @@ final class RulesDumper
             }
             if (!$rulesSet instanceof Rules) {
                 throw new \InvalidArgumentException(sprintf(
-                    "Value should be instance of %s or an array of rules, %s given.",
+                    'Value should be instance of %s or an array of rules, %s given.',
                     Rules::class,
                     is_object($rulesSet) ? get_class($rulesSet) : gettype($rulesSet)
                 ));
