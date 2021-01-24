@@ -11,6 +11,7 @@ use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Tests\Stub\ParametrizedRule;
 
 /**
  * @group validators
@@ -94,6 +95,48 @@ class NestedTest extends TestCase
     {
         $validator = new Nested(['value' => (new Required())]);
         $this->assertEquals('nested', $validator->getName());
+    }
+
+    /**
+     * @dataProvider optionsDataProvider()
+     */
+    public function testOptions(array $rules, array $expectedOptions): void
+    {
+        $validator = new Nested($rules);
+
+        $options = $validator->getOptions();
+
+        $this->assertEquals($expectedOptions, $options);
+    }
+
+    public function optionsDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'author.name' => new ParametrizedRule('author-name', ['key' => 'name']),
+                    'author.age' => new ParametrizedRule('author-age', ['key' => 'age']),
+                ],
+                [
+                    'author.name' => ['key' => 'name'],
+                    'author.age' => ['key' => 'age'],
+                ]
+            ],
+            [
+                [
+                    'author' => [
+                        'name' => new ParametrizedRule('author-name', ['key' => 'name']),
+                        'age' => new ParametrizedRule('author-age', ['key' => 'age']),
+                    ]
+                ],
+                [
+                    'author' => [
+                        'name' => ['key' => 'name'],
+                        'age' => ['key' => 'age'],
+                    ]
+                ]
+            ]
+        ];
     }
 
     public function validateDataProvider(): array

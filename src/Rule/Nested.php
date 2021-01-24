@@ -8,8 +8,10 @@ use InvalidArgumentException;
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Rules;
 use function is_array;
 use function is_object;
@@ -60,7 +62,7 @@ class Nested extends Rule
         if ($this->checkRules($rules)) {
             throw new InvalidArgumentException(sprintf(
                 'Each rule should be an instance of %s.',
-                Rule::class
+                RuleInterface::class
             ));
         }
         $this->rules = $rules;
@@ -130,15 +132,36 @@ class Nested extends Rule
 
     public function getOptions(): array
     {
-        return $this->rules->asArray();
+        return $this->fetchOptions($this->rules);
     }
 
     private function checkRules(array $rules): bool
     {
         return array_reduce(
             $rules,
-            fn (bool $carry, $rule) => $carry || is_array($rule) ? $this->checkRules($rule) : !$rule instanceof Rule,
+            fn (bool $carry, $rule) => $carry || (is_array($rule) ? $this->checkRules($rule) : !$rule instanceof RuleInterface),
             false
         );
+    }
+
+    private function fetchOptions(array $rules): array
+    {
+        $result = [];
+        foreach ($rules as $attribute => $rule) {
+            if (is_array($rule)) {
+                $result[$attribute] = $this->fetchOptions($rule);
+            } elseif ($rule instanceof ParametrizedRuleInterface) {
+                $result[$attribute] = $rule->getOptions();
+            } elseif ($rule instanceof RuleInterface) {
+                // Just skip the rule that doesn't support parametrizing
+            } else {
+                throw new \InvalidArgumentException(sprintf(
+                    'Rules should be an array of rules that implements %s',
+                    ParametrizedRuleInterface::class,
+                ));
+            }
+        }
+
+        return $result;
     }
 }
