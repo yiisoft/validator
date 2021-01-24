@@ -8,6 +8,7 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use function is_string;
 
 /**
  * StringValidator validates that the attribute value is of certain length.
