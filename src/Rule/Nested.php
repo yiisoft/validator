@@ -106,6 +106,7 @@ class Nested extends Rule
 
     /**
      * @param bool $value If absence of nested property should be considered an error. Default is `false`.
+     *
      * @return self
      */
     public function errorWhenPropertyPathIsNotFound(bool $value): self
@@ -117,6 +118,7 @@ class Nested extends Rule
 
     /**
      * @param string $message A message to use when nested property is absent.
+     *
      * @return $this
      */
     public function propertyPathIsNotFoundMessage(string $message): self
