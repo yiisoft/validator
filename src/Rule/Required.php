@@ -9,6 +9,8 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
+use function is_string;
+
 /**
  * RequiredValidator validates that the specified attribute does not have null or empty value.
  */

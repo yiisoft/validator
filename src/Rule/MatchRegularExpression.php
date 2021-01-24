@@ -9,6 +9,8 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
+use function is_array;
+
 /**
  * RegularExpressionValidator validates that the attribute value matches the specified [[pattern]].
  *

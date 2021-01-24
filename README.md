@@ -22,7 +22,7 @@ The package provides data validation capabilities.
 - Could be used with any object.
 - Skip further validation if an error occurred for the same field.
 - Skip validation of empty value.
-- Error message translations.
+- Error message formatting.
 - Conditional validation.
 - Could pass context to validation rule.
 - Common rules bundled.
@@ -96,9 +96,12 @@ final class MoneyTransfer implements DataSetInterface
     }
 }
 
+// Usually obtained from container
+$validator = new Validator();
+
 $moneyTransfer = new MoneyTransfer(142);
 
-$validator = new Validator([    
+$rules = [    
     'amount' => [
         (new Number())->integer()->max(100),
         static function ($value): Result {
@@ -109,9 +112,9 @@ $validator = new Validator([
             return $result;
         }
     ],
-]);
+];
 
-$results = $validator->validate($moneyTransfer);
+$results = $validator->validate($moneyTransfer, $rules);
 foreach ($results as $attribute => $result) {
     if ($result->isValid() === false) {
         foreach ($result->getErrors() as $error) {
@@ -235,17 +238,36 @@ Then it could be used like the following:
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\Rule\Email;
 
-$validator = new Validator([    
+$validator = new Validator();
+
+$rules= [
     'username' => new UsernameRule(),
     'email' => [new Email()]
-]);
-
-$results = $validator->validate($user);
+];
+$results = $validator->validate($user, $rules);
 foreach ($results as $attribute => $result) {
     if ($result->isValid() === false) {
         foreach ($result->getErrors() as $error) {
             // ...
         }
+    }
+}
+```
+
+### Setting up your own formatter
+
+If you want to customize error message formatter in a certain case you need to use immutable `withFormatter()` method:
+
+```php
+use Yiisoft\Validator\Validator;
+
+final class PostController
+{
+    public function actionIndex(Validator $validator): ResponseInterface
+    {
+        // ...
+        $result = $validator->withFormatter(new CustomFormatter())->validate($dataSet, $rules);
+        // ...
     }
 }
 ```

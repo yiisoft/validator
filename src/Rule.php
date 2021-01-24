@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use function is_callable;
+
 /**
  * Rule represents a single value validation rule.
  */
@@ -52,7 +54,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      */
     abstract protected function validateValue($value, ValidationContext $context = null): Result;
 
-    public function formatter(FormatterInterface $formatter): self
+    public function withFormatter(?FormatterInterface $formatter): self
     {
         $new = clone $this;
         $new->formatter = $formatter;

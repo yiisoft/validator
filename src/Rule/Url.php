@@ -9,6 +9,10 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
+use function function_exists;
+use function is_string;
+use function strlen;
+
 /**
  * UrlValidator validates that the attribute value is a valid http or https URL.
  *

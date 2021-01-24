@@ -9,83 +9,41 @@ namespace Yiisoft\Validator;
  */
 final class Validator implements ValidatorInterface
 {
-    /**
-     * @var Rules[] $attributeRules
-     */
-    private array $attributeRules = [];
+    private ?FormatterInterface $formatter;
 
-    public function __construct(iterable $rules = [])
+    public function __construct(?FormatterInterface $formatter = null)
     {
-        foreach ($rules as $attribute => $ruleSets) {
-            if ($ruleSets instanceof RuleInterface) {
-                $ruleSets = [$ruleSets];
-            } elseif (!is_iterable($ruleSets)) {
-                throw new \InvalidArgumentException('Attribute rules should be either an instance of Rule class or an array of instances of Rule class.');
-            }
-            foreach ($ruleSets as $rule) {
-                $this->addRule($attribute, $rule);
-            }
-        }
+        $this->formatter = $formatter;
     }
 
-    public function validate(DataSetInterface $dataSet): ResultSet
+    /**
+     * @param DataSetInterface $dataSet
+     * @param Rule[][] $rules
+     * @psalm-param iterable<string, Rule[]> $rules
+     *
+     * @return ResultSet
+     */
+    public function validate(DataSetInterface $dataSet, iterable $rules): ResultSet
     {
         $context = new ValidationContext($dataSet);
         $results = new ResultSet();
-        foreach ($this->attributeRules as $attribute => $rules) {
+        foreach ($rules as $attribute => $attributeRules) {
+            $aggregateRule = new Rules($attributeRules);
+            if ($this->formatter !== null) {
+                $aggregateRule = $aggregateRule->withFormatter($this->formatter);
+            }
             $results->addResult(
                 $attribute,
-                $rules->validate($dataSet->getAttributeValue($attribute), $context->withAttribute($attribute))
+                $aggregateRule->validate($dataSet->getAttributeValue($attribute), $context)
             );
         }
         return $results;
     }
 
-    /**
-     * @param string $attribute
-     * @param callable|RuleInterface $rule
-     */
-    public function addRule(string $attribute, $rule): void
+    public function withFormatter(?FormatterInterface $formatter): self
     {
-        if (!isset($this->attributeRules[$attribute])) {
-            $this->attributeRules[$attribute] = new Rules([]);
-        }
-        $this->attributeRules[$attribute]->add($rule);
-    }
-
-    /**
-     * Return all attribute rules as array.
-     *
-     * For example:
-     *
-     * ```php
-     * [
-     *    'amount' => [
-     *        [
-     *            'number',
-     *            'integer' => true,
-     *            'max' => 100,
-     *            'notANumberMessage' => 'Value must be an integer.',
-     *            'tooBigMessage' => 'Value must be no greater than 100.'
-     *        ],
-     *        ['callback'],
-     *    ],
-     *    'name' => [
-     *        'hasLength',
-     *        'max' => 20,
-     *        'message' => 'Value must contain at most 20 characters.'
-     *    ],
-     * ]
-     * ```
-     *
-     * @return array
-     */
-    public function asArray(): array
-    {
-        $rulesOfArray = [];
-        foreach ($this->attributeRules as $attribute => $rules) {
-            $rulesOfArray[$attribute] = $rules->asArray();
-        }
-        return $rulesOfArray;
+        $new = clone $this;
+        $new->formatter = $formatter;
+        return $new;
     }
 }

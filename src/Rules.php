@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Callback;
+use function is_callable;
 
 /**
  * Rules represents multiple rules for a single value
  */
 final class Rules
 {
+    private ?FormatterInterface $formatter = null;
+
     /**
      * @var RuleInterface[]
      */
@@ -28,7 +32,11 @@ final class Rules
      */
     public function add($rule): void
     {
-        $this->rules[] = $this->normalizeRule($rule);
+        $rule = $this->normalizeRule($rule);
+        if ($this->formatter !== null && $rule instanceof FormattableRuleInterface) {
+            $rule = $rule->withFormatter($this->formatter);
+        }
+        $this->rules[] = $rule;
     }
 
     public function validate($value, ValidationContext $context = null): Result
@@ -57,13 +65,22 @@ final class Rules
         }
 
         if (!$rule instanceof RuleInterface) {
-            throw new \InvalidArgumentException(sprintf(
-                'Rule should be either instance of %s or a callable',
-                RuleInterface::class
+            throw new InvalidArgumentException(sprintf(
+                'Rule should be either an instance of %s or a callable, %s given.',
+                RuleInterface::class,
+                gettype($rule)
             ));
         }
 
         return $rule;
+    }
+
+    public function withFormatter(?FormatterInterface $formatter): self
+    {
+        $new = clone $this;
+        $new->formatter = $formatter;
+        $new->addFormatterToRules($formatter);
+        return $new;
     }
 
     /**
@@ -80,5 +97,14 @@ final class Rules
             }
         }
         return $arrayOfRules;
+    }
+
+    private function addFormatterToRules(?FormatterInterface $formatter): void
+    {
+        foreach ($this->rules as &$rule) {
+            if ($rule instanceof FormattableRuleInterface) {
+                $rule = $rule->withFormatter($formatter);
+            }
+        }
     }
 }

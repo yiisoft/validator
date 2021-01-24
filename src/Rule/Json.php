@@ -9,6 +9,8 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
+use function is_string;
+
 /**
  * JsonValidator validates that the attribute value is a valid json
  */
