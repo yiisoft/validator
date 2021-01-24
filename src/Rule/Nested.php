@@ -13,7 +13,25 @@ use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rules;
 
 /**
- * Each validator validates an array by checking each of its elements against a set of rules
+ * Nested rule needed for validation nested structures.
+ *
+ * For example we have an inbound request with the following structure:
+ * $request = [
+ *     'author' => [
+ *         'name' => 'Dmitry',
+ *         'age' => 18,
+ *     ],
+ * ];
+ *
+ * So to make validation with Nested rule we can configure it like this:
+ * $rule = new Nested([
+ *     'author.age' => [
+ *         (new Number())->min(20),
+ *     ],
+ *     'author.name' => [
+ *         (new HasLength())->min(3),
+ *     ],
+ * ]);
  */
 class Nested extends Rule
 {
