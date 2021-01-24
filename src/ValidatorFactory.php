@@ -4,23 +4,16 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Rule\Callback;
 
 final class ValidatorFactory implements ValidatorFactoryInterface
 {
-    private ?TranslatorInterface $translator;
-    private ?string $translationDomain;
-    private ?string $translationLocale;
+    private ?FormatterInterface $formatter;
 
     public function __construct(
-        TranslatorInterface $translator = null,
-        string $translationDomain = null,
-        string $translationLocale = null
+        FormatterInterface $formatter = null
     ) {
-        $this->translator = $translator;
-        $this->translationDomain = $translationDomain;
-        $this->translationLocale = $translationLocale;
+        $this->formatter = $formatter;
     }
 
     public function create(array $rules): ValidatorInterface
@@ -40,30 +33,23 @@ final class ValidatorFactory implements ValidatorFactoryInterface
     }
 
     /**
-     * @param callable|Rule $rule
+     * @param callable|RuleInterface $rule
      */
-    private function normalizeRule($rule): Rule
+    private function normalizeRule($rule): RuleInterface
     {
         if (is_callable($rule)) {
             $rule = new Callback($rule);
         }
 
-        if (!$rule instanceof Rule) {
-            throw new \InvalidArgumentException(
-                'Rule should be either instance of Rule class or a callable'
-            );
+        if (!$rule instanceof RuleInterface) {
+            throw new \InvalidArgumentException(sprintf(
+                'Rule should be either instance of %s or a callable',
+                RuleInterface::class
+            ));
         }
 
-        if ($this->translator !== null) {
-            $rule = $rule->translator($this->translator);
-        }
-
-        if ($this->translationDomain !== null) {
-            $rule = $rule->translationDomain($this->translationDomain);
-        }
-
-        if ($this->translationLocale !== null) {
-            $rule = $rule->translationLocale($this->translationLocale);
+        if ($this->formatter !== null && $rule instanceof FormattableRuleInterface) {
+            $rule = $rule->formatter($this->formatter);
         }
 
         return $rule;
