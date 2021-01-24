@@ -37,4 +37,11 @@ final class Validator implements ValidatorInterface
         }
         return $results;
     }
+
+    public function withFormatter(?FormatterInterface $formatter): self
+    {
+        $new = clone $this;
+        $new->formatter = $formatter;
+        return $new;
+    }
 }
