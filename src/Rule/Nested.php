@@ -11,19 +11,26 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rules;
+use function is_array;
+use function is_object;
 
 /**
- * Nested rule needed for validation nested structures.
+ * Nested rule can be used for validation of nested structures.
  *
  * For example we have an inbound request with the following structure:
+ *
+ * ```php
  * $request = [
  *     'author' => [
  *         'name' => 'Dmitry',
  *         'age' => 18,
  *     ],
  * ];
+ * ```
  *
  * So to make validation with Nested rule we can configure it like this:
+ *
+ * ```php
  * $rule = new Nested([
  *     'author.age' => [
  *         (new Number())->min(20),
@@ -32,6 +39,7 @@ use Yiisoft\Validator\Rules;
  *         (new HasLength())->min(3),
  *     ],
  * ]);
+ * ```
  */
 class Nested extends Rule
 {
@@ -51,7 +59,7 @@ class Nested extends Rule
         }
         if ($this->checkRules($rules)) {
             throw new InvalidArgumentException(sprintf(
-                'Each rule should be instance of %s.',
+                'Each rule should be an instance of %s.',
                 Rule::class
             ));
         }
@@ -63,7 +71,7 @@ class Nested extends Rule
         $result = new Result();
         if (!is_object($value) && !is_array($value)) {
             $result->addError(sprintf(
-                'Value should be an array or an object. %s given',
+                'Value should be an array or an object. %s given.',
                 gettype($value)
             ));
             return $result;
@@ -96,6 +104,10 @@ class Nested extends Rule
         return $result;
     }
 
+    /**
+     * @param bool $value If absence of nested property should be considered an error. Default is `false`.
+     * @return self
+     */
     public function errorWhenPropertyPathIsNotFound(bool $value): self
     {
         $new = clone $this;
@@ -103,6 +115,10 @@ class Nested extends Rule
         return $new;
     }
 
+    /**
+     * @param string $message A message to use when nested property is absent.
+     * @return $this
+     */
     public function propertyPathIsNotFoundMessage(string $message): self
     {
         $new = clone $this;
