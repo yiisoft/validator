@@ -156,7 +156,7 @@ class Nested extends Rule
                 // Just skip the rule that doesn't support parametrizing
             } else {
                 throw new \InvalidArgumentException(sprintf(
-                    'Rules should be an array of rules that implements %s',
+                    'Rules should be an array of rules that implements %s.',
                     ParametrizedRuleInterface::class,
                 ));
             }
