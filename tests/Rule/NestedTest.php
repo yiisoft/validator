@@ -21,6 +21,7 @@ class NestedTest extends TestCase
      * @dataProvider validateDataProvider
      *
      * @param Rule[] $rules
+     * @param bool $expectedResult
      */
     public function testValidate(array $rules, bool $expectedResult): void
     {
@@ -54,7 +55,7 @@ class NestedTest extends TestCase
 
         $result = $validator->validate('');
 
-        $this->assertEquals(['Value should be an array or an object. string given'], $result->getErrors());
+        $this->assertEquals(['Value should be an array or an object. string given.'], $result->getErrors());
     }
 
     public function testValidationMessage(): void
