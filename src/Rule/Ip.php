@@ -31,7 +31,7 @@ use function strlen;
  * ['ip_address', 'ip', 'expandIPv6' => true], // expands IPv6 address to a full notation format
  * ```
  *
- * @property array $ranges The IPv4 or IPv6 ranges that are allowed or forbidden. See [[setRanges()]] for
+ * @property array $ranges The IPv4 or IPv6 ranges that are allowed or forbidden. See {@see Ip::ranges()} for
  * detailed description.
  */
 class Ip extends Rule
@@ -39,11 +39,8 @@ class Ip extends Rule
     /**
      * Negation char.
      *
-     * Used to negate [[ranges]] or [[networks]] or to negate validating value when [[negation]] is set to `true`.
-     *
-     * @see allowNegation
-     * @see networks
-     * @see ranges
+     * Used to negate {@see ranges()} or {@see network()} or to negate validating value when {@see allowNegation()}
+     * is used.
      */
     private const NEGATION_CHAR = '!';
 
@@ -51,7 +48,7 @@ class Ip extends Rule
      * @var array The network aliases, that can be used in {@see ranges()}.
      *  - key - alias name
      *  - value - array of strings. String can be an IP range, IP address or another alias. String can be
-     *    negated with [[NEGATION_CHAR]] (independent of `negation` option).
+     *    negated with {@see NEGATION_CHAR} (independent of {@see allowNegation()} option).
      *
      * The following aliases are defined by default:
      *  - `*`: `any`
@@ -99,7 +96,7 @@ class Ip extends Rule
     private bool $requireSubnet = false;
 
     /**
-     * @var bool whether address may have a [[NEGATION_CHAR]] character at the beginning.
+     * @var bool whether address may have a {@see NEGATION_CHAR} character at the beginning.
      * Defaults to `false`.
      */
     private bool $allowNegation = false;
@@ -151,7 +148,7 @@ class Ip extends Rule
     private string $wrongCidr = 'Contains wrong subnet mask.';
 
     /**
-     * @var string user-defined error message is used when validation fails due to subnet [[subnet]] set to 'only',
+     * @var string user-defined error message is used when validation fails due to subnet {@see allowSubnet()} is used,
      * but the CIDR prefix is not set.
      *
      * You may use the following placeholders in the message:
@@ -165,7 +162,7 @@ class Ip extends Rule
 
     /**
      * @var string user-defined error message is used when validation fails
-     * due to [[subnet]] is false, but CIDR prefix is present.
+     * due to {@see allowSubnet()} is false, but CIDR prefix is present.
      *
      * You may use the following placeholders in the message:
      *
@@ -178,7 +175,7 @@ class Ip extends Rule
 
     /**
      * @var string user-defined error message is used when validation fails due to IP address
-     * is not not allowed by [[ranges]] check.
+     * is not not allowed by {@see ranges()} check.
      *
      * You may use the following placeholders in the message:
      *
@@ -265,7 +262,7 @@ class Ip extends Rule
      *
      * The following preparation tasks are performed:
      *
-     * - Recursively substitutes aliases (described in [[networks]]) with their values.
+     * - Recursively substitutes aliases (described in {@see networks}) with their values.
      * - Removes duplicates
      *
      * @param array $ranges the IPv4 or IPv6 ranges that are allowed or forbidden.
@@ -405,7 +402,7 @@ class Ip extends Rule
     }
 
     /**
-     * Parses IP address/range for the negation with [[NEGATION_CHAR]].
+     * Parses IP address/range for the negation with {@see NEGATION_CHAR}.
      *
      * @param $string
      *
@@ -420,9 +417,9 @@ class Ip extends Rule
     }
 
     /**
-     * Prepares array to fill in [[ranges]].
+     * Prepares array to fill in {@see ranges}.
      *
-     *  - Recursively substitutes aliases, described in [[networks]] with their values,
+     *  - Recursively substitutes aliases, described in {@see networks} with their values,
      *  - Removes duplicates.
      *
      * @param array $ranges
