@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\ValidationContext;
 
-final class ValidatorContextTest extends TestCase
+final class ValidationContextTest extends TestCase
 {
     public function testDataSet(): void
     {
