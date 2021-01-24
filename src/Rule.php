@@ -21,8 +21,8 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
     /**
      * Validates the value
      *
-     * @param mixed $value value to be validated
-     * @param ValidationContext|null $context optional validation context
+     * @param mixed $value Value to be validated.
+     * @param ValidationContext|null $context Optional validation context.
      *
      * @return Result
      */
@@ -45,8 +45,8 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
     /**
      * Validates the value. The method should be implemented by concrete validation rules.
      *
-     * @param mixed $value value to be validated
-     * @param ValidationContext|null $context optional validation context
+     * @param mixed $value Value to be validated.
+     * @param ValidationContext|null $context Optional validation context.
      *
      * @return Result
      */

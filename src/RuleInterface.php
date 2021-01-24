@@ -12,8 +12,8 @@ interface RuleInterface
     /**
      * Validates the value
      *
-     * @param mixed $value value to be validated
-     * @param ValidationContext|null $context optional validation context
+     * @param mixed $value Value to be validated.
+     * @param ValidationContext|null $context Optional validation context.
      *
      * @return Result
      */
