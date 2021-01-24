@@ -120,22 +120,22 @@ class NestedTest extends TestCase
                 [
                     'author.name' => ['key' => 'name'],
                     'author.age' => ['key' => 'age'],
-                ]
+                ],
             ],
             [
                 [
                     'author' => [
                         'name' => new ParametrizedRule('author-name', ['key' => 'name']),
                         'age' => new ParametrizedRule('author-age', ['key' => 'age']),
-                    ]
+                    ],
                 ],
                 [
                     'author' => [
                         'name' => ['key' => 'name'],
                         'age' => ['key' => 'age'],
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
     }
 
