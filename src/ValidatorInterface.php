@@ -8,7 +8,7 @@ interface ValidatorInterface
 {
     /**
      * @param DataSetInterface $dataSet
-     * @param Rule[] $rules
+     * @param Rule[][] $rules
      * @psalm-param iterable<string, Rule[]> $rules
      *
      * @return ResultSet
