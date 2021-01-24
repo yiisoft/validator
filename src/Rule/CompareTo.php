@@ -11,26 +11,28 @@ use Yiisoft\Validator\Rule;
 /**
  * CompareValidator compares the specified attribute value with another value.
  *
- * The value being compared with a constant [[compareValue]], which is set
+ * The value being compared with a constant {@see CompareTo::$compareValue}, which is set
  * in the constructor.
  *
  * CompareValidator supports different comparison operators, specified
- * via the [[operator]] property.
+ * via the {@see CompareTo::operator()}.
  *
  * The default comparison function is based on string values, which means the values
- * are compared byte by byte. When comparing numbers, make sure to set the [[$type]]
- * to [[TYPE_NUMBER]] to enable numeric comparison.
+ * are compared byte by byte. When comparing numbers, make sure to call the {@see CompareTo::asNumber()}
+ * to enable numeric comparison.
  */
 class CompareTo extends Rule
 {
     /**
-     * Constant for specifying the comparison [[type]] by numeric values.
+     * Constant for specifying the comparison as string values.
+     * No conversion will be done before comparison.
      *
      * @see type
      */
     private const TYPE_STRING = 'string';
     /**
-     * Constant for specifying the comparison [[type]] by numeric values.
+     * Constant for specifying the comparison as numeric values.
+     * String values will be converted into numbers before comparison.
      *
      * @see type
      */
@@ -41,10 +43,7 @@ class CompareTo extends Rule
      */
     private $compareValue;
     /**
-     * @var string the type of the values being compared. The follow types are supported:
-     *
-     * - [[TYPE_STRING|string]]: the values are being compared as strings. No conversion will be done before comparison.
-     * - [[TYPE_NUMBER|number]]: the values are being compared as numbers. String values will be converted into numbers before comparison.
+     * @var string the type of the values being compared.
      */
     private string $type = self::TYPE_STRING;
     /**
@@ -59,7 +58,7 @@ class CompareTo extends Rule
      * - `<`: check if value being validated is less than the value being compared with.
      * - `<=`: check if value being validated is less than or equal to the value being compared with.
      *
-     * When you want to compare numbers, make sure to also set [[type]] to `number`.
+     * When you want to compare numbers, make sure to also call {@see asNumber()}.
      */
     private string $operator = '==';
 
