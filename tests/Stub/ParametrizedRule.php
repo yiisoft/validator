@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\Stub;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\ValidationContext;
 
 final class ParametrizedRule implements ParametrizedRuleInterface
 {
@@ -29,7 +30,7 @@ final class ParametrizedRule implements ParametrizedRuleInterface
         return $this->options;
     }
 
-    public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
+    public function validate($value, ValidationContext $context = null): Result
     {
         return new Result();
     }

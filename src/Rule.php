@@ -35,7 +35,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
         }
 
         if (
-            ($this->skipOnError && $context && $context->getParam(Rules::PARAM_RREVIOUS_RULES_ERRORED) === true) ||
+            ($this->skipOnError && $context && $context->getParameter(Rules::PARAMETER_PREVIOUS_RULES_ERRORED) === true) ||
             (is_callable($this->when) && !($this->when)($value, $context))
         ) {
             return new Result();

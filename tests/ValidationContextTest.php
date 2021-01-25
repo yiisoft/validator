@@ -15,7 +15,7 @@ final class ValidationContextTest extends TestCase
         $context = new ValidationContext();
         $this->assertNull($context->getDataSet());
         $this->assertNull($context->getAttribute());
-        $this->assertSame([], $context->getParams());
+        $this->assertSame([], $context->getParameters());
     }
 
     public function testConstructor(): void
@@ -26,7 +26,7 @@ final class ValidationContextTest extends TestCase
 
         $this->assertSame($dataSet, $context->getDataSet());
         $this->assertSame('name', $context->getAttribute());
-        $this->assertSame(['key' => 42], $context->getParams());
+        $this->assertSame(['key' => 42], $context->getParameters());
     }
 
     public function testWithAttribute(): void
@@ -40,19 +40,19 @@ final class ValidationContextTest extends TestCase
         $this->assertSame('newKey', $newContext->getAttribute());
     }
 
-    public function testSetParam(): void
+    public function testSetParameter(): void
     {
         $context = new ValidationContext();
-        $context->setParam('key', 42);
-        $this->assertSame(['key' => 42], $context->getParams());
+        $context->setParameter('key', 42);
+        $this->assertSame(['key' => 42], $context->getParameters());
     }
 
-    public function testGetParam(): void
+    public function testGetParameter(): void
     {
         $context = new ValidationContext(null, null, ['key' => 42]);
 
-        $this->assertSame(42, $context->getParam('key'));
-        $this->assertSame(null, $context->getParam('non-exists'));
-        $this->assertSame(7, $context->getParam('non-exists', 7));
+        $this->assertSame(42, $context->getParameter('key'));
+        $this->assertNull($context->getParameter('non-exists'));
+        $this->assertSame(7, $context->getParameter('non-exists', 7));
     }
 }
