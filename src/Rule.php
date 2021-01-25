@@ -84,7 +84,16 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      * The following example will enable the validator only when the country currently selected is USA:
      *
      * ```php
-     * function ($value, DataSetInterface $dataSet) {
+     * function ($value, ValidationContext $context)) {
+     *     if ($context === null) {
+     *         return false;
+     *     }
+     *
+     *     $dataSet = $context->getDataSet();
+     *     if ($dataSet === null) {
+     *         return false;
+     *     }
+     *
      *     return $dataSet->getAttributeValue('country') === Country::USA;
      * }
      * ```
