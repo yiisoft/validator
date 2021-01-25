@@ -25,8 +25,8 @@ class Boolean extends Rule
      */
     private $falseValue = '0';
     /**
-     * @var bool whether the comparison to [[trueValue]] and [[falseValue]] is strict.
-     * When this is true, the attribute value and type must both match those of [[trueValue]] or [[falseValue]].
+     * @var bool whether the comparison to {@see trueValue()} and {@see falseValue()} is strict.
+     * When this is true, the attribute value and type must both match those of {@see trueValue()} or {@see falseValue()}.
      * Defaults to false, meaning only the value needs to be matched.
      */
     private bool $strict = false;

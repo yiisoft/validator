@@ -13,8 +13,8 @@ use Yiisoft\Validator\Rule;
 /**
  * In validates that the attribute value is among a list of values.
  *
- * The range can be specified via the [[range]] property.
- * If the [[not]] property is set true, the validator will ensure the attribute value
+ * The range can be specified via constructor.
+ * If the {@see InRange::not()} is called, the validator will ensure the attribute value
  * is NOT among the specified range.
  */
 class InRange extends Rule
@@ -31,7 +31,7 @@ class InRange extends Rule
     private bool $strict = false;
     /**
      * @var bool whether to invert the validation logic. Defaults to false. If set to true,
-     * the attribute value should NOT be among the list of values defined via [[range]].
+     * the attribute value should NOT be among the list of values passed via constructor.
      */
     private bool $not = false;
 
