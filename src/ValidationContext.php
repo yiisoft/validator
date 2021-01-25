@@ -48,6 +48,7 @@ final class ValidationContext
 
     /**
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
+     *
      * @return self
      */
     public function withAttribute(?string $attribute): self
@@ -72,6 +73,7 @@ final class ValidationContext
      * @param mixed $default Default value to return in case parameter with a given name does not exist.
      *
      * @return mixed Parameter value.
+     *
      * @see ArrayHelper::getValue()
      */
     public function getParameter(string $key, $default = null)
