@@ -9,6 +9,10 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
+use function function_exists;
+use function is_string;
+use function strlen;
+
 /**
  * EmailValidator validates that the attribute value is a valid email address.
  */
@@ -24,7 +28,7 @@ class Email extends Rule
     private string $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/';
     /**
      * @var string the regular expression used to validateValue email addresses with the name part.
-     * This property is used only when [[allowName]] is true.
+     * This property is used only when {@see allowName()} is true.
      *
      * @see allowName
      */

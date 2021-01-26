@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use function is_callable;
+
 /**
  * Rule represents a single value validation rule.
  */
@@ -33,7 +35,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
         }
 
         if (
-            ($this->skipOnError && $context && $context->isPreviousRulesErrored()) ||
+            ($this->skipOnError && $context && $context->getParameter(Rules::PARAMETER_PREVIOUS_RULES_ERRORED) === true) ||
             (is_callable($this->when) && !($this->when)($value, $context))
         ) {
             return new Result();
@@ -52,7 +54,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      */
     abstract protected function validateValue($value, ValidationContext $context = null): Result;
 
-    public function formatter(FormatterInterface $formatter): self
+    public function withFormatter(?FormatterInterface $formatter): self
     {
         $new = clone $this;
         $new->formatter = $formatter;
@@ -82,7 +84,16 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      * The following example will enable the validator only when the country currently selected is USA:
      *
      * ```php
-     * function ($value, DataSetInterface $dataSet) {
+     * function ($value, ValidationContext $context)) {
+     *     if ($context === null) {
+     *         return false;
+     *     }
+     *
+     *     $dataSet = $context->getDataSet();
+     *     if ($dataSet === null) {
+     *         return false;
+     *     }
+     *
      *     return $dataSet->getAttributeValue('country') === Country::USA;
      * }
      * ```

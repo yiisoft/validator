@@ -9,8 +9,12 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
+use function function_exists;
+use function is_string;
+use function strlen;
+
 /**
- * UrlValidator validates that the attribute value is a valid http or https URL.
+ * UrlValidator validates that the attribute value is a valid HTTP or HTTPS URL.
  *
  * Note that this validator only checks if the URL scheme and host part are correct.
  * It does not check the remaining parts of a URL.
@@ -22,7 +26,7 @@ class Url extends Rule
     /**
      * @var string the regular expression used to validateValue the attribute value.
      * The pattern may contain a `{schemes}` token that will be replaced
-     * by a regular expression which represents the [[validSchemes]].
+     * by a regular expression which represents the {@see schemes()}.
      */
     private string $pattern = '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i';
     /**
