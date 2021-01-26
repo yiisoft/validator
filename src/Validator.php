@@ -25,6 +25,7 @@ final class Validator implements ValidatorInterface
      */
     public function validate(DataSetInterface $dataSet, iterable $rules): ResultSet
     {
+        $context = new ValidationContext($dataSet);
         $results = new ResultSet();
         foreach ($rules as $attribute => $attributeRules) {
             $aggregateRule = new Rules($attributeRules);
@@ -33,7 +34,7 @@ final class Validator implements ValidatorInterface
             }
             $results->addResult(
                 $attribute,
-                $aggregateRule->validate($dataSet->getAttributeValue($attribute), $dataSet)
+                $aggregateRule->validate($dataSet->getAttributeValue($attribute), $context->withAttribute($attribute))
             );
         }
         return $results;

@@ -7,12 +7,12 @@ namespace Yiisoft\Validator\Rule;
 use InvalidArgumentException;
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\ValidationContext;
 use function is_array;
 use function is_object;
 
@@ -68,7 +68,7 @@ class Nested extends Rule
         $this->rules = $rules;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();
         if (!is_object($value) && !is_array($value)) {

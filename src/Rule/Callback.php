@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Exception\CallbackRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\ValidationContext;
 
 class Callback extends Rule
 {
@@ -21,10 +21,10 @@ class Callback extends Rule
         $this->callback = $callback;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, ValidationContext $context = null): Result
     {
         $callback = $this->callback;
-        $callbackResult = $callback($value, $dataSet);
+        $callbackResult = $callback($value, $context);
 
         if (!$callbackResult instanceof Result) {
             throw new CallbackRuleException($callbackResult);

@@ -12,11 +12,10 @@ interface RuleInterface
     /**
      * Validates the value
      *
-     * @param mixed $value value to be validated
-     * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
-     * @param bool $previousRulesErrored set to true if rule is part of a group of rules and one of the previous validations failed
+     * @param mixed $value Value to be validated.
+     * @param ValidationContext|null $context Optional validation context.
      *
      * @return Result
      */
-    public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result;
+    public function validate($value, ValidationContext $context = null): Result;
 }

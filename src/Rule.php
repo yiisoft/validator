@@ -23,37 +23,36 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
     /**
      * Validates the value
      *
-     * @param mixed $value value to be validated
-     * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
-     * @param bool $previousRulesErrored set to true if rule is part of a group of rules and one of the previous validations failed
+     * @param mixed $value Value to be validated.
+     * @param ValidationContext|null $context Optional validation context.
      *
      * @return Result
      */
-    final public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
+    final public function validate($value, ValidationContext $context = null): Result
     {
         if ($this->skipOnEmpty && $this->isEmpty($value)) {
             return new Result();
         }
 
         if (
-          ($this->skipOnError && $previousRulesErrored) ||
-          (is_callable($this->when) && !($this->when)($value, $dataSet))
+            ($this->skipOnError && $context && $context->getParameter(Rules::PARAMETER_PREVIOUS_RULES_ERRORED) === true) ||
+            (is_callable($this->when) && !($this->when)($value, $context))
         ) {
             return new Result();
         }
 
-        return $this->validateValue($value, $dataSet);
+        return $this->validateValue($value, $context);
     }
 
     /**
      * Validates the value. The method should be implemented by concrete validation rules.
      *
-     * @param mixed $value value to be validated
-     * @param DataSetInterface|null $dataSet optional data set that could be used for contextual validation
+     * @param mixed $value Value to be validated.
+     * @param ValidationContext|null $context Optional validation context.
      *
      * @return Result
      */
-    abstract protected function validateValue($value, DataSetInterface $dataSet = null): Result;
+    abstract protected function validateValue($value, ValidationContext $context = null): Result;
 
     public function withFormatter(?FormatterInterface $formatter): self
     {
@@ -78,16 +77,25 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      * Add a PHP callable whose return value determines whether this rule should be applied.
      * By default rule will be always applied.
      *
-     * The signature of the callable should be `function ($value, DataSetInterface $dataSet): bool`, where $value and $dataSet
-     * refer to the value validated and the data set in which context it is validated. The callable should return
-     * a boolean value.
+     * The signature of the callable should be `function ($value, ValidationContext $context): bool`,
+     * where `$value` and `$context` refer to the value validated and the validation context.
+     * The callable should return a boolean value.
      *
      * The following example will enable the validator only when the country currently selected is USA:
      *
      * ```php
-     * function ($value, DataSetInterface $dataSet) {
-         return $dataSet->getAttributeValue('country') === Country::USA;
-     }
+     * function ($value, ValidationContext $context)) {
+     *     if ($context === null) {
+     *         return false;
+     *     }
+     *
+     *     $dataSet = $context->getDataSet();
+     *     if ($dataSet === null) {
+     *         return false;
+     *     }
+     *
+     *     return $dataSet->getAttributeValue('country') === Country::USA;
+     * }
      * ```
      *
      * @param callable $callback

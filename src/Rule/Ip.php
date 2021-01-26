@@ -6,10 +6,10 @@ namespace Yiisoft\Validator\Rule;
 
 use InvalidArgumentException;
 use Yiisoft\NetworkUtilities\IpHelper;
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
-use function array_key_exists;
+use Yiisoft\Validator\ValidationContext;
+
 use function is_string;
 use function strlen;
 
@@ -191,7 +191,7 @@ class Ip extends Rule
      */
     private array $ranges = [];
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, ValidationContext $context = null): Result
     {
         if (!$this->allowIpv4 && !$this->allowIpv6) {
             throw new \RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time');

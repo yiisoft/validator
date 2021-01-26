@@ -13,6 +13,8 @@ use function is_callable;
  */
 final class Rules
 {
+    public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
+
     private ?FormatterInterface $formatter = null;
 
     /**
@@ -39,13 +41,15 @@ final class Rules
         $this->rules[] = $rule;
     }
 
-    public function validate($value, DataSetInterface $dataSet = null, bool $previousRulesErrored = false): Result
+    public function validate($value, ValidationContext $context = null): Result
     {
+        $context = $context ?? new ValidationContext();
+
         $compoundResult = new Result();
         foreach ($this->rules as $rule) {
-            $ruleResult = $rule->validate($value, $dataSet, $previousRulesErrored);
+            $ruleResult = $rule->validate($value, $context);
             if ($ruleResult->isValid() === false) {
-                $previousRulesErrored = true;
+                $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
                 foreach ($ruleResult->getErrors() as $message) {
                     $compoundResult->addError($message);
                 }

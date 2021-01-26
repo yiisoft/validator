@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * Each validator validates an array by checking each of its elements against a set of rules
@@ -27,7 +27,7 @@ class Each extends Rule
         $this->rules = $rules;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();
         if (!is_iterable($value)) {
@@ -36,7 +36,7 @@ class Each extends Rule
         }
 
         foreach ($value as $item) {
-            $itemResult = $this->rules->validate($item, $dataSet);
+            $itemResult = $this->rules->validate($item, $context);
             if ($itemResult->isValid() === false) {
                 foreach ($itemResult->getErrors() as $error) {
                     $result->addError(

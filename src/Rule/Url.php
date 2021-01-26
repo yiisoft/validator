@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\ValidationContext;
+
 use function function_exists;
 use function is_string;
 use function strlen;
@@ -50,7 +51,7 @@ class Url extends Rule
         }
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();
 

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Strings\NumericHelper;
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * NumberValidator validates that the attribute value is a number.
@@ -52,7 +52,7 @@ class Number extends Rule
      */
     private string $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/';
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();
 

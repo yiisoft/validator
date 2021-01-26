@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\ValidationContext;
+
 use function is_string;
 
 /**
@@ -19,7 +20,7 @@ class Required extends Rule
 
     private string $message = 'Value cannot be blank.';
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();
 

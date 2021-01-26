@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * BooleanValidator checks if the attribute value is a boolean value or a value corresponding to it.
@@ -15,6 +15,7 @@ use Yiisoft\Validator\Rule;
 class Boolean extends Rule
 {
     use HasValidationErrorMessage;
+
     /**
      * @var mixed the value representing true status. Defaults to '1'.
      */
@@ -53,7 +54,7 @@ class Boolean extends Rule
         return $new;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, ValidationContext $context = null): Result
     {
         if ($this->strict) {
             $valid = $value === $this->trueValue || $value === $this->falseValue;

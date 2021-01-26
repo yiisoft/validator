@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
-use function is_iterable;
 
 /**
  * In validates that the attribute value is among a list of values.
@@ -43,7 +42,7 @@ class InRange extends Rule
         $this->range = $range;
     }
 
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, ValidationContext $context = null): Result
     {
         $in = false;
 
