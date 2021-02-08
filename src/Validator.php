@@ -17,14 +17,18 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param DataSetInterface $dataSet
+     * @param DataSetInterface|RulesProviderInterface $dataSet
      * @param Rule[][] $rules
      * @psalm-param iterable<string, Rule[]> $rules
      *
      * @return ResultSet
      */
-    public function validate(DataSetInterface $dataSet, iterable $rules): ResultSet
+    public function validate(DataSetInterface $dataSet, iterable $rules = []): ResultSet
     {
+        if ($dataSet instanceof RulesProviderInterface) {
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+            $rules = $dataSet->getRules();
+        }
         $context = new ValidationContext($dataSet);
         $results = new ResultSet();
         foreach ($rules as $attribute => $attributeRules) {
