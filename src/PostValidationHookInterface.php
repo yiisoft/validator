@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 /**
- * Allow to make validation post-processing.
+ * Allows to make validation post-processing.
  *
  * @example {@see \Yiisoft\Form\FormModel::processValidationResult}
  */
