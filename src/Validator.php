@@ -30,18 +30,21 @@ final class Validator implements ValidatorInterface
             $rules = $dataSet->getRules();
         }
         $context = new ValidationContext($dataSet);
-        $results = new ResultSet();
+        $resultSet = new ResultSet();
         foreach ($rules as $attribute => $attributeRules) {
             $aggregateRule = new Rules($attributeRules);
             if ($this->formatter !== null) {
                 $aggregateRule = $aggregateRule->withFormatter($this->formatter);
             }
-            $results->addResult(
+            $resultSet->addResult(
                 $attribute,
                 $aggregateRule->validate($dataSet->getAttributeValue($attribute), $context->withAttribute($attribute))
             );
         }
-        return $results;
+        if ($dataSet instanceof PostValidationHookInterface) {
+            $dataSet->processValidationResult($resultSet);
+        }
+        return $resultSet;
     }
 
     public function withFormatter(?FormatterInterface $formatter): self
