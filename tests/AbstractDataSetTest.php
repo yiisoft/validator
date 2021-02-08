@@ -14,6 +14,7 @@ abstract class AbstractDataSetTest extends TestCase
 {
     /**
      * @dataProvider validationCasesDataProvider()
+     *
      * @param array $dataSet
      */
     final public function test(array $dataSet, array $rules): void
@@ -34,13 +35,14 @@ abstract class AbstractDataSetTest extends TestCase
                 [
                     'bool' => [new Boolean()],
                     'int' => [new Number()],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
     /**
      * @dataProvider resultDataProvider()
+     *
      * @param array $dataSet
      */
     public function testResult(array $dataSet, array $rules): void
@@ -75,8 +77,8 @@ abstract class AbstractDataSetTest extends TestCase
                             return $result;
                         },
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
