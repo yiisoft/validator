@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Yiisoft\Validator\DataSet\ArrayableDataSet;
+use Yiisoft\Validator\DataSet\SingleData;
+
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
  */
@@ -17,15 +20,16 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param DataSetInterface $dataSet
+     * @param DataSetInterface|mixed $data
      * @param Rule[][] $rules
      * @psalm-param iterable<string, Rule[]> $rules
      *
      * @return ResultSet
      */
-    public function validate(DataSetInterface $dataSet, iterable $rules): ResultSet
+    public function validate($data, iterable $rules): ResultSet
     {
-        $context = new ValidationContext($dataSet);
+        $data = $this->normalizeDataSet($data);
+        $context = new ValidationContext($data);
         $results = new ResultSet();
         foreach ($rules as $attribute => $attributeRules) {
             $aggregateRule = new Rules($attributeRules);
@@ -34,7 +38,7 @@ final class Validator implements ValidatorInterface
             }
             $results->addResult(
                 $attribute,
-                $aggregateRule->validate($dataSet->getAttributeValue($attribute), $context->withAttribute($attribute))
+                $aggregateRule->validate($data->getAttributeValue($attribute), $context->withAttribute($attribute))
             );
         }
         return $results;
@@ -45,5 +49,18 @@ final class Validator implements ValidatorInterface
         $new = clone $this;
         $new->formatter = $formatter;
         return $new;
+    }
+
+    private function normalizeDataSet($data): DataSetInterface
+    {
+        if ($data instanceof DataSetInterface) {
+            return $data;
+        }
+
+        if (is_object($data) || is_array($data)) {
+            return new ArrayableDataSet((array)$data);
+        }
+
+        return new SingleData($data);
     }
 }

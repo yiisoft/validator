@@ -7,7 +7,9 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
+use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Validator;
 
@@ -42,5 +44,61 @@ class ValidatorTest extends TestCase
         $intResult = $results->getResult('int');
         $this->assertFalse($intResult->isValid());
         $this->assertCount(1, $intResult->getErrors());
+    }
+
+    /**
+     * @dataProvider diverseTypesDataProvider()
+     */
+    public function testDiverseTypes($dataSet): void
+    {
+        $validator = new Validator();
+
+        $results = $validator->validate($dataSet, [
+            'property' => [
+                new Required()
+            ],
+        ]);
+
+        $this->assertTrue($results->isValid());
+    }
+
+    public function diverseTypesDataProvider(): array
+    {
+        $class = new \stdClass();
+        $class->property = true;
+        return [
+            [
+                $class
+            ],
+            [
+                true
+            ],
+            [
+                'true'
+            ],
+            [
+                12345
+            ],
+            [
+                12.345
+            ],
+            [
+                false
+            ],
+        ];
+    }
+
+    public function testNullAsDataSet(): void
+    {
+        $validator = new Validator();
+        $dataSet = null;
+
+        $results = $validator->validate($dataSet, [
+            'property' => [
+                new CompareTo(null)
+            ],
+        ]);
+
+        $this->assertTrue($results->isValid());
     }
 }
