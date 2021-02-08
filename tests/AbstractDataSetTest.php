@@ -6,53 +6,55 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\ResultSet;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Tests\Stub\DataSet;
-use Yiisoft\Validator\Tests\Stub\RulesProvidedDataSet;
-use Yiisoft\Validator\Validator;
 
-class ValidatorTest extends TestCase
+abstract class AbstractDataSetTest extends TestCase
 {
     /**
      * @dataProvider validationCasesDataProvider()
      * @param array $dataSet
      */
-    public function testAddingRulesViaConstructor(array $dataSet, array $rules): void
+    final public function test(array $dataSet, array $rules): void
     {
-        $dataObject = new DataSet($dataSet);
+        $resultSet = $this->validate($dataSet, $rules);
 
-        $validator = new Validator();
-
-        $results = $validator->validate($dataObject, $rules);
-
-        $this->assertTrue($results->getResult('bool')->isValid());
-
-        $intResult = $results->getResult('int');
-        $this->assertFalse($intResult->isValid());
-        $this->assertCount(1, $intResult->getErrors());
-    }
-
-    /**
-     * @dataProvider validationCasesDataProvider()
-     * @param array $dataSet
-     */
-    public function testRulesProvidedObject(array $dataSet, array $rules): void
-    {
-        $dataObject = new RulesProvidedDataSet($dataSet, $rules);
-
-        $validator = new Validator();
-
-        $results = $validator->validate($dataObject);
-
-        $this->assertTrue($results->getResult('bool')->isValid());
-
-        $intResult = $results->getResult('int');
-        $this->assertFalse($intResult->isValid());
-        $this->assertCount(1, $intResult->getErrors());
+        $this->assertTrue($resultSet->isValid());
     }
 
     public function validationCasesDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'bool' => true,
+                    'int' => 41,
+                ],
+                [
+                    'bool' => [new Boolean()],
+                    'int' => [new Number()],
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider resultDataProvider()
+     * @param array $dataSet
+     */
+    public function testResult(array $dataSet, array $rules): void
+    {
+        $resultSet = $this->validate($dataSet, $rules);
+
+        $this->assertTrue($resultSet->getResult('bool')->isValid());
+
+        $intResult = $resultSet->getResult('int');
+        $this->assertFalse($intResult->isValid());
+        $this->assertCount(1, $intResult->getErrors());
+    }
+
+    public function resultDataProvider(): array
     {
         return [
             [
@@ -77,4 +79,6 @@ class ValidatorTest extends TestCase
             ]
         ];
     }
+
+    abstract protected function validate(array $dataSet, array $rules): ResultSet;
 }
