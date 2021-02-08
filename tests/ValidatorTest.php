@@ -55,7 +55,7 @@ class ValidatorTest extends TestCase
 
         $results = $validator->validate($dataSet, [
             'property' => [
-                new Required()
+                new Required(),
             ],
         ]);
 
@@ -68,22 +68,22 @@ class ValidatorTest extends TestCase
         $class->property = true;
         return [
             [
-                $class
+                $class,
             ],
             [
-                true
+                true,
             ],
             [
-                'true'
+                'true',
             ],
             [
-                12345
+                12345,
             ],
             [
-                12.345
+                12.345,
             ],
             [
-                false
+                false,
             ],
         ];
     }
@@ -95,7 +95,7 @@ class ValidatorTest extends TestCase
 
         $results = $validator->validate($dataSet, [
             'property' => [
-                new CompareTo(null)
+                new CompareTo(null),
             ],
         ]);
 
