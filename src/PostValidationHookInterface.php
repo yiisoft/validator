@@ -6,6 +6,7 @@ namespace Yiisoft\Validator;
 
 /**
  * Allow to make validation post-processing.
+ *
  * @example {@see \Yiisoft\Form\FormModel::processValidationResult}
  */
 interface PostValidationHookInterface extends DataSetInterface
