@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\DataSet;
 
 use Yiisoft\Validator\DataSetInterface;
 
-final class SingleData implements DataSetInterface
+final class ScalarDataSet implements DataSetInterface
 {
     private $value;
 

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use Yiisoft\Validator\DataSet\ArrayDataSet;
-use Yiisoft\Validator\DataSet\SingleData;
+use Yiisoft\Validator\DataSet\ScalarDataSet;
+use function is_array;
+use function is_object;
 
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
@@ -61,6 +63,6 @@ final class Validator implements ValidatorInterface
             return new ArrayDataSet((array)$data);
         }
 
-        return new SingleData($data);
+        return new ScalarDataSet($data);
     }
 }
