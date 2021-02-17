@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\DataSet;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Exception\MissingAttributeException;
 
-final class ArrayableDataSet implements DataSetInterface
+final class ArrayDataSet implements DataSetInterface
 {
     private array $data;
 
@@ -19,7 +19,7 @@ final class ArrayableDataSet implements DataSetInterface
     public function getAttributeValue(string $attribute)
     {
         if (!$this->hasAttribute($attribute)) {
-            throw new MissingAttributeException("There is no \"$attribute\" attribute in the class.");
+            throw new MissingAttributeException("There is no \"$attribute\" key in the array.");
         }
 
         return $this->data[$attribute];

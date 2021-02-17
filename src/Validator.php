@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\Validator\DataSet\ArrayableDataSet;
+use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\SingleData;
 
 /**
@@ -58,7 +58,7 @@ final class Validator implements ValidatorInterface
         }
 
         if (is_object($data) || is_array($data)) {
-            return new ArrayableDataSet((array)$data);
+            return new ArrayDataSet((array)$data);
         }
 
         return new SingleData($data);
