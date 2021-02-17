@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 /**
- * Allows to make validation post-processing.
+ * Allows to implement post-validation processing in the data set object itself.
  *
- * @example {@see \Yiisoft\Form\FormModel::processValidationResult}
+ * @see \Yiisoft\Form\FormModel::processValidationResult
  */
 interface PostValidationHookInterface extends DataSetInterface
 {
