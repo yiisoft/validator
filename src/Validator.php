@@ -17,27 +17,34 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param DataSetInterface $dataSet
+     * @param DataSetInterface|RulesProviderInterface $dataSet
      * @param Rule[][] $rules
      * @psalm-param iterable<string, Rule[]> $rules
      *
      * @return ResultSet
      */
-    public function validate(DataSetInterface $dataSet, iterable $rules): ResultSet
+    public function validate(DataSetInterface $dataSet, iterable $rules = []): ResultSet
     {
+        if ($dataSet instanceof RulesProviderInterface) {
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+            $rules = $dataSet->getRules();
+        }
         $context = new ValidationContext($dataSet);
-        $results = new ResultSet();
+        $resultSet = new ResultSet();
         foreach ($rules as $attribute => $attributeRules) {
             $aggregateRule = new Rules($attributeRules);
             if ($this->formatter !== null) {
                 $aggregateRule = $aggregateRule->withFormatter($this->formatter);
             }
-            $results->addResult(
+            $resultSet->addResult(
                 $attribute,
                 $aggregateRule->validate($dataSet->getAttributeValue($attribute), $context->withAttribute($attribute))
             );
         }
-        return $results;
+        if ($dataSet instanceof PostValidationHookInterface) {
+            $dataSet->processValidationResult($resultSet);
+        }
+        return $resultSet;
     }
 
     public function withFormatter(?FormatterInterface $formatter): self
