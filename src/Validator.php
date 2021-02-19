@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Yiisoft\Validator\DataSet\ArrayDataSet;
+use Yiisoft\Validator\DataSet\ScalarDataSet;
+use function is_array;
+use function is_object;
+
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
  */
@@ -17,34 +22,37 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param DataSetInterface|RulesProviderInterface $dataSet
+     * @param DataSetInterface|mixed|RulesProviderInterface $data
      * @param Rule[][] $rules
      * @psalm-param iterable<string, Rule[]> $rules
      *
      * @return ResultSet
      */
-    public function validate(DataSetInterface $dataSet, iterable $rules = []): ResultSet
+    public function validate($data, iterable $rules = []): ResultSet
     {
-        if ($dataSet instanceof RulesProviderInterface) {
+        $data = $this->normalizeDataSet($data);
+        if ($data instanceof RulesProviderInterface) {
             /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-            $rules = $dataSet->getRules();
+            $rules = $data->getRules();
         }
-        $context = new ValidationContext($dataSet);
-        $resultSet = new ResultSet();
+
+        $context = new ValidationContext($data);
+        $results = new ResultSet();
+
         foreach ($rules as $attribute => $attributeRules) {
             $aggregateRule = new Rules($attributeRules);
             if ($this->formatter !== null) {
                 $aggregateRule = $aggregateRule->withFormatter($this->formatter);
             }
-            $resultSet->addResult(
+            $results->addResult(
                 $attribute,
-                $aggregateRule->validate($dataSet->getAttributeValue($attribute), $context->withAttribute($attribute))
+                $aggregateRule->validate($data->getAttributeValue($attribute), $context->withAttribute($attribute))
             );
         }
-        if ($dataSet instanceof PostValidationHookInterface) {
-            $dataSet->processValidationResult($resultSet);
+        if ($data instanceof PostValidationHookInterface) {
+            $data->processValidationResult($results);
         }
-        return $resultSet;
+        return $results;
     }
 
     public function withFormatter(?FormatterInterface $formatter): self
@@ -52,5 +60,18 @@ final class Validator implements ValidatorInterface
         $new = clone $this;
         $new->formatter = $formatter;
         return $new;
+    }
+
+    private function normalizeDataSet($data): DataSetInterface
+    {
+        if ($data instanceof DataSetInterface) {
+            return $data;
+        }
+
+        if (is_object($data) || is_array($data)) {
+            return new ArrayDataSet((array)$data);
+        }
+
+        return new ScalarDataSet($data);
     }
 }

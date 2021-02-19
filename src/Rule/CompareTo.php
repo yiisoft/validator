@@ -129,10 +129,6 @@ class CompareTo extends Rule
     {
         $result = new Result();
 
-        if ($this->compareValue === null) {
-            throw new \RuntimeException('CompareValidator::compareValue must be set.');
-        }
-
         if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
             $result->addError(
                 $this->formatMessage(

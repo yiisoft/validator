@@ -12,11 +12,11 @@ interface ValidatorInterface
     /**
      * Validate data set against rules set for data set attributes.
      *
-     * @param DataSetInterface|RulesProviderInterface $dataSet Data set to validate.
+     * @param DataSetInterface|mixed|RulesProviderInterface $data Data set to validate.
      * @param Rule[][] $rules Rules to apply.
      * @psalm-param iterable<string, Rule[]> $rules
      *
      * @return ResultSet Validation results.
      */
-    public function validate(DataSetInterface $dataSet, iterable $rules = []): ResultSet;
+    public function validate($data, iterable $rules = []): ResultSet;
 }
