@@ -22,17 +22,23 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param DataSetInterface|mixed $data
+     * @param DataSetInterface|RulesProviderInterface|mixed $data
      * @param Rule[][] $rules
      * @psalm-param iterable<string, Rule[]> $rules
      *
      * @return ResultSet
      */
-    public function validate($data, iterable $rules): ResultSet
+    public function validate($data, iterable $rules = []): ResultSet
     {
         $data = $this->normalizeDataSet($data);
+        if ($data instanceof RulesProviderInterface) {
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+            $rules = $data->getRules();
+        }
+
         $context = new ValidationContext($data);
         $results = new ResultSet();
+
         foreach ($rules as $attribute => $attributeRules) {
             $aggregateRule = new Rules($attributeRules);
             if ($this->formatter !== null) {
@@ -42,6 +48,9 @@ final class Validator implements ValidatorInterface
                 $attribute,
                 $aggregateRule->validate($data->getAttributeValue($attribute), $context->withAttribute($attribute))
             );
+        }
+        if ($data instanceof PostValidationHookInterface) {
+            $data->processValidationResult($results);
         }
         return $results;
     }
