@@ -22,7 +22,7 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param DataSetInterface|RulesProviderInterface|mixed $data
+     * @param DataSetInterface|mixed|RulesProviderInterface $data
      * @param Rule[][] $rules
      * @psalm-param iterable<string, Rule[]> $rules
      *
