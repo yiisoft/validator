@@ -44,15 +44,9 @@ class InRange extends Rule
 
     protected function validateValue($value, ValidationContext $context = null): Result
     {
-        $in = false;
-
-        if (!$in && ArrayHelper::isIn($value, $this->range, $this->strict)) {
-            $in = true;
-        }
-
         $result = new Result();
 
-        if ($this->not === $in) {
+        if ($this->not === ArrayHelper::isIn($value, $this->range, $this->strict)) {
             $result->addError($this->formatMessage($this->message));
         }
 
