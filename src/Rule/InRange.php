@@ -46,13 +46,6 @@ class InRange extends Rule
     {
         $in = false;
 
-        if (
-            (is_iterable($value)) &&
-            ArrayHelper::isSubset($value, $this->range, $this->strict)
-        ) {
-            $in = true;
-        }
-
         if (!$in && ArrayHelper::isIn($value, $this->range, $this->strict)) {
             $in = true;
         }
