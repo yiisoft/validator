@@ -34,7 +34,6 @@ class SubsetTest extends TestCase
 
     public function testValidateEmpty()
     {
-
         $rule = (new Subset(range(10, 20, 1)))
             ->skipOnEmpty(false);
 
