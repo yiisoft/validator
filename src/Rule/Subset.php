@@ -31,7 +31,7 @@ class Subset extends Rule
     {
         $result = new Result();
 
-        if (is_iterable($value)) {
+        if (!is_iterable($value)) {
             $result->addError($this->formatMessage($this->iterableMessage));
             return $result;
         }
