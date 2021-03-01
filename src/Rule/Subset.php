@@ -60,7 +60,7 @@ class Subset extends Rule
                 'iterableMessage' => $this->formatMessage($this->iterableMessage),
                 'subsetMessage' => $this->formatMessage($this->subsetMessage),
                 'range' => $this->range,
-                'strict' => $this->strict
+                'strict' => $this->strict,
             ],
         );
     }
