@@ -14,7 +14,7 @@ class Subset extends Rule
     /**
      * @var iterable
      */
-    private iterable $range;
+    private iterable $values;
     /**
      * @var bool whether the comparison is strict (both type and value must be the same)
      */
@@ -22,11 +22,11 @@ class Subset extends Rule
 
     private string $iterableMessage = 'Value must be iterable';
 
-    private string $subsetMessage = 'Value must be subset of...';
+    private string $subsetMessage = 'Values must be ones of {values}.';
 
-    public function __construct(iterable $range)
+    public function __construct(iterable $values)
     {
-        $this->range = $range;
+        $this->values = $values;
     }
 
     protected function validateValue($value, ValidationContext $context = null): Result
@@ -38,8 +38,10 @@ class Subset extends Rule
             return $result;
         }
 
-        if (!ArrayHelper::isSubset($value, $this->range, $this->strict)) {
-            $result->addError($this->formatMessage($this->subsetMessage));
+        if (!ArrayHelper::isSubset($value, $this->values, $this->strict)) {
+            $result->addError($this->formatMessage($this->subsetMessage, [
+                'values' => '"' . implode('", "', $this->values) . '"',
+            ]));
         }
 
         return $result;
@@ -59,7 +61,7 @@ class Subset extends Rule
             [
                 'iterableMessage' => $this->formatMessage($this->iterableMessage),
                 'subsetMessage' => $this->formatMessage($this->subsetMessage),
-                'range' => $this->range,
+                'values' => $this->values,
                 'strict' => $this->strict,
             ],
         );
