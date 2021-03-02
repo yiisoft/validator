@@ -40,7 +40,7 @@ class Subset extends Rule
 
         if (!ArrayHelper::isSubset($value, $this->values, $this->strict)) {
             $result->addError($this->formatMessage($this->subsetMessage, [
-                'values' => '"' . implode('", "', $this->values) . '"',
+                'values' => '"' . implode('", "', iterator_to_array($this->values)) . '"',
             ]));
         }
 
