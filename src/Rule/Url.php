@@ -44,13 +44,6 @@ class Url extends Rule
 
     private string $message = 'This value is not a valid URL.';
 
-    public function __construct()
-    {
-        if ($this->enableIDN && !function_exists('idn_to_ascii')) {
-            throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
-        }
-    }
-
     protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();
@@ -108,6 +101,11 @@ class Url extends Rule
     public function enableIDN(): self
     {
         $new = clone $this;
+
+        if (!function_exists('idn_to_ascii')) {
+            throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
+        }
+
         $new->enableIDN = true;
         return $new;
     }
