@@ -100,12 +100,11 @@ class Url extends Rule
 
     public function enableIDN(): self
     {
-        $new = clone $this;
-
         if (!function_exists('idn_to_ascii')) {
             throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }
 
+        $new = clone $this;
         $new->enableIDN = true;
         return $new;
     }
