@@ -6,7 +6,8 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Tests\Rule\UrlTest;
 
-function function_exists($function) {
+function function_exists($function)
+{
     if ($function === 'idn_to_ascii' && UrlTest::$idnFunctionException) {
         return false;
     }
