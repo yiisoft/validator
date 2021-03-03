@@ -39,9 +39,8 @@ class Subset extends Rule
         }
 
         if (!ArrayHelper::isSubset($value, $this->values, $this->strict)) {
-            
             $valuesString = '"' . implode('", "', (is_array($this->values) ? $this->values : iterator_to_array($this->values))) . '"';
-            
+
             $result->addError($this->formatMessage($this->subsetMessage, [
                 'values' => $valuesString,
             ]));
