@@ -9,7 +9,6 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
-use function function_exists;
 use function is_string;
 use function strlen;
 
@@ -43,13 +42,6 @@ class Url extends Rule
     private bool $enableIDN = false;
 
     private string $message = 'This value is not a valid URL.';
-
-    public function __construct()
-    {
-        if ($this->enableIDN && !function_exists('idn_to_ascii')) {
-            throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
-        }
-    }
 
     protected function validateValue($value, ValidationContext $context = null): Result
     {
@@ -107,6 +99,10 @@ class Url extends Rule
 
     public function enableIDN(): self
     {
+        if (!function_exists('idn_to_ascii')) {
+            throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
+        }
+
         $new = clone $this;
         $new->enableIDN = true;
         return $new;
