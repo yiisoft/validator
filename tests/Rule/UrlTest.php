@@ -97,6 +97,17 @@ class UrlTest extends TestCase
         $this->assertTrue($val->validate('http://xn--zcack7ayc9a.de')->isValid());
     }
 
+    public function testValidateWithIdnType(): void
+    {
+        if (!\function_exists('idn_to_ascii')) {
+            $this->markTestSkipped('intl package required');
+            return;
+        }
+
+        $val = (new Url())->enableIDN();
+        $this->assertFalse($val->validate('')->isValid());
+    }
+
     public function testEnableIdnException(): void
     {
         static::$idnFunctionException = true;
