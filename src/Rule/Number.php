@@ -23,6 +23,10 @@ class Number extends Rule
      */
     private bool $asInteger = false;
     /**
+     * @var bool whether to check the attribute value in strict mode. Defaults to false.
+     */
+    private bool $strict = false;
+    /**
      * @var float|int upper limit of the number. Defaults to null, meaning no upper limit.
      *
      * @see tooBigMessage for the customized message used when the number is too big.
@@ -56,7 +60,7 @@ class Number extends Rule
     {
         $result = new Result();
 
-        if (!is_scalar($value)) {
+        if (($this->strict && is_bool($value)) || !is_scalar($value)) {
             $result->addError($this->formatMessage($this->getNotANumberMessage(), ['value' => $value]));
             return $result;
         }
@@ -78,6 +82,13 @@ class Number extends Rule
     {
         $new = clone $this;
         $new->asInteger = true;
+        return $new;
+    }
+
+    public function strict(): self
+    {
+        $new = clone $this;
+        $new->strict = true;
         return $new;
     }
 
