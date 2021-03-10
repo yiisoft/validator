@@ -63,12 +63,14 @@ class Url extends Rule
         return $result;
     }
 
-    private function idnToAscii($idn)
+    private function idnToAscii(string $idn): string
     {
-        return idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
+        $result = idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
+
+        return $result === false ? '' : $result;
     }
 
-    private function convertIdn($value): string
+    private function convertIdn(string $value): string
     {
         if (strpos($value, '://') === false) {
             return $this->idnToAscii($value);
