@@ -56,7 +56,7 @@ class Number extends Rule
     {
         $result = new Result();
 
-        if (!is_scalar($value)) {
+        if (is_bool($value) || !is_scalar($value)) {
             $result->addError($this->formatMessage($this->getNotANumberMessage(), ['value' => $value]));
             return $result;
         }
