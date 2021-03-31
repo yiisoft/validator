@@ -6,6 +6,9 @@ namespace Yiisoft\Validator;
 
 trait HasValidationErrorMessage
 {
+    /**
+     * @return static
+     */
     public function message(string $message): self
     {
         $new = clone $this;
