@@ -54,6 +54,9 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      */
     abstract protected function validateValue($value, ValidationContext $context = null): Result;
 
+    /**
+     * @return static
+     */
     public function withFormatter(?FormatterInterface $formatter): self
     {
         $new = clone $this;
@@ -100,7 +103,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      *
      * @param callable $callback
      *
-     * @return $this
+     * @return static
      */
     public function when(callable $callback): self
     {
@@ -119,7 +122,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
     /**
      * @param bool $value if validation should be skipped if value validated is empty
      *
-     * @return self
+     * @return static
      */
     public function skipOnEmpty(bool $value): self
     {
