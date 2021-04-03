@@ -6,6 +6,6 @@ namespace Yiisoft\Validator\Exception;
 
 use InvalidArgumentException;
 
-class MissingAttributeException extends InvalidArgumentException
+final class MissingAttributeException extends InvalidArgumentException
 {
 }
