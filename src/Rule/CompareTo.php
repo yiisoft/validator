@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
@@ -23,6 +24,8 @@ use Yiisoft\Validator\ValidationContext;
  */
 class CompareTo extends Rule
 {
+    use HasValidationErrorMessage;
+
     /**
      * Constant for specifying the comparison as string values.
      * No conversion will be done before comparison.
@@ -42,6 +45,12 @@ class CompareTo extends Rule
      * @var mixed the constant value to be compared with.
      */
     private $compareValue;
+
+    /**
+     * @var ?string user-defined error message
+     */
+    private ?string $message = null;
+
     /**
      * @var string the type of the values being compared.
      */
@@ -75,6 +84,10 @@ class CompareTo extends Rule
 
     private function getMessage(): string
     {
+        if ($this->message !== null) {
+            return $this->message;
+        }
+
         switch ($this->operator) {
             case '==':
             case '===':

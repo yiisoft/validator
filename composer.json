@@ -29,7 +29,7 @@
         "ext-mbstring": "*",
         "yiisoft/arrays": "^1.0",
         "yiisoft/friendly-exception": "^1.0",
-        "yiisoft/network-utilities": "dev-master",
+        "yiisoft/network-utilities": "^1.0",
         "yiisoft/strings": "^2.0"
     },
     "require-dev": {
@@ -52,8 +52,11 @@
         "branch-alias": {
             "dev-master": "3.0.x-dev"
         },
+        "config-plugin-options": {
+            "source-directory": "config"
+        },
         "config-plugin": {
-            "common": "config/common.php"
+            "common": "common.php"
         }
     },
     "config": {

@@ -42,6 +42,14 @@ class NumberTest extends TestCase
         $this->assertFalse($rule->validate('0x14')->isValid()); // todo check this
     }
 
+    public function testValidateBoolean(): void
+    {
+        $rule = (new Number());
+
+        $this->assertFalse($rule->validate(false)->isValid());
+        $this->assertFalse($rule->validate(true)->isValid());
+    }
+
     public function testValidateAdvanced(): void
     {
         $rule = new Number();

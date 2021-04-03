@@ -2,6 +2,18 @@
 
 declare(strict_types=1);
 
+namespace Yiisoft\Validator\Rule;
+
+use Yiisoft\Validator\Tests\Rule\UrlTest;
+
+function function_exists($function)
+{
+    if ($function === 'idn_to_ascii' && UrlTest::$idnFunctionException) {
+        return false;
+    }
+    return \function_exists($function);
+}
+
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
@@ -13,6 +25,13 @@ use Yiisoft\Validator\Rule\Url;
  */
 class UrlTest extends TestCase
 {
+    public static bool $idnFunctionException = false;
+
+    protected function setUp(): void
+    {
+        static::$idnFunctionException = false;
+    }
+
     public function testValidate(): void
     {
         $val = new Url();
@@ -67,7 +86,7 @@ class UrlTest extends TestCase
 
     public function testValidateWithIdn(): void
     {
-        if (!function_exists('idn_to_ascii')) {
+        if (!\function_exists('idn_to_ascii')) {
             $this->markTestSkipped('intl package required');
             return;
         }
@@ -76,6 +95,25 @@ class UrlTest extends TestCase
         $this->assertTrue($val->validate('http://äüößìà.de')->isValid());
         // converted via http://mct.verisign-grs.com/convertServlet
         $this->assertTrue($val->validate('http://xn--zcack7ayc9a.de')->isValid());
+    }
+
+    public function testValidateWithIdnType(): void
+    {
+        if (!\function_exists('idn_to_ascii')) {
+            $this->markTestSkipped('intl package required');
+            return;
+        }
+
+        $val = (new Url())->enableIDN();
+        $this->assertFalse($val->validate('')->isValid());
+    }
+
+    public function testEnableIdnException(): void
+    {
+        static::$idnFunctionException = true;
+
+        $this->expectException(\RuntimeException::class);
+        (new Url())->enableIDN();
     }
 
     public function testValidateLength(): void
@@ -87,7 +125,7 @@ class UrlTest extends TestCase
 
     public function testValidateWithIdnWithoutScheme(): void
     {
-        if (!function_exists('idn_to_ascii')) {
+        if (!\function_exists('idn_to_ascii')) {
             $this->markTestSkipped('intl package required');
             return;
         }

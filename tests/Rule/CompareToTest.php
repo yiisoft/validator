@@ -151,6 +151,17 @@ class CompareToTest extends TestCase
                     'skipOnError' => true,
                 ],
             ],
+            [
+                (new CompareTo('YES'))->message('Custom message for {value}'),
+                [
+                    'type' => 'string',
+                    'operator' => '==',
+                    'compareValue' => 'YES',
+                    'message' => 'Custom message for YES',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => true,
+                ],
+            ],
         ];
     }
 
