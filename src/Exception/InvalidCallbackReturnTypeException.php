@@ -10,7 +10,7 @@ use Yiisoft\Validator\Result;
 use function get_class;
 use function is_object;
 
-final class CallbackRuleException extends \Exception implements FriendlyExceptionInterface
+final class InvalidCallbackReturnTypeException extends \Exception implements FriendlyExceptionInterface
 {
     public function __construct($result, int $code = 0, Throwable $previous = null)
     {
