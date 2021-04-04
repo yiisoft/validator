@@ -69,5 +69,8 @@
     "scripts": {
         "test": "phpunit --testdox --no-interaction",
         "test-watch": "phpunit-watcher watch"
+    },
+    "suggest": {
+        "yiisoft/injector": "Enables using Injector in Callback rule."
     }
 }
