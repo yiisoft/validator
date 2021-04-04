@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Injector\Injector;
+use Yiisoft\Test\Support\Container\SimpleContainer;
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
 class CallbackTest extends TestCase
 {
@@ -31,6 +34,32 @@ class CallbackTest extends TestCase
         $this->assertEquals('Value should be 42!', $result->getErrors()[0]);
     }
 
+    /**
+     * @dataProvider injectorDataProvider
+     */
+    public function testInjector(callable $callback, Injector $injector): void
+    {
+        $rule = (new Callback($callback))->withInjector($injector);
+
+        $result = $rule->validate(0);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function injectorDataProvider(): array
+    {
+        $injector = new Injector(new SimpleContainer([
+            CustomUrlRule::class => new CustomUrlRule(),
+        ]));
+        return [
+            [
+                static function ($value, $context, CustomUrlRule $rule) {
+                    return new Result();
+                },
+                $injector
+            ],
+        ];
+    }
     public function testThrowExceptionWithInvalidReturn(): void
     {
         $this->expectException(InvalidCallbackReturnTypeException::class);

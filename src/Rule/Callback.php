@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Psr\Container\ContainerInterface;
 use Yiisoft\Injector\Injector;
-use Yiisoft\Validator\Exception\InvalidCallbackRuleConfiguration;
+use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
@@ -17,7 +16,7 @@ class Callback extends Rule
      * @var callable
      */
     private $callback;
-    private ?ContainerInterface $container = null;
+    private ?Injector $injector = null;
 
     public function __construct(callable $callback)
     {
@@ -27,17 +26,12 @@ class Callback extends Rule
     protected function validateValue($value, ValidationContext $context = null): Result
     {
         $callback = $this->callback;
-        if ($this->isInjectorAvailable()) {
-            if ($this->container === null) {
-                throw new \RuntimeException('You should add container to rule via withContainer() method.');
-            }
-            $callbackResult = (new Injector($this->container))->invoke($this->callback, [$value, $context]);
-        } else {
-            $callbackResult = $callback($value, $context);
-        }
+        $callbackResult = $this->injector === null
+            ? $callback($value, $context)
+            : $this->injector->invoke($callback, ['value' => $value, 'context' => $context]);
 
         if (!$callbackResult instanceof Result) {
-            throw new CallbackRuleException($callbackResult);
+            throw new InvalidCallbackReturnTypeException($callbackResult);
         }
 
         $result = new Result();
@@ -50,21 +44,10 @@ class Callback extends Rule
         return $result;
     }
 
-    /**
-     * @throws InvalidCallbackRuleConfiguration
-     */
-    public function withContainer(ContainerInterface $container): self
+    public function withInjector(Injector $injector): self
     {
-        if (!$this->isInjectorAvailable()) {
-            throw new InvalidCallbackRuleConfiguration();
-        }
         $new = clone $this;
-        $new->container = $container;
+        $new->injector = $injector;
         return $new;
-    }
-
-    private function isInjectorAvailable(): bool
-    {
-        return class_exists(Injector::class);
     }
 }
