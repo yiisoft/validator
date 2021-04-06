@@ -2,21 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Rule;
-
-use Yiisoft\Validator\Tests\Rule\UrlTest;
-
-function function_exists($function)
-{
-    if ($function === 'idn_to_ascii' && UrlTest::$idnFunctionException) {
-        return false;
-    }
-    return \function_exists($function);
-}
-
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Url;
 
@@ -25,11 +14,18 @@ use Yiisoft\Validator\Rule\Url;
  */
 class UrlTest extends TestCase
 {
-    public static bool $idnFunctionException = false;
+    public static ?bool $idnFunctionExists = null;
 
     protected function setUp(): void
     {
-        static::$idnFunctionException = false;
+        static::$idnFunctionExists = null;
+        parent::setUp();
+    }
+
+    protected function tearDown(): void
+    {
+        static::$idnFunctionExists = null;
+        parent::tearDown();
     }
 
     public function testValidate(): void
@@ -110,9 +106,9 @@ class UrlTest extends TestCase
 
     public function testEnableIdnException(): void
     {
-        static::$idnFunctionException = true;
+        static::$idnFunctionExists = false;
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         (new Url())->enableIDN();
     }
 
@@ -198,4 +194,15 @@ class UrlTest extends TestCase
     {
         $this->assertEquals($expected, $rule->getOptions());
     }
+}
+
+namespace Yiisoft\Validator\Rule;
+
+use Yiisoft\Validator\Tests\Rule\UrlTest;
+
+function function_exists($function)
+{
+    return $function === 'idn_to_ascii' && UrlTest::$idnFunctionExists !== null
+        ? UrlTest::$idnFunctionExists
+        : \function_exists($function);
 }
