@@ -56,10 +56,11 @@ class CallbackTest extends TestCase
                 static function ($value, $context, CustomUrlRule $rule) {
                     return new Result();
                 },
-                $injector
+                $injector,
             ],
         ];
     }
+
     public function testThrowExceptionWithInvalidReturn(): void
     {
         $this->expectException(InvalidCallbackReturnTypeException::class);
