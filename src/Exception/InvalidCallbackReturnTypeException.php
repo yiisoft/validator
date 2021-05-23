@@ -10,9 +10,9 @@ use Yiisoft\Validator\Result;
 use function get_class;
 use function is_object;
 
-class CallbackRuleException extends \Exception implements FriendlyExceptionInterface
+final class InvalidCallbackReturnTypeException extends \Exception implements FriendlyExceptionInterface
 {
-    public function __construct($result, $code = 0, Throwable $previous = null)
+    public function __construct($result, int $code = 0, ?Throwable $previous = null)
     {
         $message = sprintf(
             'Return value of callback must be an instance of %s, %s returned.',

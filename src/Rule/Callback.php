@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Exception\CallbackRuleException;
+use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
@@ -27,7 +27,7 @@ class Callback extends Rule
         $callbackResult = $callback($value, $context);
 
         if (!$callbackResult instanceof Result) {
-            throw new CallbackRuleException($callbackResult);
+            throw new InvalidCallbackReturnTypeException($callbackResult);
         }
 
         $result = new Result();
