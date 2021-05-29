@@ -102,7 +102,7 @@ class NestedTest extends TestCase
      */
     public function testOptions(array $rules, array $expectedOptions): void
     {
-        $validator =Nested::rule($rules);
+        $validator = Nested::rule($rules);
 
         $options = $validator->getOptions();
 
