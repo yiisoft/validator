@@ -14,7 +14,7 @@ class CallbackTest extends TestCase
 {
     public function testValidate(): void
     {
-        $rule = new Callback(
+        $rule = Callback::rule(
             static function ($value): Result {
                 $result = new Result();
                 if ($value !== 42) {
@@ -35,34 +35,34 @@ class CallbackTest extends TestCase
     {
         $this->expectException(InvalidCallbackReturnTypeException::class);
 
-        (new Callback(
+        Callback::rule(
             static fn () => 'invalid return'
-        ))->validate(null);
+        )->validate(null);
     }
 
     public function testName(): void
     {
-        $this->assertEquals('callback', (new Callback(static function ($value) {
+        $this->assertEquals('callback', Callback::rule(static function ($value) {
             return $value;
-        }))->getName());
+        })->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                (new Callback(static function ($value) {
+                Callback::rule(static function ($value) {
                     return $value;
-                })),
+                }),
                 [
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ],
             ],
             [
-                (new Callback(static function ($value) {
+                Callback::rule(static function ($value) {
                     return $value;
-                }))->skipOnEmpty(true),
+                })->skipOnEmpty(true),
                 [
                     'skipOnEmpty' => true,
                     'skipOnError' => true,

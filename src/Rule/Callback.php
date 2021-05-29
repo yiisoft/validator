@@ -16,9 +16,11 @@ class Callback extends Rule
      */
     private $callback;
 
-    public function __construct(callable $callback)
+    public static function rule(callable $callback): self
     {
-        $this->callback = $callback;
+        $rule = new self();
+        $rule->callback = $callback;
+        return $rule;
     }
 
     protected function validateValue($value, ValidationContext $context = null): Result

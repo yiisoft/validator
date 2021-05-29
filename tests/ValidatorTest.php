@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\CompareTo;
@@ -25,10 +26,10 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
 
         $results = $validator->validate($dataObject, [
-            'bool' => [new Boolean()],
+            'bool' => [Boolean::rule()],
             'int' => [
-                (new Number())->integer(),
-                (new Number())->integer()->min(44),
+                Number::rule()->integer(),
+                Number::rule()->integer()->min(44),
                 static function ($value): Result {
                     $result = new Result();
                     if ($value !== 42) {
@@ -55,7 +56,7 @@ class ValidatorTest extends TestCase
 
         $results = $validator->validate($dataSet, [
             'property' => [
-                new Required(),
+                Required::rule(),
             ],
         ]);
 
@@ -64,7 +65,7 @@ class ValidatorTest extends TestCase
 
     public function diverseTypesDataProvider(): array
     {
-        $class = new \stdClass();
+        $class = new stdClass();
         $class->property = true;
         return [
             [
@@ -95,7 +96,7 @@ class ValidatorTest extends TestCase
 
         $results = $validator->validate($dataSet, [
             'property' => [
-                new CompareTo(null),
+                CompareTo::rule(null),
             ],
         ]);
 

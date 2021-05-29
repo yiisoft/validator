@@ -191,6 +191,11 @@ class Ip extends Rule
      */
     private array $ranges = [];
 
+    public static function rule(): self
+    {
+        return new self();
+    }
+
     protected function validateValue($value, ValidationContext $context = null): Result
     {
         if (!$this->allowIpv4 && !$this->allowIpv6) {

@@ -24,10 +24,10 @@ class EachTest extends TestCase
         ];
 
         $rules = new Rules([
-            (new Number())->max(13),
+            Number::rule()->max(13),
         ]);
 
-        $result = (new Each($rules))->validate($values);
+        $result = Each::rule($rules)->validate($values);
         $errors = $result->getErrors();
 
         $this->assertFalse($result->isValid());
@@ -38,14 +38,14 @@ class EachTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('each', (new Each(new Rules([(new Number())->max(13)])))->getName());
+        $this->assertEquals('each', Each::rule(new Rules([Number::rule()->max(13)]))->getName());
     }
 
     public function testOptions(): void
     {
         $rules = new Rules([
-            (new Number())->max(13),
-            (new Number())->max(14),
+            Number::rule()->max(13),
+            Number::rule()->max(14),
         ]);
 
         $this->assertEquals([
@@ -71,6 +71,6 @@ class EachTest extends TestCase
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
             ],
-        ], (new Each($rules))->getOptions());
+        ], Each::rule($rules)->getOptions());
     }
 }

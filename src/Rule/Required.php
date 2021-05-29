@@ -20,6 +20,11 @@ class Required extends Rule
 
     private string $message = 'Value cannot be blank.';
 
+    public static function rule(): self
+    {
+        return new self();
+    }
+
     protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();

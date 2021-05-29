@@ -15,7 +15,7 @@ class RequiredTest extends TestCase
 {
     public function testValidateWithDefaults()
     {
-        $val = new Required();
+        $val = Required::rule();
         $this->assertFalse($val->validate(null)->isValid());
         $this->assertFalse($val->validate([])->isValid());
         $this->assertTrue($val->validate('not empty')->isValid());
@@ -24,14 +24,14 @@ class RequiredTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('required', (new Required())->getName());
+        $this->assertEquals('required', Required::rule()->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                (new Required()),
+                Required::rule(),
                 [
                     'message' => 'Value cannot be blank.',
                     'skipOnEmpty' => false,

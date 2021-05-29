@@ -22,9 +22,11 @@ class Each extends Rule
     private string $incorrectInputMessage = 'Value should be array or iterable';
     private string $message = '{error} {value} given.';
 
-    public function __construct(Rules $rules)
+    public static function rule(Rules $rules): self
     {
-        $this->rules = $rules;
+        $rule = new self();
+        $rule->rules = $rules;
+        return $rule;
     }
 
     protected function validateValue($value, ValidationContext $context = null): Result

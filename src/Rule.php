@@ -20,6 +20,10 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      */
     private $when = null;
 
+    final protected function __construct()
+    {
+    }
+
     /**
      * Validates the value
      *

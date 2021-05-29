@@ -15,12 +15,12 @@ class MatchRegularExpressionTest extends TestCase
 {
     public function testValidate(): void
     {
-        $rule = new MatchRegularExpression('/^[a-zA-Z0-9](\.)?([^\/]*)$/m');
+        $rule = MatchRegularExpression::rule('/^[a-zA-Z0-9](\.)?([^\/]*)$/m');
         $this->assertTrue($rule->validate('b.4')->isValid());
         $this->assertFalse($rule->validate('b./')->isValid());
         $this->assertFalse($rule->validate(['a', 'b'])->isValid());
 
-        $rule = (new MatchRegularExpression('/^[a-zA-Z0-9](\.)?([^\/]*)$/m'))->not();
+        $rule = MatchRegularExpression::rule('/^[a-zA-Z0-9](\.)?([^\/]*)$/m')->not();
         $this->assertFalse($rule->validate('b.4')->isValid());
         $this->assertTrue($rule->validate('b./')->isValid());
         $this->assertFalse($rule->validate(['a', 'b'])->isValid());
@@ -28,7 +28,7 @@ class MatchRegularExpressionTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('matchRegularExpression', (new MatchRegularExpression('/^[a-zA-Z0-9](\.)?([^\/]*)$/m'))->getName());
+        $this->assertEquals('matchRegularExpression', MatchRegularExpression::rule('/^[a-zA-Z0-9](\.)?([^\/]*)$/m')->getName());
     }
 
     public function optionsProvider(): array
@@ -36,7 +36,7 @@ class MatchRegularExpressionTest extends TestCase
         $pattern = '/^[a-zA-Z0-9](\.)?([^\/]*)$/m';
         return [
             [
-                (new MatchRegularExpression($pattern)),
+                MatchRegularExpression::rule($pattern),
                 [
                     'message' => 'Value is invalid.',
                     'not' => false,
@@ -46,7 +46,7 @@ class MatchRegularExpressionTest extends TestCase
                 ],
             ],
             [
-                (new MatchRegularExpression($pattern))->not(),
+                MatchRegularExpression::rule($pattern)->not(),
                 [
                     'message' => 'Value is invalid.',
                     'not' => true,

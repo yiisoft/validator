@@ -108,9 +108,11 @@ class CompareTo extends Rule
         }
     }
 
-    public function __construct($value)
+    public static function rule($value): self
     {
-        $this->compareValue = $value;
+        $rule = new self();
+        $rule->compareValue = $value;
+        return $rule;
     }
 
     public function operator(string $operator): self

@@ -24,9 +24,11 @@ class Subset extends Rule
 
     private string $subsetMessage = 'Values must be ones of {values}.';
 
-    public function __construct(iterable $values)
+    public static function rule(iterable $values): self
     {
-        $this->values = $values;
+        $rule = new self();
+        $rule->values = $values;
+        return $rule;
     }
 
     protected function validateValue($value, ValidationContext $context = null): Result

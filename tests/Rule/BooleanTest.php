@@ -16,26 +16,26 @@ class BooleanTest extends TestCase
     public function validateProvider(): array
     {
         return [
-            [new Boolean(), true, true],
-            [new Boolean(), false, true],
+            [Boolean::rule(), true, true],
+            [Boolean::rule(), false, true],
 
-            [new Boolean(), '0', true],
-            [new Boolean(), '1', true],
-            [new Boolean(), '5', false],
+            [Boolean::rule(), '0', true],
+            [Boolean::rule(), '1', true],
+            [Boolean::rule(), '5', false],
 
-            [new Boolean(), null, false],
-            [new Boolean(), [], false],
+            [Boolean::rule(), null, false],
+            [Boolean::rule(), [], false],
 
-            [(new Boolean())->strict(true), '0', true],
-            [(new Boolean())->strict(true), '1', true],
+            [Boolean::rule()->strict(true), '0', true],
+            [Boolean::rule()->strict(true), '1', true],
 
-            [(new Boolean())->strict(true), true, false],
-            [(new Boolean())->strict(true), false, false],
+            [Boolean::rule()->strict(true), true, false],
+            [Boolean::rule()->strict(true), false, false],
 
-            [(new Boolean())->strict(true)->trueValue(true)->falseValue(false), '0', false],
-            [(new Boolean())->strict(true)->trueValue(true)->falseValue(false), [], false],
-            [(new Boolean())->strict(true)->trueValue(true)->falseValue(false), true, true],
-            [(new Boolean())->strict(true)->trueValue(true)->falseValue(false), false, true],
+            [Boolean::rule()->strict(true)->trueValue(true)->falseValue(false), '0', false],
+            [Boolean::rule()->strict(true)->trueValue(true)->falseValue(false), [], false],
+            [Boolean::rule()->strict(true)->trueValue(true)->falseValue(false), true, true],
+            [Boolean::rule()->strict(true)->trueValue(true)->falseValue(false), false, true],
         ];
     }
 
@@ -49,14 +49,14 @@ class BooleanTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('boolean', (new Boolean())->getName());
+        $this->assertEquals('boolean', Boolean::rule()->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                (new Boolean()),
+                Boolean::rule(),
                 [
                     'strict' => false,
                     'trueValue' => '1',
@@ -67,7 +67,7 @@ class BooleanTest extends TestCase
                 ],
             ],
             [
-                (new Boolean())->skipOnEmpty(true),
+                Boolean::rule()->skipOnEmpty(true),
                 [
                     'strict' => false,
                     'trueValue' => '1',
@@ -78,7 +78,7 @@ class BooleanTest extends TestCase
                 ],
             ],
             [
-                (new Boolean())->skipOnEmpty(true)->skipOnError(false),
+                Boolean::rule()->skipOnEmpty(true)->skipOnError(false),
                 [
                     'strict' => false,
                     'trueValue' => '1',
@@ -89,7 +89,7 @@ class BooleanTest extends TestCase
                 ],
             ],
             [
-                (new Boolean())->skipOnEmpty(true)->skipOnError(false)->strict(true),
+                Boolean::rule()->skipOnEmpty(true)->skipOnError(false)->strict(true),
                 [
                     'strict' => true,
                     'trueValue' => '1',
@@ -100,7 +100,7 @@ class BooleanTest extends TestCase
                 ],
             ],
             [
-                (new Boolean())->trueValue('YES'),
+                Boolean::rule()->trueValue('YES'),
                 [
                     'strict' => false,
                     'trueValue' => 'YES',
@@ -111,7 +111,7 @@ class BooleanTest extends TestCase
                 ],
             ],
             [
-                (new Boolean())->falseValue('NO'),
+                Boolean::rule()->falseValue('NO'),
                 [
                     'strict' => false,
                     'trueValue' => '1',
@@ -122,7 +122,7 @@ class BooleanTest extends TestCase
                 ],
             ],
             [
-                (new Boolean())->trueValue('YES')->falseValue('NO')->strict(true),
+                Boolean::rule()->trueValue('YES')->falseValue('NO')->strict(true),
                 [
                     'strict' => true,
                     'trueValue' => 'YES',

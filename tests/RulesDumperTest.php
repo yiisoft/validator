@@ -27,7 +27,7 @@ final class RulesDumperTest extends TestCase
             [
                 [
                     'attributeName' => [
-                        (new Number())
+                        Number::rule()
                             ->integer()
                             ->max(100)
                             ->min(10)

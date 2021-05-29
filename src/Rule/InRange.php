@@ -37,9 +37,11 @@ class InRange extends Rule
 
     private string $message = 'This value is invalid.';
 
-    public function __construct(iterable $range)
+    public static function rule(iterable $range): self
     {
-        $this->range = $range;
+        $rule = new self();
+        $rule->range = $range;
+        return $rule;
     }
 
     protected function validateValue($value, ValidationContext $context = null): Result

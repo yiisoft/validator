@@ -17,8 +17,8 @@ class RulesTest extends TestCase
     public function testMethodSyntax(): void
     {
         $rules = new Rules();
-        $rules->add(new Required());
-        $rules->add((new Number())->max(10));
+        $rules->add(Required::rule());
+        $rules->add(Number::rule()->max(10));
 
         $result = $rules->validate(42);
         $this->assertFalse($result->isValid());
@@ -29,8 +29,8 @@ class RulesTest extends TestCase
     {
         $rules = new Rules(
             [
-                new Required(),
-                (new Number())->max(10),
+                Required::rule(),
+                Number::rule()->max(10),
             ]
         );
 
@@ -62,9 +62,9 @@ class RulesTest extends TestCase
     {
         $rules = new Rules(
             [
-                (new Number())->min(10),
-                (new Number())->min(10)->when(fn () => false)->skipOnError(false),
-                (new Number())->min(10)->skipOnError(false),
+                Number::rule()->min(10),
+                Number::rule()->min(10)->when(fn () => false)->skipOnError(false),
+                Number::rule()->min(10)->skipOnError(false),
             ]
         );
 
@@ -78,9 +78,9 @@ class RulesTest extends TestCase
     {
         $rules = new Rules(
             [
-                (new Number())->min(10),
-                (new Number())->min(10)->skipOnError(false),
-                (new Number())->min(10),
+                Number::rule()->min(10),
+                Number::rule()->min(10)->skipOnError(false),
+                Number::rule()->min(10),
             ]
         );
 
@@ -93,8 +93,8 @@ class RulesTest extends TestCase
     public function testAsArray(): void
     {
         $rules = new Rules();
-        $rules->add(new Required());
-        $rules->add((new Number())->max(10));
+        $rules->add(Required::rule());
+        $rules->add(Number::rule()->max(10));
 
         $this->assertEquals([
             [
@@ -118,9 +118,9 @@ class RulesTest extends TestCase
 
         $rules = new Rules(
             [
-                (new Number())->min(10),
-                (new Number())->min(10)->skipOnError(false),
-                (new Number())->min(10)->integer(),
+                Number::rule()->min(10),
+                Number::rule()->min(10)->skipOnError(false),
+                Number::rule()->min(10)->integer(),
             ]
         );
         $this->assertEquals([
@@ -160,11 +160,11 @@ class RulesTest extends TestCase
         ], $rules->asArray());
 
         $rules = new Rules([
-            (new Each(new Rules([
-                (new Number())->max(13),
-                (new Number())->max(14),
-            ]))),
-            (new Number())->min(10),
+            Each::rule(new Rules([
+                Number::rule()->max(13),
+                Number::rule()->max(14),
+            ])),
+            Number::rule()->min(10),
         ]);
 
         $this->assertEquals([
@@ -209,8 +209,8 @@ class RulesTest extends TestCase
     public function testAsArrayWithGroupRule(): void
     {
         $rules = new Rules();
-        $rules->add(new Required());
-        $rules->add(new CustomUrlRule());
+        $rules->add(Required::rule());
+        $rules->add(CustomUrlRule::rule());
 
         $this->assertEquals([
             [

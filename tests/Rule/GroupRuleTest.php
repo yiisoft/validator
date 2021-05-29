@@ -14,7 +14,7 @@ class GroupRuleTest extends TestCase
 {
     public function testValidate(): void
     {
-        $validator = new CustomUrlRule();
+        $validator = CustomUrlRule::rule();
 
         $this->assertTrue($validator->validate('http://домен.рф')->isValid());
         $this->assertFalse($validator->validate('http://доменбольшедвадцатизнаков.рф')->isValid());
@@ -23,19 +23,19 @@ class GroupRuleTest extends TestCase
 
     public function testErrorMessage(): void
     {
-        $validator = new CustomUrlRule();
+        $validator = CustomUrlRule::rule();
         $this->assertEquals(['This value is not a valid.'], $validator->validate('domain')->getErrors());
     }
 
     public function testCustomErrorMessage(): void
     {
-        $validator = (new CustomUrlRule())->message('This value is not valid custom url');
+        $validator = CustomUrlRule::rule()->message('This value is not valid custom url');
         $this->assertEquals(['This value is not valid custom url'], $validator->validate('domain')->getErrors());
     }
 
     public function testOptions(): void
     {
-        $validator = new CustomUrlRule();
+        $validator = CustomUrlRule::rule();
         $this->assertEquals([
             [
                 'required',

@@ -15,7 +15,7 @@ class InRangeTest extends TestCase
 {
     public function testValidate(): void
     {
-        $val = new InRange(range(1, 10));
+        $val = InRange::rule(range(1, 10));
         $this->assertTrue($val->validate(1)->isValid());
         $this->assertFalse($val->validate(0)->isValid());
         $this->assertFalse($val->validate(11)->isValid());
@@ -27,7 +27,7 @@ class InRangeTest extends TestCase
 
     public function testValidateEmpty(): void
     {
-        $rule = (new InRange(range(10, 20)))->skipOnEmpty(false);
+        $rule = InRange::rule(range(10, 20))->skipOnEmpty(false);
         $this->assertFalse($rule->validate(null)->isValid()); //row RangeValidatorTest.php:101
         $this->assertFalse($rule->validate('0')->isValid());
         $this->assertFalse($rule->validate(0)->isValid());
@@ -37,20 +37,20 @@ class InRangeTest extends TestCase
     public function testValidateArrayValue(): void
     {
         // Test in array, values are arrays. IE: ['a'] in [['a'], ['b']]
-        $rule = (new InRange([['a'], ['b']]));
+        $rule = InRange::rule([['a'], ['b']]);
 
         $this->assertTrue($rule->validate(['a'])->isValid());
 
 
         // Test range as ArrayObject.
-        $rule = (new InRange(new \ArrayObject(['a', 'b'])));
+        $rule = InRange::rule(new \ArrayObject(['a', 'b']));
 
         $this->assertTrue($rule->validate('a')->isValid());
     }
 
     public function testValidateStrict(): void
     {
-        $rule = (new InRange(range(1, 10)))
+        $rule = InRange::rule(range(1, 10))
             ->strict();
 
         $this->assertTrue($rule->validate(1)->isValid());
@@ -63,7 +63,7 @@ class InRangeTest extends TestCase
 
     public function testValidateArrayValueStrict(): void
     {
-        $rule = (new InRange(range(1, 10, 1)))
+        $rule = InRange::rule(range(1, 10, 1))
             ->strict();
 
         $this->assertFalse($rule->validate(['1', '2', '3', '4', '5', '6'])->isValid());
@@ -72,7 +72,7 @@ class InRangeTest extends TestCase
 
     public function testValidateNot()
     {
-        $rule = (new InRange(range(1, 10, 1)))
+        $rule = InRange::rule(range(1, 10, 1))
             ->not();
 
         $this->assertFalse($rule->validate(1)->isValid());
@@ -86,14 +86,14 @@ class InRangeTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('inRange', (new InRange(range(1, 10)))->getName());
+        $this->assertEquals('inRange', InRange::rule(range(1, 10))->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                (new InRange(range(1, 10))),
+                InRange::rule(range(1, 10)),
                 [
                     'message' => 'This value is invalid.',
                     'range' => range(1, 10),
@@ -104,7 +104,7 @@ class InRangeTest extends TestCase
                 ],
             ],
             [
-                (new InRange(range(1, 2)))->strict(),
+                InRange::rule(range(1, 2))->strict(),
                 [
                     'message' => 'This value is invalid.',
                     'range' => [1, 2],
@@ -115,7 +115,7 @@ class InRangeTest extends TestCase
                 ],
             ],
             [
-                (new InRange(range(1, 2)))->not(),
+                InRange::rule(range(1, 2))->not(),
                 [
                     'message' => 'This value is invalid.',
                     'range' => [1, 2],

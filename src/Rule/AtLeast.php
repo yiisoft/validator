@@ -35,9 +35,11 @@ class AtLeast extends Rule
     /**
      * @param array $attributes The list of required attributes that will be checked.
      */
-    public function __construct(array $attributes)
+    public static function rule(array $attributes): self
     {
-        $this->attributes = $attributes;
+        $rule = new self();
+        $rule->attributes = $attributes;
+        return $rule;
     }
 
     protected function validateValue($value, ValidationContext $context = null): Result

@@ -15,7 +15,7 @@ class HasLengthTest extends TestCase
 {
     public function testValidate(): void
     {
-        $val = new HasLength();
+        $val = HasLength::rule();
         $this->assertFalse($val->validate(['not a string'])->isValid());
         $this->assertFalse($val->validate(new \stdClass())->isValid());
         $this->assertTrue($val->validate('Just some string')->isValid());
@@ -25,7 +25,7 @@ class HasLengthTest extends TestCase
 
     public function testValidateLength(): void
     {
-        $val = (new HasLength())
+        $val = HasLength::rule()
             ->min(25)
             ->max(25);
         $this->assertTrue($val->validate(str_repeat('x', 25))->isValid());
@@ -33,21 +33,21 @@ class HasLengthTest extends TestCase
         $this->assertFalse($val->validate(str_repeat('x', 125))->isValid());
         $this->assertFalse($val->validate('')->isValid());
 
-        $val = (new HasLength())
+        $val = HasLength::rule()
             ->min(25);
         $this->assertTrue($val->validate(str_repeat('x', 125))->isValid());
         $this->assertTrue($val->validate(str_repeat('€', 25))->isValid());
         $this->assertFalse($val->validate(str_repeat('x', 13))->isValid());
         $this->assertFalse($val->validate('')->isValid());
 
-        $val = (new HasLength())
+        $val = HasLength::rule()
             ->max(25);
         $this->assertTrue($val->validate(str_repeat('x', 25))->isValid());
         $this->assertTrue($val->validate(str_repeat('Ä', 24))->isValid());
         $this->assertfalse($val->validate(str_repeat('x', 1250))->isValid());
         $this->assertTrue($val->validate('')->isValid());
 
-        $val = (new HasLength())
+        $val = HasLength::rule()
             ->min(10)
             ->max(25);
         $this->assertTrue($val->validate(str_repeat('x', 15))->isValid());
@@ -60,7 +60,7 @@ class HasLengthTest extends TestCase
 
     public function testValidateMin(): void
     {
-        $rule = (new HasLength())
+        $rule = HasLength::rule()
             ->min(1);
 
         $result = $rule->validate('');
@@ -75,7 +75,7 @@ class HasLengthTest extends TestCase
 
     public function testValidateMax(): void
     {
-        $rule = (new HasLength())
+        $rule = HasLength::rule()
             ->max(100);
 
         $this->assertTrue($rule->validate(str_repeat('x', 5))->isValid());
@@ -90,7 +90,7 @@ class HasLengthTest extends TestCase
 
     public function testValidateMessages()
     {
-        $rule = (new HasLength())
+        $rule = HasLength::rule()
             ->message('is not string error')
             ->tooShortMessage('is to short test')
             ->tooLongMessage('is to long test')
@@ -104,14 +104,14 @@ class HasLengthTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('hasLength', (new HasLength())->getName());
+        $this->assertEquals('hasLength', HasLength::rule()->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                (new HasLength()),
+                HasLength::rule(),
                 [
                     'message' => 'This value must be a string.',
                     'min' => null,
@@ -124,7 +124,7 @@ class HasLengthTest extends TestCase
                 ],
             ],
             [
-                (new HasLength())->min(3),
+                HasLength::rule()->min(3),
                 [
                     'message' => 'This value must be a string.',
                     'min' => 3,
@@ -137,7 +137,7 @@ class HasLengthTest extends TestCase
                 ],
             ],
             [
-                (new HasLength())->max(3),
+                HasLength::rule()->max(3),
                 [
                     'message' => 'This value must be a string.',
                     'min' => null,
@@ -150,7 +150,7 @@ class HasLengthTest extends TestCase
                 ],
             ],
             [
-                (new HasLength())->min(3)->max(4)->encoding('windows-1251'),
+                HasLength::rule()->min(3)->max(4)->encoding('windows-1251'),
                 [
                     'message' => 'This value must be a string.',
                     'min' => 3,
