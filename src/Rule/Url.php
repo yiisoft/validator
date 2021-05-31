@@ -43,6 +43,11 @@ class Url extends Rule
 
     private string $message = 'This value is not a valid URL.';
 
+    public static function rule(): self
+    {
+        return new self();
+    }
+
     protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();

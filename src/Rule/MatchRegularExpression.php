@@ -36,9 +36,11 @@ class MatchRegularExpression extends Rule
     /**
      * @param string $pattern The regular expression to be matched with.
      */
-    public function __construct(string $pattern)
+    public static function rule(string $pattern): self
     {
-        $this->pattern = $pattern;
+        $rule = new self();
+        $rule->pattern = $pattern;
+        return $rule;
     }
 
     protected function validateValue($value, ValidationContext $context = null): Result

@@ -53,19 +53,24 @@ class Nested extends Rule
     private bool $errorWhenPropertyPathIsNotFound = false;
     private string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.';
 
-    public function __construct(iterable $rules)
+    public static function rule(iterable $rules): self
     {
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         if (empty($rules)) {
             throw new InvalidArgumentException('Rules should not be empty.');
         }
-        if ($this->checkRules($rules)) {
+
+        $rule = new self();
+        if ($rule->checkRules($rules)) {
             throw new InvalidArgumentException(sprintf(
                 'Each rule should be an instance of %s.',
                 RuleInterface::class
             ));
         }
-        $this->rules = $rules;
+
+        $rule->rules = $rules;
+
+        return $rule;
     }
 
     protected function validateValue($value, ValidationContext $context = null): Result

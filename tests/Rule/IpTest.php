@@ -17,7 +17,7 @@ class IpTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Both IPv4 and IPv6 checks can not be disabled at the same time');
-        (new Ip())->disallowIpv4()->disallowIpv6()->validate('');
+        Ip::rule()->disallowIpv4()->disallowIpv6()->validate('');
     }
 
     public function provideRangesForSubstitution(): array
@@ -56,13 +56,13 @@ class IpTest extends TestCase
      */
     public function testRangesSubstitution(array $range, array $expectedRange): void
     {
-        $validator = (new Ip())->ranges($range);
+        $validator = Ip::rule()->ranges($range);
         $this->assertEquals($expectedRange, $validator->getRanges());
     }
 
     public function testValidateOrder(): void
     {
-        $validator = (new Ip())->ranges(['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any']);
+        $validator = Ip::rule()->ranges(['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any']);
 
         $this->assertTrue($validator->validate('10.0.0.1')->isValid());
         $this->assertFalse($validator->validate('10.0.0.2')->isValid());
@@ -88,13 +88,13 @@ class IpTest extends TestCase
      */
     public function testValidateNotAnIP($badIp): void
     {
-        $validator = new Ip();
+        $validator = Ip::rule();
         $this->assertFalse($validator->validate($badIp)->isValid());
     }
 
     public function testValidateIPv4(): void
     {
-        $validator = new Ip();
+        $validator = Ip::rule();
 
         $this->assertTrue($validator->validate('192.168.10.11')->isValid());
         $this->assertFalse($validator->validate('192.168.005.001')->isValid()); // leading zero not supported
@@ -126,7 +126,7 @@ class IpTest extends TestCase
 
     public function testValidateIPv6(): void
     {
-        $validator = new Ip();
+        $validator = Ip::rule();
 
         $this->assertTrue($validator->validate('2008:fa::1')->isValid());
         $this->assertTrue($validator->validate('2008:00fa::0001')->isValid());
@@ -156,7 +156,7 @@ class IpTest extends TestCase
 
     public function testValidateIPvBoth(): void
     {
-        $validator = new Ip();
+        $validator = Ip::rule();
 
         $this->assertTrue($validator->validate('192.168.10.11')->isValid());
         $this->assertTrue($validator->validate('2008:fa::1')->isValid());
@@ -208,7 +208,7 @@ class IpTest extends TestCase
 
     public function testValidateRangeIPv4(): void
     {
-        $validator = (new Ip())->ranges(['10.0.1.0/24']);
+        $validator = Ip::rule()->ranges(['10.0.1.0/24']);
         $this->assertTrue($validator->validate('10.0.1.2')->isValid());
         $this->assertFalse($validator->validate('192.5.1.1')->isValid());
 
@@ -230,7 +230,7 @@ class IpTest extends TestCase
 
     public function testValidateRangeIPv6(): void
     {
-        $validator = (new Ip())->ranges(['2001:db0:1:1::/64']);
+        $validator = Ip::rule()->ranges(['2001:db0:1:1::/64']);
         $this->assertTrue($validator->validate('2001:db0:1:1::6')->isValid());
         $this->assertFalse($validator->validate('2001:db0:1:2::7')->isValid());
 
@@ -246,7 +246,7 @@ class IpTest extends TestCase
 
     public function testValidateRangeIPvBoth(): void
     {
-        $validator = (new Ip())->ranges(['10.0.1.0/24']);
+        $validator = Ip::rule()->ranges(['10.0.1.0/24']);
         $this->assertTrue($validator->validate('10.0.1.2')->isValid());
         $this->assertFalse($validator->validate('192.5.1.1')->isValid());
         $this->assertFalse($validator->validate('2001:db0:1:2::7')->isValid());
@@ -272,14 +272,14 @@ class IpTest extends TestCase
 
     public function testIpv4LeadingZero(): void
     {
-        $this->assertFalse((new Ip())->validate('01.01.01.01')->isValid());
-        $this->assertFalse((new Ip())->validate('010.010.010.010')->isValid());
-        $this->assertFalse((new Ip())->validate('001.001.001.001')->isValid());
+        $this->assertFalse(Ip::rule()->validate('01.01.01.01')->isValid());
+        $this->assertFalse(Ip::rule()->validate('010.010.010.010')->isValid());
+        $this->assertFalse(Ip::rule()->validate('001.001.001.001')->isValid());
     }
 
     public function testNetworkAlias(): void
     {
-        $validator = (new Ip())->network('myNetworkEu', ['1.2.3.4/10', '5.6.7.8'])
+        $validator = Ip::rule()->network('myNetworkEu', ['1.2.3.4/10', '5.6.7.8'])
             ->ranges(['myNetworkEu']);
         $this->assertTrue($validator->validate('1.2.3.4')->isValid());
         $this->assertTrue($validator->validate('5.6.7.8')->isValid());
@@ -287,7 +287,7 @@ class IpTest extends TestCase
 
     public function testNetworkAliasException(): void
     {
-        $validator = (new Ip())->network('myNetworkEu', ['1.2.3.4/10', '5.6.7.8'])
+        $validator = Ip::rule()->network('myNetworkEu', ['1.2.3.4/10', '5.6.7.8'])
             ->ranges(['myNetworkEu']);
 
         $this->expectException(\RuntimeException::class);
@@ -297,14 +297,14 @@ class IpTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('ip', (new Ip())->getName());
+        $this->assertEquals('ip', Ip::rule()->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                (new Ip()),
+                Ip::rule(),
                 [
                     'message' => 'Must be a valid IP address.',
                     'allowIpv4' => true,
@@ -324,7 +324,7 @@ class IpTest extends TestCase
                 ],
             ],
             [
-                (new Ip())->allowIpv4(),
+                Ip::rule()->allowIpv4(),
                 [
                     'message' => 'Must be a valid IP address.',
                     'allowIpv4' => true,
@@ -344,7 +344,7 @@ class IpTest extends TestCase
                 ],
             ],
             [
-                (new Ip())->disallowIpv4(),
+                Ip::rule()->disallowIpv4(),
                 [
                     'message' => 'Must be a valid IP address.',
                     'allowIpv4' => false,
@@ -364,7 +364,7 @@ class IpTest extends TestCase
                 ],
             ],
             [
-                (new Ip())->disallowIpv6(),
+                Ip::rule()->disallowIpv6(),
                 [
                     'message' => 'Must be a valid IP address.',
                     'allowIpv4' => true,
@@ -384,7 +384,7 @@ class IpTest extends TestCase
                 ],
             ],
             [
-                (new Ip())->allowSubnet(),
+                Ip::rule()->allowSubnet(),
                 [
                     'message' => 'Must be a valid IP address.',
                     'allowIpv4' => true,
@@ -404,7 +404,7 @@ class IpTest extends TestCase
                 ],
             ],
             [
-                (new Ip())->requireSubnet(),
+                Ip::rule()->requireSubnet(),
                 [
                     'message' => 'Must be a valid IP address.',
                     'allowIpv4' => true,
@@ -424,7 +424,7 @@ class IpTest extends TestCase
                 ],
             ],
             [
-                (new Ip())->requireSubnet()->disallowSubnet(),
+                Ip::rule()->requireSubnet()->disallowSubnet(),
                 [
                     'message' => 'Must be a valid IP address.',
                     'allowIpv4' => true,
@@ -443,7 +443,7 @@ class IpTest extends TestCase
                     'skipOnError' => true,
                 ],
             ],
-            [(new Ip())->allowNegation(),
+            [Ip::rule()->allowNegation(),
                 [
                     'message' => 'Must be a valid IP address.',
                     'allowIpv4' => true,
@@ -463,7 +463,7 @@ class IpTest extends TestCase
                 ],
             ],
             [
-                (new Ip())->allowNegation()->disallowNegation(),
+                Ip::rule()->allowNegation()->disallowNegation(),
                 [
                     'message' => 'Must be a valid IP address.',
                     'allowIpv4' => true,
@@ -483,7 +483,7 @@ class IpTest extends TestCase
                 ],
             ],
             [
-                (new Ip())->ranges(['private']),
+                Ip::rule()->ranges(['private']),
                 [
                     'message' => 'Must be a valid IP address.',
                     'allowIpv4' => true,

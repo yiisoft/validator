@@ -50,6 +50,11 @@ class HasLength extends Rule
      */
     protected string $encoding = 'UTF-8';
 
+    public static function rule(): self
+    {
+        return new self();
+    }
+
     protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();

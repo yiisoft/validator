@@ -33,6 +33,11 @@ class Boolean extends Rule
 
     private string $message = 'The value must be either "{true}" or "{false}".';
 
+    public static function rule(): self
+    {
+        return new self();
+    }
+
     public function trueValue($value): self
     {
         $new = clone $this;

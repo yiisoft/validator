@@ -15,14 +15,14 @@ class JsonTest extends TestCase
 {
     public function testInvalidJsonValidate(): void
     {
-        $val = new Json();
+        $val = Json::rule();
         $this->assertFalse($val->validate('{"name": "tester"')->isValid());
         $this->assertFalse($val->validate('{"name": tester}')->isValid());
     }
 
     public function testInvalidTypeValidate(): void
     {
-        $val = new Json();
+        $val = Json::rule();
         $this->assertFalse($val->validate(['json'])->isValid());
         $this->assertFalse($val->validate(10)->isValid());
         $this->assertFalse($val->validate(null)->isValid());
@@ -103,9 +103,9 @@ JSON;
 }
 JSON;
 
-        $this->assertTrue((new Json())->validate($json1)->isValid());
-        $this->assertTrue((new Json())->validate($json2)->isValid());
-        $this->assertTrue((new Json())->validate($json3)->isValid());
+        $this->assertTrue(Json::rule()->validate($json1)->isValid());
+        $this->assertTrue(Json::rule()->validate($json2)->isValid());
+        $this->assertTrue(Json::rule()->validate($json3)->isValid());
     }
 
     public function testValidationMessage(): void
@@ -114,7 +114,7 @@ JSON;
             [
                 'The value is not JSON.',
             ],
-            (new Json())->validate('')->getErrors()
+            Json::rule()->validate('')->getErrors()
         );
     }
 
@@ -124,20 +124,20 @@ JSON;
             [
                 'bad json',
             ],
-            (new Json())->message('bad json')->validate('')->getErrors()
+            Json::rule()->message('bad json')->validate('')->getErrors()
         );
     }
 
     public function testName(): void
     {
-        $this->assertEquals('json', (new Json())->getName());
+        $this->assertEquals('json', Json::rule()->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                (new Json()),
+                Json::rule(),
                 [
                     'message' => 'The value is not JSON.',
                     'skipOnEmpty' => false,

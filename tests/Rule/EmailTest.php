@@ -15,7 +15,7 @@ class EmailTest extends TestCase
 {
     public function testValidate(): void
     {
-        $validator = new Email();
+        $validator = Email::rule();
 
         $this->assertTrue($validator->validate('sam@rmcreative.ru')->isValid());
         $this->assertTrue($validator->validate('5011@gmail.com')->isValid());
@@ -71,8 +71,7 @@ class EmailTest extends TestCase
 
             return;
         }
-        $validator = (new Email())
-            ->enableIDN(true);
+        $validator = Email::rule()->enableIDN(true);
 
         $this->assertTrue($validator->validate('5011@example.com')->isValid());
         $this->assertTrue($validator->validate('test-@dummy.com')->isValid());
@@ -123,8 +122,7 @@ class EmailTest extends TestCase
 
     public function testValidateMx(): void
     {
-        $validator = (new Email())
-            ->checkDNS(true);
+        $validator = Email::rule()->checkDNS(true);
 
         $this->assertTrue($validator->validate('5011@gmail.com')->isValid());
 
@@ -186,8 +184,7 @@ class EmailTest extends TestCase
      */
     public function testMalformedAddressesIdnDisabled($value): void
     {
-        $validator = (new Email())
-            ->enableIDN(true);
+        $validator = Email::rule()->enableIDN(true);
         $this->assertFalse($validator->validate($value)->isValid());
     }
 
@@ -208,21 +205,20 @@ class EmailTest extends TestCase
             return;
         }
 
-        $validator = (new Email())
-            ->enableIDN(true);
+        $validator = Email::rule()->enableIDN(true);
         $this->assertFalse($validator->validate($value)->isValid());
     }
 
     public function testName(): void
     {
-        $this->assertEquals('email', (new Email())->getName());
+        $this->assertEquals('email', Email::rule()->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                (new Email()),
+                Email::rule(),
                 [
                     'allowName' => false,
                     'checkDNS' => false,
@@ -233,7 +229,7 @@ class EmailTest extends TestCase
                 ],
             ],
             [
-                (new Email())->allowName(true),
+                Email::rule()->allowName(true),
                 [
                     'allowName' => true,
                     'checkDNS' => false,
@@ -244,7 +240,7 @@ class EmailTest extends TestCase
                 ],
             ],
             [
-                (new Email())->allowName(true)->checkDNS(true),
+                Email::rule()->allowName(true)->checkDNS(true),
                 [
                     'allowName' => true,
                     'checkDNS' => true,
@@ -255,7 +251,7 @@ class EmailTest extends TestCase
                 ],
             ],
             [
-                (new Email())->allowName(true)->enableIDN(true),
+                Email::rule()->allowName(true)->enableIDN(true),
                 [
                     'allowName' => true,
                     'checkDNS' => false,

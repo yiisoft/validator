@@ -33,7 +33,7 @@ class NestedTest extends TestCase
             ],
         ];
 
-        $actualResult = (new Nested($rules))->validate($values);
+        $actualResult = Nested::rule($rules)->validate($values);
 
         $this->assertEquals($expectedResult, $actualResult->isValid());
     }
@@ -41,18 +41,18 @@ class NestedTest extends TestCase
     public function testValidationEmptyRules(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        new Nested([]);
+        Nested::rule([]);
     }
 
     public function testValidationRuleIsNotInstanceOfRule(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        new Nested(['path.to.value' => (new \stdClass())]);
+        Nested::rule(['path.to.value' => (new \stdClass())]);
     }
 
     public function testInvalidValue(): void
     {
-        $validator = (new Nested(['value' => (new Required())]));
+        $validator = Nested::rule(['value' => Required::rule()]);
 
         $result = $validator->validate('');
 
@@ -61,9 +61,9 @@ class NestedTest extends TestCase
 
     public function testValidationMessage(): void
     {
-        $validator = (new Nested([
-            'value' => (new Required())->message('Value cannot be blank.'),
-        ]));
+        $validator = Nested::rule([
+            'value' => Required::rule()->message('Value cannot be blank.'),
+        ]);
 
         $result = $validator->validate(['value' => null]);
 
@@ -72,7 +72,7 @@ class NestedTest extends TestCase
 
     public function testErrorWhenValuePathNotFound(): void
     {
-        $validator = (new Nested(['value' => (new Required())]))
+        $validator = Nested::rule(['value' => Required::rule()])
             ->errorWhenPropertyPathIsNotFound(true);
 
         $result = $validator->validate([]);
@@ -82,7 +82,7 @@ class NestedTest extends TestCase
 
     public function testPropertyPathIsNotFoundMessage(): void
     {
-        $validator = (new Nested(['value' => new Required()]))
+        $validator = Nested::rule(['value' => Required::rule()])
             ->errorWhenPropertyPathIsNotFound(true)
             ->propertyPathIsNotFoundMessage('Property is not found.');
 
@@ -93,7 +93,7 @@ class NestedTest extends TestCase
 
     public function testName(): void
     {
-        $validator = new Nested(['value' => (new Required())]);
+        $validator = Nested::rule(['value' => Required::rule()]);
         $this->assertEquals('nested', $validator->getName());
     }
 
@@ -102,7 +102,7 @@ class NestedTest extends TestCase
      */
     public function testOptions(array $rules, array $expectedOptions): void
     {
-        $validator = new Nested($rules);
+        $validator = Nested::rule($rules);
 
         $options = $validator->getOptions();
 
@@ -145,7 +145,7 @@ class NestedTest extends TestCase
             'success' => [
                 [
                     'author.name' => [
-                        (new HasLength())->min(3),
+                        HasLength::rule()->min(3),
                     ],
                 ],
                 true,
@@ -153,7 +153,7 @@ class NestedTest extends TestCase
             'error' => [
                 [
                     'author.age' => [
-                        (new Number())->min(20),
+                        Number::rule()->min(20),
                     ],
                 ],
                 false,
@@ -161,7 +161,7 @@ class NestedTest extends TestCase
             'key not exists' => [
                 [
                     'author.sex' => [
-                        (new InRange(['male', 'female'])),
+                        InRange::rule(['male', 'female']),
                     ],
                 ],
                 false,
@@ -169,7 +169,7 @@ class NestedTest extends TestCase
             'key not exists, skip empty' => [
                 [
                     'author.sex' => [
-                        (new InRange(['male', 'female']))->skipOnEmpty(true),
+                        InRange::rule(['male', 'female'])->skipOnEmpty(true),
                     ],
                 ],
                 true,

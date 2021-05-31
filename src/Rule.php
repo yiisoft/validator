@@ -21,6 +21,34 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
     private $when = null;
 
     /**
+     * To create an instance of a rule class, the static factory method `rule()` must be implemented
+     * in the final class.
+     *
+     * Simple example:
+     *
+     * ```php
+     * public static function rule(): self
+     * {
+     *     return new self();
+     * }
+     * ```
+     *
+     * Example with parameters:
+     *
+     * ```php
+     * public static function rule(int $count): self
+     * {
+     *     $rule = new self();
+     *     $rule->count = $count;
+     *     return $rule;
+     * }
+     * ```
+     */
+    final protected function __construct()
+    {
+    }
+
+    /**
      * Validates the value
      *
      * @param mixed $value Value to be validated.

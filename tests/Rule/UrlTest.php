@@ -9,6 +9,8 @@ use RuntimeException;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Url;
 
+use function function_exists;
+
 /**
  * @group validators
  */
@@ -30,7 +32,7 @@ class UrlTest extends TestCase
 
     public function testValidate(): void
     {
-        $val = new Url();
+        $val = Url::rule();
         $this->assertFalse($val->validate('google.de')->isValid());
         $this->assertTrue($val->validate('http://google.de')->isValid());
         $this->assertTrue($val->validate('https://google.de')->isValid());
@@ -61,7 +63,7 @@ class UrlTest extends TestCase
 
     public function testValidateWithoutScheme(): void
     {
-        $val = (new Url())
+        $val = Url::rule()
             ->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i');
 
         $this->assertTrue($val->validate('yiiframework.com')->isValid());
@@ -69,7 +71,7 @@ class UrlTest extends TestCase
 
     public function testValidateWithCustomScheme(): void
     {
-        $val = (new Url())
+        $val = Url::rule()
             ->schemes(['http', 'https', 'ftp', 'ftps']);
 
         $this->assertTrue($val->validate('ftp://ftp.ruhr-uni-bochum.de/')->isValid());
@@ -82,12 +84,12 @@ class UrlTest extends TestCase
 
     public function testValidateWithIdn(): void
     {
-        if (!\function_exists('idn_to_ascii')) {
+        if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('intl package required');
             return;
         }
 
-        $val = (new Url())->enableIDN();
+        $val = Url::rule()->enableIDN();
         $this->assertTrue($val->validate('http://äüößìà.de')->isValid());
         // converted via http://mct.verisign-grs.com/convertServlet
         $this->assertTrue($val->validate('http://xn--zcack7ayc9a.de')->isValid());
@@ -95,12 +97,12 @@ class UrlTest extends TestCase
 
     public function testValidateWithIdnType(): void
     {
-        if (!\function_exists('idn_to_ascii')) {
+        if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('intl package required');
             return;
         }
 
-        $val = (new Url())->enableIDN();
+        $val = Url::rule()->enableIDN();
         $this->assertFalse($val->validate('')->isValid());
     }
 
@@ -109,37 +111,37 @@ class UrlTest extends TestCase
         static::$idnFunctionExists = false;
 
         $this->expectException(RuntimeException::class);
-        (new Url())->enableIDN();
+        Url::rule()->enableIDN();
     }
 
     public function testValidateLength(): void
     {
         $url = 'http://' . str_pad('base', 2000, 'url') . '.de';
-        $val = new Url();
+        $val = Url::rule();
         $this->assertFalse($val->validate($url)->isValid());
     }
 
     public function testValidateWithIdnWithoutScheme(): void
     {
-        if (!\function_exists('idn_to_ascii')) {
+        if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('intl package required');
             return;
         }
 
-        $validator = (new Url())->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN();
+        $validator = Url::rule()->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN();
         $this->assertTrue($validator->validate('домен.рф')->isValid());
     }
 
     public function testName(): void
     {
-        $this->assertEquals('url', (new Url())->getName());
+        $this->assertEquals('url', Url::rule()->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                (new Url()),
+                Url::rule(),
                 [
                     'message' => 'This value is not a valid URL.',
                     'enableIDN' => false,
@@ -150,7 +152,7 @@ class UrlTest extends TestCase
                 ],
             ],
             [
-                (new Url())->enableIDN(),
+                Url::rule()->enableIDN(),
                 [
                     'message' => 'This value is not a valid URL.',
                     'enableIDN' => true,
@@ -161,7 +163,7 @@ class UrlTest extends TestCase
                 ],
             ],
             [
-                (new Url())->schemes(['http']),
+                Url::rule()->schemes(['http']),
                 [
                     'message' => 'This value is not a valid URL.',
                     'enableIDN' => false,
@@ -171,7 +173,7 @@ class UrlTest extends TestCase
                     'skipOnError' => true,
                 ],
             ],
-            [(new Url())->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN(),
+            [Url::rule()->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN(),
                 [
                     'message' => 'This value is not a valid URL.',
                     'enableIDN' => true,

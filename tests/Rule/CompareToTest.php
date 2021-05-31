@@ -17,13 +17,13 @@ class CompareToTest extends TestCase
     {
         $value = 18449;
         // default config
-        $validator = new CompareTo($value);
+        $validator = CompareTo::rule($value);
 
         $this->assertTrue($validator->validate($value)->isValid());
         $this->assertTrue($validator->validate((string)$value)->isValid());
         $this->assertFalse($validator->validate($value + 1)->isValid());
         foreach ($this->getOperationTestData($value) as $operator => $tests) {
-            $validator = (new CompareTo($value))
+            $validator = CompareTo::rule($value)
                 ->operator($operator);
 
             foreach ($tests as $test) {
@@ -79,14 +79,14 @@ class CompareToTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('compareTo', (new CompareTo(1))->getName());
+        $this->assertEquals('compareTo', CompareTo::rule(1)->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                (new CompareTo(1)),
+                CompareTo::rule(1),
                 [
                     'type' => 'string',
                     'operator' => '==',
@@ -97,7 +97,7 @@ class CompareToTest extends TestCase
                 ],
             ],
             [
-                (new CompareTo(1))->asNumber(),
+                CompareTo::rule(1)->asNumber(),
                 [
                     'type' => 'number',
                     'operator' => '==',
@@ -108,7 +108,7 @@ class CompareToTest extends TestCase
                 ],
             ],
             [
-                (new CompareTo(1))->asNumber()->operator('>='),
+                CompareTo::rule(1)->asNumber()->operator('>='),
                 [
                     'type' => 'number',
                     'operator' => '>=',
@@ -119,7 +119,7 @@ class CompareToTest extends TestCase
                 ],
             ],
             [
-                (new CompareTo('YES')),
+                CompareTo::rule('YES'),
                 [
                     'type' => 'string',
                     'operator' => '==',
@@ -130,7 +130,7 @@ class CompareToTest extends TestCase
                 ],
             ],
             [
-                (new CompareTo('YES'))->asString()->skipOnEmpty(true),
+                CompareTo::rule('YES')->asString()->skipOnEmpty(true),
                 [
                     'type' => 'string',
                     'operator' => '==',
@@ -141,7 +141,7 @@ class CompareToTest extends TestCase
                 ],
             ],
             [
-                (new CompareTo('YES'))->asString()->operator('!=='),
+                CompareTo::rule('YES')->asString()->operator('!=='),
                 [
                     'type' => 'string',
                     'operator' => '!==',
@@ -152,7 +152,7 @@ class CompareToTest extends TestCase
                 ],
             ],
             [
-                (new CompareTo('YES'))->message('Custom message for {value}'),
+                CompareTo::rule('YES')->message('Custom message for {value}'),
                 [
                     'type' => 'string',
                     'operator' => '==',

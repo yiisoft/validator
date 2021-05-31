@@ -33,8 +33,8 @@ abstract class AbstractDataSetTest extends TestCase
                     'int' => 41,
                 ],
                 [
-                    'bool' => [new Boolean()],
-                    'int' => [new Number()],
+                    'bool' => [Boolean::rule()],
+                    'int' => [Number::rule()],
                 ],
             ],
         ];
@@ -65,10 +65,10 @@ abstract class AbstractDataSetTest extends TestCase
                     'int' => 41,
                 ],
                 [
-                    'bool' => [new Boolean()],
+                    'bool' => [Boolean::rule()],
                     'int' => [
-                        (new Number())->integer(),
-                        (new Number())->integer()->min(44),
+                        Number::rule()->integer(),
+                        Number::rule()->integer()->min(44),
                         static function ($value): Result {
                             $result = new Result();
                             if ($value !== 42) {

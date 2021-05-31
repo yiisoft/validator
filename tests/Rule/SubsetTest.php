@@ -11,7 +11,7 @@ class SubsetTest extends TestCase
 {
     public function testValidateArrayValue(): void
     {
-        $rule = (new Subset(range(1, 10)));
+        $rule = Subset::rule(range(1, 10));
         $this->assertTrue($rule->validate([1, 2, 3, 4, 5])->isValid());
         $this->assertTrue($rule->validate([6, 7, 8, 9, 10])->isValid());
         $this->assertFalse($rule->validate([0, 1, 2])->isValid());
@@ -22,19 +22,19 @@ class SubsetTest extends TestCase
     public function testValidateSubsetArrayable(): void
     {
         // Test in array, values are arrays. IE: ['a', 'b'] subset [['a', 'b', 'c']
-        $rule = (new Subset(['a', 'b', 'c']));
+        $rule = Subset::rule(['a', 'b', 'c']);
 
         $this->assertTrue($rule->validate(['a', 'b'])->isValid());
 
         // Test in array, values are arrays. IE: ['a', 'b'] subset [['a', 'b', 'c']
-        $rule = (new Subset(['a', 'b', 'c']));
+        $rule = Subset::rule(['a', 'b', 'c']);
 
         $this->assertTrue($rule->validate(new \ArrayObject(['a', 'b']))->isValid());
     }
 
     public function testValidateEmpty()
     {
-        $rule = (new Subset(range(10, 20, 1)))
+        $rule = Subset::rule(range(10, 20, 1))
             ->skipOnEmpty(false);
 
         $this->assertTrue($rule->validate([])->isValid());
@@ -42,6 +42,6 @@ class SubsetTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('subset', (new Subset(range(1, 10)))->getName());
+        $this->assertEquals('subset', Subset::rule(range(1, 10))->getName());
     }
 }

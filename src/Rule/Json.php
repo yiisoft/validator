@@ -20,6 +20,11 @@ class Json extends Rule
 
     private string $message = 'The value is not JSON.';
 
+    public static function rule(): self
+    {
+        return new self();
+    }
+
     protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();

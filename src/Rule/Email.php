@@ -59,6 +59,11 @@ class Email extends Rule
 
     private string $message = 'This value is not a valid email address.';
 
+    public static function rule(): self
+    {
+        return new self();
+    }
+
     protected function validateValue($value, ValidationContext $context = null): Result
     {
         $originalValue = $value;
