@@ -64,7 +64,7 @@ $rules = new Rules([
 ]);
 
 $result = $rules->validate(41);
-if ($result->isValid() === false) {
+if ($result->isNotValid()) {
     foreach ($result->getErrors() as $error) {
         // ...
     }

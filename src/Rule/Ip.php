@@ -243,7 +243,7 @@ class Ip extends Rule
             $result->addError($this->formatMessage($this->ipv4NotAllowed));
             return $result;
         }
-        if (!$result->isValid()) {
+        if ($result->isNotValid()) {
             return $result;
         }
         if ($cidr !== null) {

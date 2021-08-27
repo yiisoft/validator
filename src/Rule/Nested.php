@@ -101,7 +101,7 @@ class Nested extends Rule
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
             $aggregateRule = new Rules($rulesSet);
             $itemResult = $aggregateRule->validate($validatedValue);
-            if ($itemResult->isValid() === false) {
+            if ($itemResult->isNotValid()) {
                 foreach ($itemResult->getErrors() as $error) {
                     $result->addError($error);
                 }

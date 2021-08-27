@@ -22,7 +22,7 @@ abstract class GroupRule extends Rule
     protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();
-        if (!$this->getRules()->validate($value, $context)->isValid()) {
+        if ($this->getRules()->validate($value, $context)->isNotValid()) {
             $result->addError($this->formatMessage($this->message));
         }
 

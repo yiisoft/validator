@@ -16,6 +16,11 @@ final class Result
         return $this->errors === [];
     }
 
+    public function isNotValid(): bool
+    {
+        return $this->isValid() === false;
+    }
+
     public function addError(string $message): void
     {
         $this->errors[] = $message;

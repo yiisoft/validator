@@ -23,7 +23,7 @@ final class ResultSet implements IteratorAggregate
 
     public function addResult(string $attribute, Result $result): void
     {
-        if (!$result->isValid()) {
+        if ($result->isNotValid()) {
             $this->isValid = false;
         }
 
@@ -63,7 +63,7 @@ final class ResultSet implements IteratorAggregate
     {
         $errors = [];
         foreach ($this->results as $attribute => $result) {
-            if (!$result->isValid()) {
+            if ($result->isNotValid()) {
                 $errors[$attribute] = $result->getErrors();
             }
         }

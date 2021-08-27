@@ -39,7 +39,7 @@ class Each extends Rule
 
         foreach ($value as $item) {
             $itemResult = $this->rules->validate($item, $context);
-            if ($itemResult->isValid() === false) {
+            if ($itemResult->isNotValid()) {
                 foreach ($itemResult->getErrors() as $error) {
                     $result->addError(
                         $this->formatMessage(
