@@ -52,8 +52,8 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
 
 $rules = new Rules([
-    new Required(),
-    (new Number())->min(10),
+    Required::rule(),
+    Number::rule()->min(10),
     static function ($value): Result {
         $result = new Result();
         if ($value !== 42) {
@@ -103,7 +103,7 @@ $moneyTransfer = new MoneyTransfer(142);
 
 $rules = [    
     'amount' => [
-        (new Number())->integer()->max(100),
+        Number::rule()->integer()->max(100),
         static function ($value): Result {
             $result = new Result();
             if ($value === 13) {
@@ -130,7 +130,7 @@ By default, if an error occurred during validation of an attribute, further rule
 To change this behavior use `skipOnError(false)` when configuring rules:  
 
 ```php
-(new Number())->integer()->max(100)->skipOnError(false)
+Number::rule()->integer()->max(100)->skipOnError(false)
 ```
 
 #### Skipping empty values
@@ -139,7 +139,7 @@ By default, empty values are validated. That is undesirable if you need to allow
 To change this behavior use `skipOnEmpty(true)`:
 
 ```php
-(new Number())->integer()->max(100)->skipOnEmpty(true)
+Number::rule()->integer()->max(100)->skipOnEmpty(true)
 ```
 
 ### Conditional validation
@@ -147,7 +147,7 @@ To change this behavior use `skipOnEmpty(true)`:
 In some cases there is a need to apply rule conditionally. It could be performed by using `when()`:
 
 ```php
-(new Number())->integer()->min(100)->when(static function ($value, DataSetInterface $dataSet) {
+Number::rule()->integer()->min(100)->when(static function ($value, DataSetInterface $dataSet) {
     return $dataSet->getAttributeValue('country') === Country::USA;
 });
 ```
@@ -225,8 +225,8 @@ final class UsernameRule extends GroupRule
     public function getRules(): Rules
     {
         return new Rules([
-            (new HasLength())->min(2)->max(20),
-            new MatchRegularExpression('~[a-z_\-]~i')
+            HasLength::rule()->min(2)->max(20),
+            MatchRegularExpression::rule('~[a-z_\-]~i')
         ]);
     }
 }
@@ -241,8 +241,8 @@ use Yiisoft\Validator\Rule\Email;
 $validator = new Validator();
 
 $rules= [
-    'username' => new UsernameRule(),
-    'email' => [new Email()]
+    'username' => UsernameRule::rule(),
+    'email' => [Email::rule()]
 ];
 $results = $validator->validate($user, $rules);
 foreach ($results as $attribute => $result) {
