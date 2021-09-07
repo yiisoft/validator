@@ -247,7 +247,7 @@ class NumberTest extends TestCase
 
     public function getDataSet(array $attributeValues): DataSetInterface
     {
-        return new class($attributeValues) implements DataSetInterface {
+        return new class ($attributeValues) implements DataSetInterface {
             private array $data;
 
             public function __construct(array $data)
