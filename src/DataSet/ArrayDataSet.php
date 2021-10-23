@@ -16,7 +16,7 @@ final class ArrayDataSet implements DataSetInterface
         $this->data = $data;
     }
 
-    public function getAttributeValue(string $attribute)
+    public function getRawAttributeValue(string $attribute)
     {
         if (!$this->hasAttribute($attribute)) {
             throw new MissingAttributeException("There is no \"$attribute\" key in the array.");

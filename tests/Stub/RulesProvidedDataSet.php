@@ -18,7 +18,7 @@ final class RulesProvidedDataSet implements RulesProviderInterface
         $this->rules = $rules;
     }
 
-    public function getAttributeValue(string $attribute)
+    public function getRawAttributeValue(string $attribute)
     {
         if (!$this->hasAttribute($attribute)) {
             throw new MissingAttributeException("There is no \"$attribute\" attribute in the class.");

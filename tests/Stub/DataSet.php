@@ -16,7 +16,7 @@ final class DataSet implements DataSetInterface
         $this->data = $data;
     }
 
-    public function getAttributeValue(string $attribute)
+    public function getRawAttributeValue(string $attribute)
     {
         if (!$this->hasAttribute($attribute)) {
             throw new MissingAttributeException("There is no \"$attribute\" attribute in the class.");

@@ -15,7 +15,7 @@ final class ScalarDataSet implements DataSetInterface
         $this->value = $value;
     }
 
-    public function getAttributeValue(string $attribute)
+    public function getRawAttributeValue(string $attribute)
     {
         return $this->value;
     }
