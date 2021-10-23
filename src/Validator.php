@@ -46,10 +46,7 @@ final class Validator implements ValidatorInterface
             }
             $results->addResult(
                 $attribute,
-                $aggregateRule->validate(
-                    $data->getRawAttributeValue($attribute) ?? $data->getAttributeValue($attribute),
-                    $context->withAttribute($attribute),
-                )
+                $aggregateRule->validate($data->getRawAttributeValue($attribute), $context->withAttribute($attribute))
             );
         }
         if ($data instanceof PostValidationHookInterface) {
