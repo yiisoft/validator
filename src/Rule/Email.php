@@ -103,7 +103,7 @@ class Email extends Rule
                     $value
                 ));
                 if ($valid && $this->checkDNS) {
-                    $valid = dns_check_record($matches['domain'] . '.', 'MX') || dns_check_record($matches['domain'] . '.', 'A');
+                    $valid = checkdnsrr($matches['domain'] . '.', 'MX') || checkdnsrr($matches['domain'] . '.', 'A');
                 }
             }
         }
