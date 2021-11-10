@@ -26,8 +26,11 @@ class Url extends Rule
      * @var string the regular expression used to validateValue the attribute value.
      * The pattern may contain a `{schemes}` token that will be replaced
      * by a regular expression which represents the {@see schemes()}.
+     *
+     * Note that if you want to reuse the pattern in HTML5 input it should have ^ and $, should not have any modifiers
+     * and should not be case-insensitive.
      */
-    private string $pattern = '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i';
+    private string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/';
     /**
      * @var array list of URI schemes which should be considered valid. By default, http and https
      * are considered to be valid schemes.
@@ -91,7 +94,7 @@ class Url extends Rule
     private function getPattern(): string
     {
         if (strpos($this->pattern, '{schemes}') !== false) {
-            return str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
+            return str_replace('{schemes}', '((?i)' . implode('|', $this->validSchemes) . ')', $this->pattern);
         }
 
         return $this->pattern;
