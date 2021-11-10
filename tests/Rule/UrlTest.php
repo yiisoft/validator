@@ -82,6 +82,13 @@ class UrlTest extends TestCase
         $this->assertFalse($val->validate('//yiiframework.com')->isValid());
     }
 
+    public function testSchemaShouldBeCaseInsensitive(): void
+    {
+        $val = Url::rule()->schemes(['http', 'FTP']);
+        $this->assertTrue($val->validate('HtTp://www.yiiframework.com/')->isValid());
+        $this->assertTrue($val->validate('fTp://www.yiiframework.com/')->isValid());
+    }
+
     public function testValidateWithIdn(): void
     {
         if (!function_exists('idn_to_ascii')) {

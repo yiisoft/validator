@@ -94,7 +94,7 @@ class Url extends Rule
     private function getPattern(): string
     {
         if (strpos($this->pattern, '{schemes}') !== false) {
-            return str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
+            return str_replace('{schemes}', '((?i)' . implode('|', $this->validSchemes) . ')', $this->pattern);
         }
 
         return $this->pattern;
