@@ -30,7 +30,7 @@ class Url extends Rule
      * Note that if you want to reuse the pattern in HTML5 input it should have ^ and $, should not have any modifiers
      * and should not be case-insensitive.
      */
-    private string $pattern = '^(http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?[?\/#]?.*$';
+    private string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/';
     /**
      * @var array list of URI schemes which should be considered valid. By default, http and https
      * are considered to be valid schemes.

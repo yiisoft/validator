@@ -64,7 +64,7 @@ class UrlTest extends TestCase
     public function testValidateWithoutScheme(): void
     {
         $val = Url::rule()
-            ->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i');
+            ->pattern('/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)/');
 
         $this->assertTrue($val->validate('yiiframework.com')->isValid());
     }
@@ -140,45 +140,45 @@ class UrlTest extends TestCase
     public function optionsProvider(): array
     {
         return [
-            [
+            'default' => [
                 Url::rule(),
                 [
                     'message' => 'This value is not a valid URL.',
                     'enableIDN' => false,
                     'validSchemes' => ['http', 'https'],
-                    'pattern' => '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i',
+                    'pattern' => '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ],
             ],
-            [
+            'IDN enabled' => [
                 Url::rule()->enableIDN(),
                 [
                     'message' => 'This value is not a valid URL.',
                     'enableIDN' => true,
                     'validSchemes' => ['http', 'https'],
-                    'pattern' => '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i',
+                    'pattern' => '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ],
             ],
-            [
+            'HTTP scheme only' => [
                 Url::rule()->schemes(['http']),
                 [
                     'message' => 'This value is not a valid URL.',
                     'enableIDN' => false,
                     'validSchemes' => ['http'],
-                    'pattern' => '/^{schemes}:\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(?::\d{1,5})?(?:$|[?\/#])/i',
+                    'pattern' => '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ],
             ],
-            [Url::rule()->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN(),
+            'custom pattern' => [Url::rule()->pattern('/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/')->enableIDN(),
                 [
                     'message' => 'This value is not a valid URL.',
                     'enableIDN' => true,
                     'validSchemes' => ['http', 'https'],
-                    'pattern' => '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i',
+                    'pattern' => '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ],

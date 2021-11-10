@@ -48,7 +48,7 @@ class GroupRuleTest extends TestCase
                 'message' => 'This value is not a valid URL.',
                 'enableIDN' => true,
                 'validSchemes' => ['http', 'https',],
-                'pattern' => '/^{schemes}:\\/\\/(([A-Z0-9][A-Z0-9_-]*)(\\.[A-Z0-9][A-Z0-9_-]*)+)(?::\\d{1,5})?(?:$|[?\\/#])/i',
+                'pattern' => '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
             ],
