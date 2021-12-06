@@ -417,8 +417,8 @@ final class Ip extends Rule
      */
     private function parseNegatedRange($string): array
     {
-        $isNegated = strpos($string, static::NEGATION_CHAR) === 0;
-        return [$isNegated, $isNegated ? substr($string, strlen(static::NEGATION_CHAR)) : $string];
+        $isNegated = strpos($string, self::NEGATION_CHAR) === 0;
+        return [$isNegated, $isNegated ? substr($string, strlen(self::NEGATION_CHAR)) : $string];
     }
 
     /**
@@ -442,7 +442,7 @@ final class Ip extends Rule
                 $replacements = $this->prepareRanges($this->networks[$range]);
                 foreach ($replacements as &$replacement) {
                     [$isReplacementNegated, $replacement] = $this->parseNegatedRange($replacement);
-                    $result[] = ($isRangeNegated && !$isReplacementNegated ? static::NEGATION_CHAR : '') . $replacement;
+                    $result[] = ($isRangeNegated && !$isReplacementNegated ? self::NEGATION_CHAR : '') . $replacement;
                 }
             } else {
                 $result[] = $string;
@@ -460,7 +460,7 @@ final class Ip extends Rule
     public function getIpParsePattern(): string
     {
         return '/^(?<not>' . preg_quote(
-            static::NEGATION_CHAR,
+            self::NEGATION_CHAR,
             '/'
         ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }

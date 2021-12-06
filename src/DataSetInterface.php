@@ -14,8 +14,9 @@ interface DataSetInterface
     /**
      * Get specified attribute value.
      *
-     * @return mixed
      * @throws MissingAttributeException if there is no such value.
+     *
+     * @return mixed
      */
     public function getAttributeValue(string $attribute);
 
