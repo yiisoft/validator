@@ -17,7 +17,7 @@ use function is_array;
  * If the {@see MatchRegularExpression::not()} is used, the validator will ensure the attribute value do NOT match
  * the pattern.
  */
-class MatchRegularExpression extends Rule
+final class MatchRegularExpression extends Rule
 {
     use HasValidationErrorMessage;
 

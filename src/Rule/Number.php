@@ -16,7 +16,7 @@ use Yiisoft\Validator\ValidationContext;
  * or {@see Number::$numberPattern}. Optionally, you may configure the {@see Number::max()} and {@see Number::min()}
  * to ensure the number is within certain range.
  */
-class Number extends Rule
+final class Number extends Rule
 {
     /**
      * @var bool whether the attribute value can only be an integer. Defaults to false.

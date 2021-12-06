@@ -16,7 +16,7 @@ use function is_string;
  *
  * Note, this validator should only be used with string-typed attributes.
  */
-class HasLength extends Rule
+final class HasLength extends Rule
 {
     use HasValidationErrorMessage;
 

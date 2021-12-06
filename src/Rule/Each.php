@@ -13,7 +13,7 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * Each validator validates an array by checking each of its elements against a set of rules
  */
-class Each extends Rule
+final class Each extends Rule
 {
     use HasValidationErrorMessage;
 

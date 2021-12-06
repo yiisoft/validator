@@ -12,7 +12,7 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * BooleanValidator checks if the attribute value is a boolean value or a value corresponding to it.
  */
-class Boolean extends Rule
+final class Boolean extends Rule
 {
     use HasValidationErrorMessage;
 

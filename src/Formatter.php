@@ -8,7 +8,7 @@ use function is_array;
 use function is_object;
 use function is_resource;
 
-class Formatter implements FormatterInterface
+final class Formatter implements FormatterInterface
 {
     public function format(string $message, array $parameters = []): string
     {

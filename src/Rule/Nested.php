@@ -43,7 +43,7 @@ use function is_object;
  * ]);
  * ```
  */
-class Nested extends Rule
+final class Nested extends Rule
 {
     /**
      * @var Rule[][]

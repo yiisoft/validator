@@ -9,7 +9,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
-class Callback extends Rule
+final class Callback extends Rule
 {
     /**
      * @var callable

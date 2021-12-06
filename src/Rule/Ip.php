@@ -34,7 +34,7 @@ use function strlen;
  * @property array $ranges The IPv4 or IPv6 ranges that are allowed or forbidden. See {@see Ip::ranges()} for
  * detailed description.
  */
-class Ip extends Rule
+final class Ip extends Rule
 {
     /**
      * Negation char.

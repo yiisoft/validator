@@ -22,7 +22,7 @@ use Yiisoft\Validator\ValidationContext;
  * are compared byte by byte. When comparing numbers, make sure to call the {@see CompareTo::asNumber()}
  * to enable numeric comparison.
  */
-class CompareTo extends Rule
+final class CompareTo extends Rule
 {
     use HasValidationErrorMessage;
 
