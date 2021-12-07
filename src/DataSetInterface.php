@@ -14,7 +14,7 @@ interface DataSetInterface
     /**
      * Get specified attribute value.
      *
-     * @throws MissingAttributeException if there is no such value.
+     * @throws MissingAttributeException If there is no such value.
      *
      * @return mixed
      */
