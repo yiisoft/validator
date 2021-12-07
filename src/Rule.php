@@ -106,7 +106,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
 
     /**
      * Add a PHP callable whose return value determines whether this rule should be applied.
-     * By default rule will be always applied.
+     * By default, rule will always be applied.
      *
      * The signature of the callable should be `function ($value, ValidationContext $context): bool`,
      * where `$value` and `$context` refer to the value validated and the validation context.

@@ -32,7 +32,6 @@ final class Validator implements ValidatorInterface
     {
         $data = $this->normalizeDataSet($data);
         if ($data instanceof RulesProviderInterface) {
-            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $rules = $data->getRules();
         }
 

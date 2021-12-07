@@ -9,7 +9,7 @@ use Yiisoft\Validator\Rule\Callback;
 use function is_callable;
 
 /**
- * Rules represents multiple rules for a single value
+ * Rules represents multiple rules for a single value.
  */
 final class Rules
 {

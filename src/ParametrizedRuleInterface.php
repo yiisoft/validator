@@ -12,7 +12,7 @@ interface ParametrizedRuleInterface extends RuleInterface
 {
     /**
      * Get name of the rule to be used when rule is converted to array.
-     * By default it returns base name of the class, first letter in lowercase.
+     * By default, it returns base name of the class, first letter in lowercase.
      *
      * @return string
      */

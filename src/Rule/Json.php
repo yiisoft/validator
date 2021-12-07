@@ -14,7 +14,7 @@ use function is_string;
 /**
  * JsonValidator validates that the attribute value is a valid json
  */
-class Json extends Rule
+final class Json extends Rule
 {
     use HasValidationErrorMessage;
 

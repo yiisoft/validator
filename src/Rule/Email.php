@@ -16,7 +16,7 @@ use function strlen;
 /**
  * EmailValidator validates that the attribute value is a valid email address.
  */
-class Email extends Rule
+final class Email extends Rule
 {
     use HasValidationErrorMessage;
 

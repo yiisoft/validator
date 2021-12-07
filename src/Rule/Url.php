@@ -18,7 +18,7 @@ use function strlen;
  * Note that this validator only checks if the URL scheme and host part are correct.
  * It does not check the remaining parts of a URL.
  */
-class Url extends Rule
+final class Url extends Rule
 {
     use HasValidationErrorMessage;
 

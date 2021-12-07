@@ -9,7 +9,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
-class Subset extends Rule
+final class Subset extends Rule
 {
     /**
      * @var iterable

@@ -12,7 +12,7 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * AtLeastValidator checks if at least $min of many attributes are filled.
  */
-class AtLeast extends Rule
+final class AtLeast extends Rule
 {
     use HasValidationErrorMessage;
 

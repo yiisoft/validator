@@ -17,7 +17,7 @@ use Yiisoft\Validator\Rule;
  * If the {@see InRange::not()} is called, the validator will ensure the attribute value
  * is NOT among the specified range.
  */
-class InRange extends Rule
+final class InRange extends Rule
 {
     use HasValidationErrorMessage;
 

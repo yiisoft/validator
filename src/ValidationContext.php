@@ -12,8 +12,8 @@ use Yiisoft\Arrays\ArrayHelper;
 final class ValidationContext
 {
     private ?DataSetInterface $dataSet;
-    private ?string $attribute = null;
-    private array $parameters = [];
+    private ?string $attribute;
+    private array $parameters;
 
     /**
      * @param DataSetInterface|null $dataSet Data set the attribute belongs to. Null if a single value is validated.

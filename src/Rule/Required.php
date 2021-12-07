@@ -14,7 +14,7 @@ use function is_string;
 /**
  * RequiredValidator validates that the specified attribute does not have null or empty value.
  */
-class Required extends Rule
+final class Required extends Rule
 {
     use HasValidationErrorMessage;
 
