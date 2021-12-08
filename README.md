@@ -57,7 +57,7 @@ $rules = new Rules([
     static function ($value): Result {
         $result = new Result();
         if ($value !== 42) {
-            $result->addError('Value should be 42!');
+            $result->addError('Value should be 42.');
         }
         return $result;
     }
@@ -107,7 +107,7 @@ $rules = [
         static function ($value): Result {
             $result = new Result();
             if ($value === 13) {
-                $result->addError('Value should not be 13!');
+                $result->addError('Value should not be 13.');
             }
             return $result;
         }
@@ -170,8 +170,9 @@ final class Pi extends Rule
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
     {
         $result = new Result();
-        if ($value != M_PI) {
-            $result->addError('Value is not PI');
+        $equal = \abs($value - M_PI) < PHP_FLOAT_EPSILON;
+        if (!$equal) {
+            $result->addError('Value is not PI.');
         }
         return $result;
     }
@@ -198,7 +199,7 @@ final class CompanyName extends Rule
 
         if ($hasCompany && $this->isCompanyNameValid($value) === false) {
             
-            $result->addError('Company name is not valid');
+            $result->addError('Company name is not valid.');
         }
         return $result;
     }
@@ -206,6 +207,40 @@ final class CompanyName extends Rule
     private function isCompanyNameValid(string $value): bool
     {
         // check company name    
+    }
+}
+```
+
+In case you need extra dependencies, these could be passed to the rule when it is created:
+
+```php
+$rule = NoLessThanExistingBidRule::rule($connection);
+```
+
+That would work with the following implementation:
+
+```php
+final class NoLessThanExistingBidRule extends Rule
+{
+    private ConnectionInterface $connection;
+
+    public static function rule(ConnectionInterface $connection): self
+    {
+        $rule = new self();
+        $rule->connection = $connection;
+        return $rule;
+    }
+    
+    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    {
+        $result = new Result();
+        
+        $currentMax = $connection->query('SELECT MAX(price) FROM bid')->scalar();
+        if ($value <= $currentMax) {
+            $result->addError('There is a higher bid.');
+        }
+
+        return $result;
     }
 }
 ```

@@ -36,10 +36,11 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      * Example with parameters:
      *
      * ```php
-     * public static function rule(int $count): self
+     * public static function rule(int $count, ConnectionInterface $connection): self
      * {
      *     $rule = new self();
      *     $rule->count = $count;
+     *     $rule->connection = $connection;
      *     return $rule;
      * }
      * ```
