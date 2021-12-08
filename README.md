@@ -172,7 +172,7 @@ final class Pi extends Rule
         $result = new Result();
         $equal = \abs($value - M_PI) < PHP_FLOAT_EPSILON;
         if (!$equal) {
-            $result->addError('Value is not PI.');
+            $result->addError($this->formatMessage('Value is not PI.'));
         }
         return $result;
     }
@@ -199,7 +199,7 @@ final class CompanyName extends Rule
 
         if ($hasCompany && $this->isCompanyNameValid($value) === false) {
             
-            $result->addError('Company name is not valid.');
+            $result->addError($this->formatMessage('Company name is not valid.'));
         }
         return $result;
     }
@@ -237,7 +237,7 @@ final class NoLessThanExistingBidRule extends Rule
         
         $currentMax = $connection->query('SELECT MAX(price) FROM bid')->scalar();
         if ($value <= $currentMax) {
-            $result->addError('There is a higher bid.');
+            $result->addError($this->formatMessage('There is a higher bid of {bid}.', ['bid' => $currentMax]));
         }
 
         return $result;
