@@ -39,11 +39,13 @@ final class HasLength extends Rule
     /**
      * @var string user-defined error message used when the length of the value is smaller than {@see $min}.
      */
-    private string $tooShortMessage = 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.';
+    private string $tooShortMessage = 'This value should contain at least {min} characters or more, currently has ' .
+        '{length} characters.';
     /**
      * @var string user-defined error message used when the length of the value is greater than {@see $max}.
      */
-    private string $tooLongMessage = 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.';
+    private string $tooLongMessage = 'This value must contain at most {max} characters or less, currently has ' .
+        '{length} characters.';
     /**
      * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
      * If this property is not set, application wide encoding will be used.
@@ -67,10 +69,10 @@ final class HasLength extends Rule
         $length = mb_strlen($value, $this->encoding);
 
         if ($this->min !== null && $length < $this->min) {
-            $result->addError($this->formatMessage($this->tooShortMessage, ['min' => $this->min]));
+            $result->addError($this->formatMessage($this->tooShortMessage, ['min' => $this->min, 'length' => $length]));
         }
         if ($this->max !== null && $length > $this->max) {
-            $result->addError($this->formatMessage($this->tooLongMessage, ['max' => $this->max]));
+            $result->addError($this->formatMessage($this->tooLongMessage, ['max' => $this->max, 'length' => $length]));
         }
 
         return $result;
@@ -118,9 +120,13 @@ final class HasLength extends Rule
             [
                 'message' => $this->formatMessage($this->message),
                 'min' => $this->min,
-                'tooShortMessage' => $this->formatMessage($this->tooShortMessage, ['min' => $this->min]),
+                'tooShortMessage' => $this->formatMessage(
+                    $this->tooShortMessage, ['min' => $this->min, 'length' => strlen($this->message)]
+                ),
                 'max' => $this->max,
-                'tooLongMessage' => $this->formatMessage($this->tooLongMessage, ['max' => $this->max]),
+                'tooLongMessage' => $this->formatMessage(
+                    $this->tooLongMessage, ['max' => $this->max, 'length' => strlen($this->message)]
+                ),
                 'encoding' => $this->encoding,
             ],
         );
