@@ -119,11 +119,13 @@ final class HasLength extends Rule
                 'message' => $this->formatMessage($this->message),
                 'min' => $this->min,
                 'tooShortMessage' => $this->formatMessage(
-                    $this->tooShortMessage, ['min' => $this->min, 'length' => strlen($this->message)]
+                    $this->tooShortMessage,
+                    ['min' => $this->min, 'length' => strlen($this->message)]
                 ),
                 'max' => $this->max,
                 'tooLongMessage' => $this->formatMessage(
-                    $this->tooLongMessage, ['max' => $this->max, 'length' => strlen($this->message)]
+                    $this->tooLongMessage,
+                    ['max' => $this->max, 'length' => strlen($this->message)]
                 ),
                 'encoding' => $this->encoding,
             ],
