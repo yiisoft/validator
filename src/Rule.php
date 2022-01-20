@@ -93,16 +93,13 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
         return $new;
     }
 
-    protected function formatMessage(string $message, array $parameters = []): string
+    protected function formatMessage(string $message, array $parameters = [], string $locale = 'en-US'): string
     {
         if ($this->formatter === null) {
             $this->formatter = new Formatter();
         }
 
-        return $this->formatter->format(
-            $message,
-            $parameters
-        );
+        return $this->formatter->format($message, $parameters, $locale);
     }
 
     /**
