@@ -39,13 +39,11 @@ final class HasLength extends Rule
     /**
      * @var string user-defined error message used when the length of the value is smaller than {@see $min}.
      */
-    private string $tooShortMessage = 'This value should contain at least {min} characters or more, currently has ' .
-        '{length} characters.';
+    private string $tooShortMessage = 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.';
     /**
      * @var string user-defined error message used when the length of the value is greater than {@see $max}.
      */
-    private string $tooLongMessage = 'This value must contain at most {max} characters or less, currently has ' .
-        '{length} characters.';
+    private string $tooLongMessage = 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.';
     /**
      * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
      * If this property is not set, application wide encoding will be used.

@@ -67,7 +67,7 @@ class HasLengthTest extends TestCase
         $this->assertFalse($result->isValid());
 
         $this->assertStringContainsString(
-            'This value should contain at least 1 characters or more, currently has 0 characters.',
+            'This value should contain at least 1 character.',
             $result->getErrors()[0]
         );
         $this->assertTrue($rule->validate(str_repeat('x', 5))->isValid());
@@ -83,7 +83,7 @@ class HasLengthTest extends TestCase
         $result = $rule->validate(str_repeat('x', 1230));
         $this->assertFalse($result->isValid());
         $this->assertStringContainsString(
-            'This value must contain at most 100 characters or less, currently has 1230 characters.',
+            'This value should contain at most 100 characters.',
             $result->getErrors()[0]
         );
     }
@@ -115,9 +115,9 @@ class HasLengthTest extends TestCase
                 [
                     'message' => 'This value must be a string.',
                     'min' => null,
-                    'tooShortMessage' => 'This value should contain at least  characters or more, currently has 28 characters.',
+                    'tooShortMessage' => 'This value should contain at least 0 characters.',
                     'max' => null,
-                    'tooLongMessage' => 'This value must contain at most  characters or less, currently has 28 characters.',
+                    'tooLongMessage' => 'This value should contain at most 0 characters.',
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
@@ -128,9 +128,9 @@ class HasLengthTest extends TestCase
                 [
                     'message' => 'This value must be a string.',
                     'min' => 3,
-                    'tooShortMessage' => 'This value should contain at least 3 characters or more, currently has 28 characters.',
+                    'tooShortMessage' => 'This value should contain at least 3 characters.',
                     'max' => null,
-                    'tooLongMessage' => 'This value must contain at most  characters or less, currently has 28 characters.',
+                    'tooLongMessage' => 'This value should contain at most 0 characters.',
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
@@ -141,9 +141,9 @@ class HasLengthTest extends TestCase
                 [
                     'message' => 'This value must be a string.',
                     'min' => null,
-                    'tooShortMessage' => 'This value should contain at least  characters or more, currently has 28 characters.',
+                    'tooShortMessage' => 'This value should contain at least 0 characters.',
                     'max' => 3,
-                    'tooLongMessage' => 'This value must contain at most 3 characters or less, currently has 28 characters.',
+                    'tooLongMessage' => 'This value should contain at most 3 characters.',
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
@@ -154,9 +154,9 @@ class HasLengthTest extends TestCase
                 [
                     'message' => 'This value must be a string.',
                     'min' => 3,
-                    'tooShortMessage' => 'This value should contain at least 3 characters or more, currently has 28 characters.',
+                    'tooShortMessage' => 'This value should contain at least 3 characters.',
                     'max' => 4,
-                    'tooLongMessage' => 'This value must contain at most 4 characters or less, currently has 28 characters.',
+                    'tooLongMessage' => 'This value should contain at most 4 characters.',
                     'encoding' => 'windows-1251',
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
