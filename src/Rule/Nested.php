@@ -33,13 +33,11 @@ use function is_object;
  * So to make validation with Nested rule we can configure it like this:
  *
  * ```php
- * $rule = new Nested([
- *     'author.age' => [
- *         (new Number())->min(20),
- *     ],
- *     'author.name' => [
- *         (new HasLength())->min(3),
- *     ],
+ * $rule = Nested::rule([
+ *     'author' => Nested::rule([
+ *         'name' => [HasLength::rule()->min(3)],
+ *         'age' => [Number::rule()->min(18)],
+ *     )];
  * ]);
  * ```
  */
