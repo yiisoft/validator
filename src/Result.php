@@ -6,7 +6,7 @@ namespace Yiisoft\Validator;
 
 final class Result
 {
-    const ERROR_KEY_SEPARATOR = '.';
+    public const ERROR_KEY_SEPARATOR = '.';
 
     /**
      * @var array<mixed, string>
