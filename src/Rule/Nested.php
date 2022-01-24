@@ -99,11 +99,12 @@ final class Nested extends Rule
                 continue;
             }
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
-            $aggregateRule = new Rules($rulesSet);
-            $itemResult = $aggregateRule->validate($validatedValue);
+            $aggregatedRule = new Rules($rulesSet);
+            $itemResult = $aggregatedRule->validate($validatedValue);
             if ($itemResult->isValid() === false) {
-                foreach ($itemResult->getErrors() as $error) {
-                    $result->addError($error);
+                foreach ($itemResult->getErrors() as $key => $error) {
+                    $errorKey = self::calculateErrorKey($aggregatedRule, $valuePath, (string) $key);
+                    $result->addError($error, $errorKey);
                 }
             }
         }
@@ -168,5 +169,37 @@ final class Nested extends Rule
         }
 
         return $result;
+    }
+
+    private static function calculateErrorKey(Rules $aggregatedRule, string $valuePath, string $key): string
+    {
+        return self::canConcatenateErrorKey($aggregatedRule, $key) ? "$valuePath.$key" : $valuePath;
+    }
+
+    private static function canConcatenateErrorKey(Rules $aggregatedRule, string $key): bool
+    {
+        if (!self::isPositiveInteger($key)) {
+            return true;
+        }
+
+        $aggregatedRuleArr = $aggregatedRule->asArray();
+        if (ArrayHelper::getValue($aggregatedRuleArr, [0, 0]) !== 'each') {
+            return false;
+        }
+
+        if (ArrayHelper::getValue($aggregatedRuleArr, [0, 1, 0]) === 'nested') {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static function isPositiveInteger(string $str): bool
+    {
+        if (!preg_match('/^\d$/', $str)) {
+            return false;
+        }
+
+        return filter_var($str, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0]]) !== false;
     }
 }

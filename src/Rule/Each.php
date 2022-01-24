@@ -37,20 +37,27 @@ final class Each extends Rule
             return $result;
         }
 
-        foreach ($value as $item) {
+        foreach ($value as $index => $item) {
             $itemResult = $this->rules->validate($item, $context);
-            if ($itemResult->isValid() === false) {
-                foreach ($itemResult->getErrors() as $error) {
-                    $result->addError(
-                        $this->formatMessage(
-                            $this->message,
-                            [
-                                'error' => $error,
-                                'value' => $item,
-                            ]
-                        )
-                    );
+            if ($itemResult->isValid() === true) {
+                continue;
+            }
+
+            foreach ($itemResult->getErrors() as $key => $error) {
+                if (!is_array($item)) {
+                    $errorKey = $index;
+                    $formatMessage = true;
+                } else {
+                    $errorKey = "$index.$key";
+                    $formatMessage = false;
                 }
+
+                $message = !$formatMessage ? $error : $this->formatMessage($this->message, [
+                    'error' => $error,
+                    'value' => $item,
+                ]);
+
+                $result->addError($message, $errorKey);
             }
         }
 
