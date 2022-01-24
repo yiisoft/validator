@@ -173,7 +173,11 @@ final class Nested extends Rule
 
     private static function calculateErrorKey(Rules $aggregatedRule, string $valuePath, string $key): string
     {
-        return self::canConcatenateErrorKey($aggregatedRule, $key) ? "$valuePath.$key" : $valuePath;
+        if (!self::canConcatenateErrorKey($aggregatedRule, $key)) {
+            return $valuePath;
+        }
+
+        return $valuePath . Result::ERROR_KEY_SEPARATOR . $key;
     }
 
     private static function canConcatenateErrorKey(Rules $aggregatedRule, string $key): bool
