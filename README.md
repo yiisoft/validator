@@ -26,6 +26,7 @@ The package provides data validation capabilities.
         * [Validating a set of data](#validating-a-set-of-data)
             * [Skipping validation on error](#skipping-validation-on-error)
             * [Skipping empty values](#skipping-empty-values)
+            * [Nested and related data](#nested-and-related-data)
         * [Conditional validation](#conditional-validation)
         * [Creating your own validation rules](#creating-your-own-validation-rules)
         * [Grouping multiple validation rules](#grouping-multiple-validation-rules)
