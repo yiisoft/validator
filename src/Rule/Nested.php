@@ -33,13 +33,11 @@ use function is_object;
  * So to make validation with Nested rule we can configure it like this:
  *
  * ```php
- * $rule = new Nested([
- *     'author.age' => [
- *         (new Number())->min(20),
- *     ],
- *     'author.name' => [
- *         (new HasLength())->min(3),
- *     ],
+ * $rule = Nested::rule([
+ *     'author' => Nested::rule([
+ *         'name' => [HasLength::rule()->min(3)],
+ *         'age' => [Number::rule()->min(18)],
+ *     )];
  * ]);
  * ```
  */
@@ -99,11 +97,12 @@ final class Nested extends Rule
                 continue;
             }
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
-            $aggregateRule = new Rules($rulesSet);
-            $itemResult = $aggregateRule->validate($validatedValue);
+            $aggregatedRule = new Rules($rulesSet);
+            $itemResult = $aggregatedRule->validate($validatedValue);
             if ($itemResult->isValid() === false) {
-                foreach ($itemResult->getErrors() as $error) {
-                    $result->addError($error);
+                foreach ($itemResult->getErrors() as $key => $error) {
+                    $errorKey = self::calculateErrorKey($aggregatedRule, $valuePath, (string) $key);
+                    $result->addError($error, $errorKey);
                 }
             }
         }
@@ -168,5 +167,37 @@ final class Nested extends Rule
         }
 
         return $result;
+    }
+
+    private static function calculateErrorKey(Rules $aggregatedRule, string $valuePath, string $key): string
+    {
+        if (!self::canConcatenateErrorKey($aggregatedRule, $key)) {
+            return $valuePath;
+        }
+
+        return $valuePath . Result::ERROR_KEY_SEPARATOR . $key;
+    }
+
+    private static function canConcatenateErrorKey(Rules $aggregatedRule, string $key): bool
+    {
+        if (!self::isPositiveInteger($key)) {
+            return true;
+        }
+
+        $aggregatedRuleArr = $aggregatedRule->asArray();
+        if (ArrayHelper::getValue($aggregatedRuleArr, [0, 0]) !== 'each') {
+            return false;
+        }
+
+        return !(ArrayHelper::getValue($aggregatedRuleArr, [0, 1, 0]) === 'nested');
+    }
+
+    private static function isPositiveInteger(string $str): bool
+    {
+        if (!preg_match('/^\d$/', $str)) {
+            return false;
+        }
+
+        return filter_var($str, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0]]) !== false;
     }
 }

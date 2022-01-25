@@ -50,8 +50,8 @@ final class Rules
             $ruleResult = $rule->validate($value, $context);
             if ($ruleResult->isValid() === false) {
                 $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
-                foreach ($ruleResult->getErrors() as $message) {
-                    $compoundResult->addError($message);
+                foreach ($ruleResult->getErrors() as $key => $message) {
+                    $compoundResult->addError($message, $key);
                 }
             }
         }

@@ -17,6 +17,28 @@ The package provides data validation capabilities.
 [![static analysis](https://github.com/yiisoft/validator/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/validator/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/validator/coverage.svg)](https://shepherd.dev/github/yiisoft/validator)
 
+* [Yii Validator](#yii-validator)
+    * [Features](#features)
+    * [Requirements](#requirements)
+    * [Installation](#installation)
+    * [General usage](#general-usage)
+        * [Validating a single value](#validating-a-single-value)
+        * [Validating a set of data](#validating-a-set-of-data)
+            * [Skipping validation on error](#skipping-validation-on-error)
+            * [Skipping empty values](#skipping-empty-values)
+            * [Nested and related data](#nested-and-related-data)
+        * [Conditional validation](#conditional-validation)
+        * [Creating your own validation rules](#creating-your-own-validation-rules)
+        * [Grouping multiple validation rules](#grouping-multiple-validation-rules)
+        * [Setting up your own formatter](#setting-up-your-own-formatter)
+    * [Testing](#testing)
+        * [Unit testing](#unit-testing)
+        * [Mutation testing](#mutation-testing)
+        * [Static analysis](#static-analysis)
+    * [License](#license)
+    * [Support the project](#support-the-project)
+    * [Follow updates](#follow-updates)
+
 ## Features
 
 - Could be used with any object.
@@ -140,6 +162,81 @@ To change this behavior use `skipOnEmpty(true)`:
 
 ```php
 Number::rule()->integer()->max(100)->skipOnEmpty(true)
+```
+
+#### Nested and related data
+
+```php
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
+
+$data = ['author' => ['name' => 'Alexey', 'age' => '31']];
+$rule = Nested::rule([
+    'author' => Nested::rule([
+        'name' => [HasLength::rule()->min(3)],
+        'age' => [Number::rule()->min(18)],
+    )];
+]);
+$errors = $rule->validate($data)->getErrors();
+```
+
+A more complex real-life example using arrays.
+
+```php
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
+
+$data = [
+    'charts' => [
+        [
+            'dots' => [
+                ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
+                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]]
+            ],
+        ],
+        [
+            'dots' => [
+                ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],
+                ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],
+            ],
+        ],
+        [
+            'dots' => [
+                ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],
+                ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],
+            ],
+        ],
+    ],
+];
+$rule = Nested::rule([
+    'charts' => Each::rule(new Rules([
+        Nested::rule([
+            'dots' => Each::rule(new Rules([
+                Nested::rule([
+                    'coordinates' => Nested::rule([
+                        'x' => [Number::rule()->min(-10)->max(10)],
+                        'y' => [Number::rule()->min(-10)->max(10)],
+                    ]),
+                    'rgb' => Each::rule(new Rules([
+                        Number::rule()->min(0)->max(255)->skipOnError(false),
+                    ])),
+                ])->skipOnError(false),
+            ])),
+        ])->skipOnError(false),
+    ])),
+]);
+$errors = $rule->validate($data)->getErrors();
+```
+
+The contents of the errors will be (omitted for brevity):
+
+```php
+$errors = [
+    'charts.0.dots.0.coordinates.x' => 'Value must be no less than -10.',
+    'charts.0.dots.0.rgb.0' => 'Value must be no less than 0. -1 given.',
+];
 ```
 
 ### Conditional validation
