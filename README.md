@@ -274,12 +274,12 @@ use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\Rule\Email;
 
 $validator = new Validator();
-
-$rules= [
+$rules = [
     'username' => UsernameRule::rule(),
-    'email' => [Email::rule()]
+    'email' => [Email::rule()],
 ];
 $results = $validator->validate($user, $rules);
+
 foreach ($results as $attribute => $result) {
     if ($result->isValid() === false) {
         foreach ($result->getErrors() as $error) {
