@@ -118,7 +118,7 @@ class NestedTest extends TestCase
                 [
                     'dots' => [
                         ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
-                        ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]]
+                        ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],
                     ],
                 ],
                 [
