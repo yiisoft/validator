@@ -116,51 +116,59 @@ class NestedTest extends TestCase
         $data = [
             'charts' => [
                 [
-                    ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
-                    ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],
+                    'dots' => [
+                        ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
+                        ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]]
+                    ],
                 ],
                 [
-                    ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],
-                    ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],
+                    'dots' => [
+                        ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],
+                        ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],
+                    ],
                 ],
                 [
-                    ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],
-                    ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],
+                    'dots' => [
+                        ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],
+                        ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],
+                    ],
                 ],
             ],
         ];
         $rule = Nested::rule([
             'charts' => Each::rule(new Rules([
-                Each::rule(new Rules([
-                    Nested::rule([
-                        'coordinates' => Nested::rule([
-                            'x' => [Number::rule()->min(-10)->max(10)],
-                            'y' => [Number::rule()->min(-10)->max(10)],
-                        ]),
-                        'rgb' => Each::rule(new Rules([
-                            Number::rule()->min(0)->max(255)->skipOnError(false),
-                        ])),
-                    ])->skipOnError(false),
-                ]))->skipOnError(false),
+                Nested::rule([
+                    'dots' => Each::rule(new Rules([
+                        Nested::rule([
+                            'coordinates' => Nested::rule([
+                                'x' => [Number::rule()->min(-10)->max(10)],
+                                'y' => [Number::rule()->min(-10)->max(10)],
+                            ]),
+                            'rgb' => Each::rule(new Rules([
+                                Number::rule()->min(0)->max(255)->skipOnError(false),
+                            ])),
+                        ])->skipOnError(false),
+                    ])),
+                ])->skipOnError(false),
             ])),
         ]);
         $expectedErrors = [
-            'charts.0.0.coordinates.x' => 'Value must be no less than -10.',
-            'charts.0.0.coordinates.y' => 'Value must be no greater than 10.',
-            'charts.0.0.rgb.0' => 'Value must be no less than 0. -1 given.',
-            'charts.0.0.rgb.1' => 'Value must be no greater than 255. 256 given.',
-            'charts.0.1.coordinates.x' => 'Value must be no less than -10.',
-            'charts.0.1.coordinates.y' => 'Value must be no greater than 10.',
-            'charts.0.1.rgb.1' => 'Value must be no less than 0. -2 given.',
-            'charts.0.1.rgb.2' => 'Value must be no greater than 255. 257 given.',
-            'charts.2.0.coordinates.x' => 'Value must be no less than -10.',
-            'charts.2.0.coordinates.y' => 'Value must be no greater than 10.',
-            'charts.2.0.rgb.0' => 'Value must be no less than 0. -3 given.',
-            'charts.2.0.rgb.1' => 'Value must be no greater than 255. 258 given.',
-            'charts.2.1.coordinates.x' => 'Value must be no less than -10.',
-            'charts.2.1.coordinates.y' => 'Value must be no greater than 10.',
-            'charts.2.1.rgb.1' => 'Value must be no less than 0. -4 given.',
-            'charts.2.1.rgb.2' => 'Value must be no greater than 255. 259 given.',
+            'charts.0.dots.0.coordinates.x' => 'Value must be no less than -10.',
+            'charts.0.dots.0.coordinates.y' => 'Value must be no greater than 10.',
+            'charts.0.dots.0.rgb.0' => 'Value must be no less than 0. -1 given.',
+            'charts.0.dots.0.rgb.1' => 'Value must be no greater than 255. 256 given.',
+            'charts.0.dots.1.coordinates.x' => 'Value must be no less than -10.',
+            'charts.0.dots.1.coordinates.y' => 'Value must be no greater than 10.',
+            'charts.0.dots.1.rgb.1' => 'Value must be no less than 0. -2 given.',
+            'charts.0.dots.1.rgb.2' => 'Value must be no greater than 255. 257 given.',
+            'charts.2.dots.0.coordinates.x' => 'Value must be no less than -10.',
+            'charts.2.dots.0.coordinates.y' => 'Value must be no greater than 10.',
+            'charts.2.dots.0.rgb.0' => 'Value must be no less than 0. -3 given.',
+            'charts.2.dots.0.rgb.1' => 'Value must be no greater than 255. 258 given.',
+            'charts.2.dots.1.coordinates.x' => 'Value must be no less than -10.',
+            'charts.2.dots.1.coordinates.y' => 'Value must be no greater than 10.',
+            'charts.2.dots.1.rgb.1' => 'Value must be no less than 0. -4 given.',
+            'charts.2.dots.1.rgb.2' => 'Value must be no greater than 255. 259 given.',
         ];
         $this->assertEquals($expectedErrors, $rule->validate($data)->getErrors());
     }
