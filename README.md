@@ -191,32 +191,40 @@ use Yiisoft\Validator\Rule\Nested;
 $data = [
     'charts' => [
         [
-            ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
-            ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],
+            'dots' => [
+                ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
+                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]]
+            ],
         ],
         [
-            ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],
-            ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],
+            'dots' => [
+                ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],
+                ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],
+            ],
         ],
         [
-            ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],
-            ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],
+            'dots' => [
+                ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],
+                ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],
+            ],
         ],
     ],
 ];
 $rule = Nested::rule([
     'charts' => Each::rule(new Rules([
-        Each::rule(new Rules([
-            Nested::rule([
-                'coordinates' => Nested::rule([
-                    'x' => [Number::rule()->min(-10)->max(10)],
-                    'y' => [Number::rule()->min(-10)->max(10)],
-                ]),
-                'rgb' => Each::rule(new Rules([
-                    Number::rule()->min(0)->max(255)->skipOnError(false),
-                ])),
-            ])->skipOnError(false),
-        ]))->skipOnError(false),
+        Nested::rule([
+            'dots' => Each::rule(new Rules([
+                Nested::rule([
+                    'coordinates' => Nested::rule([
+                        'x' => [Number::rule()->min(-10)->max(10)],
+                        'y' => [Number::rule()->min(-10)->max(10)],
+                    ]),
+                    'rgb' => Each::rule(new Rules([
+                        Number::rule()->min(0)->max(255)->skipOnError(false),
+                    ])),
+                ])->skipOnError(false),
+            ])),
+        ])->skipOnError(false),
     ])),
 ]);
 $errors = $rule->validate($data)->getErrors();
@@ -226,8 +234,8 @@ The contents of the errors will be (omitted for brevity):
 
 ```php
 $errors = [
-    'charts.0.0.coordinates.x' => 'Value must be no less than -10.',
-    'charts.0.0.rgb.0' => 'Value must be no less than 0. -1 given.',    
+    'charts.0.dots.0.coordinates.x' => 'Value must be no less than -10.',
+    'charts.0.dots.0.rgb.0' => 'Value must be no less than 0. -1 given.',
 ];
 ```
 
