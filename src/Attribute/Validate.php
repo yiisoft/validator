@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator;
+namespace Yiisoft\Validator\Attribute;
 
 use Attribute;
+use Yiisoft\Validator\Rule;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Validate
