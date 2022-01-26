@@ -13,6 +13,8 @@ final class AttributeTraitTest extends TestCase
     public function testGetRule()
     {
         if (PHP_VERSION_ID < 80000) {
+            $this->assertEquals(true, PHP_VERSION < 80000);
+
             return;
         }
 
