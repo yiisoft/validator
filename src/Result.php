@@ -18,7 +18,7 @@ final class Result
         return $this->errors === [];
     }
 
-    public function addError(string $message, $key = null): void
+    public function addError(string $message, ?string $key = null): void
     {
         if ($key) {
             $this->errors[$key] = $message;
