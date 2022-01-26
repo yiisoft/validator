@@ -9,7 +9,7 @@ final class Result
     public const ERROR_KEY_SEPARATOR = '.';
 
     /**
-     * @var array<mixed, string>
+     * @psalm-var list<int|string, string>
      */
     private array $errors = [];
 
@@ -28,7 +28,7 @@ final class Result
     }
 
     /**
-     * @return array<mixed, string>
+     * @psalm-var list<int|string, string>
      */
     public function getErrors(): array
     {
