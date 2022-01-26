@@ -18,7 +18,12 @@ final class Result
         return $this->errors === [];
     }
 
-    public function addError(string $message, ?string $key = null): void
+    /**
+     * @param string $message
+     * @param int|string|null $key
+     * @return void
+     */
+    public function addError(string $message, $key = null): void
     {
         if ($key) {
             $this->errors[$key] = $message;
