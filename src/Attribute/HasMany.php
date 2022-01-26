@@ -6,6 +6,9 @@ namespace Yiisoft\Validator\Attribute;
 
 use Attribute;
 
+/**
+ * Represents pne to many relation.
+ */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 class HasMany
 {

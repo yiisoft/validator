@@ -7,6 +7,9 @@ namespace Yiisoft\Validator\Attribute;
 use Attribute;
 use Yiisoft\Validator\Rule;
 
+/**
+ * Allows to bind a rule to a property of DTO in-place, without separate configuration.
+ */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Validate
 {

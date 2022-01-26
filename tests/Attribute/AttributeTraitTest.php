@@ -8,16 +8,13 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Tests\Data\ChartsData;
 
+/**
+ * @requires PHP >= 8.0
+ */
 final class AttributeTraitTest extends TestCase
 {
     public function testGetRule()
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->assertEquals(true, PHP_VERSION < 80000);
-
-            return;
-        }
-
         $rule = (new ChartsData())->getRule();
         $actualOptions = $rule->getOptions();
         $replacedValuePaths = [

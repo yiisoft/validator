@@ -116,13 +116,15 @@ final class MoneyTransfer implements DataSetInterface
         
         return $this->$key;
     }
+    
+    public function hasAttribute(string $attribute) : bool
+    {
+        return isset($this->$key);
+    }
 }
 
-// Usually obtained from container
-$validator = new Validator();
-
+$validator = new Validator(); // Usually obtained from container
 $moneyTransfer = new MoneyTransfer(142);
-
 $rules = [    
     'amount' => [
         Number::rule()->integer()->max(100),
@@ -135,7 +137,6 @@ $rules = [
         }
     ],
 ];
-
 $results = $validator->validate($moneyTransfer, $rules);
 foreach ($results as $attribute => $result) {
     if ($result->isValid() === false) {
@@ -237,6 +238,59 @@ $errors = [
     'charts.0.dots.0.coordinates.x' => 'Value must be no less than -10.',
     'charts.0.dots.0.rgb.0' => 'Value must be no less than 0. -1 given.',
 ];
+```
+
+#### Attributes
+
+If you have PHP 8, you can simplify this using attributes. Declare the DTOs, relations and rules:
+
+```php
+use Yiisoft\Validator\Attribute\AttributeTrait;
+use Yiisoft\Validator\Attribute\HasMany;
+use Yiisoft\Validator\Attribute\HasOne;
+use Yiisoft\Validator\Attribute\Validate;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Number;
+
+class ChartsData
+{
+    use AttributeTrait;
+
+    #[HasMany(Chart::class)]
+    private array $charts;
+}
+
+class Chart
+{
+    #[HasMany(Dot::class)]
+    private array $dots;
+}
+
+class Dot
+{
+    #[HasOne(Coordinates::class)]
+    private $coordinates;
+    #[Validate(Each::class)]
+    #[Validate(Number::class, ['min' => 0, 'max' => 255, 'skipOnError' => false])]
+    private array $rgb;
+}
+
+class Coordinates
+{
+    #[Validate(Number::class, ['min' => -10, 'max' => 10])]
+    private int $x;
+    #[Validate(Number::class, ['min' => -10, 'max' => 10])]
+    private int $y;
+}
+```
+
+Retrieve rule from the base DTO and use it for validation.
+
+```php
+$rule = (new ChartsData())->getRule();
+// The structure of data and errors is the same as in previous example
+$data = [];
+$errors = $rule->validate($data)->getErrors();
 ```
 
 ### Conditional validation
