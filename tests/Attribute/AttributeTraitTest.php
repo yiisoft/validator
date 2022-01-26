@@ -59,9 +59,9 @@ final class AttributeTraitTest extends TestCase
                                 ],
                             ],
                         ],
-                    ]
+                    ],
                 ],
-            ]
+            ],
         ];
         $this->assertEquals($expectedOptions, $actualOptions);
     }
