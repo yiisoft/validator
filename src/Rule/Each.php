@@ -39,7 +39,7 @@ final class Each extends Rule
 
         foreach ($value as $index => $item) {
             $itemResult = $this->rules->validate($item, $context);
-            if ($itemResult->isValid() === true) {
+            if ($itemResult->isValid()) {
                 continue;
             }
 

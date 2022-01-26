@@ -25,7 +25,7 @@ final class Result
      */
     public function addError(string $message, $key = null): void
     {
-        if ($key) {
+        if ($key !== null) {
             $this->errors[$key] = $message;
         } else {
             $this->errors[] = $message;
