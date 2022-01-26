@@ -12,6 +12,10 @@ final class AttributeTraitTest extends TestCase
 {
     public function testGetRule()
     {
+        if (PHP_VERSION_ID < 80000) {
+            return;
+        }
+
         $rule = (new ChartsData())->getRule();
         $actualOptions = $rule->getOptions();
         $replacedValuePaths = [
