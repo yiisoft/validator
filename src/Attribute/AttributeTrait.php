@@ -13,6 +13,7 @@ use Yiisoft\Validator\Rules;
 /**
  * This trait makes use of attributes introduced in PHP 8. It simplifies rules configuration process, especially for
  * nested data and relations. Please refer to the guide for example.
+ *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  */
 trait AttributeTrait
