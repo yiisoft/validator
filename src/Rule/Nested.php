@@ -185,11 +185,11 @@ final class Nested extends Rule
         }
 
         $aggregatedRuleArray = $aggregatedRule->asArray();
-        if (ArrayHelper::getValue($aggregatedRuleArr, [0, 0]) !== 'each') {
+        if (ArrayHelper::getValue($aggregatedRuleArray, [0, 0]) !== 'each') {
             return false;
         }
 
-        return !(ArrayHelper::getValue($aggregatedRuleArr, [0, 1, 0]) === 'nested');
+        return !(ArrayHelper::getValue($aggregatedRuleArray, [0, 1, 0]) === 'nested');
     }
 
     private static function isPositiveInteger(string $str): bool
