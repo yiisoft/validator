@@ -17,6 +17,9 @@ The package provides data validation capabilities.
 [![static analysis](https://github.com/yiisoft/validator/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/validator/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/validator/coverage.svg)](https://shepherd.dev/github/yiisoft/validator)
 
+Table of Contents
+=================
+
 * [Yii Validator](#yii-validator)
     * [Features](#features)
     * [Requirements](#requirements)
@@ -38,6 +41,8 @@ The package provides data validation capabilities.
     * [License](#license)
     * [Support the project](#support-the-project)
     * [Follow updates](#follow-updates)
+
+Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
 ## Features
 
