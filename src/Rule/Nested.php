@@ -184,7 +184,7 @@ final class Nested extends Rule
             return true;
         }
 
-        $aggregatedRuleArr = $aggregatedRule->asArray();
+        $aggregatedRuleArray = $aggregatedRule->asArray();
         if (ArrayHelper::getValue($aggregatedRuleArr, [0, 0]) !== 'each') {
             return false;
         }
