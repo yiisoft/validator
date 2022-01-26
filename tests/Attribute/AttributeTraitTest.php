@@ -19,10 +19,10 @@ final class AttributeTraitTest extends TestCase
             'charts.0.dots.0.coordinates.y.0',
             'charts.0.dots.0.rgb.0',
         ];
-        $checkedKeys = [0, 'min', 'max', 'skipOnError'];
+        $checkedKeys = ['0', 'min', 'max', 'skipOnError'];
         foreach ($replacedValuePaths as $replacedValuePath) {
             $value = ArrayHelper::getValueByPath($actualOptions, $replacedValuePath);
-            $value = array_intersect_key($value, array_flip($checkedKeys));
+            $value = ArrayHelper::filter($value, $checkedKeys);
 
             ArrayHelper::setValueByPath($actualOptions, $replacedValuePath, $value);
         }
