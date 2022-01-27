@@ -21,11 +21,11 @@ class ChartsData
 
 class Chart
 {
-    #[HasMany(Dot::class)]
-    private array $dots;
+    #[HasMany(Point::class)]
+    private array $points;
 }
 
-class Dot
+class Point
 {
     #[HasOne(Coordinates::class)]
     private $coordinates;

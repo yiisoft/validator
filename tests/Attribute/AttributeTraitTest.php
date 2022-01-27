@@ -18,23 +18,23 @@ final class AttributeTraitTest extends TestCase
         $rule = (new ChartsData())->getRule();
         $actualOptions = $rule->getOptions();
         $replacedValuePaths = [
-            'charts.0.dots.0.coordinates.x.0',
-            'charts.0.dots.0.coordinates.y.0',
-            'charts.0.dots.0.rgb.0',
+            ['charts', 0, 'points', 0, 'coordinates', 'x', 0],
+            ['charts', 0, 'points', 0, 'coordinates', 'y', 0],
+            ['charts', 0, 'points', 0, 'rgb', 0],
         ];
         $checkedKeys = ['0', 'min', 'max', 'skipOnError'];
         foreach ($replacedValuePaths as $replacedValuePath) {
-            $value = ArrayHelper::getValueByPath($actualOptions, $replacedValuePath);
+            $value = ArrayHelper::getValue($actualOptions, $replacedValuePath);
             $value = ArrayHelper::filter($value, $checkedKeys);
 
-            ArrayHelper::setValueByPath($actualOptions, $replacedValuePath, $value);
+            ArrayHelper::setValue($actualOptions, $replacedValuePath, $value);
         }
 
         $expectedOptions = [
             'charts' => [
                 [
                     'nested',
-                    'dots' => [
+                    'points' => [
                         [
                             'nested',
                             'coordinates' => [
