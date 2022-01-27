@@ -164,7 +164,8 @@ $rule = Nested::rule([
 $errors = $rule->validate($data)->getErrors();
 ```
 
-A more complex real-life example is a chart that is made of points. This data is represented as an arrays:
+A more complex real-life example is a chart that is made of points. This data is represented as arrays. `Nested` can be 
+combined with `Each` rule to validate such similar structures:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
