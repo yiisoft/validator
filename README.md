@@ -213,7 +213,7 @@ $rule = Nested::rule([
 $errors = $rule->validate($data)->getErrors();
 ```
 
-The contents of the errors will be (omitted for brevity):
+The contents of the errors will be:
 
 ```php
 $errors = [
