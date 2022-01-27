@@ -19,7 +19,6 @@ final class Result
     /**
      * @param string $message
      * @param int|string|null $key
-     * @return void
      */
     public function addError(string $message, $key = null): void
     {
