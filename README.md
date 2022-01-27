@@ -144,7 +144,9 @@ Number::rule()->integer()->max(100)->skipOnEmpty(true)
 
 #### Nested and related data
 
-In many cases there is a need to validate data consisting of many similar structures. There is a `Nested` rule for this purpose:
+In many cases there is a need to validate related data in addition to current entity / model. There is a `Nested` rule 
+for this purpose:
+
 ```php
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Nested;
@@ -153,6 +155,7 @@ use Yiisoft\Validator\Rule\Required;
 
 $data = ['author' => ['name' => 'Alexey', 'age' => '31']];
 $rule = Nested::rule([
+    'title' => [Required::rule()],
     'author' => Nested::rule([
         'name' => [HasLength::rule()->min(3)],
         'age' => [Number::rule()->min(18)],
