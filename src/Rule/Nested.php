@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use InvalidArgumentException;
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -175,29 +176,20 @@ final class Nested extends Rule
             return $valuePath;
         }
 
-        return $valuePath . Result::ERROR_KEY_SEPARATOR . $key;
+        return "$valuePath.$key";
     }
 
     private static function canConcatenateErrorKey(Rules $aggregatedRule, string $key): bool
     {
-        if (!self::isPositiveInteger($key)) {
+        if ($key !== '0' && !NumericHelper::isPositiveInteger($key)) {
             return true;
         }
 
-        $aggregatedRuleArr = $aggregatedRule->asArray();
-        if (ArrayHelper::getValueByPath($aggregatedRuleArr, '0.0') !== 'each') {
+        $aggregatedRuleArray = $aggregatedRule->asArray();
+        if (ArrayHelper::getValue($aggregatedRuleArray, [0, 0]) !== 'each') {
             return false;
         }
 
-        return !(ArrayHelper::getValueByPath($aggregatedRuleArr, '0.1.0') === 'nested');
-    }
-
-    private static function isPositiveInteger(string $str): bool
-    {
-        if (!preg_match('/^\d$/', $str)) {
-            return false;
-        }
-
-        return filter_var($str, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0]]) !== false;
+        return !(ArrayHelper::getValue($aggregatedRuleArray, [0, 1, 0]) === 'nested');
     }
 }

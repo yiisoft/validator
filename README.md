@@ -17,9 +17,6 @@ The package provides data validation capabilities.
 [![static analysis](https://github.com/yiisoft/validator/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/validator/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/validator/coverage.svg)](https://shepherd.dev/github/yiisoft/validator)
 
-Table of Contents
-=================
-
 * [Yii Validator](#yii-validator)
     * [Features](#features)
     * [Requirements](#requirements)
@@ -30,7 +27,6 @@ Table of Contents
             * [Skipping validation on error](#skipping-validation-on-error)
             * [Skipping empty values](#skipping-empty-values)
             * [Nested and related data](#nested-and-related-data)
-            * [Attributes](#attributes)
         * [Conditional validation](#conditional-validation)
         * [Creating your own validation rules](#creating-your-own-validation-rules)
         * [Grouping multiple validation rules](#grouping-multiple-validation-rules)
@@ -42,8 +38,6 @@ Table of Contents
     * [License](#license)
     * [Support the project](#support-the-project)
     * [Follow updates](#follow-updates)
-
-Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
 ## Features
 
@@ -173,6 +167,9 @@ Number::rule()->integer()->max(100)->skipOnEmpty(true)
 
 #### Nested and related data
 
+In many cases there is a need to validate related data in addition to current entity / model. There is a `Nested` rule 
+for this purpose:
+
 ```php
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Nested;
@@ -181,6 +178,7 @@ use Yiisoft\Validator\Rule\Required;
 
 $data = ['author' => ['name' => 'Alexey', 'age' => '31']];
 $rule = Nested::rule([
+    'title' => [Required::rule()],
     'author' => Nested::rule([
         'name' => [HasLength::rule()->min(3)],
         'age' => [Number::rule()->min(18)],
@@ -189,7 +187,8 @@ $rule = Nested::rule([
 $errors = $rule->validate($data)->getErrors();
 ```
 
-A more complex real-life example using arrays.
+A more complex real-life example is a chart that is made of points. This data is represented as arrays. `Nested` can be 
+combined with `Each` rule to validate such similar structures:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -198,19 +197,19 @@ use Yiisoft\Validator\Rule\Nested;
 $data = [
     'charts' => [
         [
-            'dots' => [
+            'points' => [
                 ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
                 ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]]
             ],
         ],
         [
-            'dots' => [
+            'points' => [
                 ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],
                 ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],
             ],
         ],
         [
-            'dots' => [
+            'points' => [
                 ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],
                 ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],
             ],
@@ -220,7 +219,7 @@ $data = [
 $rule = Nested::rule([
     'charts' => Each::rule(new Rules([
         Nested::rule([
-            'dots' => Each::rule(new Rules([
+            'points' => Each::rule(new Rules([
                 Nested::rule([
                     'coordinates' => Nested::rule([
                         'x' => [Number::rule()->min(-10)->max(10)],
@@ -237,12 +236,13 @@ $rule = Nested::rule([
 $errors = $rule->validate($data)->getErrors();
 ```
 
-The contents of the errors will be (omitted for brevity):
+The contents of the errors will be:
 
 ```php
 $errors = [
-    'charts.0.dots.0.coordinates.x' => 'Value must be no less than -10.',
-    'charts.0.dots.0.rgb.0' => 'Value must be no less than 0. -1 given.',
+    'charts.0.points.0.coordinates.x' => 'Value must be no less than -10.',
+    'charts.0.points.0.rgb.0' => 'Value must be no less than 0. -1 given.',
+    // ...
 ];
 ```
 

@@ -6,10 +6,8 @@ namespace Yiisoft\Validator;
 
 final class Result
 {
-    public const ERROR_KEY_SEPARATOR = '.';
-
     /**
-     * @var array<mixed, string>
+     * @psalm-var array<int|string, string>
      */
     private array $errors = [];
 
@@ -18,9 +16,15 @@ final class Result
         return $this->errors === [];
     }
 
+    /**
+     * @param string $message
+     * @param int|string|null $key For simple rules the key is null meaning error will be appended to the end of the
+     * array. Otherwise, it's a path to a current error value in the input data concatenated using dot notation. For
+     * example: "charts.0.points.0.coordinates.x".
+     */
     public function addError(string $message, $key = null): void
     {
-        if ($key) {
+        if ($key !== null && $key !== 0) {
             $this->errors[$key] = $message;
         } else {
             $this->errors[] = $message;
@@ -28,7 +32,7 @@ final class Result
     }
 
     /**
-     * @return array<mixed, string>
+     * @psalm-return array<int|string, string>
      */
     public function getErrors(): array
     {

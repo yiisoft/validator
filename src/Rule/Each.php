@@ -39,7 +39,7 @@ final class Each extends Rule
 
         foreach ($value as $index => $item) {
             $itemResult = $this->rules->validate($item, $context);
-            if ($itemResult->isValid() === true) {
+            if ($itemResult->isValid()) {
                 continue;
             }
 
@@ -48,7 +48,7 @@ final class Each extends Rule
                     $errorKey = $index;
                     $formatMessage = true;
                 } else {
-                    $errorKey = $index . Result::ERROR_KEY_SEPARATOR . $key;
+                    $errorKey = "$index.$key";
                     $formatMessage = false;
                 }
 
