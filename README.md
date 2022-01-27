@@ -144,6 +144,7 @@ Number::rule()->integer()->max(100)->skipOnEmpty(true)
 
 #### Nested and related data
 
+In many cases there is a need to validate data consisting of many similar structures. There is a `Nested` rule for this purpose:
 ```php
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Nested;
