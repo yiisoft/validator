@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Attribute;
 use Attribute;
 
 /**
- * Represents pne to one relation.
+ * Represents one to one relation.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 class HasOne
