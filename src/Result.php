@@ -33,7 +33,7 @@ final class Result
     }
 
     /**
-     * @psalm-param list<int|string, string>
+     * @psalm-return list<int|string, string>
      */
     public function getErrors(): array
     {
