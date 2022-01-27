@@ -248,7 +248,7 @@ $errors = [
 
 #### Attributes
 
-If you have PHP 8, you can simplify this using attributes. Declare the DTOs, relations and rules:
+If you have PHP 8, you can use attributes. Declare the DTOs, relations and rules:
 
 ```php
 use Yiisoft\Validator\Attribute\AttributeTrait;
