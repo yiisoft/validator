@@ -219,6 +219,7 @@ The contents of the errors will be:
 $errors = [
     'charts.0.dots.0.coordinates.x' => 'Value must be no less than -10.',
     'charts.0.dots.0.rgb.0' => 'Value must be no less than 0. -1 given.',
+    // ...
 ];
 ```
 
