@@ -175,7 +175,7 @@ final class Nested extends Rule
             return $valuePath;
         }
 
-        return $valuePath . Result::ERROR_KEY_SEPARATOR . $key;
+        return "$valuePath.$key";
     }
 
     private static function canConcatenateErrorKey(Rules $aggregatedRule, string $key): bool

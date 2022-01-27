@@ -48,7 +48,7 @@ final class Each extends Rule
                     $errorKey = $index;
                     $formatMessage = true;
                 } else {
-                    $errorKey = $index . Result::ERROR_KEY_SEPARATOR . $key;
+                    $errorKey = "$index.$key";
                     $formatMessage = false;
                 }
 

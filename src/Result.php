@@ -6,8 +6,6 @@ namespace Yiisoft\Validator;
 
 final class Result
 {
-    public const ERROR_KEY_SEPARATOR = '.';
-
     /**
      * @psalm-var list<int|string, string>
      */
