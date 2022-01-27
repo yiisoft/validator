@@ -57,7 +57,7 @@ final class ResultSet implements IteratorAggregate
 
     /**
      * @return string[][]
-     * @psalm-return array<string, list<string>>
+     * @psalm-return array<string, list<int|string, string>>
      */
     public function getErrors(): array
     {
