@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 final class Result
 {
     /**
-     * @psalm-var list<int|string, string>
+     * @psalm-var array<int|string, string>
      */
     private array $errors = [];
 
@@ -30,7 +30,7 @@ final class Result
     }
 
     /**
-     * @psalm-return list<int|string, string>
+     * @psalm-return array<int|string, string>
      */
     public function getErrors(): array
     {
