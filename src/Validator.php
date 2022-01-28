@@ -36,22 +36,25 @@ final class Validator implements ValidatorInterface
         }
 
         $context = new ValidationContext($data);
-        $results = new ResultSet();
+        $resultSet = new ResultSet();
 
         foreach ($rules as $attribute => $attributeRules) {
-            $aggregateRule = new Rules($attributeRules);
+            $aggregatedRule = new Rules($attributeRules);
             if ($this->formatter !== null) {
-                $aggregateRule = $aggregateRule->withFormatter($this->formatter);
+                $aggregatedRule = $aggregatedRule->withFormatter($this->formatter);
             }
-            $results->addResult(
+
+            $resultSet->addResult(
                 $attribute,
-                $aggregateRule->validate($data->getAttributeValue($attribute), $context->withAttribute($attribute))
+                $aggregatedRule->validate($data->getAttributeValue($attribute), $context->withAttribute($attribute))
             );
         }
+
         if ($data instanceof PostValidationHookInterface) {
-            $data->processValidationResult($results);
+            $data->processValidationResult($resultSet);
         }
-        return $results;
+
+        return $resultSet;
     }
 
     public function withFormatter(?FormatterInterface $formatter): self
@@ -68,7 +71,7 @@ final class Validator implements ValidatorInterface
         }
 
         if (is_object($data) || is_array($data)) {
-            return new ArrayDataSet((array)$data);
+            return new ArrayDataSet((array) $data);
         }
 
         return new ScalarDataSet($data);

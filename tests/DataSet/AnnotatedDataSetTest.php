@@ -2,25 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Attribute;
+namespace Yiisoft\Validator\Tests\DataSet;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\DataSet\AnnotatedDataSet;
 use Yiisoft\Validator\Tests\Data\ChartsData;
 
 /**
  * @requires PHP >= 8.0
  */
-final class AttributeTraitTest extends TestCase
+final class AnnotatedDataSetTest extends TestCase
 {
-    public function testGetRule()
+    public function testGetRules(): void
     {
-        $rule = (new ChartsData())->getRule();
-        $actualOptions = $rule->getOptions();
+        $dataSet = new AnnotatedDataSet(new ChartsData());
+        $rules = (array) $dataSet->getRules();
+
+        $this->assertEquals(['charts'], array_keys($rules));
+        $this->assertEquals([0], array_keys($rules['charts']));
+
+        $actualOptions = $dataSet->getRules()['charts'][0]->getOptions();
         $replacedValuePaths = [
-            ['charts', 0, 'points', 0, 'coordinates', 'x', 0],
-            ['charts', 0, 'points', 0, 'coordinates', 'y', 0],
-            ['charts', 0, 'points', 0, 'rgb', 0],
+            [0, 'points', 0, 0, 'coordinates', 'x', 0],
+            [0, 'points', 0, 0, 'coordinates', 'y', 0],
+            [0, 'points', 0, 0, 'rgb', 0],
         ];
         $checkedKeys = ['0', 'min', 'max', 'skipOnError'];
         foreach ($replacedValuePaths as $replacedValuePath) {
@@ -31,10 +37,10 @@ final class AttributeTraitTest extends TestCase
         }
 
         $expectedOptions = [
-            'charts' => [
-                [
-                    'nested',
-                    'points' => [
+            [
+                'nested',
+                'points' => [
+                    [
                         [
                             'nested',
                             'coordinates' => [
@@ -66,6 +72,7 @@ final class AttributeTraitTest extends TestCase
                 ],
             ],
         ];
+
         $this->assertEquals($expectedOptions, $actualOptions);
     }
 }

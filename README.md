@@ -137,8 +137,8 @@ $rules = [
         }
     ],
 ];
-$results = $validator->validate($moneyTransfer, $rules);
-foreach ($results as $attribute => $result) {
+$resultSet = $validator->validate($moneyTransfer, $rules);
+foreach ($resultSet as $attribute => $result) {
     if ($result->isValid() === false) {
         foreach ($result->getErrors() as $error) {
             // ...
@@ -246,7 +246,7 @@ $errors = [
 ];
 ```
 
-#### Attributes
+##### Attributes
 
 If you have PHP 8, you can use attributes. Declare the DTOs, relations and rules:
 

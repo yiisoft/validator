@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Data;
 
-use Yiisoft\Validator\Attribute\AttributeTrait;
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
 use Yiisoft\Validator\Attribute\Validate;
@@ -13,8 +12,6 @@ use Yiisoft\Validator\Rule\Number;
 
 class ChartsData
 {
-    use AttributeTrait;
-
     #[HasMany(Chart::class)]
     private array $charts;
 }
