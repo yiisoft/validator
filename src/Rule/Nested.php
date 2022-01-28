@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use InvalidArgumentException;
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -100,11 +99,15 @@ final class Nested extends Rule
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
             $aggregatedRule = new Rules($rulesSet);
             $itemResult = $aggregatedRule->validate($validatedValue);
-            if ($itemResult->isValid() === false) {
-                foreach ($itemResult->getErrors() as $key => $error) {
-                    $errorKey = self::calculateErrorKey($aggregatedRule, $valuePath, (string) $key);
-                    $result->addError($error, $errorKey);
-                }
+            if ($itemResult->isValid()) {
+                continue;
+            }
+
+            $concatenateErrorKey = !isset($itemResult->getErrors()[0]) || $aggregatedRule->isNestedEach();
+
+            foreach ($itemResult->getErrors() as $key => $error) {
+                $errorKey = $concatenateErrorKey ? "$valuePath.$key" : $valuePath;
+                $result->addError($error, $errorKey);
             }
         }
 
@@ -168,28 +171,5 @@ final class Nested extends Rule
         }
 
         return $result;
-    }
-
-    private static function calculateErrorKey(Rules $aggregatedRule, string $valuePath, string $key): string
-    {
-        if (!self::canConcatenateErrorKey($aggregatedRule, $key)) {
-            return $valuePath;
-        }
-
-        return "$valuePath.$key";
-    }
-
-    private static function canConcatenateErrorKey(Rules $aggregatedRule, string $key): bool
-    {
-        if ($key !== '0' && !NumericHelper::isPositiveInteger($key)) {
-            return true;
-        }
-
-        $aggregatedRuleArray = $aggregatedRule->asArray();
-        if (ArrayHelper::getValue($aggregatedRuleArray, [0, 0]) !== 'each') {
-            return false;
-        }
-
-        return !(ArrayHelper::getValue($aggregatedRuleArray, [0, 1, 0]) === 'nested');
     }
 }
