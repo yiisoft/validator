@@ -8,6 +8,7 @@ use ReflectionClass;
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
 use Yiisoft\Validator\Attribute\Validate;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rules;
@@ -56,6 +57,9 @@ final class AnnotatedDataSet implements RulesProviderInterface
                 $nestedRule = Nested::rule($this->handleAnnotations($relatedClassMeta))->skipOnError(false);
 
                 if ($className === HasMany::class) {
+                    /**
+                     * @psalm-suppress UndefinedMethod
+                     */
                     $rules[$property->getName()][] = Each::rule(new Rules([$nestedRule]));
                 } else {
                     $rules[$property->getName()] = $nestedRule;
