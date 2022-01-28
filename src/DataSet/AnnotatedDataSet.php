@@ -47,6 +47,9 @@ final class AnnotatedDataSet implements RulesProviderInterface
             }
 
             foreach ([HasMany::class, HasOne::class] as $className) {
+                /**
+                 * @psalm-suppress UndefinedMethod
+                 */
                 $attributes = $property->getAttributes($className);
                 if (!$attributes) {
                     continue;
@@ -67,6 +70,9 @@ final class AnnotatedDataSet implements RulesProviderInterface
 
             $useEach = false;
             $flatRules = [];
+            /**
+             * @psalm-suppress UndefinedMethod
+             */
             $attributes = $property->getAttributes(Validate::class);
             foreach ($attributes as $index => $attribute) {
                 if ($index === 0 && $attribute->getArguments()[0] === Each::class) {
