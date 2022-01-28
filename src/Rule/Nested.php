@@ -79,25 +79,23 @@ final class Nested extends Rule
                 'Value should be an array or an object. %s given.',
                 gettype($value)
             ));
+
             return $result;
         }
+
         $value = (array) $value;
 
         foreach ($this->rules as $valuePath => $rules) {
-            $rulesSet = is_array($rules) ? $rules : [$rules];
             if ($this->errorWhenPropertyPathIsNotFound && !ArrayHelper::pathExists($value, $valuePath)) {
-                $result->addError(
-                    $this->formatMessage(
-                        $this->propertyPathIsNotFoundMessage,
-                        [
-                            'path' => $valuePath,
-                        ]
-                    )
-                );
+                $message = $this->formatMessage($this->propertyPathIsNotFoundMessage, ['path' => $valuePath]);
+                $result->addError($message);
+
                 continue;
             }
-            $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
+
+            $rulesSet = is_array($rules) ? $rules : [$rules];
             $aggregatedRule = new Rules($rulesSet);
+            $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
             $itemResult = $aggregatedRule->validate($validatedValue);
             if ($itemResult->isValid()) {
                 continue;
