@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use InvalidArgumentException;
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
