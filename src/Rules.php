@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
+use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Rule\Callback;
 use function is_callable;
 
@@ -97,6 +98,16 @@ final class Rules
             }
         }
         return $arrayOfRules;
+    }
+
+    public function isNestedEach(): bool
+    {
+        $array = $this->asArray();
+        if (ArrayHelper::getValue($array, [0, 0]) !== 'each') {
+            return false;
+        }
+
+        return !(ArrayHelper::getValue($array, [0, 1, 0]) === 'nested');
     }
 
     private function addFormatterToRules(?FormatterInterface $formatter): void
