@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Yiisoft\Arrays\ArrayHelper;
+
 final class Result
 {
     /**
@@ -39,5 +41,15 @@ final class Result
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    public function getNestedErrors(): array
+    {
+        $errors = [];
+        foreach ($this->errors as $key => $message) {
+            ArrayHelper::setValueByPath($errors, $key, $message);
+        }
+
+        return $errors;
     }
 }

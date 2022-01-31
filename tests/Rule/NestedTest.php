@@ -162,6 +162,8 @@ class NestedTest extends TestCase
                 ])->skipOnError(false),
             ])),
         ]);
+        $result = $rule->validate($data);
+
         $this->assertEquals([
             'charts.0.points.0.coordinates.x.0' => 'Value must be no less than -10.',
             'charts.0.points.0.coordinates.x.1' => 'Custom error.',
@@ -185,7 +187,65 @@ class NestedTest extends TestCase
             'charts.2.points.1.coordinates.y.0' => 'Value must be no greater than 10.',
             'charts.2.points.1.rgb.1' => 'Value must be no less than 0. -4 given.',
             'charts.2.points.1.rgb.2' => 'Value must be no greater than 255. 259 given.',
-        ], $rule->validate($data)->getErrors());
+        ], $result->getErrors());
+        $this->assertEquals([
+            'charts' => [
+                0 => [
+                    'points' => [
+                        0 => [
+                            'coordinates' => [
+                                'x' => ['Value must be no less than -10.', 'Custom error.'],
+                                'y' => ['Value must be no greater than 10.'],
+                            ],
+                            'rgb' => [
+                                0 => 'Value must be no less than 0. -1 given.',
+                                1 => 'Value must be no greater than 255. 256 given.',
+                            ],
+                        ],
+                        1 => [
+                            'coordinates' => [
+                                'x' => ['Value must be no less than -10.', 'Custom error.'],
+                                'y' => ['Value must be no greater than 10.'],
+                            ],
+                            'rgb' => [
+                                1 => 'Value must be no less than 0. -2 given.',
+                                2 => 'Value must be no greater than 255. 257 given.',
+                            ],
+                        ],
+                    ],
+                ],
+                1 => [
+                    'points' => [
+                        0 => ['coordinates' => ['x' => ['Custom error.']]],
+                        1 => ['coordinates' => ['x' => ['Custom error.']]],
+                    ],
+                ],
+                2 => [
+                    'points' => [
+                        0 => [
+                            'coordinates' => [
+                                'x' => ['Value must be no less than -10.', 'Custom error.'],
+                                'y' => ['Value must be no greater than 10.'],
+                            ],
+                            'rgb' => [
+                                0 => 'Value must be no less than 0. -3 given.',
+                                1 => 'Value must be no greater than 255. 258 given.',
+                            ],
+                        ],
+                        1 => [
+                            'coordinates' => [
+                                'x' => ['Value must be no less than -10.', 'Custom error.'],
+                                'y' => ['Value must be no greater than 10.'],
+                            ],
+                            'rgb' => [
+                                1 => 'Value must be no less than 0. -4 given.',
+                                2 => 'Value must be no greater than 255. 259 given.',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ], $result->getNestedErrors());
     }
 
     public function optionsDataProvider(): array
