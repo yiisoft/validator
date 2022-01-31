@@ -71,6 +71,7 @@ final class AnnotatedDataSet implements RulesProviderInterface
             }
 
             $useEach = false;
+            $eachRuleConfig = [];
             $flatRules = [];
             /**
              * @psalm-suppress UndefinedMethod
@@ -79,6 +80,7 @@ final class AnnotatedDataSet implements RulesProviderInterface
             foreach ($attributes as $index => $attribute) {
                 if ($index === 0 && $attribute->getArguments()[0] === Each::class) {
                     $useEach = true;
+                    $eachRuleConfig = $attribute->getArguments()[1] ?? [];
 
                     continue;
                 }
@@ -90,10 +92,9 @@ final class AnnotatedDataSet implements RulesProviderInterface
                 continue;
             }
 
-            $addedRules = $useEach ?
-                Each::rule(new Rules($flatRules))->applyConfig($attribute->getArguments()[1] ?? []) :
+            $rules[$property->getName()] = $useEach ?
+                Each::rule(new Rules($flatRules))->applyConfig($eachRuleConfig) :
                 $flatRules;
-            $rules[$property->getName()] = $addedRules;
         }
 
         return $rules;
