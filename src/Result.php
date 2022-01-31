@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Yiisoft\Arrays\ArrayHelper;
+
 final class Result
 {
     /**
@@ -17,14 +19,16 @@ final class Result
     }
 
     /**
-     * @param string $message
+     * Add an error.
+     *
+     * @param string $message Error message.
      * @param int|string|null $key For simple rules the key is null meaning error will be appended to the end of the
      * array. Otherwise, it's a path to a current error value in the input data concatenated using dot notation. For
      * example: "charts.0.points.0.coordinates.x".
      */
     public function addError(string $message, $key = null): void
     {
-        if ($key !== null && $key !== 0) {
+        if ($key !== null && $key !== 0 && !isset($this->errors[$key])) {
             $this->errors[$key] = $message;
         } else {
             $this->errors[] = $message;
@@ -37,5 +41,15 @@ final class Result
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    public function getNestedErrors(): array
+    {
+        $errors = [];
+        foreach ($this->errors as $key => $message) {
+            ArrayHelper::setValueByPath($errors, $key, $message);
+        }
+
+        return $errors;
     }
 }
