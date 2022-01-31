@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
-use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Rule\Callback;
 use function is_callable;
 
