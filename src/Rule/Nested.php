@@ -101,11 +101,8 @@ final class Nested extends Rule
                 continue;
             }
 
-            $concatenateErrorKey = !isset($itemResult->getErrors()[0]) || $aggregatedRule->isNestedEach();
-
             foreach ($itemResult->getErrors() as $key => $error) {
-                $errorKey = $concatenateErrorKey ? "$valuePath.$key" : $valuePath;
-                $result->addError($error, $errorKey);
+                $result->addError($error, "$valuePath.$key");
             }
         }
 

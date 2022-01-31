@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\InRange;
@@ -69,7 +71,7 @@ class NestedTest extends TestCase
 
         $result = $validator->validate(['value' => null]);
 
-        $this->assertEquals(['value' => 'Value cannot be blank.'], $result->getErrors());
+        $this->assertEquals(['value.0' => 'Value cannot be blank.'], $result->getErrors());
     }
 
     public function testErrorWhenValuePathNotFound(): void
@@ -141,7 +143,15 @@ class NestedTest extends TestCase
                     'points' => Each::rule(new Rules([
                         Nested::rule([
                             'coordinates' => Nested::rule([
-                                'x' => [Number::rule()->min(-10)->max(10)],
+                                'x' => [
+                                    Number::rule()->min(-10)->max(10),
+                                    Callback::rule(static function ($value): Result {
+                                        $result = new Result();
+                                        $result->addError('Custom error.');
+
+                                        return $result;
+                                    })->skipOnError(false),
+                                ],
                                 'y' => [Number::rule()->min(-10)->max(10)],
                             ]),
                             'rgb' => Each::rule(new Rules([
@@ -152,25 +162,30 @@ class NestedTest extends TestCase
                 ])->skipOnError(false),
             ])),
         ]);
-        $expectedErrors = [
-            'charts.0.points.0.coordinates.x' => 'Value must be no less than -10.',
-            'charts.0.points.0.coordinates.y' => 'Value must be no greater than 10.',
+        $this->assertEquals([
+            'charts.0.points.0.coordinates.x.0' => 'Value must be no less than -10.',
+            'charts.0.points.0.coordinates.x.1' => 'Custom error.',
+            'charts.0.points.0.coordinates.y.0' => 'Value must be no greater than 10.',
             'charts.0.points.0.rgb.0' => 'Value must be no less than 0. -1 given.',
             'charts.0.points.0.rgb.1' => 'Value must be no greater than 255. 256 given.',
-            'charts.0.points.1.coordinates.x' => 'Value must be no less than -10.',
-            'charts.0.points.1.coordinates.y' => 'Value must be no greater than 10.',
+            'charts.0.points.1.coordinates.x.0' => 'Value must be no less than -10.',
+            'charts.0.points.1.coordinates.x.1' => 'Custom error.',
+            'charts.0.points.1.coordinates.y.0' => 'Value must be no greater than 10.',
             'charts.0.points.1.rgb.1' => 'Value must be no less than 0. -2 given.',
             'charts.0.points.1.rgb.2' => 'Value must be no greater than 255. 257 given.',
-            'charts.2.points.0.coordinates.x' => 'Value must be no less than -10.',
-            'charts.2.points.0.coordinates.y' => 'Value must be no greater than 10.',
+            'charts.1.points.0.coordinates.x.0' => 'Custom error.',
+            'charts.1.points.1.coordinates.x.0' => 'Custom error.',
+            'charts.2.points.0.coordinates.x.0' => 'Value must be no less than -10.',
+            'charts.2.points.0.coordinates.x.1' => 'Custom error.',
+            'charts.2.points.0.coordinates.y.0' => 'Value must be no greater than 10.',
             'charts.2.points.0.rgb.0' => 'Value must be no less than 0. -3 given.',
             'charts.2.points.0.rgb.1' => 'Value must be no greater than 255. 258 given.',
-            'charts.2.points.1.coordinates.x' => 'Value must be no less than -10.',
-            'charts.2.points.1.coordinates.y' => 'Value must be no greater than 10.',
+            'charts.2.points.1.coordinates.x.0' => 'Value must be no less than -10.',
+            'charts.2.points.1.coordinates.x.1' => 'Custom error.',
+            'charts.2.points.1.coordinates.y.0' => 'Value must be no greater than 10.',
             'charts.2.points.1.rgb.1' => 'Value must be no less than 0. -4 given.',
             'charts.2.points.1.rgb.2' => 'Value must be no greater than 255. 259 given.',
-        ];
-        $this->assertEquals($expectedErrors, $rule->validate($data)->getErrors());
+        ], $rule->validate($data)->getErrors());
     }
 
     public function optionsDataProvider(): array
