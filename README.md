@@ -251,17 +251,16 @@ $errors = [
 If you have PHP 8, you can use attributes. Declare the DTOs, relations and rules:
 
 ```php
-use Yiisoft\Validator\Attribute\AttributeTrait;
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
 use Yiisoft\Validator\Attribute\Validate;
+use Yiisoft\Validator\DataSet\AnnotatedDataSet;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Validator;
 
 class ChartsData
 {
-    use AttributeTrait;
-
     #[HasMany(Chart::class)]
     private array $charts;
 }
@@ -293,10 +292,10 @@ class Coordinates
 Retrieve rule from the base DTO and use it for validation.
 
 ```php
-$rule = (new ChartsData())->getRule();
 // The structure of data and errors is the same as in previous example
 $data = [];
-$errors = $rule->validate($data)->getErrors();
+$dataSet = new AnnotatedDataSet(new ChartsData(), $data);
+$errors = $rule->validate($dataSet)->getErrors();
 ```
 
 ### Conditional validation
