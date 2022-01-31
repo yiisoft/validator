@@ -107,7 +107,7 @@ final class Rules
             return false;
         }
 
-        return !(ArrayHelper::getValue($array, [0, 1, 0]) === 'nested');
+        return ArrayHelper::getValue($array, [0, 1, 0]) !== 'nested';
     }
 
     private function addFormatterToRules(?FormatterInterface $formatter): void
