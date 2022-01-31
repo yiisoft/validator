@@ -45,17 +45,21 @@ final class Rules
     public function validate($value, ValidationContext $context = null): Result
     {
         $context = $context ?? new ValidationContext();
-
         $compoundResult = new Result();
+
         foreach ($this->rules as $rule) {
             $ruleResult = $rule->validate($value, $context);
-            if ($ruleResult->isValid() === false) {
-                $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
-                foreach ($ruleResult->getErrors() as $key => $message) {
-                    $compoundResult->addError($message, $key);
-                }
+            if ($ruleResult->isValid()) {
+                continue;
+            }
+
+            $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
+
+            foreach ($ruleResult->getErrors() as $key => $message) {
+                $compoundResult->addError($message, $key);
             }
         }
+
         return $compoundResult;
     }
 

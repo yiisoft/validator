@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -249,5 +250,41 @@ class RulesTest extends TestCase
                 ],
             ],
         ], $rules->asArray());
+    }
+
+    /**
+     * @test
+     */
+    public function testPersistentError(): void
+    {
+        $ruleSet = new Rules([
+            Callback::rule(static function ($value): Result {
+                $result = new Result();
+                $result->addError('e1');
+                $result->addError('e2');
+                $result->addError('e3');
+
+                return $result;
+            }),
+            Callback::rule(static function ($value): Result {
+                $result = new Result();
+                $result->addError('e4');
+                $result->addError('e5');
+                $result->addError('e6');
+
+                return $result;
+            })->skipOnError(false),
+        ]);
+        $result = $ruleSet->validate('hi');
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame([
+            0 => 'e1',
+            1 => 'e2',
+            2 => 'e3',
+            3 => 'e4',
+            4 => 'e5',
+            5 => 'e6',
+        ], $result->getErrors());
     }
 }
