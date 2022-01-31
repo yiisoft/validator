@@ -17,7 +17,9 @@ final class Result
     }
 
     /**
-     * @param string $message
+     * Add an error.
+     *
+     * @param string $message Error message.
      * @param int|string|null $key For simple rules the key is null meaning error will be appended to the end of the
      * array. Otherwise, it's a path to a current error value in the input data concatenated using dot notation. For
      * example: "charts.0.points.0.coordinates.x".
