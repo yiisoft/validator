@@ -261,19 +261,19 @@ use Yiisoft\Validator\Validator;
 
 class ChartsData
 {
-    #[HasMany(Chart::class)]
+    #[HasMany(Chart::class, ['skipOnError' => false])]
     private array $charts;
 }
 
 class Chart
 {
-    #[HasMany(Dot::class)]
+    #[HasMany(Dot::class, ['skipOnError' => false])]
     private array $dots;
 }
 
 class Dot
 {
-    #[HasOne(Coordinates::class)]
+    #[HasOne(Coordinates::class, ['skipOnError' => false])]
     private $coordinates;
     #[Validate(Each::class)]
     #[Validate(Number::class, ['min' => 0, 'max' => 255, 'skipOnError' => false])]

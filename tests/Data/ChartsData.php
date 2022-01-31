@@ -12,19 +12,19 @@ use Yiisoft\Validator\Rule\Number;
 
 class ChartsData
 {
-    #[HasMany(Chart::class)]
+    #[HasMany(Chart::class, ['skipOnError' => false])]
     private array $charts;
 }
 
 class Chart
 {
-    #[HasMany(Point::class)]
+    #[HasMany(Point::class, ['skipOnError' => false])]
     private array $points;
 }
 
 class Point
 {
-    #[HasOne(Coordinates::class)]
+    #[HasOne(Coordinates::class, ['skipOnError' => false])]
     private $coordinates;
     #[Validate(Each::class)]
     #[Validate(Number::class, ['min' => 0, 'max' => 255, 'skipOnError' => false])]

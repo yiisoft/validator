@@ -17,11 +17,7 @@ class Validate
 
     public function __construct(string $rule, array $parameters = [])
     {
-        $this->rule = $rule::rule();
-
-        foreach ($parameters as $methodName => $value) {
-            $this->rule = $this->rule->$methodName($value);
-        }
+        $this->rule = $rule::rule()->applyConfig($parameters);
     }
 
     public function getRule(): Rule

@@ -50,6 +50,34 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
     }
 
     /**
+     * An alternative to chain calls for setting properties.
+     *
+     * Example:
+     *
+     * ```php
+     * Rule::rule()->applyConfig(['skipOnError' => false]);
+     * ```
+     * is equivalent to:
+     *
+     * ```php
+     * Rule::rule()->skipOnError(false);
+     * ```
+     *
+     * @param array $config
+     *
+     * @return $this
+     */
+    final public function applyConfig($config): self
+    {
+        $rule = $this;
+        foreach ($config as $methodName => $value) {
+            $rule = $rule->$methodName($value);
+        }
+
+        return $rule;
+    }
+
+    /**
      * Validates the value
      *
      * @param mixed $value Value to be validated.

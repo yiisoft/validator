@@ -56,13 +56,15 @@ final class AnnotatedDataSet implements RulesProviderInterface
                 }
 
                 $relatedClassMeta = new ReflectionClass(new ($attributes[0]->getArguments()[0]));
-                $nestedRule = Nested::rule($this->handleAnnotations($relatedClassMeta))->skipOnError(false);
+                $nestedRule = Nested::rule($this->handleAnnotations($relatedClassMeta))
+                    ->applyConfig($attributes[1] ?? []);
 
                 if ($className === HasMany::class) {
                     /**
                      * @psalm-suppress UndefinedMethod
                      */
-                    $rules[$property->getName()][] = Each::rule(new Rules([$nestedRule]));
+                    $rules[$property->getName()][] = Each::rule(new Rules([$nestedRule]))
+                        ->applyConfig($attributes[2] ?? []);
                 } else {
                     $rules[$property->getName()] = $nestedRule;
                 }
@@ -88,7 +90,9 @@ final class AnnotatedDataSet implements RulesProviderInterface
                 continue;
             }
 
-            $addedRules = $useEach ? Each::rule(new Rules($flatRules)) : $flatRules;
+            $addedRules = $useEach ?
+                Each::rule(new Rules($flatRules))->applyConfig($attribute->getArguments()[1] ?? []) :
+                $flatRules;
             $rules[$property->getName()] = $addedRules;
         }
 

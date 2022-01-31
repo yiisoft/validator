@@ -7,12 +7,12 @@ namespace Yiisoft\Validator\Attribute;
 use Attribute;
 
 /**
- * Represents pne to many relation.
+ * Represents one to many relation.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 class HasMany
 {
-    public function __construct(string $relatedClassName)
+    public function __construct(string $relatedClassName, array $nestedRuleConfig = [], array $eachRuleConfig = [])
     {
     }
 }
