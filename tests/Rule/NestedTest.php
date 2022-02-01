@@ -113,6 +113,74 @@ class NestedTest extends TestCase
         $this->assertEquals($expectedOptions, $options);
     }
 
+    public function optionsDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'author.name' => new ParametrizedRule('author-name', ['key' => 'name']),
+                    'author.age' => new ParametrizedRule('author-age', ['key' => 'age']),
+                ],
+                [
+                    'author.name' => ['key' => 'name'],
+                    'author.age' => ['key' => 'age'],
+                ],
+            ],
+            [
+                [
+                    'author' => [
+                        'name' => new ParametrizedRule('author-name', ['key' => 'name']),
+                        'age' => new ParametrizedRule('author-age', ['key' => 'age']),
+                    ],
+                ],
+                [
+                    'author' => [
+                        'name' => ['key' => 'name'],
+                        'age' => ['key' => 'age'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function validateDataProvider(): array
+    {
+        return [
+            'success' => [
+                [
+                    'author.name' => [
+                        HasLength::rule()->min(3),
+                    ],
+                ],
+                true,
+            ],
+            'error' => [
+                [
+                    'author.age' => [
+                        Number::rule()->min(20),
+                    ],
+                ],
+                false,
+            ],
+            'key not exists' => [
+                [
+                    'author.sex' => [
+                        InRange::rule(['male', 'female']),
+                    ],
+                ],
+                false,
+            ],
+            'key not exists, skip empty' => [
+                [
+                    'author.sex' => [
+                        InRange::rule(['male', 'female'])->skipOnEmpty(true),
+                    ],
+                ],
+                true,
+            ],
+        ];
+    }
+
     public function testWithOtherNestedAndEach(): void
     {
         $data = [
@@ -246,73 +314,5 @@ class NestedTest extends TestCase
                 ],
             ],
         ], $result->getNestedErrors());
-    }
-
-    public function optionsDataProvider(): array
-    {
-        return [
-            [
-                [
-                    'author.name' => new ParametrizedRule('author-name', ['key' => 'name']),
-                    'author.age' => new ParametrizedRule('author-age', ['key' => 'age']),
-                ],
-                [
-                    'author.name' => ['key' => 'name'],
-                    'author.age' => ['key' => 'age'],
-                ],
-            ],
-            [
-                [
-                    'author' => [
-                        'name' => new ParametrizedRule('author-name', ['key' => 'name']),
-                        'age' => new ParametrizedRule('author-age', ['key' => 'age']),
-                    ],
-                ],
-                [
-                    'author' => [
-                        'name' => ['key' => 'name'],
-                        'age' => ['key' => 'age'],
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    public function validateDataProvider(): array
-    {
-        return [
-            'success' => [
-                [
-                    'author.name' => [
-                        HasLength::rule()->min(3),
-                    ],
-                ],
-                true,
-            ],
-            'error' => [
-                [
-                    'author.age' => [
-                        Number::rule()->min(20),
-                    ],
-                ],
-                false,
-            ],
-            'key not exists' => [
-                [
-                    'author.sex' => [
-                        InRange::rule(['male', 'female']),
-                    ],
-                ],
-                false,
-            ],
-            'key not exists, skip empty' => [
-                [
-                    'author.sex' => [
-                        InRange::rule(['male', 'female'])->skipOnEmpty(true),
-                    ],
-                ],
-                true,
-            ],
-        ];
     }
 }
