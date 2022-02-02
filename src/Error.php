@@ -21,7 +21,7 @@ final class Error
     }
 
     /**
-     * @psalm-var array<int|string>
+     * @psalm-return array<int|string>
      */
     public function getValuePath(): ?array
     {
