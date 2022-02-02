@@ -9,7 +9,7 @@ use Yiisoft\Arrays\ArrayHelper;
 final class Result
 {
     /**
-     * @psalm-var array<int|string, string>
+     * @var Error[]
      */
     private array $errors = [];
 
@@ -19,35 +19,60 @@ final class Result
     }
 
     /**
-     * Add an error.
-     *
-     * @param string $message Error message.
-     * @param int|string|null $key For simple rules the key is null meaning error will be appended to the end of the
-     * array. Otherwise, it's a path to a current error value in the input data concatenated using dot notation. For
-     * example: "charts.0.points.0.coordinates.x".
+     * @psalm-param list<int|string>|null $valuePath
      */
-    public function addError(string $message, $key = null): void
+    public function addError(string $message, ?array $valuePath = null): void
     {
-        if ($key !== null && $key !== 0 && !isset($this->errors[$key])) {
-            $this->errors[$key] = $message;
-        } else {
-            $this->errors[] = $message;
-        }
+        $this->errors[] = new Error($message, $valuePath);
     }
 
     /**
-     * @psalm-return array<int|string, string>
+     * @return Error[]
      */
-    public function getErrors(): array
+    public function getErrorObjects(): array
     {
         return $this->errors;
     }
 
-    public function getNestedErrors(): array
+    /**
+     * @return string[]
+     */
+    public function getErrors(): array
+    {
+        return ArrayHelper::getColumn($this->errors, function ($error) {
+            /** @var Error $error */
+            return $error->getMessage();
+        });
+    }
+
+    /**
+     * @return array
+     */
+    public function getNestedDetailedErrors(): array
+    {
+        $valuePathCountMap = [];
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $stringValuePath = $error->getStringValuePath();
+            $valuePathCount = $valuePathCountMap[$stringValuePath] ?? 0;
+            $errorValuePath = "$stringValuePath.$valuePathCount";
+
+            ArrayHelper::setValueByPath($errors, $errorValuePath, $error->getMessage());
+            $valuePathCount++;
+            $valuePathCountMap[$stringValuePath] = $valuePathCount;
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFlatDetailedErrors(): array
     {
         $errors = [];
-        foreach ($this->errors as $key => $message) {
-            ArrayHelper::setValueByPath($errors, $key, $message);
+        foreach ($this->errors as $error) {
+            $errors[$error->getStringValuePath()][] = $error->getMessage();
         }
 
         return $errors;

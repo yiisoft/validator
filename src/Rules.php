@@ -54,8 +54,8 @@ final class Rules
 
             $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
 
-            foreach ($ruleResult->getErrors() as $key => $message) {
-                $compoundResult->addError($message, $key);
+            foreach ($ruleResult->getErrorObjects() as $error) {
+                $compoundResult->addError($error->getMessage(), $error->getValuePath());
             }
         }
 

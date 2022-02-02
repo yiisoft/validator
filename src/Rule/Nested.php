@@ -93,16 +93,23 @@ final class Nested extends Rule
                 continue;
             }
 
-            $rulesSet = is_array($rules) ? $rules : [$rules];
-            $aggregatedRule = new Rules($rulesSet);
+            $ruleSet = is_array($rules) ? $rules : [$rules];
+            $aggregatedRule = new Rules($ruleSet);
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
             $itemResult = $aggregatedRule->validate($validatedValue);
             if ($itemResult->isValid()) {
                 continue;
             }
 
-            foreach ($itemResult->getErrors() as $key => $error) {
-                $result->addError($error, "$valuePath.$key");
+            foreach ($itemResult->getErrorObjects() as $error) {
+                if (!is_array($valuePath)) {
+                    $valuePathArray = explode('.', $valuePath);
+                }
+
+                $valuePath = $error->getValuePath()
+                    ? array_merge($valuePathArray, $error->getValuePath())
+                    : $valuePathArray;
+                $result->addError($error->getMessage(), $valuePath);
             }
         }
 

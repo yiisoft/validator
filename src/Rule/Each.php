@@ -43,17 +43,17 @@ final class Each extends Rule
                 continue;
             }
 
-            foreach ($itemResult->getErrors() as $key => $error) {
+            foreach ($itemResult->getErrorObjects() as $error) {
                 if (!is_array($item)) {
-                    $errorKey = $index;
+                    $errorKey = [$index];
                     $formatMessage = true;
                 } else {
-                    $errorKey = "$index.$key";
+                    $errorKey = array_merge([$index], $error->getValuePath());
                     $formatMessage = false;
                 }
 
-                $message = !$formatMessage ? $error : $this->formatMessage($this->message, [
-                    'error' => $error,
+                $message = !$formatMessage ? $error->getMessage() : $this->formatMessage($this->message, [
+                    'error' => $error->getMessage(),
                     'value' => $item,
                 ]);
 
