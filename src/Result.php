@@ -21,7 +21,7 @@ final class Result
     /**
      * @psalm-param list<int|string>|null $valuePath
      */
-    public function addError(string $message, ?array $valuePath = null): void
+    public function addError(string $message, array $valuePath = []): void
     {
         $this->errors[] = new Error($message, $valuePath);
     }
