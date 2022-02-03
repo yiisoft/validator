@@ -366,4 +366,17 @@ class NestedTest extends TestCase
             'charts.2.points.1.rgb.2' => ['Value must be no greater than 255. 259 given.'],
         ], $result->getErrorsIndexedByPath());
     }
+
+    public function testIntValuePath(): void
+    {
+        $rule = Nested::rule([
+            0 => Nested::rule([
+                0 => [Number::rule()->min(-10)->max(10)],
+            ]),
+        ]);
+        $result = $rule->validate([0 => [0 => -11]]);
+
+        $this->assertCount(1, $result->getErrorObjects());
+        $this->assertSame($result->getErrorObjects()[0]->getValuePath(), [0, 0]);
+    }
 }
