@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use ArrayIterator;
+use Closure;
 use InvalidArgumentException;
 use IteratorAggregate;
 
@@ -12,7 +13,7 @@ use IteratorAggregate;
  * ResultSet stores validation result of each attribute from {@link DataSetInterface}.
  * It is typically obtained by validating data set with {@link Validator}.
  */
-final class ResultSet implements IteratorAggregate
+final class ResultSet implements IteratorAggregate, ErrorsReadInterface
 {
     /**
      * @var Result[]
@@ -20,6 +21,55 @@ final class ResultSet implements IteratorAggregate
      */
     private array $results = [];
     private bool $isValid = true;
+
+    public function getIterator(): ArrayIterator
+    {
+        return new ArrayIterator($this->results);
+    }
+
+    public function isValid(): bool
+    {
+        return $this->isValid;
+    }
+
+    /**
+     * @psalm-return array<string, Error>
+     */
+    public function getErrorObjects(): array
+    {
+        return $this->getAttributeToErrorsMap(static fn (Result $result) => $result->getErrorObjects());
+    }
+
+    /**
+     * @return string[][]
+     * @psalm-return array<string, array<int|string, string>>
+     */
+    public function getErrors(): array
+    {
+        return $this->getAttributeToErrorsMap(static fn (Result $result) => $result->getErrors());
+    }
+
+    public function getNestedErrors(): array
+    {
+        return $this->getAttributeToErrorsMap(static fn (Result $result) => $result->getNestedErrors());
+    }
+
+    public function getErrorsIndexedByPath(string $separator = '.'): array
+    {
+        return $this->getAttributeToErrorsMap(static fn (Result $result) => $result->getErrorsIndexedByPath($separator));
+    }
+
+    private function getAttributeToErrorsMap(Closure $getErrorsClosure): array
+    {
+        $errors = [];
+        foreach ($this->results as $attribute => $result) {
+            if (!$result->isValid()) {
+                $errors[$attribute] = $getErrorsClosure($result);
+            }
+        }
+
+        return $errors;
+    }
 
     public function addResult(string $attribute, Result $result): void
     {
@@ -48,31 +98,5 @@ final class ResultSet implements IteratorAggregate
         }
 
         return $this->results[$attribute];
-    }
-
-    public function getIterator(): ArrayIterator
-    {
-        return new ArrayIterator($this->results);
-    }
-
-    /**
-     * @return string[][]
-     * @psalm-return array<string, array<int|string, string>>
-     */
-    public function getErrors(): array
-    {
-        $errors = [];
-        foreach ($this->results as $attribute => $result) {
-            if (!$result->isValid()) {
-                $errors[$attribute] = $result->getErrors();
-            }
-        }
-
-        return $errors;
-    }
-
-    public function isValid(): bool
-    {
-        return $this->isValid;
     }
 }

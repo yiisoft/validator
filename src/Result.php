@@ -6,7 +6,7 @@ namespace Yiisoft\Validator;
 
 use Yiisoft\Arrays\ArrayHelper;
 
-final class Result
+final class Result implements ErrorsReadInterface
 {
     /**
      * @var Error[]
@@ -16,14 +16,6 @@ final class Result
     public function isValid(): bool
     {
         return $this->errors === [];
-    }
-
-    /**
-     * @psalm-param array<int|string> $valuePath
-     */
-    public function addError(string $message, array $valuePath = []): void
-    {
-        $this->errors[] = new Error($message, $valuePath);
     }
 
     /**
@@ -69,5 +61,13 @@ final class Result
         }
 
         return $errors;
+    }
+
+    /**
+     * @psalm-param array<int|string> $valuePath
+     */
+    public function addError(string $message, array $valuePath = []): void
+    {
+        $this->errors[] = new Error($message, $valuePath);
     }
 }
