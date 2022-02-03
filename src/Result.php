@@ -19,7 +19,7 @@ final class Result
     }
 
     /**
-     * @psalm-param list<int|string>|null $valuePath
+     * @psalm-param list<int|string> $valuePath
      */
     public function addError(string $message, array $valuePath = []): void
     {
