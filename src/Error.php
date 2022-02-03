@@ -9,7 +9,7 @@ final class Error
     private string $message;
     private ?array $valuePath;
 
-    public function __construct(string $message, ?array $valuePath = null)
+    public function __construct(string $message, array $valuePath = [])
     {
         $this->message = $message;
         $this->valuePath = $valuePath;
