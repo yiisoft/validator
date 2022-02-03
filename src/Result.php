@@ -48,7 +48,7 @@ final class Result
     /**
      * @return array
      */
-    public function getNestedDetailedErrors(): array
+    public function getNestedErrors(): array
     {
         $valuePathCountMap = [];
         $errors = [];
