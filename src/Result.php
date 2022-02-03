@@ -68,7 +68,7 @@ final class Result
     /**
      * @return array
      */
-    public function getFlatDetailedErrors(): array
+    public function getErrorsIndexedByPath(string $separator = '.'): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
