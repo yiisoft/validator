@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 final class Error
 {
     private string $message;
-    private ?array $valuePath;
+    private array $valuePath;
 
     public function __construct(string $message, array $valuePath = [])
     {
