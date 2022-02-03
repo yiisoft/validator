@@ -39,10 +39,7 @@ final class Result
      */
     public function getErrors(): array
     {
-        return ArrayHelper::getColumn($this->errors, function ($error) {
-            /** @var Error $error */
-            return $error->getMessage();
-        });
+        return ArrayHelper::getColumn($this->errors, static fn (Error $error) => $error->getMessage());
     }
 
     public function getNestedErrors(): array
