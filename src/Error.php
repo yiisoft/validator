@@ -27,9 +27,4 @@ final class Error
     {
         return $this->valuePath;
     }
-
-    public function getStringValuePath(): string
-    {
-        return implode('.', $this->valuePath);
-    }
 }

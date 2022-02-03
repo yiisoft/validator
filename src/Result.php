@@ -45,15 +45,12 @@ final class Result
         });
     }
 
-    /**
-     * @return array
-     */
-    public function getNestedErrors(): array
+    public function getNestedErrors(string $separator = '.'): array
     {
         $valuePathCountMap = [];
         $errors = [];
         foreach ($this->errors as $error) {
-            $stringValuePath = $error->getStringValuePath();
+            $stringValuePath = implode($separator, $error->getValuePath());
             $valuePathCount = $valuePathCountMap[$stringValuePath] ?? 0;
             $errorValuePath = "$stringValuePath.$valuePathCount";
 
@@ -65,14 +62,12 @@ final class Result
         return $errors;
     }
 
-    /**
-     * @return array
-     */
     public function getErrorsIndexedByPath(string $separator = '.'): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
-            $errors[$error->getStringValuePath()][] = $error->getMessage();
+            $stringValuePath = implode($separator, $error->getValuePath());
+            $errors[$stringValuePath][] = $error->getMessage();
         }
 
         return $errors;

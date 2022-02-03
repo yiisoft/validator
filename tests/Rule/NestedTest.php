@@ -364,6 +364,6 @@ class NestedTest extends TestCase
             'charts.2.points.1.coordinates.y' => ['Value must be no greater than 10.'],
             'charts.2.points.1.rgb.1' => ['Value must be no less than 0. -4 given.'],
             'charts.2.points.1.rgb.2' => ['Value must be no greater than 255. 259 given.'],
-        ], $result->getFlatDetailedErrors());
+        ], $result->getErrorsIndexedByPath());
     }
 }
