@@ -344,7 +344,7 @@ class NestedTest extends TestCase
                     ],
                 ],
             ],
-        ], $result->getNestedDetailedErrors());
+        ], $result->getNestedErrors());
         $this->assertEquals([
             'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
             'charts.0.points.0.coordinates.y' => ['Value must be no greater than 10.'],
