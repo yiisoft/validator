@@ -45,21 +45,22 @@ final class Result
         });
     }
 
-    public function getNestedErrors(string $separator = '.'): array
+    public function getNestedErrors(): array
     {
-        $valuePathCountMap = [];
-        $errors = [];
+        $nestedErrors = [];
         foreach ($this->errors as $error) {
-            $stringValuePath = implode($separator, $error->getValuePath());
-            $valuePathCount = $valuePathCountMap[$stringValuePath] ?? 0;
-            $errorValuePath = "$stringValuePath.$valuePathCount";
+            $valuePath = $error->getValuePath();
+            if ($valuePath === []) {
+                $nestedErrors[0][] = $error->getMessage();
+            } else {
+                $errors = ArrayHelper::getValue($nestedErrors, $valuePath, []);
+                $errors[] = $error->getMessage();
 
-            ArrayHelper::setValueByPath($errors, $errorValuePath, $error->getMessage());
-            $valuePathCount++;
-            $valuePathCountMap[$stringValuePath] = $valuePathCount;
+                ArrayHelper::setValue($nestedErrors, $valuePath, $errors);
+            }
         }
 
-        return $errors;
+        return $nestedErrors;
     }
 
     public function getErrorsIndexedByPath(string $separator = '.'): array
