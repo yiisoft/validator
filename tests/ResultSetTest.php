@@ -76,14 +76,6 @@ class ResultSetTest extends TestCase
         );
     }
 
-    public function testGetNestedErrors(): void
-    {
-        $this->assertEquals(
-            ['attribute1' => [0 => ['error1', 'error2']], 'attribute2' => ['path' => [3 => ['error3']]]],
-            $this->createErrorResultSet()->getNestedErrors()
-        );
-    }
-
     public function testGetErrorsIndexedByPath(): void
     {
         $this->assertEquals(

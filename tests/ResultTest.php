@@ -63,14 +63,6 @@ class ResultTest extends TestCase
         $this->assertSame(['error1', 'error2'], $this->createErrorResult()->getErrors());
     }
 
-    public function testGetNestedErrors(): void
-    {
-        $this->assertEquals(
-            [0 => ['error1'], 'path' => [2 => ['error2']]],
-            $this->createErrorResult()->getNestedErrors()
-        );
-    }
-
     public function testGetErrorsIndexedByPath(): void
     {
         $this->assertEquals(

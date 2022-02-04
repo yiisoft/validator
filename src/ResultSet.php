@@ -49,11 +49,6 @@ final class ResultSet implements IteratorAggregate, ErrorsReadInterface
         return $this->getAttributeToErrorsMap(static fn (Result $result) => $result->getErrors());
     }
 
-    public function getNestedErrors(): array
-    {
-        return $this->getAttributeToErrorsMap(static fn (Result $result) => $result->getNestedErrors());
-    }
-
     public function getErrorsIndexedByPath(string $separator = '.'): array
     {
         return $this->getAttributeToErrorsMap(static fn (Result $result) => $result->getErrorsIndexedByPath($separator));

@@ -34,24 +34,6 @@ final class Result implements ErrorsReadInterface
         return ArrayHelper::getColumn($this->errors, static fn (Error $error) => $error->getMessage());
     }
 
-    public function getNestedErrors(): array
-    {
-        $nestedErrors = [];
-        foreach ($this->errors as $error) {
-            $valuePath = $error->getValuePath();
-            if ($valuePath === []) {
-                $nestedErrors[0][] = $error->getMessage();
-            } else {
-                $errors = ArrayHelper::getValue($nestedErrors, $valuePath, []);
-                $errors[] = $error->getMessage();
-
-                ArrayHelper::setValue($nestedErrors, $valuePath, $errors);
-            }
-        }
-
-        return $nestedErrors;
-    }
-
     public function getErrorsIndexedByPath(string $separator = '.'): array
     {
         $errors = [];

@@ -12,7 +12,5 @@ interface ErrorsReadInterface
 
     public function getErrors(): array;
 
-    public function getNestedErrors(): array;
-
     public function getErrorsIndexedByPath(string $separator = '.'): array;
 }
