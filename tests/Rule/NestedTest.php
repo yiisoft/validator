@@ -379,4 +379,24 @@ class NestedTest extends TestCase
         $this->assertCount(1, $result->getErrorObjects());
         $this->assertSame($result->getErrorObjects()[0]->getValuePath(), [0, 0]);
     }
+
+    public function testSeparateErrorGroups(): void
+    {
+        $rule = Nested::rule([
+            'key' => Each::rule(new Rules([
+                HasLength::rule()->min(5)->skipOnError(false),
+                InRange::rule(['aaa', 'bbb', 'ccc'])->skipOnError(false),
+            ]))
+        ]);
+        $result = $rule->validate(['key' => ['x', 'y']]);
+        $indexedErrors = $result->getErrorsIndexedByPath();
+
+        $this->assertSame(array_keys($indexedErrors), ['key.0', 'key.1']);
+        $this->assertSame(array_keys($indexedErrors['key.0']), [0, 1]);
+        $this->assertSame(array_keys($indexedErrors['key.1']), [0, 1]);
+        $this->assertIsString($indexedErrors['key.0'][0]);
+        $this->assertIsString($indexedErrors['key.0'][1]);
+        $this->assertIsString($indexedErrors['key.1'][0]);
+        $this->assertIsString($indexedErrors['key.1'][1]);
+    }
 }
