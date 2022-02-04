@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 
 class ResultTest extends TestCase
@@ -34,7 +35,8 @@ class ResultTest extends TestCase
     {
         $result = new Result();
         $result->addError('Error');
-        $this->assertContains('Error', $result->getErrors());
+
+        $this->assertSame([0 => 'Error'], $result->getErrors());
     }
 
     /**
@@ -44,6 +46,45 @@ class ResultTest extends TestCase
     {
         $result = new Result();
         $result->addError('Error');
+
         $this->assertFalse($result->isValid());
+    }
+
+    public function testGetErrorObjects(): void
+    {
+        $this->assertEquals(
+            [new Error('error1', []), new Error('error2', ['path', 2])],
+            $this->createErrorResult()->getErrorObjects()
+        );
+    }
+
+    public function testGetErrors(): void
+    {
+        $this->assertEquals(['error1', 'error2'], $this->createErrorResult()->getErrors());
+    }
+
+    public function testGetNestedErrors(): void
+    {
+        $this->assertEquals(
+            [0 => ['error1'], 'path' => [2 => ['error2']]],
+            $this->createErrorResult()->getNestedErrors()
+        );
+    }
+
+    public function testGetErrorsIndexedByPath(): void
+    {
+        $this->assertEquals(
+            ['' => ['error1'], 'path.2' => ['error2']],
+            $this->createErrorResult()->getErrorsIndexedByPath()
+        );
+    }
+
+    private function createErrorResult(): Result
+    {
+        $result = new Result();
+        $result->addError('error1', []);
+        $result->addError('error2', ['path', 2]);
+
+        return $result;
     }
 }

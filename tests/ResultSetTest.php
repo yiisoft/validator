@@ -27,7 +27,7 @@ class ResultSetTest extends TestCase
         $this->assertFalse($resultSet->isValid());
     }
 
-    public function testSuccessShouldNotOverrideError(): void
+    public function testSuccessDoesNotOverrideError(): void
     {
         $error = $this->createErrorResult('error');
         $success = new Result();
@@ -43,7 +43,7 @@ class ResultSetTest extends TestCase
         $this->assertContains('error', $errors);
     }
 
-    public function testErrorsShouldAdd(): void
+    public function testAddErrors(): void
     {
         $resultSet = new ResultSet();
         $resultSet->addResult('x', $this->createErrorResult('error1'));
@@ -70,7 +70,7 @@ class ResultSetTest extends TestCase
 
     public function testGetErrors(): void
     {
-        $this->assertSame(
+        $this->assertEquals(
             ['attribute1' => ['error1', 'error2'], 'attribute2' => ['error3']],
             $this->createErrorResultSet()->getErrors()
         );
@@ -84,7 +84,7 @@ class ResultSetTest extends TestCase
         );
     }
 
-    public function testGetErrorsIndexedByPath_Empty(): void
+    public function testGetErrorsIndexedByPath(): void
     {
         $this->assertEquals(
             ['attribute1' => ['' => ['error1', 'error2']], 'attribute2' => ['path.3' => ['error3']]],

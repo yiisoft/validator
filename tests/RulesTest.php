@@ -253,9 +253,6 @@ class RulesTest extends TestCase
         ], $rules->asArray());
     }
 
-    /**
-     * @test
-     */
     public function testPersistentError(): void
     {
         $ruleSet = new Rules([
