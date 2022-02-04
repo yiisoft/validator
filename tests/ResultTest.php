@@ -36,7 +36,7 @@ class ResultTest extends TestCase
         $result = new Result();
         $result->addError('Error');
 
-        $this->assertSame([0 => 'Error'], $result->getErrors());
+        $this->assertContains('Error', $result->getErrors());
     }
 
     /**
@@ -60,7 +60,7 @@ class ResultTest extends TestCase
 
     public function testGetErrors(): void
     {
-        $this->assertEquals(['error1', 'error2'], $this->createErrorResult()->getErrors());
+        $this->assertSame(['error1', 'error2'], $this->createErrorResult()->getErrors());
     }
 
     public function testGetNestedErrors(): void
