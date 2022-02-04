@@ -328,7 +328,7 @@ class NestedTest extends TestCase
             'key' => Each::rule(new Rules([
                 HasLength::rule()->min(5)->skipOnError(false),
                 InRange::rule(['aaa', 'bbb', 'ccc'])->skipOnError(false),
-            ]))
+            ])),
         ]);
         $result = $rule->validate(['key' => ['x', 'y']]);
         $indexedErrors = $result->getErrorsIndexedByPath();
