@@ -23,7 +23,7 @@ final class Error
     /**
      * @psalm-return array<int|string>
      */
-    public function getValuePath(): ?array
+    public function getValuePath(): array
     {
         return $this->valuePath;
     }
