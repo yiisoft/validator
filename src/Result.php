@@ -6,7 +6,7 @@ namespace Yiisoft\Validator;
 
 use Yiisoft\Arrays\ArrayHelper;
 
-final class Result implements ErrorsReadInterface
+final class Result
 {
     /**
      * @var Error[]

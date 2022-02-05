@@ -13,7 +13,7 @@ use IteratorAggregate;
  * ResultSet stores validation result of each attribute from {@link DataSetInterface}.
  * It is typically obtained by validating data set with {@link Validator}.
  */
-final class ResultSet implements IteratorAggregate, ErrorsReadInterface
+final class ResultSet implements IteratorAggregate
 {
     /**
      * @var Result[]
