@@ -102,14 +102,7 @@ final class Nested extends Rule
             }
 
             foreach ($itemResult->getErrorObjects() as $error) {
-                if (is_array($valuePath)) {
-                    $errorValuePath = $valuePath;
-                } elseif (is_int($valuePath)) {
-                    $errorValuePath = [$valuePath];
-                } else {
-                    $errorValuePath = explode('.', $valuePath);
-                }
-
+                $errorValuePath = is_int($valuePath) ? [$valuePath]: explode('.', $valuePath);
                 if ($error->getValuePath()) {
                     $errorValuePath = array_merge($errorValuePath, $error->getValuePath());
                 }
