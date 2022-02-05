@@ -37,7 +37,7 @@ final class ResultSet implements IteratorAggregate
      */
     public function getErrorObjects(): array
     {
-        return $this->getErrorsMap(static fn (Result $result) => $result->getErrorObjects());
+        return $this->getErrorsMap(static fn (Result $result): array => $result->getErrorObjects());
     }
 
     /**
@@ -46,12 +46,12 @@ final class ResultSet implements IteratorAggregate
      */
     public function getErrors(): array
     {
-        return $this->getErrorsMap(static fn (Result $result) => $result->getErrors());
+        return $this->getErrorsMap(static fn (Result $result): array => $result->getErrors());
     }
 
     public function getErrorsIndexedByPath(string $separator = '.'): array
     {
-        return $this->getErrorsMap(static fn (Result $result) => $result->getErrorsIndexedByPath($separator));
+        return $this->getErrorsMap(static fn (Result $result): array => $result->getErrorsIndexedByPath($separator));
     }
 
     private function getErrorsMap(Closure $getErrorsClosure): array
