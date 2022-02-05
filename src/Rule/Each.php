@@ -48,7 +48,7 @@ final class Each extends Rule
                     $errorKey = [$index];
                     $formatMessage = true;
                 } else {
-                    $errorKey = array_merge([$index], $error->getValuePath());
+                    $errorKey = [$index, ...$error->getValuePath()];
                     $formatMessage = false;
                 }
 
