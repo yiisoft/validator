@@ -18,7 +18,7 @@ class MatchRegularExpressionTest extends TestCase
 
     public function testGetName(): void
     {
-        $this->assertEquals('matchRegularExpression', MatchRegularExpression::rule(self::PATTERN)->getName());
+        $this->assertSame('matchRegularExpression', MatchRegularExpression::rule(self::PATTERN)->getName());
     }
 
     public function validateDataProvider(): array
