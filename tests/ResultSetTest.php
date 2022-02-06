@@ -79,7 +79,10 @@ class ResultSetTest extends TestCase
     public function testGetErrorsIndexedByPath(): void
     {
         $this->assertEquals(
-            ['attribute1' => ['' => ['error1', 'error2']], 'attribute2' => ['path.3' => ['error3']]],
+            [
+                'attribute1' => ['attribute1' => ['error1', 'error2']],
+                'attribute2' => ['attribute2.path.3' => ['error3']],
+            ],
             $this->createErrorResultSet()->getErrorsIndexedByPath()
         );
     }
