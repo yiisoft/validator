@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Yiisoft\Arrays\ArrayHelper;
+
 final class Result
 {
     /**
-     * @psalm-var list<string>
+     * @var Error[]
      */
     private array $errors = [];
 
@@ -16,16 +18,38 @@ final class Result
         return $this->errors === [];
     }
 
-    public function addError(string $message): void
+    /**
+     * @return Error[]
+     */
+    public function getErrorObjects(): array
     {
-        $this->errors[] = $message;
+        return $this->errors;
     }
 
     /**
-     * @psalm-return list<string>
+     * @return string[]
      */
     public function getErrors(): array
     {
-        return $this->errors;
+        return ArrayHelper::getColumn($this->errors, static fn (Error $error) => $error->getMessage());
+    }
+
+    public function getErrorsIndexedByPath(string $separator = '.'): array
+    {
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $stringValuePath = implode($separator, $error->getValuePath());
+            $errors[$stringValuePath][] = $error->getMessage();
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @psalm-param array<int|string> $valuePath
+     */
+    public function addError(string $message, array $valuePath = []): void
+    {
+        $this->errors[] = new Error($message, $valuePath);
     }
 }

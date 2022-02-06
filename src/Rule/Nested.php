@@ -33,13 +33,11 @@ use function is_object;
  * So to make validation with Nested rule we can configure it like this:
  *
  * ```php
- * $rule = new Nested([
- *     'author.age' => [
- *         (new Number())->min(20),
- *     ],
- *     'author.name' => [
- *         (new HasLength())->min(3),
- *     ],
+ * $rule = Nested::rule([
+ *     'author' => Nested::rule([
+ *         'name' => [HasLength::rule()->min(3)],
+ *         'age' => [Number::rule()->min(18)],
+ *     )];
  * ]);
  * ```
  */
@@ -81,30 +79,35 @@ final class Nested extends Rule
                 'Value should be an array or an object. %s given.',
                 gettype($value)
             ));
+
             return $result;
         }
+
         $value = (array) $value;
 
         foreach ($this->rules as $valuePath => $rules) {
-            $rulesSet = is_array($rules) ? $rules : [$rules];
             if ($this->errorWhenPropertyPathIsNotFound && !ArrayHelper::pathExists($value, $valuePath)) {
-                $result->addError(
-                    $this->formatMessage(
-                        $this->propertyPathIsNotFoundMessage,
-                        [
-                            'path' => $valuePath,
-                        ]
-                    )
-                );
+                $message = $this->formatMessage($this->propertyPathIsNotFoundMessage, ['path' => $valuePath]);
+                $result->addError($message);
+
                 continue;
             }
+
+            $ruleSet = is_array($rules) ? $rules : [$rules];
+            $aggregatedRule = new Rules($ruleSet);
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
-            $aggregateRule = new Rules($rulesSet);
-            $itemResult = $aggregateRule->validate($validatedValue);
-            if ($itemResult->isValid() === false) {
-                foreach ($itemResult->getErrors() as $error) {
-                    $result->addError($error);
+            $itemResult = $aggregatedRule->validate($validatedValue);
+            if ($itemResult->isValid()) {
+                continue;
+            }
+
+            foreach ($itemResult->getErrorObjects() as $error) {
+                $errorValuePath = is_int($valuePath) ? [$valuePath] : explode('.', $valuePath);
+                if ($error->getValuePath()) {
+                    $errorValuePath = array_merge($errorValuePath, $error->getValuePath());
                 }
+
+                $result->addError($error->getMessage(), $errorValuePath);
             }
         }
 

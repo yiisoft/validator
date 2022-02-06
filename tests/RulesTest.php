@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -249,5 +251,54 @@ class RulesTest extends TestCase
                 ],
             ],
         ], $rules->asArray());
+    }
+
+    public function testPersistentError(): void
+    {
+        $ruleSet = new Rules([
+            Callback::rule(static function ($value): Result {
+                $result = new Result();
+                $result->addError('e1');
+                $result->addError('e2');
+                $result->addError('e3');
+
+                return $result;
+            }),
+            Callback::rule(static function ($value): Result {
+                $result = new Result();
+                $result->addError('e4');
+                $result->addError('e5');
+                $result->addError('e6');
+
+                return $result;
+            })->skipOnError(false),
+        ]);
+        $result = $ruleSet->validate('hi');
+
+        $this->assertFalse($result->isValid());
+        $this->assertEquals([
+            new Error('e1'),
+            new Error('e2'),
+            new Error('e3'),
+            new Error('e4'),
+            new Error('e5'),
+            new Error('e6'),
+        ], $result->getErrorObjects());
+    }
+
+    public function testAddErrorWithValuePath(): void
+    {
+        $ruleSet = new Rules([
+            Callback::rule(static function ($value): Result {
+                $result = new Result();
+                $result->addError('e1', ['key1']);
+
+                return $result;
+            }),
+        ]);
+        $result = $ruleSet->validate('hi');
+        $result->addError('e2', ['key2']);
+
+        $this->assertEquals([new Error('e1', ['key1']), new Error('e2', ['key2'])], $result->getErrorObjects());
     }
 }

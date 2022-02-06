@@ -33,12 +33,14 @@ final class Callback extends Rule
         }
 
         $result = new Result();
-
-        if ($callbackResult->isValid() === false) {
-            foreach ($callbackResult->getErrors() as $message) {
-                $result->addError($this->formatMessage($message));
-            }
+        if ($callbackResult->isValid()) {
+            return $result;
         }
+
+        foreach ($callbackResult->getErrorObjects() as $error) {
+            $result->addError($this->formatMessage($error->getMessage()), $error->getValuePath());
+        }
+
         return $result;
     }
 }
