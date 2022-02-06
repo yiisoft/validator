@@ -9,7 +9,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
-use function is_array;
+use function is_string;
 
 /**
  * RegularExpressionValidator validates that the attribute value matches the pattern specified in constructor.
