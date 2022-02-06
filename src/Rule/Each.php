@@ -19,7 +19,7 @@ final class Each extends Rule
 
     private Rules $rules;
 
-    private string $incorrectInputMessage = 'Value should be array or iterable';
+    private string $incorrectInputMessage = 'Value should be array or iterable.';
     private string $message = '{error} {value} given.';
 
     public static function rule(Rules $rules): self
