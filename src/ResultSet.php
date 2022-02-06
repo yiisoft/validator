@@ -51,19 +51,7 @@ final class ResultSet implements IteratorAggregate
 
     public function getErrorsIndexedByPath(string $separator = '.'): array
     {
-        $errors = [];
-        foreach ($this->results as $attribute => $result) {
-            if ($result->isValid()) {
-                continue;
-            }
-
-            foreach ($result->getErrorsIndexedByPath() as $path => $innerErrors) {
-                $path = !$path ? $attribute : $attribute . $separator . $path;
-                $errors[$path] = $innerErrors;
-            }
-        }
-
-        return $errors;
+        return $this->getErrorsMap(static fn (Result $result): array => $result->getErrorsIndexedByPath($separator));
     }
 
     private function getErrorsMap(Closure $getErrorsClosure): array
