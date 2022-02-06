@@ -16,6 +16,11 @@ class MatchRegularExpressionTest extends TestCase
 {
     private const PATTERN = '/^[a-zA-Z0-9](\.)?([^\/]*)$/m';
 
+    public function testGetName(): void
+    {
+        $this->assertEquals('matchRegularExpression', MatchRegularExpression::rule(self::PATTERN)->getName());
+    }
+
     public function validateDataProvider(): array
     {
         return [
@@ -38,9 +43,16 @@ class MatchRegularExpressionTest extends TestCase
         $this->assertSame($rule->not()->validate($data)->isValid(), $expectedIsValidForInverseRule);
     }
 
-    public function testGetName(): void
+    public function testMessage(): void
     {
-        $this->assertEquals('matchRegularExpression', MatchRegularExpression::rule(self::PATTERN)->getName());
+        $rule = MatchRegularExpression::rule(self::PATTERN)->message('Custom message.');
+        $this->assertSame($rule->validate('b./')->getErrors(), ['Custom message.']);
+    }
+
+    public function testIncorrectInputMessage(): void
+    {
+        $rule = MatchRegularExpression::rule(self::PATTERN)->incorrectInputMessage('Custom message.');
+        $this->assertSame($rule->validate(null)->getErrors(), ['Custom message.']);
     }
 
     public function getOptionsProvider(): array
