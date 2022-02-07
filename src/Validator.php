@@ -39,13 +39,13 @@ final class Validator implements ValidatorInterface
         $results = new ResultSet();
 
         foreach ($rules as $attribute => $attributeRules) {
-            $aggregateRule = new Rules($attributeRules);
+            $ruleSet = new RuleSet($attributeRules);
             if ($this->formatter !== null) {
-                $aggregateRule = $aggregateRule->withFormatter($this->formatter);
+                $ruleSet = $ruleSet->withFormatter($this->formatter);
             }
             $results->addResult(
                 $attribute,
-                $aggregateRule->validate($data->getAttributeValue($attribute), $context->withAttribute($attribute))
+                $ruleSet->validate($data->getAttributeValue($attribute), $context->withAttribute($attribute))
             );
         }
         if ($data instanceof PostValidationHookInterface) {
