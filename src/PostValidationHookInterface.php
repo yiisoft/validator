@@ -11,5 +11,8 @@ namespace Yiisoft\Validator;
  */
 interface PostValidationHookInterface extends DataSetInterface
 {
-    public function processValidationResult(ResultSet $resultSet): void;
+    /**
+     * @param Result[] $results
+     */
+    public function processValidationResult(array $results): void;
 }

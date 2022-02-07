@@ -11,7 +11,7 @@ use Yiisoft\Validator\RulesDumper;
 final class RulesDumperTest extends TestCase
 {
     /**
-     * @dataProvider asArrayDataProvider()
+     * @dataProvider asArrayDataProvider
      */
     public function testAsArray($rules, array $expected): void
     {

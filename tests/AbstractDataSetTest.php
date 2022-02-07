@@ -6,52 +6,46 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\ResultSet;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Number;
 
 abstract class AbstractDataSetTest extends TestCase
 {
     /**
-     * @dataProvider validationCasesDataProvider()
+     * @dataProvider validationCasesDataProvider
      *
      * @param array $dataSet
      */
     final public function test(array $dataSet, array $rules): void
     {
-        $resultSet = $this->validate($dataSet, $rules);
-
-        $this->assertTrue($resultSet->isValid());
+        $results = $this->validate($dataSet, $rules);
+        foreach ($results as $result) {
+            $this->assertTrue($result->isValid());
+        }
     }
 
     public function validationCasesDataProvider(): array
     {
         return [
             [
-                [
-                    'bool' => true,
-                    'int' => 41,
-                ],
-                [
-                    'bool' => [Boolean::rule()],
-                    'int' => [Number::rule()],
-                ],
+                ['bool' => true, 'int' => 41],
+                ['bool' => [Boolean::rule()], 'int' => [Number::rule()]],
             ],
         ];
     }
 
     /**
-     * @dataProvider resultDataProvider()
+     * @dataProvider resultDataProvider
      *
      * @param array $dataSet
      */
     public function testResult(array $dataSet, array $rules): void
     {
-        $resultSet = $this->validate($dataSet, $rules);
+        $results = $this->validate($dataSet, $rules);
 
-        $this->assertTrue($resultSet->getResult('bool')->isValid());
+        $this->assertTrue($results['bool']->isValid());
 
-        $intResult = $resultSet->getResult('int');
+        $intResult = $results['int'];
         $this->assertFalse($intResult->isValid());
         $this->assertCount(1, $intResult->getErrors());
     }
@@ -82,5 +76,8 @@ abstract class AbstractDataSetTest extends TestCase
         ];
     }
 
-    abstract protected function validate(array $dataSet, array $rules): ResultSet;
+    /**
+     * @return Result[]
+     */
+    abstract protected function validate(array $dataSet, array $rules): array;
 }

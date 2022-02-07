@@ -26,9 +26,9 @@ final class Validator implements ValidatorInterface
      * @param Rule[][] $rules
      * @psalm-param iterable<string, Rule[]> $rules
      *
-     * @return ResultSet
+     * @return Result[]
      */
-    public function validate($data, iterable $rules = []): ResultSet
+    public function validate($data, iterable $rules = []): array
     {
         $data = $this->normalizeDataSet($data);
         if ($data instanceof RulesProviderInterface) {
@@ -36,21 +36,24 @@ final class Validator implements ValidatorInterface
         }
 
         $context = new ValidationContext($data);
-        $results = new ResultSet();
+        $results = [];
 
         foreach ($rules as $attribute => $attributeRules) {
-            $aggregateRule = new Rules($attributeRules);
+            $aggregatedRule = new Rules($attributeRules);
             if ($this->formatter !== null) {
-                $aggregateRule = $aggregateRule->withFormatter($this->formatter);
+                $aggregatedRule = $aggregatedRule->withFormatter($this->formatter);
             }
-            $results->addResult(
-                $attribute,
-                $aggregateRule->validate($data->getAttributeValue($attribute), $context->withAttribute($attribute))
+
+            $results[$attribute] = $aggregatedRule->validate(
+                $data->getAttributeValue($attribute),
+                $context->withAttribute($attribute)
             );
         }
+
         if ($data instanceof PostValidationHookInterface) {
             $data->processValidationResult($results);
         }
+
         return $results;
     }
 
