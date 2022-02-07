@@ -25,7 +25,7 @@ final class Each extends Rule
     public static function rule(RuleSet $ruleSet): self
     {
         $rule = new self();
-        $rule->ruleSet = $rules;
+        $rule->ruleSet = $ruleSet;
         return $rule;
     }
 
