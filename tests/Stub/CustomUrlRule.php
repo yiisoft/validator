@@ -22,7 +22,7 @@ final class CustomUrlRule extends GroupRule
         return new RuleSet([
             new Required(),
             Url::rule()->enableIDN(),
-            (new HasLength())->max(20)
+            (new HasLength())->max(20),
         ]);
     }
 
