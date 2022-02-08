@@ -9,9 +9,9 @@ use Yiisoft\Validator\Rule\Callback;
 use function is_callable;
 
 /**
- * Rules represents multiple rules for a single value.
+ * Rule set represents multiple rules for a single value.
  */
-final class Rules
+final class RuleSet
 {
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 

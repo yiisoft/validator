@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -22,7 +22,7 @@ abstract class GroupRule extends Rule
     protected function validateValue($value, ValidationContext $context = null): Result
     {
         $result = new Result();
-        if (!$this->getRules()->validate($value, $context)->isValid()) {
+        if (!$this->getRuleSet()->validate($value, $context)->isValid()) {
             $result->addError($this->formatMessage($this->message));
         }
 
@@ -32,12 +32,12 @@ abstract class GroupRule extends Rule
     /**
      * Return custom rules set
      *
-     * @return Rules
+     * @return RuleSet
      */
-    abstract protected function getRules(): Rules;
+    abstract protected function getRuleSet(): RuleSet;
 
     public function getOptions(): array
     {
-        return $this->getRules()->asArray();
+        return $this->getRuleSet()->asArray();
     }
 }
