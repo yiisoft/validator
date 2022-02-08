@@ -35,11 +35,10 @@ class ValidatorTest extends TestCase
                 },
             ],
         ]);
-        $errorMap = $result->getErrorsIndexedByPath();
 
-        $this->assertArrayNotHasKey('bool', $errorMap);
-        $this->assertArrayHasKey('int', $errorMap);
-        $this->assertCount(1, $errorMap['int']);
+        $this->assertTrue($result->isAttributeValid('bool'));
+        $this->assertFalse($result->isAttributeValid('int'));
+        $this->assertCount(1, $result->getAttributeErrors('int'));
     }
 
     /**

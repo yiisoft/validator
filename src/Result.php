@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Closure;
 use Yiisoft\Arrays\ArrayHelper;
 
 final class Result
@@ -16,6 +17,18 @@ final class Result
     public function isValid(): bool
     {
         return $this->errors === [];
+    }
+
+    public function isAttributeValid(string $attribute): bool
+    {
+        foreach ($this->errors as $error) {
+            $firstItem = $error->getValuePath()[0] ?? null;
+            if ($firstItem === $attribute) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -34,6 +47,9 @@ final class Result
         return ArrayHelper::getColumn($this->errors, static fn (Error $error) => $error->getMessage());
     }
 
+    /**
+     * @psalm-return array<string, non-empty-list<string>>
+     */
     public function getErrorsIndexedByPath(string $separator = '.'): array
     {
         $errors = [];
@@ -43,6 +59,43 @@ final class Result
         }
 
         return $errors;
+    }
+
+    /**
+     * @psalm-return array<string, Error[]>
+     */
+    public function getAttributeErrorObjects(string $attribute): array
+    {
+        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): Error => $error);
+    }
+
+    /**
+     * @psalm-return array<string, string[]>
+     */
+    public function getAttributeErrors(string $attribute): array
+    {
+        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): string => $error->getMessage());
+    }
+
+    private function getAttributeErrorsMap(string $attribute, Closure $getErrorClosure): array
+    {
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $firstItem = $error->getValuePath()[0] ?? null;
+            if ($firstItem === $attribute) {
+                $errors[] = $getErrorClosure($error);
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @psalm-return list<string>
+     */
+    public function getAttributeErrorsIndexedByPath(string $attribute, string $separator = '.'): array
+    {
+        return $this->getErrorsIndexedByPath($separator)[$attribute] ?? [];
     }
 
     /**

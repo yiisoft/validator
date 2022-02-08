@@ -40,11 +40,10 @@ abstract class AbstractDataSetTest extends TestCase
     public function testResult(array $dataSet, array $rules): void
     {
         $result = $this->validate($dataSet, $rules);
-        $errorMap = $result->getErrorsIndexedByPath();
 
-        $this->assertArrayNotHasKey('bool', $errorMap);
-        $this->assertArrayHasKey('int', $errorMap);
-        $this->assertCount(1, $errorMap['int']);
+        $this->assertTrue($result->isAttributeValid('bool'));
+        $this->assertFalse($result->isAttributeValid('int'));
+        $this->assertCount(1, $result->getAttributeErrors('int'));
     }
 
     public function resultDataProvider(): array
