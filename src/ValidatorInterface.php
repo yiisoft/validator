@@ -15,8 +15,6 @@ interface ValidatorInterface
      * @param DataSetInterface|mixed|RulesProviderInterface $data Data set to validate.
      * @param Rule[][] $rules Rules to apply.
      * @psalm-param iterable<string, Rule[]> $rules
-     *
-     * @return Result[] Validation results.
      */
-    public function validate($data, iterable $rules = []): array;
+    public function validate($data, iterable $rules = []): Result;
 }

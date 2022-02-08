@@ -20,7 +20,7 @@ class ValidatorTest extends TestCase
     {
         $dataObject = new DataSet(['bool' => true, 'int' => 41]);
         $validator = new Validator();
-        $results = $validator->validate($dataObject, [
+        $result = $validator->validate($dataObject, [
             'bool' => [Boolean::rule()],
             'int' => [
                 Number::rule()->integer(),
@@ -35,12 +35,11 @@ class ValidatorTest extends TestCase
                 },
             ],
         ]);
+        $errorMap = $result->getErrorsIndexedByPath();
 
-        $this->assertTrue($results['bool']->isValid());
-
-        $intResult = $results['int'];
-        $this->assertFalse($intResult->isValid());
-        $this->assertCount(1, $intResult->getErrors());
+        $this->assertArrayNotHasKey('bool', $errorMap);
+        $this->assertArrayHasKey('int', $errorMap);
+        $this->assertCount(1, $errorMap['int']);
     }
 
     /**
@@ -49,10 +48,9 @@ class ValidatorTest extends TestCase
     public function testDiverseTypes($dataSet): void
     {
         $validator = new Validator();
-        $results = $validator->validate($dataSet, ['property' => [Required::rule()]]);
+        $result = $validator->validate($dataSet, ['property' => [Required::rule()]]);
 
-        $this->assertCount(1, $results);
-        $this->assertTrue($results['property']->isValid());
+        $this->assertTrue($result->isValid());
     }
 
     public function diverseTypesDataProvider(): array
@@ -73,9 +71,8 @@ class ValidatorTest extends TestCase
     public function testNullAsDataSet(): void
     {
         $validator = new Validator();
-        $results = $validator->validate(null, ['property' => [CompareTo::rule(null)]]);
+        $result = $validator->validate(null, ['property' => [CompareTo::rule(null)]]);
 
-        $this->assertCount(1, $results);
-        $this->assertTrue($results['property']->isValid());
+        $this->assertTrue($result->isValid());
     }
 }

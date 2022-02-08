@@ -18,10 +18,8 @@ abstract class AbstractDataSetTest extends TestCase
      */
     final public function test(array $dataSet, array $rules): void
     {
-        $results = $this->validate($dataSet, $rules);
-        foreach ($results as $result) {
-            $this->assertTrue($result->isValid());
-        }
+        $result = $this->validate($dataSet, $rules);
+        $this->assertTrue($result->isValid());
     }
 
     public function validationCasesDataProvider(): array
@@ -41,13 +39,12 @@ abstract class AbstractDataSetTest extends TestCase
      */
     public function testResult(array $dataSet, array $rules): void
     {
-        $results = $this->validate($dataSet, $rules);
+        $result = $this->validate($dataSet, $rules);
+        $errorMap = $result->getErrorsIndexedByPath();
 
-        $this->assertTrue($results['bool']->isValid());
-
-        $intResult = $results['int'];
-        $this->assertFalse($intResult->isValid());
-        $this->assertCount(1, $intResult->getErrors());
+        $this->assertArrayNotHasKey('bool', $errorMap);
+        $this->assertArrayHasKey('int', $errorMap);
+        $this->assertCount(1, $errorMap['int']);
     }
 
     public function resultDataProvider(): array
@@ -76,8 +73,5 @@ abstract class AbstractDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @return Result[]
-     */
-    abstract protected function validate(array $dataSet, array $rules): array;
+    abstract protected function validate(array $dataSet, array $rules): Result;
 }
