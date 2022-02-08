@@ -7,6 +7,9 @@ namespace Yiisoft\Validator;
 use Closure;
 use Yiisoft\Arrays\ArrayHelper;
 
+use function array_slice;
+use function implode;
+
 final class Result
 {
     /**
@@ -91,7 +94,7 @@ final class Result
     }
 
     /**
-     * @psalm-return list<string>
+     * @psalm-return array<string, non-empty-list<string>>
      */
     public function getAttributeErrorsIndexedByPath(string $attribute, string $separator = '.'): array
     {
