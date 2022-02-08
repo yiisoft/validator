@@ -24,11 +24,11 @@ final class Result
         foreach ($this->errors as $error) {
             $firstItem = $error->getValuePath()[0] ?? null;
             if ($firstItem === $attribute) {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -95,7 +95,18 @@ final class Result
      */
     public function getAttributeErrorsIndexedByPath(string $attribute, string $separator = '.'): array
     {
-        return $this->getErrorsIndexedByPath($separator)[$attribute] ?? [];
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $firstItem = $error->getValuePath()[0] ?? null;
+            if ($firstItem !== $attribute) {
+                continue;
+            }
+
+            $valuePath = implode($separator, array_slice($error->getValuePath(), 1));
+            $errors[$valuePath][] = $error->getMessage();
+        }
+
+        return $errors;
     }
 
     /**
