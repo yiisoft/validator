@@ -60,16 +60,16 @@ final class RulesDumper
         $rulesOfArray = [];
         foreach ($rules as $attribute => $rulesSet) {
             if (is_array($rulesSet)) {
-                $rulesSet = new Rules($rulesSet);
+                $ruleSet = new RuleSet($rulesSet);
             }
-            if (!$rulesSet instanceof Rules) {
+            if (!$ruleSet instanceof RuleSet) {
                 throw new InvalidArgumentException(sprintf(
                     'Value should be an instance of %s or an array of rules, %s given.',
-                    Rules::class,
-                    is_object($rulesSet) ? get_class($rulesSet) : gettype($rulesSet)
+                    RuleSet::class,
+                    is_object($ruleSet) ? get_class($ruleSet) : gettype($ruleSet)
                 ));
             }
-            $rulesOfArray[$attribute] = $rulesSet->withFormatter($this->formatter)->asArray();
+            $rulesOfArray[$attribute] = $ruleSet->withFormatter($this->formatter)->asArray();
         }
         return $rulesOfArray;
     }

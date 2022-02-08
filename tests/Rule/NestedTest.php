@@ -15,7 +15,7 @@ use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Tests\Stub\ParametrizedRule;
 
 /**
@@ -207,9 +207,9 @@ class NestedTest extends TestCase
             ],
         ];
         $rule = Nested::rule([
-            'charts' => Each::rule(new Rules([
+            'charts' => Each::rule(new RuleSet([
                 Nested::rule([
-                    'points' => Each::rule(new Rules([
+                    'points' => Each::rule(new RuleSet([
                         Nested::rule([
                             'coordinates' => Nested::rule([
                                 'x' => [
@@ -223,7 +223,7 @@ class NestedTest extends TestCase
                                 ],
                                 'y' => [Number::rule()->min(-10)->max(10)],
                             ]),
-                            'rgb' => Each::rule(new Rules([
+                            'rgb' => Each::rule(new RuleSet([
                                 Number::rule()->min(0)->max(255)->skipOnError(false),
                             ])),
                         ])->skipOnError(false),
@@ -325,7 +325,7 @@ class NestedTest extends TestCase
     public function testSeparateErrorGroups(): void
     {
         $rule = Nested::rule([
-            'key' => Each::rule(new Rules([
+            'key' => Each::rule(new RuleSet([
                 HasLength::rule()->min(5)->skipOnError(false),
                 InRange::rule(['aaa', 'bbb', 'ccc'])->skipOnError(false),
             ])),

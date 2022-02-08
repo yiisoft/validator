@@ -46,12 +46,12 @@ Library could be used in two ways: validating a single value and validating a se
 ### Validating a single value
 
 ```php
-use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
 
-$rules = new Rules([
+$ruleSet = new RuleSet([
     Required::rule(),
     Number::rule()->min(10),
     static function ($value): Result {
@@ -63,7 +63,7 @@ $rules = new Rules([
     }
 ]);
 
-$result = $rules->validate(41);
+$result = $ruleSet->validate(41);
 if ($result->isValid() === false) {
     foreach ($result->getErrors() as $error) {
         // ...
@@ -332,16 +332,16 @@ final class NoLessThanExistingBidRule extends Rule
 To reuse multiple validation rules it is advised to group rules like the following:
 
 ```php
-use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\MatchRegularExpression;
 use \Yiisoft\Validator\Rule\GroupRule;
 
 final class UsernameRule extends GroupRule
 {
-    public function getRules(): Rules
+    public function getRules(): RuleSet
     {
-        return new Rules([
+        return new RuleSet([
             HasLength::rule()->min(2)->max(20),
             MatchRegularExpression::rule('~[a-z_\-]~i')
         ]);
