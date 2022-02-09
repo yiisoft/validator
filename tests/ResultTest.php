@@ -79,4 +79,55 @@ class ResultTest extends TestCase
 
         return $result;
     }
+
+    public function testIsAttributeValid(): void
+    {
+        $result = $this->createAttributeErrorResult();
+
+        $this->assertTrue($result->isAttributeValid('attribute1'));
+        $this->assertFalse($result->isAttributeValid('attribute2'));
+    }
+
+    public function testGetAttributeErrorObjects(): void
+    {
+        $this->assertEquals([], $this->createAttributeErrorResult()->getAttributeErrorObjects('attribute1'));
+        $this->assertEquals(
+            [
+                new Error('error2.1', ['attribute2']),
+                new Error('error2.2', ['attribute2']),
+                new Error('error2.3', ['attribute2', 'nested']),
+                new Error('error2.4', ['attribute2', 'nested']),
+            ],
+            $this->createAttributeErrorResult()->getAttributeErrorObjects('attribute2')
+        );
+    }
+
+    public function testGetAttributeErrors(): void
+    {
+        $this->assertEquals([], $this->createAttributeErrorResult()->getAttributeErrors('attribute1'));
+        $this->assertEquals(
+            ['error2.1', 'error2.2', 'error2.3', 'error2.4'],
+            $this->createAttributeErrorResult()->getAttributeErrors('attribute2')
+        );
+    }
+
+    public function testGetAttributeErrorsIndexedByPath(): void
+    {
+        $this->assertEquals([], $this->createAttributeErrorResult()->getAttributeErrorsIndexedByPath('attribute1'));
+        $this->assertEquals(
+            ['' => ['error2.1', 'error2.2'], 'nested' => ['error2.3', 'error2.4']],
+            $this->createAttributeErrorResult()->getAttributeErrorsIndexedByPath('attribute2')
+        );
+    }
+
+    private function createAttributeErrorResult(): Result
+    {
+        $result = new Result();
+        $result->addError('error2.1', ['attribute2']);
+        $result->addError('error2.2', ['attribute2']);
+        $result->addError('error2.3', ['attribute2', 'nested']);
+        $result->addError('error2.4', ['attribute2', 'nested']);
+
+        return $result;
+    }
 }

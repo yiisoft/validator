@@ -103,7 +103,7 @@ class NestedTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsDataProvider()
+     * @dataProvider optionsDataProvider
      */
     public function testOptions(array $rules, array $expectedOptions): void
     {

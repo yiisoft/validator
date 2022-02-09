@@ -25,10 +25,8 @@ final class Validator implements ValidatorInterface
      * @param DataSetInterface|mixed|RulesProviderInterface $data
      * @param Rule[][] $rules
      * @psalm-param iterable<string, Rule[]> $rules
-     *
-     * @return ResultSet
      */
-    public function validate($data, iterable $rules = []): ResultSet
+    public function validate($data, iterable $rules = []): Result
     {
         $data = $this->normalizeDataSet($data);
         if ($data instanceof RulesProviderInterface) {
@@ -36,22 +34,28 @@ final class Validator implements ValidatorInterface
         }
 
         $context = new ValidationContext($data);
-        $results = new ResultSet();
+        $result = new Result();
 
         foreach ($rules as $attribute => $attributeRules) {
             $ruleSet = new RuleSet($attributeRules);
             if ($this->formatter !== null) {
                 $ruleSet = $ruleSet->withFormatter($this->formatter);
             }
-            $results->addResult(
-                $attribute,
-                $ruleSet->validate($data->getAttributeValue($attribute), $context->withAttribute($attribute))
+
+            $tempResult = $ruleSet->validate(
+                $data->getAttributeValue($attribute),
+                $context->withAttribute($attribute)
             );
+            foreach ($tempResult->getErrorObjects() as $error) {
+                $result->addError($error->getMessage(), [$attribute, ...$error->getValuePath()]);
+            }
         }
+
         if ($data instanceof PostValidationHookInterface) {
-            $data->processValidationResult($results);
+            $data->processValidationResult($result);
         }
-        return $results;
+
+        return $result;
     }
 
     public function withFormatter(?FormatterInterface $formatter): self
