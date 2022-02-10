@@ -79,7 +79,7 @@ final class Result
     }
 
     /**
-     * @psalm-return array<string, Error[]>
+     * @return Error[]
      */
     public function getAttributeErrorObjects(string $attribute): array
     {
@@ -87,7 +87,7 @@ final class Result
     }
 
     /**
-     * @psalm-return array<string, string[]>
+     * @return string[]
      */
     public function getAttributeErrors(string $attribute): array
     {
@@ -124,6 +124,14 @@ final class Result
         }
 
         return $errors;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getCommonErrors(): array
+    {
+        return $this->getAttributeErrors('');
     }
 
     /**

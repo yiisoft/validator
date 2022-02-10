@@ -138,6 +138,11 @@ class ResultTest extends TestCase
         $this->assertEquals(['' => ['error3.1', 'error3.2']], $result->getAttributeErrorsIndexedByPath(''));
     }
 
+    public function testGetCommonErrors(): void
+    {
+        $this->assertEquals(['error3.1', 'error3.2'], $this->createAttributeErrorResult()->getCommonErrors());
+    }
+
     private function createAttributeErrorResult(): Result
     {
         $result = new Result();
