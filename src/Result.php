@@ -73,7 +73,7 @@ final class Result
     }
 
     /**
-     * @psalm-return array<string, non-empty-list<string>>
+     * @psalm-return array<int|string, non-empty-list<int|string>>
      */
     public function getTopLevelAttributeErrors(): array
     {
