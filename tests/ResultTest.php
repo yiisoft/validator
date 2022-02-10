@@ -86,11 +86,22 @@ class ResultTest extends TestCase
 
         $this->assertTrue($result->isAttributeValid('attribute1'));
         $this->assertFalse($result->isAttributeValid('attribute2'));
+        $this->assertFalse($result->isAttributeValid(''));
+    }
+
+    public function testGetErrorsIndexedByAttribute(): void
+    {
+        $this->assertEquals(
+            ['attribute2' => ['error2.1', 'error2.2', 'error2.3', 'error2.4'], '' => ['error3.1', 'error3.2']],
+            $this->createAttributeErrorResult()->getErrorsIndexedByAttribute()
+        );
     }
 
     public function testGetAttributeErrorObjects(): void
     {
-        $this->assertEquals([], $this->createAttributeErrorResult()->getAttributeErrorObjects('attribute1'));
+        $result = $this->createAttributeErrorResult();
+
+        $this->assertEquals([], $result->getAttributeErrorObjects('attribute1'));
         $this->assertEquals(
             [
                 new Error('error2.1', ['attribute2']),
@@ -98,26 +109,38 @@ class ResultTest extends TestCase
                 new Error('error2.3', ['attribute2', 'nested']),
                 new Error('error2.4', ['attribute2', 'nested']),
             ],
-            $this->createAttributeErrorResult()->getAttributeErrorObjects('attribute2')
+            $result->getAttributeErrorObjects('attribute2')
         );
+        $this->assertEquals([new Error('error3.1'), new Error('error3.2')], $result->getAttributeErrorObjects(''));
     }
 
     public function testGetAttributeErrors(): void
     {
-        $this->assertEquals([], $this->createAttributeErrorResult()->getAttributeErrors('attribute1'));
+        $result = $this->createAttributeErrorResult();
+
+        $this->assertEquals([], $result->getAttributeErrors('attribute1'));
         $this->assertEquals(
             ['error2.1', 'error2.2', 'error2.3', 'error2.4'],
-            $this->createAttributeErrorResult()->getAttributeErrors('attribute2')
+            $result->getAttributeErrors('attribute2')
         );
+        $this->assertEquals(['error3.1', 'error3.2'], $result->getAttributeErrors(''));
     }
 
     public function testGetAttributeErrorsIndexedByPath(): void
     {
-        $this->assertEquals([], $this->createAttributeErrorResult()->getAttributeErrorsIndexedByPath('attribute1'));
+        $result = $this->createAttributeErrorResult();
+
+        $this->assertEquals([], $result->getAttributeErrorsIndexedByPath('attribute1'));
         $this->assertEquals(
             ['' => ['error2.1', 'error2.2'], 'nested' => ['error2.3', 'error2.4']],
-            $this->createAttributeErrorResult()->getAttributeErrorsIndexedByPath('attribute2')
+            $result->getAttributeErrorsIndexedByPath('attribute2')
         );
+        $this->assertEquals(['' => ['error3.1', 'error3.2']], $result->getAttributeErrorsIndexedByPath(''));
+    }
+
+    public function testGetCommonErrors(): void
+    {
+        $this->assertEquals(['error3.1', 'error3.2'], $this->createAttributeErrorResult()->getCommonErrors());
     }
 
     private function createAttributeErrorResult(): Result
@@ -127,6 +150,8 @@ class ResultTest extends TestCase
         $result->addError('error2.2', ['attribute2']);
         $result->addError('error2.3', ['attribute2', 'nested']);
         $result->addError('error2.4', ['attribute2', 'nested']);
+        $result->addError('error3.1');
+        $result->addError('error3.2');
 
         return $result;
     }

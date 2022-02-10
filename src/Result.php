@@ -25,7 +25,7 @@ final class Result
     public function isAttributeValid(string $attribute): bool
     {
         foreach ($this->errors as $error) {
-            $firstItem = $error->getValuePath()[0] ?? null;
+            $firstItem = $error->getValuePath()[0] ?? '';
             if ($firstItem === $attribute) {
                 return false;
             }
@@ -65,7 +65,21 @@ final class Result
     }
 
     /**
-     * @psalm-return array<string, Error[]>
+     * @psalm-return array<int|string, non-empty-list<int|string>>
+     */
+    public function getErrorsIndexedByAttribute(): array
+    {
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $key = $error->getValuePath()[0] ?? '';
+            $errors[$key][] = $error->getMessage();
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @return Error[]
      */
     public function getAttributeErrorObjects(string $attribute): array
     {
@@ -73,7 +87,7 @@ final class Result
     }
 
     /**
-     * @psalm-return array<string, string[]>
+     * @return string[]
      */
     public function getAttributeErrors(string $attribute): array
     {
@@ -84,7 +98,7 @@ final class Result
     {
         $errors = [];
         foreach ($this->errors as $error) {
-            $firstItem = $error->getValuePath()[0] ?? null;
+            $firstItem = $error->getValuePath()[0] ?? '';
             if ($firstItem === $attribute) {
                 $errors[] = $getErrorClosure($error);
             }
@@ -100,7 +114,7 @@ final class Result
     {
         $errors = [];
         foreach ($this->errors as $error) {
-            $firstItem = $error->getValuePath()[0] ?? null;
+            $firstItem = $error->getValuePath()[0] ?? '';
             if ($firstItem !== $attribute) {
                 continue;
             }
@@ -110,6 +124,14 @@ final class Result
         }
 
         return $errors;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getCommonErrors(): array
+    {
+        return $this->getAttributeErrors('');
     }
 
     /**
