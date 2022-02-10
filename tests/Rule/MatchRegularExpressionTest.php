@@ -46,13 +46,13 @@ class MatchRegularExpressionTest extends TestCase
     public function testMessage(): void
     {
         $rule = MatchRegularExpression::rule(self::PATTERN)->message('Custom message.');
-        $this->assertSame($rule->validate('b./')->getErrors(), ['Custom message.']);
+        $this->assertSame(['Custom message.'], $rule->validate('b./')->getErrorMessages());
     }
 
     public function testIncorrectInputMessage(): void
     {
         $rule = MatchRegularExpression::rule(self::PATTERN)->incorrectInputMessage('Custom message.');
-        $this->assertSame($rule->validate(null)->getErrors(), ['Custom message.']);
+        $this->assertSame(['Custom message.'], $rule->validate(null)->getErrorMessages());
     }
 
     public function getOptionsProvider(): array

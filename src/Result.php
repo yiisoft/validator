@@ -37,7 +37,7 @@ final class Result
     /**
      * @return Error[]
      */
-    public function getErrorObjects(): array
+    public function getErrors(): array
     {
         return $this->errors;
     }
@@ -45,7 +45,7 @@ final class Result
     /**
      * @return string[]
      */
-    public function getErrors(): array
+    public function getErrorMessages(): array
     {
         return ArrayHelper::getColumn($this->errors, static fn (Error $error) => $error->getMessage());
     }
@@ -53,7 +53,7 @@ final class Result
     /**
      * @psalm-return array<string, non-empty-list<string>>
      */
-    public function getErrorsIndexedByPath(string $separator = '.'): array
+    public function getErrorMessagesIndexedByPath(string $separator = '.'): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
@@ -67,7 +67,7 @@ final class Result
     /**
      * @psalm-return array<int|string, non-empty-list<int|string>>
      */
-    public function getErrorsIndexedByAttribute(): array
+    public function getErrorMessagesIndexedByAttribute(): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
@@ -81,7 +81,7 @@ final class Result
     /**
      * @return Error[]
      */
-    public function getAttributeErrorObjects(string $attribute): array
+    public function getAttributeErrors(string $attribute): array
     {
         return $this->getAttributeErrorsMap($attribute, static fn (Error $error): Error => $error);
     }
@@ -89,7 +89,7 @@ final class Result
     /**
      * @return string[]
      */
-    public function getAttributeErrors(string $attribute): array
+    public function getAttributeErrorMessages(string $attribute): array
     {
         return $this->getAttributeErrorsMap($attribute, static fn (Error $error): string => $error->getMessage());
     }
@@ -110,7 +110,7 @@ final class Result
     /**
      * @psalm-return array<string, non-empty-list<string>>
      */
-    public function getAttributeErrorsIndexedByPath(string $attribute, string $separator = '.'): array
+    public function getAttributeErrorMessagesIndexedByPath(string $attribute, string $separator = '.'): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
@@ -129,9 +129,9 @@ final class Result
     /**
      * @return string[]
      */
-    public function getCommonErrors(): array
+    public function getCommonErrorMessages(): array
     {
-        return $this->getAttributeErrors('');
+        return $this->getAttributeErrorMessages('');
     }
 
     /**

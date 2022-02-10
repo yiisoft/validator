@@ -110,22 +110,12 @@ JSON;
 
     public function testValidationMessage(): void
     {
-        $this->assertEquals(
-            [
-                'The value is not JSON.',
-            ],
-            Json::rule()->validate('')->getErrors()
-        );
+        $this->assertEquals(['The value is not JSON.'], Json::rule()->validate('')->getErrorMessages());
     }
 
     public function testCustomValidationMessage(): void
     {
-        $this->assertEquals(
-            [
-                'bad json',
-            ],
-            Json::rule()->message('bad json')->validate('')->getErrors()
-        );
+        $this->assertEquals(['bad json'], Json::rule()->message('bad json')->validate('')->getErrorMessages());
     }
 
     public function testName(): void
