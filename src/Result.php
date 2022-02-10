@@ -73,6 +73,22 @@ final class Result
     }
 
     /**
+     * @psalm-return array<string, non-empty-list<string>>
+     */
+    public function getTopLevelAttributeErrors(): array
+    {
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $firstItem = $error->getValuePath()[0] ?? null;
+            if ($firstItem !== null) {
+                $errors[$firstItem][] = $error->getMessage();
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
      * @psalm-return array<string, string[]>
      */
     public function getAttributeErrors(string $attribute): array

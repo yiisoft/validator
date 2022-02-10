@@ -102,6 +102,14 @@ class ResultTest extends TestCase
         );
     }
 
+    public function testGetTopLevelAttributeErrors(): void
+    {
+        $this->assertEquals(
+            ['attribute2' => ['error2.1', 'error2.2', 'error2.3', 'error2.4']],
+            $this->createAttributeErrorResult()->getTopLevelAttributeErrors()
+        );
+    }
+
     public function testGetAttributeErrors(): void
     {
         $this->assertEquals([], $this->createAttributeErrorResult()->getAttributeErrors('attribute1'));
