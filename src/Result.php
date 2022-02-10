@@ -25,7 +25,7 @@ final class Result
     public function isAttributeValid(string $attribute): bool
     {
         foreach ($this->errors as $error) {
-            $firstItem = $error->getValuePath()[0] ?? null;
+            $firstItem = $error->getValuePath()[0] ?? '';
             if ($firstItem === $attribute) {
                 return false;
             }
@@ -65,27 +65,25 @@ final class Result
     }
 
     /**
-     * @psalm-return array<string, Error[]>
-     */
-    public function getAttributeErrorObjects(string $attribute): array
-    {
-        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): Error => $error);
-    }
-
-    /**
      * @psalm-return array<int|string, non-empty-list<int|string>>
      */
     public function getErrorsIndexedByAttribute(): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
-            $firstItem = $error->getValuePath()[0] ?? null;
-            if ($firstItem !== null) {
-                $errors[$firstItem][] = $error->getMessage();
-            }
+            $key = $error->getValuePath()[0] ?? '';
+            $errors[$key][] = $error->getMessage();
         }
 
         return $errors;
+    }
+
+    /**
+     * @psalm-return array<string, Error[]>
+     */
+    public function getAttributeErrorObjects(string $attribute): array
+    {
+        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): Error => $error);
     }
 
     /**
@@ -100,7 +98,7 @@ final class Result
     {
         $errors = [];
         foreach ($this->errors as $error) {
-            $firstItem = $error->getValuePath()[0] ?? null;
+            $firstItem = $error->getValuePath()[0] ?? '';
             if ($firstItem === $attribute) {
                 $errors[] = $getErrorClosure($error);
             }
@@ -116,7 +114,7 @@ final class Result
     {
         $errors = [];
         foreach ($this->errors as $error) {
-            $firstItem = $error->getValuePath()[0] ?? null;
+            $firstItem = $error->getValuePath()[0] ?? '';
             if ($firstItem !== $attribute) {
                 continue;
             }
