@@ -75,7 +75,7 @@ final class Result
     /**
      * @psalm-return array<int|string, non-empty-list<int|string>>
      */
-    public function getTopLevelAttributeErrors(): array
+    public function getErrorsIndexedByAttribute(): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
