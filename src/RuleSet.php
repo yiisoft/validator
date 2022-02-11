@@ -9,9 +9,9 @@ use Yiisoft\Validator\Rule\Callback;
 use function is_callable;
 
 /**
- * Rules represents multiple rules for a single value.
+ * Rule set represents multiple rules for a single value.
  */
-final class Rules
+final class RuleSet
 {
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 
@@ -44,8 +44,8 @@ final class Rules
     public function validate($value, ValidationContext $context = null): Result
     {
         $context = $context ?? new ValidationContext();
-        $compoundResult = new Result();
 
+        $compoundResult = new Result();
         foreach ($this->rules as $rule) {
             $ruleResult = $rule->validate($value, $context);
             if ($ruleResult->isValid()) {
@@ -54,11 +54,10 @@ final class Rules
 
             $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
 
-            foreach ($ruleResult->getErrors() as $key => $message) {
-                $compoundResult->addError($message, $key);
+            foreach ($ruleResult->getErrors() as $error) {
+                $compoundResult->addError($error->getMessage(), $error->getValuePath());
             }
         }
-
         return $compoundResult;
     }
 

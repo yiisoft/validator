@@ -17,28 +17,6 @@ The package provides data validation capabilities.
 [![static analysis](https://github.com/yiisoft/validator/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/validator/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/validator/coverage.svg)](https://shepherd.dev/github/yiisoft/validator)
 
-* [Yii Validator](#yii-validator)
-    * [Features](#features)
-    * [Requirements](#requirements)
-    * [Installation](#installation)
-    * [General usage](#general-usage)
-        * [Validating a single value](#validating-a-single-value)
-        * [Validating a set of data](#validating-a-set-of-data)
-            * [Skipping validation on error](#skipping-validation-on-error)
-            * [Skipping empty values](#skipping-empty-values)
-            * [Nested and related data](#nested-and-related-data)
-        * [Conditional validation](#conditional-validation)
-        * [Creating your own validation rules](#creating-your-own-validation-rules)
-        * [Grouping multiple validation rules](#grouping-multiple-validation-rules)
-        * [Setting up your own formatter](#setting-up-your-own-formatter)
-    * [Testing](#testing)
-        * [Unit testing](#unit-testing)
-        * [Mutation testing](#mutation-testing)
-        * [Static analysis](#static-analysis)
-    * [License](#license)
-    * [Support the project](#support-the-project)
-    * [Follow updates](#follow-updates)
-
 ## Features
 
 - Could be used with any object.
@@ -68,12 +46,12 @@ Library could be used in two ways: validating a single value and validating a se
 ### Validating a single value
 
 ```php
-use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
 
-$rules = new Rules([
+$ruleSet = new RuleSet([
     Required::rule(),
     Number::rule()->min(10),
     static function ($value): Result {
@@ -85,9 +63,9 @@ $rules = new Rules([
     }
 ]);
 
-$result = $rules->validate(41);
-if ($result->isValid() === false) {
-    foreach ($result->getErrors() as $error) {
+$result = $ruleSet->validate(41);
+if (!$result->isValid()) {
+    foreach ($result->getErrorMessages() as $error) {
         // ...
     }
 }
@@ -184,7 +162,7 @@ $rule = Nested::rule([
         'age' => [Number::rule()->min(18)],
     )];
 ]);
-$errors = $rule->validate($data)->getErrors();
+$errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
 ```
 
 A more complex real-life example is a chart that is made of points. This data is represented as arrays. `Nested` can be 
@@ -233,15 +211,16 @@ $rule = Nested::rule([
         ])->skipOnError(false),
     ])),
 ]);
-$errors = $rule->validate($data)->getErrors();
+$errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
 ```
 
 The contents of the errors will be:
 
 ```php
 $errors = [
-    'charts.0.points.0.coordinates.x' => 'Value must be no less than -10.',
-    'charts.0.points.0.rgb.0' => 'Value must be no less than 0. -1 given.',
+    'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.'],
+    // ...
+    'charts.0.points.0.rgb.0' => ['Value must be no less than 0. -1 given.'],
     // ...
 ];
 ```
@@ -406,16 +385,16 @@ final class NoLessThanExistingBidRule extends Rule
 To reuse multiple validation rules it is advised to group rules like the following:
 
 ```php
-use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\MatchRegularExpression;
 use \Yiisoft\Validator\Rule\GroupRule;
 
 final class UsernameRule extends GroupRule
 {
-    public function getRules(): Rules
+    public function getRules(): RuleSet
     {
-        return new Rules([
+        return new RuleSet([
             HasLength::rule()->min(2)->max(20),
             MatchRegularExpression::rule('~[a-z_\-]~i')
         ]);

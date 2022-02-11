@@ -9,7 +9,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
-use function is_array;
+use function is_string;
 
 /**
  * RegularExpressionValidator validates that the attribute value matches the pattern specified in constructor.
@@ -31,6 +31,7 @@ final class MatchRegularExpression extends Rule
      */
     private bool $not = false;
 
+    private string $incorrectInputMessage = 'Value should be string.';
     private string $message = 'Value is invalid.';
 
     /**
@@ -47,11 +48,16 @@ final class MatchRegularExpression extends Rule
     {
         $result = new Result();
 
-        $valid = !is_array($value) &&
-            ((!$this->not && preg_match($this->pattern, $value))
-                || ($this->not && !preg_match($this->pattern, $value)));
+        if (!is_string($value)) {
+            $result->addError($this->formatMessage($this->incorrectInputMessage));
 
-        if (!$valid) {
+            return $result;
+        }
+
+        if (
+            (!$this->not && !preg_match($this->pattern, $value)) ||
+            ($this->not && preg_match($this->pattern, $value))
+        ) {
             $result->addError($this->formatMessage($this->message));
         }
 
@@ -65,12 +71,20 @@ final class MatchRegularExpression extends Rule
         return $new;
     }
 
+    public function incorrectInputMessage(string $message): self
+    {
+        $new = clone $this;
+        $new->incorrectInputMessage = $message;
+        return $new;
+    }
+
     public function getOptions(): array
     {
         return array_merge(
             parent::getOptions(),
             [
                 'message' => $this->formatMessage($this->message),
+                'incorrectInputMessage' => $this->formatMessage($this->incorrectInputMessage),
                 'not' => $this->not,
                 'pattern' => $this->pattern,
             ],

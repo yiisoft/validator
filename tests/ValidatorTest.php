@@ -18,14 +18,9 @@ class ValidatorTest extends TestCase
 {
     public function testAddingRulesViaConstructor(): void
     {
-        $dataObject = new DataSet([
-            'bool' => true,
-            'int' => 41,
-        ]);
-
+        $dataObject = new DataSet(['bool' => true, 'int' => 41]);
         $validator = new Validator();
-
-        $results = $validator->validate($dataObject, [
+        $result = $validator->validate($dataObject, [
             'bool' => [Boolean::rule()],
             'int' => [
                 Number::rule()->integer(),
@@ -35,71 +30,48 @@ class ValidatorTest extends TestCase
                     if ($value !== 42) {
                         $result->addError('Value should be 42!');
                     }
+
                     return $result;
                 },
             ],
         ]);
 
-        $this->assertTrue($results->getResult('bool')->isValid());
-
-        $intResult = $results->getResult('int');
-        $this->assertFalse($intResult->isValid());
-        $this->assertCount(1, $intResult->getErrors());
+        $this->assertTrue($result->isAttributeValid('bool'));
+        $this->assertFalse($result->isAttributeValid('int'));
+        $this->assertCount(1, $result->getAttributeErrors('int'));
     }
 
     /**
-     * @dataProvider diverseTypesDataProvider()
+     * @dataProvider diverseTypesDataProvider
      */
     public function testDiverseTypes($dataSet): void
     {
         $validator = new Validator();
+        $result = $validator->validate($dataSet, ['property' => [Required::rule()]]);
 
-        $results = $validator->validate($dataSet, [
-            'property' => [
-                Required::rule(),
-            ],
-        ]);
-
-        $this->assertTrue($results->isValid());
+        $this->assertTrue($result->isValid());
     }
 
     public function diverseTypesDataProvider(): array
     {
         $class = new stdClass();
         $class->property = true;
+
         return [
-            [
-                $class,
-            ],
-            [
-                true,
-            ],
-            [
-                'true',
-            ],
-            [
-                12345,
-            ],
-            [
-                12.345,
-            ],
-            [
-                false,
-            ],
+            [$class],
+            [true],
+            ['true'],
+            [12345],
+            [12.345],
+            [false],
         ];
     }
 
     public function testNullAsDataSet(): void
     {
         $validator = new Validator();
-        $dataSet = null;
+        $result = $validator->validate(null, ['property' => [CompareTo::rule(null)]]);
 
-        $results = $validator->validate($dataSet, [
-            'property' => [
-                CompareTo::rule(null),
-            ],
-        ]);
-
-        $this->assertTrue($results->isValid());
+        $this->assertTrue($result->isValid());
     }
 }

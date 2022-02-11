@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\MatchRegularExpression;
 
@@ -13,44 +14,68 @@ use Yiisoft\Validator\Rule\MatchRegularExpression;
  */
 class MatchRegularExpressionTest extends TestCase
 {
-    public function testValidate(): void
-    {
-        $rule = MatchRegularExpression::rule('/^[a-zA-Z0-9](\.)?([^\/]*)$/m');
-        $this->assertTrue($rule->validate('b.4')->isValid());
-        $this->assertFalse($rule->validate('b./')->isValid());
-        $this->assertFalse($rule->validate(['a', 'b'])->isValid());
+    private const PATTERN = '/^[a-zA-Z0-9](\.)?([^\/]*)$/m';
 
-        $rule = MatchRegularExpression::rule('/^[a-zA-Z0-9](\.)?([^\/]*)$/m')->not();
-        $this->assertFalse($rule->validate('b.4')->isValid());
-        $this->assertTrue($rule->validate('b./')->isValid());
-        $this->assertFalse($rule->validate(['a', 'b'])->isValid());
+    public function testGetName(): void
+    {
+        $this->assertSame('matchRegularExpression', MatchRegularExpression::rule(self::PATTERN)->getName());
     }
 
-    public function testName(): void
+    public function validateDataProvider(): array
     {
-        $this->assertEquals('matchRegularExpression', MatchRegularExpression::rule('/^[a-zA-Z0-9](\.)?([^\/]*)$/m')->getName());
+        return [
+            [['a', 'b'], false, false],
+            [null, false, false],
+            [new stdClass(), false, false],
+
+            ['b.4', true, false],
+            ['b./', false, true],
+        ];
     }
 
-    public function optionsProvider(): array
+    /**
+     * @dataProvider validateDataProvider
+     */
+    public function testValidate($data, bool $expectedIsValid, bool $expectedIsValidForInverseRule): void
     {
-        $pattern = '/^[a-zA-Z0-9](\.)?([^\/]*)$/m';
+        $rule = MatchRegularExpression::rule(self::PATTERN);
+        $this->assertSame($rule->validate($data)->isValid(), $expectedIsValid);
+        $this->assertSame($rule->not()->validate($data)->isValid(), $expectedIsValidForInverseRule);
+    }
+
+    public function testMessage(): void
+    {
+        $rule = MatchRegularExpression::rule(self::PATTERN)->message('Custom message.');
+        $this->assertSame(['Custom message.'], $rule->validate('b./')->getErrorMessages());
+    }
+
+    public function testIncorrectInputMessage(): void
+    {
+        $rule = MatchRegularExpression::rule(self::PATTERN)->incorrectInputMessage('Custom message.');
+        $this->assertSame(['Custom message.'], $rule->validate(null)->getErrorMessages());
+    }
+
+    public function getOptionsProvider(): array
+    {
         return [
             [
-                MatchRegularExpression::rule($pattern),
+                MatchRegularExpression::rule(self::PATTERN),
                 [
+                    'incorrectInputMessage' => 'Value should be string.',
                     'message' => 'Value is invalid.',
                     'not' => false,
-                    'pattern' => $pattern,
+                    'pattern' => self::PATTERN,
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ],
             ],
             [
-                MatchRegularExpression::rule($pattern)->not(),
+                MatchRegularExpression::rule(self::PATTERN)->not(),
                 [
+                    'incorrectInputMessage' => 'Value should be string.',
                     'message' => 'Value is invalid.',
                     'not' => true,
-                    'pattern' => $pattern,
+                    'pattern' => self::PATTERN,
                     'skipOnEmpty' => false,
                     'skipOnError' => true,
                 ],
@@ -59,12 +84,9 @@ class MatchRegularExpressionTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
-     *
-     * @param Rule $rule
-     * @param array $expected
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(Rule $rule, array $expected): void
+    public function testGetOptions(Rule $rule, array $expected): void
     {
         $this->assertEquals($expected, $rule->getOptions());
     }

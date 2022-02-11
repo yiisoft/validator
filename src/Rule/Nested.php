@@ -11,7 +11,7 @@ use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\ValidationContext;
 use function is_array;
 use function is_object;
@@ -93,16 +93,21 @@ final class Nested extends Rule
                 continue;
             }
 
-            $rulesSet = is_array($rules) ? $rules : [$rules];
-            $aggregatedRule = new Rules($rulesSet);
+            $rules = is_array($rules) ? $rules : [$rules];
+            $ruleSet = new RuleSet($rules);
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
-            $itemResult = $aggregatedRule->validate($validatedValue);
+            $itemResult = $ruleSet->validate($validatedValue);
             if ($itemResult->isValid()) {
                 continue;
             }
 
-            foreach ($itemResult->getErrors() as $key => $error) {
-                $result->addError($error, "$valuePath.$key");
+            foreach ($itemResult->getErrors() as $error) {
+                $errorValuePath = is_int($valuePath) ? [$valuePath] : explode('.', $valuePath);
+                if ($error->getValuePath()) {
+                    $errorValuePath = array_merge($errorValuePath, $error->getValuePath());
+                }
+
+                $result->addError($error->getMessage(), $errorValuePath);
             }
         }
 

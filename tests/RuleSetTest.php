@@ -5,44 +5,43 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
-class RulesTest extends TestCase
+class RuleSetTest extends TestCase
 {
     public function testMethodSyntax(): void
     {
-        $rules = new Rules();
-        $rules->add(Required::rule());
-        $rules->add(Number::rule()->max(10));
+        $ruleSet = new RuleSet();
+        $ruleSet->add(Required::rule());
+        $ruleSet->add(Number::rule()->max(10));
 
-        $result = $rules->validate(42);
+        $result = $ruleSet->validate(42);
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
     }
 
     public function testArraySyntax(): void
     {
-        $rules = new Rules(
-            [
-                Required::rule(),
-                Number::rule()->max(10),
-            ]
-        );
+        $ruleSet = new RuleSet([
+            Required::rule(),
+            Number::rule()->max(10),
+        ]);
+        $result = $ruleSet->validate(42);
 
-        $result = $rules->validate(42);
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
     }
 
     public function testCallback(): void
     {
-        $rules = new Rules(
+        $ruleSet = new RuleSet(
             [
                 static function ($value): Result {
                     $result = new Result();
@@ -54,22 +53,19 @@ class RulesTest extends TestCase
             ]
         );
 
-        $result = $rules->validate(41);
+        $result = $ruleSet->validate(41);
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
     }
 
     public function testWhenValidate(): void
     {
-        $rules = new Rules(
-            [
-                Number::rule()->min(10),
-                Number::rule()->min(10)->when(fn () => false)->skipOnError(false),
-                Number::rule()->min(10)->skipOnError(false),
-            ]
-        );
-
-        $result = $rules->validate(1);
+        $ruleSet = new RuleSet([
+            Number::rule()->min(10),
+            Number::rule()->min(10)->when(fn () => false)->skipOnError(false),
+            Number::rule()->min(10)->skipOnError(false),
+        ]);
+        $result = $ruleSet->validate(1);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(2, $result->getErrors());
@@ -77,15 +73,12 @@ class RulesTest extends TestCase
 
     public function testSkipOnError(): void
     {
-        $rules = new Rules(
-            [
-                Number::rule()->min(10),
-                Number::rule()->min(10)->skipOnError(false),
-                Number::rule()->min(10),
-            ]
-        );
-
-        $result = $rules->validate(1);
+        $ruleSet = new RuleSet([
+            Number::rule()->min(10),
+            Number::rule()->min(10)->skipOnError(false),
+            Number::rule()->min(10),
+        ]);
+        $result = $ruleSet->validate(1);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(2, $result->getErrors());
@@ -93,9 +86,9 @@ class RulesTest extends TestCase
 
     public function testAsArray(): void
     {
-        $rules = new Rules();
-        $rules->add(Required::rule());
-        $rules->add(Number::rule()->max(10));
+        $ruleSet = new RuleSet();
+        $ruleSet->add(Required::rule());
+        $ruleSet->add(Number::rule()->max(10));
 
         $this->assertEquals([
             [
@@ -115,9 +108,9 @@ class RulesTest extends TestCase
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
             ],
-        ], $rules->asArray());
+        ], $ruleSet->asArray());
 
-        $rules = new Rules(
+        $ruleSet = new RuleSet(
             [
                 Number::rule()->min(10),
                 Number::rule()->min(10)->skipOnError(false),
@@ -158,10 +151,10 @@ class RulesTest extends TestCase
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
             ],
-        ], $rules->asArray());
+        ], $ruleSet->asArray());
 
-        $rules = new Rules([
-            Each::rule(new Rules([
+        $ruleSet = new RuleSet([
+            Each::rule(new RuleSet([
                 Number::rule()->max(13),
                 Number::rule()->max(14),
             ])),
@@ -204,14 +197,14 @@ class RulesTest extends TestCase
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
             ],
-        ], $rules->asArray());
+        ], $ruleSet->asArray());
     }
 
     public function testAsArrayWithGroupRule(): void
     {
-        $rules = new Rules();
-        $rules->add(Required::rule());
-        $rules->add(CustomUrlRule::rule());
+        $ruleSet = new RuleSet();
+        $ruleSet->add(Required::rule());
+        $ruleSet->add(CustomUrlRule::rule());
 
         $this->assertEquals([
             [
@@ -249,7 +242,56 @@ class RulesTest extends TestCase
                     'skipOnError' => true,
                 ],
             ],
-        ], $rules->asArray());
+        ], $ruleSet->asArray());
+    }
+
+    public function testPersistentError(): void
+    {
+        $ruleSet = new RuleSet([
+            Callback::rule(static function ($value): Result {
+                $result = new Result();
+                $result->addError('e1');
+                $result->addError('e2');
+                $result->addError('e3');
+
+                return $result;
+            }),
+            Callback::rule(static function ($value): Result {
+                $result = new Result();
+                $result->addError('e4');
+                $result->addError('e5');
+                $result->addError('e6');
+
+                return $result;
+            })->skipOnError(false),
+        ]);
+        $result = $ruleSet->validate('hi');
+
+        $this->assertFalse($result->isValid());
+        $this->assertEquals([
+            new Error('e1'),
+            new Error('e2'),
+            new Error('e3'),
+            new Error('e4'),
+            new Error('e5'),
+            new Error('e6'),
+        ], $result->getErrors());
+    }
+
+    public function testAddErrorWithValuePath(): void
+    {
+        $ruleSet = new RuleSet([
+            Callback::rule(static function ($value): Result {
+                $result = new Result();
+                $result->addError('e1', ['key1']);
+
+                return $result;
+            }),
+        ]);
+        $result = $ruleSet->validate('hi');
+        $result->addError('e2', ['key2']);
+
+        $this->assertEquals([new Error('e1', ['key1']), new Error('e2', ['key2'])], $result->getErrors());
     }
 
     /**

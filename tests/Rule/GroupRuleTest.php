@@ -14,28 +14,31 @@ class GroupRuleTest extends TestCase
 {
     public function testValidate(): void
     {
-        $validator = CustomUrlRule::rule();
+        $rule = CustomUrlRule::rule();
 
-        $this->assertTrue($validator->validate('http://домен.рф')->isValid());
-        $this->assertFalse($validator->validate('http://доменбольшедвадцатизнаков.рф')->isValid());
-        $this->assertFalse($validator->validate(null)->isValid());
+        $this->assertTrue($rule->validate('http://домен.рф')->isValid());
+        $this->assertFalse($rule->validate('http://доменбольшедвадцатизнаков.рф')->isValid());
+        $this->assertFalse($rule->validate(null)->isValid());
     }
 
     public function testErrorMessage(): void
     {
-        $validator = CustomUrlRule::rule();
-        $this->assertEquals(['This value is not a valid.'], $validator->validate('domain')->getErrors());
+        $rule = CustomUrlRule::rule();
+        $this->assertEquals(
+            ['This value is not a valid.'],
+            $rule->validate('domain')->getErrorMessages()
+        );
     }
 
     public function testCustomErrorMessage(): void
     {
-        $validator = CustomUrlRule::rule()->message('This value is not valid custom url');
-        $this->assertEquals(['This value is not valid custom url'], $validator->validate('domain')->getErrors());
+        $rule = CustomUrlRule::rule()->message('This value is not valid custom url');
+        $this->assertEquals(['This value is not valid custom url'], $rule->validate('domain')->getErrorMessages());
     }
 
     public function testOptions(): void
     {
-        $validator = CustomUrlRule::rule();
+        $rule = CustomUrlRule::rule();
         $this->assertEquals([
             [
                 'required',
@@ -63,6 +66,6 @@ class GroupRuleTest extends TestCase
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
             ],
-        ], $validator->getOptions());
+        ], $rule->getOptions());
     }
 }

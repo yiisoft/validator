@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -17,15 +17,15 @@ final class Each extends Rule
 {
     use HasValidationErrorMessage;
 
-    private Rules $rules;
+    private RuleSet $ruleSet;
 
-    private string $incorrectInputMessage = 'Value should be array or iterable';
+    private string $incorrectInputMessage = 'Value should be array or iterable.';
     private string $message = '{error} {value} given.';
 
-    public static function rule(Rules $rules): self
+    public static function rule(RuleSet $ruleSet): self
     {
         $rule = new self();
-        $rule->rules = $rules;
+        $rule->ruleSet = $ruleSet;
         return $rule;
     }
 
@@ -38,22 +38,22 @@ final class Each extends Rule
         }
 
         foreach ($value as $index => $item) {
-            $itemResult = $this->rules->validate($item, $context);
+            $itemResult = $this->ruleSet->validate($item, $context);
             if ($itemResult->isValid()) {
                 continue;
             }
 
-            foreach ($itemResult->getErrors() as $key => $error) {
+            foreach ($itemResult->getErrors() as $error) {
                 if (!is_array($item)) {
-                    $errorKey = $index;
+                    $errorKey = [$index];
                     $formatMessage = true;
                 } else {
-                    $errorKey = "$index.$key";
+                    $errorKey = [$index, ...$error->getValuePath()];
                     $formatMessage = false;
                 }
 
-                $message = !$formatMessage ? $error : $this->formatMessage($this->message, [
-                    'error' => $error,
+                $message = !$formatMessage ? $error->getMessage() : $this->formatMessage($this->message, [
+                    'error' => $error->getMessage(),
                     'value' => $item,
                 ]);
 
@@ -73,6 +73,6 @@ final class Each extends Rule
 
     public function getOptions(): array
     {
-        return $this->rules->asArray();
+        return $this->ruleSet->asArray();
     }
 }

@@ -8,7 +8,7 @@ use Yiisoft\Validator\Rule\GroupRule;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Url;
-use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\RuleSet;
 
 final class CustomUrlRule extends GroupRule
 {
@@ -17,15 +17,13 @@ final class CustomUrlRule extends GroupRule
         return new self();
     }
 
-    protected function getRules(): Rules
+    protected function getRuleSet(): RuleSet
     {
-        return new Rules(
-            [
-                new Required(),
-                Url::rule()->enableIDN(),
-                (new HasLength())->max(20),
-            ]
-        );
+        return new RuleSet([
+            new Required(),
+            Url::rule()->enableIDN(),
+            (new HasLength())->max(20),
+        ]);
     }
 
     public function getName(): string

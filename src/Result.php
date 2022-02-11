@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Closure;
+use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
+
+use function array_slice;
+use function implode;
+use function is_string;
 
 final class Result
 {
     /**
-     * @psalm-var array<int|string, string>
+     * @var Error[]
      */
     private array $errors = [];
 
@@ -18,38 +24,129 @@ final class Result
         return $this->errors === [];
     }
 
-    /**
-     * Add an error.
-     *
-     * @param string $message Error message.
-     * @param int|string|null $key For simple rules the key is null meaning error will be appended to the end of the
-     * array. Otherwise, it's a path to a current error value in the input data concatenated using dot notation. For
-     * example: "charts.0.points.0.coordinates.x".
-     */
-    public function addError(string $message, $key = null): void
+    public function isAttributeValid(string $attribute): bool
     {
-        if ($key !== null && $key !== 0 && !isset($this->errors[$key])) {
-            $this->errors[$key] = $message;
-        } else {
-            $this->errors[] = $message;
+        foreach ($this->errors as $error) {
+            $firstItem = $error->getValuePath()[0] ?? '';
+            if ($firstItem === $attribute) {
+                return false;
+            }
         }
+
+        return true;
     }
 
     /**
-     * @psalm-return array<int|string, string>
+     * @return Error[]
      */
     public function getErrors(): array
     {
         return $this->errors;
     }
 
-    public function getNestedErrors(): array
+    /**
+     * @return string[]
+     */
+    public function getErrorMessages(): array
+    {
+        return ArrayHelper::getColumn($this->errors, static fn (Error $error) => $error->getMessage());
+    }
+
+    /**
+     * @psalm-return array<string, non-empty-list<string>>
+     */
+    public function getErrorMessagesIndexedByPath(string $separator = '.'): array
     {
         $errors = [];
-        foreach ($this->errors as $key => $message) {
-            ArrayHelper::setValueByPath($errors, $key, $message);
+        foreach ($this->errors as $error) {
+            $stringValuePath = implode($separator, $error->getValuePath());
+            $errors[$stringValuePath][] = $error->getMessage();
         }
 
         return $errors;
+    }
+
+    /**
+     * @psalm-return array<string, non-empty-list<string>>
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getErrorMessagesIndexedByAttribute(): array
+    {
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $key = $error->getValuePath()[0] ?? '';
+            if (!is_string($key)) {
+                throw new InvalidArgumentException('Top level attributes can only have string type.');
+            }
+
+            $errors[$key][] = $error->getMessage();
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @return Error[]
+     */
+    public function getAttributeErrors(string $attribute): array
+    {
+        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): Error => $error);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAttributeErrorMessages(string $attribute): array
+    {
+        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): string => $error->getMessage());
+    }
+
+    private function getAttributeErrorsMap(string $attribute, Closure $getErrorClosure): array
+    {
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $firstItem = $error->getValuePath()[0] ?? '';
+            if ($firstItem === $attribute) {
+                $errors[] = $getErrorClosure($error);
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @psalm-return array<string, non-empty-list<string>>
+     */
+    public function getAttributeErrorMessagesIndexedByPath(string $attribute, string $separator = '.'): array
+    {
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $firstItem = $error->getValuePath()[0] ?? '';
+            if ($firstItem !== $attribute) {
+                continue;
+            }
+
+            $valuePath = implode($separator, array_slice($error->getValuePath(), 1));
+            $errors[$valuePath][] = $error->getMessage();
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getCommonErrorMessages(): array
+    {
+        return $this->getAttributeErrorMessages('');
+    }
+
+    /**
+     * @psalm-param array<int|string> $valuePath
+     */
+    public function addError(string $message, array $valuePath = []): void
+    {
+        $this->errors[] = new Error($message, $valuePath);
     }
 }

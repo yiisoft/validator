@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\RuleSet;
 
 /**
  * @group validators
@@ -19,31 +19,25 @@ class EachTest extends TestCase
      */
     public function validateValues(): void
     {
-        $values = [
-            10, 20, 30,
-        ];
-
-        $rules = new Rules([
-            Number::rule()->max(13),
-        ]);
-
-        $result = Each::rule($rules)->validate($values);
-        $errors = $result->getErrors();
+        $values = [10, 20, 30];
+        $ruleSet = new RuleSet([Number::rule()->max(13)]);
+        $result = Each::rule($ruleSet)->validate($values);
 
         $this->assertFalse($result->isValid());
-        $this->assertCount(2, $errors);
-        $this->assertContains('Value must be no greater than 13. 20 given.', $errors);
-        $this->assertContains('Value must be no greater than 13. 30 given.', $errors);
+        $this->assertEquals([
+            'Value must be no greater than 13. 20 given.',
+            'Value must be no greater than 13. 30 given.',
+        ], $result->getErrorMessages());
     }
 
     public function testName(): void
     {
-        $this->assertEquals('each', Each::rule(new Rules([Number::rule()->max(13)]))->getName());
+        $this->assertEquals('each', Each::rule(new RuleSet([Number::rule()->max(13)]))->getName());
     }
 
     public function testOptions(): void
     {
-        $rules = new Rules([
+        $ruleSet = new RuleSet([
             Number::rule()->max(13),
             Number::rule()->max(14),
         ]);
@@ -71,6 +65,6 @@ class EachTest extends TestCase
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
             ],
-        ], Each::rule($rules)->getOptions());
+        ], Each::rule($ruleSet)->getOptions());
     }
 }
