@@ -19,7 +19,7 @@ class EachTest extends TestCase
      */
     public function validateValues(): void
     {
-        $values = [10, 20, 30,];
+        $values = [10, 20, 30];
         $ruleSet = new RuleSet([Number::rule()->max(13)]);
         $result = Each::rule($ruleSet)->validate($values);
 
