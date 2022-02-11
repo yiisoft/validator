@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use Closure;
+use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 
 use function array_slice;
 use function implode;
+use function is_string;
 
 final class Result
 {
@@ -65,13 +67,19 @@ final class Result
     }
 
     /**
-     * @psalm-return array<int|string, non-empty-list<int|string>>
+     * @psalm-return array<string, non-empty-list<string>>
+     *
+     * @throws InvalidArgumentException
      */
     public function getErrorMessagesIndexedByAttribute(): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
             $key = $error->getValuePath()[0] ?? '';
+            if (!is_string($key)) {
+                throw new InvalidArgumentException('Top level attributes can only have string type.');
+            }
+
             $errors[$key][] = $error->getMessage();
         }
 

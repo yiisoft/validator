@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\RuleSet;
 
 class ResultTest extends TestCase
 {
@@ -95,6 +99,15 @@ class ResultTest extends TestCase
             ['attribute2' => ['error2.1', 'error2.2', 'error2.3', 'error2.4'], '' => ['error3.1', 'error3.2']],
             $this->createAttributeErrorResult()->getErrorMessagesIndexedByAttribute()
         );
+    }
+
+    public function testGetErrorMessagesIndexedByAttribute_IncorrectType(): void
+    {
+        $rule = Each::rule(new RuleSet([Number::rule()->min(1)->max(3)]));
+        $result = $rule->validate([1, 4, 3]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $result->getErrorMessagesIndexedByAttribute();
     }
 
     public function testGetAttributeErrors(): void
