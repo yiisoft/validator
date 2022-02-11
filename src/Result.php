@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use Closure;
+use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 
 use function array_slice;
 use function implode;
+use function is_string;
 
 final class Result
 {
@@ -37,7 +39,7 @@ final class Result
     /**
      * @return Error[]
      */
-    public function getErrorObjects(): array
+    public function getErrors(): array
     {
         return $this->errors;
     }
@@ -45,7 +47,7 @@ final class Result
     /**
      * @return string[]
      */
-    public function getErrors(): array
+    public function getErrorMessages(): array
     {
         return ArrayHelper::getColumn($this->errors, static fn (Error $error) => $error->getMessage());
     }
@@ -53,7 +55,7 @@ final class Result
     /**
      * @psalm-return array<string, non-empty-list<string>>
      */
-    public function getErrorsIndexedByPath(string $separator = '.'): array
+    public function getErrorMessagesIndexedByPath(string $separator = '.'): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
@@ -65,13 +67,19 @@ final class Result
     }
 
     /**
-     * @psalm-return array<int|string, non-empty-list<int|string>>
+     * @psalm-return array<string, non-empty-list<string>>
+     *
+     * @throws InvalidArgumentException
      */
-    public function getErrorsIndexedByAttribute(): array
+    public function getErrorMessagesIndexedByAttribute(): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
             $key = $error->getValuePath()[0] ?? '';
+            if (!is_string($key)) {
+                throw new InvalidArgumentException('Top level attributes can only have string type.');
+            }
+
             $errors[$key][] = $error->getMessage();
         }
 
@@ -81,7 +89,7 @@ final class Result
     /**
      * @return Error[]
      */
-    public function getAttributeErrorObjects(string $attribute): array
+    public function getAttributeErrors(string $attribute): array
     {
         return $this->getAttributeErrorsMap($attribute, static fn (Error $error): Error => $error);
     }
@@ -89,7 +97,7 @@ final class Result
     /**
      * @return string[]
      */
-    public function getAttributeErrors(string $attribute): array
+    public function getAttributeErrorMessages(string $attribute): array
     {
         return $this->getAttributeErrorsMap($attribute, static fn (Error $error): string => $error->getMessage());
     }
@@ -110,7 +118,7 @@ final class Result
     /**
      * @psalm-return array<string, non-empty-list<string>>
      */
-    public function getAttributeErrorsIndexedByPath(string $attribute, string $separator = '.'): array
+    public function getAttributeErrorMessagesIndexedByPath(string $attribute, string $separator = '.'): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
@@ -129,9 +137,9 @@ final class Result
     /**
      * @return string[]
      */
-    public function getCommonErrors(): array
+    public function getCommonErrorMessages(): array
     {
-        return $this->getAttributeErrors('');
+        return $this->getAttributeErrorMessages('');
     }
 
     /**

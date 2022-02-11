@@ -89,7 +89,7 @@ class NumberTest extends TestCase
 
         $result = $rule->validate(-1);
         $this->assertFalse($result->isValid());
-        $this->assertStringContainsString('must be no less than 1.', $result->getErrors()[0]);
+        $this->assertEquals(['Value must be no less than 1.'], $result->getErrorMessages());
 
         $this->assertFalse($rule->validate('22e-12')->isValid());
         $this->assertTrue($rule->validate(PHP_INT_MAX + 1)->isValid());
@@ -276,12 +276,10 @@ class NumberTest extends TestCase
         $rule = Number::rule()
             ->min(5)
             ->tooSmallMessage('Value is too small.');
-
         $result = $rule->validate(0);
+
         $this->assertFalse($result->isValid());
-        $this->assertCount(1, $result->getErrors());
-        $errors = $result->getErrors();
-        $this->assertSame('Value is too small.', $errors[0]);
+        $this->assertEquals(['Value is too small.'], $result->getErrorMessages());
     }
 
     public function testValidateObject(): void

@@ -28,8 +28,7 @@ class CallbackTest extends TestCase
         $result = $rule->validate(41);
 
         $this->assertFalse($result->isValid());
-        $this->assertCount(1, $result->getErrors());
-        $this->assertEquals('Value should be 42!', $result->getErrors()[0]);
+        $this->assertEquals(['Value should be 42!'], $result->getErrorMessages());
     }
 
     public function testThrowExceptionWithInvalidReturn(): void
@@ -94,6 +93,6 @@ class CallbackTest extends TestCase
         $result = $rule->validate('hi');
         $result->addError('e2', ['key2']);
 
-        $this->assertEquals([new Error('e1', ['key1']), new Error('e2', ['key2'])], $result->getErrorObjects());
+        $this->assertEquals([new Error('e1', ['key1']), new Error('e2', ['key2'])], $result->getErrors());
     }
 }

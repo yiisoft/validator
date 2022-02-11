@@ -19,21 +19,15 @@ class EachTest extends TestCase
      */
     public function validateValues(): void
     {
-        $values = [
-            10, 20, 30,
-        ];
-
-        $ruleSet = new RuleSet([
-            Number::rule()->max(13),
-        ]);
-
+        $values = [10, 20, 30];
+        $ruleSet = new RuleSet([Number::rule()->max(13)]);
         $result = Each::rule($ruleSet)->validate($values);
-        $errors = $result->getErrors();
 
         $this->assertFalse($result->isValid());
-        $this->assertCount(2, $errors);
-        $this->assertContains('Value must be no greater than 13. 20 given.', $errors);
-        $this->assertContains('Value must be no greater than 13. 30 given.', $errors);
+        $this->assertEquals([
+            'Value must be no greater than 13. 20 given.',
+            'Value must be no greater than 13. 30 given.',
+        ], $result->getErrorMessages());
     }
 
     public function testName(): void

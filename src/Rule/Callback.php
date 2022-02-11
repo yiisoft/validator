@@ -37,7 +37,7 @@ final class Callback extends Rule
             return $result;
         }
 
-        foreach ($callbackResult->getErrorObjects() as $error) {
+        foreach ($callbackResult->getErrors() as $error) {
             $result->addError($this->formatMessage($error->getMessage()), $error->getValuePath());
         }
 

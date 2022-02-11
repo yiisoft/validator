@@ -46,7 +46,7 @@ final class Validator implements ValidatorInterface
                 $data->getAttributeValue($attribute),
                 $context->withAttribute($attribute)
             );
-            foreach ($tempResult->getErrorObjects() as $error) {
+            foreach ($tempResult->getErrors() as $error) {
                 $result->addError($error->getMessage(), [$attribute, ...$error->getValuePath()]);
             }
         }

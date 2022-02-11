@@ -14,7 +14,7 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
-class RulesTest extends TestCase
+class RuleSetTest extends TestCase
 {
     public function testMethodSyntax(): void
     {
@@ -275,7 +275,7 @@ class RulesTest extends TestCase
             new Error('e4'),
             new Error('e5'),
             new Error('e6'),
-        ], $result->getErrorObjects());
+        ], $result->getErrors());
     }
 
     public function testAddErrorWithValuePath(): void
@@ -291,6 +291,6 @@ class RulesTest extends TestCase
         $result = $ruleSet->validate('hi');
         $result->addError('e2', ['key2']);
 
-        $this->assertEquals([new Error('e1', ['key1']), new Error('e2', ['key2'])], $result->getErrorObjects());
+        $this->assertEquals([new Error('e1', ['key1']), new Error('e2', ['key2'])], $result->getErrors());
     }
 }

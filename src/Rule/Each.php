@@ -43,7 +43,7 @@ final class Each extends Rule
                 continue;
             }
 
-            foreach ($itemResult->getErrorObjects() as $error) {
+            foreach ($itemResult->getErrors() as $error) {
                 if (!is_array($item)) {
                     $errorKey = [$index];
                     $formatMessage = true;

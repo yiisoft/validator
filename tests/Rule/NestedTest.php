@@ -61,7 +61,7 @@ class NestedTest extends TestCase
 
         $result = $validator->validate('');
 
-        $this->assertEquals(['Value should be an array or an object. string given.'], $result->getErrors());
+        $this->assertEquals(['Value should be an array or an object. string given.'], $result->getErrorMessages());
     }
 
     public function testValidationMessage(): void
@@ -72,7 +72,7 @@ class NestedTest extends TestCase
 
         $result = $validator->validate(['value' => null]);
 
-        $this->assertEquals(['Value cannot be blank.'], $result->getErrors());
+        $this->assertEquals(['Value cannot be blank.'], $result->getErrorMessages());
     }
 
     public function testErrorWhenValuePathNotFound(): void
@@ -82,7 +82,7 @@ class NestedTest extends TestCase
 
         $result = $validator->validate([]);
 
-        $this->assertEquals(['Property path "value" is not found.'], $result->getErrors());
+        $this->assertEquals(['Property path "value" is not found.'], $result->getErrorMessages());
     }
 
     public function testPropertyPathIsNotFoundMessage(): void
@@ -93,7 +93,7 @@ class NestedTest extends TestCase
 
         $result = $validator->validate([]);
 
-        $this->assertEquals(['Property is not found.'], $result->getErrors());
+        $this->assertEquals(['Property is not found.'], $result->getErrorMessages());
     }
 
     public function testName(): void
@@ -262,7 +262,7 @@ class NestedTest extends TestCase
             $expectedDetailedErrors[] = new Error($errorData[1], $errorData[0]);
         }
 
-        $this->assertEquals($expectedDetailedErrors, $result->getErrorObjects());
+        $this->assertEquals($expectedDetailedErrors, $result->getErrors());
         $this->assertEquals([
             'Value must be no less than -10.',
             'Custom error.',
@@ -286,7 +286,7 @@ class NestedTest extends TestCase
             'Value must be no greater than 10.',
             'Value must be no less than 0. -4 given.',
             'Value must be no greater than 255. 259 given.',
-        ], $result->getErrors());
+        ], $result->getErrorMessages());
         $this->assertEquals([
             'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
             'charts.0.points.0.coordinates.y' => ['Value must be no greater than 10.'],
@@ -306,7 +306,7 @@ class NestedTest extends TestCase
             'charts.2.points.1.coordinates.y' => ['Value must be no greater than 10.'],
             'charts.2.points.1.rgb.1' => ['Value must be no less than 0. -4 given.'],
             'charts.2.points.1.rgb.2' => ['Value must be no greater than 255. 259 given.'],
-        ], $result->getErrorsIndexedByPath());
+        ], $result->getErrorMessagesIndexedByPath());
     }
 
     public function testIntValuePath(): void
@@ -318,8 +318,8 @@ class NestedTest extends TestCase
         ]);
         $result = $rule->validate([0 => [0 => -11]]);
 
-        $this->assertCount(1, $result->getErrorObjects());
-        $this->assertSame($result->getErrorObjects()[0]->getValuePath(), [0, 0]);
+        $this->assertCount(1, $result->getErrors());
+        $this->assertSame($result->getErrors()[0]->getValuePath(), [0, 0]);
     }
 
     public function testSeparateErrorGroups(): void
@@ -331,7 +331,7 @@ class NestedTest extends TestCase
             ])),
         ]);
         $result = $rule->validate(['key' => ['x', 'y']]);
-        $indexedErrors = $result->getErrorsIndexedByPath();
+        $indexedErrors = $result->getErrorMessagesIndexedByPath();
 
         $this->assertSame(array_keys($indexedErrors), ['key.0', 'key.1']);
         $this->assertSame(array_keys($indexedErrors['key.0']), [0, 1]);

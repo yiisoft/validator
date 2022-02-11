@@ -64,8 +64,8 @@ $ruleSet = new RuleSet([
 ]);
 
 $result = $ruleSet->validate(41);
-if ($result->isValid() === false) {
-    foreach ($result->getErrors() as $error) {
+if (!$result->isValid()) {
+    foreach ($result->getErrorMessages() as $error) {
         // ...
     }
 }
@@ -161,7 +161,7 @@ $rule = Nested::rule([
         'age' => [Number::rule()->min(18)],
     )];
 ]);
-$errors = $rule->validate($data)->getErrorsIndexedByPath();
+$errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
 ```
 
 A more complex real-life example is a chart that is made of points. This data is represented as arrays. `Nested` can be 
@@ -210,7 +210,7 @@ $rule = Nested::rule([
         ])->skipOnError(false),
     ])),
 ]);
-$errors = $rule->validate($data)->getErrorsIndexedByPath();
+$errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
 ```
 
 The contents of the errors will be:
