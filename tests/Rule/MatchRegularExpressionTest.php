@@ -66,7 +66,7 @@ class MatchRegularExpressionTest extends TestCase
                     'not' => false,
                     'pattern' => self::PATTERN,
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -77,7 +77,7 @@ class MatchRegularExpressionTest extends TestCase
                     'not' => true,
                     'pattern' => self::PATTERN,
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
         ];

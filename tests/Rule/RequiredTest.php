@@ -35,7 +35,7 @@ class RequiredTest extends TestCase
                 [
                     'message' => 'Value cannot be blank.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
         ];

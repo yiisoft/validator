@@ -120,7 +120,7 @@ class HasLengthTest extends TestCase
                     'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -133,7 +133,7 @@ class HasLengthTest extends TestCase
                     'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -146,7 +146,7 @@ class HasLengthTest extends TestCase
                     'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -159,7 +159,7 @@ class HasLengthTest extends TestCase
                     'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
                     'encoding' => 'windows-1251',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
         ];

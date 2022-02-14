@@ -75,7 +75,7 @@ class RuleSetTest extends TestCase
     {
         $ruleSet = new RuleSet([
             Number::rule()->min(10),
-            Number::rule()->min(10)->skipOnError(false),
+            Number::rule()->min(10)->skipOnError(true),
             Number::rule()->min(10),
         ]);
         $result = $ruleSet->validate(1);
@@ -95,7 +95,7 @@ class RuleSetTest extends TestCase
                 'required',
                 'message' => 'Value cannot be blank.',
                 'skipOnEmpty' => false,
-                'skipOnError' => true,
+                'skipOnError' => false,
             ],
             [
                 'number',
@@ -106,7 +106,7 @@ class RuleSetTest extends TestCase
                 'max' => 10,
                 'tooBigMessage' => 'Value must be no greater than 10.',
                 'skipOnEmpty' => false,
-                'skipOnError' => true,
+                'skipOnError' => false,
             ],
         ], $ruleSet->asArray());
 
@@ -127,7 +127,7 @@ class RuleSetTest extends TestCase
                 'max' => null,
                 'tooBigMessage' => 'Value must be no greater than .',
                 'skipOnEmpty' => false,
-                'skipOnError' => true,
+                'skipOnError' => false,
             ],
             [
                 'number',
@@ -149,7 +149,7 @@ class RuleSetTest extends TestCase
                 'max' => null,
                 'tooBigMessage' => 'Value must be no greater than .',
                 'skipOnEmpty' => false,
-                'skipOnError' => true,
+                'skipOnError' => false,
             ],
         ], $ruleSet->asArray());
 
@@ -172,7 +172,7 @@ class RuleSetTest extends TestCase
                     'max' => 13,
                     'tooBigMessage' => 'Value must be no greater than 13.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
                 [
                     'number',
@@ -183,7 +183,7 @@ class RuleSetTest extends TestCase
                     'max' => 14,
                     'tooBigMessage' => 'Value must be no greater than 14.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -195,7 +195,7 @@ class RuleSetTest extends TestCase
                 'max' => null,
                 'tooBigMessage' => 'Value must be no greater than .',
                 'skipOnEmpty' => false,
-                'skipOnError' => true,
+                'skipOnError' => false,
             ],
         ], $ruleSet->asArray());
     }
@@ -211,7 +211,7 @@ class RuleSetTest extends TestCase
                 'required',
                 'message' => 'Value cannot be blank.',
                 'skipOnEmpty' => false,
-                'skipOnError' => true,
+                'skipOnError' => false,
             ],
             [
                 'customUrlRule',
@@ -219,7 +219,7 @@ class RuleSetTest extends TestCase
                     'required',
                     'message' => 'Value cannot be blank.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
                 [
                     'url',
@@ -228,7 +228,7 @@ class RuleSetTest extends TestCase
                     'validSchemes' => ['http', 'https',],
                     'pattern' => '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
                 [
                     'hasLength',
@@ -239,7 +239,7 @@ class RuleSetTest extends TestCase
                     'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
         ], $ruleSet->asArray());

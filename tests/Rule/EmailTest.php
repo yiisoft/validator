@@ -225,7 +225,7 @@ class EmailTest extends TestCase
                     'enableIDN' => false,
                     'message' => 'This value is not a valid email address.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -236,7 +236,7 @@ class EmailTest extends TestCase
                     'enableIDN' => false,
                     'message' => 'This value is not a valid email address.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -247,7 +247,7 @@ class EmailTest extends TestCase
                     'enableIDN' => false,
                     'message' => 'This value is not a valid email address.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -258,7 +258,7 @@ class EmailTest extends TestCase
                     'enableIDN' => true,
                     'message' => 'This value is not a valid email address.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
         ];
