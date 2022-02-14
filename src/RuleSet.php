@@ -6,6 +6,7 @@ namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Callback;
+use function get_class;
 use function is_callable;
 
 /**
@@ -98,6 +99,8 @@ final class RuleSet
         foreach ($this->rules as $rule) {
             if ($rule instanceof ParametrizedRuleInterface) {
                 $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
+            } else {
+                $arrayOfRules[] = [get_class($rule)];
             }
         }
         return $arrayOfRules;
