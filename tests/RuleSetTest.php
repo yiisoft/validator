@@ -11,8 +11,11 @@ use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
+use Yiisoft\Validator\ValidationContext;
+use function get_class;
 
 class RuleSetTest extends TestCase
 {
@@ -86,9 +89,16 @@ class RuleSetTest extends TestCase
 
     public function testAsArray(): void
     {
+        $rule = new class () implements RuleInterface {
+            public function validate($value, ValidationContext $context = null): Result
+            {
+            }
+        };
+
         $ruleSet = new RuleSet();
         $ruleSet->add(Required::rule());
         $ruleSet->add(Number::rule()->max(10));
+        $ruleSet->add($rule);
 
         $this->assertEquals([
             [
@@ -107,6 +117,9 @@ class RuleSetTest extends TestCase
                 'tooBigMessage' => 'Value must be no greater than 10.',
                 'skipOnEmpty' => false,
                 'skipOnError' => true,
+            ],
+            [
+                get_class($rule),
             ],
         ], $ruleSet->asArray());
 
