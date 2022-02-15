@@ -44,7 +44,7 @@ class GroupRuleTest extends TestCase
                 'required',
                 'message' => 'Value cannot be blank.',
                 'skipOnEmpty' => false,
-                'skipOnError' => true,
+                'skipOnError' => false,
             ],
             [
                 'url',
@@ -53,7 +53,7 @@ class GroupRuleTest extends TestCase
                 'validSchemes' => ['http', 'https',],
                 'pattern' => '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                 'skipOnEmpty' => false,
-                'skipOnError' => true,
+                'skipOnError' => false,
             ],
             [
                 'hasLength',
@@ -64,7 +64,7 @@ class GroupRuleTest extends TestCase
                 'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
                 'encoding' => 'UTF-8',
                 'skipOnEmpty' => false,
-                'skipOnError' => true,
+                'skipOnError' => false,
             ],
         ], $rule->getOptions());
     }

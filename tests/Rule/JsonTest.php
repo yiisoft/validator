@@ -131,7 +131,7 @@ JSON;
                 [
                     'message' => 'The value is not JSON.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
         ];

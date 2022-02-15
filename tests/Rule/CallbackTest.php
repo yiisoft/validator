@@ -56,7 +56,7 @@ class CallbackTest extends TestCase
                 }),
                 [
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -65,7 +65,7 @@ class CallbackTest extends TestCase
                 })->skipOnEmpty(true),
                 [
                     'skipOnEmpty' => true,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
         ];
