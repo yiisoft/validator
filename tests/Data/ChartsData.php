@@ -7,8 +7,11 @@ namespace Yiisoft\Validator\Tests\Data;
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
 use Yiisoft\Validator\Attribute\Validate;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\ValidationContext;
 
 class ChartsData
 {
@@ -34,7 +37,24 @@ class Point
 class Coordinates
 {
     #[Validate(Number::class, ['min' => -10, 'max' => 10])]
+    #[Validate(ValidateXRule::class)]
     private int $x;
     #[Validate(Number::class, ['min' => -10, 'max' => 10])]
     private int $y;
+}
+
+final class ValidateXRule extends Rule
+{
+    public static function rule(): self
+    {
+        return new self();
+    }
+
+    protected function validateValue($value, ?ValidationContext $context = null): Result
+    {
+        $result = new Result();
+        $result->addError('Custom error.');
+
+        return $result;
+    }
 }
