@@ -68,7 +68,6 @@ final class AnnotatedDataSet implements RulesProviderInterface
                      */
                     $rules[$property->getName()][] = Each::rule(new RuleSet([$nestedRule]))
                         ->applyConfig($attributes[2] ?? []);
-
                 }
             }
 
