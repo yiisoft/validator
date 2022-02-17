@@ -55,12 +55,12 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      * Example:
      *
      * ```php
-     * Rule::rule()->applyConfig(['skipOnError' => false]);
+     * Rule::rule()->applyConfig(['skipOnError' => true]);
      * ```
      * is equivalent to:
      *
      * ```php
-     * Rule::rule()->skipOnError(false);
+     * Rule::rule()->skipOnError(true);
      * ```
      *
      * @param array $config
@@ -85,7 +85,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      *
      * @return Result
      */
-    final public function validate($value, ValidationContext $context = null): Result
+    final public function validate($value, ?ValidationContext $context = null): Result
     {
         if ($this->skipOnEmpty && $this->isEmpty($value)) {
             return new Result();
@@ -109,7 +109,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      *
      * @return Result
      */
-    abstract protected function validateValue($value, ValidationContext $context = null): Result;
+    abstract protected function validateValue($value, ?ValidationContext $context = null): Result;
 
     /**
      * @return static

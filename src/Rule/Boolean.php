@@ -59,7 +59,7 @@ final class Boolean extends Rule
         return $new;
     }
 
-    protected function validateValue($value, ValidationContext $context = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         if ($this->strict) {
             $valid = $value === $this->trueValue || $value === $this->falseValue;

@@ -29,7 +29,7 @@ final class Each extends Rule
         return $rule;
     }
 
-    protected function validateValue($value, ValidationContext $context = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         if (!is_iterable($value)) {

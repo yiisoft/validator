@@ -240,22 +240,22 @@ use Yiisoft\Validator\Validator;
 
 class ChartsData
 {
-    #[HasMany(Chart::class, ['skipOnError' => false])]
+    #[HasMany(Chart::class)]
     private array $charts;
 }
 
 class Chart
 {
-    #[HasMany(Dot::class, ['skipOnError' => false])]
+    #[HasMany(Dot::class)]
     private array $dots;
 }
 
 class Dot
 {
-    #[HasOne(Coordinates::class, ['skipOnError' => false])]
+    #[HasOne(Coordinates::class)]
     private $coordinates;
     #[Validate(Each::class)]
-    #[Validate(Number::class, ['min' => 0, 'max' => 255, 'skipOnError' => false])]
+    #[Validate(Number::class, ['min' => 0, 'max' => 255])]
     private array $rgb;
 }
 
@@ -271,10 +271,14 @@ class Coordinates
 Retrieve rule from the base DTO and use it for validation.
 
 ```php
+use Yiisoft\Validator\DataSet\AnnotatedDataSet;
+
 // The structure of data and errors is the same as in previous example
-$data = [];
+$data = [
+    // ...
+];
 $dataSet = new AnnotatedDataSet(new ChartsData(), $data);
-$errors = $rule->validate($dataSet)->getErrors();
+$errors = $rule->validate($dataSet)->getErrorMessagesIndexedByPath();
 ```
 
 ### Conditional validation
@@ -302,19 +306,26 @@ use Yiisoft\Validator\Rule;
 
 final class Pi extends Rule
 {
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    public static function rule(): self
+    {
+        return new self();
+    }
+
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         $equal = \abs($value - M_PI) < PHP_FLOAT_EPSILON;
+
         if (!$equal) {
             $result->addError($this->formatMessage('Value is not PI.'));
         }
+
         return $result;
     }
 }
 ```
 
-Note that `validateValue()` second argument is an instance of `DataSetInterface` so you can use it if you need
+Note that `validateValue()` second argument is an instance of `ValidationContext` so you can use it if you need
 whole data set context. For example, implementation might be the following if you need to validate "company"
 property only if "hasCompany" is true:
 
@@ -323,19 +334,25 @@ namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\Rule;use Yiisoft\Validator\ValidationContext;
 
 final class CompanyName extends Rule
 {
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    public static function rule(): self
+    {
+        return new self();
+    }
+
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
+        $dataSet = $context->getDataSet();
         $hasCompany = $dataSet !== null && $dataSet->getAttributeValue('hasCompany') === true;
 
         if ($hasCompany && $this->isCompanyNameValid($value) === false) {
-            
             $result->addError($this->formatMessage('Company name is not valid.'));
         }
+
         return $result;
     }
     

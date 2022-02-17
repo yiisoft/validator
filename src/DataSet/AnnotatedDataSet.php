@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\DataSet;
 
+use InvalidArgumentException;
 use ReflectionClass;
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
@@ -33,9 +34,9 @@ final class AnnotatedDataSet implements RulesProviderInterface
 
     public function getRules(): iterable
     {
-        $class = new ReflectionClass($this->baseAnnotatedObject);
+        $classMeta = new ReflectionClass($this->baseAnnotatedObject);
 
-        return $this->handleAnnotations($class);
+        return $this->handleAnnotations($classMeta);
     }
 
     private function handleAnnotations(ReflectionClass $classMeta): array
@@ -79,7 +80,11 @@ final class AnnotatedDataSet implements RulesProviderInterface
              */
             $attributes = $property->getAttributes(Validate::class);
             foreach ($attributes as $index => $attribute) {
-                if ($index === 0 && $attribute->getArguments()[0] === Each::class) {
+                if ($attribute->getArguments()[0] === Each::class) {
+                    if ($index !== 0) {
+                        throw new InvalidArgumentException('Each is only allowed in the first annotation.');
+                    }
+
                     $useEach = true;
                     $eachRuleConfig = $attribute->getArguments()[1] ?? [];
 
@@ -93,9 +98,9 @@ final class AnnotatedDataSet implements RulesProviderInterface
                 continue;
             }
 
-            $rules[$property->getName()] = $useEach ?
-                Each::rule(new RuleSet($flatRules))->applyConfig($eachRuleConfig) :
-                $flatRules;
+            $rules[$property->getName()] = $useEach
+                ? Each::rule(new RuleSet($flatRules))->applyConfig($eachRuleConfig)
+                : $flatRules;
         }
 
         return $rules;

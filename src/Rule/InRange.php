@@ -44,7 +44,7 @@ final class InRange extends Rule
         return $rule;
     }
 
-    protected function validateValue($value, ValidationContext $context = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 

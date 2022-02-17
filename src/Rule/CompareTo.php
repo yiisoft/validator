@@ -140,7 +140,7 @@ final class CompareTo extends Rule
         return $new;
     }
 
-    protected function validateValue($value, ValidationContext $context = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 

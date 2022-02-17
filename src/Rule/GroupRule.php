@@ -19,7 +19,7 @@ abstract class GroupRule extends Rule
 
     protected string $message = 'This value is not a valid.';
 
-    protected function validateValue($value, ValidationContext $context = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         if (!$this->getRuleSet()->validate($value, $context)->isValid()) {

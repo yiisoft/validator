@@ -64,7 +64,7 @@ final class Email extends Rule
         return new self();
     }
 
-    protected function validateValue($value, ValidationContext $context = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $originalValue = $value;
         $result = new Result();
