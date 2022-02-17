@@ -25,7 +25,6 @@ final class AnnotatedDataSetTest extends TestCase
         $actualOptions = $dataSet->getRules()['charts'][0]->getOptions();
         $replacedValuePaths = [
             [0, 'points', 0, 0, 'coordinates', 'x', 0],
-            [0, 'points', 0, 0, 'coordinates', 'x', 1],
             [0, 'points', 0, 0, 'coordinates', 'y', 0],
             [0, 'points', 0, 0, 'rgb', 0],
         ];
@@ -50,7 +49,6 @@ final class AnnotatedDataSetTest extends TestCase
                                         'min' => -10,
                                         'max' => 10,
                                     ],
-                                    [],
                                 ],
                                 'y' => [
                                     [
