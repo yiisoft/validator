@@ -10,7 +10,7 @@ use Yiisoft\Validator\Attribute\HasOne;
 use Yiisoft\Validator\Attribute\Validate;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
-use Yiisoft\Validator\Rules;
+use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\RulesProviderInterface;
 
 /**
@@ -59,14 +59,15 @@ final class AnnotatedDataSet implements RulesProviderInterface
                 $nestedRule = Nested::rule($this->handleAnnotations($relatedClassMeta))
                     ->applyConfig($attributes[1] ?? []);
 
-                if ($className === HasMany::class) {
+                if ($className !== HasMany::class) {
+                    $rules[$property->getName()] = $nestedRule;
+                } else {
                     /**
                      * @psalm-suppress UndefinedMethod
                      */
-                    $rules[$property->getName()][] = Each::rule(new Rules([$nestedRule]))
+                    $rules[$property->getName()][] = Each::rule(new RuleSet([$nestedRule]))
                         ->applyConfig($attributes[2] ?? []);
-                } else {
-                    $rules[$property->getName()] = $nestedRule;
+
                 }
             }
 
@@ -93,7 +94,7 @@ final class AnnotatedDataSet implements RulesProviderInterface
             }
 
             $rules[$property->getName()] = $useEach ?
-                Each::rule(new Rules($flatRules))->applyConfig($eachRuleConfig) :
+                Each::rule(new RuleSet($flatRules))->applyConfig($eachRuleConfig) :
                 $flatRules;
         }
 

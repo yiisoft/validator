@@ -28,7 +28,7 @@ final class AnnotatedDataSetTest extends TestCase
             [0, 'points', 0, 0, 'coordinates', 'y', 0],
             [0, 'points', 0, 0, 'rgb', 0],
         ];
-        $checkedKeys = ['0', 'min', 'max', 'skipOnError'];
+        $checkedKeys = ['0', 'min', 'max'];
         foreach ($replacedValuePaths as $replacedValuePath) {
             $value = ArrayHelper::getValue($actualOptions, $replacedValuePath);
             $value = ArrayHelper::filter($value, $checkedKeys);
@@ -48,14 +48,12 @@ final class AnnotatedDataSetTest extends TestCase
                                     [
                                         'min' => -10,
                                         'max' => 10,
-                                        'skipOnError' => true,
                                     ],
                                 ],
                                 'y' => [
                                     [
                                         'min' => -10,
                                         'max' => 10,
-                                        'skipOnError' => true,
                                     ],
                                 ],
                             ],
@@ -64,7 +62,6 @@ final class AnnotatedDataSetTest extends TestCase
                                     'number',
                                     'min' => 0,
                                     'max' => 255,
-                                    'skipOnError' => false,
                                 ],
                             ],
                         ],

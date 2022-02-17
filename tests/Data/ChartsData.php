@@ -12,22 +12,22 @@ use Yiisoft\Validator\Rule\Number;
 
 class ChartsData
 {
-    #[HasMany(Chart::class, ['skipOnError' => false])]
+    #[HasMany(Chart::class)]
     private array $charts;
 }
 
 class Chart
 {
-    #[HasMany(Point::class, ['skipOnError' => false])]
+    #[HasMany(Point::class)]
     private array $points;
 }
 
 class Point
 {
-    #[HasOne(Coordinates::class, ['skipOnError' => false])]
+    #[HasOne(Coordinates::class)]
     private $coordinates;
     #[Validate(Each::class)]
-    #[Validate(Number::class, ['min' => 0, 'max' => 255, 'skipOnError' => false])]
+    #[Validate(Number::class, ['min' => 0, 'max' => 255])]
     private array $rgb;
 }
 
