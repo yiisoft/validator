@@ -219,16 +219,16 @@ class NestedTest extends TestCase
                                         $result->addError('Custom error.');
 
                                         return $result;
-                                    })->skipOnError(false),
+                                    }),
                                 ],
                                 'y' => [Number::rule()->min(-10)->max(10)],
                             ]),
                             'rgb' => Each::rule(new RuleSet([
-                                Number::rule()->min(0)->max(255)->skipOnError(false),
+                                Number::rule()->min(0)->max(255),
                             ])),
-                        ])->skipOnError(false),
+                        ]),
                     ])),
-                ])->skipOnError(false),
+                ]),
             ])),
         ]);
         $result = $rule->validate($data);
@@ -326,8 +326,8 @@ class NestedTest extends TestCase
     {
         $rule = Nested::rule([
             'key' => Each::rule(new RuleSet([
-                HasLength::rule()->min(5)->skipOnError(false),
-                InRange::rule(['aaa', 'bbb', 'ccc'])->skipOnError(false),
+                HasLength::rule()->min(5),
+                InRange::rule(['aaa', 'bbb', 'ccc']),
             ])),
         ]);
         $result = $rule->validate(['key' => ['x', 'y']]);

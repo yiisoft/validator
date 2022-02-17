@@ -126,11 +126,11 @@ foreach ($results as $attribute => $result) {
 
 #### Skipping validation on error
 
-By default, if an error occurred during validation of an attribute, further rules for this attribute are skipped.
-To change this behavior use `skipOnError(false)` when configuring rules:  
+By default, if an error occurred during validation of an attribute, further rules for this attribute are processed.
+To change this behavior use `skipOnError(true)` when configuring rules:  
 
 ```php
-Number::rule()->integer()->max(100)->skipOnError(false)
+Number::rule()->integer()->max(100)->skipOnError(true)
 ```
 
 #### Skipping empty values
@@ -203,11 +203,11 @@ $rule = Nested::rule([
                         'y' => [Number::rule()->min(-10)->max(10)],
                     ]),
                     'rgb' => Each::rule(new Rules([
-                        Number::rule()->min(0)->max(255)->skipOnError(false),
+                        Number::rule()->min(0)->max(255),
                     ])),
-                ])->skipOnError(false),
+                ]),
             ])),
-        ])->skipOnError(false),
+        ]),
     ])),
 ]);
 $errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
