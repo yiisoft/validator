@@ -78,7 +78,7 @@ class BooleanTest extends TestCase
                 ],
             ],
             [
-                Boolean::rule()->skipOnEmpty(true)->skipOnError(false),
+                Boolean::rule()->skipOnEmpty(true),
                 [
                     'strict' => false,
                     'trueValue' => '1',
@@ -89,7 +89,7 @@ class BooleanTest extends TestCase
                 ],
             ],
             [
-                Boolean::rule()->skipOnEmpty(true)->skipOnError(false)->strict(true),
+                Boolean::rule()->skipOnEmpty(true)->strict(true),
                 [
                     'strict' => true,
                     'trueValue' => '1',
