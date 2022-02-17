@@ -7,11 +7,8 @@ namespace Yiisoft\Validator\Tests\Data;
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
 use Yiisoft\Validator\Attribute\Validate;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\ValidationContext;
 
 class ChartsData
 {
