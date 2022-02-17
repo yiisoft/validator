@@ -63,7 +63,7 @@ class BooleanTest extends TestCase
                     'falseValue' => '0',
                     'message' => 'The value must be either "1" or "0".',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -74,7 +74,7 @@ class BooleanTest extends TestCase
                     'falseValue' => '0',
                     'message' => 'The value must be either "1" or "0".',
                     'skipOnEmpty' => true,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -107,7 +107,7 @@ class BooleanTest extends TestCase
                     'falseValue' => '0',
                     'message' => 'The value must be either "YES" or "0".',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -118,7 +118,7 @@ class BooleanTest extends TestCase
                     'falseValue' => 'NO',
                     'message' => 'The value must be either "1" or "NO".',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -129,7 +129,7 @@ class BooleanTest extends TestCase
                     'falseValue' => 'NO',
                     'message' => 'The value must be either "YES" or "NO".',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
         ];

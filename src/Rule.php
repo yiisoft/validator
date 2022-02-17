@@ -13,7 +13,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
 {
     private ?FormatterInterface $formatter = null;
     private bool $skipOnEmpty = false;
-    private bool $skipOnError = true;
+    private bool $skipOnError = false;
 
     /**
      * @var callable|null

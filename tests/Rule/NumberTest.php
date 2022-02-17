@@ -323,7 +323,7 @@ class NumberTest extends TestCase
                     'max' => null,
                     'tooBigMessage' => 'Value must be no greater than .',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -336,7 +336,7 @@ class NumberTest extends TestCase
                     'max' => null,
                     'tooBigMessage' => 'Value must be no greater than .',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -349,7 +349,7 @@ class NumberTest extends TestCase
                     'max' => 1,
                     'tooBigMessage' => 'Value must be no greater than 1.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -362,7 +362,7 @@ class NumberTest extends TestCase
                     'max' => 10,
                     'tooBigMessage' => 'Value must be no greater than 10.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -375,7 +375,7 @@ class NumberTest extends TestCase
                     'max' => null,
                     'tooBigMessage' => 'Value must be no greater than .',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
         ];

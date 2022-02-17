@@ -100,7 +100,7 @@ class InRangeTest extends TestCase
                     'strict' => false,
                     'not' => false,
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -111,7 +111,7 @@ class InRangeTest extends TestCase
                     'strict' => true,
                     'not' => false,
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -122,7 +122,7 @@ class InRangeTest extends TestCase
                     'strict' => false,
                     'not' => true,
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
         ];

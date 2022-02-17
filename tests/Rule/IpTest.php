@@ -320,7 +320,7 @@ class IpTest extends TestCase
                     'ranges' => [],
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -340,7 +340,7 @@ class IpTest extends TestCase
                     'ranges' => [],
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -360,7 +360,7 @@ class IpTest extends TestCase
                     'ranges' => [],
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -380,7 +380,7 @@ class IpTest extends TestCase
                     'ranges' => [],
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -400,7 +400,7 @@ class IpTest extends TestCase
                     'ranges' => [],
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -420,7 +420,7 @@ class IpTest extends TestCase
                     'ranges' => [],
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -440,7 +440,7 @@ class IpTest extends TestCase
                     'ranges' => [],
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [Ip::rule()->allowNegation(),
@@ -459,7 +459,7 @@ class IpTest extends TestCase
                     'ranges' => [],
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -479,7 +479,7 @@ class IpTest extends TestCase
                     'ranges' => [],
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -499,7 +499,7 @@ class IpTest extends TestCase
                     'ranges' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
                     'notInRangeMessage' => 'Is not in the allowed range.',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
         ];

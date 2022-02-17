@@ -52,7 +52,7 @@ class EachTest extends TestCase
                 'max' => 13,
                 'tooBigMessage' => 'Value must be no greater than 13.',
                 'skipOnEmpty' => false,
-                'skipOnError' => true,
+                'skipOnError' => false,
             ],
             [
                 'number',
@@ -63,7 +63,7 @@ class EachTest extends TestCase
                 'max' => 14,
                 'tooBigMessage' => 'Value must be no greater than 14.',
                 'skipOnEmpty' => false,
-                'skipOnError' => true,
+                'skipOnError' => false,
             ],
         ], Each::rule($ruleSet)->getOptions());
     }

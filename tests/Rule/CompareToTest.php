@@ -93,7 +93,7 @@ class CompareToTest extends TestCase
                     'compareValue' => 1,
                     'message' => 'Value must be equal to "1".',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -104,7 +104,7 @@ class CompareToTest extends TestCase
                     'compareValue' => 1,
                     'message' => 'Value must be equal to "1".',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -115,7 +115,7 @@ class CompareToTest extends TestCase
                     'compareValue' => 1,
                     'message' => 'Value must be greater than or equal to "1".',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -126,7 +126,7 @@ class CompareToTest extends TestCase
                     'compareValue' => 'YES',
                     'message' => 'Value must be equal to "YES".',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -137,7 +137,7 @@ class CompareToTest extends TestCase
                     'compareValue' => 'YES',
                     'message' => 'Value must be equal to "YES".',
                     'skipOnEmpty' => true,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -148,7 +148,7 @@ class CompareToTest extends TestCase
                     'compareValue' => 'YES',
                     'message' => 'Value must not be equal to "YES".',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
             [
@@ -159,7 +159,7 @@ class CompareToTest extends TestCase
                     'compareValue' => 'YES',
                     'message' => 'Custom message for YES',
                     'skipOnEmpty' => false,
-                    'skipOnError' => true,
+                    'skipOnError' => false,
                 ],
             ],
         ];
