@@ -157,7 +157,6 @@ class RuleSetTest extends TestCase
                 'notANumberMessage' => 'Value must be an integer.',
                 'tooSmallMessage' => 'Value must be no less than 10.',
                 'tooBigMessage' => 'Value must be no greater than .',
-
             ],
         ], $ruleSet->asArray());
 
