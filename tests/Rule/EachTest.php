@@ -20,7 +20,7 @@ class EachTest extends TestCase
     public function validateValues(): void
     {
         $values = [10, 20, 30];
-        $ruleSet = new RuleSet([Number::rule()->max(13)]);
+        $ruleSet = new RuleSet([new Number(max: 13)]);
         $result = Each::rule($ruleSet)->validate($values);
 
         $this->assertFalse($result->isValid());
@@ -32,38 +32,35 @@ class EachTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('each', Each::rule(new RuleSet([Number::rule()->max(13)]))->getName());
+        $this->assertEquals('each', Each::rule(new RuleSet([new Number(max: 13)]))->getName());
     }
 
     public function testOptions(): void
     {
-        $ruleSet = new RuleSet([
-            Number::rule()->max(13),
-            Number::rule()->max(14),
-        ]);
+        $ruleSet = new RuleSet([new Number(max: 13), new Number(max: 14)]);
 
         $this->assertEquals([
             [
                 'number',
-                'notANumberMessage' => 'Value must be a number.',
-                'asInteger' => false,
-                'min' => null,
-                'tooSmallMessage' => 'Value must be no less than .',
-                'max' => 13,
-                'tooBigMessage' => 'Value must be no greater than 13.',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
+                'asInteger' => false,
+                'min' => null,
+                'max' => 13,
+                'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than .',
+                'tooBigMessage' => 'Value must be no greater than 13.',
             ],
             [
                 'number',
-                'notANumberMessage' => 'Value must be a number.',
-                'asInteger' => false,
-                'min' => null,
-                'tooSmallMessage' => 'Value must be no less than .',
-                'max' => 14,
-                'tooBigMessage' => 'Value must be no greater than 14.',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
+                'asInteger' => false,
+                'min' => null,
+                'max' => 14,
+                'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than .',
+                'tooBigMessage' => 'Value must be no greater than 14.',
             ],
         ], Each::rule($ruleSet)->getOptions());
     }

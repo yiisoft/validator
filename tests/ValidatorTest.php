@@ -23,8 +23,8 @@ class ValidatorTest extends TestCase
         $result = $validator->validate($dataObject, [
             'bool' => [Boolean::rule()],
             'int' => [
-                Number::rule()->integer(),
-                Number::rule()->integer()->min(44),
+                new Number(asInteger: true),
+                new Number(asInteger: true, min: 44),
                 static function ($value): Result {
                     $result = new Result();
                     if ($value !== 42) {

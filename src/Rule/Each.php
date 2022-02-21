@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\HasValidationErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -17,16 +18,22 @@ final class Each extends Rule
 {
     use HasValidationErrorMessage;
 
-    private RuleSet $ruleSet;
+    public function __construct(
+        private RuleSet $ruleSet,
+        private string $incorrectInputMessage = 'Value should be array or iterable.',
+        private string $message = '{error} {value} given.',
 
-    private string $incorrectInputMessage = 'Value should be array or iterable.';
-    private string $message = '{error} {value} given.';
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null,
+    ) {
+        parent::__construct($formatter, $skipOnEmpty, $skipOnError, $when);
+    }
 
     public static function rule(RuleSet $ruleSet): self
     {
-        $rule = new self();
-        $rule->ruleSet = $ruleSet;
-        return $rule;
+        return new self($ruleSet);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result

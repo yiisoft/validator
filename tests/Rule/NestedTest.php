@@ -158,7 +158,7 @@ class NestedTest extends TestCase
             'error' => [
                 [
                     'author.age' => [
-                        Number::rule()->min(20),
+                        new Number(min: 20),
                     ],
                 ],
                 false,
@@ -213,7 +213,7 @@ class NestedTest extends TestCase
                         Nested::rule([
                             'coordinates' => Nested::rule([
                                 'x' => [
-                                    Number::rule()->min(-10)->max(10),
+                                    new Number(min: -10, max: 10),
                                     Callback::rule(static function ($value): Result {
                                         $result = new Result();
                                         $result->addError('Custom error.');
@@ -221,10 +221,10 @@ class NestedTest extends TestCase
                                         return $result;
                                     }),
                                 ],
-                                'y' => [Number::rule()->min(-10)->max(10)],
+                                'y' => [new Number(min: -10, max: 10)],
                             ]),
                             'rgb' => Each::rule(new RuleSet([
-                                Number::rule()->min(0)->max(255),
+                                new Number(min: 0, max: 255),
                             ])),
                         ]),
                     ])),
@@ -313,7 +313,7 @@ class NestedTest extends TestCase
     {
         $rule = Nested::rule([
             0 => Nested::rule([
-                0 => [Number::rule()->min(-10)->max(10)],
+                0 => [new Number(min: -10, max: 10)],
             ]),
         ]);
         $result = $rule->validate([0 => [0 => -11]]);

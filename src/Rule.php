@@ -11,15 +11,6 @@ use function is_callable;
  */
 abstract class Rule implements RuleInterface, ParametrizedRuleInterface, FormattableRuleInterface
 {
-    private ?FormatterInterface $formatter = null;
-    private bool $skipOnEmpty = false;
-    private bool $skipOnError = false;
-
-    /**
-     * @var callable|null
-     */
-    private $when = null;
-
     /**
      * To create an instance of a rule class, the static factory method `rule()` must be implemented
      * in the final class.
@@ -45,8 +36,15 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      * }
      * ```
      */
-    final protected function __construct()
-    {
+    public function __construct(
+        private ?FormatterInterface $formatter = null,
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var callable|null
+         */
+        private $when = null,
+    ) {
     }
 
     /**

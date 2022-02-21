@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\DataSet;
 
-use InvalidArgumentException;
 use ReflectionClass;
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
-use Yiisoft\Validator\Attribute\Validate;
+use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\RuleSet;
@@ -71,34 +70,22 @@ final class AnnotatedDataSet implements RulesProviderInterface
                 }
             }
 
-            $useEach = false;
-            $eachRuleConfig = [];
             $flatRules = [];
-            /**
-             * @psalm-suppress UndefinedMethod
-             */
-            $attributes = $property->getAttributes(Validate::class);
-            foreach ($attributes as $index => $attribute) {
-                if ($attribute->getArguments()[0] === Each::class) {
-                    if ($index !== 0) {
-                        throw new InvalidArgumentException('Each is only allowed in the first annotation.');
-                    }
-
-                    $useEach = true;
-                    $eachRuleConfig = $attribute->getArguments()[1] ?? [];
-
+            $attributes = $property->getAttributes();
+            foreach ($attributes as $_index => $attribute) {
+                if (!is_subclass_of($attribute->getName(), Rule::class)) {
                     continue;
                 }
 
-                $flatRules[] = $attribute->newInstance()->getRule();
+                $flatRules[] = $attribute->newInstance();
             }
 
             if (!$flatRules) {
                 continue;
             }
 
-            $rules[$property->getName()] = $useEach
-                ? Each::rule(new RuleSet($flatRules))->applyConfig($eachRuleConfig)
+            $rules[$property->getName()] = (string) $property->getType() === 'array'
+                ? Each::rule(new RuleSet($flatRules))
                 : $flatRules;
         }
 

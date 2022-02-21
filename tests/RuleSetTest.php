@@ -23,7 +23,7 @@ class RuleSetTest extends TestCase
     {
         $ruleSet = new RuleSet();
         $ruleSet->add(Required::rule());
-        $ruleSet->add(Number::rule()->max(10));
+        $ruleSet->add(new Number(max: 10));
 
         $result = $ruleSet->validate(42);
         $this->assertFalse($result->isValid());
@@ -34,7 +34,7 @@ class RuleSetTest extends TestCase
     {
         $ruleSet = new RuleSet([
             Required::rule(),
-            Number::rule()->max(10),
+            new Number(max: 10),
         ]);
         $result = $ruleSet->validate(42);
 
@@ -64,9 +64,9 @@ class RuleSetTest extends TestCase
     public function testWhenValidate(): void
     {
         $ruleSet = new RuleSet([
-            Number::rule()->min(10),
-            Number::rule()->min(10)->when(fn () => false),
-            Number::rule()->min(10),
+            new Number(min: 10),
+            (new Number(when: fn () => false, min: 10)),
+            new Number(min: 10),
         ]);
         $result = $ruleSet->validate(1);
 
@@ -77,9 +77,9 @@ class RuleSetTest extends TestCase
     public function testSkipOnError(): void
     {
         $ruleSet = new RuleSet([
-            Number::rule()->min(10),
-            Number::rule()->min(10)->skipOnError(true),
-            Number::rule()->min(10),
+            new Number(min: 10),
+            new Number(skipOnError: true, min: 10),
+            new Number(min: 10),
         ]);
         $result = $ruleSet->validate(1);
 
@@ -97,7 +97,7 @@ class RuleSetTest extends TestCase
 
         $ruleSet = new RuleSet();
         $ruleSet->add(Required::rule());
-        $ruleSet->add(Number::rule()->max(10));
+        $ruleSet->add(new Number(max: 10));
         $ruleSet->add($rule);
 
         $this->assertEquals([
@@ -109,106 +109,98 @@ class RuleSetTest extends TestCase
             ],
             [
                 'number',
-                'notANumberMessage' => 'Value must be a number.',
-                'asInteger' => false,
-                'min' => null,
-                'tooSmallMessage' => 'Value must be no less than .',
-                'max' => 10,
-                'tooBigMessage' => 'Value must be no greater than 10.',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
+                'asInteger' => false,
+                'min' => null,
+                'max' => 10,
+                'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than .',
+                'tooBigMessage' => 'Value must be no greater than 10.',
             ],
             [
                 get_class($rule),
             ],
         ], $ruleSet->asArray());
 
-        $ruleSet = new RuleSet(
-            [
-                Number::rule()->min(10),
-                Number::rule()->min(10),
-                Number::rule()->min(10)->integer(),
-            ]
-        );
+        $ruleSet = new RuleSet([new Number(min: 10), new Number(min: 10), new Number(asInteger: true, min: 10)]);
         $this->assertEquals([
             [
                 'number',
-                'notANumberMessage' => 'Value must be a number.',
-                'asInteger' => false,
-                'min' => 10,
-                'tooSmallMessage' => 'Value must be no less than 10.',
-                'max' => null,
-                'tooBigMessage' => 'Value must be no greater than .',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
+                'asInteger' => false,
+                'min' => 10,
+                'max' => null,
+                'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than 10.',
+                'tooBigMessage' => 'Value must be no greater than .',
             ],
             [
                 'number',
-                'notANumberMessage' => 'Value must be a number.',
-                'asInteger' => false,
-                'min' => 10,
-                'tooSmallMessage' => 'Value must be no less than 10.',
-                'max' => null,
-                'tooBigMessage' => 'Value must be no greater than .',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
+                'asInteger' => false,
+                'min' => 10,
+                'max' => null,
+                'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than 10.',
+                'tooBigMessage' => 'Value must be no greater than .',
             ],
             [
                 'number',
-                'notANumberMessage' => 'Value must be an integer.',
+                'skipOnEmpty' => false,
+                'skipOnError' => false,
                 'asInteger' => true,
                 'min' => 10,
-                'tooSmallMessage' => 'Value must be no less than 10.',
                 'max' => null,
+                'notANumberMessage' => 'Value must be an integer.',
+                'tooSmallMessage' => 'Value must be no less than 10.',
                 'tooBigMessage' => 'Value must be no greater than .',
-                'skipOnEmpty' => false,
-                'skipOnError' => false,
+
             ],
         ], $ruleSet->asArray());
 
         $ruleSet = new RuleSet([
-            Each::rule(new RuleSet([
-                Number::rule()->max(13),
-                Number::rule()->max(14),
-            ])),
-            Number::rule()->min(10),
+            Each::rule(new RuleSet([new Number(max: 13), new Number(max: 14)])),
+            new Number(min: 10),
         ]);
 
         $this->assertEquals([
             ['each',
                 [
                     'number',
-                    'notANumberMessage' => 'Value must be a number.',
-                    'asInteger' => false,
-                    'min' => null,
-                    'tooSmallMessage' => 'Value must be no less than .',
-                    'max' => 13,
-                    'tooBigMessage' => 'Value must be no greater than 13.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'asInteger' => false,
+                    'min' => null,
+                    'max' => 13,
+                    'notANumberMessage' => 'Value must be a number.',
+                    'tooSmallMessage' => 'Value must be no less than .',
+                    'tooBigMessage' => 'Value must be no greater than 13.',
                 ],
                 [
                     'number',
-                    'notANumberMessage' => 'Value must be a number.',
-                    'asInteger' => false,
-                    'min' => null,
-                    'tooSmallMessage' => 'Value must be no less than .',
-                    'max' => 14,
-                    'tooBigMessage' => 'Value must be no greater than 14.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'asInteger' => false,
+                    'min' => null,
+                    'max' => 14,
+                    'notANumberMessage' => 'Value must be a number.',
+                    'tooSmallMessage' => 'Value must be no less than .',
+                    'tooBigMessage' => 'Value must be no greater than 14.',
                 ],
             ],
             [
                 'number',
-                'notANumberMessage' => 'Value must be a number.',
-                'asInteger' => false,
-                'min' => 10,
-                'tooSmallMessage' => 'Value must be no less than 10.',
-                'max' => null,
-                'tooBigMessage' => 'Value must be no greater than .',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
+                'asInteger' => false,
+                'min' => 10,
+                'max' => null,
+                'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than 10.',
+                'tooBigMessage' => 'Value must be no greater than .',
             ],
         ], $ruleSet->asArray());
     }

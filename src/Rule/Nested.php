@@ -36,7 +36,7 @@ use function is_object;
  * $rule = Nested::rule([
  *     'author' => Nested::rule([
  *         'name' => [HasLength::rule()->min(3)],
- *         'age' => [Number::rule()->min(18)],
+ *         'age' => [new Number(min: 18)],
  *     )];
  * ]);
  * ```

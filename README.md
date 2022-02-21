@@ -53,7 +53,7 @@ use Yiisoft\Validator\Result;
 
 $ruleSet = new RuleSet([
     Required::rule(),
-    Number::rule()->min(10),
+    new Number(min: 10),
     static function ($value): Result {
         $result = new Result();
         if ($value !== 42) {
@@ -105,7 +105,7 @@ $validator = new Validator(); // Usually obtained from container
 $moneyTransfer = new MoneyTransfer(142);
 $rules = [    
     'amount' => [
-        Number::rule()->integer()->max(100),
+        new Number(asInteger: true, max: 100),
         static function ($value): Result {
             $result = new Result();
             if ($value === 13) {
@@ -128,19 +128,23 @@ foreach ($resultSet as $attribute => $result) {
 #### Skipping validation on error
 
 By default, if an error occurred during validation of an attribute, further rules for this attribute are processed.
-To change this behavior use `skipOnError(true)` when configuring rules:  
+To change this behavior use `skipOnError: true` when configuring rules:  
 
 ```php
-Number::rule()->integer()->max(100)->skipOnError(true)
+use Yiisoft\Validator\Rule\Number;
+
+new Number(skipOnError: true, asInteger: true, max: 100)
 ```
 
 #### Skipping empty values
 
 By default, empty values are validated. That is undesirable if you need to allow not specifying a field.
-To change this behavior use `skipOnEmpty(true)`:
+To change this behavior use `skipOnEmpty: true`:
 
 ```php
-Number::rule()->integer()->max(100)->skipOnEmpty(true)
+use Yiisoft\Validator\Rule\Number;
+
+new Number(skipOnEmpty: true, asInteger: true, max: 100)
 ```
 
 #### Nested and related data
@@ -159,7 +163,7 @@ $rule = Nested::rule([
     'title' => [Required::rule()],
     'author' => Nested::rule([
         'name' => [HasLength::rule()->min(3)],
-        'age' => [Number::rule()->min(18)],
+        'age' => [new Number(min: 18)],
     )];
 ]);
 $errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
@@ -200,11 +204,11 @@ $rule = Nested::rule([
             'points' => Each::rule(new Rules([
                 Nested::rule([
                     'coordinates' => Nested::rule([
-                        'x' => [Number::rule()->min(-10)->max(10)],
-                        'y' => [Number::rule()->min(-10)->max(10)],
+                        'x' => [new Number(min: -10, max: 10)],
+                        'y' => [new Number(min: -10, max: 10)],
                     ]),
                     'rgb' => Each::rule(new Rules([
-                        Number::rule()->min(0)->max(255),
+                        new Number(min: 0, max: 255),
                     ])),
                 ]),
             ])),
@@ -304,9 +308,15 @@ $errors = $rule->validate($dataSet)->getErrorMessagesIndexedByPath();
 In some cases there is a need to apply rule conditionally. It could be performed by using `when()`:
 
 ```php
-Number::rule()->integer()->min(100)->when(static function ($value, DataSetInterface $dataSet) {
-    return $dataSet->getAttributeValue('country') === Country::USA;
-});
+use Yiisoft\Validator\Rule\Number;
+
+new Number(
+    when: static function ($value, DataSetInterface $dataSet) {
+        return $dataSet->getAttributeValue('country') === Country::USA;
+    },
+    asInteger: true, 
+    min: 100,
+);
 ```
 
 If callable returns `true` rule is applied, when the value returned is `false`, rule is skipped.

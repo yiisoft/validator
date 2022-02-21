@@ -9,9 +9,6 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\DataSet\AnnotatedDataSet;
 use Yiisoft\Validator\Tests\Data\ChartsData;
 
-/**
- * @requires PHP >= 8.0
- */
 final class AnnotatedDataSetTest extends TestCase
 {
     public function testGetRules(): void
