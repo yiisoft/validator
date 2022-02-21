@@ -133,7 +133,7 @@ To change this behavior use `skipOnError: true` when configuring rules:
 ```php
 use Yiisoft\Validator\Rule\Number;
 
-new Number(skipOnError: true, asInteger: true, max: 100)
+new Number(asInteger: true, max: 100, skipOnError: true)
 ```
 
 #### Skipping empty values
@@ -144,7 +144,7 @@ To change this behavior use `skipOnEmpty: true`:
 ```php
 use Yiisoft\Validator\Rule\Number;
 
-new Number(skipOnEmpty: true, asInteger: true, max: 100)
+new Number(asInteger: true, max: 100, skipOnEmpty: true)
 ```
 
 #### Nested and related data

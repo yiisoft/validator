@@ -78,7 +78,7 @@ class RuleSetTest extends TestCase
     {
         $ruleSet = new RuleSet([
             new Number(min: 10),
-            new Number(skipOnError: true, min: 10),
+            new Number(min: 10, skipOnError: true),
             new Number(min: 10),
         ]);
         $result = $ruleSet->validate(1);
