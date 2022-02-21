@@ -65,8 +65,8 @@ class RuleSetTest extends TestCase
     {
         $ruleSet = new RuleSet([
             Number::rule()->min(10),
-            Number::rule()->min(10)->when(fn () => false)->skipOnError(false),
-            Number::rule()->min(10)->skipOnError(false),
+            Number::rule()->min(10)->when(fn () => false),
+            Number::rule()->min(10),
         ]);
         $result = $ruleSet->validate(1);
 
@@ -126,7 +126,7 @@ class RuleSetTest extends TestCase
         $ruleSet = new RuleSet(
             [
                 Number::rule()->min(10),
-                Number::rule()->min(10)->skipOnError(false),
+                Number::rule()->min(10),
                 Number::rule()->min(10)->integer(),
             ]
         );
@@ -276,7 +276,7 @@ class RuleSetTest extends TestCase
                 $result->addError('e6');
 
                 return $result;
-            })->skipOnError(false),
+            }),
         ]);
         $result = $ruleSet->validate('hi');
 
