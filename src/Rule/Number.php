@@ -55,7 +55,6 @@ final class Number extends Rule
          * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
          */
         private string $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
