@@ -42,14 +42,14 @@ final class RulesDumperTest extends TestCase
                     'attributeName' => [
                         [
                             'number',
-                            'skipOnEmpty' => true,
-                            'skipOnError' => true,
                             'asInteger' => true,
                             'min' => 10,
                             'max' => 100,
                             'notANumberMessage' => 'Value must be an integer.',
                             'tooBigMessage' => 'Value must be no greater than 100.',
                             'tooSmallMessage' => 'Value must be greater than 10.',
+                            'skipOnEmpty' => true,
+                            'skipOnError' => true,
                         ],
                     ],
                 ],

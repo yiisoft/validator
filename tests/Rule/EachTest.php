@@ -42,25 +42,25 @@ class EachTest extends TestCase
         $this->assertEquals([
             [
                 'number',
-                'skipOnEmpty' => false,
-                'skipOnError' => false,
                 'asInteger' => false,
                 'min' => null,
                 'max' => 13,
                 'notANumberMessage' => 'Value must be a number.',
                 'tooSmallMessage' => 'Value must be no less than .',
                 'tooBigMessage' => 'Value must be no greater than 13.',
+                'skipOnEmpty' => false,
+                'skipOnError' => false,
             ],
             [
                 'number',
-                'skipOnEmpty' => false,
-                'skipOnError' => false,
                 'asInteger' => false,
                 'min' => null,
                 'max' => 14,
                 'notANumberMessage' => 'Value must be a number.',
                 'tooSmallMessage' => 'Value must be no less than .',
                 'tooBigMessage' => 'Value must be no greater than 14.',
+                'skipOnEmpty' => false,
+                'skipOnError' => false,
             ],
         ], Each::rule($ruleSet)->getOptions());
     }
