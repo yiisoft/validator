@@ -19,7 +19,6 @@ final class Each extends Rule
         private RuleSet $ruleSet,
         private string $incorrectInputMessage = 'Value should be array or iterable.',
         private string $message = '{error} {value} given.',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,

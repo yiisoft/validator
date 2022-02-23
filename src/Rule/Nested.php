@@ -51,7 +51,6 @@ final class Nested extends Rule
         private iterable $rules,
         private bool $errorWhenPropertyPathIsNotFound = false,
         private string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,

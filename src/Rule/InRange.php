@@ -31,7 +31,6 @@ final class InRange extends Rule
          */
         private bool $not = false,
         private string $message = 'This value is invalid.',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,

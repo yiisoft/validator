@@ -18,7 +18,6 @@ final class Required extends Rule
 {
     public function __construct(
         private string $message = 'Value cannot be blank.',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,

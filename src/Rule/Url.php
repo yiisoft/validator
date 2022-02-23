@@ -44,7 +44,6 @@ final class Url extends Rule
          */
         private bool $enableIDN = false,
         private string $message = 'This value is not a valid URL.',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,

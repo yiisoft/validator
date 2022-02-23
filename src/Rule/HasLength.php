@@ -48,7 +48,6 @@ final class HasLength extends Rule
          * If this property is not set, application wide encoding will be used.
          */
         protected string $encoding = 'UTF-8',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,

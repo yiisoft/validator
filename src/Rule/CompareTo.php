@@ -79,7 +79,6 @@ final class CompareTo extends Rule
          * When you want to compare numbers, make sure to also call {@see $asNumber}.
          */
         private string $operator = '==',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,

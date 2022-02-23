@@ -17,7 +17,6 @@ abstract class GroupRule extends Rule
 {
     public function __construct(
         protected string $message = 'This value is not a valid.',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,

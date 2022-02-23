@@ -17,7 +17,6 @@ final class Callback extends Rule
          * @var callable
          */
         private $callback,
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
