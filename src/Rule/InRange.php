@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Attribute;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Arrays\ArrayHelper;
@@ -17,6 +18,7 @@ use Yiisoft\Validator\Rule;
  * If the {@see InRange::$not} is called, the validator will ensure the attribute value
  * is NOT among the specified range.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class InRange extends Rule
 {
     public function __construct(

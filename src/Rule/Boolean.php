@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Attribute;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -12,6 +13,7 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * BooleanValidator checks if the attribute value is a boolean value or a value corresponding to it.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class Boolean extends Rule
 {
     public function __construct(

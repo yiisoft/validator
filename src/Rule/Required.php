@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Attribute;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -14,6 +15,7 @@ use function is_string;
 /**
  * RequiredValidator validates that the specified attribute does not have null or empty value.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class Required extends Rule
 {
     public function __construct(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Attribute;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -17,6 +18,7 @@ use function is_string;
  * If the {@see MatchRegularExpression::$not} is used, the validator will ensure the attribute value do NOT match
  * the pattern.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class MatchRegularExpression extends Rule
 {
     public function __construct(

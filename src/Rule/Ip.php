@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Attribute;
 use InvalidArgumentException;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
@@ -12,6 +13,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
+use function array_key_exists;
 use function is_string;
 use function strlen;
 
@@ -33,6 +35,7 @@ use function strlen;
  * ['ip_address', 'ip', 'expandIPv6' => true], // expands IPv6 address to a full notation format
  * ```
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class Ip extends Rule
 {
     /**

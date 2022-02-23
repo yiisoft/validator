@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Attribute;
 use InvalidArgumentException;
 use RuntimeException;
 use Yiisoft\Validator\FormatterInterface;
@@ -24,6 +25,7 @@ use Yiisoft\Validator\ValidationContext;
  * are compared byte by byte. When comparing numbers, make sure to call the {@see CompareTo::$asNumber}
  * to enable numeric comparison.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class CompareTo extends Rule
 {
     /**

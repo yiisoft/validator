@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Attribute;
 use RuntimeException;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
@@ -19,6 +20,7 @@ use function strlen;
  * Note that this validator only checks if the URL scheme and host part are correct.
  * It does not check the remaining parts of a URL.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class Url extends Rule
 {
     public function __construct(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Attribute;
 use RuntimeException;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
@@ -17,6 +18,7 @@ use function strlen;
 /**
  * EmailValidator validates that the attribute value is a valid email address.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class Email extends Rule
 {
     public function __construct(

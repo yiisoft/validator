@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Attribute;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -16,6 +17,7 @@ use function is_string;
  *
  * Note, this validator should only be used with strings.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class HasLength extends Rule
 {
     public function __construct(
