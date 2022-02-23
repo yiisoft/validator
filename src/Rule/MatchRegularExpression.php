@@ -33,7 +33,6 @@ final class MatchRegularExpression extends Rule
         private bool $not = false,
         private string $incorrectInputMessage = 'Value should be string.',
         private string $message = 'Value is invalid.',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,

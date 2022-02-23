@@ -32,7 +32,6 @@ final class Boolean extends Rule
          */
         private bool $strict = false,
         private string $message = 'The value must be either "{true}" or "{false}".',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
@@ -63,7 +62,7 @@ final class Boolean extends Rule
 
     private function getFormattedMessage(): string
     {
-        return $this->formatMessage( $this->message, [
+        return $this->formatMessage($this->message, [
             'true' => $this->trueValue === true ? 'true' : $this->trueValue,
             'false' => $this->falseValue === false ? 'false' : $this->falseValue,
         ]);

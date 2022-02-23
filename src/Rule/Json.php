@@ -20,7 +20,6 @@ final class Json extends Rule
 {
     public function __construct(
         private string $message = 'The value is not JSON.',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,

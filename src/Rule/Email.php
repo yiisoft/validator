@@ -60,7 +60,6 @@ final class Email extends Rule
          */
         private bool $enableIDN = false,
         private string $message = 'This value is not a valid email address.',
-
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,

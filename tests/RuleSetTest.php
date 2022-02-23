@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
