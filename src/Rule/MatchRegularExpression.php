@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
@@ -14,34 +14,30 @@ use function is_string;
 /**
  * RegularExpressionValidator validates that the attribute value matches the pattern specified in constructor.
  *
- * If the {@see MatchRegularExpression::not()} is used, the validator will ensure the attribute value do NOT match
+ * If the {@see MatchRegularExpression::$not} is used, the validator will ensure the attribute value do NOT match
  * the pattern.
  */
 final class MatchRegularExpression extends Rule
 {
-    use HasValidationErrorMessage;
+    public function __construct(
+        /**
+         * @var string the regular expression to be matched with
+         */
+        private string $pattern,
+        /**
+         * @var bool whether to invert the validation logic. Defaults to `false`. If set to `true`, the regular
+         * expression defined via {@see $pattern} should NOT match the attribute value.
+         */
+        private bool $not = false,
+        private string $incorrectInputMessage = 'Value should be string.',
+        private string $message = 'Value is invalid.',
 
-    /**
-     * @var string the regular expression to be matched with
-     */
-    private string $pattern;
-    /**
-     * @var bool whether to invert the validation logic. Defaults to false. If set to true,
-     * the regular expression defined via {@see pattern} should NOT match the attribute value.
-     */
-    private bool $not = false;
-
-    private string $incorrectInputMessage = 'Value should be string.';
-    private string $message = 'Value is invalid.';
-
-    /**
-     * @param string $pattern The regular expression to be matched with.
-     */
-    public static function rule(string $pattern): self
-    {
-        $rule = new self();
-        $rule->pattern = $pattern;
-        return $rule;
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null
+    ) {
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
@@ -64,30 +60,13 @@ final class MatchRegularExpression extends Rule
         return $result;
     }
 
-    public function not(): self
-    {
-        $new = clone $this;
-        $new->not = true;
-        return $new;
-    }
-
-    public function incorrectInputMessage(string $message): self
-    {
-        $new = clone $this;
-        $new->incorrectInputMessage = $message;
-        return $new;
-    }
-
     public function getOptions(): array
     {
-        return array_merge(
-            parent::getOptions(),
-            [
-                'message' => $this->formatMessage($this->message),
-                'incorrectInputMessage' => $this->formatMessage($this->incorrectInputMessage),
-                'not' => $this->not,
-                'pattern' => $this->pattern,
-            ],
-        );
+        return array_merge(parent::getOptions(), [
+            'pattern' => $this->pattern,
+            'not' => $this->not,
+            'incorrectInputMessage' => $this->formatMessage($this->incorrectInputMessage),
+            'message' => $this->formatMessage($this->message),
+        ]);
     }
 }

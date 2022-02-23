@@ -12,18 +12,9 @@ use Yiisoft\Validator\RuleSet;
 
 final class CustomUrlRule extends GroupRule
 {
-    public static function rule(): self
-    {
-        return new self();
-    }
-
     protected function getRuleSet(): RuleSet
     {
-        return new RuleSet([
-            new Required(),
-            Url::rule()->enableIDN(),
-            (new HasLength())->max(20),
-        ]);
+        return new RuleSet([new Required(), new Url(enableIDN: true), new HasLength(max: 20)]);
     }
 
     public function getName(): string

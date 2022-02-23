@@ -18,7 +18,7 @@ class MatchRegularExpressionTest extends TestCase
 
     public function testGetName(): void
     {
-        $this->assertSame('matchRegularExpression', MatchRegularExpression::rule(self::PATTERN)->getName());
+        $this->assertSame('matchRegularExpression', (new MatchRegularExpression(self::PATTERN))->getName());
     }
 
     public function validateDataProvider(): array
@@ -38,20 +38,22 @@ class MatchRegularExpressionTest extends TestCase
      */
     public function testValidate($data, bool $expectedIsValid, bool $expectedIsValidForInverseRule): void
     {
-        $rule = MatchRegularExpression::rule(self::PATTERN);
+        $rule = new MatchRegularExpression(self::PATTERN);
         $this->assertSame($rule->validate($data)->isValid(), $expectedIsValid);
-        $this->assertSame($rule->not()->validate($data)->isValid(), $expectedIsValidForInverseRule);
+
+        $rule = new MatchRegularExpression(self::PATTERN, not: true);
+        $this->assertSame($rule->validate($data)->isValid(), $expectedIsValidForInverseRule);
     }
 
     public function testMessage(): void
     {
-        $rule = MatchRegularExpression::rule(self::PATTERN)->message('Custom message.');
+        $rule = new MatchRegularExpression(self::PATTERN, message: 'Custom message.');
         $this->assertSame(['Custom message.'], $rule->validate('b./')->getErrorMessages());
     }
 
     public function testIncorrectInputMessage(): void
     {
-        $rule = MatchRegularExpression::rule(self::PATTERN)->incorrectInputMessage('Custom message.');
+        $rule = new MatchRegularExpression(self::PATTERN, incorrectInputMessage: 'Custom message.');
         $this->assertSame(['Custom message.'], $rule->validate(null)->getErrorMessages());
     }
 
@@ -59,23 +61,23 @@ class MatchRegularExpressionTest extends TestCase
     {
         return [
             [
-                MatchRegularExpression::rule(self::PATTERN),
+                new MatchRegularExpression(self::PATTERN),
                 [
+                    'pattern' => self::PATTERN,
+                    'not' => false,
                     'incorrectInputMessage' => 'Value should be string.',
                     'message' => 'Value is invalid.',
-                    'not' => false,
-                    'pattern' => self::PATTERN,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                MatchRegularExpression::rule(self::PATTERN)->not(),
+                new MatchRegularExpression(self::PATTERN, not: true),
                 [
+                    'pattern' => self::PATTERN,
+                    'not' => true,
                     'incorrectInputMessage' => 'Value should be string.',
                     'message' => 'Value is invalid.',
-                    'not' => true,
-                    'pattern' => self::PATTERN,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],

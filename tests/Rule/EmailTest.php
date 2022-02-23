@@ -15,106 +15,105 @@ class EmailTest extends TestCase
 {
     public function testValidate(): void
     {
-        $validator = Email::rule();
+        $rule = new Email();
 
-        $this->assertTrue($validator->validate('sam@rmcreative.ru')->isValid());
-        $this->assertTrue($validator->validate('5011@gmail.com')->isValid());
-        $this->assertTrue($validator->validate('Abc.123@example.com')->isValid());
-        $this->assertTrue($validator->validate('user+mailbox/department=shipping@example.com')->isValid());
-        $this->assertTrue($validator->validate('!#$%&\'*+-/=?^_`.{|}~@example.com')->isValid());
-        $this->assertFalse($validator->validate('rmcreative.ru')->isValid());
-        $this->assertFalse($validator->validate('Carsten Brandt <mail@cebe.cc>')->isValid());
-        $this->assertFalse($validator->validate('"Carsten Brandt" <mail@cebe.cc>')->isValid());
-        $this->assertFalse($validator->validate('<mail@cebe.cc>')->isValid());
-        $this->assertFalse($validator->validate('info@örtliches.de')->isValid());
-        $this->assertFalse($validator->validate('sam@рмкреатиф.ru')->isValid());
-        $this->assertFalse($validator->validate('ex..ample@example.com')->isValid());
-        $this->assertFalse($validator->validate(['developer@yiiframework.com'])->isValid());
+        $this->assertTrue($rule->validate('sam@rmcreative.ru')->isValid());
+        $this->assertTrue($rule->validate('5011@gmail.com')->isValid());
+        $this->assertTrue($rule->validate('Abc.123@example.com')->isValid());
+        $this->assertTrue($rule->validate('user+mailbox/department=shipping@example.com')->isValid());
+        $this->assertTrue($rule->validate('!#$%&\'*+-/=?^_`.{|}~@example.com')->isValid());
+        $this->assertFalse($rule->validate('rmcreative.ru')->isValid());
+        $this->assertFalse($rule->validate('Carsten Brandt <mail@cebe.cc>')->isValid());
+        $this->assertFalse($rule->validate('"Carsten Brandt" <mail@cebe.cc>')->isValid());
+        $this->assertFalse($rule->validate('<mail@cebe.cc>')->isValid());
+        $this->assertFalse($rule->validate('info@örtliches.de')->isValid());
+        $this->assertFalse($rule->validate('sam@рмкреатиф.ru')->isValid());
+        $this->assertFalse($rule->validate('ex..ample@example.com')->isValid());
+        $this->assertFalse($rule->validate(['developer@yiiframework.com'])->isValid());
 
-        $validator = $validator->allowName(true);
+        $rule = new Email(allowName: true);
 
-        $this->assertTrue($validator->validate('sam@rmcreative.ru')->isValid());
-        $this->assertTrue($validator->validate('5011@gmail.com')->isValid());
-        $this->assertFalse($validator->validate('rmcreative.ru')->isValid());
-        $this->assertTrue($validator->validate('Carsten Brandt <mail@cebe.cc>')->isValid());
-        $this->assertTrue($validator->validate('"Carsten Brandt" <mail@cebe.cc>')->isValid());
-        $this->assertTrue($validator->validate('<mail@cebe.cc>')->isValid());
-        $this->assertFalse($validator->validate('info@örtliches.de')->isValid());
-        $this->assertFalse($validator->validate('üñîçøðé@üñîçøðé.com')->isValid());
-        $this->assertFalse($validator->validate('sam@рмкреатиф.ru')->isValid());
-        $this->assertFalse($validator->validate('Informtation info@oertliches.de')->isValid());
-        $this->assertTrue($validator->validate('test@example.com')->isValid());
-        $this->assertTrue($validator->validate('John Smith <john.smith@example.com>')->isValid());
+        $this->assertTrue($rule->validate('sam@rmcreative.ru')->isValid());
+        $this->assertTrue($rule->validate('5011@gmail.com')->isValid());
+        $this->assertFalse($rule->validate('rmcreative.ru')->isValid());
+        $this->assertTrue($rule->validate('Carsten Brandt <mail@cebe.cc>')->isValid());
+        $this->assertTrue($rule->validate('"Carsten Brandt" <mail@cebe.cc>')->isValid());
+        $this->assertTrue($rule->validate('<mail@cebe.cc>')->isValid());
+        $this->assertFalse($rule->validate('info@örtliches.de')->isValid());
+        $this->assertFalse($rule->validate('üñîçøðé@üñîçøðé.com')->isValid());
+        $this->assertFalse($rule->validate('sam@рмкреатиф.ru')->isValid());
+        $this->assertFalse($rule->validate('Informtation info@oertliches.de')->isValid());
+        $this->assertTrue($rule->validate('test@example.com')->isValid());
+        $this->assertTrue($rule->validate('John Smith <john.smith@example.com>')->isValid());
         $this->assertTrue(
-            $validator->validate(
+            $rule->validate(
                 '"This name is longer than 64 characters. Blah blah blah blah blah" <shortmail@example.com>'
             )->isValid()
         );
-        $this->assertFalse($validator->validate('John Smith <example.com>')->isValid());
+        $this->assertFalse($rule->validate('John Smith <example.com>')->isValid());
         $this->assertFalse(
-            $validator->validate(
+            $rule->validate(
                 'Short Name <localPartMoreThan64Characters-blah-blah-blah-blah-blah-blah-blah-blah@example.com>'
             )->isValid()
         );
         $this->assertFalse(
-            $validator->validate(
+            $rule->validate(
                 'Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah.com>'
             )->isValid()
         );
-        $this->assertFalse($validator->validate(['developer@yiiframework.com'])->isValid());
+        $this->assertFalse($rule->validate(['developer@yiiframework.com'])->isValid());
     }
 
     public function testValidateIdn(): void
     {
         if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('Intl extension required');
-
-            return;
         }
-        $validator = Email::rule()->enableIDN(true);
 
-        $this->assertTrue($validator->validate('5011@example.com')->isValid());
-        $this->assertTrue($validator->validate('test-@dummy.com')->isValid());
-        $this->assertTrue($validator->validate('example@äüößìà.de')->isValid());
-        $this->assertTrue($validator->validate('example@xn--zcack7ayc9a.de')->isValid());
-        $this->assertTrue($validator->validate('info@örtliches.de')->isValid());
-        $this->assertTrue($validator->validate('sam@рмкреатиф.ru')->isValid());
-        $this->assertTrue($validator->validate('sam@rmcreative.ru')->isValid());
-        $this->assertTrue($validator->validate('5011@gmail.com')->isValid());
-        $this->assertTrue($validator->validate('üñîçøðé@üñîçøðé.com')->isValid());
-        $this->assertFalse($validator->validate('rmcreative.ru')->isValid());
-        $this->assertFalse($validator->validate('Carsten Brandt <mail@cebe.cc>')->isValid());
-        $this->assertFalse($validator->validate('"Carsten Brandt" <mail@cebe.cc>')->isValid());
-        $this->assertFalse($validator->validate('<mail@cebe.cc>')->isValid());
+        $rule = new Email(enableIDN: true);
 
-        $validator = $validator->allowName(true);
+        $this->assertTrue($rule->validate('5011@example.com')->isValid());
+        $this->assertTrue($rule->validate('test-@dummy.com')->isValid());
+        $this->assertTrue($rule->validate('example@äüößìà.de')->isValid());
+        $this->assertTrue($rule->validate('example@xn--zcack7ayc9a.de')->isValid());
+        $this->assertTrue($rule->validate('info@örtliches.de')->isValid());
+        $this->assertTrue($rule->validate('sam@рмкреатиф.ru')->isValid());
+        $this->assertTrue($rule->validate('sam@rmcreative.ru')->isValid());
+        $this->assertTrue($rule->validate('5011@gmail.com')->isValid());
+        $this->assertTrue($rule->validate('üñîçøðé@üñîçøðé.com')->isValid());
+        $this->assertFalse($rule->validate('rmcreative.ru')->isValid());
+        $this->assertFalse($rule->validate('Carsten Brandt <mail@cebe.cc>')->isValid());
+        $this->assertFalse($rule->validate('"Carsten Brandt" <mail@cebe.cc>')->isValid());
+        $this->assertFalse($rule->validate('<mail@cebe.cc>')->isValid());
 
-        $this->assertTrue($validator->validate('info@örtliches.de')->isValid());
-        $this->assertTrue($validator->validate('Informtation <info@örtliches.de>')->isValid());
-        $this->assertFalse($validator->validate('Informtation info@örtliches.de')->isValid());
-        $this->assertTrue($validator->validate('sam@рмкреатиф.ru')->isValid());
-        $this->assertTrue($validator->validate('sam@rmcreative.ru')->isValid());
-        $this->assertTrue($validator->validate('5011@gmail.com')->isValid());
-        $this->assertFalse($validator->validate('rmcreative.ru')->isValid());
-        $this->assertTrue($validator->validate('Carsten Brandt <mail@cebe.cc>')->isValid());
-        $this->assertTrue($validator->validate('"Carsten Brandt" <mail@cebe.cc>')->isValid());
-        $this->assertTrue($validator->validate('üñîçøðé 日本国 <üñîçøðé@üñîçøðé.com>')->isValid());
-        $this->assertTrue($validator->validate('<mail@cebe.cc>')->isValid());
-        $this->assertTrue($validator->validate('test@example.com')->isValid());
-        $this->assertTrue($validator->validate('John Smith <john.smith@example.com>')->isValid());
+        $rule = new Email(allowName: true, enableIDN: true);
+
+        $this->assertTrue($rule->validate('info@örtliches.de')->isValid());
+        $this->assertTrue($rule->validate('Informtation <info@örtliches.de>')->isValid());
+        $this->assertFalse($rule->validate('Informtation info@örtliches.de')->isValid());
+        $this->assertTrue($rule->validate('sam@рмкреатиф.ru')->isValid());
+        $this->assertTrue($rule->validate('sam@rmcreative.ru')->isValid());
+        $this->assertTrue($rule->validate('5011@gmail.com')->isValid());
+        $this->assertFalse($rule->validate('rmcreative.ru')->isValid());
+        $this->assertTrue($rule->validate('Carsten Brandt <mail@cebe.cc>')->isValid());
+        $this->assertTrue($rule->validate('"Carsten Brandt" <mail@cebe.cc>')->isValid());
+        $this->assertTrue($rule->validate('üñîçøðé 日本国 <üñîçøðé@üñîçøðé.com>')->isValid());
+        $this->assertTrue($rule->validate('<mail@cebe.cc>')->isValid());
+        $this->assertTrue($rule->validate('test@example.com')->isValid());
+        $this->assertTrue($rule->validate('John Smith <john.smith@example.com>')->isValid());
         $this->assertTrue(
-            $validator->validate(
+            $rule->validate(
                 '"Такое имя достаточно длинное, но оно все равно может пройти валидацию" <shortmail@example.com>'
             )->isValid()
         );
-        $this->assertFalse($validator->validate('John Smith <example.com>')->isValid());
+        $this->assertFalse($rule->validate('John Smith <example.com>')->isValid());
         $this->assertFalse(
-            $validator->validate(
+            $rule->validate(
                 'Короткое имя <после-преобразования-в-idn-тут-будет-больше-чем-64-символа@пример.com>'
             )->isValid()
         );
         $this->assertFalse(
-            $validator->validate(
+            $rule->validate(
                 'Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.com>'
             )->isValid()
         );
@@ -122,25 +121,20 @@ class EmailTest extends TestCase
 
     public function testValidateMx(): void
     {
-        $validator = Email::rule()->checkDNS(true);
+        $rule = new Email(checkDNS: true);
+        $this->assertTrue($rule->validate('5011@gmail.com')->isValid());
 
-        $this->assertTrue($validator->validate('5011@gmail.com')->isValid());
+        $rule = new Email();
+        $this->assertTrue($rule->validate('test@nonexistingsubdomain.example.com')->isValid());
 
-        $validator = $validator->checkDNS(false);
-        $this->assertTrue($validator->validate('test@nonexistingsubdomain.example.com')->isValid());
+        $rule = new Email(checkDNS: true);
+        $this->assertFalse($rule->validate('test@nonexistingsubdomain.example.com')->isValid());
 
-        $validator = $validator->checkDNS(true);
-        $this->assertFalse($validator->validate('test@nonexistingsubdomain.example.com')->isValid());
-
-        $validator = $validator->checkDns(true);
-        $validator = $validator->allowName(true);
-        $emails = [
-            'ipetrov@gmail.com',
-            'Ivan Petrov <ipetrov@gmail.com>',
-        ];
+        $rule = new Email(allowName: true, checkDNS: true);
+        $emails = ['ipetrov@gmail.com', 'Ivan Petrov <ipetrov@gmail.com>'];
         foreach ($emails as $email) {
             $this->assertTrue(
-                $validator->validate($email)->isValid(),
+                $rule->validate($email)->isValid(),
                 "Email: '$email' failed to validate(checkDNS=true, allowName=true)"
             );
         }
@@ -184,8 +178,8 @@ class EmailTest extends TestCase
      */
     public function testMalformedAddressesIdnDisabled($value): void
     {
-        $validator = Email::rule()->enableIDN(true);
-        $this->assertFalse($validator->validate($value)->isValid());
+        $rule = new Email(enableIDN: true);
+        $this->assertFalse($rule->validate($value)->isValid());
     }
 
     /**
@@ -201,24 +195,22 @@ class EmailTest extends TestCase
     {
         if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('Intl extension required');
-
-            return;
         }
 
-        $validator = Email::rule()->enableIDN(true);
-        $this->assertFalse($validator->validate($value)->isValid());
+        $rule = new Email(enableIDN: true);
+        $this->assertFalse($rule->validate($value)->isValid());
     }
 
     public function testName(): void
     {
-        $this->assertEquals('email', Email::rule()->getName());
+        $this->assertEquals('email', (new Email())->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                Email::rule(),
+                new Email(),
                 [
                     'allowName' => false,
                     'checkDNS' => false,
@@ -229,7 +221,7 @@ class EmailTest extends TestCase
                 ],
             ],
             [
-                Email::rule()->allowName(true),
+                new Email(allowName: true),
                 [
                     'allowName' => true,
                     'checkDNS' => false,
@@ -240,7 +232,7 @@ class EmailTest extends TestCase
                 ],
             ],
             [
-                Email::rule()->allowName(true)->checkDNS(true),
+                new Email(allowName: true, checkDNS: true),
                 [
                     'allowName' => true,
                     'checkDNS' => true,
@@ -251,7 +243,7 @@ class EmailTest extends TestCase
                 ],
             ],
             [
-                Email::rule()->allowName(true)->enableIDN(true),
+                new Email(allowName: true, enableIDN: true),
                 [
                     'allowName' => true,
                     'checkDNS' => false,

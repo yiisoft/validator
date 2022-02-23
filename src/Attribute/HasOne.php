@@ -12,7 +12,7 @@ use Attribute;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 class HasOne
 {
-    public function __construct(string $relatedClassName, array $nestedRuleConfig = [])
+    public function __construct(string $relatedClassName)
     {
     }
 }

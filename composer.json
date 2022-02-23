@@ -31,6 +31,9 @@
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^4.18"
     },
+    "suggest": {
+        "ext-intl": "for using IDN validation for emails"
+    },
     "autoload": {
         "psr-4": {
             "Yiisoft\\Validator\\": "src"

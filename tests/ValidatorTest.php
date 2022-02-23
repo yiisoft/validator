@@ -21,7 +21,7 @@ class ValidatorTest extends TestCase
         $dataObject = new DataSet(['bool' => true, 'int' => 41]);
         $validator = new Validator();
         $result = $validator->validate($dataObject, [
-            'bool' => [Boolean::rule()],
+            'bool' => [new Boolean()],
             'int' => [
                 new Number(asInteger: true),
                 new Number(asInteger: true, min: 44),
@@ -47,7 +47,7 @@ class ValidatorTest extends TestCase
     public function testDiverseTypes($dataSet): void
     {
         $validator = new Validator();
-        $result = $validator->validate($dataSet, ['property' => [Required::rule()]]);
+        $result = $validator->validate($dataSet, ['property' => [new Required()]]);
 
         $this->assertTrue($result->isValid());
     }
@@ -70,7 +70,7 @@ class ValidatorTest extends TestCase
     public function testNullAsDataSet(): void
     {
         $validator = new Validator();
-        $result = $validator->validate(null, ['property' => [CompareTo::rule(null)]]);
+        $result = $validator->validate(null, ['property' => [new CompareTo(null)]]);
 
         $this->assertTrue($result->isValid());
     }

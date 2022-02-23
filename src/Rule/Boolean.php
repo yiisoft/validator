@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
@@ -14,49 +14,29 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class Boolean extends Rule
 {
-    use HasValidationErrorMessage;
+    public function __construct(
+        /**
+         * @var mixed the value representing true status. Defaults to '1'.
+         */
+        private $trueValue = '1',
+        /**
+         * @var mixed the value representing false status. Defaults to '0'.
+         */
+        private $falseValue = '0',
+        /**
+         * @var bool whether the comparison to {@see $trueValue} and {@see $falseValue} is strict.
+         * When this is true, the attribute value and type must both match those of {@see $trueValue} or
+         * {@see $falseValue}. Defaults to `false`, meaning only the value needs to be matched.
+         */
+        private bool $strict = false,
+        private string $message = 'The value must be either "{true}" or "{false}".',
 
-    /**
-     * @var mixed the value representing true status. Defaults to '1'.
-     */
-    private $trueValue = '1';
-    /**
-     * @var mixed the value representing false status. Defaults to '0'.
-     */
-    private $falseValue = '0';
-    /**
-     * @var bool whether the comparison to {@see trueValue()} and {@see falseValue()} is strict.
-     * When this is true, the attribute value and type must both match those of {@see trueValue()} or {@see falseValue()}.
-     * Defaults to false, meaning only the value needs to be matched.
-     */
-    private bool $strict = false;
-
-    private string $message = 'The value must be either "{true}" or "{false}".';
-
-    public static function rule(): self
-    {
-        return new self();
-    }
-
-    public function trueValue($value): self
-    {
-        $new = clone $this;
-        $new->trueValue = $value;
-        return $new;
-    }
-
-    public function falseValue($value): self
-    {
-        $new = clone $this;
-        $new->falseValue = $value;
-        return $new;
-    }
-
-    public function strict(bool $value): self
-    {
-        $new = clone $this;
-        $new->strict = $value;
-        return $new;
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null
+    ) {
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
@@ -69,37 +49,31 @@ final class Boolean extends Rule
 
         $result = new Result();
 
-        if (!$valid) {
-            $result->addError(
-                $this->formatMessage(
-                    $this->message,
-                    [
-                        'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                        'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                    ]
-                )
-            );
+        if ($valid) {
+            return $result;
         }
+
+        $message = $this->getFormattedMessage();
+        $result->addError($message);
 
         return $result;
     }
 
+    private function getFormattedMessage(): string
+    {
+        return $this->formatMessage( $this->message, [
+            'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+            'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+        ]);
+    }
+
     public function getOptions(): array
     {
-        return array_merge(
-            parent::getOptions(),
-            [
-                'strict' => $this->strict,
-                'trueValue' => $this->trueValue,
-                'falseValue' => $this->falseValue,
-                'message' => $this->formatMessage(
-                    $this->message,
-                    [
-                        'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                        'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                    ]
-                ),
-            ],
-        );
+        return array_merge(parent::getOptions(), [
+            'trueValue' => $this->trueValue,
+            'falseValue' => $this->falseValue,
+            'strict' => $this->strict,
+            'message' => $this->getFormattedMessage(),
+        ]);
     }
 }

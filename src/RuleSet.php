@@ -65,7 +65,7 @@ final class RuleSet
     private function normalizeRule($rule): RuleInterface
     {
         if (is_callable($rule)) {
-            $rule = Callback::rule($rule);
+            $rule = new Callback($rule);
         }
 
         if (!$rule instanceof RuleInterface) {

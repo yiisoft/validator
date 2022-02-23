@@ -103,7 +103,7 @@ class ResultTest extends TestCase
 
     public function testGetErrorMessagesIndexedByAttribute_IncorrectType(): void
     {
-        $rule = Each::rule(new RuleSet([new Number(min: 1, max: 3)]));
+        $rule = new Each(new RuleSet([new Number(min: 1, max: 3)]));
         $result = $rule->validate([1, 4, 3]);
 
         $this->expectException(InvalidArgumentException::class);

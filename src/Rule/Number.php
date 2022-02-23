@@ -63,7 +63,7 @@ final class Number extends Rule
          */
         $when = null,
     ) {
-        parent::__construct($formatter, $skipOnEmpty, $skipOnError, $when);
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result

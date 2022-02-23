@@ -27,7 +27,7 @@ abstract class AbstractDataSetTest extends TestCase
         return [
             [
                 ['bool' => true, 'int' => 41],
-                ['bool' => [Boolean::rule()], 'int' => [new Number()]],
+                ['bool' => [new Boolean()], 'int' => [new Number()]],
             ],
         ];
     }
@@ -55,7 +55,7 @@ abstract class AbstractDataSetTest extends TestCase
                     'int' => 41,
                 ],
                 [
-                    'bool' => [Boolean::rule()],
+                    'bool' => [new Boolean()],
                     'int' => [
                         new Number(asInteger: true),
                         new Number(asInteger: true, min: 44),
@@ -64,6 +64,7 @@ abstract class AbstractDataSetTest extends TestCase
                             if ($value !== 42) {
                                 $result->addError('Value should be 42!');
                             }
+
                             return $result;
                         },
                     ],

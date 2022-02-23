@@ -29,7 +29,7 @@ The package provides data validation capabilities.
 
 ## Requirements
 
-- PHP 7.4 or higher.
+- PHP 8.0 or higher.
 
 ## Installation
 
@@ -52,13 +52,14 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
 
 $ruleSet = new RuleSet([
-    Required::rule(),
+    new Required(),
     new Number(min: 10),
     static function ($value): Result {
         $result = new Result();
         if ($value !== 42) {
             $result->addError('Value should be 42.');
         }
+
         return $result;
     }
 ]);
@@ -159,10 +160,10 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
 $data = ['author' => ['name' => 'Alexey', 'age' => '31']];
-$rule = Nested::rule([
-    'title' => [Required::rule()],
-    'author' => Nested::rule([
-        'name' => [HasLength::rule()->min(3)],
+$rule = new Nested([
+    'title' => [new Required()],
+    'author' => new Nested([
+        'name' => [new HasLength(min: 3)],
         'age' => [new Number(min: 18)],
     )];
 ]);
@@ -175,6 +176,7 @@ combined with `Each` rule to validate such similar structures:
 ```php
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\RuleSet;
 
 $data = [
     'charts' => [
@@ -198,16 +200,16 @@ $data = [
         ],
     ],
 ];
-$rule = Nested::rule([
-    'charts' => Each::rule(new Rules([
-        Nested::rule([
-            'points' => Each::rule(new Rules([
-                Nested::rule([
-                    'coordinates' => Nested::rule([
+$rule = new Nested([
+    'charts' => new Each(new RuleSet([
+        new Nested([
+            'points' => new Each(new RuleSet([
+                new Nested([
+                    'coordinates' => new Nested([
                         'x' => [new Number(min: -10, max: 10)],
                         'y' => [new Number(min: -10, max: 10)],
                     ]),
-                    'rgb' => Each::rule(new Rules([
+                    'rgb' => new Each(new RuleSet([
                         new Number(min: 0, max: 255),
                     ])),
                 ]),
@@ -231,9 +233,10 @@ $errors = [
 
 ##### Attributes
 
-If you have PHP 8, you can use attributes. Declare the DTOs, relations and rules:
+You can also use attributes as an alternative. Declare the DTOs, relations and rules:
 
 ```php
+use Attribute;
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
 use Yiisoft\Validator\Attribute\Validate;
@@ -259,27 +262,22 @@ class Dot
 {
     #[HasOne(Coordinates::class)]
     private $coordinates;
-    #[Validate(Each::class)]
-    #[Validate(Number::class, ['min' => 0, 'max' => 255])]
+    #[Number(min: 0, max: 255)]
     private array $rgb;
 }
 
 class Coordinates
 {
-    #[Validate(Number::class, ['min' => -10, 'max' => 10])]
-    #[Validate(ValidateXRule::class)]
+    #[Number(min: -10, max: 10)]
+    #[ValidateXRule()]
     private int $x;
-    #[Validate(Number::class, ['min' => -10, 'max' => 10])]
+    #[Number(min: -10, max: 10)]
     private int $y;
 }
 
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class ValidateXRule extends Rule
-{
-    public static function rule(): self
-    {
-        return new self();
-    }
-
+{    
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
@@ -334,11 +332,6 @@ use Yiisoft\Validator\Rule;
 
 final class Pi extends Rule
 {
-    public static function rule(): self
-    {
-        return new self();
-    }
-
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
@@ -353,7 +346,7 @@ final class Pi extends Rule
 }
 ```
 
-Note that `validateValue()` second argument is an instance of `ValidationContext` so you can use it if you need
+Note that second argument in `validateValue()` is an instance of `ValidationContext` so you can use it if you need
 whole data set context. For example, implementation might be the following if you need to validate "company"
 property only if "hasCompany" is true:
 
@@ -362,15 +355,11 @@ namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\ValidationContext;
 
 final class CompanyName extends Rule
 {
-    public static function rule(): self
-    {
-        return new self();
-    }
-
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
@@ -394,21 +383,23 @@ final class CompanyName extends Rule
 In case you need extra dependencies, these could be passed to the rule when it is created:
 
 ```php
-$rule = NoLessThanExistingBidRule::rule($connection);
+$rule = new NoLessThanExistingBidRule($connection);
 ```
 
 That would work with the following implementation:
 
 ```php
 final class NoLessThanExistingBidRule extends Rule
-{
-    private ConnectionInterface $connection;
-
-    public static function rule(ConnectionInterface $connection): self
-    {
-        $rule = new self();
-        $rule->connection = $connection;
-        return $rule;
+{   
+    public function __construct(    
+        private ConnectionInterface $connection,
+        
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null
+    ) {
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
     
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
@@ -437,11 +428,11 @@ use \Yiisoft\Validator\Rule\GroupRule;
 
 final class UsernameRule extends GroupRule
 {
-    public function getRules(): RuleSet
+    public function getRuleSet(): RuleSet
     {
         return new RuleSet([
-            HasLength::rule()->min(2)->max(20),
-            MatchRegularExpression::rule('~[a-z_\-]~i')
+            new HasLength(min: 2, max: 20),
+            new MatchRegularExpression('~[a-z_\-]~i'),
         ]);
     }
 }
@@ -455,8 +446,8 @@ use Yiisoft\Validator\Rule\Email;
 
 $validator = new Validator();
 $rules = [
-    'username' => UsernameRule::rule(),
-    'email' => [Email::rule()],
+    'username' => new UsernameRule(),
+    'email' => [new Email()],
 ];
 $results = $validator->validate($user, $rules);
 

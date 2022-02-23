@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
+use RuntimeException;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
@@ -18,50 +19,56 @@ use function strlen;
  */
 final class Email extends Rule
 {
-    use HasValidationErrorMessage;
+    public function __construct(
+        /**
+         * @var string the regular expression used to validate value.
+         *
+         * @link http://www.regular-expressions.info/email.html
+         */
+        private string $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/',
+        /**
+         * @var string the regular expression used to validate email addresses with the name part. This property is used
+         * only when {@see $allowName} is `true`.
+         *
+         * @see $allowName
+         */
+        private string $fullPattern = '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/',
+        /**
+         * @var string the regular expression used to validate complex emails when idn is enabled.
+         */
+        private string $patternIdnEmail = '/^([a-zA-Z0-9._%+-]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/',
+        /**
+         * @var bool whether to allow name in the email address (e.g. "John Smith <john.smith@example.com>"). Defaults
+         * to `false`.
+         *
+         * @see $fullPattern
+         */
+        private bool $allowName = false,
+        /**
+         * @var bool whether to check whether the email's domain exists and has either an A or MX record.
+         * Be aware that this check can fail due to temporary DNS problems even if the email address is
+         * valid and an email would be deliverable. Defaults to `false`.
+         */
+        private bool $checkDNS = false,
+        /**
+         * @var bool whether validation process should take into account IDN (internationalized domain
+         * names). Defaults to false meaning that validation of emails containing IDN will always fail.
+         * Note that in order to use IDN validation you have to install and enable `intl` PHP extension,
+         * otherwise an exception would be thrown.
+         */
+        private bool $enableIDN = false,
+        private string $message = 'This value is not a valid email address.',
 
-    /**
-     * @var string the regular expression used to validateValue the attribute value.
-     *
-     * @see http://www.regular-expressions.info/email.html
-     */
-    private string $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/';
-    /**
-     * @var string the regular expression used to validateValue email addresses with the name part.
-     * This property is used only when {@see allowName()} is true.
-     *
-     * @see allowName
-     */
-    private string $fullPattern = '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/';
-    /**
-     * @var string the regular expression used to validate complex emails when idn is enabled.
-     */
-    private string $patternIdnEmail = '/^([a-zA-Z0-9._%+-]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/';
-    /**
-     * @var bool whether to allow name in the email address (e.g. "John Smith <john.smith@example.com>"). Defaults to false.
-     *
-     * @see fullPattern
-     */
-    private bool $allowName = false;
-    /**
-     * @var bool whether to check whether the email's domain exists and has either an A or MX record.
-     * Be aware that this check can fail due to temporary DNS problems even if the email address is
-     * valid and an email would be deliverable. Defaults to false.
-     */
-    private bool $checkDNS = false;
-    /**
-     * @var bool whether validation process should take into account IDN (internationalized domain
-     * names). Defaults to false meaning that validation of emails containing IDN will always fail.
-     * Note that in order to use IDN validation you have to install and enable `intl` PHP extension,
-     * otherwise an exception would be thrown.
-     */
-    private bool $enableIDN = false;
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null
+    ) {
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
 
-    private string $message = 'This value is not a valid email address.';
-
-    public static function rule(): self
-    {
-        return new self();
+        if ($enableIDN && !function_exists('idn_to_ascii')) {
+            throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
+        }
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
@@ -72,7 +79,7 @@ final class Email extends Rule
         if (!is_string($value)) {
             $valid = false;
         } elseif (!preg_match(
-            '/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?(?:(?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))$/i',
+            '/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?((?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))$/i',
             $value,
             $matches
         )) {
@@ -82,7 +89,14 @@ final class Email extends Rule
             if ($this->enableIDN) {
                 $matches['local'] = $this->idnToAscii($matches['local']);
                 $matches['domain'] = $this->idnToAscii($matches['domain']);
-                $value = $matches['name'] . $matches['open'] . $matches['local'] . '@' . $matches['domain'] . $matches['close'];
+                $value = implode([
+                    $matches['name'],
+                    $matches['open'],
+                    $matches['local'],
+                    '@',
+                    $matches['domain'],
+                    $matches['close'],
+                ]);
             }
 
             if (is_string($matches['local']) && strlen($matches['local']) > 64) {
@@ -124,48 +138,13 @@ final class Email extends Rule
         return idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
     }
 
-    public function patternIdnEmail(string $patternIdnEmail): self
-    {
-        $new = clone $this;
-        $new->patternIdnEmail = $patternIdnEmail;
-        return $new;
-    }
-
-    public function allowName(bool $allowName): self
-    {
-        $new = clone $this;
-        $new->allowName = $allowName;
-        return $new;
-    }
-
-    public function checkDNS(bool $checkDNS): self
-    {
-        $new = clone $this;
-        $new->checkDNS = $checkDNS;
-        return $new;
-    }
-
-    public function enableIDN(bool $enableIDN): self
-    {
-        if ($enableIDN && !function_exists('idn_to_ascii')) {
-            throw new \RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
-        }
-
-        $new = clone $this;
-        $new->enableIDN = $enableIDN;
-        return $new;
-    }
-
     public function getOptions(): array
     {
-        return array_merge(
-            parent::getOptions(),
-            [
-                'allowName' => $this->allowName,
-                'checkDNS' => $this->checkDNS,
-                'enableIDN' => $this->enableIDN,
-                'message' => $this->formatMessage($this->message),
-            ],
-        );
+        return array_merge(parent::getOptions(), [
+            'allowName' => $this->allowName,
+            'checkDNS' => $this->checkDNS,
+            'enableIDN' => $this->enableIDN,
+            'message' => $this->formatMessage($this->message),
+        ]);
     }
 }

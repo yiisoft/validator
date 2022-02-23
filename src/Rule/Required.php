@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
@@ -16,13 +16,15 @@ use function is_string;
  */
 final class Required extends Rule
 {
-    use HasValidationErrorMessage;
+    public function __construct(
+        private string $message = 'Value cannot be blank.',
 
-    private string $message = 'Value cannot be blank.';
-
-    public static function rule(): self
-    {
-        return new self();
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null
+    ) {
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
@@ -38,11 +40,8 @@ final class Required extends Rule
 
     public function getOptions(): array
     {
-        return array_merge(
-            parent::getOptions(),
-            [
-                'message' => $this->formatMessage($this->message),
-            ],
-        );
+        return array_merge(parent::getOptions(), [
+            'message' => $this->formatMessage($this->message),
+        ]);
     }
 }

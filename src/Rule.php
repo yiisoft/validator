@@ -11,68 +11,42 @@ use function is_callable;
  */
 abstract class Rule implements RuleInterface, ParametrizedRuleInterface, FormattableRuleInterface
 {
-    /**
-     * To create an instance of a rule class, the static factory method `rule()` must be implemented
-     * in the final class.
-     *
-     * Simple example:
-     *
-     * ```php
-     * public static function rule(): self
-     * {
-     *     return new self();
-     * }
-     * ```
-     *
-     * Example with parameters:
-     *
-     * ```php
-     * public static function rule(int $count, ConnectionInterface $connection): self
-     * {
-     *     $rule = new self();
-     *     $rule->count = $count;
-     *     $rule->connection = $connection;
-     *     return $rule;
-     * }
-     * ```
-     */
     public function __construct(
         private ?FormatterInterface $formatter = null,
+        /**
+         * @var bool if validation should be skipped if value validated is empty
+         */
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var callable|null
+         *
+         * Add a PHP callable whose return value determines whether this rule should be applied.
+         * By default, rule will always be applied.
+         *
+         * The signature of the callable should be `function ($value, ValidationContext $context): bool`,
+         * where `$value` and `$context` refer to the value validated and the validation context.
+         * The callable should return a boolean value.
+         *
+         * The following example will enable the validator only when the country currently selected is USA:
+         *
+         * ```php
+         * function ($value, ValidationContext $context)) {
+         *     if ($context === null) {
+         *         return false;
+         *     }
+         *
+         *     $dataSet = $context->getDataSet();
+         *     if ($dataSet === null) {
+         *         return false;
+         *     }
+         *
+         *     return $dataSet->getAttributeValue('country') === Country::USA;
+         * }
+         * ```
          */
         private $when = null,
     ) {
-    }
-
-    /**
-     * An alternative to chain calls for setting properties.
-     *
-     * Example:
-     *
-     * ```php
-     * Rule::rule()->applyConfig(['skipOnError' => true]);
-     * ```
-     * is equivalent to:
-     *
-     * ```php
-     * Rule::rule()->skipOnError(true);
-     * ```
-     *
-     * @param array $config
-     *
-     * @return $this
-     */
-    final public function applyConfig($config): self
-    {
-        $rule = $this;
-        foreach ($config as $methodName => $value) {
-            $rule = $rule->$methodName($value);
-        }
-
-        return $rule;
     }
 
     /**
@@ -125,65 +99,7 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
             $this->formatter = new Formatter();
         }
 
-        return $this->formatter->format(
-            $message,
-            $parameters
-        );
-    }
-
-    /**
-     * Add a PHP callable whose return value determines whether this rule should be applied.
-     * By default, rule will always be applied.
-     *
-     * The signature of the callable should be `function ($value, ValidationContext $context): bool`,
-     * where `$value` and `$context` refer to the value validated and the validation context.
-     * The callable should return a boolean value.
-     *
-     * The following example will enable the validator only when the country currently selected is USA:
-     *
-     * ```php
-     * function ($value, ValidationContext $context)) {
-     *     if ($context === null) {
-     *         return false;
-     *     }
-     *
-     *     $dataSet = $context->getDataSet();
-     *     if ($dataSet === null) {
-     *         return false;
-     *     }
-     *
-     *     return $dataSet->getAttributeValue('country') === Country::USA;
-     * }
-     * ```
-     *
-     * @param callable $callback
-     *
-     * @return static
-     */
-    public function when(callable $callback): self
-    {
-        $new = clone $this;
-        $new->when = $callback;
-        return $new;
-    }
-
-    public function skipOnError(bool $value): self
-    {
-        $new = clone $this;
-        $new->skipOnError = $value;
-        return $new;
-    }
-
-    /**
-     * @param bool $value if validation should be skipped if value validated is empty
-     *
-     * @return static
-     */
-    public function skipOnEmpty(bool $value): self
-    {
-        $new = clone $this;
-        $new->skipOnEmpty = $value;
-        return $new;
+        return $this->formatter->format($message, $parameters);
     }
 
     /**
@@ -203,8 +119,6 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
     /**
      * Get name of the rule to be used when rule is converted to array.
      * By default it returns base name of the class, first letter in lowercase.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -214,8 +128,6 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
 
     /**
      * Returns rule options as array.
-     *
-     * @return array
      */
     public function getOptions(): array
     {

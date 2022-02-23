@@ -21,7 +21,7 @@ class EachTest extends TestCase
     {
         $values = [10, 20, 30];
         $ruleSet = new RuleSet([new Number(max: 13)]);
-        $result = Each::rule($ruleSet)->validate($values);
+        $result = (new Each($ruleSet))->validate($values);
 
         $this->assertFalse($result->isValid());
         $this->assertEquals([
@@ -32,7 +32,8 @@ class EachTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('each', Each::rule(new RuleSet([new Number(max: 13)]))->getName());
+        $rule = new Each(new RuleSet([new Number(max: 13)]));
+        $this->assertEquals('each', $rule->getName());
     }
 
     public function testOptions(): void
@@ -62,6 +63,6 @@ class EachTest extends TestCase
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
             ],
-        ], Each::rule($ruleSet)->getOptions());
+        ], (new Each($ruleSet))->getOptions());
     }
 }

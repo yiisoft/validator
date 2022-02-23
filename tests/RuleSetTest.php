@@ -22,7 +22,7 @@ class RuleSetTest extends TestCase
     public function testMethodSyntax(): void
     {
         $ruleSet = new RuleSet();
-        $ruleSet->add(Required::rule());
+        $ruleSet->add(new Required());
         $ruleSet->add(new Number(max: 10));
 
         $result = $ruleSet->validate(42);
@@ -32,10 +32,7 @@ class RuleSetTest extends TestCase
 
     public function testArraySyntax(): void
     {
-        $ruleSet = new RuleSet([
-            Required::rule(),
-            new Number(max: 10),
-        ]);
+        $ruleSet = new RuleSet([new Required(), new Number(max: 10)]);
         $result = $ruleSet->validate(42);
 
         $this->assertFalse($result->isValid());
@@ -96,7 +93,7 @@ class RuleSetTest extends TestCase
         };
 
         $ruleSet = new RuleSet();
-        $ruleSet->add(Required::rule());
+        $ruleSet->add(new Required());
         $ruleSet->add(new Number(max: 10));
         $ruleSet->add($rule);
 
@@ -161,7 +158,7 @@ class RuleSetTest extends TestCase
         ], $ruleSet->asArray());
 
         $ruleSet = new RuleSet([
-            Each::rule(new RuleSet([new Number(max: 13), new Number(max: 14)])),
+            new Each(new RuleSet([new Number(max: 13), new Number(max: 14)])),
             new Number(min: 10),
         ]);
 
@@ -207,8 +204,8 @@ class RuleSetTest extends TestCase
     public function testAsArrayWithGroupRule(): void
     {
         $ruleSet = new RuleSet();
-        $ruleSet->add(Required::rule());
-        $ruleSet->add(CustomUrlRule::rule());
+        $ruleSet->add(new Required());
+        $ruleSet->add(new CustomUrlRule());
 
         $this->assertEquals([
             [
@@ -252,22 +249,22 @@ class RuleSetTest extends TestCase
     public function testPersistentError(): void
     {
         $ruleSet = new RuleSet([
-            Callback::rule(static function ($value): Result {
+            static function ($value): Result {
                 $result = new Result();
                 $result->addError('e1');
                 $result->addError('e2');
                 $result->addError('e3');
 
                 return $result;
-            }),
-            Callback::rule(static function ($value): Result {
+            },
+            static function ($value): Result {
                 $result = new Result();
                 $result->addError('e4');
                 $result->addError('e5');
                 $result->addError('e6');
 
                 return $result;
-            }),
+            },
         ]);
         $result = $ruleSet->validate('hi');
 
@@ -285,12 +282,12 @@ class RuleSetTest extends TestCase
     public function testAddErrorWithValuePath(): void
     {
         $ruleSet = new RuleSet([
-            Callback::rule(static function ($value): Result {
+            static function ($value): Result {
                 $result = new Result();
                 $result->addError('e1', ['key1']);
 
                 return $result;
-            }),
+            },
         ]);
         $result = $ruleSet->validate('hi');
         $result->addError('e2', ['key2']);

@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use InvalidArgumentException;
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -19,7 +20,7 @@ use function is_object;
 /**
  * Nested rule can be used for validation of nested structures.
  *
- * For example we have an inbound request with the following structure:
+ * For example, we have an inbound request with the following structure:
  *
  * ```php
  * $request = [
@@ -33,9 +34,9 @@ use function is_object;
  * So to make validation with Nested rule we can configure it like this:
  *
  * ```php
- * $rule = Nested::rule([
- *     'author' => Nested::rule([
- *         'name' => [HasLength::rule()->min(3)],
+ * $rule = new Nested([
+ *     'author' => new Nested([
+ *         'name' => [new HasLength(min: 3)],
  *         'age' => [new Number(min: 18)],
  *     )];
  * ]);
@@ -43,42 +44,40 @@ use function is_object;
  */
 final class Nested extends Rule
 {
-    /**
-     * @var Rule[][]
-     */
-    private iterable $rules;
+    public function __construct(
+        /**
+         * @var Rule[][]
+         */
+        private iterable $rules,
+        private bool $errorWhenPropertyPathIsNotFound = false,
+        private string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
 
-    private bool $errorWhenPropertyPathIsNotFound = false;
-    private string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.';
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null
+    ) {
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
 
-    public static function rule(iterable $rules): self
-    {
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         if (empty($rules)) {
             throw new InvalidArgumentException('Rules should not be empty.');
         }
 
-        $rule = new self();
-        if ($rule->checkRules($rules)) {
-            throw new InvalidArgumentException(sprintf(
-                'Each rule should be an instance of %s.',
-                RuleInterface::class
-            ));
+        if ($this->checkRules($rules)) {
+            $message = sprintf('Each rule should be an instance of %s.', RuleInterface::class);
+            throw new InvalidArgumentException($message);
         }
 
-        $rule->rules = $rules;
-
-        return $rule;
+        $this->rules = $rules;
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         if (!is_object($value) && !is_array($value)) {
-            $result->addError(sprintf(
-                'Value should be an array or an object. %s given.',
-                gettype($value)
-            ));
+            $message = sprintf('Value should be an array or an object. %s given.', gettype($value));
+            $result->addError($message);
 
             return $result;
         }
@@ -114,28 +113,15 @@ final class Nested extends Rule
         return $result;
     }
 
-    /**
-     * @param bool $value If absence of nested property should be considered an error. Default is `false`.
-     *
-     * @return self
-     */
-    public function errorWhenPropertyPathIsNotFound(bool $value): self
+    private function checkRules(array $rules): bool
     {
-        $new = clone $this;
-        $new->errorWhenPropertyPathIsNotFound = $value;
-        return $new;
-    }
-
-    /**
-     * @param string $message A message to use when nested property is absent.
-     *
-     * @return $this
-     */
-    public function propertyPathIsNotFoundMessage(string $message): self
-    {
-        $new = clone $this;
-        $new->propertyPathIsNotFoundMessage = $message;
-        return $new;
+        return array_reduce(
+            $rules,
+            function (bool $carry, $rule) {
+                return $carry || (is_array($rule) ? $this->checkRules($rule) : !$rule instanceof RuleInterface);
+            },
+            false
+        );
     }
 
     public function getOptions(): array
@@ -143,16 +129,7 @@ final class Nested extends Rule
         return $this->fetchOptions($this->rules);
     }
 
-    private function checkRules(array $rules): bool
-    {
-        return array_reduce(
-            $rules,
-            fn (bool $carry, $rule) => $carry || (is_array($rule) ? $this->checkRules($rule) : !$rule instanceof RuleInterface),
-            false
-        );
-    }
-
-    private function fetchOptions(array $rules): array
+    private function fetchOptions(iterable $rules): array
     {
         $result = [];
         foreach ($rules as $attribute => $rule) {
@@ -162,8 +139,9 @@ final class Nested extends Rule
                 $result[$attribute] = $rule->getOptions();
             } elseif ($rule instanceof RuleInterface) {
                 // Just skip the rule that doesn't support parametrizing
+                continue;
             } else {
-                throw new \InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'Rules should be an array of rules that implements %s.',
                     ParametrizedRuleInterface::class,
                 ));
