@@ -95,16 +95,13 @@ final class Number extends Rule
 
     public function getOptions(): array
     {
-        return array_merge(
-            parent::getOptions(),
-            [
-                'asInteger' => $this->asInteger,
-                'min' => $this->min,
-                'max' => $this->max,
-                'notANumberMessage' => $this->formatMessage($this->getNotANumberMessage()),
-                'tooSmallMessage' => $this->formatMessage($this->tooSmallMessage, ['min' => $this->min]),
-                'tooBigMessage' => $this->formatMessage($this->tooBigMessage, ['max' => $this->max]),
-            ],
-        );
+        return array_merge(parent::getOptions(), [
+            'asInteger' => $this->asInteger,
+            'min' => $this->min,
+            'max' => $this->max,
+            'notANumberMessage' => $this->formatMessage($this->getNotANumberMessage()),
+            'tooSmallMessage' => $this->formatMessage($this->tooSmallMessage, ['min' => $this->min]),
+            'tooBigMessage' => $this->formatMessage($this->tooBigMessage, ['max' => $this->max]),
+        ]);
     }
 }
