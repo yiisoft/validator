@@ -275,7 +275,7 @@ class IpTest extends TestCase
 
     public function testNetworkAlias(): void
     {
-        $rule = (new Ip(ranges: ['myNetworkEu']))->network('myNetworkEu', ['1.2.3.4/10', '5.6.7.8']);
+        $rule = new Ip(networks: ['myNetworkEu' => ['1.2.3.4/10', '5.6.7.8']], ranges: ['myNetworkEu']);
 
         $this->assertTrue($rule->validate('1.2.3.4')->isValid());
         $this->assertTrue($rule->validate('5.6.7.8')->isValid());
@@ -283,12 +283,10 @@ class IpTest extends TestCase
 
     public function testNetworkAliasException(): void
     {
-        $rule = (new Ip(ranges: ['myNetworkEu']))->network('myNetworkEu', ['1.2.3.4/10', '5.6.7.8']);
-
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Network alias "myNetworkEu" already set');
+        $this->expectExceptionMessage('Network alias "*" already set as default');
 
-        $rule->network('myNetworkEu', ['!1.2.3.4/10', '!5.6.7.8']);
+        new Ip(networks: ['*' => ['wrong']], ranges: ['*']);
     }
 
     public function testName(): void

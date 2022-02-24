@@ -45,15 +45,30 @@ final class Ip extends Rule
      * is used.
      */
     private const NEGATION_CHAR = '!';
+    /**
+     * @see $networks
+     */
+    private array $defaultNetworks = [
+        '*' => ['any'],
+        'any' => ['0.0.0.0/0', '::/0'],
+        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
+        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
+        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
+        'localhost' => ['127.0.0.0/8', '::1'],
+        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
+        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
+    ];
 
     public function __construct(
         /**
-         * @var array The network aliases, that can be used in {@see $ranges}.
+         * @var array Custom network aliases, that can be used in {@see $ranges}.
+         *
          *  - key - alias name
          *  - value - array of strings. String can be an IP range, IP address or another alias. String can be
          *    negated with {@see NEGATION_CHAR} (independent of {@see $allowNegation} option).
          *
-         * The following aliases are defined by default:
+         * The following aliases are defined by default in {@see $defaultNetworks} and will be merged with custom ones:
+         *
          *  - `*`: `any`
          *  - `any`: `0.0.0.0/0, ::/0`
          *  - `private`: `10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, fd00::/8`
@@ -62,17 +77,10 @@ final class Ip extends Rule
          *  - `localhost`: `127.0.0.0/8', ::1`
          *  - `documentation`: `192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24, 2001:db8::/32`
          *  - `system`: `multicast, linklocal, localhost, documentation`
+         *
+         * @see $defaultNetworks
          */
-        private array $networks = [
-            '*' => ['any'],
-            'any' => ['0.0.0.0/0', '::/0'],
-            'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
-            'multicast' => ['224.0.0.0/4', 'ff00::/8'],
-            'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
-            'localhost' => ['127.0.0.0/8', '::1'],
-            'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
-            'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
-        ],
+        private array $networks = [],
         /**
          * @var bool whether the validating value can be an IPv4 address. Defaults to `true`.
          */
@@ -207,6 +215,14 @@ final class Ip extends Rule
     ) {
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
 
+        foreach ($networks as $key => $_values) {
+            if (array_key_exists($key, $this->defaultNetworks)) {
+                throw new RuntimeException("Network alias \"{$key}\" already set as default");
+            }
+        }
+
+        $this->networks = array_merge($this->defaultNetworks, $this->networks);
+
         if ($requireSubnet) {
             $this->allowSubnet = true;
         }
@@ -278,25 +294,6 @@ final class Ip extends Rule
         }
 
         return $result;
-    }
-
-    /**
-     * Define network alias to be used in {@see $ranges}
-     *
-     * @param string $name name of the network
-     * @param array $ranges ranges
-     *
-     * @return self
-     */
-    public function network(string $name, array $ranges): self
-    {
-        if (array_key_exists($name, $this->networks)) {
-            throw new \RuntimeException("Network alias \"{$name}\" already set");
-        }
-
-        $new = clone $this;
-        $new->networks[$name] = $ranges;
-        return $new;
     }
 
     public function getRanges(): array
