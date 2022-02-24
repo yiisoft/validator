@@ -18,15 +18,10 @@ final class DataSet implements DataSetInterface
 
     public function getAttributeValue(string $attribute)
     {
-        if (!$this->hasAttribute($attribute)) {
+        if (!isset($this->data[$attribute])) {
             throw new MissingAttributeException("There is no \"$attribute\" attribute in the class.");
         }
 
         return $this->data[$attribute];
-    }
-
-    public function hasAttribute(string $attribute): bool
-    {
-        return isset($this->data[$attribute]);
     }
 }
