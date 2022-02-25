@@ -95,7 +95,7 @@ final class AnnotatedDataSet implements RulesProviderInterface
                 $rules[$property->getName()] = $flatRules;
 
                 continue;
-            };
+            }
 
             $rules[$property->getName()][] = new Each(
                 new RuleSet($flatRules),

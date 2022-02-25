@@ -11,7 +11,6 @@ use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Tests\Data\ChartsData;
-use Yiisoft\Validator\Validator;
 
 final class AnnotatedDataSetTest extends TestCase
 {
@@ -36,7 +35,7 @@ final class AnnotatedDataSetTest extends TestCase
                                     'rgb' => [
                                         new Each(new RuleSet([
                                             new Number(min: 0, max: 255),
-                                        ]), incorrectInputMessage: 'Custom message 5.', message: 'Custom message 6.')
+                                        ]), incorrectInputMessage: 'Custom message 5.', message: 'Custom message 6.'),
                                     ],
                                 ]),
                             ])),
