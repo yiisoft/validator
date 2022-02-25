@@ -13,6 +13,8 @@ use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\RulesProviderInterface;
 
+use function in_array;
+
 /**
  * This data set makes use of attributes introduced in PHP 8. It simplifies rules configuration process, especially for
  * nested data and relations. Please refer to the guide for example.
@@ -47,16 +49,16 @@ final class AnnotatedDataSet implements RulesProviderInterface
             }
 
             foreach ([HasMany::class, HasOne::class] as $className) {
-                /**
-                 * @psalm-suppress UndefinedMethod
-                 */
                 $attributes = $property->getAttributes($className);
                 if (!$attributes) {
                     continue;
                 }
 
                 $relatedClassMeta = new ReflectionClass(new ($attributes[0]->getArguments()[0]));
-                $nestedRule = new Nested($this->handleAnnotations($relatedClassMeta));
+                $nestedRule = new Nested(
+                    $this->handleAnnotations($relatedClassMeta),
+                    ...(($property->getAttributes(Nested::class)[0] ?? null)?->getArguments() ?? [])
+                );
 
                 if ($className !== HasMany::class) {
                     $rules[$property->getName()] = $nestedRule;
@@ -64,7 +66,10 @@ final class AnnotatedDataSet implements RulesProviderInterface
                     /**
                      * @psalm-suppress UndefinedMethod
                      */
-                    $rules[$property->getName()][] = new Each(new RuleSet([$nestedRule]));
+                    $rules[$property->getName()][] = new Each(
+                        new RuleSet([$nestedRule]),
+                        ...(($property->getAttributes(Each::class)[0] ?? null)?->getArguments() ?? [])
+                    );
                 }
             }
 
@@ -75,6 +80,10 @@ final class AnnotatedDataSet implements RulesProviderInterface
                     continue;
                 }
 
+                if (in_array($attribute->getName(), [Each::class, Nested::class])) {
+                    continue;
+                }
+
                 $flatRules[] = $attribute->newInstance();
             }
 
@@ -82,9 +91,16 @@ final class AnnotatedDataSet implements RulesProviderInterface
                 continue;
             }
 
-            $rules[$property->getName()] = (string) $property->getType() === 'array'
-                ? new Each(new RuleSet($flatRules))
-                : $flatRules;
+            if ((string) $property->getType() !== 'array') {
+                $rules[$property->getName()] = $flatRules;
+
+                continue;
+            };
+
+            $rules[$property->getName()][] = new Each(
+                new RuleSet($flatRules),
+                ...(($property->getAttributes(Each::class)[0] ?? null)?->getArguments() ?? [])
+            );
         }
 
         return $rules;

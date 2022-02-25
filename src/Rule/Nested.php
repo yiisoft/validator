@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Attribute;
 use InvalidArgumentException;
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
@@ -42,13 +43,14 @@ use function is_object;
  * ]);
  * ```
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class Nested extends Rule
 {
     public function __construct(
         /**
          * @var Rule[][]
          */
-        private iterable $rules,
+        private iterable $rules = [],
         private bool $errorWhenPropertyPathIsNotFound = false,
         private string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
         ?FormatterInterface $formatter = null,
@@ -60,7 +62,7 @@ final class Nested extends Rule
 
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         if (empty($rules)) {
-            throw new InvalidArgumentException('Rules should not be empty.');
+            throw new InvalidArgumentException('Rules must not be empty.');
         }
 
         if ($this->checkRules($rules)) {
