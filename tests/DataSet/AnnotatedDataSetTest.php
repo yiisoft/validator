@@ -9,7 +9,6 @@ use Yiisoft\Validator\DataSet\AnnotatedDataSet;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Tests\Data\ChartsData;
 use Yiisoft\Validator\Tests\Data\CustomFormatter;
 
