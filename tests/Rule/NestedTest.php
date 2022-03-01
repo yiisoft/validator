@@ -199,10 +199,10 @@ class NestedTest extends TestCase
             ],
         ];
         $rule = new Nested([
-            'charts' => new Each([
-                new Nested([
-                    'points' => new Each([
-                        new Nested([
+            'charts' => [
+                new Each([new Nested([
+                    'points' => [
+                        new Each([new Nested([
                             'coordinates' => new Nested([
                                 'x' => [
                                     new Number(min: -10, max: 10),
@@ -215,13 +215,11 @@ class NestedTest extends TestCase
                                 ],
                                 'y' => [new Number(min: -10, max: 10)],
                             ]),
-                            'rgb' => new Each([
-                                new Number(min: 0, max: 255),
-                            ]),
-                        ]),
-                    ]),
-                ]),
-            ]),
+                            'rgb' => [new Each([new Number(min: 0, max: 255)])],
+                        ])]),
+                    ],
+                ])]),
+            ],
         ]);
         $result = $rule->validate($data);
 
