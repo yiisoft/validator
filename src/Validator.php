@@ -58,13 +58,6 @@ final class Validator implements ValidatorInterface
         return $result;
     }
 
-    public function withFormatter(?FormatterInterface $formatter): self
-    {
-        $new = clone $this;
-        $new->formatter = $formatter;
-        return $new;
-    }
-
     private function normalizeDataSet($data): DataSetInterface
     {
         if ($data instanceof DataSetInterface) {

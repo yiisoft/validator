@@ -29,7 +29,7 @@ The package provides data validation capabilities.
 
 ## Requirements
 
-- PHP 8.0 or higher.
+- PHP 8.1 or higher.
 
 ## Installation
 
@@ -231,7 +231,7 @@ $errors = [
 ];
 ```
 
-##### Attributes
+#### Using attributes
 
 You can also use attributes as an alternative. Declare the DTOs, relations and rules:
 
@@ -254,26 +254,78 @@ class ChartsData
 
 class Chart
 {
-    #[HasMany(Dot::class)]
-    private array $dots;
+    #[HasMany(Point::class)]
+    private array $points;
 }
 
-class Dot
+class Point
 {
     #[HasOne(Coordinates::class)]
     private $coordinates;
     #[Number(min: 0, max: 255)]
-    private array $rgb;
+    private array $rgb; // A flat array, the "Number" rule will be applied to each array element.
 }
 
 class Coordinates
 {
     #[Number(min: -10, max: 10)]
-    #[ValidateXRule()]
     private int $x;
     #[Number(min: -10, max: 10)]
     private int $y;
 }
+```
+
+Here are some technical details:
+
+- `HasOne` uses `Nested` rule.
+- `HasMany` uses combination of `Each` and `Nested` rules.
+- In case of a flat array `Point::$rgb`, a property type `array` needs to be declared. It uses `Each` rule internally.
+
+Pass the base DTO to `AnnotatedDataSet` and use it for validation.
+
+```php
+use Yiisoft\Validator\DataSet\AnnotatedDataSet;
+
+$data = [
+    // ...
+];
+$dataSet = new AnnotatedDataSet(new ChartsData(), $data);
+$errors = $rule->validate($dataSet)->getErrorMessagesIndexedByPath();
+```
+
+This approach has some limitations.
+
+`Each` and `Nested` rules are not supported directly. Use `HasOne` and `HasMany` attributes for declaring relations (or 
+property type `array` for flat rules) instead. Use `Each` and `Nested` rules in addition for custom configuration if 
+needed.
+
+```php
+class ChartsData
+{
+    #[Each(incorrectInputMessage: 'Custom message 1.', message: 'Custom message 2.')]
+    #[Nested(errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 3.')]
+    #[HasMany(Chart::class)]
+    private array $charts;
+}
+
+class Point
+{
+    #[Nested(errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 4.')]
+    #[HasOne(Coordinates::class)]
+    private $coordinates;
+    #[Each(incorrectInputMessage: 'Custom message 5.', message: 'Custom message 6.')]
+    #[Number(min: 0, max: 255)]
+    private array $rgb;
+}
+```
+
+`Callback` rule is not supported, also you can't use `callable` type with attributes. Use custom rule instead.
+
+```php
+use Attribute;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\ValidationContext;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class ValidateXRule extends Rule
@@ -286,19 +338,83 @@ final class ValidateXRule extends Rule
         return $result;
     }
 }
+
+class Coordinates
+{
+    #[Number(min: -10, max: 10)]
+    #[ValidateXRule()]
+    private int $x;
+    #[Number(min: -10, max: 10)]
+    private int $y;
+}
 ```
 
-Pass the base DTO to `AnnotatedDataSet` and use it for validation.
+`GroupRule` is not supported, but it's unnecessary since multiple attributes can be used for one property (except they 
+must be of different type).
 
 ```php
-use Yiisoft\Validator\DataSet\AnnotatedDataSet;
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\MatchRegularExpression;
 
-// The structure of data and errors is the same as in previous example
-$data = [
-    // ...
-];
-$dataSet = new AnnotatedDataSet(new ChartsData(), $data);
-$errors = $rule->validate($dataSet)->getErrorMessagesIndexedByPath();
+class UserData
+{
+    #[HasLength(min: 2, max: 20)]
+    #[MatchRegularExpression('~[a-z_\-]~i')]
+    private string $name;    
+}
+```
+
+You can't use a function / method call result with attributes. Like with `Callback` rule and callable, this problem can 
+be overcome with custom rule.
+
+```php
+use Attribute;
+use Yiisoft\Validator\FormatterInterface;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\ValidationContext;
+
+final class CustomFormatter implements FormatterInterface
+{
+    public function format(string $message, array $parameters = []): string
+    {
+        // More complex logic
+        // ...
+        return $message;
+    }
+}
+
+#[Attribute(Attribute::TARGET_PROPERTY)]
+final class ValidateXRule extends Rule
+{    
+    public function __construct(
+        ?FormatterInterface $formatter = self::createFormatter(),
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null
+    ) {
+        $this->formatter = $formatter;
+        $this->skipOnEmpty = $skipOnEmpty;
+        $this->skipOnError = $skipOnError;
+        $this->when = $when;
+    }
+    
+    private function createFormatter(): FormatterInterface
+    {
+        // More complex logic
+        // ...
+        return CustomFormatter();
+    }
+}
+
+class Coordinates
+{
+    #[Number(min: -10, max: 10)]
+    #[ValidateXRule()]
+    private int $x;
+    #[Number(min: -10, max: 10)]
+    private int $y;
+}
 ```
 
 ### Conditional validation
@@ -313,7 +429,7 @@ new Number(
         return $dataSet->getAttributeValue('country') === Country::USA;
     },
     asInteger: true, 
-    min: 100,
+    min: 100
 );
 ```
 
@@ -392,8 +508,7 @@ That would work with the following implementation:
 final class NoLessThanExistingBidRule extends Rule
 {   
     public function __construct(    
-        private ConnectionInterface $connection,
-        
+        private ConnectionInterface $connection,        
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
@@ -456,24 +571,6 @@ foreach ($results as $attribute => $result) {
         foreach ($result->getErrors() as $error) {
             // ...
         }
-    }
-}
-```
-
-### Setting up your own formatter
-
-If you want to customize error message formatter in a certain case you need to use immutable `withFormatter()` method:
-
-```php
-use Yiisoft\Validator\Validator;
-
-final class PostController
-{
-    public function actionIndex(Validator $validator): ResponseInterface
-    {
-        // ...
-        $result = $validator->withFormatter(new CustomFormatter())->validate($dataSet, $rules);
-        // ...
     }
 }
 ```

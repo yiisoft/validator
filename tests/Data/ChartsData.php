@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Data;
 
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
@@ -36,8 +37,16 @@ class Point
 
 class Coordinates
 {
-    #[Number(min: -10, max: 10)]
+    #[Number(min: -10, max: 10, formatter: new CustomFormatter())]
     private int $x;
     #[Number(min: -10, max: 10)]
     private int $y;
+}
+
+final class CustomFormatter implements FormatterInterface
+{
+    public function format(string $message, array $parameters = []): string
+    {
+        return $message;
+    }
 }
