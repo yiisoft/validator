@@ -17,8 +17,6 @@ final class RuleSet
 {
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 
-    private ?FormatterInterface $formatter = null;
-
     /**
      * @var RuleInterface[]
      */
