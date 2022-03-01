@@ -9,7 +9,7 @@ use function is_callable;
 /**
  * Rule represents a single value validation rule.
  */
-abstract class Rule implements RuleInterface, ParametrizedRuleInterface, FormattableRuleInterface
+abstract class Rule implements RuleInterface, ParametrizedRuleInterface
 {
     public function __construct(
         private ?FormatterInterface $formatter = null,
@@ -82,16 +82,6 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface, Formatt
      * @return Result
      */
     abstract protected function validateValue($value, ?ValidationContext $context = null): Result;
-
-    /**
-     * @return static
-     */
-    public function withFormatter(?FormatterInterface $formatter): self
-    {
-        $new = clone $this;
-        $new->formatter = $formatter;
-        return $new;
-    }
 
     protected function formatMessage(string $message, array $parameters = []): string
     {

@@ -15,7 +15,7 @@ final class RulesDumperTest extends TestCase
      */
     public function testAsArray($rules, array $expected): void
     {
-        $dumper = new RulesDumper(null);
+        $dumper = new RulesDumper();
         $result = $dumper->asArray($rules);
 
         $this->assertEquals($expected, $result);

@@ -7,6 +7,7 @@ namespace Yiisoft\Validator;
 use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Callback;
 use function get_class;
+use function gettype;
 use function is_callable;
 
 /**
@@ -35,11 +36,7 @@ final class RuleSet
      */
     public function add($rule): void
     {
-        $rule = $this->normalizeRule($rule);
-        if ($this->formatter !== null && $rule instanceof FormattableRuleInterface) {
-            $rule = $rule->withFormatter($this->formatter);
-        }
-        $this->rules[] = $rule;
+        $this->rules[] = $this->normalizeRule($rule);
     }
 
     public function validate($value, ValidationContext $context = null): Result
@@ -79,14 +76,6 @@ final class RuleSet
         return $rule;
     }
 
-    public function withFormatter(?FormatterInterface $formatter): self
-    {
-        $new = clone $this;
-        $new->formatter = $formatter;
-        $new->addFormatterToRules($formatter);
-        return $new;
-    }
-
     /**
      * Return rules as array.
      *
@@ -103,14 +92,5 @@ final class RuleSet
             }
         }
         return $arrayOfRules;
-    }
-
-    private function addFormatterToRules(?FormatterInterface $formatter): void
-    {
-        foreach ($this->rules as &$rule) {
-            if ($rule instanceof FormattableRuleInterface) {
-                $rule = $rule->withFormatter($formatter);
-            }
-        }
     }
 }
