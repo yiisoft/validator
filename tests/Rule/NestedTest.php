@@ -199,9 +199,9 @@ class NestedTest extends TestCase
             ],
         ];
         $rule = new Nested([
-            'charts' => new Each(new RuleSet([
+            'charts' => new Each([
                 new Nested([
-                    'points' => new Each(new RuleSet([
+                    'points' => new Each([
                         new Nested([
                             'coordinates' => new Nested([
                                 'x' => [
@@ -215,13 +215,13 @@ class NestedTest extends TestCase
                                 ],
                                 'y' => [new Number(min: -10, max: 10)],
                             ]),
-                            'rgb' => new Each(new RuleSet([
+                            'rgb' => new Each([
                                 new Number(min: 0, max: 255),
-                            ])),
+                            ]),
                         ]),
-                    ])),
+                    ]),
                 ]),
-            ])),
+            ]),
         ]);
         $result = $rule->validate($data);
 
@@ -317,10 +317,12 @@ class NestedTest extends TestCase
     public function testSeparateErrorGroups(): void
     {
         $rule = new Nested([
-            'key' => new Each(new RuleSet([
-                new HasLength(min: 5),
-                new InRange(['aaa', 'bbb', 'ccc']),
-            ])),
+            'key' => [
+                new Each([
+                    new HasLength(min: 5),
+                    new InRange(['aaa', 'bbb', 'ccc']),
+                ]),
+            ],
         ]);
         $result = $rule->validate(['key' => ['x', 'y']]);
         $indexedErrors = $result->getErrorMessagesIndexedByPath();

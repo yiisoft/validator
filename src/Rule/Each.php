@@ -18,8 +18,10 @@ use Yiisoft\Validator\ValidationContext;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Each extends Rule
 {
+    private ?RuleSet $ruleSet = null;
+
     public function __construct(
-        private ?RuleSet $ruleSet = null,
+        iterable $rules = [],
         private string $incorrectInputMessage = 'Value should be array or iterable.',
         private string $message = '{error} {value} given.',
         ?FormatterInterface $formatter = null,
@@ -27,18 +29,23 @@ final class Each extends Rule
         bool $skipOnError = false,
         $when = null,
     ) {
+        if ($rules !== []) {
+            $this->ruleSet = new RuleSet($rules);
+        }
+
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         if ($this->ruleSet === null) {
-            throw new InvalidArgumentException('Rule set is required.');
+            throw new InvalidArgumentException('Rules are required.');
         }
 
         $result = new Result();
         if (!is_iterable($value)) {
             $result->addError($this->incorrectInputMessage);
+
             return $result;
         }
 

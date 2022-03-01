@@ -157,7 +157,7 @@ class RuleSetTest extends TestCase
         ], $ruleSet->asArray());
 
         $ruleSet = new RuleSet([
-            new Each(new RuleSet([new Number(max: 13), new Number(max: 14)])),
+            new Each([new Number(max: 13), new Number(max: 14)]),
             new Number(min: 10),
         ]);
 

@@ -201,21 +201,21 @@ $data = [
     ],
 ];
 $rule = new Nested([
-    'charts' => new Each(new RuleSet([
+    'charts' => new Each([
         new Nested([
-            'points' => new Each(new RuleSet([
+            'points' => new Each([
                 new Nested([
                     'coordinates' => new Nested([
                         'x' => [new Number(min: -10, max: 10)],
                         'y' => [new Number(min: -10, max: 10)],
                     ]),
-                    'rgb' => new Each(new RuleSet([
+                    'rgb' => new Each([
                         new Number(min: 0, max: 255),
-                    ])),
+                    ]),
                 ]),
-            ])),
+            ]),
         ]),
-    ])),
+    ]),
 ]);
 $errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
 ```

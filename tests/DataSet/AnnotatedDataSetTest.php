@@ -20,10 +20,10 @@ final class AnnotatedDataSetTest extends TestCase
         $dataSet = new AnnotatedDataSet(new ChartsData());
         $this->assertEquals([
             'charts' => [
-                new Each(new RuleSet([
+                new Each([
                     new Nested([
                         'points' => [
-                            new Each(new RuleSet([
+                            new Each([
                                 new Nested([
                                     'coordinates' => new Nested(
                                         [
@@ -34,15 +34,15 @@ final class AnnotatedDataSetTest extends TestCase
                                         propertyPathIsNotFoundMessage: 'Custom message 4.'
                                     ),
                                     'rgb' => [
-                                        new Each(new RuleSet([
+                                        new Each([
                                             new Number(min: 0, max: 255),
-                                        ]), incorrectInputMessage: 'Custom message 5.', message: 'Custom message 6.'),
+                                        ], incorrectInputMessage: 'Custom message 5.', message: 'Custom message 6.'),
                                     ],
                                 ]),
-                            ])),
+                            ]),
                         ],
                     ], errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 3.'),
-                ]), incorrectInputMessage: 'Custom message 1.', message: 'Custom message 2.'),
+                ], incorrectInputMessage: 'Custom message 1.', message: 'Custom message 2.'),
             ],
         ], $dataSet->getRules());
     }

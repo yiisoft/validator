@@ -67,7 +67,7 @@ final class AnnotatedDataSet implements RulesProviderInterface
                      * @psalm-suppress UndefinedMethod
                      */
                     $rules[$property->getName()][] = new Each(
-                        new RuleSet([$nestedRule]),
+                        [$nestedRule],
                         ...(($property->getAttributes(Each::class)[0] ?? null)?->getArguments() ?? [])
                     );
                 }
@@ -98,7 +98,7 @@ final class AnnotatedDataSet implements RulesProviderInterface
             }
 
             $rules[$property->getName()][] = new Each(
-                new RuleSet($flatRules),
+                $flatRules,
                 ...(($property->getAttributes(Each::class)[0] ?? null)?->getArguments() ?? [])
             );
         }
