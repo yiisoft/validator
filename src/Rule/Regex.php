@@ -15,11 +15,11 @@ use function is_string;
 /**
  * RegularExpressionValidator validates that the attribute value matches the pattern specified in constructor.
  *
- * If the {@see MatchRegularExpression::$not} is used, the validator will ensure the attribute value do NOT match
+ * If the {@see Regex::$not} is used, the validator will ensure the attribute value do NOT match
  * the pattern.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class MatchRegularExpression extends Rule
+final class Regex extends Rule
 {
     public function __construct(
         /**

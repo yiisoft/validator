@@ -354,12 +354,12 @@ must be of different type).
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\MatchRegularExpression;
+use Yiisoft\Validator\Rule\Regex;
 
 class UserData
 {
     #[HasLength(min: 2, max: 20)]
-    #[MatchRegularExpression('~[a-z_\-]~i')]
+    #[Regex('~[a-z_\-]~i')]
     private string $name;    
 }
 ```
@@ -538,7 +538,7 @@ To reuse multiple validation rules it is advised to group rules like the followi
 ```php
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\MatchRegularExpression;
+use Yiisoft\Validator\Rule\Regex;
 use \Yiisoft\Validator\Rule\GroupRule;
 
 final class UsernameRule extends GroupRule
@@ -547,7 +547,7 @@ final class UsernameRule extends GroupRule
     {
         return new RuleSet([
             new HasLength(min: 2, max: 20),
-            new MatchRegularExpression('~[a-z_\-]~i'),
+            new Regex('~[a-z_\-]~i'),
         ]);
     }
 }

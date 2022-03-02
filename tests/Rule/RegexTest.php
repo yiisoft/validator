@@ -7,18 +7,18 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Rule\MatchRegularExpression;
+use Yiisoft\Validator\Rule\Regex;
 
 /**
  * @group validators
  */
-class MatchRegularExpressionTest extends TestCase
+class RegexTest extends TestCase
 {
     private const PATTERN = '/^[a-zA-Z0-9](\.)?([^\/]*)$/m';
 
     public function testGetName(): void
     {
-        $this->assertSame('matchRegularExpression', (new MatchRegularExpression(self::PATTERN))->getName());
+        $this->assertSame('regex', (new Regex(self::PATTERN))->getName());
     }
 
     public function validateDataProvider(): array
@@ -38,22 +38,22 @@ class MatchRegularExpressionTest extends TestCase
      */
     public function testValidate($data, bool $expectedIsValid, bool $expectedIsValidForInverseRule): void
     {
-        $rule = new MatchRegularExpression(self::PATTERN);
+        $rule = new Regex(self::PATTERN);
         $this->assertSame($rule->validate($data)->isValid(), $expectedIsValid);
 
-        $rule = new MatchRegularExpression(self::PATTERN, not: true);
+        $rule = new Regex(self::PATTERN, not: true);
         $this->assertSame($rule->validate($data)->isValid(), $expectedIsValidForInverseRule);
     }
 
     public function testMessage(): void
     {
-        $rule = new MatchRegularExpression(self::PATTERN, message: 'Custom message.');
+        $rule = new Regex(self::PATTERN, message: 'Custom message.');
         $this->assertSame(['Custom message.'], $rule->validate('b./')->getErrorMessages());
     }
 
     public function testIncorrectInputMessage(): void
     {
-        $rule = new MatchRegularExpression(self::PATTERN, incorrectInputMessage: 'Custom message.');
+        $rule = new Regex(self::PATTERN, incorrectInputMessage: 'Custom message.');
         $this->assertSame(['Custom message.'], $rule->validate(null)->getErrorMessages());
     }
 
@@ -61,7 +61,7 @@ class MatchRegularExpressionTest extends TestCase
     {
         return [
             [
-                new MatchRegularExpression(self::PATTERN),
+                new Regex(self::PATTERN),
                 [
                     'pattern' => self::PATTERN,
                     'not' => false,
@@ -72,7 +72,7 @@ class MatchRegularExpressionTest extends TestCase
                 ],
             ],
             [
-                new MatchRegularExpression(self::PATTERN, not: true),
+                new Regex(self::PATTERN, not: true),
                 [
                     'pattern' => self::PATTERN,
                     'not' => true,
