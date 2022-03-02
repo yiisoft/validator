@@ -13,7 +13,7 @@ use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
- * JsonValidator validates that the attribute value is a valid json
+ * JsonValidator validates that the value is a valid json
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Json extends Rule

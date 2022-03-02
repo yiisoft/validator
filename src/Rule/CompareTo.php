@@ -13,7 +13,7 @@ use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * CompareValidator compares the specified attribute value with another value.
+ * CompareValidator compares the specified value with another value.
  *
  * The value being compared with a constant {@see CompareTo::$compareValue}, which is set
  * in the constructor.

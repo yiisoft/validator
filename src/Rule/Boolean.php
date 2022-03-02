@@ -11,7 +11,7 @@ use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * BooleanValidator checks if the attribute value is a boolean value or a value corresponding to it.
+ * BooleanValidator checks if the value is a boolean value or a value corresponding to it.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Boolean extends Rule
@@ -27,7 +27,7 @@ final class Boolean extends Rule
         private $falseValue = '0',
         /**
          * @var bool whether the comparison to {@see $trueValue} and {@see $falseValue} is strict.
-         * When this is true, the attribute value and type must both match those of {@see $trueValue} or
+         * When this is `true`, the value and type must both match those of {@see $trueValue} or
          * {@see $falseValue}. Defaults to `false`, meaning only the value needs to be matched.
          */
         private bool $strict = false,

@@ -12,7 +12,7 @@ use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * NumberValidator validates that the attribute value is a number.
+ * NumberValidator validates that the value is a number.
  *
  * The format of the number must match the regular expression specified in {@see Number::$integerPattern}
  * or {@see Number::$numberPattern}. Optionally, you may configure the {@see Number::min()} and {@see Number::max()}
@@ -23,7 +23,7 @@ final class Number extends Rule
 {
     public function __construct(
         /**
-         * @var bool whether the attribute value can only be an integer. Defaults to false.
+         * @var bool whether the value can only be an integer. Defaults to false.
          */
         private bool $asInteger = false,
         /**

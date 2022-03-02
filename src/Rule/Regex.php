@@ -13,10 +13,9 @@ use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
- * RegularExpressionValidator validates that the attribute value matches the pattern specified in constructor.
+ * RegularExpressionValidator validates that the value matches the pattern specified in constructor.
  *
- * If the {@see Regex::$not} is used, the validator will ensure the attribute value do NOT match
- * the pattern.
+ * If the {@see Regex::$not} is used, the validator will ensure the value do NOT match the pattern.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Regex extends Rule
@@ -28,7 +27,7 @@ final class Regex extends Rule
         private string $pattern,
         /**
          * @var bool whether to invert the validation logic. Defaults to `false`. If set to `true`, the regular
-         * expression defined via {@see $pattern} should NOT match the attribute value.
+         * expression defined via {@see $pattern} should NOT match the value.
          */
         private bool $not = false,
         private string $incorrectInputMessage = 'Value should be string.',

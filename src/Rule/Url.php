@@ -15,7 +15,7 @@ use function is_string;
 use function strlen;
 
 /**
- * UrlValidator validates that the attribute value is a valid HTTP or HTTPS URL.
+ * UrlValidator validates that the value is a valid HTTP or HTTPS URL.
  *
  * Note that this validator only checks if the URL scheme and host part are correct.
  * It does not check the remaining parts of a URL.
@@ -25,7 +25,7 @@ final class Url extends Rule
 {
     public function __construct(
         /**
-         * @var string the regular expression used to validate a value.
+         * @var string the regular expression used to validate the value.
          * The pattern may contain a `{schemes}` token that will be replaced
          * by a regular expression which represents the {@see $schemes}.
          *

@@ -13,7 +13,7 @@ use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
- * StringValidator validates that a value is of certain length.
+ * StringValidator validates that the value is of certain length.
  *
  * Note, this validator should only be used with strings.
  */

@@ -13,7 +13,7 @@ use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
- * RequiredValidator validates that the specified attribute does not have null or empty value.
+ * RequiredValidator validates that the specified value is neither null nor empty.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Required extends Rule
