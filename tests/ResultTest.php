@@ -10,7 +10,6 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\RuleSet;
 
 class ResultTest extends TestCase
 {

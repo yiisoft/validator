@@ -16,7 +16,6 @@ use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Tests\Stub\ParametrizedRule;
 
 /**
