@@ -96,6 +96,9 @@ final class AnnotatedDataSet implements RulesProviderInterface
                 continue;
             }
 
+            /**
+             * @psalm-suppress UndefinedMethod
+             */
             $rules[$property->getName()][] = new Each(
                 $flatRules,
                 ...(($property->getAttributes(Each::class)[0] ?? null)?->getArguments() ?? [])
