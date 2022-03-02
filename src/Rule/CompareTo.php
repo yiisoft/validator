@@ -22,8 +22,8 @@ use Yiisoft\Validator\ValidationContext;
  * via the {@see CompareTo::$operator}.
  *
  * The default comparison function is based on string values, which means the values
- * are compared byte by byte. When comparing numbers, make sure to call the {@see CompareTo::$asNumber}
- * to enable numeric comparison.
+ * are compared byte by byte. When comparing numbers, make sure to change {@see CompareTo::$type} to
+ * {@see CompareTo::TYPE_NUMBER} to enable numeric comparison.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class CompareTo extends Rule
@@ -78,7 +78,8 @@ final class CompareTo extends Rule
          * - `<`: check if value being validated is less than the value being compared with.
          * - `<=`: check if value being validated is less than or equal to the value being compared with.
          *
-         * When you want to compare numbers, make sure to also call {@see $asNumber}.
+         * When you want to compare numbers, make sure to also chabge @see CompareTo::$type} to
+         * {@see CompareTo::TYPE_NUMBER}.
          */
         private string $operator = '==',
         ?FormatterInterface $formatter = null,

@@ -109,7 +109,7 @@ final class Ip extends Rule
          *
          * @see $allowIpv4
          */
-        private string $ipv4NotAllowed = 'Must not be an IPv4 address.',
+        private string $ipv4NotAllowedMessage = 'Must not be an IPv4 address.',
         /**
          * @var string user-defined error message is used when validation fails due to the disabled IPv6 validation.
          *
@@ -120,7 +120,7 @@ final class Ip extends Rule
          *
          * @see $allowIpv6
          */
-        private string $ipv6NotAllowed = 'Must not be an IPv6 address.',
+        private string $ipv6NotAllowedMessage = 'Must not be an IPv6 address.',
         /**
          * @var string user-defined error message is used when validation fails due to the wrong CIDR.
          *
@@ -131,7 +131,7 @@ final class Ip extends Rule
          *
          * @see $allowSubnet
          */
-        private string $wrongCidr = 'Contains wrong subnet mask.',
+        private string $wrongCidrMessage = 'Contains wrong subnet mask.',
         /**
          * @var string user-defined error message is used when validation fails due to subnet {@see $allowSubnet} is
          * used, but the CIDR prefix is not set.
@@ -143,7 +143,7 @@ final class Ip extends Rule
          *
          * @see $allowSubnet
          */
-        private string $noSubnet = 'Must be an IP address with specified subnet.',
+        private string $noSubnetMessage = 'Must be an IP address with specified subnet.',
         /**
          * @var string user-defined error message is used when validation fails
          * due to {@see $allowSubnet} is false, but CIDR prefix is present.
@@ -155,7 +155,7 @@ final class Ip extends Rule
          *
          * @see $allowSubnet
          */
-        private string $hasSubnet = 'Must not be a subnet.',
+        private string $hasSubnetMessage = 'Must not be a subnet.',
         /**
          * @var string user-defined error message is used when validation fails due to IP address
          * is not allowed by {@see $ranges} check.
@@ -167,7 +167,7 @@ final class Ip extends Rule
          *
          * @see $ranges
          */
-        private string $notInRange = 'Is not in the allowed range.',
+        private string $notInRangeMessage = 'Is not in the allowed range.',
         /**
          * @var array The IPv4 or IPv6 ranges that are allowed or forbidden.
          *
@@ -245,11 +245,11 @@ final class Ip extends Rule
         }
 
         if ($this->requireSubnet === true && $cidr === null) {
-            $result->addError($this->formatMessage($this->noSubnet));
+            $result->addError($this->formatMessage($this->noSubnetMessage));
             return $result;
         }
         if ($this->allowSubnet === false && $cidr !== null) {
-            $result->addError($this->formatMessage($this->hasSubnet));
+            $result->addError($this->formatMessage($this->hasSubnetMessage));
             return $result;
         }
         if ($this->allowNegation === false && $negation) {
@@ -257,11 +257,11 @@ final class Ip extends Rule
             return $result;
         }
         if ($ipVersion === IpHelper::IPV6 && !$this->allowIpv6) {
-            $result->addError($this->formatMessage($this->ipv6NotAllowed));
+            $result->addError($this->formatMessage($this->ipv6NotAllowedMessage));
             return $result;
         }
         if ($ipVersion === IpHelper::IPV4 && !$this->allowIpv4) {
-            $result->addError($this->formatMessage($this->ipv4NotAllowed));
+            $result->addError($this->formatMessage($this->ipv4NotAllowedMessage));
             return $result;
         }
         if (!$result->isValid()) {
@@ -271,12 +271,12 @@ final class Ip extends Rule
             try {
                 IpHelper::getCidrBits($ipCidr);
             } catch (InvalidArgumentException $e) {
-                $result->addError($this->formatMessage($this->wrongCidr));
+                $result->addError($this->formatMessage($this->wrongCidrMessage));
                 return $result;
             }
         }
         if (!$this->isAllowed($ipCidr)) {
-            $result->addError($this->formatMessage($this->notInRange));
+            $result->addError($this->formatMessage($this->notInRangeMessage));
             return $result;
         }
 
@@ -369,12 +369,12 @@ final class Ip extends Rule
             'requireSubnet' => $this->requireSubnet,
             'allowNegation' => $this->allowNegation,
             'message' => $this->formatMessage($this->message),
-            'ipv4NotAllowedMessage' => $this->formatMessage($this->ipv4NotAllowed),
-            'ipv6NotAllowedMessage' => $this->formatMessage($this->ipv6NotAllowed),
-            'wrongCidrMessage' => $this->formatMessage($this->wrongCidr),
-            'noSubnetMessage' => $this->formatMessage($this->noSubnet),
-            'hasSubnetMessage' => $this->formatMessage($this->hasSubnet),
-            'notInRangeMessage' => $this->formatMessage($this->notInRange),
+            'ipv4NotAllowedMessage' => $this->formatMessage($this->ipv4NotAllowedMessage),
+            'ipv6NotAllowedMessage' => $this->formatMessage($this->ipv6NotAllowedMessage),
+            'wrongCidrMessage' => $this->formatMessage($this->wrongCidrMessage),
+            'noSubnetMessage' => $this->formatMessage($this->noSubnetMessage),
+            'hasSubnetMessage' => $this->formatMessage($this->hasSubnetMessage),
+            'notInRangeMessage' => $this->formatMessage($this->notInRangeMessage),
             'ranges' => $this->ranges,
         ]);
     }
