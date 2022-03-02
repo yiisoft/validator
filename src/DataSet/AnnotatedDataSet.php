@@ -62,9 +62,7 @@ final class AnnotatedDataSet implements RulesProviderInterface
                 if ($className !== HasMany::class) {
                     $rules[$property->getName()] = $nestedRule;
                 } else {
-                    /**
-                     * @psalm-suppress UndefinedMethod
-                     */
+                    /** @psalm-suppress UndefinedMethod */
                     $rules[$property->getName()][] = new Each(
                         [$nestedRule],
                         ...(($property->getAttributes(Each::class)[0] ?? null)?->getArguments() ?? [])
@@ -96,9 +94,7 @@ final class AnnotatedDataSet implements RulesProviderInterface
                 continue;
             }
 
-            /**
-             * @psalm-suppress UndefinedMethod
-             */
+            /** @psalm-suppress UndefinedMethod */
             $rules[$property->getName()][] = new Each(
                 $flatRules,
                 ...(($property->getAttributes(Each::class)[0] ?? null)?->getArguments() ?? [])
