@@ -63,10 +63,11 @@ abstract class Rule implements RuleInterface, ParametrizedRuleInterface
             return new Result();
         }
 
-        if (
-            ($this->skipOnError && $context && $context->getParameter(RuleSet::PARAMETER_PREVIOUS_RULES_ERRORED) === true) ||
-            (is_callable($this->when) && !($this->when)($value, $context))
-        ) {
+        if ($this->skipOnError && $context?->getParameter(RuleSet::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
+            return new Result();
+        }
+
+        if (is_callable($this->when) && !($this->when)($value, $context)) {
             return new Result();
         }
 
