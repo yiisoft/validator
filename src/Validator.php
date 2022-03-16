@@ -39,6 +39,7 @@ final class Validator implements ValidatorInterface
         $context = new ValidationContext($data);
         $result = new Result();
 
+        /** @psalm-var array<string, array<array-key, Rule>> $rules */
         foreach ($rules as $attribute => $attributeRules) {
             $ruleSet = new RuleSet($attributeRules);
 
