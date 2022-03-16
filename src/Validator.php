@@ -6,6 +6,8 @@ namespace Yiisoft\Validator;
 
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ScalarDataSet;
+use Yiisoft\Validator\Rule\Nested;
+
 use function is_array;
 use function is_object;
 
@@ -29,6 +31,7 @@ final class Validator implements ValidatorInterface
     public function validate($data, iterable $rules = []): Result
     {
         $data = $this->normalizeDataSet($data);
+
         if ($data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
         }
@@ -38,16 +41,38 @@ final class Validator implements ValidatorInterface
 
         foreach ($rules as $attribute => $attributeRules) {
             $ruleSet = new RuleSet($attributeRules);
+
             if ($this->formatter !== null) {
                 $ruleSet = $ruleSet->withFormatter($this->formatter);
             }
 
-            $tempResult = $ruleSet->validate(
-                $data->getAttributeValue($attribute),
-                $context->withAttribute($attribute)
-            );
-            foreach ($tempResult->getErrors() as $error) {
-                $result->addError($error->getMessage(), [$attribute, ...$error->getValuePath()]);
+            if ($attributeRules[0] instanceof Nested) {
+                $nesteds = $attributeRules[0]->getOptions();
+
+                foreach ($nesteds as $nested => $options) {
+                    $values[$nested] = $data->getAttributeValue($attribute . '.' . $nested);
+                }
+
+                $tempResult = $ruleSet->validate(
+                    $values,
+                    $context->withAttribute($attribute . '.' . $nested)
+                );
+
+                foreach ($tempResult->getErrors() as $error) {
+                    $result->addError(
+                        $error->getMessage(),
+                        [$attribute . '.' . $nested, ...$error->getValuePath()],
+                    );
+                }
+            } else {
+                $tempResult = $ruleSet->validate(
+                    $data->getAttributeValue($attribute),
+                    $context->withAttribute($attribute)
+                );
+
+                foreach ($tempResult->getErrors() as $error) {
+                    $result->addError($error->getMessage(), [$attribute, ...$error->getValuePath()]);
+                }
             }
         }
 
