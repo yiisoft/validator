@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Closure;
 use InvalidArgumentException;
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
@@ -13,6 +14,7 @@ use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\ValidationContext;
+
 use function is_array;
 use function is_object;
 
@@ -95,8 +97,18 @@ final class Nested extends Rule
 
             $rules = is_array($rules) ? $rules : [$rules];
             $ruleSet = new RuleSet($rules);
-            $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
+
+            if ($context !== null && $context->getDataSet() !== null) {
+                $validatedValue = $context->getDataSet()->getAttributeValue(
+                    $context->getAttribute() . '.' . $valuePath
+                );
+            } else {
+                $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
+            }
+
+
             $itemResult = $ruleSet->validate($validatedValue);
+
             if ($itemResult->isValid()) {
                 continue;
             }
