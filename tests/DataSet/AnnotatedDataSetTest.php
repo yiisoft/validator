@@ -9,8 +9,8 @@ use Yiisoft\Validator\DataSet\AnnotatedDataSet;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Tests\Data\ChartsData;
-use Yiisoft\Validator\Tests\Data\CustomFormatter;
+use Yiisoft\Validator\Tests\Data\Charts\ChartsData;
+use Yiisoft\Validator\Tests\Data\Charts\CustomFormatter;
 
 final class AnnotatedDataSetTest extends TestCase
 {
