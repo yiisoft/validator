@@ -12,7 +12,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 
 /**
- * In validates that the value is among a list of values.
+ * Validates that the value is among a list of values.
  *
  * The range can be specified via constructor.
  * If the {@see InRange::$not} is called, the validator will ensure the value is NOT among the specified range.
