@@ -18,7 +18,7 @@ use Yiisoft\Validator\ValidationContext;
  * The value being compared with a constant {@see CompareTo::$compareValue}, which is set
  * in the constructor.
  *
- * CompareValidator supports different comparison operators, specified
+ * It supports different comparison operators, specified
  * via the {@see CompareTo::$operator}.
  *
  * The default comparison function is based on string values, which means the values
