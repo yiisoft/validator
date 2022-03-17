@@ -236,17 +236,11 @@ $errors = [
 You can also use attributes as an alternative. Declare the DTOs, relations and rules:
 
 ```php
-use Attribute;
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
-use Yiisoft\Validator\Attribute\Validate;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\ValidationContext;
 
-class ChartsData
+final class ChartsData
 {
     #[HasMany(Chart::class)]
     private array $charts;
@@ -258,7 +252,7 @@ class Chart
     private array $points;
 }
 
-class Point
+final class Point
 {
     #[HasOne(Coordinates::class)]
     private $coordinates;
@@ -266,7 +260,7 @@ class Point
     private array $rgb; // A flat array, the "Number" rule will be applied to each array element.
 }
 
-class Coordinates
+final class Coordinates
 {
     #[Number(min: -10, max: 10)]
     private int $x;
@@ -285,12 +279,14 @@ Pass the base DTO to `AnnotatedDataSet` and use it for validation.
 
 ```php
 use Yiisoft\Validator\DataSet\AnnotatedDataSet;
+use Yiisoft\Validator\Validator;
 
 $data = [
     // ...
 ];
 $dataSet = new AnnotatedDataSet(new ChartsData(), $data);
-$errors = $rule->validate($dataSet)->getErrorMessagesIndexedByPath();
+$validator = new Validator();
+$errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
 ```
 
 This approach has some limitations.
@@ -300,7 +296,13 @@ property type `array` for flat rules) instead. Use `Each` and `Nested` rules in 
 needed.
 
 ```php
-class ChartsData
+use Yiisoft\Validator\Attribute\HasMany;
+use Yiisoft\Validator\Attribute\HasOne;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Number;
+
+final class ChartsData
 {
     #[Each(incorrectInputMessage: 'Custom message 1.', message: 'Custom message 2.')]
     #[Nested(errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 3.')]
@@ -308,7 +310,7 @@ class ChartsData
     private array $charts;
 }
 
-class Point
+final class Point
 {
     #[Nested(errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 4.')]
     #[HasOne(Coordinates::class)]
@@ -325,6 +327,7 @@ class Point
 use Attribute;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\ValidationContext;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
@@ -339,7 +342,7 @@ final class ValidateXRule extends Rule
     }
 }
 
-class Coordinates
+final class Coordinates
 {
     #[Number(min: -10, max: 10)]
     #[ValidateXRule()]
@@ -356,7 +359,7 @@ must be of different type).
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Regex;
 
-class UserData
+final class UserData
 {
     #[HasLength(min: 2, max: 20)]
     #[Regex('~[a-z_\-]~i')]
@@ -372,6 +375,7 @@ use Attribute;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\ValidationContext;
 
 final class CustomFormatter implements FormatterInterface
@@ -386,28 +390,36 @@ final class CustomFormatter implements FormatterInterface
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class ValidateXRule extends Rule
-{    
+{
     public function __construct(
-        ?FormatterInterface $formatter = self::createFormatter(),
+        ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
     ) {
-        $this->formatter = $formatter;
+        parent::__construct($formatter, $skipOnEmpty, $skipOnError, $when);
+
+        $this->formatter = $this->createFormatter();
         $this->skipOnEmpty = $skipOnEmpty;
         $this->skipOnError = $skipOnError;
         $this->when = $when;
     }
-    
+
     private function createFormatter(): FormatterInterface
     {
         // More complex logic
         // ...
         return CustomFormatter();
     }
+
+    public function validateValue($value, ?ValidationContext $context = null): Result
+    {
+        // More complex logic
+        // ...
+    }
 }
 
-class Coordinates
+final class Coordinates
 {
     #[Number(min: -10, max: 10)]
     #[ValidateXRule()]
