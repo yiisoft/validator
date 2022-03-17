@@ -11,7 +11,7 @@ use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * GroupRule validates a single value for a set of custom rules
+ * Validates a single value for a set of custom rules.
  */
 abstract class GroupRule extends Rule
 {

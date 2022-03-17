@@ -15,7 +15,7 @@ use function is_string;
 /**
  * Validates that the value is of certain length.
  *
- * Note, this validator should only be used with strings.
+ * Note, this rule should only be used with strings.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class HasLength extends Rule

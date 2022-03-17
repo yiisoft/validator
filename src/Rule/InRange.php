@@ -15,7 +15,7 @@ use Yiisoft\Validator\Rule;
  * Validates that the value is among a list of values.
  *
  * The range can be specified via constructor.
- * If the {@see InRange::$not} is called, the validator will ensure the value is NOT among the specified range.
+ * If the {@see InRange::$not} is called, the rule will ensure the value is NOT among the specified range.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class InRange extends Rule

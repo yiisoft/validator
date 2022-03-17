@@ -13,7 +13,7 @@ use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- *  Validates an array by checking each of its elements against a set of rules
+ *  Validates an array by checking each of its elements against a set of rules.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Each extends Rule

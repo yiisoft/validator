@@ -19,7 +19,7 @@ use function is_array;
 use function is_object;
 
 /**
- * Nested rule can be used for validation of nested structures.
+ * Can be used for validation of nested structures.
  *
  * For example, we have an inbound request with the following structure:
  *
@@ -32,7 +32,7 @@ use function is_object;
  * ];
  * ```
  *
- * So to make validation with Nested rule we can configure it like this:
+ * So to make validation we can configure it like this:
  *
  * ```php
  * $rule = new Nested([

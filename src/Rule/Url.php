@@ -15,9 +15,9 @@ use function is_string;
 use function strlen;
 
 /**
- * UrlValidator validates that the value is a valid HTTP or HTTPS URL.
+ * Validates that the value is a valid HTTP or HTTPS URL.
  *
- * Note that this validator only checks if the URL scheme and host part are correct.
+ * Note that this rule only checks if the URL scheme and host part are correct.
  * It does not check the remaining parts of a URL.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]

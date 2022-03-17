@@ -18,7 +18,7 @@ use function is_string;
 use function strlen;
 
 /**
- * The validator checks if the value is a valid IPv4/IPv6 address or subnet.
+ * Checks if the value is a valid IPv4/IPv6 address or subnet.
  *
  * It also may change the value if normalization of IPv6 expansion is enabled.
  */
