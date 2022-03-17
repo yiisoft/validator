@@ -10,7 +10,7 @@ use Attribute;
  * Represents one to one relation.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class HasOne
+final class HasOne
 {
     public function __construct(string $relatedClassName)
     {
