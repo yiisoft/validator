@@ -16,7 +16,7 @@ use function is_string;
 use function strlen;
 
 /**
- * EmailValidator validates that the value is a valid email address.
+ * Validates that the value is a valid email address.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Email extends Rule
