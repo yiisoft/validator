@@ -73,7 +73,7 @@ final class AnnotatedDataSet implements RulesProviderInterface
             $flatRules = [];
             $attributes = $property->getAttributes();
             foreach ($attributes as $_index => $attribute) {
-                if (!is_subclass_of($attribute->getName(), Rule::class)) {
+                if (!is_subclass_of($attribute->getName(), RuleInterface::class)) {
                     continue;
                 }
 
