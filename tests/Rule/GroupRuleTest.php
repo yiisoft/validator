@@ -24,7 +24,9 @@ class GroupRuleTest extends TestCase
     public function testErrorMessage(): void
     {
         $rule = new CustomUrlRule();
-        $this->assertEquals(['This value is not a valid.'], $rule->validate('domain')->getErrorMessages());
+        $result = $rule->validate('domain');
+
+        $this->assertEquals(['This value is not a valid.'], $result->getErrorMessages());
     }
 
     public function testCustomErrorMessage(): void
