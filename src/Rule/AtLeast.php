@@ -11,7 +11,7 @@ use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * AtLeastValidator checks if at least {@see AtLeast::$min} of many attributes are filled.
+ * Checks if at least {@see AtLeast::$min} of many attributes are filled.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class AtLeast extends Rule
