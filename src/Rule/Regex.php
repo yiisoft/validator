@@ -13,7 +13,7 @@ use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
- * RegularExpressionValidator validates that the value matches the pattern specified in constructor.
+ * Validates that the value matches the pattern specified in constructor.
  *
  * If the {@see Regex::$not} is used, the validator will ensure the value do NOT match the pattern.
  */
