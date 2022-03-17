@@ -11,7 +11,7 @@ use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * BooleanValidator checks if the value is a boolean value or a value corresponding to it.
+ * Checks if the value is a boolean value or a value corresponding to it.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Boolean extends Rule
