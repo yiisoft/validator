@@ -17,7 +17,7 @@ final class AnnotatedDataSetTest extends TestCase
     public function testGetRules(): void
     {
         $dataSet = new AnnotatedDataSet(new ChartsData());
-        $this->assertEquals([
+        $expectedRules = [
             'charts' => [
                 new Each([
                     new Nested([
@@ -41,6 +41,8 @@ final class AnnotatedDataSetTest extends TestCase
                     ], errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 3.'),
                 ], incorrectInputMessage: 'Custom message 1.', message: 'Custom message 2.'),
             ],
-        ], $dataSet->getRules());
+        ];
+
+        $this->assertEquals($expectedRules, $dataSet->getRules());
     }
 }
