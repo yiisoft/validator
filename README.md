@@ -246,7 +246,7 @@ final class ChartsData
     private array $charts;
 }
 
-class Chart
+final class Chart
 {
     #[HasMany(Point::class)]
     private array $points;
