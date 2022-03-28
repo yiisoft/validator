@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\DataSet;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\DataSet\AnnotatedDataSet;
+use Yiisoft\Validator\DataSet\AttributeDataSet;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Tests\Data\Charts\ChartsData;
 
-final class AnnotatedDataSetTest extends TestCase
+final class AttributeDataSetTest extends TestCase
 {
     public function testGetRules(): void
     {
-        $dataSet = new AnnotatedDataSet(new ChartsData());
+        $dataSet = new AttributeDataSet(new ChartsData());
         $expectedRules = [
             'charts' => [
                 new Each([

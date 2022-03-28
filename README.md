@@ -273,13 +273,13 @@ Here are some technical details:
 Pass the base DTO to `AnnotatedDataSet` and use it for validation.
 
 ```php
-use Yiisoft\Validator\DataSet\AnnotatedDataSet;
+use Yiisoft\Validator\DataSet\AttributeDataSet;
 use Yiisoft\Validator\Validator;
 
 $data = [
     // ...
 ];
-$dataSet = new AnnotatedDataSet(new ChartsData(), $data);
+$dataSet = new AttributeDataSet(new ChartsData(), $data);
 $validator = new Validator();
 $errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
 ```

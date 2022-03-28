@@ -20,7 +20,7 @@ use function in_array;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  */
-final class AnnotatedDataSet implements RulesProviderInterface
+final class AttributeDataSet implements RulesProviderInterface
 {
     use ArrayDataTrait;
 
@@ -36,10 +36,10 @@ final class AnnotatedDataSet implements RulesProviderInterface
     {
         $classMeta = new ReflectionClass($this->baseAnnotatedObject);
 
-        return $this->handleAnnotations($classMeta);
+        return $this->handleAttributes($classMeta);
     }
 
-    private function handleAnnotations(ReflectionClass $classMeta): array
+    private function handleAttributes(ReflectionClass $classMeta): array
     {
         $rules = [];
         foreach ($classMeta->getProperties() as $property) {
@@ -55,7 +55,7 @@ final class AnnotatedDataSet implements RulesProviderInterface
 
                 $relatedClassMeta = new ReflectionClass(new ($attributes[0]->getArguments()[0]));
                 $nestedRule = new Nested(
-                    $this->handleAnnotations($relatedClassMeta),
+                    $this->handleAttributes($relatedClassMeta),
                     ...(($property->getAttributes(Nested::class)[0] ?? null)?->getArguments() ?? [])
                 );
 
