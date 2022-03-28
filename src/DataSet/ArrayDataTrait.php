@@ -6,6 +6,9 @@ namespace Yiisoft\Validator\DataSet;
 
 use Yiisoft\Validator\Exception\MissingAttributeException;
 
+/**
+ * @internal
+ */
 trait ArrayDataTrait
 {
     private array $data;
