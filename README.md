@@ -95,11 +95,6 @@ final class MoneyTransfer implements DataSetInterface
         
         return $this->$key;
     }
-    
-    public function hasAttribute(string $attribute) : bool
-    {
-        return isset($this->$key);
-    }
 }
 
 $validator = new Validator(); // Usually obtained from container
