@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\DataSet;
 
+use InvalidArgumentException;
 use ReflectionClass;
+use ReflectionException;
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
 use Yiisoft\Validator\Rule\Each;
@@ -53,7 +55,14 @@ final class AttributeDataSet implements RulesProviderInterface
                     continue;
                 }
 
-                $relatedClassMeta = new ReflectionClass(new ($attributes[0]->getArguments()[0]));
+                $relatedClassName = $attributes[0]->getArguments()[0];
+
+                try {
+                    $relatedClassMeta = new ReflectionClass(new $relatedClassName);
+                } catch (ReflectionException) {
+                    throw new InvalidArgumentException("Class $relatedClassName not found.");
+                }
+
                 $nestedRule = new Nested(
                     $this->handleAttributes($relatedClassMeta),
                     ...(($property->getAttributes(Nested::class)[0] ?? null)?->getArguments() ?? [])
