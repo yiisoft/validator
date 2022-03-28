@@ -220,7 +220,7 @@ final class Ip extends Rule
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         if (!$this->allowIpv4 && !$this->allowIpv6) {
-            throw new RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time');
+            throw new RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time.');
         }
         $result = new Result();
         if (!is_string($value)) {
