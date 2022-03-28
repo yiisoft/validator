@@ -204,7 +204,7 @@ final class Ip extends Rule
 
         foreach ($networks as $key => $_values) {
             if (array_key_exists($key, $this->defaultNetworks)) {
-                throw new RuntimeException("Network alias \"{$key}\" already set as default");
+                throw new RuntimeException("Network alias \"{$key}\" already set as default.");
             }
         }
 
