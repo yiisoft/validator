@@ -61,7 +61,7 @@ class RuleSetTest extends TestCase
     {
         $ruleSet = new RuleSet([
             new Number(min: 10),
-            (new Number(when: fn () => false, min: 10)),
+            new Number(when: fn () => false, min: 10),
             new Number(min: 10),
         ]);
         $result = $ruleSet->validate(1);
