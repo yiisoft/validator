@@ -270,7 +270,7 @@ Here are some technical details:
 - `HasMany` uses combination of `Each` and `Nested` rules.
 - In case of a flat array `Point::$rgb`, a property type `array` needs to be declared. It uses `Each` rule internally.
 
-Pass the base DTO to `AnnotatedDataSet` and use it for validation.
+Pass the base DTO to `AttributeDataSet` and use it for validation.
 
 ```php
 use Yiisoft\Validator\DataSet\AttributeDataSet;
