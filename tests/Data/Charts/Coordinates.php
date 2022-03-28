@@ -8,7 +8,7 @@ use Yiisoft\Validator\Rule\Number;
 
 final class Coordinates
 {
-    #[Number(min: -10, max: 10, formatter: new CustomFormatter())]
+    #[Number(min: -10, max: 10)]
     private int $x;
     #[Number(min: -10, max: 10)]
     private int $y;

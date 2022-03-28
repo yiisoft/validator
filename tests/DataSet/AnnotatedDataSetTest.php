@@ -10,7 +10,6 @@ use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Tests\Data\Charts\ChartsData;
-use Yiisoft\Validator\Tests\Data\Charts\CustomFormatter;
 
 final class AnnotatedDataSetTest extends TestCase
 {
@@ -25,7 +24,7 @@ final class AnnotatedDataSetTest extends TestCase
                             new Each([new Nested([
                                 'coordinates' => new Nested(
                                     [
-                                        'x' => [new Number(min: -10, max: 10, formatter: new CustomFormatter())],
+                                        'x' => [new Number(min: -10, max: 10)],
                                         'y' => [new Number(min: -10, max: 10)],
                                     ],
                                     errorWhenPropertyPathIsNotFound: true,
