@@ -20,7 +20,7 @@ final class Subset extends Rule
          * @var bool whether the comparison is strict (both type and value must be the same)
          */
         private bool $strict = false,
-        private string $iterableMessage = 'Value must be iterable',
+        private string $iterableMessage = 'Value must be iterable.',
         private string $subsetMessage = 'Values must be ones of {values}.',
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
