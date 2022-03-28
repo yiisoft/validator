@@ -58,7 +58,7 @@ final class AttributeDataSet implements RulesProviderInterface
                 $relatedClassName = $attributes[0]->getArguments()[0];
 
                 try {
-                    $relatedClassMeta = new ReflectionClass(new $relatedClassName());
+                    $relatedClassMeta = new ReflectionClass($relatedClassName);
                 } catch (ReflectionException) {
                     throw new InvalidArgumentException("Class \"$relatedClassName\" not found.");
                 }
