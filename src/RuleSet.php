@@ -60,7 +60,7 @@ final class RuleSet
     private function normalizeRule($rule): RuleInterface
     {
         if (is_callable($rule)) {
-            $rule = new Callback($rule);
+            return new Callback($rule);
         }
 
         if (!$rule instanceof RuleInterface) {
