@@ -60,7 +60,7 @@ final class AttributeDataSet implements RulesProviderInterface
                 try {
                     $relatedClassMeta = new ReflectionClass(new $relatedClassName);
                 } catch (ReflectionException) {
-                    throw new InvalidArgumentException("Class $relatedClassName not found.");
+                    throw new InvalidArgumentException("Class \"$relatedClassName\" not found.");
                 }
 
                 $nestedRule = new Nested(
