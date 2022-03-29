@@ -51,7 +51,7 @@ final class AttributeDataSet implements RulesProviderInterface
 
             foreach ([HasMany::class, HasOne::class] as $className) {
                 $attributes = $property->getAttributes($className);
-                if (!$attributes) {
+                if (empty($attributes)) {
                     continue;
                 }
 
