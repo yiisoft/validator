@@ -17,14 +17,13 @@ class CompareToTest extends TestCase
     {
         $value = 18449;
         // default config
-        $validator = CompareTo::rule($value);
+        $validator = new CompareTo($value);
 
         $this->assertTrue($validator->validate($value)->isValid());
         $this->assertTrue($validator->validate((string)$value)->isValid());
         $this->assertFalse($validator->validate($value + 1)->isValid());
         foreach ($this->getOperationTestData($value) as $operator => $tests) {
-            $validator = CompareTo::rule($value)
-                ->operator($operator);
+            $validator = new CompareTo($value, operator: $operator);
 
             foreach ($tests as $test) {
                 $this->assertEquals($test[1], $validator->validate($test[0])->isValid(), "Testing $operator");
@@ -79,85 +78,85 @@ class CompareToTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('compareTo', CompareTo::rule(1)->getName());
+        $this->assertEquals('compareTo', (new CompareTo(1))->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                CompareTo::rule(1),
+                new CompareTo(1),
                 [
+                    'compareValue' => 1,
+                    'message' => 'Value must be equal to "1".',
                     'type' => 'string',
                     'operator' => '==',
-                    'compareValue' => 1,
-                    'message' => 'Value must be equal to "1".',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                CompareTo::rule(1)->asNumber(),
+                new CompareTo(1, type: CompareTo::TYPE_NUMBER),
                 [
+                    'compareValue' => 1,
+                    'message' => 'Value must be equal to "1".',
                     'type' => 'number',
                     'operator' => '==',
-                    'compareValue' => 1,
-                    'message' => 'Value must be equal to "1".',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                CompareTo::rule(1)->asNumber()->operator('>='),
+                new CompareTo(1, type: CompareTo::TYPE_NUMBER, operator: '>='),
                 [
-                    'type' => 'number',
-                    'operator' => '>=',
                     'compareValue' => 1,
                     'message' => 'Value must be greater than or equal to "1".',
+                    'type' => 'number',
+                    'operator' => '>=',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                CompareTo::rule('YES'),
+                new CompareTo('YES'),
                 [
-                    'type' => 'string',
-                    'operator' => '==',
                     'compareValue' => 'YES',
                     'message' => 'Value must be equal to "YES".',
+                    'type' => 'string',
+                    'operator' => '==',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                CompareTo::rule('YES')->asString()->skipOnEmpty(true),
+                new CompareTo('YES', skipOnEmpty: true),
                 [
-                    'type' => 'string',
-                    'operator' => '==',
                     'compareValue' => 'YES',
                     'message' => 'Value must be equal to "YES".',
+                    'type' => 'string',
+                    'operator' => '==',
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
                 ],
             ],
             [
-                CompareTo::rule('YES')->asString()->operator('!=='),
+                new CompareTo('YES', operator: '!=='),
                 [
-                    'type' => 'string',
-                    'operator' => '!==',
                     'compareValue' => 'YES',
                     'message' => 'Value must not be equal to "YES".',
+                    'type' => 'string',
+                    'operator' => '!==',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                CompareTo::rule('YES')->message('Custom message for {value}'),
+                new CompareTo('YES', message: 'Custom message for {value}'),
                 [
-                    'type' => 'string',
-                    'operator' => '==',
                     'compareValue' => 'YES',
                     'message' => 'Custom message for YES',
+                    'type' => 'string',
+                    'operator' => '==',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],

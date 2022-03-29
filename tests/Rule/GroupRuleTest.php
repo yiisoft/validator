@@ -14,7 +14,7 @@ class GroupRuleTest extends TestCase
 {
     public function testValidate(): void
     {
-        $rule = CustomUrlRule::rule();
+        $rule = new CustomUrlRule();
 
         $this->assertTrue($rule->validate('http://домен.рф')->isValid());
         $this->assertFalse($rule->validate('http://доменбольшедвадцатизнаков.рф')->isValid());
@@ -23,22 +23,21 @@ class GroupRuleTest extends TestCase
 
     public function testErrorMessage(): void
     {
-        $rule = CustomUrlRule::rule();
-        $this->assertEquals(
-            ['This value is not a valid.'],
-            $rule->validate('domain')->getErrorMessages()
-        );
+        $rule = new CustomUrlRule();
+        $result = $rule->validate('domain');
+
+        $this->assertEquals(['This value is not a valid.'], $result->getErrorMessages());
     }
 
     public function testCustomErrorMessage(): void
     {
-        $rule = CustomUrlRule::rule()->message('This value is not valid custom url');
+        $rule = new CustomUrlRule(message: 'This value is not valid custom url');
         $this->assertEquals(['This value is not valid custom url'], $rule->validate('domain')->getErrorMessages());
     }
 
     public function testOptions(): void
     {
-        $rule = CustomUrlRule::rule();
+        $rule = new CustomUrlRule();
         $this->assertEquals([
             [
                 'required',
@@ -48,19 +47,19 @@ class GroupRuleTest extends TestCase
             ],
             [
                 'url',
-                'message' => 'This value is not a valid URL.',
-                'enableIDN' => true,
-                'validSchemes' => ['http', 'https',],
                 'pattern' => '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
+                'validSchemes' => ['http', 'https',],
+                'enableIDN' => true,
+                'message' => 'This value is not a valid URL.',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
             ],
             [
                 'hasLength',
-                'message' => 'This value must be a string.',
                 'min' => null,
-                'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
                 'max' => 20,
+                'message' => 'This value must be a string.',
+                'tooShortMessage' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
                 'tooLongMessage' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
                 'encoding' => 'UTF-8',
                 'skipOnEmpty' => false,

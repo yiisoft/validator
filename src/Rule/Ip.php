@@ -4,63 +4,38 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Attribute;
 use InvalidArgumentException;
+use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
+use function array_key_exists;
 use function is_string;
 use function strlen;
 
 /**
- * The validator checks if the attribute value is a valid IPv4/IPv6 address or subnet.
+ * Checks if the value is a valid IPv4/IPv6 address or subnet.
  *
- * It also may change attribute's value if normalization of IPv6 expansion is enabled.
- *
- * The following are examples of validation rules using this validator:
- *
- * ```php
- * ['ip_address', 'ip'], // IPv4 or IPv6 address
- * ['ip_address', 'ip', 'ipv6' => false], // IPv4 address (IPv6 is disabled)
- * ['ip_address', 'ip', 'subnet' => true], // requires a CIDR prefix (like 10.0.0.1/24) for the IP address
- * ['ip_address', 'ip', 'subnet' => null], // CIDR prefix is optional
- * ['ip_address', 'ip', 'subnet' => null, 'normalize' => true], // CIDR prefix is optional and will be added when missing
- * ['ip_address', 'ip', 'ranges' => ['192.168.0.0/24']], // only IP addresses from the specified subnet are allowed
- * ['ip_address', 'ip', 'ranges' => ['!192.168.0.0/24', 'any']], // any IP is allowed except IP in the specified subnet
- * ['ip_address', 'ip', 'expandIPv6' => true], // expands IPv6 address to a full notation format
- * ```
- *
- * @property array $ranges The IPv4 or IPv6 ranges that are allowed or forbidden. See {@see Ip::ranges()} for
- * detailed description.
+ * It also may change the value if normalization of IPv6 expansion is enabled.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class Ip extends Rule
 {
     /**
      * Negation char.
      *
-     * Used to negate {@see ranges()} or {@see network()} or to negate validating value when {@see allowNegation()}
+     * Used to negate {@see $ranges} or {@see $network} or to negate validating value when {@see $allowNegation}
      * is used.
      */
     private const NEGATION_CHAR = '!';
-
     /**
-     * @var array The network aliases, that can be used in {@see ranges()}.
-     *  - key - alias name
-     *  - value - array of strings. String can be an IP range, IP address or another alias. String can be
-     *    negated with {@see NEGATION_CHAR} (independent of {@see allowNegation()} option).
-     *
-     * The following aliases are defined by default:
-     *  - `*`: `any`
-     *  - `any`: `0.0.0.0/0, ::/0`
-     *  - `private`: `10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, fd00::/8`
-     *  - `multicast`: `224.0.0.0/4, ff00::/8`
-     *  - `linklocal`: `169.254.0.0/16, fe80::/10`
-     *  - `localhost`: `127.0.0.0/8', ::1`
-     *  - `documentation`: `192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24, 2001:db8::/32`
-     *  - `system`: `multicast, linklocal, localhost, documentation`
+     * @see $networks
      */
-    private array $networks = [
+    private array $defaultNetworks = [
         '*' => ['any'],
         'any' => ['0.0.0.0/0', '::/0'],
         'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
@@ -71,135 +46,181 @@ final class Ip extends Rule
         'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
     ];
 
-    /**
-     * @var bool whether the validating value can be an IPv6 address. Defaults to `true`.
-     */
-    private bool $allowIpv6 = true;
+    public function __construct(
+        /**
+         * @var array Custom network aliases, that can be used in {@see $ranges}.
+         *
+         *  - key - alias name
+         *  - value - array of strings. String can be an IP range, IP address or another alias. String can be
+         *    negated with {@see NEGATION_CHAR} (independent of {@see $allowNegation} option).
+         *
+         * The following aliases are defined by default in {@see $defaultNetworks} and will be merged with custom ones:
+         *
+         *  - `*`: `any`
+         *  - `any`: `0.0.0.0/0, ::/0`
+         *  - `private`: `10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, fd00::/8`
+         *  - `multicast`: `224.0.0.0/4, ff00::/8`
+         *  - `linklocal`: `169.254.0.0/16, fe80::/10`
+         *  - `localhost`: `127.0.0.0/8', ::1`
+         *  - `documentation`: `192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24, 2001:db8::/32`
+         *  - `system`: `multicast, linklocal, localhost, documentation`
+         *
+         * @see $defaultNetworks
+         */
+        private array $networks = [],
+        /**
+         * @var bool whether the validating value can be an IPv4 address. Defaults to `true`.
+         */
+        private bool $allowIpv4 = true,
+        /**
+         * @var bool whether the validating value can be an IPv6 address. Defaults to `true`.
+         */
+        private bool $allowIpv6 = true,
+        /**
+         * @var bool whether the address can be an IP with CIDR subnet, like `192.168.10.0/24`.
+         * The following values are possible:
+         *
+         * - `false` - the address must not have a subnet (default).
+         * - `true` - specifying a subnet is optional.
+         */
+        private bool $allowSubnet = false,
+        private bool $requireSubnet = false,
+        /**
+         * @var bool whether address may have a {@see NEGATION_CHAR} character at the beginning.
+         * Defaults to `false`.
+         */
+        private bool $allowNegation = false,
+        /**
+         * @var string user-defined error message is used when validation fails due to the wrong IP address format.
+         *
+         * You may use the following placeholders in the message:
+         *
+         * - `{attribute}`: the label of the attribute being validated
+         * - `{value}`: the value of the attribute being validated
+         */
+        private string $message = 'Must be a valid IP address.',
+        /**
+         * @var string user-defined error message is used when validation fails due to the disabled IPv4 validation.
+         *
+         * You may use the following placeholders in the message:
+         *
+         * - `{attribute}`: the label of the attribute being validated
+         * - `{value}`: the value of the attribute being validated
+         *
+         * @see $allowIpv4
+         */
+        private string $ipv4NotAllowedMessage = 'Must not be an IPv4 address.',
+        /**
+         * @var string user-defined error message is used when validation fails due to the disabled IPv6 validation.
+         *
+         * You may use the following placeholders in the message:
+         *
+         * - `{attribute}`: the label of the attribute being validated
+         * - `{value}`: the value of the attribute being validated
+         *
+         * @see $allowIpv6
+         */
+        private string $ipv6NotAllowedMessage = 'Must not be an IPv6 address.',
+        /**
+         * @var string user-defined error message is used when validation fails due to the wrong CIDR.
+         *
+         * You may use the following placeholders in the message:
+         *
+         * - `{attribute}`: the label of the attribute being validated
+         * - `{value}`: the value of the attribute being validated
+         *
+         * @see $allowSubnet
+         */
+        private string $wrongCidrMessage = 'Contains wrong subnet mask.',
+        /**
+         * @var string user-defined error message is used when validation fails due to subnet {@see $allowSubnet} is
+         * used, but the CIDR prefix is not set.
+         *
+         * You may use the following placeholders in the message:
+         *
+         * - `{attribute}`: the label of the attribute being validated
+         * - `{value}`: the value of the attribute being validated
+         *
+         * @see $allowSubnet
+         */
+        private string $noSubnetMessage = 'Must be an IP address with specified subnet.',
+        /**
+         * @var string user-defined error message is used when validation fails
+         * due to {@see $allowSubnet} is false, but CIDR prefix is present.
+         *
+         * You may use the following placeholders in the message:
+         *
+         * - `{attribute}`: the label of the attribute being validated
+         * - `{value}`: the value of the attribute being validated
+         *
+         * @see $allowSubnet
+         */
+        private string $hasSubnetMessage = 'Must not be a subnet.',
+        /**
+         * @var string user-defined error message is used when validation fails due to IP address
+         * is not allowed by {@see $ranges} check.
+         *
+         * You may use the following placeholders in the message:
+         *
+         * - `{attribute}`: the label of the attribute being validated
+         * - `{value}`: the value of the attribute being validated
+         *
+         * @see $ranges
+         */
+        private string $notInRangeMessage = 'Is not in the allowed range.',
+        /**
+         * @var array The IPv4 or IPv6 ranges that are allowed or forbidden.
+         *
+         * The following preparation tasks are performed:
+         *
+         * - Recursively substitutes aliases (described in {@see $networks}) with their values.
+         * - Removes duplicates.
+         *
+         * When the array is empty, or the option not set, all IP addresses are allowed.
+         *
+         * Otherwise, the rules are checked sequentially until the first match is found.
+         * An IP address is forbidden, when it has not matched any of the rules.
+         *
+         * Example:
+         *
+         * ```php
+         * (new Ip(ranges: [
+         *     '192.168.10.128'
+         *     '!192.168.10.0/24',
+         *     'any' // allows any other IP addresses
+         * ]);
+         * ```
+         *
+         * In this example, access is allowed for all the IPv4 and IPv6 addresses excluding the `192.168.10.0/24`
+         * subnet. IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
+         */
+        private array $ranges = [],
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null
+    ) {
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
 
-    /**
-     * @var bool whether the validating value can be an IPv4 address. Defaults to `true`.
-     */
-    private bool $allowIpv4 = true;
+        foreach ($networks as $key => $_values) {
+            if (array_key_exists($key, $this->defaultNetworks)) {
+                throw new RuntimeException("Network alias \"{$key}\" already set as default.");
+            }
+        }
 
-    /**
-     * @var bool whether the address can be an IP with CIDR subnet, like `192.168.10.0/24`.
-     * The following values are possible:
-     *
-     * - `false` - the address must not have a subnet (default).
-     * - `true` - specifying a subnet is optional.
-     */
-    private bool $allowSubnet = false;
+        $this->networks = array_merge($this->defaultNetworks, $this->networks);
 
-    /**
-     * @var bool
-     */
-    private bool $requireSubnet = false;
+        if ($requireSubnet) {
+            $this->allowSubnet = true;
+        }
 
-    /**
-     * @var bool whether address may have a {@see NEGATION_CHAR} character at the beginning.
-     * Defaults to `false`.
-     */
-    private bool $allowNegation = false;
-
-    /**
-     * @var string user-defined error message is used when validation fails due to the wrong IP address format.
-     *
-     * You may use the following placeholders in the message:
-     *
-     * - `{attribute}`: the label of the attribute being validated
-     * - `{value}`: the value of the attribute being validated
-     */
-    private string $message = 'Must be a valid IP address.';
-
-    /**
-     * @var string user-defined error message is used when validation fails due to the disabled IPv6 validation.
-     *
-     * You may use the following placeholders in the message:
-     *
-     * - `{attribute}`: the label of the attribute being validated
-     * - `{value}`: the value of the attribute being validated
-     *
-     * @see allowIpv6
-     */
-    private string $ipv6NotAllowed = 'Must not be an IPv6 address.';
-
-    /**
-     * @var string user-defined error message is used when validation fails due to the disabled IPv4 validation.
-     *
-     * You may use the following placeholders in the message:
-     *
-     * - `{attribute}`: the label of the attribute being validated
-     * - `{value}`: the value of the attribute being validated
-     *
-     * @see allowIpv4
-     */
-    private string $ipv4NotAllowed = 'Must not be an IPv4 address.';
-
-    /**
-     * @var string user-defined error message is used when validation fails due to the wrong CIDR.
-     *
-     * You may use the following placeholders in the message:
-     *
-     * - `{attribute}`: the label of the attribute being validated
-     * - `{value}`: the value of the attribute being validated
-     *
-     * @see allowSubnet
-     */
-    private string $wrongCidr = 'Contains wrong subnet mask.';
-
-    /**
-     * @var string user-defined error message is used when validation fails due to subnet {@see allowSubnet()} is used,
-     * but the CIDR prefix is not set.
-     *
-     * You may use the following placeholders in the message:
-     *
-     * - `{attribute}`: the label of the attribute being validated
-     * - `{value}`: the value of the attribute being validated
-     *
-     * @see allowSubnet
-     */
-    private string $noSubnet = 'Must be an IP address with specified subnet.';
-
-    /**
-     * @var string user-defined error message is used when validation fails
-     * due to {@see allowSubnet()} is false, but CIDR prefix is present.
-     *
-     * You may use the following placeholders in the message:
-     *
-     * - `{attribute}`: the label of the attribute being validated
-     * - `{value}`: the value of the attribute being validated
-     *
-     * @see allowSubnet
-     */
-    private string $hasSubnet = 'Must not be a subnet.';
-
-    /**
-     * @var string user-defined error message is used when validation fails due to IP address
-     * is not not allowed by {@see ranges()} check.
-     *
-     * You may use the following placeholders in the message:
-     *
-     * - `{attribute}`: the label of the attribute being validated
-     * - `{value}`: the value of the attribute being validated
-     *
-     * @see ranges
-     */
-    private string $notInRange = 'Is not in the allowed range.';
-
-    /**
-     * @var array
-     */
-    private array $ranges = [];
-
-    public static function rule(): self
-    {
-        return new self();
+        $this->ranges = $this->prepareRanges($ranges);
     }
 
-    protected function validateValue($value, ValidationContext $context = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         if (!$this->allowIpv4 && !$this->allowIpv6) {
-            throw new \RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time');
+            throw new RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time.');
         }
         $result = new Result();
         if (!is_string($value)) {
@@ -224,11 +245,11 @@ final class Ip extends Rule
         }
 
         if ($this->requireSubnet === true && $cidr === null) {
-            $result->addError($this->formatMessage($this->noSubnet));
+            $result->addError($this->formatMessage($this->noSubnetMessage));
             return $result;
         }
         if ($this->allowSubnet === false && $cidr !== null) {
-            $result->addError($this->formatMessage($this->hasSubnet));
+            $result->addError($this->formatMessage($this->hasSubnetMessage));
             return $result;
         }
         if ($this->allowNegation === false && $negation) {
@@ -236,11 +257,11 @@ final class Ip extends Rule
             return $result;
         }
         if ($ipVersion === IpHelper::IPV6 && !$this->allowIpv6) {
-            $result->addError($this->formatMessage($this->ipv6NotAllowed));
+            $result->addError($this->formatMessage($this->ipv6NotAllowedMessage));
             return $result;
         }
         if ($ipVersion === IpHelper::IPV4 && !$this->allowIpv4) {
-            $result->addError($this->formatMessage($this->ipv4NotAllowed));
+            $result->addError($this->formatMessage($this->ipv4NotAllowedMessage));
             return $result;
         }
         if (!$result->isValid()) {
@@ -250,70 +271,16 @@ final class Ip extends Rule
             try {
                 IpHelper::getCidrBits($ipCidr);
             } catch (InvalidArgumentException $e) {
-                $result->addError($this->formatMessage($this->wrongCidr));
+                $result->addError($this->formatMessage($this->wrongCidrMessage));
                 return $result;
             }
         }
         if (!$this->isAllowed($ipCidr)) {
-            $result->addError($this->formatMessage($this->notInRange));
+            $result->addError($this->formatMessage($this->notInRangeMessage));
             return $result;
         }
 
         return $result;
-    }
-
-    /**
-     * Set the IPv4 or IPv6 ranges that are allowed or forbidden.
-     *
-     * The following preparation tasks are performed:
-     *
-     * - Recursively substitutes aliases (described in {@see networks}) with their values.
-     * - Removes duplicates
-     *
-     * @param array $ranges the IPv4 or IPv6 ranges that are allowed or forbidden.
-     *
-     * When the array is empty, or the option not set, all IP addresses are allowed.
-     *
-     * Otherwise, the rules are checked sequentially until the first match is found.
-     * An IP address is forbidden, when it has not matched any of the rules.
-     *
-     * Example:
-     *
-     * ```php
-     * (new Ip())->ranges([
-     *          '192.168.10.128'
-     *          '!192.168.10.0/24',
-     *          'any' // allows any other IP addresses
-     *      ]);
-     * ```
-     *
-     * In this example, access is allowed for all the IPv4 and IPv6 addresses excluding the `192.168.10.0/24` subnet.
-     * IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
-     */
-    public function ranges(array $ranges): self
-    {
-        $new = clone $this;
-        $new->ranges = $this->prepareRanges($ranges);
-        return $new;
-    }
-
-    /**
-     * Define network alias to be used in {@see ranges()}
-     *
-     * @param string $name name of the network
-     * @param array $ranges ranges
-     *
-     * @return self
-     */
-    public function network(string $name, array $ranges): self
-    {
-        if (array_key_exists($name, $this->networks)) {
-            throw new \RuntimeException("Network alias \"{$name}\" already set");
-        }
-
-        $new = clone $this;
-        $new->networks[$name] = $ranges;
-        return $new;
     }
 
     public function getRanges(): array
@@ -321,74 +288,8 @@ final class Ip extends Rule
         return $this->ranges;
     }
 
-    public function allowIpv4(): self
-    {
-        $new = clone $this;
-        $new->allowIpv4 = true;
-        return $new;
-    }
-
-    public function disallowIpv4(): self
-    {
-        $new = clone $this;
-        $new->allowIpv4 = false;
-        return $new;
-    }
-
-    public function allowIpv6(): self
-    {
-        $new = clone $this;
-        $new->allowIpv6 = true;
-        return $new;
-    }
-
-    public function disallowIpv6(): self
-    {
-        $new = clone $this;
-        $new->allowIpv6 = false;
-        return $new;
-    }
-
-    public function allowNegation(): self
-    {
-        $new = clone $this;
-        $new->allowNegation = true;
-        return $new;
-    }
-
-    public function disallowNegation(): self
-    {
-        $new = clone $this;
-        $new->allowNegation = false;
-        return $new;
-    }
-
-    public function allowSubnet(): self
-    {
-        $new = clone $this;
-        $new->allowSubnet = true;
-        $new->requireSubnet = false;
-        return $new;
-    }
-
-    public function requireSubnet(): self
-    {
-        $new = clone $this;
-        $new->allowSubnet = true;
-        $new->requireSubnet = true;
-        return $new;
-    }
-
-    public function disallowSubnet(): self
-    {
-        $new = clone $this;
-        $new->allowSubnet = false;
-        $new->requireSubnet = false;
-        return $new;
-    }
-
     /**
-     * The method checks whether the IP address with specified CIDR is allowed according to the {@see ranges} list.
+     * The method checks whether the IP address with specified CIDR is allowed according to the {@see $ranges} list.
      */
     private function isAllowed(string $ip): bool
     {
@@ -422,16 +323,12 @@ final class Ip extends Rule
     }
 
     /**
-     * Prepares array to fill in {@see ranges}.
+     * Prepares array to fill in {@see $ranges}.
      *
-     *  - Recursively substitutes aliases, described in {@see networks} with their values,
+     *  - Recursively substitutes aliases, described in {@see $networks} with their values,
      *  - Removes duplicates.
      *
-     * @param array $ranges
-     *
-     * @return array
-     *
-     * @see networks
+     * @see $networks
      */
     private function prepareRanges(array $ranges): array
     {
@@ -454,8 +351,6 @@ final class Ip extends Rule
 
     /**
      * Used to get the Regexp pattern for initial IP address parsing.
-     *
-     * @return string
      */
     public function getIpParsePattern(): string
     {
@@ -467,23 +362,20 @@ final class Ip extends Rule
 
     public function getOptions(): array
     {
-        return array_merge(
-            parent::getOptions(),
-            [
-                'message' => $this->formatMessage($this->message),
-                'allowIpv4' => $this->allowIpv4,
-                'ipv4NotAllowedMessage' => $this->formatMessage($this->ipv4NotAllowed),
-                'allowIpv6' => $this->allowIpv6,
-                'ipv6NotAllowedMessage' => $this->formatMessage($this->ipv6NotAllowed),
-                'allowSubnet' => $this->allowSubnet,
-                'hasSubnetMessage' => $this->formatMessage($this->hasSubnet),
-                'requireSubnet' => $this->requireSubnet,
-                'noSubnetMessage' => $this->formatMessage($this->noSubnet),
-                'allowNegation' => $this->allowNegation,
-                'wrongCidrMessage' => $this->formatMessage($this->wrongCidr),
-                'ranges' => $this->ranges,
-                'notInRangeMessage' => $this->formatMessage($this->notInRange),
-            ],
-        );
+        return array_merge(parent::getOptions(), [
+            'allowIpv4' => $this->allowIpv4,
+            'allowIpv6' => $this->allowIpv6,
+            'allowSubnet' => $this->allowSubnet,
+            'requireSubnet' => $this->requireSubnet,
+            'allowNegation' => $this->allowNegation,
+            'message' => $this->formatMessage($this->message),
+            'ipv4NotAllowedMessage' => $this->formatMessage($this->ipv4NotAllowedMessage),
+            'ipv6NotAllowedMessage' => $this->formatMessage($this->ipv6NotAllowedMessage),
+            'wrongCidrMessage' => $this->formatMessage($this->wrongCidrMessage),
+            'noSubnetMessage' => $this->formatMessage($this->noSubnetMessage),
+            'hasSubnetMessage' => $this->formatMessage($this->hasSubnetMessage),
+            'notInRangeMessage' => $this->formatMessage($this->notInRangeMessage),
+            'ranges' => $this->ranges,
+        ]);
     }
 }

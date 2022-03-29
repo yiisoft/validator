@@ -5,25 +5,27 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
 final class Callback extends Rule
 {
-    /**
-     * @var callable
-     */
-    private $callback;
-
-    public static function rule(callable $callback): self
-    {
-        $rule = new self();
-        $rule->callback = $callback;
-        return $rule;
+    public function __construct(
+        /**
+         * @var callable
+         */
+        private $callback,
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null
+    ) {
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ValidationContext $context = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $callback = $this->callback;
         $callbackResult = $callback($value, $context);

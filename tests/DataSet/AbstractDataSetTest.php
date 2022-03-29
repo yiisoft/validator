@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests;
+namespace Yiisoft\Validator\Tests\DataSet;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
@@ -27,7 +27,7 @@ abstract class AbstractDataSetTest extends TestCase
         return [
             [
                 ['bool' => true, 'int' => 41],
-                ['bool' => [Boolean::rule()], 'int' => [Number::rule()]],
+                ['bool' => [new Boolean()], 'int' => [new Number()]],
             ],
         ];
     }
@@ -55,15 +55,16 @@ abstract class AbstractDataSetTest extends TestCase
                     'int' => 41,
                 ],
                 [
-                    'bool' => [Boolean::rule()],
+                    'bool' => [new Boolean()],
                     'int' => [
-                        Number::rule()->integer(),
-                        Number::rule()->integer()->min(44),
+                        new Number(asInteger: true),
+                        new Number(asInteger: true, min: 44),
                         static function ($value): Result {
                             $result = new Result();
                             if ($value !== 42) {
                                 $result->addError('Value should be 42!');
                             }
+
                             return $result;
                         },
                     ],

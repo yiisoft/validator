@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
+use Attribute;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
@@ -12,50 +13,52 @@ use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
- * StringValidator validates that the attribute value is of certain length.
+ * Validates that the value is of certain length.
  *
- * Note, this validator should only be used with string-typed attributes.
+ * Note, this rule should only be used with strings.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class HasLength extends Rule
 {
-    use HasValidationErrorMessage;
-
-    /**
-     * @var int|null maximum length. null means no maximum length limit.
-     *
-     * @see tooLongMessage for the customized message for a too long string.
-     */
-    private ?int $max = null;
-    /**
-     * @var int|null minimum length. null means no minimum length limit.
-     *
-     * @see tooShortMessage for the customized message for a too short string.
-     */
-    private ?int $min = null;
-    /**
-     * @var string user-defined error message used when the value is not a string.
-     */
-    private string $message = 'This value must be a string.';
-    /**
-     * @var string user-defined error message used when the length of the value is smaller than {@see $min}.
-     */
-    private string $tooShortMessage = 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.';
-    /**
-     * @var string user-defined error message used when the length of the value is greater than {@see $max}.
-     */
-    private string $tooLongMessage = 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.';
-    /**
-     * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
-     * If this property is not set, application wide encoding will be used.
-     */
-    protected string $encoding = 'UTF-8';
-
-    public static function rule(): self
-    {
-        return new self();
+    public function __construct(
+        /**
+         * @var int|null minimum length. null means no minimum length limit.
+         *
+         * @see $tooShortMessage for the customized message for a too short string.
+         */
+        private ?int $min = null,
+        /**
+         * @var int|null maximum length. null means no maximum length limit.
+         *
+         * @see $tooLongMessage for the customized message for a too long string.
+         */
+        private ?int $max = null,
+        /**
+         * @var string user-defined error message used when the value is not a string.
+         */
+        private string $message = 'This value must be a string.',
+        /**
+         * @var string user-defined error message used when the length of the value is smaller than {@see $min}.
+         */
+        private string $tooShortMessage = 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+        /**
+         * @var string user-defined error message used when the length of the value is greater than {@see $max}.
+         */
+        private string $tooLongMessage = 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+        /**
+         * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
+         * If this property is not set, application wide encoding will be used.
+         */
+        protected string $encoding = 'UTF-8',
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null
+    ) {
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ValidationContext $context = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 
@@ -76,53 +79,15 @@ final class HasLength extends Rule
         return $result;
     }
 
-    public function min(int $value): self
-    {
-        $new = clone $this;
-        $new->min = $value;
-        return $new;
-    }
-
-    public function max(int $value): self
-    {
-        $new = clone $this;
-        $new->max = $value;
-        return $new;
-    }
-
-    public function encoding(string $encoding): self
-    {
-        $new = clone $this;
-        $new->encoding = $encoding;
-        return $new;
-    }
-
-    public function tooShortMessage(string $message): self
-    {
-        $new = clone $this;
-        $new->tooShortMessage = $message;
-        return $new;
-    }
-
-    public function tooLongMessage(string $message): self
-    {
-        $new = clone $this;
-        $new->tooLongMessage = $message;
-        return $new;
-    }
-
     public function getOptions(): array
     {
-        return array_merge(
-            parent::getOptions(),
-            [
-                'message' => $this->formatMessage($this->message),
-                'min' => $this->min,
-                'tooShortMessage' => $this->formatMessage($this->tooShortMessage, ['min' => $this->min]),
-                'max' => $this->max,
-                'tooLongMessage' => $this->formatMessage($this->tooLongMessage, ['max' => $this->max]),
-                'encoding' => $this->encoding,
-            ],
-        );
+        return array_merge(parent::getOptions(), [
+            'min' => $this->min,
+            'max' => $this->max,
+            'message' => $this->formatMessage($this->message),
+            'tooShortMessage' => $this->formatMessage($this->tooShortMessage, ['min' => $this->min]),
+            'tooLongMessage' => $this->formatMessage($this->tooLongMessage, ['max' => $this->max]),
+            'encoding' => $this->encoding,
+        ]);
     }
 }

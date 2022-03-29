@@ -17,13 +17,6 @@ use function is_object;
  */
 final class RulesDumper
 {
-    private ?FormatterInterface $formatter;
-
-    public function __construct(?FormatterInterface $formatter)
-    {
-        $this->formatter = $formatter;
-    }
-
     /**
      * Return all attribute rules as array.
      *
@@ -51,17 +44,18 @@ final class RulesDumper
      * ]
      * ```
      *
-     * @param iterable $rules
+     * @param iterable $ruleSetMap
      *
      * @return array
      */
-    public function asArray(iterable $rules): array
+    public function asArray(iterable $ruleSetMap): array
     {
-        $rulesOfArray = [];
-        foreach ($rules as $attribute => $rulesSet) {
-            if (is_array($rulesSet)) {
-                $ruleSet = new RuleSet($rulesSet);
+        $arrayMap = [];
+        foreach ($ruleSetMap as $attribute => $ruleSet) {
+            if (is_array($ruleSet)) {
+                $ruleSet = new RuleSet($ruleSet);
             }
+
             if (!$ruleSet instanceof RuleSet) {
                 throw new InvalidArgumentException(sprintf(
                     'Value should be an instance of %s or an array of rules, %s given.',
@@ -69,15 +63,10 @@ final class RulesDumper
                     is_object($ruleSet) ? get_class($ruleSet) : gettype($ruleSet)
                 ));
             }
-            $rulesOfArray[$attribute] = $ruleSet->withFormatter($this->formatter)->asArray();
-        }
-        return $rulesOfArray;
-    }
 
-    public function withFormatter(?FormatterInterface $formatter): self
-    {
-        $new = clone $this;
-        $new->formatter = $formatter;
-        return $new;
+            $arrayMap[$attribute] = $ruleSet->asArray();
+        }
+
+        return $arrayMap;
     }
 }

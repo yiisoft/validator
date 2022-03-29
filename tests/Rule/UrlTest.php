@@ -32,59 +32,56 @@ class UrlTest extends TestCase
 
     public function testValidate(): void
     {
-        $val = Url::rule();
-        $this->assertFalse($val->validate('google.de')->isValid());
-        $this->assertTrue($val->validate('http://google.de')->isValid());
-        $this->assertTrue($val->validate('https://google.de')->isValid());
-        $this->assertFalse($val->validate('htp://yiiframework.com')->isValid());
-        $this->assertTrue($val->validate('https://www.google.de/search?q=yii+framework&ie=utf-8&oe=utf-8'
+        $rule = new Url();
+        $this->assertFalse($rule->validate('google.de')->isValid());
+        $this->assertTrue($rule->validate('http://google.de')->isValid());
+        $this->assertTrue($rule->validate('https://google.de')->isValid());
+        $this->assertFalse($rule->validate('htp://yiiframework.com')->isValid());
+        $this->assertTrue($rule->validate('https://www.google.de/search?q=yii+framework&ie=utf-8&oe=utf-8'
                                         . '&rls=org.mozilla:de:official&client=firefox-a&gws_rd=cr')->isValid());
-        $this->assertFalse($val->validate('ftp://ftp.ruhr-uni-bochum.de/')->isValid());
-        $this->assertFalse($val->validate('http://invalid,domain')->isValid());
-        $this->assertFalse($val->validate('http://example.com,')->isValid());
-        $this->assertFalse($val->validate('http://example.com*12')->isValid());
-        $this->assertTrue($val->validate('http://example.com/*12')->isValid());
-        $this->assertTrue($val->validate('http://example.com/?test')->isValid());
-        $this->assertTrue($val->validate('http://example.com/#test')->isValid());
-        $this->assertTrue($val->validate('http://example.com:80/#test')->isValid());
-        $this->assertTrue($val->validate('http://example.com:65535/#test')->isValid());
-        $this->assertTrue($val->validate('http://example.com:81/?good')->isValid());
-        $this->assertTrue($val->validate('http://example.com?test')->isValid());
-        $this->assertTrue($val->validate('http://example.com#test')->isValid());
-        $this->assertTrue($val->validate('http://example.com:81#test')->isValid());
-        $this->assertTrue($val->validate('http://example.com:81?good')->isValid());
-        $this->assertFalse($val->validate('http://example.com,?test')->isValid());
-        $this->assertFalse($val->validate('http://example.com:?test')->isValid());
-        $this->assertFalse($val->validate('http://example.com:test')->isValid());
-        $this->assertFalse($val->validate('http://example.com:123456/test')->isValid());
-
-        $this->assertFalse($val->validate('http://äüö?=!"§$%&/()=}][{³²€.edu')->isValid());
+        $this->assertFalse($rule->validate('ftp://ftp.ruhr-uni-bochum.de/')->isValid());
+        $this->assertFalse($rule->validate('http://invalid,domain')->isValid());
+        $this->assertFalse($rule->validate('http://example.com,')->isValid());
+        $this->assertFalse($rule->validate('http://example.com*12')->isValid());
+        $this->assertTrue($rule->validate('http://example.com/*12')->isValid());
+        $this->assertTrue($rule->validate('http://example.com/?test')->isValid());
+        $this->assertTrue($rule->validate('http://example.com/#test')->isValid());
+        $this->assertTrue($rule->validate('http://example.com:80/#test')->isValid());
+        $this->assertTrue($rule->validate('http://example.com:65535/#test')->isValid());
+        $this->assertTrue($rule->validate('http://example.com:81/?good')->isValid());
+        $this->assertTrue($rule->validate('http://example.com?test')->isValid());
+        $this->assertTrue($rule->validate('http://example.com#test')->isValid());
+        $this->assertTrue($rule->validate('http://example.com:81#test')->isValid());
+        $this->assertTrue($rule->validate('http://example.com:81?good')->isValid());
+        $this->assertFalse($rule->validate('http://example.com,?test')->isValid());
+        $this->assertFalse($rule->validate('http://example.com:?test')->isValid());
+        $this->assertFalse($rule->validate('http://example.com:test')->isValid());
+        $this->assertFalse($rule->validate('http://example.com:123456/test')->isValid());
+        $this->assertFalse($rule->validate('http://äüö?=!"§$%&/()=}][{³²€.edu')->isValid());
     }
 
     public function testValidateWithoutScheme(): void
     {
-        $val = Url::rule()
-            ->pattern('/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)/');
-
-        $this->assertTrue($val->validate('yiiframework.com')->isValid());
+        $rule = new Url(pattern: '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)/');
+        $this->assertTrue($rule->validate('yiiframework.com')->isValid());
     }
 
     public function testValidateWithCustomScheme(): void
     {
-        $val = Url::rule()
-            ->schemes(['http', 'https', 'ftp', 'ftps']);
+        $rule = new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']);
 
-        $this->assertTrue($val->validate('ftp://ftp.ruhr-uni-bochum.de/')->isValid());
-        $this->assertTrue($val->validate('http://google.de')->isValid());
-        $this->assertTrue($val->validate('https://google.de')->isValid());
-        $this->assertFalse($val->validate('htp://yiiframework.com')->isValid());
-        // relative urls not supported
-        $this->assertFalse($val->validate('//yiiframework.com')->isValid());
+        $this->assertTrue($rule->validate('ftp://ftp.ruhr-uni-bochum.de/')->isValid());
+        $this->assertTrue($rule->validate('http://google.de')->isValid());
+        $this->assertTrue($rule->validate('https://google.de')->isValid());
+        $this->assertFalse($rule->validate('htp://yiiframework.com')->isValid());
+        // relative urls are not supported
+        $this->assertFalse($rule->validate('//yiiframework.com')->isValid());
     }
 
     public function testSchemaShouldBeCaseInsensitive(): void
     {
-        $val = Url::rule()->schemes(['http', 'FTP']);
+        $val = new Url(validSchemes: ['http', 'FTP']);
+
         $this->assertTrue($val->validate('HtTp://www.yiiframework.com/')->isValid());
         $this->assertTrue($val->validate('fTp://www.yiiframework.com/')->isValid());
     }
@@ -93,24 +90,22 @@ class UrlTest extends TestCase
     {
         if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('intl package required');
-            return;
         }
 
-        $val = Url::rule()->enableIDN();
-        $this->assertTrue($val->validate('http://äüößìà.de')->isValid());
+        $rule = new Url(enableIDN: true);
+        $this->assertTrue($rule->validate('http://äüößìà.de')->isValid());
         // converted via http://mct.verisign-grs.com/convertServlet
-        $this->assertTrue($val->validate('http://xn--zcack7ayc9a.de')->isValid());
+        $this->assertTrue($rule->validate('http://xn--zcack7ayc9a.de')->isValid());
     }
 
     public function testValidateWithIdnType(): void
     {
         if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('intl package required');
-            return;
         }
 
-        $val = Url::rule()->enableIDN();
-        $this->assertFalse($val->validate('')->isValid());
+        $rule = new Url(enableIDN: true);
+        $this->assertFalse($rule->validate('')->isValid());
     }
 
     public function testEnableIdnException(): void
@@ -118,74 +113,75 @@ class UrlTest extends TestCase
         static::$idnFunctionExists = false;
 
         $this->expectException(RuntimeException::class);
-        Url::rule()->enableIDN();
+        new Url(enableIDN: true);
     }
 
     public function testValidateLength(): void
     {
         $url = 'http://' . str_pad('base', 2000, 'url') . '.de';
-        $val = Url::rule();
-        $this->assertFalse($val->validate($url)->isValid());
+        $rule = new Url();
+
+        $this->assertFalse($rule->validate($url)->isValid());
     }
 
     public function testValidateWithIdnWithoutScheme(): void
     {
         if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('intl package required');
-            return;
         }
 
-        $validator = Url::rule()->pattern('/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i')->enableIDN();
-        $this->assertTrue($validator->validate('домен.рф')->isValid());
+        $rule = new Url(pattern: '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i', enableIDN: true);
+        $this->assertTrue($rule->validate('домен.рф')->isValid());
     }
 
     public function testName(): void
     {
-        $this->assertEquals('url', Url::rule()->getName());
+        $this->assertEquals('url', (new Url())->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             'default' => [
-                Url::rule(),
+                new Url(),
                 [
-                    'message' => 'This value is not a valid URL.',
-                    'enableIDN' => false,
-                    'validSchemes' => ['http', 'https'],
                     'pattern' => '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
+                    'validSchemes' => ['http', 'https'],
+                    'enableIDN' => false,
+                    'message' => 'This value is not a valid URL.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             'IDN enabled' => [
-                Url::rule()->enableIDN(),
+                new Url(enableIDN: true),
                 [
-                    'message' => 'This value is not a valid URL.',
-                    'enableIDN' => true,
-                    'validSchemes' => ['http', 'https'],
                     'pattern' => '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
+                    'validSchemes' => ['http', 'https'],
+                    'enableIDN' => true,
+                    'message' => 'This value is not a valid URL.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             'HTTP scheme only' => [
-                Url::rule()->schemes(['http']),
+                new Url(validSchemes: ['http']),
                 [
-                    'message' => 'This value is not a valid URL.',
-                    'enableIDN' => false,
-                    'validSchemes' => ['http'],
                     'pattern' => '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
+                    'validSchemes' => ['http'],
+                    'enableIDN' => false,
+                    'message' => 'This value is not a valid URL.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
-            'custom pattern' => [Url::rule()->pattern('/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/')->enableIDN(),
+            'custom pattern' => [
+                new Url(pattern: '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/', enableIDN: true),
                 [
-                    'message' => 'This value is not a valid URL.',
-                    'enableIDN' => true,
-                    'validSchemes' => ['http', 'https'],
                     'pattern' => '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/',
+                    'validSchemes' => ['http', 'https'],
+                    'enableIDN' => true,
+                    'message' => 'This value is not a valid URL.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],

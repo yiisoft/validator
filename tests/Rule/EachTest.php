@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\RuleSet;
 
 /**
  * @group validators
@@ -19,9 +18,7 @@ class EachTest extends TestCase
      */
     public function validateValues(): void
     {
-        $values = [10, 20, 30];
-        $ruleSet = new RuleSet([Number::rule()->max(13)]);
-        $result = Each::rule($ruleSet)->validate($values);
+        $result = (new Each([new Number(max: 13)]))->validate([10, 20, 30]);
 
         $this->assertFalse($result->isValid());
         $this->assertEquals([
@@ -32,39 +29,36 @@ class EachTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('each', Each::rule(new RuleSet([Number::rule()->max(13)]))->getName());
+        $rule = new Each([new Number(max: 13)]);
+        $this->assertEquals('each', $rule->getName());
     }
 
     public function testOptions(): void
     {
-        $ruleSet = new RuleSet([
-            Number::rule()->max(13),
-            Number::rule()->max(14),
-        ]);
-
+        $rule = new Each([new Number(max: 13), new Number(max: 14)]);
         $this->assertEquals([
             [
                 'number',
-                'notANumberMessage' => 'Value must be a number.',
                 'asInteger' => false,
                 'min' => null,
-                'tooSmallMessage' => 'Value must be no less than .',
                 'max' => 13,
+                'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than .',
                 'tooBigMessage' => 'Value must be no greater than 13.',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
             ],
             [
                 'number',
-                'notANumberMessage' => 'Value must be a number.',
                 'asInteger' => false,
                 'min' => null,
-                'tooSmallMessage' => 'Value must be no less than .',
                 'max' => 14,
+                'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than .',
                 'tooBigMessage' => 'Value must be no greater than 14.',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
             ],
-        ], Each::rule($ruleSet)->getOptions());
+        ], $rule->getOptions());
     }
 }

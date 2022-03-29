@@ -10,7 +10,6 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\RuleSet;
 
 class ResultTest extends TestCase
 {
@@ -103,7 +102,7 @@ class ResultTest extends TestCase
 
     public function testGetErrorMessagesIndexedByAttribute_IncorrectType(): void
     {
-        $rule = Each::rule(new RuleSet([Number::rule()->min(1)->max(3)]));
+        $rule = new Each([new Number(min: 1, max: 3)]);
         $result = $rule->validate([1, 4, 3]);
 
         $this->expectException(InvalidArgumentException::class);

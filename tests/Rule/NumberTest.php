@@ -17,7 +17,7 @@ class NumberTest extends TestCase
 {
     public function testValidateSimple(): void
     {
-        $rule = Number::rule();
+        $rule = new Number();
         $this->assertTrue($rule->validate(20)->isValid());
         $this->assertTrue($rule->validate(0)->isValid());
         $this->assertTrue($rule->validate(-20)->isValid());
@@ -29,8 +29,7 @@ class NumberTest extends TestCase
 
     public function testValidateSimpleInteger(): void
     {
-        $rule = Number::rule()
-            ->integer();
+        $rule = new Number(asInteger: true);
 
         $this->assertTrue($rule->validate(20)->isValid());
         $this->assertTrue($rule->validate(0)->isValid());
@@ -44,7 +43,7 @@ class NumberTest extends TestCase
 
     public function testValidateBoolean(): void
     {
-        $rule = Number::rule();
+        $rule = new Number();
 
         $this->assertFalse($rule->validate(false)->isValid());
         $this->assertFalse($rule->validate(true)->isValid());
@@ -52,7 +51,7 @@ class NumberTest extends TestCase
 
     public function testValidateAdvanced(): void
     {
-        $rule = Number::rule();
+        $rule = new Number();
         $this->assertTrue($rule->validate('-1.23')->isValid()); // signed float
         $this->assertTrue($rule->validate('-4.423e-12')->isValid()); // signed float + exponent
         $this->assertTrue($rule->validate('12E3')->isValid()); // integer + exponent
@@ -64,7 +63,7 @@ class NumberTest extends TestCase
 
     public function testValidateAdvancedInteger(): void
     {
-        $rule = Number::rule()->integer();
+        $rule = new Number(asInteger: true);
         $this->assertFalse($rule->validate('-1.23')->isValid());
         $this->assertFalse($rule->validate('-4.423e-12')->isValid());
         $this->assertFalse($rule->validate('12E3')->isValid());
@@ -76,14 +75,13 @@ class NumberTest extends TestCase
 
     public function testValidateWhereDecimalPointIsComma(): void
     {
-        $rule = Number::rule();
+        $rule = new Number();
         $this->assertTrue($rule->validate(.5)->isValid());
     }
 
     public function testValidateMin(): void
     {
-        $rule = Number::rule()
-            ->min(1);
+        $rule = new Number(min: 1);
 
         $this->assertTrue($rule->validate(1)->isValid());
 
@@ -97,9 +95,7 @@ class NumberTest extends TestCase
 
     public function testValidateMinInteger(): void
     {
-        $rule = Number::rule()
-            ->min(1)
-            ->integer();
+        $rule = new Number(asInteger: true, min: 1);
 
         $this->assertTrue($rule->validate(1)->isValid(), '1 is a valid integer');
         $this->assertFalse($rule->validate(-1)->isValid(), '-1 is not a valid integer');
@@ -108,8 +104,7 @@ class NumberTest extends TestCase
 
     public function testValidateMax(): void
     {
-        $rule = Number::rule()
-            ->max(1.25);
+        $rule = new Number(max: 1.25);
 
         $this->assertTrue($rule->validate(1)->isValid());
         $this->assertFalse($rule->validate(1.5)->isValid());
@@ -119,9 +114,7 @@ class NumberTest extends TestCase
 
     public function testValidateMaxInteger(): void
     {
-        $rule = Number::rule()
-            ->max(1.25)
-            ->integer();
+        $rule = new Number(asInteger: true, max: 1.25);
 
         $this->assertTrue($rule->validate(1)->isValid());
         $this->assertFalse($rule->validate(1.5)->isValid());
@@ -131,9 +124,7 @@ class NumberTest extends TestCase
 
     public function testValidateRange(): void
     {
-        $rule = Number::rule()
-            ->min(-10)
-            ->max(20);
+        $rule = new Number(min: -10, max: 20);
 
         $this->assertTrue($rule->validate(0)->isValid());
         $this->assertTrue($rule->validate(-10)->isValid());
@@ -143,10 +134,7 @@ class NumberTest extends TestCase
 
     public function testValidateRangeInteger(): void
     {
-        $rule = Number::rule()
-            ->min(-10)
-            ->max(20)
-            ->integer();
+        $rule = new Number(asInteger: true, min: -10, max: 20);
 
         $this->assertTrue($rule->validate(0)->isValid());
         $this->assertFalse($rule->validate(-11)->isValid());
@@ -156,22 +144,21 @@ class NumberTest extends TestCase
 
     public function testScientificFormat(): void
     {
-        $rule = Number::rule();
+        $rule = new Number();
         $result = $rule->validate('5.5e1');
         $this->assertTrue($result->isValid());
     }
 
     public function testExpressionFormat(): void
     {
-        $rule = Number::rule();
+        $rule = new Number();
         $result = $rule->validate('43^32');
         $this->assertFalse($result->isValid());
     }
 
     public function testMinEdge(): void
     {
-        $rule = Number::rule()
-            ->min(10);
+        $rule = new Number(min: 10);
 
         $result = $rule->validate(10);
         $this->assertTrue($result->isValid());
@@ -179,8 +166,7 @@ class NumberTest extends TestCase
 
     public function testLessThanMin(): void
     {
-        $rule = Number::rule()
-            ->min(10);
+        $rule = new Number(min: 10);
 
         $result = $rule->validate(5);
         $this->assertFalse($result->isValid());
@@ -188,8 +174,7 @@ class NumberTest extends TestCase
 
     public function testMaxEdge(): void
     {
-        $rule = Number::rule()
-            ->max(10);
+        $rule = new Number(max: 10);
 
         $result = $rule->validate(10);
         $this->assertTrue($result->isValid());
@@ -197,9 +182,7 @@ class NumberTest extends TestCase
 
     public function testMaxEdgeInteger(): void
     {
-        $rule = Number::rule()
-            ->max(10)
-            ->integer();
+        $rule = new Number(asInteger: true, min: 10);
 
         $result = $rule->validate(10);
         $this->assertTrue($result->isValid());
@@ -207,8 +190,7 @@ class NumberTest extends TestCase
 
     public function testMoreThanMax(): void
     {
-        $rule = Number::rule()
-            ->max(10);
+        $rule = new Number(max: 10);
 
         $result = $rule->validate(15);
         $this->assertFalse($result->isValid());
@@ -216,9 +198,7 @@ class NumberTest extends TestCase
 
     public function testFloatWithInteger(): void
     {
-        $rule = Number::rule()
-            ->max(10)
-            ->integer();
+        $rule = new Number(asInteger: true, max: 10);
 
         $result = $rule->validate(3.43);
         $this->assertFalse($result->isValid());
@@ -226,8 +206,7 @@ class NumberTest extends TestCase
 
     public function testArray(): void
     {
-        $rule = Number::rule()
-            ->min(1);
+        $rule = new Number(min: 1);
 
         $result = $rule->validate([1, 2, 3]);
         $this->assertFalse($result->isValid());
@@ -238,8 +217,7 @@ class NumberTest extends TestCase
      */
     public function testStdClass(): void
     {
-        $rule = Number::rule()
-            ->min(1);
+        $rule = new Number(min: 1);
 
         $result = $rule->validate(new \stdClass());
         $this->assertFalse($result->isValid());
@@ -268,9 +246,7 @@ class NumberTest extends TestCase
 
     public function testEnsureCustomMessageIsSetOnvalidate(): void
     {
-        $rule = Number::rule()
-            ->min(5)
-            ->tooSmallMessage('Value is too small.');
+        $rule = new Number(min: 5, tooSmallMessage: 'Value is too small.');
         $result = $rule->validate(0);
 
         $this->assertFalse($result->isValid());
@@ -279,14 +255,14 @@ class NumberTest extends TestCase
 
     public function testValidateObject(): void
     {
-        $rule = Number::rule();
+        $rule = new Number();
         $value = new \stdClass();
         $this->assertFalse($rule->validate($value)->isValid());
     }
 
     public function testValidateResource(): void
     {
-        $rule = Number::rule();
+        $rule = new Number();
         $fp = fopen('php://stdin', 'r');
         $this->assertFalse($rule->validate($fp)->isValid());
 
@@ -302,72 +278,72 @@ class NumberTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('number', Number::rule()->getName());
+        $this->assertEquals('number', (new Number())->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                Number::rule(),
+                new Number(),
                 [
-                    'notANumberMessage' => 'Value must be a number.',
                     'asInteger' => false,
                     'min' => null,
-                    'tooSmallMessage' => 'Value must be no less than .',
                     'max' => null,
+                    'notANumberMessage' => 'Value must be a number.',
+                    'tooSmallMessage' => 'Value must be no less than .',
                     'tooBigMessage' => 'Value must be no greater than .',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                Number::rule()->min(1),
+                new Number(min: 1),
                 [
-                    'notANumberMessage' => 'Value must be a number.',
                     'asInteger' => false,
                     'min' => 1,
-                    'tooSmallMessage' => 'Value must be no less than 1.',
                     'max' => null,
+                    'notANumberMessage' => 'Value must be a number.',
+                    'tooSmallMessage' => 'Value must be no less than 1.',
                     'tooBigMessage' => 'Value must be no greater than .',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                Number::rule()->max(1),
+                new Number(max: 1),
                 [
-                    'notANumberMessage' => 'Value must be a number.',
                     'asInteger' => false,
                     'min' => null,
-                    'tooSmallMessage' => 'Value must be no less than .',
                     'max' => 1,
+                    'notANumberMessage' => 'Value must be a number.',
+                    'tooSmallMessage' => 'Value must be no less than .',
                     'tooBigMessage' => 'Value must be no greater than 1.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                Number::rule()->min(2)->max(10),
+                new Number(min: 2, max: 10),
                 [
-                    'notANumberMessage' => 'Value must be a number.',
                     'asInteger' => false,
                     'min' => 2,
-                    'tooSmallMessage' => 'Value must be no less than 2.',
                     'max' => 10,
+                    'notANumberMessage' => 'Value must be a number.',
+                    'tooSmallMessage' => 'Value must be no less than 2.',
                     'tooBigMessage' => 'Value must be no greater than 10.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                Number::rule()->integer(),
+                new Number(asInteger: true),
                 [
-                    'notANumberMessage' => 'Value must be an integer.',
                     'asInteger' => true,
                     'min' => null,
-                    'tooSmallMessage' => 'Value must be no less than .',
                     'max' => null,
+                    'notANumberMessage' => 'Value must be an integer.',
+                    'tooSmallMessage' => 'Value must be no less than .',
                     'tooBigMessage' => 'Value must be no greater than .',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,

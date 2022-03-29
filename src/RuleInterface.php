@@ -17,5 +17,5 @@ interface RuleInterface
      *
      * @return Result
      */
-    public function validate($value, ValidationContext $context = null): Result;
+    public function validate($value, ?ValidationContext $context = null): Result;
 }

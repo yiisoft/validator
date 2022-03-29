@@ -17,7 +17,7 @@
         "source": "https://github.com/yiisoft/validator"
     },
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.0",
         "ext-json": "*",
         "ext-mbstring": "*",
         "yiisoft/arrays": "^2.0",
@@ -30,6 +30,9 @@
         "roave/infection-static-analysis-plugin": "^1.16",
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^4.18"
+    },
+    "suggest": {
+        "ext-intl": "Allows using IDN validation for emails"
     },
     "autoload": {
         "psr-4": {

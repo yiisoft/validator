@@ -4,36 +4,48 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
+use Attribute;
+use InvalidArgumentException;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Each validator validates an array by checking each of its elements against a set of rules
+ * Validates an array by checking each of its elements against a set of rules.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class Each extends Rule
 {
-    use HasValidationErrorMessage;
+    private ?RuleSet $ruleSet = null;
 
-    private RuleSet $ruleSet;
+    public function __construct(
+        iterable $rules = [],
+        private string $incorrectInputMessage = 'Value should be array or iterable.',
+        private string $message = '{error} {value} given.',
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null,
+    ) {
+        if ($rules !== []) {
+            $this->ruleSet = new RuleSet($rules);
+        }
 
-    private string $incorrectInputMessage = 'Value should be array or iterable.';
-    private string $message = '{error} {value} given.';
-
-    public static function rule(RuleSet $ruleSet): self
-    {
-        $rule = new self();
-        $rule->ruleSet = $ruleSet;
-        return $rule;
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ValidationContext $context = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
+        if ($this->ruleSet === null) {
+            throw new InvalidArgumentException('Rules are required.');
+        }
+
         $result = new Result();
         if (!is_iterable($value)) {
             $result->addError($this->incorrectInputMessage);
+
             return $result;
         }
 
@@ -62,13 +74,6 @@ final class Each extends Rule
         }
 
         return $result;
-    }
-
-    public function incorrectInputMessage(string $message): self
-    {
-        $new = clone $this;
-        $new->incorrectInputMessage = $message;
-        return $new;
     }
 
     public function getOptions(): array

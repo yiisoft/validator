@@ -29,7 +29,7 @@ The package provides data validation capabilities.
 
 ## Requirements
 
-- PHP 7.4 or higher.
+- PHP 8.1 or higher.
 
 ## Installation
 
@@ -52,13 +52,14 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
 
 $ruleSet = new RuleSet([
-    Required::rule(),
-    Number::rule()->min(10),
+    new Required(),
+    new Number(min: 10),
     static function ($value): Result {
         $result = new Result();
         if ($value !== 42) {
             $result->addError('Value should be 42.');
         }
+
         return $result;
     }
 ]);
@@ -96,14 +97,11 @@ final class MoneyTransfer implements DataSetInterface
     }
 }
 
-// Usually obtained from container
-$validator = new Validator();
-
+$validator = new Validator(); // Usually obtained from container
 $moneyTransfer = new MoneyTransfer(142);
-
 $rules = [    
     'amount' => [
-        Number::rule()->integer()->max(100),
+        new Number(asInteger: true, max: 100),
         static function ($value): Result {
             $result = new Result();
             if ($value === 13) {
@@ -113,9 +111,8 @@ $rules = [
         }
     ],
 ];
-
-$results = $validator->validate($moneyTransfer, $rules);
-foreach ($results as $attribute => $result) {
+$resultSet = $validator->validate($moneyTransfer, $rules);
+foreach ($resultSet as $attribute => $result) {
     if ($result->isValid() === false) {
         foreach ($result->getErrors() as $error) {
             // ...
@@ -127,19 +124,23 @@ foreach ($results as $attribute => $result) {
 #### Skipping validation on error
 
 By default, if an error occurred during validation of an attribute, further rules for this attribute are processed.
-To change this behavior use `skipOnError(true)` when configuring rules:  
+To change this behavior use `skipOnError: true` when configuring rules:  
 
 ```php
-Number::rule()->integer()->max(100)->skipOnError(true)
+use Yiisoft\Validator\Rule\Number;
+
+new Number(asInteger: true, max: 100, skipOnError: true)
 ```
 
 #### Skipping empty values
 
 By default, empty values are validated. That is undesirable if you need to allow not specifying a field.
-To change this behavior use `skipOnEmpty(true)`:
+To change this behavior use `skipOnEmpty: true`:
 
 ```php
-Number::rule()->integer()->max(100)->skipOnEmpty(true)
+use Yiisoft\Validator\Rule\Number;
+
+new Number(asInteger: true, max: 100, skipOnEmpty: true)
 ```
 
 #### Nested and related data
@@ -154,11 +155,11 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
 $data = ['author' => ['name' => 'Alexey', 'age' => '31']];
-$rule = Nested::rule([
-    'title' => [Required::rule()],
-    'author' => Nested::rule([
-        'name' => [HasLength::rule()->min(3)],
-        'age' => [Number::rule()->min(18)],
+$rule = new Nested([
+    'title' => [new Required()],
+    'author' => new Nested([
+        'name' => [new HasLength(min: 3)],
+        'age' => [new Number(min: 18)],
     )];
 ]);
 $errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
@@ -170,6 +171,7 @@ combined with `Each` rule to validate such similar structures:
 ```php
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\RuleSet;
 
 $data = [
     'charts' => [
@@ -193,22 +195,22 @@ $data = [
         ],
     ],
 ];
-$rule = Nested::rule([
-    'charts' => Each::rule(new Rules([
-        Nested::rule([
-            'points' => Each::rule(new Rules([
-                Nested::rule([
-                    'coordinates' => Nested::rule([
-                        'x' => [Number::rule()->min(-10)->max(10)],
-                        'y' => [Number::rule()->min(-10)->max(10)],
+$rule = new Nested([
+    'charts' => new Each([
+        new Nested([
+            'points' => new Each([
+                new Nested([
+                    'coordinates' => new Nested([
+                        'x' => [new Number(min: -10, max: 10)],
+                        'y' => [new Number(min: -10, max: 10)],
                     ]),
-                    'rgb' => Each::rule(new Rules([
-                        Number::rule()->min(0)->max(255),
-                    ])),
+                    'rgb' => new Each([
+                        new Number(min: 0, max: 255),
+                    ]),
                 ]),
-            ])),
+            ]),
         ]),
-    ])),
+    ]),
 ]);
 $errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
 ```
@@ -224,14 +226,218 @@ $errors = [
 ];
 ```
 
+#### Using attributes
+
+You can also use attributes as an alternative. Declare the DTOs, relations and rules:
+
+```php
+use Yiisoft\Validator\Attribute\HasMany;
+use Yiisoft\Validator\Attribute\HasOne;
+use Yiisoft\Validator\Rule\Number;
+
+final class ChartsData
+{
+    #[HasMany(Chart::class)]
+    private array $charts;
+}
+
+final class Chart
+{
+    #[HasMany(Point::class)]
+    private array $points;
+}
+
+final class Point
+{
+    #[HasOne(Coordinates::class)]
+    private $coordinates;
+    #[Number(min: 0, max: 255)]
+    private array $rgb; // A flat array, the "Number" rule will be applied to each array element.
+}
+
+final class Coordinates
+{
+    #[Number(min: -10, max: 10)]
+    private int $x;
+    #[Number(min: -10, max: 10)]
+    private int $y;
+}
+```
+
+Here are some technical details:
+
+- `HasOne` uses `Nested` rule.
+- `HasMany` uses combination of `Each` and `Nested` rules.
+- In case of a flat array `Point::$rgb`, a property type `array` needs to be declared. It uses `Each` rule internally.
+
+Pass the base DTO to `AttributeDataSet` and use it for validation.
+
+```php
+use Yiisoft\Validator\DataSet\AttributeDataSet;
+use Yiisoft\Validator\Validator;
+
+$data = [
+    // ...
+];
+$dataSet = new AttributeDataSet(new ChartsData(), $data);
+$validator = new Validator();
+$errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
+```
+
+This approach has some limitations.
+
+`Each` and `Nested` rules are not supported directly. Use `HasOne` and `HasMany` attributes for declaring relations (or 
+property type `array` for flat rules) instead. Use `Each` and `Nested` rules in addition for custom configuration if 
+needed.
+
+```php
+use Yiisoft\Validator\Attribute\HasMany;
+use Yiisoft\Validator\Attribute\HasOne;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Number;
+
+final class ChartsData
+{
+    #[Each(incorrectInputMessage: 'Custom message 1.', message: 'Custom message 2.')]
+    #[Nested(errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 3.')]
+    #[HasMany(Chart::class)]
+    private array $charts;
+}
+
+final class Point
+{
+    #[Nested(errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 4.')]
+    #[HasOne(Coordinates::class)]
+    private $coordinates;
+    #[Each(incorrectInputMessage: 'Custom message 5.', message: 'Custom message 6.')]
+    #[Number(min: 0, max: 255)]
+    private array $rgb;
+}
+```
+
+`Callback` rule is not supported, also you can't use `callable` type with attributes. Use custom rule instead.
+
+```php
+use Attribute;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\ValidationContext;
+
+#[Attribute(Attribute::TARGET_PROPERTY)]
+final class ValidateXRule extends Rule
+{    
+    protected function validateValue($value, ?ValidationContext $context = null): Result
+    {
+        $result = new Result();
+        $result->addError('Custom error.');
+
+        return $result;
+    }
+}
+
+final class Coordinates
+{
+    #[Number(min: -10, max: 10)]
+    #[ValidateXRule()]
+    private int $x;
+    #[Number(min: -10, max: 10)]
+    private int $y;
+}
+```
+
+`GroupRule` is not supported, but it's unnecessary since multiple attributes can be used for one property (except they 
+must be of different type).
+
+```php
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Regex;
+
+final class UserData
+{
+    #[HasLength(min: 2, max: 20)]
+    #[Regex('~[a-z_\-]~i')]
+    private string $name;    
+}
+```
+
+You can't use a function / method call result with attributes. Like with `Callback` rule and callable, this problem can 
+be overcome with custom rule.
+
+```php
+use Attribute;
+use Yiisoft\Validator\FormatterInterface;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\ValidationContext;
+
+final class CustomFormatter implements FormatterInterface
+{
+    public function format(string $message, array $parameters = []): string
+    {
+        // More complex logic
+        // ...
+        return $message;
+    }
+}
+
+#[Attribute(Attribute::TARGET_PROPERTY)]
+final class ValidateXRule extends Rule
+{
+    public function __construct(
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null
+    ) {
+        parent::__construct($formatter, $skipOnEmpty, $skipOnError, $when);
+
+        $this->formatter = $this->createFormatter();
+        $this->skipOnEmpty = $skipOnEmpty;
+        $this->skipOnError = $skipOnError;
+        $this->when = $when;
+    }
+
+    private function createFormatter(): FormatterInterface
+    {
+        // More complex logic
+        // ...
+        return CustomFormatter();
+    }
+
+    public function validateValue($value, ?ValidationContext $context = null): Result
+    {
+        // More complex logic
+        // ...
+    }
+}
+
+final class Coordinates
+{
+    #[Number(min: -10, max: 10)]
+    #[ValidateXRule()]
+    private int $x;
+    #[Number(min: -10, max: 10)]
+    private int $y;
+}
+```
+
 ### Conditional validation
 
 In some cases there is a need to apply rule conditionally. It could be performed by using `when()`:
 
 ```php
-Number::rule()->integer()->min(100)->when(static function ($value, DataSetInterface $dataSet) {
-    return $dataSet->getAttributeValue('country') === Country::USA;
-});
+use Yiisoft\Validator\Rule\Number;
+
+new Number(
+    when: static function ($value, DataSetInterface $dataSet) {
+        return $dataSet->getAttributeValue('country') === Country::USA;
+    },
+    asInteger: true, 
+    min: 100
+);
 ```
 
 If callable returns `true` rule is applied, when the value returned is `false`, rule is skipped.
@@ -249,19 +455,21 @@ use Yiisoft\Validator\Rule;
 
 final class Pi extends Rule
 {
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         $equal = \abs($value - M_PI) < PHP_FLOAT_EPSILON;
+
         if (!$equal) {
             $result->addError($this->formatMessage('Value is not PI.'));
         }
+
         return $result;
     }
 }
 ```
 
-Note that `validateValue()` second argument is an instance of `DataSetInterface` so you can use it if you need
+Note that second argument in `validateValue()` is an instance of `ValidationContext` so you can use it if you need
 whole data set context. For example, implementation might be the following if you need to validate "company"
 property only if "hasCompany" is true:
 
@@ -271,18 +479,20 @@ namespace MyVendor\Rules;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\ValidationContext;
 
 final class CompanyName extends Rule
 {
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
+        $dataSet = $context->getDataSet();
         $hasCompany = $dataSet !== null && $dataSet->getAttributeValue('hasCompany') === true;
 
         if ($hasCompany && $this->isCompanyNameValid($value) === false) {
-            
             $result->addError($this->formatMessage('Company name is not valid.'));
         }
+
         return $result;
     }
     
@@ -296,21 +506,22 @@ final class CompanyName extends Rule
 In case you need extra dependencies, these could be passed to the rule when it is created:
 
 ```php
-$rule = NoLessThanExistingBidRule::rule($connection);
+$rule = new NoLessThanExistingBidRule($connection);
 ```
 
 That would work with the following implementation:
 
 ```php
 final class NoLessThanExistingBidRule extends Rule
-{
-    private ConnectionInterface $connection;
-
-    public static function rule(ConnectionInterface $connection): self
-    {
-        $rule = new self();
-        $rule->connection = $connection;
-        return $rule;
+{   
+    public function __construct(    
+        private ConnectionInterface $connection,        
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null
+    ) {
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
     
     protected function validateValue($value, DataSetInterface $dataSet = null): Result
@@ -334,16 +545,16 @@ To reuse multiple validation rules it is advised to group rules like the followi
 ```php
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\MatchRegularExpression;
+use Yiisoft\Validator\Rule\Regex;
 use \Yiisoft\Validator\Rule\GroupRule;
 
 final class UsernameRule extends GroupRule
 {
-    public function getRules(): RuleSet
+    public function getRuleSet(): RuleSet
     {
         return new RuleSet([
-            HasLength::rule()->min(2)->max(20),
-            MatchRegularExpression::rule('~[a-z_\-]~i')
+            new HasLength(min: 2, max: 20),
+            new Regex('~[a-z_\-]~i'),
         ]);
     }
 }
@@ -356,35 +567,17 @@ use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\Rule\Email;
 
 $validator = new Validator();
-
-$rules= [
-    'username' => UsernameRule::rule(),
-    'email' => [Email::rule()]
+$rules = [
+    'username' => new UsernameRule(),
+    'email' => [new Email()],
 ];
 $results = $validator->validate($user, $rules);
+
 foreach ($results as $attribute => $result) {
     if ($result->isValid() === false) {
         foreach ($result->getErrors() as $error) {
             // ...
         }
-    }
-}
-```
-
-### Setting up your own formatter
-
-If you want to customize error message formatter in a certain case you need to use immutable `withFormatter()` method:
-
-```php
-use Yiisoft\Validator\Validator;
-
-final class PostController
-{
-    public function actionIndex(Validator $validator): ResponseInterface
-    {
-        // ...
-        $result = $validator->withFormatter(new CustomFormatter())->validate($dataSet, $rules);
-        // ...
     }
 }
 ```

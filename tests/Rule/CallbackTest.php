@@ -15,15 +15,14 @@ class CallbackTest extends TestCase
 {
     public function testValidate(): void
     {
-        $rule = Callback::rule(
-            static function ($value): Result {
-                $result = new Result();
-                if ($value !== 42) {
-                    $result->addError('Value should be 42!');
-                }
-                return $result;
+        $rule = new Callback(static function ($value): Result {
+            $result = new Result();
+            if ($value !== 42) {
+                $result->addError('Value should be 42!');
             }
-        );
+
+            return $result;
+        });
 
         $result = $rule->validate(41);
 
@@ -35,34 +34,28 @@ class CallbackTest extends TestCase
     {
         $this->expectException(InvalidCallbackReturnTypeException::class);
 
-        Callback::rule(
-            static fn () => 'invalid return'
-        )->validate(null);
+        $rule = new Callback(static fn (): string => 'invalid return');
+        $rule->validate(null);
     }
 
     public function testName(): void
     {
-        $this->assertEquals('callback', Callback::rule(static function ($value) {
-            return $value;
-        })->getName());
+        $rule = new Callback(static fn ($value) => $value);
+        $this->assertEquals('callback', $rule->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                Callback::rule(static function ($value) {
-                    return $value;
-                }),
+                new Callback(static fn ($value) => $value),
                 [
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                Callback::rule(static function ($value) {
-                    return $value;
-                })->skipOnEmpty(true),
+                new Callback(static fn ($value) => $value, skipOnEmpty: true),
                 [
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
@@ -84,7 +77,7 @@ class CallbackTest extends TestCase
 
     public function testAddErrorWithValuePath(): void
     {
-        $rule = Callback::rule(static function ($value): Result {
+        $rule = new Callback(static function ($value): Result {
             $result = new Result();
             $result->addError('e1', ['key1']);
 

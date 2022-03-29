@@ -16,26 +16,26 @@ class BooleanTest extends TestCase
     public function validateProvider(): array
     {
         return [
-            [Boolean::rule(), true, true],
-            [Boolean::rule(), false, true],
+            [new Boolean(), true, true],
+            [new Boolean(), false, true],
 
-            [Boolean::rule(), '0', true],
-            [Boolean::rule(), '1', true],
-            [Boolean::rule(), '5', false],
+            [new Boolean(), '0', true],
+            [new Boolean(), '1', true],
+            [new Boolean(), '5', false],
 
-            [Boolean::rule(), null, false],
-            [Boolean::rule(), [], false],
+            [new Boolean(), null, false],
+            [new Boolean(), [], false],
 
-            [Boolean::rule()->strict(true), '0', true],
-            [Boolean::rule()->strict(true), '1', true],
+            [new Boolean(strict: true), '0', true],
+            [new Boolean(strict: true), '1', true],
 
-            [Boolean::rule()->strict(true), true, false],
-            [Boolean::rule()->strict(true), false, false],
+            [new Boolean(strict: true), true, false],
+            [new Boolean(strict: true), false, false],
 
-            [Boolean::rule()->strict(true)->trueValue(true)->falseValue(false), '0', false],
-            [Boolean::rule()->strict(true)->trueValue(true)->falseValue(false), [], false],
-            [Boolean::rule()->strict(true)->trueValue(true)->falseValue(false), true, true],
-            [Boolean::rule()->strict(true)->trueValue(true)->falseValue(false), false, true],
+            [new Boolean(trueValue: true, falseValue: false, strict: true), '0', false],
+            [new Boolean(trueValue: true, falseValue: false, strict: true), [], false],
+            [new Boolean(trueValue: true, falseValue: false, strict: true), true, true],
+            [new Boolean(trueValue: true, falseValue: false, strict: true), false, true],
         ];
     }
 
@@ -49,84 +49,84 @@ class BooleanTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('boolean', Boolean::rule()->getName());
+        $this->assertEquals('boolean', (new Boolean())->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                Boolean::rule(),
+                new Boolean(),
                 [
-                    'strict' => false,
                     'trueValue' => '1',
                     'falseValue' => '0',
+                    'strict' => false,
                     'message' => 'The value must be either "1" or "0".',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                Boolean::rule()->skipOnEmpty(true),
+                new Boolean(skipOnEmpty: true),
                 [
-                    'strict' => false,
                     'trueValue' => '1',
                     'falseValue' => '0',
+                    'strict' => false,
                     'message' => 'The value must be either "1" or "0".',
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
                 ],
             ],
             [
-                Boolean::rule()->skipOnEmpty(true),
+                new Boolean(skipOnEmpty: true),
                 [
-                    'strict' => false,
                     'trueValue' => '1',
                     'falseValue' => '0',
+                    'strict' => false,
                     'message' => 'The value must be either "1" or "0".',
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
                 ],
             ],
             [
-                Boolean::rule()->skipOnEmpty(true)->strict(true),
+                new Boolean(strict: true, skipOnEmpty: true),
                 [
+                    'trueValue' => '1',
+                    'falseValue' => '0',
                     'strict' => true,
-                    'trueValue' => '1',
-                    'falseValue' => '0',
                     'message' => 'The value must be either "1" or "0".',
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
                 ],
             ],
             [
-                Boolean::rule()->trueValue('YES'),
+                new Boolean(trueValue: 'YES'),
                 [
-                    'strict' => false,
                     'trueValue' => 'YES',
                     'falseValue' => '0',
+                    'strict' => false,
                     'message' => 'The value must be either "YES" or "0".',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                Boolean::rule()->falseValue('NO'),
+                new Boolean(falseValue: 'NO'),
                 [
-                    'strict' => false,
                     'trueValue' => '1',
                     'falseValue' => 'NO',
+                    'strict' => false,
                     'message' => 'The value must be either "1" or "NO".',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                Boolean::rule()->trueValue('YES')->falseValue('NO')->strict(true),
+                new Boolean(trueValue: 'YES', falseValue: 'NO', strict: true),
                 [
-                    'strict' => true,
                     'trueValue' => 'YES',
                     'falseValue' => 'NO',
+                    'strict' => true,
                     'message' => 'The value must be either "YES" or "NO".',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,

@@ -15,7 +15,7 @@ final class RulesDumperTest extends TestCase
      */
     public function testAsArray($rules, array $expected): void
     {
-        $dumper = new RulesDumper(null);
+        $dumper = new RulesDumper();
         $result = $dumper->asArray($rules);
 
         $this->assertEquals($expected, $result);
@@ -27,14 +27,15 @@ final class RulesDumperTest extends TestCase
             [
                 [
                     'attributeName' => [
-                        Number::rule()
-                            ->integer()
-                            ->max(100)
-                            ->min(10)
-                            ->skipOnError(true)
-                            ->skipOnEmpty(true)
-                            ->tooSmallMessage('Value must be greater than 10.')
-                            ->tooBigMessage('Value must be no greater than 100.'),
+                        new Number(
+                            asInteger: true,
+                            min: 10,
+                            max: 100,
+                            tooSmallMessage: 'Value must be greater than 10.',
+                            tooBigMessage: 'Value must be no greater than 100.',
+                            skipOnEmpty: true,
+                            skipOnError: true
+                        ),
                     ],
                 ],
                 [
@@ -42,13 +43,13 @@ final class RulesDumperTest extends TestCase
                         [
                             'number',
                             'asInteger' => true,
-                            'max' => 100,
                             'min' => 10,
-                            'skipOnError' => true,
-                            'skipOnEmpty' => true,
+                            'max' => 100,
                             'notANumberMessage' => 'Value must be an integer.',
                             'tooBigMessage' => 'Value must be no greater than 100.',
                             'tooSmallMessage' => 'Value must be greater than 10.',
+                            'skipOnEmpty' => true,
+                            'skipOnError' => true,
                         ],
                     ],
                 ],

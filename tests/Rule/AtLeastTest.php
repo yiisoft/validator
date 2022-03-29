@@ -21,7 +21,7 @@ class AtLeastTest extends TestCase
         $model->attr2 = null;
         $model->attr3 = null;
 
-        $rule = AtLeast::rule(['attr1', 'attr2']);
+        $rule = new AtLeast(['attr1', 'attr2']);
 
         $this->assertTrue($rule->validate($model)->isValid());
         $this->assertEquals([], $rule->validate($model)->getErrors());
@@ -34,7 +34,7 @@ class AtLeastTest extends TestCase
         $model->attr2 = 1;
         $model->attr3 = null;
 
-        $rule = AtLeast::rule(['attr2']);
+        $rule = new AtLeast(['attr2']);
 
         $this->assertTrue($rule->validate($model)->isValid());
         $this->assertEquals([], $rule->validate($model)->getErrors());
@@ -47,7 +47,7 @@ class AtLeastTest extends TestCase
         $model->attr2 = null;
         $model->attr3 = 1;
 
-        $rule = AtLeast::rule(['attr1', 'attr2']);
+        $rule = new AtLeast(['attr1', 'attr2']);
         $result = $rule->validate($model);
 
         $this->assertFalse($result->isValid());
@@ -63,7 +63,7 @@ class AtLeastTest extends TestCase
         $model->attr1 = 1;
         $model->attr2 = null;
 
-        $rule = AtLeast::rule(['attr1', 'attr2'])->min(2);
+        $rule = new AtLeast(['attr1', 'attr2'], min: 2);
         $result = $rule->validate($model);
 
         $this->assertFalse($result->isValid());
@@ -75,14 +75,15 @@ class AtLeastTest extends TestCase
 
     public function testName(): void
     {
-        $this->assertEquals('atLeast', AtLeast::rule(['attr1', 'attr2'])->getName());
+        $rule = new AtLeast(['attr1', 'attr2']);
+        $this->assertEquals('atLeast', $rule->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                AtLeast::rule(['attr1', 'attr2']),
+                new AtLeast(['attr1', 'attr2']),
                 [
                     'min' => 1,
                     'message' => 'The model is not valid. Must have at least "1" filled attributes.',
@@ -91,7 +92,7 @@ class AtLeastTest extends TestCase
                 ],
             ],
             [
-                AtLeast::rule(['attr1', 'attr2'])->min(2),
+                new AtLeast(['attr1', 'attr2'], min: 2),
                 [
                     'min' => 2,
                     'message' => 'The model is not valid. Must have at least "2" filled attributes.',

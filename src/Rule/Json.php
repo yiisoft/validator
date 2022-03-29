@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\HasValidationErrorMessage;
+use Attribute;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
@@ -12,20 +13,22 @@ use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
- * JsonValidator validates that the attribute value is a valid json
+ * Validates that the value is a valid json.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class Json extends Rule
 {
-    use HasValidationErrorMessage;
-
-    private string $message = 'The value is not JSON.';
-
-    public static function rule(): self
-    {
-        return new self();
+    public function __construct(
+        private string $message = 'The value is not JSON.',
+        ?FormatterInterface $formatter = null,
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        $when = null,
+    ) {
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ValidationContext $context = null): Result
+    protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 
@@ -60,11 +63,8 @@ final class Json extends Rule
 
     public function getOptions(): array
     {
-        return array_merge(
-            parent::getOptions(),
-            [
-                'message' => $this->formatMessage($this->message),
-            ],
-        );
+        return array_merge(parent::getOptions(), [
+            'message' => $this->formatMessage($this->message),
+        ]);
     }
 }

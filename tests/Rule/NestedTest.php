@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
@@ -15,7 +16,6 @@ use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Tests\Stub\ParametrizedRule;
 
 /**
@@ -38,68 +38,63 @@ class NestedTest extends TestCase
             ],
         ];
 
-        $actualResult = Nested::rule($rules)->validate($values);
+        $actualResult = (new Nested($rules))->validate($values);
 
         $this->assertEquals($expectedResult, $actualResult->isValid());
     }
 
     public function testValidationEmptyRules(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        Nested::rule([]);
+        $this->expectException(InvalidArgumentException::class);
+        new Nested([]);
     }
 
     public function testValidationRuleIsNotInstanceOfRule(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        Nested::rule(['path.to.value' => (new \stdClass())]);
+        $this->expectException(InvalidArgumentException::class);
+        new Nested(['path.to.value' => (new \stdClass())]);
     }
 
     public function testInvalidValue(): void
     {
-        $validator = Nested::rule(['value' => Required::rule()]);
-
-        $result = $validator->validate('');
+        $rule = new Nested(['value' => new Required()]);
+        $result = $rule->validate('');
 
         $this->assertEquals(['Value should be an array or an object. string given.'], $result->getErrorMessages());
     }
 
     public function testValidationMessage(): void
     {
-        $validator = Nested::rule([
-            'value' => Required::rule()->message('Value cannot be blank.'),
-        ]);
-
-        $result = $validator->validate(['value' => null]);
+        $rule = new Nested(['value' => new Required()]);
+        $result = $rule->validate(['value' => null]);
 
         $this->assertEquals(['Value cannot be blank.'], $result->getErrorMessages());
     }
 
     public function testErrorWhenValuePathNotFound(): void
     {
-        $validator = Nested::rule(['value' => Required::rule()])
-            ->errorWhenPropertyPathIsNotFound(true);
-
-        $result = $validator->validate([]);
+        $rule = new Nested(['value' => new Required()], errorWhenPropertyPathIsNotFound: true);
+        $result = $rule->validate([]);
 
         $this->assertEquals(['Property path "value" is not found.'], $result->getErrorMessages());
     }
 
     public function testPropertyPathIsNotFoundMessage(): void
     {
-        $validator = Nested::rule(['value' => Required::rule()])
-            ->errorWhenPropertyPathIsNotFound(true)
-            ->propertyPathIsNotFoundMessage('Property is not found.');
-
-        $result = $validator->validate([]);
+        $rule = new Nested(
+            ['value' => new Required()],
+            errorWhenPropertyPathIsNotFound: true,
+            propertyPathIsNotFoundMessage: 'Property is not found.',
+        );
+        $result = $rule->validate([]);
 
         $this->assertEquals(['Property is not found.'], $result->getErrorMessages());
     }
 
     public function testName(): void
     {
-        $validator = Nested::rule(['value' => Required::rule()]);
-        $this->assertEquals('nested', $validator->getName());
+        $rule = new Nested(['value' => new Required()]);
+        $this->assertEquals('nested', $rule->getName());
     }
 
     /**
@@ -107,11 +102,7 @@ class NestedTest extends TestCase
      */
     public function testOptions(array $rules, array $expectedOptions): void
     {
-        $validator = Nested::rule($rules);
-
-        $options = $validator->getOptions();
-
-        $this->assertEquals($expectedOptions, $options);
+        $this->assertEquals($expectedOptions, (new Nested($rules))->getOptions());
     }
 
     public function optionsDataProvider(): array
@@ -150,7 +141,7 @@ class NestedTest extends TestCase
             'success' => [
                 [
                     'author.name' => [
-                        HasLength::rule()->min(3),
+                        new HasLength(min: 3),
                     ],
                 ],
                 true,
@@ -158,7 +149,7 @@ class NestedTest extends TestCase
             'error' => [
                 [
                     'author.age' => [
-                        Number::rule()->min(20),
+                        new Number(min: 20),
                     ],
                 ],
                 false,
@@ -166,7 +157,7 @@ class NestedTest extends TestCase
             'key not exists' => [
                 [
                     'author.sex' => [
-                        InRange::rule(['male', 'female']),
+                        new InRange(['male', 'female']),
                     ],
                 ],
                 false,
@@ -174,7 +165,7 @@ class NestedTest extends TestCase
             'key not exists, skip empty' => [
                 [
                     'author.sex' => [
-                        InRange::rule(['male', 'female'])->skipOnEmpty(true),
+                        new InRange(['male', 'female'], skipOnEmpty: true),
                     ],
                 ],
                 true,
@@ -206,30 +197,28 @@ class NestedTest extends TestCase
                 ],
             ],
         ];
-        $rule = Nested::rule([
-            'charts' => Each::rule(new RuleSet([
-                Nested::rule([
-                    'points' => Each::rule(new RuleSet([
-                        Nested::rule([
-                            'coordinates' => Nested::rule([
+        $rule = new Nested([
+            'charts' => [
+                new Each([new Nested([
+                    'points' => [
+                        new Each([new Nested([
+                            'coordinates' => new Nested([
                                 'x' => [
-                                    Number::rule()->min(-10)->max(10),
-                                    Callback::rule(static function ($value): Result {
+                                    new Number(min: -10, max: 10),
+                                    new Callback(static function ($value): Result {
                                         $result = new Result();
                                         $result->addError('Custom error.');
 
                                         return $result;
                                     }),
                                 ],
-                                'y' => [Number::rule()->min(-10)->max(10)],
+                                'y' => [new Number(min: -10, max: 10)],
                             ]),
-                            'rgb' => Each::rule(new RuleSet([
-                                Number::rule()->min(0)->max(255),
-                            ])),
-                        ]),
-                    ])),
-                ]),
-            ])),
+                            'rgb' => [new Each([new Number(min: 0, max: 255)])],
+                        ])]),
+                    ],
+                ])]),
+            ],
         ]);
         $result = $rule->validate($data);
 
@@ -311,9 +300,9 @@ class NestedTest extends TestCase
 
     public function testIntValuePath(): void
     {
-        $rule = Nested::rule([
-            0 => Nested::rule([
-                0 => [Number::rule()->min(-10)->max(10)],
+        $rule = new Nested([
+            0 => new Nested([
+                0 => [new Number(min: -10, max: 10)],
             ]),
         ]);
         $result = $rule->validate([0 => [0 => -11]]);
@@ -324,11 +313,13 @@ class NestedTest extends TestCase
 
     public function testSeparateErrorGroups(): void
     {
-        $rule = Nested::rule([
-            'key' => Each::rule(new RuleSet([
-                HasLength::rule()->min(5),
-                InRange::rule(['aaa', 'bbb', 'ccc']),
-            ])),
+        $rule = new Nested([
+            'key' => [
+                new Each([
+                    new HasLength(min: 5),
+                    new InRange(['aaa', 'bbb', 'ccc']),
+                ]),
+            ],
         ]);
         $result = $rule->validate(['key' => ['x', 'y']]);
         $indexedErrors = $result->getErrorMessagesIndexedByPath();

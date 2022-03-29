@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests;
+namespace Yiisoft\Validator\Tests\DataSet;
 
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Tests\Stub\RulesProvidedDataSet;

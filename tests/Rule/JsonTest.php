@@ -15,17 +15,19 @@ class JsonTest extends TestCase
 {
     public function testInvalidJsonValidate(): void
     {
-        $val = Json::rule();
-        $this->assertFalse($val->validate('{"name": "tester"')->isValid());
-        $this->assertFalse($val->validate('{"name": tester}')->isValid());
+        $rule = new Json();
+
+        $this->assertFalse($rule->validate('{"name": "tester"')->isValid());
+        $this->assertFalse($rule->validate('{"name": tester}')->isValid());
     }
 
     public function testInvalidTypeValidate(): void
     {
-        $val = Json::rule();
-        $this->assertFalse($val->validate(['json'])->isValid());
-        $this->assertFalse($val->validate(10)->isValid());
-        $this->assertFalse($val->validate(null)->isValid());
+        $rule = new Json();
+
+        $this->assertFalse($rule->validate(['json'])->isValid());
+        $this->assertFalse($rule->validate(10)->isValid());
+        $this->assertFalse($rule->validate(null)->isValid());
     }
 
     public function testValidValueValidate(): void
@@ -103,31 +105,32 @@ JSON;
 }
 JSON;
 
-        $this->assertTrue(Json::rule()->validate($json1)->isValid());
-        $this->assertTrue(Json::rule()->validate($json2)->isValid());
-        $this->assertTrue(Json::rule()->validate($json3)->isValid());
+        $this->assertTrue((new Json())->validate($json1)->isValid());
+        $this->assertTrue((new Json())->validate($json2)->isValid());
+        $this->assertTrue((new Json())->validate($json3)->isValid());
     }
 
     public function testValidationMessage(): void
     {
-        $this->assertEquals(['The value is not JSON.'], Json::rule()->validate('')->getErrorMessages());
+        $this->assertEquals(['The value is not JSON.'], (new Json())->validate('')->getErrorMessages());
     }
 
     public function testCustomValidationMessage(): void
     {
-        $this->assertEquals(['bad json'], Json::rule()->message('bad json')->validate('')->getErrorMessages());
+        $rule = new Json(message: 'bad json');
+        $this->assertEquals(['bad json'], $rule->validate('')->getErrorMessages());
     }
 
     public function testName(): void
     {
-        $this->assertEquals('json', Json::rule()->getName());
+        $this->assertEquals('json', (new Json())->getName());
     }
 
     public function optionsProvider(): array
     {
         return [
             [
-                Json::rule(),
+                new Json(),
                 [
                     'message' => 'The value is not JSON.',
                     'skipOnEmpty' => false,

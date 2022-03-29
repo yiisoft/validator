@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -22,8 +21,8 @@ class RuleSetTest extends TestCase
     public function testMethodSyntax(): void
     {
         $ruleSet = new RuleSet();
-        $ruleSet->add(Required::rule());
-        $ruleSet->add(Number::rule()->max(10));
+        $ruleSet->add(new Required());
+        $ruleSet->add(new Number(max: 10));
 
         $result = $ruleSet->validate(42);
         $this->assertFalse($result->isValid());
@@ -32,10 +31,7 @@ class RuleSetTest extends TestCase
 
     public function testArraySyntax(): void
     {
-        $ruleSet = new RuleSet([
-            Required::rule(),
-            Number::rule()->max(10),
-        ]);
+        $ruleSet = new RuleSet([new Required(), new Number(max: 10)]);
         $result = $ruleSet->validate(42);
 
         $this->assertFalse($result->isValid());
@@ -64,9 +60,9 @@ class RuleSetTest extends TestCase
     public function testWhenValidate(): void
     {
         $ruleSet = new RuleSet([
-            Number::rule()->min(10),
-            Number::rule()->min(10)->when(fn () => false),
-            Number::rule()->min(10),
+            new Number(min: 10),
+            new Number(when: fn () => false, min: 10),
+            new Number(min: 10),
         ]);
         $result = $ruleSet->validate(1);
 
@@ -77,9 +73,9 @@ class RuleSetTest extends TestCase
     public function testSkipOnError(): void
     {
         $ruleSet = new RuleSet([
-            Number::rule()->min(10),
-            Number::rule()->min(10)->skipOnError(true),
-            Number::rule()->min(10),
+            new Number(min: 10),
+            new Number(min: 10, skipOnError: true),
+            new Number(min: 10),
         ]);
         $result = $ruleSet->validate(1);
 
@@ -96,8 +92,8 @@ class RuleSetTest extends TestCase
         };
 
         $ruleSet = new RuleSet();
-        $ruleSet->add(Required::rule());
-        $ruleSet->add(Number::rule()->max(10));
+        $ruleSet->add(new Required());
+        $ruleSet->add(new Number(max: 10));
         $ruleSet->add($rule);
 
         $this->assertEquals([
@@ -109,11 +105,11 @@ class RuleSetTest extends TestCase
             ],
             [
                 'number',
-                'notANumberMessage' => 'Value must be a number.',
                 'asInteger' => false,
                 'min' => null,
-                'tooSmallMessage' => 'Value must be no less than .',
                 'max' => 10,
+                'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than .',
                 'tooBigMessage' => 'Value must be no greater than 10.',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
@@ -123,43 +119,37 @@ class RuleSetTest extends TestCase
             ],
         ], $ruleSet->asArray());
 
-        $ruleSet = new RuleSet(
-            [
-                Number::rule()->min(10),
-                Number::rule()->min(10),
-                Number::rule()->min(10)->integer(),
-            ]
-        );
+        $ruleSet = new RuleSet([new Number(min: 10), new Number(min: 10), new Number(asInteger: true, min: 10)]);
         $this->assertEquals([
             [
                 'number',
-                'notANumberMessage' => 'Value must be a number.',
                 'asInteger' => false,
                 'min' => 10,
-                'tooSmallMessage' => 'Value must be no less than 10.',
                 'max' => null,
+                'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than 10.',
                 'tooBigMessage' => 'Value must be no greater than .',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
             ],
             [
                 'number',
-                'notANumberMessage' => 'Value must be a number.',
                 'asInteger' => false,
                 'min' => 10,
-                'tooSmallMessage' => 'Value must be no less than 10.',
                 'max' => null,
+                'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than 10.',
                 'tooBigMessage' => 'Value must be no greater than .',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
             ],
             [
                 'number',
-                'notANumberMessage' => 'Value must be an integer.',
                 'asInteger' => true,
                 'min' => 10,
-                'tooSmallMessage' => 'Value must be no less than 10.',
                 'max' => null,
+                'notANumberMessage' => 'Value must be an integer.',
+                'tooSmallMessage' => 'Value must be no less than 10.',
                 'tooBigMessage' => 'Value must be no greater than .',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
@@ -167,33 +157,30 @@ class RuleSetTest extends TestCase
         ], $ruleSet->asArray());
 
         $ruleSet = new RuleSet([
-            Each::rule(new RuleSet([
-                Number::rule()->max(13),
-                Number::rule()->max(14),
-            ])),
-            Number::rule()->min(10),
+            new Each([new Number(max: 13), new Number(max: 14)]),
+            new Number(min: 10),
         ]);
 
         $this->assertEquals([
             ['each',
                 [
                     'number',
-                    'notANumberMessage' => 'Value must be a number.',
                     'asInteger' => false,
                     'min' => null,
-                    'tooSmallMessage' => 'Value must be no less than .',
                     'max' => 13,
+                    'notANumberMessage' => 'Value must be a number.',
+                    'tooSmallMessage' => 'Value must be no less than .',
                     'tooBigMessage' => 'Value must be no greater than 13.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
                 [
                     'number',
-                    'notANumberMessage' => 'Value must be a number.',
                     'asInteger' => false,
                     'min' => null,
-                    'tooSmallMessage' => 'Value must be no less than .',
                     'max' => 14,
+                    'notANumberMessage' => 'Value must be a number.',
+                    'tooSmallMessage' => 'Value must be no less than .',
                     'tooBigMessage' => 'Value must be no greater than 14.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -201,11 +188,11 @@ class RuleSetTest extends TestCase
             ],
             [
                 'number',
-                'notANumberMessage' => 'Value must be a number.',
                 'asInteger' => false,
                 'min' => 10,
-                'tooSmallMessage' => 'Value must be no less than 10.',
                 'max' => null,
+                'notANumberMessage' => 'Value must be a number.',
+                'tooSmallMessage' => 'Value must be no less than 10.',
                 'tooBigMessage' => 'Value must be no greater than .',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
@@ -216,8 +203,8 @@ class RuleSetTest extends TestCase
     public function testAsArrayWithGroupRule(): void
     {
         $ruleSet = new RuleSet();
-        $ruleSet->add(Required::rule());
-        $ruleSet->add(CustomUrlRule::rule());
+        $ruleSet->add(new Required());
+        $ruleSet->add(new CustomUrlRule());
 
         $this->assertEquals([
             [
@@ -261,22 +248,22 @@ class RuleSetTest extends TestCase
     public function testPersistentError(): void
     {
         $ruleSet = new RuleSet([
-            Callback::rule(static function ($value): Result {
+            static function ($value): Result {
                 $result = new Result();
                 $result->addError('e1');
                 $result->addError('e2');
                 $result->addError('e3');
 
                 return $result;
-            }),
-            Callback::rule(static function ($value): Result {
+            },
+            static function ($value): Result {
                 $result = new Result();
                 $result->addError('e4');
                 $result->addError('e5');
                 $result->addError('e6');
 
                 return $result;
-            }),
+            },
         ]);
         $result = $ruleSet->validate('hi');
 
@@ -294,12 +281,12 @@ class RuleSetTest extends TestCase
     public function testAddErrorWithValuePath(): void
     {
         $ruleSet = new RuleSet([
-            Callback::rule(static function ($value): Result {
+            static function ($value): Result {
                 $result = new Result();
                 $result->addError('e1', ['key1']);
 
                 return $result;
-            }),
+            },
         ]);
         $result = $ruleSet->validate('hi');
         $result->addError('e2', ['key2']);
