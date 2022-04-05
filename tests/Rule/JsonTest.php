@@ -5,35 +5,54 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Json;
 
-/**
- * @group validators
- */
 class JsonTest extends TestCase
 {
-    public function testInvalidJsonValidate(): void
+    public function validateInvalidJsonProvider(): array
     {
-        $rule = new Json();
-
-        $this->assertFalse($rule->validate('{"name": "tester"')->isValid());
-        $this->assertFalse($rule->validate('{"name": tester}')->isValid());
+        return [
+            ['{"name": "tester"'],
+            ['{"name": tester}'],
+        ];
     }
 
-    public function testInvalidTypeValidate(): void
+    /**
+     * @dataProvider validateInvalidJsonProvider
+     */
+    public function testValidateInvalidJson(string $value): void
     {
         $rule = new Json();
+        $result = $rule->validate($value);
 
-        $this->assertFalse($rule->validate(['json'])->isValid());
-        $this->assertFalse($rule->validate(10)->isValid());
-        $this->assertFalse($rule->validate(null)->isValid());
+        $this->assertFalse($result->isValid());
     }
 
-    public function testValidValueValidate(): void
+    public function validateInvalidTypeProvider(): array
     {
-        // JSON test from http://www.json.org/JSON_checker/test/pass1.json
-        $json1 = <<<'JSON'
+        return [
+            ['json'],
+            10,
+            null,
+        ];
+    }
+
+    /**
+     * @dataProvider validateInvalidTypeProvider
+     */
+    public function testValidateInvalidType(mixed $value): void
+    {
+        $rule = new Json();
+        $result = $rule->validate($value);
+
+        $this->assertFalse($result->isValid());
+    }
+
+    public function validateValidValueProvider(): array
+    {
+        return [
+            // JSON test from http://www.json.org/JSON_checker/test/pass1.json
+            <<<'JSON'
 [
     "JSON Test Pattern pass1",
     {"object with 1 member":["array with 1 element"]},
@@ -92,62 +111,63 @@ class JsonTest extends TestCase
 1e-1,
 1e00,2e+00,2e-00
 ,"rosebud"]
-JSON;
+JSON,
         // JSON test from http://www.json.org/JSON_checker/test/pass2.json
-        $json2 = '[[[[[[[[[[[[[[[[[[["Not too deep"]]]]]]]]]]]]]]]]]]]';
+        '[[[[[[[[[[[[[[[[[[["Not too deep"]]]]]]]]]]]]]]]]]]]',
         // JSON test from http://www.json.org/JSON_checker/test/pass3.json
-        $json3 = <<<'JSON'
+        <<<'JSON'
 {
     "JSON Test Pattern pass3": {
         "The outermost value": "must be an object or array.",
         "In this test": "It is an object."
     }
 }
-JSON;
+JSON,
+        ];
+    }
 
-        $this->assertTrue((new Json())->validate($json1)->isValid());
-        $this->assertTrue((new Json())->validate($json2)->isValid());
-        $this->assertTrue((new Json())->validate($json3)->isValid());
+    /**
+     * @dataProvider validateValidValueProvider
+     */
+    public function testValidateValidValue(string $value): void
+    {
+        $rule = new Json();
+        $result = $rule->validate($value);
+
+        $this->assertTrue($result->isValid());
     }
 
     public function testValidationMessage(): void
     {
-        $this->assertEquals(['The value is not JSON.'], (new Json())->validate('')->getErrorMessages());
+        $rule = new Json();
+        $result = $rule->validate('');
+
+        $this->assertEquals(['The value is not JSON.'], $result->getErrorMessages());
     }
 
     public function testCustomValidationMessage(): void
     {
         $rule = new Json(message: 'bad json');
-        $this->assertEquals(['bad json'], $rule->validate('')->getErrorMessages());
+        $result = $rule->validate('');
+
+        $this->assertEquals(['bad json'], $result->getErrorMessages());
     }
 
     public function testName(): void
     {
-        $this->assertEquals('json', (new Json())->getName());
+        $rule = new Json();
+        $this->assertEquals('json', $rule->getName());
     }
 
-    public function optionsProvider(): array
+    public function testOptions(): void
     {
-        return [
-            [
-                new Json(),
-                [
-                    'message' => 'The value is not JSON.',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
+        $rule = new Json();
+        $expectedOptions = [
+            'message' => 'The value is not JSON.',
+            'skipOnEmpty' => false,
+            'skipOnError' => false,
         ];
-    }
 
-    /**
-     * @dataProvider optionsProvider
-     *
-     * @param Rule $rule
-     * @param array $expected
-     */
-    public function testOptions(Rule $rule, array $expected): void
-    {
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 }
