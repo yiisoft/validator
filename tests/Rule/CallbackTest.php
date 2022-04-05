@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Callback;
 
 class CallbackTest extends TestCase
@@ -66,13 +65,10 @@ class CallbackTest extends TestCase
 
     /**
      * @dataProvider optionsProvider
-     *
-     * @param Rule $rule
-     * @param array $expected
      */
-    public function testOptions(Rule $rule, array $expected): void
+    public function testOptions(Callback $rule, array $expectedOptions): void
     {
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 
     public function testAddErrorWithValuePath(): void
