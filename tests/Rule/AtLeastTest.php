@@ -9,9 +9,6 @@ use stdClass;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\AtLeast;
 
-/**
- * @group validators
- */
 class AtLeastTest extends TestCase
 {
     public function testAtLeastOne(): void
@@ -22,9 +19,9 @@ class AtLeastTest extends TestCase
         $model->attr3 = null;
 
         $rule = new AtLeast(['attr1', 'attr2']);
+        $result = $rule->validate($model);
 
-        $this->assertTrue($rule->validate($model)->isValid());
-        $this->assertEquals([], $rule->validate($model)->getErrors());
+        $this->assertTrue($result->isValid());
     }
 
     public function testAtLeastOneWithOnlyAttributes(): void
@@ -35,9 +32,9 @@ class AtLeastTest extends TestCase
         $model->attr3 = null;
 
         $rule = new AtLeast(['attr2']);
+        $result = $rule->validate($model);
 
-        $this->assertTrue($rule->validate($model)->isValid());
-        $this->assertEquals([], $rule->validate($model)->getErrors());
+        $this->assertTrue($result->isValid());
     }
 
     public function testAtLeastWithError(): void
@@ -51,7 +48,7 @@ class AtLeastTest extends TestCase
         $result = $rule->validate($model);
 
         $this->assertFalse($result->isValid());
-        $this->assertEquals(
+        $this->assertSame(
             ['The model is not valid. Must have at least "1" filled attributes.'],
             $result->getErrorMessages()
         );
@@ -105,12 +102,9 @@ class AtLeastTest extends TestCase
 
     /**
      * @dataProvider optionsProvider
-     *
-     * @param Rule $rule
-     * @param array $expected
      */
-    public function testOptions(Rule $rule, array $expected): void
+    public function testOptions(Rule $rule, array $expectedOptions): void
     {
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 }
