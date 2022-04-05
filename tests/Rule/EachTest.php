@@ -31,7 +31,7 @@ class EachTest extends TestCase
     public function testOptions(): void
     {
         $rule = new Each([new Number(max: 13), new Number(max: 14)]);
-        $this->assertEquals([
+        $expectedOptions = [
             [
                 'number',
                 'asInteger' => false,
@@ -54,6 +54,8 @@ class EachTest extends TestCase
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
             ],
-        ], $rule->getOptions());
+        ];
+
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 }

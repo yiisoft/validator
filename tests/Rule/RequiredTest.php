@@ -28,28 +28,15 @@ class RequiredTest extends TestCase
         $this->assertEquals('required', (new Required())->getName());
     }
 
-    public function optionsProvider(): array
+    public function testOptions(): void
     {
-        return [
-            [
-                new Required(),
-                [
-                    'message' => 'Value cannot be blank.',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
+        $rule = new Required();
+        $expectedOptions = [
+            'message' => 'Value cannot be blank.',
+            'skipOnEmpty' => false,
+            'skipOnError' => false,
         ];
-    }
 
-    /**
-     * @dataProvider optionsProvider
-     *
-     * @param Rule $rule
-     * @param array $expected
-     */
-    public function testOptions(Rule $rule, array $expected): void
-    {
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 }

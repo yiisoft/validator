@@ -7,18 +7,26 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
-/**
- * @group validators
- */
 class GroupRuleTest extends TestCase
 {
-    public function testValidate(): void
+    public function validateProvider(): array
+    {
+        return [
+            ['http://домен.рф', true],
+            ['http://доменбольшедвадцатизнаков.рф', false],
+            [null, false],
+        ];
+    }
+
+    /**
+     * @dataProvider validateProvider
+     */
+    public function testValidate(mixed $value, bool $expectedIsValid): void
     {
         $rule = new CustomUrlRule();
+        $result = $rule->validate($value);
 
-        $this->assertTrue($rule->validate('http://домен.рф')->isValid());
-        $this->assertFalse($rule->validate('http://доменбольшедвадцатизнаков.рф')->isValid());
-        $this->assertFalse($rule->validate(null)->isValid());
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
     public function testErrorMessage(): void
@@ -32,13 +40,15 @@ class GroupRuleTest extends TestCase
     public function testCustomErrorMessage(): void
     {
         $rule = new CustomUrlRule(message: 'This value is not valid custom url');
-        $this->assertEquals(['This value is not valid custom url'], $rule->validate('domain')->getErrorMessages());
+        $result = $rule->validate('domain');
+
+        $this->assertEquals(['This value is not valid custom url'], $result->getErrorMessages());
     }
 
     public function testOptions(): void
     {
         $rule = new CustomUrlRule();
-        $this->assertEquals([
+        $expectedOptions = [
             [
                 'required',
                 'message' => 'Value cannot be blank.',
@@ -65,6 +75,8 @@ class GroupRuleTest extends TestCase
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
             ],
-        ], $rule->getOptions());
+        ];
+
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 }
