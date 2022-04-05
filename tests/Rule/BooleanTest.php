@@ -8,9 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Boolean;
 
-/**
- * @group validators
- */
 class BooleanTest extends TestCase
 {
     public function validateProvider(): array
@@ -42,14 +39,16 @@ class BooleanTest extends TestCase
     /**
      * @dataProvider validateProvider
      */
-    public function testValidate(Rule $rule, $value, bool $expected): void
+    public function testValidate(Boolean $rule, mixed $value, bool $expectedIsValid): void
     {
-        $this->assertSame($expected, $rule->validate($value)->isValid());
+        $result = $rule->validate($value);
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
     public function testName(): void
     {
-        $this->assertEquals('boolean', (new Boolean())->getName());
+        $rule = new Boolean();
+        $this->assertEquals('boolean', $rule->getName());
     }
 
     public function optionsProvider(): array
@@ -137,12 +136,9 @@ class BooleanTest extends TestCase
 
     /**
      * @dataProvider optionsProvider
-     *
-     * @param Rule $rule
-     * @param array $expected
      */
-    public function testOptions(Rule $rule, array $expected): void
+    public function testOptions(Boolean $rule, array $expectedOptions): void
     {
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 }
