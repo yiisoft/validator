@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -18,29 +19,63 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\ParametrizedRule;
 
-/**
- * @group validators
- */
 class NestedTest extends TestCase
 {
+    public function validateDataProvider(): array
+    {
+        return [
+            'success' => [
+                [
+                    'author.name' => [
+                        new HasLength(min: 3),
+                    ],
+                ],
+                true,
+            ],
+            'error' => [
+                [
+                    'author.age' => [
+                        new Number(min: 20),
+                    ],
+                ],
+                false,
+            ],
+            'key not exists' => [
+                [
+                    'author.sex' => [
+                        new InRange(['male', 'female']),
+                    ],
+                ],
+                false,
+            ],
+            'key not exists, skip empty' => [
+                [
+                    'author.sex' => [
+                        new InRange(['male', 'female'], skipOnEmpty: true),
+                    ],
+                ],
+                true,
+            ],
+        ];
+    }
+
     /**
      * @dataProvider validateDataProvider
      *
      * @param Rule[] $rules
-     * @param bool $expectedResult
      */
     public function testValidate(array $rules, bool $expectedResult): void
     {
-        $values = [
+        $rule = new Nested($rules);
+        $value = [
             'author' => [
                 'name' => 'Dmitry',
                 'age' => 18,
             ],
         ];
+        $result = $rule->validate($value);
 
-        $actualResult = (new Nested($rules))->validate($values);
-
-        $this->assertEquals($expectedResult, $actualResult->isValid());
+        $this->assertEquals($expectedResult, $result->isValid());
     }
 
     public function testValidationEmptyRules(): void
@@ -52,7 +87,7 @@ class NestedTest extends TestCase
     public function testValidationRuleIsNotInstanceOfRule(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new Nested(['path.to.value' => (new \stdClass())]);
+        new Nested(['path.to.value' => (new stdClass())]);
     }
 
     public function testInvalidValue(): void
@@ -97,14 +132,6 @@ class NestedTest extends TestCase
         $this->assertEquals('nested', $rule->getName());
     }
 
-    /**
-     * @dataProvider optionsDataProvider
-     */
-    public function testOptions(array $rules, array $expectedOptions): void
-    {
-        $this->assertEquals($expectedOptions, (new Nested($rules))->getOptions());
-    }
-
     public function optionsDataProvider(): array
     {
         return [
@@ -135,42 +162,13 @@ class NestedTest extends TestCase
         ];
     }
 
-    public function validateDataProvider(): array
+    /**
+     * @dataProvider optionsDataProvider
+     */
+    public function testOptions(array $rules, array $expectedOptions): void
     {
-        return [
-            'success' => [
-                [
-                    'author.name' => [
-                        new HasLength(min: 3),
-                    ],
-                ],
-                true,
-            ],
-            'error' => [
-                [
-                    'author.age' => [
-                        new Number(min: 20),
-                    ],
-                ],
-                false,
-            ],
-            'key not exists' => [
-                [
-                    'author.sex' => [
-                        new InRange(['male', 'female']),
-                    ],
-                ],
-                false,
-            ],
-            'key not exists, skip empty' => [
-                [
-                    'author.sex' => [
-                        new InRange(['male', 'female'], skipOnEmpty: true),
-                    ],
-                ],
-                true,
-            ],
-        ];
+        $rule = new Nested($rules);
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 
     public function testWithOtherNestedAndEach(): void
@@ -252,7 +250,8 @@ class NestedTest extends TestCase
         }
 
         $this->assertEquals($expectedDetailedErrors, $result->getErrors());
-        $this->assertEquals([
+
+        $expectedErrorMessages = [
             'Value must be no less than -10.',
             'Custom error.',
             'Value must be no greater than 10.',
@@ -275,8 +274,10 @@ class NestedTest extends TestCase
             'Value must be no greater than 10.',
             'Value must be no less than 0. -4 given.',
             'Value must be no greater than 255. 259 given.',
-        ], $result->getErrorMessages());
-        $this->assertEquals([
+        ];
+        $this->assertEquals($expectedErrorMessages, $result->getErrorMessages());
+
+        $expectedErrorMessagesIndexedByPath = [
             'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
             'charts.0.points.0.coordinates.y' => ['Value must be no greater than 10.'],
             'charts.0.points.0.rgb.0' => ['Value must be no less than 0. -1 given.'],
@@ -295,7 +296,8 @@ class NestedTest extends TestCase
             'charts.2.points.1.coordinates.y' => ['Value must be no greater than 10.'],
             'charts.2.points.1.rgb.1' => ['Value must be no less than 0. -4 given.'],
             'charts.2.points.1.rgb.2' => ['Value must be no greater than 255. 259 given.'],
-        ], $result->getErrorMessagesIndexedByPath());
+        ];
+        $this->assertEquals($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
     public function testIntValuePath(): void
