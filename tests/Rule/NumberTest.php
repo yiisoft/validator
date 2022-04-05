@@ -158,8 +158,7 @@ class NumberTest extends TestCase
         mixed $value,
         bool $expectedIsValid,
         array $expectedErrorMessages
-    ): void
-    {
+    ): void {
         $result = $rule->validate($value);
 
         $this->assertSame($expectedIsValid, $result->isValid());
