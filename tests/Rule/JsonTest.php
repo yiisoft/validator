@@ -53,7 +53,7 @@ class JsonTest extends TestCase
         return [
             // JSON test from http://www.json.org/JSON_checker/test/pass1.json
             [
-<<<'JSON'
+                <<<'JSON'
 [
     "JSON Test Pattern pass1",
     {"object with 1 member":["array with 1 element"]},
@@ -118,7 +118,7 @@ JSON,
             ['[[[[[[[[[[[[[[[[[[["Not too deep"]]]]]]]]]]]]]]]]]]]'],
             // JSON test from http://www.json.org/JSON_checker/test/pass3.json
             [
-<<<'JSON'
+                <<<'JSON'
 {
     "JSON Test Pattern pass3": {
         "The outermost value": "must be an object or array.",
