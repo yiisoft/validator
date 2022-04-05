@@ -112,10 +112,10 @@ class JsonTest extends TestCase
 1e00,2e+00,2e-00
 ,"rosebud"]
 JSON,
-        // JSON test from http://www.json.org/JSON_checker/test/pass2.json
-        '[[[[[[[[[[[[[[[[[[["Not too deep"]]]]]]]]]]]]]]]]]]]',
-        // JSON test from http://www.json.org/JSON_checker/test/pass3.json
-        <<<'JSON'
+            // JSON test from http://www.json.org/JSON_checker/test/pass2.json
+            '[[[[[[[[[[[[[[[[[[["Not too deep"]]]]]]]]]]]]]]]]]]]',
+            // JSON test from http://www.json.org/JSON_checker/test/pass3.json
+            <<<'JSON'
 {
     "JSON Test Pattern pass3": {
         "The outermost value": "must be an object or array.",
