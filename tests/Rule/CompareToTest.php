@@ -79,8 +79,7 @@ class CompareToTest extends TestCase
         string $operator,
         mixed $value,
         bool $expectedIsValid
-    ): void
-    {
+    ): void {
         $rule = new CompareTo($compareValue, operator: $operator);
         $result = $rule->validate($value);
 
