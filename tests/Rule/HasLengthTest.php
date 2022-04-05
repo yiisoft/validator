@@ -8,77 +8,76 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\HasLength;
 
-/**
- * @group validators
- */
 class HasLengthTest extends TestCase
 {
-    public function testValidate(): void
+    public function validateProvider(): array
     {
-        $rule = new HasLength();
-        $this->assertFalse($rule->validate(['not a string'])->isValid());
-        $this->assertFalse($rule->validate(new \stdClass())->isValid());
-        $this->assertTrue($rule->validate('Just some string')->isValid());
-        $this->assertFalse($rule->validate(true)->isValid());
-        $this->assertFalse($rule->validate(false)->isValid());
+        return [
+            [new HasLength(), ['not a string'], false],
+            [new HasLength(), new \stdClass(), false],
+            [new HasLength(), 'Just some string', true],
+            [new HasLength(), true, false],
+            [new HasLength(), false, false],
+
+            [new HasLength(min: 25, max: 25), str_repeat('x', 25), true],
+            [new HasLength(min: 25, max: 25), str_repeat('€', 25), true],
+            [new HasLength(min: 25, max: 25), str_repeat('x', 125), false],
+            [new HasLength(min: 25, max: 25), '', false],
+
+            [new HasLength(min: 25), str_repeat('x', 125), true],
+            [new HasLength(min: 25), str_repeat('€', 25), true],
+            [new HasLength(min: 25), str_repeat('x', 13), false],
+            [new HasLength(min: 25), '', false],
+
+            [new HasLength(max: 25), str_repeat('x', 25), true],
+            [new HasLength(max: 25), str_repeat('Ä', 24), true],
+            [new HasLength(max: 25), str_repeat('x', 1250), false],
+            [new HasLength(max: 25), '', true],
+
+            [new HasLength(min: 10, max: 25), str_repeat('x', 15), true],
+            [new HasLength(min: 10, max: 25), str_repeat('x', 10), true],
+            [new HasLength(min: 10, max: 25), str_repeat('x', 20), true],
+            [new HasLength(min: 10, max: 25), str_repeat('x', 25), true],
+            [new HasLength(min: 10, max: 25), str_repeat('x', 5), false],
+            [new HasLength(min: 10, max: 25), '', false],
+
+            [new HasLength(min: 1), str_repeat('x', 5), true],
+            [new HasLength(max: 100), str_repeat('x', 5), true],
+        ];
     }
 
-    public function testValidateLength(): void
+    /**
+     * @dataProvider validateProvider
+     */
+    public function testValidate(HasLength $rule, mixed $value, bool $expectedIsValid): void
     {
-        $rule = new HasLength(min: 25, max: 25);
-        $this->assertTrue($rule->validate(str_repeat('x', 25))->isValid());
-        $this->assertTrue($rule->validate(str_repeat('€', 25))->isValid());
-        $this->assertFalse($rule->validate(str_repeat('x', 125))->isValid());
-        $this->assertFalse($rule->validate('')->isValid());
-
-        $rule = new HasLength(min: 25);
-        $this->assertTrue($rule->validate(str_repeat('x', 125))->isValid());
-        $this->assertTrue($rule->validate(str_repeat('€', 25))->isValid());
-        $this->assertFalse($rule->validate(str_repeat('x', 13))->isValid());
-        $this->assertFalse($rule->validate('')->isValid());
-
-        $rule = new HasLength(max: 25);
-        $this->assertTrue($rule->validate(str_repeat('x', 25))->isValid());
-        $this->assertTrue($rule->validate(str_repeat('Ä', 24))->isValid());
-        $this->assertfalse($rule->validate(str_repeat('x', 1250))->isValid());
-        $this->assertTrue($rule->validate('')->isValid());
-
-        $rule = new HasLength(min: 10, max: 25);
-        $this->assertTrue($rule->validate(str_repeat('x', 15))->isValid());
-        $this->assertTrue($rule->validate(str_repeat('x', 10))->isValid());
-        $this->assertTrue($rule->validate(str_repeat('x', 20))->isValid());
-        $this->assertTrue($rule->validate(str_repeat('x', 25))->isValid());
-        $this->assertFalse($rule->validate(str_repeat('x', 5))->isValid());
-        $this->assertFalse($rule->validate('')->isValid());
+        $result = $rule->validate($value);
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testValidateMin(): void
+    public function testTooShortMessage(): void
     {
         $rule = new HasLength(min: 1);
         $result = $rule->validate('');
 
-        $this->assertFalse($result->isValid());
         $this->assertEquals(
             ['This value should contain at least {min, number} {min, plural, one{character} other{characters}}.'],
             $result->getErrorMessages()
         );
-        $this->assertTrue($rule->validate(str_repeat('x', 5))->isValid());
     }
 
-    public function testValidateMax(): void
+    public function testTooLongMessage(): void
     {
         $rule = new HasLength(max: 100);
-        $this->assertTrue($rule->validate(str_repeat('x', 5))->isValid());
-
         $result = $rule->validate(str_repeat('x', 1230));
-        $this->assertFalse($result->isValid());
+
         $this->assertEquals(
             ['This value should contain at most {max, number} {max, plural, one{character} other{characters}}.'],
             $result->getErrorMessages()
         );
     }
 
-    public function testValidateMessages()
+    public function customErrorMessagesProvider(): array
     {
         $rule = new HasLength(
             min: 3,
@@ -88,14 +87,28 @@ class HasLengthTest extends TestCase
             tooLongMessage: 'is too long test'
         );
 
-        $this->assertEquals(['is not string error'], $rule->validate(null)->getErrorMessages());
-        $this->assertEquals(['is too short test'], $rule->validate(str_repeat('x', 1))->getErrorMessages());
-        $this->assertEquals(['is too long test'], $rule->validate(str_repeat('x', 6))->getErrorMessages());
+        return [
+            [$rule, null, ['is not string error']],
+            [$rule, str_repeat('x', 1), ['is too short test']],
+            [$rule, str_repeat('x', 6), ['is too long test']],
+        ];
+    }
+
+    /**
+     * @param string[] $expectedErrorMessages
+     *
+     * @dataProvider customErrorMessagesProvider
+     */
+    public function testCustomErrorMessages(HasLength $rule, mixed $value, array $expectedErrorMessages): void
+    {
+        $result = $rule->validate($value);
+        $this->assertEquals($expectedErrorMessages, $result->getErrorMessages());
     }
 
     public function testName(): void
     {
-        $this->assertEquals('hasLength', (new HasLength())->getName());
+        $rule = new HasLength();
+        $this->assertEquals('hasLength', $rule->getName());
     }
 
     public function optionsProvider(): array
@@ -158,12 +171,9 @@ class HasLengthTest extends TestCase
 
     /**
      * @dataProvider optionsProvider
-     *
-     * @param Rule $rule
-     * @param array $expected
      */
-    public function testOptions(Rule $rule, array $expected): void
+    public function testOptions(Rule $rule, array $expectedOptions): void
     {
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 }
