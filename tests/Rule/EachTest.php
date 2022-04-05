@@ -8,17 +8,12 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 
-/**
- * @group validators
- */
 class EachTest extends TestCase
 {
-    /**
-     * @test
-     */
     public function validateValues(): void
     {
-        $result = (new Each([new Number(max: 13)]))->validate([10, 20, 30]);
+        $rule = new Each([new Number(max: 13)]);
+        $result = $rule->validate([10, 20, 30]);
 
         $this->assertFalse($result->isValid());
         $this->assertEquals([
@@ -30,7 +25,7 @@ class EachTest extends TestCase
     public function testName(): void
     {
         $rule = new Each([new Number(max: 13)]);
-        $this->assertEquals('each', $rule->getName());
+        $this->assertSame('each', $rule->getName());
     }
 
     public function testOptions(): void

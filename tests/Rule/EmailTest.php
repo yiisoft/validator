@@ -10,7 +10,7 @@ use function function_exists;
 
 class EmailTest extends TestCase
 {
-    public function validateWithDefaultParametersProvider(): array
+    public function validateWithDefaultArgumentsProvider(): array
     {
         return [
             ['sam@rmcreative.ru', true],
@@ -59,9 +59,9 @@ class EmailTest extends TestCase
     }
 
     /**
-     * @dataProvider validateWithDefaultParametersProvider
+     * @dataProvider validateWithDefaultArgumentsProvider
      */
-    public function testValidateWithDefaultParameters(mixed $value, bool $expectedIsValid): void
+    public function testValidateWithDefaultArguments(mixed $value, bool $expectedIsValid): void
     {
         $rule = new Email();
         $result = $rule->validate($value);

@@ -48,7 +48,7 @@ class AtLeastTest extends TestCase
         $result = $rule->validate($model);
 
         $this->assertFalse($result->isValid());
-        $this->assertSame(
+        $this->assertEquals(
             ['The model is not valid. Must have at least "1" filled attributes.'],
             $result->getErrorMessages()
         );
