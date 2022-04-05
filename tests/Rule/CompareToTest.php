@@ -8,77 +8,89 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\CompareTo;
 
-/**
- * @group validators
- */
 class CompareToTest extends TestCase
 {
-    public function testValidate(): void
+    public function validateWithDefaultArgumentsProvider(): array
     {
         $value = 18449;
-        // default config
-        $validator = new CompareTo($value);
 
-        $this->assertTrue($validator->validate($value)->isValid());
-        $this->assertTrue($validator->validate((string)$value)->isValid());
-        $this->assertFalse($validator->validate($value + 1)->isValid());
-        foreach ($this->getOperationTestData($value) as $operator => $tests) {
-            $validator = new CompareTo($value, operator: $operator);
-
-            foreach ($tests as $test) {
-                $this->assertEquals($test[1], $validator->validate($test[0])->isValid(), "Testing $operator");
-            }
-        }
+        return [
+            [$value, $value, true],
+            [$value, (string)$value, true],
+            [$value, $value + 1, false],
+        ];
     }
 
-    protected function getOperationTestData($value): array
+    /**
+     * @dataProvider validateWithDefaultArgumentsProvider
+     */
+    public function testValidateWithDefaultArguments(int $compareValue, mixed $value, bool $expectedIsValid): void
     {
+        $rule = new CompareTo($compareValue);
+        $result = $rule->validate($value);
+
+        $this->assertSame($expectedIsValid, $result->isValid());
+    }
+
+    public function validateWIthOperatorProvider(): array
+    {
+        $value = 18449;
+
         return [
-            '===' => [
-                [$value, true],
-                [(string)$value, true],
-                [(float)$value, true],
-                [$value + 1, false],
-            ],
-            '!=' => [
-                [$value, false],
-                [(string)$value, false],
-                [(float)$value, false],
-                [$value + 0.00001, true],
-                [false, true],
-            ],
-            '!==' => [
-                [$value, false],
-                [(string)$value, false],
-                [(float)$value, false],
-                [false, true],
-            ],
-            '>' => [
-                [$value, false],
-                [$value + 1, true],
-                [$value - 1, false],
-            ],
-            '>=' => [
-                [$value, true],
-                [$value + 1, true],
-                [$value - 1, false],
-            ],
-            '<' => [
-                [$value, false],
-                [$value + 1, false],
-                [$value - 1, true],
-            ],
-            '<=' => [
-                [$value, true],
-                [$value + 1, false],
-                [$value - 1, true],
-            ],
+            [$value, '===', $value, true],
+            [$value, '===', (string)$value, true],
+            [$value, '===', (float)$value, true],
+            [$value, '===', $value + 1, false],
+
+            [$value, '!=', $value, false],
+            [$value, '!=', (string)$value, false],
+            [$value, '!=', (float)$value, false],
+            [$value, '!=', $value + 0.00001, true],
+            [$value, '!=', false, true],
+
+            [$value, '!==', $value, false],
+            [$value, '!==', (string)$value, false],
+            [$value, '!==', (float)$value, false],
+            [$value, '!==', false, true],
+
+            [$value, '>', $value, false],
+            [$value, '>', $value + 1, true],
+            [$value, '>', $value - 1, false],
+
+            [$value, '>=', $value, true],
+            [$value, '>=', $value + 1, true],
+            [$value, '>=', $value - 1, false],
+
+            [$value, '<', $value, false],
+            [$value, '<', $value + 1, false],
+            [$value, '<', $value - 1, true],
+
+            [$value, '<=', $value, true],
+            [$value, '<=', $value + 1, false],
+            [$value, '<=', $value - 1, true],
         ];
+    }
+
+    /**
+     * @dataProvider validateWithOperatorProvider
+     */
+    public function testValidateWithOperator(
+        int $compareValue,
+        string $operator,
+        mixed $value,
+        bool $expectedIsValid
+    ): void
+    {
+        $rule = new CompareTo($compareValue, operator: $operator);
+        $result = $rule->validate($value);
+
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
     public function testName(): void
     {
-        $this->assertEquals('compareTo', (new CompareTo(1))->getName());
+        $rule = new CompareTo(1);
+        $this->assertEquals('compareTo', $rule->getName());
     }
 
     public function optionsProvider(): array
@@ -166,12 +178,9 @@ class CompareToTest extends TestCase
 
     /**
      * @dataProvider optionsProvider
-     *
-     * @param Rule $rule
-     * @param array $expected
      */
-    public function testOptions(Rule $rule, array $expected): void
+    public function testOptions(Rule $rule, array $expectedOptions): void
     {
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 }
