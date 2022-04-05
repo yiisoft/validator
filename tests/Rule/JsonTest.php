@@ -31,9 +31,9 @@ class JsonTest extends TestCase
     public function validateInvalidTypeProvider(): array
     {
         return [
-            ['json'],
-            10,
-            null,
+            [['json']],
+            [10],
+            [null],
         ];
     }
 
@@ -52,7 +52,8 @@ class JsonTest extends TestCase
     {
         return [
             // JSON test from http://www.json.org/JSON_checker/test/pass1.json
-            <<<'JSON'
+            [
+<<<'JSON'
 [
     "JSON Test Pattern pass1",
     {"object with 1 member":["array with 1 element"]},
@@ -112,10 +113,12 @@ class JsonTest extends TestCase
 1e00,2e+00,2e-00
 ,"rosebud"]
 JSON,
+            ],
             // JSON test from http://www.json.org/JSON_checker/test/pass2.json
-            '[[[[[[[[[[[[[[[[[[["Not too deep"]]]]]]]]]]]]]]]]]]]',
+            ['[[[[[[[[[[[[[[[[[[["Not too deep"]]]]]]]]]]]]]]]]]]]'],
             // JSON test from http://www.json.org/JSON_checker/test/pass3.json
-            <<<'JSON'
+            [
+<<<'JSON'
 {
     "JSON Test Pattern pass3": {
         "The outermost value": "must be an object or array.",
@@ -123,6 +126,7 @@ JSON,
     }
 }
 JSON,
+            ],
         ];
     }
 
