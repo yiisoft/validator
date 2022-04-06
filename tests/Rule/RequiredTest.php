@@ -7,24 +7,33 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Required;
 
-/**
- * @group validators
- */
 class RequiredTest extends TestCase
 {
-    public function testValidateWithDefaults()
+    public function validateWithDefaultsProvider(): array
+    {
+        return [
+            [null, false],
+            [[], false],
+            ['not empty', true],
+            [['with', 'elements'], true],
+        ];
+    }
+
+    /**
+     * @dataProvider validateWithDefaultsProvider
+     */
+    public function testValidateWithDefaults(mixed $value, bool $expectedIsValid): void
     {
         $rule = new Required();
+        $result = $rule->validate($value);
 
-        $this->assertFalse($rule->validate(null)->isValid());
-        $this->assertFalse($rule->validate([])->isValid());
-        $this->assertTrue($rule->validate('not empty')->isValid());
-        $this->assertTrue($rule->validate(['with', 'elements'])->isValid());
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
     public function testName(): void
     {
-        $this->assertEquals('required', (new Required())->getName());
+        $rule = new Required();
+        $this->assertEquals('required', $rule->getName());
     }
 
     public function testOptions(): void
