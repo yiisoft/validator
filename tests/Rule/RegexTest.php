@@ -9,16 +9,14 @@ use stdClass;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Regex;
 
-/**
- * @group validators
- */
 class RegexTest extends TestCase
 {
     private const PATTERN = '/^[a-zA-Z0-9](\.)?([^\/]*)$/m';
 
     public function testGetName(): void
     {
-        $this->assertSame('regex', (new Regex(self::PATTERN))->getName());
+        $rule = new Regex(self::PATTERN);
+        $this->assertSame('regex', $rule->getName());
     }
 
     public function validateDataProvider(): array
@@ -57,7 +55,7 @@ class RegexTest extends TestCase
         $this->assertSame(['Custom message.'], $rule->validate(null)->getErrorMessages());
     }
 
-    public function getOptionsProvider(): array
+    public function optionsProvider(): array
     {
         return [
             [
@@ -86,10 +84,10 @@ class RegexTest extends TestCase
     }
 
     /**
-     * @dataProvider getOptionsProvider
+     * @dataProvider optionsProvider
      */
-    public function testGetOptions(Rule $rule, array $expected): void
+    public function testOptions(Rule $rule, array $expectedOptions): void
     {
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 }
