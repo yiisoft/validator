@@ -41,17 +41,6 @@ class ValidatorTest extends TestCase
         $this->assertCount(2, $result->getAttributeErrors('int'));
     }
 
-    /**
-     * @dataProvider diverseTypesDataProvider
-     */
-    public function testDiverseTypes($dataSet): void
-    {
-        $validator = new Validator();
-        $result = $validator->validate($dataSet, ['property' => [new Required()]]);
-
-        $this->assertTrue($result->isValid());
-    }
-
     public function diverseTypesDataProvider(): array
     {
         $class = new stdClass();
@@ -65,6 +54,17 @@ class ValidatorTest extends TestCase
             [12.345],
             [false],
         ];
+    }
+
+    /**
+     * @dataProvider diverseTypesDataProvider
+     */
+    public function testDiverseTypes($dataSet): void
+    {
+        $validator = new Validator();
+        $result = $validator->validate($dataSet, ['property' => [new Required()]]);
+
+        $this->assertTrue($result->isValid());
     }
 
     public function testNullAsDataSet(): void

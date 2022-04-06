@@ -44,13 +44,13 @@ class BooleanTest extends TestCase
         $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $rule = new Boolean();
         $this->assertEquals('boolean', $rule->getName());
     }
 
-    public function optionsProvider(): array
+    public function getOptionsProvider(): array
     {
         return [
             [
@@ -134,9 +134,9 @@ class BooleanTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(Boolean $rule, array $expectedOptions): void
+    public function testGetOptions(Boolean $rule, array $expectedOptions): void
     {
         $this->assertEquals($expectedOptions, $rule->getOptions());
     }

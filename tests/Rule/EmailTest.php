@@ -215,12 +215,12 @@ class EmailTest extends TestCase
         $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $this->assertEquals('email', (new Email())->getName());
     }
 
-    public function optionsProvider(): array
+    public function getOptionsProvider(): array
     {
         return [
             [
@@ -271,9 +271,9 @@ class EmailTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(Email $rule, array $expectedOptions): void
+    public function testGetOptions(Email $rule, array $expectedOptions): void
     {
         $this->assertEquals($expectedOptions, $rule->getOptions());
     }

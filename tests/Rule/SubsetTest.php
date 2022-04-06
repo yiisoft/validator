@@ -59,7 +59,7 @@ class SubsetTest extends TestCase
         $this->assertTrue($result->isValid());
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $rule = new Subset(range(1, 10));
         $this->assertEquals('subset', $rule->getName());

@@ -382,13 +382,13 @@ class NumberTest extends TestCase
         }
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $rule = new Number();
         $this->assertEquals('number', $rule->getName());
     }
 
-    public function optionsProvider(): array
+    public function getOptionsProvider(): array
     {
         return [
             [
@@ -460,9 +460,9 @@ class NumberTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(Number $rule, array $expectedOptions): void
+    public function testGetOptions(Number $rule, array $expectedOptions): void
     {
         $this->assertEquals($expectedOptions, $rule->getOptions());
     }

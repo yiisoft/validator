@@ -105,13 +105,13 @@ class HasLengthTest extends TestCase
         $this->assertEquals($expectedErrorMessages, $result->getErrorMessages());
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $rule = new HasLength();
         $this->assertEquals('hasLength', $rule->getName());
     }
 
-    public function optionsProvider(): array
+    public function getOptionsProvider(): array
     {
         return [
             [
@@ -170,9 +170,9 @@ class HasLengthTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(Rule $rule, array $expectedOptions): void
+    public function testGetOptions(Rule $rule, array $expectedOptions): void
     {
         $this->assertEquals($expectedOptions, $rule->getOptions());
     }

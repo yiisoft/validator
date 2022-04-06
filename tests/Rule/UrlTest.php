@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Url;
 
 use function function_exists;
@@ -145,7 +144,7 @@ class UrlTest extends TestCase
 
     public function testValidateWithIdnType(): void
     {
-        $this->intlPackageRequired();;
+        $this->intlPackageRequired();
 
         $rule = new Url(enableIDN: true);
         $result = $rule->validate('');
@@ -180,13 +179,13 @@ class UrlTest extends TestCase
         $this->assertTrue($result->isValid());
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $rule = new Url();
         $this->assertSame('url', $rule->getName());
     }
 
-    public function optionsProvider(): array
+    public function getOptionsProvider(): array
     {
         return [
             'default' => [
@@ -237,14 +236,11 @@ class UrlTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
-     *
-     * @param Rule $rule
-     * @param array $expected
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(Rule $rule, array $expected): void
+    public function testGetOptions(Url $rule, array $expectedOptions): void
     {
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 
     private function intlPackageRequired(): void
@@ -259,7 +255,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Tests\Rule\UrlTest;
 
-function function_exists(string $function)
+function function_exists(string $function): bool
 {
     return $function === 'idn_to_ascii' && UrlTest::$idnFunctionExists !== null
         ? UrlTest::$idnFunctionExists

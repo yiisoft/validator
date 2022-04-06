@@ -22,13 +22,13 @@ class EachTest extends TestCase
         ], $result->getErrorMessages());
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $rule = new Each([new Number(max: 13)]);
         $this->assertSame('each', $rule->getName());
     }
 
-    public function testOptions(): void
+    public function testGetOptions(): void
     {
         $rule = new Each([new Number(max: 13), new Number(max: 14)]);
         $expectedOptions = [

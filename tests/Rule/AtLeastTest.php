@@ -70,13 +70,13 @@ class AtLeastTest extends TestCase
         );
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $rule = new AtLeast(['attr1', 'attr2']);
         $this->assertEquals('atLeast', $rule->getName());
     }
 
-    public function optionsProvider(): array
+    public function getOptionsProvider(): array
     {
         return [
             [
@@ -101,9 +101,9 @@ class AtLeastTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(Rule $rule, array $expectedOptions): void
+    public function testGetOptions(Rule $rule, array $expectedOptions): void
     {
         $this->assertEquals($expectedOptions, $rule->getOptions());
     }

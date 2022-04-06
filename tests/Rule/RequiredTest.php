@@ -30,13 +30,13 @@ class RequiredTest extends TestCase
         $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $rule = new Required();
         $this->assertEquals('required', $rule->getName());
     }
 
-    public function testOptions(): void
+    public function testGetOptions(): void
     {
         $rule = new Required();
         $expectedOptions = [

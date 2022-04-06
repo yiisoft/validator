@@ -392,12 +392,12 @@ class IpTest extends TestCase
         new Ip(networks: ['*' => ['wrong']], ranges: ['*']);
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $this->assertEquals('ip', (new Ip())->getName());
     }
 
-    public function optionsProvider(): array
+    public function getOptionsProvider(): array
     {
         return [
             [
@@ -544,9 +544,9 @@ class IpTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(Ip $rule, array $expectedOptions): void
+    public function testGetOptions(Ip $rule, array $expectedOptions): void
     {
         $this->assertEquals($expectedOptions, $rule->getOptions());
     }

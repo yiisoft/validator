@@ -32,7 +32,6 @@ final class ValidationContextTest extends TestCase
     public function testWithAttribute(): void
     {
         $context = new ValidationContext(null, 'key');
-
         $newContext = $context->withAttribute('newKey');
 
         $this->assertNotSame($context, $newContext);
@@ -44,6 +43,7 @@ final class ValidationContextTest extends TestCase
     {
         $context = new ValidationContext();
         $context->setParameter('key', 42);
+
         $this->assertSame(['key' => 42], $context->getParameters());
     }
 

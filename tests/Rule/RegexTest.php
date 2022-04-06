@@ -55,7 +55,7 @@ class RegexTest extends TestCase
         $this->assertSame(['Custom message.'], $rule->validate(null)->getErrorMessages());
     }
 
-    public function optionsProvider(): array
+    public function getOptionsProvider(): array
     {
         return [
             [
@@ -84,9 +84,9 @@ class RegexTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(Rule $rule, array $expectedOptions): void
+    public function testGetOptions(Rule $rule, array $expectedOptions): void
     {
         $this->assertEquals($expectedOptions, $rule->getOptions());
     }

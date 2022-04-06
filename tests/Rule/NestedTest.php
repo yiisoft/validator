@@ -126,13 +126,13 @@ class NestedTest extends TestCase
         $this->assertEquals(['Property is not found.'], $result->getErrorMessages());
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $rule = new Nested(['value' => new Required()]);
         $this->assertEquals('nested', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function getOptionsDataProvider(): array
     {
         return [
             [
@@ -163,9 +163,9 @@ class NestedTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsDataProvider
+     * @dataProvider getOptionsDataProvider
      */
-    public function testOptions(array $rules, array $expectedOptions): void
+    public function testGetOptions(array $rules, array $expectedOptions): void
     {
         $rule = new Nested($rules);
         $this->assertEquals($expectedOptions, $rule->getOptions());

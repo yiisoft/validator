@@ -157,13 +157,13 @@ JSON,
         $this->assertEquals(['bad json'], $result->getErrorMessages());
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $rule = new Json();
         $this->assertEquals('json', $rule->getName());
     }
 
-    public function testOptions(): void
+    public function testGetOptions(): void
     {
         $rule = new Json();
         $expectedOptions = [

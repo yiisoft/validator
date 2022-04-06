@@ -150,13 +150,13 @@ class InRangeTest extends TestCase
         $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
         $rule = new InRange(range(1, 10));
         $this->assertEquals('inRange', $rule->getName());
     }
 
-    public function optionsProvider(): array
+    public function getOptionsProvider(): array
     {
         return [
             [
@@ -196,9 +196,9 @@ class InRangeTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(InRange $rule, array $expectedOptions): void
+    public function testGetOptions(InRange $rule, array $expectedOptions): void
     {
         $this->assertEquals($expectedOptions, $rule->getOptions());
     }

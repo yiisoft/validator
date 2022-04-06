@@ -45,7 +45,7 @@ class GroupRuleTest extends TestCase
         $this->assertEquals(['This value is not valid custom url'], $result->getErrorMessages());
     }
 
-    public function testOptions(): void
+    public function testGetOptions(): void
     {
         $rule = new CustomUrlRule();
         $expectedOptions = [
