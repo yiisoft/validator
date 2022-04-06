@@ -11,9 +11,6 @@ use Yiisoft\Validator\Rule\Url;
 
 use function function_exists;
 
-/**
- * @group validators
- */
 class UrlTest extends TestCase
 {
     public static ?bool $idnFunctionExists = null;
@@ -30,82 +27,130 @@ class UrlTest extends TestCase
         parent::tearDown();
     }
 
-    public function testValidate(): void
+    public function validateWithDefaultArgumentsProvider(): array
+    {
+        return [
+            ['google.de', false],
+            ['http://google.de', true],
+            ['https://google.de', true],
+            ['htp://yiiframework.com', false],
+            [
+                'https://www.google.de/search?q=yii+framework&ie=utf-8&oe=utf-8&rls=org.mozilla:de:official'
+                . '&client=firefox-a&gws_rd=cr',
+                true,
+            ],
+
+            ['ftp://ftp.ruhr-uni-bochum.de/', false],
+            ['http://invalid,domain', false],
+            ['http://example.com,', false],
+            ['http://example.com*12', false],
+            ['http://example.com/*12', true],
+            ['http://example.com/?test', true],
+            ['http://example.com/#test', true],
+            ['http://example.com:80/#test', true],
+            ['http://example.com:65535/#test', true],
+            ['http://example.com:81/?good', true],
+            ['http://example.com?test', true],
+            ['http://example.com#test', true],
+            ['http://example.com:81#test', true],
+            ['http://example.com:81?good', true],
+            ['http://example.com,?test', false],
+            ['http://example.com:?test', false],
+            ['http://example.com:test', false],
+            ['http://example.com:123456/test', false],
+            ['http://äüö?=!"§$%&/()=}][{³²€.edu', false],
+        ];
+    }
+
+    /**
+     * @dataProvider validateWithDefaultArgumentsProvider
+     */
+    public function testValidateWithDefaultArguments(string $value, bool $expectedIsValid): void
     {
         $rule = new Url();
-        $this->assertFalse($rule->validate('google.de')->isValid());
-        $this->assertTrue($rule->validate('http://google.de')->isValid());
-        $this->assertTrue($rule->validate('https://google.de')->isValid());
-        $this->assertFalse($rule->validate('htp://yiiframework.com')->isValid());
-        $this->assertTrue($rule->validate('https://www.google.de/search?q=yii+framework&ie=utf-8&oe=utf-8'
-                                        . '&rls=org.mozilla:de:official&client=firefox-a&gws_rd=cr')->isValid());
-        $this->assertFalse($rule->validate('ftp://ftp.ruhr-uni-bochum.de/')->isValid());
-        $this->assertFalse($rule->validate('http://invalid,domain')->isValid());
-        $this->assertFalse($rule->validate('http://example.com,')->isValid());
-        $this->assertFalse($rule->validate('http://example.com*12')->isValid());
-        $this->assertTrue($rule->validate('http://example.com/*12')->isValid());
-        $this->assertTrue($rule->validate('http://example.com/?test')->isValid());
-        $this->assertTrue($rule->validate('http://example.com/#test')->isValid());
-        $this->assertTrue($rule->validate('http://example.com:80/#test')->isValid());
-        $this->assertTrue($rule->validate('http://example.com:65535/#test')->isValid());
-        $this->assertTrue($rule->validate('http://example.com:81/?good')->isValid());
-        $this->assertTrue($rule->validate('http://example.com?test')->isValid());
-        $this->assertTrue($rule->validate('http://example.com#test')->isValid());
-        $this->assertTrue($rule->validate('http://example.com:81#test')->isValid());
-        $this->assertTrue($rule->validate('http://example.com:81?good')->isValid());
-        $this->assertFalse($rule->validate('http://example.com,?test')->isValid());
-        $this->assertFalse($rule->validate('http://example.com:?test')->isValid());
-        $this->assertFalse($rule->validate('http://example.com:test')->isValid());
-        $this->assertFalse($rule->validate('http://example.com:123456/test')->isValid());
-        $this->assertFalse($rule->validate('http://äüö?=!"§$%&/()=}][{³²€.edu')->isValid());
+        $result = $rule->validate($value);
+
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
     public function testValidateWithoutScheme(): void
     {
         $rule = new Url(pattern: '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)/');
-        $this->assertTrue($rule->validate('yiiframework.com')->isValid());
+        $result = $rule->validate('yiiframework.com');
+
+        $this->assertTrue($result->isValid());
     }
 
-    public function testValidateWithCustomScheme(): void
+    public function validateWithCustomSchemeProvider(): array
     {
         $rule = new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']);
 
-        $this->assertTrue($rule->validate('ftp://ftp.ruhr-uni-bochum.de/')->isValid());
-        $this->assertTrue($rule->validate('http://google.de')->isValid());
-        $this->assertTrue($rule->validate('https://google.de')->isValid());
-        $this->assertFalse($rule->validate('htp://yiiframework.com')->isValid());
-        // relative urls are not supported
-        $this->assertFalse($rule->validate('//yiiframework.com')->isValid());
+        return [
+            [$rule, 'ftp://ftp.ruhr-uni-bochum.de/', true],
+            [$rule, 'http://google.de', true],
+            [$rule, 'https://google.de', true],
+            [$rule, 'htp://yiiframework.com', false],
+            [$rule, '//yiiframework.com', false], // Relative URLs are not supported
+        ];
     }
 
-    public function testSchemaShouldBeCaseInsensitive(): void
+    /**
+     * @dataProvider validateWithCustomSchemeProvider
+     */
+    public function testValidateWithCustomScheme(Url $rule, string $value, bool $expectedIsValid): void
     {
-        $val = new Url(validSchemes: ['http', 'FTP']);
-
-        $this->assertTrue($val->validate('HtTp://www.yiiframework.com/')->isValid());
-        $this->assertTrue($val->validate('fTp://www.yiiframework.com/')->isValid());
+        $result = $rule->validate($value);
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testValidateWithIdn(): void
+    public function schemaShouldBeCaseInsensitiveProvider(): array
     {
-        if (!function_exists('idn_to_ascii')) {
-            $this->markTestSkipped('intl package required');
-        }
+        $rule  = new Url(validSchemes: ['http', 'FTP']);
+
+        return [
+            [$rule, 'HtTp://www.yiiframework.com/'],
+            [$rule, 'fTp://www.yiiframework.com/'],
+        ];
+    }
+
+    /**
+     * @dataProvider schemaShouldBeCaseInsensitiveProvider
+     */
+    public function testSchemaShouldBeCaseInsensitive(Url $rule, string $value): void
+    {
+        $result = $rule->validate($value);
+        $this->assertTrue($result->isValid());
+    }
+
+    public function validateWithIdnProvider(): array
+    {
+        return [
+            ['http://äüößìà.de'],
+            ['http://xn--zcack7ayc9a.de'],
+        ];
+    }
+
+    /**
+     * @dataProvider validateWithIdnProvider
+     */
+    public function testValidateWithIdn(string $value): void
+    {
+        $this->intlPackageRequired();
 
         $rule = new Url(enableIDN: true);
-        $this->assertTrue($rule->validate('http://äüößìà.de')->isValid());
-        // converted via http://mct.verisign-grs.com/convertServlet
-        $this->assertTrue($rule->validate('http://xn--zcack7ayc9a.de')->isValid());
+        $result = $rule->validate($value);
+
+        $this->assertTrue($result->isValid());
     }
 
     public function testValidateWithIdnType(): void
     {
-        if (!function_exists('idn_to_ascii')) {
-            $this->markTestSkipped('intl package required');
-        }
+        $this->intlPackageRequired();;
 
         $rule = new Url(enableIDN: true);
-        $this->assertFalse($rule->validate('')->isValid());
+        $result = $rule->validate('');
+
+        $this->assertFalse($result->isValid());
     }
 
     public function testEnableIdnException(): void
@@ -118,25 +163,27 @@ class UrlTest extends TestCase
 
     public function testValidateLength(): void
     {
-        $url = 'http://' . str_pad('base', 2000, 'url') . '.de';
+        $value = 'http://' . str_pad('base', 2000, 'url') . '.de';
         $rule = new Url();
+        $result = $rule->validate($value);
 
-        $this->assertFalse($rule->validate($url)->isValid());
+        $this->assertFalse($result->isValid());
     }
 
     public function testValidateWithIdnWithoutScheme(): void
     {
-        if (!function_exists('idn_to_ascii')) {
-            $this->markTestSkipped('intl package required');
-        }
+        $this->intlPackageRequired();
 
         $rule = new Url(pattern: '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i', enableIDN: true);
-        $this->assertTrue($rule->validate('домен.рф')->isValid());
+        $result = $rule->validate('домен.рф');
+
+        $this->assertTrue($result->isValid());
     }
 
     public function testName(): void
     {
-        $this->assertEquals('url', (new Url())->getName());
+        $rule = new Url();
+        $this->assertSame('url', $rule->getName());
     }
 
     public function optionsProvider(): array
@@ -199,13 +246,20 @@ class UrlTest extends TestCase
     {
         $this->assertEquals($expected, $rule->getOptions());
     }
+
+    private function intlPackageRequired(): void
+    {
+        if (!function_exists('idn_to_ascii')) {
+            $this->markTestSkipped('intl package required');
+        }
+    }
 }
 
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Tests\Rule\UrlTest;
 
-function function_exists($function)
+function function_exists(string $function)
 {
     return $function === 'idn_to_ascii' && UrlTest::$idnFunctionExists !== null
         ? UrlTest::$idnFunctionExists
