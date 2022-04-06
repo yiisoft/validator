@@ -54,7 +54,9 @@ class SubsetTest extends TestCase
     public function testValidateEmpty(): void
     {
         $rule = new Subset(range(10, 20));
-        $this->assertTrue($rule->validate([])->isValid());
+        $result = $rule->validate([]);
+
+        $this->assertTrue($result->isValid());
     }
 
     public function testName(): void
