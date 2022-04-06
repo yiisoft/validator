@@ -38,7 +38,7 @@ class SubsetTest extends TestCase
 
         return [
             [$rule, ['a', 'b']],
-            [$rule, new ArrayObject(['a', 'b'])]
+            [$rule, new ArrayObject(['a', 'b'])],
         ];
     }
 
