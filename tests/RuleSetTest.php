@@ -199,7 +199,7 @@ class RuleSetTest extends TestCase
                         'skipOnError' => false,
                     ],
                 ],
-            ]
+            ],
         ];
     }
 
