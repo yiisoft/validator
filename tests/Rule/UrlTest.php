@@ -104,7 +104,7 @@ class UrlTest extends TestCase
 
     public function schemaShouldBeCaseInsensitiveProvider(): array
     {
-        $rule  = new Url(validSchemes: ['http', 'FTP']);
+        $rule = new Url(validSchemes: ['http', 'FTP']);
 
         return [
             [$rule, 'HtTp://www.yiiframework.com/'],
