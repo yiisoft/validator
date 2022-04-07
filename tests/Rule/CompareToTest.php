@@ -32,7 +32,7 @@ class CompareToTest extends TestCase
         $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function validateWIthOperatorProvider(): array
+    public function validateWithOperatorProvider(): array
     {
         $value = 18449;
 
