@@ -5,147 +5,275 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Exception\MissingAttributeException;
-use Yiisoft\Validator\Rule;
+use stdClass;
 use Yiisoft\Validator\Rule\Number;
+use function fclose;
+use function is_resource;
 
-/**
- * @group validators
- */
 class NumberTest extends TestCase
 {
-    public function testValidateSimple(): void
+    public function validateSimpleProvider(): array
     {
-        $rule = new Number();
-        $this->assertTrue($rule->validate(20)->isValid());
-        $this->assertTrue($rule->validate(0)->isValid());
-        $this->assertTrue($rule->validate(-20)->isValid());
-        $this->assertTrue($rule->validate('20')->isValid());
-        $this->assertTrue($rule->validate(25.45)->isValid());
-        $this->assertTrue($rule->validate('25,45')->isValid());
-        $this->assertFalse($rule->validate('12:45')->isValid());
+        return [
+            [20, true],
+            [0, true],
+            [-20, true],
+            ['20', true],
+            [25.45, true],
+            ['25,45', true],
+            ['12:45', false],
+        ];
     }
 
-    public function testValidateSimpleInteger(): void
+    /**
+     * @dataProvider validateSimpleProvider
+     */
+    public function testValidateSimple(mixed $value, bool $expectedIsValid): void
+    {
+        $rule = new Number();
+        $result = $rule->validate($value);
+
+        $this->assertSame($expectedIsValid, $result->isValid());
+    }
+
+    public function validateSimpleIntegerProvider(): array
+    {
+        return [
+            [20, true],
+            [0, true],
+            [25.45, false],
+            ['20', true],
+            ['25,45', false],
+            ['020', true],
+            [0x14, true],
+            ['0x14', false], // TODO: Check this
+        ];
+    }
+
+    /**
+     * @dataProvider validateSimpleIntegerProvider
+     */
+    public function testValidateSimpleInteger(mixed $value, bool $expectedIsValid): void
     {
         $rule = new Number(asInteger: true);
+        $result = $rule->validate($value);
 
-        $this->assertTrue($rule->validate(20)->isValid());
-        $this->assertTrue($rule->validate(0)->isValid());
-        $this->assertFalse($rule->validate(25.45)->isValid());
-        $this->assertTrue($rule->validate('20')->isValid());
-        $this->assertFalse($rule->validate('25,45')->isValid());
-        $this->assertTrue($rule->validate('020')->isValid());
-        $this->assertTrue($rule->validate(0x14)->isValid());
-        $this->assertFalse($rule->validate('0x14')->isValid()); // todo check this
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testValidateBoolean(): void
+    public function validateBooleanProvider(): array
+    {
+        return [
+            [false],
+            [true],
+        ];
+    }
+
+    /**
+     * @dataProvider validateBooleanProvider
+     */
+    public function testValidateBoolean(mixed $value): void
     {
         $rule = new Number();
+        $result = $rule->validate($value);
 
-        $this->assertFalse($rule->validate(false)->isValid());
-        $this->assertFalse($rule->validate(true)->isValid());
+        $this->assertFalse($result->isValid());
     }
 
-    public function testValidateAdvanced(): void
+    public function validateAdvancedProvider(): array
+    {
+        return [
+            'signed float' => ['-1.23', true],
+            'signed float + exponent' => ['-4.423e-12', true],
+            'integer + exponent' => ['12E3', true],
+            'just exponent' => ['e12', false],
+            'just exponent with minus sign' => ['-e3', false],
+            '"signed" exponent' => ['-4.534-e-12', false],
+            'expression instead of value' => ['12.23^4', false],
+        ];
+    }
+
+    /**
+     * @dataProvider validateAdvancedProvider
+     */
+    public function testValidateAdvanced(string $value, bool $expectedIsValid): void
     {
         $rule = new Number();
-        $this->assertTrue($rule->validate('-1.23')->isValid()); // signed float
-        $this->assertTrue($rule->validate('-4.423e-12')->isValid()); // signed float + exponent
-        $this->assertTrue($rule->validate('12E3')->isValid()); // integer + exponent
-        $this->assertFalse($rule->validate('e12')->isValid()); // just exponent
-        $this->assertFalse($rule->validate('-e3')->isValid());
-        $this->assertFalse($rule->validate('-4.534-e-12')->isValid()); // 'signed' exponent
-        $this->assertFalse($rule->validate('12.23^4')->isValid()); // expression instead of value
+        $result = $rule->validate($value);
+
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testValidateAdvancedInteger(): void
+    public function validateAdvancedInteger(): array
+    {
+        return [
+            ['-1.23'],
+            ['-4.423e-12'],
+            ['12E3'],
+            ['e12'],
+            ['-e3'],
+            ['-4.534-e-12'],
+            ['12.23^4'],
+        ];
+    }
+
+    /**
+     * @dataProvider validateAdvancedInteger
+     */
+    public function testValidateAdvancedInteger(string $value): void
     {
         $rule = new Number(asInteger: true);
-        $this->assertFalse($rule->validate('-1.23')->isValid());
-        $this->assertFalse($rule->validate('-4.423e-12')->isValid());
-        $this->assertFalse($rule->validate('12E3')->isValid());
-        $this->assertFalse($rule->validate('e12')->isValid());
-        $this->assertFalse($rule->validate('-e3')->isValid());
-        $this->assertFalse($rule->validate('-4.534-e-12')->isValid());
-        $this->assertFalse($rule->validate('12.23^4')->isValid());
+        $result = $rule->validate($value);
+
+        $this->assertFalse($result->isValid());
     }
 
     public function testValidateWhereDecimalPointIsComma(): void
     {
         $rule = new Number();
-        $this->assertTrue($rule->validate(.5)->isValid());
+        $result = $rule->validate(.5);
+
+        $this->assertTrue($result->isValid());
     }
 
-    public function testValidateMin(): void
+    public function validateMinProvider(): array
     {
         $rule = new Number(min: 1);
 
-        $this->assertTrue($rule->validate(1)->isValid());
-
-        $result = $rule->validate(-1);
-        $this->assertFalse($result->isValid());
-        $this->assertEquals(['Value must be no less than 1.'], $result->getErrorMessages());
-
-        $this->assertFalse($rule->validate('22e-12')->isValid());
-        $this->assertTrue($rule->validate(PHP_INT_MAX + 1)->isValid());
+        return [
+            [$rule, 1, true, []],
+            [$rule, -1, false, ['Value must be no less than 1.']],
+            [$rule, '22e-12', false, ['Value must be no less than 1.']],
+            [$rule, PHP_INT_MAX + 1, true, []],
+        ];
     }
 
-    public function testValidateMinInteger(): void
+    /**
+     * @param string[] $expectedErrorMessages
+     *
+     * @dataProvider validateMinProvider
+     */
+    public function testValidateMin(
+        Number $rule,
+        mixed $value,
+        bool $expectedIsValid,
+        array $expectedErrorMessages
+    ): void {
+        $result = $rule->validate($value);
+
+        $this->assertSame($expectedIsValid, $result->isValid());
+        $this->assertEquals($expectedErrorMessages, $result->getErrorMessages());
+    }
+
+    public function validateMinIntegerProvider(): array
     {
         $rule = new Number(asInteger: true, min: 1);
 
-        $this->assertTrue($rule->validate(1)->isValid(), '1 is a valid integer');
-        $this->assertFalse($rule->validate(-1)->isValid(), '-1 is not a valid integer');
-        $this->assertFalse($rule->validate('22e-12')->isValid(), '22e-12 is not a valid integer');
+        return [
+            [$rule, 1, true],
+            [$rule, -1, false],
+            [$rule, '22e-12', false],
+        ];
     }
 
-    public function testValidateMax(): void
+    /**
+     * @dataProvider validateMinIntegerProvider
+     */
+    public function testValidateMinInteger(Number $rule, mixed $value, bool $expectedIsValid): void
+    {
+        $result = $rule->validate($value);
+        $this->assertSame($expectedIsValid, $result->isValid());
+    }
+
+    public function validateMaxProvider(): array
     {
         $rule = new Number(max: 1.25);
 
-        $this->assertTrue($rule->validate(1)->isValid());
-        $this->assertFalse($rule->validate(1.5)->isValid());
-        $this->assertTrue($rule->validate('22e-12')->isValid());
-        $this->assertTrue($rule->validate('125e-2')->isValid());
+        return [
+            [$rule, 1, true],
+            [$rule, 1.5, false],
+            [$rule, '22e-12', true],
+            [$rule, '125e-2', true],
+        ];
     }
 
-    public function testValidateMaxInteger(): void
+    /**
+     * @dataProvider validateMaxProvider
+     */
+    public function testValidateMax(Number $rule, mixed $value, bool $expectedIsValid): void
+    {
+        $result = $rule->validate($value);
+        $this->assertSame($expectedIsValid, $result->isValid());
+    }
+
+    public function validateMaxIntegerProvider(): array
     {
         $rule = new Number(asInteger: true, max: 1.25);
 
-        $this->assertTrue($rule->validate(1)->isValid());
-        $this->assertFalse($rule->validate(1.5)->isValid());
-        $this->assertFalse($rule->validate('22e-12')->isValid());
-        $this->assertFalse($rule->validate('125e-2')->isValid());
+        return [
+            [$rule, 1, true],
+            [$rule, 1.5, false],
+            [$rule, '22e-12', false],
+            [$rule, '125e-2', false],
+        ];
     }
 
-    public function testValidateRange(): void
+    /**
+     * @dataProvider validateMaxIntegerProvider
+     */
+    public function testValidateMaxInteger(Number $rule, mixed $value, bool $expectedIsValid): void
+    {
+        $result = $rule->validate($value);
+        $this->assertSame($expectedIsValid, $result->isValid());
+    }
+
+    public function validateRangeProvider(): array
     {
         $rule = new Number(min: -10, max: 20);
 
-        $this->assertTrue($rule->validate(0)->isValid());
-        $this->assertTrue($rule->validate(-10)->isValid());
-        $this->assertFalse($rule->validate(-11)->isValid());
-        $this->assertFalse($rule->validate(21)->isValid());
+        return [
+            [$rule, 0, true],
+            [$rule, -10, true],
+            [$rule, -11, false],
+            [$rule, 21, false],
+        ];
     }
 
-    public function testValidateRangeInteger(): void
+    /**
+     * @dataProvider validateRangeProvider
+     */
+    public function testValidateRange(Number $rule, mixed $value, bool $expectedIsValid): void
+    {
+        $result = $rule->validate($value);
+        $this->assertSame($expectedIsValid, $result->isValid());
+    }
+
+    public function validateRangeIntegerProvider(): array
     {
         $rule = new Number(asInteger: true, min: -10, max: 20);
 
-        $this->assertTrue($rule->validate(0)->isValid());
-        $this->assertFalse($rule->validate(-11)->isValid());
-        $this->assertFalse($rule->validate(22)->isValid());
-        $this->assertFalse($rule->validate('20e-1')->isValid());
+        return [
+            [$rule, 0, true],
+            [$rule, -11, false],
+            [$rule, 22, false],
+            [$rule, '20e-1', false],
+        ];
+    }
+
+    /**
+     * @dataProvider validateRangeIntegerProvider
+     */
+    public function testValidateRangeInteger(Number $rule, mixed $value, bool $expectedIsValid): void
+    {
+        $result = $rule->validate($value);
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
     public function testScientificFormat(): void
     {
         $rule = new Number();
         $result = $rule->validate('5.5e1');
+
         $this->assertTrue($result->isValid());
     }
 
@@ -153,135 +281,114 @@ class NumberTest extends TestCase
     {
         $rule = new Number();
         $result = $rule->validate('43^32');
+
         $this->assertFalse($result->isValid());
     }
 
     public function testMinEdge(): void
     {
         $rule = new Number(min: 10);
-
         $result = $rule->validate(10);
+
         $this->assertTrue($result->isValid());
     }
 
     public function testLessThanMin(): void
     {
         $rule = new Number(min: 10);
-
         $result = $rule->validate(5);
+
         $this->assertFalse($result->isValid());
     }
 
     public function testMaxEdge(): void
     {
         $rule = new Number(max: 10);
-
         $result = $rule->validate(10);
+
         $this->assertTrue($result->isValid());
     }
 
     public function testMaxEdgeInteger(): void
     {
         $rule = new Number(asInteger: true, min: 10);
-
         $result = $rule->validate(10);
+
         $this->assertTrue($result->isValid());
     }
 
     public function testMoreThanMax(): void
     {
         $rule = new Number(max: 10);
-
         $result = $rule->validate(15);
+
         $this->assertFalse($result->isValid());
     }
 
     public function testFloatWithInteger(): void
     {
         $rule = new Number(asInteger: true, max: 10);
-
         $result = $rule->validate(3.43);
+
         $this->assertFalse($result->isValid());
     }
 
     public function testArray(): void
     {
         $rule = new Number(min: 1);
-
         $result = $rule->validate([1, 2, 3]);
+
         $this->assertFalse($result->isValid());
+    }
+
+    public function objectProvider(): array
+    {
+        return [
+            [new Number(min: 1), new stdClass()],
+            [new Number(), new stdClass()],
+        ];
     }
 
     /**
-     * @see https://github.com/yiisoft/yii2/issues/11672
+     * @link https://github.com/yiisoft/yii2/issues/11672
+     *
+     * @dataProvider objectProvider
      */
-    public function testStdClass(): void
+    public function testObject(Number $rule, object $value): void
     {
-        $rule = new Number(min: 1);
-
-        $result = $rule->validate(new \stdClass());
+        $result = $rule->validate($value);
         $this->assertFalse($result->isValid());
     }
 
-    public function getDataSet(array $attributeValues): DataSetInterface
-    {
-        return new class ($attributeValues) implements DataSetInterface {
-            private array $data;
-
-            public function __construct(array $data)
-            {
-                $this->data = $data;
-            }
-
-            public function getAttributeValue(string $attribute)
-            {
-                if (!isset($this->data[$attribute])) {
-                    throw new MissingAttributeException("There is no \"$attribute\" attribute in the class.");
-                }
-
-                return $this->data[$attribute];
-            }
-        };
-    }
-
-    public function testEnsureCustomMessageIsSetOnvalidate(): void
+    public function testEnsureCustomMessageIsSetOnValidate(): void
     {
         $rule = new Number(min: 5, tooSmallMessage: 'Value is too small.');
         $result = $rule->validate(0);
 
-        $this->assertFalse($result->isValid());
         $this->assertEquals(['Value is too small.'], $result->getErrorMessages());
-    }
-
-    public function testValidateObject(): void
-    {
-        $rule = new Number();
-        $value = new \stdClass();
-        $this->assertFalse($rule->validate($value)->isValid());
     }
 
     public function testValidateResource(): void
     {
         $rule = new Number();
-        $fp = fopen('php://stdin', 'r');
-        $this->assertFalse($rule->validate($fp)->isValid());
-
+        $fp = fopen('php://stdin', 'rb');
         $result = $rule->validate($fp);
+
         $this->assertFalse($result->isValid());
 
-        // the check is here for HHVM that
-        // was losing handler for unknown reason
+        // The check is here for HHVM that was losing handler for unknown reason
         if (is_resource($fp)) {
             fclose($fp);
         }
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
-        $this->assertEquals('number', (new Number())->getName());
+        $rule = new Number();
+        $this->assertEquals('number', $rule->getName());
     }
 
-    public function optionsProvider(): array
+    public function getOptionsProvider(): array
     {
         return [
             [
@@ -353,13 +460,10 @@ class NumberTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
-     *
-     * @param Rule $rule
-     * @param array $expected
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(Rule $rule, array $expected): void
+    public function testGetOptions(Number $rule, array $expectedOptions): void
     {
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 }

@@ -169,7 +169,7 @@ final class Ip extends Rule
          */
         private string $notInRangeMessage = 'Is not in the allowed range.',
         /**
-         * @var array The IPv4 or IPv6 ranges that are allowed or forbidden.
+         * @var string[] The IPv4 or IPv6 ranges that are allowed or forbidden.
          *
          * The following preparation tasks are performed:
          *

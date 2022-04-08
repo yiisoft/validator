@@ -6,88 +6,157 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use ArrayObject;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\InRange;
 
-/**
- * @group validators
- */
 class InRangeTest extends TestCase
 {
-    public function testValidate(): void
+    public function validateWithDefaultArgumentsProvider(): array
     {
-        $rule = new InRange(range(1, 10));
+        $range = range(1, 10);
 
-        $this->assertTrue($rule->validate(1)->isValid());
-        $this->assertFalse($rule->validate(0)->isValid());
-        $this->assertFalse($rule->validate(11)->isValid());
-        $this->assertFalse($rule->validate(5.5)->isValid());
-        $this->assertTrue($rule->validate(10)->isValid());
-        $this->assertTrue($rule->validate('10')->isValid());
-        $this->assertTrue($rule->validate('5')->isValid());
+        return [
+            [$range, 1, true],
+            [$range, 0, false],
+            [$range, 11, false],
+            [$range, 5.5, false],
+            [$range, 10, true],
+            [$range, '10', true],
+            [$range, '5', true],
+        ];
     }
 
-    public function testValidateEmpty(): void
+    /**
+     * @dataProvider validateWithDefaultArgumentsProvider
+     */
+    public function testValidateWithDefaultArguments(iterable $range, mixed $value, bool $expectedIsValid): void
     {
-        $rule = new InRange(range(10, 20));
+        $rule = new InRange($range);
+        $result = $rule->validate($value);
 
-        $this->assertFalse($rule->validate(null)->isValid()); // row RangeValidatorTest.php:101
-        $this->assertFalse($rule->validate('0')->isValid());
-        $this->assertFalse($rule->validate(0)->isValid());
-        $this->assertFalse($rule->validate('')->isValid());
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testValidateArrayValue(): void
+    public function validateEmptyDataProvider(): array
     {
-        // Test in array, values are arrays. IE: ['a'] in [['a'], ['b']]
-        $rule = new InRange([['a'], ['b']]);
-        $this->assertTrue($rule->validate(['a'])->isValid());
+        $range = range(10, 20);
 
-        // Test range as ArrayObject
-        $rule = new InRange(new ArrayObject(['a', 'b']));
-        $this->assertTrue($rule->validate('a')->isValid());
+        return [
+            [$range, null, false],
+            [$range, '0', false],
+            [$range, 0, false],
+            [$range, '', false],
+        ];
     }
 
-    public function testValidateStrict(): void
+    /**
+     * @dataProvider validateEmptyDataProvider
+     */
+    public function testValidateEmpty(iterable $range, mixed $value, bool $expectedIsValid): void
     {
-        $rule = new InRange(range(1, 10), strict: true);
+        $rule = new InRange($range);
+        $result = $rule->validate($value);
 
-        $this->assertTrue($rule->validate(1)->isValid());
-        $this->assertTrue($rule->validate(5)->isValid());
-        $this->assertTrue($rule->validate(10)->isValid());
-        $this->assertFalse($rule->validate('1')->isValid());
-        $this->assertFalse($rule->validate('10')->isValid());
-        $this->assertFalse($rule->validate('5.5')->isValid());
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testValidateArrayValueStrict(): void
+    public function validateArrayValueDataProvider(): array
     {
-        $rule = new InRange(range(1, 10), strict: true);
-
-        $this->assertFalse($rule->validate(['1', '2', '3', '4', '5', '6'])->isValid());
-        $this->assertFalse($rule->validate(['1', '2', '3', 4, 5, 6])->isValid());
+        return [
+            [[['a'], ['b']], ['a'], true],
+            [new ArrayObject(['a', 'b']), 'a', true],
+        ];
     }
 
-    public function testValidateNot()
+    /**
+     * @dataProvider validateArrayValueDataProvider
+     */
+    public function testValidateArrayValue(iterable $range, mixed $value, bool $expectedIsValid): void
     {
-        $rule = new InRange(range(1, 10), not: true);
+        $rule = new InRange($range);
+        $result = $rule->validate($value);
 
-        $this->assertFalse($rule->validate(1)->isValid());
-        $this->assertTrue($rule->validate(0)->isValid());
-        $this->assertTrue($rule->validate(11)->isValid());
-        $this->assertTrue($rule->validate(5.5)->isValid());
-        $this->assertFalse($rule->validate(10)->isValid());
-        $this->assertFalse($rule->validate('10')->isValid());
-        $this->assertFalse($rule->validate('5')->isValid());
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testName(): void
+    public function validateStrictDataProvider(): array
+    {
+        $range = range(1, 10);
+
+        return [
+            [$range, 1, true],
+            [$range, 5, true],
+            [$range, 10, true],
+            [$range, '1', false],
+            [$range, '10', false],
+            [$range, '5.5', false],
+        ];
+    }
+
+    /**
+     * @dataProvider validateStrictDataProvider
+     */
+    public function testValidateStrict(iterable $range, mixed $value, bool $expectedIsValid): void
+    {
+        $rule = new InRange($range, strict: true);
+        $result = $rule->validate($value);
+
+        $this->assertSame($expectedIsValid, $result->isValid());
+    }
+
+    public function validateArrayValueStrictProvider(): array
+    {
+        $range = range(1, 10);
+
+        return [
+            [$range, ['1', '2', '3', '4', '5', '6'], false],
+            [$range, ['1', '2', '3', 4, 5, 6], false],
+        ];
+    }
+
+    /**
+     * @dataProvider validateArrayValueStrictProvider
+     */
+    public function testValidateArrayValueStrict(iterable $range, mixed $value, bool $expectedIsValid): void
+    {
+        $rule = new InRange($range, strict: true);
+        $result = $rule->validate($value);
+
+        $this->assertSame($expectedIsValid, $result->isValid());
+    }
+
+    public function validateNotProvider(): array
+    {
+        $range = range(1, 10);
+
+        return [
+            [$range, 1, false],
+            [$range, 0, true],
+            [$range, 11, true],
+            [$range, 5.5, true],
+            [$range, 10, false],
+            [$range, '10', false],
+            [$range, '5', false],
+        ];
+    }
+
+    /**
+     * @dataProvider validateNotProvider
+     */
+    public function testValidateNot(iterable $range, mixed $value, bool $expectedIsValid): void
+    {
+        $rule = new InRange($range, not: true);
+        $result = $rule->validate($value);
+
+        $this->assertSame($expectedIsValid, $result->isValid());
+    }
+
+    public function testGetName(): void
     {
         $rule = new InRange(range(1, 10));
         $this->assertEquals('inRange', $rule->getName());
     }
 
-    public function optionsProvider(): array
+    public function getOptionsProvider(): array
     {
         return [
             [
@@ -127,13 +196,10 @@ class InRangeTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
-     *
-     * @param Rule $rule
-     * @param array $expected
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(Rule $rule, array $expected): void
+    public function testGetOptions(InRange $rule, array $expectedOptions): void
     {
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 }
