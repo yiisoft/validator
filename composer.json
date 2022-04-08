@@ -20,6 +20,7 @@
         "php": "^8.0",
         "ext-json": "*",
         "ext-mbstring": "*",
+        "jetbrains/phpstorm-attributes": "^1.0",
         "yiisoft/arrays": "^2.0",
         "yiisoft/friendly-exception": "^1.0",
         "yiisoft/network-utilities": "^1.0",

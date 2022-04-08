@@ -57,7 +57,7 @@ abstract class Rule implements ParametrizedRuleInterface
      *
      * @return Result
      */
-    final public function validate($value, ?ValidationContext $context = null): Result
+    final public function validate(mixed $value, ?ValidationContext $context = null): Result
     {
         if ($this->skipOnEmpty && $this->isEmpty($value)) {
             return new Result();

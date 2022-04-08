@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use JetBrains\PhpStorm\Pure;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ScalarDataSet;
 use function is_array;
@@ -45,6 +46,7 @@ final class Validator implements ValidatorInterface
         return $result;
     }
 
+    #[Pure]
     private function normalizeDataSet($data): DataSetInterface
     {
         if ($data instanceof DataSetInterface) {
