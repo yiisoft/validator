@@ -7,9 +7,11 @@ namespace Yiisoft\Validator\Tests\DataSet;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\AttributeDataSet;
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Tests\Data\Charts\ChartsData;
+use Yiisoft\Validator\Tests\Data\Post;
 
 final class AttributeDataSetTest extends TestCase
 {
@@ -41,6 +43,17 @@ final class AttributeDataSetTest extends TestCase
                 ], incorrectInputMessage: 'Custom message 1.', message: 'Custom message 2.'),
             ],
         ];
+
+        $this->assertEquals($expectedRules, $dataSet->getRules());
+    }
+
+    /**
+     * @link https://github.com/yiisoft/validator/issues/198
+     */
+    public function testGetRulesViaTraits(): void
+    {
+        $dataSet = new AttributeDataSet(new Post());
+        $expectedRules = ['title' => [new HasLength(max: 255)]];
 
         $this->assertEquals($expectedRules, $dataSet->getRules());
     }
