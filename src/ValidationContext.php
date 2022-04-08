@@ -76,7 +76,7 @@ final class ValidationContext
      *
      * @see ArrayHelper::getValue()
      */
-    public function getParameter(string $key, $default = null)
+    public function getParameter(string $key, mixed $default = null): mixed
     {
         return ArrayHelper::getValue($this->parameters, $key, $default);
     }
