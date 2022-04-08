@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Countable;
+use InvalidArgumentException;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
@@ -14,6 +15,10 @@ use function count;
 use function is_array;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
+/**
+ * Validates that the value contains certain number of items. Can be applied to arrays or classes implementing
+ * {@see Countable} interface.
+ */
 final class Count extends Rule
 {
     public function __construct(
@@ -30,12 +35,17 @@ final class Count extends Rule
          */
         private ?int $max = null,
         /**
-         * @var string user-defined error message used when the value is neither an array nor implementing "Countable"
-         * interface.
+         * @var int|null exact number of items. null means no strict comparison. Mutually exclusive with {@see $min} and
+         * {@see $max}.
+         */
+        private ?int $exactly = null,
+        /**
+         * @var string user-defined error message used when the value is neither an array nor implementing
+         * {@see \Countable} interface.
          *
          * @see Countable
          */
-        private string $message = 'This value must be an array or implement "Countable" interface.',
+        private string $message = 'This value must be an array or implement \Countable interface.',
         /**
          * @var string user-defined error message used when the number of items is smaller than {@see $min}.
          */
@@ -49,6 +59,20 @@ final class Count extends Rule
         bool $skipOnError = false,
         $when = null
     ) {
+        if (!$this->min && !$this->max && !$this->exactly) {
+            throw new InvalidArgumentException(
+                'At least one of these attributes must be specified: $min, $max, $exactly.'
+            );
+        }
+
+        if ($this->min && $this->max && $this->min === $this->max) {
+            throw new InvalidArgumentException('Use $exactly instead.');
+        }
+
+        if ($this->exactly && ($this->min || $this->max)) {
+            throw new InvalidArgumentException('$exactly is mutually exclusive with $min and $max.');
+        }
+
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
@@ -58,14 +82,22 @@ final class Count extends Rule
 
         if (!is_array($value) && !$value instanceof Countable) {
             $result->addError($this->formatMessage($this->message));
+
             return $result;
         }
 
         $count = count($value);
 
+        if ($this->exactly !== null && $count !== $this->exactly) {
+            $result->addError('');
+
+            return $result;
+        }
+
         if ($this->min !== null && $count < $this->min) {
             $result->addError($this->formatMessage($this->tooFewItemsMessage, ['min' => $this->min]));
         }
+
         if ($this->max !== null && $count > $this->max) {
             $result->addError($this->formatMessage($this->tooManyItemsMessage, ['max' => $this->max]));
         }
