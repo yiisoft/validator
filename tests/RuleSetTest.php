@@ -261,17 +261,17 @@ class RuleSetTest extends TestCase
         $ruleSet = new RuleSet([
             static function ($value): Result {
                 $result = new Result();
-                $result->addError('e1');
-                $result->addError('e2');
-                $result->addError('e3');
+                $result->addError('e1')
+                    ->addError('e2')
+                    ->addError('e3');
 
                 return $result;
             },
             static function ($value): Result {
                 $result = new Result();
-                $result->addError('e4');
-                $result->addError('e5');
-                $result->addError('e6');
+                $result->addError('e4')
+                    ->addError('e5')
+                    ->addError('e6');
 
                 return $result;
             },
