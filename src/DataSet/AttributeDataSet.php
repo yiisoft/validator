@@ -79,33 +79,36 @@ final class AttributeDataSet implements RulesProviderInterface
                 }
             }
 
-            $flatRules = [];
+            $eachRuleFound = false;
+            $eachRules = [];
             $attributes = $property->getAttributes();
             foreach ($attributes as $attribute) {
                 if (!is_subclass_of($attribute->getName(), RuleInterface::class)) {
                     continue;
                 }
 
-                if (in_array($attribute->getName(), [Each::class, Nested::class])) {
+                if ($attribute->getName() === Each::class) {
+                    $eachRuleFound = true;
+
                     continue;
                 }
 
-                $flatRules[] = $attribute->newInstance();
+                if ($attribute->getName() === Nested::class) {
+                    continue;
+                }
+
+                $eachRuleFound
+                    ? $eachRules[] = $attribute->newInstance()
+                    : $rules[$property->getName()][] = $attribute->newInstance();
             }
 
-            if (!$flatRules) {
-                continue;
-            }
-
-            if ((string) $property->getType() !== 'array') {
-                $rules[$property->getName()] = $flatRules;
-
+            if (!$eachRules || (string) $property->getType() !== 'array') {
                 continue;
             }
 
             /** @psalm-suppress UndefinedMethod */
             $rules[$property->getName()][] = new Each(
-                $flatRules,
+                $eachRules,
                 ...(($property->getAttributes(Each::class)[0] ?? null)?->getArguments() ?? [])
             );
         }
