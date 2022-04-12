@@ -12,7 +12,6 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 use function count;
-use function is_array;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
 /**

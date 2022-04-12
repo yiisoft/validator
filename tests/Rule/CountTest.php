@@ -120,8 +120,7 @@ class CountTest extends TestCase
         array $value,
         bool $expectedIsValid,
         array $expectedErrorMessages
-    ): void
-    {
+    ): void {
         $result = $rule->validate($value);
 
         $this->assertSame($expectedIsValid, $result->isValid());
@@ -159,8 +158,7 @@ class CountTest extends TestCase
         array $value,
         bool $expectedIsValid,
         array $expectedErrorMessages
-    ): void
-    {
+    ): void {
         $result = $rule->validate($value);
 
         $this->assertSame($expectedIsValid, $result->isValid());
