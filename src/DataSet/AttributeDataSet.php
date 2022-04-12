@@ -14,8 +14,6 @@ use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 
-use function in_array;
-
 /**
  * This data set makes use of attributes introduced in PHP 8. It simplifies rules configuration process, especially for
  * nested data and relations. Please refer to the guide for example.
