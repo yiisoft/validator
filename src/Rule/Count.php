@@ -13,11 +13,11 @@ use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 use function count;
 
-#[Attribute(Attribute::TARGET_PROPERTY)]
 /**
  * Validates that the value contains certain number of items. Can be applied to arrays or classes implementing
  * {@see Countable} interface.
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class Count extends Rule
 {
     public function __construct(
