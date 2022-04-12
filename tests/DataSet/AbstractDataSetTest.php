@@ -11,16 +11,7 @@ use Yiisoft\Validator\Rule\Number;
 
 abstract class AbstractDataSetTest extends TestCase
 {
-    /**
-     * @dataProvider validationCasesDataProvider
-     *
-     * @param array $dataSet
-     */
-    final public function test(array $dataSet, array $rules): void
-    {
-        $result = $this->validate($dataSet, $rules);
-        $this->assertTrue($result->isValid());
-    }
+    abstract protected function validate(array $dataSet, array $rules): Result;
 
     public function validationCasesDataProvider(): array
     {
@@ -33,17 +24,12 @@ abstract class AbstractDataSetTest extends TestCase
     }
 
     /**
-     * @dataProvider resultDataProvider
-     *
-     * @param array $dataSet
+     * @dataProvider validationCasesDataProvider
      */
-    public function testResult(array $dataSet, array $rules): void
+    final public function test(array $dataSet, array $rules): void
     {
         $result = $this->validate($dataSet, $rules);
-
-        $this->assertTrue($result->isAttributeValid('bool'));
-        $this->assertFalse($result->isAttributeValid('int'));
-        $this->assertCount(2, $result->getAttributeErrors('int'));
+        $this->assertTrue($result->isValid());
     }
 
     public function resultDataProvider(): array
@@ -73,5 +59,15 @@ abstract class AbstractDataSetTest extends TestCase
         ];
     }
 
-    abstract protected function validate(array $dataSet, array $rules): Result;
+    /**
+     * @dataProvider resultDataProvider
+     */
+    public function testResult(array $dataSet, array $rules): void
+    {
+        $result = $this->validate($dataSet, $rules);
+
+        $this->assertTrue($result->isAttributeValid('bool'));
+        $this->assertFalse($result->isAttributeValid('int'));
+        $this->assertCount(2, $result->getAttributeErrors('int'));
+    }
 }

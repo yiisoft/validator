@@ -286,6 +286,23 @@ $validator = new Validator();
 $errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
 ```
 
+Traits are supported too:
+
+```php
+use Yiisoft\Validator\Rule\HasLength;
+
+trait TitleTrait
+{
+    #[HasLength(max: 255)]
+    private string $title;
+}
+
+final class Post
+{
+    use TitleTrait;
+}
+````
+
 This approach has some limitations.
 
 `Each` and `Nested` rules are not supported directly. Use `HasOne` and `HasMany` attributes for declaring relations (or 

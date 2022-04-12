@@ -10,17 +10,6 @@ use Yiisoft\Validator\RulesDumper;
 
 final class RulesDumperTest extends TestCase
 {
-    /**
-     * @dataProvider asArrayDataProvider
-     */
-    public function testAsArray($rules, array $expected): void
-    {
-        $dumper = new RulesDumper();
-        $result = $dumper->asArray($rules);
-
-        $this->assertEquals($expected, $result);
-    }
-
     public function asArrayDataProvider(): array
     {
         return [
@@ -55,5 +44,16 @@ final class RulesDumperTest extends TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * @dataProvider asArrayDataProvider
+     */
+    public function testAsArray($rules, array $expected): void
+    {
+        $dumper = new RulesDumper();
+        $result = $dumper->asArray($rules);
+
+        $this->assertEquals($expected, $result);
     }
 }

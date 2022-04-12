@@ -5,12 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Boolean;
 
-/**
- * @group validators
- */
 class BooleanTest extends TestCase
 {
     public function validateProvider(): array
@@ -42,17 +38,19 @@ class BooleanTest extends TestCase
     /**
      * @dataProvider validateProvider
      */
-    public function testValidate(Rule $rule, $value, bool $expected): void
+    public function testValidate(Boolean $rule, mixed $value, bool $expectedIsValid): void
     {
-        $this->assertSame($expected, $rule->validate($value)->isValid());
+        $result = $rule->validate($value);
+        $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testName(): void
+    public function testGetName(): void
     {
-        $this->assertEquals('boolean', (new Boolean())->getName());
+        $rule = new Boolean();
+        $this->assertEquals('boolean', $rule->getName());
     }
 
-    public function optionsProvider(): array
+    public function getOptionsProvider(): array
     {
         return [
             [
@@ -136,13 +134,10 @@ class BooleanTest extends TestCase
     }
 
     /**
-     * @dataProvider optionsProvider
-     *
-     * @param Rule $rule
-     * @param array $expected
+     * @dataProvider getOptionsProvider
      */
-    public function testOptions(Rule $rule, array $expected): void
+    public function testGetOptions(Boolean $rule, array $expectedOptions): void
     {
-        $this->assertEquals($expected, $rule->getOptions());
+        $this->assertEquals($expectedOptions, $rule->getOptions());
     }
 }
