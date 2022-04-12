@@ -49,7 +49,7 @@ final class Count extends Rule
          * @var string user-defined error message used when the number of items is smaller than {@see $min}.
          */
         private string $tooFewItemsMessage = 'This value must contain at least {min, number} ' .
-        '{min, plural, one{items} other{items}}.',
+        '{min, plural, one{item} other{items}}.',
         /**
          * @var string user-defined error message used when the number of items is greater than {@see $max}.
          */
