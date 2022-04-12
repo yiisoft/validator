@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionObject;
+use RuntimeException;
 use Yiisoft\Validator\Rule\Email;
 use function function_exists;
 
@@ -104,6 +106,19 @@ class EmailTest extends TestCase
         $result = $rule->validate($value);
 
         $this->assertSame($expectedIsValid, $result->isValid());
+    }
+
+    public function testEnableIdnWithMissingIntlExtension(): void
+    {
+        $rule = new Email(enableIDN: true);
+
+        $reflection = new ReflectionObject($rule);
+        $property = $reflection->getProperty('idnFunctionExists');
+        $property->setAccessible(true);
+        $property->setValue($rule, false);
+
+        $this->expectException(RuntimeException::class);
+        $rule->validate('');
     }
 
     public function validateWithEnableIdnProvider(): array

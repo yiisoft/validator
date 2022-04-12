@@ -23,6 +23,8 @@ use function strlen;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Url extends Rule
 {
+    use IdnDependencyTrait;
+
     public function __construct(
         /**
          * @var string the regular expression used to validate the value.
@@ -52,14 +54,13 @@ final class Url extends Rule
         $when = null
     ) {
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
-
-        if ($enableIDN && !function_exists('idn_to_ascii')) {
-            throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
-        }
+        $this->initIdnFunctionExists();
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
+        $this->idnFunctionRequired();
+
         $result = new Result();
 
         // make sure the length is limited to avoid DOS attacks

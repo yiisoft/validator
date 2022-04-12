@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionObject;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Url;
 
@@ -12,20 +13,6 @@ use function function_exists;
 
 class UrlTest extends TestCase
 {
-    public static ?bool $idnFunctionExists = null;
-
-    protected function setUp(): void
-    {
-        static::$idnFunctionExists = null;
-        parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        static::$idnFunctionExists = null;
-        parent::tearDown();
-    }
-
     public function validateWithDefaultArgumentsProvider(): array
     {
         return [
@@ -152,12 +139,17 @@ class UrlTest extends TestCase
         $this->assertFalse($result->isValid());
     }
 
-    public function testEnableIdnException(): void
+    public function testEnableIdnWithMissingIntlExtension(): void
     {
-        static::$idnFunctionExists = false;
+        $rule = new Url(enableIDN: true);
+
+        $reflection = new ReflectionObject($rule);
+        $property = $reflection->getProperty('idnFunctionExists');
+        $property->setAccessible(true);
+        $property->setValue($rule, false);
 
         $this->expectException(RuntimeException::class);
-        new Url(enableIDN: true);
+        $rule->validate('');
     }
 
     public function testValidateLength(): void
@@ -249,15 +241,4 @@ class UrlTest extends TestCase
             $this->markTestSkipped('intl package required');
         }
     }
-}
-
-namespace Yiisoft\Validator\Rule;
-
-use Yiisoft\Validator\Tests\Rule\UrlTest;
-
-function function_exists(string $function): bool
-{
-    return $function === 'idn_to_ascii' && UrlTest::$idnFunctionExists !== null
-        ? UrlTest::$idnFunctionExists
-        : \function_exists($function);
 }
