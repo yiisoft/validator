@@ -10,6 +10,7 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\InRange;
@@ -214,7 +215,10 @@ class NestedTest extends TestCase
                                 ],
                                 'y' => [new Number(min: -10, max: 10)],
                             ]),
-                            'rgb' => [new Each([new Number(min: 0, max: 255)])],
+                            'rgb' => [
+                                new Count(exactly: 3),
+                                new Each([new Number(min: 0, max: 255)]),
+                            ],
                         ])]),
                     ],
                 ])]),

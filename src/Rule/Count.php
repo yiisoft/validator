@@ -49,11 +49,18 @@ final class Count extends Rule
         /**
          * @var string user-defined error message used when the number of items is smaller than {@see $min}.
          */
-        private string $tooFewItemsMessage = 'This value should contain at least {min, number} {min, plural, one{items} other{items}}.',
+        private string $tooFewItemsMessage = 'This value must contain at least {min, number} ' .
+        '{min, plural, one{items} other{items}}.',
         /**
          * @var string user-defined error message used when the number of items is greater than {@see $max}.
          */
-        private string $tooManyItemsMessage = 'This value should contain at most {max, number} {max, plural, one{item} other{items}}.',
+        private string $tooManyItemsMessage = 'This value must contain at most {max, number} ' .
+        '{max, plural, one{item} other{items}}.',
+        /**
+         * @var string user-defined error message used when the number of items does not equal {@see $exactly}.
+         */
+        private string $notExactlyMessage = 'This value must contain exactly {max, number} ' .
+        '{max, plural, one{item} other{items}}.',
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
@@ -65,12 +72,12 @@ final class Count extends Rule
             );
         }
 
-        if ($this->min && $this->max && $this->min === $this->max) {
-            throw new InvalidArgumentException('Use $exactly instead.');
-        }
-
         if ($this->exactly && ($this->min || $this->max)) {
             throw new InvalidArgumentException('$exactly is mutually exclusive with $min and $max.');
+        }
+
+        if ($this->min && $this->max && $this->min === $this->max) {
+            throw new InvalidArgumentException('Use $exactly instead.');
         }
 
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
@@ -80,7 +87,7 @@ final class Count extends Rule
     {
         $result = new Result();
 
-        if (!is_array($value) && !$value instanceof Countable) {
+        if (!is_countable($value)) {
             $result->addError($this->formatMessage($this->message));
 
             return $result;
@@ -89,17 +96,20 @@ final class Count extends Rule
         $count = count($value);
 
         if ($this->exactly !== null && $count !== $this->exactly) {
-            $result->addError('');
+            $message = $this->formatMessage($this->notExactlyMessage, ['exactly' => $this->exactly]);
+            $result->addError($message);
 
             return $result;
         }
 
         if ($this->min !== null && $count < $this->min) {
-            $result->addError($this->formatMessage($this->tooFewItemsMessage, ['min' => $this->min]));
+            $message = $this->formatMessage($this->tooFewItemsMessage, ['min' => $this->min]);
+            $result->addError($message);
         }
 
         if ($this->max !== null && $count > $this->max) {
-            $result->addError($this->formatMessage($this->tooManyItemsMessage, ['max' => $this->max]));
+            $message = $this->formatMessage($this->tooManyItemsMessage, ['max' => $this->max]);
+            $result->addError($message);
         }
 
         return $result;
@@ -110,9 +120,11 @@ final class Count extends Rule
         return array_merge(parent::getOptions(), [
             'min' => $this->min,
             'max' => $this->max,
+            'exactly' => $this->exactly,
             'message' => $this->formatMessage($this->message),
             'tooFewItemsMessage' => $this->formatMessage($this->tooFewItemsMessage, ['min' => $this->min]),
             'tooManyItemsMessage' => $this->formatMessage($this->tooManyItemsMessage, ['max' => $this->max]),
+            'notExactlyMessage' => $this->formatMessage($this->notExactlyMessage, ['exactly' => $this->exactly]),
         ]);
     }
 }
