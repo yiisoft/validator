@@ -100,7 +100,7 @@ class CountTest extends TestCase
     public function validateWithMinDataProvider(): array
     {
         $rule = new Count(min: 3);
-        $errorMessages = ['This value must contain at least {min, number} {min, plural, one{items} other{items}}.'];
+        $errorMessages = ['This value must contain at least {min, number} {min, plural, one{item} other{items}}.'];
 
         return [
             [$rule, [], false, $errorMessages],
@@ -206,7 +206,7 @@ class CountTest extends TestCase
             'exactly' => null,
             'message' => 'This value must be an array or implement \Countable interface.',
             'tooFewItemsMessage' => 'This value must contain at least {min, number} ' .
-                '{min, plural, one{items} other{items}}.',
+                '{min, plural, one{item} other{items}}.',
             'tooManyItemsMessage' => 'This value must contain at most {max, number} ' .
                 '{max, plural, one{item} other{items}}.',
             'notExactlyMessage' => 'This value must contain exactly {max, number} ' .
