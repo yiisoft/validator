@@ -15,8 +15,7 @@ class CustomRuleTest extends TestCase
 {
     public function testUsingCommonArgumentsViaComposition()
     {
-        $rule = new class() implements RuleInterface
-        {
+        $rule = new class () implements RuleInterface {
             private Number $baseRule;
 
             public function __construct()
