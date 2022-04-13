@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
