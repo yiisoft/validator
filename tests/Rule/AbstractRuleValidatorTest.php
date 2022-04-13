@@ -18,7 +18,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
     {
         $result = $this->validate($value, $config);
 
-        $this->assertTrue($result->isValid());
+        $this->assertTrue($result->isValid(), print_r($result->getErrors(), true));
     }
 
     /**
@@ -28,7 +28,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
     {
         $result = $this->validate($value, $config);
 
-        $this->assertFalse($result->isValid());
+        $this->assertFalse($result->isValid(), print_r($result->getErrors(), true));
         $this->assertEquals($expectedErrors, $result->getErrors());
     }
 
@@ -45,6 +45,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
 
         $errors = $result->getErrors();
 
+        $this->assertFalse($result->isValid(), print_r($result->getErrors(), true));
         $this->assertEquals($expectedErrorMessages, $errors);
     }
 
