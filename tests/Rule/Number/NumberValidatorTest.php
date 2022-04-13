@@ -113,7 +113,6 @@ final class NumberValidatorTest extends AbstractRuleValidatorTest
             [new Number(min: -10, max: 20), -10],
 
             [new Number(asInteger: true, min: -10, max: 20), 0],
-
         ];
     }
 

@@ -36,7 +36,7 @@ final class JsonValidatorTest extends AbstractRuleValidatorTest
         $rule = new Json();
 
         return [
-// JSON test from http://www.json.org/JSON_checker/test/pass1.json
+            // JSON test from http://www.json.org/JSON_checker/test/pass1.json
             [
                 $rule,
                 <<<'JSON'

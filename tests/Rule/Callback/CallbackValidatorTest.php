@@ -62,7 +62,7 @@ final class CallbackValidatorTest extends AbstractRuleValidatorTest
     {
         $this->expectException(InvalidCallbackReturnTypeException::class);
 
-        $rule = new Callback(static fn(): string => 'invalid return');
+        $rule = new Callback(static fn (): string => 'invalid return');
 
         $this->validate(null, $rule);
     }
