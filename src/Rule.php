@@ -9,7 +9,7 @@ use function is_callable;
 /**
  * Rule represents a single value validation rule.
  */
-abstract class Rule implements ParametrizedRuleInterface
+abstract class Rule
 {
     public function __construct(
         private ?FormatterInterface $formatter = null,

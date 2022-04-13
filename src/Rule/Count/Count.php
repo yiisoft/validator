@@ -8,14 +8,18 @@ use Attribute;
 use Closure;
 use Countable;
 use InvalidArgumentException;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\Rule\RuleNameTrait;
 
 /**
  * Validates that the value contains certain number of items. Can be applied to arrays or classes implementing
  * {@see Countable} interface.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Count
+final class Count implements ParametrizedRuleInterface
 {
+    use RuleNameTrait;
+
     public function __construct(
         /**
          * @var int|null minimum number of items. null means no minimum number limit.

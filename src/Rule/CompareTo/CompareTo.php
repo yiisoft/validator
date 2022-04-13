@@ -8,6 +8,8 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use RuntimeException;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\Rule\RuleNameTrait;
 
 /**
  * Compares the specified value with another value.
@@ -23,8 +25,10 @@ use RuntimeException;
  * {@see CompareTo::TYPE_NUMBER} to enable numeric comparison.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class CompareTo
+final class CompareTo implements ParametrizedRuleInterface
 {
+    use RuleNameTrait;
+
     /**
      * Constant for specifying the comparison as string values.
      * No conversion will be done before comparison.

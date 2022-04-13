@@ -8,6 +8,8 @@ use Attribute;
 use Closure;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\Rule\RuleNameTrait;
 use function array_key_exists;
 use function strlen;
 
@@ -17,8 +19,10 @@ use function strlen;
  * It also may change the value if normalization of IPv6 expansion is enabled.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Ip
+final class Ip implements ParametrizedRuleInterface
 {
+    use RuleNameTrait;
+
     /**
      * Negation char.
      *

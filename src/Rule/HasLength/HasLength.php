@@ -6,6 +6,8 @@ namespace Yiisoft\Validator\Rule\HasLength;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\Rule\RuleNameTrait;
 
 /**
  * Validates that the value is of certain length.
@@ -13,8 +15,10 @@ use Closure;
  * Note, this rule should only be used with strings.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class HasLength
+final class HasLength implements ParametrizedRuleInterface
 {
+    use RuleNameTrait;
+
     public function __construct(
         /**
          * @var int|null minimum length. null means no minimum length limit.

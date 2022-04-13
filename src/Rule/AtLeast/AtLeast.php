@@ -6,13 +6,17 @@ namespace Yiisoft\Validator\Rule\AtLeast;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\Rule\RuleNameTrait;
 
 /**
  * Checks if at least {@see AtLeast::$min} of many attributes are filled.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class AtLeast
+final class AtLeast implements ParametrizedRuleInterface
 {
+    use RuleNameTrait;
+
     public function __construct(
         /**
          * The list of required attributes that will be checked.

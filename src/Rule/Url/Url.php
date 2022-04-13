@@ -7,6 +7,8 @@ namespace Yiisoft\Validator\Rule\Url;
 use Attribute;
 use Closure;
 use RuntimeException;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\Rule\RuleNameTrait;
 
 /**
  * Validates that the value is a valid HTTP or HTTPS URL.
@@ -15,8 +17,10 @@ use RuntimeException;
  * It does not check the remaining parts of a URL.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Url
+final class Url implements ParametrizedRuleInterface
 {
+    use RuleNameTrait;
+
     public function __construct(
         /**
          * @var string the regular expression used to validate the value.

@@ -6,13 +6,17 @@ namespace Yiisoft\Validator\Rule\Required;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\Rule\RuleNameTrait;
 
 /**
  * Validates that the specified value is neither null nor empty.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Required
+final class Required implements ParametrizedRuleInterface
 {
+    use RuleNameTrait;
+
     public function __construct(
         public string   $message = 'Value cannot be blank.',
         public bool     $skipOnEmpty = false,

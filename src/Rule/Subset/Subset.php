@@ -6,10 +6,14 @@ namespace Yiisoft\Validator\Rule\Subset;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\Rule\RuleNameTrait;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Subset
+final class Subset implements ParametrizedRuleInterface
 {
+    use RuleNameTrait;
+
     public function __construct(
         public iterable $values,
         /**
