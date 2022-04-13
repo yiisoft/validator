@@ -13,7 +13,7 @@ use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 /**
- * @group t2
+ * @group t
  */
 final class CallbackValidatorTest extends AbstractRuleValidatorTest
 {
@@ -62,7 +62,7 @@ final class CallbackValidatorTest extends AbstractRuleValidatorTest
     {
         $this->expectException(InvalidCallbackReturnTypeException::class);
 
-        $rule = new Callback(static fn (): string => 'invalid return');
+        $rule = new Callback(static fn(): string => 'invalid return');
 
         $this->validate(null, $rule);
     }

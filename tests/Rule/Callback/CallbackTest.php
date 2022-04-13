@@ -10,7 +10,7 @@ use Yiisoft\Validator\Rule\Callback\Callback;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 /**
- * @group t2
+ * @group t
  */
 final class CallbackTest extends AbstractRuleTest
 {
