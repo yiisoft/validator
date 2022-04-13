@@ -21,7 +21,7 @@ final class CallbackValidatorTest extends AbstractRuleValidatorTest
     {
         return [
             [
-                 new Callback(static function ($value): Result {
+                new Callback(static function ($value): Result {
                     $result = new Result();
                     if ($value !== 42) {
                         $result->addError('Value should be 42!');
@@ -30,10 +30,11 @@ final class CallbackValidatorTest extends AbstractRuleValidatorTest
                     return $result;
                 }),
                 41,
-                [new Error('Value should be 42!')]
+                [new Error('Value should be 42!')],
             ],
         ];
     }
+
     public function passedValidationProvider(): array
     {
         return [
@@ -54,7 +55,6 @@ final class CallbackValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-
         ];
     }
 

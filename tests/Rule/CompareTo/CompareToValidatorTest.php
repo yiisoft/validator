@@ -47,7 +47,6 @@ final class CompareToValidatorTest extends AbstractRuleValidatorTest
             [new CompareTo($value, operator: '<'), $value + 1, [new Error($messageLessThan, ['value' => $value])]],
 
             [new CompareTo($value, operator: '<='), $value + 1, [new Error($messageLessOrEqualThan, ['value' => $value])]],
-
         ];
     }
 
@@ -82,7 +81,6 @@ final class CompareToValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-
         ];
     }
 
