@@ -266,6 +266,28 @@ final class Coordinates
 }
 ```
 
+To combine both flat rules and "each" rules, specify `Each` explicitly and place flat rules above "each" ones:
+
+```php
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Attribute\HasMany;
+use Yiisoft\Validator\Attribute\HasOne;
+use Yiisoft\Validator\Rule\Number;
+
+final class Point
+{
+    #[HasOne(Coordinates::class)]
+    private $coordinates;
+    #[Count(exactly: 3)]
+    #[Each()]
+    #[Number(min: 0, max: 255)]
+    private array $rgb;
+}
+```
+
+In this example `Count` will be applied to the whole value and `Number` - for each item.
+
 Here are some technical details:
 
 - `HasOne` uses `Nested` rule.

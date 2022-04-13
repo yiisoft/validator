@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\DataSet;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\AttributeDataSet;
+use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Nested;
@@ -33,6 +34,7 @@ final class AttributeDataSetTest extends TestCase
                                     propertyPathIsNotFoundMessage: 'Custom message 4.'
                                 ),
                                 'rgb' => [
+                                    new Count(exactly: 3),
                                     new Each([
                                         new Number(min: 0, max: 255),
                                     ], incorrectInputMessage: 'Custom message 5.', message: 'Custom message 6.'),
