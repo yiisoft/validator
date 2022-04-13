@@ -102,6 +102,8 @@ final class Number extends Rule
             'notANumberMessage' => $this->formatMessage($this->getNotANumberMessage()),
             'tooSmallMessage' => $this->formatMessage($this->tooSmallMessage, ['min' => $this->min]),
             'tooBigMessage' => $this->formatMessage($this->tooBigMessage, ['max' => $this->max]),
+            'integerPattern' => $this->integerPattern,
+            'numberPattern' => $this->numberPattern,
         ]);
     }
 }

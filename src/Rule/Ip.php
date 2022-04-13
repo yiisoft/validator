@@ -363,6 +363,7 @@ final class Ip extends Rule
     public function getOptions(): array
     {
         return array_merge(parent::getOptions(), [
+            'networks' => $this->networks,
             'allowIpv4' => $this->allowIpv4,
             'allowIpv6' => $this->allowIpv6,
             'allowSubnet' => $this->allowSubnet,

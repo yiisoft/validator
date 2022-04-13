@@ -11,6 +11,8 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\ValidationContext;
+use function is_array;
+use function is_iterable;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.

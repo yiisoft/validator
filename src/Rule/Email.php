@@ -142,6 +142,9 @@ final class Email extends Rule
     public function getOptions(): array
     {
         return array_merge(parent::getOptions(), [
+            'pattern' => $this->pattern,
+            'fullPattern' => $this->fullPattern,
+            'idnEmailPattern' => $this->idnEmailPattern,
             'allowName' => $this->allowName,
             'checkDNS' => $this->checkDNS,
             'enableIDN' => $this->enableIDN,
