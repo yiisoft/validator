@@ -13,38 +13,27 @@ use Yiisoft\Validator\Rule\Number;
 
 class ResultTest extends TestCase
 {
-    /**
-     * @test
-     */
     public function isValidByDefault(): void
     {
         $result = new Result();
         $this->assertTrue($result->isValid());
     }
 
-    /**
-     * @test
-     */
     public function errorsAreEmptyByDefault(): void
     {
         $result = new Result();
         $this->assertEmpty($result->getErrorMessages());
     }
 
-    /**
-     * @test
-     */
-    public function errorIsProperlyAdded(): void
+    public function errorsAreProperlyAdded(): void
     {
         $result = new Result();
-        $result->addError('Error');
+        $result->addError('Error 1')
+            ->addError('Error 2');
 
-        $this->assertContains('Error', $result->getErrorMessages());
+        $this->assertEquals(['Error 1', 'Error 2'], $result->getErrorMessages());
     }
 
-    /**
-     * @test
-     */
     public function addingErrorChangesIsValid(): void
     {
         $result = new Result();
@@ -77,8 +66,8 @@ class ResultTest extends TestCase
     private function createErrorResult(): Result
     {
         $result = new Result();
-        $result->addError('error1', []);
-        $result->addError('error2', ['path', 2]);
+        $result->addError('error1', [])
+            ->addError('error2', ['path', 2]);
 
         return $result;
     }
@@ -158,12 +147,12 @@ class ResultTest extends TestCase
     private function createAttributeErrorResult(): Result
     {
         $result = new Result();
-        $result->addError('error2.1', ['attribute2']);
-        $result->addError('error2.2', ['attribute2']);
-        $result->addError('error2.3', ['attribute2', 'nested']);
-        $result->addError('error2.4', ['attribute2', 'nested']);
-        $result->addError('error3.1');
-        $result->addError('error3.2');
+        $result->addError('error2.1', ['attribute2'])
+            ->addError('error2.2', ['attribute2'])
+            ->addError('error2.3', ['attribute2', 'nested'])
+            ->addError('error2.4', ['attribute2', 'nested'])
+            ->addError('error3.1')
+            ->addError('error3.2');
 
         return $result;
     }

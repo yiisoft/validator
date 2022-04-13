@@ -145,8 +145,10 @@ final class Result
     /**
      * @psalm-param array<int|string> $valuePath
      */
-    public function addError(string $message, array $valuePath = []): void
+    public function addError(string $message, array $valuePath = []): self
     {
         $this->errors[] = new Error($message, $valuePath);
+
+        return $this;
     }
 }
