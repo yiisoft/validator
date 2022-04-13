@@ -145,6 +145,8 @@ new Number(asInteger: true, max: 100, skipOnEmpty: true)
 
 #### Nested and related data
 
+##### Basic usage
+
 In many cases there is a need to validate related data in addition to current entity / model. There is a `Nested` rule 
 for this purpose:
 
@@ -164,6 +166,43 @@ $rule = new Nested([
 ]);
 $errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
 ```
+
+##### Other configuration options
+
+A dot notation can be used as an alternative way of configuration. In this case the example above will be presented as
+following:
+
+```php
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
+
+$rule = new Nested([
+    'title' => [new Required()],
+    'author.name' => [new HasLength(min: 3)],
+    'author.age' => [new Number(min: 18)],
+)];
+```
+
+It's also possible to combine both of these approaches:
+
+```php
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
+
+$data = ['author' => ['name' => 'Alexey', 'age' => '31']];
+$rule = new Nested([
+    'data.author' => new Nested([
+        'name' => [new HasLength(min: 3)],
+        'age' => [new Number(min: 18)],
+    )];
+]);
+```
+
+##### Advanced usage
 
 A more complex real-life example is a chart that is made of points. This data is represented as arrays. `Nested` can be 
 combined with `Each` rule to validate such similar structures:
