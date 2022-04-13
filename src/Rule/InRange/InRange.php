@@ -21,22 +21,21 @@ final class InRange implements ParametrizedRuleInterface
     use RuleNameTrait;
 
     public function __construct(
-        public iterable  $range,
+        public iterable $range,
         /**
          * @var bool whether the comparison is strict (both type and value must be the same)
          */
-        public bool     $strict = false,
+        public bool $strict = false,
         /**
          * @var bool whether to invert the validation logic. Defaults to false. If set to `true`, the value should NOT
          * be among the list of values passed via constructor.
          */
-        public bool     $not = false,
-        public string   $message = 'This value is invalid.',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public bool $not = false,
+        public string $message = 'This value is invalid.',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
-    )
-    {
+    ) {
     }
 
     public function getOptions(): array

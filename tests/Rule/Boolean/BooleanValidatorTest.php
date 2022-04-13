@@ -63,7 +63,6 @@ final class BooleanValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-
         ];
     }
 

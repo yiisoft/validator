@@ -31,14 +31,12 @@ final class Boolean implements ParametrizedRuleInterface
          * When this is `true`, the value and type must both match those of {@see $trueValue} or
          * {@see $falseValue}. Defaults to `false`, meaning only the value needs to be matched.
          */
-        public bool     $strict = false,
-        public string   $message = 'The value must be either "{true}" or "{false}".',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public bool $strict = false,
+        public string $message = 'The value must be either "{true}" or "{false}".',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
-    )
-    {
-
+    ) {
     }
 
     public function getOptions(): array
@@ -51,8 +49,8 @@ final class Boolean implements ParametrizedRuleInterface
                 'message' => $this->message,
                 'parameters' => [
                     // TODO: get reasons to do like this
-//                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-//                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+                    //                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                    //                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
                     'true' => $this->trueValue,
                     'false' => $this->falseValue,
                 ],

@@ -18,9 +18,9 @@ final class Json implements ParametrizedRuleInterface
     use RuleNameTrait;
 
     public function __construct(
-        public string   $message = 'The value is not JSON.',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public string $message = 'The value is not JSON.',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
     ) {
     }

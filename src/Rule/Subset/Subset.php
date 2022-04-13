@@ -19,14 +19,13 @@ final class Subset implements ParametrizedRuleInterface
         /**
          * @var bool whether the comparison is strict (both type and value must be the same)
          */
-        public bool     $strict = false,
-        public string   $iterableMessage = 'Value must be iterable.',
-        public string   $subsetMessage = 'Values must be ones of {values}.',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public bool $strict = false,
+        public string $iterableMessage = 'Value must be iterable.',
+        public string $subsetMessage = 'Values must be ones of {values}.',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
     ) {
-
     }
 
     public function getOptions(): array

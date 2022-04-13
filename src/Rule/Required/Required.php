@@ -18,12 +18,11 @@ final class Required implements ParametrizedRuleInterface
     use RuleNameTrait;
 
     public function __construct(
-        public string   $message = 'Value cannot be blank.',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public string $message = 'Value cannot be blank.',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
     ) {
-
     }
 
     public function getOptions(): array

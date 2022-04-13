@@ -26,45 +26,44 @@ final class Count implements ParametrizedRuleInterface
          *
          * @see $tooFewItemsMessage for the customized message for a value with too few items.
          */
-        public ?int     $min = null,
+        public ?int $min = null,
         /**
          * @var int|null maximum number of items. null means no maximum number limit.
          *
          * @see $tooManyItemsMessage for the customized message for a value wuth too many items.
          */
-        public ?int     $max = null,
+        public ?int $max = null,
         /**
          * @var int|null exact number of items. null means no strict comparison. Mutually exclusive with {@see $min} and
          * {@see $max}.
          */
-        public ?int     $exactly = null,
+        public ?int $exactly = null,
         /**
          * @var string user-defined error message used when the value is neither an array nor implementing
          * {@see \Countable} interface.
          *
          * @see Countable
          */
-        public string   $message = 'This value must be an array or implement \Countable interface.',
+        public string $message = 'This value must be an array or implement \Countable interface.',
         /**
          * @var string user-defined error message used when the number of items is smaller than {@see $min}.
          */
-        public string   $tooFewItemsMessage = 'This value must contain at least {min, number} ' .
+        public string $tooFewItemsMessage = 'This value must contain at least {min, number} ' .
         '{min, plural, one{item} other{items}}.',
         /**
          * @var string user-defined error message used when the number of items is greater than {@see $max}.
          */
-        public string   $tooManyItemsMessage = 'This value must contain at most {max, number} ' .
+        public string $tooManyItemsMessage = 'This value must contain at most {max, number} ' .
         '{max, plural, one{item} other{items}}.',
         /**
          * @var string user-defined error message used when the number of items does not equal {@see $exactly}.
          */
-        public string   $notExactlyMessage = 'This value must contain exactly {max, number} ' .
+        public string $notExactlyMessage = 'This value must contain exactly {max, number} ' .
         '{max, plural, one{item} other{items}}.',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
-    )
-    {
+    ) {
         if (!$this->min && !$this->max && !$this->exactly) {
             throw new InvalidArgumentException(
                 'At least one of these attributes must be specified: $min, $max, $exactly.'

@@ -58,7 +58,7 @@ final class UrlValidator implements RuleValidatorInterface
 
         return preg_replace_callback(
             '/:\/\/([^\/]+)/',
-            fn($matches) => '://' . $this->idnToAscii($matches[1]),
+            fn ($matches) => '://' . $this->idnToAscii($matches[1]),
             $value
         );
     }
