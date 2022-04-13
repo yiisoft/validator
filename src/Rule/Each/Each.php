@@ -29,7 +29,7 @@ final class Each implements ParametrizedRuleInterface
         public ?Closure $when = null,
     ) {
 //        if ($rules !== []) {
-            $this->ruleSet = new RuleSet($rules);
+        $this->ruleSet = new RuleSet($rules);
 //        }
     }
 

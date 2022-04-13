@@ -16,7 +16,6 @@ final class EmailTest extends AbstractRuleTest
     public function optionsDataProvider(): array
     {
         return [
-
             [
                 new Email(),
                 [
