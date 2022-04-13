@@ -17,6 +17,7 @@ use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\ParametrizedRule;
 
@@ -337,5 +338,31 @@ class NestedTest extends TestCase
         $this->assertIsString($indexedErrors['key.0'][1]);
         $this->assertIsString($indexedErrors['key.1'][0]);
         $this->assertIsString($indexedErrors['key.1'][1]);
+    }
+
+    /**
+     * @link https://github.com/yiisoft/validator/issues/200
+     */
+    public function testCombineDotNotationAndNestedStructure(): void
+    {
+        $rule = new Nested([
+            'body.shipping' => [
+                new Required(),
+                new Nested([
+                    'phone' => [new Regex('/^\+\d{11}$/')],
+                ]),
+            ],
+        ]);
+        $data = [
+            'body' => [
+                'shipping' => [
+                    'phone' => '+777777777777',
+                ],
+            ],
+        ];
+        $result = $rule->validate($data);
+        $expectedErrors = [new Error('Value is invalid.', ['body', 'shipping', 'phone'])];
+
+        $this->assertEquals($expectedErrors, $result->getErrors());
     }
 }
