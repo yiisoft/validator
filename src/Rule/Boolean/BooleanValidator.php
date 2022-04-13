@@ -33,8 +33,11 @@ final class BooleanValidator implements RuleValidatorInterface
         }
 
         $result->addError($config->message, [
-            'true' => $config->trueValue === true ? 'true' : $config->trueValue,
-            'false' => $config->falseValue === false ? 'false' : $config->falseValue,
+            // TODO: get reasons to do like this
+//            'true' => $config->trueValue === true ? 'true' : $config->trueValue,
+//            'false' => $config->falseValue === false ? 'false' : $config->falseValue,
+            'true' => $config->trueValue,
+            'false' => $config->falseValue,
         ]);
 
         return $result;

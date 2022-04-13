@@ -21,7 +21,7 @@ final class Boolean implements ParametrizedRuleInterface
         /**
          * @var mixed the value representing true status. Defaults to '1'.
          */
-        public           $trueValue = '1',
+        public          $trueValue = '1',
         /**
          * @var mixed the value representing false status. Defaults to '0'.
          */
@@ -50,8 +50,11 @@ final class Boolean implements ParametrizedRuleInterface
             'message' => [
                 'message' => $this->message,
                 'parameters' => [
-                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+                    // TODO: get reasons to do like this
+//                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+//                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+                    'true' => $this->trueValue,
+                    'false' => $this->falseValue,
                 ],
             ],
             'skipOnEmpty' => $this->skipOnEmpty,
