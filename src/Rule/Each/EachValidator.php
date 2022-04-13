@@ -10,6 +10,7 @@ use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
+ * TODO: need validators storage
  * Validates an array by checking each of its elements against a set of rules.
  */
 final class EachValidator implements RuleValidatorInterface

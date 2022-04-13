@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
-use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\Callback\Callback;
 use function get_class;
 use function gettype;
 use function is_callable;
@@ -57,16 +57,16 @@ final class RuleSet
         return $compoundResult;
     }
 
-    private function normalizeRule($rule): RuleInterface
+    private function normalizeRule($rule): ParametrizedRuleInterface
     {
         if (is_callable($rule)) {
             return new Callback($rule);
         }
 
-        if (!$rule instanceof RuleInterface) {
+        if (!$rule instanceof ParametrizedRuleInterface) {
             throw new InvalidArgumentException(sprintf(
                 'Rule should be either an instance of %s or a callable, %s given.',
-                RuleInterface::class,
+                ParametrizedRuleInterface::class,
                 gettype($rule)
             ));
         }

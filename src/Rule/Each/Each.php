@@ -18,7 +18,7 @@ final class Each implements ParametrizedRuleInterface
 {
     use RuleNameTrait;
 
-    private ?RuleSet $ruleSet = null;
+    public ?RuleSet $ruleSet = null;
 
     public function __construct(
         public iterable $rules = [],
@@ -28,9 +28,9 @@ final class Each implements ParametrizedRuleInterface
         public bool $skipOnError = false,
         public ?Closure $when = null,
     ) {
-        if ($rules !== []) {
+//        if ($rules !== []) {
             $this->ruleSet = new RuleSet($rules);
-        }
+//        }
     }
 
     public function getOptions(): array
