@@ -44,7 +44,7 @@ final class AtLeast implements ParametrizedRuleInterface
         return [
             'min' => $this->min,
             'message' => [
-                'messages' => $this->message,
+                'message' => $this->message,
                 'parameters' => ['min' => $this->min],
             ],
             'skipOnEmpty' => $this->skipOnEmpty,
