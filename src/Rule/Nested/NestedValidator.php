@@ -8,6 +8,7 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\RuleSet;
+use Yiisoft\Validator\RuleValidatorStorage;
 use Yiisoft\Validator\ValidationContext;
 use function is_array;
 use function is_object;
@@ -39,6 +40,14 @@ use function is_object;
  */
 final class NestedValidator implements RuleValidatorInterface
 {
+    private ?RuleValidatorStorage $storage;
+
+    public function __construct(RuleValidatorStorage $storage = null)
+    {
+        // TODO: just for test
+        $this->storage = $storage ?? new RuleValidatorStorage();
+    }
+
     public static function getConfigClassName(): string
     {
         return Nested::class;
@@ -64,9 +73,9 @@ final class NestedValidator implements RuleValidatorInterface
             }
 
             $rules = is_array($rules) ? $rules : [$rules];
-            $ruleSet = new RuleSet($rules);
+            $ruleSet = new RuleSet($this->storage, $rules);
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
-            $itemResult = $ruleSet->validate($validatedValue);
+            $itemResult = $ruleSet->validate($validatedValue, $config);
             if ($itemResult->isValid()) {
                 continue;
             }

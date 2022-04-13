@@ -18,15 +18,17 @@ final class RuleSet
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 
     /**
-     * @var RuleInterface[]
+     * @var ParametrizedRuleInterface[]
      */
     private array $rules = [];
+    private RuleValidatorStorage $storage;
 
-    public function __construct(iterable $rules = [])
+    public function __construct(RuleValidatorStorage $storage, iterable $rules = [])
     {
         foreach ($rules as $rule) {
             $this->add($rule);
         }
+        $this->storage = $storage;
     }
 
     /**
@@ -37,13 +39,14 @@ final class RuleSet
         $this->rules[] = $this->normalizeRule($rule);
     }
 
-    public function validate($value, ValidationContext $context = null): Result
+    public function validate($value, object $config, ValidationContext $context = null): Result
     {
         $context = $context ?? new ValidationContext();
 
         $compoundResult = new Result();
         foreach ($this->rules as $rule) {
-            $ruleResult = $rule->validate($value, $context);
+            $validator = $this->storage->getValidator(get_class($rule));
+            $ruleResult = $validator->validate($value, $rule, $context);
             if ($ruleResult->isValid()) {
                 continue;
             }

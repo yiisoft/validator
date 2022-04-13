@@ -11,7 +11,6 @@ use Traversable;
 use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\RuleNameTrait;
-use Yiisoft\Validator\RuleInterface;
 use function is_array;
 
 /**
@@ -61,7 +60,7 @@ final class Nested implements ParametrizedRuleInterface
         }
 
         if ($this->checkRules($rules)) {
-            $message = sprintf('Each rule should be an instance of %s.', RuleInterface::class);
+            $message = sprintf('Each rule should be an instance of %s.', ParametrizedRuleInterface::class);
             throw new InvalidArgumentException($message);
         }
 
@@ -73,7 +72,7 @@ final class Nested implements ParametrizedRuleInterface
         return array_reduce(
             $rules,
             function (bool $carry, $rule) {
-                return $carry || (is_array($rule) ? $this->checkRules($rule) : !$rule instanceof RuleInterface);
+                return $carry || (is_array($rule) ? $this->checkRules($rule) : !$rule instanceof ParametrizedRuleInterface);
             },
             false
         );
@@ -92,9 +91,6 @@ final class Nested implements ParametrizedRuleInterface
                 $result[$attribute] = $this->fetchOptions($rule);
             } elseif ($rule instanceof ParametrizedRuleInterface) {
                 $result[$attribute] = $rule->getOptions();
-            } elseif ($rule instanceof RuleInterface) {
-                // Just skip the rule that doesn't support parametrizing
-                continue;
             } else {
                 throw new InvalidArgumentException(sprintf(
                     'Rules should be an array of rules that implements %s.',

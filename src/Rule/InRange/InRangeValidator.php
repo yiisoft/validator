@@ -26,6 +26,10 @@ final class InRangeValidator implements RuleValidatorInterface
     {
         $result = new Result();
 
+        if ($config->skipOnEmpty && $value === null) {
+            return $result;
+        }
+
         if ($config->not === ArrayHelper::isIn($value, $config->range, $config->strict)) {
             $result->addError($config->message);
         }
