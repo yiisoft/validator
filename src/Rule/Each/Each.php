@@ -22,10 +22,10 @@ final class Each implements ParametrizedRuleInterface
 
     public function __construct(
         public iterable $rules = [],
-        public string   $incorrectInputMessage = 'Value should be array or iterable.',
-        public string   $message = '{error} {value} given.',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public string $incorrectInputMessage = 'Value should be array or iterable.',
+        public string $message = '{error} {value} given.',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
     ) {
         if ($rules !== []) {

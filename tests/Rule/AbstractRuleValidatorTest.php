@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
@@ -70,5 +71,4 @@ abstract class AbstractRuleValidatorTest extends TestCase
     abstract protected function getValidator(): RuleValidatorInterface;
 
     abstract protected function getConfigClassName(): string;
-
 }

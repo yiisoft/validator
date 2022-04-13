@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
@@ -14,5 +15,4 @@ trait RuleNameTrait
         $className = static::class;
         return lcfirst(substr($className, strrpos($className, '\\') + 1));
     }
-
 }

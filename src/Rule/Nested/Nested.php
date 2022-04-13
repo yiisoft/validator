@@ -49,10 +49,10 @@ final class Nested implements ParametrizedRuleInterface
          * @var Rule[][]
          */
         public iterable $rules = [],
-        public bool     $errorWhenPropertyPathIsNotFound = false,
-        public string   $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public bool $errorWhenPropertyPathIsNotFound = false,
+        public string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
     ) {
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;

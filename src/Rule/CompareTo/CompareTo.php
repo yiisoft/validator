@@ -62,11 +62,11 @@ final class CompareTo implements ParametrizedRuleInterface
         /**
          * @var string|null user-defined error message
          */
-        public ?string  $message = null,
+        public ?string $message = null,
         /**
          * @var string the type of the values being compared.
          */
-        public string   $type = self::TYPE_STRING,
+        public string $type = self::TYPE_STRING,
         /**
          * @var string the operator for comparison. The following operators are supported:
          *
@@ -82,12 +82,11 @@ final class CompareTo implements ParametrizedRuleInterface
          * When you want to compare numbers, make sure to also chabge @see CompareTo::$type} to
          * {@see CompareTo::TYPE_NUMBER}.
          */
-        public string   $operator = '==',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public string $operator = '==',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
-    )
-    {
+    ) {
         if (!isset($this->validOperators[$operator])) {
             throw new InvalidArgumentException("Operator \"$operator\" is not supported.");
         }
@@ -118,7 +117,6 @@ final class CompareTo implements ParametrizedRuleInterface
                 throw new RuntimeException("Unknown operator: {$this->operator}");
         }
     }
-
 
     public function getOptions(): array
     {

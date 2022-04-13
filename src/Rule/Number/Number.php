@@ -25,7 +25,7 @@ final class Number implements ParametrizedRuleInterface
         /**
          * @var bool whether the value can only be an integer. Defaults to false.
          */
-        public bool      $asInteger = false,
+        public bool $asInteger = false,
         /**
          * @var float|int lower limit of the number. Defaults to null, meaning no lower limit.
          *
@@ -41,26 +41,24 @@ final class Number implements ParametrizedRuleInterface
         /**
          * @var string user-defined error message used when the value is smaller than {@link $min}.
          */
-        public string    $tooSmallMessage = 'Value must be no less than {min}.',
+        public string $tooSmallMessage = 'Value must be no less than {min}.',
         /**
          * @var string user-defined error message used when the value is bigger than {@link $max}.
          */
-        public string    $tooBigMessage = 'Value must be no greater than {max}.',
+        public string $tooBigMessage = 'Value must be no greater than {max}.',
         /**
          * @var string the regular expression for matching integers.
          */
-        public string   $integerPattern = '/^\s*[+-]?\d+\s*$/',
+        public string $integerPattern = '/^\s*[+-]?\d+\s*$/',
         /**
          * @var string the regular expression for matching numbers. It defaults to a pattern
          * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
          */
-        public string   $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public string $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
-    )
-    {
-
+    ) {
     }
 
     private function getNotANumberMessage(): string

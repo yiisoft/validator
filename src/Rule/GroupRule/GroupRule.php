@@ -17,12 +17,11 @@ abstract class GroupRule implements ParametrizedRuleInterface
     use RuleNameTrait;
 
     public function __construct(
-        public string   $message = 'This value is not a valid.',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public string $message = 'This value is not a valid.',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
     ) {
-
     }
 
     /**

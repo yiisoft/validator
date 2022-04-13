@@ -17,10 +17,9 @@ final class Callback implements ParametrizedRuleInterface
          * @var callable
          */
         public          $callback,
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
     ) {
-
     }
 }

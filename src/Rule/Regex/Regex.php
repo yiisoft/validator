@@ -23,20 +23,18 @@ final class Regex implements ParametrizedRuleInterface
         /**
          * @var string the regular expression to be matched with
          */
-        public string   $pattern,
+        public string $pattern,
         /**
          * @var bool whether to invert the validation logic. Defaults to `false`. If set to `true`, the regular
          * expression defined via {@see $pattern} should NOT match the value.
          */
-        public bool     $not = false,
-        public string   $incorrectInputMessage = 'Value should be string.',
-        public string   $message = 'Value is invalid.',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public bool $not = false,
+        public string $incorrectInputMessage = 'Value should be string.',
+        public string $message = 'Value is invalid.',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
-    )
-    {
-
+    ) {
     }
 
     public function getOptions(): array

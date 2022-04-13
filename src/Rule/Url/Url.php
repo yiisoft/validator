@@ -42,10 +42,10 @@ final class Url implements ParametrizedRuleInterface
          * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
          * extension, otherwise an exception would be thrown.
          */
-        public bool     $enableIDN = false,
-        public string   $message = 'This value is not a valid URL.',
-        public bool     $skipOnEmpty = false,
-        public bool     $skipOnError = false,
+        public bool $enableIDN = false,
+        public string $message = 'This value is not a valid URL.',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null,
     ) {
         if ($enableIDN && !function_exists('idn_to_ascii')) {

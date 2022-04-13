@@ -61,5 +61,4 @@ final class EachValidator implements RuleValidatorInterface
 
         return $result;
     }
-
 }
