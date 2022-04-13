@@ -457,8 +457,8 @@ final class Coordinates
 
 ###### Passing instances
 
-If you have PHP >= 8.1, you can utilize passing instances in attributes' scope. Otherwise, fallback to custom rules 
-approach described above.
+If you have PHP >= 8.1, you can utilize passing instances in attributes' scope. Otherwise, again fallback to custom 
+rules approach described above.
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -489,6 +489,8 @@ new Number(
 If callable returns `true` rule is applied, when the value returned is `false`, rule is skipped.
 
 ### Creating your own validation rules
+
+#### Basic usage
 
 To create your own validation rule you should extend `Rule` class:
 
@@ -580,6 +582,25 @@ final class NoLessThanExistingBidRule extends Rule
         }
 
         return $result;
+    }
+}
+```
+
+#### Using common arguments for multiple rules of the same type
+
+Because concrete rules' implementations (`Number`, etc) are marked as final, you can not extend them to set up 
+common arguments. For this and more complex cases use composition instead of inheritance:
+
+```php
+use Yiisoft\Validator\Rule;
+
+final class Coordinate implements RuleInterface
+{
+    public function validate($value, ?ValidationContext $context = null): Result
+    {
+        $rule = new Number(min: -10, max: 10);
+
+        return $rule->validate($value, $context);
     }
 }
 ```
