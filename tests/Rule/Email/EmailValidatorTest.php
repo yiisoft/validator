@@ -92,7 +92,6 @@ final class EmailValidatorTest extends AbstractRuleValidatorTest
             [$ruleEnabledIDNandAllowedName, 'Короткое имя <после-преобразования-в-idn-тут-будет-больше-чем-64-символа@пример.com>', $errors],
 
             [new Email(checkDNS: true), 'test@nonexistingsubdomain.example.com', $errors],
-
         ];
     }
 
@@ -153,7 +152,6 @@ final class EmailValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-
         ];
     }
 

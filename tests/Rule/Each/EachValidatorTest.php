@@ -26,22 +26,20 @@ final class EachValidatorTest extends AbstractRuleValidatorTest
                 [
                     new Error('Value must be no greater than 13. 20 given.', ['max' => 13]),
                     new Error('Value must be no greater than 13. 30 given.', ['max' => 13]),
-                ]
-
-            ]
+                ],
+            ],
         ];
     }
+
     public function passedValidationProvider(): array
     {
         return [
-
         ];
     }
 
     public function customErrorMessagesProvider(): array
     {
         return [
-
         ];
     }
 
