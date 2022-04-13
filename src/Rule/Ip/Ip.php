@@ -260,6 +260,25 @@ final class Ip implements ParametrizedRuleInterface
     }
 
     /**
+     * The method checks whether the IP address with specified CIDR is allowed according to the {@see $ranges} list.
+     */
+    public function isAllowed(string $ip): bool
+    {
+        if (empty($this->ranges)) {
+            return true;
+        }
+
+        foreach ($this->ranges as $string) {
+            [$isNegated, $range] = $this->parseNegatedRange($string);
+            if (IpHelper::inRange($ip, $range)) {
+                return !$isNegated;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Used to get the Regexp pattern for initial IP address parsing.
      */
     public function getIpParsePattern(): string
@@ -270,6 +289,7 @@ final class Ip implements ParametrizedRuleInterface
         ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
+    // TODO: improve output
     public function getOptions(): array
     {
         return [

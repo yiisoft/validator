@@ -11,7 +11,6 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use function is_string;
-use function strlen;
 
 /**
  * Checks if the value is a valid IPv4/IPv6 address or subnet.
@@ -91,46 +90,12 @@ final class IpValidator implements RuleValidatorInterface
                 return $result;
             }
         }
-        if (!$this->isAllowed($ipCidr)) {
+        if (!$config->isAllowed($ipCidr)) {
             $result->addError($config->notInRangeMessage);
             return $result;
         }
 
         return $result;
-    }
-
-    /**
-     * The method checks whether the IP address with specified CIDR is allowed according to the {@see $ranges} list.
-     */
-    private function isAllowed(string $ip): bool
-    {
-        if (empty($this->ranges)) {
-            return true;
-        }
-
-        foreach ($this->ranges as $string) {
-            [$isNegated, $range] = $this->parseNegatedRange($string);
-            if (IpHelper::inRange($ip, $range)) {
-                return !$isNegated;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Parses IP address/range for the negation with {@see NEGATION_CHAR}.
-     *
-     * @param $string
-     *
-     * @return array `[0 => bool, 1 => string]`
-     *  - boolean: whether the string is negated
-     *  - string: the string without negation (when the negation were present)
-     */
-    private function parseNegatedRange($string): array
-    {
-        $isNegated = strpos($string, self::NEGATION_CHAR) === 0;
-        return [$isNegated, $isNegated ? substr($string, strlen(self::NEGATION_CHAR)) : $string];
     }
 
     /**
