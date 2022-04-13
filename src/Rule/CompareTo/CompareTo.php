@@ -93,7 +93,7 @@ final class CompareTo implements ParametrizedRuleInterface
         }
     }
 
-    private function getMessage(): string
+    public function getMessage(): string
     {
         if ($this->message !== null) {
             return $this->message;
