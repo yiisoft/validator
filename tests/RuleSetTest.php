@@ -112,6 +112,8 @@ class RuleSetTest extends TestCase
                         'tooBigMessage' => 'Value must be no greater than 10.',
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
+                        'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
                     ],
                     [
                         get_class($rule),
@@ -131,6 +133,8 @@ class RuleSetTest extends TestCase
                         'tooBigMessage' => 'Value must be no greater than .',
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
+                        'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
                     ],
                     [
                         'number',
@@ -142,6 +146,8 @@ class RuleSetTest extends TestCase
                         'tooBigMessage' => 'Value must be no greater than .',
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
+                        'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
                     ],
                     [
                         'number',
@@ -153,6 +159,8 @@ class RuleSetTest extends TestCase
                         'tooBigMessage' => 'Value must be no greater than .',
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
+                        'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
                     ],
                 ],
             ],
@@ -174,6 +182,8 @@ class RuleSetTest extends TestCase
                             'tooBigMessage' => 'Value must be no greater than 13.',
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
+                            'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                            'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
                         ],
                         [
                             'number',
@@ -185,6 +195,8 @@ class RuleSetTest extends TestCase
                             'tooBigMessage' => 'Value must be no greater than 14.',
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
+                            'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                            'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
                         ],
                     ],
                     [
@@ -197,6 +209,8 @@ class RuleSetTest extends TestCase
                         'tooBigMessage' => 'Value must be no greater than .',
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
+                        'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
                     ],
                 ],
             ],

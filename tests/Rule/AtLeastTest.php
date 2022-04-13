@@ -82,6 +82,7 @@ class AtLeastTest extends TestCase
             [
                 new AtLeast(['attr1', 'attr2']),
                 [
+                    'attributes' => ['attr1', 'attr2'],
                     'min' => 1,
                     'message' => 'The model is not valid. Must have at least "1" filled attributes.',
                     'skipOnEmpty' => false,
@@ -91,6 +92,7 @@ class AtLeastTest extends TestCase
             [
                 new AtLeast(['attr1', 'attr2'], min: 2),
                 [
+                    'attributes' => ['attr1', 'attr2'],
                     'min' => 2,
                     'message' => 'The model is not valid. Must have at least "2" filled attributes.',
                     'skipOnEmpty' => false,

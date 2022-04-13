@@ -402,6 +402,8 @@ class NumberTest extends TestCase
                     'tooBigMessage' => 'Value must be no greater than .',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                    'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                 ],
             ],
             [
@@ -415,6 +417,8 @@ class NumberTest extends TestCase
                     'tooBigMessage' => 'Value must be no greater than .',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                    'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                 ],
             ],
             [
@@ -428,6 +432,8 @@ class NumberTest extends TestCase
                     'tooBigMessage' => 'Value must be no greater than 1.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                    'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                 ],
             ],
             [
@@ -441,6 +447,8 @@ class NumberTest extends TestCase
                     'tooBigMessage' => 'Value must be no greater than 10.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                    'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                 ],
             ],
             [
@@ -454,6 +462,8 @@ class NumberTest extends TestCase
                     'tooBigMessage' => 'Value must be no greater than .',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                    'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                 ],
             ],
         ];
