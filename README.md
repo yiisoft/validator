@@ -169,6 +169,7 @@ A more complex real-life example is a chart that is made of points. This data is
 combined with `Each` rule to validate such similar structures:
 
 ```php
+use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\RuleSet;
@@ -205,6 +206,7 @@ $rule = new Nested([
                         'y' => [new Number(min: -10, max: 10)],
                     ]),
                     'rgb' => new Each([
+                        new Count(exactly: 3);
                         new Number(min: 0, max: 255),
                     ]),
                 ]),
