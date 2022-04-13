@@ -84,39 +84,6 @@ abstract class Rule implements ParametrizedRuleInterface
      */
     abstract protected function validateValue($value, ?ValidationContext $context = null): Result;
 
-    protected function formatMessage(string $message, array $parameters = []): string
-    {
-        if ($this->formatter === null) {
-            $this->formatter = new Formatter();
-        }
-
-        return $this->formatter->format($message, $parameters);
-    }
-
-    /**
-     * Checks if the given value is empty.
-     * A value is considered empty if it is null, an empty array, or an empty string.
-     * Note that this method is different from PHP empty(). It will return false when the value is 0.
-     *
-     * @param mixed $value the value to be checked
-     *
-     * @return bool whether the value is empty
-     */
-    protected function isEmpty($value): bool
-    {
-        return $value === null || $value === [] || $value === '';
-    }
-
-    /**
-     * Get name of the rule to be used when rule is converted to array.
-     * By default, it returns base name of the class, first letter in lowercase.
-     */
-    public function getName(): string
-    {
-        $className = static::class;
-        return lcfirst(substr($className, strrpos($className, '\\') + 1));
-    }
-
     /**
      * Returns rule options as array.
      */

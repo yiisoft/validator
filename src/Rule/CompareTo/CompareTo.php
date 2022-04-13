@@ -2,15 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Rule;
+namespace Yiisoft\Validator\Rule\CompareTo;
 
 use Attribute;
+use Closure;
 use InvalidArgumentException;
 use RuntimeException;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\ValidationContext;
 
 /**
  * Compares the specified value with another value.
@@ -26,7 +23,7 @@ use Yiisoft\Validator\ValidationContext;
  * {@see CompareTo::TYPE_NUMBER} to enable numeric comparison.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class CompareTo extends Rule
+final class CompareTo
 {
     /**
      * Constant for specifying the comparison as string values.
@@ -57,15 +54,15 @@ final class CompareTo extends Rule
         /**
          * @var mixed the constant value to be compared with.
          */
-        private $compareValue,
+        public          $compareValue,
         /**
          * @var string|null user-defined error message
          */
-        private ?string $message = null,
+        public ?string  $message = null,
         /**
          * @var string the type of the values being compared.
          */
-        private string $type = self::TYPE_STRING,
+        public string   $type = self::TYPE_STRING,
         /**
          * @var string the operator for comparison. The following operators are supported:
          *
@@ -81,14 +78,12 @@ final class CompareTo extends Rule
          * When you want to compare numbers, make sure to also chabge @see CompareTo::$type} to
          * {@see CompareTo::TYPE_NUMBER}.
          */
-        private string $operator = '==',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
-    ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
-
+        public string   $operator = '==',
+        public bool     $skipOnEmpty = false,
+        public bool     $skipOnError = false,
+        public ?Closure $when = null,
+    )
+    {
         if (!isset($this->validOperators[$operator])) {
             throw new InvalidArgumentException("Operator \"$operator\" is not supported.");
         }
@@ -120,66 +115,17 @@ final class CompareTo extends Rule
         }
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
-    {
-        $result = new Result();
-
-        if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
-            $message = $this->formatMessage($this->getMessage(), ['value' => $this->compareValue]);
-            $result->addError($message);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Compares two values with the specified operator.
-     *
-     * @param string $operator the comparison operator
-     * @param string $type the type of the values being compared
-     * @param mixed $value the value being compared
-     * @param mixed $compareValue another value being compared
-     *
-     * @return bool whether the comparison using the specified operator is true.
-     */
-    protected function compareValues(string $operator, string $type, $value, $compareValue): bool
-    {
-        if ($type === self::TYPE_NUMBER) {
-            $value = (float) $value;
-            $compareValue = (float)$compareValue;
-        } else {
-            $value = (string) $value;
-            $compareValue = (string) $compareValue;
-        }
-        switch ($operator) {
-            case '==':
-                return $value == $compareValue;
-            case '===':
-                return $value === $compareValue;
-            case '!=':
-                return $value != $compareValue;
-            case '!==':
-                return $value !== $compareValue;
-            case '>':
-                return $value > $compareValue;
-            case '>=':
-                return $value >= $compareValue;
-            case '<':
-                return $value < $compareValue;
-            case '<=':
-                return $value <= $compareValue;
-            default:
-                return false;
-        }
-    }
 
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
+        return [
             'compareValue' => $this->compareValue,
-            'message' => $this->formatMessage($this->getMessage(), ['value' => $this->compareValue]),
+            'message' => [
+                'message' => $this->getMessage(),
+                'parameters' => ['value' => $this->compareValue],
+            ],
             'type' => $this->type,
             'operator' => $this->operator,
-        ]);
+        ];
     }
 }
