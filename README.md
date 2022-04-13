@@ -592,15 +592,20 @@ Because concrete rules' implementations (`Number`, etc) are marked as final, you
 common arguments. For this and more complex cases use composition instead of inheritance:
 
 ```php
-use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\RuleInterface;
 
 final class Coordinate implements RuleInterface
 {
-    public function validate($value, ?ValidationContext $context = null): Result
+    private Number $baseRule;
+    
+    public function __construct() 
     {
-        $rule = new Number(min: -10, max: 10);
+        $this->baseRule = new Number(min: -10, max: 10);
+    }        
 
-        return $rule->validate($value, $context);
+    public function validate(mixed $value, ?ValidationContext $context = null): Result
+    {
+        return $this->baseRule->validate($value, $context);
     }
 }
 ```
