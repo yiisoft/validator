@@ -52,7 +52,7 @@ final class UrlValidator implements RuleValidatorInterface
 
     private function convertIdn(string $value): string
     {
-        if (strpos($value, '://') === false) {
+        if (!str_contains($value, '://')) {
             return $this->idnToAscii($value);
         }
 
