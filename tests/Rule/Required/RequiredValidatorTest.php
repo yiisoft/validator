@@ -38,7 +38,6 @@ final class RequiredValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-
         ];
     }
 

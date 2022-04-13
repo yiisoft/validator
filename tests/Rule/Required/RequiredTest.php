@@ -25,7 +25,7 @@ final class RequiredTest extends AbstractRuleTest
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
-            ]
+            ],
         ];
     }
 

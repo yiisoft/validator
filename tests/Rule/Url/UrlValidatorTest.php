@@ -96,15 +96,13 @@ final class UrlValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-
         ];
     }
-
 
     public function testEnableIdnException(): void
     {
         $this->markTestIncomplete('Fix mock');
-        static::$idnFunctionExists = false;
+        self::$idnFunctionExists = false;
 
         $this->expectException(RuntimeException::class);
         new Url(enableIDN: true);
@@ -120,7 +118,6 @@ final class UrlValidatorTest extends AbstractRuleValidatorTest
         return Url::class;
     }
 }
-
 
 namespace Yiisoft\Validator\Rule\Url;
 

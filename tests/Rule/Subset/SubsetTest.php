@@ -16,7 +16,6 @@ final class SubsetTest extends AbstractRuleTest
     public function optionsDataProvider(): array
     {
         return [
-
         ];
     }
 
