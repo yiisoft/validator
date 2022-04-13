@@ -4,71 +4,31 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 
 abstract class AbstractRuleTest extends TestCase
 {
     /**
-     * @dataProvider passedValidationProvider
+     * @dataProvider optionsDataProvider
      */
-    public function testValidationPassed(object $config, mixed $value): void
+    public function testOptions(ParametrizedRuleInterface $rule, array $expectedOptions): void
     {
-        $result = $this->validate($value, $config);
+        $options = $rule->getOptions();
 
-        $this->assertTrue($result->isValid());
-    }
-
-    /**
-     * @dataProvider failedValidationProvider
-     */
-    public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
-    {
-        $result = $this->validate($value, $config);
-
-        $this->assertFalse($result->isValid());
-        $this->assertEquals($expectedErrors, $result->getErrors());
-    }
-
-    /**
-     * @param string[] $expectedErrorMessages
-     *
-     * @dataProvider customErrorMessagesProvider
-     */
-    public function testCustomErrorMessages(object $config, mixed $value, array $expectedErrorMessages): void
-    {
-        $validator = $this->getValidator();
-
-        $result = $validator->validate($value, $config);
-
-        $errors = $result->getErrors();
-
-        $this->assertEquals($expectedErrorMessages, $errors);
+        $this->assertEquals($expectedOptions, $options);
     }
 
     public function testGetName(): void
     {
-        $rule = $this->getValidator();
-
-        $this->assertEquals($this->getConfigClassName(), $rule::getConfigClassName());
+        $rule = $this->getRule();
+        $this->assertEquals('atLeast', $rule->getName());
     }
 
-    protected function validate(mixed $value, object $config, ValidationContext $context = null): Result
-    {
-        $validator = $this->getValidator();
+    abstract protected function optionsDataProvider(): array;
 
-        return $validator->validate($value, $config, $context);
-    }
-
-    abstract public function customErrorMessagesProvider(): array;
-
-    abstract public function passedValidationProvider(): array;
-
-    abstract public function failedValidationProvider(): array;
-
-    abstract protected function getValidator(): RuleValidatorInterface;
-
-    abstract protected function getConfigClassName(): string;
-
+    abstract protected function getRule(): ParametrizedRuleInterface;
 }

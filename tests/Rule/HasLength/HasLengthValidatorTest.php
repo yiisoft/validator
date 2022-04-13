@@ -9,11 +9,12 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\HasLength\HasLength;
 use Yiisoft\Validator\Rule\HasLength\HasLengthValidator;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
+use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 /**
- * @group t2
+ * @group t
  */
-final class HasLengthValidatorTest extends AbstractRuleTest
+final class HasLengthValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array
     {
