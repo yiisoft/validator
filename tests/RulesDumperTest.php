@@ -39,6 +39,8 @@ final class RulesDumperTest extends TestCase
                             'tooSmallMessage' => 'Value must be greater than 10.',
                             'skipOnEmpty' => true,
                             'skipOnError' => true,
+                            'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                            'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                         ],
                     ],
                 ],

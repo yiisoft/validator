@@ -10,6 +10,7 @@ use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
+use function is_array;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Subset extends Rule

@@ -11,23 +11,23 @@ use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Checks if at least {@see AtLeast::$min} of many attributes are filled.
+ * Checks if at least {@see AtLeast::$min} of many object attributes are filled.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class AtLeast extends Rule
 {
     public function __construct(
         /**
-         * The list of required attributes that will be checked.
+         * @var string[] The list of required attributes that will be checked.
          */
         private array $attributes,
         /**
-         * The minimum required quantity of filled attributes to pass the validation.
+         * @var int The minimum required quantity of filled attributes to pass the validation.
          * Defaults to 1.
          */
         private int $min = 1,
         /**
-         * Message to display in case of error.
+         * @var string Message to display in case of error.
          */
         private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.',
         ?FormatterInterface $formatter = null,
@@ -51,18 +51,24 @@ final class AtLeast extends Rule
         $result = new Result();
 
         if ($filledCount < $this->min) {
-            $message = $this->formatMessage($this->message, ['min' => $this->min]);
+            $message = $this->getFormattedMessage();
             $result->addError($message);
         }
 
         return $result;
     }
 
+    private function getFormattedMessage(): string
+    {
+        return $this->formatMessage($this->message, ['min' => $this->min]);
+    }
+
     public function getOptions(): array
     {
         return array_merge(parent::getOptions(), [
+            'attributes' => $this->attributes,
             'min' => $this->min,
-            'message' => $this->formatMessage($this->message, ['min' => $this->min]),
+            'message' => $this->getFormattedMessage(),
         ]);
     }
 }

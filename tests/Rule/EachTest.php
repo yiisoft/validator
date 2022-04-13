@@ -42,6 +42,8 @@ class EachTest extends TestCase
                 'tooBigMessage' => 'Value must be no greater than 13.',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
+                'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
             ],
             [
                 'number',
@@ -53,6 +55,8 @@ class EachTest extends TestCase
                 'tooBigMessage' => 'Value must be no greater than 14.',
                 'skipOnEmpty' => false,
                 'skipOnError' => false,
+                'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
             ],
         ];
 
