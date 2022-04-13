@@ -20,9 +20,7 @@ final class Callback implements ParametrizedRuleInterface
         public bool $skipOnEmpty = false,
         public bool $skipOnError = false,
         public ?Closure $when = null,
-    )
-    {
-
+    ) {
     }
 
     public function getOptions(): array
