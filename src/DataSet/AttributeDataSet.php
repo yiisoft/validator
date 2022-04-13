@@ -95,6 +95,7 @@ final class AttributeDataSet implements RulesProviderInterface
                     continue;
                 }
 
+                /** @psalm-suppress UndefinedMethod */
                 $eachRuleFound
                     ? $eachRules[] = $attribute->newInstance()
                     : $rules[$property->getName()][] = $attribute->newInstance();
