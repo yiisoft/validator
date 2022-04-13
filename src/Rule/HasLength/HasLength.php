@@ -65,7 +65,7 @@ final class HasLength
                 'parameters' => ['min' => $this->min],
             ],
             'tooLongMessage' => [
-                'message' => $this->tooLongMessage, ['max' => $this->max],
+                'message' => $this->tooLongMessage,
                 'parameters' => ['max' => $this->max],
             ],
             'encoding' => $this->encoding,
