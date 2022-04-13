@@ -113,7 +113,7 @@ class RuleSetTest extends TestCase
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
                         'integerPattern' => '/^\s*[+-]?\d+\s*$/',
-                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
+                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                     ],
                     [
                         get_class($rule),
@@ -134,7 +134,7 @@ class RuleSetTest extends TestCase
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
                         'integerPattern' => '/^\s*[+-]?\d+\s*$/',
-                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
+                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                     ],
                     [
                         'number',
@@ -147,7 +147,7 @@ class RuleSetTest extends TestCase
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
                         'integerPattern' => '/^\s*[+-]?\d+\s*$/',
-                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
+                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                     ],
                     [
                         'number',
@@ -160,7 +160,7 @@ class RuleSetTest extends TestCase
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
                         'integerPattern' => '/^\s*[+-]?\d+\s*$/',
-                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
+                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                     ],
                 ],
             ],
@@ -183,7 +183,7 @@ class RuleSetTest extends TestCase
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
                             'integerPattern' => '/^\s*[+-]?\d+\s*$/',
-                            'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
+                            'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                         ],
                         [
                             'number',
@@ -196,7 +196,7 @@ class RuleSetTest extends TestCase
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
                             'integerPattern' => '/^\s*[+-]?\d+\s*$/',
-                            'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
+                            'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                         ],
                     ],
                     [
@@ -210,7 +210,7 @@ class RuleSetTest extends TestCase
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
                         'integerPattern' => '/^\s*[+-]?\d+\s*$/',
-                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/'
+                        'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                     ],
                 ],
             ],
