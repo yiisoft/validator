@@ -228,6 +228,8 @@ $errors = [
 
 #### Using attributes
 
+##### Basic usage
+
 You can also use attributes as an alternative. Declare the DTOs, relations and rules:
 
 ```php
@@ -284,6 +286,8 @@ $validator = new Validator();
 $errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
 ```
 
+##### Traits
+
 Traits are supported too:
 
 ```php
@@ -299,9 +303,13 @@ final class Post
 {
     use TitleTrait;
 }
-````
+```
+
+##### Limitations
 
 This approach has some limitations.
+
+###### `Each` and `Nested` rules
 
 `Each` and `Nested` rules are not supported directly. Use `HasOne` and `HasMany` attributes for declaring relations (or 
 property type `array` for flat rules) instead. Use `Each` and `Nested` rules in addition for custom configuration if 
@@ -332,6 +340,8 @@ final class Point
     private array $rgb;
 }
 ```
+
+###### `Callback` rule and `callable` type
 
 `Callback` rule is not supported, also you can't use `callable` type with attributes. Use custom rule instead.
 
@@ -364,6 +374,8 @@ final class Coordinates
 }
 ```
 
+###### `GroupRule`
+
 `GroupRule` is not supported, but it's unnecessary since multiple attributes can be used for one property (except they 
 must be of different type).
 
@@ -378,6 +390,8 @@ final class UserData
     private string $name;    
 }
 ```
+
+###### Function / method calls
 
 You can't use a function / method call result with attributes. Like with `Callback` rule and callable, this problem can 
 be overcome with custom rule.
@@ -438,6 +452,21 @@ final class Coordinates
     private int $x;
     #[Number(min: -10, max: 10)]
     private int $y;
+}
+```
+
+###### Passing instances
+
+If you have PHP >= 8.1, you can utilize passing instances in attributes' scope. Otherwise, fallback to custom rules 
+approach described above.
+
+```php
+use Yiisoft\Validator\Rule\HasLength;
+
+final class Post
+{
+    #[HasLength(max: 255, formatter: new CustomFormatter())]
+    private string $title;
 }
 ```
 
