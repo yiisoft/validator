@@ -61,7 +61,7 @@ final class Number implements ParametrizedRuleInterface
     ) {
     }
 
-    private function getNotANumberMessage(): string
+    public function getNotANumberMessage(): string
     {
         return $this->asInteger ? 'Value must be an integer.' : 'Value must be a number.';
     }
