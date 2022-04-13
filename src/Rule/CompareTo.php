@@ -82,12 +82,12 @@ final class CompareTo extends Rule
          * {@see CompareTo::TYPE_NUMBER}.
          */
         private string $operator = '==',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        parent::__construct(skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
 
         if (!isset($this->validOperators[$operator])) {
             throw new InvalidArgumentException("Operator \"$operator\" is not supported.");
@@ -122,11 +122,10 @@ final class CompareTo extends Rule
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
-        $result = new Result();
+        $result = new Result($this->formatter);
 
         if (!$this->compareValues($this->operator, $this->type, $value, $this->compareValue)) {
-            $message = $this->formatMessage($this->getMessage(), ['value' => $this->compareValue]);
-            $result->addError($message);
+            $result->addError($this->getMessage(), parameters: ['value' => $this->compareValue]);
         }
 
         return $result;
@@ -177,7 +176,7 @@ final class CompareTo extends Rule
     {
         return array_merge(parent::getOptions(), [
             'compareValue' => $this->compareValue,
-            'message' => $this->formatMessage($this->getMessage(), ['value' => $this->compareValue]),
+            'message' => [$this->getMessage(), ['value' => $this->compareValue]],
             'type' => $this->type,
             'operator' => $this->operator,
         ]);

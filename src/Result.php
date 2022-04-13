@@ -19,6 +19,10 @@ final class Result
      */
     private array $errors = [];
 
+    public function __construct(private ?FormatterInterface $formatter = null)
+    {
+    }
+
     public function isValid(): bool
     {
         return $this->errors === [];
@@ -49,7 +53,7 @@ final class Result
      */
     public function getErrorMessages(): array
     {
-        return ArrayHelper::getColumn($this->errors, static fn (Error $error) => $error->getMessage());
+        return ArrayHelper::getColumn($this->errors, fn(Error $error) => $this->formatMessage($error));
     }
 
     /**
@@ -60,7 +64,7 @@ final class Result
         $errors = [];
         foreach ($this->errors as $error) {
             $stringValuePath = implode($separator, $error->getValuePath());
-            $errors[$stringValuePath][] = $error->getMessage();
+            $errors[$stringValuePath][] = $this->formatMessage($error);
         }
 
         return $errors;
@@ -80,7 +84,7 @@ final class Result
                 throw new InvalidArgumentException('Top level attributes can only have string type.');
             }
 
-            $errors[$key][] = $error->getMessage();
+            $errors[$key][] = $this->formatMessage($error);
         }
 
         return $errors;
@@ -91,7 +95,7 @@ final class Result
      */
     public function getAttributeErrors(string $attribute): array
     {
-        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): Error => $error);
+        return $this->getAttributeErrorsMap($attribute, static fn(Error $error): Error => $error);
     }
 
     /**
@@ -99,7 +103,8 @@ final class Result
      */
     public function getAttributeErrorMessages(string $attribute): array
     {
-        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): string => $error->getMessage());
+        return $this->getAttributeErrorsMap($attribute, fn(Error $error): string => $this->formatMessage($error)
+        );
     }
 
     private function getAttributeErrorsMap(string $attribute, Closure $getErrorClosure): array
@@ -128,7 +133,7 @@ final class Result
             }
 
             $valuePath = implode($separator, array_slice($error->getValuePath(), 1));
-            $errors[$valuePath][] = $error->getMessage();
+            $errors[$valuePath][] = $this->formatMessage($error);
         }
 
         return $errors;
@@ -145,10 +150,29 @@ final class Result
     /**
      * @psalm-param array<int|string> $valuePath
      */
-    public function addError(string $message, array $valuePath = []): self
-    {
-        $this->errors[] = new Error($message, $valuePath);
+    public function addError(
+        string $message,
+        array $valuePath = [],
+        array $parameters = [],
+        ?FormatterInterface $formatter = null
+    ): self {
+        $this->errors[] = new Error(
+            $message,
+            $valuePath,
+            $parameters,
+            $formatter ?? $this->formatter
+        );
 
         return $this;
+    }
+
+    private function formatMessage(Error $error): string
+    {
+        if (!$this->formatter) {
+            $this->formatter = new Formatter();
+        }
+
+        return ($error->getFormatter() ?? $this->formatter)
+            ->format($error->getMessage(), $error->getParameters());
     }
 }

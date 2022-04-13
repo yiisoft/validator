@@ -7,6 +7,7 @@ namespace Yiisoft\Validator;
 use JetBrains\PhpStorm\Pure;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ScalarDataSet;
+
 use function is_array;
 use function is_object;
 
@@ -15,6 +16,11 @@ use function is_object;
  */
 final class Validator implements ValidatorInterface
 {
+    public function __construct(
+        private ?FormatterInterface $formatter = null
+    ) {
+    }
+
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
      * @param Rule[][] $rules
@@ -28,14 +34,19 @@ final class Validator implements ValidatorInterface
         }
 
         $context = new ValidationContext($data);
-        $result = new Result();
+        $result = new Result($this->formatter);
 
         foreach ($rules as $attribute => $attributeRules) {
             $ruleSet = new RuleSet($attributeRules);
             $tempResult = $ruleSet->validate($data->getAttributeValue($attribute), $context->withAttribute($attribute));
 
             foreach ($tempResult->getErrors() as $error) {
-                $result->addError($error->getMessage(), [$attribute, ...$error->getValuePath()]);
+                $result->addError(
+                    message: $error->getMessage(),
+                    valuePath: [$attribute, ...$error->getValuePath()],
+                    parameters: $error->getParameters(),
+                    formatter: $error->getFormatter()
+                );
             }
         }
 

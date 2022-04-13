@@ -61,7 +61,7 @@ final class Count extends Rule
          */
         private string $notExactlyMessage = 'This value must contain exactly {max, number} ' .
         '{max, plural, one{item} other{items}}.',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
@@ -80,15 +80,15 @@ final class Count extends Rule
             throw new InvalidArgumentException('Use $exactly instead.');
         }
 
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        parent::__construct(skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
-        $result = new Result();
+        $result = new Result($this->formatter);
 
         if (!is_countable($value)) {
-            $result->addError($this->formatMessage($this->message));
+            $result->addError($this->message);
 
             return $result;
         }
@@ -96,20 +96,17 @@ final class Count extends Rule
         $count = count($value);
 
         if ($this->exactly !== null && $count !== $this->exactly) {
-            $message = $this->formatMessage($this->notExactlyMessage, ['exactly' => $this->exactly]);
-            $result->addError($message);
+            $result->addError($this->notExactlyMessage, parameters: ['exactly' => $this->exactly]);
 
             return $result;
         }
 
         if ($this->min !== null && $count < $this->min) {
-            $message = $this->formatMessage($this->tooFewItemsMessage, ['min' => $this->min]);
-            $result->addError($message);
+            $result->addError($this->tooFewItemsMessage, parameters: ['min'=> $this->min]);
         }
 
         if ($this->max !== null && $count > $this->max) {
-            $message = $this->formatMessage($this->tooManyItemsMessage, ['max' => $this->max]);
-            $result->addError($message);
+            $result->addError($this->tooManyItemsMessage, ['max' => $this->max]);
         }
 
         return $result;
@@ -121,10 +118,10 @@ final class Count extends Rule
             'min' => $this->min,
             'max' => $this->max,
             'exactly' => $this->exactly,
-            'message' => $this->formatMessage($this->message),
-            'tooFewItemsMessage' => $this->formatMessage($this->tooFewItemsMessage, ['min' => $this->min]),
-            'tooManyItemsMessage' => $this->formatMessage($this->tooManyItemsMessage, ['max' => $this->max]),
-            'notExactlyMessage' => $this->formatMessage($this->notExactlyMessage, ['exactly' => $this->exactly]),
+            'message' => $this->message,
+            'tooFewItemsMessage' => [$this->tooFewItemsMessage, ['min' => $this->min]],
+            'tooManyItemsMessage' => [$this->tooManyItemsMessage, ['max' => $this->max]],
+            'notExactlyMessage' => [$this->notExactlyMessage, ['exactly' => $this->exactly]],
         ]);
     }
 }

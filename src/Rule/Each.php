@@ -24,7 +24,7 @@ final class Each extends Rule
         iterable $rules = [],
         private string $incorrectInputMessage = 'Value should be array or iterable.',
         private string $message = '{error} {value} given.',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null,
@@ -42,7 +42,7 @@ final class Each extends Rule
             throw new InvalidArgumentException('Rules are required.');
         }
 
-        $result = new Result();
+        $result = new Result($this->formatter);
         if (!is_iterable($value)) {
             $result->addError($this->incorrectInputMessage);
 
@@ -64,12 +64,14 @@ final class Each extends Rule
                     $formatMessage = false;
                 }
 
-                $message = !$formatMessage ? $error->getMessage() : $this->formatMessage($this->message, [
-                    'error' => $error->getMessage(),
-                    'value' => $item,
-                ]);
-
-                $result->addError($message, $errorKey);
+                if (!$formatMessage) {
+                    $result->addError($error->getMessage(), $errorKey);
+                } else {
+                    $result->addError($this->message, $errorKey, [
+                        'error' => $error->getMessage(),
+                        'value' => $item,
+                    ]);
+                }
             }
         }
 

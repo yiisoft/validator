@@ -17,12 +17,12 @@ final class Callback extends Rule
          * @var callable
          */
         private $callback,
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        parent::__construct(skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
@@ -34,13 +34,13 @@ final class Callback extends Rule
             throw new InvalidCallbackReturnTypeException($callbackResult);
         }
 
-        $result = new Result();
+        $result = new Result($this->formatter);
         if ($callbackResult->isValid()) {
             return $result;
         }
 
         foreach ($callbackResult->getErrors() as $error) {
-            $result->addError($this->formatMessage($error->getMessage()), $error->getValuePath());
+            $result->addError($error->getMessage(), parameters: $error->getValuePath());
         }
 
         return $result;

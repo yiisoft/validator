@@ -195,12 +195,12 @@ final class Ip extends Rule
          * subnet. IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
          */
         private array $ranges = [],
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        parent::__construct(skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
 
         foreach ($networks as $key => $_values) {
             if (array_key_exists($key, $this->defaultNetworks)) {
@@ -222,14 +222,14 @@ final class Ip extends Rule
         if (!$this->allowIpv4 && !$this->allowIpv6) {
             throw new RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time.');
         }
-        $result = new Result();
+        $result = new Result($this->formatter);
         if (!is_string($value)) {
-            $result->addError($this->formatMessage($this->message));
+            $result->addError($this->message);
             return $result;
         }
 
         if (preg_match($this->getIpParsePattern(), $value, $matches) === 0) {
-            $result->addError($this->formatMessage($this->message));
+            $result->addError($this->message);
             return $result;
         }
         $negation = !empty($matches['not'] ?? null);
@@ -240,28 +240,28 @@ final class Ip extends Rule
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
         } catch (InvalidArgumentException $e) {
-            $result->addError($this->formatMessage($this->message));
+            $result->addError($this->message);
             return $result;
         }
 
         if ($this->requireSubnet === true && $cidr === null) {
-            $result->addError($this->formatMessage($this->noSubnetMessage));
+            $result->addError($this->noSubnetMessage);
             return $result;
         }
         if ($this->allowSubnet === false && $cidr !== null) {
-            $result->addError($this->formatMessage($this->hasSubnetMessage));
+            $result->addError($this->hasSubnetMessage);
             return $result;
         }
         if ($this->allowNegation === false && $negation) {
-            $result->addError($this->formatMessage($this->message));
+            $result->addError($this->message);
             return $result;
         }
         if ($ipVersion === IpHelper::IPV6 && !$this->allowIpv6) {
-            $result->addError($this->formatMessage($this->ipv6NotAllowedMessage));
+            $result->addError($this->ipv6NotAllowedMessage);
             return $result;
         }
         if ($ipVersion === IpHelper::IPV4 && !$this->allowIpv4) {
-            $result->addError($this->formatMessage($this->ipv4NotAllowedMessage));
+            $result->addError($this->ipv4NotAllowedMessage);
             return $result;
         }
         if (!$result->isValid()) {
@@ -271,12 +271,12 @@ final class Ip extends Rule
             try {
                 IpHelper::getCidrBits($ipCidr);
             } catch (InvalidArgumentException $e) {
-                $result->addError($this->formatMessage($this->wrongCidrMessage));
+                $result->addError($this->wrongCidrMessage);
                 return $result;
             }
         }
         if (!$this->isAllowed($ipCidr)) {
-            $result->addError($this->formatMessage($this->notInRangeMessage));
+            $result->addError($this->notInRangeMessage);
             return $result;
         }
 
@@ -368,13 +368,13 @@ final class Ip extends Rule
             'allowSubnet' => $this->allowSubnet,
             'requireSubnet' => $this->requireSubnet,
             'allowNegation' => $this->allowNegation,
-            'message' => $this->formatMessage($this->message),
-            'ipv4NotAllowedMessage' => $this->formatMessage($this->ipv4NotAllowedMessage),
-            'ipv6NotAllowedMessage' => $this->formatMessage($this->ipv6NotAllowedMessage),
-            'wrongCidrMessage' => $this->formatMessage($this->wrongCidrMessage),
-            'noSubnetMessage' => $this->formatMessage($this->noSubnetMessage),
-            'hasSubnetMessage' => $this->formatMessage($this->hasSubnetMessage),
-            'notInRangeMessage' => $this->formatMessage($this->notInRangeMessage),
+            'message' => $this->message,
+            'ipv4NotAllowedMessage' => $this->ipv4NotAllowedMessage,
+            'ipv6NotAllowedMessage' => $this->ipv6NotAllowedMessage,
+            'wrongCidrMessage' => $this->wrongCidrMessage,
+            'noSubnetMessage' => $this->noSubnetMessage,
+            'hasSubnetMessage' => $this->hasSubnetMessage,
+            'notInRangeMessage' => $this->notInRangeMessage,
             'ranges' => $this->ranges,
         ]);
     }

@@ -22,7 +22,7 @@ final class RuleSet
      */
     private array $rules = [];
 
-    public function __construct(iterable $rules = [])
+    public function __construct(iterable $rules = [], private ?FormatterInterface $formatter = null)
     {
         foreach ($rules as $rule) {
             $this->add($rule);
@@ -41,7 +41,7 @@ final class RuleSet
     {
         $context = $context ?? new ValidationContext();
 
-        $compoundResult = new Result();
+        $compoundResult = new Result($this->formatter);
         foreach ($this->rules as $rule) {
             $ruleResult = $rule->validate($value, $context);
             if ($ruleResult->isValid()) {
@@ -51,7 +51,12 @@ final class RuleSet
             $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
 
             foreach ($ruleResult->getErrors() as $error) {
-                $compoundResult->addError($error->getMessage(), $error->getValuePath());
+                $compoundResult->addError(
+                    message: $error->getMessage(),
+                    valuePath: $error->getValuePath(),
+                    parameters: $error->getParameters(),
+                    formatter: $error->getFormatter()
+                );
             }
         }
         return $compoundResult;
@@ -64,11 +69,13 @@ final class RuleSet
         }
 
         if (!$rule instanceof RuleInterface) {
-            throw new InvalidArgumentException(sprintf(
-                'Rule should be either an instance of %s or a callable, %s given.',
-                RuleInterface::class,
-                gettype($rule)
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Rule should be either an instance of %s or a callable, %s given.',
+                    RuleInterface::class,
+                    gettype($rule)
+                )
+            );
         }
 
         return $rule;

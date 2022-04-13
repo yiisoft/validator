@@ -17,19 +17,19 @@ abstract class GroupRule extends Rule
 {
     public function __construct(
         protected string $message = 'This value is not a valid.',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        parent::__construct(skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
-        $result = new Result();
+        $result = new Result($this->formatter);
         if (!$this->getRuleSet()->validate($value, $context)->isValid()) {
-            $result->addError($this->formatMessage($this->message));
+            $result->addError($this->message);
         }
 
         return $result;

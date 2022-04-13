@@ -46,12 +46,12 @@ final class Url extends Rule
          */
         private bool $enableIDN = false,
         private string $message = 'This value is not a valid URL.',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        parent::__construct(skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
 
         if ($enableIDN && !function_exists('idn_to_ascii')) {
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
@@ -60,7 +60,7 @@ final class Url extends Rule
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
-        $result = new Result();
+        $result = new Result($this->formatter);
 
         // make sure the length is limited to avoid DOS attacks
         if (is_string($value) && strlen($value) < 2000) {
@@ -73,7 +73,7 @@ final class Url extends Rule
             }
         }
 
-        $result->addError($this->formatMessage($this->message));
+        $result->addError($this->message);
 
         return $result;
     }

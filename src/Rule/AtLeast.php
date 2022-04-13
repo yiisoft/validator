@@ -30,12 +30,12 @@ final class AtLeast extends Rule
          * Message to display in case of error.
          */
         private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        parent::__construct(skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
@@ -48,11 +48,10 @@ final class AtLeast extends Rule
             }
         }
 
-        $result = new Result();
+        $result = new Result($this->formatter);
 
         if ($filledCount < $this->min) {
-            $message = $this->formatMessage($this->message, ['min' => $this->min]);
-            $result->addError($message);
+            $result->addError($this->message, parameters: ['min' => $this->min]);
         }
 
         return $result;
@@ -62,7 +61,7 @@ final class AtLeast extends Rule
     {
         return array_merge(parent::getOptions(), [
             'min' => $this->min,
-            'message' => $this->formatMessage($this->message, ['min' => $this->min]),
+            'message' => [$this->message, ['min' => $this->min]],
         ]);
     }
 }

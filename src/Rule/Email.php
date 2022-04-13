@@ -60,12 +60,12 @@ final class Email extends Rule
          */
         private bool $enableIDN = false,
         private string $message = 'This value is not a valid email address.',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        parent::__construct(skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
 
         if ($enableIDN && !function_exists('idn_to_ascii')) {
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
@@ -75,7 +75,7 @@ final class Email extends Rule
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $originalValue = $value;
-        $result = new Result();
+        $result = new Result($this->formatter);
 
         if (!is_string($value)) {
             $valid = false;
@@ -128,7 +128,7 @@ final class Email extends Rule
         }
 
         if ($valid === false) {
-            $result->addError($this->formatMessage($this->message));
+            $result->addError($this->message);
         }
 
         return $result;
@@ -145,7 +145,7 @@ final class Email extends Rule
             'allowName' => $this->allowName,
             'checkDNS' => $this->checkDNS,
             'enableIDN' => $this->enableIDN,
-            'message' => $this->formatMessage($this->message),
+            'message' => $this->message,
         ]);
     }
 }

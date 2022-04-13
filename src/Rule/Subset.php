@@ -22,20 +22,20 @@ final class Subset extends Rule
         private bool $strict = false,
         private string $iterableMessage = 'Value must be iterable.',
         private string $subsetMessage = 'Values must be ones of {values}.',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        parent::__construct(skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
-        $result = new Result();
+        $result = new Result($this->formatter);
 
         if (!is_iterable($value)) {
-            $result->addError($this->formatMessage($this->iterableMessage));
+            $result->addError($this->iterableMessage);
             return $result;
         }
 
@@ -43,7 +43,7 @@ final class Subset extends Rule
             $values = is_array($this->values) ? $this->values : iterator_to_array($this->values);
             $valuesString = '"' . implode('", "', $values) . '"';
 
-            $result->addError($this->formatMessage($this->subsetMessage, ['values' => $valuesString]));
+            $result->addError($this->subsetMessage, parameters: ['values' => $valuesString]);
         }
 
         return $result;
@@ -54,8 +54,8 @@ final class Subset extends Rule
         return array_merge(parent::getOptions(), [
             'values' => $this->values,
             'strict' => $this->strict,
-            'iterableMessage' => $this->formatMessage($this->iterableMessage),
-            'subsetMessage' => $this->formatMessage($this->subsetMessage),
+            'iterableMessage' => $this->iterableMessage,
+            'subsetMessage' => $this->subsetMessage,
         ]);
     }
 }

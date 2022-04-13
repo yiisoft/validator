@@ -55,7 +55,7 @@ final class Number extends Rule
          * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
          */
         private string $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         /**
@@ -63,26 +63,26 @@ final class Number extends Rule
          */
         $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        parent::__construct(skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
-        $result = new Result();
+        $result = new Result($this->formatter);
 
         if (is_bool($value) || !is_scalar($value)) {
-            $result->addError($this->formatMessage($this->getNotANumberMessage(), ['value' => $value]));
+            $result->addError($this->getNotANumberMessage(), parameters: ['value' => $value]);
             return $result;
         }
 
         $pattern = $this->asInteger ? $this->integerPattern : $this->numberPattern;
 
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
-            $result->addError($this->formatMessage($this->getNotANumberMessage(), ['value' => $value]));
+            $result->addError($this->getNotANumberMessage(), parameters: ['value' => $value]);
         } elseif ($this->min !== null && $value < $this->min) {
-            $result->addError($this->formatMessage($this->tooSmallMessage, ['min' => $this->min]));
+            $result->addError($this->tooSmallMessage, parameters: ['min' => $this->min]);
         } elseif ($this->max !== null && $value > $this->max) {
-            $result->addError($this->formatMessage($this->tooBigMessage, ['max' => $this->max]));
+            $result->addError($this->tooBigMessage, parameters: ['max' => $this->max]);
         }
 
         return $result;
@@ -99,9 +99,9 @@ final class Number extends Rule
             'asInteger' => $this->asInteger,
             'min' => $this->min,
             'max' => $this->max,
-            'notANumberMessage' => $this->formatMessage($this->getNotANumberMessage()),
-            'tooSmallMessage' => $this->formatMessage($this->tooSmallMessage, ['min' => $this->min]),
-            'tooBigMessage' => $this->formatMessage($this->tooBigMessage, ['max' => $this->max]),
+            'notANumberMessage' => $this->getNotANumberMessage(),
+            'tooSmallMessage' => [$this->tooSmallMessage, ['min' => $this->min]],
+            'tooBigMessage' => [$this->tooBigMessage, ['max' => $this->max]],
         ]);
     }
 }

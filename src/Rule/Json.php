@@ -20,7 +20,7 @@ final class Json extends Rule
 {
     public function __construct(
         private string $message = 'The value is not JSON.',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null,
@@ -30,10 +30,10 @@ final class Json extends Rule
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
-        $result = new Result();
+        $result = new Result($this->formatter);
 
         if (!$this->isValidJson($value)) {
-            $result->addError($this->formatMessage($this->message));
+            $result->addError($this->message);
         }
 
         return $result;

@@ -12,7 +12,6 @@ use function is_callable;
 abstract class Rule implements ParametrizedRuleInterface
 {
     public function __construct(
-        private ?FormatterInterface $formatter = null,
         /**
          * @var bool if validation should be skipped if value validated is empty
          */
@@ -83,15 +82,6 @@ abstract class Rule implements ParametrizedRuleInterface
      * @return Result
      */
     abstract protected function validateValue($value, ?ValidationContext $context = null): Result;
-
-    protected function formatMessage(string $message, array $parameters = []): string
-    {
-        if ($this->formatter === null) {
-            $this->formatter = new Formatter();
-        }
-
-        return $this->formatter->format($message, $parameters);
-    }
 
     /**
      * Checks if the given value is empty.

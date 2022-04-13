@@ -20,20 +20,20 @@ final class Required extends Rule
 {
     public function __construct(
         private string $message = 'Value cannot be blank.',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        parent::__construct(skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
-        $result = new Result();
+        $result = new Result($this->formatter);
 
         if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
-            $result->addError($this->formatMessage($this->message));
+            $result->addError($this->message);
         }
 
         return $result;
@@ -42,7 +42,7 @@ final class Required extends Rule
     public function getOptions(): array
     {
         return array_merge(parent::getOptions(), [
-            'message' => $this->formatMessage($this->message),
+            'message' => $this->message,
         ]);
     }
 }

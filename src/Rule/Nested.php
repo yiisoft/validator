@@ -53,7 +53,7 @@ final class Nested extends Rule
         private iterable $rules = [],
         private bool $errorWhenPropertyPathIsNotFound = false,
         private string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
@@ -75,7 +75,7 @@ final class Nested extends Rule
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
-        $result = new Result();
+        $result = new Result($this->formatter);
         if (!is_object($value) && !is_array($value)) {
             $message = sprintf('Value should be an array or an object. %s given.', gettype($value));
             $result->addError($message);
@@ -87,8 +87,7 @@ final class Nested extends Rule
 
         foreach ($this->rules as $valuePath => $rules) {
             if ($this->errorWhenPropertyPathIsNotFound && !ArrayHelper::pathExists($value, $valuePath)) {
-                $message = $this->formatMessage($this->propertyPathIsNotFoundMessage, ['path' => $valuePath]);
-                $result->addError($message);
+                $result->addError($this->propertyPathIsNotFoundMessage, parameters: ['path' => $valuePath]);
 
                 continue;
             }

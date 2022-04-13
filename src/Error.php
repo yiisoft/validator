@@ -6,20 +6,20 @@ namespace Yiisoft\Validator;
 
 final class Error
 {
-    private string $message;
-
-    /**
-     * @psalm-var list<int|string>
-     */
-    private array $valuePath;
-
     /**
      * @psalm-param list<int|string> $valuePath
      */
-    public function __construct(string $message, array $valuePath = [])
+    public function __construct(
+        private string $message,
+        private array $valuePath = [],
+        private array $parameters = [],
+        private ?FormatterInterface $formatter = null
+    ) {
+    }
+
+    public function getFormatter(): ?FormatterInterface
     {
-        $this->message = $message;
-        $this->valuePath = $valuePath;
+        return $this->formatter;
     }
 
     public function getMessage(): string
@@ -33,5 +33,10 @@ final class Error
     public function getValuePath(): array
     {
         return $this->valuePath;
+    }
+
+    public function getParameters(): array
+    {
+        return $this->parameters;
     }
 }

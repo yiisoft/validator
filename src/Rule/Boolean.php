@@ -32,12 +32,12 @@ final class Boolean extends Rule
          */
         private bool $strict = false,
         private string $message = 'The value must be either "{true}" or "{false}".',
-        ?FormatterInterface $formatter = null,
+        private ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         $when = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        parent::__construct(skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
@@ -48,24 +48,18 @@ final class Boolean extends Rule
             $valid = $value == $this->trueValue || $value == $this->falseValue;
         }
 
-        $result = new Result();
+        $result = new Result($this->formatter);
 
         if ($valid) {
             return $result;
         }
 
-        $message = $this->getFormattedMessage();
-        $result->addError($message);
-
-        return $result;
-    }
-
-    private function getFormattedMessage(): string
-    {
-        return $this->formatMessage($this->message, [
+        $result->addError($this->message, parameters: [
             'true' => $this->trueValue === true ? 'true' : $this->trueValue,
             'false' => $this->falseValue === false ? 'false' : $this->falseValue,
         ]);
+
+        return $result;
     }
 
     public function getOptions(): array
@@ -74,7 +68,13 @@ final class Boolean extends Rule
             'trueValue' => $this->trueValue,
             'falseValue' => $this->falseValue,
             'strict' => $this->strict,
-            'message' => $this->getFormattedMessage(),
+            'message' => [
+                $this->message,
+                [
+                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+                ]
+            ],
         ]);
     }
 }
