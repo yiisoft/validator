@@ -24,6 +24,7 @@ final class HasLengthValidator implements RuleValidatorInterface
      * @param $value
      * @param HasLength $config
      * @param ValidationContext|null $context
+     *
      * @return Result
      */
     public function validate($value, object $config, ?ValidationContext $context = null): Result

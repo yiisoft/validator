@@ -21,35 +21,34 @@ final class HasLength
          *
          * @see $tooShortMessage for the customized message for a too short string.
          */
-        public ?int      $min = null,
+        public ?int $min = null,
         /**
          * @var int|null maximum length. null means no maximum length limit.
          *
          * @see $tooLongMessage for the customized message for a too long string.
          */
-        public ?int      $max = null,
+        public ?int $max = null,
         /**
          * @var string user-defined error message used when the value is not a string.
          */
-        public string    $message = 'This value must be a string.',
+        public string $message = 'This value must be a string.',
         /**
          * @var string user-defined error message used when the length of the value is smaller than {@see $min}.
          */
-        public string    $tooShortMessage = 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+        public string $tooShortMessage = 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
         /**
          * @var string user-defined error message used when the length of the value is greater than {@see $max}.
          */
-        public string    $tooLongMessage = 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+        public string $tooLongMessage = 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
         /**
          * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
          * If this property is not set, application wide encoding will be used.
          */
-        public string    $encoding = 'UTF-8',
-        public bool      $skipOnEmpty = false,
-        public bool      $skipOnError = false,
+        public string $encoding = 'UTF-8',
+        public bool $skipOnEmpty = false,
+        public bool $skipOnError = false,
         public ?Closure $when = null
-    )
-    {
+    ) {
     }
 
     public function getOptions(): array
