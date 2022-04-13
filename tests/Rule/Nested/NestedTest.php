@@ -16,7 +16,6 @@ final class NestedTest extends AbstractRuleTest
     public function optionsDataProvider(): array
     {
         return [
-
         ];
     }
 

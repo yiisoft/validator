@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Yiisoft\Validator;
 
 use RuntimeException;
@@ -46,7 +48,7 @@ class RuleValidatorStorage
             RequiredValidator::getConfigClassName() => new RequiredValidator(),
             SubsetValidator::getConfigClassName() => new SubsetValidator(),
             UrlValidator::getConfigClassName() => new UrlValidator(),
-//            NestedValidator::getConfigClassName() => new NestedValidator($this),
+            //            NestedValidator::getConfigClassName() => new NestedValidator($this),
         ];
     }
 
@@ -60,7 +62,7 @@ class RuleValidatorStorage
             if (is_a($rule, $processingClass, true)) {
                 return $validator;
             }
-         }
+        }
 
         throw new RuntimeException("No validator found for \"$rule\" rule.");
     }
