@@ -28,6 +28,9 @@ final class Subset implements ParametrizedRuleInterface
     ) {
     }
 
+    /**
+     * TODO: Add range to output messages
+     */
     public function getOptions(): array
     {
         return [
