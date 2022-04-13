@@ -27,7 +27,7 @@ abstract class GroupRule implements ParametrizedRuleInterface
     /**
      * Return custom rules set
      */
-    abstract protected function getRuleSet(): RuleSet;
+    abstract public function getRuleSet(): RuleSet;
 
     public function getOptions(): array
     {
