@@ -126,6 +126,8 @@ final class CompareTo
             ],
             'type' => $this->type,
             'operator' => $this->operator,
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }

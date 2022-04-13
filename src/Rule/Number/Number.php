@@ -81,6 +81,8 @@ final class Number
                 'message' => $this->tooBigMessage,
                 'parameters' => ['max' => $this->max],
             ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }

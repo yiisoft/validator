@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule\InRange;
 
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -14,7 +15,7 @@ use Yiisoft\Validator\ValidationContext;
  * The range can be specified via constructor.
  * If the {@see InRange::$not} is called, the rule will ensure the value is NOT among the specified range.
  */
-final class InRangeValidator
+final class InRangeValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

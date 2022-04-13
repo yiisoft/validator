@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Boolean;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
  * Checks if the value is a boolean value or a value corresponding to it.
  */
-final class BooleanValidator
+final class BooleanValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

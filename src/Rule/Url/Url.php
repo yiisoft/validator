@@ -58,6 +58,8 @@ final class Url
             'message' => [
                 'message' => $this->message,
             ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }

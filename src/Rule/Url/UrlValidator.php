@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Url;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use function is_string;
 use function strlen;
@@ -15,7 +16,7 @@ use function strlen;
  * Note that this rule only checks if the URL scheme and host part are correct.
  * It does not check the remaining parts of a URL.
  */
-final class UrlValidator
+final class UrlValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

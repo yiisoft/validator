@@ -6,9 +6,10 @@ namespace Yiisoft\Validator\Rule\Callback;
 
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 
-final class CallbackValidator
+final class CallbackValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

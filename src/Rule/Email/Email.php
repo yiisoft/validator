@@ -75,6 +75,8 @@ final class Email
             'message' => [
                 'message' => $this->message,
             ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }

@@ -36,6 +36,8 @@ final class Subset
             'subsetMessage' => [
                 'message' => $this->subsetMessage,
             ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }

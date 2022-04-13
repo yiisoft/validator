@@ -28,6 +28,8 @@ final class Required
             'message' => [
                 'message' => $this->message,
             ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }

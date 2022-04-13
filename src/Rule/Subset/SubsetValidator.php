@@ -6,9 +6,10 @@ namespace Yiisoft\Validator\Rule\Subset;
 
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 
-final class SubsetValidator
+final class SubsetValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

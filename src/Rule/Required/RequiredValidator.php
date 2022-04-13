@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Required;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
  * Validates that the specified value is neither null nor empty.
  */
-final class RequiredValidator
+final class RequiredValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

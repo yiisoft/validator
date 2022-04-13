@@ -297,6 +297,8 @@ final class Ip
                 'message' => $this->notInRangeMessage,
             ],
             'ranges' => $this->ranges,
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }

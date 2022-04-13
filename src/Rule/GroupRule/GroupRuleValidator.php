@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\GroupRule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\ValidationContext;
 
 /**
  * Validates a single value for a set of custom rules.
  */
-abstract class GroupRuleValidator
+abstract class GroupRuleValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

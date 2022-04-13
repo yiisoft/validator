@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Json;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
  * Validates that the value is a valid json.
  */
-final class JsonValidator
+final class JsonValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

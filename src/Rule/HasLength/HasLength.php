@@ -69,6 +69,8 @@ final class HasLength
                 'parameters' => ['max' => $this->max],
             ],
             'encoding' => $this->encoding,
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }

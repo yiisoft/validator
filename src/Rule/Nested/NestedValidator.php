@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule\Nested;
 
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\ValidationContext;
 use function is_array;
@@ -36,7 +37,7 @@ use function is_object;
  * ]);
  * ```
  */
-final class NestedValidator
+final class NestedValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

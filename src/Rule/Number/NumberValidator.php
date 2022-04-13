@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule\Number;
 
 use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -15,7 +16,7 @@ use Yiisoft\Validator\ValidationContext;
  * or {@see Number::$numberPattern}. Optionally, you may configure the {@see Number::min()} and {@see Number::max()}
  * to ensure the number is within certain range.
  */
-final class NumberValidator
+final class NumberValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

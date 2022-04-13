@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Email;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use function is_string;
 use function strlen;
@@ -12,7 +13,7 @@ use function strlen;
 /**
  * Validates that the value is a valid email address.
  */
-final class EmailValidator
+final class EmailValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

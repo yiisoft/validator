@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use function is_string;
 use function strlen;
@@ -17,7 +18,7 @@ use function strlen;
  *
  * It also may change the value if normalization of IPv6 expansion is enabled.
  */
-final class IpValidator
+final class IpValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

@@ -27,6 +27,8 @@ final class Json
             'message' => [
                 'message' => $this->message,
             ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }

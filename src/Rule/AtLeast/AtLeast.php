@@ -43,6 +43,8 @@ final class AtLeast
                 'messages' => $this->message,
                 'parameters' => ['min' => $this->min],
             ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }

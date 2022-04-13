@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Regex;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
@@ -13,7 +14,7 @@ use function is_string;
  *
  * If the {@see Regex::$not} is used, the rule will ensure the value do NOT match the pattern.
  */
-final class RegexValidator
+final class RegexValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

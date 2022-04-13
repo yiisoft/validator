@@ -16,6 +16,11 @@ use function is_string;
  */
 final class HasLengthValidator implements RuleValidatorInterface
 {
+    public static function getConfigClassName(): string
+    {
+        return HasLength::class;
+    }
+
     public function __construct(
     ) {
     }

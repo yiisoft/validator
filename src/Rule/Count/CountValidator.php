@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule\Count;
 
 use Countable;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use function count;
 
@@ -13,7 +14,7 @@ use function count;
  * Validates that the value contains certain number of items. Can be applied to arrays or classes implementing
  * {@see Countable} interface.
  */
-final class CountValidator
+final class CountValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

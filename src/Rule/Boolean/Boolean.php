@@ -50,6 +50,8 @@ final class Boolean
                     'false' => $this->falseValue === false ? 'false' : $this->falseValue,
                 ],
             ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }

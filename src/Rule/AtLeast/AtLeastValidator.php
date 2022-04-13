@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\AtLeast;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
  * Checks if at least {@see AtLeast::$min} of many attributes are filled.
  */
-final class AtLeastValidator
+final class AtLeastValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

@@ -46,6 +46,8 @@ final class Regex
             'message' => [
                 'message' => $this->message,
             ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }

@@ -6,12 +6,13 @@ namespace Yiisoft\Validator\Rule\Each;
 
 use InvalidArgumentException;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.
  */
-final class EachValidator
+final class EachValidator implements RuleValidatorInterface
 {
     public static function getConfigClassName(): string
     {

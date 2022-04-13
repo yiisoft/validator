@@ -97,6 +97,8 @@ final class Count
                 'message' => $this->notExactlyMessage,
                 'parameters' => ['exactly' => $this->exactly],
             ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
         ];
     }
 }
