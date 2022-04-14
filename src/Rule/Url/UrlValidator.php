@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
 use function strlen;
 
@@ -23,7 +24,7 @@ final class UrlValidator implements RuleValidatorInterface
         return Url::class;
     }
 
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 

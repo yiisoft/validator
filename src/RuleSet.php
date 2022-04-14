@@ -39,14 +39,15 @@ final class RuleSet
         $this->rules[] = $this->normalizeRule($rule);
     }
 
-    public function validate($value, object $config, ValidationContext $context = null): Result
+    // TODO: remove `= null`
+    public function validate($value, ValidatorInterface $validator, ValidationContext $context = null): Result
     {
         $context = $context ?? new ValidationContext();
 
         $compoundResult = new Result();
         foreach ($this->rules as $rule) {
             $validator = $this->storage->getValidator(get_class($rule));
-            $ruleResult = $validator->validate($value, $rule, $context);
+            $ruleResult = $validator->validate($value, $rule, $validator, $context);
             if ($ruleResult->isValid()) {
                 continue;
             }

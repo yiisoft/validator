@@ -8,6 +8,7 @@ use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 
 /**
  * Validates that the value is a number.
@@ -23,7 +24,7 @@ final class NumberValidator implements RuleValidatorInterface
         return Number::class;
     }
 
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 

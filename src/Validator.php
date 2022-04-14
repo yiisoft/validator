@@ -32,7 +32,11 @@ final class Validator implements ValidatorInterface
 
         foreach ($rules as $attribute => $attributeRules) {
             $ruleSet = new RuleSet($attributeRules);
-            $tempResult = $ruleSet->validate($data->getAttributeValue($attribute), $context->withAttribute($attribute));
+            $tempResult = $ruleSet->validate(
+                $data->getAttributeValue($attribute),
+                $this,
+                $context->withAttribute($attribute)
+            );
 
             foreach ($tempResult->getErrors() as $error) {
                 $result->addError($error->getMessage(), [$attribute, ...$error->getValuePath()]);

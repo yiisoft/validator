@@ -10,6 +10,7 @@ use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
 
 /**
@@ -32,7 +33,7 @@ final class IpValidator implements RuleValidatorInterface
      */
     private const NEGATION_CHAR = '!';
 
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         if (!$config->allowIpv4 && !$config->allowIpv6) {
             throw new RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time.');

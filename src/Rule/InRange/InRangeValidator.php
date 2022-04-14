@@ -8,6 +8,7 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 
 /**
  * Validates that the value is among a list of values.
@@ -22,7 +23,7 @@ final class InRangeValidator implements RuleValidatorInterface
         return InRange::class;
     }
 
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 

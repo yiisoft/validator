@@ -11,6 +11,7 @@ use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 use function get_class;
 
 class RuleSetTest extends TestCase
@@ -83,7 +84,7 @@ class RuleSetTest extends TestCase
             {
             }
 
-            public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+            public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
             {
             }
         };

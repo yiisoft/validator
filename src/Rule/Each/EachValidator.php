@@ -7,8 +7,8 @@ namespace Yiisoft\Validator\Rule\Each;
 use InvalidArgumentException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
-use Yiisoft\Validator\RuleValidatorStorage;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 
 /**
  * TODO: need validators storage
@@ -16,12 +16,8 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class EachValidator implements RuleValidatorInterface
 {
-    private ?RuleValidatorStorage $storage;
-
-    public function __construct(RuleValidatorStorage $storage = null)
+    public function __construct()
     {
-        // TODO: just for test
-        $this->storage = $storage ?? new RuleValidatorStorage();
     }
 
     public static function getConfigClassName(): string
@@ -29,7 +25,7 @@ final class EachValidator implements RuleValidatorInterface
         return Each::class;
     }
 
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         if ($config->ruleSet === null) {
             throw new InvalidArgumentException('Rules are required.');

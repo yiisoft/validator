@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 
 /**
  * Compares the specified value with another value.
@@ -43,7 +44,7 @@ final class CompareToValidator implements RuleValidatorInterface
      */
     public const TYPE_NUMBER = 'number';
 
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 

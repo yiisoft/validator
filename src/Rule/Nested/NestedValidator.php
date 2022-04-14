@@ -10,6 +10,7 @@ use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\RuleValidatorStorage;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 use function is_array;
 use function is_object;
 
@@ -53,7 +54,7 @@ final class NestedValidator implements RuleValidatorInterface
         return Nested::class;
     }
 
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         if (!is_object($value) && !is_array($value)) {

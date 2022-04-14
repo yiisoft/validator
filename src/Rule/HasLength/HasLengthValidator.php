@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
 
 /**
@@ -21,18 +22,11 @@ final class HasLengthValidator implements RuleValidatorInterface
         return HasLength::class;
     }
 
-    public function __construct(
-    ) {
+    public function __construct()
+    {
     }
 
-    /**
-     * @param $value
-     * @param HasLength $config
-     * @param ValidationContext|null $context
-     *
-     * @return Result
-     */
-    public function validate($value, object $config, ?ValidationContext $context = null): Result
+    public function validate($value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 

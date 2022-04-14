@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 
 /**
  * Checks if the value is a boolean value or a value corresponding to it.
@@ -18,7 +19,7 @@ final class BooleanValidator implements RuleValidatorInterface
         return Boolean::class;
     }
 
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         if ($config->strict) {
             $valid = $value === $config->trueValue || $value === $config->falseValue;

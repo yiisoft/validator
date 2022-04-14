@@ -8,6 +8,7 @@ use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 
 final class CallbackValidator implements RuleValidatorInterface
 {
@@ -16,7 +17,7 @@ final class CallbackValidator implements RuleValidatorInterface
         return Callback::class;
     }
 
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $callback = $config->callback;
         $callbackResult = $callback($value, $context);

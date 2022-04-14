@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 
 /**
  * Checks if at least {@see AtLeast::$min} of many attributes are filled.
@@ -18,7 +19,7 @@ final class AtLeastValidator implements RuleValidatorInterface
         return AtLeast::class;
     }
 
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $filledCount = 0;
 

@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
 
 /**
@@ -19,7 +20,7 @@ final class RequiredValidator implements RuleValidatorInterface
         return Required::class;
     }
 
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 

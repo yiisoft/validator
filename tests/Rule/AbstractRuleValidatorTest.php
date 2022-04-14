@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 
 abstract class AbstractRuleValidatorTest extends TestCase
 {
@@ -39,9 +40,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
      */
     public function testCustomErrorMessages(object $config, mixed $value, array $expectedErrorMessages): void
     {
-        $validator = $this->getValidator();
-
-        $result = $validator->validate($value, $config);
+        $result = $this->validate($value, $config);
 
         $errors = $result->getErrors();
 
@@ -58,9 +57,15 @@ abstract class AbstractRuleValidatorTest extends TestCase
 
     protected function validate(mixed $value, object $config, ValidationContext $context = null): Result
     {
-        $validator = $this->getValidator();
+        $ruleValidator = $this->getValidator();
+        $validator = new class implements ValidatorInterface{
+            public function validate(mixed $data, iterable $rules = []): Result
+            {
+                return new Result();
+            }
+        };
 
-        return $validator->validate($value, $config, $context);
+        return $ruleValidator->validate($value, $config, $validator, $context);
     }
 
     abstract public function customErrorMessagesProvider(): array;
