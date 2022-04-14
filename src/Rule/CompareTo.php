@@ -118,6 +118,17 @@ final class CompareTo extends Rule
     }
 
     /**
+     * @see $message
+     */
+    public function message(string $value): self
+    {
+        $new = clone $this;
+        $new->message = $value;
+
+        return $new;
+    }
+
+    /**
      * @see $type
      */
     public function asString(): self

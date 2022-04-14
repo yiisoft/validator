@@ -61,6 +61,17 @@ final class AtLeast extends Rule
         return $new;
     }
 
+    /**
+     * @see $message
+     */
+    public function message(string $value): self
+    {
+        $new = clone $this;
+        $new->message = $value;
+
+        return $new;
+    }
+
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $filledCount = 0;

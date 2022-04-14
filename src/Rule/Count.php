@@ -120,6 +120,50 @@ final class Count extends Rule
         return $new;
     }
 
+    /**
+     * @see $message
+     */
+    public function message(string $value): self
+    {
+        $new = clone $this;
+        $new->message = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $tooFewItemsMessage
+     */
+    public function tooFewItemsMessage(string $value): self
+    {
+        $new = clone $this;
+        $new->tooFewItemsMessage = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $tooManyItemsMessage
+     */
+    public function tooManyItemsMessage(string $value): self
+    {
+        $new = clone $this;
+        $new->tooManyItemsMessage = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $notExactlyMessage
+     */
+    public function notExactlyMessage(string $value): self
+    {
+        $new = clone $this;
+        $new->notExactlyMessage = $value;
+
+        return $new;
+    }
+
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $this->checkLimitsCompatibility();

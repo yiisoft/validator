@@ -42,6 +42,17 @@ class BooleanTest extends TestCase
         $this->assertNotSame($rule1, $rule2);
     }
 
+    public function testMessage(): void
+    {
+        $rule1 = new Boolean(message: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['message']);
+
+        $rule2 = $rule1->message('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['message']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
     public function validateProvider(): array
     {
         return [

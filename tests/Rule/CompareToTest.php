@@ -22,6 +22,17 @@ class CompareToTest extends TestCase
         $this->assertNotSame($rule1, $rule2);
     }
 
+    public function testMessage(): void
+    {
+        $rule1 = new CompareTo(1, message: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['message']);
+
+        $rule2 = $rule1->message('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['message']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
     public function testAsString(): void
     {
         $rule1 = new CompareTo(1, type: CompareTo::TYPE_NUMBER);

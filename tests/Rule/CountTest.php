@@ -45,6 +45,50 @@ class CountTest extends TestCase
         $this->assertNotSame($rule1, $rule2);
     }
 
+    public function testMessage(): void
+    {
+        $rule1 = new Count(min: 1, message: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['message']);
+
+        $rule2 = $rule1->message('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['message']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testTooFewItemsMessage(): void
+    {
+        $rule1 = new Count(min: 1, tooFewItemsMessage: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['tooFewItemsMessage']);
+
+        $rule2 = $rule1->tooFewItemsMessage('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['tooFewItemsMessage']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testTooManyItemsMessage(): void
+    {
+        $rule1 = new Count(min: 1, tooManyItemsMessage: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['tooManyItemsMessage']);
+
+        $rule2 = $rule1->tooManyItemsMessage('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['tooManyItemsMessage']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testNotExactlyMessage(): void
+    {
+        $rule1 = new Count(min: 1, notExactlyMessage: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['notExactlyMessage']);
+
+        $rule2 = $rule1->notExactlyMessage('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['notExactlyMessage']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
     public function testInitWithoutRequiredArguments(): void
     {
         $this->expectException(InvalidArgumentException::class);

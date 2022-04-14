@@ -73,6 +73,17 @@ final class Boolean extends Rule
         return $new;
     }
 
+    /**
+     * @see $message
+     */
+    public function message(string $value): self
+    {
+        $new = clone $this;
+        $new->message = $value;
+
+        return $new;
+    }
+
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         if ($this->strict) {
