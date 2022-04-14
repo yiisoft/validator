@@ -12,6 +12,29 @@ use Yiisoft\Validator\Rule\Callback;
 
 class CallbackTest extends TestCase
 {
+    public function testCallback(): void
+    {
+        $rule1 = new Callback(static function ($value): Result {
+            $result = new Result();
+            $result->addError('Error 1.');
+
+            return $result;
+        });
+        $result1 = $rule1->validate('');
+        $this->assertEquals(['Error 1.'], $result1->getErrorMessages());
+
+        $rule2 = $rule1->callback(static function ($value): Result {
+            $result = new Result();
+            $result->addError('Error 2.');
+
+            return $result;
+        });
+        $result2 = $rule2->validate('');
+        $this->assertEquals(['Error 2.'], $result2->getErrorMessages());
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
     public function testValidate(): void
     {
         $rule = new Callback(static function ($value): Result {

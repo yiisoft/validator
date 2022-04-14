@@ -25,6 +25,17 @@ final class Callback extends Rule
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
+    /**
+     * @see $callback
+     */
+    public function callback(callable $value): self
+    {
+        $new = clone $this;
+        $new->callback = $value;
+
+        return $new;
+    }
+
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $callback = $this->callback;
