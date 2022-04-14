@@ -38,6 +38,28 @@ final class Each extends Rule
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
+    /**
+     * @see $message
+     */
+    public function message(string $value): self
+    {
+        $new = clone $this;
+        $new->message = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $incorrectInputMessage
+     */
+    public function incorrectInputMessage(string $value): self
+    {
+        $new = clone $this;
+        $new->incorrectInputMessage = $value;
+
+        return $new;
+    }
+
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         if ($this->ruleSet === null) {
