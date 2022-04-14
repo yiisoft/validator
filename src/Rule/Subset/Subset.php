@@ -28,9 +28,6 @@ final class Subset implements RuleInterface
     ) {
     }
 
-    /**
-     * TODO: Add range to output messages
-     */
     public function getOptions(): array
     {
         return [

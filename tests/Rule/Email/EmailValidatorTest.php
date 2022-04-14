@@ -17,10 +17,6 @@ final class EmailValidatorTest extends AbstractRuleValidatorTest
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
-        // TODO: move to another data provider to use this check
-//        if (!function_exists('idn_to_ascii')) {
-//            $this->markTestSkipped('Intl extension required');
-//        }
         $ruleEnabledIDNandAllowedName = new Email(allowName: true, enableIDN: true);
         $message = $rule->message;
         $parameters = [];

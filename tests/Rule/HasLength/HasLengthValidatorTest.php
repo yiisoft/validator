@@ -86,37 +86,6 @@ final class HasLengthValidatorTest extends AbstractRuleValidatorTest
         ];
     }
 
-    /**
-     * TODO: add base test case with data provider
-     */
-    public function testTooShortMessage(): void
-    {
-        $config = new HasLength(min: 1);
-        $result = $this->validate('', $config);
-
-        $this->assertEquals(
-            [new Error(
-                'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
-                ['min' => 1],
-            )],
-            $result->getErrors()
-        );
-    }
-
-    public function testTooLongMessage(): void
-    {
-        $config = new HasLength(max: 100);
-        $result = $this->validate(str_repeat('x', 1230), $config);
-
-        $this->assertEquals(
-            [new Error(
-                'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
-                ['max' => 100],
-            )],
-            $result->getErrors()
-        );
-    }
-
     protected function getValidator(): HasLengthValidator
     {
         return new HasLengthValidator();

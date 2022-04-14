@@ -42,7 +42,6 @@ final class UrlValidatorTest extends AbstractRuleValidatorTest
             [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']), 'htp://yiiframework.com', $errors],
             [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']), '//yiiframework.com', $errors], // Relative URLs are not supported
 
-            // TODO: use mock for intl functions
             [new Url(enableIDN: true), '', $errors],
             [new Url(enableIDN: true), 'http://' . str_pad('base', 2000, 'url') . '.de', $errors],
         ];
@@ -76,7 +75,6 @@ final class UrlValidatorTest extends AbstractRuleValidatorTest
             [new Url(validSchemes: ['http', 'FTP']), 'HtTp://www.yiiframework.com/'],
             [new Url(validSchemes: ['http', 'FTP']), 'fTp://www.yiiframework.com/'],
 
-            // TODO: use mock for intl functions
             [new Url(enableIDN: true), 'http://äüößìà.de'],
             [new Url(enableIDN: true), 'http://xn--zcack7ayc9a.de'],
             [new Url(pattern: '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i', enableIDN: true), 'домен.рф'],
