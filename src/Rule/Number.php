@@ -66,6 +66,72 @@ final class Number extends Rule
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
+    /**
+     * @see $min
+     */
+    public function min(?int $value): self
+    {
+        $new = clone $this;
+        $new->min = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $max
+     */
+    public function max(?int $value): self
+    {
+        $new = clone $this;
+        $new->max = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $tooSmallMessage
+     */
+    public function tooSmallMessage(string $value): self
+    {
+        $new = clone $this;
+        $new->tooSmallMessage = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $tooBigMessage
+     */
+    public function tooBigMessage(string $value): self
+    {
+        $new = clone $this;
+        $new->tooBigMessage = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $integerPattern
+     */
+    public function integerPattern(string $value): self
+    {
+        $new = clone $this;
+        $new->integerPattern = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $numberPattern
+     */
+    public function numberPattern(string $value): self
+    {
+        $new = clone $this;
+        $new->numberPattern = $value;
+
+        return $new;
+    }
+
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();

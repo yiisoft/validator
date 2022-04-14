@@ -12,6 +12,72 @@ use function is_resource;
 
 class NumberTest extends TestCase
 {
+    public function testMin(): void
+    {
+        $rule1 = new Number(min: 1);
+        $this->assertSame(1, $rule1->getOptions()['min']);
+
+        $rule2 = $rule1->min(2);
+        $this->assertSame(2, $rule2->getOptions()['min']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testMax(): void
+    {
+        $rule1 = new Number(max: 1);
+        $this->assertSame(1, $rule1->getOptions()['max']);
+
+        $rule2 = $rule1->max(2);
+        $this->assertSame(2, $rule2->getOptions()['max']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testTooSmallMessage(): void
+    {
+        $rule1 = new Number(tooSmallMessage: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['tooSmallMessage']);
+
+        $rule2 = $rule1->tooSmallMessage('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['tooSmallMessage']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testTooBigMessage(): void
+    {
+        $rule1 = new Number(tooBigMessage: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['tooBigMessage']);
+
+        $rule2 = $rule1->tooBigMessage('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['tooBigMessage']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testIntegerPattern(): void
+    {
+        $rule1 = new Number(integerPattern: 'Pattern 1');
+        $this->assertSame('Pattern 1', $rule1->getOptions()['integerPattern']);
+
+        $rule2 = $rule1->integerPattern('Pattern 2');
+        $this->assertSame('Pattern 2', $rule2->getOptions()['integerPattern']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testNumberPattern(): void
+    {
+        $rule1 = new Number(numberPattern: 'Pattern 1');
+        $this->assertSame('Pattern 1', $rule1->getOptions()['numberPattern']);
+
+        $rule2 = $rule1->numberPattern('Pattern 2');
+        $this->assertSame('Pattern 2', $rule2->getOptions()['numberPattern']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
     public function validateSimpleProvider(): array
     {
         return [
