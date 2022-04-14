@@ -9,5 +9,7 @@ use Yiisoft\Validator\ValidationContext;
 
 interface RuleValidatorInterface
 {
+    public static function getConfigClassName(): string;
+
     public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result;
 }
