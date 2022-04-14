@@ -21,13 +21,13 @@ use Yiisoft\Validator\Rule\Regex\RegexValidator;
 use Yiisoft\Validator\Rule\Required\RequiredValidator;
 use Yiisoft\Validator\Rule\Subset\SubsetValidator;
 use Yiisoft\Validator\Rule\Url\UrlValidator;
-use Yiisoft\Validator\RuleValidatorStorage;
+use Yiisoft\Validator\ValidatorStorage;
 
 class FakeRuleStorageFactory
 {
-    public static function make(): RuleValidatorStorage
+    public static function make(): ValidatorStorage
     {
-        return new RuleValidatorStorage([
+        return new ValidatorStorage([
             AtLeastValidator::getRuleClassName() => new AtLeastValidator(),
             BooleanValidator::getRuleClassName() => new BooleanValidator(),
             CallbackValidator::getRuleClassName() => new CallbackValidator(),

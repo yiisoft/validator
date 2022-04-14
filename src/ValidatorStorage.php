@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 use RuntimeException;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 
-final class RuleValidatorStorage
+final class ValidatorStorage
 {
     private array $validators;
 

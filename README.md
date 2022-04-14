@@ -97,7 +97,7 @@ final class MoneyTransfer implements DataSetInterface
     }
 }
 
-$validatorStorage = new \Yiisoft\Validator\RuleValidatorStorage([
+$validatorStorage = new \Yiisoft\Validator\ValidatorStorage([
   \Yiisoft\Validator\Rule\Number\NumberValidator::getRuleClassName() => new \Yiisoft\Validator\Rule\Number\NumberValidator::getRuleClassName(), 
   \Yiisoft\Validator\Rule\Callback\CallbackValidator::getRuleClassName() => new \Yiisoft\Validator\Rule\Callback\CallbackValidator::getRuleClassName(), 
 ]);

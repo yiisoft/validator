@@ -19,9 +19,9 @@ final class Validator implements ValidatorInterface
 {
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 
-    private RuleValidatorStorage $storage;
+    private ValidatorStorage $storage;
 
-    public function __construct(RuleValidatorStorage $storage)
+    public function __construct(ValidatorStorage $storage)
     {
         $this->storage = $storage;
     }
