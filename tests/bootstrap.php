@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests {
@@ -11,7 +12,6 @@ namespace Yiisoft\Validator\Tests {
 }
 
 namespace Yiisoft\Validator\Rule\Url {
-
     use Yiisoft\Validator\Tests\FunctionExists;
 
     function function_exists(string $function): bool

@@ -108,4 +108,3 @@ final class UrlValidatorTest extends AbstractRuleValidatorTest
         return Url::class;
     }
 }
-
