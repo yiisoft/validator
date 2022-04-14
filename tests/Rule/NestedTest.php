@@ -10,15 +10,6 @@ use stdClass;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Rule\Callback;
-use Yiisoft\Validator\Rule\Count;
-use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\InRange;
-use Yiisoft\Validator\Rule\Nested;
-use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Rule\Regex;
-use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\ParametrizedRule;
 
 class NestedTest extends TestCase
@@ -26,38 +17,7 @@ class NestedTest extends TestCase
     public function validateDataProvider(): array
     {
         return [
-            'success' => [
-                [
-                    'author.name' => [
-                        new HasLength(min: 3),
-                    ],
-                ],
-                true,
-            ],
-            'error' => [
-                [
-                    'author.age' => [
-                        new Number(min: 20),
-                    ],
-                ],
-                false,
-            ],
-            'key not exists' => [
-                [
-                    'author.sex' => [
-                        new InRange(['male', 'female']),
-                    ],
-                ],
-                false,
-            ],
-            'key not exists, skip empty' => [
-                [
-                    'author.sex' => [
-                        new InRange(['male', 'female'], skipOnEmpty: true),
-                    ],
-                ],
-                true,
-            ],
+
         ];
     }
 
@@ -69,12 +29,7 @@ class NestedTest extends TestCase
     public function testValidate(array $rules, bool $expectedResult): void
     {
         $rule = new Nested($rules);
-        $value = [
-            'author' => [
-                'name' => 'Dmitry',
-                'age' => 18,
-            ],
-        ];
+
         $result = $rule->validate($value);
 
         $this->assertEquals($expectedResult, $result->isValid());
