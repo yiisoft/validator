@@ -66,7 +66,8 @@ final class NestedValidator implements RuleValidatorInterface
             $rules = is_array($rules) ? $rules : [$rules];
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
 
-            $itemResult = $validator->validate($validatedValue, [$valuePath => $rules]);
+            $itemResult = $validator->validate($validatedValue, $rules);
+//            $itemResult = $validator->validate($validatedValue, [$valuePath => $rules]);
 
             if ($itemResult->isValid()) {
                 continue;

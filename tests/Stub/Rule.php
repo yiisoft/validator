@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Stub;
 
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\ValidationContext;
 
 final class Rule implements RuleInterface
 {
@@ -27,10 +25,5 @@ final class Rule implements RuleInterface
     public function getOptions(): array
     {
         return $this->options;
-    }
-
-    public function validate($value, ValidationContext $context = null): Result
-    {
-        return new Result();
     }
 }

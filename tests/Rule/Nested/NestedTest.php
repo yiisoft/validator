@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Nested;
 
+use InvalidArgumentException;
+use stdClass;
 use Yiisoft\Validator\Rule\Nested\Nested;
 use Yiisoft\Validator\Rule\Number\Number;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
+use Yiisoft\Validator\Tests\Stub\Rule;
 
 /**
- * @group t
+ * @group t2
  */
 final class NestedTest extends AbstractRuleTest
 {
@@ -63,8 +66,45 @@ final class NestedTest extends AbstractRuleTest
                     ],
                 ],
             ],
+            [
+                new Nested([
+                    'author.name' => new Rule('author-name', ['key' => 'name']),
+                    'author.age' => new Rule('author-age', ['key' => 'age']),
+                ]),
+                [
+                    'author.name' => ['key' => 'name'],
+                    'author.age' => ['key' => 'age'],
+                ],
+            ],
+            [
+                new Nested([
+                    'author' => [
+                        'name' => new Rule('author-name', ['key' => 'name']),
+                        'age' => new Rule('author-age', ['key' => 'age']),
+                    ],
+                ]),
+                [
+                    'author' => [
+                        'name' => ['key' => 'name'],
+                        'age' => ['key' => 'age'],
+                    ],
+                ],
+            ],
         ];
     }
+
+    public function testValidationEmptyRules(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new Nested([]);
+    }
+
+    public function testValidationRuleIsNotInstanceOfRule(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new Nested(['path.to.value' => (new stdClass())]);
+    }
+
 
     protected function getRule(): RuleInterface
     {

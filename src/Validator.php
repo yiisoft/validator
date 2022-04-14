@@ -40,10 +40,19 @@ final class Validator implements ValidatorInterface
         foreach ($rules as $attribute => $attributeRules) {
             $attributeRules = is_array($attributeRules) ? $attributeRules : [$attributeRules];
             $ruleSet = new RuleSet($this->storage, $attributeRules);
+
+            if (is_int($attribute)) {
+                $validatedData = $data->getData();
+                $validatedContext = $context->withAttribute((string)$attribute);
+            }else {
+                $validatedData = $data->getAttributeValue($attribute);
+                $validatedContext = $context;
+            }
+
             $tempResult = $ruleSet->validate(
-                $data->getAttributeValue((string)$attribute),
+                $validatedData,
                 $this,
-                $context->withAttribute((string)$attribute)
+                $validatedContext
             );
 
             foreach ($tempResult->getErrors() as $error) {

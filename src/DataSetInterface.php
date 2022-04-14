@@ -19,4 +19,5 @@ interface DataSetInterface
      * @return mixed
      */
     public function getAttributeValue(string $attribute);
+    public function getData():mixed;
 }
