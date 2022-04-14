@@ -19,7 +19,7 @@ final class Result
     public function isAttributeValid(string $attribute): bool
     {
         foreach ($this->errors as $error) {
-            $firstItem = $error->getValuePath()[0] ?? '';
+            $firstItem = $error->getParameters()[0] ?? '';
             if ($firstItem === $attribute) {
                 return false;
             }

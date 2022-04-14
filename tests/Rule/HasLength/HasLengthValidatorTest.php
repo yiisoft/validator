@@ -20,10 +20,10 @@ final class HasLengthValidatorTest extends AbstractRuleValidatorTest
         $defaultConfig = new HasLength();
 
         return [
-            [$defaultConfig, ['not a string'], [new Error($defaultConfig->message)]],
-            [$defaultConfig, new stdClass(), [new Error($defaultConfig->message)]],
-            [$defaultConfig, true, [new Error($defaultConfig->message)]],
-            [$defaultConfig, false, [new Error($defaultConfig->message)]],
+            [$defaultConfig, ['not a string'], [new Error($defaultConfig->message, [])]],
+            [$defaultConfig, new stdClass(), [new Error($defaultConfig->message, [])]],
+            [$defaultConfig, true, [new Error($defaultConfig->message, [])]],
+            [$defaultConfig, false, [new Error($defaultConfig->message, [])]],
 
             [new HasLength(max: 25), str_repeat('x', 1250), [new Error($defaultConfig->tooLongMessage, ['max' => 25])]],
             [new HasLength(min: 25, max: 25), str_repeat('x', 125), [new Error($defaultConfig->tooLongMessage, ['max' => 25])]],
@@ -74,7 +74,7 @@ final class HasLengthValidatorTest extends AbstractRuleValidatorTest
             [
                 $rule,
                 null,
-                [new Error('is not string error')],
+                [new Error('is not string error', [])],
             ],
             [
                 $rule,

@@ -60,7 +60,7 @@ final class Validator implements ValidatorInterface
             );
 
             foreach ($tempResult->getErrors() as $error) {
-                $result->addError($error->getMessage(), $error->getValuePath());
+                $result->addError($error->getMessage(), $error->getParameters());
 //                $result->addError($error->getMessage(), [$attribute, ...$error->getValuePath()]);
             }
         }
@@ -99,7 +99,7 @@ final class Validator implements ValidatorInterface
             $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
 
             foreach ($ruleResult->getErrors() as $error) {
-                $compoundResult->addError($error->getMessage(), $error->getValuePath());
+                $compoundResult->addError($error->getMessage(), $error->getParameters());
             }
         }
         return $compoundResult;

@@ -16,7 +16,7 @@ final class Error
     /**
      * @psalm-param list<int|mixed> $parameters
      */
-    public function __construct(string $message, array $parameters = [])
+    public function __construct(string $message, array $parameters)
     {
         $this->message = $message;
         $this->parameters = $parameters;
@@ -30,7 +30,7 @@ final class Error
     /**
      * @psalm-return list<int|string>
      */
-    public function getValuePath(): array
+    public function getParameters(): array
     {
         return $this->parameters;
     }

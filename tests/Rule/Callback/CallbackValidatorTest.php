@@ -30,7 +30,7 @@ final class CallbackValidatorTest extends AbstractRuleValidatorTest
                     return $result;
                 }),
                 41,
-                [new Error('Value should be 42!')],
+                [new Error('Value should be 42!', [])],
             ],
         ];
     }
@@ -65,7 +65,7 @@ final class CallbackValidatorTest extends AbstractRuleValidatorTest
                     return $result;
                 }),
                 41,
-                [new Error('Custom error')],
+                [new Error('Custom error', [])],
             ],
         ];
     }

@@ -33,7 +33,7 @@ final class UrlValidatorTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $rule = new Url();
-        $errors = [new Error($rule->message)];
+        $errors = [new Error($rule->message, [])];
 
         return [
             [$rule, 'google.de', $errors],

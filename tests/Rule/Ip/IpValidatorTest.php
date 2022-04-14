@@ -39,16 +39,16 @@ final class IpValidatorTest extends AbstractRuleValidatorTest
             [$ruleRange, 'babe::cafe', [new Error($rule->notInRangeMessage, [])]],
             [$ruleRange, '10.0.0.2', [new Error($rule->notInRangeMessage, [])]],
 
-            [$rule, '192.168.005.001', [new Error($rule->message)]], // Leading zeroes are not supported
-            [$rule, '192.168.5.321', [new Error($rule->message)]],
-            [$rule, '!192.168.5.32', [new Error($rule->message)]],
-            [$rule, '192.168.5.32/11', [new Error($rule->hasSubnetMessage)]],
-            [new Ip(allowIpv4: false), '192.168.10.11', [new Error($rule->ipv4NotAllowedMessage)]],
-            [new Ip(allowSubnet: true), '192.168.5.32/33', [new Error($rule->wrongCidrMessage)]],
-            [new Ip(allowSubnet: true), '192.168.5.32/af', [new Error($rule->message)]],
-            [new Ip(allowSubnet: true), '192.168.5.32/11/12', [new Error($rule->message)]],
-            [$ruleRequiredSubnet, '10.0.0.1', [new Error($rule->noSubnetMessage)]],
-            [new Ip(requireSubnet: true, allowNegation: true), '!!192.168.5.32/32', [new Error($rule->message)]],
+            [$rule, '192.168.005.001', [new Error($rule->message, [])]], // Leading zeroes are not supported
+            [$rule, '192.168.5.321', [new Error($rule->message, [])]],
+            [$rule, '!192.168.5.32', [new Error($rule->message, [])]],
+            [$rule, '192.168.5.32/11', [new Error($rule->hasSubnetMessage, [])]],
+            [new Ip(allowIpv4: false), '192.168.10.11', [new Error($rule->ipv4NotAllowedMessage, [])]],
+            [new Ip(allowSubnet: true), '192.168.5.32/33', [new Error($rule->wrongCidrMessage, [])]],
+            [new Ip(allowSubnet: true), '192.168.5.32/af', [new Error($rule->message, [])]],
+            [new Ip(allowSubnet: true), '192.168.5.32/11/12', [new Error($rule->message, [])]],
+            [$ruleRequiredSubnet, '10.0.0.1', [new Error($rule->noSubnetMessage, [])]],
+            [new Ip(requireSubnet: true, allowNegation: true), '!!192.168.5.32/32', [new Error($rule->message, [])]],
 
             [new Ip(allowIpv4: false, allowSubnet: true), '!2008:fa::0:1/0', [new Error($rule->message, [])]],
             [new Ip(allowIpv4: false, allowSubnet: true), '2008:fz::0/129', [new Error($rule->message, [])]],
@@ -186,7 +186,7 @@ final class IpValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new Ip(allowSubnet: true, message: 'Custom error'), '192.168.5.32/af', [new Error('Custom error')]],
+            [new Ip(allowSubnet: true, message: 'Custom error'), '192.168.5.32/af', [new Error('Custom error', [])]],
         ];
     }
 

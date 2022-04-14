@@ -78,7 +78,7 @@ final class NestedValidator implements RuleValidatorInterface
 //                if ($error->getValuePath()) {
 //                    $errorValuePath = array_merge($errorValuePath, $error->getValuePath());
 //                }
-                $errorValuePath = $error->getValuePath();
+                $errorValuePath = $error->getParameters();
 
                 $result->addError($error->getMessage(), $errorValuePath);
             }

@@ -24,14 +24,14 @@ final class RegexValidatorTest extends AbstractRuleValidatorTest
         $ruleNot = new Regex('/a/', not: true);
 
         return [
-            [$rule, ['a', 'b'], [new Error($rule->incorrectInputMessage)]],
-            [$ruleNot, ['a', 'b'], [new Error($rule->incorrectInputMessage)]],
-            [$rule, null, [new Error($rule->incorrectInputMessage)]],
-            [$ruleNot, null, [new Error($rule->incorrectInputMessage)]],
-            [$rule, new stdClass(), [new Error($rule->incorrectInputMessage)]],
-            [$ruleNot, new stdClass(), [new Error($rule->incorrectInputMessage)]],
+            [$rule, ['a', 'b'], [new Error($rule->incorrectInputMessage, [])]],
+            [$ruleNot, ['a', 'b'], [new Error($rule->incorrectInputMessage, [])]],
+            [$rule, null, [new Error($rule->incorrectInputMessage, [])]],
+            [$ruleNot, null, [new Error($rule->incorrectInputMessage, [])]],
+            [$rule, new stdClass(), [new Error($rule->incorrectInputMessage, [])]],
+            [$ruleNot, new stdClass(), [new Error($rule->incorrectInputMessage, [])]],
 
-            [$rule, 'b', [new Error($rule->message)]],
+            [$rule, 'b', [new Error($rule->message, [])]],
         ];
     }
 
@@ -53,12 +53,12 @@ final class RegexValidatorTest extends AbstractRuleValidatorTest
             [
                 new Regex('/a/', message: 'Custom message.'),
                 'b',
-                [new Error('Custom message.')],
+                [new Error('Custom message.', [])],
             ],
             [
                 new Regex('/a/', incorrectInputMessage: 'Custom message.'),
                 null,
-                [new Error('Custom message.')],
+                [new Error('Custom message.', [])],
             ],
         ];
     }

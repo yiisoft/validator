@@ -20,8 +20,8 @@ final class RequiredValidatorTest extends AbstractRuleValidatorTest
         $rule = new Required();
 
         return [
-            [$rule, null, [new Error($rule->message)]],
-            [$rule, [], [new Error($rule->message)]],
+            [$rule, null, [new Error($rule->message, [])]],
+            [$rule, [], [new Error($rule->message, [])]],
         ];
     }
 
@@ -38,7 +38,7 @@ final class RequiredValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new Required(message: 'Custom error'), null, [new Error('Custom error')]],
+            [new Required(message: 'Custom error'), null, [new Error('Custom error', [])]],
         ];
     }
 
