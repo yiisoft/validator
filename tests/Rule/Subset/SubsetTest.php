@@ -29,8 +29,8 @@ final class SubsetTest extends AbstractRuleTest
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 

@@ -59,5 +59,4 @@ abstract class Rule
     {
         return $this->validateValue($value, $context);
     }
-
 }

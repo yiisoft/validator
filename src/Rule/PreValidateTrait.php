@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
@@ -18,8 +19,7 @@ trait PreValidateTrait
         bool $skipOnEmpty,
         bool $skipOnError,
         Closure $when,
-    )
-    {
+    ) {
         if ($skipOnEmpty && $this->isEmpty($value)) {
             return new Result();
         }
