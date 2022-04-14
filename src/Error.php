@@ -11,15 +11,15 @@ final class Error
     /**
      * @psalm-var list<int|string>
      */
-    private array $valuePath;
+    private array $parameters;
 
     /**
-     * @psalm-param list<int|string> $valuePath
+     * @psalm-param list<int|mixed> $parameters
      */
-    public function __construct(string $message, array $valuePath = [])
+    public function __construct(string $message, array $parameters = [])
     {
         $this->message = $message;
-        $this->valuePath = $valuePath;
+        $this->parameters = $parameters;
     }
 
     public function getMessage(): string
@@ -32,6 +32,6 @@ final class Error
      */
     public function getValuePath(): array
     {
-        return $this->valuePath;
+        return $this->parameters;
     }
 }
