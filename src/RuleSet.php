@@ -18,7 +18,7 @@ final class RuleSet
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 
     /**
-     * @var ParametrizedRuleInterface[]
+     * @var RuleInterface[]
      */
     private array $rules = [];
     private RuleValidatorStorage $storage;
@@ -32,7 +32,7 @@ final class RuleSet
     }
 
     /**
-     * @param callable|ParametrizedRuleInterface $rule
+     * @param callable|RuleInterface $rule
      */
     public function add($rule): void
     {
@@ -60,16 +60,16 @@ final class RuleSet
         return $compoundResult;
     }
 
-    private function normalizeRule($rule): ParametrizedRuleInterface
+    private function normalizeRule($rule): RuleInterface
     {
         if (is_callable($rule)) {
             return new Callback($rule);
         }
 
-        if (!$rule instanceof ParametrizedRuleInterface) {
+        if (!$rule instanceof RuleInterface) {
             throw new InvalidArgumentException(sprintf(
                 'Rule should be either an instance of %s or a callable, %s given.',
-                ParametrizedRuleInterface::class,
+                RuleInterface::class,
                 gettype($rule)
             ));
         }
@@ -86,7 +86,7 @@ final class RuleSet
     {
         $arrayOfRules = [];
         foreach ($this->rules as $rule) {
-            if ($rule instanceof ParametrizedRuleInterface) {
+            if ($rule instanceof RuleInterface) {
                 $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
             } else {
                 $arrayOfRules[] = [get_class($rule)];

@@ -8,15 +8,15 @@ use Attribute;
 use Closure;
 use Countable;
 use InvalidArgumentException;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 
 /**
  * Validates that the value contains certain number of items. Can be applied to arrays or classes implementing
  * {@see Countable} interface.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Count implements ParametrizedRuleInterface
+final class Count implements RuleInterface
 {
     use RuleNameTrait;
 

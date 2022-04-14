@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\GroupRule;
 
 use Closure;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RuleSet;
 
 /**
  * Validates a single value for a set of custom rules.
  */
-abstract class GroupRule implements ParametrizedRuleInterface
+abstract class GroupRule implements RuleInterface
 {
     use RuleNameTrait;
 

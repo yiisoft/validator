@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Stub;
 
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
-final class ParametrizedRule implements ParametrizedRuleInterface
+final class Rule implements RuleInterface
 {
     private array $options;
     private string $name;

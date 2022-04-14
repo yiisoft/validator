@@ -8,8 +8,8 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use RuntimeException;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 
 /**
  * Compares the specified value with another value.
@@ -25,7 +25,7 @@ use Yiisoft\Validator\Rule\RuleNameTrait;
  * {@see CompareTo::TYPE_NUMBER} to enable numeric comparison.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class CompareTo implements ParametrizedRuleInterface
+final class CompareTo implements RuleInterface
 {
     use RuleNameTrait;
 

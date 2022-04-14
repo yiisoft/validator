@@ -6,8 +6,8 @@ namespace Yiisoft\Validator\Rule\HasLength;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 
 /**
  * Validates that the value is of certain length.
@@ -15,7 +15,7 @@ use Yiisoft\Validator\Rule\RuleNameTrait;
  * Note, this rule should only be used with strings.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class HasLength implements ParametrizedRuleInterface
+final class HasLength implements RuleInterface
 {
     use RuleNameTrait;
 

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Callback;
 
 use Closure;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 
-final class Callback implements ParametrizedRuleInterface
+final class Callback implements RuleInterface
 {
     use RuleNameTrait;
 

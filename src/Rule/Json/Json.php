@@ -6,14 +6,14 @@ namespace Yiisoft\Validator\Rule\Json;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 
 /**
  * Validates that the value is a valid json.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Json implements ParametrizedRuleInterface
+final class Json implements RuleInterface
 {
     use RuleNameTrait;
 

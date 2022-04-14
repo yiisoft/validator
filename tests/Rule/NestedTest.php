@@ -9,8 +9,7 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\Tests\Stub\ParametrizedRule;
+use Yiisoft\Validator\Tests\Stub\Rule;
 
 class NestedTest extends TestCase
 {
@@ -94,8 +93,8 @@ class NestedTest extends TestCase
         return [
             [
                 [
-                    'author.name' => new ParametrizedRule('author-name', ['key' => 'name']),
-                    'author.age' => new ParametrizedRule('author-age', ['key' => 'age']),
+                    'author.name' => new Rule('author-name', ['key' => 'name']),
+                    'author.age' => new Rule('author-age', ['key' => 'age']),
                 ],
                 [
                     'author.name' => ['key' => 'name'],
@@ -105,8 +104,8 @@ class NestedTest extends TestCase
             [
                 [
                     'author' => [
-                        'name' => new ParametrizedRule('author-name', ['key' => 'name']),
-                        'age' => new ParametrizedRule('author-age', ['key' => 'age']),
+                        'name' => new Rule('author-name', ['key' => 'name']),
+                        'age' => new Rule('author-age', ['key' => 'age']),
                     ],
                 ],
                 [

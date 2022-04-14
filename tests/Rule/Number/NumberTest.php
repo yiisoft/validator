@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Number;
 
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\Number\Number;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 /**
@@ -124,7 +124,7 @@ final class NumberTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): RuleInterface
     {
         return new Number();
     }

@@ -6,14 +6,14 @@ namespace Yiisoft\Validator\Rule\Boolean;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 
 /**
  * Checks if the value is a boolean value or a value corresponding to it.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Boolean implements ParametrizedRuleInterface
+final class Boolean implements RuleInterface
 {
     use RuleNameTrait;
 

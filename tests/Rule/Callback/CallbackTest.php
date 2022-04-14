@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Callback;
 
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\Callback\Callback;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 /**
@@ -34,7 +34,7 @@ final class CallbackTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): RuleInterface
     {
         return new AtLeast([]);
     }

@@ -7,15 +7,15 @@ namespace Yiisoft\Validator\Rule\Email;
 use Attribute;
 use Closure;
 use RuntimeException;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 use function function_exists;
 
 /**
  * Validates that the value is a valid email address.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Email implements ParametrizedRuleInterface
+final class Email implements RuleInterface
 {
     use RuleNameTrait;
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\AtLeast;
 
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\AtLeast\AtLeast;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 /**
@@ -43,7 +43,7 @@ final class AtLeastTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): RuleInterface
     {
         return new AtLeast([]);
     }

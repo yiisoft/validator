@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Email;
 
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\Email\Email;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 /**
@@ -71,7 +71,7 @@ final class EmailTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): RuleInterface
     {
         return new Email();
     }

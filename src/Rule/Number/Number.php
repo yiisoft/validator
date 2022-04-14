@@ -6,8 +6,8 @@ namespace Yiisoft\Validator\Rule\Number;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 
 /**
  * Validates that the value is a number.
@@ -17,7 +17,7 @@ use Yiisoft\Validator\Rule\RuleNameTrait;
  * to ensure the number is within certain range.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Number implements ParametrizedRuleInterface
+final class Number implements RuleInterface
 {
     use RuleNameTrait;
 

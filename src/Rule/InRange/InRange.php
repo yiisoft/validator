@@ -6,8 +6,8 @@ namespace Yiisoft\Validator\Rule\InRange;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 
 /**
  * Validates that the value is among a list of values.
@@ -16,7 +16,7 @@ use Yiisoft\Validator\Rule\RuleNameTrait;
  * If the {@see InRange::$not} is called, the rule will ensure the value is NOT among the specified range.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class InRange implements ParametrizedRuleInterface
+final class InRange implements RuleInterface
 {
     use RuleNameTrait;
 

@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
-
 use function is_array;
 
 /**
  * RulesDumper allows to get an array of rule names and corresponding settings from a set of rules.
  * The array is usually passed to the client to use it in client-side validation.
  *
- * * @see ParametrizedRuleInterface
+ * * @see RuleInterface
  */
 final class RulesDumper
 {

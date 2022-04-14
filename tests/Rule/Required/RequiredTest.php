@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Required;
 
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\Required\Required;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 /**
@@ -29,7 +29,7 @@ final class RequiredTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): RuleInterface
     {
         return new Required();
     }

@@ -8,7 +8,7 @@ namespace Yiisoft\Validator;
  * The interface should be implemented for a rule that is meant to be converted to array of name => parameters.
  * Such array is usually passed to the client and then used for client-side validation.
  */
-interface ParametrizedRuleInterface
+interface RuleInterface
 {
     /**
      * Get name of the rule to be used when rule is converted to array.

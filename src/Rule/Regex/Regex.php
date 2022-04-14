@@ -6,8 +6,8 @@ namespace Yiisoft\Validator\Rule\Regex;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 
 /**
  * Validates that the value matches the pattern specified in constructor.
@@ -15,7 +15,7 @@ use Yiisoft\Validator\Rule\RuleNameTrait;
  * If the {@see Regex::$not} is used, the rule will ensure the value do NOT match the pattern.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Regex implements ParametrizedRuleInterface
+final class Regex implements RuleInterface
 {
     use RuleNameTrait;
 

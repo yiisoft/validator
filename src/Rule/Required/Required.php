@@ -6,14 +6,14 @@ namespace Yiisoft\Validator\Rule\Required;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 
 /**
  * Validates that the specified value is neither null nor empty.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Required implements ParametrizedRuleInterface
+final class Required implements RuleInterface
 {
     use RuleNameTrait;
 

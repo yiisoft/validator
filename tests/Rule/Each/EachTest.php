@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Each;
 
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\Each\Each;
 use Yiisoft\Validator\Rule\Number\Number;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 /**
@@ -63,7 +63,7 @@ final class EachTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): RuleInterface
     {
         return new Each([]);
     }

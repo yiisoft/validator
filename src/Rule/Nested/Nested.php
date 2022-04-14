@@ -8,9 +8,9 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use Traversable;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 use function is_array;
 
 /**
@@ -39,7 +39,7 @@ use function is_array;
  * ```
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Nested implements ParametrizedRuleInterface
+final class Nested implements RuleInterface
 {
     use RuleNameTrait;
 
@@ -60,7 +60,7 @@ final class Nested implements ParametrizedRuleInterface
         }
 
         if ($this->checkRules($rules)) {
-            $message = sprintf('Each rule should be an instance of %s.', ParametrizedRuleInterface::class);
+            $message = sprintf('Each rule should be an instance of %s.', RuleInterface::class);
             throw new InvalidArgumentException($message);
         }
 
@@ -72,7 +72,7 @@ final class Nested implements ParametrizedRuleInterface
         return array_reduce(
             $rules,
             function (bool $carry, $rule) {
-                return $carry || (is_array($rule) ? $this->checkRules($rule) : !$rule instanceof ParametrizedRuleInterface);
+                return $carry || (is_array($rule) ? $this->checkRules($rule) : !$rule instanceof RuleInterface);
             },
             false
         );
@@ -89,12 +89,12 @@ final class Nested implements ParametrizedRuleInterface
         foreach ($rules as $attribute => $rule) {
             if (is_array($rule)) {
                 $result[$attribute] = $this->fetchOptions($rule);
-            } elseif ($rule instanceof ParametrizedRuleInterface) {
+            } elseif ($rule instanceof RuleInterface) {
                 $result[$attribute] = $rule->getOptions();
             } else {
                 throw new InvalidArgumentException(sprintf(
                     'Rules should be an array of rules that implements %s.',
-                    ParametrizedRuleInterface::class,
+                    RuleInterface::class,
                 ));
             }
         }
