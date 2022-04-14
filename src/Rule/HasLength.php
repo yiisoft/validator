@@ -58,6 +58,72 @@ final class HasLength extends Rule
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
+    /**
+     * @see $min
+     */
+    public function min(?int $value): self
+    {
+        $new = clone $this;
+        $new->min = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $max
+     */
+    public function max(?int $value): self
+    {
+        $new = clone $this;
+        $new->max = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $message
+     */
+    public function message(string $value): self
+    {
+        $new = clone $this;
+        $new->message = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $tooShortMessage
+     */
+    public function tooShortMessage(string $value): self
+    {
+        $new = clone $this;
+        $new->tooShortMessage = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $tooLongMessage
+     */
+    public function tooLongMessage(string $value): self
+    {
+        $new = clone $this;
+        $new->tooLongMessage = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $encoding
+     */
+    public function encoding(string $value): self
+    {
+        $new = clone $this;
+        $new->encoding = $value;
+
+        return $new;
+    }
+
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();

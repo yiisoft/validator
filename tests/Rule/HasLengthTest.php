@@ -10,6 +10,72 @@ use Yiisoft\Validator\Rule\HasLength;
 
 class HasLengthTest extends TestCase
 {
+    public function testMin(): void
+    {
+        $rule1 = new HasLength(min: 1);
+        $this->assertSame(1, $rule1->getOptions()['min']);
+
+        $rule2 = $rule1->min(2);
+        $this->assertSame(2, $rule2->getOptions()['min']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testMax(): void
+    {
+        $rule1 = new HasLength(max: 1);
+        $this->assertSame(1, $rule1->getOptions()['max']);
+
+        $rule2 = $rule1->max(2);
+        $this->assertSame(2, $rule2->getOptions()['max']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testMessage(): void
+    {
+        $rule1 = new HasLength(message: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['message']);
+
+        $rule2 = $rule1->message('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['message']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testTooShortMessage(): void
+    {
+        $rule1 = new HasLength(tooShortMessage: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['tooShortMessage']);
+
+        $rule2 = $rule1->tooShortMessage('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['tooShortMessage']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testTooLongMessage(): void
+    {
+        $rule1 = new HasLength(tooLongMessage: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['tooLongMessage']);
+
+        $rule2 = $rule1->tooLongMessage('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['tooLongMessage']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testEncoding(): void
+    {
+        $rule1 = new HasLength(encoding: 'Encoding 1.');
+        $this->assertSame('Encoding 1.', $rule1->getOptions()['encoding']);
+
+        $rule2 = $rule1->encoding('Encoding 2.');
+        $this->assertSame('Encoding 2.', $rule2->getOptions()['encoding']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
     public function validateProvider(): array
     {
         return [
@@ -55,7 +121,7 @@ class HasLengthTest extends TestCase
         $this->assertSame($expectedIsValid, $result->isValid());
     }
 
-    public function testTooShortMessage(): void
+    public function testTooShortMessageInErrorMessages(): void
     {
         $rule = new HasLength(min: 1);
         $result = $rule->validate('');
@@ -66,7 +132,7 @@ class HasLengthTest extends TestCase
         );
     }
 
-    public function testTooLongMessage(): void
+    public function testTooLongMessageInErrorMessages(): void
     {
         $rule = new HasLength(max: 100);
         $result = $rule->validate(str_repeat('x', 1230));
