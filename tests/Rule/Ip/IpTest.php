@@ -10,7 +10,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 /**
- * @group t2
+ * @group t
  */
 final class IpTest extends AbstractRuleTest
 {

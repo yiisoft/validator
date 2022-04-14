@@ -12,7 +12,7 @@ use Yiisoft\Validator\Rule\Subset\SubsetValidator;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 /**
- * @group t2
+ * @group t
  */
 final class SubsetValidatorTest extends AbstractRuleValidatorTest
 {

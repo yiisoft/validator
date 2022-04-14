@@ -12,7 +12,7 @@ use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
 /**
- * @group t3
+ * @group t
  */
 final class GroupRuleValidatorTest extends AbstractRuleValidatorTest
 {

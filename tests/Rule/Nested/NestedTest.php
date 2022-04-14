@@ -10,7 +10,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 /**
- * @group t4
+ * @group t
  */
 final class NestedTest extends AbstractRuleTest
 {

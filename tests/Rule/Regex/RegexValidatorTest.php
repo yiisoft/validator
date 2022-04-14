@@ -12,7 +12,7 @@ use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 /**
- * @group t2
+ * @group t
  */
 final class RegexValidatorTest extends AbstractRuleValidatorTest
 {

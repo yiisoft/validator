@@ -9,7 +9,7 @@ use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
 /**
- * @group t2
+ * @group t
  */
 final class GroupRuleTest extends AbstractRuleTest
 {

@@ -14,7 +14,7 @@ use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 /**
- * @group t4
+ * @group t
  */
 final class NestedValidatorTest extends AbstractRuleValidatorTest
 {
