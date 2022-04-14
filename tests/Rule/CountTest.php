@@ -12,7 +12,40 @@ use Yiisoft\Validator\Rule\Count;
 
 class CountTest extends TestCase
 {
-    public function testValidateWithoutRequiredArguments(): void
+    public function testMin(): void
+    {
+        $rule1 = new Count(min: 1);
+        $this->assertSame(1, $rule1->getOptions()['min']);
+
+        $rule2 = $rule1->min(2);
+        $this->assertSame(2, $rule2->getOptions()['min']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testMax(): void
+    {
+        $rule1 = new Count(max: 1);
+        $this->assertSame(1, $rule1->getOptions()['max']);
+
+        $rule2 = $rule1->max(2);
+        $this->assertSame(2, $rule2->getOptions()['max']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testExactly(): void
+    {
+        $rule1 = new Count(exactly: 1);
+        $this->assertSame(1, $rule1->getOptions()['exactly']);
+
+        $rule2 = $rule1->exactly(2);
+        $this->assertSame(2, $rule2->getOptions()['exactly']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testInitWithoutRequiredArguments(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('At least one of these attributes must be specified: $min, $max, $exactly.');
@@ -20,7 +53,18 @@ class CountTest extends TestCase
         new Count();
     }
 
-    public function validateWithMinAndMaxAndExactlyDataProvider(): array
+    public function testValidateWithoutRequiredArguments(): void
+    {
+        $rule = new Count(min: 1);
+        $rule = $rule->min(null);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('At least one of these attributes must be specified: $min, $max, $exactly.');
+
+        $rule->validate(2);
+    }
+
+    public function withMinAndMaxAndExactlyDataProvider(): array
     {
         return [
             [['min' => 3, 'exactly' => 3]],
@@ -30,9 +74,9 @@ class CountTest extends TestCase
     }
 
     /**
-     * @dataProvider validateWithMinAndMaxAndExactlyDataProvider
+     * @dataProvider withMinAndMaxAndExactlyDataProvider
      */
-    public function testValidateWithMinAndMaxAndExactly(array $arguments): void
+    public function testInitWithMinAndMaxAndExactly(array $arguments): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('$exactly is mutually exclusive with $min and $max.');
@@ -40,12 +84,40 @@ class CountTest extends TestCase
         new Count(...$arguments);
     }
 
-    public function testValidateWithMinAndMax(): void
+    /**
+     * @dataProvider withMinAndMaxAndExactlyDataProvider
+     */
+    public function testValidateWithMinAndMaxAndExactly(array $arguments): void
+    {
+        $rule = new Count(min: 1);
+        foreach ($arguments as $name => $value) {
+            $rule = $rule->$name($value);
+        }
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$exactly is mutually exclusive with $min and $max.');
+
+        $rule->validate(2);
+    }
+
+    public function testInitWithMinAndMax(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Use $exactly instead.');
 
         new Count(min: 3, max: 3);
+    }
+
+    public function testValidateWithMinAndMax(): void
+    {
+        $rule = new Count(min: 1);
+        $rule = $rule->min(3)
+            ->max(3);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Use $exactly instead.');
+
+        $rule->validate(2);
     }
 
     public function validateWrongTypesDataProvider(): array

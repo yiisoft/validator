@@ -66,6 +66,12 @@ final class Count extends Rule
         bool $skipOnError = false,
         $when = null
     ) {
+        $this->checkLimitsCompatibility();
+        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+    }
+
+    private function checkLimitsCompatibility(): void
+    {
         if (!$this->min && !$this->max && !$this->exactly) {
             throw new InvalidArgumentException(
                 'At least one of these attributes must be specified: $min, $max, $exactly.'
@@ -79,12 +85,45 @@ final class Count extends Rule
         if ($this->min && $this->max && $this->min === $this->max) {
             throw new InvalidArgumentException('Use $exactly instead.');
         }
+    }
 
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+    /**
+     * @see $min
+     */
+    public function min(?int $value): self
+    {
+        $new = clone $this;
+        $new->min = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $max
+     */
+    public function max(?int $value): self
+    {
+        $new = clone $this;
+        $new->max = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $exactly
+     */
+    public function exactly(?int $value): self
+    {
+        $new = clone $this;
+        $new->exactly = $value;
+
+        return $new;
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
+        $this->checkLimitsCompatibility();
+
         $result = new Result();
 
         if (!is_countable($value)) {
