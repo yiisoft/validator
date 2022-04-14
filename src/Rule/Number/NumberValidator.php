@@ -19,11 +19,6 @@ use Yiisoft\Validator\ValidatorInterface;
  */
 final class NumberValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return Number::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();

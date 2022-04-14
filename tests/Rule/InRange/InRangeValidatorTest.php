@@ -85,9 +85,4 @@ final class InRangeValidatorTest extends AbstractRuleValidatorTest
     {
         return new InRangeValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return InRange::class;
-    }
 }

@@ -17,11 +17,6 @@ use function count;
  */
 final class CountValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return Count::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();

@@ -18,11 +18,6 @@ final class RequiredValidator implements RuleValidatorInterface
 {
     use EmptyCheckTrait;
 
-    public static function getRuleClassName(): string
-    {
-        return Required::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();

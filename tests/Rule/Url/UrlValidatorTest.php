@@ -100,9 +100,4 @@ final class UrlValidatorTest extends AbstractRuleValidatorTest
     {
         return new UrlValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Url::class;
-    }
 }

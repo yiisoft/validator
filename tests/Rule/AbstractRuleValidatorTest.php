@@ -48,13 +48,6 @@ abstract class AbstractRuleValidatorTest extends TestCase
         $this->assertEquals($expectedErrorMessages, $errors);
     }
 
-    public function testGetName(): void
-    {
-        $rule = $this->getValidator();
-
-        $this->assertEquals($this->getConfigClassName(), $rule::getRuleClassName());
-    }
-
     protected function validate(mixed $value, object $config, ValidationContext $context = null): Result
     {
         $ruleValidator = $this->getValidator();
@@ -70,6 +63,4 @@ abstract class AbstractRuleValidatorTest extends TestCase
     abstract public function failedValidationProvider(): array;
 
     abstract protected function getValidator(): RuleValidatorInterface;
-
-    abstract protected function getConfigClassName(): string;
 }

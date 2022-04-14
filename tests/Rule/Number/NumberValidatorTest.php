@@ -128,9 +128,4 @@ final class NumberValidatorTest extends AbstractRuleValidatorTest
     {
         return new NumberValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Number::class;
-    }
 }

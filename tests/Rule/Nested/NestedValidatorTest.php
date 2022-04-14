@@ -141,9 +141,4 @@ final class NestedValidatorTest extends AbstractRuleValidatorTest
     {
         return new NestedValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Nested::class;
-    }
 }

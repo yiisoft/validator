@@ -14,11 +14,6 @@ use Yiisoft\Validator\ValidatorInterface;
  */
 class GroupRuleValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return GroupRule::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();

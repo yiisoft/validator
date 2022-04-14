@@ -77,9 +77,4 @@ final class BooleanValidatorTest extends AbstractRuleValidatorTest
     {
         return new BooleanValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Boolean::class;
-    }
 }

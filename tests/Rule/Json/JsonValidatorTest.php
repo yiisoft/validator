@@ -129,9 +129,4 @@ JSON,
     {
         return new JsonValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Json::class;
-    }
 }

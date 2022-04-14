@@ -14,11 +14,6 @@ use Yiisoft\Validator\ValidatorInterface;
  */
 final class BooleanValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return Boolean::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         if ($rule->strict) {

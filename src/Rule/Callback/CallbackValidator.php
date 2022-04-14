@@ -12,11 +12,6 @@ use Yiisoft\Validator\ValidatorInterface;
 
 final class CallbackValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return Callback::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $callback = $rule->callback;

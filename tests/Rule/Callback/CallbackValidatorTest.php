@@ -80,9 +80,4 @@ final class CallbackValidatorTest extends AbstractRuleValidatorTest
     {
         return new CallbackValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Callback::class;
-    }
 }

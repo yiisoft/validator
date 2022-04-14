@@ -59,11 +59,6 @@ final class AtLeastValidatorTest extends AbstractRuleValidatorTest
         return new AtLeastValidator();
     }
 
-    protected function getConfigClassName(): string
-    {
-        return AtLeast::class;
-    }
-
     private function createObject(mixed $attr1, mixed $attr2): stdClass
     {
         $object = new stdClass();

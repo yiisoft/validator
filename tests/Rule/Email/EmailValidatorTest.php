@@ -157,9 +157,4 @@ final class EmailValidatorTest extends AbstractRuleValidatorTest
     {
         return new EmailValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Email::class;
-    }
 }

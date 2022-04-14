@@ -55,9 +55,4 @@ final class EachValidatorTest extends AbstractRuleValidatorTest
     {
         return new EachValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Each::class;
-    }
 }

@@ -6,6 +6,9 @@ namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ScalarDataSet;
 use Yiisoft\Validator\Rule\Callback\Callback;
@@ -19,11 +22,11 @@ final class Validator implements ValidatorInterface
 {
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 
-    private ValidatorStorage $storage;
+    private ContainerInterface $container;
 
-    public function __construct(ValidatorStorage $storage)
+    public function __construct(ContainerInterface $container)
     {
-        $this->storage = $storage;
+        $this->container = $container;
     }
 
     /**
@@ -97,11 +100,19 @@ final class Validator implements ValidatorInterface
         return new ScalarDataSet($data);
     }
 
-    public function validateInternal($value, iterable $rules, ValidationContext $context): Result
+    /**
+     * @param $value
+     * @param RuleInterface[] $rules
+     * @param ValidationContext $context
+     * @return Result
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    private function validateInternal($value, iterable $rules, ValidationContext $context): Result
     {
         $compoundResult = new Result();
         foreach ($rules as $rule) {
-            $ruleValidator = $this->storage->getValidator(get_class($rule));
+            $ruleValidator = $this->container->get($rule->getValidatorClassName());
             $ruleResult = $ruleValidator->validate($value, $rule, $this, $context);
             if ($ruleResult->isValid()) {
                 continue;

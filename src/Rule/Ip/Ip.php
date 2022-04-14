@@ -9,6 +9,7 @@ use Closure;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\Rule\ValidatorClassNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use function array_key_exists;
 use function strlen;
@@ -22,6 +23,7 @@ use function strlen;
 final class Ip implements RuleInterface
 {
     use RuleNameTrait;
+    use ValidatorClassNameTrait;
 
     /**
      * Negation char.

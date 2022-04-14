@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule\GroupRule;
 
 use Yiisoft\Validator\Error;
-use Yiisoft\Validator\Rule\GroupRule\GroupRule;
 use Yiisoft\Validator\Rule\GroupRule\GroupRuleValidator;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\FunctionExists;
@@ -54,10 +53,5 @@ final class GroupRuleValidatorTest extends AbstractRuleValidatorTest
     protected function getValidator(): RuleValidatorInterface
     {
         return new GroupRuleValidator();
-    }
-
-    protected function getConfigClassName(): string
-    {
-        return GroupRule::class;
     }
 }

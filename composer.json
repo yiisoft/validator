@@ -24,7 +24,8 @@
         "yiisoft/arrays": "^2.0",
         "yiisoft/friendly-exception": "^1.0",
         "yiisoft/network-utilities": "^1.0",
-        "yiisoft/strings": "^2.0"
+        "yiisoft/strings": "^2.0",
+        "yiisoft/test-support": "^1.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",

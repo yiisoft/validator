@@ -24,11 +24,6 @@ use Yiisoft\Validator\ValidatorInterface;
  */
 final class CompareToValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return CompareTo::class;
-    }
-
     /**
      * Constant for specifying the comparison as string values.
      * No conversion will be done before comparison.

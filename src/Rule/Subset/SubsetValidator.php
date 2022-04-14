@@ -12,11 +12,6 @@ use Yiisoft\Validator\ValidatorInterface;
 
 final class SubsetValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return Subset::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();

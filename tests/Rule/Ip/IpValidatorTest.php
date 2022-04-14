@@ -243,9 +243,4 @@ final class IpValidatorTest extends AbstractRuleValidatorTest
     {
         return new IpValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Ip::class;
-    }
 }

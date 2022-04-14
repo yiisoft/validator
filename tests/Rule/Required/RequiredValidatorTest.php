@@ -43,9 +43,4 @@ final class RequiredValidatorTest extends AbstractRuleValidatorTest
     {
         return new RequiredValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Required::class;
-    }
 }

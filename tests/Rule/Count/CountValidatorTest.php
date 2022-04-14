@@ -127,9 +127,4 @@ final class CountValidatorTest extends AbstractRuleValidatorTest
     {
         return new CountValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Count::class;
-    }
 }

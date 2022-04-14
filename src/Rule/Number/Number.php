@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule\Number;
 use Attribute;
 use Closure;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\Rule\ValidatorClassNameTrait;
 use Yiisoft\Validator\RuleInterface;
 
 /**
@@ -20,6 +21,7 @@ use Yiisoft\Validator\RuleInterface;
 final class Number implements RuleInterface
 {
     use RuleNameTrait;
+    use ValidatorClassNameTrait;
 
     public function __construct(
         /**

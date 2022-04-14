@@ -16,11 +16,6 @@ use function strlen;
  */
 final class EmailValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return Email::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $originalValue = $value;

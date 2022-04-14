@@ -17,11 +17,6 @@ final class AtLeastValidator implements RuleValidatorInterface
 {
     use EmptyCheckTrait;
 
-    public static function getRuleClassName(): string
-    {
-        return AtLeast::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $filledCount = 0;

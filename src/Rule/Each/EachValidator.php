@@ -15,11 +15,6 @@ use Yiisoft\Validator\ValidatorInterface;
  */
 final class EachValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return Each::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         if ($rule->rules === null) {

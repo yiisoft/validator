@@ -17,15 +17,6 @@ use function is_string;
  */
 final class HasLengthValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return HasLength::class;
-    }
-
-    public function __construct()
-    {
-    }
-
     public function validate($value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();

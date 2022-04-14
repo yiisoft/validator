@@ -55,9 +55,4 @@ final class SubsetValidatorTest extends AbstractRuleValidatorTest
     {
         return new SubsetValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Subset::class;
-    }
 }

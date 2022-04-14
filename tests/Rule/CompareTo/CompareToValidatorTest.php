@@ -90,9 +90,4 @@ final class CompareToValidatorTest extends AbstractRuleValidatorTest
     {
         return new CompareToValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return CompareTo::class;
-    }
 }

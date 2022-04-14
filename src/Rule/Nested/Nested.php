@@ -9,6 +9,7 @@ use Closure;
 use InvalidArgumentException;
 use Traversable;
 use Yiisoft\Validator\Rule\RuleNameTrait;
+use Yiisoft\Validator\Rule\ValidatorClassNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
 use function is_array;
@@ -42,6 +43,7 @@ use function is_array;
 final class Nested implements RuleInterface
 {
     use RuleNameTrait;
+    use ValidatorClassNameTrait;
 
     public function __construct(
         /**

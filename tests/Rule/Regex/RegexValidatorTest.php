@@ -64,9 +64,4 @@ final class RegexValidatorTest extends AbstractRuleValidatorTest
     {
         return new RegexValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return Regex::class;
-    }
 }

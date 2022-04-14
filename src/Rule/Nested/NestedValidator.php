@@ -39,11 +39,6 @@ use function is_object;
  */
 final class NestedValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return Nested::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $compoundResult = new Result();

@@ -90,9 +90,4 @@ final class HasLengthValidatorTest extends AbstractRuleValidatorTest
     {
         return new HasLengthValidator();
     }
-
-    protected function getConfigClassName(): string
-    {
-        return HasLength::class;
-    }
 }

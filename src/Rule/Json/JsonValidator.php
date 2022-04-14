@@ -15,11 +15,6 @@ use function is_string;
  */
 final class JsonValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return Json::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();

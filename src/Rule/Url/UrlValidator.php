@@ -19,11 +19,6 @@ use function strlen;
  */
 final class UrlValidator implements RuleValidatorInterface
 {
-    public static function getRuleClassName(): string
-    {
-        return Url::class;
-    }
-
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();

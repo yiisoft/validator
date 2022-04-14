@@ -10,8 +10,6 @@ use Yiisoft\Validator\ValidatorInterface;
 
 interface RuleValidatorInterface
 {
-    public static function getRuleClassName(): string;
-
     /**
      * Validates the value. The method should be implemented by concrete validation rules.
      *

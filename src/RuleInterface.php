@@ -24,4 +24,6 @@ interface RuleInterface
      * @return array
      */
     public function getOptions(): array;
+
+    public function getValidatorClassName(): string;
 }
