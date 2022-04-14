@@ -40,6 +40,50 @@ final class InRange extends Rule
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
+    /**
+     * @see $range
+     */
+    public function range(iterable $value): self
+    {
+        $new = clone $this;
+        $new->range = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $strict
+     */
+    public function strict(bool $value): self
+    {
+        $new = clone $this;
+        $new->strict = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $not
+     */
+    public function not(bool $value): self
+    {
+        $new = clone $this;
+        $new->not = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $message
+     */
+    public function message(string $value): self
+    {
+        $new = clone $this;
+        $new->message = $value;
+
+        return $new;
+    }
+
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();

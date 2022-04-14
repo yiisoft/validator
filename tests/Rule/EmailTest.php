@@ -46,10 +46,10 @@ class EmailTest extends TestCase
     public function testAllowName(): void
     {
         $rule1 = new Email(allowName: true);
-        $this->assertSame(true, $rule1->getOptions()['allowName']);
+        $this->assertTrue($rule1->getOptions()['allowName']);
 
         $rule2 = $rule1->allowName(false);
-        $this->assertSame(false, $rule2->getOptions()['allowName']);
+        $this->assertFalse($rule2->getOptions()['allowName']);
 
         $this->assertNotSame($rule1, $rule2);
     }
@@ -57,10 +57,10 @@ class EmailTest extends TestCase
     public function testCheckDNS(): void
     {
         $rule1 = new Email(checkDNS: true);
-        $this->assertSame(true, $rule1->getOptions()['checkDNS']);
+        $this->assertTrue($rule1->getOptions()['checkDNS']);
 
         $rule2 = $rule1->checkDNS(false);
-        $this->assertSame(false, $rule2->getOptions()['checkDNS']);
+        $this->assertFalse($rule2->getOptions()['checkDNS']);
 
         $this->assertNotSame($rule1, $rule2);
     }
@@ -68,10 +68,10 @@ class EmailTest extends TestCase
     public function testEnableIDN(): void
     {
         $rule1 = new Email(enableIDN: true);
-        $this->assertSame(true, $rule1->getOptions()['enableIDN']);
+        $this->assertTrue($rule1->getOptions()['enableIDN']);
 
         $rule2 = $rule1->enableIDN(false);
-        $this->assertSame(false, $rule2->getOptions()['enableIDN']);
+        $this->assertFalse($rule2->getOptions()['enableIDN']);
 
         $this->assertNotSame($rule1, $rule2);
     }

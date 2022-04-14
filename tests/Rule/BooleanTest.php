@@ -34,10 +34,10 @@ class BooleanTest extends TestCase
     public function testStrict(): void
     {
         $rule1 = new Boolean(strict: true);
-        $this->assertSame(true, $rule1->getOptions()['strict']);
+        $this->assertTrue($rule1->getOptions()['strict']);
 
         $rule2 = $rule1->strict(false);
-        $this->assertSame(false, $rule2->getOptions()['strict']);
+        $this->assertFalse($rule2->getOptions()['strict']);
 
         $this->assertNotSame($rule1, $rule2);
     }

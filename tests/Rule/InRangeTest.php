@@ -10,6 +10,50 @@ use Yiisoft\Validator\Rule\InRange;
 
 class InRangeTest extends TestCase
 {
+    public function testRange(): void
+    {
+        $rule1 = new InRange([1, 2]);
+        $this->assertSame([1, 2], $rule1->getOptions()['range']);
+
+        $rule2 = $rule1->range([1, 2, 3]);
+        $this->assertSame([1, 2, 3], $rule2->getOptions()['range']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testStrict(): void
+    {
+        $rule1 = new InRange([1, 2], strict: true);
+        $this->assertTrue($rule1->getOptions()['strict']);
+
+        $rule2 = $rule1->strict(false);
+        $this->assertFalse($rule2->getOptions()['strict']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testNot(): void
+    {
+        $rule1 = new InRange([1, 2], not: true);
+        $this->assertTrue($rule1->getOptions()['not']);
+
+        $rule2 = $rule1->not(false);
+        $this->assertFalse($rule2->getOptions()['not']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testMessage(): void
+    {
+        $rule1 = new InRange([1, 2], message: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['message']);
+
+        $rule2 = $rule1->message('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['message']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
     public function validateWithDefaultArgumentsProvider(): array
     {
         $range = range(1, 10);
