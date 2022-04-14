@@ -23,7 +23,6 @@ final class AtLeast extends Rule
         private array $attributes,
         /**
          * @var int The minimum required quantity of filled attributes to pass the validation.
-         * Defaults to 1.
          */
         private int $min = 1,
         /**
@@ -36,6 +35,30 @@ final class AtLeast extends Rule
         $when = null
     ) {
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+    }
+
+    /**
+     * @param string[] $value
+     *
+     * @see $attributes
+     */
+    public function attributes(array $value): self
+    {
+        $new = clone $this;
+        $new->attributes = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $min
+     */
+    public function min(int $value): self
+    {
+        $new = clone $this;
+        $new->min = $value;
+
+        return $new;
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result

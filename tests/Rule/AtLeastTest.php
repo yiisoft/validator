@@ -11,6 +11,28 @@ use Yiisoft\Validator\Rule\AtLeast;
 
 class AtLeastTest extends TestCase
 {
+    public function testAttributes(): void
+    {
+        $rule1 = new AtLeast(['attr1']);
+        $this->assertEquals(['attr1'], $rule1->getOptions()['attributes']);
+
+        $rule2 = $rule1->attributes(['attr1', 'attr2']);
+        $this->assertEquals(['attr1', 'attr2'], $rule2->getOptions()['attributes']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testMin(): void
+    {
+        $rule1 = new AtLeast(['attr1'], min: 2);
+        $this->assertSame(2, $rule1->getOptions()['min']);
+
+        $rule2 = $rule1->min(3);
+        $this->assertEquals(3, $rule2->getOptions()['min']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
     public function testAtLeastOne(): void
     {
         $model = new stdClass();
