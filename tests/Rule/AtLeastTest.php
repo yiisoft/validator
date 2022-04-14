@@ -28,7 +28,7 @@ class AtLeastTest extends TestCase
         $this->assertSame(2, $rule1->getOptions()['min']);
 
         $rule2 = $rule1->min(3);
-        $this->assertEquals(3, $rule2->getOptions()['min']);
+        $this->assertSame(3, $rule2->getOptions()['min']);
 
         $this->assertNotSame($rule1, $rule2);
     }

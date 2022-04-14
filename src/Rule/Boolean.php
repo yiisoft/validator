@@ -18,13 +18,13 @@ final class Boolean extends Rule
 {
     public function __construct(
         /**
-         * @var mixed the value representing true status. Defaults to '1'.
+         * @var mixed the value representing true status.
          */
-        private $trueValue = '1',
+        private mixed $trueValue = '1',
         /**
-         * @var mixed the value representing false status. Defaults to '0'.
+         * @var mixed the value representing false status.
          */
-        private $falseValue = '0',
+        private mixed $falseValue = '0',
         /**
          * @var bool whether the comparison to {@see $trueValue} and {@see $falseValue} is strict.
          * When this is `true`, the value and type must both match those of {@see $trueValue} or
@@ -38,6 +38,39 @@ final class Boolean extends Rule
         $when = null
     ) {
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+    }
+
+    /**
+     * @see $trueValue
+     */
+    public function trueValue(mixed $value): self
+    {
+        $new = clone $this;
+        $new->trueValue = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $falseValue
+     */
+    public function falseValue(mixed $value): self
+    {
+        $new = clone $this;
+        $new->falseValue = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $strict
+     */
+    public function strict(bool $value): self
+    {
+        $new = clone $this;
+        $new->strict = $value;
+
+        return $new;
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result

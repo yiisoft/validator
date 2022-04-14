@@ -9,6 +9,39 @@ use Yiisoft\Validator\Rule\Boolean;
 
 class BooleanTest extends TestCase
 {
+    public function testTrueValue(): void
+    {
+        $rule1 = new Boolean(trueValue: 'true1');
+        $this->assertSame('true1', $rule1->getOptions()['trueValue']);
+
+        $rule2 = $rule1->trueValue('true2');
+        $this->assertSame('true2', $rule2->getOptions()['trueValue']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testFalseValue(): void
+    {
+        $rule1 = new Boolean(falseValue: 'false1');
+        $this->assertSame('false1', $rule1->getOptions()['falseValue']);
+
+        $rule2 = $rule1->falseValue('false2');
+        $this->assertSame('false2', $rule2->getOptions()['falseValue']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testStrict(): void
+    {
+        $rule1 = new Boolean(strict: true);
+        $this->assertSame(true, $rule1->getOptions()['strict']);
+
+        $rule2 = $rule1->strict(false);
+        $this->assertSame(false, $rule2->getOptions()['strict']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
     public function validateProvider(): array
     {
         return [
