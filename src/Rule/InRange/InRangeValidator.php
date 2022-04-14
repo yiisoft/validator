@@ -23,16 +23,16 @@ final class InRangeValidator implements RuleValidatorInterface
         return InRange::class;
     }
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 
-        if ($config->skipOnEmpty && $value === null) {
+        if ($rule->skipOnEmpty && $value === null) {
             return $result;
         }
 
-        if ($config->not === ArrayHelper::isIn($value, $config->range, $config->strict)) {
-            $result->addError($config->message);
+        if ($rule->not === ArrayHelper::isIn($value, $rule->range, $rule->strict)) {
+            $result->addError($rule->message);
         }
 
         return $result;

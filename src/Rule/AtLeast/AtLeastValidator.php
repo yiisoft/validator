@@ -22,11 +22,11 @@ final class AtLeastValidator implements RuleValidatorInterface
         return AtLeast::class;
     }
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $filledCount = 0;
 
-        foreach ($config->attributes as $attribute) {
+        foreach ($rule->attributes as $attribute) {
             if (!$this->isEmpty($value->{$attribute})) {
                 $filledCount++;
             }
@@ -34,8 +34,8 @@ final class AtLeastValidator implements RuleValidatorInterface
 
         $result = new Result();
 
-        if ($filledCount < $config->min) {
-            $result->addError($config->message, ['min' => $config->min]);
+        if ($filledCount < $rule->min) {
+            $result->addError($rule->message, ['min' => $rule->min]);
         }
 
         return $result;

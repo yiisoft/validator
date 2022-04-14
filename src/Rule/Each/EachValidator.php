@@ -20,21 +20,21 @@ final class EachValidator implements RuleValidatorInterface
         return Each::class;
     }
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
-        if ($config->rules === null) {
+        if ($rule->rules === null) {
             throw new InvalidArgumentException('Rules are required.');
         }
 
         $result = new Result();
         if (!is_iterable($value)) {
-            $result->addError($config->incorrectInputMessage);
+            $result->addError($rule->incorrectInputMessage);
 
             return $result;
         }
 
         foreach ($value as $index => $item) {
-            $itemResult = $validator->validate($item, [$index => $config->rules]);
+            $itemResult = $validator->validate($item, [$index => $rule->rules]);
             if ($itemResult->isValid()) {
                 continue;
             }

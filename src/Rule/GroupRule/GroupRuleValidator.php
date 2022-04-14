@@ -19,11 +19,11 @@ class GroupRuleValidator implements RuleValidatorInterface
         return GroupRule::class;
     }
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
-        if (!$validator->validate($value, $config->getRuleSet(), $context)->isValid()) {
-            $result->addError($config->message);
+        if (!$validator->validate($value, $rule->getRuleSet())->isValid()) {
+            $result->addError($rule->message);
         }
 
         return $result;

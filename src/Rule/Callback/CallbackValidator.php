@@ -17,9 +17,9 @@ final class CallbackValidator implements RuleValidatorInterface
         return Callback::class;
     }
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
-        $callback = $config->callback;
+        $callback = $rule->callback;
         $callbackResult = $callback($value, $context);
 
         if (!$callbackResult instanceof Result) {

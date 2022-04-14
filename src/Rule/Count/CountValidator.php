@@ -22,30 +22,30 @@ final class CountValidator implements RuleValidatorInterface
         return Count::class;
     }
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 
         if (!is_countable($value)) {
-            $result->addError($config->message);
+            $result->addError($rule->message);
 
             return $result;
         }
 
         $count = count($value);
 
-        if ($config->exactly !== null && $count !== $config->exactly) {
-            $result->addError($config->notExactlyMessage, ['exactly' => $config->exactly]);
+        if ($rule->exactly !== null && $count !== $rule->exactly) {
+            $result->addError($rule->notExactlyMessage, ['exactly' => $rule->exactly]);
 
             return $result;
         }
 
-        if ($config->min !== null && $count < $config->min) {
-            $result->addError($config->tooFewItemsMessage, ['min' => $config->min]);
+        if ($rule->min !== null && $count < $rule->min) {
+            $result->addError($rule->tooFewItemsMessage, ['min' => $rule->min]);
         }
 
-        if ($config->max !== null && $count > $config->max) {
-            $result->addError($config->tooManyItemsMessage, ['max' => $config->max]);
+        if ($rule->max !== null && $count > $rule->max) {
+            $result->addError($rule->tooManyItemsMessage, ['max' => $rule->max]);
         }
 
         return $result;

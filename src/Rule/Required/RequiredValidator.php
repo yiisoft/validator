@@ -23,12 +23,12 @@ final class RequiredValidator implements RuleValidatorInterface
         return Required::class;
     }
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 
         if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
-            $result->addError($config->message);
+            $result->addError($rule->message);
         }
 
         return $result;

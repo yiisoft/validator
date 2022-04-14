@@ -33,19 +33,19 @@ final class IpValidator implements RuleValidatorInterface
      */
     private const NEGATION_CHAR = '!';
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
-        if (!$config->allowIpv4 && !$config->allowIpv6) {
+        if (!$rule->allowIpv4 && !$rule->allowIpv6) {
             throw new RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time.');
         }
         $result = new Result();
         if (!is_string($value)) {
-            $result->addError($config->message);
+            $result->addError($rule->message);
             return $result;
         }
 
-        if (preg_match($config->getIpParsePattern(), $value, $matches) === 0) {
-            $result->addError($config->message);
+        if (preg_match($rule->getIpParsePattern(), $value, $matches) === 0) {
+            $result->addError($rule->message);
             return $result;
         }
         $negation = !empty($matches['not'] ?? null);
@@ -56,28 +56,28 @@ final class IpValidator implements RuleValidatorInterface
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
         } catch (InvalidArgumentException $e) {
-            $result->addError($config->message);
+            $result->addError($rule->message);
             return $result;
         }
 
-        if ($config->requireSubnet === true && $cidr === null) {
-            $result->addError($config->noSubnetMessage);
+        if ($rule->requireSubnet === true && $cidr === null) {
+            $result->addError($rule->noSubnetMessage);
             return $result;
         }
-        if ($config->allowSubnet === false && $cidr !== null) {
-            $result->addError($config->hasSubnetMessage);
+        if ($rule->allowSubnet === false && $cidr !== null) {
+            $result->addError($rule->hasSubnetMessage);
             return $result;
         }
-        if ($config->allowNegation === false && $negation) {
-            $result->addError($config->message);
+        if ($rule->allowNegation === false && $negation) {
+            $result->addError($rule->message);
             return $result;
         }
-        if ($ipVersion === IpHelper::IPV6 && !$config->allowIpv6) {
-            $result->addError($config->ipv6NotAllowedMessage);
+        if ($ipVersion === IpHelper::IPV6 && !$rule->allowIpv6) {
+            $result->addError($rule->ipv6NotAllowedMessage);
             return $result;
         }
-        if ($ipVersion === IpHelper::IPV4 && !$config->allowIpv4) {
-            $result->addError($config->ipv4NotAllowedMessage);
+        if ($ipVersion === IpHelper::IPV4 && !$rule->allowIpv4) {
+            $result->addError($rule->ipv4NotAllowedMessage);
             return $result;
         }
         if (!$result->isValid()) {
@@ -87,12 +87,12 @@ final class IpValidator implements RuleValidatorInterface
             try {
                 IpHelper::getCidrBits($ipCidr);
             } catch (InvalidArgumentException $e) {
-                $result->addError($config->wrongCidrMessage);
+                $result->addError($rule->wrongCidrMessage);
                 return $result;
             }
         }
-        if (!$config->isAllowed($ipCidr)) {
-            $result->addError($config->notInRangeMessage);
+        if (!$rule->isAllowed($ipCidr)) {
+            $result->addError($rule->notInRangeMessage);
             return $result;
         }
 

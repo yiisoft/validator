@@ -22,21 +22,21 @@ final class RegexValidator implements RuleValidatorInterface
         return Regex::class;
     }
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($config->incorrectInputMessage);
+            $result->addError($rule->incorrectInputMessage);
 
             return $result;
         }
 
         if (
-            (!$config->not && !preg_match($config->pattern, $value)) ||
-            ($config->not && preg_match($config->pattern, $value))
+            (!$rule->not && !preg_match($rule->pattern, $value)) ||
+            ($rule->not && preg_match($rule->pattern, $value))
         ) {
-            $result->addError($config->message);
+            $result->addError($rule->message);
         }
 
         return $result;

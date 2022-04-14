@@ -21,7 +21,7 @@ final class EmailValidator implements RuleValidatorInterface
         return Email::class;
     }
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $originalValue = $value;
         $result = new Result();
@@ -36,7 +36,7 @@ final class EmailValidator implements RuleValidatorInterface
             $valid = false;
         } else {
             /** @psalm-var array{name:string,local:string,open:string,domain:string,close:string} $matches */
-            if ($config->enableIDN) {
+            if ($rule->enableIDN) {
                 $matches['local'] = $this->idnToAscii($matches['local']);
                 $matches['domain'] = $this->idnToAscii($matches['domain']);
                 $value = implode([
@@ -62,22 +62,22 @@ final class EmailValidator implements RuleValidatorInterface
                 // http://www.rfc-editor.org/errata_search.php?eid=1690
                 $valid = false;
             } else {
-                $valid = preg_match($config->pattern, $value) || ($config->allowName && preg_match(
-                    $config->fullPattern,
+                $valid = preg_match($rule->pattern, $value) || ($rule->allowName && preg_match(
+                    $rule->fullPattern,
                     $value
                 ));
-                if ($valid && $config->checkDNS) {
+                if ($valid && $rule->checkDNS) {
                     $valid = checkdnsrr($matches['domain'] . '.', 'MX') || checkdnsrr($matches['domain'] . '.', 'A');
                 }
             }
         }
 
-        if ($config->enableIDN && $valid === false) {
-            $valid = (bool) preg_match($config->idnEmailPattern, $originalValue);
+        if ($rule->enableIDN && $valid === false) {
+            $valid = (bool) preg_match($rule->idnEmailPattern, $originalValue);
         }
 
         if ($valid === false) {
-            $result->addError($config->message);
+            $result->addError($rule->message);
         }
 
         return $result;

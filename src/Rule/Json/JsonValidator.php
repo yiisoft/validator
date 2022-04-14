@@ -20,12 +20,12 @@ final class JsonValidator implements RuleValidatorInterface
         return Json::class;
     }
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 
         if (!$this->isValidJson($value)) {
-            $result->addError($config->message);
+            $result->addError($rule->message);
         }
 
         return $result;

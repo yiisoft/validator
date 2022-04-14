@@ -26,22 +26,22 @@ final class HasLengthValidator implements RuleValidatorInterface
     {
     }
 
-    public function validate($value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate($value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($config->message);
+            $result->addError($rule->message);
             return $result;
         }
 
-        $length = mb_strlen($value, $config->encoding);
+        $length = mb_strlen($value, $rule->encoding);
 
-        if ($config->min !== null && $length < $config->min) {
-            $result->addError($config->tooShortMessage, ['min' => $config->min]);
+        if ($rule->min !== null && $length < $rule->min) {
+            $result->addError($rule->tooShortMessage, ['min' => $rule->min]);
         }
-        if ($config->max !== null && $length > $config->max) {
-            $result->addError($config->tooLongMessage, ['max' => $config->max]);
+        if ($rule->max !== null && $length > $rule->max) {
+            $result->addError($rule->tooLongMessage, ['max' => $rule->max]);
         }
 
         return $result;

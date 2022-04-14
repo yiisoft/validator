@@ -24,22 +24,22 @@ final class UrlValidator implements RuleValidatorInterface
         return Url::class;
     }
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 
         // make sure the length is limited to avoid DOS attacks
         if (is_string($value) && strlen($value) < 2000) {
-            if ($config->enableIDN) {
+            if ($rule->enableIDN) {
                 $value = $this->convertIdn($value);
             }
 
-            if (preg_match($config->getPattern(), $value)) {
+            if (preg_match($rule->getPattern(), $value)) {
                 return $result;
             }
         }
 
-        $result->addError($config->message);
+        $result->addError($rule->message);
 
         return $result;
     }

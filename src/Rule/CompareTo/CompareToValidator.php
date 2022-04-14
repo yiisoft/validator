@@ -44,12 +44,12 @@ final class CompareToValidator implements RuleValidatorInterface
      */
     public const TYPE_NUMBER = 'number';
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
 
-        if (!$this->compareValues($config->operator, $config->type, $value, $config->compareValue)) {
-            $result->addError($config->getMessage(), ['value' => $config->compareValue]);
+        if (!$this->compareValues($rule->operator, $rule->type, $value, $rule->compareValue)) {
+            $result->addError($rule->getMessage(), ['value' => $rule->compareValue]);
         }
 
         return $result;

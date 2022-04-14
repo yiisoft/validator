@@ -19,12 +19,12 @@ final class BooleanValidator implements RuleValidatorInterface
         return Boolean::class;
     }
 
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
-        if ($config->strict) {
-            $valid = $value === $config->trueValue || $value === $config->falseValue;
+        if ($rule->strict) {
+            $valid = $value === $rule->trueValue || $value === $rule->falseValue;
         } else {
-            $valid = $value == $config->trueValue || $value == $config->falseValue;
+            $valid = $value == $rule->trueValue || $value == $rule->falseValue;
         }
 
         $result = new Result();
@@ -33,12 +33,12 @@ final class BooleanValidator implements RuleValidatorInterface
             return $result;
         }
 
-        $result->addError($config->message, [
+        $result->addError($rule->message, [
             // TODO: get reasons to do like this
             //            'true' => $config->trueValue === true ? 'true' : $config->trueValue,
             //            'false' => $config->falseValue === false ? 'false' : $config->falseValue,
-            'true' => $config->trueValue,
-            'false' => $config->falseValue,
+            'true' => $rule->trueValue,
+            'false' => $rule->falseValue,
         ]);
 
         return $result;
