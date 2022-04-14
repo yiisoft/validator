@@ -16,7 +16,6 @@ class NestedTest extends TestCase
     public function validateDataProvider(): array
     {
         return [
-
         ];
     }
 
