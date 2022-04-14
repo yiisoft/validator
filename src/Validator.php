@@ -44,7 +44,7 @@ final class Validator implements ValidatorInterface
             if (is_int($attribute)) {
                 $validatedData = $data->getData();
                 $validatedContext = $context->withAttribute((string)$attribute);
-            }else {
+            } else {
                 $validatedData = $data->getAttributeValue($attribute);
                 $validatedContext = $context;
             }

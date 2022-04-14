@@ -59,7 +59,7 @@ final class NestedValidatorTest extends AbstractRuleValidatorTest
                 [new Error($rule->propertyPathIsNotFoundMessage, ['path' => 'value'])],
             ],
             [
-//                 @link https://github.com/yiisoft/validator/issues/200
+                //                 @link https://github.com/yiisoft/validator/issues/200
                 new Nested([
                     'body.shipping' => [
                         new Required(),
