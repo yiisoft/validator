@@ -129,6 +129,10 @@ final class Validator implements ValidatorInterface
         return $compoundResult;
     }
 
+    /**
+     * @param array $rules
+     * @return RuleInterface[]
+     */
     private function normalizeRules(array $rules): iterable
     {
         foreach ($rules as $rule) {

@@ -42,9 +42,6 @@ final class Result
         return $this->errors;
     }
 
-    /**
-     * @psalm-param array<int|string> $parameters
-     */
     public function addError(string $message, array $parameters = [], string $attribute = null): self
     {
         if ($this->attribute !== null) {
