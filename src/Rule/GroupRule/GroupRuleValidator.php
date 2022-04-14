@@ -22,7 +22,7 @@ class GroupRuleValidator implements RuleValidatorInterface
     public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
-        if (!$config->getRuleSet()->validate($value, $context)->isValid()) {
+        if (!$validator->validate($value, $config->getRuleSet(), $context)->isValid()) {
             $result->addError($config->message);
         }
 

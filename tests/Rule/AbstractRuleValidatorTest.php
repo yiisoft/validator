@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\ValidatorInterface;
+use Yiisoft\Validator\Validator;
 
 abstract class AbstractRuleValidatorTest extends TestCase
 {
@@ -58,12 +58,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
     protected function validate(mixed $value, object $config, ValidationContext $context = null): Result
     {
         $ruleValidator = $this->getValidator();
-        $validator = new class implements ValidatorInterface{
-            public function validate(mixed $data, iterable $rules = []): Result
-            {
-                return new Result();
-            }
-        };
+        $validator = new Validator();
 
         return $ruleValidator->validate($value, $config, $validator, $context);
     }

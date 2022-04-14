@@ -8,13 +8,12 @@ use Yiisoft\Validator\Rule\GroupRule\GroupRule;
 use Yiisoft\Validator\Rule\HasLength\HasLength;
 use Yiisoft\Validator\Rule\Required\Required;
 use Yiisoft\Validator\Rule\Url\Url;
-use Yiisoft\Validator\RuleSet;
 
 final class CustomUrlRule extends GroupRule
 {
-    public function getRuleSet(): RuleSet
+    public function getRuleSet(): array
     {
-        return new RuleSet([new Required(), new Url(enableIDN: true), new HasLength(max: 20)]);
+        return [new Required(), new Url(enableIDN: true), new HasLength(max: 20)];
     }
 
     public function getName(): string

@@ -17,6 +17,7 @@ use Yiisoft\Validator\Rule\HasLength\HasLengthValidator;
 use Yiisoft\Validator\Rule\InRange\InRangeValidator;
 use Yiisoft\Validator\Rule\Ip\IpValidator;
 use Yiisoft\Validator\Rule\Json\JsonValidator;
+use Yiisoft\Validator\Rule\Nested\NestedValidator;
 use Yiisoft\Validator\Rule\Number\NumberValidator;
 use Yiisoft\Validator\Rule\Regex\RegexValidator;
 use Yiisoft\Validator\Rule\Required\RequiredValidator;
@@ -48,16 +49,12 @@ class RuleValidatorStorage
             RequiredValidator::getConfigClassName() => new RequiredValidator(),
             SubsetValidator::getConfigClassName() => new SubsetValidator(),
             UrlValidator::getConfigClassName() => new UrlValidator(),
-            //            NestedValidator::getConfigClassName() => new NestedValidator($this),
+            NestedValidator::getConfigClassName() => new NestedValidator(),
         ];
     }
 
     public function getValidator(string $rule): RuleValidatorInterface
     {
-//        throw new \InvalidArgumentException(print_r([
-//            $rule,
-//            $this->mapping
-//        ], true));
         foreach ($this->mapping as $processingClass => $validator) {
             if (is_a($rule, $processingClass, true)) {
                 return $validator;

@@ -31,27 +31,12 @@ final class NestedValidatorTest extends AbstractRuleValidatorTest
             'error' => [
                 new Nested(['author.age' => [new Number(min: 20)]]),
                 $value,
-                [
-                    new Error(
-                        'Value must be no less than {min}.',
-                        [
-                            'author',
-                            'age',
-                            'min' => 20,
-                        ]
-                    ), ],
+                [new Error('Value must be no less than {min}.', ['min' => 20])],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
                 $value,
-                [
-                    new Error(
-                        'This value is invalid.',
-                        [
-                            'author',
-                            'sex',
-                        ]
-                    ), ],
+                [new Error('This value is invalid.', [])],
             ],
         ];
     }

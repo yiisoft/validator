@@ -46,8 +46,8 @@ final class RuleSet
 
         $compoundResult = new Result();
         foreach ($this->rules as $rule) {
-            $validator = $this->storage->getValidator(get_class($rule));
-            $ruleResult = $validator->validate($value, $rule, $validator, $context);
+            $ruleValidator = $this->storage->getValidator(get_class($rule));
+            $ruleResult = $ruleValidator->validate($value, $rule, $validator, $context);
             if ($ruleResult->isValid()) {
                 continue;
             }

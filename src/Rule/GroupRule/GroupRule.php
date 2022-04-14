@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule\GroupRule;
 use Closure;
 use Yiisoft\Validator\Rule\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\RuleSet;
+use Yiisoft\Validator\RulesDumper;
 
 /**
  * Validates a single value for a set of custom rules.
@@ -27,10 +27,12 @@ abstract class GroupRule implements RuleInterface
     /**
      * Return custom rules set
      */
-    abstract public function getRuleSet(): RuleSet;
+    abstract public function getRuleSet(): array;
 
     public function getOptions(): array
     {
-        return $this->getRuleSet()->asArray();
+        $dumper = new RulesDumper();
+
+        return $dumper->asArray($this->getRuleSet());
     }
 }

@@ -15,6 +15,13 @@ use function is_object;
  */
 final class Validator implements ValidatorInterface
 {
+    private RuleValidatorStorage $storage;
+
+    public function __construct()
+    {
+        $this->storage = new RuleValidatorStorage();
+    }
+
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
      * @param Rule[][] $rules
@@ -31,15 +38,17 @@ final class Validator implements ValidatorInterface
         $result = new Result();
 
         foreach ($rules as $attribute => $attributeRules) {
-            $ruleSet = new RuleSet($attributeRules);
+            $attributeRules = is_array($attributeRules) ? $attributeRules : [$attributeRules];
+            $ruleSet = new RuleSet($this->storage, $attributeRules);
             $tempResult = $ruleSet->validate(
-                $data->getAttributeValue($attribute),
+                $data->getAttributeValue((string)$attribute),
                 $this,
-                $context->withAttribute($attribute)
+                $context->withAttribute((string)$attribute)
             );
 
             foreach ($tempResult->getErrors() as $error) {
-                $result->addError($error->getMessage(), [$attribute, ...$error->getValuePath()]);
+                $result->addError($error->getMessage(), $error->getValuePath());
+//                $result->addError($error->getMessage(), [$attribute, ...$error->getValuePath()]);
             }
         }
 
@@ -58,7 +67,7 @@ final class Validator implements ValidatorInterface
         }
 
         if (is_object($data) || is_array($data)) {
-            return new ArrayDataSet((array) $data);
+            return new ArrayDataSet((array)$data);
         }
 
         return new ScalarDataSet($data);

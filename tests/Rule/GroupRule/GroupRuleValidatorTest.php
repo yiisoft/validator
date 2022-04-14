@@ -21,8 +21,8 @@ final class GroupRuleValidatorTest extends AbstractRuleValidatorTest
         $rule = new CustomUrlRule();
 
         return [
-            [$rule, 'http://доменбольшедвадцатизнаков.рф', [new Error('', [])]],
-            [$rule, null, [new Error('', [])]],
+            [$rule, 'http://доменбольшедвадцатизнаков.рф', [new Error('This value is not a valid.', [])]],
+            [$rule, null, [new Error('This value is not a valid.', [])]],
             [$rule, 'domain', [new Error('This value is not a valid.', [])]],
         ];
     }
