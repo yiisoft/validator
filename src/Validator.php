@@ -21,9 +21,9 @@ final class Validator implements ValidatorInterface
 
     private RuleValidatorStorage $storage;
 
-    public function __construct()
+    public function __construct(RuleValidatorStorage $storage)
     {
-        $this->storage = new RuleValidatorStorage();
+        $this->storage = $storage;
     }
 
     /**

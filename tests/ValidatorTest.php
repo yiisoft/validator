@@ -12,14 +12,14 @@ use Yiisoft\Validator\Rule\CompareTo\CompareTo;
 use Yiisoft\Validator\Rule\Number\Number;
 use Yiisoft\Validator\Rule\Required\Required;
 use Yiisoft\Validator\Tests\Stub\DataSet;
-use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 
 class ValidatorTest extends TestCase
 {
     public function testAddingRulesViaConstructor(): void
     {
         $dataObject = new DataSet(['bool' => true, 'int' => 41]);
-        $validator = new Validator();
+        $validator = FakeValidatorFactory::make();
         $result = $validator->validate($dataObject, [
             'bool' => [new Boolean()],
             'int' => [
@@ -60,7 +60,7 @@ class ValidatorTest extends TestCase
      */
     public function testDiverseTypes($dataSet): void
     {
-        $validator = new Validator();
+        $validator = FakeValidatorFactory::make();
         $result = $validator->validate($dataSet, ['property' => [new Required()]]);
 
         $this->assertTrue($result->isValid());
@@ -68,7 +68,7 @@ class ValidatorTest extends TestCase
 
     public function testNullAsDataSet(): void
     {
-        $validator = new Validator();
+        $validator = FakeValidatorFactory::make();
         $result = $validator->validate(null, ['property' => [new CompareTo(null)]]);
 
         $this->assertTrue($result->isValid());

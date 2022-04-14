@@ -7,8 +7,8 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\Validator;
 
 abstract class AbstractRuleValidatorTest extends TestCase
 {
@@ -58,7 +58,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
     protected function validate(mixed $value, object $config, ValidationContext $context = null): Result
     {
         $ruleValidator = $this->getValidator();
-        $validator = new Validator();
+        $validator = FakeValidatorFactory::make();
 
         return $ruleValidator->validate($value, $config, $validator, $context);
     }
