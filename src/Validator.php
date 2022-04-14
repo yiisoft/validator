@@ -102,7 +102,7 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param $value
-     * @param RuleInterface[] $rules
+     * @param iterable<RuleInterface> $rules
      * @param ValidationContext $context
      *
      * @throws ContainerExceptionInterface
@@ -131,9 +131,9 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param array $rules
-     * @return RuleInterface[]
+     * @return iterable<RuleInterface>
      */
-    private function normalizeRules(array $rules): iterable
+    private function normalizeRules(iterable $rules): iterable
     {
         foreach ($rules as $rule) {
             yield $this->normalizeRule($rule);
