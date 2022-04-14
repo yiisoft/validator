@@ -105,7 +105,6 @@ final class NestedTest extends AbstractRuleTest
         new Nested(['path.to.value' => (new stdClass())]);
     }
 
-
     protected function getRule(): RuleInterface
     {
         return new Nested([]);
