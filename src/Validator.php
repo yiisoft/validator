@@ -131,6 +131,7 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param array $rules
+     *
      * @return RuleInterface[]
      */
     private function normalizeRules(array $rules): iterable
