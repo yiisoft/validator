@@ -24,7 +24,7 @@ use Yiisoft\Validator\ValidatorInterface;
  */
 final class CompareToValidator implements RuleValidatorInterface
 {
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return CompareTo::class;
     }

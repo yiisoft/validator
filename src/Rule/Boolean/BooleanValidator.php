@@ -14,7 +14,7 @@ use Yiisoft\Validator\ValidatorInterface;
  */
 final class BooleanValidator implements RuleValidatorInterface
 {
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return Boolean::class;
     }

@@ -20,7 +20,7 @@ use function is_string;
  */
 final class IpValidator implements RuleValidatorInterface
 {
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return Ip::class;
     }

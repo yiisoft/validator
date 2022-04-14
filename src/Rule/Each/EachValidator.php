@@ -20,7 +20,7 @@ final class EachValidator implements RuleValidatorInterface
     {
     }
 
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return Each::class;
     }

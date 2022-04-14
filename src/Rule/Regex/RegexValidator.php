@@ -17,7 +17,7 @@ use function is_string;
  */
 final class RegexValidator implements RuleValidatorInterface
 {
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return Regex::class;
     }

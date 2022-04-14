@@ -17,7 +17,7 @@ final class AtLeastValidator implements RuleValidatorInterface
 {
     use EmptyCheckTrait;
 
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return AtLeast::class;
     }

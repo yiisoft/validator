@@ -12,7 +12,7 @@ use Yiisoft\Validator\ValidatorInterface;
 
 final class CallbackValidator implements RuleValidatorInterface
 {
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return Callback::class;
     }

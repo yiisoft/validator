@@ -18,7 +18,7 @@ use Yiisoft\Validator\ValidatorInterface;
  */
 final class InRangeValidator implements RuleValidatorInterface
 {
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return InRange::class;
     }

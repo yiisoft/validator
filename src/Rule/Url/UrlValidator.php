@@ -19,7 +19,7 @@ use function strlen;
  */
 final class UrlValidator implements RuleValidatorInterface
 {
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return Url::class;
     }

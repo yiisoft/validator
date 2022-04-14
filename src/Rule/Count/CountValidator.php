@@ -17,7 +17,7 @@ use function count;
  */
 final class CountValidator implements RuleValidatorInterface
 {
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return Count::class;
     }

@@ -52,7 +52,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
     {
         $rule = $this->getValidator();
 
-        $this->assertEquals($this->getConfigClassName(), $rule::getConfigClassName());
+        $this->assertEquals($this->getConfigClassName(), $rule::getRuleClassName());
     }
 
     protected function validate(mixed $value, object $config, ValidationContext $context = null): Result

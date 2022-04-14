@@ -16,7 +16,7 @@ use function strlen;
  */
 final class EmailValidator implements RuleValidatorInterface
 {
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return Email::class;
     }

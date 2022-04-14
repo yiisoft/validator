@@ -18,7 +18,7 @@ final class RequiredValidator implements RuleValidatorInterface
 {
     use EmptyCheckTrait;
 
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return Required::class;
     }

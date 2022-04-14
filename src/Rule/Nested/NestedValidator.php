@@ -39,7 +39,7 @@ use function is_object;
  */
 final class NestedValidator implements RuleValidatorInterface
 {
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return Nested::class;
     }

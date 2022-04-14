@@ -14,7 +14,7 @@ use Yiisoft\Validator\ValidatorInterface;
  */
 class GroupRuleValidator implements RuleValidatorInterface
 {
-    public static function getConfigClassName(): string
+    public static function getRuleClassName(): string
     {
         return GroupRule::class;
     }
