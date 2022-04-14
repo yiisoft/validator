@@ -9,26 +9,16 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Rule\Url\Url;
 use Yiisoft\Validator\Rule\Url\UrlValidator;
+use Yiisoft\Validator\Tests\FunctionExists;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class UrlValidatorTest extends AbstractRuleValidatorTest
 {
-    public static bool $idnFunctionExists = false;
-
-//    protected function setUp(): void
-//    {
-//        static::$idnFunctionExists = true;
-//        parent::setUp();
-//    }
-//
-//    protected function tearDown(): void
-//    {
-//        static::$idnFunctionExists = true;
-//        parent::tearDown();
-//    }
+    protected function setUp(): void
+    {
+        FunctionExists::$isIdnFunctionExists = true;
+        parent::setUp();
+    }
 
     public function failedValidationProvider(): array
     {
@@ -102,8 +92,7 @@ final class UrlValidatorTest extends AbstractRuleValidatorTest
 
     public function testEnableIdnException(): void
     {
-        $this->markTestIncomplete('Fix mock');
-        self::$idnFunctionExists = false;
+        FunctionExists::$isIdnFunctionExists = false;
 
         $this->expectException(RuntimeException::class);
         new Url(enableIDN: true);
@@ -120,14 +109,3 @@ final class UrlValidatorTest extends AbstractRuleValidatorTest
     }
 }
 
-namespace Yiisoft\Validator\Rule\Url;
-
-use Yiisoft\Validator\Tests\Rule\Url\UrlValidatorTest;
-
-function function_exists(string $function): bool
-{
-    if ($function === 'idn_to_ascii') {
-        return UrlValidatorTest::$idnFunctionExists;
-    }
-    return \function_exists($function);
-}

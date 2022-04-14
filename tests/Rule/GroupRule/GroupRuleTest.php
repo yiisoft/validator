@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule\GroupRule;
 
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\Tests\FunctionExists;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
-/**
- * @group t
- */
 final class GroupRuleTest extends AbstractRuleTest
 {
+    protected function setUp(): void
+    {
+        FunctionExists::$isIdnFunctionExists = true;
+        parent::setUp();
+    }
+
     public function optionsDataProvider(): array
     {
         return [

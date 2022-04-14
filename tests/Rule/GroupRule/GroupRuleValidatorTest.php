@@ -8,14 +8,18 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\GroupRule\GroupRule;
 use Yiisoft\Validator\Rule\GroupRule\GroupRuleValidator;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Tests\FunctionExists;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
-/**
- * @group t
- */
 final class GroupRuleValidatorTest extends AbstractRuleValidatorTest
 {
+    protected function setUp(): void
+    {
+        FunctionExists::$isIdnFunctionExists = true;
+        parent::setUp();
+    }
+
     public function failedValidationProvider(): array
     {
         $rule = new CustomUrlRule();
