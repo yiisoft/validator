@@ -36,15 +36,15 @@ final class RulesDumperTest extends TestCase
                             'max' => 100,
                             'notANumberMessage' => [
                                 'message' => 'Value must be an integer.',
-                                ],
+                            ],
                             'tooBigMessage' => [
                                 'message' => 'Value must be no greater than 100.',
                                 'parameters' => ['max' => 100],
-                                ],
+                            ],
                             'tooSmallMessage' => [
                                 'message' => 'Value must be greater than 10.',
                                 'parameters' => ['min' => 10],
-                                ],
+                            ],
                             'skipOnEmpty' => true,
                             'skipOnError' => true,
                         ],
