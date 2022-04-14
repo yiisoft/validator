@@ -10,6 +10,83 @@ use function function_exists;
 
 class EmailTest extends TestCase
 {
+    public function testPattern(): void
+    {
+        $rule1 = new Email(pattern: 'Pattern 1');
+        $this->assertSame('Pattern 1', $rule1->getOptions()['pattern']);
+
+        $rule2 = $rule1->pattern('Pattern 2');
+        $this->assertSame('Pattern 2', $rule2->getOptions()['pattern']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testFullPattern(): void
+    {
+        $rule1 = new Email(fullPattern: 'Pattern 1');
+        $this->assertSame('Pattern 1', $rule1->getOptions()['fullPattern']);
+
+        $rule2 = $rule1->fullPattern('Pattern 2');
+        $this->assertSame('Pattern 2', $rule2->getOptions()['fullPattern']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testIdnEmailPattern(): void
+    {
+        $rule1 = new Email(idnEmailPattern: 'Pattern 1');
+        $this->assertSame('Pattern 1', $rule1->getOptions()['idnEmailPattern']);
+
+        $rule2 = $rule1->idnEmailPattern('Pattern 2');
+        $this->assertSame('Pattern 2', $rule2->getOptions()['idnEmailPattern']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testAllowName(): void
+    {
+        $rule1 = new Email(allowName: true);
+        $this->assertSame(true, $rule1->getOptions()['allowName']);
+
+        $rule2 = $rule1->allowName(false);
+        $this->assertSame(false, $rule2->getOptions()['allowName']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testCheckDNS(): void
+    {
+        $rule1 = new Email(checkDNS: true);
+        $this->assertSame(true, $rule1->getOptions()['checkDNS']);
+
+        $rule2 = $rule1->checkDNS(false);
+        $this->assertSame(false, $rule2->getOptions()['checkDNS']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testEnableIDN(): void
+    {
+        $rule1 = new Email(enableIDN: true);
+        $this->assertSame(true, $rule1->getOptions()['enableIDN']);
+
+        $rule2 = $rule1->enableIDN(false);
+        $this->assertSame(false, $rule2->getOptions()['enableIDN']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testMessage(): void
+    {
+        $rule1 = new Email(message: 'Message 1.');
+        $this->assertSame('Message 1.', $rule1->getOptions()['message']);
+
+        $rule2 = $rule1->message('Message 2.');
+        $this->assertSame('Message 2.', $rule2->getOptions()['message']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
     public function validateWithDefaultArgumentsProvider(): array
     {
         return [

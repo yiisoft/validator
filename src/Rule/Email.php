@@ -72,6 +72,83 @@ final class Email extends Rule
         }
     }
 
+    /**
+     * @see $pattern
+     */
+    public function pattern(string $value): self
+    {
+        $new = clone $this;
+        $new->pattern = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $fullPattern
+     */
+    public function fullPattern(string $value): self
+    {
+        $new = clone $this;
+        $new->fullPattern = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $idnEmailPattern
+     */
+    public function idnEmailPattern(string $value): self
+    {
+        $new = clone $this;
+        $new->idnEmailPattern = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $allowName
+     */
+    public function allowName(bool $value): self
+    {
+        $new = clone $this;
+        $new->allowName = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $checkDNS
+     */
+    public function checkDNS(bool $value): self
+    {
+        $new = clone $this;
+        $new->checkDNS = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $enableIDN
+     */
+    public function enableIDN(bool $value): self
+    {
+        $new = clone $this;
+        $new->enableIDN = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $message
+     */
+    public function message(string $value): self
+    {
+        $new = clone $this;
+        $new->message = $value;
+
+        return $new;
+    }
+
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $originalValue = $value;
