@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Yiisoft\Validator\Rule\AtLeast\AtLeastValidator;
 use Yiisoft\Validator\Rule\Boolean\BooleanValidator;
 use Yiisoft\Validator\Rule\Callback\CallbackValidator;
