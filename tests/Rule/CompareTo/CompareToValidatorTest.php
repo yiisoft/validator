@@ -81,6 +81,11 @@ final class CompareToValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
+            [
+                new CompareTo(100, message: 'Custom error'),
+                101,
+                [new Error('Custom error', ['value' => 100])],
+            ],
         ];
     }
 

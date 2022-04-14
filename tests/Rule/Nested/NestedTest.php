@@ -13,7 +13,7 @@ use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 use Yiisoft\Validator\Tests\Stub\Rule;
 
 /**
- * @group t2
+ * @group t
  */
 final class NestedTest extends AbstractRuleTest
 {

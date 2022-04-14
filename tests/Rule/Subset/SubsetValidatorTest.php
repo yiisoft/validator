@@ -20,7 +20,7 @@ final class SubsetValidatorTest extends AbstractRuleValidatorTest
     {
         $range = range(1, 10);
         $rule = new Subset($range);
-        $rangeToShow = implode(', ', array_map(fn (int $value) => "\"{$value}\"", $range));
+        $rangeToShow = implode(', ', array_map(fn(int $value) => "\"{$value}\"", $range));
 
         return [
             [$rule, [0, 1, 2], [new Error($rule->subsetMessage, ['values' => $rangeToShow])]],
@@ -46,6 +46,11 @@ final class SubsetValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
+            [
+                new Subset(['a'], subsetMessage: 'Custom error'),
+                ['2'],
+                [new Error('Custom error', ['values' => '"a"'])],
+            ],
         ];
     }
 

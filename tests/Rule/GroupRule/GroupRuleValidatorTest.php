@@ -38,10 +38,12 @@ final class GroupRuleValidatorTest extends AbstractRuleValidatorTest
 
     public function customErrorMessagesProvider(): array
     {
-        $rule = new CustomUrlRule(message: 'This value is not valid custom url');
-
         return [
-            [$rule, 'domain', [new Error('This value is not valid custom url', [])]],
+            [
+                new CustomUrlRule(message: 'Custom error'),
+                'domain',
+                [new Error('Custom error', [])],
+            ],
         ];
     }
 

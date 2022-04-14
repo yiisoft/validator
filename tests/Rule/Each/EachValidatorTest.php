@@ -18,14 +18,13 @@ final class EachValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array
     {
-        $this->markTestIncomplete('Need implement validators storage');
         return [
             [
                 new Each([new Number(max: 13)]),
                 [10, 20, 30],
                 [
-                    new Error('Value must be no greater than 13. 20 given.', ['max' => 13]),
-                    new Error('Value must be no greater than 13. 30 given.', ['max' => 13]),
+                    new Error('Value must be no greater than {max}.', ['max' => 13]),
+                    new Error('Value must be no greater than {max}.', ['max' => 13]),
                 ],
             ],
         ];

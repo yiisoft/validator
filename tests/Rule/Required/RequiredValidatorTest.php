@@ -38,6 +38,7 @@ final class RequiredValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
+            [new Required(message: 'Custom error'), null, [new Error('Custom error')]],
         ];
     }
 

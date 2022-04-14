@@ -33,20 +33,20 @@ abstract class AbstractRuleValidatorTest extends TestCase
         $this->assertEquals($expectedErrors, $result->getErrors());
     }
 
-//    /**
-//     * @param string[] $expectedErrorMessages
-//     *
-//     * @dataProvider customErrorMessagesProvider
-//     */
-//    public function testCustomErrorMessages(object $config, mixed $value, array $expectedErrorMessages): void
-//    {
-//        $result = $this->validate($value, $config);
-//
-//        $errors = $result->getErrors();
-//
-//        $this->assertFalse($result->isValid(), print_r($result->getErrors(), true));
-//        $this->assertEquals($expectedErrorMessages, $errors);
-//    }
+    /**
+     * @param string[] $expectedErrorMessages
+     *
+     * @dataProvider customErrorMessagesProvider
+     */
+    public function testCustomErrorMessages(object $config, mixed $value, array $expectedErrorMessages): void
+    {
+        $result = $this->validate($value, $config);
+
+        $errors = $result->getErrors();
+
+        $this->assertFalse($result->isValid(), print_r($result->getErrors(), true));
+        $this->assertEquals($expectedErrorMessages, $errors);
+    }
 
     public function testGetName(): void
     {

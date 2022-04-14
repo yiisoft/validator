@@ -96,6 +96,7 @@ final class UrlValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
+            [new Url(enableIDN: true, message: 'Custom error'), '', [new Error('Custom error', [])]],
         ];
     }
 

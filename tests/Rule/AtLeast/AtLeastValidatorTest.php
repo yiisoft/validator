@@ -46,10 +46,15 @@ final class AtLeastValidatorTest extends AbstractRuleValidatorTest
         ];
     }
 
-    // TODO: Add test cases
     public function customErrorMessagesProvider(): array
     {
-        return [];
+        return [
+            [
+                new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom error'),
+                $this->createObject(1, null),
+                [new Error('Custom error', ['min' => 2])],
+            ],
+        ];
     }
 
     protected function getValidator(): RuleValidatorInterface

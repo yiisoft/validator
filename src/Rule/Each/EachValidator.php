@@ -45,23 +45,7 @@ final class EachValidator implements RuleValidatorInterface
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                if (!is_array($item)) {
-                    // TODO: move back errorKey
-                    $errorKey = [$index];
-                    $formatMessage = true;
-                } else {
-                    $errorKey = [$index, ...$error->getValuePath()];
-                    $formatMessage = false;
-                }
-
-                if (!$formatMessage) {
-                    $result->addError($error->getMessage());
-                } else {
-                    $result->addError($config->message, [
-                        'error' => $error->getMessage(),
-                        'value' => $item,
-                    ]);
-                }
+                $result->addError($error->getMessage(), $error->getValuePath());
             }
         }
 

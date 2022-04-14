@@ -55,6 +55,18 @@ final class CallbackValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
+            [
+                new Callback(static function ($value): Result {
+                    $result = new Result();
+                    if ($value !== 42) {
+                        $result->addError('Custom error');
+                    }
+
+                    return $result;
+                }),
+                41,
+                [new Error('Custom error')],
+            ],
         ];
     }
 

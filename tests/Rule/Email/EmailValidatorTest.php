@@ -152,6 +152,11 @@ final class EmailValidatorTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
+            [
+                new Email(checkDNS: true, message: 'Custom error'),
+                'test@nonexistingsubdomain.example.com',
+                [new Error('Custom error', [])],
+            ],
         ];
     }
 
