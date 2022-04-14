@@ -9,9 +9,6 @@ use Yiisoft\Validator\Rule\Count\Count;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
-/**
- * @group t
- */
 final class CountTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array

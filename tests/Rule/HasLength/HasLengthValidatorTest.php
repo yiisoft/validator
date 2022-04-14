@@ -10,9 +10,6 @@ use Yiisoft\Validator\Rule\HasLength\HasLength;
 use Yiisoft\Validator\Rule\HasLength\HasLengthValidator;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class HasLengthValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array

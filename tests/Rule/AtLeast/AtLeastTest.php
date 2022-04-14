@@ -8,9 +8,6 @@ use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
-/**
- * @group t
- */
 final class AtLeastTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array

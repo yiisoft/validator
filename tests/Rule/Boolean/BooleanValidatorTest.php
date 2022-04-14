@@ -10,9 +10,6 @@ use Yiisoft\Validator\Rule\Boolean\BooleanValidator;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class BooleanValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array

@@ -15,9 +15,6 @@ use Yiisoft\Validator\Rule\Required\Required;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class NestedValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array

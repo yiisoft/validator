@@ -12,9 +12,6 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 use Yiisoft\Validator\Tests\Stub\Rule;
 
-/**
- * @group t
- */
 final class NestedTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array

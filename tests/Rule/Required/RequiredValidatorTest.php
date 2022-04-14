@@ -10,9 +10,6 @@ use Yiisoft\Validator\Rule\Required\RequiredValidator;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class RequiredValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array

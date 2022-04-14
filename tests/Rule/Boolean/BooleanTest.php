@@ -8,9 +8,6 @@ use Yiisoft\Validator\Rule\Boolean\Boolean;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
-/**
- * @group t
- */
 final class BooleanTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array

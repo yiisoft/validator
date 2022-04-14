@@ -8,9 +8,6 @@ use Yiisoft\Validator\Rule\CompareTo\CompareTo;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
-/**
- * @group t
- */
 final class CompareToTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array

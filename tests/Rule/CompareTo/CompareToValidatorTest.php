@@ -10,9 +10,6 @@ use Yiisoft\Validator\Rule\CompareTo\CompareToValidator;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class CompareToValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array

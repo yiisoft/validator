@@ -10,9 +10,6 @@ use Yiisoft\Validator\Rule\Email\EmailValidator;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class EmailValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array

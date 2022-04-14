@@ -12,9 +12,6 @@ use Yiisoft\Validator\Rule\Callback\CallbackValidator;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class CallbackValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array

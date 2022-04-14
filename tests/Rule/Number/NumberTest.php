@@ -8,9 +8,6 @@ use Yiisoft\Validator\Rule\Number\Number;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
-/**
- * @group t
- */
 final class NumberTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array

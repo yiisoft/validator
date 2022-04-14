@@ -10,9 +10,6 @@ use Yiisoft\Validator\Rule\Json\JsonValidator;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class JsonValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array

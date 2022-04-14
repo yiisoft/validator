@@ -12,9 +12,6 @@ use Yiisoft\Validator\Rule\Count\CountValidator;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class CountValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array

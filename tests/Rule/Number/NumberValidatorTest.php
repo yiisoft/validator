@@ -11,9 +11,6 @@ use Yiisoft\Validator\Rule\Number\NumberValidator;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class NumberValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array

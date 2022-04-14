@@ -8,9 +8,6 @@ use Yiisoft\Validator\Rule\InRange\InRange;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
-/**
- * @group t
- */
 final class InRangeTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array

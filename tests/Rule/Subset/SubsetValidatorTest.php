@@ -11,9 +11,6 @@ use Yiisoft\Validator\Rule\Subset\Subset;
 use Yiisoft\Validator\Rule\Subset\SubsetValidator;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class SubsetValidatorTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array

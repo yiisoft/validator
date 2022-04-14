@@ -8,9 +8,6 @@ use Yiisoft\Validator\Rule\Regex\Regex;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
-/**
- * @group t
- */
 final class RegexTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array

@@ -8,9 +8,6 @@ use Yiisoft\Validator\Rule\Required\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
-/**
- * @group t
- */
 final class RequiredTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array

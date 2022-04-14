@@ -11,9 +11,6 @@ use Yiisoft\Validator\Rule\Regex\RegexValidator;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
-/**
- * @group t
- */
 final class RegexValidatorTest extends AbstractRuleValidatorTest
 {
     private const PATTERN = '/^[a-zA-Z0-9](\.)?([^\/]*)$/m';

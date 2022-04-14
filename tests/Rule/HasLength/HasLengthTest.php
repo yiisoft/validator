@@ -7,9 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule\HasLength;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\HasLength\HasLength;
 
-/**
- * @group t
- */
 final class HasLengthTest extends TestCase
 {
     /**
