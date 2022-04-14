@@ -12,7 +12,7 @@ use Yiisoft\Validator\Rule\Number;
 
 final class Point
 {
-    #[Nested(errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 4.')]
+    #[Nested(throwErrorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 4.')]
     #[HasOne(Coordinates::class)]
     private $coordinates;
     #[Count(exactly: 3)]

@@ -349,14 +349,14 @@ use Yiisoft\Validator\Rule\Number;
 final class ChartsData
 {
     #[Each(incorrectInputMessage: 'Custom message 1.', message: 'Custom message 2.')]
-    #[Nested(errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 3.')]
+    #[Nested(throwErrorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 3.')]
     #[HasMany(Chart::class)]
     private array $charts;
 }
 
 final class Point
 {
-    #[Nested(errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 4.')]
+    #[Nested(throwErrorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 4.')]
     #[HasOne(Coordinates::class)]
     private $coordinates;
     #[Each(incorrectInputMessage: 'Custom message 5.', message: 'Custom message 6.')]
