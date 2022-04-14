@@ -33,12 +33,24 @@ final class EachValidatorTest extends AbstractRuleValidatorTest
     public function passedValidationProvider(): array
     {
         return [
+            [
+                new Each([new Number(max: 20)]),
+                [10, 11],
+            ],
         ];
     }
 
     public function customErrorMessagesProvider(): array
     {
         return [
+            [
+                new Each([new Number(max: 13, tooBigMessage: 'Custom error')]),
+                [10, 20, 30],
+                [
+                    new Error('Custom error', ['max' => 13]),
+                    new Error('Custom error', ['max' => 13]),
+                ],
+            ],
         ];
     }
 

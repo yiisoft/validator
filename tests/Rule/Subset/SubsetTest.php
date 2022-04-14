@@ -16,6 +16,21 @@ final class SubsetTest extends AbstractRuleTest
     public function optionsDataProvider(): array
     {
         return [
+            [
+                new Subset([]),
+                [
+                    'values' => [],
+                    'strict' => false,
+                    'iterableMessage' => [
+                        'message' => 'Value must be iterable.',
+                    ],
+                    'subsetMessage' => [
+                        'message' => 'Values must be ones of {values}.',
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ]
+            ]
         ];
     }
 
