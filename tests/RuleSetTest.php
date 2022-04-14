@@ -7,10 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 use Yiisoft\Validator\ValidationContext;
@@ -81,8 +78,12 @@ class RuleSetTest extends TestCase
 
     public function asArrayDataProvider(): array
     {
-        $rule = new class () implements RuleInterface {
-            public function validate($value, ValidationContext $context = null): Result
+        $rule = new class () implements RuleValidatorInterface {
+            public static function getConfigClassName(): string
+            {
+            }
+
+            public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
             {
             }
         };

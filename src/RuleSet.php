@@ -32,7 +32,7 @@ final class RuleSet
     }
 
     /**
-     * @param callable|RuleInterface $rule
+     * @param callable|ParametrizedRuleInterface $rule
      */
     public function add($rule): void
     {
