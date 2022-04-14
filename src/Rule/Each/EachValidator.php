@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule\Each;
 use InvalidArgumentException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\RuleValidatorStorage;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -15,6 +16,14 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class EachValidator implements RuleValidatorInterface
 {
+    private ?RuleValidatorStorage $storage;
+
+    public function __construct(RuleValidatorStorage $storage = null)
+    {
+        // TODO: just for test
+        $this->storage = $storage ?? new RuleValidatorStorage();
+    }
+
     public static function getConfigClassName(): string
     {
         return Each::class;
@@ -34,7 +43,7 @@ final class EachValidator implements RuleValidatorInterface
         }
 
         foreach ($value as $index => $item) {
-            $itemResult = $config->ruleSet->validate($item, $context);
+            $itemResult = $config->ruleSet->validate($item, $config, $context);
             if ($itemResult->isValid()) {
                 continue;
             }
