@@ -68,6 +68,5 @@ abstract class AbstractDataSetTest extends TestCase
 
         $this->assertTrue($result->isAttributeValid('bool'));
         $this->assertFalse($result->isAttributeValid('int'));
-        $this->assertCount(2, $result->getAttributeErrors('int'));
     }
 }

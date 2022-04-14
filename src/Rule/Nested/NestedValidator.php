@@ -46,12 +46,12 @@ final class NestedValidator implements RuleValidatorInterface
 
     public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
-        $compountResult = new Result();
+        $compoundResult = new Result();
         if (!is_object($value) && !is_array($value)) {
             $message = sprintf('Value should be an array or an object. %s given.', gettype($value));
-            $compountResult->addError($message);
+            $compoundResult->addError($message);
 
-            return $compountResult;
+            return $compoundResult;
         }
 
         $value = (array)$value;
@@ -61,7 +61,7 @@ final class NestedValidator implements RuleValidatorInterface
             $result = new Result((string)$valuePath);
 
             if ($config->errorWhenPropertyPathIsNotFound && !ArrayHelper::pathExists($value, $valuePath)) {
-                $compountResult->addError($config->propertyPathIsNotFoundMessage, ['path' => $valuePath], $valuePath);
+                $compoundResult->addError($config->propertyPathIsNotFoundMessage, ['path' => $valuePath], $valuePath);
 
                 continue;
             }
@@ -83,10 +83,10 @@ final class NestedValidator implements RuleValidatorInterface
 
         foreach ($results as $result) {
             foreach ($result->getErrors() as $error) {
-                $compountResult->merge($error);
+                $compoundResult->merge($error);
             }
         }
 
-        return $compountResult;
+        return $compoundResult;
     }
 }

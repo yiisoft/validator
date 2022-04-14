@@ -39,9 +39,14 @@ final class Validator implements ValidatorInterface
         }
 
         $context = new ValidationContext($data);
-        $result = new Result();
+        $compoundResult = new Result();
+
+        $results = [];
 
         foreach ($rules as $attribute => $attributeRules) {
+            $attributeName = is_string($attribute) ? $attribute : null;
+            $result = new Result($attributeName);
+
             $tempRule = is_array($attributeRules) ? $attributeRules : [$attributeRules];
             $attributeRules = $this->normalizeRules($tempRule);
 
@@ -62,13 +67,20 @@ final class Validator implements ValidatorInterface
             foreach ($tempResult->getErrors() as $error) {
                 $result->merge($error);
             }
+            $results[] = $result;
+        }
+
+        foreach ($results as $result) {
+            foreach ($result->getErrors() as $error) {
+                $compoundResult->merge($error);
+            }
         }
 
         if ($data instanceof PostValidationHookInterface) {
-            $data->processValidationResult($result);
+            $data->processValidationResult($compoundResult);
         }
 
-        return $result;
+        return $compoundResult;
     }
 
     #[Pure]
