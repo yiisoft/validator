@@ -46,25 +46,34 @@ final class RulesDumper
      *
      * @return array
      */
-    public function asArray(iterable $ruleSetMap): array
+    public function asArray(iterable $ruleSetMap, bool $dumpRuleName): array
     {
-        $arrayMap = [];
-        foreach ($ruleSetMap as $attribute => $ruleSet) {
-            if (is_array($ruleSet)) {
-                $ruleSet = new RuleSet($ruleSet);
-            }
+        return $this->fetchOptions($ruleSetMap, $dumpRuleName);
+    }
 
-            if (!$ruleSet instanceof RuleSet) {
+    private function fetchOptions(iterable $rules, bool $dumpRuleName): array
+    {
+        $result = [];
+        foreach ($rules as $attribute => $rule) {
+            if (is_array($rule)) {
+                $result[$attribute] = $this->fetchOptions($rule, $dumpRuleName);
+            } elseif ($rule instanceof RuleInterface) {
+                if ($dumpRuleName) {
+                    $result[$attribute] = [$rule->getName(), ...$rule->getOptions()];
+                } else {
+                    $result[$attribute] = $rule->getOptions();
+                }
+            } else {
+                // or ?
+                // $result[$attribute] = [get_class($rule)];
+
                 throw new InvalidArgumentException(sprintf(
-                    'Value should be an instance of %s or an array of rules, %s given.',
-                    RuleSet::class,
-                    get_debug_type($ruleSet)
+                    'Rules should be an array of rules that implements %s.',
+                    RuleInterface::class,
                 ));
             }
-
-            $arrayMap[$attribute] = $ruleSet->asArray();
         }
 
-        return $arrayMap;
+        return $result;
     }
 }

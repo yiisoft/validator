@@ -27,7 +27,7 @@ final class EachValidator implements RuleValidatorInterface
 
     public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
-        if ($config->ruleSet === null) {
+        if ($config->rules === null) {
             throw new InvalidArgumentException('Rules are required.');
         }
 
@@ -39,7 +39,7 @@ final class EachValidator implements RuleValidatorInterface
         }
 
         foreach ($value as $index => $item) {
-            $itemResult = $config->ruleSet->validate($item, $config, $context);
+            $itemResult = $validator->validate($item, [$index => $config->rules]);
             if ($itemResult->isValid()) {
                 continue;
             }

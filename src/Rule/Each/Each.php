@@ -28,13 +28,18 @@ final class Each implements RuleInterface
         public bool $skipOnError = false,
         public ?Closure $when = null,
     ) {
-//        if ($rules !== []) {
-        $this->ruleSet = new RuleSet($rules);
-//        }
     }
 
     public function getOptions(): array
     {
-        return $this->ruleSet->asArray();
+        $arrayOfRules = [];
+        foreach ($this->rules as $rule) {
+            if ($rule instanceof RuleInterface) {
+                $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
+            } else {
+                $arrayOfRules[] = [get_class($rule)];
+            }
+        }
+        return $arrayOfRules;
     }
 }

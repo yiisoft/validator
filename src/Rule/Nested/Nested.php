@@ -11,6 +11,7 @@ use Traversable;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RulesDumper;
 use function is_array;
 
 /**
@@ -48,12 +49,13 @@ final class Nested implements RuleInterface
          * @var Rule[][]
          */
         public iterable $rules = [],
-        public bool $errorWhenPropertyPathIsNotFound = false,
-        public string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
-        public bool $skipOnEmpty = false,
-        public bool $skipOnError = false,
+        public bool     $errorWhenPropertyPathIsNotFound = false,
+        public string   $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
+        public bool     $skipOnEmpty = false,
+        public bool     $skipOnError = false,
         public ?Closure $when = null,
-    ) {
+    )
+    {
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         if (empty($rules)) {
             throw new InvalidArgumentException('Rules must not be empty.');
@@ -80,25 +82,8 @@ final class Nested implements RuleInterface
 
     public function getOptions(): array
     {
-        return $this->fetchOptions($this->rules);
-    }
+        $dumper = new RulesDumper();
 
-    private function fetchOptions(iterable $rules): array
-    {
-        $result = [];
-        foreach ($rules as $attribute => $rule) {
-            if (is_array($rule)) {
-                $result[$attribute] = $this->fetchOptions($rule);
-            } elseif ($rule instanceof RuleInterface) {
-                $result[$attribute] = $rule->getOptions();
-            } else {
-                throw new InvalidArgumentException(sprintf(
-                    'Rules should be an array of rules that implements %s.',
-                    RuleInterface::class,
-                ));
-            }
-        }
-
-        return $result;
+        return $dumper->asArray($this->rules, false);
     }
 }

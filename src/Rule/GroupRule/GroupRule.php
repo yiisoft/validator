@@ -33,6 +33,6 @@ abstract class GroupRule implements RuleInterface
     {
         $dumper = new RulesDumper();
 
-        return $dumper->asArray($this->getRuleSet());
+        return $dumper->asArray($this->getRuleSet(), true);
     }
 }
