@@ -8,7 +8,6 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use Traversable;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
@@ -46,7 +45,7 @@ final class Nested implements RuleInterface
 
     public function __construct(
         /**
-         * @var Rule[][]
+         * @var RuleInterface[][]
          */
         public iterable $rules = [],
         public bool $errorWhenPropertyPathIsNotFound = false,

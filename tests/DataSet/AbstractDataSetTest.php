@@ -6,8 +6,8 @@ namespace Yiisoft\Validator\Tests\DataSet;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Boolean;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Boolean\Boolean;
+use Yiisoft\Validator\Rule\Number\Number;
 
 abstract class AbstractDataSetTest extends TestCase
 {

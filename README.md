@@ -362,14 +362,14 @@ final class Point
 ```php
 use Attribute;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class ValidateXRule extends Rule
+final class ValidateXRule implements RuleValidatorInterface
 {    
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         $result->addError('Custom error.');
@@ -496,7 +496,7 @@ use Yiisoft\Validator\Rule;
 
 final class Pi extends Rule
 {
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         $equal = \abs($value - M_PI) < PHP_FLOAT_EPSILON;
@@ -524,7 +524,7 @@ use Yiisoft\Validator\ValidationContext;
 
 final class CompanyName extends Rule
 {
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         $dataSet = $context->getDataSet();

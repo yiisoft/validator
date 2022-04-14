@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Data\Charts;
 
 use Yiisoft\Validator\Attribute\HasMany;
-use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Each\Each;
+use Yiisoft\Validator\Rule\Nested\Nested;
 
 final class ChartsData
 {

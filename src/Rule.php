@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use function is_callable;
-
 /**
  * Rule represents a single value validation rule.
  */
@@ -59,39 +57,7 @@ abstract class Rule
      */
     final public function validate(mixed $value, ?ValidationContext $context = null): Result
     {
-        if ($this->skipOnEmpty && $this->isEmpty($value)) {
-            return new Result();
-        }
-
-        if ($this->skipOnError && $context?->getParameter(RuleSet::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
-            return new Result();
-        }
-
-        if (is_callable($this->when) && !($this->when)($value, $context)) {
-            return new Result();
-        }
-
         return $this->validateValue($value, $context);
     }
 
-    /**
-     * Validates the value. The method should be implemented by concrete validation rules.
-     *
-     * @param mixed $value Value to be validated.
-     * @param ValidationContext|null $context Optional validation context.
-     *
-     * @return Result
-     */
-    abstract protected function validateValue($value, ?ValidationContext $context = null): Result;
-
-    /**
-     * Returns rule options as array.
-     */
-    public function getOptions(): array
-    {
-        return [
-            'skipOnEmpty' => $this->skipOnEmpty,
-            'skipOnError' => $this->skipOnError,
-        ];
-    }
 }

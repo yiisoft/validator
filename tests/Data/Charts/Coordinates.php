@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Data\Charts;
 
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Number\Number;
 
 final class Coordinates
 {

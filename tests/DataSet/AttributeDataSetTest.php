@@ -6,11 +6,11 @@ namespace Yiisoft\Validator\Tests\DataSet;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\AttributeDataSet;
-use Yiisoft\Validator\Rule\Count;
-use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\Nested;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Count\Count;
+use Yiisoft\Validator\Rule\Each\Each;
+use Yiisoft\Validator\Rule\HasLength\HasLength;
+use Yiisoft\Validator\Rule\Nested\Nested;
+use Yiisoft\Validator\Rule\Number\Number;
 use Yiisoft\Validator\Tests\Data\Charts\ChartsData;
 use Yiisoft\Validator\Tests\Data\Post;
 

@@ -8,8 +8,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Number;
 
 class ResultTest extends TestCase
 {

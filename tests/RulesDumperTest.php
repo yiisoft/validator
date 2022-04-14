@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Number\Number;
 use Yiisoft\Validator\RulesDumper;
 
 final class RulesDumperTest extends TestCase
@@ -52,7 +52,7 @@ final class RulesDumperTest extends TestCase
     public function testAsArray($rules, array $expected): void
     {
         $dumper = new RulesDumper();
-        $result = $dumper->asArray($rules);
+        $result = $dumper->asArray($rules, true);
 
         $this->assertEquals($expected, $result);
     }

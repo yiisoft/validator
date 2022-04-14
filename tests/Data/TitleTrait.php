@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Data;
 
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\HasLength\HasLength;
 
 trait TitleTrait
 {

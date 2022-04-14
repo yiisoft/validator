@@ -31,4 +31,9 @@ final class RulesProvidedDataSet implements RulesProviderInterface
     {
         return $this->rules;
     }
+
+    public function getData(): mixed
+    {
+        return $this->data;
+    }
 }

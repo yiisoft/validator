@@ -7,6 +7,8 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Number\Number;
+use Yiisoft\Validator\Rule\Required\Required;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
