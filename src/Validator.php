@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ScalarDataSet;
+use Yiisoft\Validator\Rule\Callback\Callback;
 use function is_array;
 use function is_object;
 
@@ -15,6 +17,8 @@ use function is_object;
  */
 final class Validator implements ValidatorInterface
 {
+    public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
+
     private RuleValidatorStorage $storage;
 
     public function __construct()
@@ -38,8 +42,8 @@ final class Validator implements ValidatorInterface
         $result = new Result();
 
         foreach ($rules as $attribute => $attributeRules) {
-            $attributeRules = is_array($attributeRules) ? $attributeRules : [$attributeRules];
-            $ruleSet = new RuleSet($this->storage, $attributeRules);
+            $tempRule = is_array($attributeRules) ? $attributeRules : [$attributeRules];
+            $attributeRules = $this->normalizeRules($tempRule);
 
             if (is_int($attribute)) {
                 $validatedData = $data->getData();
@@ -49,9 +53,9 @@ final class Validator implements ValidatorInterface
                 $validatedContext = $context;
             }
 
-            $tempResult = $ruleSet->validate(
+            $tempResult = $this->validateInternal(
                 $validatedData,
-                $this,
+                $attributeRules,
                 $validatedContext
             );
 
@@ -80,5 +84,48 @@ final class Validator implements ValidatorInterface
         }
 
         return new ScalarDataSet($data);
+    }
+
+    public function validateInternal($value, iterable $rules, ValidationContext $context): Result
+    {
+        $compoundResult = new Result();
+        foreach ($rules as $rule) {
+            $ruleValidator = $this->storage->getValidator(get_class($rule));
+            $ruleResult = $ruleValidator->validate($value, $rule, $this, $context);
+            if ($ruleResult->isValid()) {
+                continue;
+            }
+
+            $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
+
+            foreach ($ruleResult->getErrors() as $error) {
+                $compoundResult->addError($error->getMessage(), $error->getValuePath());
+            }
+        }
+        return $compoundResult;
+    }
+
+    private function normalizeRules(array $rules): iterable
+    {
+        foreach ($rules as $rule) {
+            yield $this->normalizeRule($rule);
+        }
+    }
+
+    private function normalizeRule($rule): RuleInterface
+    {
+        if (is_callable($rule)) {
+            return new Callback($rule);
+        }
+
+        if (!$rule instanceof RuleInterface) {
+            throw new InvalidArgumentException(sprintf(
+                'Rule should be either an instance of %s or a callable, %s given.',
+                RuleInterface::class,
+                gettype($rule)
+            ));
+        }
+
+        return $rule;
     }
 }

@@ -6,8 +6,8 @@ namespace Yiisoft\Validator\Rule;
 
 use Closure;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Validator;
 
 trait PreValidateTrait
 {
@@ -24,7 +24,7 @@ trait PreValidateTrait
             return new Result();
         }
 
-        if ($skipOnError && $context->getParameter(RuleSet::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
+        if ($skipOnError && $context->getParameter(Validator::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
             return new Result();
         }
 

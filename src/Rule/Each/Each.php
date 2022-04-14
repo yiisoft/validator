@@ -8,7 +8,6 @@ use Attribute;
 use Closure;
 use Yiisoft\Validator\Rule\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\RuleSet;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.
@@ -17,8 +16,6 @@ use Yiisoft\Validator\RuleSet;
 final class Each implements RuleInterface
 {
     use RuleNameTrait;
-
-    public ?RuleSet $ruleSet = null;
 
     public function __construct(
         public iterable $rules = [],
