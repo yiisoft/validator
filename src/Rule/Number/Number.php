@@ -85,6 +85,8 @@ final class Number implements RuleInterface
             ],
             'skipOnEmpty' => $this->skipOnEmpty,
             'skipOnError' => $this->skipOnError,
+            'integerPattern' => $this->integerPattern,
+            'numberPattern' => $this->numberPattern,
         ];
     }
 }

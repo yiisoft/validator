@@ -15,7 +15,10 @@ final class EachTest extends AbstractRuleTest
     {
         return [
             [
-                new Each([new Number(max: 13), new Number(max: 14)]),
+                new Each([
+                    new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
+                    new Number(max: 14, integerPattern: '/2/', numberPattern: '/2/'),
+                    ]),
                 [
                     [
                         'number',
@@ -35,6 +38,8 @@ final class EachTest extends AbstractRuleTest
                         ],
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
+                        'integerPattern' => '/1/',
+                        'numberPattern' => '/1/',
                     ],
                     [
                         'number',
@@ -54,6 +59,8 @@ final class EachTest extends AbstractRuleTest
                         ],
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
+                        'integerPattern' => '/2/',
+                        'numberPattern' => '/2/',
                     ],
                 ],
             ],

@@ -16,6 +16,9 @@ final class AtLeastTest extends AbstractRuleTest
             [
                 new AtLeast(['attr1', 'attr2']),
                 [
+                    'attributes' => [
+                        'attr1', 'attr2',
+                    ],
                     'min' => 1,
                     'message' => [
                         'message' => 'The model is not valid. Must have at least "{min}" filled attributes.',
@@ -28,6 +31,9 @@ final class AtLeastTest extends AbstractRuleTest
             [
                 new AtLeast(['attr1', 'attr2'], min: 2),
                 [
+                    'attributes' => [
+                        'attr1', 'attr2',
+                    ],
                     'min' => 2,
                     'message' => [
                         'message' => 'The model is not valid. Must have at least "{min}" filled attributes.',

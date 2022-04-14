@@ -32,6 +32,8 @@ final class NumberTest extends AbstractRuleTest
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                    'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                 ],
             ],
             [
@@ -53,6 +55,8 @@ final class NumberTest extends AbstractRuleTest
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                    'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                 ],
             ],
             [
@@ -74,6 +78,8 @@ final class NumberTest extends AbstractRuleTest
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                    'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                 ],
             ],
             [
@@ -95,6 +101,8 @@ final class NumberTest extends AbstractRuleTest
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                    'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                 ],
             ],
             [
@@ -116,6 +124,8 @@ final class NumberTest extends AbstractRuleTest
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                    'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                 ],
             ],
         ];

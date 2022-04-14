@@ -289,10 +289,10 @@ final class Ip implements RuleInterface
         ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
-    // TODO: improve output
     public function getOptions(): array
     {
         return [
+            'networks' => $this->networks,
             'allowIpv4' => $this->allowIpv4,
             'allowIpv6' => $this->allowIpv6,
             'allowSubnet' => $this->allowSubnet,

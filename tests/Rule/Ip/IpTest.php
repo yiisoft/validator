@@ -17,6 +17,16 @@ final class IpTest extends AbstractRuleTest
             [
                 new Ip(),
                 [
+                    'networks' => [
+                        '*' => ['any'],
+                        'any' => ['0.0.0.0/0', '::/0'],
+                        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
+                        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
+                        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
+                        'localhost' => ['127.0.0.0/8', '::1'],
+                        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
+                        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
+                    ],
                     'allowIpv4' => true,
                     'allowIpv6' => true,
                     'allowSubnet' => false,
@@ -51,6 +61,16 @@ final class IpTest extends AbstractRuleTest
             [
                 new Ip(allowIpv4: false),
                 [
+                    'networks' => [
+                        '*' => ['any'],
+                        'any' => ['0.0.0.0/0', '::/0'],
+                        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
+                        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
+                        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
+                        'localhost' => ['127.0.0.0/8', '::1'],
+                        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
+                        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
+                    ],
                     'allowIpv4' => false,
                     'allowIpv6' => true,
                     'allowSubnet' => false,
@@ -85,6 +105,16 @@ final class IpTest extends AbstractRuleTest
             [
                 new Ip(allowIpv6: false),
                 [
+                    'networks' => [
+                        '*' => ['any'],
+                        'any' => ['0.0.0.0/0', '::/0'],
+                        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
+                        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
+                        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
+                        'localhost' => ['127.0.0.0/8', '::1'],
+                        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
+                        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
+                    ],
                     'allowIpv4' => true,
                     'allowIpv6' => false,
                     'allowSubnet' => false,
@@ -119,6 +149,16 @@ final class IpTest extends AbstractRuleTest
             [
                 new Ip(allowSubnet: true),
                 [
+                    'networks' => [
+                        '*' => ['any'],
+                        'any' => ['0.0.0.0/0', '::/0'],
+                        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
+                        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
+                        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
+                        'localhost' => ['127.0.0.0/8', '::1'],
+                        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
+                        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
+                    ],
                     'allowIpv4' => true,
                     'allowIpv6' => true,
                     'allowSubnet' => true,
@@ -153,6 +193,16 @@ final class IpTest extends AbstractRuleTest
             [
                 new Ip(requireSubnet: true),
                 [
+                    'networks' => [
+                        '*' => ['any'],
+                        'any' => ['0.0.0.0/0', '::/0'],
+                        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
+                        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
+                        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
+                        'localhost' => ['127.0.0.0/8', '::1'],
+                        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
+                        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
+                    ],
                     'allowIpv4' => true,
                     'allowIpv6' => true,
                     'allowSubnet' => true,
@@ -187,6 +237,16 @@ final class IpTest extends AbstractRuleTest
             [
                 new Ip(allowNegation: true),
                 [
+                    'networks' => [
+                        '*' => ['any'],
+                        'any' => ['0.0.0.0/0', '::/0'],
+                        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
+                        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
+                        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
+                        'localhost' => ['127.0.0.0/8', '::1'],
+                        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
+                        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
+                    ],
                     'allowIpv4' => true,
                     'allowIpv6' => true,
                     'allowSubnet' => false,
@@ -221,6 +281,16 @@ final class IpTest extends AbstractRuleTest
             [
                 new Ip(ranges: ['private']),
                 [
+                    'networks' => [
+                        '*' => ['any'],
+                        'any' => ['0.0.0.0/0', '::/0'],
+                        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
+                        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
+                        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
+                        'localhost' => ['127.0.0.0/8', '::1'],
+                        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
+                        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
+                    ],
                     'allowIpv4' => true,
                     'allowIpv6' => true,
                     'allowSubnet' => false,

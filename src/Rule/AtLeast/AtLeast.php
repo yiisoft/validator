@@ -40,6 +40,7 @@ final class AtLeast implements RuleInterface
     public function getOptions(): array
     {
         return [
+            'attributes' => $this->attributes,
             'min' => $this->min,
             'message' => [
                 'message' => $this->message,

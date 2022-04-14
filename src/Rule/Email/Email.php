@@ -70,6 +70,9 @@ final class Email implements RuleInterface
     public function getOptions(): array
     {
         return [
+            'pattern' => $this->pattern,
+            'fullPattern' => $this->fullPattern,
+            'idnEmailPattern' => $this->idnEmailPattern,
             'allowName' => $this->allowName,
             'checkDNS' => $this->checkDNS,
             'enableIDN' => $this->enableIDN,

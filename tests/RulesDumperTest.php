@@ -47,6 +47,8 @@ final class RulesDumperTest extends TestCase
                             ],
                             'skipOnEmpty' => true,
                             'skipOnError' => true,
+                            'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                            'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                         ],
                     ],
                 ],
