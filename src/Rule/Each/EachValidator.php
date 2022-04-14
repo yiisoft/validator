@@ -45,7 +45,7 @@ final class EachValidator implements RuleValidatorInterface
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                $result->addError($error->getMessage(), $error->getParameters());
+                $result->addError($error->getMessage(), $error->getParameters(), $error->getAttribute());
             }
         }
 

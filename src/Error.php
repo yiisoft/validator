@@ -12,14 +12,16 @@ final class Error
      * @psalm-var list<int|string>
      */
     private array $parameters;
+    private ?string $attribute;
 
     /**
      * @psalm-param list<int|mixed> $parameters
      */
-    public function __construct(string $message, array $parameters)
+    public function __construct(string $message, array $parameters, ?string $attribute = null)
     {
         $this->message = $message;
         $this->parameters = $parameters;
+        $this->attribute = $attribute;
     }
 
     public function getMessage(): string
@@ -33,5 +35,10 @@ final class Error
     public function getParameters(): array
     {
         return $this->parameters;
+    }
+
+    public function getAttribute(): ?string
+    {
+        return $this->attribute;
     }
 }

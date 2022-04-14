@@ -47,10 +47,10 @@ final class Validator implements ValidatorInterface
 
             if (is_int($attribute)) {
                 $validatedData = $data->getData();
-                $validatedContext = $context->withAttribute((string)$attribute);
+                $validatedContext = $context;
             } else {
                 $validatedData = $data->getAttributeValue($attribute);
-                $validatedContext = $context;
+                $validatedContext = $context->withAttribute($attribute);
             }
 
             $tempResult = $this->validateInternal(
@@ -60,7 +60,7 @@ final class Validator implements ValidatorInterface
             );
 
             foreach ($tempResult->getErrors() as $error) {
-                $result->addError($error->getMessage(), $error->getParameters());
+                $result->addError($error->getMessage(), $error->getParameters(), $error->getAttribute());
 //                $result->addError($error->getMessage(), [$attribute, ...$error->getValuePath()]);
             }
         }
@@ -99,7 +99,7 @@ final class Validator implements ValidatorInterface
             $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
 
             foreach ($ruleResult->getErrors() as $error) {
-                $compoundResult->addError($error->getMessage(), $error->getParameters());
+                $compoundResult->addError($error->getMessage(), $error->getParameters(), $error->getAttribute());
             }
         }
         return $compoundResult;

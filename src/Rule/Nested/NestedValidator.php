@@ -54,11 +54,11 @@ final class NestedValidator implements RuleValidatorInterface
             return $result;
         }
 
-        $value = (array) $value;
+        $value = (array)$value;
 
         foreach ($config->rules as $valuePath => $rules) {
             if ($config->errorWhenPropertyPathIsNotFound && !ArrayHelper::pathExists($value, $valuePath)) {
-                $result->addError($config->propertyPathIsNotFoundMessage, ['path' => $valuePath]);
+                $result->addError($config->propertyPathIsNotFoundMessage, ['path' => $valuePath], $valuePath);
 
                 continue;
             }
@@ -78,9 +78,12 @@ final class NestedValidator implements RuleValidatorInterface
 //                if ($error->getValuePath()) {
 //                    $errorValuePath = array_merge($errorValuePath, $error->getValuePath());
 //                }
-                $errorValuePath = $error->getParameters();
 
-                $result->addError($error->getMessage(), $errorValuePath);
+                $attribute = (string)$valuePath;
+                if ($error->getAttribute() !== null) {
+                    $attribute .= '.' . $error->getAttribute();
+                }
+                $result->addError($error->getMessage(), $error->getParameters(), $attribute);
             }
         }
 

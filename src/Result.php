@@ -10,6 +10,12 @@ final class Result
      * @var Error[]
      */
     private array $errors = [];
+    private ?string $attribute;
+
+    public function __construct(string $attribute = null)
+    {
+        $this->attribute = $attribute;
+    }
 
     public function isValid(): bool
     {
@@ -39,9 +45,12 @@ final class Result
     /**
      * @psalm-param array<int|string> $parameters
      */
-    public function addError(string $message, array $parameters = []): self
+    public function addError(string $message, array $parameters = [], string $attribute = null): self
     {
-        $this->errors[] = new Error($message, $parameters);
+        if ($this->attribute !== null) {
+            $attribute = $this->attribute . '.' . $attribute;
+        }
+        $this->errors[] = new Error($message, $parameters, $attribute);
 
         return $this;
     }

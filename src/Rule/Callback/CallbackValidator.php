@@ -32,7 +32,7 @@ final class CallbackValidator implements RuleValidatorInterface
         }
 
         foreach ($callbackResult->getErrors() as $error) {
-            $result->addError(($error->getMessage()), $error->getParameters());
+            $result->addError($error->getMessage(), $error->getParameters(), $error->getAttribute());
         }
 
         return $result;

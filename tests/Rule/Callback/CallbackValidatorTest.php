@@ -59,13 +59,13 @@ final class CallbackValidatorTest extends AbstractRuleValidatorTest
                 new Callback(static function ($value): Result {
                     $result = new Result();
                     if ($value !== 42) {
-                        $result->addError('Custom error');
+                        $result->addError('Custom error', [], 'attribute name');
                     }
 
                     return $result;
                 }),
                 41,
-                [new Error('Custom error', [])],
+                [new Error('Custom error', [], 'attribute name')],
             ],
         ];
     }
@@ -77,22 +77,6 @@ final class CallbackValidatorTest extends AbstractRuleValidatorTest
         $rule = new Callback(static fn (): string => 'invalid return');
 
         $this->validate(null, $rule);
-    }
-
-    public function testAddErrorWithValuePath(): void
-    {
-        $this->markTestIncomplete('Add value path feature');
-        $rule = new Callback(static function ($value): Result {
-            $result = new Result();
-            $result->addError('e1', ['key1']);
-
-            return $result;
-        });
-        $result = $this->validate('hi', $rule);
-
-        $result->addError('e2', ['key2']);
-
-        $this->assertEquals([new Error('e1', ['key1']), new Error('e2', ['key2'])], $result->getErrors());
     }
 
     protected function getValidator(): RuleValidatorInterface

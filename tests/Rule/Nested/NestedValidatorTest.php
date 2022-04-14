@@ -35,28 +35,28 @@ final class NestedValidatorTest extends AbstractRuleValidatorTest
             'error' => [
                 new Nested(['author.age' => [new Number(min: 20)]]),
                 $value,
-                [new Error('Value must be no less than {min}.', ['min' => 20])],
+                [new Error('Value must be no less than {min}.', ['min' => 20], 'author.age')],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
                 $value,
-                [new Error('This value is invalid.', [])],
+                [new Error('This value is invalid.', [], 'author.sex')],
             ],
             [
                 $rule,
                 '',
                 // TODO: move message to rule
-                [new Error('Value should be an array or an object. string given.', [])],
+                [new Error('Value should be an array or an object. string given.', [], '')],
             ],
             [
                 $rule,
                 ['value' => null],
-                [new Error($requiredRule->message, [])],
+                [new Error($requiredRule->message, [], 'value')],
             ],
             [
                 new Nested(['value' => new Required()], errorWhenPropertyPathIsNotFound: true),
                 [],
-                [new Error($rule->propertyPathIsNotFoundMessage, ['path' => 'value'])],
+                [new Error($rule->propertyPathIsNotFoundMessage, ['path' => 'value'], 'value')],
             ],
             [
                 //                 @link https://github.com/yiisoft/validator/issues/200
@@ -75,7 +75,7 @@ final class NestedValidatorTest extends AbstractRuleValidatorTest
                         ],
                     ],
                 ],
-                [new Error('Value is invalid.', [])],
+                [new Error('Value is invalid.', [], 'body.shipping.phone')],
             ],
             [
                 new Nested([
@@ -84,7 +84,7 @@ final class NestedValidatorTest extends AbstractRuleValidatorTest
                     ]),
                 ]),
                 [0 => [0 => -11]],
-                [new Error('Value must be no less than {min}.', ['min' => -10])],
+                [new Error('Value must be no less than {min}.', ['min' => -10], '0.0')],
             ],
         ];
     }
@@ -135,7 +135,7 @@ final class NestedValidatorTest extends AbstractRuleValidatorTest
                     propertyPathIsNotFoundMessage: 'Property is not found.',
                 ),
                 [],
-                [new Error('Property is not found.', ['path' => 'value'])],
+                [new Error('Property is not found.', ['path' => 'value'], 'value')],
             ],
         ];
     }
