@@ -51,7 +51,7 @@ final class Nested extends Rule
          * @var Rule[][]
          */
         private iterable $rules = [],
-        private bool $errorWhenPropertyPathIsNotFound = false,
+        private bool $throwErrorWhenPropertyPathIsNotFound = false,
         private string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
         ?FormatterInterface $formatter = null,
         bool $skipOnEmpty = false,
@@ -59,7 +59,11 @@ final class Nested extends Rule
         $when = null
     ) {
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        $this->initRules($rules);
+    }
 
+    private function initRules(iterable $rules): void
+    {
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         if (empty($rules)) {
             throw new InvalidArgumentException('Rules must not be empty.');
@@ -71,6 +75,39 @@ final class Nested extends Rule
         }
 
         $this->rules = $rules;
+    }
+
+    /**
+     * @see $rules
+     */
+    public function rules(iterable $value): self
+    {
+        $new = clone $this;
+        $new->initRules($value);
+
+        return $new;
+    }
+
+    /**
+     * @see $message
+     */
+    public function message(string $value): self
+    {
+        $new = clone $this;
+        $new->message = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $throwErrorWhenPropertyPathIsNotFound
+     */
+    public function throwErrorWhenPropertyPathIsNotFound(bool $value): self
+    {
+        $new = clone $this;
+        $new->throwErrorWhenPropertyPathIsNotFound = $value;
+
+        return $new;
     }
 
     protected function validateValue($value, ?ValidationContext $context = null): Result
@@ -86,7 +123,7 @@ final class Nested extends Rule
         $value = (array) $value;
 
         foreach ($this->rules as $valuePath => $rules) {
-            if ($this->errorWhenPropertyPathIsNotFound && !ArrayHelper::pathExists($value, $valuePath)) {
+            if ($this->throwErrorWhenPropertyPathIsNotFound && !ArrayHelper::pathExists($value, $valuePath)) {
                 $message = $this->formatMessage($this->propertyPathIsNotFoundMessage, ['path' => $valuePath]);
                 $result->addError($message);
 

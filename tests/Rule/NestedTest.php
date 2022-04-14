@@ -110,7 +110,7 @@ class NestedTest extends TestCase
 
     public function testErrorWhenValuePathNotFound(): void
     {
-        $rule = new Nested(['value' => new Required()], errorWhenPropertyPathIsNotFound: true);
+        $rule = new Nested(['value' => new Required()], throwErrorWhenPropertyPathIsNotFound: true);
         $result = $rule->validate([]);
 
         $this->assertEquals(['Property path "value" is not found.'], $result->getErrorMessages());
@@ -120,7 +120,7 @@ class NestedTest extends TestCase
     {
         $rule = new Nested(
             ['value' => new Required()],
-            errorWhenPropertyPathIsNotFound: true,
+            throwErrorWhenPropertyPathIsNotFound: true,
             propertyPathIsNotFoundMessage: 'Property is not found.',
         );
         $result = $rule->validate([]);

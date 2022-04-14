@@ -30,7 +30,7 @@ final class AttributeDataSetTest extends TestCase
                                         'x' => [new Number(min: -10, max: 10)],
                                         'y' => [new Number(min: -10, max: 10)],
                                     ],
-                                    errorWhenPropertyPathIsNotFound: true,
+                                    throwErrorWhenPropertyPathIsNotFound: true,
                                     propertyPathIsNotFoundMessage: 'Custom message 4.'
                                 ),
                                 'rgb' => [
@@ -41,7 +41,7 @@ final class AttributeDataSetTest extends TestCase
                                 ],
                             ])]),
                         ],
-                    ], errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 3.'),
+                    ], throwErrorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 3.'),
                 ], incorrectInputMessage: 'Custom message 1.', message: 'Custom message 2.'),
             ],
         ];
