@@ -57,7 +57,7 @@ final class CompareTo extends Rule
         /**
          * @var mixed the constant value to be compared with.
          */
-        private $compareValue,
+        private mixed $compareValue,
         /**
          * @var string|null user-defined error message
          */
@@ -88,10 +88,68 @@ final class CompareTo extends Rule
         $when = null
     ) {
         parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        $this->checkOperator($operator);
+        $this->checkType($this->type);
+    }
 
-        if (!isset($this->validOperators[$operator])) {
-            throw new InvalidArgumentException("Operator \"$operator\" is not supported.");
+    private function checkOperator($value): void
+    {
+        if (!isset($this->validOperators[$value])) {
+            throw new InvalidArgumentException("Operator \"$value\" is not supported.");
         }
+    }
+
+    private function checkType($value): void
+    {
+        if ($value !== self::TYPE_NUMBER && $value !== self::TYPE_STRING) {
+            throw new InvalidArgumentException("Type \"$value\" is not supported.");
+        }
+    }
+
+    /**
+     * @see $compareValue
+     */
+    public function compareValue(mixed $value): self
+    {
+        $new = clone $this;
+        $new->compareValue = $value;
+
+        return $new;
+    }
+
+    /**
+     * @see $type
+     */
+    public function asString(): self
+    {
+        $new = clone $this;
+        $new->type = self::TYPE_STRING;
+
+        return $new;
+    }
+
+    /**
+     * @see $type
+     */
+    public function asNumber(): self
+    {
+        $new = clone $this;
+        $new->type = self::TYPE_NUMBER;
+
+        return $new;
+    }
+
+    /**
+     * @see $operator
+     */
+    public function operator(string $value): self
+    {
+        $this->checkOperator($value);
+
+        $new = clone $this;
+        $new->operator = $value;
+
+        return $new;
     }
 
     private function getMessage(): string

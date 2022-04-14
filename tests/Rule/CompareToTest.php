@@ -4,12 +4,77 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\CompareTo;
 
 class CompareToTest extends TestCase
 {
+    public function testCompareValue(): void
+    {
+        $rule1 = new CompareTo(1);
+        $this->assertSame(1, $rule1->getOptions()['compareValue']);
+
+        $rule2 = $rule1->compareValue(2);
+        $this->assertSame(2, $rule2->getOptions()['compareValue']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testAsString(): void
+    {
+        $rule1 = new CompareTo(1, type: CompareTo::TYPE_NUMBER);
+        $this->assertSame(CompareTo::TYPE_NUMBER, $rule1->getOptions()['type']);
+
+        $rule2 = $rule1->asString();
+        $this->assertSame(CompareTo::TYPE_STRING, $rule2->getOptions()['type']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testAsNumber(): void
+    {
+        $rule1 = new CompareTo(1);
+        $this->assertSame(CompareTo::TYPE_STRING, $rule1->getOptions()['type']);
+
+        $rule2 = $rule1->asNumber();
+        $this->assertSame(CompareTo::TYPE_NUMBER, $rule2->getOptions()['type']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testOperator(): void
+    {
+        $rule1 = new CompareTo(1, operator: '===');
+        $this->assertSame('===', $rule1->getOptions()['operator']);
+
+        $rule2 = $rule1->operator('==');
+        $this->assertSame('==', $rule2->getOptions()['operator']);
+
+        $this->assertNotSame($rule1, $rule2);
+    }
+
+    public function testInitWithInvalidType(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new CompareTo(1, type: ':(');
+    }
+
+    public function testInitWithInvalidOperator(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new CompareTo(1, operator: ':(');
+    }
+
+    public function testInvalidOperator(): void
+    {
+        $rule1 = new CompareTo(1);
+
+        $this->expectException(InvalidArgumentException::class);
+        $rule1->operator(':(');
+    }
+
     public function validateWithDefaultArgumentsProvider(): array
     {
         $value = 18449;
