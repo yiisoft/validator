@@ -25,7 +25,7 @@ final class Result
     public function isAttributeValid(string $attribute): bool
     {
         foreach ($this->errors as $error) {
-            $firstItem = $error->getParameters()[0] ?? '';
+            $firstItem = $error->getAttribute();
             if ($firstItem === $attribute) {
                 return false;
             }
@@ -48,9 +48,27 @@ final class Result
     public function addError(string $message, array $parameters = [], string $attribute = null): self
     {
         if ($this->attribute !== null) {
-            $attribute = $this->attribute . '.' . $attribute;
+            if ($attribute !== null) {
+                $attribute = $this->attribute . '.' . $attribute;
+            } else {
+                $attribute = $this->attribute;
+            }
         }
         $this->errors[] = new Error($message, $parameters, $attribute);
+
+        return $this;
+    }
+
+    /**
+     * @psalm-param array<int|string> $parameters
+     */
+    public function merge(Error $error): self
+    {
+        $this->addError(
+            $error->getMessage(),
+            $error->getParameters(),
+            $error->getAttribute(),
+        );
 
         return $this;
     }

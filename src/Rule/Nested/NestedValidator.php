@@ -46,19 +46,22 @@ final class NestedValidator implements RuleValidatorInterface
 
     public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
-        $result = new Result();
+        $compountResult = new Result();
         if (!is_object($value) && !is_array($value)) {
             $message = sprintf('Value should be an array or an object. %s given.', gettype($value));
-            $result->addError($message);
+            $compountResult->addError($message);
 
-            return $result;
+            return $compountResult;
         }
 
         $value = (array)$value;
 
+        $results = [];
         foreach ($config->rules as $valuePath => $rules) {
+            $result = new Result((string)$valuePath);
+
             if ($config->errorWhenPropertyPathIsNotFound && !ArrayHelper::pathExists($value, $valuePath)) {
-                $result->addError($config->propertyPathIsNotFoundMessage, ['path' => $valuePath], $valuePath);
+                $compountResult->addError($config->propertyPathIsNotFoundMessage, ['path' => $valuePath], $valuePath);
 
                 continue;
             }
@@ -67,26 +70,23 @@ final class NestedValidator implements RuleValidatorInterface
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
 
             $itemResult = $validator->validate($validatedValue, $rules);
-//            $itemResult = $validator->validate($validatedValue, [$valuePath => $rules]);
 
             if ($itemResult->isValid()) {
                 continue;
             }
 
             foreach ($itemResult->getErrors() as $error) {
-//                $errorValuePath = is_int($valuePath) ? [$valuePath] : explode('.', $valuePath);
-//                if ($error->getValuePath()) {
-//                    $errorValuePath = array_merge($errorValuePath, $error->getValuePath());
-//                }
+                $result->merge($error);
+            }
+            $results[] = $result;
+        }
 
-                $attribute = (string)$valuePath;
-                if ($error->getAttribute() !== null) {
-                    $attribute .= '.' . $error->getAttribute();
-                }
-                $result->addError($error->getMessage(), $error->getParameters(), $attribute);
+        foreach ($results as $result) {
+            foreach ($result->getErrors() as $error) {
+                $compountResult->merge($error);
             }
         }
 
-        return $result;
+        return $compountResult;
     }
 }
