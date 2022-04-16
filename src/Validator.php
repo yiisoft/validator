@@ -22,11 +22,11 @@ final class Validator implements ValidatorInterface
 {
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 
-    private ContainerInterface $container;
+    private RuleHandlerResolverInterface $ruleHandlerResolver;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(RuleHandlerResolverInterface $ruleHandlerResolver)
     {
-        $this->container = $container;
+        $this->ruleHandlerResolver = $ruleHandlerResolver;
     }
 
     /**
@@ -113,7 +113,7 @@ final class Validator implements ValidatorInterface
     {
         $compoundResult = new Result();
         foreach ($rules as $rule) {
-            $ruleHandler = $this->container->get($rule->getHandlerClassName());
+            $ruleHandler = $this->ruleHandlerResolver->resolve($rule);
             $ruleResult = $ruleHandler->validate($value, $rule, $this, $context);
             if ($ruleResult->isValid()) {
                 continue;

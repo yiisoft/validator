@@ -29,27 +29,25 @@ final class FakeValidatorFactory
 {
     public static function make(): Validator
     {
-        return new Validator(
-            new SimpleContainer([
-                AtLeastHandler::class => new AtLeastHandler(),
-                BooleanHandler::class => new BooleanHandler(),
-                CallbackHandler::class => new CallbackHandler(),
-                CompareToHandler::class => new CompareToHandler(),
-                CountHandler::class => new CountHandler(),
-                EachHandler::class => new EachHandler(),
-                EmailHandler::class => new EmailHandler(),
-                GroupRuleHandler::class => new GroupRuleHandler(),
-                HasLengthHandler::class => new HasLengthHandler(),
-                InRangeHandler::class => new InRangeHandler(),
-                IpHandler::class => new IpHandler(),
-                JsonHandler::class => new JsonHandler(),
-                NumberHandler::class => new NumberHandler(),
-                RegexHandler::class => new RegexHandler(),
-                RequiredHandler::class => new RequiredHandler(),
-                SubsetHandler::class => new SubsetHandler(),
-                UrlHandler::class => new UrlHandler(),
-                NestedHandler::class => new NestedHandler(),
-            ])
-        );
+        return new Validator(new StaticRuleHandlerResolver([
+            AtLeastHandler::class => new AtLeastHandler(),
+            BooleanHandler::class => new BooleanHandler(),
+            CallbackHandler::class => new CallbackHandler(),
+            CompareToHandler::class => new CompareToHandler(),
+            CountHandler::class => new CountHandler(),
+            EachHandler::class => new EachHandler(),
+            EmailHandler::class => new EmailHandler(),
+            GroupRuleHandler::class => new GroupRuleHandler(),
+            HasLengthHandler::class => new HasLengthHandler(),
+            InRangeHandler::class => new InRangeHandler(),
+            IpHandler::class => new IpHandler(),
+            JsonHandler::class => new JsonHandler(),
+            NumberHandler::class => new NumberHandler(),
+            RegexHandler::class => new RegexHandler(),
+            RequiredHandler::class => new RequiredHandler(),
+            SubsetHandler::class => new SubsetHandler(),
+            UrlHandler::class => new UrlHandler(),
+            NestedHandler::class => new NestedHandler(),
+        ]));
     }
 }
