@@ -97,10 +97,6 @@ final class MoneyTransfer implements DataSetInterface
     }
 }
 
-$validatorStorage = new \Yiisoft\Validator\ValidatorStorage([
-  \Yiisoft\Validator\Rule\Number\NumberValidator::getRuleClassName() => new \Yiisoft\Validator\Rule\Number\NumberValidator::getRuleClassName(), 
-  \Yiisoft\Validator\Rule\Callback\CallbackValidator::getRuleClassName() => new \Yiisoft\Validator\Rule\Callback\CallbackValidator::getRuleClassName(), 
-]);
 $validator = new Validator(); // Usually obtained from container
 $moneyTransfer = new MoneyTransfer(142);
 $rules = [    
