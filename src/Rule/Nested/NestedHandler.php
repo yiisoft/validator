@@ -76,14 +76,14 @@ final class NestedHandler implements RuleHandlerInterface
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                $result->merge($error);
+                $result->mergeError($error);
             }
             $results[] = $result;
         }
 
         foreach ($results as $result) {
             foreach ($result->getErrors() as $error) {
-                $compoundResult->merge($error);
+                $compoundResult->mergeError($error);
             }
         }
 

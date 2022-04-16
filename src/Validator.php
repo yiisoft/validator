@@ -66,14 +66,14 @@ final class Validator implements ValidatorInterface
             );
 
             foreach ($tempResult->getErrors() as $error) {
-                $result->merge($error);
+                $result->mergeError($error);
             }
             $results[] = $result;
         }
 
         foreach ($results as $result) {
             foreach ($result->getErrors() as $error) {
-                $compoundResult->merge($error);
+                $compoundResult->mergeError($error);
             }
         }
 
@@ -121,7 +121,7 @@ final class Validator implements ValidatorInterface
             $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
 
             foreach ($ruleResult->getErrors() as $error) {
-                $compoundResult->merge($error);
+                $compoundResult->mergeError($error);
             }
         }
         return $compoundResult;

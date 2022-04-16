@@ -56,10 +56,7 @@ final class Result
         return $this;
     }
 
-    /**
-     * @psalm-param array<int|string> $parameters
-     */
-    public function merge(Error $error): self
+    public function mergeError(Error $error): self
     {
         $this->addError(
             $error->getMessage(),
