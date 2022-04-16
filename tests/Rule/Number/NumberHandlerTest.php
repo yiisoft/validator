@@ -8,7 +8,7 @@ use stdClass;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Number\Number;
 use Yiisoft\Validator\Rule\Number\NumberHandler;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class NumberHandlerTest extends AbstractRuleValidatorTest
@@ -124,7 +124,7 @@ final class NumberHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleValidatorInterface
+    protected function getValidator(): RuleHandlerInterface
     {
         return new NumberHandler();
     }

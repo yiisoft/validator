@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule\InRange;
 
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -17,7 +17,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  * The range can be specified via constructor.
  * If the {@see InRange::$not} is called, the rule will ensure the value is NOT among the specified range.
  */
-final class InRangeHandler implements RuleValidatorInterface
+final class InRangeHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {

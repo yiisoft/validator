@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule\Number;
 
 use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -18,7 +18,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  * or {@see Number::$numberPattern}. Optionally, you may configure the {@see Number::min()} and {@see Number::max()}
  * to ensure the number is within certain range.
  */
-final class NumberHandler implements RuleValidatorInterface
+final class NumberHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {

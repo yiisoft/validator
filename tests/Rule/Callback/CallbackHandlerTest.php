@@ -9,7 +9,7 @@ use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback\Callback;
 use Yiisoft\Validator\Rule\Callback\CallbackHandler;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class CallbackHandlerTest extends AbstractRuleValidatorTest
@@ -76,7 +76,7 @@ final class CallbackHandlerTest extends AbstractRuleValidatorTest
         $this->validate(null, $rule);
     }
 
-    protected function getValidator(): RuleValidatorInterface
+    protected function getValidator(): RuleHandlerInterface
     {
         return new CallbackHandler();
     }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\CompareTo;
 
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -23,7 +23,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  * are compared byte by byte. When comparing numbers, make sure to change {@see CompareTo::$type} to
  * {@see CompareTo::TYPE_NUMBER} to enable numeric comparison.
  */
-final class CompareToHandler implements RuleValidatorInterface
+final class CompareToHandler implements RuleHandlerInterface
 {
     /**
      * Constant for specifying the comparison as string values.

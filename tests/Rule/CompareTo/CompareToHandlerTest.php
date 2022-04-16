@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule\CompareTo;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\CompareTo\CompareTo;
 use Yiisoft\Validator\Rule\CompareTo\CompareToHandler;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class CompareToHandlerTest extends AbstractRuleValidatorTest
@@ -86,7 +86,7 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleValidatorInterface
+    protected function getValidator(): RuleHandlerInterface
     {
         return new CompareToHandler();
     }

@@ -6,12 +6,12 @@ namespace Yiisoft\Validator\Rule\Subset;
 
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
-final class SubsetHandler implements RuleValidatorInterface
+final class SubsetHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {

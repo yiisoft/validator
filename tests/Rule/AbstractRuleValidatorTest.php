@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
 
@@ -70,5 +70,5 @@ abstract class AbstractRuleValidatorTest extends TestCase
 
     abstract public function failedValidationProvider(): array;
 
-    abstract protected function getValidator(): RuleValidatorInterface;
+    abstract protected function getValidator(): RuleHandlerInterface;
 }

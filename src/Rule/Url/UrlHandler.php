@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Url;
 
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
@@ -18,7 +18,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  * Note that this rule only checks if the URL scheme and host part are correct.
  * It does not check the remaining parts of a URL.
  */
-final class UrlHandler implements RuleValidatorInterface
+final class UrlHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {

@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule\Boolean;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Boolean\Boolean;
 use Yiisoft\Validator\Rule\Boolean\BooleanHandler;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class BooleanHandlerTest extends AbstractRuleValidatorTest
@@ -73,7 +73,7 @@ final class BooleanHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleValidatorInterface
+    protected function getValidator(): RuleHandlerInterface
     {
         return new BooleanHandler();
     }

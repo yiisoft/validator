@@ -8,7 +8,7 @@ use RuntimeException;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Ip\Ip;
 use Yiisoft\Validator\Rule\Ip\IpHandler;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class IpHandlerTest extends AbstractRuleValidatorTest
@@ -239,7 +239,7 @@ final class IpHandlerTest extends AbstractRuleValidatorTest
         $this->validate('', $rule);
     }
 
-    protected function getValidator(): RuleValidatorInterface
+    protected function getValidator(): RuleHandlerInterface
     {
         return new IpHandler();
     }

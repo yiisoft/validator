@@ -8,7 +8,7 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Each\Each;
 use Yiisoft\Validator\Rule\Each\EachHandler;
 use Yiisoft\Validator\Rule\Number\Number;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class EachHandlerTest extends AbstractRuleValidatorTest
@@ -51,7 +51,7 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleValidatorInterface
+    protected function getValidator(): RuleHandlerInterface
     {
         return new EachHandler();
     }

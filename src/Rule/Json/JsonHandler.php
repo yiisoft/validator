@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Json;
 
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
@@ -14,7 +14,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 /**
  * Validates that the value is a valid json.
  */
-final class JsonHandler implements RuleValidatorInterface
+final class JsonHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {

@@ -12,7 +12,7 @@ use Yiisoft\Validator\Rule\Nested\NestedHandler;
 use Yiisoft\Validator\Rule\Number\Number;
 use Yiisoft\Validator\Rule\Regex\Regex;
 use Yiisoft\Validator\Rule\Required\Required;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class NestedHandlerTest extends AbstractRuleValidatorTest
@@ -137,7 +137,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleValidatorInterface
+    protected function getValidator(): RuleHandlerInterface
     {
         return new NestedHandler();
     }

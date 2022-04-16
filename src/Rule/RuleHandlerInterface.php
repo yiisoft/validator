@@ -8,7 +8,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 
-interface RuleValidatorInterface
+interface RuleHandlerInterface
 {
     /**
      * Validates the value. The method should be implemented by concrete validation rules.

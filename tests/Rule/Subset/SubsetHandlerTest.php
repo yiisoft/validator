@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule\Subset;
 
 use ArrayObject;
 use Yiisoft\Validator\Error;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Subset\Subset;
 use Yiisoft\Validator\Rule\Subset\SubsetHandler;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
@@ -51,7 +51,7 @@ final class SubsetHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleValidatorInterface
+    protected function getValidator(): RuleHandlerInterface
     {
         return new SubsetHandler();
     }

@@ -7,14 +7,14 @@ namespace Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\EmptyCheckTrait;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 
 /**
  * Checks if at least {@see AtLeast::$min} of many attributes are filled.
  */
-final class AtLeastHandler implements RuleValidatorInterface
+final class AtLeastHandler implements RuleHandlerInterface
 {
     use EmptyCheckTrait;
 

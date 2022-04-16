@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule\Email;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Email\Email;
 use Yiisoft\Validator\Rule\Email\EmailHandler;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class EmailHandlerTest extends AbstractRuleValidatorTest
@@ -153,7 +153,7 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleValidatorInterface
+    protected function getValidator(): RuleHandlerInterface
     {
         return new EmailHandler();
     }

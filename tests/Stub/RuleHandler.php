@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Stub;
 
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\HandlerClassNameTrait;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 
-final class RuleValidator implements RuleValidatorInterface
+final class RuleHandler implements RuleHandlerInterface
 {
     use HandlerClassNameTrait;
 

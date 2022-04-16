@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule\Required;
 
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\EmptyCheckTrait;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
@@ -15,7 +15,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 /**
  * Validates that the specified value is neither null nor empty.
  */
-final class RequiredHandler implements RuleValidatorInterface
+final class RequiredHandler implements RuleHandlerInterface
 {
     use EmptyCheckTrait;
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\HasLength;
 
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -16,7 +16,7 @@ use function is_string;
  *
  * Note, this rule should only be used with strings.
  */
-final class HasLengthHandler implements RuleValidatorInterface
+final class HasLengthHandler implements RuleHandlerInterface
 {
     public function validate($value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {

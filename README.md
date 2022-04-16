@@ -375,11 +375,11 @@ final class Point
 use Attribute;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class ValidateXRule implements RuleValidatorInterface
+final class ValidateXRule implements RuleHandlerInterface
 {    
     public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {

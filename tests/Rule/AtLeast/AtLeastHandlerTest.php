@@ -8,7 +8,7 @@ use stdClass;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\AtLeast\AtLeastHandler;
-use Yiisoft\Validator\Rule\RuleValidatorInterface;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class AtLeastHandlerTest extends AbstractRuleValidatorTest
@@ -54,7 +54,7 @@ final class AtLeastHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleValidatorInterface
+    protected function getValidator(): RuleHandlerInterface
     {
         return new AtLeastHandler();
     }
