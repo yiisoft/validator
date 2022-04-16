@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Stub;
 
-use Yiisoft\Test\Support\Container\SimpleContainer;
 use Yiisoft\Validator\Rule\AtLeast\AtLeastHandler;
 use Yiisoft\Validator\Rule\Boolean\BooleanHandler;
 use Yiisoft\Validator\Rule\Callback\CallbackHandler;
