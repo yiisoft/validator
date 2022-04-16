@@ -57,7 +57,9 @@ $ruleSet = new RuleSet([
     static function ($value): Result {
         $result = new Result();
         if ($value !== 42) {
-            $result->addError('Value should be 42.', []);
+            $result->addError('Value should be 42.']);
+            // or
+            $result->addError('Value should be {value}.'], ['value' => 42]);
         }
 
         return $result;
