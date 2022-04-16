@@ -31,7 +31,7 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
-     * @param iterable<RuleInterface>|iterable<RuleInterface[]> $rules
+     * @param iterable<RuleInterface|RuleInterface[]> $rules
      */
     public function validate($data, iterable $rules = []): Result
     {

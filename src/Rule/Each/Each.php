@@ -16,10 +16,13 @@ use Yiisoft\Validator\RuleInterface;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Each implements RuleInterface
 {
-    use HandlerClassNameTrait;
     use RuleNameTrait;
+    use HandlerClassNameTrait;
 
     public function __construct(
+        /**
+         * @var iterable<RuleInterface|RuleInterface[]>
+         */
         public iterable $rules = [],
         public string $incorrectInputMessage = 'Value should be array or iterable.',
         public string $message = '{error} {value} given.',

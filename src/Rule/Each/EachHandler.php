@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule\Each;
 use InvalidArgumentException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -22,7 +23,11 @@ final class EachHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Each::class, $rule);
         }
 
-        if ($rule->rules === null) {
+        /**
+         * @var iterable<RuleInterface> $rules
+         */
+        $rules = $rule->rules;
+        if ($rules === []) {
             throw new InvalidArgumentException('Rules are required.');
         }
 
@@ -34,7 +39,10 @@ final class EachHandler implements RuleHandlerInterface
         }
 
         foreach ($value as $index => $item) {
-            $itemResult = $validator->validate($item, [$index => $rule->rules]);
+            /**
+             * @psalm-suppress InvalidArgument
+             */
+            $itemResult = $validator->validate($item, [$index => $rules]);
             if ($itemResult->isValid()) {
                 continue;
             }
