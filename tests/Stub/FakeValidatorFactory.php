@@ -5,24 +5,24 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Stub;
 
 use Yiisoft\Test\Support\Container\SimpleContainer;
-use Yiisoft\Validator\Rule\AtLeast\AtLeastValidator;
-use Yiisoft\Validator\Rule\Boolean\BooleanValidator;
-use Yiisoft\Validator\Rule\Callback\CallbackValidator;
-use Yiisoft\Validator\Rule\CompareTo\CompareToValidator;
-use Yiisoft\Validator\Rule\Count\CountValidator;
-use Yiisoft\Validator\Rule\Each\EachValidator;
-use Yiisoft\Validator\Rule\Email\EmailValidator;
-use Yiisoft\Validator\Rule\GroupRule\GroupRuleValidator;
-use Yiisoft\Validator\Rule\HasLength\HasLengthValidator;
-use Yiisoft\Validator\Rule\InRange\InRangeValidator;
-use Yiisoft\Validator\Rule\Ip\IpValidator;
-use Yiisoft\Validator\Rule\Json\JsonValidator;
-use Yiisoft\Validator\Rule\Nested\NestedValidator;
-use Yiisoft\Validator\Rule\Number\NumberValidator;
-use Yiisoft\Validator\Rule\Regex\RegexValidator;
-use Yiisoft\Validator\Rule\Required\RequiredValidator;
-use Yiisoft\Validator\Rule\Subset\SubsetValidator;
-use Yiisoft\Validator\Rule\Url\UrlValidator;
+use Yiisoft\Validator\Rule\AtLeast\AtLeastHandler;
+use Yiisoft\Validator\Rule\Boolean\BooleanHandler;
+use Yiisoft\Validator\Rule\Callback\CallbackHandler;
+use Yiisoft\Validator\Rule\CompareTo\CompareToHandler;
+use Yiisoft\Validator\Rule\Count\CountHandler;
+use Yiisoft\Validator\Rule\Each\EachHandler;
+use Yiisoft\Validator\Rule\Email\EmailHandler;
+use Yiisoft\Validator\Rule\GroupRule\GroupRuleHandler;
+use Yiisoft\Validator\Rule\HasLength\HasLengthHandler;
+use Yiisoft\Validator\Rule\InRange\InRangeHandler;
+use Yiisoft\Validator\Rule\Ip\IpHandler;
+use Yiisoft\Validator\Rule\Json\JsonHandler;
+use Yiisoft\Validator\Rule\Nested\NestedHandler;
+use Yiisoft\Validator\Rule\Number\NumberHandler;
+use Yiisoft\Validator\Rule\Regex\RegexHandler;
+use Yiisoft\Validator\Rule\Required\RequiredHandler;
+use Yiisoft\Validator\Rule\Subset\SubsetHandler;
+use Yiisoft\Validator\Rule\Url\UrlHandler;
 use Yiisoft\Validator\Validator;
 
 final class FakeValidatorFactory
@@ -31,24 +31,24 @@ final class FakeValidatorFactory
     {
         return new Validator(
             new SimpleContainer([
-                AtLeastValidator::class => new AtLeastValidator(),
-                BooleanValidator::class => new BooleanValidator(),
-                CallbackValidator::class => new CallbackValidator(),
-                CompareToValidator::class => new CompareToValidator(),
-                CountValidator::class => new CountValidator(),
-                EachValidator::class => new EachValidator(),
-                EmailValidator::class => new EmailValidator(),
-                GroupRuleValidator::class => new GroupRuleValidator(),
-                HasLengthValidator::class => new HasLengthValidator(),
-                InRangeValidator::class => new InRangeValidator(),
-                IpValidator::class => new IpValidator(),
-                JsonValidator::class => new JsonValidator(),
-                NumberValidator::class => new NumberValidator(),
-                RegexValidator::class => new RegexValidator(),
-                RequiredValidator::class => new RequiredValidator(),
-                SubsetValidator::class => new SubsetValidator(),
-                UrlValidator::class => new UrlValidator(),
-                NestedValidator::class => new NestedValidator(),
+                AtLeastHandler::class => new AtLeastHandler(),
+                BooleanHandler::class => new BooleanHandler(),
+                CallbackHandler::class => new CallbackHandler(),
+                CompareToHandler::class => new CompareToHandler(),
+                CountHandler::class => new CountHandler(),
+                EachHandler::class => new EachHandler(),
+                EmailHandler::class => new EmailHandler(),
+                GroupRuleHandler::class => new GroupRuleHandler(),
+                HasLengthHandler::class => new HasLengthHandler(),
+                InRangeHandler::class => new InRangeHandler(),
+                IpHandler::class => new IpHandler(),
+                JsonHandler::class => new JsonHandler(),
+                NumberHandler::class => new NumberHandler(),
+                RegexHandler::class => new RegexHandler(),
+                RequiredHandler::class => new RequiredHandler(),
+                SubsetHandler::class => new SubsetHandler(),
+                UrlHandler::class => new UrlHandler(),
+                NestedHandler::class => new NestedHandler(),
             ])
         );
     }

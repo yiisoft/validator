@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Stub;
 
-use Yiisoft\Validator\Rule\ValidatorClassNameTrait;
+use Yiisoft\Validator\Rule\HandlerClassNameTrait;
 use Yiisoft\Validator\RuleInterface;
 
 final class Rule implements RuleInterface
 {
-    use ValidatorClassNameTrait;
+    use HandlerClassNameTrait;
 
     private array $options;
     private string $name;

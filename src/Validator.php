@@ -113,8 +113,8 @@ final class Validator implements ValidatorInterface
     {
         $compoundResult = new Result();
         foreach ($rules as $rule) {
-            $ruleValidator = $this->container->get($rule->getValidatorClassName());
-            $ruleResult = $ruleValidator->validate($value, $rule, $this, $context);
+            $ruleHandler = $this->container->get($rule->getHandlerClassName());
+            $ruleResult = $ruleHandler->validate($value, $rule, $this, $context);
             if ($ruleResult->isValid()) {
                 continue;
             }

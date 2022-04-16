@@ -6,13 +6,13 @@ namespace Yiisoft\Validator\Rule\Callback;
 
 use Closure;
 use Yiisoft\Validator\Rule\RuleNameTrait;
-use Yiisoft\Validator\Rule\ValidatorClassNameTrait;
+use Yiisoft\Validator\Rule\HandlerClassNameTrait;
 use Yiisoft\Validator\RuleInterface;
 
 final class Callback implements RuleInterface
 {
     use RuleNameTrait;
-    use ValidatorClassNameTrait;
+    use HandlerClassNameTrait;
 
     public function __construct(
         /**

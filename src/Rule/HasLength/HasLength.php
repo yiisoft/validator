@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule\HasLength;
 use Attribute;
 use Closure;
 use Yiisoft\Validator\Rule\RuleNameTrait;
-use Yiisoft\Validator\Rule\ValidatorClassNameTrait;
+use Yiisoft\Validator\Rule\HandlerClassNameTrait;
 use Yiisoft\Validator\RuleInterface;
 
 /**
@@ -19,7 +19,7 @@ use Yiisoft\Validator\RuleInterface;
 final class HasLength implements RuleInterface
 {
     use RuleNameTrait;
-    use ValidatorClassNameTrait;
+    use HandlerClassNameTrait;
 
     public function __construct(
         /**

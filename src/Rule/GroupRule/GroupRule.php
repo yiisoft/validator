@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule\GroupRule;
 
 use Closure;
 use Yiisoft\Validator\Rule\RuleNameTrait;
-use Yiisoft\Validator\Rule\ValidatorClassNameTrait;
+use Yiisoft\Validator\Rule\HandlerClassNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
 
@@ -16,7 +16,7 @@ use Yiisoft\Validator\RulesDumper;
 abstract class GroupRule implements RuleInterface
 {
     use RuleNameTrait;
-    use ValidatorClassNameTrait;
+    use HandlerClassNameTrait;
 
     public function __construct(
         public string $message = 'This value is not a valid.',

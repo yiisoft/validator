@@ -9,7 +9,7 @@ use Closure;
 use Countable;
 use InvalidArgumentException;
 use Yiisoft\Validator\Rule\RuleNameTrait;
-use Yiisoft\Validator\Rule\ValidatorClassNameTrait;
+use Yiisoft\Validator\Rule\HandlerClassNameTrait;
 use Yiisoft\Validator\RuleInterface;
 
 /**
@@ -20,7 +20,7 @@ use Yiisoft\Validator\RuleInterface;
 final class Count implements RuleInterface
 {
     use RuleNameTrait;
-    use ValidatorClassNameTrait;
+    use HandlerClassNameTrait;
 
     public function __construct(
         /**

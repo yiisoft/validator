@@ -9,7 +9,7 @@ use Closure;
 use InvalidArgumentException;
 use RuntimeException;
 use Yiisoft\Validator\Rule\RuleNameTrait;
-use Yiisoft\Validator\Rule\ValidatorClassNameTrait;
+use Yiisoft\Validator\Rule\HandlerClassNameTrait;
 use Yiisoft\Validator\RuleInterface;
 
 /**
@@ -29,7 +29,7 @@ use Yiisoft\Validator\RuleInterface;
 final class CompareTo implements RuleInterface
 {
     use RuleNameTrait;
-    use ValidatorClassNameTrait;
+    use HandlerClassNameTrait;
 
     /**
      * Constant for specifying the comparison as string values.
