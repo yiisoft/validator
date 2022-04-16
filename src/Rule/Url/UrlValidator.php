@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Url;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
 use function strlen;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 /**
  * Validates that the value is a valid HTTP or HTTPS URL.
@@ -21,6 +23,10 @@ final class UrlValidator implements RuleValidatorInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof Url) {
+            throw new UnexpectedRuleException(Url::class, $rule);
+        }
+
         $result = new Result();
 
         // make sure the length is limited to avoid DOS attacks

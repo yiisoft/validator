@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Boolean;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 /**
  * Checks if the value is a boolean value or a value corresponding to it.
@@ -16,6 +18,10 @@ final class BooleanValidator implements RuleValidatorInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof Boolean) {
+            throw new UnexpectedRuleException(Boolean::class, $rule);
+        }
+
         if ($rule->strict) {
             $valid = $value === $rule->trueValue || $value === $rule->falseValue;
         } else {

@@ -6,9 +6,11 @@ namespace Yiisoft\Validator\Rule\Each;
 
 use InvalidArgumentException;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.
@@ -17,6 +19,10 @@ final class EachValidator implements RuleValidatorInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof Each) {
+            throw new UnexpectedRuleException(Each::class, $rule);
+        }
+
         if ($rule->rules === null) {
             throw new InvalidArgumentException('Rules are required.');
         }

@@ -25,9 +25,9 @@ use Yiisoft\Validator\Rule\Subset\SubsetValidator;
 use Yiisoft\Validator\Rule\Url\UrlValidator;
 use Yiisoft\Validator\Validator;
 
-class FakeValidatorFactory
+final class FakeValidatorFactory
 {
-    public static function make()
+    public static function make(): Validator
     {
         return new Validator(
             new SimpleContainer([

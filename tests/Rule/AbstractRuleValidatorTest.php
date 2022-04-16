@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
@@ -46,6 +48,12 @@ abstract class AbstractRuleValidatorTest extends TestCase
 
         $this->assertFalse($result->isValid(), print_r($result->getErrors(), true));
         $this->assertEquals($expectedErrorMessages, $errors);
+    }
+
+    public function testDifferentRule(): void
+    {
+        $this->expectException(UnexpectedRuleException::class);
+        $this->validate('value', new stdClass());
     }
 
     protected function validate(mixed $value, object $config, ValidationContext $context = null): Result

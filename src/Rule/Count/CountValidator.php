@@ -6,10 +6,12 @@ namespace Yiisoft\Validator\Rule\Count;
 
 use Countable;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use function count;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 /**
  * Validates that the value contains certain number of items. Can be applied to arrays or classes implementing
@@ -19,6 +21,10 @@ final class CountValidator implements RuleValidatorInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof Count) {
+            throw new UnexpectedRuleException(Count::class, $rule);
+        }
+
         $result = new Result();
 
         if (!is_countable($value)) {

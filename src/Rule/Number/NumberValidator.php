@@ -6,9 +6,11 @@ namespace Yiisoft\Validator\Rule\Number;
 
 use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 /**
  * Validates that the value is a number.
@@ -21,6 +23,10 @@ final class NumberValidator implements RuleValidatorInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof Number) {
+            throw new UnexpectedRuleException(Number::class, $rule);
+        }
+
         $result = new Result();
 
         if (is_bool($value) || !is_scalar($value)) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule\AtLeast;
 
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\EmptyCheckTrait;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
@@ -19,6 +20,10 @@ final class AtLeastValidator implements RuleValidatorInterface
 
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof AtLeast) {
+            throw new UnexpectedRuleException(AtLeast::class, $rule);
+        }
+
         $filledCount = 0;
 
         foreach ($rule->attributes as $attribute) {

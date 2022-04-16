@@ -6,9 +6,11 @@ namespace Yiisoft\Validator\Rule\InRange;
 
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 /**
  * Validates that the value is among a list of values.
@@ -20,6 +22,10 @@ final class InRangeValidator implements RuleValidatorInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof InRange) {
+            throw new UnexpectedRuleException(InRange::class, $rule);
+        }
+
         $result = new Result();
 
         if ($rule->skipOnEmpty && $value === null) {

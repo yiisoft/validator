@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Json;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 /**
  * Validates that the value is a valid json.
@@ -17,6 +19,10 @@ final class JsonValidator implements RuleValidatorInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof Json) {
+            throw new UnexpectedRuleException(Json::class, $rule);
+        }
+
         $result = new Result();
 
         if (!$this->isValidJson($value)) {

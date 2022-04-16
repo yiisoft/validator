@@ -6,14 +6,20 @@ namespace Yiisoft\Validator\Rule\Callback;
 
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 final class CallbackValidator implements RuleValidatorInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof Callback) {
+            throw new UnexpectedRuleException(Callback::class, $rule);
+        }
+
         $callback = $rule->callback;
         $callbackResult = $callback($value, $context);
 

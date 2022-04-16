@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Email;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
 use function strlen;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 /**
  * Validates that the value is a valid email address.
@@ -18,6 +20,10 @@ final class EmailValidator implements RuleValidatorInterface
 {
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof Email) {
+            throw new UnexpectedRuleException(Email::class, $rule);
+        }
+
         $originalValue = $value;
         $result = new Result();
 

@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\CompareTo;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 /**
  * Compares the specified value with another value.
@@ -41,6 +43,10 @@ final class CompareToValidator implements RuleValidatorInterface
 
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof CompareTo) {
+            throw new UnexpectedRuleException(CompareTo::class, $rule);
+        }
+
         $result = new Result();
 
         if (!$this->compareValues($rule->operator, $rule->type, $value, $rule->compareValue)) {

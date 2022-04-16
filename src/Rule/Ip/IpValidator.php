@@ -8,10 +8,12 @@ use InvalidArgumentException;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast\AtLeast;
 use Yiisoft\Validator\Rule\RuleValidatorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 /**
  * Checks if the value is a valid IPv4/IPv6 address or subnet.
@@ -30,6 +32,10 @@ final class IpValidator implements RuleValidatorInterface
 
     public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof Ip) {
+            throw new UnexpectedRuleException(Ip::class, $rule);
+        }
+
         if (!$rule->allowIpv4 && !$rule->allowIpv6) {
             throw new RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time.');
         }
