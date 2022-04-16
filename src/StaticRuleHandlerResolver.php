@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub;
+namespace Yiisoft\Validator;
 
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
-use Yiisoft\Validator\RuleHandlerResolverInterface;
-use Yiisoft\Validator\RuleInterface;
 
 final class StaticRuleHandlerResolver implements RuleHandlerResolverInterface
 {
