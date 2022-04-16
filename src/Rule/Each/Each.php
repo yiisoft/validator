@@ -21,7 +21,7 @@ final class Each implements RuleInterface
 
     public function __construct(
         /**
-         * @var iterable<RuleInterface|RuleInterface[]>
+         * @var iterable<RuleInterface>
          */
         public iterable $rules = [],
         public string $incorrectInputMessage = 'Value should be array or iterable.',
