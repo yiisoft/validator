@@ -20,8 +20,8 @@ use Yiisoft\Validator\RuleInterface;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Number implements RuleInterface
 {
-    use RuleNameTrait;
     use HandlerClassNameTrait;
+    use RuleNameTrait;
 
     public function __construct(
         /**

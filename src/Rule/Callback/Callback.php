@@ -11,8 +11,8 @@ use Yiisoft\Validator\RuleInterface;
 
 final class Callback implements RuleInterface
 {
-    use RuleNameTrait;
     use HandlerClassNameTrait;
+    use RuleNameTrait;
 
     public function __construct(
         /**

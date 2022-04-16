@@ -18,8 +18,8 @@ use function function_exists;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Email implements RuleInterface
 {
-    use RuleNameTrait;
     use HandlerClassNameTrait;
+    use RuleNameTrait;
 
     public function __construct(
         /**

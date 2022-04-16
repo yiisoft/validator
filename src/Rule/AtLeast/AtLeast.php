@@ -16,8 +16,8 @@ use Yiisoft\Validator\RuleInterface;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class AtLeast implements RuleInterface
 {
-    use RuleNameTrait;
     use HandlerClassNameTrait;
+    use RuleNameTrait;
 
     public function __construct(
         /**

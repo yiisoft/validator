@@ -22,8 +22,8 @@ use function strlen;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Ip implements RuleInterface
 {
-    use RuleNameTrait;
     use HandlerClassNameTrait;
+    use RuleNameTrait;
 
     /**
      * Negation char.

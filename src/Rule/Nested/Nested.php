@@ -42,8 +42,8 @@ use function is_array;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Nested implements RuleInterface
 {
-    use RuleNameTrait;
     use HandlerClassNameTrait;
+    use RuleNameTrait;
 
     public function __construct(
         /**

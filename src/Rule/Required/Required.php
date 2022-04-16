@@ -16,8 +16,8 @@ use Yiisoft\Validator\RuleInterface;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Required implements RuleInterface
 {
-    use RuleNameTrait;
     use HandlerClassNameTrait;
+    use RuleNameTrait;
 
     public function __construct(
         public string $message = 'Value cannot be blank.',

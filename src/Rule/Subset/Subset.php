@@ -13,8 +13,8 @@ use Yiisoft\Validator\RuleInterface;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Subset implements RuleInterface
 {
-    use RuleNameTrait;
     use HandlerClassNameTrait;
+    use RuleNameTrait;
 
     public function __construct(
         public iterable $values,
