@@ -14,7 +14,6 @@ use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class UrlHandlerTest extends AbstractRuleValidatorTest
 {
-
     public function failedValidationProvider(): array
     {
         $rule = new Url();
