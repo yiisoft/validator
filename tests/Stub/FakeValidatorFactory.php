@@ -21,7 +21,7 @@ use Yiisoft\Validator\Rule\Number\NumberHandler;
 use Yiisoft\Validator\Rule\Regex\RegexHandler;
 use Yiisoft\Validator\Rule\Required\RequiredHandler;
 use Yiisoft\Validator\Rule\Subset\SubsetHandler;
-use Yiisoft\Validator\Rule\Url\UrlHandler;
+use Yiisoft\Validator\SimpleRuleHandler;
 use Yiisoft\Validator\StaticRuleHandlerResolver;
 use Yiisoft\Validator\Validator;
 
@@ -46,8 +46,8 @@ final class FakeValidatorFactory
             RegexHandler::class => new RegexHandler(),
             RequiredHandler::class => new RequiredHandler(),
             SubsetHandler::class => new SubsetHandler(),
-            UrlHandler::class => new UrlHandler(),
             NestedHandler::class => new NestedHandler(),
+            SimpleRuleHandler::class => new SimpleRuleHandler(),
         ]));
     }
 }

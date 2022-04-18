@@ -2,14 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Rule\Url;
+namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
 use RuntimeException;
-use Yiisoft\Validator\Rule\RuleNameTrait;
-use Yiisoft\Validator\Rule\HandlerClassNameTrait;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\SimpleRule;
+use Yiisoft\Validator\ValidationContext;
+
+use function is_string;
+use function strlen;
 
 /**
  * Validates that the value is a valid HTTP or HTTPS URL.
@@ -18,9 +21,8 @@ use Yiisoft\Validator\RuleInterface;
  * It does not check the remaining parts of a URL.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Url implements RuleInterface
+final class Url extends SimpleRule
 {
-    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(
@@ -76,5 +78,45 @@ final class Url implements RuleInterface
             'skipOnEmpty' => $this->skipOnEmpty,
             'skipOnError' => $this->skipOnError,
         ];
+    }
+
+    public function validate(mixed $value, ?ValidationContext $context = null): Result
+    {
+        $result = new Result();
+
+        // make sure the length is limited to avoid DOS attacks
+        if (is_string($value) && strlen($value) < 2000) {
+            if ($this->enableIDN) {
+                $value = $this->convertIdn($value);
+            }
+
+            if (preg_match($this->getPattern(), $value)) {
+                return $result;
+            }
+        }
+
+        $result->addError($this->message);
+
+        return $result;
+    }
+
+    private function idnToAscii(string $idn): string
+    {
+        $result = idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
+
+        return $result === false ? '' : $result;
+    }
+
+    private function convertIdn(string $value): string
+    {
+        if (!str_contains($value, '://')) {
+            return $this->idnToAscii($value);
+        }
+
+        return preg_replace_callback(
+            '/:\/\/([^\/]+)/',
+            fn ($matches) => '://' . $this->idnToAscii($matches[1]),
+            $value
+        );
     }
 }

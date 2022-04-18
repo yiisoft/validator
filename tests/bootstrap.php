@@ -11,7 +11,7 @@ namespace Yiisoft\Validator\Tests {
     }
 }
 
-namespace Yiisoft\Validator\Rule\Url {
+namespace Yiisoft\Validator\Rule {
     use Yiisoft\Validator\Tests\FunctionExists;
 
     function function_exists(string $function): bool

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Url;
 
-use Yiisoft\Validator\Rule\Url\Url;
+use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\FunctionExists;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;

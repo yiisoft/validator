@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Stub;
 use Yiisoft\Validator\Rule\GroupRule\GroupRule;
 use Yiisoft\Validator\Rule\HasLength\HasLength;
 use Yiisoft\Validator\Rule\Required\Required;
-use Yiisoft\Validator\Rule\Url\Url;
+use Yiisoft\Validator\Rule\Url;
 
 final class CustomUrlRule extends GroupRule
 {

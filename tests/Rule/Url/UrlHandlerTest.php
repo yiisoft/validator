@@ -7,18 +7,13 @@ namespace Yiisoft\Validator\Tests\Rule\Url;
 use RuntimeException;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
-use Yiisoft\Validator\Rule\Url\Url;
-use Yiisoft\Validator\Rule\Url\UrlHandler;
+use Yiisoft\Validator\Rule\Url;
+use Yiisoft\Validator\SimpleRuleHandler;
 use Yiisoft\Validator\Tests\FunctionExists;
 use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class UrlHandlerTest extends AbstractRuleValidatorTest
 {
-    protected function setUp(): void
-    {
-        FunctionExists::$isIdnFunctionExists = true;
-        parent::setUp();
-    }
 
     public function failedValidationProvider(): array
     {
@@ -98,6 +93,6 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
 
     protected function getValidator(): RuleHandlerInterface
     {
-        return new UrlHandler();
+        return new SimpleRuleHandler();
     }
 }
