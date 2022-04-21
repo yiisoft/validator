@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 final class CompareToTest extends AbstractRuleTest
 {

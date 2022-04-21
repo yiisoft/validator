@@ -9,7 +9,6 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\RegexHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class RegexHandlerTest extends AbstractRuleValidatorTest
 {

@@ -8,7 +8,6 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\RequiredHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class RequiredHandlerTest extends AbstractRuleValidatorTest
 {

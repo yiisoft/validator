@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 final class CountTest extends AbstractRuleTest
 {

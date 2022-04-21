@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 final class CallbackTest extends AbstractRuleTest
 {

@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\Subset;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 final class SubsetTest extends AbstractRuleTest
 {

@@ -9,7 +9,6 @@ use stdClass;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 use Yiisoft\Validator\Tests\Stub\Rule;
 
 final class NestedTest extends AbstractRuleTest

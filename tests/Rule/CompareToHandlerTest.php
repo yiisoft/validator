@@ -8,7 +8,6 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\CompareToHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class CompareToHandlerTest extends AbstractRuleValidatorTest
 {

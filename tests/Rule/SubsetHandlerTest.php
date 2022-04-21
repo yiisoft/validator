@@ -9,7 +9,6 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Subset;
 use Yiisoft\Validator\Rule\SubsetHandler;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class SubsetHandlerTest extends AbstractRuleValidatorTest
 {

@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 final class EachTest extends AbstractRuleTest
 {

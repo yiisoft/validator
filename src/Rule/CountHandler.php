@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Countable;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use function count;

@@ -8,7 +8,6 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\GroupRuleHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\FunctionExists;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
 final class GroupRuleHandlerTest extends AbstractRuleValidatorTest

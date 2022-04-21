@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Ip;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 final class IpTest extends AbstractRuleTest
 {

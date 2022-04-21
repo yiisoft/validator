@@ -10,7 +10,6 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\CountHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class CountHandlerTest extends AbstractRuleValidatorTest
 {

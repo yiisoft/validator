@@ -10,7 +10,6 @@ use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
 use Yiisoft\Validator\Tests\FunctionExists;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class UrlHandlerTest extends AbstractRuleValidatorTest
 {

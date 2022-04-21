@@ -8,7 +8,6 @@ use stdClass;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\HasLengthHandler;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleValidatorTest;
 
 final class HasLengthHandlerTest extends AbstractRuleValidatorTest
 {

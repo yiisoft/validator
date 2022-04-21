@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\FunctionExists;
-use Yiisoft\Validator\Tests\Rule\AbstractRuleTest;
 
 final class UrlTest extends AbstractRuleTest
 {
