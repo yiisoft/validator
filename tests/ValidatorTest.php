@@ -7,10 +7,10 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Boolean\Boolean;
-use Yiisoft\Validator\Rule\CompareTo\CompareTo;
-use Yiisoft\Validator\Rule\Number\Number;
-use Yiisoft\Validator\Rule\Required\Required;
+use Yiisoft\Validator\Rule\Boolean;
+use Yiisoft\Validator\Rule\CompareTo;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 

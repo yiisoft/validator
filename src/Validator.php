@@ -10,7 +10,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ScalarDataSet;
-use Yiisoft\Validator\Rule\Callback\Callback;
+use Yiisoft\Validator\Rule\Callback;
 use function is_array;
 use function is_object;
 

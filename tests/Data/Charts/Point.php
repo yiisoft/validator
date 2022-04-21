@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Data\Charts;
 
 use Yiisoft\Validator\Attribute\HasOne;
-use Yiisoft\Validator\Rule\Count\Count;
-use Yiisoft\Validator\Rule\Each\Each;
-use Yiisoft\Validator\Rule\Nested\Nested;
-use Yiisoft\Validator\Rule\Number\Number;
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Number;
 
 final class Point
 {

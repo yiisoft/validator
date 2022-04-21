@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Rule\Number\Number;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesDumper;
 
 final class RulesDumperTest extends TestCase
