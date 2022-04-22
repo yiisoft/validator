@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use Countable;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\ValidatorInterface;
 use function count;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 

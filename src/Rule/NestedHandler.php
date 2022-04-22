@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\ValidatorInterface;
 use function is_array;
 use function is_object;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;

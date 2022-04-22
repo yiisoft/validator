@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\EmptyCheckTrait;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
