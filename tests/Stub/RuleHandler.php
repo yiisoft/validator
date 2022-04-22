@@ -8,7 +8,6 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\ValidatorInterface;
 
 final class RuleHandler implements RuleHandlerInterface
 {

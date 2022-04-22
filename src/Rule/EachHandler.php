@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 /**

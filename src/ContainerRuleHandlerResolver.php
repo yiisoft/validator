@@ -6,7 +6,6 @@ namespace Yiisoft\Validator;
 
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Throwable;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
 

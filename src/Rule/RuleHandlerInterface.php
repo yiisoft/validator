@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\ValidatorInterface;
 
 interface RuleHandlerInterface
 {

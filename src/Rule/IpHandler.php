@@ -9,7 +9,6 @@ use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 

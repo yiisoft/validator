@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\ValidatorInterface;
 use function is_string;
 use function strlen;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
