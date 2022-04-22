@@ -8,7 +8,7 @@ use Attribute;
 use Closure;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
 /**
  * Validates that the value is among a list of values.
@@ -17,7 +17,7 @@ use Yiisoft\Validator\RuleInterface;
  * If the {@see InRange::$not} is called, the rule will ensure the value is NOT among the specified range.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class InRange implements RuleInterface
+final class InRange implements ParametrizedRuleInterface
 {
     use HandlerClassNameTrait;
     use RuleNameTrait;

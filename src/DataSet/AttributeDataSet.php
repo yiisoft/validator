@@ -9,6 +9,7 @@ use ReflectionClass;
 use ReflectionException;
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\RuleInterface;
@@ -81,7 +82,7 @@ final class AttributeDataSet implements RulesProviderInterface
             $eachRules = [];
             $attributes = $property->getAttributes();
             foreach ($attributes as $attribute) {
-                if (!is_subclass_of($attribute->getName(), RuleInterface::class)) {
+                if (!is_subclass_of($attribute->getName(), ParametrizedRuleInterface::class)) {
                     continue;
                 }
 

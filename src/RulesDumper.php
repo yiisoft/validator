@@ -57,7 +57,7 @@ final class RulesDumper
         foreach ($rules as $attribute => $rule) {
             if (is_array($rule)) {
                 $result[$attribute] = $this->fetchOptions($rule, $dumpRuleName);
-            } elseif ($rule instanceof RuleInterface) {
+            } elseif ($rule instanceof ParametrizedRuleInterface) {
                 if ($dumpRuleName) {
                     $result[$attribute] = array_merge([$rule->getName()], $rule->getOptions());
                 } else {

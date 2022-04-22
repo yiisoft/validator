@@ -9,14 +9,14 @@ use Closure;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use function function_exists;
 
 /**
  * Validates that the value is a valid email address.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Email implements RuleInterface
+final class Email implements ParametrizedRuleInterface
 {
     use HandlerClassNameTrait;
     use RuleNameTrait;

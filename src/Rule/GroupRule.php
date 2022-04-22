@@ -7,13 +7,13 @@ namespace Yiisoft\Validator\Rule;
 use Closure;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\RulesDumper;
 
 /**
  * Validates a single value for a set of custom rules.
  */
-abstract class GroupRule implements RuleInterface
+abstract class GroupRule implements ParametrizedRuleInterface
 {
     use HandlerClassNameTrait;
     use RuleNameTrait;

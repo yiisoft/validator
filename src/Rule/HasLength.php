@@ -8,7 +8,7 @@ use Attribute;
 use Closure;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
 /**
  * Validates that the value is of certain length.
@@ -16,7 +16,7 @@ use Yiisoft\Validator\RuleInterface;
  * Note, this rule should only be used with strings.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class HasLength implements RuleInterface
+final class HasLength implements ParametrizedRuleInterface
 {
     use HandlerClassNameTrait;
     use RuleNameTrait;

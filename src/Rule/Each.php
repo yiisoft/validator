@@ -8,13 +8,13 @@ use Attribute;
 use Closure;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Each implements RuleInterface
+final class Each implements ParametrizedRuleInterface
 {
     use HandlerClassNameTrait;
     use RuleNameTrait;
@@ -36,7 +36,7 @@ final class Each implements RuleInterface
     {
         $arrayOfRules = [];
         foreach ($this->rules as $rule) {
-            if ($rule instanceof RuleInterface) {
+            if ($rule instanceof ParametrizedRuleInterface) {
                 $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
             } else {
                 $arrayOfRules[] = [get_class($rule)];

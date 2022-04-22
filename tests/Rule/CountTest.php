@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Count;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
 final class CountTest extends AbstractRuleTest
 {
@@ -77,7 +77,7 @@ final class CountTest extends AbstractRuleTest
         new Count();
     }
 
-    protected function getRule(): RuleInterface
+    protected function getRule(): ParametrizedRuleInterface
     {
         return new Count();
     }

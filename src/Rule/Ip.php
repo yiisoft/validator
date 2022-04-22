@@ -10,7 +10,7 @@ use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use function array_key_exists;
 use function strlen;
 
@@ -20,7 +20,7 @@ use function strlen;
  * It also may change the value if normalization of IPv6 expansion is enabled.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Ip implements RuleInterface
+final class Ip implements ParametrizedRuleInterface
 {
     use HandlerClassNameTrait;
     use RuleNameTrait;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\Json;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
 final class JsonTest extends AbstractRuleTest
 {
@@ -25,7 +25,7 @@ final class JsonTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): RuleInterface
+    protected function getRule(): ParametrizedRuleInterface
     {
         return new Json();
     }

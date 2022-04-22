@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\InRange;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
 final class InRangeTest extends AbstractRuleTest
 {
@@ -54,7 +54,7 @@ final class InRangeTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): RuleInterface
+    protected function getRule(): ParametrizedRuleInterface
     {
         return new InRange([]);
     }

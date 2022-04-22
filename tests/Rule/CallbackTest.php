@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\Callback;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
 final class CallbackTest extends AbstractRuleTest
 {
@@ -30,7 +30,7 @@ final class CallbackTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): RuleInterface
+    protected function getRule(): ParametrizedRuleInterface
     {
         return new AtLeast([]);
     }

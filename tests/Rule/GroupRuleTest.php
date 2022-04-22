@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Tests\FunctionExists;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
@@ -65,7 +65,7 @@ final class GroupRuleTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): RuleInterface
+    protected function getRule(): ParametrizedRuleInterface
     {
         return new CustomUrlRule();
     }

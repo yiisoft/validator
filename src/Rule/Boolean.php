@@ -8,13 +8,13 @@ use Attribute;
 use Closure;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
 /**
  * Checks if the value is a boolean value or a value corresponding to it.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Boolean implements RuleInterface
+final class Boolean implements ParametrizedRuleInterface
 {
     use HandlerClassNameTrait;
     use RuleNameTrait;

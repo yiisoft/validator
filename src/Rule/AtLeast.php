@@ -8,13 +8,13 @@ use Attribute;
 use Closure;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
 /**
  * Checks if at least {@see AtLeast::$min} of many attributes are filled.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class AtLeast implements RuleInterface
+final class AtLeast implements ParametrizedRuleInterface
 {
     use HandlerClassNameTrait;
     use RuleNameTrait;

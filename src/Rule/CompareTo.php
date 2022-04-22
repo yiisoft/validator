@@ -10,7 +10,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
 /**
  * Compares the specified value with another value.
@@ -26,7 +26,7 @@ use Yiisoft\Validator\RuleInterface;
  * {@see CompareTo::TYPE_NUMBER} to enable numeric comparison.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class CompareTo implements RuleInterface
+final class CompareTo implements ParametrizedRuleInterface
 {
     use HandlerClassNameTrait;
     use RuleNameTrait;

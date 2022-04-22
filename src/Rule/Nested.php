@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use Traversable;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
 use function is_array;
@@ -40,7 +41,7 @@ use function is_array;
  * ```
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Nested implements RuleInterface
+final class Nested implements ParametrizedRuleInterface
 {
     use HandlerClassNameTrait;
     use RuleNameTrait;
