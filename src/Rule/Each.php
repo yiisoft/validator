@@ -9,6 +9,7 @@ use Closure;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\RuleInterface;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.
