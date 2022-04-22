@@ -525,9 +525,9 @@ namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\RuleInterface;
 
-final class Pi extends Rule
+final class Pi implements RuleInterface
 {
     public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
     {
