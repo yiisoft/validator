@@ -60,7 +60,7 @@ final class CompareTo implements ParametrizedRuleInterface
         /**
          * @var mixed the constant value to be compared with.
          */
-        public          $compareValue,
+        public $compareValue,
         /**
          * @var string|null user-defined error message
          */

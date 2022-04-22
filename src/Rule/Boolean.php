@@ -23,11 +23,11 @@ final class Boolean implements ParametrizedRuleInterface
         /**
          * @var mixed the value representing true status. Defaults to '1'.
          */
-        public          $trueValue = '1',
+        public $trueValue = '1',
         /**
          * @var mixed the value representing false status. Defaults to '0'.
          */
-        public          $falseValue = '0',
+        public $falseValue = '0',
         /**
          * @var bool whether the comparison to {@see $trueValue} and {@see $falseValue} is strict.
          * When this is `true`, the value and type must both match those of {@see $trueValue} or
