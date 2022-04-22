@@ -17,7 +17,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class CountHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Count) {
             throw new UnexpectedRuleException(Count::class, $rule);

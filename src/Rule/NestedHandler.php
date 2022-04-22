@@ -39,7 +39,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class NestedHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Nested) {
             throw new UnexpectedRuleException(Nested::class, $rule);
@@ -68,7 +68,7 @@ final class NestedHandler implements RuleHandlerInterface
             $rules = is_array($rules) ? $rules : [$rules];
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
 
-            $itemResult = $validator->validate($validatedValue, $rules);
+            $itemResult = $context->getValidator()->validate($validatedValue, $rules);
 
             if ($itemResult->isValid()) {
                 continue;

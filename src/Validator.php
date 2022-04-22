@@ -39,7 +39,7 @@ final class Validator implements ValidatorInterface
             $rules = $data->getRules();
         }
 
-        $context = new ValidationContext($data);
+        $context = new ValidationContext($this, $data);
         $compoundResult = new Result();
 
         $results = [];
@@ -113,7 +113,7 @@ final class Validator implements ValidatorInterface
         $compoundResult = new Result();
         foreach ($rules as $rule) {
             $ruleHandler = $this->ruleHandlerResolver->resolve($rule);
-            $ruleResult = $ruleHandler->validate($value, $rule, $this, $context);
+            $ruleResult = $ruleHandler->validate($value, $rule, $context);
             if ($ruleResult->isValid()) {
                 continue;
             }

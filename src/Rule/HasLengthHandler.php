@@ -17,7 +17,7 @@ use function is_string;
  */
 final class HasLengthHandler implements RuleHandlerInterface
 {
-    public function validate($value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate($value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof HasLength) {
             throw new UnexpectedRuleException(HasLength::class, $rule);

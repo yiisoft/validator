@@ -12,7 +12,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 final class SubsetHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Subset) {
             throw new UnexpectedRuleException(Subset::class, $rule);

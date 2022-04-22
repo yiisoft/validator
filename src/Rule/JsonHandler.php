@@ -15,7 +15,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class JsonHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Json) {
             throw new UnexpectedRuleException(Json::class, $rule);

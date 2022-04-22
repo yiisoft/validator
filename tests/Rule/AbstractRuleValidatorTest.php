@@ -56,12 +56,13 @@ abstract class AbstractRuleValidatorTest extends TestCase
         $this->validate('value', new stdClass());
     }
 
-    protected function validate(mixed $value, object $config, ValidationContext $context = null): Result
+    protected function validate(mixed $value, object $config): Result
     {
         $ruleValidator = $this->getValidator();
         $validator = FakeValidatorFactory::make();
+        $context = new ValidationContext($validator, null);
 
-        return $ruleValidator->validate($value, $config, $validator, $context);
+        return $ruleValidator->validate($value, $config, $context);
     }
 
     abstract public function customErrorMessagesProvider(): array;

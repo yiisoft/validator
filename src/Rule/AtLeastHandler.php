@@ -17,7 +17,7 @@ final class AtLeastHandler implements RuleHandlerInterface
 {
     use EmptyCheckTrait;
 
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof AtLeast) {
             throw new UnexpectedRuleException(AtLeast::class, $rule);

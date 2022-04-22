@@ -16,7 +16,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class EmailHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Email) {
             throw new UnexpectedRuleException(Email::class, $rule);

@@ -18,5 +18,5 @@ interface RuleHandlerInterface
      *
      * @return Result
      */
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result;
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result;
 }

@@ -17,7 +17,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class RegexHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Regex) {
             throw new UnexpectedRuleException(Regex::class, $rule);

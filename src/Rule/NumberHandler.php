@@ -19,7 +19,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class NumberHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Number) {
             throw new UnexpectedRuleException(Number::class, $rule);

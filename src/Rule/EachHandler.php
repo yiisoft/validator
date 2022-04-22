@@ -16,7 +16,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class EachHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Each) {
             throw new UnexpectedRuleException(Each::class, $rule);
@@ -41,7 +41,7 @@ final class EachHandler implements RuleHandlerInterface
             /**
              * @psalm-suppress InvalidArgument
              */
-            $itemResult = $validator->validate($item, [$index => $rules]);
+            $itemResult = $context->getValidator()->validate($item, [$index => $rules]);
             if ($itemResult->isValid()) {
                 continue;
             }

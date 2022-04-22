@@ -18,7 +18,7 @@ final class RequiredHandler implements RuleHandlerInterface
 {
     use EmptyCheckTrait;
 
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Required) {
             throw new UnexpectedRuleException(Required::class, $rule);

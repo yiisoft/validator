@@ -14,7 +14,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class BooleanHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Boolean) {
             throw new UnexpectedRuleException(Boolean::class, $rule);

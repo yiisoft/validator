@@ -28,7 +28,7 @@ final class IpHandler implements RuleHandlerInterface
      */
     private const NEGATION_CHAR = '!';
 
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Ip) {
             throw new UnexpectedRuleException(Ip::class, $rule);

@@ -39,7 +39,7 @@ final class CompareToHandler implements RuleHandlerInterface
      */
     public const TYPE_NUMBER = 'number';
 
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof CompareTo) {
             throw new UnexpectedRuleException(CompareTo::class, $rule);

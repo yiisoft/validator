@@ -14,14 +14,14 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 class GroupRuleHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof GroupRule) {
             throw new UnexpectedRuleException(GroupRule::class, $rule);
         }
 
         $result = new Result();
-        if (!$validator->validate($value, $rule->getRuleSet())->isValid()) {
+        if (!$context->getValidator()->validate($value, $rule->getRuleSet())->isValid()) {
             $result->addError($rule->message);
         }
 
