@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use InvalidArgumentException;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
