@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Throwable;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
@@ -22,7 +23,7 @@ final class ContainerRuleHandlerResolver implements RuleHandlerResolverInterface
     {
         try {
             return $this->container->get($rule->getHandlerClassName());
-        } catch (Throwable $e) {
+        } catch (NotFoundExceptionInterface $e) {
             throw new RuleHandlerNotFoundException($rule, $e);
         }
     }
