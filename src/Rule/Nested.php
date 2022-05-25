@@ -83,8 +83,6 @@ final class Nested implements ParametrizedRuleInterface
 
     public function getOptions(): array
     {
-        $dumper = new RulesDumper();
-
-        return $dumper->asArray($this->rules, false);
+        return (new RulesDumper())->asArray($this->rules);
     }
 }

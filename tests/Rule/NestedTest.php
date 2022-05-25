@@ -20,6 +20,7 @@ final class NestedTest extends AbstractRuleTest
                 new Nested([new Number(integerPattern: '/1/', numberPattern: '/1/')]),
                 [
                     [
+                        'number',
                         'asInteger' => false,
                         'min' => null,
                         'max' => null,
@@ -45,6 +46,7 @@ final class NestedTest extends AbstractRuleTest
                 new Nested(['user.age' => new Number(integerPattern: '/1/', numberPattern: '/1/')]),
                 [
                     'user.age' => [
+                        'number',
                         'asInteger' => false,
                         'min' => null,
                         'max' => null,
@@ -72,8 +74,8 @@ final class NestedTest extends AbstractRuleTest
                     'author.age' => new Rule('author-age', ['key' => 'age']),
                 ]),
                 [
-                    'author.name' => ['key' => 'name'],
-                    'author.age' => ['key' => 'age'],
+                    'author.name' => ['author-name', 'key' => 'name'],
+                    'author.age' => ['author-age', 'key' => 'age'],
                 ],
             ],
             [
@@ -85,8 +87,8 @@ final class NestedTest extends AbstractRuleTest
                 ]),
                 [
                     'author' => [
-                        'name' => ['key' => 'name'],
-                        'age' => ['key' => 'age'],
+                        'name' => ['author-name', 'key' => 'name'],
+                        'age' => ['author-age', 'key' => 'age'],
                     ],
                 ],
             ],

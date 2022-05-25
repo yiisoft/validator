@@ -46,27 +46,22 @@ final class RulesDumper
      *
      * @return array
      */
-    public function asArray(iterable $ruleSetMap, bool $dumpRuleName): array
+    public function asArray(iterable $ruleSetMap): array
     {
-        return $this->fetchOptions($ruleSetMap, $dumpRuleName);
+        return $this->fetchOptions($ruleSetMap);
     }
 
-    private function fetchOptions(iterable $rules, bool $dumpRuleName): array
+    private function fetchOptions(iterable $rules): array
     {
         $result = [];
         foreach ($rules as $attribute => $rule) {
             if (is_array($rule)) {
-                $result[$attribute] = $this->fetchOptions($rule, $dumpRuleName);
+                $result[$attribute] = $this->fetchOptions($rule);
             } elseif ($rule instanceof ParametrizedRuleInterface) {
-                if ($dumpRuleName) {
                     $result[$attribute] = array_merge([$rule->getName()], $rule->getOptions());
-                } else {
-                    $result[$attribute] = $rule->getOptions();
-                }
+            } elseif ($rule instanceof RuleInterface) {
+                    $result[$attribute] = [$rule->getName()];
             } else {
-                // or ?
-                // $result[$attribute] = [get_class($rule)];
-
                 throw new InvalidArgumentException(sprintf(
                     'Rules should be an array of rules that implements %s.',
                     RuleInterface::class,
