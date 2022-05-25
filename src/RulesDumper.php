@@ -58,9 +58,9 @@ final class RulesDumper
             if (is_array($rule)) {
                 $result[$attribute] = $this->fetchOptions($rule);
             } elseif ($rule instanceof ParametrizedRuleInterface) {
-                    $result[$attribute] = array_merge([$rule->getName()], $rule->getOptions());
+                $result[$attribute] = array_merge([$rule->getName()], $rule->getOptions());
             } elseif ($rule instanceof RuleInterface) {
-                    $result[$attribute] = [$rule->getName()];
+                $result[$attribute] = [$rule->getName()];
             } else {
                 throw new InvalidArgumentException(sprintf(
                     'Rules should be an array of rules that implements %s.',
