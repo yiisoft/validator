@@ -11,14 +11,6 @@ namespace Yiisoft\Validator;
 interface ParametrizedRuleInterface extends RuleInterface
 {
     /**
-     * Get name of the rule to be used when rule is converted to array.
-     * By default, it returns base name of the class, first letter in lowercase.
-     *
-     * @return string
-     */
-    public function getName(): string;
-
-    /**
      * Returns rule options as array.
      *
      * @return array

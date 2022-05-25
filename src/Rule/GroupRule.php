@@ -33,8 +33,6 @@ abstract class GroupRule implements ParametrizedRuleInterface
 
     public function getOptions(): array
     {
-        $dumper = new RulesDumper();
-
-        return $dumper->asArray($this->getRuleSet(), true);
+        return (new RulesDumper())->asArray($this->getRuleSet());
     }
 }
