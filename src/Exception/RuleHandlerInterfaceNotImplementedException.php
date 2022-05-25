@@ -6,16 +6,17 @@ namespace Yiisoft\Validator\Exception;
 
 use RuntimeException;
 use Throwable;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
 
-final class RuleHandlerNotFoundException extends RuntimeException
+final class RuleHandlerInterfaceNotImplementedException extends RuntimeException
 {
     public function __construct(string $name, ?Throwable $previous = null)
     {
         parent::__construct(
             sprintf(
-                'Handler was not found for "%s" rule or unresolved "%s" class.',
+                'Handler "%s" should implement "%s".',
                 $name,
-                $name
+                RuleHandlerInterface::class
             ),
             0,
             $previous

@@ -16,8 +16,8 @@ final class StaticRuleHandlerResolver implements RuleHandlerResolverInterface
         $this->validators = $validators;
     }
 
-    public function resolve(RuleInterface $rule): RuleHandlerInterface
+    public function resolve(string $className): RuleHandlerInterface
     {
-        return $this->validators[$rule->getHandlerClassName()] ?? throw new RuleHandlerNotFoundException($rule);
+        return $this->validators[$className] ?? throw new RuleHandlerNotFoundException($className);
     }
 }

@@ -19,7 +19,7 @@ trait PreValidateTrait
         bool $skipOnEmpty,
         bool $skipOnError,
         Closure $when,
-    ) {
+    ): ?Result {
         if ($skipOnEmpty && $this->isEmpty($value)) {
             return new Result();
         }

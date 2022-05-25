@@ -8,5 +8,5 @@ use Yiisoft\Validator\Rule\RuleHandlerInterface;
 
 interface RuleHandlerResolverInterface
 {
-    public function resolve(RuleInterface $rule): RuleHandlerInterface;
+    public function resolve(string $className): RuleHandlerInterface;
 }

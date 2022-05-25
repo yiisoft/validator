@@ -33,13 +33,13 @@ final class Number implements ParametrizedRuleInterface
          *
          * @see tooSmallMessage for the customized message used when the number is too small.
          */
-        public           $min = null,
+        public $min = null,
         /**
          * @var float|int upper limit of the number. Defaults to null, meaning no upper limit.
          *
          * @see tooBigMessage for the customized message used when the number is too big.
          */
-        public           $max = null,
+        public $max = null,
         /**
          * @var string user-defined error message used when the value is smaller than {@link $min}.
          */
