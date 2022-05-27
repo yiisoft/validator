@@ -60,7 +60,7 @@ final class Required implements ParametrizedRuleInterface
         return $this->when;
     }
 
-    #[ArrayShape(['message' => "string[]", 'skipOnEmpty' => "bool", 'skipOnError' => "bool"])]
+    #[ArrayShape(['message' => 'string[]', 'skipOnEmpty' => 'bool', 'skipOnError' => 'bool'])]
     public function getOptions(): array
     {
         return [

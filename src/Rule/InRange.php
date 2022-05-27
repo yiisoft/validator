@@ -98,12 +98,12 @@ final class InRange implements ParametrizedRuleInterface
     }
 
     #[ArrayShape([
-        'range' => "iterable",
-        'strict' => "bool",
-        'not' => "bool",
-        'message' => "string[]",
-        'skipOnEmpty' => "bool",
-        'skipOnError' => "bool"
+        'range' => 'iterable',
+        'strict' => 'bool',
+        'not' => 'bool',
+        'message' => 'string[]',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
     ])]
     public function getOptions(): array
     {

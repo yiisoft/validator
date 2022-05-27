@@ -71,17 +71,13 @@ final class Number implements ParametrizedRuleInterface
         return $this->asInteger;
     }
 
-    /**
-     * @return null
-     */
+
     public function getMin()
     {
         return $this->min;
     }
 
-    /**
-     * @return null
-     */
+
     public function getMax()
     {
         return $this->max;

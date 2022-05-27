@@ -99,12 +99,12 @@ final class Boolean implements ParametrizedRuleInterface
     }
 
     #[ArrayShape([
-        'trueValue' => "string",
-        'falseValue' => "string",
-        'strict' => "bool",
-        'message' => "array",
-        'skipOnEmpty' => "bool",
-        'skipOnError' => "bool"
+        'trueValue' => 'string',
+        'falseValue' => 'string',
+        'strict' => 'bool',
+        'message' => 'array',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
     ])]
     public function getOptions(): array
     {
