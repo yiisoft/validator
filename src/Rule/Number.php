@@ -72,17 +72,17 @@ final class Number implements ParametrizedRuleInterface
     }
 
     /**
-     * @return null
+     * @return float|int|null
      */
-    public function getMin()
+    public function getMin(): float|int|null
     {
         return $this->min;
     }
 
     /**
-     * @return null
+     * @return float|int|null
      */
-    public function getMax()
+    public function getMax(): float|int|null
     {
         return $this->max;
     }
