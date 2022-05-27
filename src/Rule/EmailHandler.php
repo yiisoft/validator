@@ -34,7 +34,7 @@ final class EmailHandler implements RuleHandlerInterface
             $valid = false;
         } else {
             /** @psalm-var array{name:string,local:string,open:string,domain:string,close:string} $matches */
-            if ($rule->enableIDN) {
+            if ($rule->isEnableIDN()) {
                 $matches['local'] = $this->idnToAscii($matches['local']);
                 $matches['domain'] = $this->idnToAscii($matches['domain']);
                 $value = implode([
@@ -60,28 +60,28 @@ final class EmailHandler implements RuleHandlerInterface
                 // http://www.rfc-editor.org/errata_search.php?eid=1690
                 $valid = false;
             } else {
-                $valid = preg_match($rule->pattern, $value) || ($rule->allowName && preg_match(
-                    $rule->fullPattern,
+                $valid = preg_match($rule->getPattern(), $value) || ($rule->isAllowName() && preg_match(
+                    $rule->getFullPattern(),
                     $value
                 ));
-                if ($valid && $rule->checkDNS) {
+                if ($valid && $rule->isCheckDNS()) {
                     $valid = checkdnsrr($matches['domain'] . '.', 'MX') || checkdnsrr($matches['domain'] . '.', 'A');
                 }
             }
         }
 
-        if ($rule->enableIDN && $valid === false) {
-            $valid = (bool) preg_match($rule->idnEmailPattern, $originalValue);
+        if ($valid === false && $rule->isEnableIDN()) {
+            $valid = (bool) preg_match($rule->getIdnEmailPattern(), $originalValue);
         }
 
         if ($valid === false) {
-            $result->addError($rule->message);
+            $result->addError($rule->getMessage());
         }
 
         return $result;
     }
 
-    private function idnToAscii($idn)
+    private function idnToAscii($idn): false|string
     {
         return idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
     }

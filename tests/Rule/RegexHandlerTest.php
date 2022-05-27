@@ -20,14 +20,14 @@ final class RegexHandlerTest extends AbstractRuleValidatorTest
         $ruleNot = new Regex('/a/', not: true);
 
         return [
-            [$rule, ['a', 'b'], [new Error($rule->incorrectInputMessage, [])]],
-            [$ruleNot, ['a', 'b'], [new Error($rule->incorrectInputMessage, [])]],
-            [$rule, null, [new Error($rule->incorrectInputMessage, [])]],
-            [$ruleNot, null, [new Error($rule->incorrectInputMessage, [])]],
-            [$rule, new stdClass(), [new Error($rule->incorrectInputMessage, [])]],
-            [$ruleNot, new stdClass(), [new Error($rule->incorrectInputMessage, [])]],
+            [$rule, ['a', 'b'], [new Error($rule->getIncorrectInputMessage(), [])]],
+            [$ruleNot, ['a', 'b'], [new Error($rule->getIncorrectInputMessage(), [])]],
+            [$rule, null, [new Error($rule->getIncorrectInputMessage(), [])]],
+            [$ruleNot, null, [new Error($rule->getIncorrectInputMessage(), [])]],
+            [$rule, new stdClass(), [new Error($rule->getIncorrectInputMessage(), [])]],
+            [$ruleNot, new stdClass(), [new Error($rule->getIncorrectInputMessage(), [])]],
 
-            [$rule, 'b', [new Error($rule->message, [])]],
+            [$rule, 'b', [new Error($rule->getMessage(), [])]],
         ];
     }
 

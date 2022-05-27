@@ -19,11 +19,43 @@ abstract class GroupRule implements ParametrizedRuleInterface
     use RuleNameTrait;
 
     public function __construct(
-        public string $message = 'This value is not a valid.',
-        public bool $skipOnEmpty = false,
-        public bool $skipOnError = false,
-        public ?Closure $when = null,
+        private string $message = 'This value is not a valid.',
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        private ?Closure $when = null,
     ) {
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnEmpty(): bool
+    {
+        return $this->skipOnEmpty;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnError(): bool
+    {
+        return $this->skipOnError;
+    }
+
+    /**
+     * @return Closure|null
+     */
+    public function getWhen(): ?Closure
+    {
+        return $this->when;
     }
 
     /**

@@ -17,7 +17,7 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
         $ruleEnabledIDNandAllowedName = new Email(allowName: true, enableIDN: true);
-        $message = $rule->message;
+        $message = $rule->getMessage();
         $parameters = [];
         $errors = [new Error($message, $parameters)];
 

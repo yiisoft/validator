@@ -19,8 +19,8 @@ final class SubsetHandlerTest extends AbstractRuleValidatorTest
         $rangeToShow = implode(', ', array_map(fn (int $value) => "\"{$value}\"", $range));
 
         return [
-            [$rule, [0, 1, 2], [new Error($rule->subsetMessage, ['values' => $rangeToShow])]],
-            [$rule, [10, 11, 12], [new Error($rule->subsetMessage, ['values' => $rangeToShow])]],
+            [$rule, [0, 1, 2], [new Error($rule->getSubsetMessage(), ['values' => $rangeToShow])]],
+            [$rule, [10, 11, 12], [new Error($rule->getSubsetMessage(), ['values' => $rangeToShow])]],
         ];
     }
 

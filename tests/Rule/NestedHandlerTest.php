@@ -47,12 +47,12 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             [
                 $rule,
                 ['value' => null],
-                [new Error($requiredRule->message, [], 'value')],
+                [new Error($requiredRule->getMessage(), [], 'value')],
             ],
             [
                 new Nested(['value' => new Required()], errorWhenPropertyPathIsNotFound: true),
                 [],
-                [new Error($rule->propertyPathIsNotFoundMessage, ['path' => 'value'], 'value')],
+                [new Error($rule->getPropertyPathIsNotFoundMessage(), ['path' => 'value'], 'value')],
             ],
             [
                 //                 @link https://github.com/yiisoft/validator/issues/200

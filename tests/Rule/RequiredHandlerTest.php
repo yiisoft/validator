@@ -16,8 +16,8 @@ final class RequiredHandlerTest extends AbstractRuleValidatorTest
         $rule = new Required();
 
         return [
-            [$rule, null, [new Error($rule->message, [])]],
-            [$rule, [], [new Error($rule->message, [])]],
+            [$rule, null, [new Error($rule->getMessage(), [])]],
+            [$rule, [], [new Error($rule->getMessage(), [])]],
         ];
     }
 

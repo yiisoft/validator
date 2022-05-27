@@ -33,17 +33,17 @@ final class IpHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Ip::class, $rule);
         }
 
-        if (!$rule->allowIpv4 && !$rule->allowIpv6) {
+        if (!$rule->isAllowIpv4() && !$rule->isAllowIpv6()) {
             throw new RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time.');
         }
         $result = new Result();
         if (!is_string($value)) {
-            $result->addError($rule->message);
+            $result->addError($rule->getMessage());
             return $result;
         }
 
         if (preg_match($rule->getIpParsePattern(), $value, $matches) === 0) {
-            $result->addError($rule->message);
+            $result->addError($rule->getMessage());
             return $result;
         }
         $negation = !empty($matches['not'] ?? null);
@@ -54,28 +54,28 @@ final class IpHandler implements RuleHandlerInterface
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
         } catch (InvalidArgumentException $e) {
-            $result->addError($rule->message);
+            $result->addError($rule->getMessage());
             return $result;
         }
 
-        if ($rule->requireSubnet === true && $cidr === null) {
-            $result->addError($rule->noSubnetMessage);
+        if ($rule->isRequireSubnet() && $cidr === null) {
+            $result->addError($rule->getNoSubnetMessage());
             return $result;
         }
-        if ($rule->allowSubnet === false && $cidr !== null) {
-            $result->addError($rule->hasSubnetMessage);
+        if (!$rule->isAllowSubnet() && $cidr !== null) {
+            $result->addError($rule->getHasSubnetMessage());
             return $result;
         }
-        if ($rule->allowNegation === false && $negation) {
-            $result->addError($rule->message);
+        if (!$rule->isAllowNegation() && $negation) {
+            $result->addError($rule->getMessage());
             return $result;
         }
-        if ($ipVersion === IpHelper::IPV6 && !$rule->allowIpv6) {
-            $result->addError($rule->ipv6NotAllowedMessage);
+        if ($ipVersion === IpHelper::IPV6 && !$rule->isAllowIpv6()) {
+            $result->addError($rule->getIpv6NotAllowedMessage());
             return $result;
         }
-        if ($ipVersion === IpHelper::IPV4 && !$rule->allowIpv4) {
-            $result->addError($rule->ipv4NotAllowedMessage);
+        if ($ipVersion === IpHelper::IPV4 && !$rule->isAllowIpv4()) {
+            $result->addError($rule->getIpv4NotAllowedMessage());
             return $result;
         }
         if (!$result->isValid()) {
@@ -85,12 +85,12 @@ final class IpHandler implements RuleHandlerInterface
             try {
                 IpHelper::getCidrBits($ipCidr);
             } catch (InvalidArgumentException $e) {
-                $result->addError($rule->wrongCidrMessage);
+                $result->addError($rule->getWrongCidrMessage());
                 return $result;
             }
         }
         if (!$rule->isAllowed($ipCidr)) {
-            $result->addError($rule->notInRangeMessage);
+            $result->addError($rule->getNotInRangeMessage());
             return $result;
         }
 

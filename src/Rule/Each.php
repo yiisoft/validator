@@ -24,13 +24,61 @@ final class Each implements ParametrizedRuleInterface
         /**
          * @var iterable<RuleInterface>
          */
-        public iterable $rules = [],
-        public string $incorrectInputMessage = 'Value should be array or iterable.',
-        public string $message = '{error} {value} given.',
-        public bool $skipOnEmpty = false,
-        public bool $skipOnError = false,
-        public ?Closure $when = null,
+        private iterable $rules = [],
+        private string $incorrectInputMessage = 'Value should be array or iterable.',
+        private string $message = '{error} {value} given.',
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        private ?Closure $when = null,
     ) {
+    }
+
+    /**
+     * @return iterable<RuleInterface>
+     */
+    public function getRules(): iterable
+    {
+        return $this->rules;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnEmpty(): bool
+    {
+        return $this->skipOnEmpty;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnError(): bool
+    {
+        return $this->skipOnError;
+    }
+
+    /**
+     * @return Closure|null
+     */
+    public function getWhen(): ?Closure
+    {
+        return $this->when;
     }
 
     public function getOptions(): array

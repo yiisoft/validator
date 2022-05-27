@@ -46,13 +46,13 @@ final class NumberHandlerTest extends AbstractRuleValidatorTest
             [$ruleInteger, '12.23^4', [new Error($ruleInteger->getNotANumberMessage(), ['value' => '12.23^4'])]],
 
 
-            [new Number(min: 1), -1, [new Error($rule->tooSmallMessage, ['min' => 1])]],
-            [new Number(min: 1), '22e-12', [new Error($rule->tooSmallMessage, ['min' => 1])]],
+            [new Number(min: 1), -1, [new Error($rule->getTooSmallMessage(), ['min' => 1])]],
+            [new Number(min: 1), '22e-12', [new Error($rule->getTooSmallMessage(), ['min' => 1])]],
 
 
-            [new Number(asInteger: true, min: 1), -1, [new Error($rule->tooSmallMessage, ['min' => 1])]],
+            [new Number(asInteger: true, min: 1), -1, [new Error($rule->getTooSmallMessage(), ['min' => 1])]],
             [new Number(asInteger: true, min: 1), '22e-12', [new Error($ruleInteger->getNotANumberMessage(), ['value' => '22e-12'])]],
-            [new Number(max: 1.25), 1.5, [new Error($ruleInteger->tooBigMessage, ['max' => 1.25])]],
+            [new Number(max: 1.25), 1.5, [new Error($ruleInteger->getTooBigMessage(), ['max' => 1.25])]],
 
             // TODO: fix wrong message
             [new Number(asInteger: true, max: 1.25), 1.5, [new Error($ruleInteger->getNotANumberMessage(), ['value' => 1.5])]],
@@ -60,10 +60,10 @@ final class NumberHandlerTest extends AbstractRuleValidatorTest
             [new Number(asInteger: true, max: 1.25), '125e-2', [new Error($ruleInteger->getNotANumberMessage(), ['value' => '125e-2'])]],
 
 
-            [new Number(min: -10, max: 20), -11, [new Error($ruleInteger->tooSmallMessage, ['min' => -10])]],
-            [new Number(min: -10, max: 20), 21, [new Error($ruleInteger->tooBigMessage, ['max' => 20])]],
-            [new Number(asInteger: true, min: -10, max: 20), -11, [new Error($ruleInteger->tooSmallMessage, ['min' => -10])]],
-            [new Number(asInteger: true, min: -10, max: 20), 22, [new Error($ruleInteger->tooBigMessage, ['max' => 20])]],
+            [new Number(min: -10, max: 20), -11, [new Error($ruleInteger->getTooSmallMessage(), ['min' => -10])]],
+            [new Number(min: -10, max: 20), 21, [new Error($ruleInteger->getTooBigMessage(), ['max' => 20])]],
+            [new Number(asInteger: true, min: -10, max: 20), -11, [new Error($ruleInteger->getTooSmallMessage(), ['min' => -10])]],
+            [new Number(asInteger: true, min: -10, max: 20), 22, [new Error($ruleInteger->getTooBigMessage(), ['max' => 20])]],
             [new Number(asInteger: true, min: -10, max: 20), '20e-1', [new Error($ruleInteger->getNotANumberMessage(), ['value' => '20e-1'])]],
         ];
     }

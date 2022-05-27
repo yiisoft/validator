@@ -19,10 +19,10 @@ final class BooleanHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Boolean::class, $rule);
         }
 
-        if ($rule->strict) {
-            $valid = $value === $rule->trueValue || $value === $rule->falseValue;
+        if ($rule->isStrict()) {
+            $valid = $value === $rule->getTrueValue() || $value === $rule->getFalseValue();
         } else {
-            $valid = $value == $rule->trueValue || $value == $rule->falseValue;
+            $valid = $value == $rule->getTrueValue() || $value == $rule->getFalseValue();
         }
 
         $result = new Result();
@@ -31,12 +31,12 @@ final class BooleanHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $result->addError($rule->message, [
+        $result->addError($rule->getMessage(), [
             // TODO: get reasons to do like this
-            //            'true' => $config->trueValue === true ? 'true' : $config->trueValue,
-            //            'false' => $config->falseValue === false ? 'false' : $config->falseValue,
-            'true' => $rule->trueValue,
-            'false' => $rule->falseValue,
+            //  'true' => $config->getTrueValue() === true ? 'true' : $config->getTrueValue(),
+            //  'false' => $config->$this->getFalseValue() === false ? 'false' : $config->$this->getFalseValue(),
+            'true' => $rule->getTrueValue(),
+            'false' => $rule->getFalseValue(),
         ]);
 
         return $result;

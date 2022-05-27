@@ -25,17 +25,17 @@ final class HasLengthHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($rule->message);
+            $result->addError($rule->getMessage());
             return $result;
         }
 
-        $length = mb_strlen($value, $rule->encoding);
+        $length = mb_strlen($value, $rule->getEncoding());
 
-        if ($rule->min !== null && $length < $rule->min) {
-            $result->addError($rule->tooShortMessage, ['min' => $rule->min]);
+        if ($rule->getMin() !== null && $length < $rule->getMin()) {
+            $result->addError($rule->getTooShortMessage(), ['min' => $rule->getMin()]);
         }
-        if ($rule->max !== null && $length > $rule->max) {
-            $result->addError($rule->tooLongMessage, ['max' => $rule->max]);
+        if ($rule->getMax() !== null && $length > $rule->getMax()) {
+            $result->addError($rule->getTooLongMessage(), ['max' => $rule->getMax()]);
         }
 
         return $result;

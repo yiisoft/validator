@@ -16,18 +16,18 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
         $defaultConfig = new HasLength();
 
         return [
-            [$defaultConfig, ['not a string'], [new Error($defaultConfig->message, [])]],
-            [$defaultConfig, new stdClass(), [new Error($defaultConfig->message, [])]],
-            [$defaultConfig, true, [new Error($defaultConfig->message, [])]],
-            [$defaultConfig, false, [new Error($defaultConfig->message, [])]],
+            [$defaultConfig, ['not a string'], [new Error($defaultConfig->getMessage(), [])]],
+            [$defaultConfig, new stdClass(), [new Error($defaultConfig->getMessage(), [])]],
+            [$defaultConfig, true, [new Error($defaultConfig->getMessage(), [])]],
+            [$defaultConfig, false, [new Error($defaultConfig->getMessage(), [])]],
 
-            [new HasLength(max: 25), str_repeat('x', 1250), [new Error($defaultConfig->tooLongMessage, ['max' => 25])]],
-            [new HasLength(min: 25, max: 25), str_repeat('x', 125), [new Error($defaultConfig->tooLongMessage, ['max' => 25])]],
+            [new HasLength(max: 25), str_repeat('x', 1250), [new Error($defaultConfig->getTooLongMessage(), ['max' => 25])]],
+            [new HasLength(min: 25, max: 25), str_repeat('x', 125), [new Error($defaultConfig->getTooLongMessage(), ['max' => 25])]],
 
-            [new HasLength(min: 25, max: 25), '', [new Error($defaultConfig->tooShortMessage, ['min' => 25])]],
-            [new HasLength(min: 10, max: 25), str_repeat('x', 5), [new Error($defaultConfig->tooShortMessage, ['min' => 10])]],
-            [new HasLength(min: 25), str_repeat('x', 13), [new Error($defaultConfig->tooShortMessage, ['min' => 25])]],
-            [new HasLength(min: 25), '', [new Error($defaultConfig->tooShortMessage, ['min' => 25])]],
+            [new HasLength(min: 25, max: 25), '', [new Error($defaultConfig->getTooShortMessage(), ['min' => 25])]],
+            [new HasLength(min: 10, max: 25), str_repeat('x', 5), [new Error($defaultConfig->getTooShortMessage(), ['min' => 10])]],
+            [new HasLength(min: 25), str_repeat('x', 13), [new Error($defaultConfig->getTooShortMessage(), ['min' => 25])]],
+            [new HasLength(min: 25), '', [new Error($defaultConfig->getTooShortMessage(), ['min' => 25])]],
         ];
     }
 

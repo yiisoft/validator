@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
@@ -37,18 +38,18 @@ final class Url implements ParametrizedRuleInterface
          * @var array list of URI schemes which should be considered valid. By default, http and https
          * are considered to be valid schemes.
          */
-        public array $validSchemes = ['http', 'https'],
+        private array $validSchemes = ['http', 'https'],
         /**
          * @var bool whether validation process should take into account IDN (internationalized
          * domain names). Defaults to false meaning that validation of URLs containing IDN will always
          * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
          * extension, otherwise an exception would be thrown.
          */
-        public bool $enableIDN = false,
-        public string $message = 'This value is not a valid URL.',
-        public bool $skipOnEmpty = false,
-        public bool $skipOnError = false,
-        public ?Closure $when = null,
+        private bool $enableIDN = false,
+        private string $message = 'This value is not a valid URL.',
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        private ?Closure $when = null,
     ) {
         if ($enableIDN && !function_exists('idn_to_ascii')) {
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
@@ -64,6 +65,62 @@ final class Url implements ParametrizedRuleInterface
         return $this->pattern;
     }
 
+    /**
+     * @return array|string[]
+     */
+    public function getValidSchemes(): array
+    {
+        return $this->validSchemes;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnableIDN(): bool
+    {
+        return $this->enableIDN;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnEmpty(): bool
+    {
+        return $this->skipOnEmpty;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnError(): bool
+    {
+        return $this->skipOnError;
+    }
+
+    /**
+     * @return Closure|null
+     */
+    public function getWhen(): ?Closure
+    {
+        return $this->when;
+    }
+
+    #[ArrayShape([
+        'pattern' => "string",
+        'validSchemes' => "array|string[]",
+        'enableIDN' => "bool",
+        'message' => "string[]",
+        'skipOnEmpty' => "bool",
+        'skipOnError' => "bool"
+    ])]
     public function getOptions(): array
     {
         return [

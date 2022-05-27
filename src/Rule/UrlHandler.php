@@ -28,7 +28,7 @@ final class UrlHandler implements RuleHandlerInterface
 
         // make sure the length is limited to avoid DOS attacks
         if (is_string($value) && strlen($value) < 2000) {
-            if ($rule->enableIDN) {
+            if ($rule->isEnableIDN()) {
                 $value = $this->convertIdn($value);
             }
 
@@ -37,7 +37,7 @@ final class UrlHandler implements RuleHandlerInterface
             }
         }
 
-        $result->addError($rule->message);
+        $result->addError($rule->getMessage());
 
         return $result;
     }

@@ -20,8 +20,8 @@ class GroupRuleHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-        if (!$context->getValidator()->validate($value, $rule->getRuleSet())->isValid()) {
-            $result->addError($rule->message);
+        if (!$context?->getValidator()->validate($value, $rule->getRuleSet())->isValid()) {
+            $result->addError($rule->getMessage());
         }
 
         return $result;

@@ -50,12 +50,12 @@ final class Nested implements ParametrizedRuleInterface
         /**
          * @var RuleInterface[][]
          */
-        public iterable $rules = [],
-        public bool $errorWhenPropertyPathIsNotFound = false,
-        public string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
-        public bool $skipOnEmpty = false,
-        public bool $skipOnError = false,
-        public ?Closure $when = null,
+        private iterable $rules = [],
+        private bool $errorWhenPropertyPathIsNotFound = false,
+        private string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        private ?Closure $when = null,
     ) {
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         if (empty($rules)) {
@@ -68,6 +68,54 @@ final class Nested implements ParametrizedRuleInterface
         }
 
         $this->rules = $rules;
+    }
+
+    /**
+     * @return iterable
+     */
+    public function getRules(): iterable
+    {
+        return $this->rules;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isErrorWhenPropertyPathIsNotFound(): bool
+    {
+        return $this->errorWhenPropertyPathIsNotFound;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPropertyPathIsNotFoundMessage(): string
+    {
+        return $this->propertyPathIsNotFoundMessage;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnEmpty(): bool
+    {
+        return $this->skipOnEmpty;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnError(): bool
+    {
+        return $this->skipOnError;
+    }
+
+    /**
+     * @return Closure|null
+     */
+    public function getWhen(): ?Closure
+    {
+        return $this->when;
     }
 
     private function checkRules(array $rules): bool

@@ -26,7 +26,7 @@ final class RequiredHandler implements RuleHandlerInterface
         $result = new Result();
 
         if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
-            $result->addError($rule->message);
+            $result->addError($rule->getMessage());
         }
 
         return $result;

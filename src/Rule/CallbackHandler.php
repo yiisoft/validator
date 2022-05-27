@@ -17,7 +17,7 @@ final class CallbackHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Callback::class, $rule);
         }
 
-        $callback = $rule->callback;
+        $callback = $rule->getCallback();
         $callbackResult = $callback($value, $context);
 
         if (!$callbackResult instanceof Result) {

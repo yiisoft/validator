@@ -14,7 +14,7 @@ final class JsonHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $rule = new Json();
-        $message = $rule->message;
+        $message = $rule->getMessage();
         $errors = [new Error($message, [])];
 
         return [

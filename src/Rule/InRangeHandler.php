@@ -25,12 +25,12 @@ final class InRangeHandler implements RuleHandlerInterface
 
         $result = new Result();
 
-        if ($rule->skipOnEmpty && $value === null) {
+        if ($rule->isSkipOnEmpty() && $value === null) {
             return $result;
         }
 
-        if ($rule->not === ArrayHelper::isIn($value, $rule->range, $rule->strict)) {
-            $result->addError($rule->message);
+        if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getRange(), $rule->isStrict())) {
+            $result->addError($rule->getMessage());
         }
 
         return $result;

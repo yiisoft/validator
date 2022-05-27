@@ -22,7 +22,7 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $rule = new Url();
-        $errors = [new Error($rule->message, [])];
+        $errors = [new Error($rule->getMessage(), [])];
 
         return [
             [$rule, 'google.de', $errors],

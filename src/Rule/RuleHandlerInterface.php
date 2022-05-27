@@ -13,6 +13,7 @@ interface RuleHandlerInterface
      * Validates the value. The method should be implemented by concrete validation rules.
      *
      * @param mixed $value Value to be validated.
+     * @param object $rule
      * @param ValidationContext|null $context Optional validation context.
      *
      * @return Result

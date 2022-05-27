@@ -24,7 +24,7 @@ final class AtLeastHandler implements RuleHandlerInterface
 
         $filledCount = 0;
 
-        foreach ($rule->attributes as $attribute) {
+        foreach ($rule->getAttributes() as $attribute) {
             if (!$this->isEmpty($value->{$attribute})) {
                 $filledCount++;
             }
@@ -32,8 +32,8 @@ final class AtLeastHandler implements RuleHandlerInterface
 
         $result = new Result();
 
-        if ($filledCount < $rule->min) {
-            $result->addError($rule->message, ['min' => $rule->min]);
+        if ($filledCount < $rule->getMin()) {
+            $result->addError($rule->getMessage(), ['min' => $rule->getMin()]);
         }
 
         return $result;

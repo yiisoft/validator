@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ParametrizedRuleInterface;
@@ -27,36 +28,118 @@ final class HasLength implements ParametrizedRuleInterface
          *
          * @see $tooShortMessage for the customized message for a too short string.
          */
-        public ?int $min = null,
+        private ?int $min = null,
         /**
          * @var int|null maximum length. null means no maximum length limit.
          *
          * @see $tooLongMessage for the customized message for a too long string.
          */
-        public ?int $max = null,
+        private ?int $max = null,
         /**
          * @var string user-defined error message used when the value is not a string.
          */
-        public string $message = 'This value must be a string.',
+        private string $message = 'This value must be a string.',
         /**
          * @var string user-defined error message used when the length of the value is smaller than {@see $min}.
          */
-        public string $tooShortMessage = 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+        private string $tooShortMessage = 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
         /**
          * @var string user-defined error message used when the length of the value is greater than {@see $max}.
          */
-        public string $tooLongMessage = 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+        private string $tooLongMessage = 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
         /**
          * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
          * If this property is not set, application wide encoding will be used.
          */
-        public string $encoding = 'UTF-8',
-        public bool $skipOnEmpty = false,
-        public bool $skipOnError = false,
-        public ?Closure $when = null
+        private string $encoding = 'UTF-8',
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        private ?Closure $when = null
     ) {
     }
 
+    /**
+     * @return int|null
+     */
+    public function getMin(): ?int
+    {
+        return $this->min;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMax(): ?int
+    {
+        return $this->max;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTooShortMessage(): string
+    {
+        return $this->tooShortMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTooLongMessage(): string
+    {
+        return $this->tooLongMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEncoding(): string
+    {
+        return $this->encoding;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnEmpty(): bool
+    {
+        return $this->skipOnEmpty;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnError(): bool
+    {
+        return $this->skipOnError;
+    }
+
+    /**
+     * @return Closure|null
+     */
+    public function getWhen(): ?Closure
+    {
+        return $this->when;
+    }
+
+    #[ArrayShape([
+        'min' => "int|null",
+        'max' => "int|null",
+        'message' => "string[]",
+        'tooShortMessage' => "array",
+        'tooLongMessage' => "array",
+        'encoding' => "string",
+        'skipOnEmpty' => "bool",
+        'skipOnError' => "bool"
+    ])]
     public function getOptions(): array
     {
         return [

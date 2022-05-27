@@ -46,8 +46,8 @@ final class CompareToHandler implements RuleHandlerInterface
 
         $result = new Result();
 
-        if (!$this->compareValues($rule->operator, $rule->type, $value, $rule->compareValue)) {
-            $result->addError($rule->getMessage(), ['value' => $rule->compareValue]);
+        if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $rule->getCompareValue())) {
+            $result->addError($rule->getMessage(), ['value' => $rule->getCompareValue()]);
         }
 
         return $result;
@@ -72,25 +72,16 @@ final class CompareToHandler implements RuleHandlerInterface
             $value = (string) $value;
             $compareValue = (string) $compareValue;
         }
-        switch ($operator) {
-            case '==':
-                return $value == $compareValue;
-            case '===':
-                return $value === $compareValue;
-            case '!=':
-                return $value != $compareValue;
-            case '!==':
-                return $value !== $compareValue;
-            case '>':
-                return $value > $compareValue;
-            case '>=':
-                return $value >= $compareValue;
-            case '<':
-                return $value < $compareValue;
-            case '<=':
-                return $value <= $compareValue;
-            default:
-                return false;
-        }
+        return match ($operator) {
+            '==' => $value == $compareValue,
+            '===' => $value === $compareValue,
+            '!=' => $value != $compareValue,
+            '!==' => $value !== $compareValue,
+            '>' => $value > $compareValue,
+            '>=' => $value >= $compareValue,
+            '<' => $value < $compareValue,
+            '<=' => $value <= $compareValue,
+            default => false,
+        };
     }
 }

@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ParametrizedRuleInterface;
@@ -23,23 +24,87 @@ final class InRange implements ParametrizedRuleInterface
     use RuleNameTrait;
 
     public function __construct(
-        public iterable $range,
+        private iterable $range,
         /**
          * @var bool whether the comparison is strict (both type and value must be the same)
          */
-        public bool $strict = false,
+        private bool $strict = false,
         /**
          * @var bool whether to invert the validation logic. Defaults to false. If set to `true`, the value should NOT
          * be among the list of values passed via constructor.
          */
-        public bool $not = false,
-        public string $message = 'This value is invalid.',
-        public bool $skipOnEmpty = false,
-        public bool $skipOnError = false,
-        public ?Closure $when = null,
+        private bool $not = false,
+        private string $message = 'This value is invalid.',
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        private ?Closure $when = null,
     ) {
     }
 
+    /**
+     * @return iterable
+     */
+    public function getRange(): iterable
+    {
+        return $this->range;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStrict(): bool
+    {
+        return $this->strict;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNot(): bool
+    {
+        return $this->not;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnEmpty(): bool
+    {
+        return $this->skipOnEmpty;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnError(): bool
+    {
+        return $this->skipOnError;
+    }
+
+    /**
+     * @return Closure|null
+     */
+    public function getWhen(): ?Closure
+    {
+        return $this->when;
+    }
+
+    #[ArrayShape([
+        'range' => "iterable",
+        'strict' => "bool",
+        'not' => "bool",
+        'message' => "string[]",
+        'skipOnEmpty' => "bool",
+        'skipOnError' => "bool"
+    ])]
     public function getOptions(): array
     {
         return [

@@ -25,25 +25,25 @@ final class CountHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_countable($value)) {
-            $result->addError($rule->message);
+            $result->addError($rule->getMessage());
 
             return $result;
         }
 
         $count = count($value);
 
-        if ($rule->exactly !== null && $count !== $rule->exactly) {
-            $result->addError($rule->notExactlyMessage, ['exactly' => $rule->exactly]);
+        if ($rule->getExactly() !== null && $count !== $rule->getExactly()) {
+            $result->addError($rule->getNotExactlyMessage(), ['exactly' => $rule->getExactly()]);
 
             return $result;
         }
 
-        if ($rule->min !== null && $count < $rule->min) {
-            $result->addError($rule->tooFewItemsMessage, ['min' => $rule->min]);
+        if ($rule->getMin() !== null && $count < $rule->getMin()) {
+            $result->addError($rule->getTooFewItemsMessage(), ['min' => $rule->getMin()]);
         }
 
-        if ($rule->max !== null && $count > $rule->max) {
-            $result->addError($rule->tooManyItemsMessage, ['max' => $rule->max]);
+        if ($rule->getMax() !== null && $count > $rule->getMax()) {
+            $result->addError($rule->getTooManyItemsMessage(), ['max' => $rule->getMax()]);
         }
 
         return $result;

@@ -27,20 +27,20 @@ final class NumberHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (is_bool($value) || !is_scalar($value)) {
-            $message = $rule->asInteger ? 'Value must be an integer.' : 'Value must be a number.';
+            $message = $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.';
             $result->addError($message, ['value' => $value]);
             return $result;
         }
 
-        $pattern = $rule->asInteger ? $rule->integerPattern : $rule->numberPattern;
+        $pattern = $rule->isAsInteger() ? $rule->getIntegerPattern() : $rule->getNumberPattern();
 
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
-            $message = $rule->asInteger ? 'Value must be an integer.' : 'Value must be a number.';
+            $message = $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.';
             $result->addError($message, ['value' => $value]);
-        } elseif ($rule->min !== null && $value < $rule->min) {
-            $result->addError($rule->tooSmallMessage, ['min' => $rule->min]);
-        } elseif ($rule->max !== null && $value > $rule->max) {
-            $result->addError($rule->tooBigMessage, ['max' => $rule->max]);
+        } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
+            $result->addError($rule->getTooSmallMessage(), ['min' => $rule->getMin()]);
+        } elseif ($rule->getMax() !== null && $value > $rule->getMax()) {
+            $result->addError($rule->getTooBigMessage(), ['max' => $rule->getMax()]);
         }
 
         return $result;

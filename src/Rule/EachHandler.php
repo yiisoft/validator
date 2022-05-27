@@ -21,26 +21,20 @@ final class EachHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Each::class, $rule);
         }
 
-        /**
-         * @var iterable<RuleInterface> $rules
-         */
-        $rules = $rule->rules;
+        $rules = $rule->getRules();
         if ($rules === []) {
             throw new InvalidArgumentException('Rules are required.');
         }
 
         $result = new Result();
         if (!is_iterable($value)) {
-            $result->addError($rule->incorrectInputMessage);
+            $result->addError($rule->getIncorrectInputMessage());
 
             return $result;
         }
 
         foreach ($value as $index => $item) {
-            /**
-             * @psalm-suppress InvalidArgument
-             */
-            $itemResult = $context->getValidator()->validate($item, [$index => $rules]);
+            $itemResult = $context?->getValidator()->validate($item, [$index => $rules]);
             if ($itemResult->isValid()) {
                 continue;
             }

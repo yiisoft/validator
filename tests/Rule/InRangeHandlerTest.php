@@ -18,7 +18,7 @@ final class InRangeHandlerTest extends AbstractRuleValidatorTest
         $ruleStrict = new InRange(range(1, 10), strict: true);
         $ruleNot = new InRange(range(1, 10), not: true);
 
-        $message = $rule->message;
+        $message = $rule->getMessage();
         $errors = [new Error($message, [])];
 
         return [

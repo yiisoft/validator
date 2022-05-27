@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ParametrizedRuleInterface;
@@ -25,20 +26,84 @@ final class Regex implements ParametrizedRuleInterface
         /**
          * @var string the regular expression to be matched with
          */
-        public string $pattern,
+        private string $pattern,
         /**
          * @var bool whether to invert the validation logic. Defaults to `false`. If set to `true`, the regular
          * expression defined via {@see $pattern} should NOT match the value.
          */
-        public bool $not = false,
-        public string $incorrectInputMessage = 'Value should be string.',
-        public string $message = 'Value is invalid.',
-        public bool $skipOnEmpty = false,
-        public bool $skipOnError = false,
-        public ?Closure $when = null,
+        private bool $not = false,
+        private string $incorrectInputMessage = 'Value should be string.',
+        private string $message = 'Value is invalid.',
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        private ?Closure $when = null,
     ) {
     }
 
+    /**
+     * @return string
+     */
+    public function getPattern(): string
+    {
+        return $this->pattern;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNot(): bool
+    {
+        return $this->not;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnEmpty(): bool
+    {
+        return $this->skipOnEmpty;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnError(): bool
+    {
+        return $this->skipOnError;
+    }
+
+    /**
+     * @return Closure|null
+     */
+    public function getWhen(): ?Closure
+    {
+        return $this->when;
+    }
+
+    #[ArrayShape([
+        'pattern' => "string",
+        'not' => "bool",
+        'incorrectInputMessage' => "string[]",
+        'message' => "string[]",
+        'skipOnEmpty' => "bool",
+        'skipOnError' => "bool"
+    ])]
     public function getOptions(): array
     {
         return [

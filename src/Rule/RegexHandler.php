@@ -25,16 +25,16 @@ final class RegexHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($rule->incorrectInputMessage);
+            $result->addError($rule->getIncorrectInputMessage());
 
             return $result;
         }
 
         if (
-            (!$rule->not && !preg_match($rule->pattern, $value)) ||
-            ($rule->not && preg_match($rule->pattern, $value))
+            (!$rule->isNot() && !preg_match($rule->getPattern(), $value)) ||
+            ($rule->isNot() && preg_match($rule->getPattern(), $value))
         ) {
-            $result->addError($rule->message);
+            $result->addError($rule->getMessage());
         }
 
         return $result;

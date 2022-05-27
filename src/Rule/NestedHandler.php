@@ -55,11 +55,11 @@ final class NestedHandler implements RuleHandlerInterface
         $value = (array)$value;
 
         $results = [];
-        foreach ($rule->rules as $valuePath => $rules) {
+        foreach ($rule->getRules() as $valuePath => $rules) {
             $result = new Result((string)$valuePath);
 
-            if ($rule->errorWhenPropertyPathIsNotFound && !ArrayHelper::pathExists($value, $valuePath)) {
-                $compoundResult->addError($rule->propertyPathIsNotFoundMessage, ['path' => $valuePath], $valuePath);
+            if ($rule->isErrorWhenPropertyPathIsNotFound() && !ArrayHelper::pathExists($value, $valuePath)) {
+                $compoundResult->addError($rule->getPropertyPathIsNotFoundMessage(), ['path' => $valuePath], $valuePath);
 
                 continue;
             }
@@ -67,7 +67,7 @@ final class NestedHandler implements RuleHandlerInterface
             $rules = is_array($rules) ? $rules : [$rules];
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
 
-            $itemResult = $context->getValidator()->validate($validatedValue, $rules);
+            $itemResult = $context?->getValidator()->validate($validatedValue, $rules);
 
             if ($itemResult->isValid()) {
                 continue;
