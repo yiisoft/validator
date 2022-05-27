@@ -131,14 +131,14 @@ final class HasLength implements ParametrizedRuleInterface
     }
 
     #[ArrayShape([
-        'min' => "int|null",
-        'max' => "int|null",
-        'message' => "string[]",
-        'tooShortMessage' => "array",
-        'tooLongMessage' => "array",
-        'encoding' => "string",
-        'skipOnEmpty' => "bool",
-        'skipOnError' => "bool"
+        'min' => 'int|null',
+        'max' => 'int|null',
+        'message' => 'string[]',
+        'tooShortMessage' => 'array',
+        'tooLongMessage' => 'array',
+        'encoding' => 'string',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
     ])]
     public function getOptions(): array
     {

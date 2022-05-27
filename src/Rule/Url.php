@@ -114,12 +114,12 @@ final class Url implements ParametrizedRuleInterface
     }
 
     #[ArrayShape([
-        'pattern' => "string",
-        'validSchemes' => "array|string[]",
-        'enableIDN' => "bool",
-        'message' => "string[]",
-        'skipOnEmpty' => "bool",
-        'skipOnError' => "bool"
+        'pattern' => 'string',
+        'validSchemes' => 'array|string[]',
+        'enableIDN' => 'bool',
+        'message' => 'string[]',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
     ])]
     public function getOptions(): array
     {

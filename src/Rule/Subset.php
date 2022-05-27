@@ -88,12 +88,12 @@ final class Subset implements ParametrizedRuleInterface
     }
 
     #[ArrayShape([
-        'values' => "iterable",
-        'strict' => "bool",
-        'iterableMessage' => "string[]",
-        'subsetMessage' => "string[]",
-        'skipOnEmpty' => "bool",
-        'skipOnError' => "bool"
+        'values' => 'iterable',
+        'strict' => 'bool',
+        'iterableMessage' => 'string[]',
+        'subsetMessage' => 'string[]',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
     ])]
     public function getOptions(): array
     {

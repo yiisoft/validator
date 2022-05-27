@@ -97,12 +97,12 @@ final class Regex implements ParametrizedRuleInterface
     }
 
     #[ArrayShape([
-        'pattern' => "string",
-        'not' => "bool",
-        'incorrectInputMessage' => "string[]",
-        'message' => "string[]",
-        'skipOnEmpty' => "bool",
-        'skipOnError' => "bool"
+        'pattern' => 'string',
+        'not' => 'bool',
+        'incorrectInputMessage' => 'string[]',
+        'message' => 'string[]',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
     ])]
     public function getOptions(): array
     {

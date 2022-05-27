@@ -146,7 +146,7 @@ final class CompareTo implements ParametrizedRuleInterface
     public function getMessage(): string
     {
         return $this->message ?? match ($this->operator) {
-                '==', '===' => 'Value must be equal to "{value}".',
+            '==', '===' => 'Value must be equal to "{value}".',
                 '!=', '!==' => 'Value must not be equal to "{value}".',
                 '>' => 'Value must be greater than "{value}".',
                 '>=' => 'Value must be greater than or equal to "{value}".',
@@ -157,12 +157,12 @@ final class CompareTo implements ParametrizedRuleInterface
     }
 
     #[ArrayShape([
-        'compareValue' => "",
-        'message' => "array",
-        'type' => "string",
-        'operator' => "string",
-        'skipOnEmpty' => "bool",
-        'skipOnError' => "bool"
+        'compareValue' => '',
+        'message' => 'array',
+        'type' => 'string',
+        'operator' => 'string',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
     ])]
     public function getOptions(): array
     {

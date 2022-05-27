@@ -89,11 +89,11 @@ final class AtLeast implements ParametrizedRuleInterface
     }
 
     #[ArrayShape([
-        'attributes' => "array",
-        'min' => "int",
-        'message' => "array",
-        'skipOnEmpty' => "bool",
-        'skipOnError' => "bool",
+        'attributes' => 'array',
+        'min' => 'int',
+        'message' => 'array',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
     ])]
     public function getOptions(): array
     {

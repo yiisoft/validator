@@ -58,7 +58,7 @@ final class Callback implements ParametrizedRuleInterface
         return $this->when;
     }
 
-    #[ArrayShape(['skipOnEmpty' => "bool", 'skipOnError' => "bool"])]
+    #[ArrayShape(['skipOnEmpty' => 'bool', 'skipOnError' => 'bool'])]
     public function getOptions(): array
     {
         return [

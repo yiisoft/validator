@@ -163,15 +163,15 @@ final class Count implements ParametrizedRuleInterface
     }
 
     #[ArrayShape([
-        'min' => "int|null",
-        'max' => "int|null",
-        'exactly' => "int|null",
-        'message' => "string[]",
-        'tooFewItemsMessage' => "array",
-        'tooManyItemsMessage' => "array",
-        'notExactlyMessage' => "array",
-        'skipOnEmpty' => "bool",
-        'skipOnError' => "bool"
+        'min' => 'int|null',
+        'max' => 'int|null',
+        'exactly' => 'int|null',
+        'message' => 'string[]',
+        'tooFewItemsMessage' => 'array',
+        'tooManyItemsMessage' => 'array',
+        'notExactlyMessage' => 'array',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
     ])]
     public function getOptions(): array
     {

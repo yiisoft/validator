@@ -151,15 +151,15 @@ final class Email implements ParametrizedRuleInterface
     }
 
     #[ArrayShape([
-        'pattern' => "string",
-        'fullPattern' => "string",
-        'idnEmailPattern' => "string",
-        'allowName' => "bool",
-        'checkDNS' => "bool",
-        'enableIDN' => "bool",
-        'message' => "string[]",
-        'skipOnEmpty' => "bool",
-        'skipOnError' => "bool"
+        'pattern' => 'string',
+        'fullPattern' => 'string',
+        'idnEmailPattern' => 'string',
+        'allowName' => 'bool',
+        'checkDNS' => 'bool',
+        'enableIDN' => 'bool',
+        'message' => 'string[]',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
     ])]
     public function getOptions(): array
     {
