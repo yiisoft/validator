@@ -195,7 +195,7 @@ use Yiisoft\Validator\Rule\Required;
 
 $data = ['author' => ['name' => 'Alexey', 'age' => '31']];
 $rule = new Nested([
-    'data.author' => new Nested([
+    'author' => new Nested([
         'name' => [new HasLength(min: 3)],
         'age' => [new Number(min: 18)],
     )];
