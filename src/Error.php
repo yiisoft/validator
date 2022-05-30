@@ -9,12 +9,12 @@ final class Error
     private string $message;
 
     /**
-     * @psalm-var list<int|string>
+     * @psalm-var list<scalar>
      */
     private array $valuePath;
 
     /**
-     * @psalm-param list<int|string> $valuePath
+     * @psalm-param list<scalar> $valuePath
      */
     public function __construct(string $message, array $valuePath = [])
     {
@@ -28,7 +28,7 @@ final class Error
     }
 
     /**
-     * @psalm-return list<int|string>
+     * @psalm-return list<scalar>
      */
     public function getValuePath(): array
     {

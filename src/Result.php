@@ -143,7 +143,7 @@ final class Result
     }
 
     /**
-     * @psalm-param array<int|string> $valuePath
+     * @psalm-param array<scalar> $valuePath
      */
     public function addError(string $message, array $valuePath = []): self
     {
