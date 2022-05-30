@@ -48,7 +48,7 @@ abstract class AbstractDataSetTest extends TestCase
                         static function ($value): Result {
                             $result = new Result();
                             if ($value !== 42) {
-                                $result->addError('Value should be 42!');
+                                $result->addError('Value should be 42!', ['int']);
                             }
 
                             return $result;

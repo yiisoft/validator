@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Attribute;
 use Attribute;
 
 /**
- * Represents one to many relation.
+ * Represents one-to-many relation.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class HasMany

@@ -134,10 +134,10 @@ class ResultTest extends TestCase
     private function createAttributeErrorResult(): Result
     {
         $result = new Result();
-        $result->addError('error2.1', [], 'attribute2')
-            ->addError('error2.2', [], 'attribute2')
-            ->addError('error2.3', [], 'attribute2.nested')
-            ->addError('error2.4', [], 'attribute2.nested')
+        $result->addError('error2.1', ['attribute2'])
+            ->addError('error2.2', ['attribute2'])
+            ->addError('error2.3', ['attribute2.nested'])
+            ->addError('error2.4', ['attribute2.nested'])
             ->addError('error3.1')
             ->addError('error3.2');
 

@@ -42,7 +42,7 @@ final class EachHandler implements RuleHandlerInterface
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                $result->mergeError($error);
+                $result->addError($error->getMessage(), $error->getValuePath());
             }
         }
 

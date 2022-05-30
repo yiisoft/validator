@@ -31,31 +31,31 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'error' => [
                 new Nested(['author.age' => [new Number(min: 20)]]),
                 $value,
-                [new Error('Value must be no less than {min}.', ['min' => 20], 'author.age')],
+                [new Error('Value must be no less than {min}.', ['author', 'age', 'min' => 20])],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
                 $value,
-                [new Error('This value is invalid.', [], 'author.sex')],
+                [new Error('This value is invalid.', ['author', 'sex'])],
             ],
             [
                 $rule,
                 '',
                 // TODO: move message to rule
-                [new Error('Value should be an array or an object. string given.', [], '')],
+                [new Error('Value should be an array or an object. string given.', [])],
             ],
             [
                 $rule,
                 ['value' => null],
-                [new Error($requiredRule->getMessage(), [], 'value')],
+                [new Error($requiredRule->getMessage(), ['value'])],
             ],
             [
                 new Nested(['value' => new Required()], errorWhenPropertyPathIsNotFound: true),
                 [],
-                [new Error($rule->getPropertyPathIsNotFoundMessage(), ['path' => 'value'], 'value')],
+                [new Error($rule->getPropertyPathIsNotFoundMessage(), ['value', 'path' => 'value'])],
             ],
             [
-                //                 @link https://github.com/yiisoft/validator/issues/200
+                // @link https://github.com/yiisoft/validator/issues/200
                 new Nested([
                     'body.shipping' => [
                         new Required(),
@@ -71,7 +71,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                         ],
                     ],
                 ],
-                [new Error('Value is invalid.', [], 'body.shipping.phone')],
+                [new Error('Value is invalid.', ['body', 'shipping', 'phone'])],
             ],
             [
                 new Nested([
@@ -80,7 +80,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     ]),
                 ]),
                 [0 => [0 => -11]],
-                [new Error('Value must be no less than {min}.', ['min' => -10], '0.0')],
+                [new Error('Value must be no less than {min}.', ['0', '0', 'min' => -10])],
             ],
         ];
     }
@@ -131,7 +131,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     propertyPathIsNotFoundMessage: 'Property is not found.',
                 ),
                 [],
-                [new Error('Property is not found.', ['path' => 'value'], 'value')],
+                [new Error('Property is not found.', ['value', 'path' => 'value'])],
             ],
         ];
     }

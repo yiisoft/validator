@@ -45,8 +45,7 @@ final class Validator implements ValidatorInterface
         $results = [];
 
         foreach ($rules as $attribute => $attributeRules) {
-            $attributeName = is_string($attribute) ? $attribute : null;
-            $result = new Result($attributeName);
+            $result = new Result();
 
             $tempRule = is_array($attributeRules) ? $attributeRules : [$attributeRules];
             $attributeRules = $this->normalizeRules($tempRule);
@@ -66,14 +65,14 @@ final class Validator implements ValidatorInterface
             );
 
             foreach ($tempResult->getErrors() as $error) {
-                $result->mergeError($error);
+                $result->addError($error->getMessage(), $error->getValuePath());
             }
             $results[] = $result;
         }
 
         foreach ($results as $result) {
             foreach ($result->getErrors() as $error) {
-                $compoundResult->mergeError($error);
+                $compoundResult->addError($error->getMessage(), $error->getValuePath());
             }
         }
 
@@ -121,7 +120,7 @@ final class Validator implements ValidatorInterface
             $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
 
             foreach ($ruleResult->getErrors() as $error) {
-                $compoundResult->mergeError($error);
+                $compoundResult->addError($error->getMessage(), $error->getValuePath());
             }
         }
         return $compoundResult;

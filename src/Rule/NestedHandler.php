@@ -56,10 +56,13 @@ final class NestedHandler implements RuleHandlerInterface
 
         $results = [];
         foreach ($rule->getRules() as $valuePath => $rules) {
-            $result = new Result((string)$valuePath);
+            $result = new Result();
 
             if ($rule->isErrorWhenPropertyPathIsNotFound() && !ArrayHelper::pathExists($value, $valuePath)) {
-                $compoundResult->addError($rule->getPropertyPathIsNotFoundMessage(), ['path' => $valuePath], $valuePath);
+                $compoundResult->addError(
+                    $rule->getPropertyPathIsNotFoundMessage(),
+                    [$valuePath, 'path' => $valuePath]
+                );
 
                 continue;
             }
@@ -74,14 +77,18 @@ final class NestedHandler implements RuleHandlerInterface
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                $result->mergeError($error);
+                $errorValuePath = is_int($valuePath) ? [$valuePath] : explode('.', $valuePath);
+                if ($error->getValuePath()) {
+                    $errorValuePath = array_merge($errorValuePath, $error->getValuePath());
+                }
+                $result->addError($error->getMessage(), $errorValuePath);
             }
             $results[] = $result;
         }
 
         foreach ($results as $result) {
             foreach ($result->getErrors() as $error) {
-                $compoundResult->mergeError($error);
+                $compoundResult->addError($error->getMessage(), $error->getValuePath());
             }
         }
 
