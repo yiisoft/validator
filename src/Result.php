@@ -43,6 +43,7 @@ final class Result
     {
         return $this->errors;
     }
+
     /**
      * @return string[]
      */
