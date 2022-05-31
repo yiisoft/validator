@@ -37,22 +37,30 @@ class RegexTest extends TestCase
     public function testValidate($data, bool $expectedIsValid, bool $expectedIsValidForInverseRule): void
     {
         $rule = new Regex(self::PATTERN);
-        $this->assertSame($rule->validate($data)->isValid(), $expectedIsValid);
+        $this->assertSame($rule
+            ->validate($data)
+            ->isValid(), $expectedIsValid);
 
         $rule = new Regex(self::PATTERN, not: true);
-        $this->assertSame($rule->validate($data)->isValid(), $expectedIsValidForInverseRule);
+        $this->assertSame($rule
+            ->validate($data)
+            ->isValid(), $expectedIsValidForInverseRule);
     }
 
     public function testMessage(): void
     {
         $rule = new Regex(self::PATTERN, message: 'Custom message.');
-        $this->assertSame(['Custom message.'], $rule->validate('b./')->getErrorMessages());
+        $this->assertSame(['Custom message.'], $rule
+            ->validate('b./')
+            ->getErrorMessages());
     }
 
     public function testIncorrectInputMessage(): void
     {
         $rule = new Regex(self::PATTERN, incorrectInputMessage: 'Custom message.');
-        $this->assertSame(['Custom message.'], $rule->validate(null)->getErrorMessages());
+        $this->assertSame(['Custom message.'], $rule
+            ->validate(null)
+            ->getErrorMessages());
     }
 
     public function getOptionsProvider(): array

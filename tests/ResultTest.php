@@ -28,7 +28,8 @@ class ResultTest extends TestCase
     public function errorsAreProperlyAdded(): void
     {
         $result = new Result();
-        $result->addError('Error 1')
+        $result
+            ->addError('Error 1')
             ->addError('Error 2');
 
         $this->assertEquals(['Error 1', 'Error 2'], $result->getErrorMessages());
@@ -46,27 +47,34 @@ class ResultTest extends TestCase
     {
         $this->assertEquals(
             [new Error('error1', []), new Error('error2', ['path', 2])],
-            $this->createErrorResult()->getErrors()
+            $this
+                ->createErrorResult()
+                ->getErrors()
         );
     }
 
     public function testGetErrorMessages(): void
     {
-        $this->assertSame(['error1', 'error2'], $this->createErrorResult()->getErrorMessages());
+        $this->assertSame(['error1', 'error2'], $this
+            ->createErrorResult()
+            ->getErrorMessages());
     }
 
     public function testGetErrorMessagesIndexedByPath(): void
     {
         $this->assertEquals(
             ['' => ['error1'], 'path.2' => ['error2']],
-            $this->createErrorResult()->getErrorMessagesIndexedByPath()
+            $this
+                ->createErrorResult()
+                ->getErrorMessagesIndexedByPath()
         );
     }
 
     private function createErrorResult(): Result
     {
         $result = new Result();
-        $result->addError('error1', [])
+        $result
+            ->addError('error1', [])
             ->addError('error2', ['path', 2]);
 
         return $result;
@@ -85,7 +93,9 @@ class ResultTest extends TestCase
     {
         $this->assertEquals(
             ['attribute2' => ['error2.1', 'error2.2', 'error2.3', 'error2.4'], '' => ['error3.1', 'error3.2']],
-            $this->createAttributeErrorResult()->getErrorMessagesIndexedByAttribute()
+            $this
+                ->createAttributeErrorResult()
+                ->getErrorMessagesIndexedByAttribute()
         );
     }
 
@@ -141,13 +151,16 @@ class ResultTest extends TestCase
 
     public function testGetCommonErrorMessages(): void
     {
-        $this->assertEquals(['error3.1', 'error3.2'], $this->createAttributeErrorResult()->getCommonErrorMessages());
+        $this->assertEquals(['error3.1', 'error3.2'], $this
+            ->createAttributeErrorResult()
+            ->getCommonErrorMessages());
     }
 
     private function createAttributeErrorResult(): Result
     {
         $result = new Result();
-        $result->addError('error2.1', ['attribute2'])
+        $result
+            ->addError('error2.1', ['attribute2'])
             ->addError('error2.2', ['attribute2'])
             ->addError('error2.3', ['attribute2', 'nested'])
             ->addError('error2.4', ['attribute2', 'nested'])

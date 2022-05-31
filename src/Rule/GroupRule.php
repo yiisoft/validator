@@ -28,7 +28,10 @@ abstract class GroupRule extends Rule
     protected function validateValue($value, ?ValidationContext $context = null): Result
     {
         $result = new Result();
-        if (!$this->getRuleSet()->validate($value, $context)->isValid()) {
+        if (!$this
+            ->getRuleSet()
+            ->validate($value, $context)
+            ->isValid()) {
             $result->addError($this->formatMessage($this->message));
         }
 
@@ -42,6 +45,8 @@ abstract class GroupRule extends Rule
 
     public function getOptions(): array
     {
-        return $this->getRuleSet()->asArray();
+        return $this
+            ->getRuleSet()
+            ->asArray();
     }
 }

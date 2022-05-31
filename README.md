@@ -164,7 +164,9 @@ $rule = new Nested([
         'age' => [new Number(min: 18)],
     )];
 ]);
-$errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
+$errors = $rule
+    ->validate($data)
+    ->getErrorMessagesIndexedByPath();
 ```
 
 ##### Other configuration options
@@ -253,7 +255,9 @@ $rule = new Nested([
         ]),
     ]),
 ]);
-$errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
+$errors = $rule
+    ->validate($data)
+    ->getErrorMessagesIndexedByPath();
 ```
 
 The contents of the errors will be:
@@ -346,7 +350,9 @@ $data = [
 ];
 $dataSet = new AttributeDataSet(new ChartsData(), $data);
 $validator = new Validator();
-$errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
+$errors = $validator
+    ->validate($dataSet)
+    ->getErrorMessagesIndexedByPath();
 ```
 
 ##### Traits
@@ -639,14 +645,16 @@ final class NoLessThanExistingBidRule extends Rule
     {
         $result = new Result();
         
-        $currentMax = $connection->query('SELECT MAX(price) FROM bid')->scalar();
-        if ($value <= $currentMax) {
-            $result->addError($this->formatMessage('There is a higher bid of {bid}.', ['bid' => $currentMax]));
-        }
-
-        return $result;
-    }
-}
+        $currentMax = $connection
+            ->query('SELECT MAX(price) FROM bid')
+            ->scalar();
+                    if ($value <= $currentMax) {
+                        $result->addError($this->formatMessage('There is a higher bid of {bid}.', ['bid' => $currentMax]));
+                    }
+            
+                    return $result;
+                }
+            }
 ```
 
 #### Using common arguments for multiple rules of the same type
