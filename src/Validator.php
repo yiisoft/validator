@@ -64,16 +64,12 @@ final class Validator implements ValidatorInterface
                 $validatedContext
             );
 
-            foreach ($tempResult->getErrors() as $error) {
-                $result->addError($error->getMessage(), $error->getValuePath());
-            }
+            $result = $this->addErrors($result, $tempResult->getErrors());
             $results[] = $result;
         }
 
         foreach ($results as $result) {
-            foreach ($result->getErrors() as $error) {
-                $compoundResult->addError($error->getMessage(), $error->getValuePath());
-            }
+            $compoundResult = $this->addErrors($compoundResult, $result->getErrors());
         }
 
         if ($data instanceof PostValidationHookInterface) {
@@ -153,5 +149,13 @@ final class Validator implements ValidatorInterface
         }
 
         return $rule;
+    }
+
+    private function addErrors(Result $result, array $errors): Result
+    {
+        foreach ($errors as $error) {
+            $result->addError($error->getMessage(), $error->getValuePath());
+        }
+        return $result;
     }
 }
