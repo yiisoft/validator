@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Error;
-use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\CompareToHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;

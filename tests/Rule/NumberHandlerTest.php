@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use stdClass;
 use Yiisoft\Validator\Error;
-use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\NumberHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
