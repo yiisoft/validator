@@ -26,6 +26,6 @@ final class StaticRuleHandlerResolver implements RuleHandlerResolverInterface
             throw new RuleHandlerInterfaceNotImplementedException($className);
         }
 
-        return new $className;
+        return new $className();
     }
 }

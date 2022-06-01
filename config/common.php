@@ -19,5 +19,5 @@ return [
         '__construct()' => [
             'handlers' => $params['ruleHandlers'],
         ],
-    ]
+    ],
 ];
