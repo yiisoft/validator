@@ -7,11 +7,14 @@ namespace Yiisoft\Validator\Rule;
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 final class SubsetHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Subset) {
@@ -29,7 +32,8 @@ final class SubsetHandler implements RuleHandlerInterface
             $values = $rule->getValues() instanceof Traversable ? iterator_to_array($rule->getValues()) : $rule->getValues();
             $valuesString = '"' . implode('", "', $values) . '"';
 
-            $result->addError($rule->getSubsetMessage(), ['values' => $valuesString]);
+            $formattedMessage = $this->formatMessage($rule->getSubsetMessage(), ['values' => $valuesString]);
+            $result->addError($formattedMessage);
         }
 
         return $result;

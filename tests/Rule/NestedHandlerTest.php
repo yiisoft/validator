@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Error;
+use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\Nested;
@@ -31,7 +32,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'error' => [
                 new Nested(['author.age' => [new Number(min: 20)]]),
                 $value,
-                [new Error('Value must be no less than {min}.', ['author', 'age', 'min' => 20])],
+                [new Error($this->formatMessage('Value must be no less than {min}.', ['min' => 20]), ['author', 'age'])],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
@@ -52,7 +53,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             [
                 new Nested(['value' => new Required()], errorWhenPropertyPathIsNotFound: true),
                 [],
-                [new Error($rule->getPropertyPathIsNotFoundMessage(), ['value', 'path' => 'value'])],
+                [new Error($this->formatMessage($rule->getPropertyPathIsNotFoundMessage(), ['path' => 'value']), ['value'])],
             ],
             [
                 // @link https://github.com/yiisoft/validator/issues/200
@@ -80,7 +81,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     ]),
                 ]),
                 [0 => [0 => -11]],
-                [new Error('Value must be no less than {min}.', ['0', '0', 'min' => -10])],
+                [new Error($this->formatMessage('Value must be no less than {min}.', ['min' => -10]), ['0', '0'])],
             ],
         ];
     }
@@ -131,7 +132,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     propertyPathIsNotFoundMessage: 'Property is not found.',
                 ),
                 [],
-                [new Error('Property is not found.', ['value', 'path' => 'value'])],
+                [new Error('Property is not found.', ['value'])],
             ],
         ];
     }

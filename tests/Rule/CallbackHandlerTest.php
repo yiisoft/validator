@@ -55,13 +55,13 @@ final class CallbackHandlerTest extends AbstractRuleValidatorTest
                 new Callback(static function ($value): Result {
                     $result = new Result();
                     if ($value !== 42) {
-                        $result->addError('Custom error', [], 'attribute name');
+                        $result->addError('Custom error', []);
                     }
 
                     return $result;
                 }),
                 41,
-                [new Error('Custom error', [], 'attribute name')],
+                [new Error('Custom error', [])],
             ],
         ];
     }

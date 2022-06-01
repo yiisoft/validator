@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
@@ -23,6 +24,8 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class CompareToHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     /**
      * Constant for specifying the comparison as string values.
      * No conversion will be done before comparison.
@@ -47,7 +50,8 @@ final class CompareToHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $rule->getCompareValue())) {
-            $result->addError($rule->getMessage(), ['value' => $rule->getCompareValue()]);
+            $formattedMessage = $this->formatMessage($rule->getMessage(), ['value' => $rule->getCompareValue()]);
+            $result->addError($formattedMessage);
         }
 
         return $result;

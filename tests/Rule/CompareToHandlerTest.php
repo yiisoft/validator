@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Error;
+use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\CompareToHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
@@ -22,27 +23,27 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
         $messageLessOrEqualThan = 'Value must be less than or equal to "{value}".';
 
         return [
-            [new CompareTo($value), 101, [new Error($messageEqual, ['value' => $value])]],
+            [new CompareTo($value), 101, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
 
-            [new CompareTo($value, operator: '==='), $value + 1, [new Error($messageEqual, ['value' => $value])]],
+            [new CompareTo($value, operator: '==='), $value + 1, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
 
-            [new CompareTo($value, operator: '!='), $value, [new Error($messageNotEqual, ['value' => $value])]],
-            [new CompareTo($value, operator: '!='), (string)$value, [new Error($messageNotEqual, ['value' => $value])]],
-            [new CompareTo($value, operator: '!='), (float)$value, [new Error($messageNotEqual, ['value' => $value])]],
+            [new CompareTo($value, operator: '!='), $value, [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))]],
+            [new CompareTo($value, operator: '!='), (string)$value, [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))]],
+            [new CompareTo($value, operator: '!='), (float)$value, [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))]],
 
-            [new CompareTo($value, operator: '!=='), $value, [new Error($messageNotEqual, ['value' => $value])]],
-            [new CompareTo($value, operator: '!=='), (string)$value, [new Error($messageNotEqual, ['value' => $value])]],
-            [new CompareTo($value, operator: '!=='), (float)$value, [new Error($messageNotEqual, ['value' => $value])]],
+            [new CompareTo($value, operator: '!=='), $value, [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))]],
+            [new CompareTo($value, operator: '!=='), (string)$value, [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))]],
+            [new CompareTo($value, operator: '!=='), (float)$value, [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))]],
 
-            [new CompareTo($value, operator: '>'), $value, [new Error($messageGreaterThan, ['value' => $value])]],
-            [new CompareTo($value, operator: '>'), $value - 1, [new Error($messageGreaterThan, ['value' => $value])]],
+            [new CompareTo($value, operator: '>'), $value, [new Error($this->formatMessage($messageGreaterThan, ['value' => $value]))]],
+            [new CompareTo($value, operator: '>'), $value - 1, [new Error($this->formatMessage($messageGreaterThan, ['value' => $value]))]],
 
-            [new CompareTo($value, operator: '>='), $value - 1, [new Error($messageGreaterOrEqualThan, ['value' => $value])]],
+            [new CompareTo($value, operator: '>='), $value - 1, [new Error($this->formatMessage($messageGreaterOrEqualThan, ['value' => $value]))]],
 
-            [new CompareTo($value, operator: '<'), $value, [new Error($messageLessThan, ['value' => $value])]],
-            [new CompareTo($value, operator: '<'), $value + 1, [new Error($messageLessThan, ['value' => $value])]],
+            [new CompareTo($value, operator: '<'), $value, [new Error($this->formatMessage($messageLessThan, ['value' => $value]))]],
+            [new CompareTo($value, operator: '<'), $value + 1, [new Error($this->formatMessage($messageLessThan, ['value' => $value]))]],
 
-            [new CompareTo($value, operator: '<='), $value + 1, [new Error($messageLessOrEqualThan, ['value' => $value])]],
+            [new CompareTo($value, operator: '<='), $value + 1, [new Error($this->formatMessage($messageLessOrEqualThan, ['value' => $value]))]],
         ];
     }
 
@@ -80,7 +81,7 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
             [
                 new CompareTo(100, message: 'Custom error'),
                 101,
-                [new Error('Custom error', ['value' => 100])],
+                [new Error('Custom error')],
             ],
         ];
     }

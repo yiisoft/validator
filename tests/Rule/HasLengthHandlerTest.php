@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use stdClass;
 use Yiisoft\Validator\Error;
+use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\HasLengthHandler;
 
@@ -21,13 +22,13 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
             [$defaultConfig, true, [new Error($defaultConfig->getMessage(), [])]],
             [$defaultConfig, false, [new Error($defaultConfig->getMessage(), [])]],
 
-            [new HasLength(max: 25), str_repeat('x', 1250), [new Error($defaultConfig->getTooLongMessage(), ['max' => 25])]],
-            [new HasLength(min: 25, max: 25), str_repeat('x', 125), [new Error($defaultConfig->getTooLongMessage(), ['max' => 25])]],
+            [new HasLength(max: 25), str_repeat('x', 1250), [new Error($this->formatMessage($defaultConfig->getTooLongMessage(), ['max' => 25]))]],
+            [new HasLength(min: 25, max: 25), str_repeat('x', 125), [new Error($this->formatMessage($defaultConfig->getTooLongMessage(), ['max' => 25]))]],
 
-            [new HasLength(min: 25, max: 25), '', [new Error($defaultConfig->getTooShortMessage(), ['min' => 25])]],
-            [new HasLength(min: 10, max: 25), str_repeat('x', 5), [new Error($defaultConfig->getTooShortMessage(), ['min' => 10])]],
-            [new HasLength(min: 25), str_repeat('x', 13), [new Error($defaultConfig->getTooShortMessage(), ['min' => 25])]],
-            [new HasLength(min: 25), '', [new Error($defaultConfig->getTooShortMessage(), ['min' => 25])]],
+            [new HasLength(min: 25, max: 25), '', [new Error($this->formatMessage($defaultConfig->getTooShortMessage(), ['min' => 25]))]],
+            [new HasLength(min: 10, max: 25), str_repeat('x', 5), [new Error($this->formatMessage($defaultConfig->getTooShortMessage(), ['min' => 10]))]],
+            [new HasLength(min: 25), str_repeat('x', 13), [new Error($this->formatMessage($defaultConfig->getTooShortMessage(), ['min' => 25]))]],
+            [new HasLength(min: 25), '', [new Error($this->formatMessage($defaultConfig->getTooShortMessage(), ['min' => 25]))]],
         ];
     }
 
@@ -75,12 +76,12 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
             [
                 $rule,
                 str_repeat('x', 1),
-                [new Error('is too short test', ['min' => 3])],
+                [new Error($this->formatMessage('is too short test', ['min' => 3]))],
             ],
             [
                 $rule,
                 str_repeat('x', 6),
-                [new Error('is too long test', ['max' => 5])],
+                [new Error($this->formatMessage('is too long test', ['max' => 5]))],
             ],
         ];
     }

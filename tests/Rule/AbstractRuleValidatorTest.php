@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
+use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
@@ -63,6 +64,11 @@ abstract class AbstractRuleValidatorTest extends TestCase
         $context = new ValidationContext($validator, null);
 
         return $ruleValidator->validate($value, $config, $context);
+    }
+
+    protected function formatMessage(string $message, array $params): string
+    {
+        return (new Formatter())->format($message, $params);
     }
 
     abstract public function customErrorMessagesProvider(): array;

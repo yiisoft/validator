@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Countable;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use function count;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -16,6 +17,8 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class CountHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Count) {
@@ -33,17 +36,20 @@ final class CountHandler implements RuleHandlerInterface
         $count = count($value);
 
         if ($rule->getExactly() !== null && $count !== $rule->getExactly()) {
-            $result->addError($rule->getNotExactlyMessage(), ['exactly' => $rule->getExactly()]);
+            $formattedMessage = $this->formatMessage($rule->getNotExactlyMessage(), ['exactly' => $rule->getExactly()]);
+            $result->addError($formattedMessage);
 
             return $result;
         }
 
         if ($rule->getMin() !== null && $count < $rule->getMin()) {
-            $result->addError($rule->getTooFewItemsMessage(), ['min' => $rule->getMin()]);
+            $formattedMessage = $this->formatMessage($rule->getTooFewItemsMessage(), ['min' => $rule->getMin()]);
+            $result->addError($formattedMessage);
         }
 
         if ($rule->getMax() !== null && $count > $rule->getMax()) {
-            $result->addError($rule->getTooManyItemsMessage(), ['max' => $rule->getMax()]);
+            $formattedMessage = $this->formatMessage($rule->getTooManyItemsMessage(), ['max' => $rule->getMax()]);
+            $result->addError($formattedMessage);
         }
 
         return $result;

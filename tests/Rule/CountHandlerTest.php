@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Countable;
 use stdClass;
 use Yiisoft\Validator\Error;
+use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\CountHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
@@ -23,37 +24,37 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
             [
                 $rule,
                 [1],
-                [new Error($message, $parameters)],
+                [new Error($this->formatMessage($message, $parameters))],
             ],
             [
                 $rule,
                 [],
-                [new Error($message, $parameters)],
+                [new Error($this->formatMessage($message, $parameters))],
             ],
             [
                 $rule,
                 [0, 0],
-                [new Error($message, $parameters)],
+                [new Error($this->formatMessage($message, $parameters))],
             ],
             [
                 $rule,
                 [1.1],
-                [new Error($message, $parameters)],
+                [new Error($this->formatMessage($message, $parameters))],
             ],
             [
                 $rule,
                 [''],
-                [new Error($message, $parameters)],
+                [new Error($this->formatMessage($message, $parameters))],
             ],
             [
                 $rule,
                 ['some string'],
-                [new Error($message, $parameters)],
+                [new Error($this->formatMessage($message, $parameters))],
             ],
             [
                 $rule,
                 [new stdClass()],
-                [new Error($message, $parameters)],
+                [new Error($this->formatMessage($message, $parameters))],
             ],
             // https://www.php.net/manual/ru/class.countable.php
             [
@@ -68,12 +69,12 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
                         }
                     },
                 ],
-                [new Error($message, $parameters)],
+                [new Error($this->formatMessage($message, $parameters))],
             ],
             [
                 new Count(max: 3),
                 [0, 0, 0, 0],
-                [new Error('This value must contain at most {max, number} {max, plural, one{item} other{items}}.', ['max' => 3])],
+                [new Error($this->formatMessage('This value must contain at most {max, number} {max, plural, one{item} other{items}}.', ['max' => 3]))],
             ],
         ];
     }
@@ -107,17 +108,17 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
             [
                 new Count(max: 3, tooManyItemsMessage: 'Custom message.'),
                 [0, 0, 0, 0],
-                [new Error('Custom message.', ['max' => 3])],
+                [new Error('Custom message.')],
             ],
             [
                 new Count(exactly: 3, notExactlyMessage: 'Custom message.'),
                 [0, 0, 0, 0],
-                [new Error('Custom message.', ['exactly' => 3])],
+                [new Error('Custom message.')],
             ],
             [
                 new Count(min: 3, tooFewItemsMessage: 'Custom message.'),
                 [0, 0],
-                [new Error('Custom message.', ['min' => 3])],
+                [new Error('Custom message.')],
             ],
         ];
     }

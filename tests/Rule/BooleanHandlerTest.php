@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Error;
+use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\BooleanHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
@@ -14,7 +15,7 @@ final class BooleanHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $defaultRule = new Boolean();
-        $defaultError = new Error($defaultRule->getMessage(), ['true' => '1', 'false' => '0']);
+        $defaultError = new Error($this->formatMessage($defaultRule->getMessage(), ['true' => '1', 'false' => '0']));
 
         return [
             [$defaultRule, '5', [$defaultError]],
@@ -29,12 +30,12 @@ final class BooleanHandlerTest extends AbstractRuleValidatorTest
             [
                 new Boolean(trueValue: true, falseValue: false, strict: true),
                 '0',
-                [new Error($defaultRule->getMessage(), ['true' => true, 'false' => false])],
+                [new Error($this->formatMessage($defaultRule->getMessage(), ['true' => true, 'false' => false]))],
             ],
             [
                 new Boolean(trueValue: true, falseValue: false, strict: true),
                 [],
-                [new Error($defaultRule->getMessage(), ['true' => true, 'false' => false])],
+                [new Error($this->formatMessage($defaultRule->getMessage(), ['true' => true, 'false' => false]))],
             ],
         ];
     }
@@ -63,10 +64,7 @@ final class BooleanHandlerTest extends AbstractRuleValidatorTest
                 new Boolean(message: 'Custom error'),
                 5,
                 [
-                    new Error('Custom error', [
-                        'true' => '1',
-                        'false' => '0',
-                    ]),
+                    new Error('Custom error'),
                 ],
             ],
         ];

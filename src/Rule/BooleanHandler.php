@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
@@ -13,6 +14,8 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class BooleanHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Boolean) {
@@ -31,13 +34,14 @@ final class BooleanHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $result->addError($rule->getMessage(), [
+        $formattedMessage = $this->formatMessage($rule->getMessage(), [
             // TODO: get reasons to do like this
             //  'true' => $config->getTrueValue() === true ? 'true' : $config->getTrueValue(),
             //  'false' => $config->$this->getFalseValue() === false ? 'false' : $config->$this->getFalseValue(),
             'true' => $rule->getTrueValue(),
             'false' => $rule->getFalseValue(),
         ]);
+        $result->addError($formattedMessage);
 
         return $result;
     }

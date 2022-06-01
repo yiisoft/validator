@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use function is_array;
 use function is_object;
@@ -38,6 +39,8 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class NestedHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Nested) {
@@ -59,10 +62,10 @@ final class NestedHandler implements RuleHandlerInterface
             $result = new Result();
 
             if ($rule->isErrorWhenPropertyPathIsNotFound() && !ArrayHelper::pathExists($value, $valuePath)) {
-                $compoundResult->addError(
-                    $rule->getPropertyPathIsNotFoundMessage(),
-                    [$valuePath, 'path' => $valuePath]
-                );
+                $formattedMessage = $this->formatMessage($rule->getPropertyPathIsNotFoundMessage(), [
+                    'path' => $valuePath
+                ]);
+                $compoundResult->addError($formattedMessage, [$valuePath]);
 
                 continue;
             }

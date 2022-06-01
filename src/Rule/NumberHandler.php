@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
@@ -18,6 +19,8 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class NumberHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Number) {
@@ -28,7 +31,7 @@ final class NumberHandler implements RuleHandlerInterface
 
         if (is_bool($value) || !is_scalar($value)) {
             $message = $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.';
-            $result->addError($message, ['value' => $value]);
+            $result->addError($this->formatMessage($message, ['value' => $value]));
             return $result;
         }
 
@@ -36,11 +39,13 @@ final class NumberHandler implements RuleHandlerInterface
 
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
             $message = $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.';
-            $result->addError($message, ['value' => $value]);
+            $result->addError($this->formatMessage($message, ['value' => $value]));
         } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
-            $result->addError($rule->getTooSmallMessage(), ['min' => $rule->getMin()]);
+            $formattedMessage = $this->formatMessage($rule->getTooSmallMessage(), ['min' => $rule->getMin()]);
+            $result->addError($formattedMessage);
         } elseif ($rule->getMax() !== null && $value > $rule->getMax()) {
-            $result->addError($rule->getTooBigMessage(), ['max' => $rule->getMax()]);
+            $formattedMessage = $this->formatMessage($rule->getTooBigMessage(), ['max' => $rule->getMax()]);
+            $result->addError($formattedMessage);
         }
 
         return $result;

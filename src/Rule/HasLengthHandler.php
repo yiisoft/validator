@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use function is_string;
@@ -16,6 +17,8 @@ use function is_string;
  */
 final class HasLengthHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate($value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof HasLength) {
@@ -32,10 +35,12 @@ final class HasLengthHandler implements RuleHandlerInterface
         $length = mb_strlen($value, $rule->getEncoding());
 
         if ($rule->getMin() !== null && $length < $rule->getMin()) {
-            $result->addError($rule->getTooShortMessage(), ['min' => $rule->getMin()]);
+            $formattedMessage = $this->formatMessage($rule->getTooShortMessage(), ['min' => $rule->getMin()]);
+            $result->addError($formattedMessage);
         }
         if ($rule->getMax() !== null && $length > $rule->getMax()) {
-            $result->addError($rule->getTooLongMessage(), ['max' => $rule->getMax()]);
+            $formattedMessage = $this->formatMessage($rule->getTooLongMessage(), ['max' => $rule->getMax()]);
+            $result->addError($formattedMessage);
         }
 
         return $result;
