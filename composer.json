@@ -55,7 +55,8 @@
             "source-directory": "config"
         },
         "config-plugin": {
-            "common": "common.php"
+            "common": "common.php",
+            "params": "params.php"
         }
     },
     "config": {
