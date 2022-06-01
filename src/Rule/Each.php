@@ -88,7 +88,7 @@ final class Each implements ParametrizedRuleInterface
             if ($rule instanceof ParametrizedRuleInterface) {
                 $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
             } else {
-                $arrayOfRules[] = [get_class($rule)];
+                $arrayOfRules[] = [$rule->getName()];
             }
         }
         return $arrayOfRules;

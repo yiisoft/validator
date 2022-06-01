@@ -381,7 +381,7 @@ use Yiisoft\Validator\ValidationContext;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class ValidateXRule implements RuleHandlerInterface
 {    
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         $result->addError('Custom error.');
@@ -529,7 +529,7 @@ use Yiisoft\Validator\RuleInterface;
 
 final class Pi implements RuleInterface
 {
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         $equal = \abs($value - M_PI) < PHP_FLOAT_EPSILON;
@@ -557,7 +557,7 @@ use Yiisoft\Validator\ValidationContext;
 
 final class CompanyName extends Rule
 {
-    public function validate(mixed $value, object $config, ValidatorInterface $validator, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         $dataSet = $context->getDataSet();
