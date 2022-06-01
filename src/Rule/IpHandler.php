@@ -9,8 +9,9 @@ use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
-use function is_string;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
+
+use function is_string;
 
 /**
  * Checks if the value is a valid IPv4/IPv6 address or subnet.
@@ -33,9 +34,7 @@ final class IpHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Ip::class, $rule);
         }
 
-        if (!$rule->isAllowIpv4() && !$rule->isAllowIpv6()) {
-            throw new RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time.');
-        }
+        $this->checkAllowedVersions($rule);
         $result = new Result();
         if (!is_string($value)) {
             $result->addError($rule->getMessage());
@@ -58,18 +57,54 @@ final class IpHandler implements RuleHandlerInterface
             return $result;
         }
 
-        if ($rule->isRequireSubnet() && $cidr === null) {
+        $result = $this->validateValueParts($rule, $result, $cidr, $negation);
+        if (!$result->isValid()) {
+            return $result;
+        }
+        $result = $this->validateVersion($rule, $result, $ipVersion);
+        if (!$result->isValid()) {
+            return $result;
+        }
+        return $this->validateCidr($rule, $result, $cidr, $ipCidr);
+    }
+
+    /**
+     * Used to get the Regexp pattern for initial IP address parsing.
+     */
+    public function getIpParsePattern(): string
+    {
+        return '/^(?<not>' . preg_quote(
+            self::NEGATION_CHAR,
+            '/'
+        ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
+    }
+
+    private function checkAllowedVersions(Ip $rule): void
+    {
+        if (!$rule->isAllowIpv4() && !$rule->isAllowIpv6()) {
+            throw new RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time.');
+        }
+    }
+
+    private function validateValueParts(Ip $rule, Result $result, ?string $cidr, bool $negation): Result
+    {
+        if ($cidr === null && $rule->isRequireSubnet()) {
             $result->addError($rule->getNoSubnetMessage());
             return $result;
         }
-        if (!$rule->isAllowSubnet() && $cidr !== null) {
+        if ($cidr !== null && !$rule->isAllowSubnet()) {
             $result->addError($rule->getHasSubnetMessage());
             return $result;
         }
-        if (!$rule->isAllowNegation() && $negation) {
+        if ($negation && !$rule->isAllowNegation()) {
             $result->addError($rule->getMessage());
             return $result;
         }
+        return $result;
+    }
+
+    private function validateVersion(Ip $rule, Result $result, int $ipVersion): Result
+    {
         if ($ipVersion === IpHelper::IPV6 && !$rule->isAllowIpv6()) {
             $result->addError($rule->getIpv6NotAllowedMessage());
             return $result;
@@ -78,9 +113,11 @@ final class IpHandler implements RuleHandlerInterface
             $result->addError($rule->getIpv4NotAllowedMessage());
             return $result;
         }
-        if (!$result->isValid()) {
-            return $result;
-        }
+        return $result;
+    }
+
+    private function validateCidr(Ip $rule, Result $result, $cidr, $ipCidr): Result
+    {
         if ($cidr !== null) {
             try {
                 IpHelper::getCidrBits($ipCidr);
@@ -93,18 +130,6 @@ final class IpHandler implements RuleHandlerInterface
             $result->addError($rule->getNotInRangeMessage());
             return $result;
         }
-
         return $result;
-    }
-
-    /**
-     * Used to get the Regexp pattern for initial IP address parsing.
-     */
-    public function getIpParsePattern(): string
-    {
-        return '/^(?<not>' . preg_quote(
-            self::NEGATION_CHAR,
-            '/'
-        ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 }
