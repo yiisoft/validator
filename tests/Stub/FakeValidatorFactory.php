@@ -22,14 +22,14 @@ use Yiisoft\Validator\Rule\RegexHandler;
 use Yiisoft\Validator\Rule\RequiredHandler;
 use Yiisoft\Validator\Rule\SubsetHandler;
 use Yiisoft\Validator\Rule\UrlHandler;
-use Yiisoft\Validator\StaticRuleHandlerResolver;
+use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 
 final class FakeValidatorFactory
 {
     public static function make(): Validator
     {
-        return new Validator(new StaticRuleHandlerResolver([
+        return new Validator(new SimpleRuleHandlerContainer([
             AtLeastHandler::class,
             BooleanHandler::class,
             CallbackHandler::class,

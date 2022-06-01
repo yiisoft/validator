@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
-use Yiisoft\Validator\StaticRuleHandlerResolver;
+use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
@@ -15,9 +15,9 @@ return [
     ValidatorInterface::class => Validator::class,
     FormatterInterface::class => Formatter::class,
     RuleHandlerResolverInterface::class => [
-        'class' => StaticRuleHandlerResolver::class,
+        'class' => SimpleRuleHandlerContainer::class,
         '__construct()' => [
-            'handlers' => $params['ruleHandlers'],
+            'handlers' => $params['yiisoft/validator']['ruleHandlers'],
         ],
     ],
 ];
