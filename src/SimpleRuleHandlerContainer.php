@@ -11,6 +11,7 @@ use Yiisoft\Validator\Rule\RuleHandlerInterface;
 final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 {
     private array $instances = [];
+
     /**
      * @param array<class-string> $handlers List of rule handler classes.
      */
