@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Countable;
 use stdClass;
 use Yiisoft\Validator\Error;
-use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\CountHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;

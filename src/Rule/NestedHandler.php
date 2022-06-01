@@ -63,7 +63,7 @@ final class NestedHandler implements RuleHandlerInterface
 
             if ($rule->isErrorWhenPropertyPathIsNotFound() && !ArrayHelper::pathExists($value, $valuePath)) {
                 $formattedMessage = $this->formatMessage($rule->getPropertyPathIsNotFoundMessage(), [
-                    'path' => $valuePath
+                    'path' => $valuePath,
                 ]);
                 $compoundResult->addError($formattedMessage, [$valuePath]);
 
