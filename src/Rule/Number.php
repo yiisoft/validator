@@ -6,6 +6,8 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ParametrizedRuleInterface;
@@ -18,9 +20,10 @@ use Yiisoft\Validator\ParametrizedRuleInterface;
  * to ensure the number is within certain range.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Number implements ParametrizedRuleInterface
+final class Number implements ParametrizedRuleInterface, PreValidatableRuleInterface
 {
     use HandlerClassNameTrait;
+    use PreValidatableTrait;
     use RuleNameTrait;
 
     public function __construct(
@@ -117,30 +120,6 @@ final class Number implements ParametrizedRuleInterface
     public function getNumberPattern(): string
     {
         return $this->numberPattern;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkipOnEmpty(): bool
-    {
-        return $this->skipOnEmpty;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkipOnError(): bool
-    {
-        return $this->skipOnError;
-    }
-
-    /**
-     * @return Closure|null
-     */
-    public function getWhen(): ?Closure
-    {
-        return $this->when;
     }
 
     public function getNotANumberMessage(): string

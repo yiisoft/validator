@@ -9,6 +9,8 @@ use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
+use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ParametrizedRuleInterface;
@@ -27,9 +29,10 @@ use Yiisoft\Validator\ParametrizedRuleInterface;
  * {@see CompareTo::TYPE_NUMBER} to enable numeric comparison.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class CompareTo implements ParametrizedRuleInterface
+final class CompareTo implements ParametrizedRuleInterface, PreValidatableRuleInterface
 {
     use HandlerClassNameTrait;
+    use PreValidatableTrait;
     use RuleNameTrait;
 
     /**
@@ -117,30 +120,6 @@ final class CompareTo implements ParametrizedRuleInterface
     public function getOperator(): string
     {
         return $this->operator;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkipOnEmpty(): bool
-    {
-        return $this->skipOnEmpty;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkipOnError(): bool
-    {
-        return $this->skipOnError;
-    }
-
-    /**
-     * @return Closure|null
-     */
-    public function getWhen(): ?Closure
-    {
-        return $this->when;
     }
 
     public function getMessage(): string

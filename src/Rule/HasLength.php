@@ -7,6 +7,8 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ParametrizedRuleInterface;
@@ -17,9 +19,10 @@ use Yiisoft\Validator\ParametrizedRuleInterface;
  * Note, this rule should only be used with strings.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class HasLength implements ParametrizedRuleInterface
+final class HasLength implements ParametrizedRuleInterface, PreValidatableRuleInterface
 {
     use HandlerClassNameTrait;
+    use PreValidatableTrait;
     use RuleNameTrait;
 
     public function __construct(
@@ -104,30 +107,6 @@ final class HasLength implements ParametrizedRuleInterface
     public function getEncoding(): string
     {
         return $this->encoding;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkipOnEmpty(): bool
-    {
-        return $this->skipOnEmpty;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkipOnError(): bool
-    {
-        return $this->skipOnError;
-    }
-
-    /**
-     * @return Closure|null
-     */
-    public function getWhen(): ?Closure
-    {
-        return $this->when;
     }
 
     #[ArrayShape([

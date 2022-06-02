@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
@@ -11,6 +12,9 @@ use Psr\Container\NotFoundExceptionInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ScalarDataSet;
 use Yiisoft\Validator\Rule\Callback;
+
+use Yiisoft\Validator\Rule\Trait\EmptyCheckTrait;
+
 use function is_array;
 use function is_object;
 
@@ -19,6 +23,8 @@ use function is_object;
  */
 final class Validator implements ValidatorInterface
 {
+    use EmptyCheckTrait;
+
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 
     private RuleHandlerResolverInterface $ruleHandlerResolver;
@@ -107,6 +113,11 @@ final class Validator implements ValidatorInterface
     {
         $compoundResult = new Result();
         foreach ($rules as $rule) {
+            $preValidateResult = $this->preValidate($value, $context, $rule);
+            if ($preValidateResult !== null && $preValidateResult->isValid()) {
+                continue;
+            }
+
             $ruleHandler = $this->ruleHandlerResolver->resolve($rule->getHandlerClassName());
             $ruleResult = $ruleHandler->validate($value, $rule, $context);
             if ($ruleResult->isValid()) {
@@ -141,11 +152,13 @@ final class Validator implements ValidatorInterface
         }
 
         if (!$rule instanceof RuleInterface) {
-            throw new InvalidArgumentException(sprintf(
-                'Rule should be either an instance of %s or a callable, %s given.',
-                RuleInterface::class,
-                gettype($rule)
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Rule should be either an instance of %s or a callable, %s given.',
+                    RuleInterface::class,
+                    gettype($rule)
+                )
+            );
         }
 
         return $rule;
@@ -157,5 +170,25 @@ final class Validator implements ValidatorInterface
             $result->addError($error->getMessage(), $error->getValuePath());
         }
         return $result;
+    }
+
+    private function preValidate(
+        $value,
+        ValidationContext $context,
+        PreValidatableRuleInterface $rule
+    ): ?Result {
+        if ($rule->isSkipOnEmpty() && $this->isEmpty($value)) {
+            return new Result();
+        }
+
+        if ($rule->isSkipOnError() && $context->getParameter(Validator::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
+            return new Result();
+        }
+
+        if (is_callable($rule->getWhen()) && !($rule->getWhen())($value, $context)) {
+            return new Result();
+        }
+
+        return null;
     }
 }

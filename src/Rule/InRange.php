@@ -7,6 +7,8 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ParametrizedRuleInterface;
@@ -18,9 +20,10 @@ use Yiisoft\Validator\ParametrizedRuleInterface;
  * If the {@see InRange::$not} is called, the rule will ensure the value is NOT among the specified range.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class InRange implements ParametrizedRuleInterface
+final class InRange implements ParametrizedRuleInterface, PreValidatableRuleInterface
 {
     use HandlerClassNameTrait;
+    use PreValidatableTrait;
     use RuleNameTrait;
 
     public function __construct(
@@ -71,30 +74,6 @@ final class InRange implements ParametrizedRuleInterface
     public function getMessage(): string
     {
         return $this->message;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkipOnEmpty(): bool
-    {
-        return $this->skipOnEmpty;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkipOnError(): bool
-    {
-        return $this->skipOnError;
-    }
-
-    /**
-     * @return Closure|null
-     */
-    public function getWhen(): ?Closure
-    {
-        return $this->when;
     }
 
     #[ArrayShape([

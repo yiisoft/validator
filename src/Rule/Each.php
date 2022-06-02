@@ -6,6 +6,8 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ParametrizedRuleInterface;
@@ -15,9 +17,10 @@ use Yiisoft\Validator\RuleInterface;
  * Validates an array by checking each of its elements against a set of rules.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Each implements ParametrizedRuleInterface
+final class Each implements ParametrizedRuleInterface, PreValidatableRuleInterface
 {
     use HandlerClassNameTrait;
+    use PreValidatableTrait;
     use RuleNameTrait;
 
     public function __construct(
@@ -55,30 +58,6 @@ final class Each implements ParametrizedRuleInterface
     public function getMessage(): string
     {
         return $this->message;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkipOnEmpty(): bool
-    {
-        return $this->skipOnEmpty;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkipOnError(): bool
-    {
-        return $this->skipOnError;
-    }
-
-    /**
-     * @return Closure|null
-     */
-    public function getWhen(): ?Closure
-    {
-        return $this->when;
     }
 
     public function getOptions(): array

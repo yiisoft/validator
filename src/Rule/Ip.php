@@ -8,6 +8,8 @@ use Attribute;
 use Closure;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
+use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ParametrizedRuleInterface;
@@ -20,9 +22,10 @@ use function strlen;
  * It also may change the value if normalization of IPv6 expansion is enabled.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Ip implements ParametrizedRuleInterface
+final class Ip implements ParametrizedRuleInterface, PreValidatableRuleInterface
 {
     use HandlerClassNameTrait;
+    use PreValidatableTrait;
     use RuleNameTrait;
 
     /**
@@ -316,30 +319,6 @@ final class Ip implements ParametrizedRuleInterface
     public function getNotInRangeMessage(): string
     {
         return $this->notInRangeMessage;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkipOnEmpty(): bool
-    {
-        return $this->skipOnEmpty;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkipOnError(): bool
-    {
-        return $this->skipOnError;
-    }
-
-    /**
-     * @return Closure|null
-     */
-    public function getWhen(): ?Closure
-    {
-        return $this->when;
     }
 
     public function getRanges(): array
