@@ -24,7 +24,10 @@ class GroupRuleHandler implements RuleHandlerInterface
 
         $result = new Result();
         if (!$context?->getValidator()->validate($value, $rule->getRuleSet())->isValid()) {
-            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $formattedMessage = $this->formatMessage(
+                $rule->getMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
         }
 

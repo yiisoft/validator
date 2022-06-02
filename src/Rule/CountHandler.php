@@ -28,7 +28,11 @@ final class CountHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_countable($value)) {
-            $result->addError($rule->getMessage());
+            $formattedMessage = $this->formatMessage(
+                $rule->getMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
+            $result->addError($formattedMessage);
 
             return $result;
         }
@@ -36,19 +40,28 @@ final class CountHandler implements RuleHandlerInterface
         $count = count($value);
 
         if ($rule->getExactly() !== null && $count !== $rule->getExactly()) {
-            $formattedMessage = $this->formatMessage($rule->getNotExactlyMessage(), ['exactly' => $rule->getExactly()]);
+            $formattedMessage = $this->formatMessage(
+                $rule->getNotExactlyMessage(),
+                ['exactly' => $rule->getExactly(), 'attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
 
             return $result;
         }
 
         if ($rule->getMin() !== null && $count < $rule->getMin()) {
-            $formattedMessage = $this->formatMessage($rule->getTooFewItemsMessage(), ['min' => $rule->getMin()]);
+            $formattedMessage = $this->formatMessage(
+                $rule->getTooFewItemsMessage(),
+                ['min' => $rule->getMin(), 'attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
         }
 
         if ($rule->getMax() !== null && $count > $rule->getMax()) {
-            $formattedMessage = $this->formatMessage($rule->getTooManyItemsMessage(), ['max' => $rule->getMax()]);
+            $formattedMessage = $this->formatMessage(
+                $rule->getTooManyItemsMessage(),
+                ['max' => $rule->getMax(), 'attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
         }
 

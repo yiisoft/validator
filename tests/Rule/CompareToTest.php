@@ -17,8 +17,8 @@ final class CompareToTest extends AbstractRuleTest
                 [
                     'compareValue' => 1,
                     'message' => [
-                        'message' => 'Value must be equal to "{value}".',
-                        'parameters' => ['value' => 1],
+                        'message' => 'Value must be equal to "{compareValue}".',
+                        'parameters' => ['compareValue' => 1],
                     ],
                     'type' => 'string',
                     'operator' => '==',
@@ -31,8 +31,8 @@ final class CompareToTest extends AbstractRuleTest
                 [
                     'compareValue' => 1,
                     'message' => [
-                        'message' => 'Value must be equal to "{value}".',
-                        'parameters' => ['value' => 1],
+                        'message' => 'Value must be equal to "{compareValue}".',
+                        'parameters' => ['compareValue' => 1],
                     ],
                     'type' => 'number',
                     'operator' => '==',
@@ -45,8 +45,8 @@ final class CompareToTest extends AbstractRuleTest
                 [
                     'compareValue' => 1,
                     'message' => [
-                        'message' => 'Value must be greater than or equal to "{value}".',
-                        'parameters' => ['value' => 1],
+                        'message' => 'Value must be greater than or equal to "{compareValue}".',
+                        'parameters' => ['compareValue' => 1],
                     ],
                     'type' => 'number',
                     'operator' => '>=',
@@ -59,8 +59,8 @@ final class CompareToTest extends AbstractRuleTest
                 [
                     'compareValue' => 'YES',
                     'message' => [
-                        'message' => 'Value must be equal to "{value}".',
-                        'parameters' => ['value' => 'YES'],
+                        'message' => 'Value must be equal to "{compareValue}".',
+                        'parameters' => ['compareValue' => 'YES'],
                     ],
                     'type' => 'string',
                     'operator' => '==',
@@ -73,8 +73,8 @@ final class CompareToTest extends AbstractRuleTest
                 [
                     'compareValue' => 'YES',
                     'message' => [
-                        'message' => 'Value must be equal to "{value}".',
-                        'parameters' => ['value' => 'YES'],
+                        'message' => 'Value must be equal to "{compareValue}".',
+                        'parameters' => ['compareValue' => 'YES'],
                     ],
                     'type' => 'string',
                     'operator' => '==',
@@ -87,8 +87,8 @@ final class CompareToTest extends AbstractRuleTest
                 [
                     'compareValue' => 'YES',
                     'message' => [
-                        'message' => 'Value must not be equal to "{value}".',
-                        'parameters' => ['value' => 'YES'],
+                        'message' => 'Value must not be equal to "{compareValue}".',
+                        'parameters' => ['compareValue' => 'YES'],
                     ],
                     'type' => 'string',
                     'operator' => '!==',
@@ -97,12 +97,12 @@ final class CompareToTest extends AbstractRuleTest
                 ],
             ],
             [
-                new CompareTo('YES', message: 'Custom message for {value}'),
+                new CompareTo('YES', message: 'Custom message for {compareValue}'),
                 [
                     'compareValue' => 'YES',
                     'message' => [
-                        'message' => 'Custom message for {value}',
-                        'parameters' => ['value' => 'YES'],
+                        'message' => 'Custom message for {compareValue}',
+                        'parameters' => ['compareValue' => 'YES'],
                     ],
                     'type' => 'string',
                     'operator' => '==',

@@ -146,13 +146,13 @@ final class CompareTo implements ParametrizedRuleInterface
     public function getMessage(): string
     {
         return $this->message ?? match ($this->operator) {
-            '==', '===' => 'Value must be equal to "{value}".',
-                '!=', '!==' => 'Value must not be equal to "{value}".',
-                '>' => 'Value must be greater than "{value}".',
-                '>=' => 'Value must be greater than or equal to "{value}".',
-                '<' => 'Value must be less than "{value}".',
-                '<=' => 'Value must be less than or equal to "{value}".',
-                default => throw new RuntimeException("Unknown operator: {$this->operator}"),
+            '==', '===' => 'Value must be equal to "{compareValue}".',
+            '!=', '!==' => 'Value must not be equal to "{compareValue}".',
+            '>' => 'Value must be greater than "{compareValue}".',
+            '>=' => 'Value must be greater than or equal to "{compareValue}".',
+            '<' => 'Value must be less than "{compareValue}".',
+            '<=' => 'Value must be less than or equal to "{compareValue}".',
+            default => throw new RuntimeException("Unknown operator: {$this->operator}"),
         };
     }
 
@@ -170,7 +170,7 @@ final class CompareTo implements ParametrizedRuleInterface
             'compareValue' => $this->compareValue,
             'message' => [
                 'message' => $this->getMessage(),
-                'parameters' => ['value' => $this->compareValue],
+                'parameters' => ['compareValue' => $this->compareValue],
             ],
             'type' => $this->type,
             'operator' => $this->operator,

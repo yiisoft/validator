@@ -35,7 +35,10 @@ final class AtLeastHandler implements RuleHandlerInterface
         $result = new Result();
 
         if ($filledCount < $rule->getMin()) {
-            $formattedMessage = $this->formatMessage($rule->getMessage(), ['min' => $rule->getMin()]);
+            $formattedMessage = $this->formatMessage(
+                $rule->getMessage(),
+                ['min' => $rule->getMin(), 'attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
         }
 

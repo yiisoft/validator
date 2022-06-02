@@ -28,12 +28,15 @@ final class InRangeHandler implements RuleHandlerInterface
 
         $result = new Result();
 
-        if ($rule->isSkipOnEmpty() && $value === null) {
+        if ($value === null && $rule->isSkipOnEmpty()) {
             return $result;
         }
 
         if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getRange(), $rule->isStrict())) {
-            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $formattedMessage = $this->formatMessage(
+                $rule->getMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
         }
 

@@ -50,7 +50,10 @@ final class NestedHandler implements RuleHandlerInterface
         $compoundResult = new Result();
         if (!is_object($value) && !is_array($value)) {
             $message = sprintf('Value should be an array or an object. %s given.', gettype($value));
-            $formattedMessage = $this->formatMessage($message);
+            $formattedMessage = $this->formatMessage(
+                $message,
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $compoundResult->addError($formattedMessage);
 
             return $compoundResult;
@@ -63,9 +66,10 @@ final class NestedHandler implements RuleHandlerInterface
             $result = new Result();
 
             if ($rule->isErrorWhenPropertyPathIsNotFound() && !ArrayHelper::pathExists($value, $valuePath)) {
-                $formattedMessage = $this->formatMessage($rule->getPropertyPathIsNotFoundMessage(), [
-                    'path' => $valuePath,
-                ]);
+                $formattedMessage = $this->formatMessage(
+                    $rule->getPropertyPathIsNotFoundMessage(),
+                    ['path' => $valuePath, 'attribute' => $context?->getAttribute(), 'value' => $value]
+                );
                 $compoundResult->addError($formattedMessage, [$valuePath]);
 
                 continue;

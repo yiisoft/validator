@@ -78,7 +78,10 @@ final class EmailHandler implements RuleHandlerInterface
         }
 
         if ($valid === false) {
-            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $formattedMessage = $this->formatMessage(
+                $rule->getMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $originalValue]
+            );
             $result->addError($formattedMessage);
         }
 

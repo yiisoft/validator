@@ -34,13 +34,18 @@ final class BooleanHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $formattedMessage = $this->formatMessage($rule->getMessage(), [
-            // TODO: get reasons to do like this
-            //  'true' => $config->getTrueValue() === true ? 'true' : $config->getTrueValue(),
-            //  'false' => $config->$this->getFalseValue() === false ? 'false' : $config->$this->getFalseValue(),
-            'true' => $rule->getTrueValue(),
-            'false' => $rule->getFalseValue(),
-        ]);
+        $formattedMessage = $this->formatMessage(
+            $rule->getMessage(),
+            [
+                // TODO: get reasons to do like this
+                //  'true' => $config->getTrueValue() === true ? 'true' : $config->getTrueValue(),
+                //  'false' => $config->$this->getFalseValue() === false ? 'false' : $config->$this->getFalseValue(),
+                'true' => $rule->getTrueValue(),
+                'false' => $rule->getFalseValue(),
+                'attribute' => $context?->getAttribute(),
+                'value' => $value,
+            ]
+        );
         $result->addError($formattedMessage);
 
         return $result;

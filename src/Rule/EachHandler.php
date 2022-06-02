@@ -31,7 +31,10 @@ final class EachHandler implements RuleHandlerInterface
 
         $result = new Result();
         if (!is_iterable($value)) {
-            $formattedMessage = $this->formatMessage($rule->getIncorrectInputMessage());
+            $formattedMessage = $this->formatMessage(
+                $rule->getIncorrectInputMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
 
             return $result;
@@ -46,7 +49,7 @@ final class EachHandler implements RuleHandlerInterface
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                $result->addError($this->formatMessage($error->getMessage()), $error->getValuePath());
+                $result->addError($error->getMessage(), $error->getValuePath());
             }
         }
 

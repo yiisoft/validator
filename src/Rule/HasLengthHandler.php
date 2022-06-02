@@ -8,6 +8,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
+
 use function is_string;
 
 /**
@@ -28,7 +29,10 @@ final class HasLengthHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_string($value)) {
-            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $formattedMessage = $this->formatMessage(
+                $rule->getMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
             return $result;
         }
@@ -36,11 +40,17 @@ final class HasLengthHandler implements RuleHandlerInterface
         $length = mb_strlen($value, $rule->getEncoding());
 
         if ($rule->getMin() !== null && $length < $rule->getMin()) {
-            $formattedMessage = $this->formatMessage($rule->getTooShortMessage(), ['min' => $rule->getMin()]);
+            $formattedMessage = $this->formatMessage(
+                $rule->getTooShortMessage(),
+                ['min' => $rule->getMin(), 'attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
         }
         if ($rule->getMax() !== null && $length > $rule->getMax()) {
-            $formattedMessage = $this->formatMessage($rule->getTooLongMessage(), ['max' => $rule->getMax()]);
+            $formattedMessage = $this->formatMessage(
+                $rule->getTooLongMessage(),
+                ['max' => $rule->getMax(), 'attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
         }
 

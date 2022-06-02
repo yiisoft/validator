@@ -50,7 +50,14 @@ final class CompareToHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $rule->getCompareValue())) {
-            $formattedMessage = $this->formatMessage($rule->getMessage(), ['value' => $rule->getCompareValue()]);
+            $formattedMessage = $this->formatMessage(
+                $rule->getMessage(),
+                [
+                    'attribute' => $context?->getAttribute(),
+                    'compareValue' => $rule->getCompareValue(),
+                    'value' => $value,
+                ]
+            );
             $result->addError($formattedMessage);
         }
 
@@ -67,14 +74,14 @@ final class CompareToHandler implements RuleHandlerInterface
      *
      * @return bool whether the comparison using the specified operator is true.
      */
-    private function compareValues(string $operator, string $type, $value, $compareValue): bool
+    private function compareValues(string $operator, string $type, mixed $value, mixed $compareValue): bool
     {
         if ($type === self::TYPE_NUMBER) {
-            $value = (float) $value;
+            $value = (float)$value;
             $compareValue = (float)$compareValue;
         } else {
-            $value = (string) $value;
-            $compareValue = (string) $compareValue;
+            $value = (string)$value;
+            $compareValue = (string)$compareValue;
         }
         return match ($operator) {
             '==' => $value == $compareValue,

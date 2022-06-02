@@ -40,7 +40,10 @@ final class UrlHandler implements RuleHandlerInterface
             }
         }
 
-        $formattedMessage = $this->formatMessage($rule->getMessage());
+        $formattedMessage = $this->formatMessage(
+            $rule->getMessage(),
+            ['attribute' => $context?->getAttribute(), 'value' => $value]
+        );
         $result->addError($formattedMessage);
 
         return $result;

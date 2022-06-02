@@ -39,14 +39,16 @@ final class IpHandler implements RuleHandlerInterface
 
         $this->checkAllowedVersions($rule);
         $result = new Result();
+        $formattedMessage = $this->formatMessage(
+            $rule->getMessage(),
+            ['attribute' => $context?->getAttribute(), 'value' => $value]
+        );
         if (!is_string($value)) {
-            $formattedMessage = $this->formatMessage($rule->getMessage());
             $result->addError($formattedMessage);
             return $result;
         }
 
         if (preg_match($rule->getIpParsePattern(), $value, $matches) === 0) {
-            $formattedMessage = $this->formatMessage($rule->getMessage());
             $result->addError($formattedMessage);
             return $result;
         }
@@ -58,20 +60,19 @@ final class IpHandler implements RuleHandlerInterface
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
         } catch (InvalidArgumentException $e) {
-            $formattedMessage = $this->formatMessage($rule->getMessage());
             $result->addError($formattedMessage);
             return $result;
         }
 
-        $result = $this->validateValueParts($rule, $result, $cidr, $negation);
+        $result = $this->validateValueParts($rule, $result, $cidr, $negation, $value, $context);
         if (!$result->isValid()) {
             return $result;
         }
-        $result = $this->validateVersion($rule, $result, $ipVersion);
+        $result = $this->validateVersion($rule, $result, $ipVersion, $value, $context);
         if (!$result->isValid()) {
             return $result;
         }
-        return $this->validateCidr($rule, $result, $cidr, $ipCidr);
+        return $this->validateCidr($rule, $result, $cidr, $ipCidr, $value, $context);
     }
 
     /**
@@ -92,54 +93,92 @@ final class IpHandler implements RuleHandlerInterface
         }
     }
 
-    private function validateValueParts(Ip $rule, Result $result, ?string $cidr, bool $negation): Result
-    {
+    private function validateValueParts(
+        Ip $rule,
+        Result $result,
+        ?string $cidr,
+        bool $negation,
+        mixed $value,
+        ?ValidationContext $context
+    ): Result {
         if ($cidr === null && $rule->isRequireSubnet()) {
-            $formattedMessage = $this->formatMessage($rule->getNoSubnetMessage());
+            $formattedMessage = $this->formatMessage(
+                $rule->getNoSubnetMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
             return $result;
         }
         if ($cidr !== null && !$rule->isAllowSubnet()) {
-            $formattedMessage = $rule->getHasSubnetMessage();
+            $formattedMessage = $this->formatMessage(
+                $rule->getHasSubnetMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
             return $result;
         }
         if ($negation && !$rule->isAllowNegation()) {
-            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $formattedMessage = $this->formatMessage(
+                $rule->getMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
             return $result;
         }
         return $result;
     }
 
-    private function validateVersion(Ip $rule, Result $result, int $ipVersion): Result
-    {
+    private function validateVersion(
+        Ip $rule,
+        Result $result,
+        int $ipVersion,
+        mixed $value,
+        ?ValidationContext $context
+    ): Result {
         if ($ipVersion === IpHelper::IPV6 && !$rule->isAllowIpv6()) {
-            $formattedMessage = $this->formatMessage($rule->getIpv6NotAllowedMessage());
+            $formattedMessage = $this->formatMessage(
+                $rule->getIpv6NotAllowedMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
             return $result;
         }
         if ($ipVersion === IpHelper::IPV4 && !$rule->isAllowIpv4()) {
-            $formattedMessage = $this->formatMessage($rule->getIpv4NotAllowedMessage());
+            $formattedMessage = $this->formatMessage(
+                $rule->getIpv4NotAllowedMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
             return $result;
         }
         return $result;
     }
 
-    private function validateCidr(Ip $rule, Result $result, $cidr, $ipCidr): Result
-    {
+    private function validateCidr(
+        Ip $rule,
+        Result $result,
+        ?string $cidr,
+        string $ipCidr,
+        mixed $value,
+        ?ValidationContext $context
+    ): Result {
         if ($cidr !== null) {
             try {
                 IpHelper::getCidrBits($ipCidr);
             } catch (InvalidArgumentException $e) {
-                $formattedMessage = $this->formatMessage($rule->getWrongCidrMessage());
+                $formattedMessage = $this->formatMessage(
+                    $rule->getWrongCidrMessage(),
+                    ['attribute' => $context?->getAttribute(), 'value' => $value]
+                );
                 $result->addError($formattedMessage);
                 return $result;
             }
         }
         if (!$rule->isAllowed($ipCidr)) {
-            $formattedMessage = $this->formatMessage($rule->getNotInRangeMessage());
+            $formattedMessage = $this->formatMessage(
+                $rule->getNotInRangeMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
             return $result;
         }

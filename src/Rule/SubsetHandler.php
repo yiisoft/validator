@@ -24,16 +24,24 @@ final class SubsetHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_iterable($value)) {
-            $formattedMessage = $this->formatMessage($rule->getIterableMessage());
+            $formattedMessage = $this->formatMessage(
+                $rule->getIterableMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
             $result->addError($formattedMessage);
             return $result;
         }
 
         if (!ArrayHelper::isSubset($value, $rule->getValues(), $rule->isStrict())) {
-            $values = $rule->getValues() instanceof Traversable ? iterator_to_array($rule->getValues()) : $rule->getValues();
+            $values = $rule->getValues() instanceof Traversable
+                ? iterator_to_array($rule->getValues())
+                : $rule->getValues();
             $valuesString = '"' . implode('", "', $values) . '"';
 
-            $formattedMessage = $this->formatMessage($rule->getSubsetMessage(), ['values' => $valuesString]);
+            $formattedMessage = $this->formatMessage(
+                $rule->getSubsetMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value, 'values' => $valuesString]
+            );
             $result->addError($formattedMessage);
         }
 

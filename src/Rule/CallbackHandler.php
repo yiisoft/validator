@@ -33,7 +33,11 @@ final class CallbackHandler implements RuleHandlerInterface
         }
 
         foreach ($callbackResult->getErrors() as $error) {
-            $result->addError($this->formatMessage($error->getMessage()), $error->getValuePath());
+            $formattedMessage = $this->formatMessage(
+                $error->getMessage(),
+                ['attribute' => $context?->getAttribute(), 'value' => $value]
+            );
+            $result->addError($formattedMessage, $error->getValuePath());
         }
 
         return $result;
