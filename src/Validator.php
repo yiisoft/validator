@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
@@ -181,7 +180,7 @@ final class Validator implements ValidatorInterface
             return new Result();
         }
 
-        if ($rule->isSkipOnError() && $context->getParameter(Validator::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
+        if ($rule->isSkipOnError() && $context->getParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
             return new Result();
         }
 
