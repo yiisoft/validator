@@ -10,7 +10,7 @@ trait FormatMessageTrait
 {
     private ?Formatter $formatter = null;
 
-    public function formatMessage(string $message, array $parameters): string
+    public function formatMessage(string $message, array $parameters = []): string
     {
         if ($this->formatter === null) {
             $this->formatter = new Formatter();

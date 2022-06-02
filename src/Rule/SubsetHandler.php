@@ -24,7 +24,8 @@ final class SubsetHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_iterable($value)) {
-            $result->addError($rule->getIterableMessage());
+            $formattedMessage = $this->formatMessage($rule->getIterableMessage());
+            $result->addError($formattedMessage);
             return $result;
         }
 

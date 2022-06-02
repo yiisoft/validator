@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use function is_string;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -14,6 +15,8 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class JsonHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Json) {
@@ -23,7 +26,8 @@ final class JsonHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!$this->isValidJson($value)) {
-            $result->addError($rule->getMessage());
+            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $result->addError($formattedMessage);
         }
 
         return $result;

@@ -39,7 +39,8 @@ final class NumberHandler implements RuleHandlerInterface
 
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
             $message = $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.';
-            $result->addError($this->formatMessage($message, ['value' => $value]));
+            $formattedMessage = $this->formatMessage($message, ['value' => $value]);
+            $result->addError($formattedMessage);
         } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
             $formattedMessage = $this->formatMessage($rule->getTooSmallMessage(), ['min' => $rule->getMin()]);
             $result->addError($formattedMessage);

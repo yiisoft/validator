@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
@@ -20,6 +21,8 @@ use function is_string;
  */
 final class IpHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     /**
      * Negation char.
      *
@@ -37,12 +40,14 @@ final class IpHandler implements RuleHandlerInterface
         $this->checkAllowedVersions($rule);
         $result = new Result();
         if (!is_string($value)) {
-            $result->addError($rule->getMessage());
+            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $result->addError($formattedMessage);
             return $result;
         }
 
         if (preg_match($rule->getIpParsePattern(), $value, $matches) === 0) {
-            $result->addError($rule->getMessage());
+            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $result->addError($formattedMessage);
             return $result;
         }
         $negation = !empty($matches['not'] ?? null);
@@ -53,7 +58,8 @@ final class IpHandler implements RuleHandlerInterface
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
         } catch (InvalidArgumentException $e) {
-            $result->addError($rule->getMessage());
+            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $result->addError($formattedMessage);
             return $result;
         }
 
@@ -74,9 +80,9 @@ final class IpHandler implements RuleHandlerInterface
     public function getIpParsePattern(): string
     {
         return '/^(?<not>' . preg_quote(
-            self::NEGATION_CHAR,
-            '/'
-        ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
+                self::NEGATION_CHAR,
+                '/'
+            ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
     private function checkAllowedVersions(Ip $rule): void
@@ -89,15 +95,18 @@ final class IpHandler implements RuleHandlerInterface
     private function validateValueParts(Ip $rule, Result $result, ?string $cidr, bool $negation): Result
     {
         if ($cidr === null && $rule->isRequireSubnet()) {
-            $result->addError($rule->getNoSubnetMessage());
+            $formattedMessage = $this->formatMessage($rule->getNoSubnetMessage());
+            $result->addError($formattedMessage);
             return $result;
         }
         if ($cidr !== null && !$rule->isAllowSubnet()) {
-            $result->addError($rule->getHasSubnetMessage());
+            $formattedMessage = $rule->getHasSubnetMessage();
+            $result->addError($formattedMessage);
             return $result;
         }
         if ($negation && !$rule->isAllowNegation()) {
-            $result->addError($rule->getMessage());
+            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $result->addError($formattedMessage);
             return $result;
         }
         return $result;
@@ -106,11 +115,13 @@ final class IpHandler implements RuleHandlerInterface
     private function validateVersion(Ip $rule, Result $result, int $ipVersion): Result
     {
         if ($ipVersion === IpHelper::IPV6 && !$rule->isAllowIpv6()) {
-            $result->addError($rule->getIpv6NotAllowedMessage());
+            $formattedMessage = $this->formatMessage($rule->getIpv6NotAllowedMessage());
+            $result->addError($formattedMessage);
             return $result;
         }
         if ($ipVersion === IpHelper::IPV4 && !$rule->isAllowIpv4()) {
-            $result->addError($rule->getIpv4NotAllowedMessage());
+            $formattedMessage = $this->formatMessage($rule->getIpv4NotAllowedMessage());
+            $result->addError($formattedMessage);
             return $result;
         }
         return $result;
@@ -122,12 +133,14 @@ final class IpHandler implements RuleHandlerInterface
             try {
                 IpHelper::getCidrBits($ipCidr);
             } catch (InvalidArgumentException $e) {
-                $result->addError($rule->getWrongCidrMessage());
+                $formattedMessage = $this->formatMessage($rule->getWrongCidrMessage());
+                $result->addError($formattedMessage);
                 return $result;
             }
         }
         if (!$rule->isAllowed($ipCidr)) {
-            $result->addError($rule->getNotInRangeMessage());
+            $formattedMessage = $this->formatMessage($rule->getNotInRangeMessage());
+            $result->addError($formattedMessage);
             return $result;
         }
         return $result;

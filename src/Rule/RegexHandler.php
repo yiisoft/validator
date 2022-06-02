@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use function is_string;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -16,6 +17,8 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class RegexHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Regex) {
@@ -25,7 +28,8 @@ final class RegexHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($rule->getIncorrectInputMessage());
+            $formattedMessage = $this->formatMessage($rule->getIncorrectInputMessage());
+            $result->addError($formattedMessage);
 
             return $result;
         }
@@ -34,7 +38,8 @@ final class RegexHandler implements RuleHandlerInterface
             (!$rule->isNot() && !preg_match($rule->getPattern(), $value)) ||
             ($rule->isNot() && preg_match($rule->getPattern(), $value))
         ) {
-            $result->addError($rule->getMessage());
+            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $result->addError($formattedMessage);
         }
 
         return $result;

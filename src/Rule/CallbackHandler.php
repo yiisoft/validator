@@ -6,11 +6,14 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
 final class CallbackHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Callback) {
@@ -30,7 +33,7 @@ final class CallbackHandler implements RuleHandlerInterface
         }
 
         foreach ($callbackResult->getErrors() as $error) {
-            $result->addError($error->getMessage(), $error->getValuePath());
+            $result->addError($this->formatMessage($error->getMessage()), $error->getValuePath());
         }
 
         return $result;

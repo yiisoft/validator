@@ -50,7 +50,8 @@ final class NestedHandler implements RuleHandlerInterface
         $compoundResult = new Result();
         if (!is_object($value) && !is_array($value)) {
             $message = sprintf('Value should be an array or an object. %s given.', gettype($value));
-            $compoundResult->addError($message);
+            $formattedMessage = $this->formatMessage($message);
+            $compoundResult->addError($formattedMessage);
 
             return $compoundResult;
         }

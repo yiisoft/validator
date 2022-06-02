@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use function is_string;
 use function strlen;
@@ -15,6 +16,8 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class EmailHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Email) {
@@ -65,7 +68,7 @@ final class EmailHandler implements RuleHandlerInterface
                     $value
                 ));
                 if ($valid && $rule->isCheckDNS()) {
-                    $valid = checkdnsrr($matches['domain'] . '.', 'MX') || checkdnsrr($matches['domain'] . '.', 'A');
+                    $valid = checkdnsrr($matches['domain'] . '.') || checkdnsrr($matches['domain'] . '.', 'A');
                 }
             }
         }
@@ -75,7 +78,8 @@ final class EmailHandler implements RuleHandlerInterface
         }
 
         if ($valid === false) {
-            $result->addError($rule->getMessage());
+            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $result->addError($formattedMessage);
         }
 
         return $result;

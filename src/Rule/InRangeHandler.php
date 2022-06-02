@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
@@ -17,6 +18,8 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class InRangeHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof InRange) {
@@ -30,7 +33,8 @@ final class InRangeHandler implements RuleHandlerInterface
         }
 
         if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getRange(), $rule->isStrict())) {
-            $result->addError($rule->getMessage());
+            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $result->addError($formattedMessage);
         }
 
         return $result;

@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\EmptyCheckTrait;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use function is_string;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -16,6 +17,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 final class RequiredHandler implements RuleHandlerInterface
 {
     use EmptyCheckTrait;
+    use FormatMessageTrait;
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
@@ -26,7 +28,8 @@ final class RequiredHandler implements RuleHandlerInterface
         $result = new Result();
 
         if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
-            $result->addError($rule->getMessage());
+            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $result->addError($formattedMessage);
         }
 
         return $result;

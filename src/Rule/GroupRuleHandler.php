@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 
@@ -13,6 +14,8 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 class GroupRuleHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof GroupRule) {
@@ -21,7 +24,8 @@ class GroupRuleHandler implements RuleHandlerInterface
 
         $result = new Result();
         if (!$context?->getValidator()->validate($value, $rule->getRuleSet())->isValid()) {
-            $result->addError($rule->getMessage());
+            $formattedMessage = $this->formatMessage($rule->getMessage());
+            $result->addError($formattedMessage);
         }
 
         return $result;

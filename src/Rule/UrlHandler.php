@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 use function is_string;
 use function strlen;
@@ -18,6 +19,8 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class UrlHandler implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Url) {
@@ -37,7 +40,8 @@ final class UrlHandler implements RuleHandlerInterface
             }
         }
 
-        $result->addError($rule->getMessage());
+        $formattedMessage = $this->formatMessage($rule->getMessage());
+        $result->addError($formattedMessage);
 
         return $result;
     }
