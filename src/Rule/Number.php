@@ -11,6 +11,7 @@ use Yiisoft\Validator\PreValidatableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * Validates that the value is a number.
@@ -62,6 +63,9 @@ final class Number implements ParametrizedRuleInterface, PreValidatableRuleInter
         private string $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
     }

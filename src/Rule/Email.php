@@ -14,6 +14,8 @@ use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 
+use Yiisoft\Validator\ValidationContext;
+
 use function function_exists;
 
 /**
@@ -67,6 +69,9 @@ final class Email implements ParametrizedRuleInterface, PreValidatableRuleInterf
         private string $message = 'This value is not a valid email address.',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
         if ($enableIDN && !function_exists('idn_to_ascii')) {

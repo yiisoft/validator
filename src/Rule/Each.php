@@ -12,6 +12,7 @@ use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.
@@ -32,6 +33,9 @@ final class Each implements ParametrizedRuleInterface, PreValidatableRuleInterfa
         private string $message = '{error} {value} given.',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
     }

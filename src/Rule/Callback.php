@@ -11,6 +11,7 @@ use Yiisoft\Validator\PreValidatableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\ValidationContext;
 
 final class Callback implements ParametrizedRuleInterface, PreValidatableRuleInterface
 {
@@ -25,6 +26,9 @@ final class Callback implements ParametrizedRuleInterface, PreValidatableRuleInt
         private $callback,
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
     }

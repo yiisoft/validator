@@ -12,6 +12,7 @@ use Yiisoft\Validator\PreValidatableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * Validates that the value is a valid json.
@@ -27,6 +28,9 @@ final class Json implements ParametrizedRuleInterface, PreValidatableRuleInterfa
         private string $message = 'The value is not JSON.',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
     }

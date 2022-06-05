@@ -13,6 +13,7 @@ use Yiisoft\Validator\PreValidatableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * Validates that the value is a valid HTTP or HTTPS URL.
@@ -52,6 +53,9 @@ final class Url implements ParametrizedRuleInterface, PreValidatableRuleInterfac
         private string $message = 'This value is not a valid URL.',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
         if ($enableIDN && !function_exists('idn_to_ascii')) {

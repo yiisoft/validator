@@ -12,6 +12,7 @@ use Yiisoft\Validator\PreValidatableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * Checks if the value is a boolean value or a value corresponding to it.
@@ -41,6 +42,9 @@ final class Boolean implements ParametrizedRuleInterface, PreValidatableRuleInte
         private string $message = 'The value must be either "{true}" or "{false}".',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
     }

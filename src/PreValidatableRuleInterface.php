@@ -12,5 +12,10 @@ interface PreValidatableRuleInterface
 
     public function isSkipOnError(): bool;
 
+    /**
+     * @psalm-return Closure(mixed, ValidationContext):bool|null
+     *
+     * @return Closure|null
+     */
     public function getWhen(): ?Closure;
 }

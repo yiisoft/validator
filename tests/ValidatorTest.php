@@ -13,6 +13,7 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\ValidationContext;
 
 class ValidatorTest extends TestCase
 {
@@ -70,6 +71,22 @@ class ValidatorTest extends TestCase
     {
         $validator = FakeValidatorFactory::make();
         $result = $validator->validate(null, ['property' => [new CompareTo(null)]]);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function testPreValidation(): void
+    {
+        $validator = FakeValidatorFactory::make();
+        $result = $validator->validate(new DataSet(['property' => '']), [
+            'property' => [
+                new Required(
+                    when: static function (mixed $value, ?ValidationContext $context): bool {
+                        return false;
+                    },
+                )
+            ],
+        ]);
 
         $this->assertTrue($result->isValid());
     }

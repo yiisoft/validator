@@ -16,6 +16,8 @@ use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
 
+use Yiisoft\Validator\ValidationContext;
+
 use function is_array;
 
 /**
@@ -59,6 +61,9 @@ final class Nested implements ParametrizedRuleInterface, PreValidatableRuleInter
         private string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;

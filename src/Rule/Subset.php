@@ -12,6 +12,7 @@ use Yiisoft\Validator\PreValidatableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\ValidationContext;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Subset implements ParametrizedRuleInterface, PreValidatableRuleInterface
@@ -30,6 +31,9 @@ final class Subset implements ParametrizedRuleInterface, PreValidatableRuleInter
         private string $subsetMessage = 'Values must be ones of {values}.',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
     }

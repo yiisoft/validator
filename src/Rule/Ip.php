@@ -14,6 +14,8 @@ use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 
+use Yiisoft\Validator\ValidationContext;
+
 use function array_key_exists;
 use function strlen;
 
@@ -201,6 +203,9 @@ final class Ip implements ParametrizedRuleInterface, PreValidatableRuleInterface
         private array $ranges = [],
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
         foreach ($networks as $key => $_values) {

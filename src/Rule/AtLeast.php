@@ -12,6 +12,7 @@ use Yiisoft\Validator\PreValidatableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * Checks if at least {@see AtLeast::$min} of many attributes are filled.
@@ -39,6 +40,9 @@ final class AtLeast implements ParametrizedRuleInterface, PreValidatableRuleInte
         private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
     }

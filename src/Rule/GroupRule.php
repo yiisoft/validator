@@ -11,6 +11,7 @@ use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RulesDumper;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * Validates a single value for a set of custom rules.
@@ -25,6 +26,9 @@ abstract class GroupRule implements ParametrizedRuleInterface, PreValidatableRul
         private string $message = 'This value is not a valid.',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
     }
