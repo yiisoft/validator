@@ -84,7 +84,7 @@ class ValidatorTest extends TestCase
                     when: static function (mixed $value, ?ValidationContext $context): bool {
                         return false;
                     },
-                )
+                ),
             ],
         ]);
 
