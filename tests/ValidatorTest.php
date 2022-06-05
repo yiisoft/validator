@@ -101,7 +101,7 @@ class ValidatorTest extends TestCase
         $validator = FakeValidatorFactory::make();
         $validator->validate(new DataSet(['property' => '']), [
             'property' => [
-                new class() implements RuleInterface {
+                new class () implements RuleInterface {
                     use HandlerClassNameTrait;
 
                     public function getName(): string
