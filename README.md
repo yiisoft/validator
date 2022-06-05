@@ -156,6 +156,7 @@ use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
+$validator = getValidator();
 $data = ['author' => ['name' => 'Alexey', 'age' => '31']];
 $rule = new Nested([
     'title' => [new Required()],
@@ -164,7 +165,7 @@ $rule = new Nested([
         'age' => [new Number(min: 18)],
     )];
 ]);
-$errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
+$errors = $validator->validate($data, [$rule])->getErrorMessagesIndexedByPath();
 ```
 
 A more complex real-life example is a chart that is made of points. This data is represented as arrays. `Nested` can be 
@@ -176,6 +177,7 @@ use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\RuleSet;
 
+$validator = getValidator();
 $data = [
     'charts' => [
         [
@@ -216,7 +218,7 @@ $rule = new Nested([
         ]),
     ]),
 ]);
-$errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
+$errors = $rule->validate($data, [$rule])->getErrorMessagesIndexedByPath();
 ```
 
 The contents of the errors will be:
@@ -379,9 +381,9 @@ use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class ValidateXRule implements RuleHandlerInterface
+final class ValidateXRuleHandler implements RuleHandlerInterface
 {    
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         $result = new Result();
         $result->addError('Custom error.');
@@ -441,33 +443,16 @@ final class CustomFormatter implements FormatterInterface
 }
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class ValidateXRule extends Rule
+final class ValidateXRule implements \Yiisoft\Validator\RuleInterface
 {
     public function __construct(
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private $value,
     ) {
-        parent::__construct($formatter, $skipOnEmpty, $skipOnError, $when);
-
-        $this->formatter = $this->createFormatter();
-        $this->skipOnEmpty = $skipOnEmpty;
-        $this->skipOnError = $skipOnError;
-        $this->when = $when;
     }
-
-    private function createFormatter(): FormatterInterface
+    
+    public function getValue()
     {
-        // More complex logic
-        // ...
-        return CustomFormatter();
-    }
-
-    public function validateValue($value, ?ValidationContext $context = null): Result
-    {
-        // More complex logic
-        // ...
+        return $this->value;
     }
 }
 
@@ -514,36 +499,53 @@ new Number(
 
 If callable returns `true` rule is applied, when the value returned is `false`, rule is skipped.
 
-### Creating your own validation rules
+### Creating your own validation rule handlers
 
 #### Basic usage
 
-To create your own validation rule you should extend `Rule` class:
+To create your own validation rule handler you should implement `RuleHandlerInterface`:
 
 ```php
 namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;use Yiisoft\Validator\RuleInterface;
 
-final class Pi implements RuleInterface
+final class Pi implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function __construct(
+        ?FormatterInterface $formatter = null,
+    ) {
+        $this->formatter = $this->createFormatter();
+    }
+    
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof Pi) {
+            throw new UnexpectedRuleException($rule);
+        }
+        
         $result = new Result();
         $equal = \abs($value - M_PI) < PHP_FLOAT_EPSILON;
 
         if (!$equal) {
-            $result->addError($this->formatMessage('Value is not PI.'));
+            $result->addError($this->formatter->format('Value is not PI.'));
         }
 
         return $result;
     }
+    
+    private function createFormatter(): FormatterInterface
+    {
+        // More complex logic
+        // ...
+        return CustomFormatter();
+    }
 }
 ```
 
-Note that second argument in `validateValue()` is an instance of `ValidationContext` so you can use it if you need
+Note that third argument in `validate()` is an instance of `ValidationContext` so you can use it if you need
 whole data set context. For example, implementation might be the following if you need to validate "company"
 property only if "hasCompany" is true:
 
@@ -555,10 +557,14 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
-final class CompanyName extends Rule
+final class CompanyName implements Rule\RuleHandlerInterface
 {
-    public function validate(mixed $value, object $config, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof CompanyName) {
+            throw new UnexpectedRuleException($rule);
+        }
+        
         $result = new Result();
         $dataSet = $context->getDataSet();
         $hasCompany = $dataSet !== null && $dataSet->getAttributeValue('hasCompany') === true;
@@ -569,7 +575,7 @@ final class CompanyName extends Rule
 
         return $result;
     }
-    
+
     private function isCompanyNameValid(string $value): bool
     {
         // check company name    
@@ -614,7 +620,7 @@ final class NoLessThanExistingBidRule extends Rule
 
 #### Using common arguments for multiple rules of the same type
 
-Because concrete rules' implementations (`Number`, etc) are marked as final, you can not extend them to set up 
+Because concrete rules' implementations (`Number`, etc.) are marked as final, you can not extend them to set up 
 common arguments. For this and more complex cases use composition instead of inheritance:
 
 ```php
