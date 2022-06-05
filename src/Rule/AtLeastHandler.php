@@ -9,7 +9,6 @@ use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\EmptyCheckTrait;
-use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
 use Yiisoft\Validator\ValidationContext;
 
 /**

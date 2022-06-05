@@ -183,10 +183,10 @@ final class Validator implements ValidatorInterface
             return true;
         }
 
-        if (is_callable($rule->getWhen()) && !($rule->getWhen())($value, $context)) {
-            return true;
-        }
+        return (bool) (is_callable($rule->getWhen()) && !($rule->getWhen())($value, $context))
 
-        return false;
+
+
+         ;
     }
 }
