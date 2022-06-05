@@ -6,11 +6,14 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
@@ -84,10 +87,29 @@ class ValidatorTest extends TestCase
                     when: static function (mixed $value, ?ValidationContext $context): bool {
                         return false;
                     },
-                )
+                ),
             ],
         ]);
 
         $this->assertTrue($result->isValid());
+    }
+
+    public function testRuleWithoutHandler()
+    {
+        $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
+
+        $validator = FakeValidatorFactory::make();
+        $validator->validate(new DataSet(['property' => '']), [
+            'property' => [
+                new class() implements RuleInterface {
+                    use HandlerClassNameTrait;
+
+                    public function getName(): string
+                    {
+                        return 'test';
+                    }
+                },
+            ],
+        ]);
     }
 }

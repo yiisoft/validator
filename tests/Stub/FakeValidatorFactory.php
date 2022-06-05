@@ -29,25 +29,6 @@ final class FakeValidatorFactory
 {
     public static function make(): Validator
     {
-        return new Validator(new SimpleRuleHandlerContainer([
-            AtLeastHandler::class,
-            BooleanHandler::class,
-            CallbackHandler::class,
-            CompareToHandler::class,
-            CountHandler::class,
-            EachHandler::class,
-            EmailHandler::class,
-            GroupRuleHandler::class,
-            HasLengthHandler::class,
-            InRangeHandler::class,
-            IpHandler::class,
-            JsonHandler::class,
-            NumberHandler::class,
-            RegexHandler::class,
-            RequiredHandler::class,
-            SubsetHandler::class,
-            UrlHandler::class,
-            NestedHandler::class,
-        ]));
+        return new Validator(new SimpleRuleHandlerContainer());
     }
 }

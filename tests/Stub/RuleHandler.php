@@ -11,8 +11,6 @@ use Yiisoft\Validator\ValidationContext;
 
 final class RuleHandler implements RuleHandlerInterface
 {
-    use HandlerClassNameTrait;
-
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         return new Result();
