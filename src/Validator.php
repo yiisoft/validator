@@ -26,11 +26,8 @@ final class Validator implements ValidatorInterface
 
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 
-    private RuleHandlerResolverInterface $ruleHandlerResolver;
-
-    public function __construct(RuleHandlerResolverInterface $ruleHandlerResolver)
+    public function __construct(private RuleHandlerResolverInterface $ruleHandlerResolver)
     {
-        $this->ruleHandlerResolver = $ruleHandlerResolver;
     }
 
     /**
@@ -114,7 +111,7 @@ final class Validator implements ValidatorInterface
         foreach ($rules as $rule) {
             if ($rule instanceof PreValidatableRuleInterface) {
                 $preValidateResult = $this->preValidate($value, $context, $rule);
-                if ($preValidateResult !== null && $preValidateResult->isValid()) {
+                if ($preValidateResult) {
                     continue;
                 }
             }
@@ -177,19 +174,19 @@ final class Validator implements ValidatorInterface
         $value,
         ValidationContext $context,
         PreValidatableRuleInterface $rule
-    ): ?Result {
+    ): bool {
         if ($rule->isSkipOnEmpty() && $this->isEmpty($value)) {
-            return new Result();
+            return true;
         }
 
         if ($rule->isSkipOnError() && $context->getParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
-            return new Result();
+            return true;
         }
 
         if (is_callable($rule->getWhen()) && !($rule->getWhen())($value, $context)) {
-            return new Result();
+            return true;
         }
 
-        return null;
+        return false;
     }
 }

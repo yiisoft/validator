@@ -9,11 +9,11 @@ use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 
 /**
  * Compares the specified value with another value.
@@ -49,6 +49,7 @@ final class CompareTo implements ParametrizedRuleInterface, PreValidatableRuleIn
      * @see $type
      */
     public const TYPE_NUMBER = 'number';
+
     private array $validOperators = [
         '==' => 1,
         '===' => 1,

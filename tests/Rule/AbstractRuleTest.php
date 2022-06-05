@@ -19,11 +19,11 @@ abstract class AbstractRuleTest extends TestCase
         $this->assertEquals($expectedOptions, $options);
     }
 
-//    public function testGetName(): void
-//    {
-//        $rule = $this->getRule();
-//        $this->assertEquals('atLeast', $rule->getName());
-//    }
+    public function testGetName(): void
+    {
+        $rule = $this->getRule();
+        $this->assertEquals(lcfirst(substr($rule::class, strrpos($rule::class, '\\') + 1)), $rule->getName());
+    }
 
     abstract protected function optionsDataProvider(): array;
 

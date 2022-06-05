@@ -6,11 +6,11 @@ namespace Yiisoft\Validator\Rule;
 
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 
 final class Callback implements ParametrizedRuleInterface, PreValidatableRuleInterface
 {

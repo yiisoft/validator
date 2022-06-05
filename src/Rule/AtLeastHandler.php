@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
+use Yiisoft\Validator\Formatter;
+use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\EmptyCheckTrait;
 use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
@@ -16,7 +18,13 @@ use Yiisoft\Validator\ValidationContext;
 final class AtLeastHandler implements RuleHandlerInterface
 {
     use EmptyCheckTrait;
-    use FormatMessageTrait;
+
+    private ?FormatterInterface $formatter;
+
+    public function __construct(?FormatterInterface $formatter = null)
+    {
+        $this->formatter = $formatter ?? new Formatter();
+    }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
@@ -35,7 +43,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         $result = new Result();
 
         if ($filledCount < $rule->getMin()) {
-            $formattedMessage = $this->formatMessage(
+            $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
                 ['min' => $rule->getMin(), 'attribute' => $context?->getAttribute(), 'value' => $value]
             );

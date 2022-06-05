@@ -14,10 +14,5 @@ use Yiisoft\Validator\ValidatorInterface;
 return [
     ValidatorInterface::class => Validator::class,
     FormatterInterface::class => Formatter::class,
-    RuleHandlerResolverInterface::class => [
-        'class' => SimpleRuleHandlerContainer::class,
-        '__construct()' => [
-            'handlers' => $params['yiisoft/validator']['ruleHandlers'],
-        ],
-    ],
+    RuleHandlerResolverInterface::class => SimpleRuleHandlerContainer::class,
 ];

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
+use Yiisoft\Validator\Formatter;
+use Yiisoft\Validator\FormatterInterface;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * Compares the specified value with another value.
@@ -24,22 +25,12 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class CompareToHandler implements RuleHandlerInterface
 {
-    use FormatMessageTrait;
+    private ?FormatterInterface $formatter;
 
-    /**
-     * Constant for specifying the comparison as string values.
-     * No conversion will be done before comparison.
-     *
-     * @see $type
-     */
-    public const TYPE_STRING = 'string';
-    /**
-     * Constant for specifying the comparison as numeric values.
-     * String values will be converted into numbers before comparison.
-     *
-     * @see $type
-     */
-    public const TYPE_NUMBER = 'number';
+    public function __construct(?FormatterInterface $formatter = null)
+    {
+        $this->formatter = $formatter ?? new Formatter();
+    }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
@@ -50,7 +41,7 @@ final class CompareToHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $rule->getCompareValue())) {
-            $formattedMessage = $this->formatMessage(
+            $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
                 [
                     'attribute' => $context?->getAttribute(),
@@ -76,7 +67,7 @@ final class CompareToHandler implements RuleHandlerInterface
      */
     private function compareValues(string $operator, string $type, mixed $value, mixed $compareValue): bool
     {
-        if ($type === self::TYPE_NUMBER) {
+        if ($type === CompareTo::TYPE_NUMBER) {
             $value = (float)$value;
             $compareValue = (float)$compareValue;
         } else {

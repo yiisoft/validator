@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
+use Yiisoft\Validator\Formatter;
+use Yiisoft\Validator\FormatterInterface;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * Validates that the value is among a list of values.
@@ -18,7 +19,12 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class InRangeHandler implements RuleHandlerInterface
 {
-    use FormatMessageTrait;
+    private ?FormatterInterface $formatter;
+
+    public function __construct(?FormatterInterface $formatter = null)
+    {
+        $this->formatter = $formatter ?? new Formatter();
+    }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
@@ -33,7 +39,7 @@ final class InRangeHandler implements RuleHandlerInterface
         }
 
         if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getRange(), $rule->isStrict())) {
-            $formattedMessage = $this->formatMessage(
+            $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
                 ['attribute' => $context?->getAttribute(), 'value' => $value]
             );

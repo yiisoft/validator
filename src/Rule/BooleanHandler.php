@@ -4,17 +4,23 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
+use Yiisoft\Validator\Formatter;
+use Yiisoft\Validator\FormatterInterface;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\ValidationContext;
 
 /**
  * Checks if the value is a boolean value or a value corresponding to it.
  */
 final class BooleanHandler implements RuleHandlerInterface
 {
-    use FormatMessageTrait;
+    private ?FormatterInterface $formatter;
+
+    public function __construct(?FormatterInterface $formatter = null)
+    {
+        $this->formatter = $formatter ?? new Formatter();
+    }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
@@ -34,14 +40,11 @@ final class BooleanHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $formattedMessage = $this->formatMessage(
+        $formattedMessage = $this->formatter->format(
             $rule->getMessage(),
             [
-                // TODO: get reasons to do like this
-                //  'true' => $config->getTrueValue() === true ? 'true' : $config->getTrueValue(),
-                //  'false' => $config->$this->getFalseValue() === false ? 'false' : $config->$this->getFalseValue(),
-                'true' => $rule->getTrueValue(),
-                'false' => $rule->getFalseValue(),
+                'true' => $rule->getTrueValue() === true ? '1' : $rule->getTrueValue(),
+                'false' => $rule->getFalseValue() === false ? '0' : $rule->getFalseValue(),
                 'attribute' => $context?->getAttribute(),
                 'value' => $value,
             ]

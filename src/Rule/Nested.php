@@ -8,13 +8,14 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use Traversable;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
+
 use function is_array;
 
 /**

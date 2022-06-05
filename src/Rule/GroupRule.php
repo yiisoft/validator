@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Closure;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\RulesDumper;
 
 /**

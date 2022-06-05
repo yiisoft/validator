@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Trait\FormatMessageTrait;
-use Yiisoft\Validator\ValidationContext;
-use function is_string;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
+use Yiisoft\Validator\Formatter;
+use Yiisoft\Validator\FormatterInterface;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\ValidationContext;
+
+use function is_string;
 
 /**
  * Validates that the value matches the pattern specified in constructor.
@@ -17,7 +19,12 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
  */
 final class RegexHandler implements RuleHandlerInterface
 {
-    use FormatMessageTrait;
+    private ?FormatterInterface $formatter;
+
+    public function __construct(?FormatterInterface $formatter = null)
+    {
+        $this->formatter = $formatter ?? new Formatter();
+    }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
@@ -28,7 +35,7 @@ final class RegexHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_string($value)) {
-            $formattedMessage = $this->formatMessage(
+            $formattedMessage = $this->formatter->format(
                 $rule->getIncorrectInputMessage(),
                 ['attribute' => $context?->getAttribute(), 'value' => $value]
             );
@@ -41,7 +48,7 @@ final class RegexHandler implements RuleHandlerInterface
             (!$rule->isNot() && !preg_match($rule->getPattern(), $value)) ||
             ($rule->isNot() && preg_match($rule->getPattern(), $value))
         ) {
-            $formattedMessage = $this->formatMessage(
+            $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
                 ['attribute' => $context?->getAttribute(), 'value' => $value]
             );

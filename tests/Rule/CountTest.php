@@ -79,6 +79,6 @@ final class CountTest extends AbstractRuleTest
 
     protected function getRule(): ParametrizedRuleInterface
     {
-        return new Count();
+        return new Count(min: 1);
     }
 }

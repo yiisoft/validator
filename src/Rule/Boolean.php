@@ -7,11 +7,11 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 
 /**
  * Checks if the value is a boolean value or a value corresponding to it.
@@ -27,11 +27,11 @@ final class Boolean implements ParametrizedRuleInterface, PreValidatableRuleInte
         /**
          * @var mixed the value representing true status. Defaults to '1'.
          */
-        private $trueValue = '1',
+        private mixed $trueValue = '1',
         /**
          * @var mixed the value representing false status. Defaults to '0'.
          */
-        private $falseValue = '0',
+        private mixed $falseValue = '0',
         /**
          * @var bool whether the comparison to {@see $trueValue} and {@see $falseValue} is strict.
          * When this is `true`, the value and type must both match those of {@see $trueValue} or
@@ -94,11 +94,8 @@ final class Boolean implements ParametrizedRuleInterface, PreValidatableRuleInte
             'message' => [
                 'message' => $this->message,
                 'parameters' => [
-                    // TODO: get reasons to do like this
-                    //  'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                    //  'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                    'true' => $this->trueValue,
-                    'false' => $this->falseValue,
+                    'true' => $this->trueValue === true ? '1' : $this->trueValue,
+                    'false' => $this->falseValue === false ? '0' : $this->falseValue,
                 ],
             ],
             'skipOnEmpty' => $this->skipOnEmpty,

@@ -29,12 +29,12 @@ final class BooleanHandlerTest extends AbstractRuleValidatorTest
             [
                 new Boolean(trueValue: true, falseValue: false, strict: true),
                 '0',
-                [new Error($this->formatMessage($defaultRule->getMessage(), ['true' => true, 'false' => false]))],
+                [new Error($this->formatMessage($defaultRule->getMessage(), ['true' => '1', 'false' => '0']))],
             ],
             [
                 new Boolean(trueValue: true, falseValue: false, strict: true),
                 [],
-                [new Error($this->formatMessage($defaultRule->getMessage(), ['true' => true, 'false' => false]))],
+                [new Error($this->formatMessage($defaultRule->getMessage(), ['true' => '1', 'false' => '0']))],
             ],
         ];
     }

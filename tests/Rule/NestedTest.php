@@ -109,6 +109,6 @@ final class NestedTest extends AbstractRuleTest
 
     protected function getRule(): ParametrizedRuleInterface
     {
-        return new Nested([]);
+        return new Nested([new Rule('rule-name', ['key' => 'value'])]);
     }
 }
