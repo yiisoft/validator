@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\Stub;
 
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ValidationContext;
 
 final class RuleHandler implements RuleHandlerInterface
