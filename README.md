@@ -51,7 +51,7 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
 
-$ruleSet = new RuleSet([
+$rules = [
     new Required(),
     new Number(min: 10),
     static function ($value): Result {
@@ -64,9 +64,10 @@ $ruleSet = new RuleSet([
 
         return $result;
     }
-]);
+];
+$validator = getValidator(); // Usually obtained from container
 
-$result = $ruleSet->validate(41);
+$result = $validator->validate(41, $rules);
 if (!$result->isValid()) {
     foreach ($result->getErrorMessages() as $error) {
         // ...
@@ -99,7 +100,7 @@ final class MoneyTransfer implements DataSetInterface
     }
 }
 
-$validator = new Validator(); // Usually obtained from container
+$validator = getValidator(); // Usually obtained from container
 $moneyTransfer = new MoneyTransfer(142);
 $rules = [    
     'amount' => [
@@ -113,12 +114,10 @@ $rules = [
         }
     ],
 ];
-$resultSet = $validator->validate($moneyTransfer, $rules);
-foreach ($resultSet as $attribute => $result) {
-    if ($result->isValid() === false) {
-        foreach ($result->getErrors() as $error) {
-            // ...
-        }
+$result = $validator->validate($moneyTransfer, $rules);
+if ($result->isValid() === false) {
+    foreach ($result->getErrors() as $error) {
+        // ...
     }
 }
 ```
@@ -156,7 +155,7 @@ use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
-$validator = getValidator();
+$validator = getValidator(); // Usually obtained from container
 $data = ['author' => ['name' => 'Alexey', 'age' => '31']];
 $rule = new Nested([
     'title' => [new Required()],
@@ -168,7 +167,7 @@ $rule = new Nested([
 $errors = $validator->validate($data, [$rule])->getErrorMessagesIndexedByPath();
 ```
 
-A more complex real-life example is a chart that is made of points. This data is represented as arrays. `Nested` can be 
+A more complex real-life example is a chart that is made of points. This data is represented as arrays. `Nested` can be
 combined with `Each` rule to validate such similar structures:
 
 ```php
@@ -375,16 +374,29 @@ final class Point
 
 ```php
 use Attribute;
+use \Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use \Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
+final class ValidateXRule implements RuleInterface
+{
+    public function __construct()
+    {    
+    }
+}
+
 final class ValidateXRuleHandler implements RuleHandlerInterface
 {    
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof RuleInterface) {
+            throw new UnexpectedRuleException($rule);
+        }
+        
         $result = new Result();
         $result->addError('Custom error.');
 
@@ -429,6 +441,7 @@ use Attribute;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\RuleInterface
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\ValidationContext;
 
@@ -443,7 +456,7 @@ final class CustomFormatter implements FormatterInterface
 }
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class ValidateXRule implements \Yiisoft\Validator\RuleInterface
+final class ValidateXRule implements RuleInterface
 {
     public function __construct(
         private $value,
@@ -559,6 +572,8 @@ use Yiisoft\Validator\ValidationContext;
 
 final class CompanyName implements Rule\RuleHandlerInterface
 {
+    use FormatMessageTrait;
+    
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof CompanyName) {
@@ -583,28 +598,24 @@ final class CompanyName implements Rule\RuleHandlerInterface
 }
 ```
 
-In case you need extra dependencies, these could be passed to the rule when it is created:
-
-```php
-$rule = new NoLessThanExistingBidRule($connection);
-```
+In case you need extra dependencies, this can be done by [rule handler container](https://github.com/yiisoft/validator-rule-handler-container/).
 
 That would work with the following implementation:
 
 ```php
-final class NoLessThanExistingBidRule extends Rule
-{   
+final class NoLessThanExistingBidRuleHandler implements RuleHandlerInterface
+{
+    use FormatMessageTrait;
+    
     public function __construct(    
         private ConnectionInterface $connection,        
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        ?FormatterInterface $formatter = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        $this->formatter = $formatter ?? new Formatter();
+    }
     }
     
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context): Result
     {
         $result = new Result();
         
@@ -675,13 +686,11 @@ $rules = [
     'username' => new UsernameRule(),
     'email' => [new Email()],
 ];
-$results = $validator->validate($user, $rules);
+$result = $validator->validate($user, $rules);
 
-foreach ($results as $attribute => $result) {
-    if ($result->isValid() === false) {
-        foreach ($result->getErrors() as $error) {
-            // ...
-        }
+if ($result->isValid() === false) {
+    foreach ($result->getErrors() as $error) {
+        // ...
     }
 }
 ```
