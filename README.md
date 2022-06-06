@@ -433,7 +433,7 @@ final class ValidateXRuleHandler implements RuleHandlerInterface
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof RuleInterface) {
-            throw new UnexpectedRuleException($rule);
+            throw new UnexpectedRuleException(ValidateXRule::class, $rule);
         }
         
         $result = new Result();
@@ -561,11 +561,15 @@ To create your own validation rule handler you should implement `RuleHandlerInte
 namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Exception\UnexpectedRuleException;use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;use Yiisoft\Validator\FormatterInterface;use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;use Yiisoft\Validator\RuleInterface;
 
 final class Pi implements RuleHandlerInterface
 {
+    use FormatMessageTrait;
+    
+    private FormatterInterface $formatter;
+    
     public function __construct(
         ?FormatterInterface $formatter = null,
     ) {
@@ -575,7 +579,7 @@ final class Pi implements RuleHandlerInterface
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Pi) {
-            throw new UnexpectedRuleException($rule);
+            throw new UnexpectedRuleException(Pi::class, $rule);
         }
         
         $result = new Result();
@@ -613,10 +617,12 @@ final class CompanyName implements Rule\RuleHandlerInterface
 {
     use FormatMessageTrait;
     
+    private FormatterInterface $formatter;
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof CompanyName) {
-            throw new UnexpectedRuleException($rule);
+            throw new UnexpectedRuleException(CompanyName::class, $rule);
         }
         
         $result = new Result();
@@ -646,6 +652,8 @@ final class NoLessThanExistingBidRuleHandler implements RuleHandlerInterface
 {
     use FormatMessageTrait;
     
+    private FormatterInterface $formatter;
+
     public function __construct(    
         private ConnectionInterface $connection,        
         ?FormatterInterface $formatter = null

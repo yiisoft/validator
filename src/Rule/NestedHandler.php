@@ -41,7 +41,7 @@ use function is_object;
  */
 final class NestedHandler implements RuleHandlerInterface
 {
-    private ?FormatterInterface $formatter;
+    private FormatterInterface $formatter;
 
     public function __construct(?FormatterInterface $formatter = null)
     {

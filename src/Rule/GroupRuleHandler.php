@@ -15,7 +15,7 @@ use Yiisoft\Validator\ValidationContext;
  */
 class GroupRuleHandler implements RuleHandlerInterface
 {
-    private ?FormatterInterface $formatter;
+    private FormatterInterface $formatter;
 
     public function __construct(?FormatterInterface $formatter = null)
     {

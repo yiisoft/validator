@@ -13,7 +13,7 @@ use Yiisoft\Validator\ValidationContext;
 
 final class CallbackHandler implements RuleHandlerInterface
 {
-    private ?FormatterInterface $formatter;
+    private FormatterInterface $formatter;
 
     public function __construct(?FormatterInterface $formatter = null)
     {

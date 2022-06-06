@@ -17,7 +17,7 @@ use function is_string;
  */
 final class JsonHandler implements RuleHandlerInterface
 {
-    private ?FormatterInterface $formatter;
+    private FormatterInterface $formatter;
 
     public function __construct(?FormatterInterface $formatter = null)
     {

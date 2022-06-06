@@ -20,7 +20,7 @@ final class RequiredHandler implements RuleHandlerInterface
 {
     use EmptyCheckTrait;
 
-    private ?FormatterInterface $formatter;
+    private FormatterInterface $formatter;
 
     public function __construct(?FormatterInterface $formatter = null)
     {

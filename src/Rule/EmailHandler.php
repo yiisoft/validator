@@ -18,7 +18,7 @@ use function strlen;
  */
 final class EmailHandler implements RuleHandlerInterface
 {
-    private ?FormatterInterface $formatter;
+    private FormatterInterface $formatter;
 
     public function __construct(?FormatterInterface $formatter = null)
     {
