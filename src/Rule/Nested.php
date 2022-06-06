@@ -22,28 +22,6 @@ use function is_array;
 
 /**
  * Can be used for validation of nested structures.
- *
- * For example, we have an inbound request with the following structure:
- *
- * ```php
- * $request = [
- *     'author' => [
- *         'name' => 'Dmitry',
- *         'age' => 18,
- *     ],
- * ];
- * ```
- *
- * So to make validation we can configure it like this:
- *
- * ```php
- * $rule = new Nested([
- *     'author' => new Nested([
- *         'name' => [new HasLength(min: 3)],
- *         'age' => [new Number(min: 18)],
- *     )];
- * ]);
- * ```
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Nested implements ParametrizedRuleInterface, PreValidatableRuleInterface
