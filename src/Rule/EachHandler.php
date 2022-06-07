@@ -55,7 +55,12 @@ final class EachHandler implements RuleHandlerInterface
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                $result->addError($error->getMessage(), $error->getValuePath());
+                if (!is_array($item)) {
+                    $errorKey = [$index];
+                } else {
+                    $errorKey = [$index, ...$error->getValuePath()];
+                }
+                $result->addError($error->getMessage(), $errorKey);
             }
         }
 

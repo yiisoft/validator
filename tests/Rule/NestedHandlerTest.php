@@ -16,6 +16,17 @@ use Yiisoft\Validator\Rule\RuleHandlerInterface;
 
 final class NestedHandlerTest extends AbstractRuleValidatorTest
 {
+    /**
+     * @dataProvider indexedByPathErrorMessagesProvider
+     */
+    public function testErrorMessagesIndexedByPath(object $rule, $value, array $expectedErrors): void
+    {
+        $result = $this->validate($value, $rule);
+
+        $this->assertFalse($result->isValid(), print_r($result->getErrorMessagesIndexedByPath(), true));
+        $this->assertEquals($expectedErrors, $result->getErrorMessagesIndexedByPath());
+    }
+
     public function failedValidationProvider(): array
     {
         $requiredRule = new Required();
@@ -41,7 +52,6 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             [
                 $rule,
                 '',
-                // TODO: move message to rule
                 [new Error('Value should be an array or an object. string given.', [])],
             ],
             [
@@ -80,7 +90,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     ]),
                 ]),
                 [0 => [0 => -11]],
-                [new Error($this->formatMessage('Value must be no less than {min}.', ['min' => -10]), ['0', '0'])],
+                [new Error($this->formatMessage('Value must be no less than {min}.', ['min' => -10]), [0, 0])],
             ],
         ];
     }
@@ -132,6 +142,74 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 ),
                 [],
                 [new Error('Property is not found.', ['value'])],
+            ],
+        ];
+    }
+
+    public function indexedByPathErrorMessagesProvider(): array
+    {
+        $requiredRule = new Required();
+        $rule = new Nested(['value' => $requiredRule]);
+        $value = [
+            'author' => [
+                'name' => 'Alex',
+                'age' => 38,
+            ],
+        ];
+
+        return [
+            'error' => [
+                new Nested(['author.age' => [new Number(min: 40)]]),
+                $value,
+                ['author.age' => [$this->formatMessage('Value must be no less than {min}.', ['min' => 40])]],
+            ],
+            'key not exists' => [
+                new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
+                $value,
+                ['author.sex' => ['This value is invalid.']],
+            ],
+            [
+                $rule,
+                '',
+                ['' => ['Value should be an array or an object. string given.']],
+            ],
+            [
+                $rule,
+                ['value' => null],
+                ['value' => [$requiredRule->getMessage()]],
+            ],
+            [
+                new Nested(['value' => new Required()], errorWhenPropertyPathIsNotFound: true),
+                [],
+                ['value' => [$this->formatMessage($rule->getPropertyPathIsNotFoundMessage(), ['path' => 'value'])]],
+            ],
+            [
+                // @link https://github.com/yiisoft/validator/issues/200
+                new Nested([
+                    'body.shipping' => [
+                        new Required(),
+                        new Nested([
+                            'phone' => [new Regex('/^\+\d{11}$/')],
+                        ]),
+                    ],
+                ]),
+                [
+                    'body' => [
+                        'shipping' => [
+                            'phone' => '+777777777777',
+                        ],
+                    ],
+                ],
+                ['body.shipping.phone' => ['Value is invalid.']],
+            ],
+            [
+                new Nested([
+                    0 => new Nested([
+                        0 => [new Number(min: -10, max: 10)],
+                    ]),
+                ]),
+                [0 => [0 => -11]],
+                ['0.0' => [$this->formatMessage('Value must be no less than {min}.', ['min' => -10])]],
             ],
         ];
     }
