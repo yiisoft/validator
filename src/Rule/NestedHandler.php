@@ -93,8 +93,8 @@ final class NestedHandler implements RuleHandlerInterface
 
             foreach ($itemResult->getErrors() as $error) {
                 $errorValuePath = is_int($valuePath) ? [$valuePath] : explode('.', $valuePath);
-                if ($error->getValuePath()) {
-                    $errorValuePath = array_merge($errorValuePath, $error->getValuePath());
+                if (!empty($error->getValuePath())) {
+                    array_push($errorValuePath, ...$error->getValuePath());
                 }
                 $result->addError($error->getMessage(), $errorValuePath);
             }

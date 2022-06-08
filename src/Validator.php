@@ -125,7 +125,11 @@ final class Validator implements ValidatorInterface
             $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
 
             foreach ($ruleResult->getErrors() as $error) {
-                $compoundResult->addError($error->getMessage(), $error->getValuePath());
+                $valuePath = $error->getValuePath();
+                if ($context->getAttribute() !== null) {
+                    $valuePath = [$context->getAttribute()] + $valuePath;
+                }
+                $compoundResult->addError($error->getMessage(), $valuePath);
             }
         }
         return $compoundResult;
