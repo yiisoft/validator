@@ -109,7 +109,7 @@ final class Validator implements ValidatorInterface
     {
         $compoundResult = new Result();
         foreach ($rules as $rule) {
-            if ($rule instanceof PreValidatableRuleInterface) {
+            if ($rule instanceof BeforeValidationInterface) {
                 $preValidateResult = $this->preValidate($value, $context, $rule);
                 if ($preValidateResult) {
                     continue;
@@ -177,13 +177,13 @@ final class Validator implements ValidatorInterface
     private function preValidate(
         $value,
         ValidationContext $context,
-        PreValidatableRuleInterface $rule
+        BeforeValidationInterface $rule
     ): bool {
-        if ($rule->isSkipOnEmpty() && $this->isEmpty($value)) {
+        if ($rule->shouldSkipOnEmpty() && $this->isEmpty($value)) {
             return true;
         }
 
-        if ($rule->isSkipOnError() && $context->getParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
+        if ($rule->shouldSkipOnError() && $context->getParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
             return true;
         }
 

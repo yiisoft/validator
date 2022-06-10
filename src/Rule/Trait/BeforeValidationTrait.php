@@ -7,14 +7,14 @@ namespace Yiisoft\Validator\Rule\Trait;
 use Closure;
 use Yiisoft\Validator\ValidationContext;
 
-trait PreValidatableTrait
+trait BeforeValidationTrait
 {
-    public function isSkipOnEmpty(): bool
+    public function shouldSkipOnEmpty(): bool
     {
         return $this->skipOnEmpty;
     }
 
-    public function isSkipOnError(): bool
+    public function shouldSkipOnError(): bool
     {
         return $this->skipOnError;
     }

@@ -8,9 +8,9 @@ use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\ParametrizedRuleInterface;
-use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
 
@@ -18,10 +18,10 @@ use Yiisoft\Validator\ValidationContext;
  * Validates that the specified value is neither null nor empty.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Required implements ParametrizedRuleInterface, PreValidatableRuleInterface
+final class Required implements ParametrizedRuleInterface, BeforeValidationInterface
 {
     use HandlerClassNameTrait;
-    use PreValidatableTrait;
+    use BeforeValidationTrait;
     use RuleNameTrait;
 
     public function __construct(

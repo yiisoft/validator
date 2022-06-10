@@ -6,9 +6,9 @@ namespace Yiisoft\Validator\Rule;
 
 use Closure;
 use Yiisoft\Validator\ParametrizedRuleInterface;
-use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RulesDumper;
 use Yiisoft\Validator\ValidationContext;
@@ -16,10 +16,10 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * Validates a single value for a set of custom rules.
  */
-abstract class GroupRule implements ParametrizedRuleInterface, PreValidatableRuleInterface
+abstract class GroupRule implements ParametrizedRuleInterface, BeforeValidationInterface
 {
     use HandlerClassNameTrait;
-    use PreValidatableTrait;
+    use BeforeValidationTrait;
     use RuleNameTrait;
 
     public function __construct(

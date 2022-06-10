@@ -7,9 +7,9 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use Yiisoft\Validator\ParametrizedRuleInterface;
-use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -18,10 +18,10 @@ use Yiisoft\Validator\ValidationContext;
  * Validates an array by checking each of its elements against a set of rules.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Each implements ParametrizedRuleInterface, PreValidatableRuleInterface
+final class Each implements ParametrizedRuleInterface, BeforeValidationInterface
 {
     use HandlerClassNameTrait;
-    use PreValidatableTrait;
+    use BeforeValidationTrait;
     use RuleNameTrait;
 
     public function __construct(

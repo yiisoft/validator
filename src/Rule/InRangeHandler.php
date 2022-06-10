@@ -34,7 +34,7 @@ final class InRangeHandler implements RuleHandlerInterface
 
         $result = new Result();
 
-        if ($value === null && $rule->isSkipOnEmpty()) {
+        if ($value === null && $rule->shouldSkipOnEmpty()) {
             return $result;
         }
 

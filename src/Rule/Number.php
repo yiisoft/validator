@@ -7,9 +7,9 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use Yiisoft\Validator\ParametrizedRuleInterface;
-use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
 
@@ -21,10 +21,10 @@ use Yiisoft\Validator\ValidationContext;
  * to ensure the number is within certain range.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Number implements ParametrizedRuleInterface, PreValidatableRuleInterface
+final class Number implements ParametrizedRuleInterface, BeforeValidationInterface
 {
     use HandlerClassNameTrait;
-    use PreValidatableTrait;
+    use BeforeValidationTrait;
     use RuleNameTrait;
 
     public function __construct(

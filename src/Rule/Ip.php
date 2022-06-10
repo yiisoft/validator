@@ -9,9 +9,9 @@ use Closure;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\ParametrizedRuleInterface;
-use Yiisoft\Validator\PreValidatableRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\Rule\Trait\PreValidatableTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 
 use Yiisoft\Validator\ValidationContext;
@@ -25,10 +25,10 @@ use function strlen;
  * It also may change the value if normalization of IPv6 expansion is enabled.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Ip implements ParametrizedRuleInterface, PreValidatableRuleInterface
+final class Ip implements ParametrizedRuleInterface, BeforeValidationInterface
 {
     use HandlerClassNameTrait;
-    use PreValidatableTrait;
+    use BeforeValidationTrait;
     use RuleNameTrait;
 
     /**
