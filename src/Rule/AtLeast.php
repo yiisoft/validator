@@ -55,9 +55,6 @@ final class AtLeast implements ParametrizedRuleInterface, PreValidatableRuleInte
         return $this->attributes;
     }
 
-    /**
-     * @return int
-     */
     public function getMin(): int
     {
         return $this->min;
