@@ -26,8 +26,8 @@ use function is_array;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Nested implements ParametrizedRuleInterface, BeforeValidationInterface
 {
-    use HandlerClassNameTrait;
     use BeforeValidationTrait;
+    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(

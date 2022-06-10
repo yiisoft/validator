@@ -27,8 +27,8 @@ use function strlen;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Ip implements ParametrizedRuleInterface, BeforeValidationInterface
 {
-    use HandlerClassNameTrait;
     use BeforeValidationTrait;
+    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     /**

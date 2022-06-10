@@ -24,8 +24,8 @@ use Yiisoft\Validator\ValidationContext;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Url implements ParametrizedRuleInterface, BeforeValidationInterface
 {
-    use HandlerClassNameTrait;
     use BeforeValidationTrait;
+    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(

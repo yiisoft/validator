@@ -24,8 +24,8 @@ use function function_exists;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Email implements ParametrizedRuleInterface, BeforeValidationInterface
 {
-    use HandlerClassNameTrait;
     use BeforeValidationTrait;
+    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(

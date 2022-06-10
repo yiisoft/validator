@@ -15,8 +15,8 @@ use Yiisoft\Validator\ValidationContext;
 
 final class Callback implements ParametrizedRuleInterface, BeforeValidationInterface
 {
-    use HandlerClassNameTrait;
     use BeforeValidationTrait;
+    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(

@@ -18,8 +18,8 @@ use Yiisoft\Validator\ValidationContext;
  */
 abstract class GroupRule implements ParametrizedRuleInterface, BeforeValidationInterface
 {
-    use HandlerClassNameTrait;
     use BeforeValidationTrait;
+    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(
