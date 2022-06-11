@@ -4,64 +4,34 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use ArrayObject;
 use Yiisoft\Validator\Rule\Subset;
-use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
-class SubsetTest extends TestCase
+final class SubsetTest extends AbstractRuleTest
 {
-    public function validateArrayValueProvider(): array
+    public function optionsDataProvider(): array
     {
-        $rule = new Subset(range(1, 10));
-
         return [
-            [$rule, [1, 2, 3, 4, 5], true],
-            [$rule, [6, 7, 8, 9, 10], true],
-            [$rule, [0, 1, 2], false],
-            [$rule, [10, 11, 12], false],
-            [$rule, ['1', '2', '3', 4, 5, 6], true],
+            [
+                new Subset([]),
+                [
+                    'values' => [],
+                    'strict' => false,
+                    'iterableMessage' => [
+                        'message' => 'Value must be iterable.',
+                    ],
+                    'subsetMessage' => [
+                        'message' => 'Values must be ones of {values}.',
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
         ];
     }
 
-    /**
-     * @dataProvider validateArrayValueProvider
-     */
-    public function testValidateArrayValue(Subset $rule, array $value, bool $expectedIsValid): void
+    protected function getRule(): ParametrizedRuleInterface
     {
-        $result = $rule->validate($value);
-        $this->assertSame($expectedIsValid, $result->isValid());
-    }
-
-    public function validateSubsetArrayableProvider()
-    {
-        $rule = new Subset(['a', 'b', 'c']);
-
-        return [
-            [$rule, ['a', 'b']],
-            [$rule, new ArrayObject(['a', 'b'])],
-        ];
-    }
-
-    /**
-     * @dataProvider validateSubsetArrayableProvider
-     */
-    public function testValidateSubsetArrayable(Subset $rule, array|ArrayObject $value): void
-    {
-        $result = $rule->validate($value);
-        $this->assertTrue($result->isValid());
-    }
-
-    public function testValidateEmpty(): void
-    {
-        $rule = new Subset(range(10, 20));
-        $result = $rule->validate([]);
-
-        $this->assertTrue($result->isValid());
-    }
-
-    public function testGetName(): void
-    {
-        $rule = new Subset(range(1, 10));
-        $this->assertEquals('subset', $rule->getName());
+        return new Subset([]);
     }
 }

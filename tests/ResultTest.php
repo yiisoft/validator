@@ -8,8 +8,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Number;
 
 class ResultTest extends TestCase
 {
@@ -78,7 +76,6 @@ class ResultTest extends TestCase
 
         $this->assertTrue($result->isAttributeValid('attribute1'));
         $this->assertFalse($result->isAttributeValid('attribute2'));
-        $this->assertFalse($result->isAttributeValid(''));
     }
 
     public function testGetErrorMessagesIndexedByAttribute(): void
@@ -91,8 +88,9 @@ class ResultTest extends TestCase
 
     public function testGetErrorMessagesIndexedByAttribute_IncorrectType(): void
     {
-        $rule = new Each([new Number(min: 1, max: 3)]);
-        $result = $rule->validate([1, 4, 3]);
+        $result = new Result();
+
+        $result->addError('error1', [1]);
 
         $this->expectException(InvalidArgumentException::class);
         $result->getErrorMessagesIndexedByAttribute();

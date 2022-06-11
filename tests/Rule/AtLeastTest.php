@@ -4,87 +4,25 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
-use stdClass;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
-class AtLeastTest extends TestCase
+final class AtLeastTest extends AbstractRuleTest
 {
-    public function testAtLeastOne(): void
-    {
-        $model = new stdClass();
-        $model->attr1 = 1;
-        $model->attr2 = null;
-        $model->attr3 = null;
-
-        $rule = new AtLeast(['attr1', 'attr2']);
-        $result = $rule->validate($model);
-
-        $this->assertTrue($result->isValid());
-    }
-
-    public function testAtLeastOneWithOnlyAttributes(): void
-    {
-        $model = new stdClass();
-        $model->attr1 = null;
-        $model->attr2 = 1;
-        $model->attr3 = null;
-
-        $rule = new AtLeast(['attr2']);
-        $result = $rule->validate($model);
-
-        $this->assertTrue($result->isValid());
-    }
-
-    public function testAtLeastWithError(): void
-    {
-        $model = new stdClass();
-        $model->attr1 = null;
-        $model->attr2 = null;
-        $model->attr3 = 1;
-
-        $rule = new AtLeast(['attr1', 'attr2']);
-        $result = $rule->validate($model);
-
-        $this->assertFalse($result->isValid());
-        $this->assertEquals(
-            ['The model is not valid. Must have at least "1" filled attributes.'],
-            $result->getErrorMessages()
-        );
-    }
-
-    public function testAtLeastMinAttribute(): void
-    {
-        $model = new stdClass();
-        $model->attr1 = 1;
-        $model->attr2 = null;
-
-        $rule = new AtLeast(['attr1', 'attr2'], min: 2);
-        $result = $rule->validate($model);
-
-        $this->assertFalse($result->isValid());
-        $this->assertEquals(
-            ['The model is not valid. Must have at least "2" filled attributes.'],
-            $result->getErrorMessages()
-        );
-    }
-
-    public function testGetName(): void
-    {
-        $rule = new AtLeast(['attr1', 'attr2']);
-        $this->assertEquals('atLeast', $rule->getName());
-    }
-
-    public function getOptionsProvider(): array
+    public function optionsDataProvider(): array
     {
         return [
             [
                 new AtLeast(['attr1', 'attr2']),
                 [
-                    'attributes' => ['attr1', 'attr2'],
+                    'attributes' => [
+                        'attr1', 'attr2',
+                    ],
                     'min' => 1,
-                    'message' => 'The model is not valid. Must have at least "1" filled attributes.',
+                    'message' => [
+                        'message' => 'The model is not valid. Must have at least "{min}" filled attributes.',
+                        'parameters' => ['min' => 1],
+                    ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -92,9 +30,14 @@ class AtLeastTest extends TestCase
             [
                 new AtLeast(['attr1', 'attr2'], min: 2),
                 [
-                    'attributes' => ['attr1', 'attr2'],
+                    'attributes' => [
+                        'attr1', 'attr2',
+                    ],
                     'min' => 2,
-                    'message' => 'The model is not valid. Must have at least "2" filled attributes.',
+                    'message' => [
+                        'message' => 'The model is not valid. Must have at least "{min}" filled attributes.',
+                        'parameters' => ['min' => 2],
+                    ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -102,11 +45,8 @@ class AtLeastTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getOptionsProvider
-     */
-    public function testGetOptions(Rule $rule, array $expectedOptions): void
+    protected function getRule(): ParametrizedRuleInterface
     {
-        $this->assertEquals($expectedOptions, $rule->getOptions());
+        return new AtLeast([]);
     }
 }

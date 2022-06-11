@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-/**
- * Rule represents a single value validation rule.
- */
 interface RuleInterface
 {
     /**
-     * Validates the value
+     * Get name of the rule to be used when rule is converted to array.
+     * By default, it returns base name of the class, first letter in lowercase.
      *
-     * @param mixed $value Value to be validated.
-     * @param ValidationContext|null $context Optional validation context.
-     *
-     * @return Result
+     * @return string
      */
-    public function validate($value, ?ValidationContext $context = null): Result;
+    public function getName(): string;
+
+    public function getHandlerClassName(): string;
 }

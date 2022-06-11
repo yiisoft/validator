@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
+use Closure;
+use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
-
-use function is_string;
-use function strlen;
 
 /**
  * Validates that the value is a valid HTTP or HTTPS URL.
@@ -21,8 +22,12 @@ use function strlen;
  * It does not check the remaining parts of a URL.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Url extends Rule
+final class Url implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
         /**
          * @var string the regular expression used to validate the value.
@@ -46,74 +51,70 @@ final class Url extends Rule
          */
         private bool $enableIDN = false,
         private string $message = 'This value is not a valid URL.',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
-
         if ($enableIDN && !function_exists('idn_to_ascii')) {
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    public function getPattern(): string
     {
-        $result = new Result();
-
-        // make sure the length is limited to avoid DOS attacks
-        if (is_string($value) && strlen($value) < 2000) {
-            if ($this->enableIDN) {
-                $value = $this->convertIdn($value);
-            }
-
-            if (preg_match($this->getPattern(), $value)) {
-                return $result;
-            }
-        }
-
-        $result->addError($this->formatMessage($this->message));
-
-        return $result;
-    }
-
-    private function idnToAscii(string $idn): string
-    {
-        $result = idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
-
-        return $result === false ? '' : $result;
-    }
-
-    private function convertIdn(string $value): string
-    {
-        if (strpos($value, '://') === false) {
-            return $this->idnToAscii($value);
-        }
-
-        return preg_replace_callback(
-            '/:\/\/([^\/]+)/',
-            fn ($matches) => '://' . $this->idnToAscii($matches[1]),
-            $value
-        );
-    }
-
-    private function getPattern(): string
-    {
-        if (strpos($this->pattern, '{schemes}') !== false) {
+        if (str_contains($this->pattern, '{schemes}')) {
             return str_replace('{schemes}', '((?i)' . implode('|', $this->validSchemes) . ')', $this->pattern);
         }
 
         return $this->pattern;
     }
 
+    /**
+     * @return array|string[]
+     */
+    public function getValidSchemes(): array
+    {
+        return $this->validSchemes;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnableIDN(): bool
+    {
+        return $this->enableIDN;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    #[ArrayShape([
+        'pattern' => 'string',
+        'validSchemes' => 'array|string[]',
+        'enableIDN' => 'bool',
+        'message' => 'string[]',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+    ])]
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
-            'pattern' => $this->pattern,
+        return [
+            'pattern' => $this->getPattern(),
             'validSchemes' => $this->validSchemes,
             'enableIDN' => $this->enableIDN,
-            'message' => $this->formatMessage($this->message),
-        ]);
+            'message' => [
+                'message' => $this->message,
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

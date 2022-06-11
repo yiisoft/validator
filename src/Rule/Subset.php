@@ -5,16 +5,22 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
-use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Closure;
+use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
-use function is_array;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Subset extends Rule
+final class Subset implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
         private iterable $values,
         /**
@@ -23,40 +29,68 @@ final class Subset extends Rule
         private bool $strict = false,
         private string $iterableMessage = 'Value must be iterable.',
         private string $subsetMessage = 'Values must be ones of {values}.',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return iterable
+     */
+    public function getValues(): iterable
     {
-        $result = new Result();
-
-        if (!is_iterable($value)) {
-            $result->addError($this->formatMessage($this->iterableMessage));
-            return $result;
-        }
-
-        if (!ArrayHelper::isSubset($value, $this->values, $this->strict)) {
-            $values = is_array($this->values) ? $this->values : iterator_to_array($this->values);
-            $valuesString = '"' . implode('", "', $values) . '"';
-
-            $result->addError($this->formatMessage($this->subsetMessage, ['values' => $valuesString]));
-        }
-
-        return $result;
+        return $this->values;
     }
 
+    /**
+     * @return bool
+     */
+    public function isStrict(): bool
+    {
+        return $this->strict;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIterableMessage(): string
+    {
+        return $this->iterableMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubsetMessage(): string
+    {
+        return $this->subsetMessage;
+    }
+
+    #[ArrayShape([
+        'values' => 'iterable',
+        'strict' => 'bool',
+        'iterableMessage' => 'string[]',
+        'subsetMessage' => 'string[]',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+    ])]
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
+        return [
             'values' => $this->values,
             'strict' => $this->strict,
-            'iterableMessage' => $this->formatMessage($this->iterableMessage),
-            'subsetMessage' => $this->formatMessage($this->subsetMessage),
-        ]);
+            'iterableMessage' => [
+                'message' => $this->iterableMessage,
+            ],
+            'subsetMessage' => [
+                'message' => $this->subsetMessage,
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

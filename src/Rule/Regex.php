@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Closure;
+use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
-
-use function is_string;
 
 /**
  * Validates that the value matches the pattern specified in constructor.
@@ -18,8 +20,12 @@ use function is_string;
  * If the {@see Regex::$not} is used, the rule will ensure the value do NOT match the pattern.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Regex extends Rule
+final class Regex implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
         /**
          * @var string the regular expression to be matched with
@@ -32,41 +38,68 @@ final class Regex extends Rule
         private bool $not = false,
         private string $incorrectInputMessage = 'Value should be string.',
         private string $message = 'Value is invalid.',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return string
+     */
+    public function getPattern(): string
     {
-        $result = new Result();
-
-        if (!is_string($value)) {
-            $result->addError($this->formatMessage($this->incorrectInputMessage));
-
-            return $result;
-        }
-
-        if (
-            (!$this->not && !preg_match($this->pattern, $value)) ||
-            ($this->not && preg_match($this->pattern, $value))
-        ) {
-            $result->addError($this->formatMessage($this->message));
-        }
-
-        return $result;
+        return $this->pattern;
     }
 
+    /**
+     * @return bool
+     */
+    public function isNot(): bool
+    {
+        return $this->not;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    #[ArrayShape([
+        'pattern' => 'string',
+        'not' => 'bool',
+        'incorrectInputMessage' => 'string[]',
+        'message' => 'string[]',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+    ])]
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
+        return [
             'pattern' => $this->pattern,
             'not' => $this->not,
-            'incorrectInputMessage' => $this->formatMessage($this->incorrectInputMessage),
-            'message' => $this->formatMessage($this->message),
-        ]);
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
+            ],
+            'message' => [
+                'message' => $this->message,
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

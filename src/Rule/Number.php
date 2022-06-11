@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
-use Yiisoft\Strings\NumericHelper;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Closure;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -19,8 +21,12 @@ use Yiisoft\Validator\ValidationContext;
  * to ensure the number is within certain range.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Number extends Rule
+final class Number implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
         /**
          * @var bool whether the value can only be an integer. Defaults to false.
@@ -55,55 +61,97 @@ final class Number extends Rule
          * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
          */
         private string $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
         /**
-         * @var callable|null
+         * @var Closure(mixed, ValidationContext):bool|null
          */
-        $when = null,
+        private ?Closure $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return bool
+     */
+    public function isAsInteger(): bool
     {
-        $result = new Result();
-
-        if (is_bool($value) || !is_scalar($value)) {
-            $result->addError($this->formatMessage($this->getNotANumberMessage(), ['value' => $value]));
-            return $result;
-        }
-
-        $pattern = $this->asInteger ? $this->integerPattern : $this->numberPattern;
-
-        if (!preg_match($pattern, NumericHelper::normalize($value))) {
-            $result->addError($this->formatMessage($this->getNotANumberMessage(), ['value' => $value]));
-        } elseif ($this->min !== null && $value < $this->min) {
-            $result->addError($this->formatMessage($this->tooSmallMessage, ['min' => $this->min]));
-        } elseif ($this->max !== null && $value > $this->max) {
-            $result->addError($this->formatMessage($this->tooBigMessage, ['max' => $this->max]));
-        }
-
-        return $result;
+        return $this->asInteger;
     }
 
-    private function getNotANumberMessage(): string
+    /**
+     * @return float|int|null
+     */
+    public function getMin(): float|int|null
+    {
+        return $this->min;
+    }
+
+    /**
+     * @return float|int|null
+     */
+    public function getMax(): float|int|null
+    {
+        return $this->max;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTooSmallMessage(): string
+    {
+        return $this->tooSmallMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTooBigMessage(): string
+    {
+        return $this->tooBigMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntegerPattern(): string
+    {
+        return $this->integerPattern;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumberPattern(): string
+    {
+        return $this->numberPattern;
+    }
+
+    public function getNotANumberMessage(): string
     {
         return $this->asInteger ? 'Value must be an integer.' : 'Value must be a number.';
     }
 
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
+        return [
             'asInteger' => $this->asInteger,
             'min' => $this->min,
             'max' => $this->max,
-            'notANumberMessage' => $this->formatMessage($this->getNotANumberMessage()),
-            'tooSmallMessage' => $this->formatMessage($this->tooSmallMessage, ['min' => $this->min]),
-            'tooBigMessage' => $this->formatMessage($this->tooBigMessage, ['max' => $this->max]),
+            'notANumberMessage' => [
+                'message' => $this->getNotANumberMessage(),
+            ],
+            'tooSmallMessage' => [
+                'message' => $this->tooSmallMessage,
+                'parameters' => ['min' => $this->min],
+            ],
+            'tooBigMessage' => [
+                'message' => $this->tooBigMessage,
+                'parameters' => ['max' => $this->max],
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
             'integerPattern' => $this->integerPattern,
             'numberPattern' => $this->numberPattern,
-        ]);
+        ];
     }
 }

@@ -4,46 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Error;
-use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
-class CallbackTest extends TestCase
+final class CallbackTest extends AbstractRuleTest
 {
-    public function testValidate(): void
-    {
-        $rule = new Callback(static function ($value): Result {
-            $result = new Result();
-            if ($value !== 42) {
-                $result->addError('Value should be 42!');
-            }
-
-            return $result;
-        });
-
-        $result = $rule->validate(41);
-
-        $this->assertFalse($result->isValid());
-        $this->assertEquals(['Value should be 42!'], $result->getErrorMessages());
-    }
-
-    public function testThrowExceptionWithInvalidReturn(): void
-    {
-        $this->expectException(InvalidCallbackReturnTypeException::class);
-
-        $rule = new Callback(static fn (): string => 'invalid return');
-        $rule->validate(null);
-    }
-
-    public function testGetName(): void
-    {
-        $rule = new Callback(static fn ($value) => $value);
-        $this->assertEquals('callback', $rule->getName());
-    }
-
-    public function getOptionsProvider(): array
+    public function optionsDataProvider(): array
     {
         return [
             [
@@ -63,25 +30,8 @@ class CallbackTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getOptionsProvider
-     */
-    public function testGetOptions(Callback $rule, array $expectedOptions): void
+    protected function getRule(): ParametrizedRuleInterface
     {
-        $this->assertEquals($expectedOptions, $rule->getOptions());
-    }
-
-    public function testAddErrorWithValuePath(): void
-    {
-        $rule = new Callback(static function ($value): Result {
-            $result = new Result();
-            $result->addError('e1', ['key1']);
-
-            return $result;
-        });
-        $result = $rule->validate('hi');
-        $result->addError('e2', ['key2']);
-
-        $this->assertEquals([new Error('e1', ['key1']), new Error('e2', ['key2'])], $result->getErrors());
+        return new AtLeast([]);
     }
 }

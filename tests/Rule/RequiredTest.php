@@ -4,47 +4,29 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
-class RequiredTest extends TestCase
+final class RequiredTest extends AbstractRuleTest
 {
-    public function validateWithDefaultsProvider(): array
+    public function optionsDataProvider(): array
     {
         return [
-            [null, false],
-            [[], false],
-            ['not empty', true],
-            [['with', 'elements'], true],
+            [
+                new Required(),
+                [
+                    'message' => [
+                        'message' => 'Value cannot be blank.',
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
         ];
     }
 
-    /**
-     * @dataProvider validateWithDefaultsProvider
-     */
-    public function testValidateWithDefaults(mixed $value, bool $expectedIsValid): void
+    protected function getRule(): ParametrizedRuleInterface
     {
-        $rule = new Required();
-        $result = $rule->validate($value);
-
-        $this->assertSame($expectedIsValid, $result->isValid());
-    }
-
-    public function testGetName(): void
-    {
-        $rule = new Required();
-        $this->assertEquals('required', $rule->getName());
-    }
-
-    public function testGetOptions(): void
-    {
-        $rule = new Required();
-        $expectedOptions = [
-            'message' => 'Value cannot be blank.',
-            'skipOnEmpty' => false,
-            'skipOnError' => false,
-        ];
-
-        $this->assertEquals($expectedOptions, $rule->getOptions());
+        return new Required();
     }
 }

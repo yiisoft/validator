@@ -6,13 +6,14 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Tests\Stub\DataSet;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
 
 final class ValidationContextTest extends TestCase
 {
     public function testDefault(): void
     {
-        $context = new ValidationContext();
+        $context = new ValidationContext(FakeValidatorFactory::make(), null);
         $this->assertNull($context->getDataSet());
         $this->assertNull($context->getAttribute());
         $this->assertSame([], $context->getParameters());
@@ -22,7 +23,7 @@ final class ValidationContextTest extends TestCase
     {
         $dataSet = new DataSet();
 
-        $context = new ValidationContext($dataSet, 'name', ['key' => 42]);
+        $context = new ValidationContext(FakeValidatorFactory::make(), $dataSet, 'name', ['key' => 42]);
 
         $this->assertSame($dataSet, $context->getDataSet());
         $this->assertSame('name', $context->getAttribute());
@@ -31,7 +32,7 @@ final class ValidationContextTest extends TestCase
 
     public function testWithAttribute(): void
     {
-        $context = new ValidationContext(null, 'key');
+        $context = new ValidationContext(FakeValidatorFactory::make(), null, 'key');
         $newContext = $context->withAttribute('newKey');
 
         $this->assertNotSame($context, $newContext);
@@ -41,7 +42,7 @@ final class ValidationContextTest extends TestCase
 
     public function testSetParameter(): void
     {
-        $context = new ValidationContext();
+        $context = new ValidationContext(FakeValidatorFactory::make(), null);
         $context->setParameter('key', 42);
 
         $this->assertSame(['key' => 42], $context->getParameters());
@@ -49,7 +50,7 @@ final class ValidationContextTest extends TestCase
 
     public function testGetParameter(): void
     {
-        $context = new ValidationContext(null, null, ['key' => 42]);
+        $context = new ValidationContext(FakeValidatorFactory::make(), null, null, ['key' => 42]);
 
         $this->assertSame(42, $context->getParameter('key'));
         $this->assertNull($context->getParameter('non-exists'));

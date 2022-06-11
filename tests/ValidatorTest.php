@@ -6,20 +6,24 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Stub\DataSet;
-use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\ValidationContext;
 
 class ValidatorTest extends TestCase
 {
     public function testAddingRulesViaConstructor(): void
     {
         $dataObject = new DataSet(['bool' => true, 'int' => 41]);
-        $validator = new Validator();
+        $validator = FakeValidatorFactory::make();
         $result = $validator->validate($dataObject, [
             'bool' => [new Boolean()],
             'int' => [
@@ -28,7 +32,7 @@ class ValidatorTest extends TestCase
                 static function ($value): Result {
                     $result = new Result();
                     if ($value !== 42) {
-                        $result->addError('Value should be 42!');
+                        $result->addError('Value should be 42!', ['int']);
                     }
 
                     return $result;
@@ -38,7 +42,6 @@ class ValidatorTest extends TestCase
 
         $this->assertTrue($result->isAttributeValid('bool'));
         $this->assertFalse($result->isAttributeValid('int'));
-        $this->assertCount(2, $result->getAttributeErrors('int'));
     }
 
     public function diverseTypesDataProvider(): array
@@ -61,7 +64,7 @@ class ValidatorTest extends TestCase
      */
     public function testDiverseTypes($dataSet): void
     {
-        $validator = new Validator();
+        $validator = FakeValidatorFactory::make();
         $result = $validator->validate($dataSet, ['property' => [new Required()]]);
 
         $this->assertTrue($result->isValid());
@@ -69,9 +72,44 @@ class ValidatorTest extends TestCase
 
     public function testNullAsDataSet(): void
     {
-        $validator = new Validator();
+        $validator = FakeValidatorFactory::make();
         $result = $validator->validate(null, ['property' => [new CompareTo(null)]]);
 
         $this->assertTrue($result->isValid());
+    }
+
+    public function testPreValidation(): void
+    {
+        $validator = FakeValidatorFactory::make();
+        $result = $validator->validate(new DataSet(['property' => '']), [
+            'property' => [
+                new Required(
+                    when: static function (mixed $value, ?ValidationContext $context): bool {
+                        return false;
+                    },
+                ),
+            ],
+        ]);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function testRuleWithoutHandler()
+    {
+        $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
+
+        $validator = FakeValidatorFactory::make();
+        $validator->validate(new DataSet(['property' => '']), [
+            'property' => [
+                new class () implements RuleInterface {
+                    use HandlerClassNameTrait;
+
+                    public function getName(): string
+                    {
+                        return 'test';
+                    }
+                },
+            ],
+        ]);
     }
 }

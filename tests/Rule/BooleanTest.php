@@ -4,53 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Boolean;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
-class BooleanTest extends TestCase
+final class BooleanTest extends AbstractRuleTest
 {
-    public function validateProvider(): array
-    {
-        return [
-            [new Boolean(), true, true],
-            [new Boolean(), false, true],
-
-            [new Boolean(), '0', true],
-            [new Boolean(), '1', true],
-            [new Boolean(), '5', false],
-
-            [new Boolean(), null, false],
-            [new Boolean(), [], false],
-
-            [new Boolean(strict: true), '0', true],
-            [new Boolean(strict: true), '1', true],
-
-            [new Boolean(strict: true), true, false],
-            [new Boolean(strict: true), false, false],
-
-            [new Boolean(trueValue: true, falseValue: false, strict: true), '0', false],
-            [new Boolean(trueValue: true, falseValue: false, strict: true), [], false],
-            [new Boolean(trueValue: true, falseValue: false, strict: true), true, true],
-            [new Boolean(trueValue: true, falseValue: false, strict: true), false, true],
-        ];
-    }
-
-    /**
-     * @dataProvider validateProvider
-     */
-    public function testValidate(Boolean $rule, mixed $value, bool $expectedIsValid): void
-    {
-        $result = $rule->validate($value);
-        $this->assertSame($expectedIsValid, $result->isValid());
-    }
-
-    public function testGetName(): void
-    {
-        $rule = new Boolean();
-        $this->assertEquals('boolean', $rule->getName());
-    }
-
-    public function getOptionsProvider(): array
+    public function optionsDataProvider(): array
     {
         return [
             [
@@ -59,7 +18,13 @@ class BooleanTest extends TestCase
                     'trueValue' => '1',
                     'falseValue' => '0',
                     'strict' => false,
-                    'message' => 'The value must be either "1" or "0".',
+                    'message' => [
+                        'message' => 'The value must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => '1',
+                            'false' => '0',
+                        ],
+                    ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -70,7 +35,13 @@ class BooleanTest extends TestCase
                     'trueValue' => '1',
                     'falseValue' => '0',
                     'strict' => false,
-                    'message' => 'The value must be either "1" or "0".',
+                    'message' => [
+                        'message' => 'The value must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => '1',
+                            'false' => '0',
+                        ],
+                    ],
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
                 ],
@@ -81,7 +52,13 @@ class BooleanTest extends TestCase
                     'trueValue' => '1',
                     'falseValue' => '0',
                     'strict' => false,
-                    'message' => 'The value must be either "1" or "0".',
+                    'message' => [
+                        'message' => 'The value must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => '1',
+                            'false' => '0',
+                        ],
+                    ],
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
                 ],
@@ -92,7 +69,13 @@ class BooleanTest extends TestCase
                     'trueValue' => '1',
                     'falseValue' => '0',
                     'strict' => true,
-                    'message' => 'The value must be either "1" or "0".',
+                    'message' => [
+                        'message' => 'The value must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => '1',
+                            'false' => '0',
+                        ],
+                    ],
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
                 ],
@@ -103,7 +86,13 @@ class BooleanTest extends TestCase
                     'trueValue' => 'YES',
                     'falseValue' => '0',
                     'strict' => false,
-                    'message' => 'The value must be either "YES" or "0".',
+                    'message' => [
+                        'message' => 'The value must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => 'YES',
+                            'false' => '0',
+                        ],
+                    ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -114,7 +103,13 @@ class BooleanTest extends TestCase
                     'trueValue' => '1',
                     'falseValue' => 'NO',
                     'strict' => false,
-                    'message' => 'The value must be either "1" or "NO".',
+                    'message' => [
+                        'message' => 'The value must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => '1',
+                            'false' => 'NO',
+                        ],
+                    ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -125,7 +120,13 @@ class BooleanTest extends TestCase
                     'trueValue' => 'YES',
                     'falseValue' => 'NO',
                     'strict' => true,
-                    'message' => 'The value must be either "YES" or "NO".',
+                    'message' => [
+                        'message' => 'The value must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => 'YES',
+                            'false' => 'NO',
+                        ],
+                    ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -133,11 +134,8 @@ class BooleanTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getOptionsProvider
-     */
-    public function testGetOptions(Boolean $rule, array $expectedOptions): void
+    protected function getRule(): ParametrizedRuleInterface
     {
-        $this->assertEquals($expectedOptions, $rule->getOptions());
+        return new Boolean([]);
     }
 }

@@ -4,9 +4,16 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ScalarDataSet;
+use Yiisoft\Validator\Rule\Callback;
+
+use Yiisoft\Validator\Rule\Trait\EmptyCheckTrait;
+
 use function is_array;
 use function is_object;
 
@@ -15,10 +22,17 @@ use function is_object;
  */
 final class Validator implements ValidatorInterface
 {
+    use EmptyCheckTrait;
+
+    public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
+
+    public function __construct(private RuleHandlerResolverInterface $ruleHandlerResolver)
+    {
+    }
+
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
-     * @param Rule[][] $rules
-     * @psalm-param iterable<string, Rule[]> $rules
+     * @param iterable<RuleInterface|RuleInterface[]> $rules
      */
     public function validate($data, iterable $rules = []): Result
     {
@@ -27,23 +41,44 @@ final class Validator implements ValidatorInterface
             $rules = $data->getRules();
         }
 
-        $context = new ValidationContext($data);
-        $result = new Result();
+        $context = new ValidationContext($this, $data);
+        $compoundResult = new Result();
+
+        $results = [];
 
         foreach ($rules as $attribute => $attributeRules) {
-            $ruleSet = new RuleSet($attributeRules);
-            $tempResult = $ruleSet->validate($data->getAttributeValue($attribute), $context->withAttribute($attribute));
+            $result = new Result();
 
-            foreach ($tempResult->getErrors() as $error) {
-                $result->addError($error->getMessage(), [$attribute, ...$error->getValuePath()]);
+            $tempRule = is_array($attributeRules) ? $attributeRules : [$attributeRules];
+            $attributeRules = $this->normalizeRules($tempRule);
+
+            if (is_int($attribute)) {
+                $validatedData = $data->getData();
+                $validatedContext = $context;
+            } else {
+                $validatedData = $data->getAttributeValue($attribute);
+                $validatedContext = $context->withAttribute($attribute);
             }
+
+            $tempResult = $this->validateInternal(
+                $validatedData,
+                $attributeRules,
+                $validatedContext
+            );
+
+            $result = $this->addErrors($result, $tempResult->getErrors());
+            $results[] = $result;
+        }
+
+        foreach ($results as $result) {
+            $compoundResult = $this->addErrors($compoundResult, $result->getErrors());
         }
 
         if ($data instanceof PostValidationHookInterface) {
-            $data->processValidationResult($result);
+            $data->processValidationResult($compoundResult);
         }
 
-        return $result;
+        return $compoundResult;
     }
 
     #[Pure]
@@ -54,9 +89,104 @@ final class Validator implements ValidatorInterface
         }
 
         if (is_object($data) || is_array($data)) {
-            return new ArrayDataSet((array) $data);
+            return new ArrayDataSet((array)$data);
         }
 
         return new ScalarDataSet($data);
+    }
+
+    /**
+     * @param $value
+     * @param iterable<RuleInterface> $rules
+     * @param ValidationContext $context
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     *
+     * @return Result
+     */
+    private function validateInternal($value, iterable $rules, ValidationContext $context): Result
+    {
+        $compoundResult = new Result();
+        foreach ($rules as $rule) {
+            if ($rule instanceof BeforeValidationInterface) {
+                $preValidateResult = $this->preValidate($value, $context, $rule);
+                if ($preValidateResult) {
+                    continue;
+                }
+            }
+
+            $ruleHandler = $this->ruleHandlerResolver->resolve($rule->getHandlerClassName());
+            $ruleResult = $ruleHandler->validate($value, $rule, $context);
+            if ($ruleResult->isValid()) {
+                continue;
+            }
+
+            $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
+
+            foreach ($ruleResult->getErrors() as $error) {
+                $valuePath = $error->getValuePath();
+                if ($context->getAttribute() !== null) {
+                    $valuePath = [$context->getAttribute()] + $valuePath;
+                }
+                $compoundResult->addError($error->getMessage(), $valuePath);
+            }
+        }
+        return $compoundResult;
+    }
+
+    /**
+     * @param array $rules
+     *
+     * @return iterable<RuleInterface>
+     */
+    private function normalizeRules(iterable $rules): iterable
+    {
+        foreach ($rules as $rule) {
+            yield $this->normalizeRule($rule);
+        }
+    }
+
+    private function normalizeRule($rule): RuleInterface
+    {
+        if (is_callable($rule)) {
+            return new Callback($rule);
+        }
+
+        if (!$rule instanceof RuleInterface) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Rule should be either an instance of %s or a callable, %s given.',
+                    RuleInterface::class,
+                    gettype($rule)
+                )
+            );
+        }
+
+        return $rule;
+    }
+
+    private function addErrors(Result $result, array $errors): Result
+    {
+        foreach ($errors as $error) {
+            $result->addError($error->getMessage(), $error->getValuePath());
+        }
+        return $result;
+    }
+
+    private function preValidate(
+        $value,
+        ValidationContext $context,
+        BeforeValidationInterface $rule
+    ): bool {
+        if ($rule->shouldSkipOnEmpty() && $this->isEmpty($value)) {
+            return true;
+        }
+
+        if ($rule->shouldSkipOnError() && $context->getParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
+            return true;
+        }
+
+        return is_callable($rule->getWhen()) && !($rule->getWhen())($value, $context);
     }
 }

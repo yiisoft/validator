@@ -21,4 +21,9 @@ trait ArrayDataTrait
 
         return $this->data[$attribute];
     }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
 }

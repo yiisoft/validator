@@ -20,20 +20,22 @@
         "php": "^8.0",
         "ext-json": "*",
         "ext-mbstring": "*",
-        "jetbrains/phpstorm-attributes": "^1.0",
         "yiisoft/arrays": "^2.0",
         "yiisoft/friendly-exception": "^1.0",
         "yiisoft/network-utilities": "^1.0",
         "yiisoft/strings": "^2.0"
     },
     "require-dev": {
+        "jetbrains/phpstorm-attributes": "^1.0",
         "phpunit/phpunit": "^9.5",
         "roave/infection-static-analysis-plugin": "^1.16",
         "spatie/phpunit-watcher": "^1.23",
-        "vimeo/psalm": "^4.18"
+        "vimeo/psalm": "^4.18",
+        "yiisoft/test-support": "^1.4"
     },
     "suggest": {
-        "ext-intl": "Allows using IDN validation for emails"
+        "ext-intl": "Allows using IDN validation for emails",
+        "yiisoft/validator-rule-handler-container": "To create rule handlers via Yii Factory"
     },
     "autoload": {
         "psr-4": {

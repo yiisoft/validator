@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Stub;
 
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\ParametrizedRuleInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\ValidationContext;
 
-final class ParametrizedRule implements ParametrizedRuleInterface
+final class Rule implements ParametrizedRuleInterface
 {
+    use HandlerClassNameTrait;
+
     private array $options;
     private string $name;
 
@@ -27,10 +28,5 @@ final class ParametrizedRule implements ParametrizedRuleInterface
     public function getOptions(): array
     {
         return $this->options;
-    }
-
-    public function validate($value, ValidationContext $context = null): Result
-    {
-        return new Result();
     }
 }

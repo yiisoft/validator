@@ -4,78 +4,40 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
-use stdClass;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Regex;
+use Yiisoft\Validator\ParametrizedRuleInterface;
 
-class RegexTest extends TestCase
+final class RegexTest extends AbstractRuleTest
 {
-    private const PATTERN = '/^[a-zA-Z0-9](\.)?([^\/]*)$/m';
-
-    public function testGetName(): void
-    {
-        $rule = new Regex(self::PATTERN);
-        $this->assertSame('regex', $rule->getName());
-    }
-
-    public function validateDataProvider(): array
-    {
-        return [
-            [['a', 'b'], false, false],
-            [null, false, false],
-            [new stdClass(), false, false],
-
-            ['b.4', true, false],
-            ['b./', false, true],
-        ];
-    }
-
-    /**
-     * @dataProvider validateDataProvider
-     */
-    public function testValidate($data, bool $expectedIsValid, bool $expectedIsValidForInverseRule): void
-    {
-        $rule = new Regex(self::PATTERN);
-        $this->assertSame($rule->validate($data)->isValid(), $expectedIsValid);
-
-        $rule = new Regex(self::PATTERN, not: true);
-        $this->assertSame($rule->validate($data)->isValid(), $expectedIsValidForInverseRule);
-    }
-
-    public function testMessage(): void
-    {
-        $rule = new Regex(self::PATTERN, message: 'Custom message.');
-        $this->assertSame(['Custom message.'], $rule->validate('b./')->getErrorMessages());
-    }
-
-    public function testIncorrectInputMessage(): void
-    {
-        $rule = new Regex(self::PATTERN, incorrectInputMessage: 'Custom message.');
-        $this->assertSame(['Custom message.'], $rule->validate(null)->getErrorMessages());
-    }
-
-    public function getOptionsProvider(): array
+    public function optionsDataProvider(): array
     {
         return [
             [
-                new Regex(self::PATTERN),
+                new Regex('//'),
                 [
-                    'pattern' => self::PATTERN,
+                    'pattern' => '//',
                     'not' => false,
-                    'incorrectInputMessage' => 'Value should be string.',
-                    'message' => 'Value is invalid.',
+                    'incorrectInputMessage' => [
+                        'message' => 'Value should be string.',
+                    ],
+                    'message' => [
+                        'message' => 'Value is invalid.',
+                    ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                new Regex(self::PATTERN, not: true),
+                new Regex('//', not: true),
                 [
-                    'pattern' => self::PATTERN,
+                    'pattern' => '//',
                     'not' => true,
-                    'incorrectInputMessage' => 'Value should be string.',
-                    'message' => 'Value is invalid.',
+                    'incorrectInputMessage' => [
+                        'message' => 'Value should be string.',
+                    ],
+                    'message' => [
+                        'message' => 'Value is invalid.',
+                    ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -83,11 +45,8 @@ class RegexTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getOptionsProvider
-     */
-    public function testGetOptions(Rule $rule, array $expectedOptions): void
+    protected function getRule(): ParametrizedRuleInterface
     {
-        $this->assertEquals($expectedOptions, $rule->getOptions());
+        return new Regex('//');
     }
 }

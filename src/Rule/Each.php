@@ -5,81 +5,75 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
-use InvalidArgumentException;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\RuleSet;
+use Closure;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
-use function is_array;
-use function is_iterable;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Each extends Rule
+final class Each implements ParametrizedRuleInterface, BeforeValidationInterface
 {
-    private ?RuleSet $ruleSet = null;
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
 
     public function __construct(
-        iterable $rules = [],
+        /**
+         * @var iterable<RuleInterface>
+         */
+        private iterable $rules = [],
         private string $incorrectInputMessage = 'Value should be array or iterable.',
         private string $message = '{error} {value} given.',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null,
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
-        if ($rules !== []) {
-            $this->ruleSet = new RuleSet($rules);
-        }
-
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return iterable<RuleInterface>
+     */
+    public function getRules(): iterable
     {
-        if ($this->ruleSet === null) {
-            throw new InvalidArgumentException('Rules are required.');
-        }
+        return $this->rules;
+    }
 
-        $result = new Result();
-        if (!is_iterable($value)) {
-            $result->addError($this->incorrectInputMessage);
+    /**
+     * @return string
+     */
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
 
-            return $result;
-        }
-
-        foreach ($value as $index => $item) {
-            $itemResult = $this->ruleSet->validate($item, $context);
-            if ($itemResult->isValid()) {
-                continue;
-            }
-
-            foreach ($itemResult->getErrors() as $error) {
-                if (!is_array($item)) {
-                    $errorKey = [$index];
-                    $formatMessage = true;
-                } else {
-                    $errorKey = [$index, ...$error->getValuePath()];
-                    $formatMessage = false;
-                }
-
-                $message = !$formatMessage ? $error->getMessage() : $this->formatMessage($this->message, [
-                    'error' => $error->getMessage(),
-                    'value' => $item,
-                ]);
-
-                $result->addError($message, $errorKey);
-            }
-        }
-
-        return $result;
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
     }
 
     public function getOptions(): array
     {
-        return $this->ruleSet->asArray();
+        $arrayOfRules = [];
+        foreach ($this->rules as $rule) {
+            if ($rule instanceof ParametrizedRuleInterface) {
+                $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
+            } else {
+                $arrayOfRules[] = [$rule->getName()];
+            }
+        }
+        return $arrayOfRules;
     }
 }

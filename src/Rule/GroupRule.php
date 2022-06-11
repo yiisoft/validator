@@ -4,44 +4,50 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
-use Yiisoft\Validator\RuleSet;
+use Closure;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\RulesDumper;
 use Yiisoft\Validator\ValidationContext;
 
 /**
  * Validates a single value for a set of custom rules.
  */
-abstract class GroupRule extends Rule
+abstract class GroupRule implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
-        protected string $message = 'This value is not a valid.',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private string $message = 'This value is not a valid.',
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return string
+     */
+    public function getMessage(): string
     {
-        $result = new Result();
-        if (!$this->getRuleSet()->validate($value, $context)->isValid()) {
-            $result->addError($this->formatMessage($this->message));
-        }
-
-        return $result;
+        return $this->message;
     }
 
     /**
      * Return custom rules set
      */
-    abstract protected function getRuleSet(): RuleSet;
+    abstract public function getRuleSet(): array;
 
     public function getOptions(): array
     {
-        return $this->getRuleSet()->asArray();
+        return (new RulesDumper())->asArray($this->getRuleSet());
     }
 }

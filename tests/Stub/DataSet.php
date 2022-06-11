@@ -24,4 +24,9 @@ final class DataSet implements DataSetInterface
 
         return $this->data[$attribute];
     }
+
+    public function getData(): mixed
+    {
+        return $this->data;
+    }
 }

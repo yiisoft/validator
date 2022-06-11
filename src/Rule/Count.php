@@ -5,22 +5,28 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
+use Closure;
 use Countable;
 use InvalidArgumentException;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
-
-use function count;
 
 /**
  * Validates that the value contains certain number of items. Can be applied to arrays or classes implementing
  * {@see Countable} interface.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Count extends Rule
+final class Count implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
         /**
          * @var int|null minimum number of items. null means no minimum number limit.
@@ -61,10 +67,12 @@ final class Count extends Rule
          */
         private string $notExactlyMessage = 'This value must contain exactly {max, number} ' .
         '{max, plural, one{item} other{items}}.',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
         if (!$this->min && !$this->max && !$this->exactly) {
             throw new InvalidArgumentException(
@@ -79,52 +87,98 @@ final class Count extends Rule
         if ($this->min && $this->max && $this->min === $this->max) {
             throw new InvalidArgumentException('Use $exactly instead.');
         }
-
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return int|null
+     */
+    public function getMin(): ?int
     {
-        $result = new Result();
-
-        if (!is_countable($value)) {
-            $result->addError($this->formatMessage($this->message));
-
-            return $result;
-        }
-
-        $count = count($value);
-
-        if ($this->exactly !== null && $count !== $this->exactly) {
-            $message = $this->formatMessage($this->notExactlyMessage, ['exactly' => $this->exactly]);
-            $result->addError($message);
-
-            return $result;
-        }
-
-        if ($this->min !== null && $count < $this->min) {
-            $message = $this->formatMessage($this->tooFewItemsMessage, ['min' => $this->min]);
-            $result->addError($message);
-        }
-
-        if ($this->max !== null && $count > $this->max) {
-            $message = $this->formatMessage($this->tooManyItemsMessage, ['max' => $this->max]);
-            $result->addError($message);
-        }
-
-        return $result;
+        return $this->min;
     }
 
+    /**
+     * @return int|null
+     */
+    public function getMax(): ?int
+    {
+        return $this->max;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getExactly(): ?int
+    {
+        return $this->exactly;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTooFewItemsMessage(): string
+    {
+        return $this->tooFewItemsMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTooManyItemsMessage(): string
+    {
+        return $this->tooManyItemsMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotExactlyMessage(): string
+    {
+        return $this->notExactlyMessage;
+    }
+
+    #[ArrayShape([
+        'min' => 'int|null',
+        'max' => 'int|null',
+        'exactly' => 'int|null',
+        'message' => 'string[]',
+        'tooFewItemsMessage' => 'array',
+        'tooManyItemsMessage' => 'array',
+        'notExactlyMessage' => 'array',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+    ])]
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
+        return [
             'min' => $this->min,
             'max' => $this->max,
             'exactly' => $this->exactly,
-            'message' => $this->formatMessage($this->message),
-            'tooFewItemsMessage' => $this->formatMessage($this->tooFewItemsMessage, ['min' => $this->min]),
-            'tooManyItemsMessage' => $this->formatMessage($this->tooManyItemsMessage, ['max' => $this->max]),
-            'notExactlyMessage' => $this->formatMessage($this->notExactlyMessage, ['exactly' => $this->exactly]),
-        ]);
+            'message' => [
+                'message' => $this->message,
+            ],
+            'tooFewItemsMessage' => [
+                'message' => $this->tooFewItemsMessage,
+                'parameters' => ['min' => $this->min],
+            ],
+            'tooManyItemsMessage' => [
+                'message' => $this->tooManyItemsMessage,
+                'parameters' => ['max' => $this->max],
+            ],
+            'notExactlyMessage' => [
+                'message' => $this->notExactlyMessage,
+                'parameters' => ['exactly' => $this->exactly],
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

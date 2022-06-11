@@ -19,4 +19,9 @@ final class ScalarDataSet implements DataSetInterface
     {
         return $this->value;
     }
+
+    public function getData(): mixed
+    {
+        return $this->value;
+    }
 }

@@ -5,26 +5,34 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Closure;
+use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
 
 /**
  * Checks if the value is a boolean value or a value corresponding to it.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Boolean extends Rule
+final class Boolean implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
         /**
          * @var mixed the value representing true status. Defaults to '1'.
          */
-        private $trueValue = '1',
+        private mixed $trueValue = '1',
         /**
          * @var mixed the value representing false status. Defaults to '0'.
          */
-        private $falseValue = '0',
+        private mixed $falseValue = '0',
         /**
          * @var bool whether the comparison to {@see $trueValue} and {@see $falseValue} is strict.
          * When this is `true`, the value and type must both match those of {@see $trueValue} or
@@ -32,49 +40,70 @@ final class Boolean extends Rule
          */
         private bool $strict = false,
         private string $message = 'The value must be either "{true}" or "{false}".',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return mixed
+     */
+    public function getTrueValue(): mixed
     {
-        if ($this->strict) {
-            $valid = $value === $this->trueValue || $value === $this->falseValue;
-        } else {
-            $valid = $value == $this->trueValue || $value == $this->falseValue;
-        }
-
-        $result = new Result();
-
-        if ($valid) {
-            return $result;
-        }
-
-        $message = $this->getFormattedMessage();
-        $result->addError($message);
-
-        return $result;
+        return $this->trueValue;
     }
 
-    private function getFormattedMessage(): string
+    /**
+     * @return mixed
+     */
+    public function getFalseValue(): mixed
     {
-        return $this->formatMessage($this->message, [
-            'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-            'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-        ]);
+        return $this->falseValue;
     }
 
+    /**
+     * @return bool
+     */
+    public function isStrict(): bool
+    {
+        return $this->strict;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    #[ArrayShape([
+        'trueValue' => 'string',
+        'falseValue' => 'string',
+        'strict' => 'bool',
+        'message' => 'array',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+    ])]
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
+        return [
             'trueValue' => $this->trueValue,
             'falseValue' => $this->falseValue,
             'strict' => $this->strict,
-            'message' => $this->getFormattedMessage(),
-        ]);
+            'message' => [
+                'message' => $this->message,
+                'parameters' => [
+                    'true' => $this->trueValue === true ? '1' : $this->trueValue,
+                    'false' => $this->falseValue === false ? '0' : $this->falseValue,
+                ],
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

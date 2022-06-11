@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Closure;
+use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
-
-use function is_string;
 
 /**
  * Validates that the value is of certain length.
@@ -18,8 +20,12 @@ use function is_string;
  * Note, this rule should only be used with strings.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class HasLength extends Rule
+final class HasLength implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
         /**
          * @var int|null minimum length. null means no minimum length limit.
@@ -49,45 +55,93 @@ final class HasLength extends Rule
          * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
          * If this property is not set, application wide encoding will be used.
          */
-        protected string $encoding = 'UTF-8',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private string $encoding = 'UTF-8',
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return int|null
+     */
+    public function getMin(): ?int
     {
-        $result = new Result();
-
-        if (!is_string($value)) {
-            $result->addError($this->formatMessage($this->message));
-            return $result;
-        }
-
-        $length = mb_strlen($value, $this->encoding);
-
-        if ($this->min !== null && $length < $this->min) {
-            $result->addError($this->formatMessage($this->tooShortMessage, ['min' => $this->min]));
-        }
-        if ($this->max !== null && $length > $this->max) {
-            $result->addError($this->formatMessage($this->tooLongMessage, ['max' => $this->max]));
-        }
-
-        return $result;
+        return $this->min;
     }
 
+    /**
+     * @return int|null
+     */
+    public function getMax(): ?int
+    {
+        return $this->max;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTooShortMessage(): string
+    {
+        return $this->tooShortMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTooLongMessage(): string
+    {
+        return $this->tooLongMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEncoding(): string
+    {
+        return $this->encoding;
+    }
+
+    #[ArrayShape([
+        'min' => 'int|null',
+        'max' => 'int|null',
+        'message' => 'string[]',
+        'tooShortMessage' => 'array',
+        'tooLongMessage' => 'array',
+        'encoding' => 'string',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+    ])]
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
+        return [
             'min' => $this->min,
             'max' => $this->max,
-            'message' => $this->formatMessage($this->message),
-            'tooShortMessage' => $this->formatMessage($this->tooShortMessage, ['min' => $this->min]),
-            'tooLongMessage' => $this->formatMessage($this->tooLongMessage, ['max' => $this->max]),
+            'message' => [
+                'message' => $this->message,
+            ],
+            'tooShortMessage' => [
+                'message' => $this->tooShortMessage,
+                'parameters' => ['min' => $this->min],
+            ],
+            'tooLongMessage' => [
+                'message' => $this->tooLongMessage,
+                'parameters' => ['max' => $this->max],
+            ],
             'encoding' => $this->encoding,
-        ]);
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

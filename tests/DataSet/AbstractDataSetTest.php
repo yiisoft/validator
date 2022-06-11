@@ -48,7 +48,7 @@ abstract class AbstractDataSetTest extends TestCase
                         static function ($value): Result {
                             $result = new Result();
                             if ($value !== 42) {
-                                $result->addError('Value should be 42!');
+                                $result->addError('Value should be 42!', ['int']);
                             }
 
                             return $result;
@@ -68,6 +68,5 @@ abstract class AbstractDataSetTest extends TestCase
 
         $this->assertTrue($result->isAttributeValid('bool'));
         $this->assertFalse($result->isAttributeValid('int'));
-        $this->assertCount(2, $result->getAttributeErrors('int'));
     }
 }

@@ -105,7 +105,9 @@ final class AttributeDataSet implements RulesProviderInterface
                 continue;
             }
 
-            /** @psalm-suppress UndefinedMethod */
+            /**
+             * @psalm-suppress UndefinedMethod, InvalidArgument
+             */
             $rules[$property->getName()][] = new Each(
                 $eachRules,
                 ...(($property->getAttributes(Each::class)[0] ?? null)?->getArguments() ?? [])

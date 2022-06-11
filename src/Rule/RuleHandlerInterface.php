@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Yiisoft\Validator\Rule;
+
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\ValidationContext;
+
+/**
+ * Rule handler performs actual validation taking configuration parameters from a rule.
+ */
+interface RuleHandlerInterface
+{
+    /**
+     * Validates the value.
+     *
+     * @param mixed $value Value to be validated.
+     * @param object $rule Rule containing validation parameters.
+     * @param ValidationContext|null $context Optional validation context.
+     *
+     * @return Result
+     */
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result;
+}

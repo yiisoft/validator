@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
-use Yiisoft\Validator\FormatterInterface;
+use Closure;
+use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
 
 /**
  * Validates that the value is among a list of values.
@@ -18,8 +21,12 @@ use Yiisoft\Validator\Rule;
  * If the {@see InRange::$not} is called, the rule will ensure the value is NOT among the specified range.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class InRange extends Rule
+final class InRange implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
         private iterable $range,
         /**
@@ -32,32 +39,66 @@ final class InRange extends Rule
          */
         private bool $not = false,
         private string $message = 'This value is invalid.',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return iterable
+     */
+    public function getRange(): iterable
     {
-        $result = new Result();
-
-        if ($this->not === ArrayHelper::isIn($value, $this->range, $this->strict)) {
-            $result->addError($this->formatMessage($this->message));
-        }
-
-        return $result;
+        return $this->range;
     }
 
+    /**
+     * @return bool
+     */
+    public function isStrict(): bool
+    {
+        return $this->strict;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNot(): bool
+    {
+        return $this->not;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    #[ArrayShape([
+        'range' => 'iterable',
+        'strict' => 'bool',
+        'not' => 'bool',
+        'message' => 'string[]',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+    ])]
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
+        return [
             'range' => $this->range,
             'strict' => $this->strict,
             'not' => $this->not,
-            'message' => $this->formatMessage($this->message),
-        ]);
+            'message' => [
+                'message' => $this->message,
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

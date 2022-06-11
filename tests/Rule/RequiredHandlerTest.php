@@ -1,0 +1,45 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Yiisoft\Validator\Tests\Rule;
+
+use Yiisoft\Validator\Error;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rule\RequiredHandler;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
+
+final class RequiredHandlerTest extends AbstractRuleValidatorTest
+{
+    public function failedValidationProvider(): array
+    {
+        $rule = new Required();
+
+        return [
+            [$rule, null, [new Error($rule->getMessage(), [])]],
+            [$rule, [], [new Error($rule->getMessage(), [])]],
+        ];
+    }
+
+    public function passedValidationProvider(): array
+    {
+        $rule = new Required();
+
+        return [
+            [$rule, 'not empty'],
+            [$rule, ['with', 'elements']],
+        ];
+    }
+
+    public function customErrorMessagesProvider(): array
+    {
+        return [
+            [new Required(message: 'Custom error'), null, [new Error('Custom error', [])]],
+        ];
+    }
+
+    protected function getValidator(): RuleHandlerInterface
+    {
+        return new RequiredHandler();
+    }
+}

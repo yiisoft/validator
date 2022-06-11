@@ -5,44 +5,53 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Closure;
+use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
-
-use function is_string;
 
 /**
  * Validates that the specified value is neither null nor empty.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Required extends Rule
+final class Required implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
         private string $message = 'Value cannot be blank.',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return string
+     */
+    public function getMessage(): string
     {
-        $result = new Result();
-
-        if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
-            $result->addError($this->formatMessage($this->message));
-        }
-
-        return $result;
+        return $this->message;
     }
 
+    #[ArrayShape(['message' => 'string[]', 'skipOnEmpty' => 'bool', 'skipOnError' => 'bool'])]
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
-            'message' => $this->formatMessage($this->message),
-        ]);
+        return [
+            'message' => [
+                'message' => $this->message,
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

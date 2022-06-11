@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
-
 use function is_array;
 
 /**
@@ -13,6 +12,7 @@ use function is_array;
  * The array is usually passed to the client to use it in client-side validation.
  *
  * * @see ParametrizedRuleInterface
+ * * @see RuleInterface
  */
 final class RulesDumper
 {
@@ -49,23 +49,27 @@ final class RulesDumper
      */
     public function asArray(iterable $ruleSetMap): array
     {
-        $arrayMap = [];
-        foreach ($ruleSetMap as $attribute => $ruleSet) {
-            if (is_array($ruleSet)) {
-                $ruleSet = new RuleSet($ruleSet);
-            }
+        return $this->fetchOptions($ruleSetMap);
+    }
 
-            if (!$ruleSet instanceof RuleSet) {
+    private function fetchOptions(iterable $rules): array
+    {
+        $result = [];
+        foreach ($rules as $attribute => $rule) {
+            if (is_array($rule)) {
+                $result[$attribute] = $this->fetchOptions($rule);
+            } elseif ($rule instanceof ParametrizedRuleInterface) {
+                $result[$attribute] = array_merge([$rule->getName()], $rule->getOptions());
+            } elseif ($rule instanceof RuleInterface) {
+                $result[$attribute] = [$rule->getName()];
+            } else {
                 throw new InvalidArgumentException(sprintf(
-                    'Value should be an instance of %s or an array of rules, %s given.',
-                    RuleSet::class,
-                    get_debug_type($ruleSet)
+                    'Rules should be a rule or an array of rules that implements %s.',
+                    RuleInterface::class,
                 ));
             }
-
-            $arrayMap[$attribute] = $ruleSet->asArray();
         }
 
-        return $arrayMap;
+        return $result;
     }
 }

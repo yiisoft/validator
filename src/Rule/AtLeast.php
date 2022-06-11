@@ -5,70 +5,87 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Closure;
+use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Checks if at least {@see AtLeast::$min} of many object attributes are filled.
+ * Checks if at least {@see AtLeast::$min} of many attributes are filled.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class AtLeast extends Rule
+final class AtLeast implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
         /**
-         * @var string[] The list of required attributes that will be checked.
+         * The list of required attributes that will be checked.
          */
         private array $attributes,
         /**
-         * @var int The minimum required quantity of filled attributes to pass the validation.
+         * The minimum required quantity of filled attributes to pass the validation.
          * Defaults to 1.
          */
         private int $min = 1,
         /**
-         * @var string Message to display in case of error.
+         * Message to display in case of error.
          */
         private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return array
+     */
+    public function getAttributes(): array
     {
-        $filledCount = 0;
-
-        foreach ($this->attributes as $attribute) {
-            if (!$this->isEmpty($value->{$attribute})) {
-                $filledCount++;
-            }
-        }
-
-        $result = new Result();
-
-        if ($filledCount < $this->min) {
-            $message = $this->getFormattedMessage();
-            $result->addError($message);
-        }
-
-        return $result;
+        return $this->attributes;
     }
 
-    private function getFormattedMessage(): string
+    public function getMin(): int
     {
-        return $this->formatMessage($this->message, ['min' => $this->min]);
+        return $this->min;
     }
 
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    #[ArrayShape([
+        'attributes' => 'array',
+        'min' => 'int',
+        'message' => 'array',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+    ])]
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
+        return [
             'attributes' => $this->attributes,
             'min' => $this->min,
-            'message' => $this->getFormattedMessage(),
-        ]);
+            'message' => [
+                'message' => $this->message,
+                'parameters' => ['min' => $this->min],
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

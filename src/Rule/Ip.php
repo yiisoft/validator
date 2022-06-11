@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
-use InvalidArgumentException;
+use Closure;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+
 use Yiisoft\Validator\ValidationContext;
 
 use function array_key_exists;
-use function is_string;
 use function strlen;
 
 /**
@@ -23,8 +25,12 @@ use function strlen;
  * It also may change the value if normalization of IPv6 expansion is enabled.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Ip extends Rule
+final class Ip implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     /**
      * Negation char.
      *
@@ -195,13 +201,13 @@ final class Ip extends Rule
          * subnet. IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
          */
         private array $ranges = [],
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
-
         foreach ($networks as $key => $_values) {
             if (array_key_exists($key, $this->defaultNetworks)) {
                 throw new RuntimeException("Network alias \"{$key}\" already set as default.");
@@ -217,94 +223,113 @@ final class Ip extends Rule
         $this->ranges = $this->prepareRanges($ranges);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return array
+     */
+    public function getNetworks(): array
     {
-        if (!$this->allowIpv4 && !$this->allowIpv6) {
-            throw new RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time.');
-        }
-        $result = new Result();
-        if (!is_string($value)) {
-            $result->addError($this->formatMessage($this->message));
-            return $result;
-        }
+        return $this->networks;
+    }
 
-        if (preg_match($this->getIpParsePattern(), $value, $matches) === 0) {
-            $result->addError($this->formatMessage($this->message));
-            return $result;
-        }
-        $negation = !empty($matches['not'] ?? null);
-        $ip = $matches['ip'];
-        $cidr = $matches['cidr'] ?? null;
-        $ipCidr = $matches['ipCidr'];
+    /**
+     * @return bool
+     */
+    public function isAllowIpv4(): bool
+    {
+        return $this->allowIpv4;
+    }
 
-        try {
-            $ipVersion = IpHelper::getIpVersion($ip, false);
-        } catch (InvalidArgumentException $e) {
-            $result->addError($this->formatMessage($this->message));
-            return $result;
-        }
+    /**
+     * @return bool
+     */
+    public function isAllowIpv6(): bool
+    {
+        return $this->allowIpv6;
+    }
 
-        if ($this->requireSubnet === true && $cidr === null) {
-            $result->addError($this->formatMessage($this->noSubnetMessage));
-            return $result;
-        }
-        if ($this->allowSubnet === false && $cidr !== null) {
-            $result->addError($this->formatMessage($this->hasSubnetMessage));
-            return $result;
-        }
-        if ($this->allowNegation === false && $negation) {
-            $result->addError($this->formatMessage($this->message));
-            return $result;
-        }
-        if ($ipVersion === IpHelper::IPV6 && !$this->allowIpv6) {
-            $result->addError($this->formatMessage($this->ipv6NotAllowedMessage));
-            return $result;
-        }
-        if ($ipVersion === IpHelper::IPV4 && !$this->allowIpv4) {
-            $result->addError($this->formatMessage($this->ipv4NotAllowedMessage));
-            return $result;
-        }
-        if (!$result->isValid()) {
-            return $result;
-        }
-        if ($cidr !== null) {
-            try {
-                IpHelper::getCidrBits($ipCidr);
-            } catch (InvalidArgumentException $e) {
-                $result->addError($this->formatMessage($this->wrongCidrMessage));
-                return $result;
-            }
-        }
-        if (!$this->isAllowed($ipCidr)) {
-            $result->addError($this->formatMessage($this->notInRangeMessage));
-            return $result;
-        }
+    /**
+     * @return bool
+     */
+    public function isAllowSubnet(): bool
+    {
+        return $this->allowSubnet;
+    }
 
-        return $result;
+    /**
+     * @return bool
+     */
+    public function isRequireSubnet(): bool
+    {
+        return $this->requireSubnet;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllowNegation(): bool
+    {
+        return $this->allowNegation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIpv4NotAllowedMessage(): string
+    {
+        return $this->ipv4NotAllowedMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIpv6NotAllowedMessage(): string
+    {
+        return $this->ipv6NotAllowedMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWrongCidrMessage(): string
+    {
+        return $this->wrongCidrMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNoSubnetMessage(): string
+    {
+        return $this->noSubnetMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHasSubnetMessage(): string
+    {
+        return $this->hasSubnetMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotInRangeMessage(): string
+    {
+        return $this->notInRangeMessage;
     }
 
     public function getRanges(): array
     {
         return $this->ranges;
-    }
-
-    /**
-     * The method checks whether the IP address with specified CIDR is allowed according to the {@see $ranges} list.
-     */
-    private function isAllowed(string $ip): bool
-    {
-        if (empty($this->ranges)) {
-            return true;
-        }
-
-        foreach ($this->ranges as $string) {
-            [$isNegated, $range] = $this->parseNegatedRange($string);
-            if (IpHelper::inRange($ip, $range)) {
-                return !$isNegated;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -318,7 +343,7 @@ final class Ip extends Rule
      */
     private function parseNegatedRange($string): array
     {
-        $isNegated = strpos($string, self::NEGATION_CHAR) === 0;
+        $isNegated = str_starts_with($string, self::NEGATION_CHAR);
         return [$isNegated, $isNegated ? substr($string, strlen(self::NEGATION_CHAR)) : $string];
     }
 
@@ -350,6 +375,25 @@ final class Ip extends Rule
     }
 
     /**
+     * The method checks whether the IP address with specified CIDR is allowed according to the {@see $ranges} list.
+     */
+    public function isAllowed(string $ip): bool
+    {
+        if (empty($this->ranges)) {
+            return true;
+        }
+
+        foreach ($this->ranges as $string) {
+            [$isNegated, $range] = $this->parseNegatedRange($string);
+            if (IpHelper::inRange($ip, $range)) {
+                return !$isNegated;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Used to get the Regexp pattern for initial IP address parsing.
      */
     public function getIpParsePattern(): string
@@ -362,21 +406,37 @@ final class Ip extends Rule
 
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
+        return [
             'networks' => $this->networks,
             'allowIpv4' => $this->allowIpv4,
             'allowIpv6' => $this->allowIpv6,
             'allowSubnet' => $this->allowSubnet,
             'requireSubnet' => $this->requireSubnet,
             'allowNegation' => $this->allowNegation,
-            'message' => $this->formatMessage($this->message),
-            'ipv4NotAllowedMessage' => $this->formatMessage($this->ipv4NotAllowedMessage),
-            'ipv6NotAllowedMessage' => $this->formatMessage($this->ipv6NotAllowedMessage),
-            'wrongCidrMessage' => $this->formatMessage($this->wrongCidrMessage),
-            'noSubnetMessage' => $this->formatMessage($this->noSubnetMessage),
-            'hasSubnetMessage' => $this->formatMessage($this->hasSubnetMessage),
-            'notInRangeMessage' => $this->formatMessage($this->notInRangeMessage),
+            'message' => [
+                'message' => $this->message,
+            ],
+            'ipv4NotAllowedMessage' => [
+                'message' => $this->ipv4NotAllowedMessage,
+            ],
+            'ipv6NotAllowedMessage' => [
+                'message' => $this->ipv6NotAllowedMessage,
+            ],
+            'wrongCidrMessage' => [
+                'message' => $this->wrongCidrMessage,
+            ],
+            'noSubnetMessage' => [
+                'message' => $this->noSubnetMessage,
+            ],
+            'hasSubnetMessage' => [
+                'message' => $this->hasSubnetMessage,
+            ],
+            'notInRangeMessage' => [
+                'message' => $this->notInRangeMessage,
+            ],
             'ranges' => $this->ranges,
-        ]);
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

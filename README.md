@@ -51,20 +51,23 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
 
-$ruleSet = new RuleSet([
+$rules = [
     new Required(),
     new Number(min: 10),
     static function ($value): Result {
         $result = new Result();
         if ($value !== 42) {
             $result->addError('Value should be 42.');
+            // or
+            $result->addError('Value should be {value}.', ['value' => 42]);
         }
 
         return $result;
     }
-]);
+];
+$validator = getValidator(); // Usually obtained from container
 
-$result = $ruleSet->validate(41);
+$result = $validator->validate(41, $rules);
 if (!$result->isValid()) {
     foreach ($result->getErrorMessages() as $error) {
         // ...
@@ -97,7 +100,7 @@ final class MoneyTransfer implements DataSetInterface
     }
 }
 
-$validator = new Validator(); // Usually obtained from container
+$validator = getValidator(); // Usually obtained from container
 $moneyTransfer = new MoneyTransfer(142);
 $rules = [    
     'amount' => [
@@ -111,12 +114,10 @@ $rules = [
         }
     ],
 ];
-$resultSet = $validator->validate($moneyTransfer, $rules);
-foreach ($resultSet as $attribute => $result) {
-    if ($result->isValid() === false) {
-        foreach ($result->getErrors() as $error) {
-            // ...
-        }
+$result = $validator->validate($moneyTransfer, $rules);
+if ($result->isValid() === false) {
+    foreach ($result->getErrors() as $error) {
+        // ...
     }
 }
 ```
@@ -156,6 +157,7 @@ use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
+$validator = getValidator(); // Usually obtained from container
 $data = ['author' => ['name' => 'Alexey', 'age' => '31']];
 $rule = new Nested([
     'title' => [new Required()],
@@ -164,7 +166,7 @@ $rule = new Nested([
         'age' => [new Number(min: 18)],
     )];
 ]);
-$errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
+$errors = $validator->validate($data, [$rule])->getErrorMessagesIndexedByPath();
 ```
 
 ##### Other configuration options
@@ -213,6 +215,7 @@ use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\RuleSet;
 
+$validator = getValidator();
 $data = [
     'charts' => [
         [
@@ -253,7 +256,7 @@ $rule = new Nested([
         ]),
     ]),
 ]);
-$errors = $rule->validate($data)->getErrorMessagesIndexedByPath();
+$errors = $rule->validate($data, [$rule])->getErrorMessagesIndexedByPath();
 ```
 
 The contents of the errors will be:
@@ -410,16 +413,29 @@ final class Point
 
 ```php
 use Attribute;
+use \Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use \Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class ValidateXRule extends Rule
+final class ValidateXRule implements RuleInterface
+{
+    public function __construct()
+    {    
+    }
+}
+
+final class ValidateXRuleHandler implements RuleHandlerInterface
 {    
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof RuleInterface) {
+            throw new UnexpectedRuleException(ValidateXRule::class, $rule);
+        }
+        
         $result = new Result();
         $result->addError('Custom error.');
 
@@ -464,6 +480,7 @@ use Attribute;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\RuleInterface
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\ValidationContext;
 
@@ -478,33 +495,16 @@ final class CustomFormatter implements FormatterInterface
 }
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class ValidateXRule extends Rule
+final class ValidateXRule implements RuleInterface
 {
     public function __construct(
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private $value,
     ) {
-        parent::__construct($formatter, $skipOnEmpty, $skipOnError, $when);
-
-        $this->formatter = $this->createFormatter();
-        $this->skipOnEmpty = $skipOnEmpty;
-        $this->skipOnError = $skipOnError;
-        $this->when = $when;
     }
-
-    private function createFormatter(): FormatterInterface
+    
+    public function getValue()
     {
-        // More complex logic
-        // ...
-        return CustomFormatter();
-    }
-
-    public function validateValue($value, ?ValidationContext $context = null): Result
-    {
-        // More complex logic
-        // ...
+        return $this->value;
     }
 }
 
@@ -551,36 +551,57 @@ new Number(
 
 If callable returns `true` rule is applied, when the value returned is `false`, rule is skipped.
 
-### Creating your own validation rules
+### Creating your own validation rule handlers
 
 #### Basic usage
 
-To create your own validation rule you should extend `Rule` class:
+To create your own validation rule handler you should implement `RuleHandlerInterface`:
 
 ```php
 namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;use Yiisoft\Validator\FormatterInterface;use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\RuleHandlerInterface;use Yiisoft\Validator\RuleInterface;
 
-final class Pi extends Rule
+final class Pi implements RuleHandlerInterface
 {
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    use FormatMessageTrait;
+    
+    private FormatterInterface $formatter;
+    
+    public function __construct(
+        ?FormatterInterface $formatter = null,
+    ) {
+        $this->formatter = $this->createFormatter();
+    }
+    
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof Pi) {
+            throw new UnexpectedRuleException(Pi::class, $rule);
+        }
+        
         $result = new Result();
         $equal = \abs($value - M_PI) < PHP_FLOAT_EPSILON;
 
         if (!$equal) {
-            $result->addError($this->formatMessage('Value is not PI.'));
+            $result->addError($this->formatter->format('Value is not PI.'));
         }
 
         return $result;
     }
+    
+    private function createFormatter(): FormatterInterface
+    {
+        // More complex logic
+        // ...
+        return CustomFormatter();
+    }
 }
 ```
 
-Note that second argument in `validateValue()` is an instance of `ValidationContext` so you can use it if you need
+Note that third argument in `validate()` is an instance of `ValidationContext` so you can use it if you need
 whole data set context. For example, implementation might be the following if you need to validate "company"
 property only if "hasCompany" is true:
 
@@ -592,10 +613,18 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
-final class CompanyName extends Rule
+final class CompanyName implements Rule\RuleHandlerInterface
 {
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    use FormatMessageTrait;
+    
+    private FormatterInterface $formatter;
+
+    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
+        if (!$rule instanceof CompanyName) {
+            throw new UnexpectedRuleException(CompanyName::class, $rule);
+        }
+        
         $result = new Result();
         $dataSet = $context->getDataSet();
         $hasCompany = $dataSet !== null && $dataSet->getAttributeValue('hasCompany') === true;
@@ -606,7 +635,7 @@ final class CompanyName extends Rule
 
         return $result;
     }
-    
+
     private function isCompanyNameValid(string $value): bool
     {
         // check company name    
@@ -614,28 +643,26 @@ final class CompanyName extends Rule
 }
 ```
 
-In case you need extra dependencies, these could be passed to the rule when it is created:
-
-```php
-$rule = new NoLessThanExistingBidRule($connection);
-```
+In case you need extra dependencies, this can be done by [rule handler container](https://github.com/yiisoft/validator-rule-handler-container/).
 
 That would work with the following implementation:
 
 ```php
-final class NoLessThanExistingBidRule extends Rule
-{   
+final class NoLessThanExistingBidRuleHandler implements RuleHandlerInterface
+{
+    use FormatMessageTrait;
+    
+    private FormatterInterface $formatter;
+
     public function __construct(    
         private ConnectionInterface $connection,        
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        ?FormatterInterface $formatter = null
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
+        $this->formatter = $formatter ?? new Formatter();
+    }
     }
     
-    protected function validateValue($value, DataSetInterface $dataSet = null): Result
+    public function validate(mixed $value, object $rule, ?ValidationContext $context): Result
     {
         $result = new Result();
         
@@ -651,7 +678,7 @@ final class NoLessThanExistingBidRule extends Rule
 
 #### Using common arguments for multiple rules of the same type
 
-Because concrete rules' implementations (`Number`, etc) are marked as final, you can not extend them to set up 
+Because concrete rules' implementations (`Number`, etc.) are marked as final, you can not extend them to set up 
 common arguments. For this and more complex cases use composition instead of inheritance:
 
 ```php
@@ -706,13 +733,11 @@ $rules = [
     'username' => new UsernameRule(),
     'email' => [new Email()],
 ];
-$results = $validator->validate($user, $rules);
+$result = $validator->validate($user, $rules);
 
-foreach ($results as $attribute => $result) {
-    if ($result->isValid() === false) {
-        foreach ($result->getErrors() as $error) {
-            // ...
-        }
+if ($result->isValid() === false) {
+    foreach ($result->getErrors() as $error) {
+        // ...
     }
 }
 ```

@@ -5,22 +5,29 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
+use Closure;
+use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+
 use Yiisoft\Validator\ValidationContext;
 
 use function function_exists;
-use function is_string;
-use function strlen;
 
 /**
  * Validates that the value is a valid email address.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Email extends Rule
+final class Email implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
         /**
          * @var string the regular expression used to validate value.
@@ -60,95 +67,99 @@ final class Email extends Rule
          */
         private bool $enableIDN = false,
         private string $message = 'This value is not a valid email address.',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
-
         if ($enableIDN && !function_exists('idn_to_ascii')) {
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return string
+     */
+    public function getPattern(): string
     {
-        $originalValue = $value;
-        $result = new Result();
-
-        if (!is_string($value)) {
-            $valid = false;
-        } elseif (!preg_match(
-            '/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?((?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))$/i',
-            $value,
-            $matches
-        )) {
-            $valid = false;
-        } else {
-            /** @psalm-var array{name:string,local:string,open:string,domain:string,close:string} $matches */
-            if ($this->enableIDN) {
-                $matches['local'] = $this->idnToAscii($matches['local']);
-                $matches['domain'] = $this->idnToAscii($matches['domain']);
-                $value = implode([
-                    $matches['name'],
-                    $matches['open'],
-                    $matches['local'],
-                    '@',
-                    $matches['domain'],
-                    $matches['close'],
-                ]);
-            }
-
-            if (is_string($matches['local']) && strlen($matches['local']) > 64) {
-                // The maximum total length of a user name or other local-part is 64 octets. RFC 5322 section 4.5.3.1.1
-                // http://tools.ietf.org/html/rfc5321#section-4.5.3.1.1
-                $valid = false;
-            } elseif (is_string($matches['local']) && strlen($matches['local'] . '@' . $matches['domain']) > 254) {
-                // There is a restriction in RFC 2821 on the length of an address in MAIL and RCPT commands
-                // of 254 characters. Since addresses that do not fit in those fields are not normally useful, the
-                // upper limit on address lengths should normally be considered to be 254.
-                //
-                // Dominic Sayers, RFC 3696 erratum 1690
-                // http://www.rfc-editor.org/errata_search.php?eid=1690
-                $valid = false;
-            } else {
-                $valid = preg_match($this->pattern, $value) || ($this->allowName && preg_match(
-                    $this->fullPattern,
-                    $value
-                ));
-                if ($valid && $this->checkDNS) {
-                    $valid = checkdnsrr($matches['domain'] . '.', 'MX') || checkdnsrr($matches['domain'] . '.', 'A');
-                }
-            }
-        }
-
-        if ($this->enableIDN && $valid === false) {
-            $valid = (bool) preg_match($this->idnEmailPattern, $originalValue);
-        }
-
-        if ($valid === false) {
-            $result->addError($this->formatMessage($this->message));
-        }
-
-        return $result;
+        return $this->pattern;
     }
 
-    private function idnToAscii($idn)
+    /**
+     * @return string
+     */
+    public function getFullPattern(): string
     {
-        return idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
+        return $this->fullPattern;
     }
 
+    /**
+     * @return string
+     */
+    public function getIdnEmailPattern(): string
+    {
+        return $this->idnEmailPattern;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllowName(): bool
+    {
+        return $this->allowName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCheckDNS(): bool
+    {
+        return $this->checkDNS;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnableIDN(): bool
+    {
+        return $this->enableIDN;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    #[ArrayShape([
+        'pattern' => 'string',
+        'fullPattern' => 'string',
+        'idnEmailPattern' => 'string',
+        'allowName' => 'bool',
+        'checkDNS' => 'bool',
+        'enableIDN' => 'bool',
+        'message' => 'string[]',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+    ])]
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
+        return [
             'pattern' => $this->pattern,
             'fullPattern' => $this->fullPattern,
             'idnEmailPattern' => $this->idnEmailPattern,
             'allowName' => $this->allowName,
             'checkDNS' => $this->checkDNS,
             'enableIDN' => $this->enableIDN,
-            'message' => $this->formatMessage($this->message),
-        ]);
+            'message' => [
+                'message' => $this->message,
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }

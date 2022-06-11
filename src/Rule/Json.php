@@ -5,66 +5,53 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
-use Yiisoft\Validator\FormatterInterface;
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule;
+use Closure;
+use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
-
-use function is_string;
 
 /**
  * Validates that the value is a valid json.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Json extends Rule
+final class Json implements ParametrizedRuleInterface, BeforeValidationInterface
 {
+    use BeforeValidationTrait;
+    use HandlerClassNameTrait;
+    use RuleNameTrait;
+
     public function __construct(
         private string $message = 'The value is not JSON.',
-        ?FormatterInterface $formatter = null,
-        bool $skipOnEmpty = false,
-        bool $skipOnError = false,
-        $when = null,
+        private bool $skipOnEmpty = false,
+        private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        private ?Closure $when = null,
     ) {
-        parent::__construct(formatter: $formatter, skipOnEmpty: $skipOnEmpty, skipOnError: $skipOnError, when: $when);
     }
 
-    protected function validateValue($value, ?ValidationContext $context = null): Result
+    /**
+     * @return string
+     */
+    public function getMessage(): string
     {
-        $result = new Result();
-
-        if (!$this->isValidJson($value)) {
-            $result->addError($this->formatMessage($this->message));
-        }
-
-        return $result;
+        return $this->message;
     }
 
-    private function isValidJson($value): bool
-    {
-        // Regular expression is built based on JSON grammar specified at
-        // https://tools.ietf.org/html/rfc8259
-        $regex = <<<'REGEX'
-        /
-        (?(DEFINE)
-            (?<json>(?>\s*(?&object)\s*|\s*(?&array)\s*))
-            (?<object>(?>\{\s*(?>(?&member)(?>\s*,\s*(?&member))*)?\s*\}))
-            (?<member>(?>(?&string)\s*:\s*(?&value)))
-            (?<array>(?>\[\s*(?>(?&value)(?>\s*,\s*(?&value))*)?\s*\]))
-            (?<value>(?>)false|null|true|(?&object)|(?&array)|(?&number)|(?&string))
-            (?<number>(?>-?(?>0|[1-9]\d*)(?>\.\d+)?(?>[eE][-+]?\d+)?))
-            (?<string>(?>"(?>\\(?>["\\\/bfnrt]|u[a-fA-F0-9]{4})|[^"\\\0-\x1F\x7F]+)*"))
-        )
-        \A(?&json)\z
-        /x
-        REGEX;
-
-        return is_string($value) && preg_match($regex, $value) === 1;
-    }
-
+    #[ArrayShape(['message' => 'string[]', 'skipOnEmpty' => 'bool', 'skipOnError' => 'bool'])]
     public function getOptions(): array
     {
-        return array_merge(parent::getOptions(), [
-            'message' => $this->formatMessage($this->message),
-        ]);
+        return [
+            'message' => [
+                'message' => $this->message,
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+        ];
     }
 }
