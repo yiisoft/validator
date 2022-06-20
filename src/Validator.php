@@ -12,8 +12,7 @@ use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ScalarDataSet;
 use Yiisoft\Validator\Rule\Callback;
 
-use Yiisoft\Validator\Rule\Trait\EmptyCheckTrait;
-
+use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 use function is_array;
 use function is_object;
 
@@ -22,9 +21,7 @@ use function is_object;
  */
 final class Validator implements ValidatorInterface
 {
-    use EmptyCheckTrait;
-
-    public const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
+    use PreValidateTrait;
 
     public function __construct(private RuleHandlerResolverInterface $ruleHandlerResolver)
     {
@@ -122,7 +119,7 @@ final class Validator implements ValidatorInterface
                 continue;
             }
 
-            $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
+            $context->setParameter($this->parameterPreviousRulesErrored, true);
 
             foreach ($ruleResult->getErrors() as $error) {
                 $valuePath = $error->getValuePath();
@@ -172,21 +169,5 @@ final class Validator implements ValidatorInterface
             $result->addError($error->getMessage(), $error->getValuePath());
         }
         return $result;
-    }
-
-    private function preValidate(
-        $value,
-        ValidationContext $context,
-        BeforeValidationInterface $rule
-    ): bool {
-        if ($rule->shouldSkipOnEmpty() && $this->isEmpty($value)) {
-            return true;
-        }
-
-        if ($rule->shouldSkipOnError() && $context->getParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
-            return true;
-        }
-
-        return is_callable($rule->getWhen()) && !($rule->getWhen())($value, $context);
     }
 }
