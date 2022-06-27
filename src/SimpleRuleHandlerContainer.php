@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
 
-final class SimpleRuleHandlerResolver implements RuleHandlerResolverInterface
+final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 {
     private array $instances = [];
 

@@ -8,7 +8,7 @@ use Yiisoft\Test\Support\Container\SimpleContainer;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
-use Yiisoft\Validator\ContainerRuleHandlerResolver;
+use Yiisoft\Validator\RuleHandlerContainer;
 use Yiisoft\Validator\Tests\Stub\PiHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
 
@@ -16,7 +16,7 @@ class RuleHandlerContainerTest extends TestCase
 {
     public function testCreate(): void
     {
-        $handlersContainer = new ContainerRuleHandlerResolver(new SimpleContainer([
+        $handlersContainer = new RuleHandlerContainer(new SimpleContainer([
             PiHandler::class => new PiHandler(),
         ]));
 
@@ -27,7 +27,7 @@ class RuleHandlerContainerTest extends TestCase
 
     public function testNotFound(): void
     {
-        $handlersContainer = new ContainerRuleHandlerResolver(new SimpleContainer());
+        $handlersContainer = new RuleHandlerContainer(new SimpleContainer());
 
         $this->expectException(RuleHandlerNotFoundException::class);
         $this->expectExceptionMessage(
@@ -39,7 +39,7 @@ class RuleHandlerContainerTest extends TestCase
 
     public function testNotRuleInterface(): void
     {
-        $handlersContainer = new ContainerRuleHandlerResolver(new SimpleContainer(['handler' => new \stdClass()]));
+        $handlersContainer = new RuleHandlerContainer(new SimpleContainer(['handler' => new \stdClass()]));
 
         $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
         $this->expectExceptionMessage('Handler "handler" should implement "' . RuleHandlerInterface::class . '".');

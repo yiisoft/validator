@@ -693,11 +693,11 @@ be used.
 use Yiisoft\Di\Container;
 use Yiisoft\Di\ContainerConfig;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
-use Yiisoft\Validator\ContainerRuleHandlerResolver;
+use Yiisoft\Validator\RuleHandlerContainer;
 
 // Need to be defined in common.php
 $config = [
-    RuleHandlerResolverInterface::class => ContainerRuleHandlerResolver::class,
+    RuleHandlerResolverInterface::class => RuleHandlerContainer::class,
 ];
 
 $containerConfig = ContainerConfig::create()->withDefinitions($config); 

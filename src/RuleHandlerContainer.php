@@ -10,7 +10,7 @@ use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
 
-final class ContainerRuleHandlerResolver implements RuleHandlerResolverInterface
+final class RuleHandlerContainer implements RuleHandlerResolverInterface
 {
     private ContainerInterface $container;
 
