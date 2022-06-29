@@ -215,7 +215,7 @@ use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\RuleSet;
 
-$validator = getValidator();
+$validator = getValidator(); // Usually obtained from container
 $data = [
     'charts' => [
         [
@@ -342,13 +342,12 @@ Pass the base DTO to `AttributeDataSet` and use it for validation.
 
 ```php
 use Yiisoft\Validator\DataSet\AttributeDataSet;
-use Yiisoft\Validator\Validator;
 
 $data = [
     // ...
 ];
 $dataSet = new AttributeDataSet(new ChartsData(), $data);
-$validator = new Validator();
+$validator = getValidator(); // Usually obtained from container
 $errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
 ```
 
@@ -551,9 +550,11 @@ new Number(
 
 If callable returns `true` rule is applied, when the value returned is `false`, rule is skipped.
 
-### Creating your own validation rule handlers
+### Validation rule handlers
 
-#### Basic usage
+#### Creating your own validation rule handlers
+
+##### Basic usage
 
 To create your own validation rule handler you should implement `RuleHandlerInterface`:
 
@@ -564,7 +565,7 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;use Yiisoft\Validator\FormatterInterface;use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;use Yiisoft\Validator\RuleInterface;
 
-final class Pi implements RuleHandlerInterface
+final class PiHandler implements RuleHandlerInterface
 {
     use FormatMessageTrait;
     
@@ -613,7 +614,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule;
 use Yiisoft\Validator\ValidationContext;
 
-final class CompanyName implements Rule\RuleHandlerInterface
+final class CompanyNameHandler implements Rule\RuleHandlerInterface
 {
     use FormatMessageTrait;
     
@@ -643,7 +644,10 @@ final class CompanyName implements Rule\RuleHandlerInterface
 }
 ```
 
-In case you need extra dependencies, this can be done by [rule handler container](https://github.com/yiisoft/validator-rule-handler-container/).
+##### Resolving rule handler dependencies
+
+Basically, you can use `SimpleRuleHandlerResolver` to resolve rule handler.
+In case you need extra dependencies, this can be done by `ContainerRuleHandlerResolver`.
 
 That would work with the following implementation:
 
@@ -674,6 +678,32 @@ final class NoLessThanExistingBidRuleHandler implements RuleHandlerInterface
         return $result;
     }
 }
+
+$ruleHandlerContainer = new ContainerRuleHandlerResolver(new MyContainer());
+$ruleHandler = $ruleHandlerContainer->resolve(NoLessThanExistingBidRuleHandler::class);
+```
+
+`MyContainer` is a container for resolving dependencies and  must be an instance of
+`Psr\Container\ContainerInterface`. [Yii Dependency Injection](https://github.com/yiisoft/di) implementation also can
+be used.
+
+###### Using [Yii config](https://github.com/yiisoft/config)
+
+```php
+use Yiisoft\Di\Container;
+use Yiisoft\Di\ContainerConfig;
+use Yiisoft\Validator\RuleHandlerResolverInterface;
+use Yiisoft\Validator\RuleHandlerContainer;
+
+// Need to be defined in common.php
+$config = [
+    RuleHandlerResolverInterface::class => RuleHandlerContainer::class,
+];
+
+$containerConfig = ContainerConfig::create()->withDefinitions($config); 
+$container = new Container($containerConfig);
+$ruleHandlerResolver = $container->get(RuleHandlerResolverInterface::class);        
+$ruleHandler = $ruleHandlerResolver->resolve(PiHandler::class);
 ```
 
 #### Using common arguments for multiple rules of the same type
@@ -728,7 +758,7 @@ Then it could be used like the following:
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\Rule\Email;
 
-$validator = new Validator();
+$validator = getValidator(); // Usually obtained from container
 $rules = [
     'username' => new UsernameRule(),
     'email' => [new Email()],

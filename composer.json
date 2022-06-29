@@ -20,6 +20,7 @@
         "php": "^8.0",
         "ext-json": "*",
         "ext-mbstring": "*",
+        "psr/container": "^1.0|^2.0",
         "yiisoft/arrays": "^2.0",
         "yiisoft/friendly-exception": "^1.0",
         "yiisoft/network-utilities": "^1.0",
@@ -35,7 +36,7 @@
     },
     "suggest": {
         "ext-intl": "Allows using IDN validation for emails",
-        "yiisoft/validator-rule-handler-container": "To create rule handlers via Yii Factory"
+        "yiisoft/di": "To create rule handlers via Yii DI"
     },
     "autoload": {
         "psr-4": {
