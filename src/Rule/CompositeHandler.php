@@ -10,7 +10,7 @@ use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Can be used to group rules for validation by skipOnEmpty, skipOnError or when
+ * Can be used to group rules for validation by `skipOnEmpty`, `skipOnError` or `when`.
  *
  * For example, we have same when closure:
  * ```
