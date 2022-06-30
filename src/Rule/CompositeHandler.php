@@ -45,7 +45,7 @@ final class CompositeHandler implements RuleHandlerInterface
         $context->setParameter($this->parameterPreviousRulesErrored, true);
 
         if ($this->preValidate($value, $context, $rule)) {
-            return  new Result();
+            return new Result();
         }
 
         return $context->getValidator()->validate($value, $rule->getRules());
