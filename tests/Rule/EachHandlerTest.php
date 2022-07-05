@@ -78,6 +78,6 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
 
     protected function getValidator(): RuleHandlerInterface
     {
-        return new EachHandler(FakeValidatorFactory::make(),null);
+        return new EachHandler(FakeValidatorFactory::make(), null);
     }
 }

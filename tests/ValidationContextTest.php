@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Tests\Stub\DataSet;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
 
 final class ValidationContextTest extends TestCase

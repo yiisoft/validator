@@ -217,6 +217,6 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
 
     protected function getValidator(): RuleHandlerInterface
     {
-        return new NestedHandler(FakeValidatorFactory::make(),null);
+        return new NestedHandler(FakeValidatorFactory::make(), null);
     }
 }

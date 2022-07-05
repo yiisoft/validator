@@ -10,7 +10,6 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
 
 abstract class AbstractRuleValidatorTest extends TestCase

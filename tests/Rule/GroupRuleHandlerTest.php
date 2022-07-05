@@ -52,6 +52,6 @@ final class GroupRuleHandlerTest extends AbstractRuleValidatorTest
 
     protected function getValidator(): RuleHandlerInterface
     {
-        return new GroupRuleHandler(FakeValidatorFactory::make(),null);
+        return new GroupRuleHandler(FakeValidatorFactory::make(), null);
     }
 }

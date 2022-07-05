@@ -19,8 +19,7 @@ class GroupRuleHandler implements RuleHandlerInterface
     public function __construct(
         private ValidatorInterface $validator,
         private ?FormatterInterface $formatter = null,
-    )
-    {
+    ) {
         $this->formatter ??= new Formatter();
     }
 
