@@ -5,12 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule\SelfValidatable;
 
 use PHPUnit\Framework\TestCase;
-use stdClass;
-use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\SelfValidatableRuleInterface;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\ValidationContext;

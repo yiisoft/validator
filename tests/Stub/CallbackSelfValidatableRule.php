@@ -6,16 +6,12 @@ namespace Yiisoft\Validator\Tests\Stub;
 
 use Closure;
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
-use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\SelfValidatableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 class CallbackSelfValidatableRule implements SelfValidatableRuleInterface

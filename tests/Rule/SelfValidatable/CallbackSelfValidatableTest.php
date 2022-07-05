@@ -6,14 +6,11 @@ namespace Yiisoft\Validator\Tests\Rule\SelfValidatable;
 
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
-use Yiisoft\Validator\ParametrizedRuleInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\AtLeast;
-use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\SelfValidatableRuleInterface;
 use Yiisoft\Validator\Tests\Stub\CallbackSelfValidatableRule;
 
-final class CallbackHandlerTest extends AbstractSelfValidatableRuleTest
+final class CallbackSelfValidatableTest extends AbstractSelfValidatableRuleTest
 {
     public function failedValidationProvider(): array
     {
@@ -96,7 +93,6 @@ final class CallbackHandlerTest extends AbstractSelfValidatableRuleTest
             ],
         ];
     }
-
 
     protected function getRule(): SelfValidatableRuleInterface
     {
