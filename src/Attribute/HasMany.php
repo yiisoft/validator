@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Attribute;
 use Attribute;
 
 /**
+ * TODO: rename to better understanding
  * Represents one-to-many relation.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
