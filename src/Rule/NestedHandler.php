@@ -10,6 +10,7 @@ use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 
 use function is_array;
 use function is_object;
@@ -41,11 +42,11 @@ use function is_object;
  */
 final class NestedHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
-
-    public function __construct(?FormatterInterface $formatter = null)
-    {
-        $this->formatter = $formatter ?? new Formatter();
+    public function __construct(
+        private ValidatorInterface $validator,
+        private ?FormatterInterface $formatter = null,
+    ) {
+        $this->formatter ??= new Formatter();
     }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
@@ -66,7 +67,7 @@ final class NestedHandler implements RuleHandlerInterface
             return $compoundResult;
         }
 
-        $value = (array)$value;
+        $value = (array) $value;
 
         $results = [];
         foreach ($rule->getRules() as $valuePath => $rules) {
@@ -85,7 +86,7 @@ final class NestedHandler implements RuleHandlerInterface
             $rules = is_array($rules) ? $rules : [$rules];
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
 
-            $itemResult = $context?->getValidator()->validate($validatedValue, $rules);
+            $itemResult = $this->validator->validate($validatedValue, $rules);
 
             if ($itemResult->isValid()) {
                 continue;

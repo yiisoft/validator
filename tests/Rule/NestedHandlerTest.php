@@ -13,6 +13,7 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 
 final class NestedHandlerTest extends AbstractRuleValidatorTest
 {
@@ -216,6 +217,6 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
 
     protected function getValidator(): RuleHandlerInterface
     {
-        return new NestedHandler();
+        return new NestedHandler(FakeValidatorFactory::make(),null);
     }
 }

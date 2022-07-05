@@ -11,17 +11,18 @@ use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.
  */
 final class EachHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
-
-    public function __construct(?FormatterInterface $formatter = null)
-    {
-        $this->formatter = $formatter ?? new Formatter();
+    public function __construct(
+        private ValidatorInterface $validator,
+        private ?FormatterInterface $formatter = null,
+    ) {
+        $this->formatter ??= new Formatter();
     }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
@@ -49,7 +50,7 @@ final class EachHandler implements RuleHandlerInterface
         foreach ($value as $index => $item) {
             /** @var array<mixed, RuleInterface[]> $rule */
             $rule = [$index => $rules];
-            $itemResult = $context?->getValidator()->validate($item, $rule);
+            $itemResult = $this->validator->validate($item, $rule);
             if ($itemResult->isValid()) {
                 continue;
             }

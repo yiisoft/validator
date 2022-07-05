@@ -9,17 +9,19 @@ use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 
 /**
  * Validates a single value for a set of custom rules.
  */
 class GroupRuleHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
-
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(
+        private ValidatorInterface $validator,
+        private ?FormatterInterface $formatter = null,
+    )
     {
-        $this->formatter = $formatter ?? new Formatter();
+        $this->formatter ??= new Formatter();
     }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
@@ -29,7 +31,7 @@ class GroupRuleHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-        if (!$context?->getValidator()->validate($value, $rule->getRuleSet())->isValid()) {
+        if (!$this->validator->validate($value, $rule->getRuleSet())->isValid()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
                 ['attribute' => $context?->getAttribute(), 'value' => $value]

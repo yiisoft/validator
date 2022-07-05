@@ -9,6 +9,7 @@ use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\EachHandler;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 
 final class EachHandlerTest extends AbstractRuleValidatorTest
 {
@@ -77,6 +78,6 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
 
     protected function getValidator(): RuleHandlerInterface
     {
-        return new EachHandler();
+        return new EachHandler(FakeValidatorFactory::make(),null);
     }
 }

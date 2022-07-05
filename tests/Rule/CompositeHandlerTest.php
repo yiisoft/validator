@@ -9,6 +9,7 @@ use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 
 final class CompositeHandlerTest extends AbstractRuleValidatorTest
 {
@@ -74,6 +75,6 @@ final class CompositeHandlerTest extends AbstractRuleValidatorTest
 
     protected function getValidator(): RuleHandlerInterface
     {
-        return new CompositeHandler();
+        return new CompositeHandler(FakeValidatorFactory::make());
     }
 }

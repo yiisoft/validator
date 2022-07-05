@@ -38,7 +38,7 @@ final class Validator implements ValidatorInterface
             $rules = $data->getRules();
         }
 
-        $context = new ValidationContext($this, $data);
+        $context = new ValidationContext($data);
         $compoundResult = new Result();
 
         $results = [];

@@ -22,4 +22,9 @@ final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 
         return $this->instances[$className];
     }
+
+    public function addInstance(object $ruleHandler)
+    {
+        $this->instances[$ruleHandler::class] = $ruleHandler;
+    }
 }

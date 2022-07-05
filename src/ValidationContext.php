@@ -11,31 +11,16 @@ use Yiisoft\Arrays\ArrayHelper;
  */
 final class ValidationContext
 {
-    private ValidatorInterface $validator;
-    private ?DataSetInterface $dataSet;
-    private ?string $attribute;
-    private array $parameters;
-
     /**
      * @param DataSetInterface|null $dataSet Data set the attribute belongs to. Null if a single value is validated.
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
      * @param array $parameters Arbitrary parameters.
      */
     public function __construct(
-        ValidatorInterface $validator,
-        ?DataSetInterface $dataSet,
-        ?string $attribute = null,
-        array $parameters = []
+        private ?DataSetInterface $dataSet,
+        private ?string $attribute = null,
+        private array $parameters = [],
     ) {
-        $this->validator = $validator;
-        $this->dataSet = $dataSet;
-        $this->attribute = $attribute;
-        $this->parameters = $parameters;
-    }
-
-    public function getValidator(): ValidatorInterface
-    {
-        return $this->validator;
     }
 
     /**

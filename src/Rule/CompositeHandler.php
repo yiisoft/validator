@@ -8,6 +8,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 
 /**
  * Can be used to group rules for validation by `skipOnEmpty`, `skipOnError` or `when`.
@@ -36,6 +37,10 @@ final class CompositeHandler implements RuleHandlerInterface
 {
     use PreValidateTrait;
 
+    public function __construct(private ValidatorInterface $validator)
+    {
+    }
+
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof Composite) {
@@ -48,6 +53,6 @@ final class CompositeHandler implements RuleHandlerInterface
             return new Result();
         }
 
-        return $context->getValidator()->validate($value, $rule->getRules());
+        return $this->validator->validate($value, $rule->getRules());
     }
 }

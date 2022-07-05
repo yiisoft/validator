@@ -9,6 +9,7 @@ use Yiisoft\Validator\Rule\GroupRuleHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\FunctionExists;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 
 final class GroupRuleHandlerTest extends AbstractRuleValidatorTest
 {
@@ -51,6 +52,6 @@ final class GroupRuleHandlerTest extends AbstractRuleValidatorTest
 
     protected function getValidator(): RuleHandlerInterface
     {
-        return new GroupRuleHandler();
+        return new GroupRuleHandler(FakeValidatorFactory::make(),null);
     }
 }
