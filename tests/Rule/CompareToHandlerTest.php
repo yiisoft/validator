@@ -58,6 +58,7 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
 
         return [
             [new CompareTo($value), $value],
+            [new CompareTo(), $value],
             [new CompareTo(null, 'attribute'), $value],
             [new CompareTo($value), (string)$value],
 
