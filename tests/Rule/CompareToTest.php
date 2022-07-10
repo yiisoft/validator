@@ -136,7 +136,7 @@ final class CompareToTest extends AbstractRuleTest
                         'parameters' => [
                             'compareValue' => 'YES',
                             'compareAttribute' => null,
-                            'compareValueOrAttribute' => 'YES'
+                            'compareValueOrAttribute' => 'YES',
                         ],
                     ],
                     'type' => 'string',
@@ -174,7 +174,7 @@ final class CompareToTest extends AbstractRuleTest
                         'parameters' => [
                             'compareValue' => null,
                             'compareAttribute' => 'test',
-                            'compareValueOrAttribute' => 'test'
+                            'compareValueOrAttribute' => 'test',
                         ],
                     ],
                     'type' => 'string',
