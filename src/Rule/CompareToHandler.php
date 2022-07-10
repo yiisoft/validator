@@ -39,13 +39,17 @@ final class CompareToHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
+        $compareAttribute = $rule->getCompareAttribute() ?? $context?->getAttribute() . '_repeat';
+        $compareValue = $rule->getCompareValue() ?? $context?->getDataSet()?->getAttributeValue($compareAttribute);
 
-        if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $rule->getCompareValue())) {
+        if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $compareValue)) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
                 [
                     'attribute' => $context?->getAttribute(),
                     'compareValue' => $rule->getCompareValue(),
+                    'compareAttribute' => $rule->getCompareAttribute(),
+                    'compareValueOrAttribute' => $compareValue ?? $compareAttribute,
                     'value' => $value,
                 ]
             );

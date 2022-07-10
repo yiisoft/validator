@@ -40,14 +40,14 @@ final class CompareTo implements ParametrizedRuleInterface, BeforeValidationInte
      * Constant for specifying the comparison as string values.
      * No conversion will be done before comparison.
      *
-     * @see $type
+     * @see CompareTo::$type
      */
     public const TYPE_STRING = 'string';
     /**
      * Constant for specifying the comparison as numeric values.
      * String values will be converted into numbers before comparison.
      *
-     * @see $type
+     * @see CompareTo::$type
      */
     public const TYPE_NUMBER = 'number';
 
@@ -66,7 +66,11 @@ final class CompareTo implements ParametrizedRuleInterface, BeforeValidationInte
         /**
          * @var mixed the constant value to be compared with.
          */
-        private $compareValue,
+        private $compareValue = null,
+        /**
+         * @var string the name of the attribute to be compared with.
+         */
+        private ?string $compareAttribute = null,
         /**
          * @var string|null user-defined error message
          */
@@ -87,7 +91,7 @@ final class CompareTo implements ParametrizedRuleInterface, BeforeValidationInte
          * - `<`: check if value being validated is less than the value being compared with.
          * - `<=`: check if value being validated is less than or equal to the value being compared with.
          *
-         * When you want to compare numbers, make sure to also chabge @see CompareTo::$type} to
+         * When you want to compare numbers, make sure to also change @see CompareTo::$type} to
          * {@see CompareTo::TYPE_NUMBER}.
          */
         private string $operator = '==',
@@ -112,6 +116,14 @@ final class CompareTo implements ParametrizedRuleInterface, BeforeValidationInte
     }
 
     /**
+     * @return string|null
+     */
+    public function getCompareAttribute(): ?string
+    {
+        return $this->compareAttribute;
+    }
+
+    /**
      * @return string
      */
     public function getType(): string
@@ -130,18 +142,19 @@ final class CompareTo implements ParametrizedRuleInterface, BeforeValidationInte
     public function getMessage(): string
     {
         return $this->message ?? match ($this->operator) {
-            '==', '===' => 'Value must be equal to "{compareValue}".',
-            '!=', '!==' => 'Value must not be equal to "{compareValue}".',
-            '>' => 'Value must be greater than "{compareValue}".',
-            '>=' => 'Value must be greater than or equal to "{compareValue}".',
-            '<' => 'Value must be less than "{compareValue}".',
-            '<=' => 'Value must be less than or equal to "{compareValue}".',
+            '==', '===' => 'Value must be equal to "{compareValueOrAttribute}".',
+            '!=', '!==' => 'Value must not be equal to "{compareValueOrAttribute}".',
+            '>' => 'Value must be greater than "{compareValueOrAttribute}".',
+            '>=' => 'Value must be greater than or equal to "{compareValueOrAttribute}".',
+            '<' => 'Value must be less than "{compareValueOrAttribute}".',
+            '<=' => 'Value must be less than or equal to "{compareValueOrAttribute}".',
             default => throw new RuntimeException("Unknown operator: {$this->operator}"),
         };
     }
 
     #[ArrayShape([
-        'compareValue' => '',
+        'compareValue' => 'mixed',
+        'compareAttribute' => '',
         'message' => 'array',
         'type' => 'string',
         'operator' => 'string',
@@ -152,9 +165,14 @@ final class CompareTo implements ParametrizedRuleInterface, BeforeValidationInte
     {
         return [
             'compareValue' => $this->compareValue,
+            'compareAttribute' => $this->compareAttribute,
             'message' => [
                 'message' => $this->getMessage(),
-                'parameters' => ['compareValue' => $this->compareValue],
+                'parameters' => [
+                    'compareValue' => $this->compareValue,
+                    'compareAttribute' => $this->compareAttribute,
+                    'compareValueOrAttribute' => $this->compareValue ?? $this->compareAttribute,
+                ],
             ],
             'type' => $this->type,
             'operator' => $this->operator,

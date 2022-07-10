@@ -16,9 +16,14 @@ final class CompareToTest extends AbstractRuleTest
                 new CompareTo(1),
                 [
                     'compareValue' => 1,
+                    'compareAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{compareValue}".',
-                        'parameters' => ['compareValue' => 1],
+                        'message' => 'Value must be equal to "{compareValueOrAttribute}".',
+                        'parameters' => [
+                            'compareValue' => 1,
+                            'compareAttribute' => null,
+                            'compareValueOrAttribute' => 1,
+                        ],
                     ],
                     'type' => 'string',
                     'operator' => '==',
@@ -30,9 +35,14 @@ final class CompareToTest extends AbstractRuleTest
                 new CompareTo(1, type: CompareTo::TYPE_NUMBER),
                 [
                     'compareValue' => 1,
+                    'compareAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{compareValue}".',
-                        'parameters' => ['compareValue' => 1],
+                        'message' => 'Value must be equal to "{compareValueOrAttribute}".',
+                        'parameters' => [
+                            'compareValue' => 1,
+                            'compareAttribute' => null,
+                            'compareValueOrAttribute' => 1,
+                        ],
                     ],
                     'type' => 'number',
                     'operator' => '==',
@@ -44,9 +54,14 @@ final class CompareToTest extends AbstractRuleTest
                 new CompareTo(1, type: CompareTo::TYPE_NUMBER, operator: '>='),
                 [
                     'compareValue' => 1,
+                    'compareAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be greater than or equal to "{compareValue}".',
-                        'parameters' => ['compareValue' => 1],
+                        'message' => 'Value must be greater than or equal to "{compareValueOrAttribute}".',
+                        'parameters' => [
+                            'compareValue' => 1,
+                            'compareAttribute' => null,
+                            'compareValueOrAttribute' => 1,
+                        ],
                     ],
                     'type' => 'number',
                     'operator' => '>=',
@@ -58,9 +73,14 @@ final class CompareToTest extends AbstractRuleTest
                 new CompareTo('YES'),
                 [
                     'compareValue' => 'YES',
+                    'compareAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{compareValue}".',
-                        'parameters' => ['compareValue' => 'YES'],
+                        'message' => 'Value must be equal to "{compareValueOrAttribute}".',
+                        'parameters' => [
+                            'compareValue' => 'YES',
+                            'compareAttribute' => null,
+                            'compareValueOrAttribute' => 'YES',
+                        ],
                     ],
                     'type' => 'string',
                     'operator' => '==',
@@ -72,9 +92,14 @@ final class CompareToTest extends AbstractRuleTest
                 new CompareTo('YES', skipOnEmpty: true),
                 [
                     'compareValue' => 'YES',
+                    'compareAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{compareValue}".',
-                        'parameters' => ['compareValue' => 'YES'],
+                        'message' => 'Value must be equal to "{compareValueOrAttribute}".',
+                        'parameters' => [
+                            'compareValue' => 'YES',
+                            'compareAttribute' => null,
+                            'compareValueOrAttribute' => 'YES',
+                        ],
                     ],
                     'type' => 'string',
                     'operator' => '==',
@@ -86,9 +111,14 @@ final class CompareToTest extends AbstractRuleTest
                 new CompareTo('YES', operator: '!=='),
                 [
                     'compareValue' => 'YES',
+                    'compareAttribute' => null,
                     'message' => [
-                        'message' => 'Value must not be equal to "{compareValue}".',
-                        'parameters' => ['compareValue' => 'YES'],
+                        'message' => 'Value must not be equal to "{compareValueOrAttribute}".',
+                        'parameters' => [
+                            'compareValue' => 'YES',
+                            'compareAttribute' => null,
+                            'compareValueOrAttribute' => 'YES',
+                        ],
                     ],
                     'type' => 'string',
                     'operator' => '!==',
@@ -100,9 +130,52 @@ final class CompareToTest extends AbstractRuleTest
                 new CompareTo('YES', message: 'Custom message for {compareValue}'),
                 [
                     'compareValue' => 'YES',
+                    'compareAttribute' => null,
                     'message' => [
                         'message' => 'Custom message for {compareValue}',
-                        'parameters' => ['compareValue' => 'YES'],
+                        'parameters' => [
+                            'compareValue' => 'YES',
+                            'compareAttribute' => null,
+                            'compareValueOrAttribute' => 'YES'
+                        ],
+                    ],
+                    'type' => 'string',
+                    'operator' => '==',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
+            [
+                new CompareTo(null, 'test'),
+                [
+                    'compareValue' => null,
+                    'compareAttribute' => 'test',
+                    'message' => [
+                        'message' => 'Value must be equal to "{compareValueOrAttribute}".',
+                        'parameters' => [
+                            'compareValue' => null,
+                            'compareAttribute' => 'test',
+                            'compareValueOrAttribute' => 'test',
+                        ],
+                    ],
+                    'type' => 'string',
+                    'operator' => '==',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
+            [
+                new CompareTo(null, 'test', message: 'Custom message for {compareValue}'),
+                [
+                    'compareValue' => null,
+                    'compareAttribute' => 'test',
+                    'message' => [
+                        'message' => 'Custom message for {compareValue}',
+                        'parameters' => [
+                            'compareValue' => null,
+                            'compareAttribute' => 'test',
+                            'compareValueOrAttribute' => 'test'
+                        ],
                     ],
                     'type' => 'string',
                     'operator' => '==',

@@ -60,8 +60,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
     protected function validate(mixed $value, object $config): Result
     {
         $ruleValidator = $this->getValidator();
-        $validator = FakeValidatorFactory::make();
-        $context = new ValidationContext($validator, null);
+        $context = $this->getValidationContext();
 
         return $ruleValidator->validate($value, $config, $context);
     }
@@ -78,4 +77,10 @@ abstract class AbstractRuleValidatorTest extends TestCase
     abstract public function failedValidationProvider(): array;
 
     abstract protected function getValidator(): RuleHandlerInterface;
+
+    protected function getValidationContext(): ValidationContext
+    {
+        $validator = FakeValidatorFactory::make();
+        return new ValidationContext($validator, null);
+    }
 }
