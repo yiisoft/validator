@@ -64,11 +64,17 @@ final class CompareTo implements ParametrizedRuleInterface, BeforeValidationInte
 
     public function __construct(
         /**
-         * @var mixed the constant value to be compared with.
+         * @var mixed the constant value to be compared with. When both this property
+         * and {@see $compareAttribute} are set, this property takes precedence.
          */
         private $compareValue = null,
         /**
-         * @var string|null the name of the attribute to be compared with.
+         * @var string|null the name of the attribute to be compared with. When both this property
+         * and {@see $compareValue} are set, the latter takes precedence. If neither is set,
+         * it assumes the comparison is against another attribute whose name is formed by
+         * appending '_repeat' to the attribute being validated. For example, if 'password' is
+         * being validated, then the attribute to be compared would be 'password_repeat'.
+         * @see $compareValue
          */
         private ?string $compareAttribute = null,
         /**
