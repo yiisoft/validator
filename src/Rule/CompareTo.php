@@ -68,7 +68,7 @@ final class CompareTo implements ParametrizedRuleInterface, BeforeValidationInte
          */
         private $compareValue = null,
         /**
-         * @var string the name of the attribute to be compared with.
+         * @var string|null the name of the attribute to be compared with.
          */
         private ?string $compareAttribute = null,
         /**

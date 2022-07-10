@@ -26,6 +26,7 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
 
         return [
             [new CompareTo($value), 101, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
+            [new CompareTo(), 101, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
 
             [new CompareTo($value, operator: '==='), $value + 1, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
             [new CompareTo(null, 'attribute', operator: '==='), $value + 1, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
@@ -100,6 +101,6 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
     protected function getValidationContext(): ValidationContext
     {
         $validator = FakeValidatorFactory::make();
-        return new ValidationContext($validator, new ArrayDataSet(['attribute' => 100]));
+        return new ValidationContext($validator, new ArrayDataSet(['attribute' => 100, 'width_repeat' => 100]), 'width');
     }
 }
