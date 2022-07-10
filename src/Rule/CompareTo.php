@@ -74,6 +74,7 @@ final class CompareTo implements ParametrizedRuleInterface, BeforeValidationInte
          * it assumes the comparison is against another attribute whose name is formed by
          * appending '_repeat' to the attribute being validated. For example, if 'password' is
          * being validated, then the attribute to be compared would be 'password_repeat'.
+         *
          * @see $compareValue
          */
         private ?string $compareAttribute = null,
