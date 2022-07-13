@@ -127,12 +127,12 @@ final class CompareToTest extends AbstractRuleTest
                 ],
             ],
             [
-                new CompareTo('YES', message: 'Custom message for {compareValue}'),
+                new CompareTo('YES', message: 'Custom message for {compareValueOrAttribute}'),
                 [
                     'compareValue' => 'YES',
                     'compareAttribute' => null,
                     'message' => [
-                        'message' => 'Custom message for {compareValue}',
+                        'message' => 'Custom message for {compareValueOrAttribute}',
                         'parameters' => [
                             'compareValue' => 'YES',
                             'compareAttribute' => null,
@@ -165,12 +165,12 @@ final class CompareToTest extends AbstractRuleTest
                 ],
             ],
             [
-                new CompareTo(null, 'test', message: 'Custom message for {compareValue}'),
+                new CompareTo(null, 'test', message: 'Custom message for {compareValueOrAttribute}'),
                 [
                     'compareValue' => null,
                     'compareAttribute' => 'test',
                     'message' => [
-                        'message' => 'Custom message for {compareValue}',
+                        'message' => 'Custom message for {compareValueOrAttribute}',
                         'parameters' => [
                             'compareValue' => null,
                             'compareAttribute' => 'test',

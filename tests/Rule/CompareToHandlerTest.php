@@ -26,7 +26,6 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
 
         return [
             [new CompareTo($value), 101, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
-            [new CompareTo(), 101, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
 
             [new CompareTo($value, operator: '==='), $value + 1, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
             [new CompareTo(null, 'attribute', operator: '==='), $value + 1, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
@@ -58,7 +57,6 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
 
         return [
             [new CompareTo($value), $value],
-            [new CompareTo(), $value],
             [new CompareTo(null, 'attribute'), $value],
             [new CompareTo($value), (string)$value],
 

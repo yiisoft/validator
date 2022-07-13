@@ -70,10 +70,7 @@ final class CompareTo implements ParametrizedRuleInterface, BeforeValidationInte
         private $compareValue = null,
         /**
          * @var string|null the name of the attribute to be compared with. When both this property
-         * and {@see $compareValue} are set, the latter takes precedence. If neither is set,
-         * it assumes the comparison is against another attribute whose name is formed by
-         * appending '_repeat' to the attribute being validated. For example, if 'password' is
-         * being validated, then the attribute to be compared would be 'password_repeat'.
+         * and {@see $compareValue} are set, the previous one takes precedence.
          *
          * @see $compareValue
          */
