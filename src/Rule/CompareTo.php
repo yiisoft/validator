@@ -158,7 +158,7 @@ final class CompareTo implements ParametrizedRuleInterface, BeforeValidationInte
 
     #[ArrayShape([
         'compareValue' => 'mixed',
-        'compareAttribute' => '',
+        'compareAttribute' => 'string|null',
         'message' => 'array',
         'type' => 'string',
         'operator' => 'string',
