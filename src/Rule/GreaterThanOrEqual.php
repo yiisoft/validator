@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
 use Yiisoft\Validator\ParametrizedRuleInterface;

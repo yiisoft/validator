@@ -98,7 +98,7 @@ final class NotEqualTest extends AbstractRuleTest
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES'
+                            'targetValueOrAttribute' => 'YES',
                         ],
                     ],
                     'type' => 'string',
@@ -117,7 +117,7 @@ final class NotEqualTest extends AbstractRuleTest
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES'
+                            'targetValueOrAttribute' => 'YES',
                         ],
                     ],
                     'type' => 'string',
