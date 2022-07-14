@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\CompareToHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\ValidationContext;
 
 final class CompareToHandlerTest extends AbstractRuleValidatorTest
 {
@@ -25,6 +28,7 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
             [new CompareTo($value), 101, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
 
             [new CompareTo($value, operator: '==='), $value + 1, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
+            [new CompareTo(null, 'attribute', operator: '==='), $value + 1, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
 
             [new CompareTo($value, operator: '!='), $value, [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))]],
             [new CompareTo($value, operator: '!='), (string)$value, [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))]],
@@ -43,6 +47,7 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
             [new CompareTo($value, operator: '<'), $value + 1, [new Error($this->formatMessage($messageLessThan, ['value' => $value]))]],
 
             [new CompareTo($value, operator: '<='), $value + 1, [new Error($this->formatMessage($messageLessOrEqualThan, ['value' => $value]))]],
+            [new CompareTo(null, 'attribute', operator: '<='), $value + 1, [new Error($this->formatMessage($messageLessOrEqualThan, ['value' => $value]))]],
         ];
     }
 
@@ -52,6 +57,7 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
 
         return [
             [new CompareTo($value), $value],
+            [new CompareTo(null, 'attribute'), $value],
             [new CompareTo($value), (string)$value],
 
             [new CompareTo($value, operator: '==='), $value],
@@ -71,6 +77,7 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
 
             [new CompareTo($value, operator: '<='), $value],
             [new CompareTo($value, operator: '<='), $value - 1],
+            [new CompareTo(null, 'attribute', operator: '<='), $value - 1],
         ];
     }
 
@@ -88,5 +95,11 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
     protected function getValidator(): RuleHandlerInterface
     {
         return new CompareToHandler();
+    }
+
+    protected function getValidationContext(): ValidationContext
+    {
+        $validator = FakeValidatorFactory::make();
+        return new ValidationContext($validator, new ArrayDataSet(['attribute' => 100, 'width_repeat' => 100]), 'width');
     }
 }
