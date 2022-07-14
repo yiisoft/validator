@@ -14,11 +14,19 @@ final class EqualHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $value = 100;
-        $messageEqual = 'Value must be equal to "{equalValueOrAttribute}".';
+        $messageEqual = 'Value must be equal to "{targetValueOrAttribute}".';
 
         return [
-            [new Equal($value), 101, [new Error($this->formatMessage($messageEqual, ['equalValueOrAttribute' => $value]))]],
-            [new Equal($value, strict: true), $value + 1, [new Error($this->formatMessage($messageEqual, ['equalValueOrAttribute' => $value]))]],
+            [
+                new Equal($value),
+                101,
+                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
+            ],
+            [
+                new Equal($value, strict: true),
+                $value + 1,
+                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
+            ],
         ];
     }
 

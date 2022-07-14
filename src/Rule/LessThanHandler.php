@@ -11,14 +11,14 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Checks if the specified value is less than another value or attribute.
+ * Validates if the specified value is less than another value or attribute.
  *
- * The value being checked with a constant {@see Equal::$equalValue} or attribute {@see Equal::$equalAttribute}, which
+ * The value being validated with {@see LessThan::$targetValue} or {@see LessThan::$targetAttribute}, which
  * is set in the constructor.
  *
- * The default comparison function is based on string values, which means the values
- * are compared byte by byte. When checking numbers, make sure to change {@see LessThan::$type} to
- * {@see LessThan::TYPE_NUMBER} to enable numeric comparison.
+ * The default validation function is based on string values, which means the values
+ * are compared byte by byte. When validating numbers, make sure to change {@see LessThan::$type} to
+ * {@see LessThan::TYPE_NUMBER} to enable numeric validation.
  */
 final class LessThanHandler implements RuleHandlerInterface
 {
@@ -32,7 +32,7 @@ final class LessThanHandler implements RuleHandlerInterface
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof LessThan) {
-            throw new UnexpectedRuleException(Equal::class, $rule);
+            throw new UnexpectedRuleException(LessThan::class, $rule);
         }
 
         $result = new Result();
@@ -57,7 +57,7 @@ final class LessThanHandler implements RuleHandlerInterface
 
     private function isLessThan(mixed $value, mixed $targetValue, string $type): bool
     {
-        if ($type === Equal::TYPE_NUMBER) {
+        if ($type === LessThan::TYPE_NUMBER) {
             $value = (float)$value;
             $targetValue = (float)$targetValue;
         } else {

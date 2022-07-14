@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\Rule\Equal;
+use Yiisoft\Validator\Rule\GreaterThan;
 use Yiisoft\Validator\ParametrizedRuleInterface;
 
-final class EqualTest extends AbstractRuleTest
+final class GreaterThanTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array
     {
         return [
             [
-                new Equal(1),
+                new GreaterThan(1),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must be greater than "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -26,37 +26,17 @@ final class EqualTest extends AbstractRuleTest
                         ],
                     ],
                     'type' => 'string',
-                    'strict' => false,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                new Equal(1, type: Equal::TYPE_NUMBER),
+                new GreaterThan(1, type: GreaterThan::TYPE_NUMBER),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'type' => 'number',
-                    'strict' => false,
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Equal(1, type: Equal::TYPE_NUMBER),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => null,
-                    'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must be greater than "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -64,75 +44,35 @@ final class EqualTest extends AbstractRuleTest
                         ],
                     ],
                     'type' => 'number',
-                    'strict' => false,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                new Equal('YES'),
+                new GreaterThan(1, type: GreaterThan::TYPE_NUMBER),
                 [
-                    'targetValue' => 'YES',
+                    'targetValue' => 1,
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must be greater than "{targetValueOrAttribute}".',
                         'parameters' => [
-                            'targetValue' => 'YES',
+                            'targetValue' => 1,
                             'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
+                            'targetValueOrAttribute' => 1,
                         ],
                     ],
-                    'type' => 'string',
-                    'strict' => false,
+                    'type' => 'number',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                new Equal('YES', strict: true),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES'
-                        ],
-                    ],
-                    'type' => 'string',
-                    'strict' => true,
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Equal('YES', skipOnEmpty: true),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES'
-                        ],
-                    ],
-                    'type' => 'string',
-                    'strict' => false,
-                    'skipOnEmpty' => true,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Equal(null, 'attribute'),
+                new GreaterThan(null, 'attribute'),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'attribute',
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must be greater than "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',
@@ -140,13 +80,12 @@ final class EqualTest extends AbstractRuleTest
                         ],
                     ],
                     'type' => 'string',
-                    'strict' => false,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                new Equal(targetAttribute: 'test', message: 'Custom message for {targetValueOrAttribute}'),
+                new GreaterThan(targetAttribute: 'test', message: 'Custom message for {targetValueOrAttribute}'),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'test',
@@ -159,7 +98,6 @@ final class EqualTest extends AbstractRuleTest
                         ],
                     ],
                     'type' => 'string',
-                    'strict' => false,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -169,6 +107,6 @@ final class EqualTest extends AbstractRuleTest
 
     protected function getRule(): ParametrizedRuleInterface
     {
-        return new Equal(1);
+        return new GreaterThan(1);
     }
 }

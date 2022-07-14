@@ -17,14 +17,14 @@ use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Checks if the specified value is equal with another value or attribute.
+ * Validates if the specified value is equal to another value or attribute.
  *
- * The value being compared with a constant {@see Equal::$targetValue} or attribute {@see Equal::$targetAttribute}, which
+ * The value being validated with {@see Equal::$targetValue} or {@see Equal::$targetAttribute}, which
  * is set in the constructor.
  *
- * The default equality function is based on string values, which means the values
- * are equals byte by byte. When comparing numbers, make sure to change {@see Equal::$type} to
- * {@see Equal::TYPE_NUMBER} to enable numeric comparison.
+ * The default validation function is based on string values, which means the values
+ * are equals byte by byte. When validating numbers, make sure to change {@see Equal::$type} to
+ * {@see Equal::TYPE_NUMBER} to enable numeric validation.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class Equal implements ParametrizedRuleInterface, BeforeValidationInterface
@@ -34,15 +34,15 @@ final class Equal implements ParametrizedRuleInterface, BeforeValidationInterfac
     use RuleNameTrait;
 
     /**
-     * Constant for specifying the equality as string values.
-     * No conversion will be done before equality.
+     * Constant for specifying validation as string values.
+     * No conversion will be done before validation.
      *
      * @see $type
      */
     public const TYPE_STRING = 'string';
     /**
-     * Constant for specifying equality as numeric values.
-     * String values will be converted into numbers before equality.
+     * Constant for specifying validation as numeric values.
+     * String values will be converted into numbers before validation.
      *
      * @see $type
      */
@@ -55,8 +55,8 @@ final class Equal implements ParametrizedRuleInterface, BeforeValidationInterfac
          */
         private $targetValue = null,
         /**
-         * @var mixed the constant value to be compared with. When both this property
-         * and {@see $targetValue} are set, the previous one takes precedence.
+         * @var mixed the attribute to be equal with. When both this property
+         * and {@see $targetValue} are set, the {@see $targetValue} takes precedence.
          */
         private ?string $targetAttribute = null,
         /**

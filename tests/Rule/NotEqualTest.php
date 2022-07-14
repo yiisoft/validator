@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\Rule\Equal;
+use Yiisoft\Validator\Rule\NotEqual;
 use Yiisoft\Validator\ParametrizedRuleInterface;
 
-final class EqualTest extends AbstractRuleTest
+final class NotEqualTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array
     {
         return [
             [
-                new Equal(1),
+                new NotEqual(1),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -32,12 +32,12 @@ final class EqualTest extends AbstractRuleTest
                 ],
             ],
             [
-                new Equal(1, type: Equal::TYPE_NUMBER),
+                new NotEqual(1, type: NotEqual::TYPE_NUMBER),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -51,12 +51,12 @@ final class EqualTest extends AbstractRuleTest
                 ],
             ],
             [
-                new Equal(1, type: Equal::TYPE_NUMBER),
+                new NotEqual(1, type: NotEqual::TYPE_NUMBER),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -70,12 +70,12 @@ final class EqualTest extends AbstractRuleTest
                 ],
             ],
             [
-                new Equal('YES'),
+                new NotEqual('YES'),
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -89,12 +89,12 @@ final class EqualTest extends AbstractRuleTest
                 ],
             ],
             [
-                new Equal('YES', strict: true),
+                new NotEqual('YES', strict: true),
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -108,12 +108,12 @@ final class EqualTest extends AbstractRuleTest
                 ],
             ],
             [
-                new Equal('YES', skipOnEmpty: true),
+                new NotEqual('YES', skipOnEmpty: true),
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -127,12 +127,12 @@ final class EqualTest extends AbstractRuleTest
                 ],
             ],
             [
-                new Equal(null, 'attribute'),
+                new NotEqual(null, 'attribute'),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'attribute',
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',
@@ -146,7 +146,7 @@ final class EqualTest extends AbstractRuleTest
                 ],
             ],
             [
-                new Equal(targetAttribute: 'test', message: 'Custom message for {targetValueOrAttribute}'),
+                new NotEqual(targetAttribute: 'test', message: 'Custom message for {targetValueOrAttribute}'),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'test',
@@ -169,6 +169,6 @@ final class EqualTest extends AbstractRuleTest
 
     protected function getRule(): ParametrizedRuleInterface
     {
-        return new Equal(1);
+        return new NotEqual(1);
     }
 }

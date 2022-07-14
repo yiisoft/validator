@@ -11,16 +11,16 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Validates if the specified value is less than or equal to another value or attribute.
+ * Checks if the specified value is not equal to another value or attribute.
  *
- * The value being validated with {@see LessThanOrEqual::$targetValue} or {@see LessThanOrEqual::$targetAttribute}, which
+ * The value being validated with {@see NotEqual::$equalValue} or {@see NotEqual::$equalAttribute}, which
  * is set in the constructor.
  *
  * The default validation function is based on string values, which means the values
- * are compared byte by byte. When validating numbers, make sure to change {@see LessThanOrEqual::$type} to
- * {@see LessThanOrEqual::TYPE_NUMBER} to enable numeric validation.
+ * are compared byte by byte. When validating numbers, make sure to change {@see NotEqual::$type} to
+ * {@see NotEqual::TYPE_NUMBER} to enable numeric validation.
  */
-final class LessThanOrEqualHandler implements RuleHandlerInterface
+final class NotEqualHandler implements RuleHandlerInterface
 {
     private FormatterInterface $formatter;
 
@@ -31,19 +31,19 @@ final class LessThanOrEqualHandler implements RuleHandlerInterface
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
-        if (!$rule instanceof LessThanOrEqual) {
-            throw new UnexpectedRuleException(LessThanOrEqual::class, $rule);
+        if (!$rule instanceof NotEqual) {
+            throw new UnexpectedRuleException(NotEqual::class, $rule);
         }
 
         $result = new Result();
-        $expectedValue = $rule->getTargetValue() ?? $context?->getDataSet()?->getAttributeValue($rule->getTargetAttribute());
+        $targetValue = $rule->getTargetValue() ?? $context?->getDataSet()?->getAttributeValue($rule->getTargetAttribute());
 
-        if (!$this->isLessThanOrEqual($value, $expectedValue, $rule->getType())) {
+        if (!$this->isNotEqual($value, $targetValue, $rule->shouldCheckStrictly(), $rule->getType())) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
                 [
                     'attribute' => $context?->getAttribute(),
-                    'targetAttribute' => $rule->getTargetValue(),
+                    'targetAttribute' => $rule->getTargetAttribute(),
                     'targetValue' => $rule->getTargetValue(),
                     'targetValueOrAttribute' => $rule->getTargetValue() ?? $rule->getTargetAttribute(),
                     'value' => $value,
@@ -55,16 +55,20 @@ final class LessThanOrEqualHandler implements RuleHandlerInterface
         return $result;
     }
 
-    private function isLessThanOrEqual(mixed $value, mixed $expectedValue, string $type): bool
+    private function isNotEqual(mixed $value, mixed $targetValue, bool $strict, string $type): bool
     {
-        if ($type === LessThanOrEqual::TYPE_NUMBER) {
+        if ($type === Equal::TYPE_NUMBER) {
             $value = (float)$value;
-            $expectedValue = (float)$expectedValue;
+            $targetValue = (float)$targetValue;
         } else {
             $value = (string)$value;
-            $expectedValue = (string)$expectedValue;
+            $targetValue = (string)$targetValue;
         }
 
-        return $value <= $expectedValue;
+        if ($strict) {
+            return $value !== $targetValue;
+        }
+
+        return $value != $targetValue;
     }
 }

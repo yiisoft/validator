@@ -17,17 +17,17 @@ use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Validates if the specified value is less than or equal to another value or attribute.
+ * Validates if the specified value is greater than or equal to another value or attribute.
  *
- * The value being validated with {@see LessThanOrEqual::$targetValue} or {@see LessThanOrEqual::$targetAttribute}, which
+ * The value being validated with {@see GreaterThanOrEqual::$targetValue} or {@see GreaterThanOrEqual::$targetAttribute}, which
  * is set in the constructor.
  *
  * The default validation function is based on string values, which means the values
- * are equals byte by byte. When validating numbers, make sure to change {@see LessThanOrEqual::$type} to
- * {@see LessThanOrEqual::TYPE_NUMBER} to enable numeric validation.
+ * are equals byte by byte. When validating numbers, make sure to change {@see GreaterThanOrEqual::$type} to
+ * {@see GreaterThanOrEqual::TYPE_NUMBER} to enable numeric validation.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class LessThanOrEqual implements ParametrizedRuleInterface, BeforeValidationInterface
+final class GreaterThanOrEqual implements ParametrizedRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
     use HandlerClassNameTrait;
@@ -50,12 +50,12 @@ final class LessThanOrEqual implements ParametrizedRuleInterface, BeforeValidati
 
     public function __construct(
         /**
-         * @var mixed the constant value to be less than or equal to. When both this property
+         * @var mixed the constant value to be greater than or equal to. When both this property
          * and {@see $targetAttribute} are set, this property takes precedence.
          */
         private $targetValue = null,
         /**
-         * @var mixed the constant value to be less than or equal to. When both this property
+         * @var string|null the attribute to be greater than or equal to. When both this property
          * and {@see $targetValue} are set, the {@see $targetValue} takes precedence.
          */
         private ?string $targetAttribute = null,
@@ -105,7 +105,7 @@ final class LessThanOrEqual implements ParametrizedRuleInterface, BeforeValidati
 
     public function getMessage(): string
     {
-        return $this->message ?? 'Value must be less than or equal to "{targetValueOrAttribute}".';
+        return $this->message ?? 'Value must be greater than or equal to "{targetValueOrAttribute}".';
     }
 
     #[ArrayShape([

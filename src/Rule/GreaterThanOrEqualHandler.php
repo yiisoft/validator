@@ -11,16 +11,16 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Validates if the specified value is less than or equal to another value or attribute.
+ * Validates if the specified value is greater than or equal to another value or attribute.
  *
- * The value being validated with {@see LessThanOrEqual::$targetValue} or {@see LessThanOrEqual::$targetAttribute}, which
+ * The value being validated with {@see GreaterThanOrEqual::$targetValue} or {@see GreaterThanOrEqual::$targetAttribute}, which
  * is set in the constructor.
  *
  * The default validation function is based on string values, which means the values
- * are compared byte by byte. When validating numbers, make sure to change {@see LessThanOrEqual::$type} to
- * {@see LessThanOrEqual::TYPE_NUMBER} to enable numeric validation.
+ * are compared byte by byte. When validating numbers, make sure to change {@see GreaterThanOrEqual::$type} to
+ * {@see GreaterThanOrEqual::TYPE_NUMBER} to enable numeric validation.
  */
-final class LessThanOrEqualHandler implements RuleHandlerInterface
+final class GreaterThanOrEqualHandler implements RuleHandlerInterface
 {
     private FormatterInterface $formatter;
 
@@ -31,14 +31,14 @@ final class LessThanOrEqualHandler implements RuleHandlerInterface
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
-        if (!$rule instanceof LessThanOrEqual) {
-            throw new UnexpectedRuleException(LessThanOrEqual::class, $rule);
+        if (!$rule instanceof GreaterThanOrEqual) {
+            throw new UnexpectedRuleException(GreaterThanOrEqual::class, $rule);
         }
 
         $result = new Result();
-        $expectedValue = $rule->getTargetValue() ?? $context?->getDataSet()?->getAttributeValue($rule->getTargetAttribute());
+        $targetValue = $rule->getTargetValue() ?? $context?->getDataSet()?->getAttributeValue($rule->getTargetAttribute());
 
-        if (!$this->isLessThanOrEqual($value, $expectedValue, $rule->getType())) {
+        if (!$this->isGreaterThanOrEqual($value, $targetValue, $rule->getType())) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
                 [
@@ -55,16 +55,16 @@ final class LessThanOrEqualHandler implements RuleHandlerInterface
         return $result;
     }
 
-    private function isLessThanOrEqual(mixed $value, mixed $expectedValue, string $type): bool
+    private function isGreaterThanOrEqual(mixed $value, mixed $targetValue, string $type): bool
     {
-        if ($type === LessThanOrEqual::TYPE_NUMBER) {
+        if ($type === GreaterThanOrEqual::TYPE_NUMBER) {
             $value = (float)$value;
-            $expectedValue = (float)$expectedValue;
+            $targetValue = (float)$targetValue;
         } else {
             $value = (string)$value;
-            $expectedValue = (string)$expectedValue;
+            $targetValue = (string)$targetValue;
         }
 
-        return $value <= $expectedValue;
+        return $value >= $targetValue;
     }
 }

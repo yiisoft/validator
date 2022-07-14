@@ -17,14 +17,14 @@ use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Checks if the specified value is less than another value or attribute.
+ * Validates if the specified value is less than another value or attribute.
  *
- * The value being checked with a constant {@see LessThan::$targetValue} or attribute {@see Equal::$targetAttribute}, which
+ * The value being validated with a constant {@see LessThan::$targetValue} or attribute {@see LessThan::$targetAttribute}, which
  * is set in the constructor.
  *
- * The default equality function is based on string values, which means the values
- * are equals byte by byte. When comparing numbers, make sure to change {@see Equal::$type} to
- * {@see Equal::TYPE_NUMBER} to enable numeric comparison.
+ * The default validation function is based on string values, which means the values
+ * are equals byte by byte. When validating numbers, make sure to change {@see LessThan::$type} to
+ * {@see LessThan::TYPE_NUMBER} to enable numeric validation.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class LessThan implements ParametrizedRuleInterface, BeforeValidationInterface
@@ -50,13 +50,13 @@ final class LessThan implements ParametrizedRuleInterface, BeforeValidationInter
 
     public function __construct(
         /**
-         * @var mixed the constant value to be equal with. When both this property
+         * @var mixed the constant value to be less than. When both this property
          * and {@see $targetAttribute} are set, this property takes precedence.
          */
         private $targetValue = null,
         /**
-         * @var mixed the constant value to be compared with. When both this property
-         * and {@see $targetValue} are set, the previous one takes precedence.
+         * @var mixed the constant value to be less than. When both this property
+         * and {@see $targetValue} are set, the {@see $targetValue} takes precedence.
          */
         private ?string $targetAttribute = null,
         /**
@@ -64,13 +64,9 @@ final class LessThan implements ParametrizedRuleInterface, BeforeValidationInter
          */
         private ?string $message = null,
         /**
-         * @var string the type of the values being compared.
+         * @var string the type of the values being validated.
          */
         private string $type = self::TYPE_STRING,
-        /**
-         * @var bool Whether this validator strictly check.
-         */
-        private bool $strict = false,
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
@@ -109,7 +105,7 @@ final class LessThan implements ParametrizedRuleInterface, BeforeValidationInter
 
     public function getMessage(): string
     {
-        return $this->message ?? 'Value must be equal to "{targetValueOrAttribute}".';
+        return $this->message ?? 'Value must be less than "{targetValueOrAttribute}".';
     }
 
     #[ArrayShape([
@@ -117,7 +113,6 @@ final class LessThan implements ParametrizedRuleInterface, BeforeValidationInter
         'targetAttribute' => 'string|null',
         'message' => 'array',
         'type' => 'string',
-        'strict' => 'bool',
         'skipOnEmpty' => 'bool',
         'skipOnError' => 'bool',
     ])]
@@ -135,7 +130,6 @@ final class LessThan implements ParametrizedRuleInterface, BeforeValidationInter
                 ],
             ],
             'type' => $this->type,
-            'strict' => $this->strict,
             'skipOnEmpty' => $this->skipOnEmpty,
             'skipOnError' => $this->skipOnError,
         ];

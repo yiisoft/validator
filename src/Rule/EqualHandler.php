@@ -11,14 +11,14 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Checks if the specified value is equal with another value or attribute.
+ * Validates if the specified value is equal to another value or attribute.
  *
- * The value being checked with a constant {@see Equal::$equalValue} or attribute {@see Equal::$equalAttribute}, which
+ * The value being validated with a constant {@see Equal::$equalValue} or attribute {@see Equal::$equalAttribute}, which
  * is set in the constructor.
  *
- * The default comparison function is based on string values, which means the values
- * are compared byte by byte. When comparing numbers, make sure to change {@see CompareTo::$type} to
- * {@see CompareTo::TYPE_NUMBER} to enable numeric comparison.
+ * The default validation function is based on string values, which means the values
+ * are compared byte by byte. When validating numbers, make sure to change {@see Equal::$type} to
+ * {@see Equal::TYPE_NUMBER} to enable numeric validation.
  */
 final class EqualHandler implements RuleHandlerInterface
 {
