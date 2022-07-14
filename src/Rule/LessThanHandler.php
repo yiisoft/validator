@@ -11,16 +11,16 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Checks if the specified value is equal with another value or attribute.
+ * Checks if the specified value is less than another value or attribute.
  *
  * The value being checked with a constant {@see Equal::$equalValue} or attribute {@see Equal::$equalAttribute}, which
  * is set in the constructor.
  *
  * The default comparison function is based on string values, which means the values
- * are compared byte by byte. When comparing numbers, make sure to change {@see CompareTo::$type} to
- * {@see CompareTo::TYPE_NUMBER} to enable numeric comparison.
+ * are compared byte by byte. When checking numbers, make sure to change {@see LessThan::$type} to
+ * {@see LessThan::TYPE_NUMBER} to enable numeric comparison.
  */
-final class EqualHandler implements RuleHandlerInterface
+final class LessThanHandler implements RuleHandlerInterface
 {
     private FormatterInterface $formatter;
 
@@ -31,19 +31,19 @@ final class EqualHandler implements RuleHandlerInterface
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
-        if (!$rule instanceof Equal) {
+        if (!$rule instanceof LessThan) {
             throw new UnexpectedRuleException(Equal::class, $rule);
         }
 
         $result = new Result();
         $targetValue = $rule->getTargetValue() ?? $context?->getDataSet()?->getAttributeValue($rule->getTargetAttribute());
 
-        if (!$this->isEquals($value, $targetValue, $rule->shouldCheckStrictly(), $rule->getType())) {
+        if (!$this->isLessThan($value, $targetValue, $rule->getType())) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
                 [
                     'attribute' => $context?->getAttribute(),
-                    'targetAttribute' => $rule->getTargetAttribute(),
+                    'targetAttribute' => $rule->getTargetValue(),
                     'targetValue' => $rule->getTargetValue(),
                     'targetValueOrAttribute' => $rule->getTargetValue() ?? $rule->getTargetAttribute(),
                     'value' => $value,
@@ -55,7 +55,7 @@ final class EqualHandler implements RuleHandlerInterface
         return $result;
     }
 
-    private function isEquals(mixed $value, mixed $targetValue, bool $strict, string $type): bool
+    private function isLessThan(mixed $value, mixed $targetValue, string $type): bool
     {
         if ($type === Equal::TYPE_NUMBER) {
             $value = (float)$value;
@@ -65,10 +65,6 @@ final class EqualHandler implements RuleHandlerInterface
             $targetValue = (string)$targetValue;
         }
 
-        if ($strict) {
-            return $value === $targetValue;
-        }
-
-        return $value == $targetValue;
+        return $value < $targetValue;
     }
 }
