@@ -27,6 +27,11 @@ final class LessThanHandlerTest extends AbstractRuleValidatorTest
                 '101',
                 [new Error($this->formatMessage($messageLessThan, ['targetValueOrAttribute' => $value]))],
             ],
+            [
+                new LessThan(targetAttribute: 'attribute'),
+                '101',
+                [new Error($this->formatMessage($messageLessThan, ['targetValueOrAttribute' => 'attribute']))],
+            ],
         ];
     }
 
@@ -37,6 +42,7 @@ final class LessThanHandlerTest extends AbstractRuleValidatorTest
         return [
             [new LessThan(101), $value],
             [new LessThan('101'), (string)$value],
+            [new LessThan(targetAttribute: 'attribute'), $value - 1],
         ];
     }
 

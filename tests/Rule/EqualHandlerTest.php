@@ -27,6 +27,11 @@ final class EqualHandlerTest extends AbstractRuleValidatorTest
                 $value + 1,
                 [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
             ],
+            [
+                new Equal(targetAttribute: 'attribute', strict: true),
+                $value + 1,
+                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => 'attribute']))],
+            ],
         ];
     }
 
@@ -37,6 +42,7 @@ final class EqualHandlerTest extends AbstractRuleValidatorTest
         return [
             [new Equal($value), $value],
             [new Equal($value), (string)$value],
+            [new Equal(targetAttribute: 'attribute', strict: true), (string)$value],
         ];
     }
 

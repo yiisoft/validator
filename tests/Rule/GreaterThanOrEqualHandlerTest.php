@@ -27,6 +27,15 @@ final class GreaterThanOrEqualHandlerTest extends AbstractRuleValidatorTest
                 '99',
                 [new Error($this->formatMessage($messageGreaterThanOrEqual, ['targetValueOrAttribute' => $value]))],
             ],
+            [
+                new GreaterThanOrEqual(targetAttribute: 'attribute'),
+                '99',
+                [
+                    new Error(
+                        $this->formatMessage($messageGreaterThanOrEqual, ['targetValueOrAttribute' => 'attribute'])
+                    ),
+                ],
+            ],
         ];
     }
 
@@ -37,6 +46,7 @@ final class GreaterThanOrEqualHandlerTest extends AbstractRuleValidatorTest
         return [
             [new GreaterThanOrEqual(99), $value],
             [new GreaterThanOrEqual('100'), (string)$value],
+            [new GreaterThanOrEqual(targetAttribute: 'attribute'), (string)$value],
         ];
     }
 

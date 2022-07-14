@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Result;
@@ -81,6 +82,10 @@ abstract class AbstractRuleValidatorTest extends TestCase
     protected function getValidationContext(): ValidationContext
     {
         $validator = FakeValidatorFactory::make();
-        return new ValidationContext($validator, null);
+        return new ValidationContext(
+            $validator,
+            new ArrayDataSet(['attribute' => 100, 'number' => 100, 'string' => '100']),
+            'number'
+        );
     }
 }

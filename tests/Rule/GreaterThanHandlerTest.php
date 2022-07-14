@@ -27,6 +27,11 @@ final class GreaterThanHandlerTest extends AbstractRuleValidatorTest
                 '100',
                 [new Error($this->formatMessage($messageGreaterThan, ['targetValueOrAttribute' => $value]))],
             ],
+            [
+                new GreaterThan(targetAttribute: 'attribute'),
+                '100',
+                [new Error($this->formatMessage($messageGreaterThan, ['targetValueOrAttribute' => 'attribute']))],
+            ],
         ];
     }
 
