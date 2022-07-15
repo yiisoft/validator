@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SimpleRuleHandlerContainer;
 
 abstract class AbstractRuleTest extends TestCase
 {
@@ -23,6 +24,13 @@ abstract class AbstractRuleTest extends TestCase
     {
         $rule = $this->getRule();
         $this->assertEquals(lcfirst(substr($rule::class, strrpos($rule::class, '\\') + 1)), $rule->getName());
+    }
+
+    public function testHandlerClassName(): void
+    {
+        $resolver = new SimpleRuleHandlerContainer();
+        $rule = $this->getRule();
+        $this->assertInstanceOf($rule->getHandlerClassName(), $resolver->resolve($rule->getHandlerClassName()));
     }
 
     abstract protected function optionsDataProvider(): array;
