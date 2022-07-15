@@ -130,7 +130,6 @@ class ValidatorTest extends TestCase
         $validator->validate(new DataSet(['property' => '']), [
             'property' => [
                 new class () implements RuleInterface {
-
                     public function getName(): string
                     {
                         return 'test';
