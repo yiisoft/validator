@@ -12,7 +12,6 @@ use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
@@ -98,7 +97,7 @@ class ValidatorTest extends TestCase
     {
         $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
 
-        $ruleHandler = new class {
+        $ruleHandler = new class () {
         };
         $validator = FakeValidatorFactory::make();
         $validator->validate(new DataSet(['property' => '']), [

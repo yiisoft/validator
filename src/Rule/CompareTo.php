@@ -5,16 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
-use Closure;
-use InvalidArgumentException;
-use JetBrains\PhpStorm\ArrayShape;
-use RuntimeException;
-use Yiisoft\Validator\ParametrizedRuleInterface;
-use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
-use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-use Yiisoft\Validator\ValidationContext;
 
 /**
  * Validates the specified value with another value or attribute.
