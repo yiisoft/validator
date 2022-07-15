@@ -165,7 +165,9 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
     {
         $validator = FakeValidatorFactory::make();
         return new ValidationContext(
-            $validator, new ArrayDataSet(['attribute' => 100, 'width_repeat' => 100]), 'width'
+            $validator,
+            new ArrayDataSet(['attribute' => 100, 'width_repeat' => 100]),
+            'width'
         );
     }
 }
