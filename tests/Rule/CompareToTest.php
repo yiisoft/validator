@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\Rule\CompareTo;
 
 final class CompareToTest extends AbstractRuleTest
 {
@@ -15,14 +15,14 @@ final class CompareToTest extends AbstractRuleTest
             [
                 new CompareTo(1),
                 [
-                    'compareValue' => 1,
-                    'compareAttribute' => null,
+                    'targetValue' => 1,
+                    'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{compareValueOrAttribute}".',
+                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
-                            'compareValue' => 1,
-                            'compareAttribute' => null,
-                            'compareValueOrAttribute' => 1,
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
                         ],
                     ],
                     'type' => 'string',
@@ -34,14 +34,14 @@ final class CompareToTest extends AbstractRuleTest
             [
                 new CompareTo(1, type: CompareTo::TYPE_NUMBER),
                 [
-                    'compareValue' => 1,
-                    'compareAttribute' => null,
+                    'targetValue' => 1,
+                    'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{compareValueOrAttribute}".',
+                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
-                            'compareValue' => 1,
-                            'compareAttribute' => null,
-                            'compareValueOrAttribute' => 1,
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
                         ],
                     ],
                     'type' => 'number',
@@ -53,14 +53,14 @@ final class CompareToTest extends AbstractRuleTest
             [
                 new CompareTo(1, type: CompareTo::TYPE_NUMBER, operator: '>='),
                 [
-                    'compareValue' => 1,
-                    'compareAttribute' => null,
+                    'targetValue' => 1,
+                    'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be greater than or equal to "{compareValueOrAttribute}".',
+                        'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
-                            'compareValue' => 1,
-                            'compareAttribute' => null,
-                            'compareValueOrAttribute' => 1,
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
                         ],
                     ],
                     'type' => 'number',
@@ -72,14 +72,14 @@ final class CompareToTest extends AbstractRuleTest
             [
                 new CompareTo('YES'),
                 [
-                    'compareValue' => 'YES',
-                    'compareAttribute' => null,
+                    'targetValue' => 'YES',
+                    'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{compareValueOrAttribute}".',
+                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
-                            'compareValue' => 'YES',
-                            'compareAttribute' => null,
-                            'compareValueOrAttribute' => 'YES',
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
                         ],
                     ],
                     'type' => 'string',
@@ -91,14 +91,14 @@ final class CompareToTest extends AbstractRuleTest
             [
                 new CompareTo('YES', skipOnEmpty: true),
                 [
-                    'compareValue' => 'YES',
-                    'compareAttribute' => null,
+                    'targetValue' => 'YES',
+                    'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{compareValueOrAttribute}".',
+                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
-                            'compareValue' => 'YES',
-                            'compareAttribute' => null,
-                            'compareValueOrAttribute' => 'YES',
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
                         ],
                     ],
                     'type' => 'string',
@@ -110,14 +110,14 @@ final class CompareToTest extends AbstractRuleTest
             [
                 new CompareTo('YES', operator: '!=='),
                 [
-                    'compareValue' => 'YES',
-                    'compareAttribute' => null,
+                    'targetValue' => 'YES',
+                    'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must not be equal to "{compareValueOrAttribute}".',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
-                            'compareValue' => 'YES',
-                            'compareAttribute' => null,
-                            'compareValueOrAttribute' => 'YES',
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
                         ],
                     ],
                     'type' => 'string',
@@ -127,16 +127,16 @@ final class CompareToTest extends AbstractRuleTest
                 ],
             ],
             [
-                new CompareTo('YES', message: 'Custom message for {compareValueOrAttribute}'),
+                new CompareTo('YES', message: 'Custom message for {targetValueOrAttribute}'),
                 [
-                    'compareValue' => 'YES',
-                    'compareAttribute' => null,
+                    'targetValue' => 'YES',
+                    'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Custom message for {compareValueOrAttribute}',
+                        'message' => 'Custom message for {targetValueOrAttribute}',
                         'parameters' => [
-                            'compareValue' => 'YES',
-                            'compareAttribute' => null,
-                            'compareValueOrAttribute' => 'YES',
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
                         ],
                     ],
                     'type' => 'string',
@@ -148,14 +148,14 @@ final class CompareToTest extends AbstractRuleTest
             [
                 new CompareTo(null, 'test'),
                 [
-                    'compareValue' => null,
-                    'compareAttribute' => 'test',
+                    'targetValue' => null,
+                    'targetAttribute' => 'test',
                     'message' => [
-                        'message' => 'Value must be equal to "{compareValueOrAttribute}".',
+                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
-                            'compareValue' => null,
-                            'compareAttribute' => 'test',
-                            'compareValueOrAttribute' => 'test',
+                            'targetValue' => null,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
                     'type' => 'string',
@@ -165,16 +165,16 @@ final class CompareToTest extends AbstractRuleTest
                 ],
             ],
             [
-                new CompareTo(null, 'test', message: 'Custom message for {compareValueOrAttribute}'),
+                new CompareTo(null, 'test', message: 'Custom message for {targetValueOrAttribute}'),
                 [
-                    'compareValue' => null,
-                    'compareAttribute' => 'test',
+                    'targetValue' => null,
+                    'targetAttribute' => 'test',
                     'message' => [
-                        'message' => 'Custom message for {compareValueOrAttribute}',
+                        'message' => 'Custom message for {targetValueOrAttribute}',
                         'parameters' => [
-                            'compareValue' => null,
-                            'compareAttribute' => 'test',
-                            'compareValueOrAttribute' => 'test',
+                            'targetValue' => null,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
                     'type' => 'string',

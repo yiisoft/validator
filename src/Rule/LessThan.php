@@ -18,35 +18,16 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * Validates if the specified value is less than another value or attribute.
  *
- * The value being validated with a constant {@see LessThan::$targetValue} or attribute {@see LessThan::$targetAttribute}, which
+ * The value being validated with {@see LessThan::$targetValue} or {@see LessThan::$targetAttribute}, which
  * is set in the constructor.
  *
  * The default validation function is based on string values, which means the values
- * are equals byte by byte. When validating numbers, make sure to change {@see LessThan::$type} to
+ * are checked byte by byte. When validating numbers, make sure to change {@see LessThan::$type} to
  * {@see LessThan::TYPE_NUMBER} to enable numeric validation.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class LessThan implements ParametrizedRuleInterface, BeforeValidationInterface
+final class LessThan extends Compare
 {
-    use BeforeValidationTrait;
-    use HandlerClassNameTrait;
-    use RuleNameTrait;
-
-    /**
-     * Constant for specifying validation as string values.
-     * No conversion will be done before validation.
-     *
-     * @see $type
-     */
-    public const TYPE_STRING = 'string';
-    /**
-     * Constant for specifying validation as numeric values.
-     * String values will be converted into numbers before validation.
-     *
-     * @see $type
-     */
-    public const TYPE_NUMBER = 'number';
-
     public function __construct(
         /**
          * @var mixed the constant value to be less than. When both this property
@@ -54,7 +35,7 @@ final class LessThan implements ParametrizedRuleInterface, BeforeValidationInter
          */
         private $targetValue = null,
         /**
-         * @var mixed the constant value to be less than. When both this property
+         * @var string|null the attribute to be less than. When both this property
          * and {@see $targetValue} are set, the {@see $targetValue} takes precedence.
          */
         private ?string $targetAttribute = null,
@@ -76,61 +57,20 @@ final class LessThan implements ParametrizedRuleInterface, BeforeValidationInter
         if ($this->targetValue === null && $this->targetAttribute === null) {
             throw new RuntimeException('Either "targetValue" or "targetAttribute" must be specified.');
         }
+        parent::__construct(
+            targetValue: $this->targetValue,
+            targetAttribute: $this->targetAttribute,
+            message: $this->message,
+            type: $this->type,
+            operator: '<',
+            skipOnEmpty: $this->skipOnEmpty,
+            skipOnError: $this->skipOnError,
+            when: $this->when
+        );
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTargetValue(): mixed
+    public function getHandlerClassName(): string
     {
-        return $this->targetValue;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getTargetAttribute(): ?string
-    {
-        return $this->targetAttribute;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function getMessage(): string
-    {
-        return $this->message ?? 'Value must be less than "{targetValueOrAttribute}".';
-    }
-
-    #[ArrayShape([
-        'targetValue' => 'mixed',
-        'targetAttribute' => 'string|null',
-        'message' => 'array',
-        'type' => 'string',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
-    public function getOptions(): array
-    {
-        return [
-            'targetValue' => $this->targetValue,
-            'targetAttribute' => $this->targetAttribute,
-            'message' => [
-                'message' => $this->getMessage(),
-                'parameters' => [
-                    'targetValue' => $this->targetValue,
-                    'targetAttribute' => $this->targetAttribute,
-                    'targetValueOrAttribute' => $this->targetValue ?? $this->targetAttribute,
-                ],
-            ],
-            'type' => $this->type,
-            'skipOnEmpty' => $this->skipOnEmpty,
-            'skipOnError' => $this->skipOnError,
-        ];
+        return CompareHandler::class;
     }
 }

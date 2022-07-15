@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\CompareTo;
-use Yiisoft\Validator\Rule\CompareToHandler;
+use Yiisoft\Validator\Rule\CompareHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
 
 final class CompareToHandlerTest extends AbstractRuleValidatorTest
@@ -14,96 +14,100 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $value = 100;
-        $messageEqual = 'Value must be equal to "{value}".';
-        $messageNotEqual = 'Value must not be equal to "{value}".';
-        $messageGreaterThan = 'Value must be greater than "{value}".';
-        $messageGreaterOrEqualThan = 'Value must be greater than or equal to "{value}".';
-        $messageLessThan = 'Value must be less than "{value}".';
-        $messageLessOrEqualThan = 'Value must be less than or equal to "{value}".';
+        $messageEqual = 'Value must be equal to "{targetValueOrAttribute}".';
+        $messageNotEqual = 'Value must not be equal to "{targetValueOrAttribute}".';
+        $messageGreaterThan = 'Value must be greater than "{targetValueOrAttribute}".';
+        $messageGreaterOrEqualThan = 'Value must be greater than or equal to "{targetValueOrAttribute}".';
+        $messageLessThan = 'Value must be less than "{targetValueOrAttribute}".';
+        $messageLessOrEqualThan = 'Value must be less than or equal to "{targetValueOrAttribute}".';
 
         return [
-            [new CompareTo($value), 101, [new Error($this->formatMessage($messageEqual, ['value' => $value]))]],
+            [
+                new CompareTo($value),
+                101,
+                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
+            ],
 
             [
                 new CompareTo($value, operator: '==='),
                 $value + 1,
-                [new Error($this->formatMessage($messageEqual, ['value' => $value]))],
+                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo(null, 'attribute', operator: '==='),
                 $value + 1,
-                [new Error($this->formatMessage($messageEqual, ['value' => $value]))],
+                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '!='),
                 $value,
-                [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))],
+                [new Error($this->formatMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo($value, operator: '!='),
                 (string)$value,
-                [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))],
+                [new Error($this->formatMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo($value, operator: '!='),
                 (float)$value,
-                [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))],
+                [new Error($this->formatMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '!=='),
                 $value,
-                [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))],
+                [new Error($this->formatMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo($value, operator: '!=='),
                 (string)$value,
-                [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))],
+                [new Error($this->formatMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo($value, operator: '!=='),
                 (float)$value,
-                [new Error($this->formatMessage($messageNotEqual, ['value' => $value]))],
+                [new Error($this->formatMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '>'),
                 $value,
-                [new Error($this->formatMessage($messageGreaterThan, ['value' => $value]))],
+                [new Error($this->formatMessage($messageGreaterThan, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo($value, operator: '>'),
                 $value - 1,
-                [new Error($this->formatMessage($messageGreaterThan, ['value' => $value]))],
+                [new Error($this->formatMessage($messageGreaterThan, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '>='),
                 $value - 1,
-                [new Error($this->formatMessage($messageGreaterOrEqualThan, ['value' => $value]))],
+                [new Error($this->formatMessage($messageGreaterOrEqualThan, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '<'),
                 $value,
-                [new Error($this->formatMessage($messageLessThan, ['value' => $value]))],
+                [new Error($this->formatMessage($messageLessThan, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo($value, operator: '<'),
                 $value + 1,
-                [new Error($this->formatMessage($messageLessThan, ['value' => $value]))],
+                [new Error($this->formatMessage($messageLessThan, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '<='),
                 $value + 1,
-                [new Error($this->formatMessage($messageLessOrEqualThan, ['value' => $value]))],
+                [new Error($this->formatMessage($messageLessOrEqualThan, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo(null, 'attribute', operator: '<='),
                 $value + 1,
-                [new Error($this->formatMessage($messageLessOrEqualThan, ['value' => $value]))],
+                [new Error($this->formatMessage($messageLessOrEqualThan, ['targetValueOrAttribute' => $value]))],
             ],
         ];
     }
@@ -151,6 +155,6 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
 
     protected function getValidator(): RuleHandlerInterface
     {
-        return new CompareToHandler();
+        return new CompareHandler();
     }
 }

@@ -98,15 +98,24 @@ class ValidatorTest extends TestCase
     {
         $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
 
+        $ruleHandler = new class {
+        };
         $validator = FakeValidatorFactory::make();
         $validator->validate(new DataSet(['property' => '']), [
             'property' => [
-                new class () implements RuleInterface {
-                    use HandlerClassNameTrait;
+                new class ($ruleHandler) implements RuleInterface {
+                    public function __construct(private $ruleHandler)
+                    {
+                    }
 
                     public function getName(): string
                     {
                         return 'test';
+                    }
+
+                    public function getHandlerClassName(): string
+                    {
+                        return $this->ruleHandler::class;
                     }
                 },
             ],
