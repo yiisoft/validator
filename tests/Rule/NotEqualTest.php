@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\NotEqual;
 use Yiisoft\Validator\ParametrizedRuleInterface;
 
@@ -165,6 +166,14 @@ final class NotEqualTest extends AbstractRuleTest
                 ],
             ],
         ];
+    }
+
+    public function testWithoutParameters()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+
+        $rule = new NotEqual();
     }
 
     protected function getRule(): ParametrizedRuleInterface

@@ -167,6 +167,14 @@ final class EqualTest extends AbstractRuleTest
         ];
     }
 
+    public function testWithoutParameters()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+
+        $rule = new Equal();
+    }
+
     protected function getRule(): ParametrizedRuleInterface
     {
         return new Equal(1);

@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
+use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\CompareTo;
@@ -93,7 +94,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue($result->isValid());
     }
 
-    public function testRuleWithoutHandler()
+    public function testRuleHandlerWithoutImplement()
     {
         $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
 
@@ -115,6 +116,29 @@ class ValidatorTest extends TestCase
                     public function getHandlerClassName(): string
                     {
                         return $this->ruleHandler::class;
+                    }
+                },
+            ],
+        ]);
+    }
+
+    public function testRuleWithoutHandler()
+    {
+        $this->expectException(RuleHandlerNotFoundException::class);
+
+        $validator = FakeValidatorFactory::make();
+        $validator->validate(new DataSet(['property' => '']), [
+            'property' => [
+                new class () implements RuleInterface {
+
+                    public function getName(): string
+                    {
+                        return 'test';
+                    }
+
+                    public function getHandlerClassName(): string
+                    {
+                        return 'NonExistClass';
                     }
                 },
             ],

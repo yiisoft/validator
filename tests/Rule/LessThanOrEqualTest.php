@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\LessThanOrEqual;
 use Yiisoft\Validator\ParametrizedRuleInterface;
 
@@ -108,6 +109,14 @@ final class LessThanOrEqualTest extends AbstractRuleTest
                 ],
             ],
         ];
+    }
+
+    public function testWithoutParameters()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+
+        $rule = new LessThanOrEqual();
     }
 
     protected function getRule(): ParametrizedRuleInterface
