@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\CompareHandler;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\ValidationContext;
 
 final class CompareToHandlerTest extends AbstractRuleValidatorTest
 {
@@ -156,5 +159,11 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
     protected function getValidator(): RuleHandlerInterface
     {
         return new CompareHandler();
+    }
+
+    protected function getValidationContext(): ValidationContext
+    {
+        $validator = FakeValidatorFactory::make();
+        return new ValidationContext($validator, new ArrayDataSet(['attribute' => 100, 'width_repeat' => 100]), 'width');
     }
 }
