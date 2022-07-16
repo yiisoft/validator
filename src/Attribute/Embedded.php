@@ -24,7 +24,7 @@ final class Embedded extends GroupRule
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @psalm-param Closure(mixed, ValidationContext):bool|null
          */
         ?Closure $when = null,
     ) {

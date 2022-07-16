@@ -27,7 +27,7 @@ abstract class GroupRule implements ParametrizedRuleInterface, BeforeValidationI
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @psalm-param Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
