@@ -12,6 +12,7 @@ use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Data\TitleTrait;
+use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
 
 final class AttributeDataSetTest extends TestCase
 {
@@ -64,11 +65,19 @@ final class AttributeDataSetTest extends TestCase
     {
         return [
             [
-                new class {},
+                new class {
+                },
                 [],
             ],
             [
                 new class {
+                    private $property1;
+                },
+                [],
+            ],
+            [
+                new class {
+                    #[NotRuleAttribute]
                     private $property1;
                 },
                 [],
