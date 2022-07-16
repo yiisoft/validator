@@ -165,6 +165,35 @@ final class AttributeDataSetTest extends TestCase
                     ],
                 ],
             ],
+            [
+                new class {
+                    #[Nested([
+                        new Required(skipOnEmpty: true),
+                        new HasLength(skipOnEmpty: true),
+                    ])]
+                    #[Nested([
+                        new Required(skipOnEmpty: true),
+                        new HasLength(skipOnEmpty: true),
+                    ])]
+                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(skipOnEmpty: false)]
+                    private $property1;
+                },
+                [
+                    'property1' => [
+                        new Nested([
+                            new Required(skipOnEmpty: true),
+                            new HasLength(skipOnEmpty: true),
+                        ]),
+                        new Nested([
+                            new Required(skipOnEmpty: true),
+                            new HasLength(skipOnEmpty: true),
+                        ]),
+                        new HasLength(skipOnEmpty: true),
+                        new HasLength(skipOnEmpty: false),
+                    ],
+                ],
+            ],
         ];
     }
 }
