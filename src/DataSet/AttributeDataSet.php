@@ -9,6 +9,7 @@ use ReflectionClass;
 use ReflectionException;
 use Yiisoft\Validator\Attribute\HasMany;
 use Yiisoft\Validator\Attribute\HasOne;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\RuleInterface;
@@ -20,7 +21,7 @@ use Yiisoft\Validator\RulesProviderInterface;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  */
-final class AttributeDataSet implements RulesProviderInterface
+final class AttributeDataSet implements RulesProviderInterface, DataSetInterface
 {
     use ArrayDataTrait;
 
