@@ -5,50 +5,24 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\DataSet;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Attribute\Embedded;
 use Yiisoft\Validator\DataSet\AttributeDataSet;
+use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\GroupRule;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\Tests\Data\Charts\Chart;
+use Yiisoft\Validator\Tests\Data\Charts\ChartsData;
+use Yiisoft\Validator\Tests\Data\Charts\Coordinate;
 use Yiisoft\Validator\Tests\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
 
 final class AttributeDataSetTest extends TestCase
 {
-//    public function testGetRules(): void
-//    {
-//        $dataSet = new AttributeDataSet(new ChartsData());
-//        $expectedRules = [
-//            'charts' => [
-//                new Each([
-//                    new Nested([
-//                        'points' => [
-//                            new Each([new Nested([
-//                                'coordinates' => new Nested(
-//                                    [
-//                                        'x' => [new Number(min: -10, max: 10)],
-//                                        'y' => [new Number(min: -10, max: 10)],
-//                                    ],
-//                                    errorWhenPropertyPathIsNotFound: true,
-//                                    propertyPathIsNotFoundMessage: 'Custom message 4.'
-//                                ),
-//                                'rgb' => [
-//                                    new Count(exactly: 3),
-//                                    new Each([
-//                                        new Number(min: 0, max: 255),
-//                                    ], incorrectInputMessage: 'Custom message 5.', message: 'Custom message 6.'),
-//                                ],
-//                            ])]),
-//                        ],
-//                    ], errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 3.'),
-//                ], incorrectInputMessage: 'Custom message 1.', message: 'Custom message 2.'),
-//            ],
-//        ];
-//
-//        $this->assertEquals($expectedRules, $dataSet->getRules());
-//    }
-
     /**
      * @dataProvider dataProvider
      *
@@ -212,5 +186,77 @@ final class AttributeDataSetTest extends TestCase
                 ],
             ],
         ];
+    }
+
+    public function testCollectRulesFromEmbededAttribute(): void
+    {
+        $object = new class {
+            #[Embedded(Coordinate::class)]
+            private $property1;
+        };
+        $expectedExtendedRules = [
+            'x' => [new Number(min: -10, max: 10)],
+            'y' => [new Number(min: -10, max: 10)],
+        ];
+
+        $dataSet = new AttributeDataSet($object);
+
+        $actualRules = $dataSet->getRules();
+
+        $this->assertIsArray($actualRules);
+        $this->assertArrayHasKey('property1', $actualRules);
+        $this->assertIsArray($actualRules['property1']);
+        $this->assertCount(1, $actualRules['property1']);
+        $this->assertInstanceOf(GroupRule::class, $actualRules['property1'][0]);
+        $this->assertEquals($expectedExtendedRules, $actualRules['property1'][0]->getRuleSet());
+    }
+
+    public function testGetRules(): void
+    {
+        $dataSet = new AttributeDataSet(new Chart());
+        $secondEmbeddedRules = [
+            'x' => [new Number(min: -10, max: 10)],
+            'y' => [new Number(min: -10, max: 10)],
+        ];
+        $firstEmbeddedRules = [
+            'coordinates' => new Nested(
+                $secondEmbeddedRules,
+                errorWhenPropertyPathIsNotFound: true,
+                propertyPathIsNotFoundMessage: 'Custom message 4.'
+            ),
+            'rgb' => [
+                new Count(exactly: 3),
+                new Each(
+                    [new Number(min: 0, max: 255)],
+                    incorrectInputMessage: 'Custom message 5.',
+                    message: 'Custom message 6.',
+                ),
+            ],
+        ];
+
+        $actualRules = $dataSet->getRules();
+
+        $this->assertIsArray($actualRules);
+        $this->assertArrayHasKey('points', $actualRules);
+        $this->assertIsArray($actualRules['points']);
+        $this->assertCount(1, $actualRules['points']);
+        $this->assertInstanceOf(Each::class, $actualRules['points'][0]);
+
+        $actualFirstEmbeddedRules = $actualRules['points'][0]->getRules();
+        $this->assertIsArray($actualFirstEmbeddedRules);
+        $this->assertCount(1, $actualFirstEmbeddedRules);
+        $this->assertInstanceOf(GroupRule::class, $actualFirstEmbeddedRules[0]);
+
+        $innerRules = $actualFirstEmbeddedRules[0]->getRuleSet();
+        $this->assertEquals($firstEmbeddedRules['rgb'], $innerRules['rgb']);
+
+        $this->assertIsArray($innerRules['coordinates']);
+        $this->assertCount(1, $innerRules['coordinates']);
+        $this->assertInstanceOf(Each::class, $innerRules['coordinates'][0]);
+        $secondInnerRules = $innerRules['coordinates'][0]->getRules();
+        $this->assertIsArray($secondInnerRules);
+        $this->assertCount(1, $secondInnerRules);
+        $this->assertInstanceOf(GroupRule::class, $secondInnerRules[0]);
+        $this->assertEquals($secondEmbeddedRules, $secondInnerRules[0]->getRuleSet());
     }
 }

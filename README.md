@@ -278,7 +278,7 @@ You can also use attributes as an alternative. Declare the DTOs, relations and r
 
 ```php
 use Yiisoft\Validator\Attribute\HasMany;
-use Yiisoft\Validator\Attribute\HasOne;
+use Yiisoft\Validator\Attribute\Embedded;
 use Yiisoft\Validator\Rule\Number;
 
 final class ChartsData
@@ -295,7 +295,7 @@ final class Chart
 
 final class Point
 {
-    #[HasOne(Coordinates::class)]
+    #[Embedded(Coordinates::class)]
     private $coordinates;
     #[Number(min: 0, max: 255)]
     private array $rgb; // A flat array, the "Number" rule will be applied to each array element.
@@ -316,12 +316,12 @@ To combine both flat rules and "each" rules, specify `Each` explicitly and place
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Attribute\HasMany;
-use Yiisoft\Validator\Attribute\HasOne;
+use Yiisoft\Validator\Attribute\Embedded;
 use Yiisoft\Validator\Rule\Number;
 
 final class Point
 {
-    #[HasOne(Coordinates::class)]
+    #[Embedded(Coordinates::class)]
     private $coordinates;
     #[Count(exactly: 3)]
     #[Each()]
@@ -382,7 +382,7 @@ needed.
 
 ```php
 use Yiisoft\Validator\Attribute\HasMany;
-use Yiisoft\Validator\Attribute\HasOne;
+use Yiisoft\Validator\Attribute\Embedded;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
@@ -398,7 +398,7 @@ final class ChartsData
 final class Point
 {
     #[Nested(errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 4.')]
-    #[HasOne(Coordinates::class)]
+    #[Embedded(Coordinates::class)]
     private $coordinates;
     #[Each(incorrectInputMessage: 'Custom message 5.', message: 'Custom message 6.')]
     #[Number(min: 0, max: 255)]
