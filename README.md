@@ -644,6 +644,8 @@ final class CompanyNameHandler implements Rule\RuleHandlerInterface
 }
 ```
 
+> Note: Do not call handler's `validate()` method directly. It must be used via Validator only. 
+
 ##### Resolving rule handler dependencies
 
 Basically, you can use `SimpleRuleHandlerResolver` to resolve rule handler.

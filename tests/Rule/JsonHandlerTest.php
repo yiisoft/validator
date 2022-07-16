@@ -124,7 +124,7 @@ JSON,
         ];
     }
 
-    protected function getValidator(): RuleHandlerInterface
+    protected function getRuleHandler(): RuleHandlerInterface
     {
         return new JsonHandler();
     }

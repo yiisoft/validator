@@ -38,7 +38,7 @@ final class RequiredHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleHandlerInterface
+    protected function getRuleHandler(): RuleHandlerInterface
     {
         return new RequiredHandler();
     }

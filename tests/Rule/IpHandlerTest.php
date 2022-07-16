@@ -238,7 +238,7 @@ final class IpHandlerTest extends AbstractRuleValidatorTest
         $this->validate('', $rule);
     }
 
-    protected function getValidator(): RuleHandlerInterface
+    protected function getRuleHandler(): RuleHandlerInterface
     {
         return new IpHandler();
     }
