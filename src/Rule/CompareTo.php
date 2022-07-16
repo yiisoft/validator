@@ -29,7 +29,7 @@ use Yiisoft\Validator\ValidationContext;
  * are compared byte by byte. When comparing numbers, make sure to change {@see CompareTo::$type} to
  * {@see CompareTo::TYPE_NUMBER} to enable numeric comparison.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class CompareTo implements ParametrizedRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;

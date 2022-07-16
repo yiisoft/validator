@@ -17,7 +17,7 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * Checks if at least {@see AtLeast::$min} of many attributes are filled.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class AtLeast implements ParametrizedRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;

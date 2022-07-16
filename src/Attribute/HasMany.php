@@ -9,7 +9,7 @@ use Attribute;
 /**
  * Represents one-to-many relation.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class HasMany
 {
     public function __construct(string $relatedClassName)

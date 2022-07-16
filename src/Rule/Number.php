@@ -20,7 +20,7 @@ use Yiisoft\Validator\ValidationContext;
  * or {@see Number::$numberPattern}. Optionally, you may configure the {@see Number::min()} and {@see Number::max()}
  * to ensure the number is within certain range.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Number implements ParametrizedRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;

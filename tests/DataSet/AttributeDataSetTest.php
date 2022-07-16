@@ -152,6 +152,19 @@ final class AttributeDataSetTest extends TestCase
                     ],
                 ],
             ],
+            [
+                new class {
+                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(skipOnEmpty: false)]
+                    private $property1;
+                },
+                [
+                    'property1' => [
+                        new HasLength(skipOnEmpty: true),
+                        new HasLength(skipOnEmpty: false),
+                    ],
+                ],
+            ],
         ];
     }
 }

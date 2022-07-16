@@ -20,7 +20,7 @@ use Yiisoft\Validator\ValidationContext;
  * The range can be specified via constructor.
  * If the {@see InRange::$not} is called, the rule will ensure the value is NOT among the specified range.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class InRange implements ParametrizedRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
