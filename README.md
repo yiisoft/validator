@@ -431,7 +431,7 @@ final class ValidateXRuleHandler implements RuleHandlerInterface
 {    
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
-        if (!$rule instanceof RuleInterface) {
+        if (!$rule instanceof ValidateXRule) {
             throw new UnexpectedRuleException(ValidateXRule::class, $rule);
         }
         
