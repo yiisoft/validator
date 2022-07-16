@@ -50,27 +50,27 @@ abstract class Compare implements ParametrizedRuleInterface, BeforeValidationInt
 
     public function __construct(
         /**
-         * @var mixed the constant value to be compared with. When both this property
+         * @var mixed The constant value to be compared with. When both this property
          * and {@see $targetAttribute} are set, this property takes precedence.
          */
         private $targetValue = null,
         /**
-         * @var string|null the name of the attribute to be compared with. When both this property
+         * @var string|null The name of the attribute to be compared with. When both this property
          * and {@see $targetValue} are set, the {@see $targetValue} takes precedence.
          *
          * @see $targetValue
          */
         private ?string $targetAttribute = null,
         /**
-         * @var string|null user-defined error message
+         * @var string|null User-defined error message.
          */
         private ?string $message = null,
         /**
-         * @var string the type of the values being compared.
+         * @var string The type of the values being compared.
          */
         private string $type = self::TYPE_STRING,
         /**
-         * @var string the operator for comparison. The following operators are supported:
+         * @var string The operator for comparison. The following operators are supported:
          *
          * - `==`: check if two values are equal. The comparison is done is non-strict mode.
          * - `===`: check if two values are equal. The comparison is done is strict mode.
@@ -97,33 +97,21 @@ abstract class Compare implements ParametrizedRuleInterface, BeforeValidationInt
         }
     }
 
-    /**
-     * @return mixed
-     */
     public function getTargetValue(): mixed
     {
         return $this->targetValue;
     }
 
-    /**
-     * @return string|null
-     */
     public function getTargetAttribute(): ?string
     {
         return $this->targetAttribute;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return string
-     */
     public function getOperator(): string
     {
         return $this->operator;
@@ -138,7 +126,7 @@ abstract class Compare implements ParametrizedRuleInterface, BeforeValidationInt
             '>=' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
             '<' => 'Value must be less than "{targetValueOrAttribute}".',
             '<=' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
-            default => throw new RuntimeException("Unknown operator: {$this->operator}"),
+            default => throw new RuntimeException("Unknown operator: $this->operator."),
         };
     }
 

@@ -24,21 +24,21 @@ final class GreaterThanOrEqual extends Compare
 {
     public function __construct(
         /**
-         * @var mixed the constant value to be greater than or equal to. When both this property
+         * @var mixed The constant value to be greater than or equal to. When both this property
          * and {@see $targetAttribute} are set, this property takes precedence.
          */
         private $targetValue = null,
         /**
-         * @var string|null the attribute to be greater than or equal to. When both this property
+         * @var string|null The attribute to be greater than or equal to. When both this property
          * and {@see $targetValue} are set, the {@see $targetValue} takes precedence.
          */
         private ?string $targetAttribute = null,
         /**
-         * @var string|null user-defined error message
+         * @var string|null User-defined error message.
          */
         private ?string $message = null,
         /**
-         * @var string the type of the values being validated.
+         * @var string The type of the values being validated.
          */
         private string $type = self::TYPE_STRING,
         private bool $skipOnEmpty = false,
