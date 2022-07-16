@@ -16,7 +16,6 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Data\Charts\Chart;
-use Yiisoft\Validator\Tests\Data\Charts\ChartsData;
 use Yiisoft\Validator\Tests\Data\Charts\Coordinate;
 use Yiisoft\Validator\Tests\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
@@ -39,25 +38,25 @@ final class AttributeDataSetTest extends TestCase
     {
         return [
             [
-                new class {
+                new class () {
                 },
                 [],
             ],
             [
-                new class {
+                new class () {
                     private $property1;
                 },
                 [],
             ],
             [
-                new class {
+                new class () {
                     #[NotRuleAttribute]
                     private $property1;
                 },
                 [],
             ],
             [
-                new class {
+                new class () {
                     #[Required(skipOnEmpty: true)]
                     private $property1;
                 },
@@ -68,7 +67,7 @@ final class AttributeDataSetTest extends TestCase
                 ],
             ],
             [
-                new class {
+                new class () {
                     use TitleTrait;
                 },
                 [
@@ -78,7 +77,7 @@ final class AttributeDataSetTest extends TestCase
                 ],
             ],
             [
-                new class {
+                new class () {
                     #[Required(skipOnEmpty: true)]
                     #[HasLength(skipOnEmpty: true)]
                     private $property1;
@@ -98,7 +97,7 @@ final class AttributeDataSetTest extends TestCase
                 ],
             ],
             [
-                new class {
+                new class () {
                     #[Each([
                         new Required(skipOnEmpty: true),
                         new HasLength(skipOnEmpty: true),
@@ -117,7 +116,7 @@ final class AttributeDataSetTest extends TestCase
                 ],
             ],
             [
-                new class {
+                new class () {
                     #[Nested([
                         new Required(skipOnEmpty: true),
                         new HasLength(skipOnEmpty: true),
@@ -144,7 +143,7 @@ final class AttributeDataSetTest extends TestCase
                 ],
             ],
             [
-                new class {
+                new class () {
                     #[HasLength(skipOnEmpty: true)]
                     #[HasLength(skipOnEmpty: false)]
                     private $property1;
@@ -157,7 +156,7 @@ final class AttributeDataSetTest extends TestCase
                 ],
             ],
             [
-                new class {
+                new class () {
                     #[Nested([
                         new Required(skipOnEmpty: true),
                         new HasLength(skipOnEmpty: true),
@@ -196,7 +195,7 @@ final class AttributeDataSetTest extends TestCase
      */
     public function testEmbeddedAttribute(): void
     {
-        $object = new class {
+        $object = new class () {
             #[Embedded(Coordinate::class)]
             private $property1;
         };
