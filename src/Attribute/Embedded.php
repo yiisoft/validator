@@ -5,25 +5,35 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Attribute;
 
 use Attribute;
+use Closure;
 use ReflectionAttribute;
 use ReflectionClass;
 use Yiisoft\Validator\Rule\GroupRule;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\ValidationContext;
 
 /**
- * Represents one-to-one relation.
+ * Collects all attributes from the reference and represents it as its own.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Embedded extends GroupRule
 {
-    public function __construct(private string $relatedClassName)
-    {
-        parent::__construct();
+    public function __construct(
+        private string $referenceClassName,
+        string $message = 'This value is not a valid.',
+        bool $skipOnEmpty = false,
+        bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
+        ?Closure $when = null,
+    ) {
+        parent::__construct($message, $skipOnEmpty, $skipOnError, $when);
     }
 
     public function getRuleSet(): array
     {
-        $classMeta = new ReflectionClass($this->relatedClassName);
+        $classMeta = new ReflectionClass($this->referenceClassName);
 
         return $this->collectAttributes($classMeta);
     }

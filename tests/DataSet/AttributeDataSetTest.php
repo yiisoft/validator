@@ -188,7 +188,13 @@ final class AttributeDataSetTest extends TestCase
         ];
     }
 
-    public function testCollectRulesFromEmbededAttribute(): void
+    /**
+     * The test flow is different because {@see Embedded} is only attribute.
+     * Under the hood it uses {@see GroupRule} and a bit of reflection.
+     * Due to we cannot create {@see Embedded} with particular rules via constructor
+     * we cannot just compare it with another class that extends {@see GroupRule}.
+     */
+    public function testEmbeddedAttribute(): void
     {
         $object = new class {
             #[Embedded(Coordinate::class)]
@@ -211,7 +217,7 @@ final class AttributeDataSetTest extends TestCase
         $this->assertEquals($expectedExtendedRules, $actualRules['property1'][0]->getRuleSet());
     }
 
-    public function testGetRules(): void
+    public function testMoreComplexEmbeddedRule(): void
     {
         $dataSet = new AttributeDataSet(new Chart());
         $secondEmbeddedRules = [
@@ -236,23 +242,29 @@ final class AttributeDataSetTest extends TestCase
 
         $actualRules = $dataSet->getRules();
 
+        // check Chart structure has right structure
         $this->assertIsArray($actualRules);
         $this->assertArrayHasKey('points', $actualRules);
         $this->assertIsArray($actualRules['points']);
         $this->assertCount(1, $actualRules['points']);
         $this->assertInstanceOf(Each::class, $actualRules['points'][0]);
 
+        // check Chart structure has right structure
         $actualFirstEmbeddedRules = $actualRules['points'][0]->getRules();
         $this->assertIsArray($actualFirstEmbeddedRules);
         $this->assertCount(1, $actualFirstEmbeddedRules);
         $this->assertInstanceOf(GroupRule::class, $actualFirstEmbeddedRules[0]);
 
+        // check Point structure has right structure
         $innerRules = $actualFirstEmbeddedRules[0]->getRuleSet();
+        // rgb has usual structure. We can check as is
         $this->assertEquals($firstEmbeddedRules['rgb'], $innerRules['rgb']);
 
+        // coordinates has embedded structure, so we need to unpack rules before check it
         $this->assertIsArray($innerRules['coordinates']);
         $this->assertCount(1, $innerRules['coordinates']);
         $this->assertInstanceOf(Each::class, $innerRules['coordinates'][0]);
+
         $secondInnerRules = $innerRules['coordinates'][0]->getRules();
         $this->assertIsArray($secondInnerRules);
         $this->assertCount(1, $secondInnerRules);
