@@ -18,14 +18,14 @@ use Yiisoft\Validator\ValidationContext;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Embedded extends GroupRule
 {
+    /**
+     * @psalm-param Closure(mixed, ValidationContext):bool|null $when
+     */
     public function __construct(
         private string $referenceClassName,
         string $message = 'This value is not a valid.',
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
-        /**
-         * @psalm-param Closure(mixed, ValidationContext):bool|null
-         */
         ?Closure $when = null,
     ) {
         parent::__construct($message, $skipOnEmpty, $skipOnError, $when);
