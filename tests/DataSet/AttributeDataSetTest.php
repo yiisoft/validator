@@ -11,7 +11,7 @@ use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Tests\Data\Post;
+use Yiisoft\Validator\Tests\Data\TitleTrait;
 
 final class AttributeDataSetTest extends TestCase
 {
@@ -49,10 +49,9 @@ final class AttributeDataSetTest extends TestCase
 //    }
 
     /**
-     * @param object $object
-     * @param RuleInterface[]|RuleInterface[][]|RuleInterface[][][] $rules
-     * @return void
      * @dataProvider dataProvider
+     *
+     * @param RuleInterface[]|RuleInterface[][]|RuleInterface[][][] $expectedRules
      */
     public function testCollectRules(object $object, array $expectedRules): void
     {
@@ -61,20 +60,19 @@ final class AttributeDataSetTest extends TestCase
         $this->assertEquals($expectedRules, $dataSet->getRules());
     }
 
-    /**
-     * @link https://github.com/yiisoft/validator/issues/198
-     */
-    public function testGetRulesViaTraits(): void
-    {
-        $dataSet = new AttributeDataSet(new Post());
-        $expectedRules = ['title' => [new HasLength(max: 255)]];
-
-        $this->assertEquals($expectedRules, $dataSet->getRules());
-    }
-
-    public function dataProvider()
+    public function dataProvider(): array
     {
         return [
+            [
+                new class {},
+                [],
+            ],
+            [
+                new class {
+                    private $property1;
+                },
+                [],
+            ],
             [
                 new class {
                     #[Required(skipOnEmpty: true)]
@@ -83,6 +81,16 @@ final class AttributeDataSetTest extends TestCase
                 [
                     'property1' => [
                         new Required(skipOnEmpty: true),
+                    ],
+                ],
+            ],
+            [
+                new class {
+                    use TitleTrait;
+                },
+                [
+                    'title' => [
+                        new HasLength(max: 255),
                     ],
                 ],
             ],
