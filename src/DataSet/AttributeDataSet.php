@@ -41,7 +41,6 @@ final class AttributeDataSet implements RulesProviderInterface
         foreach ($classMeta->getProperties() as $property) {
             $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             foreach ($attributes as $attribute) {
-                /** @psalm-suppress UndefinedMethod */
                 $rules[$property->getName()][] = $attribute->newInstance();
             }
         }

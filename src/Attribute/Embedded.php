@@ -45,7 +45,6 @@ final class Embedded extends GroupRule
         foreach ($classMeta->getProperties() as $property) {
             $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             foreach ($attributes as $attribute) {
-                /** @psalm-suppress UndefinedMethod */
                 $rules[$property->getName()][] = $attribute->newInstance();
             }
         }
