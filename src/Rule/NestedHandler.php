@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
+use Yiisoft\Validator\FallbackTranslator;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 
@@ -41,11 +41,11 @@ use function is_object;
  */
 final class NestedHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
+    private TranslatorInterface $translator;
 
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(?TranslatorInterface $translator = null)
     {
-        $this->formatter = $formatter ?? new Formatter();
+        $this->translator = $translator ?? new FallbackTranslator();
     }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
@@ -57,7 +57,7 @@ final class NestedHandler implements RuleHandlerInterface
         $compoundResult = new Result();
         if (!is_object($value) && !is_array($value)) {
             $message = sprintf('Value should be an array or an object. %s given.', gettype($value));
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $message,
                 ['attribute' => $context?->getAttribute(), 'value' => $value]
             );
@@ -73,7 +73,7 @@ final class NestedHandler implements RuleHandlerInterface
             $result = new Result();
 
             if ($rule->isErrorWhenPropertyPathIsNotFound() && !ArrayHelper::pathExists($value, $valuePath)) {
-                $formattedMessage = $this->formatter->format(
+                $formattedMessage = $this->translator->translate(
                     $rule->getPropertyPathIsNotFoundMessage(),
                     ['path' => $valuePath, 'attribute' => $context?->getAttribute(), 'value' => $value]
                 );

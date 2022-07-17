@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
+use Yiisoft\Validator\FallbackTranslator;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 
@@ -19,11 +19,11 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class InRangeHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
+    private TranslatorInterface $translator;
 
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(?TranslatorInterface $translator = null)
     {
-        $this->formatter = $formatter ?? new Formatter();
+        $this->translator = $translator ?? new FallbackTranslator();
     }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
@@ -39,11 +39,11 @@ final class InRangeHandler implements RuleHandlerInterface
         }
 
         if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getRange(), $rule->isStrict())) {
-            $formattedMessage = $this->formatter->format(
+            $message = $this->translator->translate(
                 $rule->getMessage(),
                 ['attribute' => $context?->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
+            $result->addError($message);
         }
 
         return $result;

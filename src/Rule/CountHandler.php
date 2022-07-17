@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Countable;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
+use Yiisoft\Validator\FallbackTranslator;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 
@@ -19,11 +19,11 @@ use function count;
  */
 final class CountHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
+    private TranslatorInterface $translator;
 
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(?TranslatorInterface $translator = null)
     {
-        $this->formatter = $formatter ?? new Formatter();
+        $this->translator = $translator ?? new FallbackTranslator();
     }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
@@ -35,11 +35,11 @@ final class CountHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_countable($value)) {
-            $formattedMessage = $this->formatter->format(
+            $message = $this->translator->translate(
                 $rule->getMessage(),
                 ['attribute' => $context?->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
+            $result->addError($message);
 
             return $result;
         }
@@ -47,29 +47,29 @@ final class CountHandler implements RuleHandlerInterface
         $count = count($value);
 
         if ($rule->getExactly() !== null && $count !== $rule->getExactly()) {
-            $formattedMessage = $this->formatter->format(
+            $message = $this->translator->translate(
                 $rule->getNotExactlyMessage(),
                 ['exactly' => $rule->getExactly(), 'attribute' => $context?->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
+            $result->addError($message);
 
             return $result;
         }
 
         if ($rule->getMin() !== null && $count < $rule->getMin()) {
-            $formattedMessage = $this->formatter->format(
+            $message = $this->translator->translate(
                 $rule->getTooFewItemsMessage(),
                 ['min' => $rule->getMin(), 'attribute' => $context?->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
+            $result->addError($message);
         }
 
         if ($rule->getMax() !== null && $count > $rule->getMax()) {
-            $formattedMessage = $this->formatter->format(
+            $message = $this->translator->translate(
                 $rule->getTooManyItemsMessage(),
                 ['max' => $rule->getMax(), 'attribute' => $context?->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
+            $result->addError($message);
         }
 
         return $result;
