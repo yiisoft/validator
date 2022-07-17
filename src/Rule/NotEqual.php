@@ -19,7 +19,7 @@ use Yiisoft\Validator\ValidationContext;
  * are checked byte by byte. When validating numbers, make sure to change {@see NotEqual::$type} to
  * {@see NotEqual::TYPE_NUMBER} to enable numeric validation.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class NotEqual extends Compare
 {
     public function __construct(
