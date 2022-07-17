@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Stub;
 
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Exception\MissingAttributeException;
 use Yiisoft\Validator\RulesProviderInterface;
 
-final class RulesProvidedDataSet implements RulesProviderInterface
+final class RulesProvidedDataSet implements RulesProviderInterface, DataSetInterface
 {
     private array $data;
     private array $rules;
