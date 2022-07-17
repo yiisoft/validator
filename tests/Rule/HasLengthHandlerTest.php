@@ -85,7 +85,7 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): HasLengthHandler
+    protected function getRuleHandler(): HasLengthHandler
     {
         return new HasLengthHandler();
     }
