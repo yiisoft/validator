@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
+use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
 
 final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
@@ -13,11 +14,15 @@ final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 
     public function resolve(string $className): RuleHandlerInterface
     {
+        if (!class_exists($className)) {
+            throw new RuleHandlerNotFoundException($className);
+        }
         if (!array_key_exists($className, $this->instances)) {
-            if (!is_subclass_of($className, RuleHandlerInterface::class)) {
+            $classInstance = new $className();
+            if (!$classInstance instanceof RuleHandlerInterface) {
                 throw new RuleHandlerInterfaceNotImplementedException($className);
             }
-            return $this->instances[$className] = new $className();
+            return $this->instances[$className] = $classInstance;
         }
 
         return $this->instances[$className];
