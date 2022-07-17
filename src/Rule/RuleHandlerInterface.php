@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\Validator;
 
 /**
  * Rule handler performs actual validation taking configuration parameters from a rule.
