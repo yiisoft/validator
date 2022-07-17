@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 
 abstract class AbstractRuleTest extends TestCase
@@ -13,7 +13,7 @@ abstract class AbstractRuleTest extends TestCase
     /**
      * @dataProvider optionsDataProvider
      */
-    public function testOptions(ParametrizedRuleInterface $rule, array $expectedOptions): void
+    public function testOptions(SerializableRuleInterface $rule, array $expectedOptions): void
     {
         $options = $rule->getOptions();
 
@@ -35,5 +35,5 @@ abstract class AbstractRuleTest extends TestCase
 
     abstract protected function optionsDataProvider(): array;
 
-    abstract protected function getRule(): ParametrizedRuleInterface;
+    abstract protected function getRule(): SerializableRuleInterface;
 }
