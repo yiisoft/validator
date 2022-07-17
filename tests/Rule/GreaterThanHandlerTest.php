@@ -51,7 +51,7 @@ final class GreaterThanHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleHandlerInterface
+    protected function getRuleHandler(): RuleHandlerInterface
     {
         return new CompareHandler();
     }
