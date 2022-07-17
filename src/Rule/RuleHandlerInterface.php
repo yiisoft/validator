@@ -20,7 +20,7 @@ interface RuleHandlerInterface
      * @param object $rule Rule containing validation parameters.
      * @param ValidationContext|null $context Optional validation context.
      *
-     * @internal Should be never called directly. Use {@see Validator}.
+     * @internal Should be never called directly. Use {@see ValidatorInterface}.
      *
      * @return Result
      */
