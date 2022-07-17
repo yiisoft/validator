@@ -10,6 +10,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class SubsetHandler implements RuleHandlerInterface

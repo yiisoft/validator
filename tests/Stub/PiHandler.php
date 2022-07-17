@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Stub;
 
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class PiHandler implements RuleHandlerInterface
