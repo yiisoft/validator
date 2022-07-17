@@ -8,6 +8,6 @@ trait HandlerClassNameTrait
 {
     public function getHandlerClassName(): string
     {
-        return self::class . 'Handler';
+        return static::class . 'Handler';
     }
 }

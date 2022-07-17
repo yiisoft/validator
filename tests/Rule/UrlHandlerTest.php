@@ -95,7 +95,7 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         new Url(enableIDN: true);
     }
 
-    protected function getValidator(): RuleHandlerInterface
+    protected function getRuleHandler(): RuleHandlerInterface
     {
         return new UrlHandler();
     }

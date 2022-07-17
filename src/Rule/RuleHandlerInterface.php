@@ -19,6 +19,8 @@ interface RuleHandlerInterface
      * @param object $rule Rule containing validation parameters.
      * @param ValidationContext|null $context Optional validation context.
      *
+     * @internal Should be never called directly. Use {@see ValidatorInterface}.
+     *
      * @return Result
      */
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result;

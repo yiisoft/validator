@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\Rule\NotEqual;
 use Yiisoft\Validator\ParametrizedRuleInterface;
-use Yiisoft\Validator\Rule\CompareTo;
 
-final class CompareToTest extends AbstractRuleTest
+final class NotEqualTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array
     {
         return [
             [
-                new CompareTo(1),
+                new NotEqual(1),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -26,37 +26,18 @@ final class CompareToTest extends AbstractRuleTest
                         ],
                     ],
                     'type' => 'string',
-                    'operator' => '==',
+                    'operator' => '!=',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                new CompareTo(1, type: CompareTo::TYPE_NUMBER),
+                new NotEqual(1, type: NotEqual::TYPE_NUMBER),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'type' => 'number',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new CompareTo(1, type: CompareTo::TYPE_NUMBER, operator: '>='),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => null,
-                    'message' => [
-                        'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -64,18 +45,37 @@ final class CompareToTest extends AbstractRuleTest
                         ],
                     ],
                     'type' => 'number',
-                    'operator' => '>=',
+                    'operator' => '!=',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                new CompareTo('YES'),
+                new NotEqual(1, type: NotEqual::TYPE_NUMBER),
+                [
+                    'targetValue' => 1,
+                    'targetAttribute' => null,
+                    'message' => [
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'type' => 'number',
+                    'operator' => '!=',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
+            [
+                new NotEqual('YES'),
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -83,32 +83,13 @@ final class CompareToTest extends AbstractRuleTest
                         ],
                     ],
                     'type' => 'string',
-                    'operator' => '==',
+                    'operator' => '!=',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                new CompareTo('YES', skipOnEmpty: true),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => true,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new CompareTo('YES', operator: '!=='),
+                new NotEqual('YES', strict: true),
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
@@ -127,12 +108,12 @@ final class CompareToTest extends AbstractRuleTest
                 ],
             ],
             [
-                new CompareTo('YES', message: 'Custom message for {targetValueOrAttribute}'),
+                new NotEqual('YES', skipOnEmpty: true),
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
                     'message' => [
-                        'message' => 'Custom message for {targetValueOrAttribute}',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -140,32 +121,32 @@ final class CompareToTest extends AbstractRuleTest
                         ],
                     ],
                     'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
+                    'operator' => '!=',
+                    'skipOnEmpty' => true,
                     'skipOnError' => false,
                 ],
             ],
             [
-                new CompareTo(null, 'test'),
+                new NotEqual(null, 'attribute'),
                 [
                     'targetValue' => null,
-                    'targetAttribute' => 'test',
+                    'targetAttribute' => 'attribute',
                     'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => null,
-                            'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
+                            'targetAttribute' => 'attribute',
+                            'targetValueOrAttribute' => 'attribute',
                         ],
                     ],
                     'type' => 'string',
-                    'operator' => '==',
+                    'operator' => '!=',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                new CompareTo(null, 'test', message: 'Custom message for {targetValueOrAttribute}'),
+                new NotEqual(targetAttribute: 'test', message: 'Custom message for {targetValueOrAttribute}'),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'test',
@@ -178,7 +159,7 @@ final class CompareToTest extends AbstractRuleTest
                         ],
                     ],
                     'type' => 'string',
-                    'operator' => '==',
+                    'operator' => '!=',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -186,8 +167,16 @@ final class CompareToTest extends AbstractRuleTest
         ];
     }
 
+    public function testWithoutParameters()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+
+        $rule = new NotEqual();
+    }
+
     protected function getRule(): ParametrizedRuleInterface
     {
-        return new CompareTo(1);
+        return new NotEqual(1);
     }
 }
