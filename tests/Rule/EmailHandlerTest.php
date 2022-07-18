@@ -154,6 +154,6 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new EmailHandler();
+        return new EmailHandler($this->getTranslator());
     }
 }

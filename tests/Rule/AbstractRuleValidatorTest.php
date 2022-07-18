@@ -6,9 +6,13 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Yiisoft\Translator\CategorySource;
+use Yiisoft\Translator\Formatter\Simple\SimpleMessageFormatter;
+use Yiisoft\Translator\MessageReaderInterface;
+use Yiisoft\Translator\Translator;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\FallbackTranslator;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
@@ -68,7 +72,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
 
     protected function formatMessage(string $message, array $params): string
     {
-        return (new FallbackTranslator())->translate($message, $params);
+        return $this->getTranslator()->translate($message, $params);
     }
 
     abstract public function customErrorMessagesProvider(): array;
@@ -87,5 +91,35 @@ abstract class AbstractRuleValidatorTest extends TestCase
             new ArrayDataSet(['attribute' => 100, 'number' => 100, 'string' => '100']),
             'number'
         );
+    }
+
+    protected function getTranslator(): TranslatorInterface
+    {
+        $translator = new Translator(
+            'en'
+        );
+
+        // TODO: fix it
+        $categorySource = new CategorySource(
+            'validator',
+            new class implements MessageReaderInterface {
+                public function getMessage(
+                    string $id,
+                    string $category,
+                    string $locale,
+                    array $parameters = []
+                ): ?string {
+                    return null;
+                }
+
+                public function getMessages(string $category, string $locale): array
+                {
+                    return [];
+                }
+            },
+            new SimpleMessageFormatter()
+        );
+        $translator->addCategorySource($categorySource);
+        return $translator;
     }
 }

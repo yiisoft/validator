@@ -82,6 +82,6 @@ final class InRangeHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new InRangeHandler();
+        return new InRangeHandler($this->getTranslator());
     }
 }

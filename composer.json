@@ -25,7 +25,8 @@
         "yiisoft/friendly-exception": "^1.0",
         "yiisoft/network-utilities": "^1.0",
         "yiisoft/strings": "^2.0",
-        "yiisoft/translator": "^1.0"
+        "yiisoft/translator": "^1.0",
+        "yiisoft/translator-formatter-simple": "^1.0"
     },
     "require-dev": {
         "jetbrains/phpstorm-attributes": "^1.0",
@@ -57,7 +58,8 @@
             "source-directory": "config"
         },
         "config-plugin": {
-            "common": "common.php"
+            "common": "common.php",
+            "bootstrap": "bootstrap.php"
         }
     },
     "config": {

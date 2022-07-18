@@ -40,6 +40,6 @@ final class RequiredHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new RequiredHandler();
+        return new RequiredHandler($this->getTranslator());
     }
 }

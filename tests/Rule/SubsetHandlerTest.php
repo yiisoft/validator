@@ -52,6 +52,6 @@ final class SubsetHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new SubsetHandler();
+        return new SubsetHandler($this->getTranslator());
     }
 }

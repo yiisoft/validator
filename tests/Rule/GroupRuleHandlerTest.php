@@ -51,6 +51,6 @@ final class GroupRuleHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new GroupRuleHandler();
+        return new GroupRuleHandler($this->getTranslator());
     }
 }

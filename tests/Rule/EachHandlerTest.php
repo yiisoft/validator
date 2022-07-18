@@ -77,6 +77,6 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new EachHandler();
+        return new EachHandler($this->getTranslator());
     }
 }

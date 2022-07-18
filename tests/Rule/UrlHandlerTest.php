@@ -97,6 +97,6 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new UrlHandler();
+        return new UrlHandler($this->getTranslator());
     }
 }

@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\FallbackTranslator;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 
@@ -21,9 +20,9 @@ final class RegexHandler implements RuleHandlerInterface
 {
     private TranslatorInterface $translator;
 
-    public function __construct(?TranslatorInterface $translator = null)
+    public function __construct(TranslatorInterface $translator)
     {
-        $this->translator = $translator ?? new FallbackTranslator();
+        $this->translator = $translator;
     }
 
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
