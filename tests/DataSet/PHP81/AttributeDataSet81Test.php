@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\DataSet;
+namespace Yiisoft\Validator\Tests\DataSet\PHP81;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Attribute\Embedded;
@@ -20,7 +20,7 @@ use Yiisoft\Validator\Tests\Data\Charts\Coordinate;
 use Yiisoft\Validator\Tests\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
 
-final class AttributeDataSetTest extends TestCase
+final class AttributeDataSet81Test extends TestCase
 {
     /**
      * @dataProvider dataProvider
