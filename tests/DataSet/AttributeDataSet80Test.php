@@ -5,18 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\DataSet;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Attribute\Embedded;
 use Yiisoft\Validator\DataSet\AttributeDataSet;
-use Yiisoft\Validator\Rule\Count;
-use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\GroupRule;
 use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\Nested;
-use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Tests\Data\Charts\Chart;
-use Yiisoft\Validator\Tests\Data\Charts\Coordinate;
 use Yiisoft\Validator\Tests\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
 
