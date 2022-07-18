@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Exception;
 
 use RuntimeException;
 use Throwable;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 
 final class RuleHandlerInterfaceNotImplementedException extends RuntimeException
 {

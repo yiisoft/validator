@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Rule;
-
-use Yiisoft\Validator\Result;
-use Yiisoft\Validator\ValidationContext;
+namespace Yiisoft\Validator;
 
 /**
  * Rule handler performs actual validation taking configuration parameters from a rule.

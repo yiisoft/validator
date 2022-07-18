@@ -8,7 +8,7 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use Traversable;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -24,7 +24,7 @@ use function is_array;
  * Can be used for validation of nested structures.
  */
 #[Attribute(Attribute::TARGET_PROPERTY)]
-final class Nested implements ParametrizedRuleInterface, BeforeValidationInterface
+final class Nested implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
     use HandlerClassNameTrait;

@@ -8,7 +8,7 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 
 final class CompositeHandlerTest extends AbstractRuleValidatorTest
 {
