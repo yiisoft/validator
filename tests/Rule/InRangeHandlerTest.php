@@ -8,7 +8,7 @@ use ArrayObject;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\InRangeHandler;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 
 final class InRangeHandlerTest extends AbstractRuleValidatorTest
 {
@@ -80,7 +80,7 @@ final class InRangeHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleHandlerInterface
+    protected function getRuleHandler(): RuleHandlerInterface
     {
         return new InRangeHandler();
     }

@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -18,7 +18,7 @@ use Yiisoft\Validator\ValidationContext;
  * Validates an array by checking each of its elements against a set of rules.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Each implements ParametrizedRuleInterface, BeforeValidationInterface
+final class Each implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
     use HandlerClassNameTrait;
@@ -68,7 +68,7 @@ final class Each implements ParametrizedRuleInterface, BeforeValidationInterface
     {
         $arrayOfRules = [];
         foreach ($this->rules as $rule) {
-            if ($rule instanceof ParametrizedRuleInterface) {
+            if ($rule instanceof SerializableRuleInterface) {
                 $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
             } else {
                 $arrayOfRules[] = [$rule->getName()];

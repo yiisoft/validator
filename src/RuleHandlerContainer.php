@@ -8,7 +8,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
 
 final class RuleHandlerContainer implements RuleHandlerResolverInterface
 {

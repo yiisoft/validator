@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\GroupRuleHandler;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\FunctionExists;
 use Yiisoft\Validator\Tests\Stub\CustomUrlRule;
 
@@ -49,7 +49,7 @@ final class GroupRuleHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleHandlerInterface
+    protected function getRuleHandler(): RuleHandlerInterface
     {
         return new GroupRuleHandler();
     }

@@ -8,7 +8,7 @@ use stdClass;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\RegexHandler;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 
 final class RegexHandlerTest extends AbstractRuleValidatorTest
 {
@@ -59,7 +59,7 @@ final class RegexHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleHandlerInterface
+    protected function getRuleHandler(): RuleHandlerInterface
     {
         return new RegexHandler();
     }

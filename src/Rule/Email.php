@@ -8,7 +8,7 @@ use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -22,7 +22,7 @@ use function function_exists;
  * Validates that the value is a valid email address.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Email implements ParametrizedRuleInterface, BeforeValidationInterface
+final class Email implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
     use HandlerClassNameTrait;

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Stub;
 
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 
-final class Rule implements ParametrizedRuleInterface
+final class Rule implements SerializableRuleInterface
 {
     use HandlerClassNameTrait;
 

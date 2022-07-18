@@ -376,7 +376,7 @@ use Attribute;
 use \Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 use \Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
@@ -392,7 +392,7 @@ final class ValidateXRuleHandler implements RuleHandlerInterface
 {    
     public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
     {
-        if (!$rule instanceof RuleInterface) {
+        if (!$rule instanceof ValidateXRule) {
             throw new UnexpectedRuleException(ValidateXRule::class, $rule);
         }
         
@@ -523,7 +523,7 @@ namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;use Yiisoft\Validator\FormatterInterface;use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RuleHandlerInterface;use Yiisoft\Validator\RuleInterface;
 
 final class PiHandler implements RuleHandlerInterface
 {
@@ -603,6 +603,8 @@ final class CompanyNameHandler implements Rule\RuleHandlerInterface
     }
 }
 ```
+
+> Note: Do not call handler's `validate()` method directly. It must be used via Validator only. 
 
 ##### Resolving rule handler dependencies
 

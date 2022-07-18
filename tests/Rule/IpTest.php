@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use RuntimeException;
 use Yiisoft\Validator\Rule\Ip;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 
 final class IpTest extends AbstractRuleTest
 {
@@ -332,7 +332,7 @@ final class IpTest extends AbstractRuleTest
         new Ip(networks: ['*' => ['wrong']], ranges: ['*']);
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): SerializableRuleInterface
     {
         return new Ip([]);
     }

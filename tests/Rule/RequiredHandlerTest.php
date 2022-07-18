@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\RequiredHandler;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 
 final class RequiredHandlerTest extends AbstractRuleValidatorTest
 {
@@ -38,7 +38,7 @@ final class RequiredHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    protected function getValidator(): RuleHandlerInterface
+    protected function getRuleHandler(): RuleHandlerInterface
     {
         return new RequiredHandler();
     }

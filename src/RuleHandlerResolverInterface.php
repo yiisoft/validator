@@ -6,7 +6,6 @@ namespace Yiisoft\Validator;
 
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
 
 /**
  * Rule handler resolver is obtaining a resolver for a given rule class name.

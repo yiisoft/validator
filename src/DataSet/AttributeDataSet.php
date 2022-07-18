@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\DataSet;
 
 use ReflectionAttribute;
 use ReflectionClass;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 
@@ -15,7 +16,7 @@ use Yiisoft\Validator\RulesProviderInterface;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  */
-final class AttributeDataSet implements RulesProviderInterface
+final class AttributeDataSet implements RulesProviderInterface, DataSetInterface
 {
     use ArrayDataTrait;
 

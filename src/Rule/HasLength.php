@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -20,7 +20,7 @@ use Yiisoft\Validator\ValidationContext;
  * Note, this rule should only be used with strings.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class HasLength implements ParametrizedRuleInterface, BeforeValidationInterface
+final class HasLength implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
     use HandlerClassNameTrait;
