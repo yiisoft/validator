@@ -102,7 +102,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
         // TODO: fix it
         $categorySource = new CategorySource(
             'validator',
-            new class implements MessageReaderInterface {
+            new class () implements MessageReaderInterface {
                 public function getMessage(
                     string $id,
                     string $category,

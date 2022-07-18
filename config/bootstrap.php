@@ -21,5 +21,5 @@ return [
             $formatter
         );
         $translator->addCategorySource($category);
-    }
+    },
 ];
