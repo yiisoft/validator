@@ -23,7 +23,12 @@ final class AttributeDataSet80Test extends TestCase
     {
         $dataSet = new AttributeDataSet($object);
 
-        $this->assertEquals($expectedRules, $dataSet->getRules());
+        $actualRules = [];
+        foreach ($dataSet->getRules() as $attribute => $rules) {
+            $actualRules[$attribute] = iterator_to_array($rules);
+        }
+
+        $this->assertEquals($expectedRules, $actualRules);
     }
 
     public function dataProvider(): array

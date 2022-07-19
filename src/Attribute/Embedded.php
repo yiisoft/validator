@@ -31,24 +31,38 @@ final class Embedded extends GroupRule
         parent::__construct($message, $skipOnEmpty, $skipOnError, $when);
     }
 
-    public function getRuleSet(): array
+    public function getRuleSet(): iterable
     {
         $classMeta = new ReflectionClass($this->referenceClassName);
 
         return $this->collectAttributes($classMeta);
     }
 
-    // TODO: use Generator to collect attributes
-    private function collectAttributes(ReflectionClass $classMeta): array
+    private function collectAttributes(ReflectionClass $classMeta): iterable
     {
-        $rules = [];
-        foreach ($classMeta->getProperties() as $property) {
-            $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
-            foreach ($attributes as $attribute) {
-                $rules[$property->getName()][] = $attribute->newInstance();
-            }
+        $reflectionProperties = $classMeta->getProperties();
+        if ($reflectionProperties === []) {
+            return [];
         }
 
-        return $rules;
+        foreach ($reflectionProperties as $property) {
+            $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
+            if ($attributes === []) {
+                continue;
+            }
+
+            yield $property->getName() => $this->createAttributes($attributes);
+        }
+    }
+
+    /**
+     * @param ReflectionAttribute[] $attributes
+     * @return iterable
+     */
+    private function createAttributes(array $attributes): iterable
+    {
+        foreach ($attributes as $attribute) {
+            yield $attribute->newInstance();
+        }
     }
 }

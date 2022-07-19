@@ -42,7 +42,7 @@ abstract class GroupRule implements SerializableRuleInterface, BeforeValidationI
     /**
      * Return custom rules set
      */
-    abstract public function getRuleSet(): array;
+    abstract public function getRuleSet(): iterable;
 
     public function getOptions(): array
     {
