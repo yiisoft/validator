@@ -95,10 +95,6 @@ abstract class AbstractRuleValidatorTest extends TestCase
 
     protected function getTranslator(): TranslatorInterface
     {
-        $translator = new Translator(
-            'en'
-        );
-
         // TODO: fix it
         $categorySource = new CategorySource(
             'validator',
@@ -119,7 +115,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
             },
             new SimpleMessageFormatter()
         );
-        $translator->addCategorySource($categorySource);
-        return $translator;
+
+        return new Translator('en', null, [$categorySource]);
     }
 }
