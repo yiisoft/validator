@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\DataSet;
+namespace Yiisoft\Validator\Tests\DataSet\PHP80;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\AttributeDataSet;
