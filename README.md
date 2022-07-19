@@ -380,7 +380,7 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use \Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class ValidateXRule implements RuleInterface
 {
     public function __construct()
@@ -427,6 +427,63 @@ final class UserData
     #[Regex('~[a-z_\-]~i')]
     private string $name;    
 }
+```
+
+###### Nested attributes
+
+PHP 8.0 supports attributes, but nested declaration is allowed only in PHP 8.1 and above.
+
+So such attributes as `Each`, `Nested` and `Composite` are not allowed in PHP 8.0.
+
+The following example is not allowed in PHP 8.0:
+
+```php
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Number;
+
+final class Color
+{
+    #[Each([
+        new Number(min: 0, max: 255),
+    ])]
+    private array $values;
+}
+```
+
+But you can do this by creating a new composite rule from it.
+
+```php
+namespace App\Validator\Rule;
+
+use Attribute;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\GroupRule;
+
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+final class RgbRule extends GroupRule
+{
+    public function getRuleSet(): array
+    {
+        return [
+            new Each([
+                new Number(min: 0, max: 255),
+            ]),
+        ];
+    }
+}
+```
+
+And use it after as attribute.
+
+```php
+use App\Validator\Rule\RgbRule;
+
+final class Color
+{
+    #[RgbRule]
+    private array $values;
+}
+
 ```
 
 ###### Function / method calls
