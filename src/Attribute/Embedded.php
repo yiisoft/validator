@@ -57,6 +57,7 @@ final class Embedded extends GroupRule
 
     /**
      * @param ReflectionAttribute[] $attributes
+     *
      * @return iterable
      */
     private function createAttributes(array $attributes): iterable

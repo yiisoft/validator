@@ -54,6 +54,7 @@ final class AttributeDataSet implements RulesProviderInterface, DataSetInterface
 
     /**
      * @param ReflectionAttribute[] $attributes
+     *
      * @return iterable
      */
     private function createAttributes(array $attributes): iterable
