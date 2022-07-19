@@ -25,7 +25,7 @@ final class EachHandler implements RuleHandlerInterface
         $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Each) {
             throw new UnexpectedRuleException(Each::class, $rule);
@@ -40,7 +40,7 @@ final class EachHandler implements RuleHandlerInterface
         if (!is_iterable($value)) {
             $formattedMessage = $this->formatter->format(
                 $rule->getIncorrectInputMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
 
@@ -50,7 +50,7 @@ final class EachHandler implements RuleHandlerInterface
         foreach ($value as $index => $item) {
             /** @var array<mixed, RuleInterface[]> $rule */
             $rule = [$index => $rules];
-            $itemResult = $context?->getValidator()->validate($item, $rule);
+            $itemResult = $context->getValidator()->validate($item, $rule);
             if ($itemResult->isValid()) {
                 continue;
             }

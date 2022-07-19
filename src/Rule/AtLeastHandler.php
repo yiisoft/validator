@@ -26,7 +26,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof AtLeast) {
             throw new UnexpectedRuleException(AtLeast::class, $rule);
@@ -45,7 +45,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         if ($filledCount < $rule->getMin()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
-                ['min' => $rule->getMin(), 'attribute' => $context?->getAttribute(), 'value' => $value]
+                ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         }

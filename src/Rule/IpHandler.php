@@ -38,7 +38,7 @@ final class IpHandler implements RuleHandlerInterface
      */
     private const NEGATION_CHAR = '!';
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Ip) {
             throw new UnexpectedRuleException(Ip::class, $rule);
@@ -48,7 +48,7 @@ final class IpHandler implements RuleHandlerInterface
         $result = new Result();
         $formattedMessage = $this->formatter->format(
             $rule->getMessage(),
-            ['attribute' => $context?->getAttribute(), 'value' => $value]
+            ['attribute' => $context->getAttribute(), 'value' => $value]
         );
         if (!is_string($value)) {
             $result->addError($formattedMessage);
@@ -111,7 +111,7 @@ final class IpHandler implements RuleHandlerInterface
         if ($cidr === null && $rule->isRequireSubnet()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getNoSubnetMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
             return $result;
@@ -119,7 +119,7 @@ final class IpHandler implements RuleHandlerInterface
         if ($cidr !== null && !$rule->isAllowSubnet()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getHasSubnetMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
             return $result;
@@ -127,7 +127,7 @@ final class IpHandler implements RuleHandlerInterface
         if ($negation && !$rule->isAllowNegation()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
             return $result;
@@ -145,7 +145,7 @@ final class IpHandler implements RuleHandlerInterface
         if ($ipVersion === IpHelper::IPV6 && !$rule->isAllowIpv6()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getIpv6NotAllowedMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
             return $result;
@@ -153,7 +153,7 @@ final class IpHandler implements RuleHandlerInterface
         if ($ipVersion === IpHelper::IPV4 && !$rule->isAllowIpv4()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getIpv4NotAllowedMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
             return $result;
@@ -175,7 +175,7 @@ final class IpHandler implements RuleHandlerInterface
             } catch (InvalidArgumentException $e) {
                 $formattedMessage = $this->formatter->format(
                     $rule->getWrongCidrMessage(),
-                    ['attribute' => $context?->getAttribute(), 'value' => $value]
+                    ['attribute' => $context->getAttribute(), 'value' => $value]
                 );
                 $result->addError($formattedMessage);
                 return $result;
@@ -184,7 +184,7 @@ final class IpHandler implements RuleHandlerInterface
         if (!$rule->isAllowed($ipCidr)) {
             $formattedMessage = $this->formatter->format(
                 $rule->getNotInRangeMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
             return $result;

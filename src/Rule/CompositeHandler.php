@@ -37,7 +37,7 @@ final class CompositeHandler implements RuleHandlerInterface
 {
     use PreValidateTrait;
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Composite) {
             throw new UnexpectedRuleException(Composite::class, $rule);

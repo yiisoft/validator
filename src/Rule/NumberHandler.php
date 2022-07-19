@@ -28,7 +28,7 @@ final class NumberHandler implements RuleHandlerInterface
         $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Number) {
             throw new UnexpectedRuleException(Number::class, $rule);
@@ -39,7 +39,7 @@ final class NumberHandler implements RuleHandlerInterface
         if (is_bool($value) || !is_scalar($value)) {
             $formattedMessage = $this->formatter->format(
                 $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.',
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
             return $result;
@@ -50,19 +50,19 @@ final class NumberHandler implements RuleHandlerInterface
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
             $formattedMessage = $this->formatter->format(
                 $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.',
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getTooSmallMessage(),
-                ['min' => $rule->getMin(), 'attribute' => $context?->getAttribute(), 'value' => $value]
+                ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         } elseif ($rule->getMax() !== null && $value > $rule->getMax()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getTooBigMessage(),
-                ['max' => $rule->getMax(), 'attribute' => $context?->getAttribute(), 'value' => $value]
+                ['max' => $rule->getMax(), 'attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         }

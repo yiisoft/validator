@@ -23,7 +23,7 @@ final class BooleanHandler implements RuleHandlerInterface
         $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Boolean) {
             throw new UnexpectedRuleException(Boolean::class, $rule);
@@ -46,7 +46,7 @@ final class BooleanHandler implements RuleHandlerInterface
             [
                 'true' => $rule->getTrueValue() === true ? '1' : $rule->getTrueValue(),
                 'false' => $rule->getFalseValue() === false ? '0' : $rule->getFalseValue(),
-                'attribute' => $context?->getAttribute(),
+                'attribute' => $context->getAttribute(),
                 'value' => $value,
             ]
         );
