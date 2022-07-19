@@ -510,7 +510,7 @@ final class CustomFormatter implements FormatterInterface
     }
 }
 
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class ValidateXRule implements RuleInterface
 {
     public function __construct(
