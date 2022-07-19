@@ -27,7 +27,7 @@ final class RegexHandler implements RuleHandlerInterface
         $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Regex) {
             throw new UnexpectedRuleException(Regex::class, $rule);
@@ -38,7 +38,7 @@ final class RegexHandler implements RuleHandlerInterface
         if (!is_string($value)) {
             $formattedMessage = $this->formatter->format(
                 $rule->getIncorrectInputMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
 
@@ -51,7 +51,7 @@ final class RegexHandler implements RuleHandlerInterface
         ) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         }

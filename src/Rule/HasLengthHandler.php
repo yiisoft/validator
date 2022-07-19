@@ -38,7 +38,7 @@ final class HasLengthHandler implements RuleHandlerInterface
         if (!is_string($value)) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
             return $result;
@@ -49,14 +49,14 @@ final class HasLengthHandler implements RuleHandlerInterface
         if ($rule->getMin() !== null && $length < $rule->getMin()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getTooShortMessage(),
-                ['min' => $rule->getMin(), 'attribute' => $context?->getAttribute(), 'value' => $value]
+                ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         }
         if ($rule->getMax() !== null && $length > $rule->getMax()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getTooLongMessage(),
-                ['max' => $rule->getMax(), 'attribute' => $context?->getAttribute(), 'value' => $value]
+                ['max' => $rule->getMax(), 'attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         }

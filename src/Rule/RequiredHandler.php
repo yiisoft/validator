@@ -28,7 +28,7 @@ final class RequiredHandler implements RuleHandlerInterface
         $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Required) {
             throw new UnexpectedRuleException(Required::class, $rule);
@@ -39,7 +39,7 @@ final class RequiredHandler implements RuleHandlerInterface
         if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         }

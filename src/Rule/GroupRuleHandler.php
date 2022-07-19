@@ -23,17 +23,17 @@ class GroupRuleHandler implements RuleHandlerInterface
         $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof GroupRule) {
             throw new UnexpectedRuleException(GroupRule::class, $rule);
         }
 
         $result = new Result();
-        if (!$context?->getValidator()->validate($value, $rule->getRuleSet())->isValid()) {
+        if (!$context->getValidator()->validate($value, $rule->getRuleSet())->isValid()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         }

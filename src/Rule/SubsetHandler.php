@@ -22,7 +22,7 @@ final class SubsetHandler implements RuleHandlerInterface
         $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Subset) {
             throw new UnexpectedRuleException(Subset::class, $rule);
@@ -33,7 +33,7 @@ final class SubsetHandler implements RuleHandlerInterface
         if (!is_iterable($value)) {
             $formattedMessage = $this->formatter->format(
                 $rule->getIterableMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
             return $result;
@@ -47,7 +47,7 @@ final class SubsetHandler implements RuleHandlerInterface
 
             $formattedMessage = $this->formatter->format(
                 $rule->getSubsetMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value, 'values' => $valuesString]
+                ['attribute' => $context->getAttribute(), 'value' => $value, 'values' => $valuesString]
             );
             $result->addError($formattedMessage);
         }
