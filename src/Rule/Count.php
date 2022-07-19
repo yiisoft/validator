@@ -20,7 +20,7 @@ use Yiisoft\Validator\ValidationContext;
  * Validates that the value contains certain number of items. Can be applied to arrays or classes implementing
  * {@see Countable} interface.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Count implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;

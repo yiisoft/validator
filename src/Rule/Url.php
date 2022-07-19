@@ -21,7 +21,7 @@ use Yiisoft\Validator\ValidationContext;
  * Note that this rule only checks if the URL scheme and host part are correct.
  * It does not check the remaining parts of a URL.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Url implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;

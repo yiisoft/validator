@@ -17,7 +17,7 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * Validates that the value is a valid json.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Json implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;

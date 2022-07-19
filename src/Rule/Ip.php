@@ -24,7 +24,7 @@ use function strlen;
  *
  * It also may change the value if normalization of IPv6 expansion is enabled.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Ip implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;

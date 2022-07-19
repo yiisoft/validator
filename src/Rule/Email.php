@@ -21,7 +21,7 @@ use function function_exists;
 /**
  * Validates that the value is a valid email address.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Email implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;

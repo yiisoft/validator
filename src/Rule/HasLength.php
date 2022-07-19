@@ -19,7 +19,7 @@ use Yiisoft\Validator\ValidationContext;
  *
  * Note, this rule should only be used with strings.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class HasLength implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;

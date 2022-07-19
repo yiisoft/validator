@@ -19,7 +19,7 @@ use Yiisoft\Validator\ValidationContext;
  *
  * If the {@see Regex::$not} is used, the rule will ensure the value do NOT match the pattern.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Regex implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;

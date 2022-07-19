@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Data\Charts;
 
 use Yiisoft\Validator\Rule\Number;
 
-final class Coordinates
+final class Coordinate
 {
     #[Number(min: -10, max: 10)]
     private int $x;

@@ -17,7 +17,7 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * Validates that the specified value is neither null nor empty.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Required implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
