@@ -19,7 +19,6 @@ use Yiisoft\Validator\ValidationContext;
 abstract class GroupRule implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(
@@ -49,5 +48,10 @@ abstract class GroupRule implements SerializableRuleInterface, BeforeValidationI
     public function getOptions(): array
     {
         return (new RulesDumper())->asArray($this->getRuleSet());
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return GroupRuleHandler::class;
     }
 }

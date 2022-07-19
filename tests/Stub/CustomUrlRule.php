@@ -21,9 +21,4 @@ final class CustomUrlRule extends GroupRule
     {
         return 'customUrlRule';
     }
-
-    public function getHandlerClassName(): string
-    {
-        return GroupRuleHandler::class;
-    }
 }
