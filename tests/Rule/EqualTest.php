@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\Equal;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 
 final class EqualTest extends AbstractRuleTest
 {
@@ -175,7 +175,7 @@ final class EqualTest extends AbstractRuleTest
         $rule = new Equal();
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): SerializableRuleInterface
     {
         return new Equal(1);
     }

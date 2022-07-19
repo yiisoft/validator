@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 
 final class EachTest extends AbstractRuleTest
 {
@@ -66,7 +66,7 @@ final class EachTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): SerializableRuleInterface
     {
         return new Each([]);
     }

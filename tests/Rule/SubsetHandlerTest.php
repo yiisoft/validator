@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use ArrayObject;
 use Yiisoft\Validator\Error;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Subset;
 use Yiisoft\Validator\Rule\SubsetHandler;
 

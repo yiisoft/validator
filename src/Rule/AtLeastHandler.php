@@ -9,6 +9,7 @@ use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\EmptyCheckTrait;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -25,7 +26,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof AtLeast) {
             throw new UnexpectedRuleException(AtLeast::class, $rule);
@@ -44,7 +45,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         if ($filledCount < $rule->getMin()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
-                ['min' => $rule->getMin(), 'attribute' => $context?->getAttribute(), 'value' => $value]
+                ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         }

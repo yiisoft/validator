@@ -46,10 +46,14 @@ Library could be used in two ways: validating a single value and validating a se
 ### Validating a single value
 
 ```php
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
+
+// Usually obtained from container
+$validator = $container->get(ValidatorInterface::class);
 
 $rules = [
     new Required(),
@@ -65,7 +69,6 @@ $rules = [
         return $result;
     }
 ];
-$validator = getValidator(); // Usually obtained from container
 
 $result = $validator->validate(41, $rules);
 if (!$result->isValid()) {
@@ -80,6 +83,7 @@ if (!$result->isValid()) {
 ```php
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
 
@@ -100,7 +104,9 @@ final class MoneyTransfer implements DataSetInterface
     }
 }
 
-$validator = getValidator(); // Usually obtained from container
+// Usually obtained from container
+$validator = $container->get(ValidatorInterface::class);
+
 $moneyTransfer = new MoneyTransfer(142);
 $rules = [    
     'amount' => [
@@ -152,12 +158,15 @@ In many cases there is a need to validate related data in addition to current en
 for this purpose:
 
 ```php
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
-$validator = getValidator(); // Usually obtained from container
+// Usually obtained from container
+$validator = $container->get(ValidatorInterface::class);
+
 $data = ['author' => ['name' => 'Alexey', 'age' => '31']];
 $rule = new Nested([
     'title' => [new Required()],
@@ -210,12 +219,15 @@ A more complex real-life example is a chart that is made of points. This data is
 combined with `Each` rule to validate such similar structures:
 
 ```php
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\RuleSet;
 
-$validator = getValidator(); // Usually obtained from container
+// Usually obtained from container
+$validator = $container->get(ValidatorInterface::class);
+
 $data = [
     'charts' => [
         [
@@ -274,31 +286,33 @@ $errors = [
 
 ##### Basic usage
 
-You can also use attributes as an alternative. Declare the DTOs, relations and rules:
+Common flow is the same as you would use usual classes: 
+1. Declare property
+2. Add rules to it
 
 ```php
-use Yiisoft\Validator\Attribute\HasMany;
-use Yiisoft\Validator\Attribute\HasOne;
+use Yiisoft\Validator\Attribute\Embedded;
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
-
-final class ChartsData
-{
-    #[HasMany(Chart::class)]
-    private array $charts;
-}
 
 final class Chart
 {
-    #[HasMany(Point::class)]
+    #[Each([
+        new Embedded(Point::class),
+    ])]
     private array $points;
 }
 
 final class Point
 {
-    #[HasOne(Coordinates::class)]
+    #[Embedded(Coordinates::class)]
     private $coordinates;
-    #[Number(min: 0, max: 255)]
-    private array $rgb; // A flat array, the "Number" rule will be applied to each array element.
+    #[Count(exactly: 3)]
+    #[Each([
+        new Number(min: 0, max: 255),
+    ])]
+    private array $rgb;
 }
 
 final class Coordinates
@@ -310,44 +324,25 @@ final class Coordinates
 }
 ```
 
-To combine both flat rules and "each" rules, specify `Each` explicitly and place flat rules above "each" ones:
-
-```php
-use Yiisoft\Validator\Rule\Count;
-use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Attribute\HasMany;
-use Yiisoft\Validator\Attribute\HasOne;
-use Yiisoft\Validator\Rule\Number;
-
-final class Point
-{
-    #[HasOne(Coordinates::class)]
-    private $coordinates;
-    #[Count(exactly: 3)]
-    #[Each()]
-    #[Number(min: 0, max: 255)]
-    private array $rgb;
-}
-```
-
-In this example `Count` will be applied to the whole value and `Number` - for each item.
-
 Here are some technical details:
 
-- `HasOne` uses `Nested` rule.
-- `HasMany` uses combination of `Each` and `Nested` rules.
-- In case of a flat array `Point::$rgb`, a property type `array` needs to be declared. It uses `Each` rule internally.
+- `Embedded` creates a reference to the referenced class and uses a `GroupRule` under the hood to make represent
+  referenced class rules as it owns.
+- In case of a flat array `Point::$rgb`, a property type `array` needs to be declared.
 
 Pass the base DTO to `AttributeDataSet` and use it for validation.
 
 ```php
 use Yiisoft\Validator\DataSet\AttributeDataSet;
+use Yiisoft\Validator\ValidatorInterface;
+
+// Usually obtained from container
+$validator = $container->get(ValidatorInterface::class);
 
 $data = [
     // ...
 ];
 $dataSet = new AttributeDataSet(new ChartsData(), $data);
-$validator = getValidator(); // Usually obtained from container
 $errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
 ```
 
@@ -372,40 +367,6 @@ final class Post
 
 ##### Limitations
 
-This approach has some limitations.
-
-###### `Each` and `Nested` rules
-
-`Each` and `Nested` rules are not supported directly. Use `HasOne` and `HasMany` attributes for declaring relations (or 
-property type `array` for flat rules) instead. Use `Each` and `Nested` rules in addition for custom configuration if 
-needed.
-
-```php
-use Yiisoft\Validator\Attribute\HasMany;
-use Yiisoft\Validator\Attribute\HasOne;
-use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Nested;
-use Yiisoft\Validator\Rule\Number;
-
-final class ChartsData
-{
-    #[Each(incorrectInputMessage: 'Custom message 1.', message: 'Custom message 2.')]
-    #[Nested(errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 3.')]
-    #[HasMany(Chart::class)]
-    private array $charts;
-}
-
-final class Point
-{
-    #[Nested(errorWhenPropertyPathIsNotFound: true, propertyPathIsNotFoundMessage: 'Custom message 4.')]
-    #[HasOne(Coordinates::class)]
-    private $coordinates;
-    #[Each(incorrectInputMessage: 'Custom message 5.', message: 'Custom message 6.')]
-    #[Number(min: 0, max: 255)]
-    private array $rgb;
-}
-```
-
 ###### `Callback` rule and `callable` type
 
 `Callback` rule is not supported, also you can't use `callable` type with attributes. Use custom rule instead.
@@ -415,11 +376,11 @@ use Attribute;
 use \Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 use \Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class ValidateXRule implements RuleInterface
 {
     public function __construct()
@@ -454,8 +415,7 @@ final class Coordinates
 
 ###### `GroupRule`
 
-`GroupRule` is not supported, but it's unnecessary since multiple attributes can be used for one property (except they 
-must be of different type).
+`GroupRule` is not supported, but it's unnecessary since multiple attributes can be used for one property.
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -467,6 +427,63 @@ final class UserData
     #[Regex('~[a-z_\-]~i')]
     private string $name;    
 }
+```
+
+###### Nested attributes
+
+PHP 8.0 supports attributes, but nested declaration is allowed only in PHP 8.1 and above.
+
+So such attributes as `Each`, `Nested` and `Composite` are not allowed in PHP 8.0.
+
+The following example is not allowed in PHP 8.0:
+
+```php
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Number;
+
+final class Color
+{
+    #[Each([
+        new Number(min: 0, max: 255),
+    ])]
+    private array $values;
+}
+```
+
+But you can do this by creating a new composite rule from it.
+
+```php
+namespace App\Validator\Rule;
+
+use Attribute;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\GroupRule;
+
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+final class RgbRule extends GroupRule
+{
+    public function getRuleSet(): array
+    {
+        return [
+            new Each([
+                new Number(min: 0, max: 255),
+            ]),
+        ];
+    }
+}
+```
+
+And use it after as attribute.
+
+```php
+use App\Validator\Rule\RgbRule;
+
+final class Color
+{
+    #[RgbRule]
+    private array $values;
+}
+
 ```
 
 ###### Function / method calls
@@ -493,7 +510,7 @@ final class CustomFormatter implements FormatterInterface
     }
 }
 
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class ValidateXRule implements RuleInterface
 {
     public function __construct(
@@ -563,7 +580,7 @@ namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;use Yiisoft\Validator\FormatterInterface;use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RuleHandlerInterface;use Yiisoft\Validator\RuleInterface;
 
 final class PiHandler implements RuleHandlerInterface
 {
@@ -758,9 +775,12 @@ Then it could be used like the following:
 
 ```php
 use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Rule\Email;
 
-$validator = getValidator(); // Usually obtained from container
+// Usually obtained from container
+$validator = $container->get(ValidatorInterface::class);
+
 $rules = [
     'username' => new UsernameRule(),
     'email' => [new Email()],

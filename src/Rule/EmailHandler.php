@@ -8,6 +8,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_string;
@@ -25,7 +26,7 @@ final class EmailHandler implements RuleHandlerInterface
         $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Email) {
             throw new UnexpectedRuleException(Email::class, $rule);
@@ -87,7 +88,7 @@ final class EmailHandler implements RuleHandlerInterface
         if ($valid === false) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $originalValue]
+                ['attribute' => $context->getAttribute(), 'value' => $originalValue]
             );
             $result->addError($formattedMessage);
         }

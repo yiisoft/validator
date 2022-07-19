@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\GreaterThanOrEqual;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 
 final class GreaterThanOrEqualTest extends AbstractRuleTest
 {
@@ -118,7 +118,7 @@ final class GreaterThanOrEqualTest extends AbstractRuleTest
         $rule = new GreaterThanOrEqual();
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): SerializableRuleInterface
     {
         return new GreaterThanOrEqual(1);
     }

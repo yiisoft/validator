@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Closure;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RulesDumper;
@@ -16,10 +15,9 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * Validates a single value for a set of custom rules.
  */
-abstract class GroupRule implements ParametrizedRuleInterface, BeforeValidationInterface
+abstract class GroupRule implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(
@@ -49,5 +47,10 @@ abstract class GroupRule implements ParametrizedRuleInterface, BeforeValidationI
     public function getOptions(): array
     {
         return (new RulesDumper())->asArray($this->getRuleSet());
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return GroupRuleHandler::class;
     }
 }

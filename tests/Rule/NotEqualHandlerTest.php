@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\CompareHandler;
 use Yiisoft\Validator\Rule\NotEqual;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 
 final class NotEqualHandlerTest extends AbstractRuleValidatorTest
 {

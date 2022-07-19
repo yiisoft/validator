@@ -9,6 +9,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_array;
@@ -48,7 +49,7 @@ final class NestedHandler implements RuleHandlerInterface
         $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Nested) {
             throw new UnexpectedRuleException(Nested::class, $rule);
@@ -59,7 +60,7 @@ final class NestedHandler implements RuleHandlerInterface
             $message = sprintf('Value should be an array or an object. %s given.', gettype($value));
             $formattedMessage = $this->formatter->format(
                 $message,
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $compoundResult->addError($formattedMessage);
 
@@ -75,7 +76,7 @@ final class NestedHandler implements RuleHandlerInterface
             if ($rule->isErrorWhenPropertyPathIsNotFound() && !ArrayHelper::pathExists($value, $valuePath)) {
                 $formattedMessage = $this->formatter->format(
                     $rule->getPropertyPathIsNotFoundMessage(),
-                    ['path' => $valuePath, 'attribute' => $context?->getAttribute(), 'value' => $value]
+                    ['path' => $valuePath, 'attribute' => $context->getAttribute(), 'value' => $value]
                 );
                 $compoundResult->addError($formattedMessage, [$valuePath]);
 
@@ -85,7 +86,7 @@ final class NestedHandler implements RuleHandlerInterface
             $rules = is_array($rules) ? $rules : [$rules];
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
 
-            $itemResult = $context?->getValidator()->validate($validatedValue, $rules);
+            $itemResult = $context->getValidator()->validate($validatedValue, $rules);
 
             if ($itemResult->isValid()) {
                 continue;

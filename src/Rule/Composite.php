@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
@@ -17,8 +17,8 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * Validates that the value is a valid json.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
-final class Composite implements ParametrizedRuleInterface, BeforeValidationInterface
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+final class Composite implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
     use HandlerClassNameTrait;
@@ -42,7 +42,7 @@ final class Composite implements ParametrizedRuleInterface, BeforeValidationInte
     {
         $arrayOfRules = [];
         foreach ($this->rules as $rule) {
-            if ($rule instanceof ParametrizedRuleInterface) {
+            if ($rule instanceof SerializableRuleInterface) {
                 $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
             } else {
                 $arrayOfRules[] = [$rule->getName()];

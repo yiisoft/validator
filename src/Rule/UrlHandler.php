@@ -8,6 +8,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_string;
@@ -28,7 +29,7 @@ final class UrlHandler implements RuleHandlerInterface
         $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Url) {
             throw new UnexpectedRuleException(Url::class, $rule);
@@ -49,7 +50,7 @@ final class UrlHandler implements RuleHandlerInterface
 
         $formattedMessage = $this->formatter->format(
             $rule->getMessage(),
-            ['attribute' => $context?->getAttribute(), 'value' => $value]
+            ['attribute' => $context->getAttribute(), 'value' => $value]
         );
         $result->addError($formattedMessage);
 

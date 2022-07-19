@@ -8,7 +8,7 @@ use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -21,8 +21,8 @@ use Yiisoft\Validator\ValidationContext;
  * Note that this rule only checks if the URL scheme and host part are correct.
  * It does not check the remaining parts of a URL.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
-final class Url implements ParametrizedRuleInterface, BeforeValidationInterface
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+final class Url implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
     use HandlerClassNameTrait;

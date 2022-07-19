@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\LessThanOrEqual;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 
 final class LessThanOrEqualTest extends AbstractRuleTest
 {
@@ -118,7 +118,7 @@ final class LessThanOrEqualTest extends AbstractRuleTest
         $rule = new LessThanOrEqual();
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): SerializableRuleInterface
     {
         return new LessThanOrEqual(1);
     }

@@ -9,7 +9,7 @@ use Closure;
 use Countable;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -20,8 +20,8 @@ use Yiisoft\Validator\ValidationContext;
  * Validates that the value contains certain number of items. Can be applied to arrays or classes implementing
  * {@see Countable} interface.
  */
-#[Attribute(Attribute::TARGET_PROPERTY)]
-final class Count implements ParametrizedRuleInterface, BeforeValidationInterface
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+final class Count implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
     use HandlerClassNameTrait;
