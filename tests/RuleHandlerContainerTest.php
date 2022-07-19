@@ -10,7 +10,7 @@ use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\RuleHandlerContainer;
 use Yiisoft\Validator\Tests\Stub\PiHandler;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 
 class RuleHandlerContainerTest extends TestCase
 {

@@ -415,7 +415,7 @@ use Attribute;
 use \Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 use \Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
@@ -563,7 +563,7 @@ namespace MyVendor\Rules;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;use Yiisoft\Validator\FormatterInterface;use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RuleHandlerInterface;use Yiisoft\Validator\RuleInterface;
 
 final class PiHandler implements RuleHandlerInterface
 {

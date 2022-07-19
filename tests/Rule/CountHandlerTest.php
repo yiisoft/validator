@@ -9,7 +9,7 @@ use stdClass;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\CountHandler;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 
 final class CountHandlerTest extends AbstractRuleValidatorTest
 {

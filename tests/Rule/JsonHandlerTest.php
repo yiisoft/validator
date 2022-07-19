@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Json;
 use Yiisoft\Validator\Rule\JsonHandler;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 
 final class JsonHandlerTest extends AbstractRuleValidatorTest
 {

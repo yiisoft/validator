@@ -8,6 +8,7 @@ use Countable;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function count;

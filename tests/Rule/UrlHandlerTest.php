@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use RuntimeException;
 use Yiisoft\Validator\Error;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
 use Yiisoft\Validator\Tests\FunctionExists;

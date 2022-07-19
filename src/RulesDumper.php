@@ -11,7 +11,7 @@ use function is_array;
  * RulesDumper allows to get an array of rule names and corresponding settings from a set of rules.
  * The array is usually passed to the client to use it in client-side validation.
  *
- * * @see ParametrizedRuleInterface
+ * * @see SerializableRuleInterface
  * * @see RuleInterface
  */
 final class RulesDumper
@@ -58,7 +58,7 @@ final class RulesDumper
         foreach ($rules as $attribute => $rule) {
             if (is_array($rule)) {
                 $result[$attribute] = $this->fetchOptions($rule);
-            } elseif ($rule instanceof ParametrizedRuleInterface) {
+            } elseif ($rule instanceof SerializableRuleInterface) {
                 $result[$attribute] = array_merge([$rule->getName()], $rule->getOptions());
             } elseif ($rule instanceof RuleInterface) {
                 $result[$attribute] = [$rule->getName()];

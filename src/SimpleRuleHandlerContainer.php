@@ -6,7 +6,6 @@ namespace Yiisoft\Validator;
 
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
 
 final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 {

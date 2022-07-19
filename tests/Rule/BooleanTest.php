@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\Boolean;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 
 final class BooleanTest extends AbstractRuleTest
 {
@@ -134,7 +134,7 @@ final class BooleanTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): SerializableRuleInterface
     {
         return new Boolean([]);
     }

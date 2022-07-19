@@ -8,7 +8,7 @@ use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\CompareHandler;
-use Yiisoft\Validator\Rule\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
 

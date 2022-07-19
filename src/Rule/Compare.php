@@ -9,13 +9,13 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
 
-abstract class Compare implements ParametrizedRuleInterface, BeforeValidationInterface
+abstract class Compare implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
     use HandlerClassNameTrait;

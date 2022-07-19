@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use stdClass;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\ParametrizedRuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\Tests\Stub\Rule;
 
 final class NestedTest extends AbstractRuleTest
@@ -107,7 +107,7 @@ final class NestedTest extends AbstractRuleTest
         new Nested(['path.to.value' => (new stdClass())]);
     }
 
-    protected function getRule(): ParametrizedRuleInterface
+    protected function getRule(): SerializableRuleInterface
     {
         return new Nested([new Rule('rule-name', ['key' => 'value'])]);
     }
