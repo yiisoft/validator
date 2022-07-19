@@ -29,10 +29,9 @@ final class RulesProvidedDataSetTest extends AbstractDataSetTest
                 'age' => 42,
             ],
             [
-
                 'username' => [
                     new Regex('^[a-z]+$'),
-                    new HasLength(max: 3)
+                    new HasLength(max: 3),
                 ],
                 'age' => [
                     new Number(max: 25),
@@ -44,7 +43,7 @@ final class RulesProvidedDataSetTest extends AbstractDataSetTest
             $dataSet,
             [
                 'username' => [
-                    new HasLength(max: 10)
+                    new HasLength(max: 10),
                 ],
             ]
         );
