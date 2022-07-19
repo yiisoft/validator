@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\ParametrizedRuleInterface;
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\Tests\Stub\TestRuleHandlerResolverFactory;
 
 abstract class AbstractRuleTest extends TestCase
 {
@@ -28,7 +28,7 @@ abstract class AbstractRuleTest extends TestCase
 
     public function testHandlerClassName(): void
     {
-        $resolver = new SimpleRuleHandlerContainer();
+        $resolver = TestRuleHandlerResolverFactory::create();
         $rule = $this->getRule();
         $this->assertInstanceOf($rule->getHandlerClassName(), $resolver->resolve($rule->getHandlerClassName()));
     }

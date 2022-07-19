@@ -10,7 +10,14 @@ use Yiisoft\Validator\Rule\RuleHandlerInterface;
 
 final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 {
-    private array $instances = [];
+    public function __construct(
+        /**
+         * @var array<string, RuleHandlerInterface>
+         */
+        private array $instances = [],
+    )
+    {
+    }
 
     public function resolve(string $className): RuleHandlerInterface
     {

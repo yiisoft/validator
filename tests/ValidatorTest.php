@@ -14,9 +14,11 @@ use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Validator;
 
 class ValidatorTest extends TestCase
 {
@@ -100,7 +102,7 @@ class ValidatorTest extends TestCase
 
         $ruleHandler = new class () {
         };
-        $validator = FakeValidatorFactory::make();
+        $validator = new Validator(new SimpleRuleHandlerContainer());
         $validator->validate(new DataSet(['property' => '']), [
             'property' => [
                 new class ($ruleHandler) implements RuleInterface {
