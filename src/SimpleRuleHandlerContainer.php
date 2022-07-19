@@ -15,8 +15,7 @@ final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
          * @var array<string, RuleHandlerInterface>
          */
         private array $instances = [],
-    )
-    {
+    ) {
     }
 
     public function resolve(string $className): RuleHandlerInterface
