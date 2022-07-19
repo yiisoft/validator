@@ -34,13 +34,8 @@ final class Validator implements ValidatorInterface
     public function validate($data, iterable $rules = []): Result
     {
         $data = $this->normalizeDataSet($data);
-        if ($data instanceof RulesProviderInterface) {
-            $explicitRules = $rules;
-            $rules = (array) $data->getRules();
-
-            foreach ($explicitRules as $key => $value) {
-                $rules[$key] = $value;
-            }
+        if ($rules === [] && $data instanceof RulesProviderInterface) {
+            $rules = $data->getRules();
         }
 
         $context = new ValidationContext($this, $data);
