@@ -14,7 +14,7 @@ interface RuleHandlerInterface
      *
      * @param mixed $value Value to be validated.
      * @param object $rule Rule containing validation parameters.
-     * @param ValidationContext|null $context Optional validation context.
+     * @param ValidationContext $context Optional validation context.
      *
      * @internal Should be never called directly. Use {@see ValidatorInterface}.
      *
