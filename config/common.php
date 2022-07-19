@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-use Yiisoft\Translator\Formatter\Simple\SimpleMessageFormatter;
-use Yiisoft\Translator\MessageFormatterInterface;
+use Yiisoft\Validator\RuleHandlerContainer;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
@@ -13,6 +11,5 @@ use Yiisoft\Validator\ValidatorInterface;
 
 return [
     ValidatorInterface::class => Validator::class,
-    RuleHandlerResolverInterface::class => SimpleRuleHandlerContainer::class,
-    MessageFormatterInterface::class => SimpleMessageFormatter::class,
+    RuleHandlerResolverInterface::class => RuleHandlerContainer::class,
 ];
