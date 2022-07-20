@@ -43,13 +43,13 @@ final class RulesDumper
      * ]
      * ```
      *
-     * @param iterable $ruleSetMap
+     * @param iterable $rules
      *
      * @return array
      */
-    public function asArray(iterable $ruleSetMap): array
+    public function asArray(iterable $rules): array
     {
-        return $this->fetchOptions($ruleSetMap);
+        return $this->fetchOptions($rules);
     }
 
     private function fetchOptions(iterable $rules): array
