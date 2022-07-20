@@ -52,7 +52,7 @@ final class Composite implements SerializableRuleInterface, BeforeValidationInte
     }
 
     /**
-     * @return iterable<RuleInterface>
+     * @return iterable<RuleInterface|RuleInterface[]|\Closure|\Closure[]>
      */
     public function getRules(): iterable
     {
