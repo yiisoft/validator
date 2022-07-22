@@ -30,7 +30,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
 
     public function __construct(
         /**
-         * @var RuleInterface[][]
+         * @var iterable<RuleInterface|RuleInterface[]|\Closure|\Closure[]>
          */
         private iterable $rules = [],
         private bool $errorWhenPropertyPathIsNotFound = false,
@@ -56,7 +56,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     }
 
     /**
-     * @return iterable
+     * @return iterable<RuleInterface|RuleInterface[]|\Closure|\Closure[]>
      */
     public function getRules(): iterable
     {
