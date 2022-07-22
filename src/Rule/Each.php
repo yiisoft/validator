@@ -39,7 +39,7 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
     }
 
     /**
-     * @return iterable<RuleInterface|RuleInterface[]|\Closure|\Closure[]>
+     * @return iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>
      */
     public function getRules(): iterable
     {

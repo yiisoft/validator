@@ -13,7 +13,7 @@ interface ValidatorInterface
      * Validate data set against rules set for data set attributes.
      *
      * @param DataSetInterface|mixed|RulesProviderInterface $data Data set to validate.
-     * @param iterable<RuleInterface|RuleInterface[]|\Closure|\Closure[]> $rules Rules to apply.
+     * @param iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]> $rules Rules to apply.
      */
     public function validate(mixed $data, iterable $rules = []): Result;
 }
