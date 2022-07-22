@@ -47,7 +47,6 @@ Library could be used in two ways: validating a single value and validating a se
 
 ```php
 use Yiisoft\Validator\ValidatorInterface;
-use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
@@ -223,7 +222,6 @@ use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
-use Yiisoft\Validator\RuleSet;
 
 // Usually obtained from container
 $validator = $container->get(ValidatorInterface::class);
@@ -373,11 +371,11 @@ final class Post
 
 ```php
 use Attribute;
-use \Yiisoft\Validator\Exception\UnexpectedRuleException;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RuleHandlerInterface;
-use \Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -457,12 +455,12 @@ namespace App\Validator\Rule;
 
 use Attribute;
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\GroupRule;
+use Yiisoft\Validator\Rule\Composite;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class RgbRule extends GroupRule
+final class RgbRule extends Composite
 {
-    public function getRuleSet(): array
+    public function getRules(): array
     {
         return [
             new Each([
@@ -754,19 +752,18 @@ final class Coordinate implements RuleInterface
 To reuse multiple validation rules it is advised to group rules like the following:
 
 ```php
-use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Regex;
-use \Yiisoft\Validator\Rule\GroupRule;
+use \Yiisoft\Validator\Rule\Composite;
 
-final class UsernameRule extends GroupRule
+final class UsernameRule extends Composite
 {
-    public function getRuleSet(): RuleSet
+    public function getRules(): array
     {
-        return new RuleSet([
+        return [
             new HasLength(min: 2, max: 20),
             new Regex('~[a-z_\-]~i'),
-        ]);
+        ];
     }
 }
 ```

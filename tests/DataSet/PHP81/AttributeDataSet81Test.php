@@ -7,9 +7,9 @@ namespace Yiisoft\Validator\Tests\DataSet\PHP81;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Attribute\Embedded;
 use Yiisoft\Validator\DataSet\AttributeDataSet;
+use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\GroupRule;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
@@ -189,9 +189,9 @@ final class AttributeDataSet81Test extends TestCase
 
     /**
      * The test flow is different because {@see Embedded} is only attribute.
-     * Under the hood it uses {@see GroupRule} and a bit of reflection.
+     * Under the hood it uses {@see Composite} and a bit of reflection.
      * Due to we cannot create {@see Embedded} with particular rules via constructor
-     * we cannot just compare it with another class that extends {@see GroupRule}.
+     * we cannot just compare it with another class that extends {@see Composite}.
      */
     public function testEmbeddedAttribute(): void
     {
@@ -212,8 +212,8 @@ final class AttributeDataSet81Test extends TestCase
         $this->assertArrayHasKey('property1', $actualRules);
         $this->assertIsArray($actualRules['property1']);
         $this->assertCount(1, $actualRules['property1']);
-        $this->assertInstanceOf(GroupRule::class, $actualRules['property1'][0]);
-        $this->assertEquals($expectedExtendedRules, $actualRules['property1'][0]->getRuleSet());
+        $this->assertInstanceOf(Composite::class, $actualRules['property1'][0]);
+        $this->assertEquals($expectedExtendedRules, $actualRules['property1'][0]->getRules());
     }
 
     public function testMoreComplexEmbeddedRule(): void
@@ -252,10 +252,10 @@ final class AttributeDataSet81Test extends TestCase
         $actualFirstEmbeddedRules = $actualRules['points'][0]->getRules();
         $this->assertIsArray($actualFirstEmbeddedRules);
         $this->assertCount(1, $actualFirstEmbeddedRules);
-        $this->assertInstanceOf(GroupRule::class, $actualFirstEmbeddedRules[0]);
+        $this->assertInstanceOf(Composite::class, $actualFirstEmbeddedRules[0]);
 
         // check Point structure has right structure
-        $innerRules = $actualFirstEmbeddedRules[0]->getRuleSet();
+        $innerRules = $actualFirstEmbeddedRules[0]->getRules();
         // rgb has usual structure. We can check as is
         $this->assertEquals($firstEmbeddedRules['rgb'], $innerRules['rgb']);
 
@@ -267,7 +267,7 @@ final class AttributeDataSet81Test extends TestCase
         $secondInnerRules = $innerRules['coordinates'][0]->getRules();
         $this->assertIsArray($secondInnerRules);
         $this->assertCount(1, $secondInnerRules);
-        $this->assertInstanceOf(GroupRule::class, $secondInnerRules[0]);
-        $this->assertEquals($secondEmbeddedRules, $secondInnerRules[0]->getRuleSet());
+        $this->assertInstanceOf(Composite::class, $secondInnerRules[0]);
+        $this->assertEquals($secondEmbeddedRules, $secondInnerRules[0]->getRules());
     }
 }

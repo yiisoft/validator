@@ -10,7 +10,6 @@ use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 
@@ -28,7 +27,6 @@ use function strlen;
 final class Ip implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     /**
@@ -438,5 +436,10 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface
             'skipOnEmpty' => $this->skipOnEmpty,
             'skipOnError' => $this->skipOnError,
         ];
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return IpHandler::class;
     }
 }

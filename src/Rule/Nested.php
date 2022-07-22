@@ -10,7 +10,6 @@ use InvalidArgumentException;
 use Traversable;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
@@ -27,7 +26,6 @@ use function is_array;
 final class Nested implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(
@@ -95,5 +93,10 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     public function getOptions(): array
     {
         return (new RulesDumper())->asArray($this->rules);
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return NestedHandler::class;
     }
 }

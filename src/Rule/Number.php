@@ -8,7 +8,6 @@ use Attribute;
 use Closure;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
@@ -24,7 +23,6 @@ use Yiisoft\Validator\ValidationContext;
 final class Number implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(
@@ -153,5 +151,10 @@ final class Number implements SerializableRuleInterface, BeforeValidationInterfa
             'integerPattern' => $this->integerPattern,
             'numberPattern' => $this->numberPattern,
         ];
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return NumberHandler::class;
     }
 }

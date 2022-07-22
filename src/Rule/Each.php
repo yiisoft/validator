@@ -8,7 +8,6 @@ use Attribute;
 use Closure;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
@@ -21,7 +20,6 @@ use Yiisoft\Validator\ValidationContext;
 final class Each implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(
@@ -75,5 +73,10 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
             }
         }
         return $arrayOfRules;
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return EachHandler::class;
     }
 }

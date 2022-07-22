@@ -8,7 +8,7 @@ use Attribute;
 use Closure;
 use ReflectionAttribute;
 use ReflectionClass;
-use Yiisoft\Validator\Rule\GroupRule;
+use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
@@ -16,22 +16,21 @@ use Yiisoft\Validator\ValidationContext;
  * Collects all attributes from the reference and represents it as its own.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Embedded extends GroupRule
+final class Embedded extends Composite
 {
     /**
      * @psalm-param Closure(mixed, ValidationContext):bool|null $when
      */
     public function __construct(
         private string $referenceClassName,
-        string $message = 'This value is not a valid.',
         bool $skipOnEmpty = false,
         bool $skipOnError = false,
         ?Closure $when = null,
     ) {
-        parent::__construct($message, $skipOnEmpty, $skipOnError, $when);
+        parent::__construct([], $skipOnEmpty, $skipOnError, $when);
     }
 
-    public function getRuleSet(): array
+    public function getRules(): array
     {
         $classMeta = new ReflectionClass($this->referenceClassName);
 

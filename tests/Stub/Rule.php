@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Stub;
 
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
 
 final class Rule implements SerializableRuleInterface
 {
-    use HandlerClassNameTrait;
-
     private array $options;
     private string $name;
 
@@ -28,5 +25,10 @@ final class Rule implements SerializableRuleInterface
     public function getOptions(): array
     {
         return $this->options;
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return RuleHandler::class;
     }
 }
