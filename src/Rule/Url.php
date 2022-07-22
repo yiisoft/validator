@@ -10,7 +10,6 @@ use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\ValidationContext;
@@ -25,7 +24,6 @@ use Yiisoft\Validator\ValidationContext;
 final class Url implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(
@@ -116,5 +114,10 @@ final class Url implements SerializableRuleInterface, BeforeValidationInterface
             'skipOnEmpty' => $this->skipOnEmpty,
             'skipOnError' => $this->skipOnError,
         ];
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return UrlHandler::class;
     }
 }

@@ -9,7 +9,6 @@ use Closure;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -21,7 +20,6 @@ use Yiisoft\Validator\ValidationContext;
 class Composite implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
 
     public function __construct(
@@ -57,5 +55,10 @@ class Composite implements SerializableRuleInterface, BeforeValidationInterface
     public function getRules(): iterable
     {
         return $this->rules;
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return CompositeHandler::class;
     }
 }

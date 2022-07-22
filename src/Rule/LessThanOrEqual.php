@@ -62,9 +62,4 @@ final class LessThanOrEqual extends Compare
             when: $this->when
         );
     }
-
-    public function getHandlerClassName(): string
-    {
-        return CompareHandler::class;
-    }
 }
