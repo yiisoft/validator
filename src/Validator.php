@@ -29,18 +29,21 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
-     * @param iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]> $rules
+     * @param iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>|null $rules
      */
-    public function validate($data, iterable $rules = []): Result
+    public function validate(mixed $data, ?iterable $rules = null): Result
     {
         $data = $this->normalizeDataSet($data);
-        if ($rules === [] && $data instanceof RulesProviderInterface) {
+        if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
         }
 
-        $context = new ValidationContext($this, $data);
         $compoundResult = new Result();
+        if (empty($rules)) {
+            return $compoundResult;
+        }
 
+        $context = new ValidationContext($this, $data);
         $results = [];
 
         foreach ($rules as $attribute => $attributeRules) {
