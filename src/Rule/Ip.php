@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\SerializableRuleInterface;
@@ -402,6 +403,24 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface
         ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
+    #[ArrayShape([
+        'networks'              => 'array',
+        'allowIpv4'             => 'bool',
+        'allowIpv6'             => 'bool',
+        'allowSubnet'           => 'bool',
+        'requireSubnet'         => 'bool',
+        'allowNegation'         => 'bool',
+        'message'               => 'string[]',
+        'ipv4NotAllowedMessage' => 'string[]',
+        'ipv6NotAllowedMessage' => 'string[]',
+        'wrongCidrMessage'      => 'string[]',
+        'noSubnetMessage'       => 'string[]',
+        'hasSubnetMessage'      => 'string[]',
+        'notInRangeMessage'     => 'string[]',
+        'ranges'                => 'array',
+        'skipOnEmpty'           => 'bool',
+        'skipOnError'           => 'bool',
+    ])]
     public function getOptions(): array
     {
         return [

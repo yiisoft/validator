@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -129,6 +130,18 @@ final class Number implements SerializableRuleInterface, BeforeValidationInterfa
         return $this->asInteger ? 'Value must be an integer.' : 'Value must be a number.';
     }
 
+    #[ArrayShape([
+        'asInteger'         => 'bool',
+        'min'               => 'float|int|null',
+        'max'               => 'float|int|null',
+        'notANumberMessage' => 'string[]',
+        'tooSmallMessage'   => 'array',
+        'tooBigMessage'     => 'array',
+        'skipOnEmpty'       => 'bool',
+        'skipOnError'       => 'bool',
+        'integerPattern'    => 'string',
+        'numberPattern'     => 'string',
+    ])]
     public function getOptions(): array
     {
         return [
