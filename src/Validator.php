@@ -34,11 +34,7 @@ final class Validator implements ValidatorInterface
      */
     public function validate($data, iterable $rules = []): Result
     {
-        $hasRules = $rules !== [];
-        $data = $this->normalizeDataSet($data, $hasRules);
-        if (!$hasRules && $data instanceof RulesProviderInterface) {
-            $rules = $data->getRules();
-        }
+        [$data, $rules] = $this->normalizeDataSet($data, $rules);
 
         $context = new ValidationContext($this, $data);
         $compoundResult = new Result();
@@ -81,17 +77,26 @@ final class Validator implements ValidatorInterface
     }
 
     #[Pure]
-    private function normalizeDataSet($data, bool $hasRules): DataSetInterface
+    private function normalizeDataSet($data, iterable $rules): array
     {
+        $rulesAreEmpty = $rules === [];
         if ($data instanceof DataSetInterface) {
-            return $hasRules ? $data : new AttributeDataSet($data, $data->getData());
+            if ($rulesAreEmpty && !$data instanceof RulesProviderInterface) {
+                $data = new AttributeDataSet($data, $data->getData());
+            }
+
+            if ($rulesAreEmpty && $data instanceof RulesProviderInterface) {
+                $rules = $data->getRules();
+            }
+
+            return [$data, $rules];
         }
 
         if (is_object($data) || is_array($data)) {
-            return new ArrayDataSet((array)$data);
+            return [new ArrayDataSet((array)$data), $rules];
         }
 
-        return new ScalarDataSet($data);
+        return [new ScalarDataSet($data), $rules];
     }
 
     /**
