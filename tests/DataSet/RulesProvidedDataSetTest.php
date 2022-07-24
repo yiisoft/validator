@@ -50,4 +50,30 @@ final class RulesProvidedDataSetTest extends AbstractDataSetTest
 
         $this->assertTrue($result->isValid());
     }
+
+    public function testEmptyExplicitRulesHavePriority(): void
+    {
+        $dataSet = new RulesProvidedDataSet(
+            [
+                'username' => 'test123',
+                'age' => 42,
+            ],
+            [
+                'username' => [
+                    new Regex('^[a-z]+$'),
+                    new HasLength(max: 3),
+                ],
+                'age' => [
+                    new Number(max: 25),
+                ],
+            ]
+        );
+        $validator = FakeValidatorFactory::make();
+        $result = $validator->validate(
+            $dataSet,
+            []
+        );
+
+        $this->assertTrue($result->isValid());
+    }
 }
