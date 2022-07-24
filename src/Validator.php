@@ -29,7 +29,7 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
-     * @param null|iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]> $rules
+     * @param iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>|null $rules
      */
     public function validate(mixed $data, ?iterable $rules = null): Result
     {
