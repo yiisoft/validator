@@ -15,7 +15,7 @@ interface ValidatorInterface
      * @param DataSetInterface|mixed|RulesProviderInterface $data Data set to validate. If {@see RulesProviderInterface}
      * instance provided and rules are not specified explicitly, they are read from the
      * {@see RulesProviderInterface::getRules()}.
-     * @param null|iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]> $rules Rules to apply. If specified,
+     * @param iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>|null $rules Rules to apply. If specified,
      * rules are not read from data set even if it is an instance of {@see RulesProviderInterface}.
      */
     public function validate(mixed $data, ?iterable $rules = null): Result;
