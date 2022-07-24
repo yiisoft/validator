@@ -39,14 +39,10 @@ final class Validator implements ValidatorInterface
         }
 
         $compoundResult = new Result();
-        if (empty($rules)) {
-            return $compoundResult;
-        }
-
         $context = new ValidationContext($this, $data);
         $results = [];
 
-        foreach ($rules as $attribute => $attributeRules) {
+        foreach ($rules ?? [] as $attribute => $attributeRules) {
             $result = new Result();
 
             $tempRule = is_array($attributeRules) ? $attributeRules : [$attributeRules];
