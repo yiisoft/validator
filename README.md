@@ -324,7 +324,7 @@ final class Coordinates
 
 Here are some technical details:
 
-- `Embedded` creates a reference to the referenced class and uses a `GroupRule` under the hood to make represent
+- `Embedded` creates a reference to the referenced class and uses a `Composite` under the hood to make represent
   referenced class rules as it owns.
 - In case of a flat array `Point::$rgb`, a property type `array` needs to be declared.
 
@@ -341,6 +341,19 @@ $data = [
     // ...
 ];
 $dataSet = new AttributeDataSet(new ChartsData(), $data);
+$errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
+```
+
+If the object implements DataSetInterface just pass it directly
+
+```php
+use Yiisoft\Validator\DataSet\AttributeDataSet;
+use Yiisoft\Validator\ValidatorInterface;
+
+// Usually obtained from container
+$validator = $container->get(ValidatorInterface::class);
+
+$dataSet = new ChartsData();
 $errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
 ```
 
