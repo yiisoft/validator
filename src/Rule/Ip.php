@@ -404,22 +404,22 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface
     }
 
     #[ArrayShape([
-        'networks'              => 'array',
-        'allowIpv4'             => 'bool',
-        'allowIpv6'             => 'bool',
-        'allowSubnet'           => 'bool',
-        'requireSubnet'         => 'bool',
-        'allowNegation'         => 'bool',
-        'message'               => 'string[]',
+        'networks' => 'array',
+        'allowIpv4' => 'bool',
+        'allowIpv6' => 'bool',
+        'allowSubnet' => 'bool',
+        'requireSubnet' => 'bool',
+        'allowNegation' => 'bool',
+        'message' => 'string[]',
         'ipv4NotAllowedMessage' => 'string[]',
         'ipv6NotAllowedMessage' => 'string[]',
-        'wrongCidrMessage'      => 'string[]',
-        'noSubnetMessage'       => 'string[]',
-        'hasSubnetMessage'      => 'string[]',
-        'notInRangeMessage'     => 'string[]',
-        'ranges'                => 'array',
-        'skipOnEmpty'           => 'bool',
-        'skipOnError'           => 'bool',
+        'wrongCidrMessage' => 'string[]',
+        'noSubnetMessage' => 'string[]',
+        'hasSubnetMessage' => 'string[]',
+        'notInRangeMessage' => 'string[]',
+        'ranges' => 'array',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
     ])]
     public function getOptions(): array
     {

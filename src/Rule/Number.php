@@ -131,16 +131,16 @@ final class Number implements SerializableRuleInterface, BeforeValidationInterfa
     }
 
     #[ArrayShape([
-        'asInteger'         => 'bool',
-        'min'               => 'float|int|null',
-        'max'               => 'float|int|null',
+        'asInteger' => 'bool',
+        'min' => 'float|int|null',
+        'max' => 'float|int|null',
         'notANumberMessage' => 'string[]',
-        'tooSmallMessage'   => 'array',
-        'tooBigMessage'     => 'array',
-        'skipOnEmpty'       => 'bool',
-        'skipOnError'       => 'bool',
-        'integerPattern'    => 'string',
-        'numberPattern'     => 'string',
+        'tooSmallMessage' => 'array',
+        'tooBigMessage' => 'array',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+        'integerPattern' => 'string',
+        'numberPattern' => 'string',
     ])]
     public function getOptions(): array
     {
