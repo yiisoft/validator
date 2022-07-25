@@ -344,7 +344,7 @@ $dataSet = new AttributeDataSet(new ChartsData(), $data);
 $errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
 ```
 
-If the object implements DataSetInterface just pass it directly
+If the object implements `DataSetInterface` just pass it directly:
 
 ```php
 use Yiisoft\Validator\DataSet\AttributeDataSet;
