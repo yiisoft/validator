@@ -23,8 +23,8 @@ use Yiisoft\Validator\ValidationContext;
 final class Count implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
-    use RuleNameTrait;
     use LimitTrait;
+    use RuleNameTrait;
 
     public function __construct(
         /**
@@ -54,17 +54,17 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
         /**
          * @var string user-defined error message used when the number of items is smaller than {@see $min}.
          */
-        string $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{item} '.
+        string $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{item} ' .
         'other{items}}.',
         /**
          * @var string user-defined error message used when the number of items is greater than {@see $max}.
          */
-        string $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{item} '.
+        string $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{item} ' .
         'other{items}}.',
         /**
          * @var string user-defined error message used when the number of items does not equal {@see $exactly}.
          */
-        string $notExactlyMessage = 'This value must contain exactly {exactly, number} {exactly, plural, one{item} '.
+        string $notExactlyMessage = 'This value must contain exactly {exactly, number} {exactly, plural, one{item} ' .
         'other{items}}.',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,

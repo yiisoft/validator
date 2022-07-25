@@ -23,8 +23,8 @@ use Yiisoft\Validator\ValidationContext;
 final class HasLength implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
-    use RuleNameTrait;
     use LimitTrait;
+    use RuleNameTrait;
 
     public function __construct(
         /**

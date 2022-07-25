@@ -30,7 +30,7 @@ final class CountTest extends AbstractRuleTest
                         'parameters' => ['min' => 3],
                     ],
                     'greaterThanMaxMessage' => [
-                        'message' => 'This value must contain at most {max, number} {max, plural, one{item} '.
+                        'message' => 'This value must contain at most {max, number} {max, plural, one{item} ' .
                             'other{items}}.',
                         'parameters' => ['max' => null],
                     ],

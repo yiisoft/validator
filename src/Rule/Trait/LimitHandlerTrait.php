@@ -15,8 +15,7 @@ trait LimitHandlerTrait
         ValidationContext $context,
         int $number,
         Result $result
-    ): void
-    {
+    ): void {
         if ($rule->getExactly() !== null && $number !== $rule->getExactly()) {
             $formattedMessage = $this->formatter->format(
                 $rule->getNotExactlyMessage(),
