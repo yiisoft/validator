@@ -28,20 +28,22 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
 
     public function __construct(
         /**
-         * @var int|null minimum number of items. null means no minimum number limit.
+         * @var int|null minimum number of items. null means no minimum number limit. Can't be combined with
+         * {@see $exactly}.
          *
          * @see $lessThanMinMessage for the customized message for a value with too few items.
          */
         ?int $min = null,
         /**
-         * @var int|null maximum number of items. null means no maximum number limit.
+         * @var int|null maximum number of items. null means no maximum number limit. Can't be combined with
+         * {@see $exactly}.
          *
          * @see $greaterThanMaxMessage for the customized message for a value wuth too many items.
          */
         ?int $max = null,
         /**
-         * @var int|null exact number of items. null means no strict comparison. Mutually exclusive with {@see $min} and
-         * {@see $max}.
+         * @var int|null exact number of items. `null` means no strict comparison. Mutually exclusive with {@see $min}
+         * and {@see $max}.
          */
         ?int $exactly = null,
         /**

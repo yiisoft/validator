@@ -7,8 +7,22 @@ namespace Yiisoft\Validator\Rule\Trait;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 
+/**
+ * A trait attachable to a handler of rule with limits.
+ */
 trait LimitHandlerTrait
 {
+    /**
+     * Runs limits specific validation.
+     *
+     * @param mixed $value A validated value in its raw form.
+     * @param object $rule A rule matching to this handler.
+     * @param ValidationContext $context Validation context.
+     * @param int $number A validated number to compare with set limits.
+     * @param Result $result Result for adding errors.
+     * @return void
+     * @see LimitTrait for information about limits and messages.
+     */
     private function validateLimits(
         mixed $value,
         object $rule,

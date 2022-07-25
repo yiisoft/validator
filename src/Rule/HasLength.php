@@ -28,19 +28,21 @@ final class HasLength implements SerializableRuleInterface, BeforeValidationInte
 
     public function __construct(
         /**
-         * @var int|null minimum length. null means no minimum length limit.
+         * @var int|null minimum length. null means no minimum length limit. Can't be combined with
+         * {@see $exactly}.
          *
          * @see $lessThanMinMessage for the customized message for a too short string.
          */
         ?int $min = null,
         /**
-         * @var int|null maximum length. null means no maximum length limit.
+         * @var int|null maximum length. null means no maximum length limit. Can't be combined with
+         * {@see $exactly}.
          *
          * @see $greaterThanMaxMessage for the customized message for a too long string.
          */
         ?int $max = null,
         /**
-         * @var int|null exact length. null means no strict comparison. Mutually exclusive with {@see $min} and
+         * @var int|null exact length. `null` means no strict comparison. Mutually exclusive with {@see $min} and
          * {@see $max}.
          */
         ?int $exactly = null,
