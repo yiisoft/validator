@@ -21,41 +21,25 @@ final class HasLengthTest extends TestCase
     {
         return [
             [
-                new HasLength(),
-                [
-                    'min' => null,
-                    'max' => null,
-                    'message' => [
-                        'message' => 'This value must be a string.',
-                    ],
-                    'tooShortMessage' => [
-                        'message' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
-                        'parameters' => ['min' => null],
-                    ],
-                    'tooLongMessage' => [
-                        'message' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
-                        'parameters' => ['max' => null],
-                    ],
-                    'encoding' => 'UTF-8',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
                 new HasLength(min: 3),
                 [
                     'min' => 3,
                     'max' => null,
+                    'exactly' => null,
                     'message' => [
                         'message' => 'This value must be a string.',
                     ],
-                    'tooShortMessage' => [
-                        'message' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                    'lessThanMinMessage' => [
+                        'message' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'parameters' => ['min' => 3],
                     ],
-                    'tooLongMessage' => [
-                        'message' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                    'greaterThanMaxMessage' => [
+                        'message' => 'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.',
                         'parameters' => ['max' => null],
+                    ],
+                    'notExactlyMessage' => [
+                        'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
+                        'parameters' => ['exactly' => null],
                     ],
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
@@ -67,16 +51,21 @@ final class HasLengthTest extends TestCase
                 [
                     'min' => null,
                     'max' => 3,
+                    'exactly' => null,
                     'message' => [
                         'message' => 'This value must be a string.',
                     ],
-                    'tooShortMessage' => [
-                        'message' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                    'lessThanMinMessage' => [
+                        'message' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'parameters' => ['min' => null],
                     ],
-                    'tooLongMessage' => [
-                        'message' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                    'greaterThanMaxMessage' => [
+                        'message' => 'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.',
                         'parameters' => ['max' => 3],
+                    ],
+                    'notExactlyMessage' => [
+                        'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
+                        'parameters' => ['exactly' => null],
                     ],
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
@@ -88,16 +77,21 @@ final class HasLengthTest extends TestCase
                 [
                     'min' => 3,
                     'max' => 4,
+                    'exactly' => null,
                     'message' => [
                         'message' => 'This value must be a string.',
                     ],
-                    'tooShortMessage' => [
-                        'message' => 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                    'lessThanMinMessage' => [
+                        'message' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'parameters' => ['min' => 3],
                     ],
-                    'tooLongMessage' => [
-                        'message' => 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                    'greaterThanMaxMessage' => [
+                        'message' => 'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.',
                         'parameters' => ['max' => 4],
+                    ],
+                    'notExactlyMessage' => [
+                        'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
+                        'parameters' => ['exactly' => null],
                     ],
                     'encoding' => 'windows-1251',
                     'skipOnEmpty' => false,

@@ -24,16 +24,19 @@ final class CountTest extends AbstractRuleTest
                     'message' => [
                         'message' => 'This value must be an array or implement \Countable interface.',
                     ],
-                    'tooFewItemsMessage' => [
-                        'message' => 'This value must contain at least {min, number} {min, plural, one{item} other{items}}.',
+                    'lessThanMinMessage' => [
+                        'message' => 'This value must contain at least {min, number} {min, plural, one{item} ' .
+                            'other{items}}.',
                         'parameters' => ['min' => 3],
                     ],
-                    'tooManyItemsMessage' => [
-                        'message' => 'This value must contain at most {max, number} {max, plural, one{item} other{items}}.',
+                    'greaterThanMaxMessage' => [
+                        'message' => 'This value must contain at most {max, number} {max, plural, one{item} '.
+                            'other{items}}.',
                         'parameters' => ['max' => null],
                     ],
                     'notExactlyMessage' => [
-                        'message' => 'This value must contain exactly {max, number} {max, plural, one{item} other{items}}.',
+                        'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{item} ' .
+                            'other{items}}.',
                         'parameters' => ['exactly' => null],
                     ],
                 ],

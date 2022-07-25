@@ -9,6 +9,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\LimitHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
@@ -20,6 +21,8 @@ use function count;
  */
 final class CountHandler implements RuleHandlerInterface
 {
+    use LimitHandlerTrait;
+
     private FormatterInterface $formatter;
 
     public function __construct(?FormatterInterface $formatter = null)
@@ -46,32 +49,7 @@ final class CountHandler implements RuleHandlerInterface
         }
 
         $count = count($value);
-
-        if ($rule->getExactly() !== null && $count !== $rule->getExactly()) {
-            $formattedMessage = $this->formatter->format(
-                $rule->getNotExactlyMessage(),
-                ['exactly' => $rule->getExactly(), 'attribute' => $context->getAttribute(), 'value' => $value]
-            );
-            $result->addError($formattedMessage);
-
-            return $result;
-        }
-
-        if ($rule->getMin() !== null && $count < $rule->getMin()) {
-            $formattedMessage = $this->formatter->format(
-                $rule->getTooFewItemsMessage(),
-                ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
-            );
-            $result->addError($formattedMessage);
-        }
-
-        if ($rule->getMax() !== null && $count > $rule->getMax()) {
-            $formattedMessage = $this->formatter->format(
-                $rule->getTooManyItemsMessage(),
-                ['max' => $rule->getMax(), 'attribute' => $context->getAttribute(), 'value' => $value]
-            );
-            $result->addError($formattedMessage);
-        }
+        $this->validateLimits($value, $rule, $context, $count, $result);
 
         return $result;
     }

@@ -13,7 +13,7 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array
     {
-        $defaultConfig = new HasLength();
+        $defaultConfig = new HasLength(min: 25);
 
         return [
             [$defaultConfig, ['not a string'], [new Error($defaultConfig->getMessage(), [])]],
@@ -21,23 +21,45 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
             [$defaultConfig, true, [new Error($defaultConfig->getMessage(), [])]],
             [$defaultConfig, false, [new Error($defaultConfig->getMessage(), [])]],
 
-            [new HasLength(max: 25), str_repeat('x', 1250), [new Error($this->formatMessage($defaultConfig->getTooLongMessage(), ['max' => 25]))]],
-            [new HasLength(min: 25, max: 25), str_repeat('x', 125), [new Error($this->formatMessage($defaultConfig->getTooLongMessage(), ['max' => 25]))]],
+            [
+                new HasLength(max: 25),
+                str_repeat('x', 1250),
+                [new Error($this->formatMessage($defaultConfig->getGreaterThanMaxMessage(), ['max' => 25]))],
+            ],
+            [
+                new HasLength(exactly: 25),
+                str_repeat('x', 125),
+                [new Error($this->formatMessage($defaultConfig->getNotExactlyMessage(), ['max' => 25]))],
+            ],
 
-            [new HasLength(min: 25, max: 25), '', [new Error($this->formatMessage($defaultConfig->getTooShortMessage(), ['min' => 25]))]],
-            [new HasLength(min: 10, max: 25), str_repeat('x', 5), [new Error($this->formatMessage($defaultConfig->getTooShortMessage(), ['min' => 10]))]],
-            [new HasLength(min: 25), str_repeat('x', 13), [new Error($this->formatMessage($defaultConfig->getTooShortMessage(), ['min' => 25]))]],
-            [new HasLength(min: 25), '', [new Error($this->formatMessage($defaultConfig->getTooShortMessage(), ['min' => 25]))]],
+            [
+                new HasLength(exactly: 25),
+                '',
+                [new Error($this->formatMessage($defaultConfig->getNotExactlyMessage(), ['min' => 25]))],
+            ],
+            [
+                new HasLength(min: 10, max: 25),
+                str_repeat('x', 5),
+                [new Error($this->formatMessage($defaultConfig->getLessThanMinMessage(), ['min' => 10]))],
+            ],
+            [
+                new HasLength(min: 25),
+                str_repeat('x', 13),
+                [new Error($this->formatMessage($defaultConfig->getLessThanMinMessage(), ['min' => 25]))],
+            ],
+            [
+                new HasLength(min: 25),
+                '',
+                [new Error($this->formatMessage($defaultConfig->getLessThanMinMessage(), ['min' => 25]))],
+            ],
         ];
     }
 
     public function passedValidationProvider(): array
     {
         return [
-            [new HasLength(), 'Just some string'],
-
-            [new HasLength(min: 25, max: 25), str_repeat('x', 25)],
-            [new HasLength(min: 25, max: 25), str_repeat('€', 25)],
+            [new HasLength(exactly: 25), str_repeat('x', 25)],
+            [new HasLength(exactly: 25), str_repeat('€', 25)],
 
             [new HasLength(min: 25), str_repeat('x', 125)],
             [new HasLength(min: 25), str_repeat('€', 25)],
@@ -62,8 +84,8 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
             min: 3,
             max: 5,
             message: 'is not string error',
-            tooShortMessage: 'is too short test',
-            tooLongMessage: 'is too long test'
+            lessThanMinMessage: 'is too short test',
+            greaterThanMaxMessage: 'is too long test'
         );
 
         return [

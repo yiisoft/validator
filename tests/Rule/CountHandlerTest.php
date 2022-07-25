@@ -105,7 +105,7 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
     {
         return [
             [
-                new Count(max: 3, tooManyItemsMessage: 'Custom message.'),
+                new Count(max: 3, greaterThanMaxMessage: 'Custom message.'),
                 [0, 0, 0, 0],
                 [new Error('Custom message.')],
             ],
@@ -115,7 +115,7 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
                 [new Error('Custom message.')],
             ],
             [
-                new Count(min: 3, tooFewItemsMessage: 'Custom message.'),
+                new Count(min: 3, lessThanMinMessage: 'Custom message.'),
                 [0, 0],
                 [new Error('Custom message.')],
             ],
