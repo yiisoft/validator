@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\HasLength;
 
@@ -99,5 +100,41 @@ final class HasLengthTest extends TestCase
                 ],
             ],
         ];
+    }
+
+    public function initWithMinAndMaxAndExactlyDataProvider(): array
+    {
+        return [
+            [['min' => 3, 'exactly' => 3]],
+            [['max' => 3, 'exactly' => 3]],
+            [['min' => 3, 'max' => 3, 'exactly' => 3]],
+        ];
+    }
+
+    /**
+     * @dataProvider initWithMinAndMaxAndExactlyDataProvider
+     */
+    public function testInitWithMinAndMaxAndExactly(array $arguments): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$exactly is mutually exclusive with $min and $max.');
+
+        new HasLength(...$arguments);
+    }
+
+    public function testInitWithMinAndMax(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Use $exactly instead.');
+
+        new HasLength(min: 3, max: 3);
+    }
+
+    public function testInitWithoutRequiredArguments(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('At least one of these attributes must be specified: $min, $max, $exactly.');
+
+        new HasLength();
     }
 }
