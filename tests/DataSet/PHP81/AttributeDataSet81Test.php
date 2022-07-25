@@ -125,7 +125,7 @@ final class AttributeDataSet81Test extends TestCase
                         new Required(skipOnEmpty: true),
                         new HasLength(max: 255, skipOnEmpty: true),
                     ])]
-                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property1;
                 },
                 [
