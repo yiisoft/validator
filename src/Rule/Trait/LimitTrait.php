@@ -12,19 +12,23 @@ use JetBrains\PhpStorm\ArrayShape;
  *
  * @see LimitHandlerTrait
  */
-trait LimitTrait{
+trait LimitTrait
+{
     /**
      * @var int|null Lower limit.
+     *
      * @see $lessThanMinMessage for according error message. Can't be combined with {@see $exactly}.
      */
     private ?int $min = null;
     /**
      * @var int|null Upper limit.
+     *
      * @see $greaterThanMaxMessage for according error message. Can't be combined with {@see $exactly}.
      */
     private ?int $max = null;
     /**
      * @var int|null Exact number (lower and upper limit match).
+     *
      * @see $notExactlyMessage for according error message. `null` means no strict comparison. Mutually exclusive with
      * {@see $min} and {@see $max}.
      */
@@ -51,7 +55,6 @@ trait LimitTrait{
      * @param string $lessThanMinMessage {@see $lessThanMinMessage}
      * @param string $greaterThanMinMessage {@see $greaterThanMinMessage}
      * @param string $notExactlyMessage {@see $notExactlyMessage}
-     * @return void
      */
     private function initLimitProperties(
         ?int $min,

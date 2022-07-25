@@ -20,7 +20,7 @@ trait LimitHandlerTrait
      * @param ValidationContext $context Validation context.
      * @param int $number A validated number to compare with set limits.
      * @param Result $result Result for adding errors.
-     * @return void
+     *
      * @see LimitTrait for information about limits and messages.
      */
     private function validateLimits(
