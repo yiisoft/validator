@@ -22,6 +22,11 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
         return [
             [
                 $rule,
+                1,
+                [new Error('This value must be an array or implement \Countable interface.')],
+            ],
+            [
+                $rule,
                 [1],
                 [new Error($this->formatMessage($message, $parameters))],
             ],
@@ -73,7 +78,14 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
             [
                 new Count(max: 3),
                 [0, 0, 0, 0],
-                [new Error($this->formatMessage('This value must contain at most {max, number} {max, plural, one{item} other{items}}.', ['max' => 3]))],
+                [
+                    new Error(
+                        $this->formatMessage(
+                            'This value must contain at most {max, number} {max, plural, one{item} other{items}}.',
+                            ['max' => 3]
+                        )
+                    ),
+                ],
             ],
         ];
     }

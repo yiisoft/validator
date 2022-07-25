@@ -108,7 +108,7 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
     {
         return array_merge($this->getLimitOptions(), [
             'message' => [
-                'message' => $this->message,
+                'message' => $this->getMessage(),
             ],
             'skipOnEmpty' => $this->skipOnEmpty,
             'skipOnError' => $this->skipOnError,
