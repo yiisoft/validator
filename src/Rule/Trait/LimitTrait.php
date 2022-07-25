@@ -23,8 +23,7 @@ trait LimitTrait
         string $lessThanMinMessage,
         string $greaterThanMinMessage,
         string $notExactlyMessage
-    ): void
-    {
+    ): void {
         $this->min = $min;
         $this->max = $max;
         $this->exactly = $exactly;
