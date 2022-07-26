@@ -85,6 +85,7 @@ final class EmailTest extends AbstractRuleTest
 
     /**
      * @requires extension intl
+     * @dataProvider optionsDataProvider
      */
     public function testOptions(SerializableRuleInterface $rule, array $expectedOptions): void
     {
