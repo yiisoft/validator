@@ -109,10 +109,13 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
 
     /**
      * @dataProvider failedValidationProvider
-     * @requires extension intl
      */
     public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
     {
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
+        }
+
         parent::testValidationFailed($config, $value, $expectedErrors);
     }
 
@@ -178,10 +181,13 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
 
     /**
      * @dataProvider passedValidationProvider
-     * @requires extension intl
      */
     public function testValidationPassed(object $config, mixed $value): void
     {
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
+        }
+
         parent::testValidationPassed($config, $value);
     }
 

@@ -40,11 +40,14 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
     }
 
     /**
-     * @requires extension intl
      * @dataProvider failedValidationProvider
      */
     public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
     {
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
+        }
+
         parent::testValidationFailed($config, $value, $expectedErrors);
     }
 
@@ -83,11 +86,14 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
     }
 
     /**
-     * @requires extension intl
      * @dataProvider passedValidationProvider
      */
     public function testValidationPassed(object $config, mixed $value): void
     {
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
+        }
+
         parent::testValidationPassed($config, $value);
     }
 
@@ -99,11 +105,14 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
     }
 
     /**
-     * @requires extension intl
      * @dataProvider customErrorMessagesProvider
      */
     public function testCustomErrorMessages(object $config, mixed $value, array $expectedErrorMessages): void
     {
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
+        }
+
         parent::testCustomErrorMessages($config, $value, $expectedErrorMessages);
     }
 
