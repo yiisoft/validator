@@ -10,10 +10,16 @@ use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\EmailHandler;
 use Yiisoft\Validator\RuleHandlerInterface;
 
+use function extension_loaded;
+
 final class EmailHandlerTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array
     {
+        if (!extension_loaded('intl')) {
+            return [];
+        }
+
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
@@ -121,6 +127,10 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
 
     public function passedValidationProvider(): array
     {
+        if (!extension_loaded('intl')) {
+            return [];
+        }
+
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
@@ -209,7 +219,6 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
         }
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('1');
         new Email(enableIDN: true);
     }
 

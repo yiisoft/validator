@@ -10,6 +10,8 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
 
+use function extension_loaded;
+
 final class UrlHandlerTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array
