@@ -8,6 +8,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\LimitHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
@@ -20,6 +21,8 @@ use function is_string;
  */
 final class HasLengthHandler implements RuleHandlerInterface
 {
+    use LimitHandlerTrait;
+
     private FormatterInterface $formatter;
 
     public function __construct(?FormatterInterface $formatter = null)
@@ -45,21 +48,7 @@ final class HasLengthHandler implements RuleHandlerInterface
         }
 
         $length = mb_strlen($value, $rule->getEncoding());
-
-        if ($rule->getMin() !== null && $length < $rule->getMin()) {
-            $formattedMessage = $this->formatter->format(
-                $rule->getTooShortMessage(),
-                ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
-            );
-            $result->addError($formattedMessage);
-        }
-        if ($rule->getMax() !== null && $length > $rule->getMax()) {
-            $formattedMessage = $this->formatter->format(
-                $rule->getTooLongMessage(),
-                ['max' => $rule->getMax(), 'attribute' => $context->getAttribute(), 'value' => $value]
-            );
-            $result->addError($formattedMessage);
-        }
+        $this->validateLimits($value, $rule, $context, $length, $result);
 
         return $result;
     }
