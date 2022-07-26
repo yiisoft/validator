@@ -9,18 +9,17 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
-use Yiisoft\Validator\Tests\FunctionExists;
+
+use function extension_loaded;
 
 final class UrlHandlerTest extends AbstractRuleValidatorTest
 {
-    protected function setUp(): void
-    {
-        FunctionExists::$isIdnFunctionExists = true;
-        parent::setUp();
-    }
-
     public function failedValidationProvider(): array
     {
+        if (!extension_loaded('intl')) {
+            return [];
+        }
+
         $rule = new Url();
         $errors = [new Error($rule->getMessage(), [])];
 
@@ -46,8 +45,21 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
+    /**
+     * @requires extension intl
+     * @dataProvider failedValidationProvider
+     */
+    public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
+    {
+        parent::testValidationFailed($config, $value, $expectedErrors);
+    }
+
     public function passedValidationProvider(): array
     {
+        if (!extension_loaded('intl')) {
+            return [];
+        }
+
         $rule = new Url();
 
         return [
@@ -80,16 +92,44 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
+    /**
+     * @requires extension intl
+     * @dataProvider passedValidationProvider
+     */
+    public function testValidationPassed(object $config, mixed $value): void
+    {
+        parent::testValidationPassed($config, $value);
+    }
+
     public function customErrorMessagesProvider(): array
     {
+        if (!extension_loaded('intl')) {
+            return [];
+        }
+
         return [
             [new Url(enableIDN: true, message: 'Custom error'), '', [new Error('Custom error', [])]],
         ];
     }
 
-    public function testEnableIdnException(): void
+    /**
+     * @requires extension intl
+     * @dataProvider customErrorMessagesProvider
+     */
+    public function testCustomErrorMessages(object $config, mixed $value, array $expectedErrorMessages): void
     {
-        FunctionExists::$isIdnFunctionExists = false;
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
+        }
+
+        parent::testCustomErrorMessages($config, $value, $expectedErrorMessages);
+    }
+
+    public function testEnableIdnWithMissingIntlExtension(): void
+    {
+        if (extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        }
 
         $this->expectException(RuntimeException::class);
         new Url(enableIDN: true);
