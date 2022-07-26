@@ -40,12 +40,12 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
     }
 
     /**
-     * @dataProvider passedValidationProvider
      * @requires extension intl
+     * @dataProvider failedValidationProvider
      */
-    public function testValidationPassed(object $config, mixed $value): void
+    public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
     {
-        parent::testValidationPassed($config, $value);
+        parent::testValidationFailed($config, $value, $expectedErrors);
     }
 
     public function passedValidationProvider(): array
@@ -83,12 +83,12 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
     }
 
     /**
-     * @dataProvider failedValidationProvider
      * @requires extension intl
+     * @dataProvider passedValidationProvider
      */
-    public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
+    public function testValidationPassed(object $config, mixed $value): void
     {
-        parent::testValidationFailed($config, $value, $expectedErrors);
+        parent::testValidationPassed($config, $value);
     }
 
     public function customErrorMessagesProvider(): array
@@ -99,8 +99,8 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
     }
 
     /**
-     * @dataProvider customErrorMessagesProvider
      * @requires extension intl
+     * @dataProvider customErrorMessagesProvider
      */
     public function testCustomErrorMessages(object $config, mixed $value, array $expectedErrorMessages): void
     {

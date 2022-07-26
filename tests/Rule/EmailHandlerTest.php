@@ -108,12 +108,12 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
     }
 
     /**
-     * @dataProvider passedValidationProvider
+     * @dataProvider failedValidationProvider
      * @requires extension intl
      */
-    public function testValidationPassed(object $config, mixed $value): void
+    public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
     {
-        parent::testValidationPassed($config, $value);
+        parent::testValidationFailed($config, $value, $expectedErrors);
     }
 
     public function passedValidationProvider(): array
@@ -177,12 +177,12 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
     }
 
     /**
-     * @dataProvider failedValidationProvider
+     * @dataProvider passedValidationProvider
      * @requires extension intl
      */
-    public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
+    public function testValidationPassed(object $config, mixed $value): void
     {
-        parent::testValidationFailed($config, $value, $expectedErrors);
+        parent::testValidationPassed($config, $value);
     }
 
     public function customErrorMessagesProvider(): array
