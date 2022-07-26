@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
@@ -94,14 +93,6 @@ final class Url implements SerializableRuleInterface, BeforeValidationInterface
         return $this->message;
     }
 
-    #[ArrayShape([
-        'pattern' => 'string',
-        'validSchemes' => 'array|string[]',
-        'enableIDN' => 'bool',
-        'message' => 'string[]',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
     public function getOptions(): array
     {
         return [
