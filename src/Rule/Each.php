@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -27,7 +28,7 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
          * @var iterable<RuleInterface>
          */
         private iterable $rules = [],
-        private string $incorrectInputMessage = 'Value should be array or iterable.',
+        private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $message = '{error} {value} given.',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
@@ -62,6 +63,13 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
         return $this->message;
     }
 
+    #[ArrayShape([
+        'incorrectInputMessage' => 'array',
+        'message' => 'array',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+        'rules' => 'array',
+    ])]
     public function getOptions(): array
     {
         $arrayOfRules = [];
@@ -72,7 +80,18 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
                 $arrayOfRules[] = [$rule->getName()];
             }
         }
-        return $arrayOfRules;
+
+        return [
+            'incorrectInputMessage' => [
+                'message' => $this->getIncorrectInputMessage(),
+            ],
+            'message' => [
+                'message' => $this->getMessage(),
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+            'rules' => $arrayOfRules,
+        ];
     }
 
     public function getHandlerClassName(): string
