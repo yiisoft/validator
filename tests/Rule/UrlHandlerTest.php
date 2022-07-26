@@ -9,16 +9,9 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
-use Yiisoft\Validator\Tests\FunctionExists;
 
 final class UrlHandlerTest extends AbstractRuleValidatorTest
 {
-    protected function setUp(): void
-    {
-        FunctionExists::$isIdnFunctionExists = true;
-        parent::setUp();
-    }
-
     public function failedValidationProvider(): array
     {
         $rule = new Url();
@@ -44,6 +37,15 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
             [new Url(enableIDN: true), '', $errors],
             [new Url(enableIDN: true), 'http://' . str_pad('base', 2000, 'url') . '.de', $errors],
         ];
+    }
+
+    /**
+     * @dataProvider passedValidationProvider
+     * @requires extension intl
+     */
+    public function testValidationPassed(object $config, mixed $value): void
+    {
+        parent::testValidationPassed($config, $value);
     }
 
     public function passedValidationProvider(): array
@@ -80,6 +82,15 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
+    /**
+     * @dataProvider failedValidationProvider
+     * @requires extension intl
+     */
+    public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
+    {
+        parent::testValidationFailed($config, $value, $expectedErrors);
+    }
+
     public function customErrorMessagesProvider(): array
     {
         return [
@@ -87,9 +98,20 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    public function testEnableIdnException(): void
+    /**
+     * @dataProvider customErrorMessagesProvider
+     * @requires extension intl
+     */
+    public function testCustomErrorMessages(object $config, mixed $value, array $expectedErrorMessages): void
     {
-        FunctionExists::$isIdnFunctionExists = false;
+        parent::testCustomErrorMessages($config, $value, $expectedErrorMessages);
+    }
+
+    public function testEnableIdnWithMissingIntlExtension(): void
+    {
+        if (extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        }
 
         $this->expectException(RuntimeException::class);
         new Url(enableIDN: true);

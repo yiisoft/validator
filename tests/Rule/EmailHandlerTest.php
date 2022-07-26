@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use RuntimeException;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\EmailHandler;
@@ -64,9 +65,22 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
             [$ruleAllowedName, 'sam@рмкреатиф.ru', $errors],
             [$ruleAllowedName, 'Informtation info@oertliches.de', $errors],
             [$ruleAllowedName, 'John Smith <example.com>', $errors],
-            [$ruleAllowedName, 'Short Name <localPartMoreThan64Characters-blah-blah-blah-blah-blah-blah-blah-blah@example.com>', $errors],
+            [
+                $ruleAllowedName,
+                'Short Name <localPartMoreThan64Characters-blah-blah-blah-blah-blah-blah-blah-blah@example.com>',
+                $errors,
+            ],
             [$ruleAllowedName, ['developer@yiiframework.com'], $errors],
-            [$ruleAllowedName, ['Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah.com>'], $errors],
+            [
+                $ruleAllowedName,
+                [
+                    'Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-' .
+                    'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
+                    'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
+                    'blah-blah-blah.com>',
+                ],
+                $errors,
+            ],
 
             [$ruleEnabledIDN, 'rmcreative.ru', $errors],
             [$ruleEnabledIDN, 'Carsten Brandt <mail@cebe.cc>', $errors],
@@ -75,16 +89,31 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
 
             [
                 $ruleEnabledIDNandAllowedName,
-                'Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.com>',
+                'Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.' .
+                'бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-'.
+                'бла.com>',
                 $errors,
             ],
             [$ruleEnabledIDNandAllowedName, 'Information info@örtliches.de', $errors],
             [$ruleEnabledIDNandAllowedName, 'rmcreative.ru', $errors],
             [$ruleEnabledIDNandAllowedName, 'John Smith <example.com>', $errors],
-            [$ruleEnabledIDNandAllowedName, 'Короткое имя <после-преобразования-в-idn-тут-будет-больше-чем-64-символа@пример.com>', $errors],
+            [
+                $ruleEnabledIDNandAllowedName,
+                'Короткое имя <после-преобразования-в-idn-тут-будет-больше-чем-64-символа@пример.com>',
+                $errors,
+            ],
 
             [new Email(checkDNS: true), 'test@nonexistingsubdomain.example.com', $errors],
         ];
+    }
+
+    /**
+     * @dataProvider passedValidationProvider
+     * @requires extension intl
+     */
+    public function testValidationPassed(object $config, mixed $value): void
+    {
+        parent::testValidationPassed($config, $value);
     }
 
     public function passedValidationProvider(): array
@@ -109,7 +138,10 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
             [$ruleAllowedName, '<mail@cebe.cc>'],
             [$ruleAllowedName, 'test@example.com'],
             [$ruleAllowedName, 'John Smith <john.smith@example.com>'],
-            [$ruleAllowedName, '"This name is longer than 64 characters. Blah blah blah blah blah" <shortmail@example.com>'],
+            [
+                $ruleAllowedName,
+                '"This name is longer than 64 characters. Blah blah blah blah blah" <shortmail@example.com>',
+            ],
 
             [$ruleEnabledIDN, '5011@example.com'],
             [$ruleEnabledIDN, 'test-@dummy.com'],
@@ -132,13 +164,25 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
             [$ruleEnabledIDNandAllowedName, '<mail@cebe.cc>'],
             [$ruleEnabledIDNandAllowedName, 'test@example.com'],
             [$ruleEnabledIDNandAllowedName, 'John Smith <john.smith@example.com>'],
-            [$ruleEnabledIDNandAllowedName, '"Такое имя достаточно длинное, но оно все равно может пройти валидацию" <shortmail@example.com>'],
+            [
+                $ruleEnabledIDNandAllowedName,
+                '"Такое имя достаточно длинное, но оно все равно может пройти валидацию" <shortmail@example.com>',
+            ],
 
             [new Email(checkDNS: true), '5011@gmail.com'],
 
             [new Email(allowName: true, checkDNS: true), 'ipetrov@gmail.com'],
             [new Email(allowName: true, checkDNS: true), 'Ivan Petrov <ipetrov@gmail.com>'],
         ];
+    }
+
+    /**
+     * @dataProvider failedValidationProvider
+     * @requires extension intl
+     */
+    public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
+    {
+        parent::testValidationFailed($config, $value, $expectedErrors);
     }
 
     public function customErrorMessagesProvider(): array
@@ -150,6 +194,17 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
                 [new Error('Custom error', [])],
             ],
         ];
+    }
+
+    public function testEnableIdnWithMissingIntlExtension(): void
+    {
+        if (extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        }
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('1');
+        new Email(enableIDN: true);
     }
 
     protected function getRuleHandler(): RuleHandlerInterface

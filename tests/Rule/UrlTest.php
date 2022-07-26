@@ -6,16 +6,9 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\SerializableRuleInterface;
-use Yiisoft\Validator\Tests\FunctionExists;
 
 final class UrlTest extends AbstractRuleTest
 {
-    protected function setUp(): void
-    {
-        FunctionExists::$isIdnFunctionExists = true;
-        parent::setUp();
-    }
-
     public function optionsDataProvider(): array
     {
         return [
