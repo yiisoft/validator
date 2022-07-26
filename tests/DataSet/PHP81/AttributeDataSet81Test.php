@@ -226,8 +226,8 @@ final class AttributeDataSet81Test extends TestCase
         $firstEmbeddedRules = [
             'coordinates' => new Nested(
                 $secondEmbeddedRules,
-                errorWhenPropertyPathIsNotFound: true,
-                propertyPathIsNotFoundMessage: 'Custom message 4.'
+                requirePropertyPath: true,
+                noPropertyPathMessage: 'Custom message 4.'
             ),
             'rgb' => [
                 new Count(exactly: 3),

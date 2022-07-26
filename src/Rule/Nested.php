@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\ArrayShape;
 use Traversable;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
@@ -33,8 +34,8 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
          * @var iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>
          */
         private iterable $rules = [],
-        private bool $errorWhenPropertyPathIsNotFound = false,
-        private string $propertyPathIsNotFoundMessage = 'Property path "{path}" is not found.',
+        private bool $requirePropertyPath = false,
+        private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
@@ -66,17 +67,17 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     /**
      * @return bool
      */
-    public function isErrorWhenPropertyPathIsNotFound(): bool
+    public function getRequirePropertyPath(): bool
     {
-        return $this->errorWhenPropertyPathIsNotFound;
+        return $this->requirePropertyPath;
     }
 
     /**
      * @return string
      */
-    public function getPropertyPathIsNotFoundMessage(): string
+    public function getNoPropertyPathMessage(): string
     {
-        return $this->propertyPathIsNotFoundMessage;
+        return $this->noPropertyPathMessage;
     }
 
     private function checkRules(array $rules): bool
@@ -90,9 +91,24 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         );
     }
 
+    #[ArrayShape([
+        'requirePropertyPath' => 'bool',
+        'noPropertyPathMessage' => 'array',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+        'rules' => 'array',
+    ])]
     public function getOptions(): array
     {
-        return (new RulesDumper())->asArray($this->rules);
+        return [
+            'requirePropertyPath' => $this->getRequirePropertyPath(),
+            'noPropertyPathMessage' => [
+                'message' => $this->getNoPropertyPathMessage(),
+            ],
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+            'rules' => (new RulesDumper())->asArray($this->rules),
+        ];
     }
 
     public function getHandlerClassName(): string

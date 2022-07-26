@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -14,7 +15,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Validates that the value is a valid json.
+ * Allows to combine and validate multiple rules.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Composite implements SerializableRuleInterface, BeforeValidationInterface
@@ -36,17 +37,27 @@ class Composite implements SerializableRuleInterface, BeforeValidationInterface
     ) {
     }
 
+    #[ArrayShape([
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+        'rules' => 'array',
+    ])]
     public function getOptions(): array
     {
         $arrayOfRules = [];
-        foreach ($this->rules as $rule) {
+        foreach ($this->getRules() as $rule) {
             if ($rule instanceof SerializableRuleInterface) {
                 $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
             } else {
                 $arrayOfRules[] = [$rule->getName()];
             }
         }
-        return $arrayOfRules;
+
+        return [
+            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnError' => $this->skipOnError,
+            'rules' => $arrayOfRules,
+        ];
     }
 
     /**

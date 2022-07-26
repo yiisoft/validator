@@ -60,9 +60,9 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 [new Error($requiredRule->getMessage(), ['value'])],
             ],
             [
-                new Nested(['value' => new Required()], errorWhenPropertyPathIsNotFound: true),
+                new Nested(['value' => new Required()], requirePropertyPath: true),
                 [],
-                [new Error($this->formatMessage($rule->getPropertyPathIsNotFoundMessage(), ['path' => 'value']), ['value'])],
+                [new Error($this->formatMessage($rule->getNoPropertyPathMessage(), ['path' => 'value']), ['value'])],
             ],
             [
                 // @link https://github.com/yiisoft/validator/issues/200
@@ -137,8 +137,8 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             [
                 new Nested(
                     ['value' => new Required()],
-                    errorWhenPropertyPathIsNotFound: true,
-                    propertyPathIsNotFoundMessage: 'Property is not found.',
+                    requirePropertyPath: true,
+                    noPropertyPathMessage: 'Property is not found.',
                 ),
                 [],
                 [new Error('Property is not found.', ['value'])],
@@ -179,9 +179,9 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 ['value' => [$requiredRule->getMessage()]],
             ],
             [
-                new Nested(['value' => new Required()], errorWhenPropertyPathIsNotFound: true),
+                new Nested(['value' => new Required()], requirePropertyPath: true),
                 [],
-                ['value' => [$this->formatMessage($rule->getPropertyPathIsNotFoundMessage(), ['path' => 'value'])]],
+                ['value' => [$this->formatMessage($rule->getNoPropertyPathMessage(), ['path' => 'value'])]],
             ],
             [
                 // @link https://github.com/yiisoft/validator/issues/200
