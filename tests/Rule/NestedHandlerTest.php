@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\InRange;
@@ -242,10 +243,10 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             ],
         ];
         $rule = new Nested([
-            'charts' => new Each([
-                new Nested([
-                    'points' => new Each([
-                        new Nested([
+            'charts' => [
+                new Each([new Nested([
+                    'points' => [
+                        new Each([new Nested([
                             'coordinates' => new Nested([
                                 'x' => [
                                     new Number(min: -10, max: 10),
@@ -258,13 +259,14 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                                 ],
                                 'y' => [new Number(min: -10, max: 10)],
                             ]),
-                            'rgb' => new Each([
-                                new Number(min: 0, max: 255),
-                            ]),
-                        ]),
-                    ]),
-                ]),
-            ]),
+                            'rgb' => [
+                                new Count(exactly: 3),
+                                new Each([new Number(min: 0, max: 255)]),
+                            ],
+                        ])]),
+                    ],
+                ])]),
+            ],
         ]);
         $result = $this->validate($data, $rule);
 
@@ -298,7 +300,8 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         }
 
         $this->assertEquals($expectedDetailedErrors, $result->getErrors());
-        $this->assertEquals([
+
+        $expectedErrorMessages = [
             'Value must be no less than -10.',
             'Custom error.',
             'Value must be no greater than 10.',
@@ -321,8 +324,10 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'Value must be no greater than 10.',
             'Value must be no less than 0.',
             'Value must be no greater than 255.',
-        ], $result->getErrorMessages());
-        $this->assertEquals([
+        ];
+        $this->assertEquals($expectedErrorMessages, $result->getErrorMessages());
+
+        $expectedErrorMessagesIndexedByPath = [
             'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
             'charts.0.points.0.coordinates.y' => ['Value must be no greater than 10.'],
             'charts.0.points.0.rgb.0' => ['Value must be no less than 0.'],
@@ -341,7 +346,8 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'charts.2.points.1.coordinates.y' => ['Value must be no greater than 10.'],
             'charts.2.points.1.rgb.1' => ['Value must be no less than 0.'],
             'charts.2.points.1.rgb.2' => ['Value must be no greater than 255.'],
-        ], $result->getErrorMessagesIndexedByPath());
+        ];
+        $this->assertEquals($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
