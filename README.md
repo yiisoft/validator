@@ -280,6 +280,44 @@ $errors = [
 ];
 ```
 
+###### Using shortcut
+
+A shortcut can be used to simplify `Nested` and `Each` combinations:
+
+```php
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'charts.*.points.*.coordinates.x' => [new Number(min: -10, max: 10)],
+    'charts.*.points.*.coordinates.y' => [new Number(min: -10, max: 10)],
+    'charts.*.points.*.rgb' => [
+        new Count(exactly: 3);
+        new Number(min: 0, max: 255),
+    ]),
+]);
+```
+
+With additional grouping it can also be rewritten like this:
+
+```php
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'charts.*.points.*.coordinates' => new Nested([
+        'x' => [new Number(min: -10, max: 10)],
+        'y' => [new Number(min: -10, max: 10)],
+    ]),
+    'charts.*.points.*.rgb' => [
+        new Count(exactly: 3);
+        new Number(min: 0, max: 255),
+    ]),
+]);
+```
+
 #### Using attributes
 
 ##### Basic usage
