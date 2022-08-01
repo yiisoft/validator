@@ -369,7 +369,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 $data,
                 new Nested([
                     'charts.*.points.*.coordinates' => new Nested([
-                        'x' =>  $xRules,
+                        'x' => $xRules,
                         'y' => $yRules,
                     ]),
                     'charts.*.points.*.rgb' => $rgbRules,
