@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Error;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\Nested;
@@ -212,6 +215,133 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 ['0.0' => [$this->formatMessage('Value must be no less than {min}.', ['min' => -10])]],
             ],
         ];
+    }
+
+    public function testWithOtherNestedAndEach(): void
+    {
+        $data = [
+            'charts' => [
+                [
+                    'points' => [
+                        ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
+                        ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],
+                    ],
+                ],
+                [
+                    'points' => [
+                        ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],
+                        ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],
+                    ],
+                ],
+                [
+                    'points' => [
+                        ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],
+                        ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],
+                    ],
+                ],
+            ],
+        ];
+        $rule = new Nested([
+            'charts' => new Each([
+                new Nested([
+                    'points' => new Each([
+                        new Nested([
+                            'coordinates' => new Nested([
+                                'x' => [
+                                    new Number(min: -10, max: 10),
+                                    new Callback(static function ($value): Result {
+                                        $result = new Result();
+                                        $result->addError('Custom error.');
+
+                                        return $result;
+                                    }),
+                                ],
+                                'y' => [new Number(min: -10, max: 10)],
+                            ]),
+                            'rgb' => new Each([
+                                new Number(min: 0, max: 255),
+                            ]),
+                        ]),
+                    ]),
+                ]),
+            ]),
+        ]);
+        $result = $this->validate($data, $rule);
+
+        $expectedDetailedErrorsData = [
+            [['charts', 0, 'points', 0, 'coordinates', 'x'], 'Value must be no less than -10.'],
+            [['charts', 0, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
+            [['charts', 0, 'points', 0, 'coordinates', 'y'], 'Value must be no greater than 10.'],
+            [['charts', 0, 'points', 0, 'rgb', 0], 'Value must be no less than 0.'],
+            [['charts', 0, 'points', 0, 'rgb', 1], 'Value must be no greater than 255.'],
+            [['charts', 0, 'points', 1, 'coordinates', 'x'], 'Value must be no less than -10.'],
+            [['charts', 0, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
+            [['charts', 0, 'points', 1, 'coordinates', 'y'], 'Value must be no greater than 10.'],
+            [['charts', 0, 'points', 1, 'rgb', 1], 'Value must be no less than 0.'],
+            [['charts', 0, 'points', 1, 'rgb', 2], 'Value must be no greater than 255.'],
+            [['charts', 1, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
+            [['charts', 1, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
+            [['charts', 2, 'points', 0, 'coordinates', 'x'], 'Value must be no less than -10.'],
+            [['charts', 2, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
+            [['charts', 2, 'points', 0, 'coordinates', 'y'], 'Value must be no greater than 10.'],
+            [['charts', 2, 'points', 0, 'rgb', 0], 'Value must be no less than 0.'],
+            [['charts', 2, 'points', 0, 'rgb', 1], 'Value must be no greater than 255.'],
+            [['charts', 2, 'points', 1, 'coordinates', 'x'], 'Value must be no less than -10.'],
+            [['charts', 2, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
+            [['charts', 2, 'points', 1, 'coordinates', 'y'], 'Value must be no greater than 10.'],
+            [['charts', 2, 'points', 1, 'rgb', 1], 'Value must be no less than 0.'],
+            [['charts', 2, 'points', 1, 'rgb', 2], 'Value must be no greater than 255.'],
+        ];
+        $expectedDetailedErrors = [];
+        foreach ($expectedDetailedErrorsData as $errorData) {
+            $expectedDetailedErrors[] = new Error($errorData[1], $errorData[0]);
+        }
+
+        $this->assertEquals($expectedDetailedErrors, $result->getErrors());
+        $this->assertEquals([
+            'Value must be no less than -10.',
+            'Custom error.',
+            'Value must be no greater than 10.',
+            'Value must be no less than 0.',
+            'Value must be no greater than 255.',
+            'Value must be no less than -10.',
+            'Custom error.',
+            'Value must be no greater than 10.',
+            'Value must be no less than 0.',
+            'Value must be no greater than 255.',
+            'Custom error.',
+            'Custom error.',
+            'Value must be no less than -10.',
+            'Custom error.',
+            'Value must be no greater than 10.',
+            'Value must be no less than 0.',
+            'Value must be no greater than 255.',
+            'Value must be no less than -10.',
+            'Custom error.',
+            'Value must be no greater than 10.',
+            'Value must be no less than 0.',
+            'Value must be no greater than 255.',
+        ], $result->getErrorMessages());
+        $this->assertEquals([
+            'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
+            'charts.0.points.0.coordinates.y' => ['Value must be no greater than 10.'],
+            'charts.0.points.0.rgb.0' => ['Value must be no less than 0.'],
+            'charts.0.points.0.rgb.1' => ['Value must be no greater than 255.'],
+            'charts.0.points.1.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
+            'charts.0.points.1.coordinates.y' => ['Value must be no greater than 10.'],
+            'charts.0.points.1.rgb.1' => ['Value must be no less than 0.'],
+            'charts.0.points.1.rgb.2' => ['Value must be no greater than 255.'],
+            'charts.1.points.0.coordinates.x' => ['Custom error.'],
+            'charts.1.points.1.coordinates.x' => ['Custom error.'],
+            'charts.2.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
+            'charts.2.points.0.coordinates.y' => ['Value must be no greater than 10.'],
+            'charts.2.points.0.rgb.0' => ['Value must be no less than 0.'],
+            'charts.2.points.0.rgb.1' => ['Value must be no greater than 255.'],
+            'charts.2.points.1.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
+            'charts.2.points.1.coordinates.y' => ['Value must be no greater than 10.'],
+            'charts.2.points.1.rgb.1' => ['Value must be no less than 0.'],
+            'charts.2.points.1.rgb.2' => ['Value must be no greater than 255.'],
+        ], $result->getErrorMessagesIndexedByPath());
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
