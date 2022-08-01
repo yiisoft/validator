@@ -187,8 +187,8 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 [],
                 ['value' => [$this->formatMessage($rule->getNoPropertyPathMessage(), ['path' => 'value'])]],
             ],
+            // https://github.com/yiisoft/validator/issues/200
             [
-                // @link https://github.com/yiisoft/validator/issues/200
                 new Nested([
                     'body.shipping' => [
                         new Required(),
@@ -218,7 +218,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    public function testWithOtherNestedAndEach(): void
+    public function withOtherNestedAndEachDataProvider(): array
     {
         $data = [
             'charts' => [
@@ -242,35 +242,8 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 ],
             ],
         ];
-        $rule = new Nested([
-            'charts' => [
-                new Each([new Nested([
-                    'points' => [
-                        new Each([new Nested([
-                            'coordinates' => new Nested([
-                                'x' => [
-                                    new Number(min: -10, max: 10),
-                                    new Callback(static function ($value): Result {
-                                        $result = new Result();
-                                        $result->addError('Custom error.');
 
-                                        return $result;
-                                    }),
-                                ],
-                                'y' => [new Number(min: -10, max: 10)],
-                            ]),
-                            'rgb' => [
-                                new Count(exactly: 3),
-                                new Each([new Number(min: 0, max: 255)]),
-                            ],
-                        ])]),
-                    ],
-                ])]),
-            ],
-        ]);
-        $result = $this->validate($data, $rule);
-
-        $expectedDetailedErrorsData = [
+        $detailedErrorsData = [
             [['charts', 0, 'points', 0, 'coordinates', 'x'], 'Value must be no less than -10.'],
             [['charts', 0, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
             [['charts', 0, 'points', 0, 'coordinates', 'y'], 'Value must be no greater than 10.'],
@@ -294,14 +267,12 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             [['charts', 2, 'points', 1, 'rgb', 1], 'Value must be no less than 0.'],
             [['charts', 2, 'points', 1, 'rgb', 2], 'Value must be no greater than 255.'],
         ];
-        $expectedDetailedErrors = [];
-        foreach ($expectedDetailedErrorsData as $errorData) {
-            $expectedDetailedErrors[] = new Error($errorData[1], $errorData[0]);
+        $detailedErrors = [];
+        foreach ($detailedErrorsData as $errorData) {
+            $detailedErrors[] = new Error($errorData[1], $errorData[0]);
         }
 
-        $this->assertEquals($expectedDetailedErrors, $result->getErrors());
-
-        $expectedErrorMessages = [
+        $errorMessages = [
             'Value must be no less than -10.',
             'Custom error.',
             'Value must be no greater than 10.',
@@ -325,9 +296,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'Value must be no less than 0.',
             'Value must be no greater than 255.',
         ];
-        $this->assertEquals($expectedErrorMessages, $result->getErrorMessages());
-
-        $expectedErrorMessagesIndexedByPath = [
+        $errorMessagesIndexedByPath = [
             'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
             'charts.0.points.0.coordinates.y' => ['Value must be no greater than 10.'],
             'charts.0.points.0.rgb.0' => ['Value must be no less than 0.'],
@@ -347,6 +316,83 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'charts.2.points.1.rgb.1' => ['Value must be no less than 0.'],
             'charts.2.points.1.rgb.2' => ['Value must be no greater than 255.'],
         ];
+
+        return [
+            'base' => [
+                $data,
+                new Nested([
+                    'charts' => [
+                        new Each([new Nested([
+                            'points' => [
+                                new Each([new Nested([
+                                    'coordinates' => new Nested([
+                                        'x' => [
+                                            new Number(min: -10, max: 10),
+                                            new Callback(static function ($value): Result {
+                                                $result = new Result();
+                                                $result->addError('Custom error.');
+
+                                                return $result;
+                                            }),
+                                        ],
+                                        'y' => [new Number(min: -10, max: 10)],
+                                    ]),
+                                    'rgb' => [
+                                        new Count(exactly: 3),
+                                        new Each([new Number(min: 0, max: 255)]),
+                                    ],
+                                ])]),
+                            ],
+                        ])]),
+                    ],
+                ]),
+                $detailedErrors,
+                $errorMessages,
+                $errorMessagesIndexedByPath,
+            ],
+            // https://github.com/yiisoft/validator/issues/195
+            'withShortcut' => [
+                $data,
+                new Nested([
+                    'charts.*.points.*.coordinates.x' => [
+                        new Number(min: -10, max: 10),
+                        new Callback(static function ($value): Result {
+                            $result = new Result();
+                            $result->addError('Custom error.');
+
+                            return $result;
+                        }),
+                    ],
+                    'charts.*.points.*.coordinates.y' => [
+                        [new Number(min: -10, max: 10)],
+                    ],
+                    'charts.*.points.*.rgb' => [
+                        new Count(exactly: 3),
+                        new Each([new Number(min: 0, max: 255)]),
+                    ],
+                ]),
+                $detailedErrors,
+                $errorMessages,
+                $errorMessagesIndexedByPath,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider withOtherNestedAndEachDataProvider
+     */
+    public function testWithOtherNestedAndEach(
+        array $data,
+        Nested $rule,
+        array $expectedDetailedErrors,
+        array $expectedErrorMessages,
+        array $expectedErrorMessagesIndexedByPath
+    ): void
+    {
+        $result = $this->validate($data, $rule);
+
+        $this->assertEquals($expectedDetailedErrors, $result->getErrors());
+        $this->assertEquals($expectedErrorMessages, $result->getErrorMessages());
         $this->assertEquals($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 

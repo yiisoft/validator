@@ -9,16 +9,20 @@ use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use Traversable;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
-
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function array_pop;
+use function count;
+use function explode;
+use function implode;
 use function is_array;
+use function sprintf;
 
 /**
  * Can be used for validation of nested structures.
@@ -48,12 +52,13 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             throw new InvalidArgumentException('Rules must not be empty.');
         }
 
-        if ($this->checkRules($rules)) {
+        if (self::checkRules($rules)) {
             $message = sprintf('Each rule should be an instance of %s.', RuleInterface::class);
             throw new InvalidArgumentException($message);
         }
 
         $this->rules = $rules;
+        $this->normalizeRules();
     }
 
     /**
@@ -80,15 +85,50 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         return $this->noPropertyPathMessage;
     }
 
-    private function checkRules(array $rules): bool
+    private static function checkRules($rules): bool
     {
         return array_reduce(
             $rules,
             function (bool $carry, $rule) {
-                return $carry || (is_array($rule) ? $this->checkRules($rule) : !$rule instanceof RuleInterface);
+                return $carry || (is_array($rule) ? self::checkRules($rule) : !$rule instanceof RuleInterface);
             },
             false
         );
+    }
+
+    private function normalizeRules(): void
+    {
+        while (true) {
+            $breakWhile = true;
+            $rulesMap = [];
+
+            foreach ($this->rules as $valuePath => $rule) {
+                $parts = explode('.*.', (string) $valuePath);
+                if (count($parts) === 1) {
+                    continue;
+                }
+
+                $breakWhile = false;
+
+                $lastValuePath = array_pop($parts);
+                $remainingValuePath = implode('.*.', $parts);
+
+                if (!isset($rulesMap[$remainingValuePath])) {
+                    $rulesMap[$remainingValuePath] = [];
+                }
+
+                $rulesMap[$remainingValuePath][$lastValuePath] = $rule;
+                unset($this->rules[$valuePath]);
+            }
+
+            foreach ($rulesMap as $valuePath => $nestedRules) {
+                $this->rules[$valuePath] = new Each([new Nested($nestedRules)]);
+            }
+
+            if ($breakWhile === true) {
+                break;
+            }
+        }
     }
 
     #[ArrayShape([
