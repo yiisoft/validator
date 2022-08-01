@@ -105,6 +105,10 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             $rulesMap = [];
 
             foreach ($rules as $valuePath => $rule) {
+                if ($valuePath === '*') {
+                    throw new InvalidArgumentException('Bare shortcut is prohibited. Use "Each" rule instead.');
+                }
+
                 $parts = explode('.*.', (string) $valuePath);
                 if (count($parts) === 1) {
                     continue;

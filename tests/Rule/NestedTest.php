@@ -139,6 +139,13 @@ final class NestedTest extends AbstractRuleTest
         new Nested(['path.to.value' => (new stdClass())]);
     }
 
+    public function testWithNestedAndEachShortcutBare(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Bare shortcut is prohibited. Use "Each" rule instead.');
+        new Nested(['*' => [new Number(min: -10, max: 10)]]);
+    }
+
     protected function getRule(): SerializableRuleInterface
     {
         return new Nested([new Rule('rule-name', ['key' => 'value'])]);
