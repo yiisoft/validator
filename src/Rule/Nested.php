@@ -99,7 +99,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     private function normalizeRules(): void
     {
         /** @var iterable $rules */
-        $rules = $this->rules;
+        $rules = $this->getRules();
         while (true) {
             $breakWhile = true;
             $rulesMap = [];

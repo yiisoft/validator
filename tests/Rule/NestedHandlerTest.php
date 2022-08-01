@@ -242,6 +242,20 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 ],
             ],
         ];
+        $xRules = [
+            new Number(min: -10, max: 10),
+            new Callback(static function ($value): Result {
+                $result = new Result();
+                $result->addError('Custom error.');
+
+                return $result;
+            }),
+        ];
+        $yRules = [new Number(min: -10, max: 10)];
+        $rgbRules = [
+            new Count(exactly: 3),
+            new Each([new Number(min: 0, max: 255)]),
+        ];
 
         $detailedErrorsData = [
             [['charts', 0, 'points', 0, 'coordinates', 'x'], 'Value must be no less than -10.'],
@@ -326,21 +340,10 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                             'points' => [
                                 new Each([new Nested([
                                     'coordinates' => new Nested([
-                                        'x' => [
-                                            new Number(min: -10, max: 10),
-                                            new Callback(static function ($value): Result {
-                                                $result = new Result();
-                                                $result->addError('Custom error.');
-
-                                                return $result;
-                                            }),
-                                        ],
-                                        'y' => [new Number(min: -10, max: 10)],
+                                        'x' => $xRules,
+                                        'y' => $yRules,
                                     ]),
-                                    'rgb' => [
-                                        new Count(exactly: 3),
-                                        new Each([new Number(min: 0, max: 255)]),
-                                    ],
+                                    'rgb' => $rgbRules,
                                 ])]),
                             ],
                         ])]),
@@ -354,22 +357,22 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'withShortcut' => [
                 $data,
                 new Nested([
-                    'charts.*.points.*.coordinates.x' => [
-                        new Number(min: -10, max: 10),
-                        new Callback(static function ($value): Result {
-                            $result = new Result();
-                            $result->addError('Custom error.');
-
-                            return $result;
-                        }),
-                    ],
-                    'charts.*.points.*.coordinates.y' => [
-                        [new Number(min: -10, max: 10)],
-                    ],
-                    'charts.*.points.*.rgb' => [
-                        new Count(exactly: 3),
-                        new Each([new Number(min: 0, max: 255)]),
-                    ],
+                    'charts.*.points.*.coordinates.x' => $xRules,
+                    'charts.*.points.*.coordinates.y' => $yRules,
+                    'charts.*.points.*.rgb' => $rgbRules,
+                ]),
+                $detailedErrors,
+                $errorMessages,
+                $errorMessagesIndexedByPath,
+            ],
+            'withShortcutAndGrouping' => [
+                $data,
+                new Nested([
+                    'charts.*.points.*.coordinates' => new Nested([
+                        'x' =>  $xRules,
+                        'y' => $yRules,
+                    ]),
+                    'charts.*.points.*.rgb' => $rgbRules,
                 ]),
                 $detailedErrors,
                 $errorMessages,
