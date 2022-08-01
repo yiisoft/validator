@@ -387,8 +387,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         array $expectedDetailedErrors,
         array $expectedErrorMessages,
         array $expectedErrorMessagesIndexedByPath
-    ): void
-    {
+    ): void {
         $result = $this->validate($data, $rule);
 
         $this->assertEquals($expectedDetailedErrors, $result->getErrors());

@@ -122,7 +122,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             }
 
             foreach ($rulesMap as $valuePath => $nestedRules) {
-                $this->rules[$valuePath] = new Each([new Nested($nestedRules)]);
+                $this->rules[$valuePath] = new Each([new self($nestedRules)]);
             }
 
             if ($breakWhile === true) {
