@@ -98,11 +98,13 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
 
     private function normalizeRules(): void
     {
+        /** @var iterable $rules */
+        $rules = $this->rules;
         while (true) {
             $breakWhile = true;
             $rulesMap = [];
 
-            foreach ($this->rules as $valuePath => $rule) {
+            foreach ($rules as $valuePath => $rule) {
                 $parts = explode('.*.', (string) $valuePath);
                 if (count($parts) === 1) {
                     continue;
@@ -118,17 +120,19 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
                 }
 
                 $rulesMap[$remainingValuePath][$lastValuePath] = $rule;
-                unset($this->rules[$valuePath]);
+                unset($rules[$valuePath]);
             }
 
             foreach ($rulesMap as $valuePath => $nestedRules) {
-                $this->rules[$valuePath] = new Each([new self($nestedRules)]);
+                $rules[$valuePath] = new Each([new self($nestedRules)]);
             }
 
             if ($breakWhile === true) {
                 break;
             }
         }
+
+        $this->rules = $rules;
     }
 
     #[ArrayShape([
