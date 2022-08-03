@@ -71,20 +71,21 @@ final class NestedHandler implements RuleHandlerInterface
 
         $results = [];
         foreach ($rule->getRules() as $valuePath => $rules) {
-            $result = new Result();
-
             if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($value, $valuePath)) {
                 $formattedMessage = $this->formatter->format(
                     $rule->getNoPropertyPathMessage(),
                     ['path' => $valuePath, 'attribute' => $context->getAttribute(), 'value' => $value]
                 );
+                /**
+                 * @psalm-suppress InvalidScalarArgument
+                 */
                 $compoundResult->addError($formattedMessage, ArrayHelper::parsePath($valuePath));
 
                 continue;
             }
 
-            $rules = is_array($rules) ? $rules : [$rules];
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
+            $rules = is_array($rules) ? $rules : [$rules];
 
             $itemResult = $context->getValidator()->validate($validatedValue, $rules);
 
@@ -92,11 +93,16 @@ final class NestedHandler implements RuleHandlerInterface
                 continue;
             }
 
+            $result = new Result();
+
             foreach ($itemResult->getErrors() as $error) {
                 $errorValuePath = is_int($valuePath) ? [$valuePath] : ArrayHelper::parsePath($valuePath);
                 if (!empty($error->getValuePath())) {
                     array_push($errorValuePath, ...$error->getValuePath());
                 }
+                /**
+                 * @psalm-suppress InvalidScalarArgument
+                 */
                 $result->addError($error->getMessage(), $errorValuePath);
             }
             $results[] = $result;
