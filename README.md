@@ -318,6 +318,27 @@ $rule = new Nested([
 ]);
 ```
 
+###### Using keys containing separator
+
+If a key contains the separator (`.`), it must be escaped with backslash (`\`) in both rule config and data in order to
+work correctly:
+
+```php
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'author\.data.name' => [
+        new HasLength(min: 3),
+    ],
+]);
+$data = [
+    'author\.data' => [
+        'name' => 'Dmitry',
+        'age' => 18,
+    ],
+];
+```
+
 #### Using attributes
 
 ##### Basic usage
