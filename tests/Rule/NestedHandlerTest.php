@@ -108,7 +108,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                         'age' => 18,
                     ],
                 ],
-                [new Error('This value must be a string.', ['author\\', 'data', 'name'])],
+                [new Error('This value must be a string.', ['author\.data', 'name'])],
             ],
             [
                 new Nested([

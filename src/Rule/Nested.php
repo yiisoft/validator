@@ -9,6 +9,7 @@ use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use Traversable;
+use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
@@ -19,10 +20,12 @@ use Yiisoft\Validator\ValidationContext;
 
 use function array_pop;
 use function count;
-use function explode;
 use function implode;
 use function is_array;
+use function ltrim;
+use function rtrim;
 use function sprintf;
+use function strlen;
 
 /**
  * Can be used for validation of nested structures.
@@ -32,6 +35,9 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
 {
     use BeforeValidationTrait;
     use RuleNameTrait;
+
+    private const SEPARATOR = '.';
+    private const EACH_SHORTCUT = '*';
 
     public function __construct(
         /**
@@ -105,11 +111,11 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             $rulesMap = [];
 
             foreach ($rules as $valuePath => $rule) {
-                if ($valuePath === '*') {
+                if ($valuePath === self::EACH_SHORTCUT) {
                     throw new InvalidArgumentException('Bare shortcut is prohibited. Use "Each" rule instead.');
                 }
 
-                $parts = explode('.*.', (string) $valuePath);
+                $parts = ArrayHelper::parsePath((string) $valuePath, self::EACH_SHORTCUT);
                 if (count($parts) === 1) {
                     continue;
                 }
@@ -117,7 +123,14 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
                 $breakWhile = false;
 
                 $lastValuePath = array_pop($parts);
-                $remainingValuePath = implode('.*.', $parts);
+                if ($lastValuePath[0] === self::SEPARATOR) {
+                    $lastValuePath = ltrim($lastValuePath, '.');
+                }
+
+                $remainingValuePath = implode(self::EACH_SHORTCUT, $parts);
+                if ($remainingValuePath[strlen($remainingValuePath) - 1] ?? null === self::SEPARATOR) {
+                    $remainingValuePath = rtrim($remainingValuePath, self::SEPARATOR);
+                }
 
                 if (!isset($rulesMap[$remainingValuePath])) {
                     $rulesMap[$remainingValuePath] = [];
