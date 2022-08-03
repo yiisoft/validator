@@ -78,7 +78,7 @@ final class NestedHandler implements RuleHandlerInterface
                     $rule->getNoPropertyPathMessage(),
                     ['path' => $valuePath, 'attribute' => $context->getAttribute(), 'value' => $value]
                 );
-                $compoundResult->addError($formattedMessage, [$valuePath]);
+                $compoundResult->addError($formattedMessage, ArrayHelper::parsePath($valuePath));
 
                 continue;
             }
@@ -93,7 +93,7 @@ final class NestedHandler implements RuleHandlerInterface
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                $errorValuePath = is_int($valuePath) ? [$valuePath] : explode('.', $valuePath);
+                $errorValuePath = is_int($valuePath) ? [$valuePath] : ArrayHelper::parsePath($valuePath);
                 if (!empty($error->getValuePath())) {
                     array_push($errorValuePath, ...$error->getValuePath());
                 }

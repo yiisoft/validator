@@ -69,7 +69,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 [new Error($this->formatMessage($rule->getNoPropertyPathMessage(), ['path' => 'value']), ['value'])],
             ],
             [
-                // @link https://github.com/yiisoft/validator/issues/200
+                // https://github.com/yiisoft/validator/issues/200
                 new Nested([
                     'body.shipping' => [
                         new Required(),
@@ -95,6 +95,34 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 ]),
                 [0 => [0 => -11]],
                 [new Error($this->formatMessage('Value must be no less than {min}.', ['min' => -10]), [0, 0])],
+            ],
+            [
+                new Nested([
+                    'author\.data.name' => [
+                        new HasLength(min: 3),
+                    ],
+                ]),
+                [
+                    'author.data' => [
+                        'name' => 'Dmitry',
+                        'age' => 18,
+                    ],
+                ],
+                [new Error('This value must be a string.', ['author\\', 'data', 'name'])],
+            ],
+            [
+                new Nested([
+                    'author.data.name' => [
+                        new HasLength(min: 3),
+                    ],
+                ]),
+                [
+                    'author\.data' => [
+                        'name' => 'Dmitry',
+                        'age' => 18,
+                    ],
+                ],
+                [new Error('This value must be a string.', ['author', 'data', 'name'])],
             ],
         ];
     }
@@ -131,6 +159,19 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'key not exists, skip empty' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'], skipOnEmpty: true)]]),
                 $value,
+            ],
+            'escaped separator' => [
+                new Nested([
+                    'author\.data.name' => [
+                        new HasLength(min: 3),
+                    ],
+                ]),
+                [
+                    'author\.data' => [
+                        'name' => 'Dmitry',
+                        'age' => 18,
+                    ],
+                ],
             ],
         ];
     }
