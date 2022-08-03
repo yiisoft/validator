@@ -20,6 +20,7 @@ The package provides data validation capabilities.
 ## Features
 
 - Could be used with any object.
+- Supports PHP 8 attributes.
 - Skip further validation if an error occurred for the same field.
 - Skip validation of empty value.
 - Error message formatting.
