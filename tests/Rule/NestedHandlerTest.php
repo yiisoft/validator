@@ -98,31 +98,22 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             ],
             [
                 new Nested([
-                    'author\.data.name' => [
-                        new HasLength(min: 3),
+                    'author\.data.name\.surname' => [
+                        new HasLength(min: 8),
                     ],
                 ]),
                 [
                     'author.data' => [
-                        'name' => 'Dmitry',
-                        'age' => 18,
+                        'name.surname' => 'Dmitriy',
                     ],
                 ],
-                [new Error('This value must be a string.', ['author\.data', 'name'])],
-            ],
-            [
-                new Nested([
-                    'author.data.name' => [
-                        new HasLength(min: 3),
-                    ],
-                ]),
                 [
-                    'author\.data' => [
-                        'name' => 'Dmitry',
-                        'age' => 18,
-                    ],
+                    new Error(
+                        'This value must contain at least {min, number} {min, plural, one{character} ' .
+                        'other{characters}}.',
+                        ['author.data', 'name.surname']
+                    ),
                 ],
-                [new Error('This value must be a string.', ['author', 'data', 'name'])],
             ],
         ];
     }
@@ -162,14 +153,13 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             ],
             'escaped separator' => [
                 new Nested([
-                    'author\.data.name' => [
+                    'author\.data.name\.surname' => [
                         new HasLength(min: 3),
                     ],
                 ]),
                 [
-                    'author\.data' => [
-                        'name' => 'Dmitry',
-                        'age' => 18,
+                    'author.data' => [
+                        'name.surname' => 'Dmitriy',
                     ],
                 ],
             ],
