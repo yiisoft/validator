@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Closure;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\SerializableRuleInterface;
@@ -127,15 +126,6 @@ abstract class Compare implements SerializableRuleInterface, BeforeValidationInt
         };
     }
 
-    #[ArrayShape([
-        'targetValue' => 'mixed',
-        'targetAttribute' => 'string|null',
-        'message' => 'array',
-        'type' => 'string',
-        'operator' => 'string',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
     public function getOptions(): array
     {
         return [

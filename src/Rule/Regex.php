@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -77,14 +76,6 @@ final class Regex implements SerializableRuleInterface, BeforeValidationInterfac
         return $this->message;
     }
 
-    #[ArrayShape([
-        'pattern' => 'string',
-        'not' => 'bool',
-        'incorrectInputMessage' => 'string[]',
-        'message' => 'string[]',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
     public function getOptions(): array
     {
         return [

@@ -73,9 +73,9 @@ final class NestedHandler implements RuleHandlerInterface
         foreach ($rule->getRules() as $valuePath => $rules) {
             $result = new Result();
 
-            if ($rule->isErrorWhenPropertyPathIsNotFound() && !ArrayHelper::pathExists($value, $valuePath)) {
+            if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($value, $valuePath)) {
                 $formattedMessage = $this->formatter->format(
-                    $rule->getPropertyPathIsNotFoundMessage(),
+                    $rule->getNoPropertyPathMessage(),
                     ['path' => $valuePath, 'attribute' => $context->getAttribute(), 'value' => $value]
                 );
                 $compoundResult->addError($formattedMessage, [$valuePath]);

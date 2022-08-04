@@ -79,20 +79,20 @@ final class AttributeDataSet81Test extends TestCase
             [
                 new class () {
                     #[Required(skipOnEmpty: true)]
-                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property1;
                     #[Required(skipOnEmpty: true)]
-                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property2;
                 },
                 [
                     'property1' => [
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ],
                     'property2' => [
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ],
                 ],
             ],
@@ -100,18 +100,18 @@ final class AttributeDataSet81Test extends TestCase
                 new class () {
                     #[Each([
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ])]
-                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property1;
                 },
                 [
                     'property1' => [
                         new Each([
                             new Required(skipOnEmpty: true),
-                            new HasLength(skipOnEmpty: true),
+                            new HasLength(max: 255, skipOnEmpty: true),
                         ]),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ],
                 ],
             ],
@@ -119,39 +119,39 @@ final class AttributeDataSet81Test extends TestCase
                 new class () {
                     #[Nested([
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ])]
                     #[Each([
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ])]
-                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property1;
                 },
                 [
                     'property1' => [
                         new Nested([
                             new Required(skipOnEmpty: true),
-                            new HasLength(skipOnEmpty: true),
+                            new HasLength(max: 255, skipOnEmpty: true),
                         ]),
                         new Each([
                             new Required(skipOnEmpty: true),
-                            new HasLength(skipOnEmpty: true),
+                            new HasLength(max: 255, skipOnEmpty: true),
                         ]),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ],
                 ],
             ],
             [
                 new class () {
-                    #[HasLength(skipOnEmpty: true)]
-                    #[HasLength(skipOnEmpty: false)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: false)]
                     private $property1;
                 },
                 [
                     'property1' => [
-                        new HasLength(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: false),
+                        new HasLength(max: 255, skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: false),
                     ],
                 ],
             ],
@@ -159,28 +159,28 @@ final class AttributeDataSet81Test extends TestCase
                 new class () {
                     #[Nested([
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ])]
                     #[Nested([
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ])]
-                    #[HasLength(skipOnEmpty: true)]
-                    #[HasLength(skipOnEmpty: false)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: false)]
                     private $property1;
                 },
                 [
                     'property1' => [
                         new Nested([
                             new Required(skipOnEmpty: true),
-                            new HasLength(skipOnEmpty: true),
+                            new HasLength(max: 255, skipOnEmpty: true),
                         ]),
                         new Nested([
                             new Required(skipOnEmpty: true),
-                            new HasLength(skipOnEmpty: true),
+                            new HasLength(max: 255, skipOnEmpty: true),
                         ]),
-                        new HasLength(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: false),
+                        new HasLength(max: 255, skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: false),
                     ],
                 ],
             ],
@@ -226,8 +226,8 @@ final class AttributeDataSet81Test extends TestCase
         $firstEmbeddedRules = [
             'coordinates' => new Nested(
                 $secondEmbeddedRules,
-                errorWhenPropertyPathIsNotFound: true,
-                propertyPathIsNotFoundMessage: 'Custom message 4.'
+                requirePropertyPath: true,
+                noPropertyPathMessage: 'Custom message 4.'
             ),
             'rgb' => [
                 new Count(exactly: 3),

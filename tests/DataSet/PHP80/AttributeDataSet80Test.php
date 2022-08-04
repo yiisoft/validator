@@ -71,33 +71,33 @@ final class AttributeDataSet80Test extends TestCase
             [
                 new class () {
                     #[Required(skipOnEmpty: true)]
-                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property1;
                     #[Required(skipOnEmpty: true)]
-                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property2;
                 },
                 [
                     'property1' => [
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ],
                     'property2' => [
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ],
                 ],
             ],
             [
                 new class () {
-                    #[HasLength(skipOnEmpty: true)]
-                    #[HasLength(skipOnEmpty: false)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: false)]
                     private $property1;
                 },
                 [
                     'property1' => [
-                        new HasLength(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: false),
+                        new HasLength(max: 255, skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: false),
                     ],
                 ],
             ],

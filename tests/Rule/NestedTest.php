@@ -19,52 +19,68 @@ final class NestedTest extends AbstractRuleTest
             [
                 new Nested([new Number(integerPattern: '/1/', numberPattern: '/1/')]),
                 [
-                    [
-                        'number',
-                        'asInteger' => false,
-                        'min' => null,
-                        'max' => null,
-                        'notANumberMessage' => [
-                            'message' => 'Value must be a number.',
+                    'requirePropertyPath' => false,
+                    'noPropertyPathMessage' => [
+                        'message' => 'Property path "{path}" is not found.',
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                    'rules' => [
+                        [
+                            'number',
+                            'asInteger' => false,
+                            'min' => null,
+                            'max' => null,
+                            'notANumberMessage' => [
+                                'message' => 'Value must be a number.',
+                            ],
+                            'tooSmallMessage' => [
+                                'message' => 'Value must be no less than {min}.',
+                                'parameters' => ['min' => null],
+                            ],
+                            'tooBigMessage' => [
+                                'message' => 'Value must be no greater than {max}.',
+                                'parameters' => ['max' => null],
+                            ],
+                            'skipOnEmpty' => false,
+                            'skipOnError' => false,
+                            'integerPattern' => '/1/',
+                            'numberPattern' => '/1/',
                         ],
-                        'tooSmallMessage' => [
-                            'message' => 'Value must be no less than {min}.',
-                            'parameters' => ['min' => null],
-                        ],
-                        'tooBigMessage' => [
-                            'message' => 'Value must be no greater than {max}.',
-                            'parameters' => ['max' => null],
-                        ],
-                        'skipOnEmpty' => false,
-                        'skipOnError' => false,
-                        'integerPattern' => '/1/',
-                        'numberPattern' => '/1/',
                     ],
                 ],
             ],
             [
                 new Nested(['user.age' => new Number(integerPattern: '/1/', numberPattern: '/1/')]),
                 [
-                    'user.age' => [
-                        'number',
-                        'asInteger' => false,
-                        'min' => null,
-                        'max' => null,
-                        'notANumberMessage' => [
-                            'message' => 'Value must be a number.',
+                    'requirePropertyPath' => false,
+                    'noPropertyPathMessage' => [
+                        'message' => 'Property path "{path}" is not found.',
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                    'rules' => [
+                        'user.age' => [
+                            'number',
+                            'asInteger' => false,
+                            'min' => null,
+                            'max' => null,
+                            'notANumberMessage' => [
+                                'message' => 'Value must be a number.',
+                            ],
+                            'tooSmallMessage' => [
+                                'message' => 'Value must be no less than {min}.',
+                                'parameters' => ['min' => null],
+                            ],
+                            'tooBigMessage' => [
+                                'message' => 'Value must be no greater than {max}.',
+                                'parameters' => ['max' => null],
+                            ],
+                            'skipOnEmpty' => false,
+                            'skipOnError' => false,
+                            'integerPattern' => '/1/',
+                            'numberPattern' => '/1/',
                         ],
-                        'tooSmallMessage' => [
-                            'message' => 'Value must be no less than {min}.',
-                            'parameters' => ['min' => null],
-                        ],
-                        'tooBigMessage' => [
-                            'message' => 'Value must be no greater than {max}.',
-                            'parameters' => ['max' => null],
-                        ],
-                        'skipOnEmpty' => false,
-                        'skipOnError' => false,
-                        'integerPattern' => '/1/',
-                        'numberPattern' => '/1/',
                     ],
                 ],
             ],
@@ -74,8 +90,16 @@ final class NestedTest extends AbstractRuleTest
                     'author.age' => new Rule('author-age', ['key' => 'age']),
                 ]),
                 [
-                    'author.name' => ['author-name', 'key' => 'name'],
-                    'author.age' => ['author-age', 'key' => 'age'],
+                    'requirePropertyPath' => false,
+                    'noPropertyPathMessage' => [
+                        'message' => 'Property path "{path}" is not found.',
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                    'rules' => [
+                        'author.name' => ['author-name', 'key' => 'name'],
+                        'author.age' => ['author-age', 'key' => 'age'],
+                    ],
                 ],
             ],
             [
@@ -86,9 +110,17 @@ final class NestedTest extends AbstractRuleTest
                     ],
                 ]),
                 [
-                    'author' => [
-                        'name' => ['author-name', 'key' => 'name'],
-                        'age' => ['author-age', 'key' => 'age'],
+                    'requirePropertyPath' => false,
+                    'noPropertyPathMessage' => [
+                        'message' => 'Property path "{path}" is not found.',
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                    'rules' => [
+                        'author' => [
+                            'name' => ['author-name', 'key' => 'name'],
+                            'age' => ['author-age', 'key' => 'age'],
+                        ],
                     ],
                 ],
             ],

@@ -6,18 +6,15 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\SerializableRuleInterface;
-use Yiisoft\Validator\Tests\FunctionExists;
 
 final class UrlTest extends AbstractRuleTest
 {
-    protected function setUp(): void
-    {
-        FunctionExists::$isIdnFunctionExists = true;
-        parent::setUp();
-    }
-
     public function optionsDataProvider(): array
     {
+        if (!extension_loaded('intl')) {
+            return [];
+        }
+
         return [
             [
                 new Url(),
@@ -72,6 +69,15 @@ final class UrlTest extends AbstractRuleTest
                 ],
             ],
         ];
+    }
+
+    /**
+     * @requires extension intl
+     * @dataProvider optionsDataProvider
+     */
+    public function testOptions(SerializableRuleInterface $rule, array $expectedOptions): void
+    {
+        parent::testOptions($rule, $expectedOptions);
     }
 
     protected function getRule(): SerializableRuleInterface
