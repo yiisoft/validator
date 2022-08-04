@@ -53,7 +53,7 @@ final class AttributeDataSet implements RulesProviderInterface, DataSetInterface
     }
 
     /**
-     * @param ReflectionAttribute[] $attributes
+     * @param array<array-key, ReflectionAttribute<RuleInterface>> $attributes
      *
      * @return iterable
      */

@@ -56,7 +56,7 @@ final class Embedded extends GroupRule
     }
 
     /**
-     * @param ReflectionAttribute[] $attributes
+     * @param array<array-key, ReflectionAttribute<RuleInterface>> $attributes
      *
      * @return iterable
      */
