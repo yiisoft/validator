@@ -35,10 +35,11 @@ final class Validator implements ValidatorInterface
     public function validate(mixed $data, ?iterable $rules = null): Result
     {
         $data = $this->normalizeDataSet($data);
+
         $rulesByAttribute = [];
 
-        if ($data !== null) {
-            $rulesByAttribute = (new AttributeDataSet($data))->getRules();
+        if ($data instanceof DataSetInterface) {
+            $rulesByAttribute = (array) ((new AttributeDataSet($data))->getRules());
         }
 
         if ($rules === null && $data instanceof RulesProviderInterface) {
