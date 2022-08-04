@@ -6,6 +6,7 @@ on:
       - 'CHANGELOG.md'
       - '.gitignore'
       - '.gitattributes'
+      - 'infection.json.dist'
       - 'psalm.xml'
 
   push:
@@ -15,6 +16,7 @@ on:
       - 'CHANGELOG.md'
       - '.gitignore'
       - '.gitattributes'
+      - 'infection.json.dist'
       - 'psalm.xml'
 
 name: mutation test

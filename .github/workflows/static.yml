@@ -7,7 +7,7 @@ on:
       - '.gitignore'
       - '.gitattributes'
       - 'infection.json.dist'
-      - 'phpunit.xml.dist'
+      - 'psalm.xml'
 
   push:
     paths-ignore:
@@ -17,7 +17,7 @@ on:
       - '.gitignore'
       - '.gitattributes'
       - 'infection.json.dist'
-      - 'phpunit.xml.dist'
+      - 'psalm.xml'
 
 name: static analysis
 
