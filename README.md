@@ -330,14 +330,13 @@ work correctly:
 use Yiisoft\Validator\Rule\Nested;
 
 $rule = new Nested([
-    'author\.data.name' => [
+    'author\.data.name\.surname' => [
         new HasLength(min: 3),
     ],
 ]);
 $data = [
-    'author\.data' => [
-        'name' => 'Dmitry',
-        'age' => 18,
+    'author.data' => [
+        'name.surname' => 'Dmitry',
     ],
 ];
 ```
