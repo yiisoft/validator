@@ -8,11 +8,12 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Yiisoft\Validator\DataSet\AttributeDataSet;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ScalarDataSet;
 use Yiisoft\Validator\Rule\Callback;
-
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
+
 use function is_array;
 use function is_object;
 
@@ -34,8 +35,15 @@ final class Validator implements ValidatorInterface
     public function validate(mixed $data, ?iterable $rules = null): Result
     {
         $data = $this->normalizeDataSet($data);
+
+        $rulesByAttribute = (new AttributeDataSet($data, $data->getData()))->getRules();
+
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
+        }
+
+        if ($rulesByAttribute !== []) {
+            $rules = array_merge($rulesByAttribute, $rules ?? []);
         }
 
         $compoundResult = new Result();
