@@ -38,7 +38,7 @@ final class Validator implements ValidatorInterface
         $rulesByAttribute = [];
 
         if ($data !== null) {
-            $rulesByAttribute = (new AttributeDataSet($data, $data?->getData()))->getRules();
+            $rulesByAttribute = (new AttributeDataSet($data))->getRules();
         }
 
         if ($rules === null && $data instanceof RulesProviderInterface) {
