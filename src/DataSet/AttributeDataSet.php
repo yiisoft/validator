@@ -25,7 +25,7 @@ final class AttributeDataSet implements RulesProviderInterface, DataSetInterface
     public function __construct(object $baseAnnotatedObject, array $data = [])
     {
         $this->baseAnnotatedObject = $baseAnnotatedObject;
-        $this->data = ($data === [] && is_subclass_of($baseAnnotatedObject, DataSetInterface::class))
+        $this->data = ($data === [] && $baseAnnotatedObject instanceof DataSetInterface)
             ? $baseAnnotatedObject->getData()
             : $data;
     }
