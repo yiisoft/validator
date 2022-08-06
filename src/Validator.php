@@ -41,7 +41,7 @@ final class Validator implements ValidatorInterface
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = (array) $data->getRules();
             $rulesByAttribute = (array) ((new AttributeDataSet($data))->getRules());
-            $rules = array_merge($rulesByAttribute, $rules ?? []);
+            $rules = array_merge($rulesByAttribute, $rules);
         }
 
         $compoundResult = new Result();
