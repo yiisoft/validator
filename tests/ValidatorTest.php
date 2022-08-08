@@ -149,7 +149,7 @@ class ValidatorTest extends TestCase
     /**
      * @link https://github.com/yiisoft/validator/issues/173
      */
-    public function testMissingRequiredAttribute()
+    public function testMissingRequiredAttribute(): void
     {
         $validator = FakeValidatorFactory::make();
         $dataSet = new ArrayDataSet([
