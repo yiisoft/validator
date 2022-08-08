@@ -11,7 +11,7 @@ trait ArrayDataTrait
 {
     private array $data;
 
-    public function getAttributeValue(string $attribute)
+    public function getAttributeValue(string $attribute): mixed
     {
         return $this->data[$attribute] ?? null;
     }
