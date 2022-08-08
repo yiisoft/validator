@@ -756,7 +756,7 @@ final class CompanyNameHandler implements Rule\RuleHandlerInterface
         $hasCompany = $dataSet !== null && $dataSet->getAttributeValue('hasCompany') === true;
 
         if ($hasCompany && $this->isCompanyNameValid($value) === false) {
-            $result->addError($this->formatMessage('Company name is not valid.'));
+            $result->addError('Company name is not valid.');
         }
 
         return $result;
@@ -799,7 +799,7 @@ final class NoLessThanExistingBidRuleHandler implements RuleHandlerInterface
         
         $currentMax = $connection->query('SELECT MAX(price) FROM bid')->scalar();
         if ($value <= $currentMax) {
-            $result->addError($this->formatMessage('There is a higher bid of {bid}.', ['bid' => $currentMax]));
+            $result->addError($this->formatter->format('There is a higher bid of {bid}.', ['bid' => $currentMax]));
         }
 
         return $result;
