@@ -151,11 +151,25 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 new Nested(['author.sex' => [new InRange(['male', 'female'], skipOnEmpty: true)]]),
                 $value,
             ],
-            'escaped separator' => [
+            'keys containing separator, one nested rule' => [
                 new Nested([
                     'author\.data.name\.surname' => [
                         new HasLength(min: 3),
                     ],
+                ]),
+                [
+                    'author.data' => [
+                        'name.surname' => 'Dmitriy',
+                    ],
+                ],
+            ],
+            'keys containing separator, multiple nested rules' => [
+                new Nested([
+                    'author\.data' => new Nested([
+                        'name\.surname' => [
+                            new HasLength(min: 3),
+                        ],
+                    ]),
                 ]),
                 [
                     'author.data' => [
@@ -408,6 +422,53 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 $detailedErrors,
                 $errorMessages,
                 $errorMessagesIndexedByPath,
+            ],
+            'withShortcutAndKeysContainingSeparatorAndShortcut' => [
+                [
+                    'charts.list' => [
+                        [
+                            'points*list' => [
+                                [
+                                    'coordinates.data' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                new Nested([
+                    'charts\.list.*.points\*list.*.coordinates\.data.x' => $xRules,
+                    'charts\.list.*.points\*list.*.coordinates\.data.y' => $yRules,
+                    'charts\.list.*.points\*list.*.rgb' => $rgbRules,
+                ]),
+                [
+                    new Error(
+                        message: $errorMessages[0],
+                        valuePath: ['charts.list', 0, 'points*list', 0, 'coordinates.data', 'x']
+                    ),
+                    new Error(
+                        message: $errorMessages[1],
+                        valuePath: ['charts.list', 0, 'points*list', 0, 'coordinates.data', 'x']
+                    ),
+                    new Error(
+                        message: $errorMessages[2],
+                        valuePath: ['charts.list', 0, 'points*list', 0, 'coordinates.data', 'y']
+                    ),
+                    new Error(
+                        message: $errorMessages[3],
+                        valuePath: ['charts.list', 0, 'points*list', 0, 'rgb', 0]
+                    ),
+                    new Error(
+                        message: $errorMessages[4],
+                        valuePath: ['charts.list', 0, 'points*list', 0, 'rgb', 1]
+                    ),
+                ],
+                array_slice($errorMessages, 0, 5),
+                [
+                    'charts.list.0.points*list.0.coordinates.data.x' => [$errorMessages[0], $errorMessages[1]],
+                    'charts.list.0.points*list.0.coordinates.data.y' => [$errorMessages[2]],
+                    'charts.list.0.points*list.0.rgb.0' => [$errorMessages[3]],
+                    'charts.list.0.points*list.0.rgb.1' => [$errorMessages[4]],
+                ],
             ],
         ];
     }

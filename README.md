@@ -321,10 +321,11 @@ $rule = new Nested([
 This is less verbose, but the downside of this approach is that you can't additionally configure dynamically generated 
 `Nested` and `Each` pairs. If you need to that, please refer to example provided in "Basic usage" section.
 
-###### Using keys containing separator
+###### Using keys containing separator / shortcut
 
-If a key contains the separator (`.`), it must be escaped with backslash (`\`) in both rule config and data in order to
-work correctly:
+If a key contains the separator (`.`), it must be escaped with backslash (`\`) in rule config in order to work 
+correctly. In the input data escaping is not needed. Here is an example with two nested keys named `author.data` and 
+`name.surname`:
 
 ```php
 use Yiisoft\Validator\Rule\Nested;
@@ -337,6 +338,54 @@ $rule = new Nested([
 $data = [
     'author.data' => [
         'name.surname' => 'Dmitry',
+    ],
+];
+```
+
+Note that in case of using multiple nested rules for configuration escaping is still required:
+
+```php
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'author\.data' => new Nested([
+        'name\.surname' => [
+            new HasLength(min: 3),
+        ],
+    ]),
+]);
+$data = [
+    'author.data' => [
+        'name.surname' => 'Dmitriy',
+    ],
+];
+```
+
+The same applies to shortcut:
+
+```php
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'charts\.list.*.points\*list.*.coordinates\.data.x' => [
+        // ...
+    ],
+    'charts\.list.*.points\*list.*.coordinates\.data.y' => [
+        // ...
+    ],
+    'charts\.list.*.points\*list.*.rgb' => [
+        // ...
+    ],
+]);
+$data = [
+    'charts.list' => [
+        [
+            'points*list' => [
+                [
+                    'coordinates.data' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0],
+                ],
+            ],
+        ],
     ],
 ];
 ```

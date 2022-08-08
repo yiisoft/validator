@@ -46,6 +46,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         private iterable $rules = [],
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
+        private bool $normalizeRules = true,
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
@@ -64,7 +65,10 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         }
 
         $this->rules = $rules;
-        $this->normalizeRules();
+
+        if ($this->normalizeRules === true) {
+            $this->normalizeRules();
+        }
     }
 
     /**
@@ -115,7 +119,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
                     throw new InvalidArgumentException('Bare shortcut is prohibited. Use "Each" rule instead.');
                 }
 
-                $parts = ArrayHelper::parsePath((string) $valuePath, self::EACH_SHORTCUT);
+                $parts = ArrayHelper::parsePath((string) $valuePath, self::EACH_SHORTCUT, false);
                 if (count($parts) === 1) {
                     continue;
                 }
@@ -123,14 +127,11 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
                 $breakWhile = false;
 
                 $lastValuePath = array_pop($parts);
-                if ($lastValuePath[0] === self::SEPARATOR) {
-                    $lastValuePath = ltrim($lastValuePath, '.');
-                }
+                $lastValuePath = ltrim($lastValuePath, '.');
+                $lastValuePath = str_replace('\\' . self::EACH_SHORTCUT, self::EACH_SHORTCUT, $lastValuePath);
 
                 $remainingValuePath = implode(self::EACH_SHORTCUT, $parts);
-                if ($remainingValuePath[strlen($remainingValuePath) - 1] ?? null === self::SEPARATOR) {
-                    $remainingValuePath = rtrim($remainingValuePath, self::SEPARATOR);
-                }
+                $remainingValuePath = rtrim($remainingValuePath, self::SEPARATOR);
 
                 if (!isset($rulesMap[$remainingValuePath])) {
                     $rulesMap[$remainingValuePath] = [];
@@ -141,7 +142,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             }
 
             foreach ($rulesMap as $valuePath => $nestedRules) {
-                $rules[$valuePath] = new Each([new self($nestedRules)]);
+                $rules[$valuePath] = new Each([new self($nestedRules, normalizeRules: false)]);
             }
 
             if ($breakWhile === true) {
