@@ -464,10 +464,10 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 ],
                 array_slice($errorMessages, 0, 5),
                 [
-                    'charts.list.0.points*list.0.coordinates.data.x' => [$errorMessages[0], $errorMessages[1]],
-                    'charts.list.0.points*list.0.coordinates.data.y' => [$errorMessages[2]],
-                    'charts.list.0.points*list.0.rgb.0' => [$errorMessages[3]],
-                    'charts.list.0.points*list.0.rgb.1' => [$errorMessages[4]],
+                    'charts\.list.0.points\*list.0.coordinates\.data.x' => [$errorMessages[0], $errorMessages[1]],
+                    'charts\.list.0.points\*list.0.coordinates\.data.y' => [$errorMessages[2]],
+                    'charts\.list.0.points\*list.0.rgb.0' => [$errorMessages[3]],
+                    'charts\.list.0.points\*list.0.rgb.1' => [$errorMessages[4]],
                 ],
             ],
         ];

@@ -59,7 +59,7 @@ final class Result
     {
         $errors = [];
         foreach ($this->errors as $error) {
-            $stringValuePath = implode($separator, $error->getValuePath());
+            $stringValuePath = implode($separator, $error->getValuePath(true));
             $errors[$stringValuePath][] = $error->getMessage();
         }
 
@@ -127,7 +127,7 @@ final class Result
                 continue;
             }
 
-            $valuePath = implode($separator, array_slice($error->getValuePath(), 1));
+            $valuePath = implode($separator, array_slice($error->getValuePath(true), 1));
             $errors[$valuePath][] = $error->getMessage();
         }
 

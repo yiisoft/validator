@@ -61,6 +61,20 @@ class ResultTest extends TestCase
         );
     }
 
+    public function testGetErrorMessagesIndexedByPathWithAttributes(): void
+    {
+        $this->assertEquals(
+            [
+                'attribute2' => ['error2.1', 'error2.2'],
+                'attribute2.nested' => ['error2.3', 'error2.4'],
+                '' => ['error3.1', 'error3.2'],
+                'attribute4.subattribute4\.1.subattribute4\*2' => ['error4.1'],
+                'attribute4.subattribute4\.3.subattribute4\*4' => ['error4.2'],
+            ],
+            $this->createAttributeErrorResult()->getErrorMessagesIndexedByPath()
+        );
+    }
+
     private function createErrorResult(): Result
     {
         $result = new Result();
@@ -76,12 +90,17 @@ class ResultTest extends TestCase
 
         $this->assertTrue($result->isAttributeValid('attribute1'));
         $this->assertFalse($result->isAttributeValid('attribute2'));
+        $this->assertFalse($result->isAttributeValid('attribute4'));
     }
 
     public function testGetErrorMessagesIndexedByAttribute(): void
     {
         $this->assertEquals(
-            ['attribute2' => ['error2.1', 'error2.2', 'error2.3', 'error2.4'], '' => ['error3.1', 'error3.2']],
+            [
+                'attribute2' => ['error2.1', 'error2.2', 'error2.3', 'error2.4'],
+                '' => ['error3.1', 'error3.2'],
+                'attribute4' => ['error4.1', 'error4.2'],
+            ],
             $this->createAttributeErrorResult()->getErrorMessagesIndexedByAttribute()
         );
     }
@@ -111,6 +130,13 @@ class ResultTest extends TestCase
             $result->getAttributeErrors('attribute2')
         );
         $this->assertEquals([new Error('error3.1'), new Error('error3.2')], $result->getAttributeErrors(''));
+        $this->assertEquals(
+            [
+                new Error('error4.1', ['attribute4', 'subattribute4.1', 'subattribute4*2']),
+                new Error('error4.2', ['attribute4', 'subattribute4.3', 'subattribute4*4']),
+            ],
+            $result->getAttributeErrors('attribute4')
+        );
     }
 
     public function testGetAttributeErrorMessages(): void
@@ -123,6 +149,7 @@ class ResultTest extends TestCase
             $result->getAttributeErrorMessages('attribute2')
         );
         $this->assertEquals(['error3.1', 'error3.2'], $result->getAttributeErrorMessages(''));
+        $this->assertEquals(['error4.1', 'error4.2'], $result->getAttributeErrorMessages('attribute4'));
     }
 
     public function testGetAttributeErrorMessagesIndexedByPath(): void
@@ -135,6 +162,10 @@ class ResultTest extends TestCase
             $result->getAttributeErrorMessagesIndexedByPath('attribute2')
         );
         $this->assertEquals(['' => ['error3.1', 'error3.2']], $result->getAttributeErrorMessagesIndexedByPath(''));
+        $this->assertEquals([
+            'subattribute4\.1.subattribute4\*2' => ['error4.1'],
+            'subattribute4\.3.subattribute4\*4' => ['error4.2'],
+        ], $result->getAttributeErrorMessagesIndexedByPath('attribute4'));
     }
 
     public function testGetCommonErrorMessages(): void
@@ -150,7 +181,9 @@ class ResultTest extends TestCase
             ->addError('error2.3', ['attribute2', 'nested'])
             ->addError('error2.4', ['attribute2', 'nested'])
             ->addError('error3.1')
-            ->addError('error3.2');
+            ->addError('error3.2')
+            ->addError('error4.1', ['attribute4', 'subattribute4.1', 'subattribute4*2'])
+            ->addError('error4.2', ['attribute4', 'subattribute4.3', 'subattribute4*4']);
 
         return $result;
     }
