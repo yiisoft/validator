@@ -25,7 +25,6 @@ use function is_array;
 use function ltrim;
 use function rtrim;
 use function sprintf;
-use function strlen;
 
 /**
  * Can be used for validation of nested structures.
