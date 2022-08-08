@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Stub;
 
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Exception\MissingAttributeException;
 
 final class DataSet implements DataSetInterface
 {
