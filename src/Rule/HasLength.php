@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\Rule\Trait\LimitTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
@@ -100,17 +99,6 @@ final class HasLength implements SerializableRuleInterface, BeforeValidationInte
         return $this->encoding;
     }
 
-    #[ArrayShape([
-        'min' => 'int|null',
-        'max' => 'int|null',
-        'message' => 'string[]',
-        'lessThanMinMessage' => 'array',
-        'greaterThanMaxMessage' => 'array',
-        'notExactlyMessage' => 'array',
-        'encoding' => 'string',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
     public function getOptions(): array
     {
         return array_merge($this->getLimitOptions(), [

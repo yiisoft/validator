@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
@@ -133,17 +132,6 @@ final class Email implements SerializableRuleInterface, BeforeValidationInterfac
         return $this->message;
     }
 
-    #[ArrayShape([
-        'pattern' => 'string',
-        'fullPattern' => 'string',
-        'idnEmailPattern' => 'string',
-        'allowName' => 'bool',
-        'checkDNS' => 'bool',
-        'enableIDN' => 'bool',
-        'message' => 'string[]',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
     public function getOptions(): array
     {
         return [

@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -41,7 +40,6 @@ final class Required implements SerializableRuleInterface, BeforeValidationInter
         return $this->message;
     }
 
-    #[ArrayShape(['message' => 'string[]', 'skipOnEmpty' => 'bool', 'skipOnError' => 'bool'])]
     public function getOptions(): array
     {
         return [

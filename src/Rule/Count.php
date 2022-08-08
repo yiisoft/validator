@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use Countable;
-use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\Rule\Trait\LimitTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
@@ -93,17 +92,6 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
         return $this->message;
     }
 
-    #[ArrayShape([
-        'min' => 'int|null',
-        'max' => 'int|null',
-        'exactly' => 'int|null',
-        'message' => 'string[]',
-        'lessThanMinMessage' => 'array',
-        'greaterThanMaxMessage' => 'array',
-        'notExactlyMessage' => 'array',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
     public function getOptions(): array
     {
         return array_merge($this->getLimitOptions(), [

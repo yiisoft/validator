@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -68,14 +67,6 @@ final class Subset implements SerializableRuleInterface, BeforeValidationInterfa
         return $this->subsetMessage;
     }
 
-    #[ArrayShape([
-        'values' => 'iterable',
-        'strict' => 'bool',
-        'iterableMessage' => 'string[]',
-        'subsetMessage' => 'string[]',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
     public function getOptions(): array
     {
         return [
