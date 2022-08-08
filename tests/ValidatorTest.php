@@ -156,7 +156,7 @@ class ValidatorTest extends TestCase
             'merchantIdd' => 1,
         ]);
         $rules = [
-            'merchantId' => [new Required(), new Number(asInteger: true)]
+            'merchantId' => [new Required(), new Number(asInteger: true)],
         ];
         $result = $validator->validate($dataSet, $rules);
         $this->assertEquals([
