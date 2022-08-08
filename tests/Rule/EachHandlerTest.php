@@ -90,7 +90,7 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
                         $this->formatMessage(
                             'Value must be no greater than {max}. {value} given.',
                             ['max' => 13, 'value' => 30]
-                        )
+                        ),
                     ],
                 ],
             ],
