@@ -28,7 +28,7 @@ final class Embedded extends Composite
         bool $skipOnError = false,
         ?Closure $when = null,
     ) {
-        parent::__construct([], $skipOnEmpty, $skipOnEmptyCallback,  $skipOnError, $when);
+        parent::__construct([], $skipOnEmpty, $skipOnEmptyCallback, $skipOnError, $when);
     }
 
     public function getRules(): array
