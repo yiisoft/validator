@@ -7,11 +7,10 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use RuntimeException;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function function_exists;
@@ -65,12 +64,15 @@ final class Email implements SerializableRuleInterface, BeforeValidationInterfac
         private bool $enableIDN = false,
         private string $message = 'This value is not a valid email address.',
         private bool $skipOnEmpty = false,
+        private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
+        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+
         if ($enableIDN && !function_exists('idn_to_ascii')) {
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }

@@ -13,7 +13,11 @@ use Yiisoft\Validator\DataSet\ScalarDataSet;
 use Yiisoft\Validator\Rule\Callback;
 
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
+
+use function gettype;
 use function is_array;
+use function is_callable;
+use function is_int;
 use function is_object;
 
 /**
@@ -23,8 +27,23 @@ final class Validator implements ValidatorInterface
 {
     use PreValidateTrait;
 
-    public function __construct(private RuleHandlerResolverInterface $ruleHandlerResolver)
+    public function __construct(
+        private RuleHandlerResolverInterface $ruleHandlerResolver,
+        private ?bool $skipOnEmpty = null,
+        private $skipOnEmptyCallback = null
+    )
     {
+        if ($this->skipOnEmpty !== null) {
+            $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipOnAll() : new SkipOnNull();
+        }
+
+        if ($this->skipOnEmptyCallback !== null) {
+            if (!is_callable($this->skipOnEmptyCallback)) {
+                throw new InvalidArgumentException('$skipOnEmptyCallback must be a callable.');
+            }
+
+            $this->skipOnEmpty = true;
+        }
     }
 
     /**
@@ -157,6 +176,14 @@ final class Validator implements ValidatorInterface
                     gettype($rule)
                 )
             );
+        }
+
+        if ($this->skipOnEmpty !== null) {
+            $rule = $rule->skipOnEmpty($this->skipOnEmpty);
+        }
+
+        if ($this->skipOnEmpty !== null) {
+            $rule = $rule->skipOnEmptyCallback($this->skipOnEmptyCallback);
         }
 
         return $rule;

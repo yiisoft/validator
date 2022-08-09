@@ -141,7 +141,7 @@ new Number(asInteger: true, max: 100, skipOnError: true)
 #### Skipping empty values
 
 By default, empty values are validated. That is undesirable if you need to allow not specifying a field.
-To change this behavior use `skipOnEmpty: true`:
+To change this behavior adjust`skipOnEmpty` argument:
 
 ```php
 use Yiisoft\Validator\Rule\Number;

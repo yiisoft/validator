@@ -9,13 +9,12 @@ use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use Traversable;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
-
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_array;
@@ -37,12 +36,15 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $skipOnEmpty = false,
+        private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
+        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         if (empty($rules)) {
             throw new InvalidArgumentException('Rules must not be empty.');

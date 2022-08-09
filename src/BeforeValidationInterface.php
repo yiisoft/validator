@@ -11,7 +11,7 @@ use Closure;
  */
 interface BeforeValidationInterface
 {
-    public function shouldSkipOnEmpty(): bool;
+    public function shouldSkipOnEmpty($value): bool;
 
     public function shouldSkipOnError(): bool;
 

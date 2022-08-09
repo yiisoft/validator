@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Closure;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class Callback implements SerializableRuleInterface, BeforeValidationInterface
@@ -22,12 +22,14 @@ final class Callback implements SerializableRuleInterface, BeforeValidationInter
          */
         private $callback,
         private bool $skipOnEmpty = false,
+        private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
+        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
     }
 
     /**
