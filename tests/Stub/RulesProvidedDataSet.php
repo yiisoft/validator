@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Stub;
 
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Exception\MissingAttributeException;
 use Yiisoft\Validator\RulesProviderInterface;
 
 final class RulesProvidedDataSet implements RulesProviderInterface, DataSetInterface
@@ -19,13 +18,9 @@ final class RulesProvidedDataSet implements RulesProviderInterface, DataSetInter
         $this->rules = $rules;
     }
 
-    public function getAttributeValue(string $attribute)
+    public function getAttributeValue(string $attribute): mixed
     {
-        if (!isset($this->data[$attribute])) {
-            throw new MissingAttributeException("There is no \"$attribute\" attribute in the class.");
-        }
-
-        return $this->data[$attribute];
+        return $this->data[$attribute] ?? null;
     }
 
     public function getRules(): iterable
