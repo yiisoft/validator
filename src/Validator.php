@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Yiisoft\Validator\DataSet\AttributeDataSet;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\AttributeDataSet;
 use Yiisoft\Validator\DataSet\ScalarDataSet;
