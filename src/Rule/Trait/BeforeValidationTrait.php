@@ -14,7 +14,7 @@ use function is_callable;
 
 trait BeforeValidationTrait
 {
-    public function getSkipOnEmpty(): callable
+    public function getSkipOnEmpty(): bool
     {
         return $this->skipOnEmpty;
     }
