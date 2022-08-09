@@ -60,10 +60,10 @@ final class BooleanHandlerTest extends AbstractRuleValidatorTest
     {
         return [
             [
-                new Boolean(message: 'Custom error'),
+                new Boolean(message: 'Custom error.'),
                 5,
                 [
-                    new Error('Custom error'),
+                    new Error('Custom error.'),
                 ],
             ],
         ];

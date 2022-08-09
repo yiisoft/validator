@@ -115,7 +115,7 @@ final class GreaterThanTest extends AbstractRuleTest
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
 
-        $rule = new GreaterThan();
+        new GreaterThan();
     }
 
     protected function getRule(): SerializableRuleInterface
