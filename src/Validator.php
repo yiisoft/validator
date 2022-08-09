@@ -31,8 +31,7 @@ final class Validator implements ValidatorInterface
         private RuleHandlerResolverInterface $ruleHandlerResolver,
         private ?bool $skipOnEmpty = null,
         private $skipOnEmptyCallback = null
-    )
-    {
+    ) {
         if ($this->skipOnEmpty !== null) {
             $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipOnAll() : new SkipOnNull();
         }
