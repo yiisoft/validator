@@ -6,6 +6,8 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Yiisoft\Validator\DataSet\ArrayDataSet;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Result;
@@ -142,5 +144,24 @@ class ValidatorTest extends TestCase
                 },
             ],
         ]);
+    }
+
+    /**
+     * @link https://github.com/yiisoft/validator/issues/173
+     */
+    public function testMissingRequiredAttribute(): void
+    {
+        $validator = FakeValidatorFactory::make();
+        $dataSet = new ArrayDataSet([
+            'merchantIdd' => 1,
+        ]);
+        $rules = [
+            'merchantId' => [new Required(), new Number(asInteger: true)],
+        ];
+        $result = $validator->validate($dataSet, $rules);
+        $this->assertEquals([
+            new Error('Value cannot be blank.', ['merchantId']),
+            new Error('Value must be an integer.', ['merchantId']),
+        ], $result->getErrors());
     }
 }
