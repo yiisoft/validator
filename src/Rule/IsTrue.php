@@ -43,25 +43,16 @@ final class IsTrue implements SerializableRuleInterface, BeforeValidationInterfa
     ) {
     }
 
-    /**
-     * @return mixed
-     */
     public function getTrueValue(): mixed
     {
         return $this->trueValue;
     }
 
-    /**
-     * @return bool
-     */
     public function isStrict(): bool
     {
         return $this->strict;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;
