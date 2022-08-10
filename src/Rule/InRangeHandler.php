@@ -34,11 +34,6 @@ final class InRangeHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-
-        if ($value === null && $rule->shouldSkipOnEmpty($value)) {
-            return $result;
-        }
-
         if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getRange(), $rule->isStrict())) {
             $formattedMessage = $this->formatter->format(
                 $rule->getMessage(),

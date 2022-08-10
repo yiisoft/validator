@@ -136,6 +136,6 @@ final class BooleanTest extends AbstractRuleTest
 
     protected function getRule(): SerializableRuleInterface
     {
-        return new Boolean([]);
+        return new Boolean();
     }
 }

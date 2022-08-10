@@ -13,12 +13,17 @@ use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\CompareTo;
+use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\SkipOnNull;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Stub\Rule;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Validator;
 
 class ValidatorTest extends TestCase
 {
@@ -163,5 +168,411 @@ class ValidatorTest extends TestCase
             new Error('Value cannot be blank.', ['merchantId']),
             new Error('Value must be an integer.', ['merchantId']),
         ], $result->getErrors());
+    }
+
+    public function skipOnEmptyDataProvider()
+    {
+        $validator = new Validator(new SimpleRuleHandlerContainer());
+        $rules = [
+            'name' => [new HasLength(min: 8)],
+            'age' => [new Number(asInteger: true, min: 18)],
+        ];
+        $stringLessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{character} ' .
+            'other{characters}}.';
+        $intMessage = 'Value must be an integer.';
+        $intLessThanMinMessage = 'Value must be no less than 18.';
+
+        return [
+            'rule / validator, skipOnEmpty: false, value not passed' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intMessage, ['age']),
+                ],
+            ],
+            'rule / validator, skipOnEmpty: false, value is empty' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => null,
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intMessage, ['age']),
+                ],
+            ],
+            'rule / validator, skipOnEmpty: false, value is not empty' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => 17,
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intLessThanMinMessage, ['age']),
+                ],
+            ],
+
+            'rule, skipOnEmpty: true, value not passed' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                ]),
+                [
+                    'name' => [new HasLength(min: 8)],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: true)],
+                ],
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                ],
+            ],
+            'rule, skipOnEmpty: true, value is empty' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => null,
+                ]),
+                [
+                    'name' => [new HasLength(min: 8)],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: true)],
+                ],
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                ],
+            ],
+            'rule, skipOnEmpty: true, value is not empty' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => 17,
+                ]),
+                [
+                    'name' => [new HasLength(min: 8)],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: true)],
+                ],
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intLessThanMinMessage, ['age']),
+                ],
+            ],
+
+            'rule, skipOnEmptyCallback, SkipOnNull, value not passed' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                ]),
+                [
+                    'name' => [new HasLength(min: 8)],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmptyCallback: new SkipOnNull())],
+                ],
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                ],
+            ],
+            'rule, skipOnEmptyCallback, SkipOnNull, value is empty' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => null,
+                ]),
+                [
+                    'name' => [new HasLength(min: 8)],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmptyCallback: new SkipOnNull())],
+                ],
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                ],
+            ],
+            'rule, skipOnEmptyCallback, SkipOnNull, value is not empty' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => 17,
+                ]),
+                [
+                    'name' => [new HasLength(min: 8)],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmptyCallback: new SkipOnNull())],
+                ],
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intLessThanMinMessage, ['age']),
+                ],
+            ],
+            'rule, skipOnEmptyCallback, SkipOnNull, value is not empty (empty string)' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => '',
+                ]),
+                [
+                    'name' => [new HasLength(min: 8)],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmptyCallback: new SkipOnNull())],
+                ],
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intMessage, ['age']),
+                ],
+            ],
+
+            'rule, skipOnEmptyCallback, custom, value not passed' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                ]),
+                [
+                    'name' => [new HasLength(min: 8)],
+                    'age' => [
+                        new Number(
+                            asInteger: true,
+                            min: 18,
+                            skipOnEmptyCallback: static function (mixed $value): bool {
+                                return $value === 0;
+                            }
+                        ),
+                    ],
+                ],
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intMessage, ['age']),
+                ],
+            ],
+            'rule, skipOnEmptyCallback, custom, value is empty' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => 0,
+                ]),
+                [
+                    'name' => [new HasLength(min: 8)],
+                    'age' => [
+                        new Number(
+                            asInteger: true,
+                            min: 18,
+                            skipOnEmptyCallback: static function (mixed $value): bool {
+                                return $value === 0;
+                            }
+                        ),
+                    ],
+                ],
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                ],
+            ],
+            'rule, skipOnEmptyCallback, custom, value is not empty' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => 17,
+                ]),
+                [
+                    'name' => [new HasLength(min: 8)],
+                    'age' => [
+                        new Number(
+                            asInteger: true,
+                            min: 18,
+                            skipOnEmptyCallback: static function (mixed $value): bool {
+                                return $value === 0;
+                            }
+                        ),
+                    ],
+                ],
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intLessThanMinMessage, ['age']),
+                ],
+            ],
+            'rule, skipOnEmptyCallback, custom, value is not empty (null)' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => null,
+                ]),
+                [
+                    'name' => [new HasLength(min: 8)],
+                    'age' => [
+                        new Number(
+                            asInteger: true,
+                            min: 18,
+                            skipOnEmptyCallback: static function (mixed $value): bool {
+                                return $value === 0;
+                            }
+                        ),
+                    ],
+                ],
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intMessage, ['age']),
+                ],
+            ],
+
+            'validator, skipOnEmpty: true, value not passed' => [
+                new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true),
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                ],
+            ],
+            'validator, skipOnEmpty: true, value is empty' => [
+                new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true),
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => null,
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                ],
+            ],
+            'validator, skipOnEmpty: true, value is not empty' => [
+                new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true),
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => 17,
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intLessThanMinMessage, ['age']),
+                ],
+            ],
+
+            'validator, skipOnEmptyCallback, SkipOnNull, value not passed' => [
+                new Validator(new SimpleRuleHandlerContainer(), skipOnEmptyCallback: new SkipOnNull()),
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                ],
+            ],
+            'validator, skipOnEmptyCallback, SkipOnNull, value is empty' => [
+                new Validator(new SimpleRuleHandlerContainer(), skipOnEmptyCallback: new SkipOnNull()),
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => null,
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                ],
+            ],
+            'validator, skipOnEmptyCallback, SkipOnNull, value is not empty' => [
+                new Validator(new SimpleRuleHandlerContainer(), skipOnEmptyCallback: new SkipOnNull()),
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => 17,
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intLessThanMinMessage, ['age']),
+                ],
+            ],
+            'validator, skipOnEmptyCallback, SkipOnNull, value is not empty (empty string)' => [
+                new Validator(new SimpleRuleHandlerContainer(), skipOnEmptyCallback: new SkipOnNull()),
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => '',
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intMessage, ['age']),
+                ],
+            ],
+
+            'validator, skipOnEmptyCallback, custom, value not passed' => [
+                new Validator(
+                    new SimpleRuleHandlerContainer(),
+                    skipOnEmptyCallback: static function (mixed $value): bool {
+                        return $value === 0;
+                    }
+                ),
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intMessage, ['age']),
+                ],
+            ],
+            'validator, skipOnEmptyCallback, custom, value is empty' => [
+                new Validator(
+                    new SimpleRuleHandlerContainer(),
+                    skipOnEmptyCallback: static function (mixed $value): bool {
+                        return $value === 0;
+                    }
+                ),
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => 0,
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                ],
+            ],
+            'validator, skipOnEmptyCallback, custom, value is not empty' => [
+                new Validator(
+                    new SimpleRuleHandlerContainer(),
+                    skipOnEmptyCallback: static function (mixed $value): bool {
+                        return $value === 0;
+                    }
+                ),
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => 17,
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intLessThanMinMessage, ['age']),
+                ],
+            ],
+            'validator, skipOnEmptyCallback, custom, value is not empty (null)' => [
+                new Validator(
+                    new SimpleRuleHandlerContainer(),
+                    skipOnEmptyCallback: static function (mixed $value): bool {
+                        return $value === 0;
+                    }
+                ),
+                new ArrayDataSet([
+                    'name' => 'Dmitriy',
+                    'age' => null,
+                ]),
+                $rules,
+                [
+                    new Error($stringLessThanMinMessage, ['name']),
+                    new Error($intMessage, ['age']),
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param Validator $validator
+     * @param ArrayDataSet $data
+     * @param Rule[] $rules
+     * @param Error[] $expectedErrors
+     *
+     * @return void
+     *
+     * @dataProvider skipOnEmptyDataProvider
+     */
+    public function testSkipOnEmpty(Validator $validator, ArrayDataSet $data, array $rules, array $expectedErrors): void
+    {
+        $result = $validator->validate($data, $rules);
+        $this->assertEquals($expectedErrors, $result->getErrors());
     }
 }
