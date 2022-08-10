@@ -6,7 +6,7 @@ namespace Yiisoft\Validator;
 
 final class SkipOnNull
 {
-    public function __invoke($value): bool
+    public function __invoke(mixed $value): bool
     {
         return $value === null;
     }

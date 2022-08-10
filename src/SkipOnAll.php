@@ -6,7 +6,7 @@ namespace Yiisoft\Validator;
 
 final class SkipOnAll
 {
-    public function __invoke($value): bool
+    public function __invoke(mixed $value): bool
     {
         return false;
     }
