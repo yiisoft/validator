@@ -36,7 +36,7 @@ final class IsTrue implements SerializableRuleInterface, BeforeValidationInterfa
         private string $message = 'The value must be "{true}".',
         private bool $skipOnEmpty = false,
         /**
-         * @var callable|null
+         * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,

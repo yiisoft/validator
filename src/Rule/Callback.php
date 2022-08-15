@@ -23,7 +23,7 @@ final class Callback implements SerializableRuleInterface, BeforeValidationInter
         private $callback,
         private bool $skipOnEmpty = false,
         /**
-         * @var callable|null
+         * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,

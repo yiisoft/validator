@@ -69,7 +69,7 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
         'other{items}}.',
         private bool $skipOnEmpty = false,
         /**
-         * @var callable|null
+         * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,

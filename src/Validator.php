@@ -31,7 +31,7 @@ final class Validator implements ValidatorInterface
         private RuleHandlerResolverInterface $ruleHandlerResolver,
         private ?bool $skipOnEmpty = null,
         /**
-         * @var callable|null
+         * @var callable
          */
         private $skipOnEmptyCallback = null
     ) {

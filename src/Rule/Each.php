@@ -32,7 +32,7 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
         private string $message = '{error} {value} given.',
         private bool $skipOnEmpty = false,
         /**
-         * @var callable|null
+         * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,

@@ -47,7 +47,7 @@ final class Equal extends Compare
         private bool $strict = false,
         private bool $skipOnEmpty = false,
         /**
-         * @var callable|null
+         * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,

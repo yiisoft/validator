@@ -28,7 +28,7 @@ final class Subset implements SerializableRuleInterface, BeforeValidationInterfa
         private string $subsetMessage = 'Values must be ones of {values}.',
         private bool $skipOnEmpty = false,
         /**
-         * @var callable|null
+         * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,

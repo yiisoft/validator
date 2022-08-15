@@ -37,7 +37,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $skipOnEmpty = false,
         /**
-         * @var callable|null
+         * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,

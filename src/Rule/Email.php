@@ -65,7 +65,7 @@ final class Email implements SerializableRuleInterface, BeforeValidationInterfac
         private string $message = 'This value is not a valid email address.',
         private bool $skipOnEmpty = false,
         /**
-         * @var callable|null
+         * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,

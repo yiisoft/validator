@@ -52,7 +52,7 @@ final class Url implements SerializableRuleInterface, BeforeValidationInterface
         private string $message = 'This value is not a valid URL.',
         private bool $skipOnEmpty = false,
         /**
-         * @var callable|null
+         * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,

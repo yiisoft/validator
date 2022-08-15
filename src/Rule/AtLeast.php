@@ -37,7 +37,7 @@ final class AtLeast implements SerializableRuleInterface, BeforeValidationInterf
         private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.',
         private bool $skipOnEmpty = false,
         /**
-         * @var callable|null
+         * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,

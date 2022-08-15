@@ -68,7 +68,7 @@ final class HasLength implements SerializableRuleInterface, BeforeValidationInte
         private string $encoding = 'UTF-8',
         private bool $skipOnEmpty = false,
         /**
-         * @var callable|null
+         * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
