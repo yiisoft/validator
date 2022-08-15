@@ -18,6 +18,8 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\SkipNever;
+use Yiisoft\Validator\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnNull;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
@@ -170,7 +172,7 @@ class ValidatorTest extends TestCase
         ], $result->getErrors());
     }
 
-    public function skipOnEmptyDataProvider()
+    public function skipOnEmptyDataProvider(): array
     {
         $validator = new Validator(new SimpleRuleHandlerContainer());
         $rules = [
@@ -572,5 +574,35 @@ class ValidatorTest extends TestCase
     {
         $result = $validator->validate($data, $rules);
         $this->assertEquals($expectedErrors, $result->getErrors());
+    }
+
+    public function initSkipOnEmptyDataProvider(): array
+    {
+        return [
+            [new Validator(new SimpleRuleHandlerContainer()), null, null],
+            [new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: false), false, SkipNever::class],
+            [new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true), true, SkipOnEmpty::class],
+            [
+                new Validator(new SimpleRuleHandlerContainer(), skipOnEmptyCallback: new SkipOnNull()),
+                true,
+                SkipOnNull::class,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider initSkipOnEmptyDataProvider
+     */
+    public function testInitSkipOnEmpty(
+        Validator $validator,
+        ?bool $expectedSkipOnEmpty,
+        ?string $expectedSkipOnEmptyCallbackClass
+    ): void
+    {
+        $this->assertSame($expectedSkipOnEmpty, $validator->getSkipOnEmpty());
+
+        if ($expectedSkipOnEmptyCallbackClass !== null) {
+            $this->assertInstanceOf($expectedSkipOnEmptyCallbackClass, $validator->getSkipOnEmptyCallback());
+        }
     }
 }

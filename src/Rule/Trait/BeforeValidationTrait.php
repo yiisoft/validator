@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule\Trait;
 use Closure;
 use InvalidArgumentException;
 use Yiisoft\Validator\SkipNever;
-use Yiisoft\Validator\SkipOnNull;
+use Yiisoft\Validator\SkipOnEmpty;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_callable;
@@ -19,12 +19,17 @@ trait BeforeValidationTrait
         return $this->skipOnEmpty;
     }
 
+    public function getSkipOnEmptyCallback(): callable
+    {
+        return $this->skipOnEmptyCallback;
+    }
+
     public function shouldSkipOnEmpty(mixed $validatedValue): bool
     {
         return ($this->skipOnEmptyCallback)($validatedValue);
     }
 
-    protected function initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback): void
+    protected function initSkipOnEmptyProperties(bool $skipOnEmpty = false, ?callable $skipOnEmptyCallback = null): void
     {
         $this->skipOnEmpty = $skipOnEmpty;
         $this->skipOnEmptyCallback = $skipOnEmptyCallback;
@@ -39,21 +44,23 @@ trait BeforeValidationTrait
             return;
         }
 
-        $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipNever() : new SkipOnNull();
+        $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipNever() : new SkipOnEmpty();
     }
 
     public function skipOnEmpty(bool $value): self
     {
         $new = clone $this;
         $new->skipOnEmpty = $value;
+        $new->initSkipOnEmptyProperties($new->skipOnEmpty);
 
         return $new;
     }
 
-    public function skipOnEmptyCallback(callable $value): self
+    public function skipOnEmptyCallback(?callable $value): self
     {
         $new = clone $this;
         $new->skipOnEmptyCallback = $value;
+        $new->initSkipOnEmptyProperties(false, $value);
 
         return $new;
     }

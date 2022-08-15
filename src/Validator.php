@@ -33,16 +33,24 @@ final class Validator implements ValidatorInterface
         private $skipOnEmptyCallback = null
     ) {
         if ($this->skipOnEmpty !== null) {
-            $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipNever() : new SkipOnNull();
-        }
-
-        if ($this->skipOnEmptyCallback !== null) {
+            $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipNever() : new SkipOnEmpty();
+        } elseif ($this->skipOnEmptyCallback !== null) {
             if (!is_callable($this->skipOnEmptyCallback)) {
                 throw new InvalidArgumentException('$skipOnEmptyCallback must be a callable.');
             }
 
             $this->skipOnEmpty = true;
         }
+    }
+
+    public function getSkipOnEmpty(): ?bool
+    {
+        return $this->skipOnEmpty;
+    }
+
+    public function getSkipOnEmptyCallback(): ?callable
+    {
+        return $this->skipOnEmptyCallback;
     }
 
     /**

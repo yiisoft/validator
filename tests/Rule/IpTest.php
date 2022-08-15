@@ -334,6 +334,6 @@ final class IpTest extends AbstractRuleTest
 
     protected function getRule(): SerializableRuleInterface
     {
-        return new Ip([]);
+        return new Ip();
     }
 }

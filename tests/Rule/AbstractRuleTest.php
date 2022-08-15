@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\SkipNever;
+use Yiisoft\Validator\SkipOnEmpty;
+use Yiisoft\Validator\SkipOnNull;
 
 abstract class AbstractRuleTest extends TestCase
 {
@@ -33,7 +37,29 @@ abstract class AbstractRuleTest extends TestCase
         $this->assertInstanceOf($rule->getHandlerClassName(), $resolver->resolve($rule->getHandlerClassName()));
     }
 
+    public function testInitSkipOnEmpty(): void
+    {
+        $rule = $this->getRule();
+        $this->assertFalse($rule->getSkipOnEmpty());
+        $this->assertInstanceOf(SkipNever::class, $rule->getSkipOnEmptyCallback());
+
+        $rule = $this->getRule()->skipOnEmpty(true);
+        $this->assertTrue($rule->getSkipOnEmpty());
+        $this->assertInstanceOf(SkipOnEmpty::class, $rule->getSkipOnEmptyCallback());
+
+        $rule = $this->getRule()->skipOnEmpty(false);
+        $this->assertFalse($rule->getSkipOnEmpty());
+        $this->assertInstanceOf(SkipNever::class, $rule->getSkipOnEmptyCallback());
+
+        $rule = $this->getRule()->skipOnEmptyCallback(new SkipOnNull());
+        $this->assertTrue($rule->getSkipOnEmpty());
+        $this->assertInstanceOf(SkipOnNull::class, $rule->getSkipOnEmptyCallback());
+    }
+
     abstract protected function optionsDataProvider(): array;
 
+    /**
+     * @return SerializableRuleInterface|BeforeValidationTrait
+     */
     abstract protected function getRule(): SerializableRuleInterface;
 }
