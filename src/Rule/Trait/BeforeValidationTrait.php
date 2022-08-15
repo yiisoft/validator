@@ -19,9 +19,9 @@ trait BeforeValidationTrait
         return $this->skipOnEmpty;
     }
 
-    public function shouldSkipOnEmpty($value): bool
+    public function shouldSkipOnEmpty(mixed $validatedValue): bool
     {
-        return ($this->skipOnEmptyCallback)($value);
+        return ($this->skipOnEmptyCallback)($validatedValue);
     }
 
     protected function initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback): void
