@@ -51,6 +51,9 @@ final class Url implements SerializableRuleInterface, BeforeValidationInterface
         private bool $enableIDN = false,
         private string $message = 'This value is not a valid URL.',
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable|null
+         */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**

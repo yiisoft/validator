@@ -24,6 +24,9 @@ final class Required implements SerializableRuleInterface, BeforeValidationInter
     public function __construct(
         private string $message = 'Value cannot be blank.',
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable|null
+         */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**

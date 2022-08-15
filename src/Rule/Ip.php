@@ -199,6 +199,9 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface
          */
         private array $ranges = [],
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable|null
+         */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**

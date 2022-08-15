@@ -30,6 +30,9 @@ final class Validator implements ValidatorInterface
     public function __construct(
         private RuleHandlerResolverInterface $ruleHandlerResolver,
         private ?bool $skipOnEmpty = null,
+        /**
+         * @var callable|null
+         */
         private $skipOnEmptyCallback = null
     ) {
         if ($this->skipOnEmpty !== null) {

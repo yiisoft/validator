@@ -31,6 +31,9 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
         private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $message = '{error} {value} given.',
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable|null
+         */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**

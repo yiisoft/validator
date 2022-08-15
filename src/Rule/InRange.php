@@ -37,6 +37,9 @@ final class InRange implements SerializableRuleInterface, BeforeValidationInterf
         private bool $not = false,
         private string $message = 'This value is invalid.',
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable|null
+         */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**

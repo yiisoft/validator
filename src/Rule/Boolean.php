@@ -38,6 +38,9 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
         private bool $strict = false,
         private string $message = 'The value must be either "{true}" or "{false}".',
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable|null
+         */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**

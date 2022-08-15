@@ -68,6 +68,9 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
         string $notExactlyMessage = 'This value must contain exactly {exactly, number} {exactly, plural, one{item} ' .
         'other{items}}.',
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable|null
+         */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**

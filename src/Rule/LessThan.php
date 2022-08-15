@@ -42,6 +42,9 @@ final class LessThan extends Compare
          */
         private string $type = self::TYPE_STRING,
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable|null
+         */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**

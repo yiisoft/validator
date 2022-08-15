@@ -36,6 +36,9 @@ final class Regex implements SerializableRuleInterface, BeforeValidationInterfac
         private string $incorrectInputMessage = 'Value should be string.',
         private string $message = 'Value is invalid.',
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable|null
+         */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**

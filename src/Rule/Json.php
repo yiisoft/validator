@@ -24,6 +24,9 @@ final class Json implements SerializableRuleInterface, BeforeValidationInterface
     public function __construct(
         private string $message = 'The value is not JSON.',
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable|null
+         */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**
