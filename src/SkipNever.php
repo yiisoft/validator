@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-final class SkipOnAll
+final class SkipNever
 {
     public function __invoke(mixed $value): bool
     {

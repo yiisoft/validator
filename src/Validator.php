@@ -33,7 +33,7 @@ final class Validator implements ValidatorInterface
         private $skipOnEmptyCallback = null
     ) {
         if ($this->skipOnEmpty !== null) {
-            $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipOnAll() : new SkipOnNull();
+            $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipNever() : new SkipOnNull();
         }
 
         if ($this->skipOnEmptyCallback !== null) {
