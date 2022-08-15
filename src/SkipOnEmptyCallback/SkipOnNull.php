@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator;
+namespace Yiisoft\Validator\SkipOnEmptyCallback;
 
 final class SkipOnNull
 {

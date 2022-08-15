@@ -6,8 +6,8 @@ namespace Yiisoft\Validator\Rule\Trait;
 
 use Closure;
 use InvalidArgumentException;
-use Yiisoft\Validator\SkipNever;
-use Yiisoft\Validator\SkipOnEmpty;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipNever;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_callable;

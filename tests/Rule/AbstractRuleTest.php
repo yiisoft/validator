@@ -8,9 +8,9 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
-use Yiisoft\Validator\SkipNever;
-use Yiisoft\Validator\SkipOnEmpty;
-use Yiisoft\Validator\SkipOnNull;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipNever;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 
 abstract class AbstractRuleTest extends TestCase
 {

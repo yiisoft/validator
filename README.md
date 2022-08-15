@@ -156,8 +156,8 @@ What exactly to consider to be empty is vague and can vary depending on a scope 
 
 - If `skipOnEmpty` is `false`, `Yiisoft\Validator\SkipOnAll` is used automatically for `skipOnEmptyCallback` - every 
 value is considered non-empty and validated without skipping (default).
-- If `skipOnEmpty` is `true`, `Yiisoft\Validator\SkipOnEmpty` is used automatically for `skipOnEmptyCallback` - only 
-- non-empty values (`null`, `[]`. `''`) are validated.
+- If `skipOnEmpty` is `true`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty` is used automatically for 
+- `skipOnEmptyCallback` - only non-empty values (`null`, `[]`. `''`) are validated.
 - If `skipOnEmptyCallback` is set, it takes precedence to determine emptiness.
 
 While using first option is usually enough for HTML forms, the second one is more suitable for APIs.
@@ -166,7 +166,7 @@ The empty values can be also limited to `null` only:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\SkipOnNull;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 
 new Number(asInteger: true, max: 100, skipOnEmptyCallback: new SkipOnNull());
 ```
