@@ -597,8 +597,7 @@ class ValidatorTest extends TestCase
         Validator $validator,
         ?bool $expectedSkipOnEmpty,
         ?string $expectedSkipOnEmptyCallbackClass
-    ): void
-    {
+    ): void {
         $this->assertSame($expectedSkipOnEmpty, $validator->getSkipOnEmpty());
 
         if ($expectedSkipOnEmptyCallbackClass !== null) {
