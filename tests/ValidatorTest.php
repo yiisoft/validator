@@ -566,8 +566,6 @@ class ValidatorTest extends TestCase
      * @param Rule[] $rules
      * @param Error[] $expectedErrors
      *
-     * @return void
-     *
      * @dataProvider skipOnEmptyDataProvider
      */
     public function testSkipOnEmpty(Validator $validator, ArrayDataSet $data, array $rules, array $expectedErrors): void
