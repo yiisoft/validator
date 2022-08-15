@@ -20,7 +20,7 @@ trait PreValidateTrait
         ValidationContext $context,
         BeforeValidationInterface $rule
     ): bool {
-        if ($rule->shouldSkipOnEmpty($value) === true) {
+        if ($rule->shouldSkipOnEmpty($value)) {
             return true;
         }
 
