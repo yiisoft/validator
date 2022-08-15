@@ -59,7 +59,7 @@ abstract class AbstractRuleTest extends TestCase
     abstract protected function optionsDataProvider(): array;
 
     /**
-     * @return SerializableRuleInterface|BeforeValidationTrait
+     * @return BeforeValidationTrait|SerializableRuleInterface
      */
     abstract protected function getRule(): SerializableRuleInterface;
 }
