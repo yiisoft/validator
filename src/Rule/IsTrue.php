@@ -6,17 +6,19 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Checks if the value is a boolean value or a value corresponding to it.
+ * Checks if the value is a "true" boolean value or a value corresponding to it. Useful for user agreements etc.
+ *
+ * @see IsTrueHandler
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Boolean implements SerializableRuleInterface, BeforeValidationInterface
+final class IsTrue implements SerializableRuleInterface, BeforeValidationInterface
 {
     use BeforeValidationTrait;
     use RuleNameTrait;
@@ -27,54 +29,30 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
          */
         private mixed $trueValue = '1',
         /**
-         * @var mixed the value representing "false" status. Defaults to `0`.
-         */
-        private mixed $falseValue = '0',
-        /**
-         * @var bool whether the comparison to {@see $trueValue} and {@see $falseValue} is strict. When this is `true`,
-         * the value and type must both match those of {@see $trueValue} or {@see $falseValue}. Defaults to `false`,
-         * meaning only the value needs to be matched.
+         * @var bool whether the comparison to {@see $trueValue} is strict. When this is "true", the value and type must
+         * both match {@see $trueValue}. Defaults to "false", meaning only the value needs to be matched.
          */
         private bool $strict = false,
-        private string $message = 'The value must be either "{true}" or "{false}".',
+        private string $message = 'The value must be "{true}".',
         private bool $skipOnEmpty = false,
-        private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
     }
 
-    /**
-     * @return mixed
-     */
     public function getTrueValue(): mixed
     {
         return $this->trueValue;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFalseValue(): mixed
-    {
-        return $this->falseValue;
-    }
-
-    /**
-     * @return bool
-     */
     public function isStrict(): bool
     {
         return $this->strict;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;
@@ -84,13 +62,11 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
     {
         return [
             'trueValue' => $this->trueValue,
-            'falseValue' => $this->falseValue,
             'strict' => $this->strict,
             'message' => [
                 'message' => $this->message,
                 'parameters' => [
                     'true' => $this->trueValue === true ? '1' : $this->trueValue,
-                    'false' => $this->falseValue === false ? '0' : $this->falseValue,
                 ],
             ],
             'skipOnEmpty' => $this->skipOnEmpty,
@@ -100,6 +76,6 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
 
     public function getHandlerClassName(): string
     {
-        return BooleanHandler::class;
+        return IsTrueHandler::class;
     }
 }
