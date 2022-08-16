@@ -44,7 +44,7 @@ final class IsTrueHandler implements RuleHandlerInterface
         $formattedMessage = $this->formatter->format(
             $rule->getMessage(),
             [
-                'true' => $rule->getTrueValue() === true ? '1' : $rule->getTrueValue(),
+                'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
                 'attribute' => $context->getAttribute(),
                 'value' => $value,
             ]
