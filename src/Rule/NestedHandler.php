@@ -13,6 +13,7 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_array;
+use function is_int;
 use function is_object;
 
 /**
