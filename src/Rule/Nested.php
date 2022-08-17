@@ -118,7 +118,11 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
                     throw new InvalidArgumentException('Bare shortcut is prohibited. Use "Each" rule instead.');
                 }
 
-                $parts = ArrayHelper::parsePath((string) $valuePath, preserveDelimiterEscaping: true);
+                $parts = ArrayHelper::parsePath(
+                    (string) $valuePath,
+                    delimiter: self::EACH_SHORTCUT,
+                    preserveDelimiterEscaping: true
+                );
                 if (count($parts) === 1) {
                     continue;
                 }
