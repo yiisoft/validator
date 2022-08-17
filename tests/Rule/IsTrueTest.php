@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\Rule\Boolean;
+use Yiisoft\Validator\Rule\IsTrue;
 use Yiisoft\Validator\SerializableRuleInterface;
 
-final class BooleanTest extends AbstractRuleTest
+final class IsTrueTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array
     {
         return [
             [
-                new Boolean(),
+                new IsTrue(),
                 [
                     'trueValue' => '1',
-                    'falseValue' => '0',
                     'strict' => false,
                     'message' => [
-                        'message' => 'The value must be either "{true}" or "{false}".',
+                        'message' => 'The value must be "{true}".',
                         'parameters' => [
                             'true' => '1',
-                            'false' => '0',
                         ],
                     ],
                     'skipOnEmpty' => false,
@@ -30,9 +28,8 @@ final class BooleanTest extends AbstractRuleTest
                 ],
             ],
             [
-                new Boolean(
+                new IsTrue(
                     trueValue: 'YES',
-                    falseValue: 'NO',
                     strict: true,
                     message: 'Custom message.',
                     skipOnEmpty: true,
@@ -40,13 +37,11 @@ final class BooleanTest extends AbstractRuleTest
                 ),
                 [
                     'trueValue' => 'YES',
-                    'falseValue' => 'NO',
                     'strict' => true,
                     'message' => [
                         'message' => 'Custom message.',
                         'parameters' => [
                             'true' => 'YES',
-                            'false' => 'NO',
                         ],
                     ],
                     'skipOnEmpty' => true,
@@ -58,6 +53,6 @@ final class BooleanTest extends AbstractRuleTest
 
     protected function getRule(): SerializableRuleInterface
     {
-        return new Boolean();
+        return new IsTrue();
     }
 }

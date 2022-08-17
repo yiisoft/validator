@@ -20,6 +20,7 @@ The package provides data validation capabilities.
 ## Features
 
 - Could be used with any object.
+- Supports PHP 8 attributes.
 - Skip further validation if an error occurred for the same field.
 - Skip validation of empty value.
 - Error message formatting.
@@ -451,6 +452,19 @@ $data = [
     // ...
 ];
 $dataSet = new AttributeDataSet(new ChartsData(), $data);
+$errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
+```
+
+If the object implements `DataSetInterface` just pass it directly:
+
+```php
+use Yiisoft\Validator\DataSet\AttributeDataSet;
+use Yiisoft\Validator\ValidatorInterface;
+
+// Usually obtained from container
+$validator = $container->get(ValidatorInterface::class);
+
+$dataSet = new ChartsData();
 $errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
 ```
 

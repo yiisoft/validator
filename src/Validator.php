@@ -9,10 +9,11 @@ use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
+use Yiisoft\Validator\DataSet\AttributeDataSet;
 use Yiisoft\Validator\DataSet\ScalarDataSet;
 use Yiisoft\Validator\Rule\Callback;
-
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
+
 use function is_array;
 use function is_object;
 
@@ -33,7 +34,7 @@ final class Validator implements ValidatorInterface
      */
     public function validate(mixed $data, ?iterable $rules = null): Result
     {
-        $data = $this->normalizeDataSet($data);
+        $data = $this->normalizeDataSet($data, $rules !== null);
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
         }
@@ -78,10 +79,10 @@ final class Validator implements ValidatorInterface
     }
 
     #[Pure]
-    private function normalizeDataSet($data): DataSetInterface
+    private function normalizeDataSet($data, bool $hasRules): DataSetInterface
     {
         if ($data instanceof DataSetInterface) {
-            return $data;
+            return $hasRules ? new AttributeDataSet($data) : $data;
         }
 
         if (is_object($data) || is_array($data)) {
