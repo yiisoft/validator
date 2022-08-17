@@ -12,6 +12,30 @@ use Yiisoft\Validator\RuleHandlerInterface;
 
 final class EachHandlerTest extends AbstractRuleValidatorTest
 {
+    public function indexedByPathErrorMessagesProvider(): array
+    {
+        return [
+            [
+                new Each([new Number(max: 13)]),
+                [10, 20, 30],
+                [
+                    '1' => [
+                        $this->formatMessage(
+                            'Value must be no greater than {max}. {value} given.',
+                            ['max' => 13, 'value' => 20]
+                        ),
+                    ],
+                    '2' => [
+                        $this->formatMessage(
+                            'Value must be no greater than {max}. {value} given.',
+                            ['max' => 13, 'value' => 30]
+                        ),
+                    ],
+                ],
+            ],
+        ];
+    }
+
     /**
      * @dataProvider indexedByPathErrorMessagesProvider
      */
@@ -68,30 +92,6 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
                 [
                     new Error('Custom error. 20 given.', [1]),
                     new Error('Custom error. 30 given.', [2]),
-                ],
-            ],
-        ];
-    }
-
-    public function indexedByPathErrorMessagesProvider(): array
-    {
-        return [
-            [
-                new Each([new Number(max: 13)]),
-                [10, 20, 30],
-                [
-                    '1' => [
-                        $this->formatMessage(
-                            'Value must be no greater than {max}. {value} given.',
-                            ['max' => 13, 'value' => 20]
-                        ),
-                    ],
-                    '2' => [
-                        $this->formatMessage(
-                            'Value must be no greater than {max}. {value} given.',
-                            ['max' => 13, 'value' => 30]
-                        ),
-                    ],
                 ],
             ],
         ];
