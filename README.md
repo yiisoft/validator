@@ -173,7 +173,7 @@ new Number(asInteger: true, max: 100, skipOnEmptyCallback: new SkipOnNull());
 
 Note that in this case `skipOnEmpty` will be automatically set to `true`, so there is no need to do it manually.
 
-For even more customization you can use own class implementing `__invoke()` magic method:
+For even more customization you can use your own class implementing `__invoke()` magic method:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
