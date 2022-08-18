@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule\Trait;
 
 use Closure;
 use InvalidArgumentException;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipNever;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\ValidationContext;
 
@@ -44,7 +44,7 @@ trait BeforeValidationTrait
             return;
         }
 
-        $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipNever() : new SkipOnEmpty();
+        $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipNone() : new SkipOnEmpty();
     }
 
     public function skipOnEmpty(bool $value): self

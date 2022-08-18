@@ -18,7 +18,7 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipNever;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Stub\DataSet;
@@ -580,7 +580,7 @@ class ValidatorTest extends TestCase
     {
         return [
             [new Validator(new SimpleRuleHandlerContainer()), null, null],
-            [new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: false), false, SkipNever::class],
+            [new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: false), false, SkipNone::class],
             [new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true), true, SkipOnEmpty::class],
             [
                 new Validator(new SimpleRuleHandlerContainer(), skipOnEmptyCallback: new SkipOnNull()),

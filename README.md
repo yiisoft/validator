@@ -154,7 +154,7 @@ What exactly to consider to be empty is vague and can vary depending on a scope 
 
 `skipOnEmpty` is more like a shortcut, `skipOnEmptyCallback` argument checks if a given value is empty:
 
-- If `skipOnEmpty` is `false`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipNever` is used automatically for 
+- If `skipOnEmpty` is `false`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipNone` is used automatically for 
 `skipOnEmptyCallback` - every value is considered non-empty and validated without skipping (default).
 - If `skipOnEmpty` is `true`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty` is used automatically for
 `skipOnEmptyCallback` - only non-empty values (not `null`, `[]`, or `''`) are validated.
