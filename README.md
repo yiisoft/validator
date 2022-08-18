@@ -171,7 +171,7 @@ use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 new Number(asInteger: true, max: 100, skipOnEmptyCallback: new SkipOnNull());
 ```
 
-Note that in this case `skipOnEmpty` will be automatically set to `true`, so no need to do it manually.
+Note that in this case `skipOnEmpty` will be automatically set to `true`, so there is no need to do it manually.
 
 For even more customization you can use own class implementing `__invoke()` magic method:
 
