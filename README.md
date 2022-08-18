@@ -160,7 +160,7 @@ What exactly to consider to be empty is vague and can vary depending on a scope 
 `skipOnEmptyCallback` - only non-empty values (not `null`, `[]`, or `''`) are validated.
 - If `skipOnEmptyCallback` is set, it takes precedence to determine emptiness.
 
-While using first option is usually enough for HTML forms, the second one is more suitable for APIs.
+Using first option is usually good for HTML forms. The second one is more suitable for APIs.
 
 The empty values can be also limited to `null` only:
 
