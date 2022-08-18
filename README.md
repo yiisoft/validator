@@ -157,7 +157,7 @@ What exactly to consider to be empty is vague and can vary depending on a scope 
 - If `skipOnEmpty` is `false`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipNever` is used automatically for 
 `skipOnEmptyCallback` - every value is considered non-empty and validated without skipping (default).
 - If `skipOnEmpty` is `true`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty` is used automatically for
-`skipOnEmptyCallback` - only non-empty values (`null`, `[]`. `''`) are validated.
+`skipOnEmptyCallback` - only non-empty values (not `null`, `[]`, or `''`) are validated.
 - If `skipOnEmptyCallback` is set, it takes precedence to determine emptiness.
 
 While using first option is usually enough for HTML forms, the second one is more suitable for APIs.
