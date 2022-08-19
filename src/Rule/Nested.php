@@ -9,7 +9,7 @@ use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use Traversable;
-use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
@@ -118,7 +118,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
                     throw new InvalidArgumentException('Bare shortcut is prohibited. Use "Each" rule instead.');
                 }
 
-                $parts = ArrayHelper::parsePath(
+                $parts = StringHelper::parsePath(
                     (string) $valuePath,
                     delimiter: self::EACH_SHORTCUT,
                     preserveDelimiterEscaping: true

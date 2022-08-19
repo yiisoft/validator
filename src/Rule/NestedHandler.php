@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
@@ -81,7 +82,7 @@ final class NestedHandler implements RuleHandlerInterface
                 /**
                  * @psalm-suppress InvalidScalarArgument
                  */
-                $compoundResult->addError($formattedMessage, ArrayHelper::parsePath($valuePath));
+                $compoundResult->addError($formattedMessage, StringHelper::parsePath($valuePath));
 
                 continue;
             }
@@ -98,7 +99,7 @@ final class NestedHandler implements RuleHandlerInterface
             $result = new Result();
 
             foreach ($itemResult->getErrors() as $error) {
-                $errorValuePath = is_int($valuePath) ? [$valuePath] : ArrayHelper::parsePath($valuePath);
+                $errorValuePath = is_int($valuePath) ? [$valuePath] : StringHelper::parsePath($valuePath);
                 if (!empty($error->getValuePath())) {
                     array_push($errorValuePath, ...$error->getValuePath());
                 }
