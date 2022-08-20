@@ -11,7 +11,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\AttributeDataSet;
-use Yiisoft\Validator\DataSet\ScalarDataSet;
+use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 
@@ -94,7 +94,7 @@ final class Validator implements ValidatorInterface
             return new ArrayDataSet($data);
         }
 
-        return new ScalarDataSet($data);
+        return new MixedDataSet($data);
     }
 
     /**

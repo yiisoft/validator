@@ -68,7 +68,7 @@ class ValidatorTest extends TestCase
     public function testDiverseTypes($dataSet): void
     {
         $validator = FakeValidatorFactory::make();
-        $result = $validator->validate($dataSet, ['property' => [new Required()]]);
+        $result = $validator->validate($dataSet, [new Required()]);
 
         $this->assertTrue($result->isValid());
     }
