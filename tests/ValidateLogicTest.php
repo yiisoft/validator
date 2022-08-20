@@ -46,7 +46,7 @@ final class ValidateLogicTest extends TestCase
                 new ObjectWithDataSet(),
                 [
                     'key1' => new Number(min: 21),
-                ]
+                ],
             ],
             'dataset-object-and-no-rules' => [
                 true,
@@ -57,7 +57,7 @@ final class ValidateLogicTest extends TestCase
             'rules-provider-object-and-array-of-rules' => [
                 false,
                 [
-                    'number' => ['Value must be no greater than 7.']
+                    'number' => ['Value must be no greater than 7.'],
                 ],
                 new ObjectWithRulesProvider(),
                 [
@@ -68,7 +68,7 @@ final class ValidateLogicTest extends TestCase
             'rules-provider-object-and-no-rules' => [
                 false,
                 [
-                    'age' => ['Value must be equal to "25".']
+                    'age' => ['Value must be equal to "25".'],
                 ],
                 new ObjectWithRulesProvider(),
                 null,
