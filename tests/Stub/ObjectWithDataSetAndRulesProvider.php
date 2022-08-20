@@ -25,7 +25,7 @@ final class ObjectWithDataSetAndRulesProvider implements DataSetInterface, Rules
     {
         return [
             'key1' => [new Required()],
-            'key2' => [new Required(), new Equal(42)],
+            'key2' => [new Required(), new Equal(99)],
         ];
     }
 
