@@ -10,7 +10,7 @@ use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
-use Yiisoft\Validator\DataSet\AttributeDataSet;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
@@ -87,7 +87,7 @@ final class Validator implements ValidatorInterface
         }
 
         if (is_object($data)) {
-            return new AttributeDataSet($data);
+            return new ObjectDataSet($data);
         }
 
         if (is_array($data)) {
