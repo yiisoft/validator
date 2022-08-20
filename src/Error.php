@@ -36,8 +36,11 @@ final class Error
             return $this->valuePath;
         }
 
-        return array_map(static function ($key): string {
-            return str_replace(['.', '*'], ['\\' . '.', '\\' . '*'], (string) $key);
-        }, $this->valuePath);
+        return array_map(
+            static function ($key): string {
+                return str_replace(['.', '*'], ['\\' . '.', '\\' . '*'], (string)$key);
+            },
+            $this->valuePath
+        );
     }
 }
