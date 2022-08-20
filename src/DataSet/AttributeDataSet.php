@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\DataSet;
 
 use ReflectionAttribute;
-use ReflectionClass;
+use ReflectionObject;
+use ReflectionProperty;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -18,36 +19,55 @@ use Yiisoft\Validator\RulesProviderInterface;
  */
 final class AttributeDataSet implements RulesProviderInterface, DataSetInterface
 {
-    use ArrayDataTrait;
+    private object $object;
 
-    private object $baseAnnotatedObject;
+    /**
+     * @var ReflectionProperty[]
+     */
+    private array $reflectionProperties = [];
 
-    public function __construct(object $baseAnnotatedObject, array $data = [])
+    private array $rules = [];
+
+    public function __construct(object $object)
     {
-        $this->baseAnnotatedObject = $baseAnnotatedObject;
-        $this->data = ($data === [] && $baseAnnotatedObject instanceof DataSetInterface)
-            ? $baseAnnotatedObject->getData()
-            : $data;
+        $this->object = $object;
+        $this->collectRules();
     }
 
     public function getRules(): iterable
     {
-        $classMeta = new ReflectionClass($this->baseAnnotatedObject);
+        return $this->rules;
+    }
 
-        return $this->collectAttributes($classMeta);
+    public function getAttributeValue(string $attribute): mixed
+    {
+        return isset($this->reflectionProperties[$attribute])
+            ? $this->reflectionProperties[$attribute]->getValue($this->object)
+            : null;
+    }
+
+    public function getData(): array
+    {
+        $data = [];
+        foreach ($this->reflectionProperties as $name => $property) {
+            $data[$name] = $property->getValue($this->object);
+        }
+
+        return $data;
     }
 
     // TODO: use Generator to collect attributes
-    private function collectAttributes(ReflectionClass $classMeta): array
+    private function collectRules(): void
     {
-        $rules = [];
-        foreach ($classMeta->getProperties() as $property) {
+        $reflection = new ReflectionObject($this->object);
+        foreach ($reflection->getProperties() as $property) {
             $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
+            if (!empty($attributes) || $property->isPublic()) {
+                $this->reflectionProperties[$property->getName()] = $property;
+            }
             foreach ($attributes as $attribute) {
-                $rules[$property->getName()][] = $attribute->newInstance();
+                $this->rules[$property->getName()][] = $attribute->newInstance();
             }
         }
-
-        return $rules;
     }
 }
