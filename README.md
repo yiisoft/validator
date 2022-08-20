@@ -439,33 +439,16 @@ Here are some technical details:
   referenced class rules as it owns.
 - In case of a flat array `Point::$rgb`, a property type `array` needs to be declared.
 
-Pass the base DTO to `AttributeDataSet` and use it for validation.
+Pass object directly to `validate()` method:
 
 ```php
-use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\ValidatorInterface;
 
 // Usually obtained from container
 $validator = $container->get(ValidatorInterface::class);
 
-$data = [
-    // ...
-];
-$dataSet = new ObjectDataSet(new ChartsData(), $data);
-$errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
-```
-
-If the object implements `DataSetInterface` just pass it directly:
-
-```php
-use Yiisoft\Validator\DataSet\ObjectDataSet;
-use Yiisoft\Validator\ValidatorInterface;
-
-// Usually obtained from container
-$validator = $container->get(ValidatorInterface::class);
-
-$dataSet = new ChartsData();
-$errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
+$coordinates = new Coordinates();
+$errors = $validator->validate($coordinates)->getErrorMessagesIndexedByPath();
 ```
 
 ##### Traits
