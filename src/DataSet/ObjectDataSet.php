@@ -88,6 +88,9 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
                 continue;
             }
 
+            if (PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             $this->reflectionProperties[$property->getName()] = $property;
 
             if (!$objectProvidedRules) {
