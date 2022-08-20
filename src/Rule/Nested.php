@@ -9,16 +9,22 @@ use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use Traversable;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
-
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function array_pop;
+use function count;
+use function implode;
 use function is_array;
+use function ltrim;
+use function rtrim;
+use function sprintf;
 
 /**
  * Can be used for validation of nested structures.
@@ -29,6 +35,9 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     use BeforeValidationTrait;
     use RuleNameTrait;
 
+    private const SEPARATOR = '.';
+    private const EACH_SHORTCUT = '*';
+
     public function __construct(
         /**
          * @var iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>
@@ -36,6 +45,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         private iterable $rules = [],
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
+        private bool $normalizeRules = true,
         private bool $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
@@ -48,12 +58,16 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             throw new InvalidArgumentException('Rules must not be empty.');
         }
 
-        if ($this->checkRules($rules)) {
+        if (self::checkRules($rules)) {
             $message = sprintf('Each rule should be an instance of %s.', RuleInterface::class);
             throw new InvalidArgumentException($message);
         }
 
         $this->rules = $rules;
+
+        if ($this->normalizeRules === true) {
+            $this->normalizeRules();
+        }
     }
 
     /**
@@ -80,15 +94,66 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         return $this->noPropertyPathMessage;
     }
 
-    private function checkRules(array $rules): bool
+    private static function checkRules($rules): bool
     {
         return array_reduce(
             $rules,
             function (bool $carry, $rule) {
-                return $carry || (is_array($rule) ? $this->checkRules($rule) : !$rule instanceof RuleInterface);
+                return $carry || (is_array($rule) ? self::checkRules($rule) : !$rule instanceof RuleInterface);
             },
             false
         );
+    }
+
+    private function normalizeRules(): void
+    {
+        /** @var iterable $rules */
+        $rules = $this->getRules();
+        while (true) {
+            $breakWhile = true;
+            $rulesMap = [];
+
+            foreach ($rules as $valuePath => $rule) {
+                if ($valuePath === self::EACH_SHORTCUT) {
+                    throw new InvalidArgumentException('Bare shortcut is prohibited. Use "Each" rule instead.');
+                }
+
+                $parts = StringHelper::parsePath(
+                    (string) $valuePath,
+                    delimiter: self::EACH_SHORTCUT,
+                    preserveDelimiterEscaping: true
+                );
+                if (count($parts) === 1) {
+                    continue;
+                }
+
+                $breakWhile = false;
+
+                $lastValuePath = array_pop($parts);
+                $lastValuePath = ltrim($lastValuePath, '.');
+                $lastValuePath = str_replace('\\' . self::EACH_SHORTCUT, self::EACH_SHORTCUT, $lastValuePath);
+
+                $remainingValuePath = implode(self::EACH_SHORTCUT, $parts);
+                $remainingValuePath = rtrim($remainingValuePath, self::SEPARATOR);
+
+                if (!isset($rulesMap[$remainingValuePath])) {
+                    $rulesMap[$remainingValuePath] = [];
+                }
+
+                $rulesMap[$remainingValuePath][$lastValuePath] = $rule;
+                unset($rules[$valuePath]);
+            }
+
+            foreach ($rulesMap as $valuePath => $nestedRules) {
+                $rules[$valuePath] = new Each([new self($nestedRules, normalizeRules: false)]);
+            }
+
+            if ($breakWhile === true) {
+                break;
+            }
+        }
+
+        $this->rules = $rules;
     }
 
     #[ArrayShape([
