@@ -18,6 +18,7 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Stub\ObjectWithAttributesOnly;
 use Yiisoft\Validator\ValidationContext;
 
 class ValidatorTest extends TestCase
@@ -52,12 +53,12 @@ class ValidatorTest extends TestCase
         $class->property = true;
 
         return [
-            [$class],
-            [true],
-            ['true'],
-            [12345],
-            [12.345],
-            [false],
+            'object' => [$class],
+            'true' => [true],
+            'non-empty-string' => ['true'],
+            'integer' => [12345],
+            'float' => [12.345],
+            'false' => [false],
         ];
     }
 
@@ -67,7 +68,7 @@ class ValidatorTest extends TestCase
     public function testDiverseTypes($dataSet): void
     {
         $validator = FakeValidatorFactory::make();
-        $result = $validator->validate($dataSet, ['property' => [new Required()]]);
+        $result = $validator->validate($dataSet, [new Required()]);
 
         $this->assertTrue($result->isValid());
     }
@@ -163,5 +164,18 @@ class ValidatorTest extends TestCase
             new Error('Value cannot be blank.', ['merchantId']),
             new Error('Value must be an integer.', ['merchantId']),
         ], $result->getErrors());
+    }
+
+    public function testObjectWithAttributesOnly(): void
+    {
+        $object = new ObjectWithAttributesOnly();
+
+        $validator = FakeValidatorFactory::make();
+
+        $result = $validator->validate($object);
+
+        $this->assertFalse($result->isValid());
+        $this->assertCount(1, $result->getErrorMessages());
+        $this->assertStringStartsWith('This value must contain at least', $result->getErrorMessages()[0]);
     }
 }

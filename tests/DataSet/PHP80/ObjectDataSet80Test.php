@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\DataSet\PHP80;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\DataSet\AttributeDataSet;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
 
-final class AttributeDataSet80Test extends TestCase
+final class ObjectDataSet80Test extends TestCase
 {
     /**
      * @dataProvider dataProvider
@@ -21,7 +21,7 @@ final class AttributeDataSet80Test extends TestCase
      */
     public function testCollectRules(object $object, array $expectedRules): void
     {
-        $dataSet = new AttributeDataSet($object);
+        $dataSet = new ObjectDataSet($object);
 
         $this->assertEquals($expectedRules, $dataSet->getRules());
     }
