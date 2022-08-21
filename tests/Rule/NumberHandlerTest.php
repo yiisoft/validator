@@ -125,6 +125,6 @@ final class NumberHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new NumberHandler();
+        return new NumberHandler($this->getTranslator());
     }
 }

@@ -7,9 +7,8 @@ namespace Yiisoft\Validator\Rule;
 use InvalidArgumentException;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -23,11 +22,11 @@ use function is_string;
  */
 final class IpHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
+    private TranslatorInterface $translator;
 
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(TranslatorInterface $translator)
     {
-        $this->formatter = $formatter ?? new Formatter();
+        $this->translator = $translator;
     }
 
     /**
@@ -46,7 +45,7 @@ final class IpHandler implements RuleHandlerInterface
 
         $this->checkAllowedVersions($rule);
         $result = new Result();
-        $formattedMessage = $this->formatter->format(
+        $formattedMessage = $this->translator->translate(
             $rule->getMessage(),
             ['attribute' => $context->getAttribute(), 'value' => $value]
         );
@@ -109,7 +108,7 @@ final class IpHandler implements RuleHandlerInterface
         ?ValidationContext $context
     ): Result {
         if ($cidr === null && $rule->isRequireSubnet()) {
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getNoSubnetMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
@@ -117,7 +116,7 @@ final class IpHandler implements RuleHandlerInterface
             return $result;
         }
         if ($cidr !== null && !$rule->isAllowSubnet()) {
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getHasSubnetMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
@@ -125,7 +124,7 @@ final class IpHandler implements RuleHandlerInterface
             return $result;
         }
         if ($negation && !$rule->isAllowNegation()) {
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
@@ -143,7 +142,7 @@ final class IpHandler implements RuleHandlerInterface
         ?ValidationContext $context
     ): Result {
         if ($ipVersion === IpHelper::IPV6 && !$rule->isAllowIpv6()) {
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getIpv6NotAllowedMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
@@ -151,7 +150,7 @@ final class IpHandler implements RuleHandlerInterface
             return $result;
         }
         if ($ipVersion === IpHelper::IPV4 && !$rule->isAllowIpv4()) {
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getIpv4NotAllowedMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
@@ -173,7 +172,7 @@ final class IpHandler implements RuleHandlerInterface
             try {
                 IpHelper::getCidrBits($ipCidr);
             } catch (InvalidArgumentException $e) {
-                $formattedMessage = $this->formatter->format(
+                $formattedMessage = $this->translator->translate(
                     $rule->getWrongCidrMessage(),
                     ['attribute' => $context->getAttribute(), 'value' => $value]
                 );
@@ -182,7 +181,7 @@ final class IpHandler implements RuleHandlerInterface
             }
         }
         if (!$rule->isAllowed($ipCidr)) {
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getNotInRangeMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );

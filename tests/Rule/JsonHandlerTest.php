@@ -126,6 +126,6 @@ JSON,
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new JsonHandler();
+        return new JsonHandler($this->getTranslator());
     }
 }

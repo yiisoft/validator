@@ -11,6 +11,7 @@ final class FakeValidatorFactory
 {
     public static function make(): Validator
     {
-        return new Validator(new SimpleRuleHandlerContainer());
+        $translator = (new TranslatorFactory())->create();
+        return new Validator(new SimpleRuleHandlerContainer($translator));
     }
 }

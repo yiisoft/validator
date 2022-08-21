@@ -61,6 +61,6 @@ final class RegexHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new RegexHandler();
+        return new RegexHandler($this->getTranslator());
     }
 }
