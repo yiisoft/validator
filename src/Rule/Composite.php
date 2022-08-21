@@ -8,10 +8,10 @@ use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -29,12 +29,17 @@ class Composite implements SerializableRuleInterface, BeforeValidationInterface
          */
         private iterable $rules = [],
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable
+         */
+        private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
+        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
     }
 
     #[ArrayShape([

@@ -8,11 +8,10 @@ use Attribute;
 use Closure;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function array_key_exists;
@@ -200,12 +199,18 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface
          */
         private array $ranges = [],
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable
+         */
+        private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
+        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+
         foreach ($networks as $key => $_values) {
             if (array_key_exists($key, $this->defaultNetworks)) {
                 throw new RuntimeException("Network alias \"{$key}\" already set as default.");

@@ -47,12 +47,18 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable
+         */
+        private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
+        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         if (empty($rules)) {
             throw new InvalidArgumentException('Rules must not be empty.');

@@ -24,10 +24,11 @@ final class Embedded extends Composite
     public function __construct(
         private string $referenceClassName,
         bool $skipOnEmpty = false,
+        callable $skipOnEmptyCallback = null,
         bool $skipOnError = false,
         ?Closure $when = null,
     ) {
-        parent::__construct([], $skipOnEmpty, $skipOnError, $when);
+        parent::__construct([], $skipOnEmpty, $skipOnEmptyCallback, $skipOnError, $when);
     }
 
     public function getRules(): array

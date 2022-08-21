@@ -6,10 +6,10 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -27,12 +27,17 @@ final class Subset implements SerializableRuleInterface, BeforeValidationInterfa
         private string $iterableMessage = 'Value must be iterable.',
         private string $subsetMessage = 'Values must be ones of {values}.',
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable
+         */
+        private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
+        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
     }
 
     /**

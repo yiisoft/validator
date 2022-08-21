@@ -7,6 +7,8 @@ namespace Yiisoft\Validator\Rule\Trait;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function is_callable;
+
 trait PreValidateTrait
 {
     use EmptyCheckTrait;
@@ -18,7 +20,7 @@ trait PreValidateTrait
         ValidationContext $context,
         BeforeValidationInterface $rule
     ): bool {
-        if ($rule->shouldSkipOnEmpty() && $this->isEmpty($value)) {
+        if ($rule->shouldSkipOnEmpty($value)) {
             return true;
         }
 

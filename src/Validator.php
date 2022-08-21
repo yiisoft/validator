@@ -14,8 +14,13 @@ use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 
+use function gettype;
 use function is_array;
+use function is_callable;
+use function is_int;
 use function is_object;
 
 /**
@@ -25,8 +30,33 @@ final class Validator implements ValidatorInterface
 {
     use PreValidateTrait;
 
-    public function __construct(private RuleHandlerResolverInterface $ruleHandlerResolver)
+    public function __construct(
+        private RuleHandlerResolverInterface $ruleHandlerResolver,
+        private ?bool $skipOnEmpty = null,
+        /**
+         * @var callable
+         */
+        private $skipOnEmptyCallback = null
+    ) {
+        if ($this->skipOnEmpty !== null) {
+            $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipNone() : new SkipOnEmpty();
+        } elseif ($this->skipOnEmptyCallback !== null) {
+            if (!is_callable($this->skipOnEmptyCallback)) {
+                throw new InvalidArgumentException('$skipOnEmptyCallback must be a callable.');
+            }
+
+            $this->skipOnEmpty = true;
+        }
+    }
+
+    public function getSkipOnEmpty(): ?bool
     {
+        return $this->skipOnEmpty;
+    }
+
+    public function getSkipOnEmptyCallback(): ?callable
+    {
+        return $this->skipOnEmptyCallback;
     }
 
     /**
@@ -163,6 +193,14 @@ final class Validator implements ValidatorInterface
                     gettype($rule)
                 )
             );
+        }
+
+        if ($this->skipOnEmpty !== null) {
+            $rule = $rule->skipOnEmpty($this->skipOnEmpty);
+        }
+
+        if ($this->skipOnEmpty !== null) {
+            $rule = $rule->skipOnEmptyCallback($this->skipOnEmptyCallback);
         }
 
         return $rule;

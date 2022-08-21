@@ -46,12 +46,18 @@ final class Equal extends Compare
          */
         private bool $strict = false,
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable
+         */
+        private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
+        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+
         if ($this->targetValue === null && $this->targetAttribute === null) {
             throw new RuntimeException('Either "targetValue" or "targetAttribute" must be specified.');
         }

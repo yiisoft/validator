@@ -6,10 +6,10 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -38,12 +38,17 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
         private bool $strict = false,
         private string $message = 'The value must be either "{true}" or "{false}".',
         private bool $skipOnEmpty = false,
+        /**
+         * @var callable
+         */
+        private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
+        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
     }
 
     /**
