@@ -30,6 +30,23 @@ final class BooleanTest extends AbstractRuleTest
                 ],
             ],
             [
+                new Boolean(trueValue: true, falseValue: false, strict: true),
+                [
+                    'trueValue' => true,
+                    'falseValue' => false,
+                    'strict' => true,
+                    'message' => [
+                        'message' => 'The value must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => 'true',
+                            'false' => 'false',
+                        ],
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
+            [
                 new Boolean(
                     trueValue: 'YES',
                     falseValue: 'NO',

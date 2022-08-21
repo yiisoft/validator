@@ -44,8 +44,8 @@ final class BooleanHandler implements RuleHandlerInterface
         $formattedMessage = $this->formatter->format(
             $rule->getMessage(),
             [
-                'true' => $rule->getTrueValue() === true ? '1' : $rule->getTrueValue(),
-                'false' => $rule->getFalseValue() === false ? '0' : $rule->getFalseValue(),
+                'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
+                'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
                 'attribute' => $context->getAttribute(),
                 'value' => $value,
             ]
