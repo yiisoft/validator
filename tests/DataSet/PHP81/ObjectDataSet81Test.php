@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\DataSet\PHP81;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Attribute\Embedded;
-use Yiisoft\Validator\DataSet\AttributeDataSet;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
@@ -20,7 +20,7 @@ use Yiisoft\Validator\Tests\Data\Charts\Coordinate;
 use Yiisoft\Validator\Tests\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
 
-final class AttributeDataSet81Test extends TestCase
+final class ObjectDataSet81Test extends TestCase
 {
     /**
      * @dataProvider dataProvider
@@ -29,7 +29,7 @@ final class AttributeDataSet81Test extends TestCase
      */
     public function testCollectRules(object $object, array $expectedRules): void
     {
-        $dataSet = new AttributeDataSet($object);
+        $dataSet = new ObjectDataSet($object);
 
         $this->assertEquals($expectedRules, $dataSet->getRules());
     }
@@ -204,7 +204,7 @@ final class AttributeDataSet81Test extends TestCase
             'y' => [new Number(min: -10, max: 10)],
         ];
 
-        $dataSet = new AttributeDataSet($object);
+        $dataSet = new ObjectDataSet($object);
 
         $actualRules = $dataSet->getRules();
 
@@ -218,7 +218,7 @@ final class AttributeDataSet81Test extends TestCase
 
     public function testMoreComplexEmbeddedRule(): void
     {
-        $dataSet = new AttributeDataSet(new Chart());
+        $dataSet = new ObjectDataSet(new Chart());
         $secondEmbeddedRules = [
             'x' => [new Number(min: -10, max: 10)],
             'y' => [new Number(min: -10, max: 10)],

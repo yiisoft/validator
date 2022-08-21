@@ -13,6 +13,8 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function is_array;
+
 /**
  * Validates an array by checking each of its elements against a set of rules.
  */
@@ -30,6 +32,9 @@ final class EachHandler implements RuleHandlerInterface
         if (!$rule instanceof Each) {
             throw new UnexpectedRuleException(Each::class, $rule);
         }
+
+        /** @var Each $eachRule */
+        $eachRule = $rule;
 
         $rules = $rule->getRules();
         if ($rules === []) {
@@ -58,10 +63,17 @@ final class EachHandler implements RuleHandlerInterface
             foreach ($itemResult->getErrors() as $error) {
                 if (!is_array($item)) {
                     $errorKey = [$index];
+                    $formatMessage = true;
                 } else {
                     $errorKey = [$index, ...$error->getValuePath()];
+                    $formatMessage = false;
                 }
-                $result->addError($error->getMessage(), $errorKey);
+
+                $message = !$formatMessage ? $error->getMessage() : $this->formatter->format($eachRule->getMessage(), [
+                    'error' => $error->getMessage(),
+                    'value' => $item,
+                ]);
+                $result->addError($message, $errorKey);
             }
         }
 

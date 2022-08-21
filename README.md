@@ -349,6 +349,116 @@ $errors = [
 ];
 ```
 
+###### Using shortcut
+
+A shortcut can be used to simplify `Nested` and `Each` combinations:
+
+```php
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'charts.*.points.*.coordinates.x' => [new Number(min: -10, max: 10)],
+    'charts.*.points.*.coordinates.y' => [new Number(min: -10, max: 10)],
+    'charts.*.points.*.rgb' => [
+        new Count(exactly: 3);
+        new Number(min: 0, max: 255),
+    ]),
+]);
+```
+
+With additional grouping it can also be rewritten like this:
+
+```php
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'charts.*.points.*.coordinates' => new Nested([
+        'x' => [new Number(min: -10, max: 10)],
+        'y' => [new Number(min: -10, max: 10)],
+    ]),
+    'charts.*.points.*.rgb' => [
+        new Count(exactly: 3);
+        new Number(min: 0, max: 255),
+    ]),
+]);
+```
+
+This is less verbose, but the downside of this approach is that you can't additionally configure dynamically generated 
+`Nested` and `Each` pairs. If you need to that, please refer to example provided in "Basic usage" section.
+
+###### Using keys containing separator / shortcut
+
+If a key contains the separator (`.`), it must be escaped with backslash (`\`) in rule config in order to work 
+correctly. In the input data escaping is not needed. Here is an example with two nested keys named `author.data` and 
+`name.surname`:
+
+```php
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'author\.data.name\.surname' => [
+        new HasLength(min: 3),
+    ],
+]);
+$data = [
+    'author.data' => [
+        'name.surname' => 'Dmitry',
+    ],
+];
+```
+
+Note that in case of using multiple nested rules for configuration escaping is still required:
+
+```php
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'author\.data' => new Nested([
+        'name\.surname' => [
+            new HasLength(min: 3),
+        ],
+    ]),
+]);
+$data = [
+    'author.data' => [
+        'name.surname' => 'Dmitriy',
+    ],
+];
+```
+
+The same applies to shortcut:
+
+```php
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'charts\.list.*.points\*list.*.coordinates\.data.x' => [
+        // ...
+    ],
+    'charts\.list.*.points\*list.*.coordinates\.data.y' => [
+        // ...
+    ],
+    'charts\.list.*.points\*list.*.rgb' => [
+        // ...
+    ],
+]);
+$data = [
+    'charts.list' => [
+        [
+            'points*list' => [
+                [
+                    'coordinates.data' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0],
+                ],
+            ],
+        ],
+    ],
+];
+```
+
 #### Using attributes
 
 ##### Basic usage
@@ -397,33 +507,16 @@ Here are some technical details:
   referenced class rules as it owns.
 - In case of a flat array `Point::$rgb`, a property type `array` needs to be declared.
 
-Pass the base DTO to `AttributeDataSet` and use it for validation.
+Pass object directly to `validate()` method:
 
 ```php
-use Yiisoft\Validator\DataSet\AttributeDataSet;
 use Yiisoft\Validator\ValidatorInterface;
 
 // Usually obtained from container
 $validator = $container->get(ValidatorInterface::class);
 
-$data = [
-    // ...
-];
-$dataSet = new AttributeDataSet(new ChartsData(), $data);
-$errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
-```
-
-If the object implements `DataSetInterface` just pass it directly:
-
-```php
-use Yiisoft\Validator\DataSet\AttributeDataSet;
-use Yiisoft\Validator\ValidatorInterface;
-
-// Usually obtained from container
-$validator = $container->get(ValidatorInterface::class);
-
-$dataSet = new ChartsData();
-$errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
+$coordinates = new Coordinates();
+$errors = $validator->validate($coordinates)->getErrorMessagesIndexedByPath();
 ```
 
 ##### Traits
@@ -728,7 +821,7 @@ final class CompanyNameHandler implements Rule\RuleHandlerInterface
         $hasCompany = $dataSet !== null && $dataSet->getAttributeValue('hasCompany') === true;
 
         if ($hasCompany && $this->isCompanyNameValid($value) === false) {
-            $result->addError($this->formatMessage('Company name is not valid.'));
+            $result->addError('Company name is not valid.');
         }
 
         return $result;
@@ -771,7 +864,7 @@ final class NoLessThanExistingBidRuleHandler implements RuleHandlerInterface
         
         $currentMax = $connection->query('SELECT MAX(price) FROM bid')->scalar();
         if ($value <= $currentMax) {
-            $result->addError($this->formatMessage('There is a higher bid of {bid}.', ['bid' => $currentMax]));
+            $result->addError($this->formatter->format('There is a higher bid of {bid}.', ['bid' => $currentMax]));
         }
 
         return $result;

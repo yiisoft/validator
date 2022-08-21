@@ -14,19 +14,20 @@ final class IsTrueHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $message = 'The value must be "1".';
+        $strictTrueMessage = 'The value must be "true".';
 
         return [
             [new IsTrue(), '5', [new Error($message)]],
             [new IsTrue(), null, [new Error($message)]],
             [new IsTrue(), [], [new Error($message)]],
             [new IsTrue(strict: true), true, [new Error($message)]],
-            [new IsTrue(trueValue: true, strict: true), '1', [new Error($message)]],
-            [new IsTrue(trueValue: true, strict: true), [], [new Error($message)]],
+            [new IsTrue(trueValue: true, strict: true), '1', [new Error($strictTrueMessage)]],
+            [new IsTrue(trueValue: true, strict: true), [], [new Error($strictTrueMessage)]],
 
             [new IsTrue(), false, [new Error($message)]],
             [new IsTrue(), '0', [new Error($message)]],
             [new IsTrue(strict: true), '0', [new Error($message)]],
-            [new IsTrue(trueValue: true, strict: true), false, [new Error($message)]],
+            [new IsTrue(trueValue: true, strict: true), false, [new Error($strictTrueMessage)]],
         ];
     }
 

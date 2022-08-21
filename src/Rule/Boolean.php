@@ -92,8 +92,8 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
             'message' => [
                 'message' => $this->message,
                 'parameters' => [
-                    'true' => $this->trueValue === true ? '1' : $this->trueValue,
-                    'false' => $this->falseValue === false ? '0' : $this->falseValue,
+                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
                 ],
             ],
             'skipOnEmpty' => $this->skipOnEmpty,

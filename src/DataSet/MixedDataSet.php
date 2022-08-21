@@ -6,18 +6,18 @@ namespace Yiisoft\Validator\DataSet;
 
 use Yiisoft\Validator\DataSetInterface;
 
-final class ScalarDataSet implements DataSetInterface
+final class MixedDataSet implements DataSetInterface
 {
-    private $value;
+    private mixed $value;
 
-    public function __construct($value)
+    public function __construct(mixed $value)
     {
         $this->value = $value;
     }
 
     public function getAttributeValue(string $attribute): mixed
     {
-        return $this->value;
+        return null;
     }
 
     public function getData(): mixed

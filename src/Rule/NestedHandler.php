@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
@@ -12,7 +13,9 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function gettype;
 use function is_array;
+use function is_int;
 use function is_object;
 
 /**
@@ -71,20 +74,21 @@ final class NestedHandler implements RuleHandlerInterface
 
         $results = [];
         foreach ($rule->getRules() as $valuePath => $rules) {
-            $result = new Result();
-
             if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($value, $valuePath)) {
                 $formattedMessage = $this->formatter->format(
                     $rule->getNoPropertyPathMessage(),
                     ['path' => $valuePath, 'attribute' => $context->getAttribute(), 'value' => $value]
                 );
-                $compoundResult->addError($formattedMessage, [$valuePath]);
+                /**
+                 * @psalm-suppress InvalidScalarArgument
+                 */
+                $compoundResult->addError($formattedMessage, StringHelper::parsePath($valuePath));
 
                 continue;
             }
 
-            $rules = is_array($rules) ? $rules : [$rules];
             $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
+            $rules = is_array($rules) ? $rules : [$rules];
 
             $itemResult = $context->getValidator()->validate($validatedValue, $rules);
 
@@ -92,11 +96,16 @@ final class NestedHandler implements RuleHandlerInterface
                 continue;
             }
 
+            $result = new Result();
+
             foreach ($itemResult->getErrors() as $error) {
-                $errorValuePath = is_int($valuePath) ? [$valuePath] : explode('.', $valuePath);
+                $errorValuePath = is_int($valuePath) ? [$valuePath] : StringHelper::parsePath($valuePath);
                 if (!empty($error->getValuePath())) {
                     array_push($errorValuePath, ...$error->getValuePath());
                 }
+                /**
+                 * @psalm-suppress InvalidScalarArgument
+                 */
                 $result->addError($error->getMessage(), $errorValuePath);
             }
             $results[] = $result;

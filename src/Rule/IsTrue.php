@@ -71,7 +71,7 @@ final class IsTrue implements SerializableRuleInterface, BeforeValidationInterfa
             'message' => [
                 'message' => $this->message,
                 'parameters' => [
-                    'true' => $this->trueValue === true ? '1' : $this->trueValue,
+                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
                 ],
             ],
             'skipOnEmpty' => $this->skipOnEmpty,

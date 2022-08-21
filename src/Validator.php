@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
-use Yiisoft\Validator\DataSet\AttributeDataSet;
-use Yiisoft\Validator\DataSet\ScalarDataSet;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
@@ -60,11 +61,11 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
-     * @param iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>|null $rules
+     * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null $rules
      */
     public function validate(mixed $data, ?iterable $rules = null): Result
     {
-        $data = $this->normalizeDataSet($data, $rules !== null);
+        $data = $this->normalizeDataSet($data);
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
         }
@@ -109,22 +110,26 @@ final class Validator implements ValidatorInterface
     }
 
     #[Pure]
-    private function normalizeDataSet($data, bool $hasRules): DataSetInterface
+    private function normalizeDataSet($data): DataSetInterface
     {
         if ($data instanceof DataSetInterface) {
-            return $hasRules ? new AttributeDataSet($data) : $data;
+            return $data;
         }
 
-        if (is_object($data) || is_array($data)) {
-            return new ArrayDataSet((array)$data);
+        if (is_object($data)) {
+            return new ObjectDataSet($data);
         }
 
-        return new ScalarDataSet($data);
+        if (is_array($data)) {
+            return new ArrayDataSet($data);
+        }
+
+        return new MixedDataSet($data);
     }
 
     /**
      * @param $value
-     * @param iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]> $rules
+     * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
      * @param ValidationContext $context
      *
      * @throws ContainerExceptionInterface

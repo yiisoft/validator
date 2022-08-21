@@ -28,6 +28,21 @@ final class IsTrueTest extends AbstractRuleTest
                 ],
             ],
             [
+                new IsTrue(trueValue: true, strict: true),
+                [
+                    'trueValue' => true,
+                    'strict' => true,
+                    'message' => [
+                        'message' => 'The value must be "{true}".',
+                        'parameters' => [
+                            'true' => 'true',
+                        ],
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
+            [
                 new IsTrue(
                     trueValue: 'YES',
                     strict: true,
