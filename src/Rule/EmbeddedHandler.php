@@ -32,7 +32,7 @@ final class EmbeddedHandler implements RuleHandlerInterface
                 [
                     'attribute' => $context->getAttribute(),
                     'value' => $value,
-                    'type' => get_debug_type($value)
+                    'type' => get_debug_type($value),
                 ]
             );
             return (new Result())->addError($formattedMessage);

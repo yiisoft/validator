@@ -70,7 +70,7 @@ final class EmbeddedTest extends TestCase
     {
         return [
             'base' => [
-                new class() {
+                new class () {
                     #[Embedded]
                     private ObjectWithDifferentPropertyVisibility $object;
 
@@ -85,7 +85,7 @@ final class EmbeddedTest extends TestCase
                 ],
             ],
             'only-public' => [
-                new class() {
+                new class () {
                     #[Embedded(propertyVisibility: ReflectionProperty::IS_PUBLIC)]
                     private ObjectWithDifferentPropertyVisibility $object;
 
@@ -99,7 +99,7 @@ final class EmbeddedTest extends TestCase
                 ],
             ],
             'only-protected' => [
-                new class() {
+                new class () {
                     #[Embedded(propertyVisibility: ReflectionProperty::IS_PROTECTED)]
                     private ObjectWithDifferentPropertyVisibility $object;
 
@@ -113,7 +113,7 @@ final class EmbeddedTest extends TestCase
                 ],
             ],
             'inherit-attributes' => [
-                new class() {
+                new class () {
                     #[Embedded]
                     private $object;
 
