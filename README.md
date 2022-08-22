@@ -503,7 +503,7 @@ final class Coordinates
 
 Here are some technical details:
 
-- `Embedded` creates a reference to the referenced class and uses a `Composite` under the hood to make represent
+- `Embedded` rule allow validate object by rules provided by object itself.
   referenced class rules as it owns.
 - In case of a flat array `Point::$rgb`, a property type `array` needs to be declared.
 
