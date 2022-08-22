@@ -123,7 +123,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     new Error(
                         $this->formatMessage('Value must be no less than {min}.', ['min' => 20]),
                         ['author', 'age']
-                    )
+                    ),
                 ],
             ],
             'key not exists' => [
@@ -401,10 +401,10 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                                                 'y' => $yRules,
                                             ]),
                                             'rgb' => $rgbRules,
-                                        ])
+                                        ]),
                                     ]),
                                 ],
-                            ])
+                            ]),
                         ]),
                     ],
                 ]),
