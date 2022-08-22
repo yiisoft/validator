@@ -65,9 +65,11 @@ final class NestedHandler implements RuleHandlerInterface
                 $message,
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $compoundResult->addError($formattedMessage);
+            return $compoundResult->addError($formattedMessage);
+        }
 
-            return $compoundResult;
+        if ($rule->getRules() === null) {
+            return $context->getValidator()->validate($value);
         }
 
         $value = (array)$value;

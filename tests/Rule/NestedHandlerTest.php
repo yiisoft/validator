@@ -17,6 +17,9 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\Tests\Stub\ObjectWithNestedObject;
+use Yiisoft\Validator\Validator;
 
 use function array_slice;
 
@@ -116,7 +119,12 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'error' => [
                 new Nested(['author.age' => [new Number(min: 20)]]),
                 $value,
-                [new Error($this->formatMessage('Value must be no less than {min}.', ['min' => 20]), ['author', 'age'])],
+                [
+                    new Error(
+                        $this->formatMessage('Value must be no less than {min}.', ['min' => 20]),
+                        ['author', 'age']
+                    )
+                ],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
@@ -383,17 +391,21 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 $data,
                 new Nested([
                     'charts' => [
-                        new Each([new Nested([
-                            'points' => [
-                                new Each([new Nested([
-                                    'coordinates' => new Nested([
-                                        'x' => $xRules,
-                                        'y' => $yRules,
+                        new Each([
+                            new Nested([
+                                'points' => [
+                                    new Each([
+                                        new Nested([
+                                            'coordinates' => new Nested([
+                                                'x' => $xRules,
+                                                'y' => $yRules,
+                                            ]),
+                                            'rgb' => $rgbRules,
+                                        ])
                                     ]),
-                                    'rgb' => $rgbRules,
-                                ])]),
-                            ],
-                        ])]),
+                                ],
+                            ])
+                        ]),
                     ],
                 ]),
                 $detailedErrors,
@@ -431,7 +443,8 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                         [
                             'points*list' => [
                                 [
-                                    'coordinates.data' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0],
+                                    'coordinates.data' => ['x' => -11, 'y' => 11],
+                                    'rgb' => [-1, 256, 0],
                                 ],
                             ],
                         ],
@@ -490,6 +503,23 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         $this->assertEquals($expectedDetailedErrors, $result->getErrors());
         $this->assertEquals($expectedErrorMessages, $result->getErrorMessages());
         $this->assertEquals($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testNestedWithoutRulesWithObject(): void
+    {
+        $validator = new Validator(new SimpleRuleHandlerContainer());
+
+        $result = $validator->validate(new ObjectWithNestedObject());
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame([
+            'caption' => [
+                'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+            ],
+            'object.name' => [
+                'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+            ],
+        ], $result->getErrorMessagesIndexedByPath());
     }
 
     protected function getRuleHandler(): RuleHandlerInterface

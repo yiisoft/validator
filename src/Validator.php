@@ -159,7 +159,7 @@ final class Validator implements ValidatorInterface
             foreach ($ruleResult->getErrors() as $error) {
                 $valuePath = $error->getValuePath();
                 if ($context->getAttribute() !== null) {
-                    $valuePath = [$context->getAttribute()] + $valuePath;
+                    $valuePath = [$context->getAttribute(), ...$valuePath];
                 }
                 $compoundResult->addError($error->getMessage(), $valuePath);
             }
