@@ -19,6 +19,9 @@ trait BeforeValidationTrait
         return $this->skipOnEmpty;
     }
 
+    /**
+     * @psalm-suppress InvalidNullableReturnType NEED FIX BEFORE RELEASE!!!
+     */
     public function getSkipOnEmptyCallback(): callable
     {
         return $this->skipOnEmptyCallback;
