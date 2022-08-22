@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use ReflectionProperty;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
@@ -17,6 +18,7 @@ final class Embedded implements SerializableRuleInterface, BeforeValidationInter
     use BeforeValidationTrait;
 
     public function __construct(
+        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
         private bool $skipOnEmpty = false,
         /**
          * @var callable|null
@@ -39,6 +41,11 @@ final class Embedded implements SerializableRuleInterface, BeforeValidationInter
     public function getHandlerClassName(): string
     {
         return EmbeddedHandler::class;
+    }
+
+    public function getPropertyVisibility(): int
+    {
+        return $this->propertyVisibility;
     }
 
     public function getOptions(): array

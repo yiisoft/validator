@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
@@ -37,6 +38,8 @@ final class EmbeddedHandler implements RuleHandlerInterface
             return (new Result())->addError($formattedMessage);
         }
 
-        return $context->getValidator()->validate($value);
+        $dataSet = new ObjectDataSet($value, $rule->getPropertyVisibility());
+
+        return $context->getValidator()->validate($dataSet);
     }
 }

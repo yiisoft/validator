@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Closure;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use Yiisoft\Validator\Rule\Embedded;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
@@ -20,10 +21,21 @@ final class EmbeddedTest extends TestCase
     {
         $rule = new Embedded();
 
+        $this->assertSame(
+            ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
+            $rule->getPropertyVisibility(),
+        );
         $this->assertFalse($rule->getSkipOnEmpty());
         $this->assertInstanceOf(SkipNone::class, $rule->getSkipOnEmptyCallback());
         $this->assertFalse($rule->shouldSkipOnError());
         $this->assertNull($rule->getWhen());
+    }
+
+    public function testPropertyVisibilityInConstructor(): void
+    {
+        $rule = new Embedded(propertyVisibility: ReflectionProperty::IS_PRIVATE);
+
+        $this->assertSame(ReflectionProperty::IS_PRIVATE, $rule->getPropertyVisibility());
     }
 
     public function testSkipOnEmptyInConstructor(): void
@@ -69,6 +81,34 @@ final class EmbeddedTest extends TestCase
                 },
                 [
                     'object.name' => ['Value cannot be blank.'],
+                    'object.age' => ['Value must be no less than 21.'],
+                ],
+            ],
+            'only-public' => [
+                new class() {
+                    #[Embedded(propertyVisibility: ReflectionProperty::IS_PUBLIC)]
+                    private ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [
+                    'object.name' => ['Value cannot be blank.'],
+                ],
+            ],
+            'only-protected' => [
+                new class() {
+                    #[Embedded(propertyVisibility: ReflectionProperty::IS_PROTECTED)]
+                    private ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [
                     'object.age' => ['Value must be no less than 21.'],
                 ],
             ],
