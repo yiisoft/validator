@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Data\Charts;
 
-use Yiisoft\Validator\Attribute\Embedded;
+use Yiisoft\Validator\Rule\Embedded;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;

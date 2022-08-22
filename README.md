@@ -468,7 +468,7 @@ Common flow is the same as you would use usual classes:
 2. Add rules to it
 
 ```php
-use Yiisoft\Validator\Attribute\Embedded;
+use Yiisoft\Validator\Rule\Embedded;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
@@ -476,14 +476,14 @@ use Yiisoft\Validator\Rule\Number;
 final class Chart
 {
     #[Each([
-        new Embedded(Point::class),
+        new Embedded(),
     ])]
     private array $points;
 }
 
 final class Point
 {
-    #[Embedded(Coordinates::class)]
+    #[Embedded]
     private $coordinates;
     #[Count(exactly: 3)]
     #[Each([
