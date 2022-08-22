@@ -459,6 +459,31 @@ $data = [
 ];
 ```
 
+##### Nested object rules usage
+
+For use rules from nested object (attributes or implementation of `RulesProviderInterface`) don't define rules
+in `Nested`:
+
+```php
+final class Point {
+    #[Number(min: 10)]
+    public $x;
+    
+    #[Number(min: 10)]
+    public $y;
+}
+
+final class Place
+{
+    #[Nested]
+    public Point $point;
+}
+
+$place = new Place();
+...
+$validator->validate($place);
+```
+
 #### Using attributes
 
 ##### Basic usage
