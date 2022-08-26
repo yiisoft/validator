@@ -18,6 +18,10 @@ use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleHandlerInterface;
 
+use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\Tests\Stub\ObjectWithNestedObject;
+use Yiisoft\Validator\Validator;
+
 use function array_slice;
 
 final class NestedHandlerTest extends AbstractRuleValidatorTest
@@ -490,6 +494,23 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         $this->assertEquals($expectedDetailedErrors, $result->getErrors());
         $this->assertEquals($expectedErrorMessages, $result->getErrorMessages());
         $this->assertEquals($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testNestedWithoutRulesWithObject(): void
+    {
+        $validator = new Validator(new SimpleRuleHandlerContainer());
+
+        $result = $validator->validate(new ObjectWithNestedObject());
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame([
+            'caption' => [
+                'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+            ],
+            'object.name' => [
+                'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+            ],
+        ], $result->getErrorMessagesIndexedByPath());
     }
 
     protected function getRuleHandler(): RuleHandlerInterface

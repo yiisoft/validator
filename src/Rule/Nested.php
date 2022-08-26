@@ -40,9 +40,9 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
 
     public function __construct(
         /**
-         * @var iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>
+         * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
          */
-        private iterable $rules = [],
+        private ?iterable $rules = null,
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
@@ -58,6 +58,10 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         private ?Closure $when = null,
     ) {
         $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+
+        if ($this->rules === null) {
+            return;
+        }
 
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         if (empty($rules)) {
@@ -77,9 +81,9 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     }
 
     /**
-     * @return iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>
+     * @return iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
      */
-    public function getRules(): iterable
+    public function getRules(): ?iterable
     {
         return $this->rules;
     }
@@ -167,7 +171,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         'noPropertyPathMessage' => 'array',
         'skipOnEmpty' => 'bool',
         'skipOnError' => 'bool',
-        'rules' => 'array',
+        'rules' => 'array|null',
     ])]
     public function getOptions(): array
     {
@@ -178,7 +182,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             ],
             'skipOnEmpty' => $this->skipOnEmpty,
             'skipOnError' => $this->skipOnError,
-            'rules' => (new RulesDumper())->asArray($this->rules),
+            'rules' => $this->rules === null ? null : (new RulesDumper())->asArray($this->rules),
         ];
     }
 
