@@ -10,10 +10,12 @@ use stdClass;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Stub\Rule;
+use Yiisoft\Validator\Validator;
 
 final class NestedTest extends TestCase
 {
@@ -213,5 +215,51 @@ final class NestedTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Bare shortcut is prohibited. Use "Each" rule instead.');
         new Nested(['*' => [new Number(min: -10, max: 10)]]);
+    }
+
+    public function dataNestedWithoutRulesToNonObject(): array
+    {
+        return [
+            'array' => [
+                'array',
+                new class() {
+                    #[Nested]
+                    public array $value = [];
+                }
+            ],
+            'boolean' => [
+                'bool',
+                new class() {
+                    #[Nested]
+                    public bool $value = false;
+                }
+            ],
+            'integer' => [
+                'int',
+                new class() {
+                    #[Nested]
+                    public int $value = 42;
+                }
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataNestedWithoutRulesToNonObject
+     */
+    public function testNestedWithoutRulesToNonObject(string $expectedValueName, object $data): void
+    {
+        $validator = $this->createValidator();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Nested rule without rules available for objects only, ' . $expectedValueName . ' given.'
+        );
+        $validator->validate($data);
+    }
+
+    private function createValidator(): Validator
+    {
+        return new Validator(new SimpleRuleHandlerContainer());
     }
 }

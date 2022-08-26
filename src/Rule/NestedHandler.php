@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -58,24 +59,31 @@ final class NestedHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Nested::class, $rule);
         }
 
-        $compoundResult = new Result();
+        if ($rule->getRules() === null) {
+            if (!is_object($value)) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Nested rule without rules available for objects only, %s given.',
+                        get_debug_type($value)
+                    )
+                );
+            }
+
+            return $context->getValidator()->validate($value);
+        }
+
         if (!is_object($value) && !is_array($value)) {
             $message = sprintf('Value should be an array or an object. %s given.', gettype($value));
             $formattedMessage = $this->formatter->format(
                 $message,
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $compoundResult->addError($formattedMessage);
-
-            return $compoundResult;
+            return (new Result())->addError($formattedMessage);
         }
 
-        if ($rule->getRules() === null) {
-            return $context->getValidator()->validate($value);
-        }
+        $value = (array) $value;
 
-        $value = (array)$value;
-
+        $compoundResult = new Result();
         $results = [];
         foreach ($rule->getRules() as $valuePath => $rules) {
             if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($value, $valuePath)) {
