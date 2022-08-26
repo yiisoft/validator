@@ -50,7 +50,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         /**
          * Null available only for objects.
          *
-         * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|class-string|null
+         * @var class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null
          */
         iterable|object|string|null $rules = null,
 
@@ -60,7 +60,6 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
          * @var int
          */
         private int $propertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
-
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
@@ -111,7 +110,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     }
 
     /**
-     * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|class-string|null $source
+     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null $source
      */
     private function prepareRules(iterable|object|string|null $source): ?iterable
     {

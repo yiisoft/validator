@@ -97,25 +97,24 @@ final class AttributesRulesProviderTest extends TestCase
                     'number' => [Number::class],
                 ],
                 new ObjectWithDifferentPropertyVisibility(),
-                ReflectionProperty::IS_PRIVATE
+                ReflectionProperty::IS_PRIVATE,
             ],
             'object-and-protected' => [
                 [
                     'age' => [Number::class],
                 ],
                 new ObjectWithDifferentPropertyVisibility(),
-                ReflectionProperty::IS_PROTECTED
+                ReflectionProperty::IS_PROTECTED,
             ],
             'object-and-public' => [
                 [
                     'name' => [Required::class],
                 ],
                 new ObjectWithDifferentPropertyVisibility(),
-                ReflectionProperty::IS_PUBLIC
+                ReflectionProperty::IS_PUBLIC,
             ],
         ];
     }
-
 
     /**
      * @dataProvider dataPropertyVisibility

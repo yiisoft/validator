@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\DataSet\PHP81;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
-use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\HasLength;

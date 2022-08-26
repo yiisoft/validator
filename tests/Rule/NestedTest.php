@@ -238,24 +238,24 @@ final class NestedTest extends TestCase
         return [
             'array' => [
                 'array',
-                new class() {
+                new class () {
                     #[Nested]
                     public array $value = [];
-                }
+                },
             ],
             'boolean' => [
                 'bool',
-                new class() {
+                new class () {
                     #[Nested]
                     public bool $value = false;
-                }
+                },
             ],
             'integer' => [
                 'int',
-                new class() {
+                new class () {
                     #[Nested]
                     public int $value = 42;
-                }
+                },
             ],
         ];
     }
@@ -278,7 +278,7 @@ final class NestedTest extends TestCase
     {
         return [
             'class-string' => [
-                new class() {
+                new class () {
                     #[Nested(ObjectWithDifferentPropertyVisibility::class)]
                     private array $array = [
                         'name' => 'hello',
@@ -292,7 +292,7 @@ final class NestedTest extends TestCase
                 ],
             ],
             'class-string-private-only' => [
-                new class() {
+                new class () {
                     #[Nested(ObjectWithDifferentPropertyVisibility::class, ReflectionProperty::IS_PRIVATE)]
                     private array $array = [
                         'name' => 'hello',
@@ -305,7 +305,7 @@ final class NestedTest extends TestCase
                 ],
             ],
             'rules-provider' => [
-                new class() implements RulesProviderInterface {
+                new class () implements RulesProviderInterface {
                     private array $array = [
                         'name' => 'hello',
                         'age' => 17,
