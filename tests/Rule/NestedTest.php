@@ -11,6 +11,7 @@ use stdClass;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
@@ -18,6 +19,7 @@ use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Stub\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\Rule;
+use Yiisoft\Validator\Tests\Stub\SimpleRulesProvider;
 use Yiisoft\Validator\Validator;
 
 final class NestedTest extends TestCase
@@ -275,6 +277,56 @@ final class NestedTest extends TestCase
     public function dataHandler(): array
     {
         return [
+            'class-string' => [
+                new class() {
+                    #[Nested(ObjectWithDifferentPropertyVisibility::class)]
+                    private array $array = [
+                        'name' => 'hello',
+                        'age' => 17,
+                        'number' => 500,
+                    ];
+                },
+                [
+                    'array.age' => ['Value must be no less than 21.'],
+                    'array.number' => ['Value must be no greater than 100.'],
+                ],
+            ],
+            'class-string-private-only' => [
+                new class() {
+                    #[Nested(ObjectWithDifferentPropertyVisibility::class, ReflectionProperty::IS_PRIVATE)]
+                    private array $array = [
+                        'name' => 'hello',
+                        'age' => 17,
+                        'number' => 500,
+                    ];
+                },
+                [
+                    'array.number' => ['Value must be no greater than 100.'],
+                ],
+            ],
+            'rules-provider' => [
+                new class() implements RulesProviderInterface {
+                    private array $array = [
+                        'name' => 'hello',
+                        'age' => 17,
+                        'number' => 500,
+                    ];
+
+                    public function getRules(): iterable
+                    {
+                        return [
+                            'array' => new Nested(
+                                new SimpleRulesProvider([
+                                    'age' => new Number(min: 99),
+                                ])
+                            ),
+                        ];
+                    }
+                },
+                [
+                    'array.age' => ['Value must be no less than 99.'],
+                ],
+            ],
             'wo-rules' => [
                 new class () {
                     #[Nested]

@@ -16,6 +16,8 @@ use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
+use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
@@ -39,13 +41,18 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     private const SEPARATOR = '.';
     private const EACH_SHORTCUT = '*';
 
+    /**
+     * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
+     */
+    private ?iterable $rules = null;
+
     public function __construct(
         /**
          * Null available only for objects.
          *
-         * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
+         * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|class-string|null
          */
-        private ?iterable $rules = null,
+        iterable|object|string|null $rules = null,
 
         /**
          * Use when {@see $rules} is null.
@@ -71,26 +78,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         private ?Closure $when = null,
     ) {
         $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
-
-        if ($this->rules === null) {
-            return;
-        }
-
-        $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
-        if (empty($rules)) {
-            throw new InvalidArgumentException('Rules must not be empty.');
-        }
-
-        if (self::checkRules($rules)) {
-            $message = sprintf('Each rule should be an instance of %s.', RuleInterface::class);
-            throw new InvalidArgumentException($message);
-        }
-
-        $this->rules = $rules;
-
-        if ($this->normalizeRules === true) {
-            $this->normalizeRules();
-        }
+        $this->rules = $this->prepareRules($rules);
     }
 
     /**
@@ -122,6 +110,39 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         return $this->noPropertyPathMessage;
     }
 
+    /**
+     * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|class-string|null $source
+     */
+    private function prepareRules(iterable|object|string|null $source): ?iterable
+    {
+        if ($source === null) {
+            return null;
+        }
+
+        if ($source instanceof RulesProviderInterface) {
+            $rules = $source->getRules();
+            return $this->normalizeRules ? $this->normalizeRules($rules) : $rules;
+        }
+
+        $isTraversable = $source instanceof Traversable;
+
+        if (!$isTraversable && !is_array($source)) {
+            $rules = (new AttributesRulesProvider($source, $this->propertyVisibility))->getRules();
+            $this->assertRulesNotEmpty($rules);
+            return $rules;
+        }
+
+        $rules = $isTraversable ? iterator_to_array($source) : $source;
+        $this->assertRulesNotEmpty($rules);
+
+        if (self::checkRules($rules)) {
+            $message = sprintf('Each rule should be an instance of %s.', RuleInterface::class);
+            throw new InvalidArgumentException($message);
+        }
+
+        return $this->normalizeRules ? $this->normalizeRules($rules) : $rules;
+    }
+
     private static function checkRules($rules): bool
     {
         return array_reduce(
@@ -133,10 +154,9 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         );
     }
 
-    private function normalizeRules(): void
+    private function normalizeRules(iterable $sourceRules): array
     {
-        /** @var iterable $rules */
-        $rules = $this->getRules();
+        $rules = $sourceRules instanceof Traversable ? iterator_to_array($sourceRules) : $sourceRules;
         while (true) {
             $breakWhile = true;
             $rulesMap = [];
@@ -181,7 +201,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             }
         }
 
-        $this->rules = $rules;
+        return $rules;
     }
 
     #[ArrayShape([
@@ -207,5 +227,12 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     public function getHandlerClassName(): string
     {
         return NestedHandler::class;
+    }
+
+    private function assertRulesNotEmpty(array $rules): void
+    {
+        if (empty($rules)) {
+            throw new InvalidArgumentException('Rules must not be empty.');
+        }
     }
 }
