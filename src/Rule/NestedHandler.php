@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
@@ -69,7 +70,9 @@ final class NestedHandler implements RuleHandlerInterface
                 );
             }
 
-            return $context->getValidator()->validate($value);
+            $dataSet = new ObjectDataSet($value, $rule->getPropertyVisibility());
+
+            return $context->getValidator()->validate($dataSet);
         }
 
         if (!is_object($value) && !is_array($value)) {

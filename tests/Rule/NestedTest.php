@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use stdClass;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NestedHandler;
@@ -14,6 +15,8 @@ use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
+use Yiisoft\Validator\Tests\Stub\InheritAttributesObject\InheritAttributesObject;
+use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\Rule;
 use Yiisoft\Validator\Validator;
 
@@ -24,12 +27,23 @@ final class NestedTest extends TestCase
         $rule = new Nested();
 
         $this->assertNull($rule->getRules());
+        $this->assertSame(
+            ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
+            $rule->getPropertyVisibility(),
+        );
         $this->assertFalse($rule->getRequirePropertyPath());
         $this->assertSame('Property path "{path}" is not found.', $rule->getNoPropertyPathMessage());
         $this->assertFalse($rule->getSkipOnEmpty());
         $this->assertInstanceOf(SkipNone::class, $rule->getSkipOnEmptyCallback());
         $this->assertFalse($rule->shouldSkipOnError());
         $this->assertNull($rule->getWhen());
+    }
+
+    public function testPropertyVisibilityInConstructor(): void
+    {
+        $rule = new Nested(propertyVisibility: ReflectionProperty::IS_PRIVATE);
+
+        $this->assertSame(ReflectionProperty::IS_PRIVATE, $rule->getPropertyVisibility());
     }
 
     public function testSkipOnEmptyInConstructor(): void
@@ -256,6 +270,89 @@ final class NestedTest extends TestCase
             'Nested rule without rules available for objects only, ' . $expectedValueName . ' given.'
         );
         $validator->validate($data);
+    }
+
+    public function dataHandler(): array
+    {
+        return [
+            'wo-rules' => [
+                new class () {
+                    #[Nested]
+                    private ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [
+                    'object.name' => ['Value cannot be blank.'],
+                    'object.age' => ['Value must be no less than 21.'],
+                ],
+            ],
+            'wo-rules-only-public' => [
+                new class () {
+                    #[Nested(propertyVisibility: ReflectionProperty::IS_PUBLIC)]
+                    private ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [
+                    'object.name' => ['Value cannot be blank.'],
+                ],
+            ],
+            'wo-rules-only-protected' => [
+                new class () {
+                    #[Nested(propertyVisibility: ReflectionProperty::IS_PROTECTED)]
+                    private ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [
+                    'object.age' => ['Value must be no less than 21.'],
+                ],
+            ],
+            'wo-rules-inherit-attributes' => [
+                new class () {
+                    #[Nested]
+                    private $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new InheritAttributesObject();
+                    }
+                },
+                [
+                    'object.age' => [
+                        'Value must be no less than 21.',
+                        'Value must be equal to "23".',
+                    ],
+                    'object.number' => ['Value must be equal to "99".'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataHandler
+     */
+    public function testHandler(
+        object $data,
+        array $expectedErrorMessagesIndexedByPath,
+        ?bool $expectedIsValid = false
+    ): void {
+        $result = $this->createValidator()->validate($data);
+
+        $this->assertSame($expectedIsValid, $result->isValid());
+        if (!$expectedIsValid) {
+            $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+        }
     }
 
     private function createValidator(): Validator

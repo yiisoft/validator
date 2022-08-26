@@ -8,6 +8,7 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
+use ReflectionProperty;
 use Traversable;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\BeforeValidationInterface;
@@ -40,18 +41,30 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
 
     public function __construct(
         /**
+         * Null available only for objects.
+         *
          * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
          */
         private ?iterable $rules = null,
+
+        /**
+         * Use when {@see $rules} is null.
+         *
+         * @var int
+         */
+        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
+
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
         private bool $skipOnEmpty = false,
+
         /**
          * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
+
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
@@ -86,6 +99,11 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     public function getRules(): ?iterable
     {
         return $this->rules;
+    }
+
+    public function getPropertyVisibility(): int
+    {
+        return $this->propertyVisibility;
     }
 
     /**
