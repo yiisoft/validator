@@ -468,22 +468,22 @@ Common flow is the same as you would use usual classes:
 2. Add rules to it
 
 ```php
-use Yiisoft\Validator\Attribute\Embedded;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 
 final class Chart
 {
     #[Each([
-        new Embedded(Point::class),
+        new Nested(Point::class),
     ])]
     private array $points;
 }
 
 final class Point
 {
-    #[Embedded(Coordinates::class)]
+    #[Nested(Coordinates::class)]
     private $coordinates;
     #[Count(exactly: 3)]
     #[Each([
@@ -503,8 +503,6 @@ final class Coordinates
 
 Here are some technical details:
 
-- `Embedded` creates a reference to the referenced class and uses a `Composite` under the hood to make represent
-  referenced class rules as it owns.
 - In case of a flat array `Point::$rgb`, a property type `array` needs to be declared.
 
 Pass object directly to `validate()` method:

@@ -132,6 +132,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             return $rules;
         }
 
+        /** @psalm-suppress InvalidArgument Psalm don't see $isTraversable above. */
         $rules = $isTraversable ? iterator_to_array($source) : $source;
         $this->assertRulesNotEmpty($rules);
 
