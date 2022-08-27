@@ -55,11 +55,19 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         iterable|object|string|null $rules = null,
 
         /**
-         * Use when {@see $rules} is null.
+         * Use on parse data and rules from object value when {@see $rules} is null.
          *
          * @var int
          */
         private int $propertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
+
+        /**
+         * This options use on parse rules from class defined in {@see $rules}.
+         *
+         * @var int
+         */
+        private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
+
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
@@ -69,6 +77,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
          * @var callable
          */
         private $skipOnEmptyCallback = null,
+
         private bool $skipOnError = false,
 
         /**
@@ -126,7 +135,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         $isTraversable = $source instanceof Traversable;
 
         if (!$isTraversable && !is_array($source)) {
-            $rules = (new AttributesRulesProvider($source, $this->propertyVisibility))->getRules();
+            $rules = (new AttributesRulesProvider($source, $this->rulesPropertyVisibility))->getRules();
             $this->assertRulesNotEmpty($rules);
             return $rules;
         }

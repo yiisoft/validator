@@ -324,7 +324,10 @@ final class NestedTest extends TestCase
             ],
             'class-string-rules-private-only' => [
                 new class () {
-                    #[Nested(ObjectWithDifferentPropertyVisibility::class, ReflectionProperty::IS_PRIVATE)]
+                    #[Nested(
+                        rules: ObjectWithDifferentPropertyVisibility::class,
+                        rulesPropertyVisibility: ReflectionProperty::IS_PRIVATE
+                    )]
                     private array $array = [
                         'name' => 'hello',
                         'age' => 17,
