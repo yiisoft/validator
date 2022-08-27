@@ -67,7 +67,6 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
          * @var int
          */
         private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
-
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
@@ -77,7 +76,6 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
          * @var callable
          */
         private $skipOnEmptyCallback = null,
-
         private bool $skipOnError = false,
 
         /**
