@@ -269,7 +269,7 @@ final class NestedTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Nested rule without rules available for objects only, ' . $expectedValueName . ' given.'
+            'Nested rule without rules available for objects only. ' . $expectedValueName . ' given.'
         );
         $validator->validate($data);
     }
@@ -277,7 +277,38 @@ final class NestedTest extends TestCase
     public function dataHandler(): array
     {
         return [
-            'class-string' => [
+            'object' => [
+                new class () {
+                    #[Nested(['number' => new Number(max: 7)])]
+                    private ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [
+                    'object.number' => ['Value must be no greater than 7.'],
+                ],
+            ],
+            'object-private-only' => [
+                new class () {
+                    #[Nested(
+                        ['age' => new Number(min: 100, skipOnEmpty: true), 'number' => new Number(max: 7)],
+                        propertyVisibility: ReflectionProperty::IS_PRIVATE
+                    )]
+                    private ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [
+                    'object.number' => ['Value must be no greater than 7.'],
+                ],
+            ],
+            'class-string-rules' => [
                 new class () {
                     #[Nested(ObjectWithDifferentPropertyVisibility::class)]
                     private array $array = [
@@ -291,7 +322,7 @@ final class NestedTest extends TestCase
                     'array.number' => ['Value must be no greater than 100.'],
                 ],
             ],
-            'class-string-private-only' => [
+            'class-string-rules-private-only' => [
                 new class () {
                     #[Nested(ObjectWithDifferentPropertyVisibility::class, ReflectionProperty::IS_PRIVATE)]
                     private array $array = [

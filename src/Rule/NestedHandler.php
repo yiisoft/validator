@@ -64,7 +64,7 @@ final class NestedHandler implements RuleHandlerInterface
             if (!is_object($value)) {
                 throw new InvalidArgumentException(
                     sprintf(
-                        'Nested rule without rules available for objects only, %s given.',
+                        'Nested rule without rules available for objects only. %s given.',
                         get_debug_type($value)
                     )
                 );
@@ -75,8 +75,15 @@ final class NestedHandler implements RuleHandlerInterface
             return $context->getValidator()->validate($dataSet);
         }
 
-        if (!is_object($value) && !is_array($value)) {
-            $message = sprintf('Value should be an array or an object. %s given.', gettype($value));
+        if (is_array($value)) {
+            $data = $value;
+        } elseif (is_object($value)) {
+            $data = (new ObjectDataSet($value, $rule->getPropertyVisibility()))->getData();
+        } else {
+            $message = sprintf(
+                'Value should be an array or an object. %s given.',
+                get_debug_type($value)
+            );
             $formattedMessage = $this->formatter->format(
                 $message,
                 ['attribute' => $context->getAttribute(), 'value' => $value]
@@ -84,15 +91,13 @@ final class NestedHandler implements RuleHandlerInterface
             return (new Result())->addError($formattedMessage);
         }
 
-        $value = (array) $value;
-
         $compoundResult = new Result();
         $results = [];
         foreach ($rule->getRules() as $valuePath => $rules) {
-            if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($value, $valuePath)) {
+            if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($data, $valuePath)) {
                 $formattedMessage = $this->formatter->format(
                     $rule->getNoPropertyPathMessage(),
-                    ['path' => $valuePath, 'attribute' => $context->getAttribute(), 'value' => $value]
+                    ['path' => $valuePath, 'attribute' => $context->getAttribute(), 'value' => $data]
                 );
                 /**
                  * @psalm-suppress InvalidScalarArgument
@@ -102,7 +107,7 @@ final class NestedHandler implements RuleHandlerInterface
                 continue;
             }
 
-            $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
+            $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
             $rules = is_array($rules) ? $rules : [$rules];
 
             $itemResult = $context->getValidator()->validate($validatedValue, $rules);
