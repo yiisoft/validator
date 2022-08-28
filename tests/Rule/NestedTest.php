@@ -269,7 +269,7 @@ final class NestedTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Nested rule without rules available for objects only. ' . $expectedValueName . ' given.'
+            'Nested rule without rules could be used for objects only. ' . $expectedValueName . ' given.'
         );
         $validator->validate($data);
     }
