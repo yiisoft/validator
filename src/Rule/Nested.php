@@ -48,7 +48,14 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
 
     public function __construct(
         /**
-         * Null available only for objects.
+         * Rules for validate value that can be described by:
+         * - object that implement {@see RulesProviderInterface};
+         * - name of class from whose attributes their will be derived;
+         * - array or object implementing the `Traversable` interface that contain {@see RuleInterface} implementations
+         *   or closures.
+         *
+         * `$rules` can be null if validatable value is object. In this case rules will be derived from object via
+         * `getRules()` method if object implement {@see RulesProviderInterface} or from attributes otherwise.
          *
          * @var class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null
          */
