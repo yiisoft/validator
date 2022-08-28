@@ -63,7 +63,7 @@ final class NestedHandler implements RuleHandlerInterface
             if (!is_object($value)) {
                 throw new InvalidArgumentException(
                     sprintf(
-                        'Nested rule without rules available for objects only. %s given.',
+                        'Nested rule without rules could be used for objects only. %s given.',
                         get_debug_type($value)
                     )
                 );
