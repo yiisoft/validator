@@ -62,18 +62,16 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         iterable|object|string|null $rules = null,
 
         /**
-         * Use on parse data and rules from object value when {@see $rules} is null.
-         *
-         * @var int
+         * @var int What visibility levels to use when reading data and rules from validatable object.
          */
         private int $propertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
 
         /**
-         * This options use on parse rules from class defined in {@see $rules}.
-         *
-         * @var int
+         * @var int What visibility levels to use when reading rules from the class specified in {@see $rules}
+         * attribute.
          */
         private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
+
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
