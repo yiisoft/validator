@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\FormatterInterface;
@@ -13,7 +15,6 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
-use function gettype;
 use function is_array;
 use function is_int;
 use function is_object;
@@ -58,26 +59,44 @@ final class NestedHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Nested::class, $rule);
         }
 
-        $compoundResult = new Result();
-        if (!is_object($value) && !is_array($value)) {
-            $message = sprintf('Value should be an array or an object. %s given.', gettype($value));
+        if ($rule->getRules() === null) {
+            if (!is_object($value)) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Nested rule without rules could be used for objects only. %s given.',
+                        get_debug_type($value)
+                    )
+                );
+            }
+
+            $dataSet = new ObjectDataSet($value, $rule->getPropertyVisibility());
+
+            return $context->getValidator()->validate($dataSet);
+        }
+
+        if (is_array($value)) {
+            $data = $value;
+        } elseif (is_object($value)) {
+            $data = (new ObjectDataSet($value, $rule->getPropertyVisibility()))->getData();
+        } else {
+            $message = sprintf(
+                'Value should be an array or an object. %s given.',
+                get_debug_type($value)
+            );
             $formattedMessage = $this->formatter->format(
                 $message,
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $compoundResult->addError($formattedMessage);
-
-            return $compoundResult;
+            return (new Result())->addError($formattedMessage);
         }
 
-        $value = (array)$value;
-
+        $compoundResult = new Result();
         $results = [];
         foreach ($rule->getRules() as $valuePath => $rules) {
-            if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($value, $valuePath)) {
+            if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($data, $valuePath)) {
                 $formattedMessage = $this->formatter->format(
                     $rule->getNoPropertyPathMessage(),
-                    ['path' => $valuePath, 'attribute' => $context->getAttribute(), 'value' => $value]
+                    ['path' => $valuePath, 'attribute' => $context->getAttribute(), 'value' => $data]
                 );
                 /**
                  * @psalm-suppress InvalidScalarArgument
@@ -87,7 +106,7 @@ final class NestedHandler implements RuleHandlerInterface
                 continue;
             }
 
-            $validatedValue = ArrayHelper::getValueByPath($value, $valuePath);
+            $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
             $rules = is_array($rules) ? $rules : [$rules];
 
             $itemResult = $context->getValidator()->validate($validatedValue, $rules);

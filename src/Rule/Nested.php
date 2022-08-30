@@ -8,6 +8,7 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
+use ReflectionProperty;
 use Traversable;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\BeforeValidationInterface;
@@ -15,6 +16,8 @@ use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
+use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
@@ -38,50 +41,67 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     private const SEPARATOR = '.';
     private const EACH_SHORTCUT = '*';
 
+    /**
+     * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
+     */
+    private ?iterable $rules = null;
+
     public function __construct(
         /**
-         * @var iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>
+         * Rules for validate value that can be described by:
+         * - object that implement {@see RulesProviderInterface};
+         * - name of class from whose attributes their will be derived;
+         * - array or object implementing the `Traversable` interface that contain {@see RuleInterface} implementations
+         *   or closures.
+         *
+         * `$rules` can be null if validatable value is object. In this case rules will be derived from object via
+         * `getRules()` method if object implement {@see RulesProviderInterface} or from attributes otherwise.
+         *
+         * @var class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null
          */
-        private iterable $rules = [],
+        iterable|object|string|null $rules = null,
+
+        /**
+         * @var int What visibility levels to use when reading data and rules from validatable object.
+         */
+        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
+
+        /**
+         * @var int What visibility levels to use when reading rules from the class specified in {@see $rules}
+         * attribute.
+         */
+        private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
         private bool $skipOnEmpty = false,
+
         /**
          * @var callable
          */
         private $skipOnEmptyCallback = null,
         private bool $skipOnError = false,
+
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
         $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
-
-        $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
-        if (empty($rules)) {
-            throw new InvalidArgumentException('Rules must not be empty.');
-        }
-
-        if (self::checkRules($rules)) {
-            $message = sprintf('Each rule should be an instance of %s.', RuleInterface::class);
-            throw new InvalidArgumentException($message);
-        }
-
-        $this->rules = $rules;
-
-        if ($this->normalizeRules === true) {
-            $this->normalizeRules();
-        }
+        $this->rules = $this->prepareRules($rules);
     }
 
     /**
-     * @return iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>
+     * @return iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
      */
-    public function getRules(): iterable
+    public function getRules(): ?iterable
     {
         return $this->rules;
+    }
+
+    public function getPropertyVisibility(): int
+    {
+        return $this->propertyVisibility;
     }
 
     /**
@@ -100,6 +120,40 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         return $this->noPropertyPathMessage;
     }
 
+    /**
+     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null $source
+     */
+    private function prepareRules(iterable|object|string|null $source): ?iterable
+    {
+        if ($source === null) {
+            return null;
+        }
+
+        if ($source instanceof RulesProviderInterface) {
+            $rules = $source->getRules();
+            return $this->normalizeRules ? $this->normalizeRules($rules) : $rules;
+        }
+
+        $isTraversable = $source instanceof Traversable;
+
+        if (!$isTraversable && !is_array($source)) {
+            $rules = (new AttributesRulesProvider($source, $this->rulesPropertyVisibility))->getRules();
+            $this->assertRulesNotEmpty($rules);
+            return $rules;
+        }
+
+        /** @psalm-suppress InvalidArgument Psalm don't see $isTraversable above. */
+        $rules = $isTraversable ? iterator_to_array($source) : $source;
+        $this->assertRulesNotEmpty($rules);
+
+        if (self::checkRules($rules)) {
+            $message = sprintf('Each rule should be an instance of %s.', RuleInterface::class);
+            throw new InvalidArgumentException($message);
+        }
+
+        return $this->normalizeRules ? $this->normalizeRules($rules) : $rules;
+    }
+
     private static function checkRules($rules): bool
     {
         return array_reduce(
@@ -111,10 +165,9 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         );
     }
 
-    private function normalizeRules(): void
+    private function normalizeRules(iterable $sourceRules): array
     {
-        /** @var iterable $rules */
-        $rules = $this->getRules();
+        $rules = $sourceRules instanceof Traversable ? iterator_to_array($sourceRules) : $sourceRules;
         while (true) {
             $breakWhile = true;
             $rulesMap = [];
@@ -159,7 +212,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             }
         }
 
-        $this->rules = $rules;
+        return $rules;
     }
 
     #[ArrayShape([
@@ -167,7 +220,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         'noPropertyPathMessage' => 'array',
         'skipOnEmpty' => 'bool',
         'skipOnError' => 'bool',
-        'rules' => 'array',
+        'rules' => 'array|null',
     ])]
     public function getOptions(): array
     {
@@ -178,12 +231,19 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             ],
             'skipOnEmpty' => $this->skipOnEmpty,
             'skipOnError' => $this->skipOnError,
-            'rules' => (new RulesDumper())->asArray($this->rules),
+            'rules' => $this->rules === null ? null : (new RulesDumper())->asArray($this->rules),
         ];
     }
 
     public function getHandlerClassName(): string
     {
         return NestedHandler::class;
+    }
+
+    private function assertRulesNotEmpty(array $rules): void
+    {
+        if (empty($rules)) {
+            throw new InvalidArgumentException('Rules must not be empty.');
+        }
     }
 }
