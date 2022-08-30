@@ -50,18 +50,18 @@ final class Url implements SerializableRuleInterface, BeforeValidationInterface
          */
         private bool $enableIDN = false,
         private string $message = 'This value is not a valid URL.',
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable
          */
-        private $skipOnEmptyCallback = null,
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+        $this->setSkipOnEmptyCallback($skipOnEmpty);
 
         if ($enableIDN && !function_exists('idn_to_ascii')) {
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
@@ -110,7 +110,7 @@ final class Url implements SerializableRuleInterface, BeforeValidationInterface
             'message' => [
                 'message' => $this->message,
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
             'skipOnError' => $this->skipOnError,
         ];
     }

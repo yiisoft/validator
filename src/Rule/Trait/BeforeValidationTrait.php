@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule\Trait;
 
 use Closure;
 use InvalidArgumentException;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\ValidationContext;
 
@@ -14,54 +13,39 @@ use function is_callable;
 
 trait BeforeValidationTrait
 {
-    public function getSkipOnEmpty(): bool
-    {
-        return $this->skipOnEmpty;
-    }
-
-    public function getSkipOnEmptyCallback(): callable
-    {
-        return $this->skipOnEmptyCallback;
-    }
+    /**
+     * @var callable|null
+     */
+    private $skipOnEmptyCallback = null;
 
     public function shouldSkipOnEmpty(mixed $validatedValue): bool
     {
-        return ($this->skipOnEmptyCallback)($validatedValue);
+        return $this->skipOnEmptyCallback !== null && ($this->skipOnEmptyCallback)($validatedValue);
     }
 
-    protected function initSkipOnEmptyProperties(bool $skipOnEmpty = false, ?callable $skipOnEmptyCallback = null): void
+    protected function setSkipOnEmptyCallback(mixed $skipOnEmpty = false): void
     {
-        $this->skipOnEmpty = $skipOnEmpty;
-        $this->skipOnEmptyCallback = $skipOnEmptyCallback;
-
-        if ($this->skipOnEmptyCallback) {
-            if (!is_callable($this->skipOnEmptyCallback)) {
-                throw new InvalidArgumentException('$skipOnEmptyCallback must be a callable.');
-            }
-
-            $this->skipOnEmpty = true;
-
+        if ($skipOnEmpty === false) {
+            $this->skipOnEmptyCallback = null;
             return;
         }
 
-        $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipNone() : new SkipOnEmpty();
+        if ($skipOnEmpty === true) {
+            $this->skipOnEmptyCallback = new SkipOnEmpty();
+            return;
+        }
+
+        if (!is_callable($skipOnEmpty)) {
+            throw new InvalidArgumentException('$skipOnEmpty must be a boolean or a callable.');
+        }
+
+        $this->skipOnEmptyCallback = $skipOnEmpty;
     }
 
-    public function skipOnEmpty(bool $value): self
+    public function skipOnEmpty(bool|callable $value): self
     {
         $new = clone $this;
-        $new->skipOnEmpty = $value;
-        $new->initSkipOnEmptyProperties($new->skipOnEmpty);
-
-        return $new;
-    }
-
-    public function skipOnEmptyCallback(?callable $value): self
-    {
-        $new = clone $this;
-        $new->skipOnEmptyCallback = $value;
-        $new->initSkipOnEmptyProperties(false, $value);
-
+        $new->setSkipOnEmptyCallback($value);
         return $new;
     }
 

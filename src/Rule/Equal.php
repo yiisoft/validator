@@ -45,19 +45,17 @@ final class Equal extends Compare
          * @var bool Whether this validator strictly check.
          */
         private bool $strict = false,
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable
          */
-        private $skipOnEmptyCallback = null,
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
-
         if ($this->targetValue === null && $this->targetAttribute === null) {
             throw new RuntimeException('Either "targetValue" or "targetAttribute" must be specified.');
         }
@@ -67,7 +65,7 @@ final class Equal extends Compare
             message: $this->message,
             type: $this->type,
             operator: $this->strict ? '===' : '==',
-            skipOnEmpty: $this->skipOnEmpty,
+            skipOnEmpty: $skipOnEmpty,
             skipOnError: $this->skipOnError,
             when: $this->when
         );

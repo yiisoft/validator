@@ -23,18 +23,18 @@ final class Json implements SerializableRuleInterface, BeforeValidationInterface
 
     public function __construct(
         private string $message = 'The value is not JSON.',
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable
          */
-        private $skipOnEmptyCallback = null,
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+        $this->setSkipOnEmptyCallback($skipOnEmpty);
     }
 
     /**
@@ -51,7 +51,7 @@ final class Json implements SerializableRuleInterface, BeforeValidationInterface
             'message' => [
                 'message' => $this->message,
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
             'skipOnError' => $this->skipOnError,
         ];
     }

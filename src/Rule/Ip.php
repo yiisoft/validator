@@ -198,18 +198,18 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface
          * subnet. IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
          */
         private array $ranges = [],
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable
          */
-        private $skipOnEmptyCallback = null,
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+        $this->setSkipOnEmptyCallback($skipOnEmpty);
 
         foreach ($networks as $key => $_values) {
             if (array_key_exists($key, $this->defaultNetworks)) {
@@ -438,7 +438,7 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface
                 'message' => $this->notInRangeMessage,
             ],
             'ranges' => $this->ranges,
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
             'skipOnError' => $this->skipOnError,
         ];
     }

@@ -74,12 +74,11 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
-        private bool $skipOnEmpty = false,
 
         /**
-         * @var callable
+         * @var bool|callable
          */
-        private $skipOnEmptyCallback = null,
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
 
         /**
@@ -87,7 +86,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+        $this->setSkipOnEmptyCallback($skipOnEmpty);
         $this->rules = $this->prepareRules($rules);
     }
 
@@ -229,7 +228,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             'noPropertyPathMessage' => [
                 'message' => $this->getNoPropertyPathMessage(),
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
             'skipOnError' => $this->skipOnError,
             'rules' => $this->rules === null ? null : (new RulesDumper())->asArray($this->rules),
         ];

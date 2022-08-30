@@ -66,18 +66,18 @@ final class HasLength implements SerializableRuleInterface, BeforeValidationInte
          * If this property is not set, application wide encoding will be used.
          */
         private string $encoding = 'UTF-8',
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable
          */
-        private $skipOnEmptyCallback = null,
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+        $this->setSkipOnEmptyCallback($skipOnEmpty);
         $this->initLimitProperties(
             $min,
             $max,
@@ -111,7 +111,7 @@ final class HasLength implements SerializableRuleInterface, BeforeValidationInte
                 'message' => $this->message,
             ],
             'encoding' => $this->encoding,
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
             'skipOnError' => $this->skipOnError,
         ]);
     }

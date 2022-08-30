@@ -37,25 +37,6 @@ abstract class AbstractRuleTest extends TestCase
         $this->assertInstanceOf($rule->getHandlerClassName(), $resolver->resolve($rule->getHandlerClassName()));
     }
 
-    public function testInitSkipOnEmpty(): void
-    {
-        $rule = $this->getRule();
-        $this->assertFalse($rule->getSkipOnEmpty());
-        $this->assertInstanceOf(SkipNone::class, $rule->getSkipOnEmptyCallback());
-
-        $rule = $this->getRule()->skipOnEmpty(true);
-        $this->assertTrue($rule->getSkipOnEmpty());
-        $this->assertInstanceOf(SkipOnEmpty::class, $rule->getSkipOnEmptyCallback());
-
-        $rule = $this->getRule()->skipOnEmpty(false);
-        $this->assertFalse($rule->getSkipOnEmpty());
-        $this->assertInstanceOf(SkipNone::class, $rule->getSkipOnEmptyCallback());
-
-        $rule = $this->getRule()->skipOnEmptyCallback(new SkipOnNull());
-        $this->assertTrue($rule->getSkipOnEmpty());
-        $this->assertInstanceOf(SkipOnNull::class, $rule->getSkipOnEmptyCallback());
-    }
-
     abstract protected function optionsDataProvider(): array;
 
     /**

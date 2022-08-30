@@ -35,18 +35,18 @@ final class AtLeast implements SerializableRuleInterface, BeforeValidationInterf
          * Message to display in case of error.
          */
         private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.',
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable
          */
-        private $skipOnEmptyCallback = null,
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+        $this->setSkipOnEmptyCallback($skipOnEmpty);
     }
 
     /**
@@ -79,7 +79,7 @@ final class AtLeast implements SerializableRuleInterface, BeforeValidationInterf
                 'message' => $this->message,
                 'parameters' => ['min' => $this->min],
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
             'skipOnError' => $this->skipOnError,
         ];
     }

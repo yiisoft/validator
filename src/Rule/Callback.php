@@ -21,18 +21,18 @@ final class Callback implements SerializableRuleInterface, BeforeValidationInter
          * @var callable
          */
         private $callback,
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable
          */
-        private $skipOnEmptyCallback = null,
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+        $this->setSkipOnEmptyCallback($skipOnEmpty);
     }
 
     /**
@@ -46,7 +46,7 @@ final class Callback implements SerializableRuleInterface, BeforeValidationInter
     public function getOptions(): array
     {
         return [
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
             'skipOnError' => $this->skipOnError,
         ];
     }

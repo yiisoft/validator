@@ -580,11 +580,11 @@ class ValidatorTest extends TestCase
     public function initSkipOnEmptyDataProvider(): array
     {
         return [
-            [new Validator(new SimpleRuleHandlerContainer()), null, null],
+            [new Validator(new SimpleRuleHandlerContainer()), null, true],
             [new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: false), false, SkipNone::class],
             [new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true), true, SkipOnEmpty::class],
             [
-                new Validator(new SimpleRuleHandlerContainer(), skipOnEmptyCallback: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: new SkipOnNull()),
                 true,
                 SkipOnNull::class,
             ],
@@ -596,14 +596,12 @@ class ValidatorTest extends TestCase
      */
     public function testInitSkipOnEmpty(
         Validator $validator,
-        ?bool $expectedSkipOnEmpty,
-        ?string $expectedSkipOnEmptyCallbackClass
+        mixed $value,
+        bool $expectedResult,
     ): void {
-        $this->assertSame($expectedSkipOnEmpty, $validator->getSkipOnEmpty());
+        $result = $validator->validate($value, [new Required()]);
 
-        if ($expectedSkipOnEmptyCallbackClass !== null) {
-            $this->assertInstanceOf($expectedSkipOnEmptyCallbackClass, $validator->getSkipOnEmptyCallback());
-        }
+        $this->assertSame($expectedResult, $result);
     }
 
     public function testObjectWithAttributesOnly(): void

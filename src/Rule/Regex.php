@@ -35,18 +35,18 @@ final class Regex implements SerializableRuleInterface, BeforeValidationInterfac
         private bool $not = false,
         private string $incorrectInputMessage = 'Value should be string.',
         private string $message = 'Value is invalid.',
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable
          */
-        private $skipOnEmptyCallback = null,
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+        $this->setSkipOnEmptyCallback($skipOnEmpty);
     }
 
     /**
@@ -92,7 +92,7 @@ final class Regex implements SerializableRuleInterface, BeforeValidationInterfac
             'message' => [
                 'message' => $this->message,
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
             'skipOnError' => $this->skipOnError,
         ];
     }

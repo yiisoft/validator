@@ -41,19 +41,17 @@ final class LessThanOrEqual extends Compare
          * @var string The type of the values being validated.
          */
         private string $type = self::TYPE_STRING,
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable
          */
-        private $skipOnEmptyCallback = null,
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
-
         if ($this->targetValue === null && $this->targetAttribute === null) {
             throw new RuntimeException('Either "targetValue" or "targetAttribute" must be specified.');
         }
@@ -63,7 +61,7 @@ final class LessThanOrEqual extends Compare
             message: $this->message,
             type: $this->type,
             operator: '<=',
-            skipOnEmpty: $this->skipOnEmpty,
+            skipOnEmpty: $skipOnEmpty,
             skipOnError: $this->skipOnError,
             when: $this->when
         );

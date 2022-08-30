@@ -13,9 +13,6 @@ use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Stub\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\Rule;
@@ -35,8 +32,7 @@ final class NestedTest extends TestCase
         );
         $this->assertFalse($rule->getRequirePropertyPath());
         $this->assertSame('Property path "{path}" is not found.', $rule->getNoPropertyPathMessage());
-        $this->assertFalse($rule->getSkipOnEmpty());
-        $this->assertInstanceOf(SkipNone::class, $rule->getSkipOnEmptyCallback());
+        $this->assertFalse($rule->shouldSkipOnEmpty(''));
         $this->assertFalse($rule->shouldSkipOnError());
         $this->assertNull($rule->getWhen());
     }
@@ -52,28 +48,14 @@ final class NestedTest extends TestCase
     {
         $rule = new Nested(skipOnEmpty: true);
 
-        $this->assertTrue($rule->getSkipOnEmpty());
-    }
-
-    public function testSkipOnEmptyCallbackInConstructor(): void
-    {
-        $rule = new Nested(skipOnEmptyCallback: new SkipOnNull());
-
-        $this->assertInstanceOf(SkipOnNull::class, $rule->getSkipOnEmptyCallback());
+        $this->assertTrue($rule->shouldSkipOnEmpty(''));
     }
 
     public function testSkipOnEmptySetter(): void
     {
         $rule = (new Nested())->skipOnEmpty(true);
 
-        $this->assertTrue($rule->getSkipOnEmpty());
-    }
-
-    public function testSkipOnEmptyCallbackSetter(): void
-    {
-        $rule = (new Nested())->skipOnEmptyCallback(new SkipOnEmpty());
-
-        $this->assertInstanceOf(SkipOnEmpty::class, $rule->getSkipOnEmptyCallback());
+        $this->assertTrue($rule->shouldSkipOnEmpty(''));
     }
 
     public function testGetName(): void

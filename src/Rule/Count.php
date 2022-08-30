@@ -67,18 +67,18 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
          */
         string $notExactlyMessage = 'This value must contain exactly {exactly, number} {exactly, plural, one{item} ' .
         'other{items}}.',
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable
          */
-        private $skipOnEmptyCallback = null,
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
+        $this->setSkipOnEmptyCallback($skipOnEmpty);
         $this->initLimitProperties(
             $min,
             $max,
@@ -103,7 +103,7 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
             'message' => [
                 'message' => $this->getMessage(),
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
             'skipOnError' => $this->skipOnError,
         ]);
     }
