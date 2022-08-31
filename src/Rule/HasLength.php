@@ -24,9 +24,9 @@ use Yiisoft\Validator\ValidationContext;
 final class HasLength implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use SkipOnEmptyTrait;
     use LimitTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         /**

@@ -23,8 +23,8 @@ use Yiisoft\Validator\ValidationContext;
 class Composite implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use SkipOnEmptyTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         /**

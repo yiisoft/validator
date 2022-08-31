@@ -18,8 +18,8 @@ use Yiisoft\Validator\ValidationContext;
 abstract class Compare implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use SkipOnEmptyTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     /**
      * Constant for specifying the comparison as string values.

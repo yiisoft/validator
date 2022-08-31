@@ -38,8 +38,8 @@ use function sprintf;
 final class Nested implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use SkipOnEmptyTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     private const SEPARATOR = '.';
     private const EACH_SHORTCUT = '*';

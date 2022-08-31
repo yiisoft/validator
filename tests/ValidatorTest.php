@@ -654,7 +654,7 @@ class ValidatorTest extends TestCase
     {
         $validator = new Validator(new SimpleRuleHandlerContainer(), new SkipOnNull());
 
-        $data = new class() {
+        $data = new class () {
             #[NotNull]
             public ?string $name = null;
         };

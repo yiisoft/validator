@@ -24,8 +24,8 @@ use Yiisoft\Validator\ValidationContext;
 final class InRange implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use SkipOnEmptyTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         private iterable $range,
@@ -49,8 +49,7 @@ final class InRange implements SerializableRuleInterface, BeforeValidationInterf
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
-    )
-    {
+    ) {
     }
 
     /**

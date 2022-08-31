@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule\Trait;
 
-use InvalidArgumentException;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnEmptyNormalizer;
 use Yiisoft\Validator\ValidationContext;

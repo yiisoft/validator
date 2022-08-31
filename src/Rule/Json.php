@@ -21,8 +21,8 @@ use Yiisoft\Validator\ValidationContext;
 final class Json implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use SkipOnEmptyTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         private string $message = 'The value is not JSON.',

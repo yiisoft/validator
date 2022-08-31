@@ -18,8 +18,8 @@ use Yiisoft\Validator\ValidationContext;
 final class Subset implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use SkipOnEmptyTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         private iterable $values,
