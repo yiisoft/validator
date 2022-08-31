@@ -26,10 +26,6 @@ trait SkipOnEmptyTrait
             return $this->skipOnEmpty;
         }
 
-        return ! ($this->skipOnEmpty === null)
-
-
-
-         ;
+        return $this->skipOnEmpty !== null;
     }
 }
