@@ -18,8 +18,6 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
@@ -580,13 +578,37 @@ class ValidatorTest extends TestCase
     public function initSkipOnEmptyDataProvider(): array
     {
         return [
-            [new Validator(new SimpleRuleHandlerContainer()), null, true],
-            [new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: false), false, SkipNone::class],
-            [new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true), true, SkipOnEmpty::class],
-            [
-                new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: new SkipOnNull()),
+            'null' => [
+                null,
+                new class() {
+                    #[Required]
+                    public ?string $name = null;
+                },
+                false,
+            ],
+            'true' => [
                 true,
-                SkipOnNull::class,
+                new class() {
+                    #[Required]
+                    public ?string $name = null;
+                },
+                true,
+            ],
+            'false' => [
+                false,
+                new class() {
+                    #[Required(skipOnEmpty: true)]
+                    public string $name = '';
+                },
+                false,
+            ],
+            'callable' => [
+                new SkipOnNull(),
+                new class() {
+                    #[Required]
+                    public ?string $name = null;
+                },
+                true,
             ],
         ];
     }
@@ -595,13 +617,15 @@ class ValidatorTest extends TestCase
      * @dataProvider initSkipOnEmptyDataProvider
      */
     public function testInitSkipOnEmpty(
-        Validator $validator,
-        mixed $value,
+        bool|callable|null $skipOnEmpty,
+        mixed $data,
         bool $expectedResult,
     ): void {
-        $result = $validator->validate($value, [new Required()]);
+        $validator = new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: $skipOnEmpty);
 
-        $this->assertSame($expectedResult, $result);
+        $result = $validator->validate($data);
+
+        $this->assertSame($expectedResult, $result->isValid());
     }
 
     public function testObjectWithAttributesOnly(): void
