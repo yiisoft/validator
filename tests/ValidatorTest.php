@@ -21,6 +21,7 @@ use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Stub\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Stub\Rule;
 use Yiisoft\Validator\Tests\Stub\ObjectWithAttributesOnly;
 use Yiisoft\Validator\ValidationContext;
@@ -639,5 +640,19 @@ class ValidatorTest extends TestCase
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrorMessages());
         $this->assertStringStartsWith('This value must contain at least', $result->getErrorMessages()[0]);
+    }
+
+    public function testRuleWithoutSkipOnEmpty(): void
+    {
+        $validator = new Validator(new SimpleRuleHandlerContainer(), new SkipOnNull());
+
+        $data = new class() {
+            #[NotNull]
+            public ?string $name = null;
+        };
+
+        $result = $validator->validate($data);
+
+        $this->assertFalse($result->isValid());
     }
 }
