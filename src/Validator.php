@@ -183,7 +183,7 @@ final class Validator implements ValidatorInterface
             );
         }
 
-        if ($this->skipOnEmptyCallback !== null && $rule instanceof BeforeValidationInterface) {
+        if ($this->skipOnEmptyCallback !== null && $rule instanceof SkipOnEmptyInterface) {
             $rule = $rule->skipOnEmpty($this->skipOnEmptyCallback ?? false);
         }
 

@@ -9,18 +9,6 @@ use Yiisoft\Validator\ValidationContext;
 
 trait BeforeValidationTrait
 {
-    public function skipOnEmpty(bool|callable $value): static
-    {
-        $new = clone $this;
-        $new->skipOnEmpty = $value;
-        return $new;
-    }
-
-    public function getSkipOnEmpty(): bool|callable
-    {
-        return $this->skipOnEmpty;
-    }
-
     public function shouldSkipOnError(): bool
     {
         return $this->skipOnError;

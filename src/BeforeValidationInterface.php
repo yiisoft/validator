@@ -11,10 +11,6 @@ use Closure;
  */
 interface BeforeValidationInterface
 {
-    public function skipOnEmpty(bool|callable $value): static;
-
-    public function getSkipOnEmpty(): bool|callable;
-
     public function shouldSkipOnError(): bool;
 
     /**
