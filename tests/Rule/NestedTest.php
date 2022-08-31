@@ -16,6 +16,7 @@ use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
+use Yiisoft\Validator\Tests\Stub\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Stub\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\Rule;
@@ -391,6 +392,13 @@ final class NestedTest extends TestCase
                     'object.number' => ['Value must be equal to "99".'],
                 ],
             ],
+            'nested-into-each' => [
+                new Foo(),
+                [
+                    'name' => ['Value cannot be blank.'],
+                    'bars.0.name' => ['Value cannot be blank.'],
+                ],
+            ],
         ];
     }
 
@@ -400,7 +408,7 @@ final class NestedTest extends TestCase
     public function testHandler(
         object $data,
         array $expectedErrorMessagesIndexedByPath,
-        ?bool $expectedIsValid = false
+        bool $expectedIsValid = false
     ): void {
         $result = $this->createValidator()->validate($data);
 
