@@ -214,12 +214,6 @@ final class NestedTest extends TestCase
         $this->assertEquals($expectedOptions, $options);
     }
 
-    public function testValidationEmptyRules(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new Nested([]);
-    }
-
     public function testValidationRuleIsNotInstanceOfRule(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -330,6 +324,19 @@ final class NestedTest extends TestCase
                     'array.age' => ['Value must be no less than 99.'],
                 ],
             ],
+            'empty-rules' => [
+                new class () {
+                    #[Nested([])]
+                    private ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [],
+                true,
+            ],
             'wo-rules' => [
                 new class () {
                     #[Nested]
@@ -400,7 +407,7 @@ final class NestedTest extends TestCase
     public function testHandler(
         object $data,
         array $expectedErrorMessagesIndexedByPath,
-        ?bool $expectedIsValid = false
+        bool $expectedIsValid = false
     ): void {
         $result = $this->createValidator()->validate($data);
 

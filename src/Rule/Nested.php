@@ -137,14 +137,11 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         $isTraversable = $source instanceof Traversable;
 
         if (!$isTraversable && !is_array($source)) {
-            $rules = (new AttributesRulesProvider($source, $this->rulesPropertyVisibility))->getRules();
-            $this->assertRulesNotEmpty($rules);
-            return $rules;
+            return (new AttributesRulesProvider($source, $this->rulesPropertyVisibility))->getRules();
         }
 
         /** @psalm-suppress InvalidArgument Psalm don't see $isTraversable above. */
         $rules = $isTraversable ? iterator_to_array($source) : $source;
-        $this->assertRulesNotEmpty($rules);
 
         if (self::checkRules($rules)) {
             $message = sprintf('Each rule should be an instance of %s.', RuleInterface::class);
@@ -238,12 +235,5 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     public function getHandlerClassName(): string
     {
         return NestedHandler::class;
-    }
-
-    private function assertRulesNotEmpty(array $rules): void
-    {
-        if (empty($rules)) {
-            throw new InvalidArgumentException('Rules must not be empty.');
-        }
     }
 }
