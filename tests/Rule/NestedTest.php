@@ -13,6 +13,7 @@ use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\Tests\Stub\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Stub\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\Rule;
@@ -196,12 +197,6 @@ final class NestedTest extends TestCase
         $this->assertEquals($expectedOptions, $options);
     }
 
-    public function testValidationEmptyRules(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new Nested([]);
-    }
-
     public function testValidationRuleIsNotInstanceOfRule(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -312,6 +307,19 @@ final class NestedTest extends TestCase
                     'array.age' => ['Value must be no less than 99.'],
                 ],
             ],
+            'empty-rules' => [
+                new class () {
+                    #[Nested([])]
+                    private ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [],
+                true,
+            ],
             'wo-rules' => [
                 new class () {
                     #[Nested]
@@ -373,6 +381,13 @@ final class NestedTest extends TestCase
                     'object.number' => ['Value must be equal to "99".'],
                 ],
             ],
+            'nested-into-each' => [
+                new Foo(),
+                [
+                    'name' => ['Value cannot be blank.'],
+                    'bars.0.name' => ['Value cannot be blank.'],
+                ],
+            ],
         ];
     }
 
@@ -382,7 +397,7 @@ final class NestedTest extends TestCase
     public function testHandler(
         object $data,
         array $expectedErrorMessagesIndexedByPath,
-        ?bool $expectedIsValid = false
+        bool $expectedIsValid = false
     ): void {
         $result = $this->createValidator()->validate($data);
 
