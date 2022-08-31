@@ -33,7 +33,7 @@ final class NestedTest extends TestCase
         );
         $this->assertFalse($rule->getRequirePropertyPath());
         $this->assertSame('Property path "{path}" is not found.', $rule->getNoPropertyPathMessage());
-        $this->assertFalse($rule->getSkipOnEmpty());
+        $this->assertNull($rule->getSkipOnEmpty());
         $this->assertFalse($rule->shouldSkipOnError());
         $this->assertNull($rule->getWhen());
     }

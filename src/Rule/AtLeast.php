@@ -40,9 +40,9 @@ final class AtLeast implements SerializableRuleInterface, BeforeValidationInterf
         private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -81,7 +81,7 @@ final class AtLeast implements SerializableRuleInterface, BeforeValidationInterf
                 'message' => $this->message,
                 'parameters' => ['min' => $this->min],
             ],
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }

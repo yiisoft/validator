@@ -72,9 +72,9 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
         'other{items}}.',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -105,7 +105,7 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
             'message' => [
                 'message' => $this->getMessage(),
             ],
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ]);
     }

@@ -39,9 +39,9 @@ final class IsTrue implements SerializableRuleInterface, BeforeValidationInterfa
         private string $message = 'The value must be "{true}".',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -76,7 +76,7 @@ final class IsTrue implements SerializableRuleInterface, BeforeValidationInterfa
                     'true' => $this->trueValue === true ? 'true' : $this->trueValue,
                 ],
             ],
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }

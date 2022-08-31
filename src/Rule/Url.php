@@ -55,9 +55,9 @@ final class Url implements SerializableRuleInterface, BeforeValidationInterface,
         private string $message = 'This value is not a valid URL.',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -111,7 +111,7 @@ final class Url implements SerializableRuleInterface, BeforeValidationInterface,
             'message' => [
                 'message' => $this->message,
             ],
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }

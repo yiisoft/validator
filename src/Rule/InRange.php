@@ -41,9 +41,9 @@ final class InRange implements SerializableRuleInterface, BeforeValidationInterf
         private string $message = 'This value is invalid.',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -94,7 +94,7 @@ final class InRange implements SerializableRuleInterface, BeforeValidationInterf
             'message' => [
                 'message' => $this->message,
             ],
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }

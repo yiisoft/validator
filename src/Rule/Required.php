@@ -28,9 +28,9 @@ final class Required implements SerializableRuleInterface, BeforeValidationInter
         private string $message = 'Value cannot be blank.',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -53,7 +53,7 @@ final class Required implements SerializableRuleInterface, BeforeValidationInter
             'message' => [
                 'message' => $this->message,
             ],
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }

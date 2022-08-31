@@ -14,7 +14,6 @@ use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
 
 use function gettype;
 use function is_array;
@@ -30,9 +29,9 @@ final class Validator implements ValidatorInterface
     use PreValidateTrait;
 
     /**
-     * @var callable|null
+     * @var callable
      */
-    private $skipOnEmptyCallback;
+    private $defaultSkipOnEmptyCallback;
 
     public function __construct(
         private RuleHandlerResolverInterface $ruleHandlerResolver,
@@ -40,11 +39,9 @@ final class Validator implements ValidatorInterface
         /**
          * @var bool|callable|null
          */
-        $skipOnEmpty = null,
+        $defaultSkipOnEmpty = null,
     ) {
-        $this->skipOnEmptyCallback = $skipOnEmpty === null
-            ? null
-            : (SkipOnEmptyNormalizer::normalize($skipOnEmpty) ?? new SkipNone());
+        $this->defaultSkipOnEmptyCallback = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
     }
 
     /**
@@ -183,8 +180,8 @@ final class Validator implements ValidatorInterface
             );
         }
 
-        if ($this->skipOnEmptyCallback !== null && $rule instanceof SkipOnEmptyInterface) {
-            $rule = $rule->skipOnEmpty($this->skipOnEmptyCallback ?? false);
+        if ($rule instanceof SkipOnEmptyInterface && $rule->getSkipOnEmpty() === null) {
+            $rule = $rule->skipOnEmpty($this->defaultSkipOnEmptyCallback);
         }
 
         return $rule;

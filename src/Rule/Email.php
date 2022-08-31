@@ -68,9 +68,9 @@ final class Email implements SerializableRuleInterface, BeforeValidationInterfac
         private string $message = 'This value is not a valid email address.',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -150,7 +150,7 @@ final class Email implements SerializableRuleInterface, BeforeValidationInterfac
             'message' => [
                 'message' => $this->message,
             ],
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }

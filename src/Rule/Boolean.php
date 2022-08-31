@@ -42,9 +42,9 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
         private string $message = 'The value must be either "{true}" or "{false}".',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -98,7 +98,7 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
                     'false' => $this->falseValue === false ? 'false' : $this->falseValue,
                 ],
             ],
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }

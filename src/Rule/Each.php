@@ -35,9 +35,9 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
         private string $message = '{error} {value} given.',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -95,7 +95,7 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
             'message' => [
                 'message' => $this->getMessage(),
             ],
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
             'rules' => $arrayOfRules,
         ];

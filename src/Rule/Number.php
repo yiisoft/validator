@@ -64,9 +64,9 @@ final class Number implements SerializableRuleInterface, BeforeValidationInterfa
         private string $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -153,7 +153,7 @@ final class Number implements SerializableRuleInterface, BeforeValidationInterfa
                 'message' => $this->tooBigMessage,
                 'parameters' => ['max' => $this->max],
             ],
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
             'integerPattern' => $this->integerPattern,
             'numberPattern' => $this->numberPattern,

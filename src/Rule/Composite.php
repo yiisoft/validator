@@ -33,9 +33,9 @@ class Composite implements SerializableRuleInterface, BeforeValidationInterface,
         private iterable $rules = [],
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -61,7 +61,7 @@ class Composite implements SerializableRuleInterface, BeforeValidationInterface,
         }
 
         return [
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
             'rules' => $arrayOfRules,
         ];

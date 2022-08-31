@@ -203,9 +203,9 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface, 
         private array $ranges = [],
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -439,7 +439,7 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface, 
                 'message' => $this->notInRangeMessage,
             ],
             'ranges' => $this->ranges,
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }

@@ -71,9 +71,9 @@ final class HasLength implements SerializableRuleInterface, BeforeValidationInte
         private string $encoding = 'UTF-8',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -113,7 +113,7 @@ final class HasLength implements SerializableRuleInterface, BeforeValidationInte
                 'message' => $this->message,
             ],
             'encoding' => $this->encoding,
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ]);
     }

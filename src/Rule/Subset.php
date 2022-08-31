@@ -31,9 +31,9 @@ final class Subset implements SerializableRuleInterface, BeforeValidationInterfa
         private string $subsetMessage = 'Values must be ones of {values}.',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -85,7 +85,7 @@ final class Subset implements SerializableRuleInterface, BeforeValidationInterfa
             'subsetMessage' => [
                 'message' => $this->subsetMessage,
             ],
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }

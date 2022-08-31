@@ -86,9 +86,9 @@ abstract class Compare implements SerializableRuleInterface, BeforeValidationInt
         private string $operator = '==',
 
         /**
-         * @var bool|callable
+         * @var bool|callable|null
          */
-        private $skipOnEmpty = false,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -148,7 +148,7 @@ abstract class Compare implements SerializableRuleInterface, BeforeValidationInt
             ],
             'type' => $this->type,
             'operator' => $this->operator,
-            'skipOnEmpty' => $this->skipOnEmpty !== false,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }
