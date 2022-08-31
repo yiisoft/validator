@@ -7,12 +7,10 @@ namespace Yiisoft\Validator;
 use Closure;
 
 /**
- * BeforeValidationInterface is the interface implemented by rules that need to execute checks before the validation.
+ * `BeforeValidationInterface` is the interface implemented by rules that need to execute checks before the validation.
  */
 interface BeforeValidationInterface
 {
-    public function shouldSkipOnEmpty(mixed $validatedValue): bool;
-
     public function shouldSkipOnError(): bool;
 
     /**

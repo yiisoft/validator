@@ -9,14 +9,17 @@ use Closure;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Subset implements SerializableRuleInterface, BeforeValidationInterface
+final class Subset implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         private iterable $values,
@@ -26,18 +29,17 @@ final class Subset implements SerializableRuleInterface, BeforeValidationInterfa
         private bool $strict = false,
         private string $iterableMessage = 'Value must be iterable.',
         private string $subsetMessage = 'Values must be ones of {values}.',
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable|null
          */
-        private $skipOnEmptyCallback = null,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
     }
 
     /**
@@ -83,7 +85,7 @@ final class Subset implements SerializableRuleInterface, BeforeValidationInterfa
             'subsetMessage' => [
                 'message' => $this->subsetMessage,
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }

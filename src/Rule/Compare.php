@@ -10,13 +10,16 @@ use RuntimeException;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
-abstract class Compare implements SerializableRuleInterface, BeforeValidationInterface
+abstract class Compare implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     /**
      * Constant for specifying the comparison as string values.
@@ -81,19 +84,17 @@ abstract class Compare implements SerializableRuleInterface, BeforeValidationInt
          * {@see TYPE_NUMBER}.
          */
         private string $operator = '==',
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable|null
          */
-        private $skipOnEmptyCallback = null,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
-
         if (!isset($this->validOperators[$operator])) {
             throw new InvalidArgumentException("Operator \"$operator\" is not supported.");
         }
@@ -147,7 +148,7 @@ abstract class Compare implements SerializableRuleInterface, BeforeValidationInt
             ],
             'type' => $this->type,
             'operator' => $this->operator,
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }

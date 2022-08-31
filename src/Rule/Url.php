@@ -10,7 +10,9 @@ use RuntimeException;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function function_exists;
@@ -22,10 +24,11 @@ use function function_exists;
  * It does not check the remaining parts of a URL.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Url implements SerializableRuleInterface, BeforeValidationInterface
+final class Url implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         /**
@@ -50,19 +53,17 @@ final class Url implements SerializableRuleInterface, BeforeValidationInterface
          */
         private bool $enableIDN = false,
         private string $message = 'This value is not a valid URL.',
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable|null
          */
-        private $skipOnEmptyCallback = null,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
-
         if ($enableIDN && !function_exists('idn_to_ascii')) {
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
         }
@@ -110,7 +111,7 @@ final class Url implements SerializableRuleInterface, BeforeValidationInterface
             'message' => [
                 'message' => $this->message,
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }

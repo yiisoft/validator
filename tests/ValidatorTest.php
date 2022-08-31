@@ -18,11 +18,10 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Stub\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Stub\Rule;
 use Yiisoft\Validator\Tests\Stub\ObjectWithAttributesOnly;
 use Yiisoft\Validator\ValidationContext;
@@ -272,7 +271,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new HasLength(min: 8)],
-                    'age' => [new Number(asInteger: true, min: 18, skipOnEmptyCallback: new SkipOnNull())],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new SkipOnNull())],
                 ],
                 [
                     new Error($stringLessThanMinMessage, ['name']),
@@ -286,7 +285,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new HasLength(min: 8)],
-                    'age' => [new Number(asInteger: true, min: 18, skipOnEmptyCallback: new SkipOnNull())],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new SkipOnNull())],
                 ],
                 [
                     new Error($stringLessThanMinMessage, ['name']),
@@ -300,7 +299,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new HasLength(min: 8)],
-                    'age' => [new Number(asInteger: true, min: 18, skipOnEmptyCallback: new SkipOnNull())],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new SkipOnNull())],
                 ],
                 [
                     new Error($stringLessThanMinMessage, ['name']),
@@ -315,7 +314,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new HasLength(min: 8)],
-                    'age' => [new Number(asInteger: true, min: 18, skipOnEmptyCallback: new SkipOnNull())],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new SkipOnNull())],
                 ],
                 [
                     new Error($stringLessThanMinMessage, ['name']),
@@ -334,7 +333,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmptyCallback: static function (mixed $value): bool {
+                            skipOnEmpty: static function (mixed $value): bool {
                                 return $value === 0;
                             }
                         ),
@@ -357,7 +356,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmptyCallback: static function (mixed $value): bool {
+                            skipOnEmpty: static function (mixed $value): bool {
                                 return $value === 0;
                             }
                         ),
@@ -379,7 +378,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmptyCallback: static function (mixed $value): bool {
+                            skipOnEmpty: static function (mixed $value): bool {
                                 return $value === 0;
                             }
                         ),
@@ -402,7 +401,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmptyCallback: static function (mixed $value): bool {
+                            skipOnEmpty: static function (mixed $value): bool {
                                 return $value === 0;
                             }
                         ),
@@ -415,7 +414,7 @@ class ValidatorTest extends TestCase
             ],
 
             'validator, skipOnEmpty: true, value not passed' => [
-                new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true),
+                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: true),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                 ]),
@@ -425,7 +424,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmpty: true, value is empty' => [
-                new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true),
+                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: true),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => null,
@@ -436,7 +435,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmpty: true, value is not empty' => [
-                new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true),
+                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: true),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => 17,
@@ -449,7 +448,7 @@ class ValidatorTest extends TestCase
             ],
 
             'validator, skipOnEmptyCallback, SkipOnNull, value not passed' => [
-                new Validator(new SimpleRuleHandlerContainer(), skipOnEmptyCallback: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                 ]),
@@ -459,7 +458,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmptyCallback, SkipOnNull, value is empty' => [
-                new Validator(new SimpleRuleHandlerContainer(), skipOnEmptyCallback: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => null,
@@ -470,7 +469,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmptyCallback, SkipOnNull, value is not empty' => [
-                new Validator(new SimpleRuleHandlerContainer(), skipOnEmptyCallback: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => 17,
@@ -482,7 +481,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmptyCallback, SkipOnNull, value is not empty (empty string)' => [
-                new Validator(new SimpleRuleHandlerContainer(), skipOnEmptyCallback: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => '',
@@ -497,7 +496,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmptyCallback, custom, value not passed' => [
                 new Validator(
                     new SimpleRuleHandlerContainer(),
-                    skipOnEmptyCallback: static function (mixed $value): bool {
+                    defaultSkipOnEmpty: static function (mixed $value): bool {
                         return $value === 0;
                     }
                 ),
@@ -513,7 +512,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmptyCallback, custom, value is empty' => [
                 new Validator(
                     new SimpleRuleHandlerContainer(),
-                    skipOnEmptyCallback: static function (mixed $value): bool {
+                    defaultSkipOnEmpty: static function (mixed $value): bool {
                         return $value === 0;
                     }
                 ),
@@ -529,7 +528,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmptyCallback, custom, value is not empty' => [
                 new Validator(
                     new SimpleRuleHandlerContainer(),
-                    skipOnEmptyCallback: static function (mixed $value): bool {
+                    defaultSkipOnEmpty: static function (mixed $value): bool {
                         return $value === 0;
                     }
                 ),
@@ -546,7 +545,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmptyCallback, custom, value is not empty (null)' => [
                 new Validator(
                     new SimpleRuleHandlerContainer(),
-                    skipOnEmptyCallback: static function (mixed $value): bool {
+                    defaultSkipOnEmpty: static function (mixed $value): bool {
                         return $value === 0;
                     }
                 ),
@@ -580,13 +579,45 @@ class ValidatorTest extends TestCase
     public function initSkipOnEmptyDataProvider(): array
     {
         return [
-            [new Validator(new SimpleRuleHandlerContainer()), null, null],
-            [new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: false), false, SkipNone::class],
-            [new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true), true, SkipOnEmpty::class],
-            [
-                new Validator(new SimpleRuleHandlerContainer(), skipOnEmptyCallback: new SkipOnNull()),
+            'null' => [
+                null,
+                new class () {
+                    #[Required]
+                    public ?string $name = null;
+                },
+                false,
+            ],
+            'false' => [
+                false,
+                new class () {
+                    #[Required]
+                    public ?string $name = null;
+                },
+                false,
+            ],
+            'true' => [
                 true,
-                SkipOnNull::class,
+                new class () {
+                    #[Required]
+                    public ?string $name = null;
+                },
+                true,
+            ],
+            'callable' => [
+                new SkipOnNull(),
+                new class () {
+                    #[Required]
+                    public ?string $name = null;
+                },
+                true,
+            ],
+            'do-not-override-rule' => [
+                false,
+                new class () {
+                    #[Required(skipOnEmpty: true)]
+                    public string $name = '';
+                },
+                true,
             ],
         ];
     }
@@ -595,15 +626,15 @@ class ValidatorTest extends TestCase
      * @dataProvider initSkipOnEmptyDataProvider
      */
     public function testInitSkipOnEmpty(
-        Validator $validator,
-        ?bool $expectedSkipOnEmpty,
-        ?string $expectedSkipOnEmptyCallbackClass
+        bool|callable|null $skipOnEmpty,
+        mixed $data,
+        bool $expectedResult,
     ): void {
-        $this->assertSame($expectedSkipOnEmpty, $validator->getSkipOnEmpty());
+        $validator = new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: $skipOnEmpty);
 
-        if ($expectedSkipOnEmptyCallbackClass !== null) {
-            $this->assertInstanceOf($expectedSkipOnEmptyCallbackClass, $validator->getSkipOnEmptyCallback());
-        }
+        $result = $validator->validate($data);
+
+        $this->assertSame($expectedResult, $result->isValid());
     }
 
     public function testObjectWithAttributesOnly(): void
@@ -617,5 +648,19 @@ class ValidatorTest extends TestCase
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrorMessages());
         $this->assertStringStartsWith('This value must contain at least', $result->getErrorMessages()[0]);
+    }
+
+    public function testRuleWithoutSkipOnEmpty(): void
+    {
+        $validator = new Validator(new SimpleRuleHandlerContainer(), new SkipOnNull());
+
+        $data = new class () {
+            #[NotNull]
+            public ?string $name = null;
+        };
+
+        $result = $validator->validate($data);
+
+        $this->assertFalse($result->isValid());
     }
 }

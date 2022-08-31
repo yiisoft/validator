@@ -11,7 +11,9 @@ use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\LimitTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -19,11 +21,12 @@ use Yiisoft\Validator\ValidationContext;
  * {@see Countable} interface.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Count implements SerializableRuleInterface, BeforeValidationInterface
+final class Count implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
     use LimitTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         /**
@@ -67,18 +70,17 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
          */
         string $notExactlyMessage = 'This value must contain exactly {exactly, number} {exactly, plural, one{item} ' .
         'other{items}}.',
-        private bool $skipOnEmpty = false,
+
         /**
-         * @var callable
+         * @var bool|callable|null
          */
-        private $skipOnEmptyCallback = null,
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->initSkipOnEmptyProperties($skipOnEmpty, $skipOnEmptyCallback);
         $this->initLimitProperties(
             $min,
             $max,
@@ -103,7 +105,7 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
             'message' => [
                 'message' => $this->getMessage(),
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ]);
     }

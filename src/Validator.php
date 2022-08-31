@@ -14,8 +14,6 @@ use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 
 use function gettype;
 use function is_array;
@@ -30,33 +28,20 @@ final class Validator implements ValidatorInterface
 {
     use PreValidateTrait;
 
+    /**
+     * @var callable
+     */
+    private $defaultSkipOnEmptyCallback;
+
     public function __construct(
         private RuleHandlerResolverInterface $ruleHandlerResolver,
-        private ?bool $skipOnEmpty = null,
+
         /**
-         * @var callable
+         * @var bool|callable|null
          */
-        private $skipOnEmptyCallback = null
+        $defaultSkipOnEmpty = null,
     ) {
-        if ($this->skipOnEmpty !== null) {
-            $this->skipOnEmptyCallback = $this->skipOnEmpty === false ? new SkipNone() : new SkipOnEmpty();
-        } elseif ($this->skipOnEmptyCallback !== null) {
-            if (!is_callable($this->skipOnEmptyCallback)) {
-                throw new InvalidArgumentException('$skipOnEmptyCallback must be a callable.');
-            }
-
-            $this->skipOnEmpty = true;
-        }
-    }
-
-    public function getSkipOnEmpty(): ?bool
-    {
-        return $this->skipOnEmpty;
-    }
-
-    public function getSkipOnEmptyCallback(): ?callable
-    {
-        return $this->skipOnEmptyCallback;
+        $this->defaultSkipOnEmptyCallback = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
     }
 
     /**
@@ -195,12 +180,8 @@ final class Validator implements ValidatorInterface
             );
         }
 
-        if ($this->skipOnEmpty !== null) {
-            $rule = $rule->skipOnEmpty($this->skipOnEmpty);
-        }
-
-        if ($this->skipOnEmpty !== null) {
-            $rule = $rule->skipOnEmptyCallback($this->skipOnEmptyCallback);
+        if ($rule instanceof SkipOnEmptyInterface && $rule->getSkipOnEmpty() === null) {
+            $rule = $rule->skipOnEmpty($this->defaultSkipOnEmptyCallback);
         }
 
         return $rule;
