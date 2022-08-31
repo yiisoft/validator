@@ -85,15 +85,13 @@ abstract class Compare implements SerializableRuleInterface, BeforeValidationInt
         /**
          * @var bool|callable
          */
-        $skipOnEmpty = false,
+        private $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->setSkipOnEmptyCallback($skipOnEmpty);
-
         if (!isset($this->validOperators[$operator])) {
             throw new InvalidArgumentException("Operator \"$operator\" is not supported.");
         }
@@ -147,7 +145,7 @@ abstract class Compare implements SerializableRuleInterface, BeforeValidationInt
             ],
             'type' => $this->type,
             'operator' => $this->operator,
-            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
+            'skipOnEmpty' => $this->skipOnEmpty !== false,
             'skipOnError' => $this->skipOnError,
         ];
     }

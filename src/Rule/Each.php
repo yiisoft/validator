@@ -34,14 +34,13 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
         /**
          * @var bool|callable
          */
-        $skipOnEmpty = false,
+        private $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->setSkipOnEmptyCallback($skipOnEmpty);
     }
 
     /**
@@ -93,7 +92,7 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
             'message' => [
                 'message' => $this->getMessage(),
             ],
-            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
+            'skipOnEmpty' => $this->skipOnEmpty !== false,
             'skipOnError' => $this->skipOnError,
             'rules' => $arrayOfRules,
         ];

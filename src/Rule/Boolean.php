@@ -41,14 +41,13 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
         /**
          * @var bool|callable
          */
-        $skipOnEmpty = false,
+        private $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->setSkipOnEmptyCallback($skipOnEmpty);
     }
 
     /**
@@ -96,7 +95,7 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
                     'false' => $this->falseValue === false ? 'false' : $this->falseValue,
                 ],
             ],
-            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
+            'skipOnEmpty' => $this->skipOnEmpty !== false,
             'skipOnError' => $this->skipOnError,
         ];
     }

@@ -202,15 +202,13 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface
         /**
          * @var bool|callable
          */
-        $skipOnEmpty = false,
+        private $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->setSkipOnEmptyCallback($skipOnEmpty);
-
         foreach ($networks as $key => $_values) {
             if (array_key_exists($key, $this->defaultNetworks)) {
                 throw new RuntimeException("Network alias \"{$key}\" already set as default.");
@@ -438,7 +436,7 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface
                 'message' => $this->notInRangeMessage,
             ],
             'ranges' => $this->ranges,
-            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
+            'skipOnEmpty' => $this->skipOnEmpty !== false,
             'skipOnError' => $this->skipOnError,
         ];
     }

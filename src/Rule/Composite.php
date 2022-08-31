@@ -32,14 +32,13 @@ class Composite implements SerializableRuleInterface, BeforeValidationInterface
         /**
          * @var bool|callable
          */
-        $skipOnEmpty = false,
+        private $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->setSkipOnEmptyCallback($skipOnEmpty);
     }
 
     #[ArrayShape([
@@ -59,7 +58,7 @@ class Composite implements SerializableRuleInterface, BeforeValidationInterface
         }
 
         return [
-            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
+            'skipOnEmpty' => $this->skipOnEmpty !== false,
             'skipOnError' => $this->skipOnError,
             'rules' => $arrayOfRules,
         ];

@@ -38,14 +38,13 @@ final class IsTrue implements SerializableRuleInterface, BeforeValidationInterfa
         /**
          * @var bool|callable
          */
-        $skipOnEmpty = false,
+        private $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->setSkipOnEmptyCallback($skipOnEmpty);
     }
 
     public function getTrueValue(): mixed
@@ -74,7 +73,7 @@ final class IsTrue implements SerializableRuleInterface, BeforeValidationInterfa
                     'true' => $this->trueValue === true ? 'true' : $this->trueValue,
                 ],
             ],
-            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
+            'skipOnEmpty' => $this->skipOnEmpty !== false,
             'skipOnError' => $this->skipOnError,
         ];
     }

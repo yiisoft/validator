@@ -11,9 +11,9 @@ use Closure;
  */
 interface BeforeValidationInterface
 {
-    public function skipOnEmpty(bool|callable $value): self;
+    public function skipOnEmpty(bool|callable $value): static;
 
-    public function shouldSkipOnEmpty(mixed $validatedValue): bool;
+    public function getSkipOnEmpty(): bool|callable;
 
     public function shouldSkipOnError(): bool;
 

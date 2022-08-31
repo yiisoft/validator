@@ -70,14 +70,13 @@ final class HasLength implements SerializableRuleInterface, BeforeValidationInte
         /**
          * @var bool|callable
          */
-        $skipOnEmpty = false,
+        private $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null
     ) {
-        $this->setSkipOnEmptyCallback($skipOnEmpty);
         $this->initLimitProperties(
             $min,
             $max,
@@ -111,7 +110,7 @@ final class HasLength implements SerializableRuleInterface, BeforeValidationInte
                 'message' => $this->message,
             ],
             'encoding' => $this->encoding,
-            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
+            'skipOnEmpty' => $this->skipOnEmpty !== false,
             'skipOnError' => $this->skipOnError,
         ]);
     }

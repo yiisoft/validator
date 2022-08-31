@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule\Trait;
 
+use InvalidArgumentException;
 use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_callable;
@@ -20,7 +23,7 @@ trait PreValidateTrait
         ValidationContext $context,
         BeforeValidationInterface $rule
     ): bool {
-        if ($rule->shouldSkipOnEmpty($value)) {
+        if (($this->prepareSkipOnEmptyCallback($rule->getSkipOnEmpty()))($value)) {
             return true;
         }
 
@@ -29,5 +32,22 @@ trait PreValidateTrait
         }
 
         return is_callable($rule->getWhen()) && !($rule->getWhen())($value, $context);
+    }
+
+    private function prepareSkipOnEmptyCallback(mixed $skipOnEmpty): callable
+    {
+        if ($skipOnEmpty === false) {
+            return new SkipNone();
+        }
+
+        if ($skipOnEmpty === true) {
+            return new SkipOnEmpty();
+        }
+
+        if (is_callable($skipOnEmpty)) {
+            return $skipOnEmpty;
+        }
+
+        throw new InvalidArgumentException('$skipOnEmpty must be a boolean or a callable.');
     }
 }

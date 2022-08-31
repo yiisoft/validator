@@ -78,7 +78,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         /**
          * @var bool|callable
          */
-        $skipOnEmpty = false,
+        private $skipOnEmpty = false,
         private bool $skipOnError = false,
 
         /**
@@ -86,7 +86,6 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
          */
         private ?Closure $when = null,
     ) {
-        $this->setSkipOnEmptyCallback($skipOnEmpty);
         $this->rules = $this->prepareRules($rules);
     }
 
@@ -225,7 +224,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             'noPropertyPathMessage' => [
                 'message' => $this->getNoPropertyPathMessage(),
             ],
-            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
+            'skipOnEmpty' => $this->skipOnEmpty !== false,
             'skipOnError' => $this->skipOnError,
             'rules' => $this->rules === null ? null : (new RulesDumper())->asArray($this->rules),
         ];

@@ -39,14 +39,13 @@ final class AtLeast implements SerializableRuleInterface, BeforeValidationInterf
         /**
          * @var bool|callable
          */
-        $skipOnEmpty = false,
+        private $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null
     ) {
-        $this->setSkipOnEmptyCallback($skipOnEmpty);
     }
 
     /**
@@ -79,7 +78,7 @@ final class AtLeast implements SerializableRuleInterface, BeforeValidationInterf
                 'message' => $this->message,
                 'parameters' => ['min' => $this->min],
             ],
-            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
+            'skipOnEmpty' => $this->skipOnEmpty !== false,
             'skipOnError' => $this->skipOnError,
         ];
     }

@@ -63,14 +63,13 @@ final class Number implements SerializableRuleInterface, BeforeValidationInterfa
         /**
          * @var bool|callable
          */
-        $skipOnEmpty = false,
+        private $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->setSkipOnEmptyCallback($skipOnEmpty);
     }
 
     /**
@@ -151,7 +150,7 @@ final class Number implements SerializableRuleInterface, BeforeValidationInterfa
                 'message' => $this->tooBigMessage,
                 'parameters' => ['max' => $this->max],
             ],
-            'skipOnEmpty' => $this->skipOnEmptyCallback !== null,
+            'skipOnEmpty' => $this->skipOnEmpty !== false,
             'skipOnError' => $this->skipOnError,
             'integerPattern' => $this->integerPattern,
             'numberPattern' => $this->numberPattern,
