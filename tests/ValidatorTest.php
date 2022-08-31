@@ -580,7 +580,7 @@ class ValidatorTest extends TestCase
         return [
             'null' => [
                 null,
-                new class() {
+                new class () {
                     #[Required]
                     public ?string $name = null;
                 },
@@ -588,7 +588,7 @@ class ValidatorTest extends TestCase
             ],
             'true' => [
                 true,
-                new class() {
+                new class () {
                     #[Required]
                     public ?string $name = null;
                 },
@@ -596,7 +596,7 @@ class ValidatorTest extends TestCase
             ],
             'false' => [
                 false,
-                new class() {
+                new class () {
                     #[Required(skipOnEmpty: true)]
                     public string $name = '';
                 },
@@ -604,7 +604,7 @@ class ValidatorTest extends TestCase
             ],
             'callable' => [
                 new SkipOnNull(),
-                new class() {
+                new class () {
                     #[Required]
                     public ?string $name = null;
                 },
