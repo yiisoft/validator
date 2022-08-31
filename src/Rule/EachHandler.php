@@ -13,8 +13,6 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
-use function is_array;
-
 /**
  * Validates an array by checking each of its elements against a set of rules.
  */
@@ -61,7 +59,7 @@ final class EachHandler implements RuleHandlerInterface
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                if (!is_array($item)) {
+                if ($error->getValuePath() === []) {
                     $errorKey = [$index];
                     $formatMessage = true;
                 } else {
