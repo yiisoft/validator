@@ -9,11 +9,14 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use ReflectionProperty;
+use Traversable;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
+use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 
 use function gettype;
 use function is_array;
@@ -46,13 +49,28 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
-     * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null $rules
+     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null $rules
+     * @param int $rulesPropertyVisibility What visibility levels to use when reading rules from the class specified in
+     * `$rules` argument.
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function validate(mixed $data, ?iterable $rules = null): Result
+    public function validate(
+        mixed $data,
+        iterable|object|string|null $rules = null,
+        int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
+        | ReflectionProperty::IS_PROTECTED
+        | ReflectionProperty::IS_PUBLIC
+    ): Result
     {
         $data = $this->normalizeDataSet($data);
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
+        } elseif ($rules instanceof RulesProviderInterface) {
+            $rules = $rules->getRules();
+        } elseif (!$rules instanceof Traversable && !is_array($rules) && $rules !== null) {
+            $rules = (new AttributesRulesProvider($rules, $rulesPropertyVisibility))->getRules();
         }
 
         $compoundResult = new Result();
