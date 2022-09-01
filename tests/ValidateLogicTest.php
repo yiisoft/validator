@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\Tests\Stub\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
@@ -128,6 +129,14 @@ final class ValidateLogicTest extends TestCase
                         ];
                     }
                 },
+            ],
+            'array-and-object' => [
+                [
+                    'name' => ['Value cannot be blank.'],
+                    'bars' => ['Value must be array or iterable.'],
+                ],
+                [],
+                new Foo(),
             ],
         ];
     }

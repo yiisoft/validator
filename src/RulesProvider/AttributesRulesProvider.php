@@ -11,6 +11,8 @@ use ReflectionProperty;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 
+use function is_object;
+
 final class AttributesRulesProvider implements RulesProviderInterface
 {
     /**
