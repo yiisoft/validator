@@ -23,10 +23,15 @@ name: build
 
 jobs:
   phpunit:
-    uses: yiisoft/actions/.github/workflows/phpunit.yml@master
+    uses: &phpunit-uses yiisoft/actions/.github/workflows/phpunit.yml@master
     with:
       extensions: intl
-      os: >-
+      os: &phpunit-os >-
         ['ubuntu-latest', 'windows-latest']
-      php: >-
+      php: &phpunit-php >-
         ['8.0', '8.1']
+  phpunit_without_extensions:
+    uses: *phpunit-uses
+    with:
+      os: *phpunit-os
+      php: *phpunit-php
