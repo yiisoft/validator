@@ -135,7 +135,8 @@ final class ValidateLogicTest extends TestCase
     /**
      * @dataProvider dataBase
      */
-    public function testBase(array $expectedErrorMessages, mixed $data, iterable|object|string|null $rules): void {
+    public function testBase(array $expectedErrorMessages, mixed $data, iterable|object|string|null $rules): void
+    {
         $result = $this->createValidator()->validate($data, $rules);
         $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
     }
