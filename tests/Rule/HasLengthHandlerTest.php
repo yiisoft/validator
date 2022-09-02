@@ -24,33 +24,33 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
             [
                 new HasLength(max: 25),
                 str_repeat('x', 1250),
-                [new Error($this->formatMessage($defaultConfig->getGreaterThanMaxMessage(), ['max' => 25]))],
+                [new Error($this->translateMessage($defaultConfig->getGreaterThanMaxMessage(), ['max' => 25]))],
             ],
             [
                 new HasLength(exactly: 25),
                 str_repeat('x', 125),
-                [new Error($this->formatMessage($defaultConfig->getNotExactlyMessage(), ['max' => 25]))],
+                [new Error($this->translateMessage($defaultConfig->getNotExactlyMessage(), ['max' => 25]))],
             ],
 
             [
                 new HasLength(exactly: 25),
                 '',
-                [new Error($this->formatMessage($defaultConfig->getNotExactlyMessage(), ['min' => 25]))],
+                [new Error($this->translateMessage($defaultConfig->getNotExactlyMessage(), ['min' => 25]))],
             ],
             [
                 new HasLength(min: 10, max: 25),
                 str_repeat('x', 5),
-                [new Error($this->formatMessage($defaultConfig->getLessThanMinMessage(), ['min' => 10]))],
+                [new Error($this->translateMessage($defaultConfig->getLessThanMinMessage(), ['min' => 10]))],
             ],
             [
                 new HasLength(min: 25),
                 str_repeat('x', 13),
-                [new Error($this->formatMessage($defaultConfig->getLessThanMinMessage(), ['min' => 25]))],
+                [new Error($this->translateMessage($defaultConfig->getLessThanMinMessage(), ['min' => 25]))],
             ],
             [
                 new HasLength(min: 25),
                 '',
-                [new Error($this->formatMessage($defaultConfig->getLessThanMinMessage(), ['min' => 25]))],
+                [new Error($this->translateMessage($defaultConfig->getLessThanMinMessage(), ['min' => 25]))],
             ],
         ];
     }
@@ -97,12 +97,12 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
             [
                 $rule,
                 str_repeat('x', 1),
-                [new Error($this->formatMessage('is too short test', ['min' => 3]))],
+                [new Error($this->translateMessage('is too short test', ['min' => 3]))],
             ],
             [
                 $rule,
                 str_repeat('x', 6),
-                [new Error($this->formatMessage('is too long test', ['max' => 5]))],
+                [new Error($this->translateMessage('is too long test', ['max' => 5]))],
             ],
         ];
     }

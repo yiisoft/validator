@@ -42,7 +42,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'error' => [
                 new Nested(['author.age' => [new Number(min: 40)]]),
                 $value,
-                ['author.age' => [$this->formatMessage('Value must be no less than {min}.', ['min' => 40])]],
+                ['author.age' => [$this->translateMessage('Value must be no less than {min}.', ['min' => 40])]],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
@@ -62,7 +62,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             [
                 new Nested(['value' => new Required()], requirePropertyPath: true),
                 [],
-                ['value' => [$this->formatMessage($rule->getNoPropertyPathMessage(), ['path' => 'value'])]],
+                ['value' => [$this->translateMessage($rule->getNoPropertyPathMessage(), ['path' => 'value'])]],
             ],
             // https://github.com/yiisoft/validator/issues/200
             [
@@ -90,7 +90,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     ]),
                 ]),
                 [0 => [0 => -11]],
-                ['0.0' => [$this->formatMessage('Value must be no less than {min}.', ['min' => -10])]],
+                ['0.0' => [$this->translateMessage('Value must be no less than {min}.', ['min' => -10])]],
             ],
         ];
     }
@@ -121,7 +121,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'error' => [
                 new Nested(['author.age' => [new Number(min: 20)]]),
                 $value,
-                [new Error($this->formatMessage('Value must be no less than {min}.', ['min' => 20]), ['author', 'age'])],
+                [new Error($this->translateMessage('Value must be no less than {min}.', ['min' => 20]), ['author', 'age'])],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
@@ -141,7 +141,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             [
                 new Nested(['value' => new Required()], requirePropertyPath: true),
                 [],
-                [new Error($this->formatMessage($rule->getNoPropertyPathMessage(), ['path' => 'value']), ['value'])],
+                [new Error($this->translateMessage($rule->getNoPropertyPathMessage(), ['path' => 'value']), ['value'])],
             ],
             [
                 // https://github.com/yiisoft/validator/issues/200
@@ -169,7 +169,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     ]),
                 ]),
                 [0 => [0 => -11]],
-                [new Error($this->formatMessage('Value must be no less than {min}.', ['min' => -10]), [0, 0])],
+                [new Error($this->translateMessage('Value must be no less than {min}.', ['min' => -10]), [0, 0])],
             ],
             [
                 new Nested([

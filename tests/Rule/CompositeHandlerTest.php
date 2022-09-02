@@ -22,8 +22,8 @@ final class CompositeHandlerTest extends AbstractRuleValidatorTest
                 ),
                 20,
                 [
-                    new Error($this->formatMessage('Value must be no greater than {max}.', ['max' => 13])),
-                    new Error($this->formatMessage('Value must be no less than {min}.', ['min' => 21])),
+                    new Error($this->translateMessage('Value must be no greater than {max}.', ['max' => 13])),
+                    new Error($this->translateMessage('Value must be no less than {min}.', ['min' => 21])),
                 ],
             ],
         ];

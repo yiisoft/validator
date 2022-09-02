@@ -28,89 +28,89 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
             [
                 new CompareTo($value),
                 101,
-                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '==='),
                 $value + 1,
-                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo(null, 'attribute', operator: '==='),
                 $value + 1,
-                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '!='),
                 $value,
-                [new Error($this->formatMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo($value, operator: '!='),
                 (string)$value,
-                [new Error($this->formatMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo($value, operator: '!='),
                 (float)$value,
-                [new Error($this->formatMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '!=='),
                 $value,
-                [new Error($this->formatMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo($value, operator: '!=='),
                 (string)$value,
-                [new Error($this->formatMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo($value, operator: '!=='),
                 (float)$value,
-                [new Error($this->formatMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageNotEqual, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '>'),
                 $value,
-                [new Error($this->formatMessage($messageGreaterThan, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageGreaterThan, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo($value, operator: '>'),
                 $value - 1,
-                [new Error($this->formatMessage($messageGreaterThan, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageGreaterThan, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '>='),
                 $value - 1,
-                [new Error($this->formatMessage($messageGreaterOrEqualThan, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageGreaterOrEqualThan, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '<'),
                 $value,
-                [new Error($this->formatMessage($messageLessThan, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageLessThan, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo($value, operator: '<'),
                 $value + 1,
-                [new Error($this->formatMessage($messageLessThan, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageLessThan, ['targetValueOrAttribute' => $value]))],
             ],
 
             [
                 new CompareTo($value, operator: '<='),
                 $value + 1,
-                [new Error($this->formatMessage($messageLessOrEqualThan, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageLessOrEqualThan, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new CompareTo(null, 'attribute', operator: '<='),
                 $value + 1,
-                [new Error($this->formatMessage($messageLessOrEqualThan, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageLessOrEqualThan, ['targetValueOrAttribute' => $value]))],
             ],
         ];
     }

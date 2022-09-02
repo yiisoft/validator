@@ -20,12 +20,12 @@ final class NotEqualHandlerTest extends AbstractRuleValidatorTest
             [
                 new NotEqual($value),
                 100,
-                [new Error($this->formatMessage($messageNotEqual, ['equalValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageNotEqual, ['equalValueOrAttribute' => $value]))],
             ],
             [
                 new NotEqual($value, strict: true),
                 100,
-                [new Error($this->formatMessage($messageNotEqual, ['equalValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageNotEqual, ['equalValueOrAttribute' => $value]))],
             ],
         ];
     }

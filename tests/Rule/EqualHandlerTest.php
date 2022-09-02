@@ -20,12 +20,12 @@ final class EqualHandlerTest extends AbstractRuleValidatorTest
             [
                 new Equal($value),
                 101,
-                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new Equal($value, strict: true),
                 $value + 1,
-                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
             ],
         ];
     }

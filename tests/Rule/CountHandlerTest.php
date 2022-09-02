@@ -28,37 +28,37 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
             [
                 $rule,
                 [1],
-                [new Error($this->formatMessage($message, $parameters))],
+                [new Error($this->translateMessage($message, $parameters))],
             ],
             [
                 $rule,
                 [],
-                [new Error($this->formatMessage($message, $parameters))],
+                [new Error($this->translateMessage($message, $parameters))],
             ],
             [
                 $rule,
                 [0, 0],
-                [new Error($this->formatMessage($message, $parameters))],
+                [new Error($this->translateMessage($message, $parameters))],
             ],
             [
                 $rule,
                 [1.1],
-                [new Error($this->formatMessage($message, $parameters))],
+                [new Error($this->translateMessage($message, $parameters))],
             ],
             [
                 $rule,
                 [''],
-                [new Error($this->formatMessage($message, $parameters))],
+                [new Error($this->translateMessage($message, $parameters))],
             ],
             [
                 $rule,
                 ['some string'],
-                [new Error($this->formatMessage($message, $parameters))],
+                [new Error($this->translateMessage($message, $parameters))],
             ],
             [
                 $rule,
                 [new stdClass()],
-                [new Error($this->formatMessage($message, $parameters))],
+                [new Error($this->translateMessage($message, $parameters))],
             ],
             // https://www.php.net/manual/ru/class.countable.php
             [
@@ -73,14 +73,14 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
                         }
                     },
                 ],
-                [new Error($this->formatMessage($message, $parameters))],
+                [new Error($this->translateMessage($message, $parameters))],
             ],
             [
                 new Count(max: 3),
                 [0, 0, 0, 0],
                 [
                     new Error(
-                        $this->formatMessage(
+                        $this->translateMessage(
                             'This value must contain at most {max, number} {max, plural, one{item} other{items}}.',
                             ['max' => 3]
                         )

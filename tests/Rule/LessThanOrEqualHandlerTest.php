@@ -20,12 +20,12 @@ final class LessThanOrEqualHandlerTest extends AbstractRuleValidatorTest
             [
                 new LessThanOrEqual($value),
                 101,
-                [new Error($this->formatMessage($messageLessThanOrEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageLessThanOrEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new LessThanOrEqual($value),
                 '101',
-                [new Error($this->formatMessage($messageLessThanOrEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageLessThanOrEqual, ['targetValueOrAttribute' => $value]))],
             ],
         ];
     }

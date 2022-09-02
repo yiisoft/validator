@@ -20,12 +20,12 @@ final class GreaterThanOrEqualHandlerTest extends AbstractRuleValidatorTest
             [
                 new GreaterThanOrEqual($value),
                 99,
-                [new Error($this->formatMessage($messageGreaterThanOrEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageGreaterThanOrEqual, ['targetValueOrAttribute' => $value]))],
             ],
             [
                 new GreaterThanOrEqual($value),
                 '99',
-                [new Error($this->formatMessage($messageGreaterThanOrEqual, ['targetValueOrAttribute' => $value]))],
+                [new Error($this->translateMessage($messageGreaterThanOrEqual, ['targetValueOrAttribute' => $value]))],
             ],
         ];
     }

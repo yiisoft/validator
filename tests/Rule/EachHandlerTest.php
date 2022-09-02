@@ -20,13 +20,13 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
                 [10, 20, 30],
                 [
                     '1' => [
-                        $this->formatMessage(
+                        $this->translateMessage(
                             'Value must be no greater than {max}. {value} given.',
                             ['max' => 13, 'value' => 20]
                         ),
                     ],
                     '2' => [
-                        $this->formatMessage(
+                        $this->translateMessage(
                             'Value must be no greater than {max}. {value} given.',
                             ['max' => 13, 'value' => 30]
                         ),
@@ -55,14 +55,14 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
                 [10, 20, 30],
                 [
                     new Error(
-                        $this->formatMessage(
+                        $this->translateMessage(
                             'Value must be no greater than {max}. {value} given.',
                             ['max' => 13, 'value' => 20]
                         ),
                         [1]
                     ),
                     new Error(
-                        $this->formatMessage(
+                        $this->translateMessage(
                             'Value must be no greater than {max}. {value} given.',
                             ['max' => 13, 'value' => 30]
                         ),
