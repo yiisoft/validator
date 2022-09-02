@@ -14,19 +14,11 @@ final class GreaterThanHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $value = 100;
-        $messageGreaterThan = 'Value must be greater than "{targetValueOrAttribute}".';
+        $message = 'Value must be greater than "100".';
 
         return [
-            [
-                new GreaterThan($value),
-                99,
-                [new Error($this->translateMessage($messageGreaterThan, ['targetValueOrAttribute' => $value]))],
-            ],
-            [
-                new GreaterThan($value),
-                '100',
-                [new Error($this->translateMessage($messageGreaterThan, ['targetValueOrAttribute' => $value]))],
-            ],
+            [new GreaterThan($value), 99, [new Error($message)]],
+            [new GreaterThan($value), '100', [new Error($message)]],
         ];
     }
 

@@ -67,11 +67,6 @@ abstract class AbstractRuleValidatorTest extends TestCase
         return $ruleHandler->validate($value, $config, $context);
     }
 
-    protected function translateMessage(string $message, array $params): string
-    {
-        return $this->getTranslator()->translate($message, $params);
-    }
-
     protected function getTranslator(): TranslatorInterface
     {
         return (new TranslatorFactory())->create();

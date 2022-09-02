@@ -13,45 +13,28 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array
     {
-        $defaultConfig = new HasLength(min: 25);
+        $defaultRule = new HasLength(min: 25);
+        $message = 'This value must be a string.';
+        $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{character} ' .
+            'other{characters}}.';
+        $notExactlyMessage = 'This value must contain exactly {exactly, number} {exactly, plural, one{character} ' .
+            'other{characters}}.';
+        $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{character} ' .
+            'other{characters}}.';
 
         return [
-            [$defaultConfig, ['not a string'], [new Error($defaultConfig->getMessage(), [])]],
-            [$defaultConfig, new stdClass(), [new Error($defaultConfig->getMessage(), [])]],
-            [$defaultConfig, true, [new Error($defaultConfig->getMessage(), [])]],
-            [$defaultConfig, false, [new Error($defaultConfig->getMessage(), [])]],
+            [$defaultRule, ['not a string'], [new Error($message)]],
+            [$defaultRule, new stdClass(), [new Error($message)]],
+            [$defaultRule, true, [new Error($message)]],
+            [$defaultRule, false, [new Error($message)]],
 
-            [
-                new HasLength(max: 25),
-                str_repeat('x', 1250),
-                [new Error($this->translateMessage($defaultConfig->getGreaterThanMaxMessage(), ['max' => 25]))],
-            ],
-            [
-                new HasLength(exactly: 25),
-                str_repeat('x', 125),
-                [new Error($this->translateMessage($defaultConfig->getNotExactlyMessage(), ['max' => 25]))],
-            ],
+            [new HasLength(max: 25), str_repeat('x', 1250), [new Error($greaterThanMaxMessage)]],
+            [new HasLength(exactly: 25), str_repeat('x', 125), [new Error($notExactlyMessage)]],
 
-            [
-                new HasLength(exactly: 25),
-                '',
-                [new Error($this->translateMessage($defaultConfig->getNotExactlyMessage(), ['min' => 25]))],
-            ],
-            [
-                new HasLength(min: 10, max: 25),
-                str_repeat('x', 5),
-                [new Error($this->translateMessage($defaultConfig->getLessThanMinMessage(), ['min' => 10]))],
-            ],
-            [
-                new HasLength(min: 25),
-                str_repeat('x', 13),
-                [new Error($this->translateMessage($defaultConfig->getLessThanMinMessage(), ['min' => 25]))],
-            ],
-            [
-                new HasLength(min: 25),
-                '',
-                [new Error($this->translateMessage($defaultConfig->getLessThanMinMessage(), ['min' => 25]))],
-            ],
+            [new HasLength(exactly: 25), '', [new Error($notExactlyMessage)]],
+            [new HasLength(min: 10, max: 25), str_repeat('x', 5), [new Error($lessThanMinMessage)]],
+            [new HasLength(min: 25), str_repeat('x', 13), [new Error($lessThanMinMessage)]],
+            [new HasLength(min: 25), '', [new Error($lessThanMinMessage)]],
         ];
     }
 
@@ -89,21 +72,9 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
         );
 
         return [
-            [
-                $rule,
-                null,
-                [new Error('is not string error', [])],
-            ],
-            [
-                $rule,
-                str_repeat('x', 1),
-                [new Error($this->translateMessage('is too short test', ['min' => 3]))],
-            ],
-            [
-                $rule,
-                str_repeat('x', 6),
-                [new Error($this->translateMessage('is too long test', ['max' => 5]))],
-            ],
+            [$rule, null, [new Error('is not string error', [])]],
+            [$rule, str_repeat('x', 1), [new Error('is too short test')],],
+            [$rule, str_repeat('x', 6), [new Error('is too long test')]],
         ];
     }
 

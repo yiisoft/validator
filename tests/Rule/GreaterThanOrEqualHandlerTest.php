@@ -14,19 +14,11 @@ final class GreaterThanOrEqualHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $value = 100;
-        $messageGreaterThanOrEqual = 'Value must be greater than or equal to "{targetValueOrAttribute}".';
+        $message = 'Value must be greater than or equal to "100".';
 
         return [
-            [
-                new GreaterThanOrEqual($value),
-                99,
-                [new Error($this->translateMessage($messageGreaterThanOrEqual, ['targetValueOrAttribute' => $value]))],
-            ],
-            [
-                new GreaterThanOrEqual($value),
-                '99',
-                [new Error($this->translateMessage($messageGreaterThanOrEqual, ['targetValueOrAttribute' => $value]))],
-            ],
+            [new GreaterThanOrEqual($value), 99, [new Error($message)]],
+            [new GreaterThanOrEqual($value), '99', [new Error($message)]],
         ];
     }
 

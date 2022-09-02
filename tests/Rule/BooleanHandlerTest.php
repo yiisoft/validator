@@ -14,7 +14,8 @@ final class BooleanHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $defaultRule = new Boolean();
-        $defaultError = new Error($this->translateMessage($defaultRule->getMessage(), ['true' => '1', 'false' => '0']));
+        $defaultError = new Error('The value must be either "1" or "0".');
+        $booleanError = new Error('The value must be either "true" or "false".');
 
         return [
             [$defaultRule, '5', [$defaultError]],
@@ -26,24 +27,8 @@ final class BooleanHandlerTest extends AbstractRuleValidatorTest
             [new Boolean(strict: true), true, [$defaultError]],
             [new Boolean(strict: true), false, [$defaultError]],
 
-            [
-                new Boolean(trueValue: true, falseValue: false, strict: true),
-                '0',
-                [
-                    new Error(
-                        $this->translateMessage($defaultRule->getMessage(), ['true' => 'true', 'false' => 'false'])
-                    ),
-                ],
-            ],
-            [
-                new Boolean(trueValue: true, falseValue: false, strict: true),
-                [],
-                [
-                    new Error(
-                        $this->translateMessage($defaultRule->getMessage(), ['true' => 'true', 'false' => 'false'])
-                    ),
-                ],
-            ],
+            [new Boolean(trueValue: true, falseValue: false, strict: true), '0', [$booleanError]],
+            [new Boolean(trueValue: true, falseValue: false, strict: true), [], [$booleanError]],
         ];
     }
 

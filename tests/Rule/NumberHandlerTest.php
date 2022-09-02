@@ -17,159 +17,54 @@ final class NumberHandlerTest extends AbstractRuleValidatorTest
         $rule = new Number();
         $ruleInteger = new Number(asInteger: true);
 
+        $notANumberMessage = 'Value must be a number.';
+        $notAnIntegerMessage = 'Value must be an integer.';
+
         return [
-            [$rule, '12:45', [new Error($this->translateMessage($rule->getNotANumberMessage(), ['value' => '12:45']))]],
+            [$rule, '12:45', [new Error($notANumberMessage)]],
 
-            [$rule, false, [new Error($this->translateMessage($rule->getNotANumberMessage(), ['value' => false]))]],
-            [$rule, true, [new Error($this->translateMessage($rule->getNotANumberMessage(), ['value' => true]))]],
+            [$rule, false, [new Error($notANumberMessage)]],
+            [$rule, true, [new Error($notANumberMessage)]],
 
-            [$rule, 'e12', [new Error($this->translateMessage($rule->getNotANumberMessage(), ['value' => 'e12']))]],
-            [$rule, '-e3', [new Error($this->translateMessage($rule->getNotANumberMessage(), ['value' => '-e3']))]],
-            [
-                $rule,
-                '-4.534-e-12',
-                [new Error($this->translateMessage($rule->getNotANumberMessage(), ['value' => '-4.534-e-12']))],
-            ],
-            [
-                $rule,
-                '12.23^4',
-                [new Error($this->translateMessage($rule->getNotANumberMessage(), ['value' => '12.23^4']))],
-            ],
-            [$rule, '43^32', [new Error($this->translateMessage($rule->getNotANumberMessage(), ['value' => '43^32']))]],
+            [$rule, 'e12', [new Error($notANumberMessage)]],
+            [$rule, '-e3', [new Error($notANumberMessage)]],
+            [$rule, '-4.534-e-12', [new Error($notANumberMessage)]],
+            [$rule, '12.23^4', [new Error($notANumberMessage)]],
+            [$rule, '43^32', [new Error($notANumberMessage)]],
 
-            [
-                $rule,
-                [1, 2, 3],
-                [new Error($this->translateMessage($rule->getNotANumberMessage(), ['value' => [1, 2, 3]]))],
-            ],
-            [
-                $rule,
-                $object = new stdClass(),
-                [new Error($this->translateMessage($rule->getNotANumberMessage(), ['value' => $object]))],
-            ],
-            [
-                $rule,
-                $resource = fopen('php://stdin', 'rb'),
-                [new Error($this->translateMessage($rule->getNotANumberMessage(), ['value' => $resource]))],
-            ],
+            [$rule, [1, 2, 3], [new Error($notANumberMessage)]],
+            [$rule, new stdClass(), [new Error($notANumberMessage)]],
+            [$rule, fopen('php://stdin', 'rb'), [new Error($notANumberMessage)]],
 
-            [
-                $ruleInteger,
-                25.45,
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => 25.45]))],
-            ],
-            [
-                $ruleInteger,
-                '25,45',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => '25,45']))],
-            ],
-            [
-                $ruleInteger,
-                '0x14',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => '0x14']))],
-            ],
+            [$ruleInteger, 25.45, [new Error($notAnIntegerMessage)]],
+            [$ruleInteger, '25,45', [new Error($notAnIntegerMessage)]],
+            [$ruleInteger, '0x14', [new Error($notAnIntegerMessage)]],
 
-            [
-                $ruleInteger,
-                '-1.23',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => '-1.23']))],
-            ],
-            [
-                $ruleInteger,
-                '-4.423e-12',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => '-4.423e-12']))],
-            ],
-            [
-                $ruleInteger,
-                '12E3',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => '12E3']))],
-            ],
-            [
-                $ruleInteger,
-                'e12',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => 'e12']))],
-            ],
-            [
-                $ruleInteger,
-                '-e3',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => '-e3']))],
-            ],
-            [
-                $ruleInteger,
-                '-4.534-e-12',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => '-4.534-e-12']))],
-            ],
-            [
-                $ruleInteger,
-                '12.23^4',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => '12.23^4']))],
-            ],
+            [$ruleInteger, '-1.23', [new Error($notAnIntegerMessage)]],
+            [$ruleInteger, '-4.423e-12', [new Error($notAnIntegerMessage)]],
+            [$ruleInteger, '12E3', [new Error($notAnIntegerMessage)]],
+            [$ruleInteger, 'e12', [new Error($notAnIntegerMessage)]],
+            [$ruleInteger, '-e3', [new Error($notAnIntegerMessage)]],
+            [$ruleInteger, '-4.534-e-12', [new Error($notAnIntegerMessage)]],
+            [$ruleInteger, '12.23^4', [new Error($notAnIntegerMessage)]],
 
-            [new Number(min: 1), -1, [new Error($this->translateMessage($rule->getTooSmallMessage(), ['min' => 1]))]],
-            [
-                new Number(min: 1),
-                '22e-12',
-                [new Error($this->translateMessage($rule->getTooSmallMessage(), ['min' => 1]))],
-            ],
+            [new Number(min: 1), -1, [new Error('Value must be no less than 1.')]],
+            [new Number(min: 1), '22e-12', [new Error('Value must be no less than 1.')]],
 
-            [
-                new Number(asInteger: true, min: 1),
-                -1,
-                [new Error($this->translateMessage($rule->getTooSmallMessage(), ['min' => 1]))],
-            ],
-            [
-                new Number(asInteger: true, min: 1),
-                '22e-12',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => '22e-12']))],
-            ],
-            [
-                new Number(max: 1.25),
-                1.5,
-                [new Error($this->translateMessage($ruleInteger->getTooBigMessage(), ['max' => 1.25]))],
-            ],
+            [new Number(asInteger: true, min: 1), -1, [new Error('Value must be no less than 1.')]],
+            [new Number(asInteger: true, min: 1), '22e-12', [new Error($notAnIntegerMessage)]],
+            [new Number(max: 1.25), 1.5, [new Error('Value must be no greater than 1.25.')]],
 
             // TODO: fix wrong message
-            [
-                new Number(asInteger: true, max: 1.25),
-                1.5,
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => 1.5]))],
-            ],
-            [
-                new Number(asInteger: true, max: 1.25),
-                '22e-12',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => '22e-12']))],
-            ],
-            [
-                new Number(asInteger: true, max: 1.25),
-                '125e-2',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => '125e-2']))],
-            ],
+            [new Number(asInteger: true, max: 1.25), 1.5, [new Error($notAnIntegerMessage)]],
+            [new Number(asInteger: true, max: 1.25), '22e-12', [new Error($notAnIntegerMessage)]],
+            [new Number(asInteger: true, max: 1.25), '125e-2', [new Error($notAnIntegerMessage)]],
 
-            [
-                new Number(min: -10, max: 20),
-                -11,
-                [new Error($this->translateMessage($ruleInteger->getTooSmallMessage(), ['min' => -10]))],
-            ],
-            [
-                new Number(min: -10, max: 20),
-                21,
-                [new Error($this->translateMessage($ruleInteger->getTooBigMessage(), ['max' => 20]))],
-            ],
-            [
-                new Number(asInteger: true, min: -10, max: 20),
-                -11,
-                [new Error($this->translateMessage($ruleInteger->getTooSmallMessage(), ['min' => -10]))],
-            ],
-            [
-                new Number(asInteger: true, min: -10, max: 20),
-                22,
-                [new Error($this->translateMessage($ruleInteger->getTooBigMessage(), ['max' => 20]))],
-            ],
-            [
-                new Number(asInteger: true, min: -10, max: 20),
-                '20e-1',
-                [new Error($this->translateMessage($ruleInteger->getNotANumberMessage(), ['value' => '20e-1']))],
-            ],
+            [new Number(min: -10, max: 20), -11, [new Error('Value must be no less than -10.')]],
+            [new Number(min: -10, max: 20), 21, [new Error('Value must be no greater than 20.')]],
+            [new Number(asInteger: true, min: -10, max: 20), -11, [new Error('Value must be no less than -10.')]],
+            [new Number(asInteger: true, min: -10, max: 20), 22, [new Error('Value must be no greater than 20.')]],
+            [new Number(asInteger: true, min: -10, max: 20), '20e-1', [new Error($notAnIntegerMessage)]],
         ];
     }
 
@@ -219,11 +114,7 @@ final class NumberHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new Number(min: 5, tooSmallMessage: 'Value is too small.'),
-                0,
-                [new Error('Value is too small.')],
-            ],
+            [new Number(min: 5, tooSmallMessage: 'Value is too small.'), 0, [new Error('Value is too small.')]],
         ];
     }
 

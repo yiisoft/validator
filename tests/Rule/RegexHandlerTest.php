@@ -12,22 +12,22 @@ use Yiisoft\Validator\RuleHandlerInterface;
 
 final class RegexHandlerTest extends AbstractRuleValidatorTest
 {
-    private const PATTERN = '/^[a-zA-Z0-9](\.)?([^\/]*)$/m';
-
     public function failedValidationProvider(): array
     {
         $rule = new Regex('/a/');
         $ruleNot = new Regex('/a/', not: true);
+        $incorrectInputMessage = 'Value should be string.';
+        $message = 'Value is invalid.';
 
         return [
-            [$rule, ['a', 'b'], [new Error($rule->getIncorrectInputMessage(), [])]],
-            [$ruleNot, ['a', 'b'], [new Error($rule->getIncorrectInputMessage(), [])]],
-            [$rule, null, [new Error($rule->getIncorrectInputMessage(), [])]],
-            [$ruleNot, null, [new Error($rule->getIncorrectInputMessage(), [])]],
-            [$rule, new stdClass(), [new Error($rule->getIncorrectInputMessage(), [])]],
-            [$ruleNot, new stdClass(), [new Error($rule->getIncorrectInputMessage(), [])]],
+            [$rule, ['a', 'b'], [new Error($incorrectInputMessage)]],
+            [$ruleNot, ['a', 'b'], [new Error($incorrectInputMessage)]],
+            [$rule, null, [new Error($incorrectInputMessage)]],
+            [$ruleNot, null, [new Error($incorrectInputMessage)]],
+            [$rule, new stdClass(), [new Error($incorrectInputMessage)]],
+            [$ruleNot, new stdClass(), [new Error($incorrectInputMessage)]],
 
-            [$rule, 'b', [new Error($rule->getMessage(), [])]],
+            [$rule, 'b', [new Error($message)]],
         ];
     }
 
@@ -46,16 +46,8 @@ final class RegexHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new Regex('/a/', message: 'Custom message.'),
-                'b',
-                [new Error('Custom message.', [])],
-            ],
-            [
-                new Regex('/a/', incorrectInputMessage: 'Custom message.'),
-                null,
-                [new Error('Custom message.', [])],
-            ],
+            [new Regex('/a/', message: 'Custom message.'), 'b', [new Error('Custom message.')]],
+            [new Regex('/a/', incorrectInputMessage: 'Custom message.'), null, [new Error('Custom message.')]],
         ];
     }
 

@@ -16,50 +16,19 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $rule = new Count(min: 3);
-        $message = 'This value must contain at least {min, number} {min, plural, one{item} other{items}}.';
-        $parameters = ['min' => 3];
+
+        $lessThanMinmessage = 'This value must contain at least {min, number} {min, plural, one{item} other{items}}.';
+        $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{item} other{items}}.';
 
         return [
-            [
-                $rule,
-                1,
-                [new Error('This value must be an array or implement \Countable interface.')],
-            ],
-            [
-                $rule,
-                [1],
-                [new Error($this->translateMessage($message, $parameters))],
-            ],
-            [
-                $rule,
-                [],
-                [new Error($this->translateMessage($message, $parameters))],
-            ],
-            [
-                $rule,
-                [0, 0],
-                [new Error($this->translateMessage($message, $parameters))],
-            ],
-            [
-                $rule,
-                [1.1],
-                [new Error($this->translateMessage($message, $parameters))],
-            ],
-            [
-                $rule,
-                [''],
-                [new Error($this->translateMessage($message, $parameters))],
-            ],
-            [
-                $rule,
-                ['some string'],
-                [new Error($this->translateMessage($message, $parameters))],
-            ],
-            [
-                $rule,
-                [new stdClass()],
-                [new Error($this->translateMessage($message, $parameters))],
-            ],
+            [$rule, 1, [new Error('This value must be an array or implement \Countable interface.')]],
+            [$rule, [1], [new Error($lessThanMinmessage)]],
+            [$rule, [], [new Error($lessThanMinmessage)]],
+            [$rule, [0, 0], [new Error($lessThanMinmessage)]],
+            [$rule, [1.1], [new Error($lessThanMinmessage)]],
+            [$rule, [''], [new Error($lessThanMinmessage)]],
+            [$rule, ['some string'], [new Error($lessThanMinmessage)]],
+            [$rule, [new stdClass()], [new Error($lessThanMinmessage)]],
             // https://www.php.net/manual/ru/class.countable.php
             [
                 $rule,
@@ -73,20 +42,9 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
                         }
                     },
                 ],
-                [new Error($this->translateMessage($message, $parameters))],
+                [new Error($lessThanMinmessage)],
             ],
-            [
-                new Count(max: 3),
-                [0, 0, 0, 0],
-                [
-                    new Error(
-                        $this->translateMessage(
-                            'This value must contain at most {max, number} {max, plural, one{item} other{items}}.',
-                            ['max' => 3]
-                        )
-                    ),
-                ],
-            ],
+            [new Count(max: 3), [0, 0, 0, 0], [new Error($greaterThanMaxMessage)]],
         ];
     }
 

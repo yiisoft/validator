@@ -16,19 +16,11 @@ final class SubsetHandlerTest extends AbstractRuleValidatorTest
     {
         $range = range(1, 10);
         $rule = new Subset($range);
-        $rangeToShow = implode(', ', array_map(fn (int $value) => "\"{$value}\"", $range));
+        $subsetMessage = 'Values must be ones of "1", "2", "3", "4", "5", "6", "7", "8", "9", "10".';
 
         return [
-            [
-                $rule,
-                [0, 1, 2],
-                [new Error($this->translateMessage($rule->getSubsetMessage(), ['values' => $rangeToShow]))],
-            ],
-            [
-                $rule,
-                [10, 11, 12],
-                [new Error($this->translateMessage($rule->getSubsetMessage(), ['values' => $rangeToShow]))],
-            ],
+            [$rule, [0, 1, 2], [new Error($subsetMessage)]],
+            [$rule, [10, 11, 12], [new Error($subsetMessage)]],
         ];
     }
 
@@ -50,11 +42,7 @@ final class SubsetHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new Subset(['a'], subsetMessage: 'Custom error'),
-                ['2'],
-                [new Error('Custom error')],
-            ],
+            [new Subset(['a'], subsetMessage: 'Custom error'), ['2'], [new Error('Custom error')]],
         ];
     }
 

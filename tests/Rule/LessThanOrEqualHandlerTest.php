@@ -14,19 +14,11 @@ final class LessThanOrEqualHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $value = 100;
-        $messageLessThanOrEqual = 'Value must be less than or equal to "{targetValueOrAttribute}".';
+        $message = 'Value must be less than or equal to "100".';
 
         return [
-            [
-                new LessThanOrEqual($value),
-                101,
-                [new Error($this->translateMessage($messageLessThanOrEqual, ['targetValueOrAttribute' => $value]))],
-            ],
-            [
-                new LessThanOrEqual($value),
-                '101',
-                [new Error($this->translateMessage($messageLessThanOrEqual, ['targetValueOrAttribute' => $value]))],
-            ],
+            [new LessThanOrEqual($value), 101, [new Error($message)]],
+            [new LessThanOrEqual($value), '101', [new Error($message)]],
         ];
     }
 
@@ -44,11 +36,7 @@ final class LessThanOrEqualHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new LessThanOrEqual(100, message: 'Custom error'),
-                101,
-                [new Error('Custom error')],
-            ],
+            [new LessThanOrEqual(100, message: 'Custom error'), 101, [new Error('Custom error')]],
         ];
     }
 

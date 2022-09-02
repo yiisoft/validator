@@ -19,86 +19,114 @@ final class IpHandlerTest extends AbstractRuleValidatorTest
         $ruleRange = new Ip(ranges: $ranges);
         $ruleRequiredSubnet = new Ip(requireSubnet: true);
 
+        $message = 'Must be a valid IP address.';
+        $hasSubnetMessage = 'Must not be a subnet.';
+        $notInRangeMessage = 'Is not in the allowed range.';
+        $ipv4NotAllowedMessage = 'Must not be an IPv4 address.';
+        $wrongCidrMessage = 'Contains wrong subnet mask.';
+        $noSubnetMessage = 'Must be an IP address with specified subnet.';
+        $ipv6NotAllowedMessage = 'Must not be an IPv6 address.';
+
         return [
-            [$rule, 'not.an.ip', [new Error($rule->getMessage(), [])]],
-            [$rule, 'bad:forSure', [new Error($rule->getMessage(), [])]],
-            [$rule, ['what an array', '??'], [new Error($rule->getMessage(), [])]],
-            [$rule, 123456, [new Error($rule->getMessage(), [])]],
-            [$rule, true, [new Error($rule->getMessage(), [])]],
-            [$rule, false, [new Error($rule->getMessage(), [])]],
+            [$rule, 'not.an.ip', [new Error($message)]],
+            [$rule, 'bad:forSure', [new Error($message)]],
+            [$rule, ['what an array', '??'], [new Error($message)]],
+            [$rule, 123456, [new Error($message)]],
+            [$rule, true, [new Error($message)]],
+            [$rule, false, [new Error($message)]],
 
-            [$rule, '2008:fz::0', [new Error($rule->getMessage(), [])]],
-            [$rule, '2008:fa::0::1', [new Error($rule->getMessage(), [])]],
-            [$rule, '!2008:fa::0::1', [new Error($rule->getMessage(), [])]],
-            [$rule, '2008:fa::0:1/64', [new Error($rule->getHasSubnetMessage(), [])]],
+            [$rule, '2008:fz::0', [new Error($message)]],
+            [$rule, '2008:fa::0::1', [new Error($message)]],
+            [$rule, '!2008:fa::0::1', [new Error($message)]],
+            [$rule, '2008:fa::0:1/64', [new Error($hasSubnetMessage)]],
 
-            [$ruleRange, 'babe::cafe', [new Error($rule->getNotInRangeMessage(), [])]],
-            [$ruleRange, '10.0.0.2', [new Error($rule->getNotInRangeMessage(), [])]],
+            [$ruleRange, 'babe::cafe', [new Error($notInRangeMessage)]],
+            [$ruleRange, '10.0.0.2', [new Error($notInRangeMessage)]],
 
-            [$rule, '192.168.005.001', [new Error($rule->getMessage(), [])]], // Leading zeroes are not supported
-            [$rule, '192.168.5.321', [new Error($rule->getMessage(), [])]],
-            [$rule, '!192.168.5.32', [new Error($rule->getMessage(), [])]],
-            [$rule, '192.168.5.32/11', [new Error($rule->getHasSubnetMessage(), [])]],
-            [new Ip(allowIpv4: false), '192.168.10.11', [new Error($rule->getIpv4NotAllowedMessage(), [])]],
-            [new Ip(allowSubnet: true), '192.168.5.32/33', [new Error($rule->getWrongCidrMessage(), [])]],
-            [new Ip(allowSubnet: true), '192.168.5.32/af', [new Error($rule->getMessage(), [])]],
-            [new Ip(allowSubnet: true), '192.168.5.32/11/12', [new Error($rule->getMessage(), [])]],
-            [$ruleRequiredSubnet, '10.0.0.1', [new Error($rule->getNoSubnetMessage(), [])]],
-            [new Ip(requireSubnet: true, allowNegation: true), '!!192.168.5.32/32', [new Error($rule->getMessage(), [])]],
+            [$rule, '192.168.005.001', [new Error($message)]], // Leading zeroes are not supported
+            [$rule, '192.168.5.321', [new Error($message)]],
+            [$rule, '!192.168.5.32', [new Error($message)]],
+            [$rule, '192.168.5.32/11', [new Error($hasSubnetMessage)]],
+            [new Ip(allowIpv4: false), '192.168.10.11', [new Error($ipv4NotAllowedMessage)]],
+            [new Ip(allowSubnet: true), '192.168.5.32/33', [new Error($wrongCidrMessage)]],
+            [new Ip(allowSubnet: true), '192.168.5.32/af', [new Error($message)]],
+            [new Ip(allowSubnet: true), '192.168.5.32/11/12', [new Error($message)]],
+            [$ruleRequiredSubnet, '10.0.0.1', [new Error($noSubnetMessage)]],
+            [new Ip(requireSubnet: true, allowNegation: true), '!!192.168.5.32/32', [new Error($message)]],
 
-            [new Ip(allowIpv4: false, allowSubnet: true), '!2008:fa::0:1/0', [new Error($rule->getMessage(), [])]],
-            [new Ip(allowIpv4: false, allowSubnet: true), '2008:fz::0/129', [new Error($rule->getMessage(), [])]],
-            [new Ip(allowIpv4: false, requireSubnet: true), '2008:db0::1', [new Error($rule->getNoSubnetMessage(), [])]],
-            [new Ip(allowIpv4: false, requireSubnet: true, allowNegation: true), '!!2008:fa::0:1/64', [new Error($rule->getMessage(), [])]],
+            [new Ip(allowIpv4: false, allowSubnet: true), '!2008:fa::0:1/0', [new Error($message)]],
+            [new Ip(allowIpv4: false, allowSubnet: true), '2008:fz::0/129', [new Error($message)]],
+            [new Ip(allowIpv4: false, requireSubnet: true), '2008:db0::1', [new Error($noSubnetMessage)]],
+            [
+                new Ip(allowIpv4: false, requireSubnet: true, allowNegation: true),
+                '!!2008:fa::0:1/64',
+                [new Error($message)],
+            ],
 
-            [$rule, '192.168.005.001', [new Error($rule->getMessage(), [])]], // Leading zeroes are not allowed
-            [$rule, '192.168.5.321', [new Error($rule->getMessage(), [])]],
-            [$rule, '!192.168.5.32', [new Error($rule->getMessage(), [])]],
-            [$rule, '192.168.5.32/11', [new Error($rule->getHasSubnetMessage(), [])]],
-            [$rule, '2008:fz::0', [new Error($rule->getMessage(), [])]],
-            [$rule, '2008:fa::0::1', [new Error($rule->getMessage(), [])]],
-            [$rule, '!2008:fa::0::1', [new Error($rule->getMessage(), [])]],
-            [$rule, '2008:fa::0:1/64', [new Error($rule->getHasSubnetMessage(), [])]],
-            [new Ip(allowIpv4: false), '192.168.10.11', [new Error($rule->getIpv4NotAllowedMessage(), [])]],
-            [new Ip(allowIpv6: false), '2008:fa::1', [new Error($rule->getIpv6NotAllowedMessage(), [])]],
-            [$ruleRequiredSubnet, '!2008:fa::0:1/0', [new Error($rule->getMessage(), [])]],
-            [$ruleRequiredSubnet, '2008:fz::0/129', [new Error($rule->getMessage(), [])]],
-            [$ruleRequiredSubnet, '192.168.5.32/33', [new Error($rule->getWrongCidrMessage(), [])]],
-            [$ruleRequiredSubnet, '192.168.5.32/af', [new Error($rule->getMessage(), [])]],
-            [$ruleRequiredSubnet, '192.168.5.32/11/12', [new Error($rule->getMessage(), [])]],
-            [$ruleRequiredSubnet, '2008:db0::1', [new Error($rule->getNoSubnetMessage(), [])]],
-            [$ruleRequiredSubnet, '10.0.0.1', [new Error($rule->getNoSubnetMessage(), [])]],
-            [new Ip(requireSubnet: true, allowNegation: true), '!!192.168.5.32/32', [new Error($rule->getMessage(), [])]],
-            [new Ip(requireSubnet: true, allowNegation: true), '!!2008:fa::0:1/64', [new Error($rule->getMessage(), [])]],
+            [$rule, '192.168.005.001', [new Error($message)]], // Leading zeroes are not allowed
+            [$rule, '192.168.5.321', [new Error($message)]],
+            [$rule, '!192.168.5.32', [new Error($message)]],
+            [$rule, '192.168.5.32/11', [new Error($hasSubnetMessage)]],
+            [$rule, '2008:fz::0', [new Error($message)]],
+            [$rule, '2008:fa::0::1', [new Error($message)]],
+            [$rule, '!2008:fa::0::1', [new Error($message)]],
+            [$rule, '2008:fa::0:1/64', [new Error($hasSubnetMessage)]],
+            [new Ip(allowIpv4: false), '192.168.10.11', [new Error($ipv4NotAllowedMessage)]],
+            [new Ip(allowIpv6: false), '2008:fa::1', [new Error($ipv6NotAllowedMessage)]],
+            [$ruleRequiredSubnet, '!2008:fa::0:1/0', [new Error($message)]],
+            [$ruleRequiredSubnet, '2008:fz::0/129', [new Error($message)]],
+            [$ruleRequiredSubnet, '192.168.5.32/33', [new Error($wrongCidrMessage)]],
+            [$ruleRequiredSubnet, '192.168.5.32/af', [new Error($message)]],
+            [$ruleRequiredSubnet, '192.168.5.32/11/12', [new Error($message)]],
+            [$ruleRequiredSubnet, '2008:db0::1', [new Error($noSubnetMessage)]],
+            [$ruleRequiredSubnet, '10.0.0.1', [new Error($noSubnetMessage)]],
+            [new Ip(requireSubnet: true, allowNegation: true), '!!192.168.5.32/32', [new Error($message)]],
+            [new Ip(requireSubnet: true, allowNegation: true), '!!2008:fa::0:1/64', [new Error($message)]],
 
-            [new Ip(ranges: ['10.0.1.0/24']), '192.5.1.1', [new Error($rule->getNotInRangeMessage(), [])]],
-            [new Ip(ranges: ['10.0.1.0/24']), '10.0.3.2', [new Error($rule->getNotInRangeMessage(), [])]],
-            [new Ip(ranges: ['!10.0.1.0/24', '10.0.0.0/8', 'localhost']), '10.0.1.2', [new Error($rule->getNotInRangeMessage(), [])]],
-            [new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '!10.0.0.0/8', 'localhost']), '10.2.2.2', [new Error($rule->getNotInRangeMessage(), [])]],
-            [new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '!10.0.0.0/8', 'localhost']), '10.0.1.1/22', [new Error($rule->getNotInRangeMessage(), [])]],
-            [new Ip(ranges: ['2001:db0:1:1::/64']), '2001:db0:1:2::7', [new Error($rule->getNotInRangeMessage(), [])]],
-            [new Ip(ranges: ['!2001:db0::/32', '2001:db0:1:2::/64']), '2001:db0:1:2::7', [new Error($rule->getNotInRangeMessage(), [])]],
+            [new Ip(ranges: ['10.0.1.0/24']), '192.5.1.1', [new Error($notInRangeMessage)]],
+            [new Ip(ranges: ['10.0.1.0/24']), '10.0.3.2', [new Error($notInRangeMessage)]],
+            [new Ip(ranges: ['!10.0.1.0/24', '10.0.0.0/8', 'localhost']), '10.0.1.2', [new Error($notInRangeMessage)]],
+            [
+                new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '!10.0.0.0/8', 'localhost']),
+                '10.2.2.2',
+                [new Error($notInRangeMessage)],
+            ],
+            [
+                new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '!10.0.0.0/8', 'localhost']),
+                '10.0.1.1/22',
+                [new Error($notInRangeMessage)],
+            ],
+            [new Ip(ranges: ['2001:db0:1:1::/64']), '2001:db0:1:2::7', [new Error($notInRangeMessage)]],
+            [
+                new Ip(ranges: ['!2001:db0::/32', '2001:db0:1:2::/64']),
+                '2001:db0:1:2::7',
+                [new Error($notInRangeMessage)],
+            ],
 
-            [new Ip(ranges: ['10.0.1.0/24']), '192.5.1.1', [new Error($rule->getNotInRangeMessage(), [])]],
-            [new Ip(ranges: ['10.0.1.0/24']), '2001:db0:1:2::7', [new Error($rule->getNotInRangeMessage(), [])]],
-            [new Ip(ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', '127.0.0.1']), '10.0.3.2', [new Error($rule->getNotInRangeMessage(), [])]],
-            [new Ip(ranges: ['!system', 'any']), '127.0.0.1', [new Error($rule->getNotInRangeMessage(), [])]],
-            [new Ip(ranges: ['!system', 'any']), 'fe80::face', [new Error($rule->getNotInRangeMessage(), [])]],
+            [new Ip(ranges: ['10.0.1.0/24']), '192.5.1.1', [new Error($notInRangeMessage)]],
+            [new Ip(ranges: ['10.0.1.0/24']), '2001:db0:1:2::7', [new Error($notInRangeMessage)]],
+            [
+                new Ip(ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', '127.0.0.1']),
+                '10.0.3.2',
+                [new Error($notInRangeMessage)],
+            ],
+            [new Ip(ranges: ['!system', 'any']), '127.0.0.1', [new Error($notInRangeMessage)]],
+            [new Ip(ranges: ['!system', 'any']), 'fe80::face', [new Error($notInRangeMessage)]],
 
             [
                 new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any']),
                 '10.2.2.2',
-                [new Error($rule->getNotInRangeMessage(), [])],
+                [new Error($notInRangeMessage)],
             ],
             [
                 new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any']),
                 '10.0.1.1/22',
-                [new Error($rule->getNotInRangeMessage(), [])],
+                [new Error($notInRangeMessage)],
             ],
 
-            [$rule, '01.01.01.01', [new Error($rule->getMessage(), [])]],
-            [$rule, '010.010.010.010', [new Error($rule->getMessage(), [])]],
-            [$rule, '001.001.001.001', [new Error($rule->getMessage(), [])]],
+            [$rule, '01.01.01.01', [new Error($message)]],
+            [$rule, '010.010.010.010', [new Error($message)]],
+            [$rule, '001.001.001.001', [new Error($message)]],
         ];
     }
 
