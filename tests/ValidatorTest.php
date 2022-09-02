@@ -450,7 +450,7 @@ class ValidatorTest extends TestCase
             ],
 
             'validator, skipOnEmptyCallback, SkipOnNull, value not passed' => [
-                new Validator(new SimpleRuleHandlerContainer($translator),defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                 ]),
