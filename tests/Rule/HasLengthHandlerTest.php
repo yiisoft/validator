@@ -72,7 +72,7 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
         );
 
         return [
-            [$rule, null, [new Error('is not string error', [])]],
+            [$rule, null, [new Error('is not string error')]],
             [$rule, str_repeat('x', 1), [new Error('is too short test')],],
             [$rule, str_repeat('x', 6), [new Error('is too long test')]],
         ];

@@ -84,11 +84,7 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new CompareTo(100, message: 'Custom error'),
-                101,
-                [new Error('Custom error')],
-            ],
+            [new CompareTo(100, message: 'Custom error'), 101, [new Error('Custom error')]],
         ];
     }
 

@@ -52,13 +52,7 @@ final class BooleanHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new Boolean(message: 'Custom error.'),
-                5,
-                [
-                    new Error('Custom error.'),
-                ],
-            ],
+            [new Boolean(message: 'Custom error.'), 5, [new Error('Custom error.')]],
         ];
     }
 

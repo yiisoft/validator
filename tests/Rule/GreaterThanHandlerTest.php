@@ -35,11 +35,7 @@ final class GreaterThanHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new GreaterThan(100, message: 'Custom error'),
-                99,
-                [new Error('Custom error')],
-            ],
+            [new GreaterThan(100, message: 'Custom error'), 99, [new Error('Custom error')]],
         ];
     }
 

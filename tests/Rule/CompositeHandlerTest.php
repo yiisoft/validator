@@ -65,9 +65,7 @@ final class CompositeHandlerTest extends AbstractRuleValidatorTest
                     when: fn () => true,
                 ),
                 20,
-                [
-                    new Error('Custom error'),
-                ],
+                [new Error('Custom error')],
             ],
         ];
     }

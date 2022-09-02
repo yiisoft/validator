@@ -70,11 +70,7 @@ final class InRangeHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new InRange(range(1, 10), message: 'Custom error'),
-                15,
-                [new Error('Custom error', [])],
-            ],
+            [new InRange(range(1, 10), message: 'Custom error'), 15, [new Error('Custom error')]],
         ];
     }
 

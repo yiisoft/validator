@@ -74,21 +74,9 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new Count(max: 3, greaterThanMaxMessage: 'Custom message.'),
-                [0, 0, 0, 0],
-                [new Error('Custom message.')],
-            ],
-            [
-                new Count(exactly: 3, notExactlyMessage: 'Custom message.'),
-                [0, 0, 0, 0],
-                [new Error('Custom message.')],
-            ],
-            [
-                new Count(min: 3, lessThanMinMessage: 'Custom message.'),
-                [0, 0],
-                [new Error('Custom message.')],
-            ],
+            [new Count(max: 3, greaterThanMaxMessage: 'Custom message.'), [0, 0, 0, 0], [new Error('Custom message.')]],
+            [new Count(exactly: 3, notExactlyMessage: 'Custom message.'), [0, 0, 0, 0], [new Error('Custom message.')]],
+            [new Count(min: 3, lessThanMinMessage: 'Custom message.'), [0, 0], [new Error('Custom message.')]],
         ];
     }
 

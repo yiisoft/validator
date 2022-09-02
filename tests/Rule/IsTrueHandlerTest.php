@@ -44,13 +44,7 @@ final class IsTrueHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new IsTrue(message: 'Custom error.'),
-                5,
-                [
-                    new Error('Custom error.'),
-                ],
-            ],
+            [new IsTrue(message: 'Custom error.'), 5, [new Error('Custom error.')]],
         ];
     }
 

@@ -35,11 +35,7 @@ final class EqualHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new Equal(100, message: 'Custom error'),
-                101,
-                [new Error('Custom error')],
-            ],
+            [new Equal(100, message: 'Custom error'), 101, [new Error('Custom error')]],
         ];
     }
 
