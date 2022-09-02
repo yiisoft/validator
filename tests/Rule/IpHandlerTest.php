@@ -240,6 +240,6 @@ final class IpHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new IpHandler();
+        return new IpHandler($this->getTranslator());
     }
 }

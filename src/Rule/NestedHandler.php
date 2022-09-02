@@ -7,10 +7,9 @@ namespace Yiisoft\Validator\Rule;
 use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -46,11 +45,11 @@ use function is_object;
  */
 final class NestedHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
+    private TranslatorInterface $translator;
 
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(TranslatorInterface $translator)
     {
-        $this->formatter = $formatter ?? new Formatter();
+        $this->translator = $translator;
     }
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result

@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -26,11 +25,11 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class CompareHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
+    private TranslatorInterface $translator;
 
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(TranslatorInterface $translator)
     {
-        $this->formatter = $formatter ?? new Formatter();
+        $this->translator = $translator;
     }
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
@@ -48,7 +47,7 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $targetValue)) {
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getMessage(),
                 [
                     'attribute' => $context->getAttribute(),
