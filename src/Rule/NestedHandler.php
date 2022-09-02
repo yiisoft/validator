@@ -82,25 +82,25 @@ final class NestedHandler implements RuleHandlerInterface
                 'Value should be an array or an object. %s given.',
                 get_debug_type($value)
             );
-            $formattedMessage = $this->formatter->format(
+            $translatedMessage = $this->translator->translate(
                 $message,
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            return (new Result())->addError($formattedMessage);
+            return (new Result())->addError($translatedMessage);
         }
 
         $compoundResult = new Result();
         $results = [];
         foreach ($rule->getRules() as $valuePath => $rules) {
             if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($data, $valuePath)) {
-                $formattedMessage = $this->formatter->format(
+                $translatedMessage = $this->translator->translate(
                     $rule->getNoPropertyPathMessage(),
                     ['path' => $valuePath, 'attribute' => $context->getAttribute(), 'value' => $data]
                 );
                 /**
                  * @psalm-suppress InvalidScalarArgument
                  */
-                $compoundResult->addError($formattedMessage, StringHelper::parsePath($valuePath));
+                $compoundResult->addError($translatedMessage, StringHelper::parsePath($valuePath));
 
                 continue;
             }

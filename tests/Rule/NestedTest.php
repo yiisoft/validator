@@ -18,6 +18,7 @@ use Yiisoft\Validator\Tests\Stub\InheritAttributesObject\InheritAttributesObject
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\Rule;
 use Yiisoft\Validator\Tests\Stub\SimpleRulesProvider;
+use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
 use Yiisoft\Validator\Validator;
 
 final class NestedTest extends TestCase
@@ -409,6 +410,8 @@ final class NestedTest extends TestCase
 
     private function createValidator(): Validator
     {
-        return new Validator(new SimpleRuleHandlerContainer());
+        $translator = (new TranslatorFactory())->create();
+
+        return new Validator(new SimpleRuleHandlerContainer($translator));
     }
 }
