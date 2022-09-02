@@ -30,3 +30,10 @@ jobs:
         ['ubuntu-latest', 'windows-latest']
       php: >-
         ['8.0', '8.1']
+  phpunit_without_extensions:
+    uses: yiisoft/actions/.github/workflows/phpunit.yml@master
+    with:
+      os: >-
+        ['ubuntu-latest', 'windows-latest']
+      php: >-
+        ['8.0', '8.1']
