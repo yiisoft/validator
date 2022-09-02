@@ -131,7 +131,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             [
                 $rule,
                 '',
-                [new Error('Value should be an array or an object. string given.', [])],
+                [new Error('Value should be an array or an object. string given.')],
             ],
             [
                 $rule,

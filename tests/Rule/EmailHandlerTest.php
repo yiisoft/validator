@@ -205,7 +205,7 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
             [
                 new Email(checkDNS: true, message: 'Custom error'),
                 'test@nonexistingsubdomain.example.com',
-                [new Error('Custom error', [])],
+                [new Error('Custom error')],
             ],
         ];
     }

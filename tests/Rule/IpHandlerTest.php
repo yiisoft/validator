@@ -210,7 +210,7 @@ final class IpHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new Ip(allowSubnet: true, message: 'Custom error'), '192.168.5.32/af', [new Error('Custom error', [])]],
+            [new Ip(allowSubnet: true, message: 'Custom error'), '192.168.5.32/af', [new Error('Custom error')]],
         ];
     }
 
