@@ -32,7 +32,11 @@ final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 
         try {
             $classInstance = new $className(translator: $this->translator);
-        } catch (Error) {
+        } catch (Error $e) {
+            if ($e->getMessage() !== 'Unknown named parameter $translator') {
+                throw $e;
+            }
+
             $classInstance = new $className();
         }
 
