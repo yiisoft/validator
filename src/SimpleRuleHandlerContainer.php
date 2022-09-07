@@ -33,7 +33,7 @@ final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
         try {
             $classInstance = new $className(translator: $this->translator);
         } catch (Error) {
-            throw new InvalidArgumentException("The rule handler $className doesn't have a tranlator.");
+            $classInstance = new $className();
         }
 
         if (!$classInstance instanceof RuleHandlerInterface) {

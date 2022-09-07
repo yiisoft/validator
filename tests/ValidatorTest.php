@@ -107,11 +107,7 @@ class ValidatorTest extends TestCase
 
     public function testRuleHandlerWithoutImplement(): void
     {
-        $translator = (new TranslatorFactory())->create();
-        $ruleHandler = new class ($translator) {
-            public function __construct(private TranslatorInterface $translator)
-            {
-            }
+        $ruleHandler = new class () {
         };
         $validator = FakeValidatorFactory::make();
 

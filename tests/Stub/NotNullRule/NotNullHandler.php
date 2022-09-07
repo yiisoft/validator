@@ -12,10 +12,6 @@ use Yiisoft\Validator\ValidationContext;
 
 final class NotNullHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof NotNull) {
@@ -25,8 +21,7 @@ final class NotNullHandler implements RuleHandlerInterface
         $result = new Result();
 
         if ($value === null) {
-            $message = $this->translator->translate('Values must not be null.');
-            $result->addError($message);
+            $result->addError('Values must not be null.');
         }
 
         return $result;

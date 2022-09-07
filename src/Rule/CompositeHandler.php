@@ -38,10 +38,6 @@ final class CompositeHandler implements RuleHandlerInterface
 {
     use PreValidateTrait;
 
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Composite) {
