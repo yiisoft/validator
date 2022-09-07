@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use Error;
-use InvalidArgumentException;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
