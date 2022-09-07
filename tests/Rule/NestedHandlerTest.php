@@ -18,10 +18,8 @@ use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleHandlerInterface;
 
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\ObjectWithNestedObject;
-use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
-use Yiisoft\Validator\Validator;
 
 use function array_slice;
 
@@ -499,9 +497,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
 
     public function testNestedWithoutRulesWithObject(): void
     {
-        $translator = (new TranslatorFactory())->create();
-        $validator = new Validator(new SimpleRuleHandlerContainer($translator));
-
+        $validator = FakeValidatorFactory::make();
         $result = $validator->validate(new ObjectWithNestedObject());
 
         $this->assertFalse($result->isValid());

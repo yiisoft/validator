@@ -13,11 +13,8 @@ use Yiisoft\Validator\ValidationContext;
 
 final class CallbackHandler implements RuleHandlerInterface
 {
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(private TranslatorInterface $translator)
     {
-        $this->translator = $translator;
     }
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result

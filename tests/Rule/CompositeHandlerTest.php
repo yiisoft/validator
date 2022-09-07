@@ -72,6 +72,6 @@ final class CompositeHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new CompositeHandler();
+        return new CompositeHandler($this->getTranslator());
     }
 }

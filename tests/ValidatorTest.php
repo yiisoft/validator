@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
@@ -106,11 +107,15 @@ class ValidatorTest extends TestCase
 
     public function testRuleHandlerWithoutImplement(): void
     {
-        $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
-
-        $ruleHandler = new class () {
+        $translator = (new TranslatorFactory())->create();
+        $ruleHandler = new class ($translator) {
+            public function __construct(private TranslatorInterface $translator)
+            {
+            }
         };
         $validator = FakeValidatorFactory::make();
+
+        $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
         $validator->validate(new DataSet(['property' => '']), [
             'property' => [
                 new class ($ruleHandler) implements RuleInterface {
