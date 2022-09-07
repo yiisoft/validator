@@ -6,12 +6,13 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
 use Yiisoft\Validator\ValidationContext;
 
 abstract class AbstractRuleValidatorTest extends TestCase
@@ -66,9 +67,9 @@ abstract class AbstractRuleValidatorTest extends TestCase
         return $ruleHandler->validate($value, $config, $context);
     }
 
-    protected function formatMessage(string $message, array $params): string
+    protected function getTranslator(): TranslatorInterface
     {
-        return (new Formatter())->format($message, $params);
+        return (new TranslatorFactory())->create();
     }
 
     abstract public function customErrorMessagesProvider(): array;

@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -16,11 +15,9 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class IsTrueHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
-
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(private TranslatorInterface $translator)
     {
-        $this->formatter = $formatter ?? new Formatter();
+        $this->translator = $translator;
     }
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
@@ -41,7 +38,7 @@ final class IsTrueHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $formattedMessage = $this->formatter->format(
+        $formattedMessage = $this->translator->translate(
             $rule->getMessage(),
             [
                 'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),

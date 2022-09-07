@@ -20,7 +20,7 @@ final class NotNullHandler implements RuleHandlerInterface
         $result = new Result();
 
         if ($value === null) {
-            $result->addError('Values should not be null.');
+            $result->addError('Values must not be null.');
         }
 
         return $result;

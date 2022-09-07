@@ -14,8 +14,7 @@ final class JsonHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $rule = new Json();
-        $message = $rule->getMessage();
-        $errors = [new Error($message, [])];
+        $errors = [new Error('The value is not JSON.')];
 
         return [
             [$rule, '{"name": "tester"', $errors],
@@ -116,16 +115,12 @@ JSON,
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new Json(message: 'bad json'),
-                '',
-                [new Error('bad json', [])],
-            ],
+            [new Json(message: 'bad json'), '', [new Error('bad json')]],
         ];
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new JsonHandler();
+        return new JsonHandler($this->getTranslator());
     }
 }

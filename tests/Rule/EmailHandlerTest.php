@@ -24,9 +24,7 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
         $ruleEnabledIDNandAllowedName = new Email(allowName: true, enableIDN: true);
-        $message = $rule->getMessage();
-        $parameters = [];
-        $errors = [new Error($message, $parameters)];
+        $errors = [new Error('This value is not a valid email address.')];
 
         return [
             [$rule, 'rmcreative.ru', $errors],
@@ -207,7 +205,7 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
             [
                 new Email(checkDNS: true, message: 'Custom error'),
                 'test@nonexistingsubdomain.example.com',
-                [new Error('Custom error', [])],
+                [new Error('Custom error')],
             ],
         ];
     }
@@ -224,6 +222,6 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new EmailHandler();
+        return new EmailHandler($this->getTranslator());
     }
 }

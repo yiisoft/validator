@@ -14,19 +14,11 @@ final class EqualHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $value = 100;
-        $messageEqual = 'Value must be equal to "{targetValueOrAttribute}".';
+        $message = 'Value must be equal to "100".';
 
         return [
-            [
-                new Equal($value),
-                101,
-                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
-            ],
-            [
-                new Equal($value, strict: true),
-                $value + 1,
-                [new Error($this->formatMessage($messageEqual, ['targetValueOrAttribute' => $value]))],
-            ],
+            [new Equal($value), 101, [new Error($message)]],
+            [new Equal($value, strict: true), $value + 1, [new Error($message)]],
         ];
     }
 
@@ -43,16 +35,12 @@ final class EqualHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new Equal(100, message: 'Custom error'),
-                101,
-                [new Error('Custom error')],
-            ],
+            [new Equal(100, message: 'Custom error'), 101, [new Error('Custom error')]],
         ];
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new CompareHandler();
+        return new CompareHandler($this->getTranslator());
     }
 }

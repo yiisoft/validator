@@ -24,6 +24,7 @@ use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Stub\Rule;
 use Yiisoft\Validator\Tests\Stub\ObjectWithAttributesOnly;
+use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
@@ -103,13 +104,13 @@ class ValidatorTest extends TestCase
         $this->assertTrue($result->isValid());
     }
 
-    public function testRuleHandlerWithoutImplement()
+    public function testRuleHandlerWithoutImplement(): void
     {
-        $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
-
         $ruleHandler = new class () {
         };
         $validator = FakeValidatorFactory::make();
+
+        $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
         $validator->validate(new DataSet(['property' => '']), [
             'property' => [
                 new class ($ruleHandler) implements RuleInterface {
@@ -131,7 +132,7 @@ class ValidatorTest extends TestCase
         ]);
     }
 
-    public function testRuleWithoutHandler()
+    public function testRuleWithoutHandler(): void
     {
         $this->expectException(RuleHandlerNotFoundException::class);
 
@@ -174,7 +175,8 @@ class ValidatorTest extends TestCase
 
     public function skipOnEmptyDataProvider(): array
     {
-        $validator = new Validator(new SimpleRuleHandlerContainer());
+        $translator = (new TranslatorFactory())->create();
+        $validator = FakeValidatorFactory::make();
         $rules = [
             'name' => [new HasLength(min: 8)],
             'age' => [new Number(asInteger: true, min: 18)],
@@ -414,7 +416,7 @@ class ValidatorTest extends TestCase
             ],
 
             'validator, skipOnEmpty: true, value not passed' => [
-                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: true),
+                new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: true),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                 ]),
@@ -424,7 +426,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmpty: true, value is empty' => [
-                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: true),
+                new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: true),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => null,
@@ -435,7 +437,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmpty: true, value is not empty' => [
-                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: true),
+                new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: true),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => 17,
@@ -448,7 +450,7 @@ class ValidatorTest extends TestCase
             ],
 
             'validator, skipOnEmptyCallback, SkipOnNull, value not passed' => [
-                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                 ]),
@@ -458,7 +460,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmptyCallback, SkipOnNull, value is empty' => [
-                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => null,
@@ -469,7 +471,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmptyCallback, SkipOnNull, value is not empty' => [
-                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => 17,
@@ -481,7 +483,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmptyCallback, SkipOnNull, value is not empty (empty string)' => [
-                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => '',
@@ -495,7 +497,7 @@ class ValidatorTest extends TestCase
 
             'validator, skipOnEmptyCallback, custom, value not passed' => [
                 new Validator(
-                    new SimpleRuleHandlerContainer(),
+                    new SimpleRuleHandlerContainer($translator),
                     defaultSkipOnEmpty: static function (mixed $value): bool {
                         return $value === 0;
                     }
@@ -511,7 +513,7 @@ class ValidatorTest extends TestCase
             ],
             'validator, skipOnEmptyCallback, custom, value is empty' => [
                 new Validator(
-                    new SimpleRuleHandlerContainer(),
+                    new SimpleRuleHandlerContainer($translator),
                     defaultSkipOnEmpty: static function (mixed $value): bool {
                         return $value === 0;
                     }
@@ -527,7 +529,7 @@ class ValidatorTest extends TestCase
             ],
             'validator, skipOnEmptyCallback, custom, value is not empty' => [
                 new Validator(
-                    new SimpleRuleHandlerContainer(),
+                    new SimpleRuleHandlerContainer($translator),
                     defaultSkipOnEmpty: static function (mixed $value): bool {
                         return $value === 0;
                     }
@@ -544,7 +546,7 @@ class ValidatorTest extends TestCase
             ],
             'validator, skipOnEmptyCallback, custom, value is not empty (null)' => [
                 new Validator(
-                    new SimpleRuleHandlerContainer(),
+                    new SimpleRuleHandlerContainer($translator),
                     defaultSkipOnEmpty: static function (mixed $value): bool {
                         return $value === 0;
                     }
@@ -630,7 +632,8 @@ class ValidatorTest extends TestCase
         mixed $data,
         bool $expectedResult,
     ): void {
-        $validator = new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: $skipOnEmpty);
+        $translator = (new TranslatorFactory())->create();
+        $validator = new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: $skipOnEmpty);
 
         $result = $validator->validate($data);
 
@@ -652,7 +655,8 @@ class ValidatorTest extends TestCase
 
     public function testRuleWithoutSkipOnEmpty(): void
     {
-        $validator = new Validator(new SimpleRuleHandlerContainer(), new SkipOnNull());
+        $translator = (new TranslatorFactory())->create();
+        $validator = new Validator(new SimpleRuleHandlerContainer($translator), new SkipOnNull());
 
         $data = new class () {
             #[NotNull]

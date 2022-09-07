@@ -21,7 +21,7 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         }
 
         $rule = new Url();
-        $errors = [new Error($rule->getMessage(), [])];
+        $errors = [new Error('This value is not a valid URL.')];
 
         return [
             [$rule, 'google.de', $errors],
@@ -38,7 +38,8 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
 
 
             [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']), 'htp://yiiframework.com', $errors],
-            [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']), '//yiiframework.com', $errors], // Relative URLs are not supported
+            // Relative URLs are not supported
+            [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']), '//yiiframework.com', $errors],
 
             [new Url(enableIDN: true), '', $errors],
             [new Url(enableIDN: true), 'http://' . str_pad('base', 2000, 'url') . '.de', $errors],
@@ -108,7 +109,7 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         }
 
         return [
-            [new Url(enableIDN: true, message: 'Custom error'), '', [new Error('Custom error', [])]],
+            [new Url(enableIDN: true, message: 'Custom error'), '', [new Error('Custom error')]],
         ];
     }
 
@@ -137,6 +138,6 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new UrlHandler();
+        return new UrlHandler($this->getTranslator());
     }
 }

@@ -12,8 +12,8 @@ use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesProviderInterface;
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Tests\Stub\EachNestedObjects\Foo;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\Rule;
@@ -409,6 +409,6 @@ final class NestedTest extends TestCase
 
     private function createValidator(): Validator
     {
-        return new Validator(new SimpleRuleHandlerContainer());
+        return FakeValidatorFactory::make();
     }
 }

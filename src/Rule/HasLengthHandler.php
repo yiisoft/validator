@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\LimitHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -23,11 +22,8 @@ final class HasLengthHandler implements RuleHandlerInterface
 {
     use LimitHandlerTrait;
 
-    private FormatterInterface $formatter;
-
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(private TranslatorInterface $translator)
     {
-        $this->formatter = $formatter ?? new Formatter();
     }
 
     public function validate($value, object $rule, ?ValidationContext $context = null): Result
@@ -39,7 +35,7 @@ final class HasLengthHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_string($value)) {
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );

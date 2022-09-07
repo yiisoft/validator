@@ -6,20 +6,16 @@ namespace Yiisoft\Validator\Rule;
 
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class SubsetHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
-
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(private TranslatorInterface $translator)
     {
-        $this->formatter = $formatter ?? new Formatter();
     }
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
@@ -31,7 +27,7 @@ final class SubsetHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_iterable($value)) {
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getIterableMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
@@ -45,7 +41,7 @@ final class SubsetHandler implements RuleHandlerInterface
                 : $rule->getValues();
             $valuesString = '"' . implode('", "', $values) . '"';
 
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getSubsetMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $value, 'values' => $valuesString]
             );
