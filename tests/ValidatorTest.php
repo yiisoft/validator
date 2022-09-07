@@ -181,7 +181,7 @@ class ValidatorTest extends TestCase
     public function skipOnEmptyDataProvider(): array
     {
         $translator = (new TranslatorFactory())->create();
-        $validator = new Validator(new SimpleRuleHandlerContainer($translator));
+        $validator = FakeValidatorFactory::make();
         $rules = [
             'name' => [new HasLength(min: 8)],
             'age' => [new Number(asInteger: true, min: 18)],

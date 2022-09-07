@@ -6,12 +6,11 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\ObjectWithRulesProvider;
-use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
 use Yiisoft\Validator\Validator;
 
 final class ValidateLogicTest extends TestCase
@@ -169,7 +168,6 @@ final class ValidateLogicTest extends TestCase
 
     private function createValidator(): Validator
     {
-        $translator = (new TranslatorFactory())->create();
-        return new Validator(new SimpleRuleHandlerContainer($translator));
+        return FakeValidatorFactory::make();
     }
 }
