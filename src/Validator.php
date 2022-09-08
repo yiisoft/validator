@@ -15,7 +15,6 @@ use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 
-use function gettype;
 use function is_array;
 use function is_callable;
 use function is_int;
