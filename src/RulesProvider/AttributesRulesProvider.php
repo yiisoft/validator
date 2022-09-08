@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\RulesProvider;
 
+use Generator;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionObject;
@@ -16,7 +17,7 @@ final class AttributesRulesProvider implements RulesProviderInterface
     /**
      * @var array<RuleInterface[]>|null
      */
-    private ?array $rules = null;
+    private Generator|null $rules = null;
 
     public function __construct(
         /**
@@ -30,36 +31,51 @@ final class AttributesRulesProvider implements RulesProviderInterface
     /**
      * @return array<RuleInterface[]>
      */
-    public function getRules(): array
+    public function getRules(): iterable
     {
         if ($this->rules === null) {
             $this->rules = $this->parseRules();
         }
-        return $this->rules;
+
+        yield from $this->rules;
     }
 
     /**
-     * @return array<RuleInterface[]>
+     * @return Generator<RuleInterface[]>
      */
-    private function parseRules(): array
+    private function parseRules(): iterable
     {
-        $rules = [];
-
         $reflection = is_object($this->source)
             ? new ReflectionObject($this->source)
             : new ReflectionClass($this->source);
-        foreach ($reflection->getProperties() as $property) {
+
+        $reflectionProperties = $reflection->getProperties();
+        if ($reflectionProperties === []) {
+            return [];
+        }
+        foreach ($reflectionProperties as $property) {
             if (!$this->isUseProperty($property)) {
                 continue;
             }
 
             $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
-            foreach ($attributes as $attribute) {
-                $rules[$property->getName()][] = $attribute->newInstance();
+            if ($attributes === []) {
+                continue;
             }
-        }
 
-        return $rules;
+            yield $property->getName() => $this->createAttributes($attributes);
+        }
+    }
+    /**
+     * @param array<array-key, ReflectionAttribute<RuleInterface>> $attributes
+     *
+     * @return iterable
+     */
+    private function createAttributes(array $attributes): iterable
+    {
+        foreach ($attributes as $attribute) {
+            yield $attribute->newInstance();
+        }
     }
 
     private function isUseProperty(ReflectionProperty $property): bool

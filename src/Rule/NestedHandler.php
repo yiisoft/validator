@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Generator;
 use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
@@ -103,7 +104,7 @@ final class NestedHandler implements RuleHandlerInterface
             }
 
             $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
-            $rules = is_array($rules) ? $rules : [$rules];
+            $rules = is_array($rules) || $rules instanceof Generator ? $rules : [$rules];
 
             $itemResult = $context->getValidator()->validate($validatedValue, $rules);
 
