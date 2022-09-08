@@ -17,9 +17,7 @@ final class InRangeHandlerTest extends AbstractRuleValidatorTest
         $rule = new InRange(range(1, 10));
         $ruleStrict = new InRange(range(1, 10), strict: true);
         $ruleNot = new InRange(range(1, 10), not: true);
-
-        $message = $rule->getMessage();
-        $errors = [new Error($message, [])];
+        $errors = [new Error('This value is invalid.')];
 
         return [
             [$rule, 0, $errors],
@@ -72,16 +70,12 @@ final class InRangeHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [
-                new InRange(range(1, 10), message: 'Custom error'),
-                15,
-                [new Error('Custom error', [])],
-            ],
+            [new InRange(range(1, 10), message: 'Custom error'), 15, [new Error('Custom error')]],
         ];
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new InRangeHandler();
+        return new InRangeHandler($this->getTranslator());
     }
 }

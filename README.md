@@ -20,6 +20,7 @@ The package provides data validation capabilities.
 ## Features
 
 - Could be used with any object.
+- Supports PHP 8 attributes.
 - Skip further validation if an error occurred for the same field.
 - Skip validation of empty value.
 - Error message formatting.
@@ -47,7 +48,6 @@ Library could be used in two ways: validating a single value and validating a se
 
 ```php
 use Yiisoft\Validator\ValidatorInterface;
-use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Result;
@@ -131,7 +131,7 @@ if ($result->isValid() === false) {
 #### Skipping validation on error
 
 By default, if an error occurred during validation of an attribute, further rules for this attribute are processed.
-To change this behavior use `skipOnError: true` when configuring rules:  
+To change this behavior, use `skipOnError: true` when configuring rules:  
 
 ```php
 use Yiisoft\Validator\Rule\Number;
@@ -142,12 +142,80 @@ new Number(asInteger: true, max: 100, skipOnError: true)
 #### Skipping empty values
 
 By default, empty values are validated. That is undesirable if you need to allow not specifying a field.
-To change this behavior use `skipOnEmpty: true`:
+To change this behavior, use `skipOnEmpty: true`:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
 
-new Number(asInteger: true, max: 100, skipOnEmpty: true)
+new Number(asInteger: true, max: 100, skipOnEmpty: true);
+```
+
+What exactly to consider to be empty is vague and can vary depending on a scope of usage.
+
+`skipOnEmpty` is more like a shortcut, `skipOnEmptyCallback` argument checks if a given value is empty:
+
+- If `skipOnEmpty` is `false`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipNone` is used automatically for 
+`skipOnEmptyCallback` - every value is considered non-empty and validated without skipping (default).
+- If `skipOnEmpty` is `true`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty` is used automatically for
+`skipOnEmptyCallback` - only non-empty values (not `null`, `[]`, or `''`) are validated.
+- If `skipOnEmptyCallback` is set, it takes precedence to determine emptiness.
+
+Using first option is usually good for HTML forms. The second one is more suitable for APIs.
+
+The empty values can be also limited to `null` only:
+
+```php
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
+
+new Number(asInteger: true, max: 100, skipOnEmptyCallback: new SkipOnNull());
+```
+
+Note that in this case `skipOnEmpty` will be automatically set to `true`, so there is no need to do it manually.
+
+For even more customization you can use your own class implementing `__invoke()` magic method:
+
+```php
+use Yiisoft\Validator\Rule\Number;
+
+final class SkipOnZero
+{
+    public function __invoke($value): bool
+    {
+        return $value === 0;
+    }
+}
+
+new Number(asInteger: true, max: 100, skipOnEmptyCallback: new SkipOnZero());
+```
+
+or just a callable:
+
+```php
+use Yiisoft\Validator\Rule\Number;
+
+new Number(
+    asInteger: true, 
+    max: 100, 
+    skipOnEmptyCallback: static function (mixed $value): bool {
+        return $value === 0;
+    }
+);
+```
+
+For multiple rules this can be also set more conveniently at validator level:
+
+```php
+use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\Validator;
+
+$validator = new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true);
+$validator = new Validator(
+    new SimpleRuleHandlerContainer(),
+    skipOnEmptyCallback: static function (mixed $value): bool {
+        return $value === 0;
+    }
+);
 ```
 
 #### Nested and related data
@@ -223,7 +291,6 @@ use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;
-use Yiisoft\Validator\RuleSet;
 
 // Usually obtained from container
 $validator = $container->get(ValidatorInterface::class);
@@ -282,6 +349,116 @@ $errors = [
 ];
 ```
 
+###### Using shortcut
+
+A shortcut can be used to simplify `Nested` and `Each` combinations:
+
+```php
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'charts.*.points.*.coordinates.x' => [new Number(min: -10, max: 10)],
+    'charts.*.points.*.coordinates.y' => [new Number(min: -10, max: 10)],
+    'charts.*.points.*.rgb' => [
+        new Count(exactly: 3);
+        new Number(min: 0, max: 255),
+    ]),
+]);
+```
+
+With additional grouping it can also be rewritten like this:
+
+```php
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'charts.*.points.*.coordinates' => new Nested([
+        'x' => [new Number(min: -10, max: 10)],
+        'y' => [new Number(min: -10, max: 10)],
+    ]),
+    'charts.*.points.*.rgb' => [
+        new Count(exactly: 3);
+        new Number(min: 0, max: 255),
+    ]),
+]);
+```
+
+This is less verbose, but the downside of this approach is that you can't additionally configure dynamically generated 
+`Nested` and `Each` pairs. If you need to that, please refer to example provided in "Basic usage" section.
+
+###### Using keys containing separator / shortcut
+
+If a key contains the separator (`.`), it must be escaped with backslash (`\`) in rule config in order to work 
+correctly. In the input data escaping is not needed. Here is an example with two nested keys named `author.data` and 
+`name.surname`:
+
+```php
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'author\.data.name\.surname' => [
+        new HasLength(min: 3),
+    ],
+]);
+$data = [
+    'author.data' => [
+        'name.surname' => 'Dmitry',
+    ],
+];
+```
+
+Note that in case of using multiple nested rules for configuration escaping is still required:
+
+```php
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'author\.data' => new Nested([
+        'name\.surname' => [
+            new HasLength(min: 3),
+        ],
+    ]),
+]);
+$data = [
+    'author.data' => [
+        'name.surname' => 'Dmitriy',
+    ],
+];
+```
+
+The same applies to shortcut:
+
+```php
+use Yiisoft\Validator\Rule\Nested;
+
+$rule = new Nested([
+    'charts\.list.*.points\*list.*.coordinates\.data.x' => [
+        // ...
+    ],
+    'charts\.list.*.points\*list.*.coordinates\.data.y' => [
+        // ...
+    ],
+    'charts\.list.*.points\*list.*.rgb' => [
+        // ...
+    ],
+]);
+$data = [
+    'charts.list' => [
+        [
+            'points*list' => [
+                [
+                    'coordinates.data' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0],
+                ],
+            ],
+        ],
+    ],
+];
+```
+
 #### Using attributes
 
 ##### Basic usage
@@ -291,22 +468,22 @@ Common flow is the same as you would use usual classes:
 2. Add rules to it
 
 ```php
-use Yiisoft\Validator\Attribute\Embedded;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 
 final class Chart
 {
     #[Each([
-        new Embedded(Point::class),
+        new Nested(Point::class),
     ])]
     private array $points;
 }
 
 final class Point
 {
-    #[Embedded(Coordinates::class)]
+    #[Nested(Coordinates::class)]
     private $coordinates;
     #[Count(exactly: 3)]
     #[Each([
@@ -326,24 +503,18 @@ final class Coordinates
 
 Here are some technical details:
 
-- `Embedded` creates a reference to the referenced class and uses a `GroupRule` under the hood to make represent
-  referenced class rules as it owns.
 - In case of a flat array `Point::$rgb`, a property type `array` needs to be declared.
 
-Pass the base DTO to `AttributeDataSet` and use it for validation.
+Pass object directly to `validate()` method:
 
 ```php
-use Yiisoft\Validator\DataSet\AttributeDataSet;
 use Yiisoft\Validator\ValidatorInterface;
 
 // Usually obtained from container
 $validator = $container->get(ValidatorInterface::class);
 
-$data = [
-    // ...
-];
-$dataSet = new AttributeDataSet(new ChartsData(), $data);
-$errors = $validator->validate($dataSet)->getErrorMessagesIndexedByPath();
+$coordinates = new Coordinates();
+$errors = $validator->validate($coordinates)->getErrorMessagesIndexedByPath();
 ```
 
 ##### Traits
@@ -373,11 +544,11 @@ final class Post
 
 ```php
 use Attribute;
-use \Yiisoft\Validator\Exception\UnexpectedRuleException;
+use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RuleHandlerInterface;
-use \Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -457,12 +628,12 @@ namespace App\Validator\Rule;
 
 use Attribute;
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\GroupRule;
+use Yiisoft\Validator\Rule\Composite;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class RgbRule extends GroupRule
+final class RgbRule extends Composite
 {
-    public function getRuleSet(): array
+    public function getRules(): array
     {
         return [
             new Each([
@@ -648,7 +819,7 @@ final class CompanyNameHandler implements Rule\RuleHandlerInterface
         $hasCompany = $dataSet !== null && $dataSet->getAttributeValue('hasCompany') === true;
 
         if ($hasCompany && $this->isCompanyNameValid($value) === false) {
-            $result->addError($this->formatMessage('Company name is not valid.'));
+            $result->addError('Company name is not valid.');
         }
 
         return $result;
@@ -691,7 +862,7 @@ final class NoLessThanExistingBidRuleHandler implements RuleHandlerInterface
         
         $currentMax = $connection->query('SELECT MAX(price) FROM bid')->scalar();
         if ($value <= $currentMax) {
-            $result->addError($this->formatMessage('There is a higher bid of {bid}.', ['bid' => $currentMax]));
+            $result->addError($this->formatter->format('There is a higher bid of {bid}.', ['bid' => $currentMax]));
         }
 
         return $result;
@@ -754,19 +925,18 @@ final class Coordinate implements RuleInterface
 To reuse multiple validation rules it is advised to group rules like the following:
 
 ```php
-use Yiisoft\Validator\RuleSet;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Regex;
-use \Yiisoft\Validator\Rule\GroupRule;
+use \Yiisoft\Validator\Rule\Composite;
 
-final class UsernameRule extends GroupRule
+final class UsernameRule extends Composite
 {
-    public function getRuleSet(): RuleSet
+    public function getRules(): array
     {
-        return new RuleSet([
+        return [
             new HasLength(min: 2, max: 20),
             new Regex('~[a-z_\-]~i'),
-        ]);
+        ];
     }
 }
 ```

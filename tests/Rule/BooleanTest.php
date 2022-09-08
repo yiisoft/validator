@@ -30,67 +30,16 @@ final class BooleanTest extends AbstractRuleTest
                 ],
             ],
             [
-                new Boolean(skipOnEmpty: true),
+                new Boolean(trueValue: true, falseValue: false, strict: true),
                 [
-                    'trueValue' => '1',
-                    'falseValue' => '0',
-                    'strict' => false,
-                    'message' => [
-                        'message' => 'The value must be either "{true}" or "{false}".',
-                        'parameters' => [
-                            'true' => '1',
-                            'false' => '0',
-                        ],
-                    ],
-                    'skipOnEmpty' => true,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Boolean(skipOnEmpty: true),
-                [
-                    'trueValue' => '1',
-                    'falseValue' => '0',
-                    'strict' => false,
-                    'message' => [
-                        'message' => 'The value must be either "{true}" or "{false}".',
-                        'parameters' => [
-                            'true' => '1',
-                            'false' => '0',
-                        ],
-                    ],
-                    'skipOnEmpty' => true,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Boolean(strict: true, skipOnEmpty: true),
-                [
-                    'trueValue' => '1',
-                    'falseValue' => '0',
+                    'trueValue' => true,
+                    'falseValue' => false,
                     'strict' => true,
                     'message' => [
                         'message' => 'The value must be either "{true}" or "{false}".',
                         'parameters' => [
-                            'true' => '1',
-                            'false' => '0',
-                        ],
-                    ],
-                    'skipOnEmpty' => true,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Boolean(trueValue: 'YES'),
-                [
-                    'trueValue' => 'YES',
-                    'falseValue' => '0',
-                    'strict' => false,
-                    'message' => [
-                        'message' => 'The value must be either "{true}" or "{false}".',
-                        'parameters' => [
-                            'true' => 'YES',
-                            'false' => '0',
+                            'true' => 'true',
+                            'false' => 'false',
                         ],
                     ],
                     'skipOnEmpty' => false,
@@ -98,37 +47,27 @@ final class BooleanTest extends AbstractRuleTest
                 ],
             ],
             [
-                new Boolean(falseValue: 'NO'),
-                [
-                    'trueValue' => '1',
-                    'falseValue' => 'NO',
-                    'strict' => false,
-                    'message' => [
-                        'message' => 'The value must be either "{true}" or "{false}".',
-                        'parameters' => [
-                            'true' => '1',
-                            'false' => 'NO',
-                        ],
-                    ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Boolean(trueValue: 'YES', falseValue: 'NO', strict: true),
+                new Boolean(
+                    trueValue: 'YES',
+                    falseValue: 'NO',
+                    strict: true,
+                    message: 'Custom message.',
+                    skipOnEmpty: true,
+                    skipOnError: true
+                ),
                 [
                     'trueValue' => 'YES',
                     'falseValue' => 'NO',
                     'strict' => true,
                     'message' => [
-                        'message' => 'The value must be either "{true}" or "{false}".',
+                        'message' => 'Custom message.',
                         'parameters' => [
                             'true' => 'YES',
                             'false' => 'NO',
                         ],
                     ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -136,6 +75,6 @@ final class BooleanTest extends AbstractRuleTest
 
     protected function getRule(): SerializableRuleInterface
     {
-        return new Boolean([]);
+        return new Boolean();
     }
 }

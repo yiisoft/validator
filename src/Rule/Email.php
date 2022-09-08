@@ -6,14 +6,13 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function function_exists;
@@ -22,11 +21,11 @@ use function function_exists;
  * Validates that the value is a valid email address.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Email implements SerializableRuleInterface, BeforeValidationInterface
+final class Email implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         /**
@@ -67,7 +66,11 @@ final class Email implements SerializableRuleInterface, BeforeValidationInterfac
          */
         private bool $enableIDN = false,
         private string $message = 'This value is not a valid email address.',
-        private bool $skipOnEmpty = false,
+
+        /**
+         * @var bool|callable|null
+         */
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -135,17 +138,6 @@ final class Email implements SerializableRuleInterface, BeforeValidationInterfac
         return $this->message;
     }
 
-    #[ArrayShape([
-        'pattern' => 'string',
-        'fullPattern' => 'string',
-        'idnEmailPattern' => 'string',
-        'allowName' => 'bool',
-        'checkDNS' => 'bool',
-        'enableIDN' => 'bool',
-        'message' => 'string[]',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
     public function getOptions(): array
     {
         return [
@@ -158,8 +150,13 @@ final class Email implements SerializableRuleInterface, BeforeValidationInterfac
             'message' => [
                 'message' => $this->message,
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return EmailHandler::class;
     }
 }

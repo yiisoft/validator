@@ -4,22 +4,27 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use RuntimeException;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\EmailHandler;
 use Yiisoft\Validator\RuleHandlerInterface;
 
+use function extension_loaded;
+
 final class EmailHandlerTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array
     {
+        if (!extension_loaded('intl')) {
+            return [];
+        }
+
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
         $ruleEnabledIDNandAllowedName = new Email(allowName: true, enableIDN: true);
-        $message = $rule->getMessage();
-        $parameters = [];
-        $errors = [new Error($message, $parameters)];
+        $errors = [new Error('This value is not a valid email address.')];
 
         return [
             [$rule, 'rmcreative.ru', $errors],
@@ -64,9 +69,22 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
             [$ruleAllowedName, 'sam@рмкреатиф.ru', $errors],
             [$ruleAllowedName, 'Informtation info@oertliches.de', $errors],
             [$ruleAllowedName, 'John Smith <example.com>', $errors],
-            [$ruleAllowedName, 'Short Name <localPartMoreThan64Characters-blah-blah-blah-blah-blah-blah-blah-blah@example.com>', $errors],
+            [
+                $ruleAllowedName,
+                'Short Name <localPartMoreThan64Characters-blah-blah-blah-blah-blah-blah-blah-blah@example.com>',
+                $errors,
+            ],
             [$ruleAllowedName, ['developer@yiiframework.com'], $errors],
-            [$ruleAllowedName, ['Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah.com>'], $errors],
+            [
+                $ruleAllowedName,
+                [
+                    'Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-' .
+                    'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
+                    'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
+                    'blah-blah-blah.com>',
+                ],
+                $errors,
+            ],
 
             [$ruleEnabledIDN, 'rmcreative.ru', $errors],
             [$ruleEnabledIDN, 'Carsten Brandt <mail@cebe.cc>', $errors],
@@ -75,20 +93,42 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
 
             [
                 $ruleEnabledIDNandAllowedName,
-                'Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.com>',
+                'Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.' .
+                'бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-' .
+                'бла.com>',
                 $errors,
             ],
             [$ruleEnabledIDNandAllowedName, 'Information info@örtliches.de', $errors],
             [$ruleEnabledIDNandAllowedName, 'rmcreative.ru', $errors],
             [$ruleEnabledIDNandAllowedName, 'John Smith <example.com>', $errors],
-            [$ruleEnabledIDNandAllowedName, 'Короткое имя <после-преобразования-в-idn-тут-будет-больше-чем-64-символа@пример.com>', $errors],
+            [
+                $ruleEnabledIDNandAllowedName,
+                'Короткое имя <после-преобразования-в-idn-тут-будет-больше-чем-64-символа@пример.com>',
+                $errors,
+            ],
 
             [new Email(checkDNS: true), 'test@nonexistingsubdomain.example.com', $errors],
         ];
     }
 
+    /**
+     * @dataProvider failedValidationProvider
+     */
+    public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
+    {
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
+        }
+
+        parent::testValidationFailed($config, $value, $expectedErrors);
+    }
+
     public function passedValidationProvider(): array
     {
+        if (!extension_loaded('intl')) {
+            return [];
+        }
+
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
@@ -109,7 +149,10 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
             [$ruleAllowedName, '<mail@cebe.cc>'],
             [$ruleAllowedName, 'test@example.com'],
             [$ruleAllowedName, 'John Smith <john.smith@example.com>'],
-            [$ruleAllowedName, '"This name is longer than 64 characters. Blah blah blah blah blah" <shortmail@example.com>'],
+            [
+                $ruleAllowedName,
+                '"This name is longer than 64 characters. Blah blah blah blah blah" <shortmail@example.com>',
+            ],
 
             [$ruleEnabledIDN, '5011@example.com'],
             [$ruleEnabledIDN, 'test-@dummy.com'],
@@ -132,7 +175,10 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
             [$ruleEnabledIDNandAllowedName, '<mail@cebe.cc>'],
             [$ruleEnabledIDNandAllowedName, 'test@example.com'],
             [$ruleEnabledIDNandAllowedName, 'John Smith <john.smith@example.com>'],
-            [$ruleEnabledIDNandAllowedName, '"Такое имя достаточно длинное, но оно все равно может пройти валидацию" <shortmail@example.com>'],
+            [
+                $ruleEnabledIDNandAllowedName,
+                '"Такое имя достаточно длинное, но оно все равно может пройти валидацию" <shortmail@example.com>',
+            ],
 
             [new Email(checkDNS: true), '5011@gmail.com'],
 
@@ -141,19 +187,41 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
+    /**
+     * @dataProvider passedValidationProvider
+     */
+    public function testValidationPassed(object $config, mixed $value): void
+    {
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
+        }
+
+        parent::testValidationPassed($config, $value);
+    }
+
     public function customErrorMessagesProvider(): array
     {
         return [
             [
                 new Email(checkDNS: true, message: 'Custom error'),
                 'test@nonexistingsubdomain.example.com',
-                [new Error('Custom error', [])],
+                [new Error('Custom error')],
             ],
         ];
     }
 
+    public function testEnableIdnWithMissingIntlExtension(): void
+    {
+        if (extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        }
+
+        $this->expectException(RuntimeException::class);
+        new Email(enableIDN: true);
+    }
+
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new EmailHandler();
+        return new EmailHandler($this->getTranslator());
     }
 }

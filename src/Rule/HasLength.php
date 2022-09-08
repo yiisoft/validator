@@ -6,12 +6,13 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use JetBrains\PhpStorm\ArrayShape;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
+use Yiisoft\Validator\Rule\Trait\LimitTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -20,25 +21,33 @@ use Yiisoft\Validator\ValidationContext;
  * Note, this rule should only be used with strings.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class HasLength implements SerializableRuleInterface, BeforeValidationInterface
+final class HasLength implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
+    use LimitTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         /**
-         * @var int|null minimum length. null means no minimum length limit.
+         * @var int|null minimum length. null means no minimum length limit. Can't be combined with
+         * {@see $exactly}.
          *
-         * @see $tooShortMessage for the customized message for a too short string.
+         * @see $lessThanMinMessage for the customized message for a too short string.
          */
-        private ?int $min = null,
+        ?int $min = null,
         /**
-         * @var int|null maximum length. null means no maximum length limit.
+         * @var int|null maximum length. null means no maximum length limit. Can't be combined with
+         * {@see $exactly}.
          *
-         * @see $tooLongMessage for the customized message for a too long string.
+         * @see $greaterThanMaxMessage for the customized message for a too long string.
          */
-        private ?int $max = null,
+        ?int $max = null,
+        /**
+         * @var int|null exact length. `null` means no strict comparison. Mutually exclusive with {@see $min} and
+         * {@see $max}.
+         */
+        ?int $exactly = null,
         /**
          * @var string user-defined error message used when the value is not a string.
          */
@@ -46,39 +55,39 @@ final class HasLength implements SerializableRuleInterface, BeforeValidationInte
         /**
          * @var string user-defined error message used when the length of the value is smaller than {@see $min}.
          */
-        private string $tooShortMessage = 'This value should contain at least {min, number} {min, plural, one{character} other{characters}}.',
+        string $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{character} ' .
+        'other{characters}}.',
         /**
          * @var string user-defined error message used when the length of the value is greater than {@see $max}.
          */
-        private string $tooLongMessage = 'This value should contain at most {max, number} {max, plural, one{character} other{characters}}.',
+        string $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{character} ' .
+        'other{characters}}.',
+        string $notExactlyMessage = 'This value must contain exactly {exactly, number} {exactly, plural, ' .
+        'one{character} other{characters}}.',
         /**
          * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
          * If this property is not set, application wide encoding will be used.
          */
         private string $encoding = 'UTF-8',
-        private bool $skipOnEmpty = false,
+
+        /**
+         * @var bool|callable|null
+         */
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null
     ) {
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getMin(): ?int
-    {
-        return $this->min;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getMax(): ?int
-    {
-        return $this->max;
+        $this->initLimitProperties(
+            $min,
+            $max,
+            $exactly,
+            $lessThanMinMessage,
+            $greaterThanMaxMessage,
+            $notExactlyMessage
+        );
     }
 
     /**
@@ -92,56 +101,25 @@ final class HasLength implements SerializableRuleInterface, BeforeValidationInte
     /**
      * @return string
      */
-    public function getTooShortMessage(): string
-    {
-        return $this->tooShortMessage;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTooLongMessage(): string
-    {
-        return $this->tooLongMessage;
-    }
-
-    /**
-     * @return string
-     */
     public function getEncoding(): string
     {
         return $this->encoding;
     }
 
-    #[ArrayShape([
-        'min' => 'int|null',
-        'max' => 'int|null',
-        'message' => 'string[]',
-        'tooShortMessage' => 'array',
-        'tooLongMessage' => 'array',
-        'encoding' => 'string',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
     public function getOptions(): array
     {
-        return [
-            'min' => $this->min,
-            'max' => $this->max,
+        return array_merge($this->getLimitOptions(), [
             'message' => [
                 'message' => $this->message,
             ],
-            'tooShortMessage' => [
-                'message' => $this->tooShortMessage,
-                'parameters' => ['min' => $this->min],
-            ],
-            'tooLongMessage' => [
-                'message' => $this->tooLongMessage,
-                'parameters' => ['max' => $this->max],
-            ],
             'encoding' => $this->encoding,
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-        ];
+        ]);
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return HasLengthHandler::class;
     }
 }

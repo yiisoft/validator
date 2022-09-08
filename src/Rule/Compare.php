@@ -6,20 +6,20 @@ namespace Yiisoft\Validator\Rule;
 
 use Closure;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
-abstract class Compare implements SerializableRuleInterface, BeforeValidationInterface
+abstract class Compare implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     /**
      * Constant for specifying the comparison as string values.
@@ -84,7 +84,11 @@ abstract class Compare implements SerializableRuleInterface, BeforeValidationInt
          * {@see TYPE_NUMBER}.
          */
         private string $operator = '==',
-        private bool $skipOnEmpty = false,
+
+        /**
+         * @var bool|callable|null
+         */
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -129,15 +133,6 @@ abstract class Compare implements SerializableRuleInterface, BeforeValidationInt
         };
     }
 
-    #[ArrayShape([
-        'targetValue' => 'mixed',
-        'targetAttribute' => 'string|null',
-        'message' => 'array',
-        'type' => 'string',
-        'operator' => 'string',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
     public function getOptions(): array
     {
         return [
@@ -153,8 +148,13 @@ abstract class Compare implements SerializableRuleInterface, BeforeValidationInt
             ],
             'type' => $this->type,
             'operator' => $this->operator,
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return CompareHandler::class;
     }
 }

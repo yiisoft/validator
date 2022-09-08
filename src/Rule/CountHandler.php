@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Countable;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\LimitHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
@@ -20,14 +20,13 @@ use function count;
  */
 final class CountHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
+    use LimitHandlerTrait;
 
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(private TranslatorInterface $translator)
     {
-        $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Count) {
             throw new UnexpectedRuleException(Count::class, $rule);
@@ -36,9 +35,9 @@ final class CountHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_countable($value)) {
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
 
@@ -46,32 +45,7 @@ final class CountHandler implements RuleHandlerInterface
         }
 
         $count = count($value);
-
-        if ($rule->getExactly() !== null && $count !== $rule->getExactly()) {
-            $formattedMessage = $this->formatter->format(
-                $rule->getNotExactlyMessage(),
-                ['exactly' => $rule->getExactly(), 'attribute' => $context?->getAttribute(), 'value' => $value]
-            );
-            $result->addError($formattedMessage);
-
-            return $result;
-        }
-
-        if ($rule->getMin() !== null && $count < $rule->getMin()) {
-            $formattedMessage = $this->formatter->format(
-                $rule->getTooFewItemsMessage(),
-                ['min' => $rule->getMin(), 'attribute' => $context?->getAttribute(), 'value' => $value]
-            );
-            $result->addError($formattedMessage);
-        }
-
-        if ($rule->getMax() !== null && $count > $rule->getMax()) {
-            $formattedMessage = $this->formatter->format(
-                $rule->getTooManyItemsMessage(),
-                ['max' => $rule->getMax(), 'attribute' => $context?->getAttribute(), 'value' => $value]
-            );
-            $result->addError($formattedMessage);
-        }
+        $this->validateLimits($value, $rule, $context, $count, $result);
 
         return $result;
     }

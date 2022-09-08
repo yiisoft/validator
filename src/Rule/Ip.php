@@ -8,12 +8,12 @@ use Attribute;
 use Closure;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
-
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function array_key_exists;
@@ -25,11 +25,11 @@ use function strlen;
  * It also may change the value if normalization of IPv6 expansion is enabled.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Ip implements SerializableRuleInterface, BeforeValidationInterface
+final class Ip implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     /**
      * Negation char.
@@ -201,7 +201,11 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface
          * subnet. IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
          */
         private array $ranges = [],
-        private bool $skipOnEmpty = false,
+
+        /**
+         * @var bool|callable|null
+         */
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -435,8 +439,13 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface
                 'message' => $this->notInRangeMessage,
             ],
             'ranges' => $this->ranges,
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return IpHandler::class;
     }
 }

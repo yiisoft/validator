@@ -6,12 +6,12 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use JetBrains\PhpStorm\ArrayShape;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -21,11 +21,11 @@ use Yiisoft\Validator\ValidationContext;
  * If the {@see InRange::$not} is called, the rule will ensure the value is NOT among the specified range.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class InRange implements SerializableRuleInterface, BeforeValidationInterface
+final class InRange implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         private iterable $range,
@@ -39,7 +39,11 @@ final class InRange implements SerializableRuleInterface, BeforeValidationInterf
          */
         private bool $not = false,
         private string $message = 'This value is invalid.',
-        private bool $skipOnEmpty = false,
+
+        /**
+         * @var bool|callable|null
+         */
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -80,14 +84,6 @@ final class InRange implements SerializableRuleInterface, BeforeValidationInterf
         return $this->message;
     }
 
-    #[ArrayShape([
-        'range' => 'iterable',
-        'strict' => 'bool',
-        'not' => 'bool',
-        'message' => 'string[]',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
     public function getOptions(): array
     {
         return [
@@ -97,8 +93,13 @@ final class InRange implements SerializableRuleInterface, BeforeValidationInterf
             'message' => [
                 'message' => $this->message,
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return InRangeHandler::class;
     }
 }

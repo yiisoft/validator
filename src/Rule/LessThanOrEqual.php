@@ -41,7 +41,11 @@ final class LessThanOrEqual extends Compare
          * @var string The type of the values being validated.
          */
         private string $type = self::TYPE_STRING,
-        private bool $skipOnEmpty = false,
+
+        /**
+         * @var bool|callable
+         */
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -57,14 +61,9 @@ final class LessThanOrEqual extends Compare
             message: $this->message,
             type: $this->type,
             operator: '<=',
-            skipOnEmpty: $this->skipOnEmpty,
+            skipOnEmpty: $skipOnEmpty,
             skipOnError: $this->skipOnError,
             when: $this->when
         );
-    }
-
-    public function getHandlerClassName(): string
-    {
-        return CompareHandler::class;
     }
 }

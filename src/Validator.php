@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
-use Yiisoft\Validator\DataSet\ScalarDataSet;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Callback;
-
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
+
+use function gettype;
 use function is_array;
+use function is_callable;
+use function is_int;
 use function is_object;
 
 /**
@@ -23,27 +28,38 @@ final class Validator implements ValidatorInterface
 {
     use PreValidateTrait;
 
-    public function __construct(private RuleHandlerResolverInterface $ruleHandlerResolver)
-    {
+    /**
+     * @var callable
+     */
+    private $defaultSkipOnEmptyCallback;
+
+    public function __construct(
+        private RuleHandlerResolverInterface $ruleHandlerResolver,
+
+        /**
+         * @var bool|callable|null
+         */
+        $defaultSkipOnEmpty = null,
+    ) {
+        $this->defaultSkipOnEmptyCallback = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
     }
 
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
-     * @param iterable<RuleInterface|RuleInterface[]> $rules
+     * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null $rules
      */
-    public function validate($data, iterable $rules = []): Result
+    public function validate(mixed $data, ?iterable $rules = null): Result
     {
         $data = $this->normalizeDataSet($data);
-        if ($data instanceof RulesProviderInterface) {
+        if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
         }
 
-        $context = new ValidationContext($this, $data);
         $compoundResult = new Result();
-
+        $context = new ValidationContext($this, $data);
         $results = [];
 
-        foreach ($rules as $attribute => $attributeRules) {
+        foreach ($rules ?? [] as $attribute => $attributeRules) {
             $result = new Result();
 
             $tempRule = is_array($attributeRules) ? $attributeRules : [$attributeRules];
@@ -85,16 +101,20 @@ final class Validator implements ValidatorInterface
             return $data;
         }
 
-        if (is_object($data) || is_array($data)) {
-            return new ArrayDataSet((array)$data);
+        if (is_object($data)) {
+            return new ObjectDataSet($data);
         }
 
-        return new ScalarDataSet($data);
+        if (is_array($data)) {
+            return new ArrayDataSet($data);
+        }
+
+        return new MixedDataSet($data);
     }
 
     /**
      * @param $value
-     * @param iterable<RuleInterface> $rules
+     * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
      * @param ValidationContext $context
      *
      * @throws ContainerExceptionInterface
@@ -124,7 +144,7 @@ final class Validator implements ValidatorInterface
             foreach ($ruleResult->getErrors() as $error) {
                 $valuePath = $error->getValuePath();
                 if ($context->getAttribute() !== null) {
-                    $valuePath = [$context->getAttribute()] + $valuePath;
+                    $valuePath = [$context->getAttribute(), ...$valuePath];
                 }
                 $compoundResult->addError($error->getMessage(), $valuePath);
             }
@@ -158,6 +178,10 @@ final class Validator implements ValidatorInterface
                     gettype($rule)
                 )
             );
+        }
+
+        if ($rule instanceof SkipOnEmptyInterface && $rule->getSkipOnEmpty() === null) {
+            $rule = $rule->skipOnEmpty($this->defaultSkipOnEmptyCallback);
         }
 
         return $rule;

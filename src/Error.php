@@ -30,8 +30,17 @@ final class Error
     /**
      * @psalm-return list<int|string>
      */
-    public function getValuePath(): array
+    public function getValuePath(bool $escape = false): array
     {
-        return $this->valuePath;
+        if ($escape === false) {
+            return $this->valuePath;
+        }
+
+        return array_map(
+            static function ($key): string {
+                return str_replace(['.', '*'], ['\\' . '.', '\\' . '*'], (string)$key);
+            },
+            $this->valuePath
+        );
     }
 }

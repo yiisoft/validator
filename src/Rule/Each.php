@@ -6,32 +6,38 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\SerializableRuleInterface;
+use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Each implements SerializableRuleInterface, BeforeValidationInterface
+final class Each implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         /**
          * @var iterable<RuleInterface>
          */
         private iterable $rules = [],
-        private string $incorrectInputMessage = 'Value should be array or iterable.',
+        private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $message = '{error} {value} given.',
-        private bool $skipOnEmpty = false,
+
+        /**
+         * @var bool|callable|null
+         */
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -41,7 +47,7 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
     }
 
     /**
-     * @return iterable<RuleInterface>
+     * @return iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>
      */
     public function getRules(): iterable
     {
@@ -64,6 +70,13 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
         return $this->message;
     }
 
+    #[ArrayShape([
+        'incorrectInputMessage' => 'array',
+        'message' => 'array',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+        'rules' => 'array',
+    ])]
     public function getOptions(): array
     {
         $arrayOfRules = [];
@@ -74,6 +87,22 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
                 $arrayOfRules[] = [$rule->getName()];
             }
         }
-        return $arrayOfRules;
+
+        return [
+            'incorrectInputMessage' => [
+                'message' => $this->getIncorrectInputMessage(),
+            ],
+            'message' => [
+                'message' => $this->getMessage(),
+            ],
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
+            'skipOnError' => $this->skipOnError,
+            'rules' => $arrayOfRules,
+        ];
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return EachHandler::class;
     }
 }

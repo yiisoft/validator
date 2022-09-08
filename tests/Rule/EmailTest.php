@@ -11,6 +11,10 @@ final class EmailTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array
     {
+        if (!extension_loaded('intl')) {
+            return [];
+        }
+
         return [
             [
                 new Email(),
@@ -77,6 +81,15 @@ final class EmailTest extends AbstractRuleTest
                 ],
             ],
         ];
+    }
+
+    /**
+     * @requires extension intl
+     * @dataProvider optionsDataProvider
+     */
+    public function testOptions(SerializableRuleInterface $rule, array $expectedOptions): void
+    {
+        parent::testOptions($rule, $expectedOptions);
     }
 
     protected function getRule(): SerializableRuleInterface

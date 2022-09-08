@@ -8,20 +8,19 @@ use PHPUnit\Framework\TestCase;
 use Traversable;
 use Yiisoft\Validator\Attribute\Embedded;
 use Yiisoft\Validator\DataSet\AttributeDataSet;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\GroupRule;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Data\Charts\Chart;
-use Yiisoft\Validator\Tests\Data\Charts\Coordinate;
 use Yiisoft\Validator\Tests\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
 
-final class AttributeDataSet81Test extends TestCase
+final class ObjectDataSet81Test extends TestCase
 {
     /**
      * @dataProvider dataProvider
@@ -30,7 +29,7 @@ final class AttributeDataSet81Test extends TestCase
      */
     public function testCollectRules(object $object, array $expectedRules): void
     {
-        $dataSet = new AttributeDataSet($object);
+        $dataSet = new ObjectDataSet($object);
 
         $arrayRules = $this->toNestedArray($dataSet->getRules());
 
@@ -82,20 +81,20 @@ final class AttributeDataSet81Test extends TestCase
             [
                 new class () {
                     #[Required(skipOnEmpty: true)]
-                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property1;
                     #[Required(skipOnEmpty: true)]
-                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property2;
                 },
                 [
                     'property1' => [
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ],
                     'property2' => [
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ],
                 ],
             ],
@@ -103,18 +102,18 @@ final class AttributeDataSet81Test extends TestCase
                 new class () {
                     #[Each([
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ])]
-                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property1;
                 },
                 [
                     'property1' => [
                         new Each([
                             new Required(skipOnEmpty: true),
-                            new HasLength(skipOnEmpty: true),
+                            new HasLength(max: 255, skipOnEmpty: true),
                         ]),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ],
                 ],
             ],
@@ -122,39 +121,39 @@ final class AttributeDataSet81Test extends TestCase
                 new class () {
                     #[Nested([
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ])]
                     #[Each([
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ])]
-                    #[HasLength(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property1;
                 },
                 [
                     'property1' => [
                         new Nested([
                             new Required(skipOnEmpty: true),
-                            new HasLength(skipOnEmpty: true),
+                            new HasLength(max: 255, skipOnEmpty: true),
                         ]),
                         new Each([
                             new Required(skipOnEmpty: true),
-                            new HasLength(skipOnEmpty: true),
+                            new HasLength(max: 255, skipOnEmpty: true),
                         ]),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ],
                 ],
             ],
             [
                 new class () {
-                    #[HasLength(skipOnEmpty: true)]
-                    #[HasLength(skipOnEmpty: false)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: false)]
                     private $property1;
                 },
                 [
                     'property1' => [
-                        new HasLength(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: false),
+                        new HasLength(max: 255, skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: false),
                     ],
                 ],
             ],
@@ -162,66 +161,37 @@ final class AttributeDataSet81Test extends TestCase
                 new class () {
                     #[Nested([
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ])]
                     #[Nested([
                         new Required(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
                     ])]
-                    #[HasLength(skipOnEmpty: true)]
-                    #[HasLength(skipOnEmpty: false)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: false)]
                     private $property1;
                 },
                 [
                     'property1' => [
                         new Nested([
                             new Required(skipOnEmpty: true),
-                            new HasLength(skipOnEmpty: true),
+                            new HasLength(max: 255, skipOnEmpty: true),
                         ]),
                         new Nested([
                             new Required(skipOnEmpty: true),
-                            new HasLength(skipOnEmpty: true),
+                            new HasLength(max: 255, skipOnEmpty: true),
                         ]),
-                        new HasLength(skipOnEmpty: true),
-                        new HasLength(skipOnEmpty: false),
+                        new HasLength(max: 255, skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: false),
                     ],
                 ],
             ],
         ];
-    }
-
-    /**
-     * The test flow is different because {@see Embedded} is only attribute.
-     * Under the hood it uses {@see GroupRule} and a bit of reflection.
-     * Due to we cannot create {@see Embedded} with particular rules via constructor
-     * we cannot just compare it with another class that extends {@see GroupRule}.
-     */
-    public function testEmbeddedAttribute(): void
-    {
-        $object = new class () {
-            #[Embedded(Coordinate::class)]
-            private $property1;
-        };
-        $expectedExtendedRules = [
-            'x' => [new Number(min: -10, max: 10)],
-            'y' => [new Number(min: -10, max: 10)],
-        ];
-
-        $dataSet = new AttributeDataSet($object);
-
-        $actualRules = $this->toNestedArray($dataSet->getRules());
-
-        $this->assertIsArray($actualRules);
-        $this->assertArrayHasKey('property1', $actualRules);
-        $this->assertIsArray($actualRules = $this->toArray($actualRules['property1']));
-        $this->assertCount(1, $actualRules);
-        $this->assertInstanceOf(GroupRule::class, $actualRules[0]);
-        $this->assertEquals($expectedExtendedRules, $this->toNestedArray($actualRules[0]->getRuleSet()));
     }
 
     public function testMoreComplexEmbeddedRule(): void
     {
-        $dataSet = new AttributeDataSet(new Chart());
+        $dataSet = new ObjectDataSet(new Chart());
         $secondEmbeddedRules = [
             'x' => [new Number(min: -10, max: 10)],
             'y' => [new Number(min: -10, max: 10)],
@@ -229,8 +199,8 @@ final class AttributeDataSet81Test extends TestCase
         $firstEmbeddedRules = [
             'coordinates' => new Nested(
                 $secondEmbeddedRules,
-                errorWhenPropertyPathIsNotFound: true,
-                propertyPathIsNotFoundMessage: 'Custom message 4.'
+                requirePropertyPath: true,
+                noPropertyPathMessage: 'Custom message 4.'
             ),
             'rgb' => [
                 new Count(exactly: 3),
@@ -254,7 +224,7 @@ final class AttributeDataSet81Test extends TestCase
         $actualFirstEmbeddedRules = $this->toArray($actualRules[0]->getRules());
         $this->assertIsArray($actualFirstEmbeddedRules);
         $this->assertCount(1, $actualFirstEmbeddedRules);
-        $this->assertInstanceOf(GroupRule::class, $actualFirstEmbeddedRules[0]);
+        $this->assertInstanceOf(Nested::class, $actualFirstEmbeddedRules[0]);
 
         // check Point structure has right structure
         $innerRules = $this->toArray($actualFirstEmbeddedRules[0]->getRuleSet());

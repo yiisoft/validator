@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Stub;
 
-use Yiisoft\Validator\Rule\GroupRule;
+use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Url;
 
-final class CustomUrlRule extends GroupRule
+final class CustomUrlRule extends Composite
 {
-    public function getRuleSet(): iterable
+    public function getRules(): array
     {
         yield new Required();
         yield new Url(enableIDN: true);

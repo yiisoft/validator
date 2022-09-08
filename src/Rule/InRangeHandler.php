@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -20,29 +19,21 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class InRangeHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
-
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(private TranslatorInterface $translator)
     {
-        $this->formatter = $formatter ?? new Formatter();
     }
 
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof InRange) {
             throw new UnexpectedRuleException(InRange::class, $rule);
         }
 
         $result = new Result();
-
-        if ($value === null && $rule->shouldSkipOnEmpty()) {
-            return $result;
-        }
-
         if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getRange(), $rule->isStrict())) {
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getMessage(),
-                ['attribute' => $context?->getAttribute(), 'value' => $value]
+                ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         }

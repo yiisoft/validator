@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
 
 abstract class AbstractRuleTest extends TestCase
 {
@@ -28,12 +30,16 @@ abstract class AbstractRuleTest extends TestCase
 
     public function testHandlerClassName(): void
     {
-        $resolver = new SimpleRuleHandlerContainer();
+        $translator = (new TranslatorFactory())->create();
+        $resolver = new SimpleRuleHandlerContainer($translator);
         $rule = $this->getRule();
         $this->assertInstanceOf($rule->getHandlerClassName(), $resolver->resolve($rule->getHandlerClassName()));
     }
 
     abstract protected function optionsDataProvider(): array;
 
+    /**
+     * @return BeforeValidationTrait|SerializableRuleInterface
+     */
     abstract protected function getRule(): SerializableRuleInterface;
 }

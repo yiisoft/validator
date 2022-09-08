@@ -6,41 +6,45 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use JetBrains\PhpStorm\ArrayShape;
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\HandlerClassNameTrait;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
  * Checks if the value is a boolean value or a value corresponding to it.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Boolean implements SerializableRuleInterface, BeforeValidationInterface
+final class Boolean implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
-    use HandlerClassNameTrait;
     use RuleNameTrait;
+    use SkipOnEmptyTrait;
 
     public function __construct(
         /**
-         * @var mixed the value representing true status. Defaults to '1'.
+         * @var mixed the value representing "true" status. Defaults to `1`.
          */
         private mixed $trueValue = '1',
         /**
-         * @var mixed the value representing false status. Defaults to '0'.
+         * @var mixed the value representing "false" status. Defaults to `0`.
          */
         private mixed $falseValue = '0',
         /**
-         * @var bool whether the comparison to {@see $trueValue} and {@see $falseValue} is strict.
-         * When this is `true`, the value and type must both match those of {@see $trueValue} or
-         * {@see $falseValue}. Defaults to `false`, meaning only the value needs to be matched.
+         * @var bool whether the comparison to {@see $trueValue} and {@see $falseValue} is strict. When this is `true`,
+         * the value and type must both match those of {@see $trueValue} or {@see $falseValue}. Defaults to `false`,
+         * meaning only the value needs to be matched.
          */
         private bool $strict = false,
         private string $message = 'The value must be either "{true}" or "{false}".',
-        private bool $skipOnEmpty = false,
+
+        /**
+         * @var bool|callable|null
+         */
+        private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -81,14 +85,6 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
         return $this->message;
     }
 
-    #[ArrayShape([
-        'trueValue' => 'string',
-        'falseValue' => 'string',
-        'strict' => 'bool',
-        'message' => 'array',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-    ])]
     public function getOptions(): array
     {
         return [
@@ -98,12 +94,17 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
             'message' => [
                 'message' => $this->message,
                 'parameters' => [
-                    'true' => $this->trueValue === true ? '1' : $this->trueValue,
-                    'false' => $this->falseValue === false ? '0' : $this->falseValue,
+                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
                 ],
             ],
-            'skipOnEmpty' => $this->skipOnEmpty,
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return BooleanHandler::class;
     }
 }

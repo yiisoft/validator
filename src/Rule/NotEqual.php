@@ -45,7 +45,11 @@ final class NotEqual extends Compare
          * @var bool Whether this validator strictly check.
          */
         private bool $strict = false,
-        private bool $skipOnEmpty = false,
+
+        /**
+         * @var bool|callable
+         */
+        $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -61,14 +65,9 @@ final class NotEqual extends Compare
             message: $this->message,
             type: $this->type,
             operator: $this->strict ? '!==' : '!=',
-            skipOnEmpty: $this->skipOnEmpty,
+            skipOnEmpty: $skipOnEmpty,
             skipOnError: $this->skipOnError,
             when: $this->when
         );
-    }
-
-    public function getHandlerClassName(): string
-    {
-        return CompareHandler::class;
     }
 }
