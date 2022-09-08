@@ -30,8 +30,9 @@ final class AttributesRulesProvider implements RulesProviderInterface
     }
 
     /**
-     * @return iterable
      * @throws ReflectionException
+     *
+     * @return iterable
      */
     public function getRules(): iterable
     {
@@ -43,8 +44,9 @@ final class AttributesRulesProvider implements RulesProviderInterface
     }
 
     /**
-     * @return Generator
      * @throws ReflectionException
+     *
+     * @return Generator
      */
     private function parseRules(): iterable
     {
