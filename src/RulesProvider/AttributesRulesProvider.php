@@ -66,6 +66,7 @@ final class AttributesRulesProvider implements RulesProviderInterface
             yield $property->getName() => $this->createAttributes($attributes);
         }
     }
+
     /**
      * @param array<array-key, ReflectionAttribute<RuleInterface>> $attributes
      *
