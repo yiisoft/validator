@@ -35,7 +35,8 @@ final class MainBench
      */
     public function benchValidate(array $params): void
     {
-        $this->validator->validate($params['data'], $params['rules']);
+        $rules = $this->generateRules($params['rules'], $params['count']);
+        $this->validator->validate($params['data'], $rules);
     }
 
     public function provider(): Generator
@@ -47,32 +48,40 @@ final class MainBench
         yield 'simple 1' => [
             'data' => $data,
             'rules' => [
-                'bool' => $this->generateRules(new Boolean(), 1),
-                'int' => $this->generateRules(new Number(asInteger: true), 1),
+                'bool' => new Boolean(),
+                'int' => new Number(asInteger: true),
             ],
+            'count' => 1,
         ];
         yield 'simple 10' => [
             'data' => $data,
             'rules' => [
-                'bool' => $this->generateRules(new Boolean(), 10),
-                'int' => $this->generateRules(new Number(asInteger: true), 10),
+                'bool' => new Boolean(),
+                'int' => new Number(asInteger: true),
             ],
+            'count' => 10,
         ];
         yield 'simple 100' => [
             'data' => $data,
             'rules' => [
-                'bool' => $this->generateRules(new Boolean(), 100),
-                'int' => $this->generateRules(new Number(asInteger: true), 100),
+                'bool' => new Boolean(),
+                'int' => new Number(asInteger: true),
             ],
+            'count' => 100,
         ];
     }
 
-    private function generateRules(object $rule, int $count): array
+    public function generateRules(array $rules, int $count): iterable
     {
-        $rules = [];
-        for ($i = 0; $i < $count; $i++) {
-            $rules[] = clone $rule;
+        foreach ($rules as $attribute => $rule) {
+            yield $attribute => $this->cloneRule($rule, $count);
         }
-        return  $rules;
+    }
+
+    private function cloneRule(mixed $rule, int $count): Generator
+    {
+        for ($i = 0; $i < $count; $i++) {
+            yield clone $rule;
+        }
     }
 }
