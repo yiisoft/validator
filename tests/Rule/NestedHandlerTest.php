@@ -18,9 +18,8 @@ use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleHandlerInterface;
 
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\ObjectWithNestedObject;
-use Yiisoft\Validator\Validator;
 
 use function array_slice;
 
@@ -41,7 +40,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'error' => [
                 new Nested(['author.age' => [new Number(min: 40)]]),
                 $value,
-                ['author.age' => [$this->formatMessage('Value must be no less than {min}.', ['min' => 40])]],
+                ['author.age' => ['Value must be no less than 40.']],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
@@ -56,12 +55,12 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             [
                 $rule,
                 ['value' => null],
-                ['value' => [$requiredRule->getMessage()]],
+                ['value' => ['Value cannot be blank.']],
             ],
             [
                 new Nested(['value' => new Required()], requirePropertyPath: true),
                 [],
-                ['value' => [$this->formatMessage($rule->getNoPropertyPathMessage(), ['path' => 'value'])]],
+                ['value' => ['Property path "value" is not found.']],
             ],
             // https://github.com/yiisoft/validator/issues/200
             [
@@ -89,7 +88,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     ]),
                 ]),
                 [0 => [0 => -11]],
-                ['0.0' => [$this->formatMessage('Value must be no less than {min}.', ['min' => -10])]],
+                ['0.0' => ['Value must be no less than -10.']],
             ],
         ];
     }
@@ -120,7 +119,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'error' => [
                 new Nested(['author.age' => [new Number(min: 20)]]),
                 $value,
-                [new Error($this->formatMessage('Value must be no less than {min}.', ['min' => 20]), ['author', 'age'])],
+                [new Error('Value must be no less than 20.', ['author', 'age'])],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
@@ -130,17 +129,17 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             [
                 $rule,
                 '',
-                [new Error('Value should be an array or an object. string given.', [])],
+                [new Error('Value should be an array or an object. string given.')],
             ],
             [
                 $rule,
                 ['value' => null],
-                [new Error($requiredRule->getMessage(), ['value'])],
+                [new Error('Value cannot be blank.', ['value'])],
             ],
             [
                 new Nested(['value' => new Required()], requirePropertyPath: true),
                 [],
-                [new Error($this->formatMessage($rule->getNoPropertyPathMessage(), ['path' => 'value']), ['value'])],
+                [new Error('Property path "value" is not found.', ['value'])],
             ],
             [
                 // https://github.com/yiisoft/validator/issues/200
@@ -168,7 +167,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     ]),
                 ]),
                 [0 => [0 => -11]],
-                [new Error($this->formatMessage('Value must be no less than {min}.', ['min' => -10]), [0, 0])],
+                [new Error('Value must be no less than -10.', [0, 0])],
             ],
             [
                 new Nested([
@@ -498,8 +497,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
 
     public function testNestedWithoutRulesWithObject(): void
     {
-        $validator = new Validator(new SimpleRuleHandlerContainer());
-
+        $validator = FakeValidatorFactory::make();
         $result = $validator->validate(new ObjectWithNestedObject());
 
         $this->assertFalse($result->isValid());
@@ -515,6 +513,6 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new NestedHandler();
+        return new NestedHandler($this->getTranslator());
     }
 }

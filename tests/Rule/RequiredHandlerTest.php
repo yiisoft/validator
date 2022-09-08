@@ -14,10 +14,11 @@ final class RequiredHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $rule = new Required();
+        $message = 'Value cannot be blank.';
 
         return [
-            [$rule, null, [new Error($rule->getMessage(), [])]],
-            [$rule, [], [new Error($rule->getMessage(), [])]],
+            [$rule, null, [new Error($message)]],
+            [$rule, [], [new Error($message)]],
         ];
     }
 
@@ -34,12 +35,12 @@ final class RequiredHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new Required(message: 'Custom error'), null, [new Error('Custom error', [])]],
+            [new Required(message: 'Custom error'), null, [new Error('Custom error')]],
         ];
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new RequiredHandler();
+        return new RequiredHandler($this->getTranslator());
     }
 }

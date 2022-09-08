@@ -7,8 +7,8 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesProviderInterface;
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Tests\Stub\EachNestedObjects\Foo;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
@@ -174,6 +174,6 @@ final class ValidateLogicTest extends TestCase
 
     private function createValidator(): Validator
     {
-        return new Validator(new SimpleRuleHandlerContainer());
+        return FakeValidatorFactory::make();
     }
 }

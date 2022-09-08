@@ -43,7 +43,7 @@ class ResultTest extends TestCase
     public function testGetErrors(): void
     {
         $this->assertEquals(
-            [new Error('error1', []), new Error('error2', ['path', 2])],
+            [new Error('error1'), new Error('error2', ['path', 2])],
             $this->createErrorResult()->getErrors()
         );
     }
@@ -78,7 +78,7 @@ class ResultTest extends TestCase
     private function createErrorResult(): Result
     {
         $result = new Result();
-        $result->addError('error1', [])
+        $result->addError('error1')
             ->addError('error2', ['path', 2]);
 
         return $result;

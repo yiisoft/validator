@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use InvalidArgumentException;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Formatter;
-use Yiisoft\Validator\FormatterInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
@@ -18,11 +17,8 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class EachHandler implements RuleHandlerInterface
 {
-    private FormatterInterface $formatter;
-
-    public function __construct(?FormatterInterface $formatter = null)
+    public function __construct(private TranslatorInterface $translator)
     {
-        $this->formatter = $formatter ?? new Formatter();
     }
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
@@ -41,7 +37,7 @@ final class EachHandler implements RuleHandlerInterface
 
         $result = new Result();
         if (!is_iterable($value)) {
-            $formattedMessage = $this->formatter->format(
+            $formattedMessage = $this->translator->translate(
                 $rule->getIncorrectInputMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
@@ -67,7 +63,7 @@ final class EachHandler implements RuleHandlerInterface
                     $formatMessage = false;
                 }
 
-                $message = !$formatMessage ? $error->getMessage() : $this->formatter->format($eachRule->getMessage(), [
+                $message = !$formatMessage ? $error->getMessage() : $this->translator->translate($eachRule->getMessage(), [
                     'error' => $error->getMessage(),
                     'value' => $item,
                 ]);

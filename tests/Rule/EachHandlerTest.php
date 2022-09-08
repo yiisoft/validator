@@ -19,18 +19,8 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
                 new Each([new Number(max: 13)]),
                 [10, 20, 30],
                 [
-                    '1' => [
-                        $this->formatMessage(
-                            'Value must be no greater than {max}. {value} given.',
-                            ['max' => 13, 'value' => 20]
-                        ),
-                    ],
-                    '2' => [
-                        $this->formatMessage(
-                            'Value must be no greater than {max}. {value} given.',
-                            ['max' => 13, 'value' => 30]
-                        ),
-                    ],
+                    '1' => ['Value must be no greater than 13. 20 given.'],
+                    '2' => ['Value must be no greater than 13. 30 given.'],
                 ],
             ],
         ];
@@ -54,20 +44,8 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
                 new Each([new Number(max: 13)]),
                 [10, 20, 30],
                 [
-                    new Error(
-                        $this->formatMessage(
-                            'Value must be no greater than {max}. {value} given.',
-                            ['max' => 13, 'value' => 20]
-                        ),
-                        [1]
-                    ),
-                    new Error(
-                        $this->formatMessage(
-                            'Value must be no greater than {max}. {value} given.',
-                            ['max' => 13, 'value' => 30]
-                        ),
-                        [2]
-                    ),
+                    new Error('Value must be no greater than 13. 20 given.', [1]),
+                    new Error('Value must be no greater than 13. 30 given.', [2]),
                 ],
             ],
         ];
@@ -99,6 +77,6 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new EachHandler();
+        return new EachHandler($this->getTranslator());
     }
 }
