@@ -24,7 +24,7 @@ final class Foo implements RulesProviderInterface
 
     public function getRules(): iterable
     {
-        return [
+        yield from [
             'name' => new Required(),
             'bars' => new Each([new Nested(Bar::class)]),
         ];
