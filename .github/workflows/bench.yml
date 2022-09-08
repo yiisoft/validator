@@ -19,12 +19,13 @@ on:
       - 'infection.json.dist'
       - 'psalm.xml'
 
-name: bench
+name: build
 
 jobs:
   phpbench:
-    name: PhpBench
-    steps:
-      - uses: actions/checkout@master
-      - name: PhpBench
-        run: bin/phpbench run --report=env --progress=dots
+    uses: yiisoft/actions/.github/workflows/phpbench.yml@master
+    with:
+      os: >-
+        ['ubuntu-latest', 'windows-latest']
+      php: >-
+        ['8.0', '8.1']
