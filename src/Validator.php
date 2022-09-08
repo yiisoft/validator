@@ -175,7 +175,7 @@ final class Validator implements ValidatorInterface
                 sprintf(
                     'Rule should be either an instance of %s or a callable, %s given.',
                     RuleInterface::class,
-                    gettype($rule)
+                    get_debug_type($rule)
                 )
             );
         }
