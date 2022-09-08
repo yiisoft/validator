@@ -1,0 +1,30 @@
+on:
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - '.gitignore'
+      - '.gitattributes'
+      - 'infection.json.dist'
+      - 'psalm.xml'
+
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - '.gitignore'
+      - '.gitattributes'
+      - 'infection.json.dist'
+      - 'psalm.xml'
+
+name: bench
+
+jobs:
+  phpbench:
+    name: PhpBench
+    steps:
+      - uses: actions/checkout@master
+      - name: PhpBench
+        run: bin/phpbench run --report=env --progress=dots
