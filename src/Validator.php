@@ -38,6 +38,13 @@ final class Validator implements ValidatorInterface
 
     public function __construct(
         private RuleHandlerResolverInterface $ruleHandlerResolver,
+        /**
+         * @var int What visibility levels to use when reading rules from the class specified in `$rules` argument in
+         * {@see validate()} method.
+         */
+        private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
+        | ReflectionProperty::IS_PROTECTED
+        | ReflectionProperty::IS_PUBLIC,
 
         /**
          * @var bool|callable|null
@@ -50,18 +57,13 @@ final class Validator implements ValidatorInterface
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
      * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null $rules
-     * @param int $rulesPropertyVisibility What visibility levels to use when reading rules from the class specified in
-     * `$rules` argument.
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
     public function validate(
         mixed $data,
-        iterable|object|string|null $rules = null,
-        int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
-        | ReflectionProperty::IS_PROTECTED
-        | ReflectionProperty::IS_PUBLIC
+        iterable|object|string|null $rules = null
     ): Result {
         $data = $this->normalizeDataSet($data);
         if ($rules === null && $data instanceof RulesProviderInterface) {
@@ -69,7 +71,7 @@ final class Validator implements ValidatorInterface
         } elseif ($rules instanceof RulesProviderInterface) {
             $rules = $rules->getRules();
         } elseif (!$rules instanceof Traversable && !is_array($rules) && $rules !== null) {
-            $rules = (new AttributesRulesProvider($rules, $rulesPropertyVisibility))->getRules();
+            $rules = (new AttributesRulesProvider($rules, $this->rulesPropertyVisibility))->getRules();
         }
 
         $compoundResult = new Result();

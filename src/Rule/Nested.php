@@ -47,7 +47,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     /**
      * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
      */
-    private ?iterable $rules = null;
+    private ?iterable $rules;
 
     public function __construct(
         /**
@@ -65,7 +65,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         iterable|object|string|null $rules = null,
 
         /**
-         * @var int What visibility levels to use when reading data and rules from validatable object.
+         * @var int What visibility levels to use when reading data and rules from validated object.
          */
         private int $propertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
