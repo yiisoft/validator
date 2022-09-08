@@ -22,7 +22,7 @@ final class Foo implements RulesProviderInterface
         ];
     }
 
-    public function getRules(): array
+    public function getRules(): iterable
     {
         return [
             'name' => new Required(),

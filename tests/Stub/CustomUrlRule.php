@@ -11,7 +11,7 @@ use Yiisoft\Validator\Rule\Url;
 
 final class CustomUrlRule extends Composite
 {
-    public function getRules(): array
+    public function getRules(): iterable
     {
         yield new Required();
         yield new Url(enableIDN: true);
