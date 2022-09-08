@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\DataSet\PHP81;
 
 use PHPUnit\Framework\TestCase;
 use Traversable;
-use Yiisoft\Validator\Attribute\Embedded;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
@@ -30,9 +29,9 @@ final class ObjectDataSet81Test extends TestCase
     {
         $dataSet = new ObjectDataSet($object);
 
-        $arrayRules = $this->toNestedArray($dataSet->getRules());
+        $rulesArray = $this->toNestedArray($dataSet->getRules());
 
-        $this->assertEquals($expectedRules, $arrayRules);
+        $this->assertEquals($expectedRules, $rulesArray);
     }
 
     public function dataProvider(): array

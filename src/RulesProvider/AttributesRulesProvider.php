@@ -15,10 +15,7 @@ use Yiisoft\Validator\RulesProviderInterface;
 
 final class AttributesRulesProvider implements RulesProviderInterface
 {
-    /**
-     * @var Generator|null
-     */
-    private Generator|null $rules = null;
+    private Generator|iterable|null $rules = null;
 
     public function __construct(
         /**
@@ -30,7 +27,6 @@ final class AttributesRulesProvider implements RulesProviderInterface
     }
 
     /**
-     * @return iterable
      * @throws ReflectionException
      */
     public function getRules(): iterable
@@ -43,7 +39,6 @@ final class AttributesRulesProvider implements RulesProviderInterface
     }
 
     /**
-     * @return Generator
      * @throws ReflectionException
      */
     private function parseRules(): iterable
