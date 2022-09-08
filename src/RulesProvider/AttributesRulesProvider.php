@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\RulesProvider;
 use Generator;
 use ReflectionAttribute;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionObject;
 use ReflectionProperty;
 use Yiisoft\Validator\RuleInterface;
@@ -15,7 +16,7 @@ use Yiisoft\Validator\RulesProviderInterface;
 final class AttributesRulesProvider implements RulesProviderInterface
 {
     /**
-     * @var array<RuleInterface[]>|null
+     * @var Generator|null
      */
     private Generator|null $rules = null;
 
@@ -29,7 +30,8 @@ final class AttributesRulesProvider implements RulesProviderInterface
     }
 
     /**
-     * @return array<RuleInterface[]>
+     * @return iterable
+     * @throws ReflectionException
      */
     public function getRules(): iterable
     {
@@ -41,7 +43,8 @@ final class AttributesRulesProvider implements RulesProviderInterface
     }
 
     /**
-     * @return Generator<RuleInterface[]>
+     * @return Generator
+     * @throws ReflectionException
      */
     private function parseRules(): iterable
     {
