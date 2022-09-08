@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\DataSet\PHP81;
 use PHPUnit\Framework\TestCase;
 use Traversable;
 use Yiisoft\Validator\Attribute\Embedded;
-use Yiisoft\Validator\DataSet\AttributeDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
