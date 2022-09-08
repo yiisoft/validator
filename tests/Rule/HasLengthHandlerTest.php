@@ -32,7 +32,7 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
             [
                 new HasLength(min: 10, max: 25),
                 str_repeat('x', 5),
-                [new Error('This value must contain at least 10 characters.')]
+                [new Error('This value must contain at least 10 characters.')],
             ],
             [new HasLength(min: 25), str_repeat('x', 13), [new Error($lessThanMinMessage)]],
             [new HasLength(min: 25), '', [new Error($lessThanMinMessage)]],
