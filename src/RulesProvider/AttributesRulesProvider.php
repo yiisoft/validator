@@ -11,6 +11,8 @@ use ReflectionProperty;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 
+use function is_object;
+
 final class AttributesRulesProvider implements RulesProviderInterface
 {
     /**
@@ -48,11 +50,7 @@ final class AttributesRulesProvider implements RulesProviderInterface
         $reflection = is_object($this->source)
             ? new ReflectionObject($this->source)
             : new ReflectionClass($this->source);
-        foreach ($reflection->getProperties() as $property) {
-            if (!$this->isUseProperty($property)) {
-                continue;
-            }
-
+        foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
             $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             foreach ($attributes as $attribute) {
                 $rules[$property->getName()][] = $attribute->newInstance();
@@ -60,12 +58,5 @@ final class AttributesRulesProvider implements RulesProviderInterface
         }
 
         return $rules;
-    }
-
-    private function isUseProperty(ReflectionProperty $property): bool
-    {
-        return ($property->isPublic() && ($this->propertyVisibility & ReflectionProperty::IS_PUBLIC))
-            || ($property->isPrivate() && ($this->propertyVisibility & ReflectionProperty::IS_PRIVATE))
-            || ($property->isProtected() && ($this->propertyVisibility & ReflectionProperty::IS_PROTECTED));
     }
 }
