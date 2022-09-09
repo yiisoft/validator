@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\RulesProvider;
 
-use Generator;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
