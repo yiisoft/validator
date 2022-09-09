@@ -181,8 +181,7 @@ class ValidatorTest extends TestCase
             'name' => [new HasLength(min: 8)],
             'age' => [new Number(asInteger: true, min: 18)],
         ];
-        $stringLessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{character} ' .
-            'other{characters}}.';
+        $stringLessThanMinMessage = 'This value must contain at least 8 characters.';
         $intMessage = 'Value must be an integer.';
         $intLessThanMinMessage = 'Value must be no less than 18.';
 
@@ -656,7 +655,7 @@ class ValidatorTest extends TestCase
     public function testRuleWithoutSkipOnEmpty(): void
     {
         $translator = (new TranslatorFactory())->create();
-        $validator = new Validator(new SimpleRuleHandlerContainer($translator), new SkipOnNull());
+        $validator = new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: new SkipOnNull());
 
         $data = new class () {
             #[NotNull]

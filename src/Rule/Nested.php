@@ -47,7 +47,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     /**
      * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
      */
-    private ?iterable $rules = null;
+    private ?iterable $rules;
 
     public function __construct(
         /**
@@ -65,15 +65,18 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         iterable|object|string|null $rules = null,
 
         /**
-         * @var int What visibility levels to use when reading data and rules from validatable object.
+         * @var int What visibility levels to use when reading data and rules from validated object.
          */
-        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
-
+        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE
+        | ReflectionProperty::IS_PROTECTED
+        | ReflectionProperty::IS_PUBLIC,
         /**
          * @var int What visibility levels to use when reading rules from the class specified in {@see $rules}
          * attribute.
          */
-        private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
+        private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
+        | ReflectionProperty::IS_PROTECTED
+        | ReflectionProperty::IS_PUBLIC,
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
@@ -132,18 +135,13 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
 
         if ($source instanceof RulesProviderInterface) {
             $rules = $source->getRules();
-            return $this->normalizeRules ? $this->normalizeRules($rules) : $rules;
+        } elseif (!$source instanceof Traversable && !is_array($source)) {
+            $rules = (new AttributesRulesProvider($source, $this->rulesPropertyVisibility))->getRules();
+        } else {
+            $rules = $source;
         }
 
-        $isTraversable = $source instanceof Traversable;
-
-        if (!$isTraversable && !is_array($source)) {
-            return (new AttributesRulesProvider($source, $this->rulesPropertyVisibility))->getRules();
-        }
-
-        /** @psalm-suppress InvalidArgument Psalm don't see $isTraversable above. */
-        $rules = $isTraversable ? iterator_to_array($source) : $source;
-
+        $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         if (self::checkRules($rules)) {
             $message = sprintf('Each rule should be an instance of %s.', RuleInterface::class);
             throw new InvalidArgumentException($message);
@@ -163,9 +161,8 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         );
     }
 
-    private function normalizeRules(iterable $sourceRules): array
+    private function normalizeRules(array $rules): array
     {
-        $rules = $sourceRules instanceof Traversable ? iterator_to_array($sourceRules) : $sourceRules;
         while (true) {
             $breakWhile = true;
             $rulesMap = [];
