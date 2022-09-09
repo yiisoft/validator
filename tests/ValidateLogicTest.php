@@ -6,6 +6,8 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\Tests\Stub\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSetAndRulesProvider;
@@ -19,7 +21,6 @@ final class ValidateLogicTest extends TestCase
     {
         return [
             'pure-object-and-array-of-rules' => [
-                false,
                 [
                     'number' => ['Value must be no less than 77.'],
                 ],
@@ -30,7 +31,6 @@ final class ValidateLogicTest extends TestCase
                 ],
             ],
             'pure-object-and-no-rules' => [
-                false,
                 [
                     'name' => ['Value cannot be blank.'],
                     'age' => ['Value must be no less than 21.'],
@@ -39,7 +39,6 @@ final class ValidateLogicTest extends TestCase
                 null,
             ],
             'dataset-object-and-array-of-rules' => [
-                false,
                 [
                     'key1' => ['Value must be no less than 21.'],
                 ],
@@ -49,13 +48,11 @@ final class ValidateLogicTest extends TestCase
                 ],
             ],
             'dataset-object-and-no-rules' => [
-                true,
                 [],
                 new ObjectWithDataSet(),
                 null,
             ],
             'rules-provider-object-and-array-of-rules' => [
-                false,
                 [
                     'number' => ['Value must be no greater than 7.'],
                 ],
@@ -66,7 +63,6 @@ final class ValidateLogicTest extends TestCase
                 ],
             ],
             'rules-provider-object-and-no-rules' => [
-                false,
                 [
                     'age' => ['Value must be equal to "25".'],
                 ],
@@ -74,7 +70,6 @@ final class ValidateLogicTest extends TestCase
                 null,
             ],
             'rules-provider-and-dataset-object-and-array-of-rules' => [
-                false,
                 [
                     'key2' => ['Value must be no greater than 7.'],
                 ],
@@ -84,7 +79,6 @@ final class ValidateLogicTest extends TestCase
                 ],
             ],
             'rules-provider-and-dataset-object-and-no-rules' => [
-                false,
                 [
                     'key2' => ['Value must be equal to "99".'],
                 ],
@@ -92,7 +86,6 @@ final class ValidateLogicTest extends TestCase
                 null,
             ],
             'array-and-array-of-rules' => [
-                false,
                 [
                     'key2' => ['Value must be no greater than 7.'],
                 ],
@@ -103,13 +96,11 @@ final class ValidateLogicTest extends TestCase
                 ],
             ],
             'array-and-no-rules' => [
-                true,
                 [],
                 ['key1' => 15, 'key2' => 99],
                 null,
             ],
             'scalar-and-array-of-rules' => [
-                false,
                 [
                     '' => ['Value must be no greater than 7.'],
                 ],
@@ -119,10 +110,33 @@ final class ValidateLogicTest extends TestCase
                 ],
             ],
             'scalar-and-no-rules' => [
-                true,
                 [],
                 42,
                 null,
+            ],
+            'array-and-rules-provider' => [
+                [
+                    'age' => ['Value must be no less than 18.'],
+                ],
+                [
+                    'age' => 17,
+                ],
+                new class () implements RulesProviderInterface {
+                    public function getRules(): iterable
+                    {
+                        return [
+                            'age' => [new Number(min: 18)],
+                        ];
+                    }
+                },
+            ],
+            'array-and-object' => [
+                [
+                    'name' => ['Value cannot be blank.'],
+                    'bars' => ['Value must be array or iterable.'],
+                ],
+                [],
+                new Foo(),
             ],
         ];
     }
@@ -130,18 +144,10 @@ final class ValidateLogicTest extends TestCase
     /**
      * @dataProvider dataBase
      */
-    public function testBase(
-        bool $expectedValid,
-        array $expectedErrorMessages,
-        mixed $data,
-        ?iterable $rules
-    ): void {
+    public function testBase(array $expectedErrorMessages, mixed $data, iterable|object|string|null $rules): void
+    {
         $result = $this->createValidator()->validate($data, $rules);
-
-        $this->assertSame($expectedValid, $result->isValid());
-        if (!$expectedValid) {
-            $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
-        }
+        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
     }
 
     public function dataWithEmptyArrayOfRules(): array

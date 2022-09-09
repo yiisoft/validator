@@ -15,12 +15,9 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
     {
         $defaultRule = new HasLength(min: 25);
         $message = 'This value must be a string.';
-        $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{character} ' .
-            'other{characters}}.';
-        $notExactlyMessage = 'This value must contain exactly {exactly, number} {exactly, plural, one{character} ' .
-            'other{characters}}.';
-        $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{character} ' .
-            'other{characters}}.';
+        $greaterThanMaxMessage = 'This value must contain at most 25 characters.';
+        $notExactlyMessage = 'This value must contain exactly 25 characters.';
+        $lessThanMinMessage = 'This value must contain at least 25 characters.';
 
         return [
             [$defaultRule, ['not a string'], [new Error($message)]],
@@ -32,7 +29,11 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
             [new HasLength(exactly: 25), str_repeat('x', 125), [new Error($notExactlyMessage)]],
 
             [new HasLength(exactly: 25), '', [new Error($notExactlyMessage)]],
-            [new HasLength(min: 10, max: 25), str_repeat('x', 5), [new Error($lessThanMinMessage)]],
+            [
+                new HasLength(min: 10, max: 25),
+                str_repeat('x', 5),
+                [new Error('This value must contain at least 10 characters.')],
+            ],
             [new HasLength(min: 25), str_repeat('x', 13), [new Error($lessThanMinMessage)]],
             [new HasLength(min: 25), '', [new Error($lessThanMinMessage)]],
         ];
