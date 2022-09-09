@@ -17,7 +17,7 @@ use function is_object;
 
 final class AttributesRulesProvider implements RulesProviderInterface
 {
-    private Generator|iterable|null $rules = null;
+    private iterable|null $rules = null;
 
     public function __construct(
         /**
@@ -30,8 +30,6 @@ final class AttributesRulesProvider implements RulesProviderInterface
 
     /**
      * @throws ReflectionException
-     *
-     * @return iterable
      */
     public function getRules(): iterable
     {
@@ -44,8 +42,6 @@ final class AttributesRulesProvider implements RulesProviderInterface
 
     /**
      * @throws ReflectionException
-     *
-     * @return Generator
      */
     private function parseRules(): iterable
     {
@@ -69,8 +65,6 @@ final class AttributesRulesProvider implements RulesProviderInterface
 
     /**
      * @param array<array-key, ReflectionAttribute<RuleInterface>> $attributes
-     *
-     * @return iterable
      */
     private function createAttributes(array $attributes): iterable
     {
