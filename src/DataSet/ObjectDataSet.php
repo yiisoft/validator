@@ -83,11 +83,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         }
 
         $reflection = new ReflectionObject($this->object);
-        foreach ($reflection->getProperties() as $property) {
-            if (!$this->isUseProperty($property)) {
-                continue;
-            }
-
+        foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
             if (PHP_VERSION_ID < 80100) {
                 $property->setAccessible(true);
             }
@@ -100,12 +96,5 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
                 }
             }
         }
-    }
-
-    private function isUseProperty(ReflectionProperty $property): bool
-    {
-        return ($property->isPublic() && ($this->propertyVisibility&ReflectionProperty::IS_PUBLIC))
-            || ($property->isPrivate() && ($this->propertyVisibility&ReflectionProperty::IS_PRIVATE))
-            || ($property->isProtected() && ($this->propertyVisibility&ReflectionProperty::IS_PROTECTED));
     }
 }
