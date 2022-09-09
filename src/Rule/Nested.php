@@ -152,7 +152,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
 
         foreach ($rules as &$rule) {
-            if (is_iterable($rule)){
+            if (is_iterable($rule)) {
                 self::ensureArrayHasRules($rule);
                 continue;
             }
