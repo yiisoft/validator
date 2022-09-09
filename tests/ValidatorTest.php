@@ -655,7 +655,7 @@ class ValidatorTest extends TestCase
     public function testRuleWithoutSkipOnEmpty(): void
     {
         $translator = (new TranslatorFactory())->create();
-        $validator = new Validator(new SimpleRuleHandlerContainer($translator), new SkipOnNull());
+        $validator = new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: new SkipOnNull());
 
         $data = new class () {
             #[NotNull]
