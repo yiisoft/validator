@@ -170,23 +170,13 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 [new Error('Value must be no less than -10.', [0, 0])],
             ],
             [
-                new Nested([
-                    'author\.data.name\.surname' => [
-                        new HasLength(min: 8),
-                    ],
-                ]),
+                new Nested(['author\.data.name\.surname' => [new HasLength(min: 8)]]),
                 [
                     'author.data' => [
                         'name.surname' => 'Dmitriy',
                     ],
                 ],
-                [
-                    new Error(
-                        'This value must contain at least {min, number} {min, plural, one{character} ' .
-                        'other{characters}}.',
-                        ['author.data', 'name.surname']
-                    ),
-                ],
+                [new Error('This value must contain at least 8 characters.', ['author.data', 'name.surname'])],
             ],
         ];
     }
@@ -502,12 +492,8 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
 
         $this->assertFalse($result->isValid());
         $this->assertSame([
-            'caption' => [
-                'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
-            ],
-            'object.name' => [
-                'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
-            ],
+            'caption' => ['This value must contain at least 3 characters.'],
+            'object.name' => ['This value must contain at least 5 characters.'],
         ], $result->getErrorMessagesIndexedByPath());
     }
 

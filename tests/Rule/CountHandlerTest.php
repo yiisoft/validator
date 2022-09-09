@@ -17,8 +17,8 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
     {
         $rule = new Count(min: 3);
 
-        $lessThanMinmessage = 'This value must contain at least {min, number} {min, plural, one{item} other{items}}.';
-        $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{item} other{items}}.';
+        $lessThanMinmessage = 'This value must contain at least 3 items.';
+        $greaterThanMaxMessage = 'This value must contain at most 3 items.';
 
         return [
             [$rule, 1, [new Error('This value must be an array or implement \Countable interface.')]],
