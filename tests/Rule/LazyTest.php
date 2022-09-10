@@ -28,7 +28,7 @@ final class LazyTest extends AbstractRuleTest
         $this->assertTrue($rule->getSkipOnEmpty());
     }
 
-    protected function optionsDataProvider(): array
+    public function optionsDataProvider(): array
     {
         return [
             [
