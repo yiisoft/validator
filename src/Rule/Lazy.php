@@ -8,28 +8,17 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
-use ReflectionProperty;
 use Traversable;
-use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
-use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
-
-use function array_pop;
-use function count;
-use function implode;
-use function is_array;
-use function ltrim;
-use function rtrim;
-use function sprintf;
 
 /**
  * Can be used for validation of nested structures.
