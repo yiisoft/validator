@@ -33,7 +33,7 @@ final class Each implements
 
     public function __construct(
         /**
-         * @var iterable<RuleInterface|SkipOnEmptyInterface|BeforeValidationInterface>
+         * @var iterable<BeforeValidationInterface|RuleInterface|SkipOnEmptyInterface>
          */
         private iterable $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
@@ -70,7 +70,7 @@ final class Each implements
     }
 
     /**
-     * @return iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]|SkipOnEmptyInterface|SkipOnEmptyInterface[]|BeforeValidationInterface|BeforeValidationInterface[]>
+     * @return iterable<BeforeValidationInterface|BeforeValidationInterface[]|\Closure|\Closure[]|RuleInterface|RuleInterface[]|SkipOnEmptyInterface|SkipOnEmptyInterface[]>
      */
     public function getRules(): iterable
     {
