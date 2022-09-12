@@ -179,6 +179,7 @@ final class Nested implements
 
     private function normalizeRules(): void
     {
+        /** @var array $rules */
         $rules = $this->rules;
 
         while (true) {
@@ -230,18 +231,21 @@ final class Nested implements
 
     public function propagateOptions(): void
     {
+        $rules = [];
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
-            foreach ($attributeRules as $index => $attributeRule) {
+            foreach ($attributeRules as $attributeRule) {
                 $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
                 $attributeRule = $attributeRule->skipOnError($this->skipOnError);
 
-                $this->rules[$attributeRulesIndex][$index] = $attributeRule;
+                $rules[$attributeRulesIndex][] = $attributeRule;
 
                 if ($attributeRule instanceof PropagateOptionsInterface) {
                     $attributeRule->propagateOptions();
                 }
             }
         }
+
+        $this->rules = $rules;
     }
 
     #[ArrayShape([

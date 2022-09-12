@@ -33,7 +33,7 @@ final class Each implements
 
     public function __construct(
         /**
-         * @var iterable<RuleInterface>
+         * @var iterable<RuleInterface|SkipOnEmptyInterface|BeforeValidationInterface>
          */
         private iterable $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
@@ -53,20 +53,23 @@ final class Each implements
 
     public function propagateOptions(): void
     {
-        foreach ($this->rules as $index => $rule) {
+        $rules = [];
+        foreach ($this->rules as $rule) {
             $rule = $rule->skipOnEmpty($this->skipOnEmpty);
             $rule = $rule->skipOnError($this->skipOnError);
 
-            $this->rules[$index] = $rule;
+            $rules[] = $rule;
 
             if ($rule instanceof PropagateOptionsInterface) {
                 $rule->propagateOptions();
             }
         }
+
+        $this->rules = $rules;
     }
 
     /**
-     * @return iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>
+     * @return iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]|SkipOnEmptyInterface|SkipOnEmptyInterface[]|BeforeValidationInterface|BeforeValidationInterface[]>
      */
     public function getRules(): iterable
     {
