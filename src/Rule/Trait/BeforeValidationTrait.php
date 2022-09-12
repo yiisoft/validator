@@ -9,6 +9,13 @@ use Yiisoft\Validator\ValidationContext;
 
 trait BeforeValidationTrait
 {
+    public function skipOnError(bool $value): static
+    {
+        $new = clone $this;
+        $new->skipOnError = $value;
+        return $new;
+    }
+
     public function shouldSkipOnError(): bool
     {
         return $this->skipOnError;

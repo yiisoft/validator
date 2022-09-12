@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Error;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use ReflectionProperty;
@@ -80,6 +81,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
+        private bool $propagateOptions = false,
 
         /**
          * @var bool|callable|null
@@ -147,6 +149,10 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             throw new InvalidArgumentException($message);
         }
 
+        if ($this->propagateOptions) {
+            $this->propagateOptions($rules, $this->skipOnEmpty, $this->skipOnError);
+        }
+
         return $this->normalizeRules ? $this->normalizeRules($rules) : $rules;
     }
 
@@ -159,6 +165,36 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             },
             false
         );
+    }
+
+    private function propagateOptions(&$rules, $skipOnEmpty, $skipOnError): void
+    {
+        foreach ($rules as $attributeRulesIndex => $attributeRules) {
+            $hasAttributeRules = true;
+            if (!is_array($attributeRules)) {
+                $attributeRules = [$attributeRules];
+                $hasAttributeRules = false;
+            }
+
+            foreach ($attributeRules as $index => $attributeRule) {
+                $attributeRule = $attributeRule->skipOnEmpty($skipOnEmpty);
+                $attributeRule = $attributeRule->skipOnError($skipOnError);
+
+                if ($hasAttributeRules === true) {
+                    $rules[$attributeRulesIndex][$index] = $attributeRule;
+                } else {
+                    $rules[0] = $attributeRule;
+                }
+
+                try {
+                    $childRules = $attributeRule->getRules();
+                } catch (Error) {
+                    continue;
+                }
+
+                $this->propagateOptions($childRules, $skipOnEmpty, $skipOnError);
+            }
+        }
     }
 
     private function normalizeRules(array $rules): array

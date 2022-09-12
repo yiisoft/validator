@@ -14,16 +14,14 @@ final class TranslatorFactory
 {
     public function create(): TranslatorInterface
     {
-        $translator = new Translator(
-            'en'
-        );
-
+        $translator = new Translator('en');
         $categorySource = new CategorySource(
             'validator',
             new IdMessageReader(),
             new SimpleMessageFormatter()
         );
         $translator->addCategorySource($categorySource);
+
         return $translator->withCategory('validator');
     }
 }
