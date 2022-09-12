@@ -36,7 +36,10 @@ use function sprintf;
  * Can be used for validation of nested structures.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Nested implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface,
+final class Nested implements
+    SerializableRuleInterface,
+    BeforeValidationInterface,
+    SkipOnEmptyInterface,
     PropagateOptionsInterface
 {
     use BeforeValidationTrait;

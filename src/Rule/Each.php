@@ -21,7 +21,10 @@ use Yiisoft\Validator\ValidationContext;
  * Validates an array by checking each of its elements against a set of rules.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Each implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface,
+final class Each implements
+    SerializableRuleInterface,
+    BeforeValidationInterface,
+    SkipOnEmptyInterface,
     PropagateOptionsInterface
 {
     use BeforeValidationTrait;
