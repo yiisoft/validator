@@ -16,6 +16,11 @@ interface BeforeValidationInterface
     public function shouldSkipOnError(): bool;
 
     /**
+     * @psalm-param Closure(mixed, ValidationContext):bool|null $value
+     */
+    public function when(?Closure $value): static;
+
+    /**
      * @psalm-return Closure(mixed, ValidationContext):bool|null
      */
     public function getWhen(): ?Closure;

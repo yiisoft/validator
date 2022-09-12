@@ -236,6 +236,7 @@ final class Nested implements
             foreach ($attributeRules as $attributeRule) {
                 $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
                 $attributeRule = $attributeRule->skipOnError($this->skipOnError);
+                $attributeRule = $attributeRule->when($this->when);
 
                 $rules[$attributeRulesIndex][] = $attributeRule;
 

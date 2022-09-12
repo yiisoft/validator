@@ -57,6 +57,7 @@ final class Each implements
         foreach ($this->rules as $rule) {
             $rule = $rule->skipOnEmpty($this->skipOnEmpty);
             $rule = $rule->skipOnError($this->skipOnError);
+            $rule = $rule->when($this->when);
 
             $rules[] = $rule;
 
