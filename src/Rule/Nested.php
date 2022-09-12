@@ -6,13 +6,13 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use Error;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use ReflectionProperty;
 use Traversable;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
@@ -36,7 +36,8 @@ use function sprintf;
  * Can be used for validation of nested structures.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Nested implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
+final class Nested implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface,
+    PropagateOptionsInterface
 {
     use BeforeValidationTrait;
     use RuleNameTrait;
@@ -233,10 +234,8 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
 
                 $this->rules[$attributeRulesIndex][$index] = $attributeRule;
 
-                try {
+                if ($attributeRule instanceof PropagateOptionsInterface) {
                     $attributeRule->propagateOptions();
-                } catch (Error) {
-                    continue;
                 }
             }
         }

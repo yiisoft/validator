@@ -6,9 +6,9 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use Error;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
@@ -21,7 +21,8 @@ use Yiisoft\Validator\ValidationContext;
  * Validates an array by checking each of its elements against a set of rules.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Each implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
+final class Each implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface,
+    PropagateOptionsInterface
 {
     use BeforeValidationTrait;
     use RuleNameTrait;
@@ -55,10 +56,8 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
 
             $this->rules[$index] = $rule;
 
-            try {
+            if ($rule instanceof PropagateOptionsInterface) {
                 $rule->propagateOptions();
-            } catch (Error) {
-                continue;
             }
         }
     }
