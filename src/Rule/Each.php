@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Error;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
@@ -44,6 +45,22 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
          */
         private ?Closure $when = null,
     ) {
+    }
+
+    public function propagateOptions(): void
+    {
+        foreach ($this->rules as $index => $rule) {
+            $rule = $rule->skipOnEmpty($this->skipOnEmpty);
+            $rule = $rule->skipOnError($this->skipOnError);
+
+            $this->rules[$index] = $rule;
+
+            try {
+                $rule->propagateOptions();
+            } catch (Error) {
+                continue;
+            }
+        }
     }
 
     /**

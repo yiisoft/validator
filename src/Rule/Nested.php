@@ -94,7 +94,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
          */
         private ?Closure $when = null,
     ) {
-        $this->rules = $this->prepareRules($rules);
+        $this->prepareRules($rules);
     }
 
     /**
@@ -129,10 +129,12 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     /**
      * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null $source
      */
-    private function prepareRules(iterable|object|string|null $source): ?iterable
+    private function prepareRules(iterable|object|string|null $source): void
     {
         if ($source === null) {
-            return null;
+            $this->rules = null;
+
+            return;
         }
 
         if ($source instanceof RulesProviderInterface) {
@@ -149,11 +151,15 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             throw new InvalidArgumentException($message);
         }
 
-        if ($this->propagateOptions) {
-            $this->propagateOptions($rules, $this->skipOnEmpty, $this->skipOnError);
+        $this->rules = $rules;
+
+        if ($this->normalizeRules) {
+            $this->normalizeRules();
         }
 
-        return $this->normalizeRules ? $this->normalizeRules($rules) : $rules;
+        if ($this->propagateOptions) {
+            $this->propagateOptions();
+        }
     }
 
     private static function checkRules($rules): bool
@@ -167,38 +173,10 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         );
     }
 
-    private function propagateOptions(&$rules, $skipOnEmpty, $skipOnError): void
+    private function normalizeRules(): void
     {
-        foreach ($rules as $attributeRulesIndex => $attributeRules) {
-            $hasAttributeRules = true;
-            if (!is_array($attributeRules)) {
-                $attributeRules = [$attributeRules];
-                $hasAttributeRules = false;
-            }
+        $rules = $this->rules;
 
-            foreach ($attributeRules as $index => $attributeRule) {
-                $attributeRule = $attributeRule->skipOnEmpty($skipOnEmpty);
-                $attributeRule = $attributeRule->skipOnError($skipOnError);
-
-                if ($hasAttributeRules === true) {
-                    $rules[$attributeRulesIndex][$index] = $attributeRule;
-                } else {
-                    $rules[0] = $attributeRule;
-                }
-
-                try {
-                    $childRules = $attributeRule->getRules();
-                } catch (Error) {
-                    continue;
-                }
-
-                $this->propagateOptions($childRules, $skipOnEmpty, $skipOnError);
-            }
-        }
-    }
-
-    private function normalizeRules(array $rules): array
-    {
         while (true) {
             $breakWhile = true;
             $rulesMap = [];
@@ -243,7 +221,25 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             }
         }
 
-        return $rules;
+        $this->rules = $rules;
+    }
+
+    public function propagateOptions(): void
+    {
+        foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
+            foreach ($attributeRules as $index => $attributeRule) {
+                $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
+                $attributeRule = $attributeRule->skipOnError($this->skipOnError);
+
+                $this->rules[$attributeRulesIndex][$index] = $attributeRule;
+
+                try {
+                    $attributeRule->propagateOptions();
+                } catch (Error) {
+                    continue;
+                }
+            }
+        }
     }
 
     #[ArrayShape([
