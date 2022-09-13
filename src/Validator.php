@@ -80,7 +80,7 @@ final class Validator implements ValidatorInterface
         foreach ($rules ?? [] as $attribute => $attributeRules) {
             $result = new Result();
 
-            $tempRule = is_array($attributeRules) ? $attributeRules : [$attributeRules];
+            $tempRule = is_iterable($attributeRules) ? $attributeRules : [$attributeRules];
             $attributeRules = $this->normalizeRules($tempRule);
 
             if (is_int($attribute)) {
