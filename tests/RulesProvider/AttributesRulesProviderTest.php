@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\RulesProvider;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
+use Traversable;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
@@ -131,13 +132,13 @@ final class AttributesRulesProviderTest extends TestCase
         $this->assertSame($expectedRuleClassNames, $ruleClassNames);
     }
 
-    private function convertRulesToClassNames(array $rules): array
+    private function convertRulesToClassNames(iterable $rules): array
     {
         $classNames = [];
         foreach ($rules as $attribute => $attributeRules) {
             $classNames[$attribute] = array_map(
                 static fn (RuleInterface $rule): string => get_class($rule),
-                $attributeRules
+                $attributeRules instanceof Traversable ? iterator_to_array($attributeRules) : $attributeRules
             );
         }
 
