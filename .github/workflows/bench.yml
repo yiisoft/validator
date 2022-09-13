@@ -19,7 +19,7 @@ on:
       - 'infection.json.dist'
       - 'psalm.xml'
 
-name: bench
+name: build
 
 jobs:
   phpbench:
