@@ -142,26 +142,28 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         }
 
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
-        if (self::checkRules($rules)) {
-            $message = sprintf('Each rule should be an instance of %s.', RuleInterface::class);
-            throw new InvalidArgumentException($message);
-        }
+        self::ensureArrayHasRules($rules);
 
         return $this->normalizeRules ? $this->normalizeRules($rules) : $rules;
     }
 
-    private static function checkRules($rules): bool
+    private static function ensureArrayHasRules(iterable &$rules)
     {
-        return array_reduce(
-            $rules,
-            function (bool $carry, $rule) {
-                return $carry || (is_array($rule) ? self::checkRules($rule) : !$rule instanceof RuleInterface);
-            },
-            false
-        );
+        $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
+
+        foreach ($rules as &$rule) {
+            if (is_iterable($rule)) {
+                self::ensureArrayHasRules($rule);
+                continue;
+            }
+            if (!$rule instanceof RuleInterface) {
+                $message = sprintf('Each rule should be an instance of %s, %s given.', RuleInterface::class, get_debug_type($rule));
+                throw new InvalidArgumentException($message);
+            }
+        }
     }
 
-    private function normalizeRules(array $rules): array
+    private function normalizeRules(iterable $rules): iterable
     {
         while (true) {
             $breakWhile = true;

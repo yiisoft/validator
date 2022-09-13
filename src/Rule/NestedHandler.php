@@ -103,7 +103,7 @@ final class NestedHandler implements RuleHandlerInterface
             }
 
             $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
-            $rules = is_array($rules) ? $rules : [$rules];
+            $rules = is_iterable($rules) ? $rules : [$rules];
 
             $itemResult = $context->getValidator()->validate($validatedValue, $rules);
 

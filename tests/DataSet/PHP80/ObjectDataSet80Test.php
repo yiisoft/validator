@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\DataSet\PHP80;
 
 use PHPUnit\Framework\TestCase;
+use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Required;
@@ -23,7 +24,12 @@ final class ObjectDataSet80Test extends TestCase
     {
         $dataSet = new ObjectDataSet($object);
 
-        $this->assertEquals($expectedRules, $dataSet->getRules());
+        $actualRules = [];
+        foreach ($dataSet->getRules() as $attribute => $rules) {
+            $actualRules[$attribute] = $rules instanceof Traversable ? iterator_to_array($rules) : (array) $rules;
+        }
+
+        $this->assertEquals($expectedRules, $actualRules);
     }
 
     public function dataProvider(): array
