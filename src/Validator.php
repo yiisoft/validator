@@ -11,6 +11,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use ReflectionProperty;
 use Traversable;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSet\MixedDataSet;
@@ -37,6 +38,7 @@ final class Validator implements ValidatorInterface
 
     public function __construct(
         private RuleHandlerResolverInterface $ruleHandlerResolver,
+        private TranslatorInterface $translator,
         /**
          * @var int What visibility levels to use when reading rules from the class specified in `$rules` argument in
          * {@see validate()} method.
@@ -74,7 +76,7 @@ final class Validator implements ValidatorInterface
         }
 
         $compoundResult = new Result();
-        $context = new ValidationContext($this, $data);
+        $context = new ValidationContext($this, $this->translator, $data);
         $results = [];
 
         foreach ($rules ?? [] as $attribute => $attributeRules) {

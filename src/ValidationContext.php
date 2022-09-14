@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Translator\TranslatorInterface;
 
 /**
  * Validation context that rule may take into account when performing validation.
@@ -23,6 +24,7 @@ final class ValidationContext
      */
     public function __construct(
         ValidatorInterface $validator,
+        private TranslatorInterface $translator,
         ?DataSetInterface $dataSet,
         ?string $attribute = null,
         array $parameters = []
@@ -92,5 +94,20 @@ final class ValidationContext
     public function setParameter(string $key, $value): void
     {
         $this->parameters[$key] = $value;
+    }
+
+    /**
+     * Translate and format a message.
+     *
+     * @param string $message The message to be prepared.
+     * @param array $parameters An array of parameters for the message.
+     *
+     * @psalm-param array<array-key, mixed> $parameters
+     *
+     * @return string The prepared message.
+     */
+    public function prepareMessage(string $message, array $parameters = []): string
+    {
+        return $this->translator->translate($message, $parameters);
     }
 }

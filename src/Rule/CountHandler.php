@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Countable;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\LimitHandlerTrait;
@@ -22,10 +21,6 @@ final class CountHandler implements RuleHandlerInterface
 {
     use LimitHandlerTrait;
 
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Count) {
@@ -35,7 +30,7 @@ final class CountHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_countable($value)) {
-            $formattedMessage = $this->translator->translate(
+            $formattedMessage = $context->prepareMessage(
                 $rule->getMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\EmptyCheckTrait;
@@ -20,10 +19,6 @@ final class RequiredHandler implements RuleHandlerInterface
 {
     use EmptyCheckTrait;
 
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Required) {
@@ -33,7 +28,7 @@ final class RequiredHandler implements RuleHandlerInterface
         $result = new Result();
 
         if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
-            $formattedMessage = $this->translator->translate(
+            $formattedMessage = $context->prepareMessage(
                 $rule->getMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );

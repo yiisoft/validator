@@ -77,6 +77,6 @@ final class CallbackHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new CallbackHandler($this->getTranslator());
+        return new CallbackHandler();
     }
 }

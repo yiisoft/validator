@@ -82,6 +82,6 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new CountHandler($this->getTranslator());
+        return new CountHandler();
     }
 }

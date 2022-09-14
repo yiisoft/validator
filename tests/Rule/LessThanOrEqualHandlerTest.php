@@ -42,6 +42,6 @@ final class LessThanOrEqualHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new CompareHandler($this->getTranslator());
+        return new CompareHandler();
     }
 }

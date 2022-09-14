@@ -31,7 +31,7 @@ trait LimitHandlerTrait
         Result $result
     ): void {
         if ($rule->getExactly() !== null && $number !== $rule->getExactly()) {
-            $formattedMessage = $this->translator->translate(
+            $formattedMessage = $context->prepareMessage(
                 $rule->getNotExactlyMessage(),
                 ['exactly' => $rule->getExactly(), 'attribute' => $context->getAttribute(), 'value' => $value]
             );
@@ -41,7 +41,7 @@ trait LimitHandlerTrait
         }
 
         if ($rule->getMin() !== null && $number < $rule->getMin()) {
-            $formattedMessage = $this->translator->translate(
+            $formattedMessage = $context->prepareMessage(
                 $rule->getLessThanMinMessage(),
                 ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
             );
@@ -49,7 +49,7 @@ trait LimitHandlerTrait
         }
 
         if ($rule->getMax() !== null && $number > $rule->getMax()) {
-            $formattedMessage = $this->translator->translate(
+            $formattedMessage = $context->prepareMessage(
                 $rule->getGreaterThanMaxMessage(),
                 ['max' => $rule->getMax(), 'attribute' => $context->getAttribute(), 'value' => $value]
             );

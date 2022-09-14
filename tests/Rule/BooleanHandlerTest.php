@@ -58,6 +58,6 @@ final class BooleanHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new BooleanHandler($this->getTranslator());
+        return new BooleanHandler();
     }
 }

@@ -81,6 +81,6 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): HasLengthHandler
     {
-        return new HasLengthHandler($this->getTranslator());
+        return new HasLengthHandler();
     }
 }

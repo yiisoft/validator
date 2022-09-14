@@ -67,11 +67,6 @@ abstract class AbstractRuleValidatorTest extends TestCase
         return $ruleHandler->validate($value, $config, $context);
     }
 
-    protected function getTranslator(): TranslatorInterface
-    {
-        return (new TranslatorFactory())->create();
-    }
-
     abstract public function customErrorMessagesProvider(): array;
 
     abstract public function passedValidationProvider(): array;
@@ -85,6 +80,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
         $validator = FakeValidatorFactory::make();
         return new ValidationContext(
             $validator,
+            (new TranslatorFactory())->create(),
             new ArrayDataSet(['attribute' => 100, 'number' => 100, 'string' => '100']),
             'number'
         );

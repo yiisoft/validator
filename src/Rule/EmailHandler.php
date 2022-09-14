@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -18,10 +17,6 @@ use function strlen;
  */
 final class EmailHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Email) {
@@ -82,7 +77,7 @@ final class EmailHandler implements RuleHandlerInterface
         }
 
         if ($valid === false) {
-            $formattedMessage = $this->translator->translate(
+            $formattedMessage = $context->prepareMessage(
                 $rule->getMessage(),
                 ['attribute' => $context->getAttribute(), 'value' => $originalValue]
             );

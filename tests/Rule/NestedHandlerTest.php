@@ -499,6 +499,6 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new NestedHandler($this->getTranslator());
+        return new NestedHandler();
     }
 }

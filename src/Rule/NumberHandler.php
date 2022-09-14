@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Strings\NumericHelper;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -20,10 +19,6 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class NumberHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Number) {
@@ -33,7 +28,7 @@ final class NumberHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (is_bool($value) || !is_scalar($value)) {
-            $formattedMessage = $this->translator->translate(
+            $formattedMessage = $context->prepareMessage(
                 $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.',
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
@@ -44,19 +39,19 @@ final class NumberHandler implements RuleHandlerInterface
         $pattern = $rule->isAsInteger() ? $rule->getIntegerPattern() : $rule->getNumberPattern();
 
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
-            $formattedMessage = $this->translator->translate(
+            $formattedMessage = $context->prepareMessage(
                 $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.',
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
-            $formattedMessage = $this->translator->translate(
+            $formattedMessage = $context->prepareMessage(
                 $rule->getTooSmallMessage(),
                 ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
             );
             $result->addError($formattedMessage);
         } elseif ($rule->getMax() !== null && $value > $rule->getMax()) {
-            $formattedMessage = $this->translator->translate(
+            $formattedMessage = $context->prepareMessage(
                 $rule->getTooBigMessage(),
                 ['max' => $rule->getMax(), 'attribute' => $context->getAttribute(), 'value' => $value]
             );

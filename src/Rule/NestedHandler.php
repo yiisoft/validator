@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
@@ -45,10 +44,6 @@ use function is_object;
  */
 final class NestedHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Nested) {
@@ -79,7 +74,7 @@ final class NestedHandler implements RuleHandlerInterface
                 'Value should be an array or an object. %s given.',
                 get_debug_type($value)
             );
-            $translatedMessage = $this->translator->translate(
+            $translatedMessage = $context->prepareMessage(
                 $message,
                 ['attribute' => $context->getAttribute(), 'value' => $value]
             );
@@ -90,7 +85,7 @@ final class NestedHandler implements RuleHandlerInterface
         $results = [];
         foreach ($rule->getRules() as $valuePath => $rules) {
             if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($data, $valuePath)) {
-                $translatedMessage = $this->translator->translate(
+                $translatedMessage = $context->prepareMessage(
                     $rule->getNoPropertyPathMessage(),
                     ['path' => $valuePath, 'attribute' => $context->getAttribute(), 'value' => $data]
                 );

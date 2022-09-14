@@ -50,6 +50,6 @@ final class IsTrueHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new IsTrueHandler($this->getTranslator());
+        return new IsTrueHandler();
     }
 }

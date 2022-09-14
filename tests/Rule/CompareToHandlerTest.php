@@ -10,6 +10,7 @@ use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\CompareHandler;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
 use Yiisoft\Validator\ValidationContext;
 
 final class CompareToHandlerTest extends AbstractRuleValidatorTest
@@ -90,7 +91,7 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new CompareHandler($this->getTranslator());
+        return new CompareHandler();
     }
 
     protected function getValidationContext(): ValidationContext
@@ -98,6 +99,7 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
         $validator = FakeValidatorFactory::make();
         return new ValidationContext(
             $validator,
+            (new TranslatorFactory())->create(),
             new ArrayDataSet(['attribute' => 100, 'width_repeat' => 100]),
             'width'
         );

@@ -55,7 +55,7 @@ final class AtLeastHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new AtLeastHandler($this->getTranslator());
+        return new AtLeastHandler();
     }
 
     private function createObject(mixed $attr1, mixed $attr2): stdClass
