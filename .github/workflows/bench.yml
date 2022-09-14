@@ -1,0 +1,31 @@
+on:
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - '.gitignore'
+      - '.gitattributes'
+      - 'infection.json.dist'
+      - 'psalm.xml'
+
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - '.gitignore'
+      - '.gitattributes'
+      - 'infection.json.dist'
+      - 'psalm.xml'
+
+name: build
+
+jobs:
+  phpbench:
+    uses: yiisoft/actions/.github/workflows/phpbench.yml@master
+    with:
+      os: >-
+        ['ubuntu-latest', 'windows-latest']
+      php: >-
+        ['8.0', '8.1']
