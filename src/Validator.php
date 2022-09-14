@@ -6,22 +6,13 @@ namespace Yiisoft\Validator;
 
 use Closure;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use ReflectionProperty;
-use Traversable;
-use Yiisoft\Validator\DataSet\ArrayDataSet;
-use Yiisoft\Validator\DataSet\ObjectDataSet;
-use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
-use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 
-use function is_array;
 use function is_callable;
 use function is_int;
-use function is_object;
 
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
