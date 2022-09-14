@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
