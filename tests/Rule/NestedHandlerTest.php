@@ -166,8 +166,8 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                         0 => [new Number(min: -10, max: 10)],
                     ]),
                 ]),
-                    [0 => [0 => -11]],
-                    [new Error('Value must be no less than -10.', [0, 0], ['min' => -10, 'value' => -11])],
+                [0 => [0 => -11]],
+                [new Error('Value must be no less than -10.', [0, 0], ['min' => -10, 'value' => -11])],
             ],
             [
                 new Nested(['author\.data.name\.surname' => [new HasLength(min: 8)]]),
