@@ -18,7 +18,6 @@ use Yiisoft\Validator\Tests\Stub\InheritAttributesObject\InheritAttributesObject
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\Rule;
 use Yiisoft\Validator\Tests\Stub\SimpleRulesProvider;
-use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
 final class NestedTest extends TestCase

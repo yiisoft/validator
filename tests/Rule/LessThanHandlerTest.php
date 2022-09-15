@@ -38,9 +38,9 @@ final class LessThanHandlerTest extends AbstractRuleValidatorTest
         return [
             [
                 new LessThan(100, message: 'Custom error'), ...$this->createValueAndErrorsPair(
-                101,
-                [new Error('Custom error', parameters: ['targetValue' => 100, 'targetAttribute' => null, 'targetValueOrAttribute' => 100])]
-            )
+                    101,
+                    [new Error('Custom error', parameters: ['targetValue' => 100, 'targetAttribute' => null, 'targetValueOrAttribute' => 100])]
+                ),
             ],
         ];
     }

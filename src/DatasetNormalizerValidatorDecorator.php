@@ -5,18 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use Closure;
-use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use ReflectionProperty;
 use Traversable;
-use Yiisoft\Validator\DataSet\ArrayDataSet;
-use Yiisoft\Validator\DataSet\MixedDataSet;
-use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 
 use function is_array;
-use function is_object;
 
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.

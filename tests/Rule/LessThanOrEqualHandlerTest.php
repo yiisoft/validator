@@ -47,7 +47,7 @@ final class LessThanOrEqualHandlerTest extends AbstractRuleValidatorTest
                 ...$this->createValueAndErrorsPair(
                     101,
                     [new Error('Custom error', parameters: ['targetValue' => 100, 'targetAttribute' => null, 'targetValueOrAttribute' => 100])]
-                )
+                ),
             ],
         ];
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -43,7 +42,7 @@ final class CompareHandler implements RuleHandlerInterface
             $result->addError(
                 message: $rule->getMessage(),
                 parameters: [
-                        'targetValue' => $rule->getTargetValue(),
+                    'targetValue' => $rule->getTargetValue(),
                     'targetAttribute' => $rule->getTargetAttribute(),
                     'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
                     'value' => $value,

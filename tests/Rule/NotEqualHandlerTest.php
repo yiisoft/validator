@@ -22,7 +22,7 @@ final class NotEqualHandlerTest extends AbstractRuleValidatorTest
 
         return [
             [new NotEqual($value), ...$this->createValueAndErrorsPair($value, $errors)],
-            [new NotEqual($value, strict: true),...$this->createValueAndErrorsPair( $value, $errors)],
+            [new NotEqual($value, strict: true),...$this->createValueAndErrorsPair($value, $errors)],
         ];
     }
 

@@ -16,7 +16,7 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
         $defaultRule = new HasLength(min: 25);
         $errors = [new Error('This value must be a string.')];
         $lessThanMinErrors = [new Error('This value must contain at least {min, number} {min, plural, one{character} other{characters}}.', parameters: ['min' => 25])];
-        $notExactlyErrors = [new Error('This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' , parameters: ['exactly' => 25])];
+        $notExactlyErrors = [new Error('This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.', parameters: ['exactly' => 25])];
 
         return [
             [$defaultRule, ...$this->createValueAndErrorsPair(['not a string'], $errors)],
@@ -28,8 +28,8 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
                 new HasLength(max: 25),
                 ...$this->createValueAndErrorsPair(
                     str_repeat('x', 1250),
-                [new Error('This value must contain at most {max, number} {max, plural, one{character} other{characters}}.', parameters: ['max' => 25])]
-                )
+                    [new Error('This value must contain at most {max, number} {max, plural, one{character} other{characters}}.', parameters: ['max' => 25])]
+                ),
             ],
             [new HasLength(exactly: 25), ...$this->createValueAndErrorsPair(str_repeat('x', 125), $notExactlyErrors)],
 
@@ -38,7 +38,7 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
                 new HasLength(min: 10, max: 25),
                 ...$this->createValueAndErrorsPair(
                     str_repeat('x', 5),
-                [new Error('This value must contain at least {min, number} {min, plural, one{character} other{characters}}.', parameters: ['min' => 10])]
+                    [new Error('This value must contain at least {min, number} {min, plural, one{character} other{characters}}.', parameters: ['min' => 10])]
                 ),
             ],
             [new HasLength(min: 25), ...$this->createValueAndErrorsPair(str_repeat('x', 13), $lessThanMinErrors)],
@@ -80,8 +80,8 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
         );
 
         return [
-            [$rule,...$this->createValueAndErrorsPair( null, [new Error('is not string error')])],
-            [$rule,...$this->createValueAndErrorsPair( str_repeat('x', 1), [new Error('is too short test', parameters: ['min' => 3])])],
+            [$rule,...$this->createValueAndErrorsPair(null, [new Error('is not string error')])],
+            [$rule,...$this->createValueAndErrorsPair(str_repeat('x', 1), [new Error('is too short test', parameters: ['min' => 3])])],
             [$rule, ...$this->createValueAndErrorsPair(str_repeat('x', 6), [new Error('is too long test', parameters: ['max' => 5])])],
         ];
     }

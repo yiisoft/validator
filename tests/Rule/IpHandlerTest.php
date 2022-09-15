@@ -54,14 +54,14 @@ final class IpHandlerTest extends AbstractRuleValidatorTest
             [$ruleRequiredSubnet, ...$this->createValueAndErrorsPair('10.0.0.1', [new Error($noSubnetMessage)])],
             [new Ip(requireSubnet: true, allowNegation: true), ...$this->createValueAndErrorsPair('!!192.168.5.32/32', [new Error($message)])],
 
-            [new Ip(allowIpv4: false, allowSubnet: true),...$this->createValueAndErrorsPair( '!2008:fa::0:1/0', [new Error($message)])],
+            [new Ip(allowIpv4: false, allowSubnet: true),...$this->createValueAndErrorsPair('!2008:fa::0:1/0', [new Error($message)])],
             [new Ip(allowIpv4: false, allowSubnet: true), ...$this->createValueAndErrorsPair('2008:fz::0/129', [new Error($message)])],
             [new Ip(allowIpv4: false, requireSubnet: true), ...$this->createValueAndErrorsPair('2008:db0::1', [new Error($noSubnetMessage)])],
             [
                 new Ip(allowIpv4: false, requireSubnet: true, allowNegation: true),
                 ...$this->createValueAndErrorsPair(
                     '!!2008:fa::0:1/64',
-                [new Error($message)]
+                    [new Error($message)]
                 ),
             ],
 
@@ -85,21 +85,21 @@ final class IpHandlerTest extends AbstractRuleValidatorTest
             [new Ip(requireSubnet: true, allowNegation: true), ...$this->createValueAndErrorsPair('!!192.168.5.32/32', [new Error($message)])],
             [new Ip(requireSubnet: true, allowNegation: true), ...$this->createValueAndErrorsPair('!!2008:fa::0:1/64', [new Error($message)])],
 
-            [new Ip(ranges: ['10.0.1.0/24']),...$this->createValueAndErrorsPair( '192.5.1.1', [new Error($notInRangeMessage)])],
-            [new Ip(ranges: ['10.0.1.0/24']),...$this->createValueAndErrorsPair( '10.0.3.2', [new Error($notInRangeMessage)])],
+            [new Ip(ranges: ['10.0.1.0/24']),...$this->createValueAndErrorsPair('192.5.1.1', [new Error($notInRangeMessage)])],
+            [new Ip(ranges: ['10.0.1.0/24']),...$this->createValueAndErrorsPair('10.0.3.2', [new Error($notInRangeMessage)])],
             [new Ip(ranges: ['!10.0.1.0/24','10.0.0.0/8', 'localhost']),  ...$this->createValueAndErrorsPair('10.0.1.2', [new Error($notInRangeMessage)])],
             [
                 new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '!10.0.0.0/8', 'localhost']),
                 ...$this->createValueAndErrorsPair(
                     '10.2.2.2',
-                [new Error($notInRangeMessage)]
+                    [new Error($notInRangeMessage)]
                 ),
             ],
             [
                 new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '!10.0.0.0/8', 'localhost']),
                 ...$this->createValueAndErrorsPair(
                     '10.0.1.1/22',
-                [new Error($notInRangeMessage)]
+                    [new Error($notInRangeMessage)]
                 ),
             ],
             [new Ip(ranges: ['2001:db0:1:1::/64']), ...$this->createValueAndErrorsPair('2001:db0:1:2::7', [new Error($notInRangeMessage)])],
@@ -107,7 +107,7 @@ final class IpHandlerTest extends AbstractRuleValidatorTest
                 new Ip(ranges: ['!2001:db0::/32', '2001:db0:1:2::/64']),
                 ...$this->createValueAndErrorsPair(
                     '2001:db0:1:2::7',
-                [new Error($notInRangeMessage)]
+                    [new Error($notInRangeMessage)]
                 ),
             ],
 
@@ -117,7 +117,7 @@ final class IpHandlerTest extends AbstractRuleValidatorTest
                 new Ip(ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', '127.0.0.1']),
                 ...$this->createValueAndErrorsPair(
                     '10.0.3.2',
-                [new Error($notInRangeMessage)]
+                    [new Error($notInRangeMessage)]
                 ),
             ],
             [new Ip(ranges: ['!system', 'any']), ...$this->createValueAndErrorsPair('127.0.0.1', [new Error($notInRangeMessage)])],
@@ -127,14 +127,14 @@ final class IpHandlerTest extends AbstractRuleValidatorTest
                 new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any']),
                 ...$this->createValueAndErrorsPair(
                     '10.2.2.2',
-                [new Error($notInRangeMessage)]
+                    [new Error($notInRangeMessage)]
                 ),
             ],
             [
                 new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any']),
                 ...$this->createValueAndErrorsPair(
                     '10.0.1.1/22',
-                [new Error($notInRangeMessage)]
+                    [new Error($notInRangeMessage)]
                 ),
             ],
 

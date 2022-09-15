@@ -13,7 +13,6 @@ use Yiisoft\Validator\Tests\Stub\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\ObjectWithRulesProvider;
-use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
 final class ValidateLogicTest extends TestCase

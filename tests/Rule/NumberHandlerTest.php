@@ -48,11 +48,11 @@ final class NumberHandlerTest extends AbstractRuleValidatorTest
             [$ruleInteger, ...$this->createValueAndErrorsPair('-4.534-e-12', [new Error($notAnIntegerMessage)])],
             [$ruleInteger, ...$this->createValueAndErrorsPair('12.23^4', [new Error($notAnIntegerMessage)])],
 
-            [new Number(min: 1),...$this->createValueAndErrorsPair( -1, [new Error('Value must be no less than {min}.', parameters: ['min' => 1])])],
+            [new Number(min: 1),...$this->createValueAndErrorsPair(-1, [new Error('Value must be no less than {min}.', parameters: ['min' => 1])])],
             [new Number(min: 1), ...$this->createValueAndErrorsPair('22e-12', [new Error('Value must be no less than {min}.', parameters: ['min' => 1])])],
 
             [new Number(asInteger: true, min: 1), ...$this->createValueAndErrorsPair(-1, [new Error('Value must be no less than {min}.', parameters: ['min' => 1])])],
-            [new Number(asInteger: true, min: 1),...$this->createValueAndErrorsPair( '22e-12', [new Error($notAnIntegerMessage)])],
+            [new Number(asInteger: true, min: 1),...$this->createValueAndErrorsPair('22e-12', [new Error($notAnIntegerMessage)])],
             [new Number(max: 1.25), ...$this->createValueAndErrorsPair(1.5, [new Error('Value must be no greater than {max}.', parameters: ['max' => 1.25])])],
 
             // TODO: fix wrong message
@@ -62,9 +62,9 @@ final class NumberHandlerTest extends AbstractRuleValidatorTest
 
             [new Number(min: -10, max: 20), ...$this->createValueAndErrorsPair(-11, [new Error('Value must be no less than {min}.', parameters: ['min' => -10])])],
             [new Number(min: -10, max: 20), ...$this->createValueAndErrorsPair(21, [new Error('Value must be no greater than {max}.', parameters: ['max' => 20])])],
-            [new Number(asInteger: true, min: -10, max: 20),...$this->createValueAndErrorsPair( -11, [new Error('Value must be no less than {min}.', parameters: ['min' => -10])])],
-            [new Number(asInteger: true, min: -10, max: 20),...$this->createValueAndErrorsPair( 22, [new Error('Value must be no greater than {max}.', parameters: ['max' => 20])])],
-            [new Number(asInteger: true, min: -10, max: 20),...$this->createValueAndErrorsPair( '20e-1', [new Error($notAnIntegerMessage)])],
+            [new Number(asInteger: true, min: -10, max: 20),...$this->createValueAndErrorsPair(-11, [new Error('Value must be no less than {min}.', parameters: ['min' => -10])])],
+            [new Number(asInteger: true, min: -10, max: 20),...$this->createValueAndErrorsPair(22, [new Error('Value must be no greater than {max}.', parameters: ['max' => 20])])],
+            [new Number(asInteger: true, min: -10, max: 20),...$this->createValueAndErrorsPair('20e-1', [new Error($notAnIntegerMessage)])],
         ];
     }
 

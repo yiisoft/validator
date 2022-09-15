@@ -27,7 +27,7 @@ final class CallbackHandlerTest extends AbstractRuleValidatorTest
                 }),
                 ...$this->createValueAndErrorsPair(
                     41,
-                [new Error('Value should be 42!')]
+                    [new Error('Value should be 42!')]
                 ),
             ],
         ];
@@ -64,7 +64,7 @@ final class CallbackHandlerTest extends AbstractRuleValidatorTest
                 }),
                 ...$this->createValueAndErrorsPair(
                     41,
-                [new Error('Custom error')]
+                    [new Error('Custom error')]
                 ),
             ],
         ];

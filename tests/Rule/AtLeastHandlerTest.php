@@ -18,15 +18,15 @@ final class AtLeastHandlerTest extends AbstractRuleValidatorTest
             [
                 new AtLeast(['attr2']),
                 ...$this->createValueAndErrorsPair(
-                $this->createObject(1, null),
-                [new Error('The model is not valid. Must have at least "{min}" filled attributes.', parameters: ['min' => 1])]
+                    $this->createObject(1, null),
+                    [new Error('The model is not valid. Must have at least "{min}" filled attributes.', parameters: ['min' => 1])]
                 ),
             ],
             [
                 new AtLeast(['attr1', 'attr2'], min: 2),
                 ...$this->createValueAndErrorsPair(
                     $this->createObject(1, null),
-                [new Error('The model is not valid. Must have at least "{min}" filled attributes.', parameters: ['min' => 2])]
+                    [new Error('The model is not valid. Must have at least "{min}" filled attributes.', parameters: ['min' => 2])]
                 ),
             ],
         ];
@@ -53,7 +53,7 @@ final class AtLeastHandlerTest extends AbstractRuleValidatorTest
                 new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom error'),
                 ...$this->createValueAndErrorsPair(
                     $this->createObject(1, null),
-                [new Error('Custom error', parameters: ['min' => 2])]
+                    [new Error('Custom error', parameters: ['min' => 2])]
                 ),
             ],
         ];

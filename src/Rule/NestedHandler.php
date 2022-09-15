@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;

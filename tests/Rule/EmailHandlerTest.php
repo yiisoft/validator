@@ -127,12 +127,13 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
             [$ruleAllowedName, ...$this->createValueAndErrorsPair(['developer@yiiframework.com'], $errors)],
             [
                 $ruleAllowedName,
-                ...$this->createValueAndErrorsPair([
-                    'Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-' .
-                    'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
-                    'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
-                    'blah-blah-blah.com>',
-                ],
+                ...$this->createValueAndErrorsPair(
+                    [
+                        'Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-' .
+                        'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
+                        'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
+                        'blah-blah-blah.com>',
+                    ],
                     $errors
                 ),
             ],
@@ -266,8 +267,8 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
             [
                 new Email(checkDNS: true, message: 'Custom error'),
                 ...$this->createValueAndErrorsPair(
-                'test@nonexistingsubdomain.example.com',
-                [new Error('Custom error')]
+                    'test@nonexistingsubdomain.example.com',
+                    [new Error('Custom error')]
                 ),
             ],
         ];

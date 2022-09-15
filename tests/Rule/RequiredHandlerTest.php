@@ -17,7 +17,7 @@ final class RequiredHandlerTest extends AbstractRuleValidatorTest
         $message = 'Value cannot be blank.';
 
         return [
-            [$rule,...$this->createValueAndErrorsPair( null, [new Error($message)])],
+            [$rule,...$this->createValueAndErrorsPair(null, [new Error($message)])],
             [$rule, ...$this->createValueAndErrorsPair([], [new Error($message)])],
         ];
     }

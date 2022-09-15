@@ -34,16 +34,16 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
                 $rule,
                 ...$this->createValueAndErrorsPair(
                     [
-                    new class () {
-                        protected int $myCount = 3;
+                        new class () {
+                            protected int $myCount = 3;
 
-                        public function count(): int
-                        {
-                            return $this->myCount;
-                        }
-                    },
-                ],
-                [new Error($lessThanMinMessage, parameters: ['min' => 3])]
+                            public function count(): int
+                            {
+                                return $this->myCount;
+                            }
+                        },
+                    ],
+                    [new Error($lessThanMinMessage, parameters: ['min' => 3])]
                 ),
             ],
             [new Count(max: 3), ...$this->createValueAndErrorsPair([0, 0, 0, 0], [new Error($greaterThanMaxMessage, parameters: ['max' => 3])])],

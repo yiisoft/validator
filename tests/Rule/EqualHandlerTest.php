@@ -47,7 +47,8 @@ final class EqualHandlerTest extends AbstractRuleValidatorTest
                         'targetValue' => 100,
                         'targetAttribute' => null,
                         'targetValueOrAttribute' => 100,
-                    ] )])],
+                    ])]
+                ), ],
         ];
     }
 

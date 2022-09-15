@@ -118,27 +118,27 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         return [
             'error' => [
                 new Nested(['author.age' => [new Number(min: 20)]]),
-                    $value,
+                $value,
                 [new Error('Value must be no less than 20.', ['author', 'age'], ['value' => 18, 'min' => 20])],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
-                    $value,
+                $value,
                 [new Error('This value is invalid.', ['author', 'sex'], ['value' => null])],
             ],
             [
                 $rule,
-                    '',
+                '',
                 [new Error('Value should be an array or an object. string given.', parameters: ['path' => 'value'])],
             ],
             [
                 $rule,
-                    ['value' => null],
+                ['value' => null],
                 [new Error('Value cannot be blank.', ['value'], ['value' => null])],
             ],
             [
                 new Nested(['value' => new Required()], requirePropertyPath: true),
-                    [],
+                [],
                 [new Error('Property path "{path}" is not found.', ['value'], ['path' => 'value'])],
             ],
             [
@@ -151,7 +151,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                         ]),
                     ],
                 ]),
-                    [
+                [
                     'body' => [
                         'shipping' => [
                             'phone' => '+777777777777',
@@ -168,12 +168,12 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 ]),
                 ...$this->createValueAndErrorsPair(
                     [0 => [0 => -11]],
-                [new Error('Value must be no less than -10.', [0, 0])]
+                    [new Error('Value must be no less than -10.', [0, 0])]
                 ),
             ],
             [
                 new Nested(['author\.data.name\.surname' => [new HasLength(min: 8)]]),
-                    [
+                [
                     'author.data' => [
                         'name.surname' => 'Dmitriy',
                     ],
@@ -254,7 +254,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     requirePropertyPath: true,
                     noPropertyPathMessage: 'Property is not found.',
                 ),
-                    [],
+                [],
                 [new Error('Property is not found.', ['value'], ['path' => 'value', 'value' => []])],
             ],
         ];

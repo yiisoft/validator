@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;

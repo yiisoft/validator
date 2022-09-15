@@ -189,6 +189,7 @@ final class Validator implements ValidatorInterface
     /**
      * @param Result $result
      * @param Error[] $errors
+     *
      * @return Result
      */
     private function addErrors(Result $result, array $errors): Result

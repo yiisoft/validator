@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use InvalidArgumentException;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;

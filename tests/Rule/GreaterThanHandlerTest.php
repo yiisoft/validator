@@ -19,7 +19,7 @@ final class GreaterThanHandlerTest extends AbstractRuleValidatorTest
         $errors = [new Error($message, parameters: ['targetValue' => 100, 'targetAttribute' => null, 'targetValueOrAttribute' => 100])];
 
         return [
-            [new GreaterThan($value),...$this->createValueAndErrorsPair( 99, $errors)],
+            [new GreaterThan($value),...$this->createValueAndErrorsPair(99, $errors)],
             [new GreaterThan($value), ...$this->createValueAndErrorsPair('100', $errors)],
         ];
     }
@@ -37,7 +37,7 @@ final class GreaterThanHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new GreaterThan(100, message: 'Custom error'),...$this->createValueAndErrorsPair( 99, [new Error('Custom error', parameters: ['targetValue' => 100, 'targetAttribute' => null, 'targetValueOrAttribute' => 100])])],
+            [new GreaterThan(100, message: 'Custom error'),...$this->createValueAndErrorsPair(99, [new Error('Custom error', parameters: ['targetValue' => 100, 'targetAttribute' => null, 'targetValueOrAttribute' => 100])])],
         ];
     }
 

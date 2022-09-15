@@ -91,10 +91,10 @@ abstract class AbstractRuleValidatorTest extends TestCase
         );
     }
 
-
     /**
      * @param mixed $value
      * @param Error[] $errors
+     *
      * @return string[]
      */
     protected function createValueAndErrorsPair(mixed $value, array $errors): array

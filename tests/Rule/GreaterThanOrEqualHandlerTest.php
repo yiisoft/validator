@@ -18,7 +18,7 @@ final class GreaterThanOrEqualHandlerTest extends AbstractRuleValidatorTest
         $errors = [new Error($message, parameters: ['targetValue' => 100, 'targetAttribute' => null, 'targetValueOrAttribute' => 100])];
 
         return [
-            [new GreaterThanOrEqual($value),...$this->createValueAndErrorsPair( 99, $errors)],
+            [new GreaterThanOrEqual($value),...$this->createValueAndErrorsPair(99, $errors)],
             [new GreaterThanOrEqual($value), ...$this->createValueAndErrorsPair('99', $errors)],
         ];
     }

@@ -67,14 +67,15 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
             [
                 new CompareTo(null, 'attribute', operator: '==='),
                 ...$this->createValueAndErrorsPair(
-                $value + 1,
-                [
-                    new Error('Value must be equal to "{targetValueOrAttribute}".', parameters: [
-                        'targetValue' => null,
-                        'targetAttribute' => 'attribute',
-                        'targetValueOrAttribute' => 100,
-                    ])
-                ])
+                    $value + 1,
+                    [
+                        new Error('Value must be equal to "{targetValueOrAttribute}".', parameters: [
+                            'targetValue' => null,
+                            'targetAttribute' => 'attribute',
+                            'targetValueOrAttribute' => 100,
+                        ]),
+                    ]
+                ),
             ],
 
             [new CompareTo($value, operator: '!='), ...$this->createValueAndErrorsPair($value, $errors1)],
@@ -93,7 +94,7 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
             [new CompareTo($value, operator: '<'), ...$this->createValueAndErrorsPair($value, $errors4)],
             [new CompareTo($value, operator: '<'), ...$this->createValueAndErrorsPair($value + 1, $errors4)],
 
-            [new CompareTo($value, operator: '<='),...$this->createValueAndErrorsPair( $value + 1, $errors5)],
+            [new CompareTo($value, operator: '<='),...$this->createValueAndErrorsPair($value + 1, $errors5)],
             [
                 new CompareTo(null, 'attribute', operator: '<='),
                 ...$this->createValueAndErrorsPair(
@@ -103,9 +104,9 @@ final class CompareToHandlerTest extends AbstractRuleValidatorTest
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',
                             'targetValueOrAttribute' => 100,
-                        ])
+                        ]),
                     ]
-                )
+                ),
             ],
         ];
     }
