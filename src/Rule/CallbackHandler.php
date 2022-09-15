@@ -24,7 +24,7 @@ final class CallbackHandler implements RuleHandlerInterface
         }
 
         $callback = $rule->getCallback();
-        $callbackResult = $callback($value, $context);
+        $callbackResult = $callback($value, $rule, $context);
 
         if (!$callbackResult instanceof Result) {
             throw new InvalidCallbackReturnTypeException($callbackResult);
