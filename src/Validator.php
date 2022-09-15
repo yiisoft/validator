@@ -6,8 +6,12 @@ namespace Yiisoft\Validator;
 
 use Closure;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Yiisoft\Validator\DataSet\ArrayDataSet;
+use Yiisoft\Validator\DataSet\MixedDataSet;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 
@@ -48,6 +52,8 @@ final class Validator implements ValidatorInterface
         mixed $data,
         iterable $rules = null
     ): Result {
+        $data = $this->normalizeDataSet($data);
+
         $compoundResult = new Result();
         $context = new ValidationContext($this, $data);
         $results = [];
@@ -160,6 +166,24 @@ final class Validator implements ValidatorInterface
         }
 
         return $rule;
+    }
+
+    #[Pure]
+    private function normalizeDataSet($data): DataSetInterface
+    {
+        if ($data instanceof DataSetInterface) {
+            return $data;
+        }
+
+        if (is_object($data)) {
+            return new ObjectDataSet($data);
+        }
+
+        if (is_array($data)) {
+            return new ArrayDataSet($data);
+        }
+
+        return new MixedDataSet($data);
     }
 
     /**

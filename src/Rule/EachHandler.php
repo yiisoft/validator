@@ -62,13 +62,14 @@ final class EachHandler implements RuleHandlerInterface
                 if ($formatMessage) {
                     $result->addError(
                         message: $eachRule->getMessage(),
+                        valuePath: $errorKey,
                         parameters: [
                             'error' => $error->getMessage(),
                             'value' => $item,
                         ]
                     );
                 } else {
-                    $result->addError($error->getMessage());
+                    $result->addError($error->getMessage(), $errorKey);
                 }
             }
         }

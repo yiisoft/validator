@@ -61,7 +61,10 @@ final class IpHandler implements RuleHandlerInterface
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
         } catch (InvalidArgumentException $e) {
-            $result->addError($formattedMessage);
+            $result->addError(
+                message: $rule->getMessage(),
+                parameters: ['value' => $value]
+            );
             return $result;
         }
 

@@ -46,7 +46,6 @@ final class DatasetNormalizerValidatorDecorator implements ValidatorInterface
         mixed $data,
         iterable $rules = null
     ): Result {
-        $data = $this->normalizeDataSet($data);
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
         } elseif ($rules instanceof RulesProviderInterface) {
@@ -56,23 +55,5 @@ final class DatasetNormalizerValidatorDecorator implements ValidatorInterface
         }
 
         return $this->decorated->validate($data, $rules);
-    }
-
-    #[Pure]
-    private function normalizeDataSet($data): DataSetInterface
-    {
-        if ($data instanceof DataSetInterface) {
-            return $data;
-        }
-
-        if (is_object($data)) {
-            return new ObjectDataSet($data);
-        }
-
-        if (is_array($data)) {
-            return new ArrayDataSet($data);
-        }
-
-        return new MixedDataSet($data);
     }
 }
