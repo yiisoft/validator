@@ -21,6 +21,8 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\ObjectWithNestedObject;
 
+use Yiisoft\Validator\ValidationContext;
+
 use function array_slice;
 
 final class NestedHandlerTest extends AbstractRuleValidatorTest
@@ -284,7 +286,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         ];
         $xRules = [
             new Number(min: -10, max: 10),
-            new Callback(static function ($value): Result {
+            new Callback(static function (mixed $value, object $rule, ValidationContext $context): Result {
                 $result = new Result();
                 $result->addError('Custom error.');
 
