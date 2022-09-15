@@ -463,9 +463,10 @@ $data = [
 
 ##### Basic usage
 
-Common flow is the same as you would use usual classes: 
-1. Declare property
-2. Add rules to it
+Common flow is the same as you would use usual classes:
+
+1. Declare property.
+2. Add rules to it.
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -536,75 +537,48 @@ final class Post
 }
 ```
 
-##### Limitations
+##### Callbacks
 
-###### `Callback` rule and `callable` type
-
-`Callback` rule is not supported, also you can't use `callable` type with attributes. Use custom rule instead.
+`Callback::$callback` property is not supported, also you can't use `callable` type with attributes. However, 
+`Callback::$method` can be set instead:
 
 ```php
-use Attribute;
-use Yiisoft\Validator\Exception\UnexpectedRuleException;
+<?php
+
+declare(strict_types=1);
+
+namespace Yiisoft\Validator\Tests\Stub;
+
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\RuleHandlerInterface;
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\ValidationContext;
 
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class ValidateXRule implements RuleInterface
+final class Author
 {
-    public function __construct()
-    {    
-    }
-}
+    #[Callback(method: 'validateName')]
+    private string $name;
 
-final class ValidateXRuleHandler implements RuleHandlerInterface
-{    
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public static function validateName(mixed $value, object $rule, ValidationContext $context): Result
     {
-        if (!$rule instanceof ValidateXRule) {
-            throw new UnexpectedRuleException(ValidateXRule::class, $rule);
-        }
-        
         $result = new Result();
-        $result->addError('Custom error.');
+        if ($value !== 'foo') {
+            $result->addError('Value must be "foo"!');
+        }
 
         return $result;
     }
 }
-
-final class Coordinates
-{
-    #[Number(min: -10, max: 10)]
-    #[ValidateXRule()]
-    private int $x;
-    #[Number(min: -10, max: 10)]
-    private int $y;
-}
 ```
 
-###### `GroupRule`
+Note that the method must exist and have public and static modifiers.
 
-`GroupRule` is not supported, but it's unnecessary since multiple attributes can be used for one property.
-
-```php
-use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\Regex;
-
-final class UserData
-{
-    #[HasLength(min: 2, max: 20)]
-    #[Regex('~[a-z_\-]~i')]
-    private string $name;    
-}
-```
+##### Limitations
 
 ###### Nested attributes
 
 PHP 8.0 supports attributes, but nested declaration is allowed only in PHP 8.1 and above.
 
-So such attributes as `Each`, `Nested` and `Composite` are not allowed in PHP 8.0.
+So attributes such as `Each`, `Nested` and `Composite` are not allowed in PHP 8.0.
 
 The following example is not allowed in PHP 8.0:
 
@@ -659,8 +633,8 @@ final class Color
 
 ###### Function / method calls
 
-You can't use a function / method call result with attributes. Like with `Callback` rule and callable, this problem can 
-be overcome with custom rule.
+You can't use a function / method call result with attributes. This problem can be overcome either with custom rule or 
+`Callback::$method` property. An example of custom rule:
 
 ```php
 use Attribute;
