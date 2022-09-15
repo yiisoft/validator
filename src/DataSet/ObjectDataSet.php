@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\DataSet;
 use ReflectionAttribute;
 use ReflectionObject;
 use ReflectionProperty;
+use Yiisoft\Validator\AttributeEventInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -41,6 +42,14 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         $this->parseObject();
     }
 
+    /**
+     * @return object
+     */
+    public function getObject(): object
+    {
+        return $this->object;
+    }
+
     public function getRules(): iterable
     {
         return $this->rules;
@@ -73,11 +82,10 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     // TODO: use Generator to collect attributes
     private function parseObject(): void
     {
-        $objectProvidedRules = $this->object instanceof RulesProviderInterface;
+        $objectHasRules = $this->object instanceof RulesProviderInterface;
+        $this->rules = $objectHasRules ? $this->object->getRules() : [];
+
         $this->dataSetProvided = $this->object instanceof DataSetInterface;
-
-        $this->rules = $objectProvidedRules ? $this->object->getRules() : [];
-
         if ($this->dataSetProvided) {
             return;
         }
@@ -89,10 +97,17 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
             }
             $this->reflectionProperties[$property->getName()] = $property;
 
-            if (!$objectProvidedRules) {
-                $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
-                foreach ($attributes as $attribute) {
-                    $this->rules[$property->getName()][] = $attribute->newInstance();
+            if ($objectHasRules === true) {
+                continue;
+            }
+
+            $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
+            foreach ($attributes as $attribute) {
+                $rule = $attribute->newInstance();
+                $this->rules[$property->getName()][] = $rule;
+
+                if ($rule instanceof AttributeEventInterface) {
+                    $rule->afterInitAttribute($this);
                 }
             }
         }
