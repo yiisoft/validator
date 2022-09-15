@@ -30,7 +30,7 @@ final class RegexHandler implements RuleHandlerInterface
         if (!is_string($value)) {
             $result->addError(
                 message: $rule->getIncorrectInputMessage(),
-                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
+                parameters: ['value' => $value]
             );
 
             return $result;
@@ -42,7 +42,7 @@ final class RegexHandler implements RuleHandlerInterface
         ) {
             $result->addError(
                 message: $rule->getMessage(),
-                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
+                parameters: ['value' => $value]
             );
         }
 

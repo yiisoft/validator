@@ -24,25 +24,25 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         $errors = [new Error('This value is not a valid URL.')];
 
         return [
-            [$rule, 'google.de', $errors],
-            [$rule, 'htp://yiiframework.com', $errors],
-            [$rule, 'ftp://ftp.ruhr-uni-bochum.de/', $errors],
-            [$rule, 'http://invalid,domain', $errors],
-            [$rule, 'http://example.com,', $errors],
-            [$rule, 'http://example.com*12', $errors],
-            [$rule, 'http://example.com,?test', $errors],
-            [$rule, 'http://example.com:?test', $errors],
-            [$rule, 'http://example.com:test', $errors],
-            [$rule, 'http://example.com:123456/test', $errors],
-            [$rule, 'http://äüö?=!"§$%&/()=}][{³²€.edu', $errors],
+            [$rule, ...$this->createValueAndErrorsPair('google.de', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('htp://yiiframework.com', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('ftp://ftp.ruhr-uni-bochum.de/', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('http://invalid,domain', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('http://example.com,', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('http://example.com*12', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('http://example.com,?test', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('http://example.com:?test', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('http://example.com:test', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('http://example.com:123456/test', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('http://äüö?=!"§$%&/()=}][{³²€.edu', $errors)],
 
 
-            [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']), 'htp://yiiframework.com', $errors],
+            [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']), ...$this->createValueAndErrorsPair('htp://yiiframework.com', $errors)],
             // Relative URLs are not supported
-            [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']), '//yiiframework.com', $errors],
+            [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']), ...$this->createValueAndErrorsPair('//yiiframework.com', $errors)],
 
-            [new Url(enableIDN: true), '', $errors],
-            [new Url(enableIDN: true), 'http://' . str_pad('base', 2000, 'url') . '.de', $errors],
+            [new Url(enableIDN: true), ...$this->createValueAndErrorsPair('', $errors)],
+            [new Url(enableIDN: true), ...$this->createValueAndErrorsPair('http://' . str_pad('base', 2000, 'url') . '.de', $errors)],
         ];
     }
 
@@ -109,7 +109,7 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         }
 
         return [
-            [new Url(enableIDN: true, message: 'Custom error'), '', [new Error('Custom error')]],
+            [new Url(enableIDN: true, message: 'Custom error'), ...$this->createValueAndErrorsPair('', [new Error('Custom error')])],
         ];
     }
 
@@ -138,6 +138,6 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new UrlHandler($this->getTranslator());
+        return new UrlHandler();
     }
 }

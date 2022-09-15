@@ -17,13 +17,17 @@ final class AtLeastHandlerTest extends AbstractRuleValidatorTest
         return [
             [
                 new AtLeast(['attr2']),
+                ...$this->createValueAndErrorsPair(
                 $this->createObject(1, null),
-                [new Error('The model is not valid. Must have at least "1" filled attributes.')],
+                [new Error('The model is not valid. Must have at least "{min}" filled attributes.', parameters: ['min' => 1])]
+                ),
             ],
             [
                 new AtLeast(['attr1', 'attr2'], min: 2),
-                $this->createObject(1, null),
-                [new Error('The model is not valid. Must have at least "2" filled attributes.')],
+                ...$this->createValueAndErrorsPair(
+                    $this->createObject(1, null),
+                [new Error('The model is not valid. Must have at least "{min}" filled attributes.', parameters: ['min' => 2])]
+                ),
             ],
         ];
     }
@@ -47,15 +51,17 @@ final class AtLeastHandlerTest extends AbstractRuleValidatorTest
         return [
             [
                 new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom error'),
-                $this->createObject(1, null),
-                [new Error('Custom error')],
+                ...$this->createValueAndErrorsPair(
+                    $this->createObject(1, null),
+                [new Error('Custom error', parameters: ['min' => 2])]
+                ),
             ],
         ];
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new AtLeastHandler($this->getTranslator());
+        return new AtLeastHandler();
     }
 
     private function createObject(mixed $attr1, mixed $attr2): stdClass

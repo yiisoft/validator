@@ -17,22 +17,23 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
     {
         $rule = new Count(min: 3);
 
-        $lessThanMinmessage = 'This value must contain at least 3 items.';
-        $greaterThanMaxMessage = 'This value must contain at most 3 items.';
+        $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{item} other{items}}.';
+        $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{item} other{items}}.';
 
         return [
-            [$rule, 1, [new Error('This value must be an array or implement \Countable interface.')]],
-            [$rule, [1], [new Error($lessThanMinmessage)]],
-            [$rule, [], [new Error($lessThanMinmessage)]],
-            [$rule, [0, 0], [new Error($lessThanMinmessage)]],
-            [$rule, [1.1], [new Error($lessThanMinmessage)]],
-            [$rule, [''], [new Error($lessThanMinmessage)]],
-            [$rule, ['some string'], [new Error($lessThanMinmessage)]],
-            [$rule, [new stdClass()], [new Error($lessThanMinmessage)]],
+            [$rule, ...$this->createValueAndErrorsPair(1, [new Error('This value must be an array or implement \Countable interface.')])],
+            [$rule, ...$this->createValueAndErrorsPair([1], [new Error($lessThanMinMessage, parameters: ['min' => 3])])],
+            [$rule, ...$this->createValueAndErrorsPair([], [new Error($lessThanMinMessage, parameters: ['min' => 3])])],
+            [$rule, ...$this->createValueAndErrorsPair([0, 0], [new Error($lessThanMinMessage, parameters: ['min' => 3])])],
+            [$rule, ...$this->createValueAndErrorsPair([1.1], [new Error($lessThanMinMessage, parameters: ['min' => 3])])],
+            [$rule, ...$this->createValueAndErrorsPair([''], [new Error($lessThanMinMessage, parameters: ['min' => 3])])],
+            [$rule, ...$this->createValueAndErrorsPair(['some string'], [new Error($lessThanMinMessage, parameters: ['min' => 3])])],
+            [$rule, ...$this->createValueAndErrorsPair([new stdClass()], [new Error($lessThanMinMessage, parameters: ['min' => 3])])],
             // https://www.php.net/manual/ru/class.countable.php
             [
                 $rule,
-                [
+                ...$this->createValueAndErrorsPair(
+                    [
                     new class () {
                         protected int $myCount = 3;
 
@@ -42,9 +43,10 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
                         }
                     },
                 ],
-                [new Error($lessThanMinmessage)],
+                [new Error($lessThanMinMessage, parameters: ['min' => 3])]
+                ),
             ],
-            [new Count(max: 3), [0, 0, 0, 0], [new Error($greaterThanMaxMessage)]],
+            [new Count(max: 3), ...$this->createValueAndErrorsPair([0, 0, 0, 0], [new Error($greaterThanMaxMessage, parameters: ['max' => 3])])],
         ];
     }
 
@@ -74,14 +76,14 @@ final class CountHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new Count(max: 3, greaterThanMaxMessage: 'Custom message.'), [0, 0, 0, 0], [new Error('Custom message.')]],
-            [new Count(exactly: 3, notExactlyMessage: 'Custom message.'), [0, 0, 0, 0], [new Error('Custom message.')]],
-            [new Count(min: 3, lessThanMinMessage: 'Custom message.'), [0, 0], [new Error('Custom message.')]],
+            [new Count(max: 3, greaterThanMaxMessage: 'Custom message.'), ...$this->createValueAndErrorsPair([0, 0, 0, 0], [new Error('Custom message.', parameters: ['max' => 3])])],
+            [new Count(exactly: 3, notExactlyMessage: 'Custom message.'), ...$this->createValueAndErrorsPair([0, 0, 0, 0], [new Error('Custom message.', parameters: ['exactly' => 3])])],
+            [new Count(min: 3, lessThanMinMessage: 'Custom message.'), ...$this->createValueAndErrorsPair([0, 0], [new Error('Custom message.', parameters: ['min' => 3])])],
         ];
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new CountHandler($this->getTranslator());
+        return new CountHandler();
     }
 }

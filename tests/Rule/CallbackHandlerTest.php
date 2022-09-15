@@ -25,8 +25,10 @@ final class CallbackHandlerTest extends AbstractRuleValidatorTest
 
                     return $result;
                 }),
-                41,
-                [new Error('Value should be 42!')],
+                ...$this->createValueAndErrorsPair(
+                    41,
+                [new Error('Value should be 42!')]
+                ),
             ],
         ];
     }
@@ -60,8 +62,10 @@ final class CallbackHandlerTest extends AbstractRuleValidatorTest
 
                     return $result;
                 }),
-                41,
-                [new Error('Custom error')],
+                ...$this->createValueAndErrorsPair(
+                    41,
+                [new Error('Custom error')]
+                ),
             ],
         ];
     }
@@ -77,6 +81,6 @@ final class CallbackHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new CallbackHandler($this->getTranslator());
+        return new CallbackHandler();
     }
 }

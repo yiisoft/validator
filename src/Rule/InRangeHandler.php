@@ -29,7 +29,7 @@ final class InRangeHandler implements RuleHandlerInterface
         if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getRange(), $rule->isStrict())) {
             $result->addError(
                 message: $rule->getMessage(),
-                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
+                parameters: ['value' => $value]
             );
         }
 

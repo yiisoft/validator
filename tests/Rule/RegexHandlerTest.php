@@ -20,14 +20,14 @@ final class RegexHandlerTest extends AbstractRuleValidatorTest
         $message = 'Value is invalid.';
 
         return [
-            [$rule, ['a', 'b'], [new Error($incorrectInputMessage)]],
-            [$ruleNot, ['a', 'b'], [new Error($incorrectInputMessage)]],
-            [$rule, null, [new Error($incorrectInputMessage)]],
-            [$ruleNot, null, [new Error($incorrectInputMessage)]],
-            [$rule, new stdClass(), [new Error($incorrectInputMessage)]],
-            [$ruleNot, new stdClass(), [new Error($incorrectInputMessage)]],
+            [$rule, ...$this->createValueAndErrorsPair(['a', 'b'], [new Error($incorrectInputMessage)])],
+            [$ruleNot, ...$this->createValueAndErrorsPair(['a', 'b'], [new Error($incorrectInputMessage)])],
+            [$rule, ...$this->createValueAndErrorsPair(null, [new Error($incorrectInputMessage)])],
+            [$ruleNot, ...$this->createValueAndErrorsPair(null, [new Error($incorrectInputMessage)])],
+            [$rule, ...$this->createValueAndErrorsPair(new stdClass(), [new Error($incorrectInputMessage)])],
+            [$ruleNot, ...$this->createValueAndErrorsPair(new stdClass(), [new Error($incorrectInputMessage)])],
 
-            [$rule, 'b', [new Error($message)]],
+            [$rule, ...$this->createValueAndErrorsPair('b', [new Error($message)])],
         ];
     }
 
@@ -46,13 +46,13 @@ final class RegexHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new Regex('/a/', message: 'Custom message.'), 'b', [new Error('Custom message.')]],
-            [new Regex('/a/', incorrectInputMessage: 'Custom message.'), null, [new Error('Custom message.')]],
+            [new Regex('/a/', message: 'Custom message.'), ...$this->createValueAndErrorsPair('b', [new Error('Custom message.')])],
+            [new Regex('/a/', incorrectInputMessage: 'Custom message.'), ...$this->createValueAndErrorsPair(null, [new Error('Custom message.')])],
         ];
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new RegexHandler($this->getTranslator());
+        return new RegexHandler();
     }
 }

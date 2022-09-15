@@ -28,7 +28,7 @@ final class JsonHandler implements RuleHandlerInterface
         if (!$this->isValidJson($value)) {
             $result->addError(
                 message: $rule->getMessage(),
-                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
+                parameters: ['value' => $value]
             );
         }
 

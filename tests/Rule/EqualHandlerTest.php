@@ -14,11 +14,16 @@ final class EqualHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $value = 100;
-        $message = 'Value must be equal to "100".';
-
+        $errors = [
+            new Error('Value must be equal to "{targetValueOrAttribute}".', parameters: [
+                'targetValue' => $value,
+                'targetAttribute' => null,
+                'targetValueOrAttribute' => $value,
+            ]),
+        ];
         return [
-            [new Equal($value), 101, [new Error($message)]],
-            [new Equal($value, strict: true), $value + 1, [new Error($message)]],
+            [new Equal($value), ...$this->createValueAndErrorsPair(101, $errors)],
+            [new Equal($value, strict: true), ...$this->createValueAndErrorsPair($value + 1, $errors)],
         ];
     }
 
@@ -28,19 +33,26 @@ final class EqualHandlerTest extends AbstractRuleValidatorTest
 
         return [
             [new Equal($value), $value],
-            [new Equal($value), (string)$value],
+            [new Equal($value), (string) $value],
         ];
     }
 
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new Equal(100, message: 'Custom error'), 101, [new Error('Custom error')]],
+            [new Equal(100, message: 'Custom error'),
+                ...$this->createValueAndErrorsPair(
+                    101,
+                    [new Error('Custom error', parameters: [
+                        'targetValue' => 100,
+                        'targetAttribute' => null,
+                        'targetValueOrAttribute' => 100,
+                    ] )])],
         ];
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new CompareHandler($this->getTranslator());
+        return new CompareHandler();
     }
 }

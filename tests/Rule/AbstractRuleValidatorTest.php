@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
+use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -88,5 +89,26 @@ abstract class AbstractRuleValidatorTest extends TestCase
             new ArrayDataSet(['attribute' => 100, 'number' => 100, 'string' => '100']),
             'number'
         );
+    }
+
+
+    /**
+     * @param mixed $value
+     * @param Error[] $errors
+     * @return string[]
+     */
+    protected function createValueAndErrorsPair(mixed $value, array $errors): array
+    {
+        $newErrors = [];
+
+        foreach ($errors as $error) {
+            $newErrors[] = new Error(
+                $error->getMessage(),
+                $error->getValuePath(),
+                array_merge($error->getParameters(), ['value' => $value])
+            );
+        }
+
+        return [$value, $newErrors];
     }
 }

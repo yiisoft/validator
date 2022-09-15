@@ -14,11 +14,13 @@ final class GreaterThanHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $value = 100;
-        $message = 'Value must be greater than "100".';
+        $message = 'Value must be greater than "{targetValueOrAttribute}".';
+
+        $errors = [new Error($message, parameters: ['targetValue' => 100, 'targetAttribute' => null, 'targetValueOrAttribute' => 100])];
 
         return [
-            [new GreaterThan($value), 99, [new Error($message)]],
-            [new GreaterThan($value), '100', [new Error($message)]],
+            [new GreaterThan($value),...$this->createValueAndErrorsPair( 99, $errors)],
+            [new GreaterThan($value), ...$this->createValueAndErrorsPair('100', $errors)],
         ];
     }
 
@@ -35,12 +37,12 @@ final class GreaterThanHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new GreaterThan(100, message: 'Custom error'), 99, [new Error('Custom error')]],
+            [new GreaterThan(100, message: 'Custom error'),...$this->createValueAndErrorsPair( 99, [new Error('Custom error', parameters: ['targetValue' => 100, 'targetAttribute' => null, 'targetValueOrAttribute' => 100])])],
         ];
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new CompareHandler($this->getTranslator());
+        return new CompareHandler();
     }
 }

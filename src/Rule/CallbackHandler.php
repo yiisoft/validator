@@ -35,7 +35,7 @@ final class CallbackHandler implements RuleHandlerInterface
             $result->addError(
                 message: $rule->getMessage(),
                 valuePath: $error->getValuePath(),
-                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
+                parameters: ['value' => $value]
             );
         }
 

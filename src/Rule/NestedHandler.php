@@ -78,7 +78,7 @@ final class NestedHandler implements RuleHandlerInterface
             $result = new Result();
             $result->addError(
                 message:$message,
-                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
+                parameters: ['value' => $value]
             );
             return  $result;
         }
@@ -93,7 +93,7 @@ final class NestedHandler implements RuleHandlerInterface
                 $compoundResult->addError(
                     message: $rule->getNoPropertyPathMessage(),
                     valuePath:  StringHelper::parsePath($valuePath),
-                    parameters: ['path' => $valuePath, 'attribute' => $context->getAttribute(), 'value' => $data]
+                    parameters: ['path' => $valuePath, 'value' => $data]
                 );
                 continue;
             }

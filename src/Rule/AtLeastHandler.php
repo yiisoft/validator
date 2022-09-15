@@ -36,7 +36,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         if ($filledCount < $rule->getMin()) {
             $result->addError(
                 message: $rule->getMessage(),
-                parameters: ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
+                parameters: ['min' => $rule->getMin(), 'value' => $value]
             );
         }
 

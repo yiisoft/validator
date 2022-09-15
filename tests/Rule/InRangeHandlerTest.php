@@ -20,25 +20,25 @@ final class InRangeHandlerTest extends AbstractRuleValidatorTest
         $errors = [new Error('This value is invalid.')];
 
         return [
-            [$rule, 0, $errors],
-            [$rule, 11, $errors],
-            [$rule, 5.5, $errors],
+            [$rule, ...$this->createValueAndErrorsPair(0, $errors)],
+            [$rule, ...$this->createValueAndErrorsPair(11, $errors)],
+            [$rule, ...$this->createValueAndErrorsPair(5.5, $errors)],
 
-            [$rule, null, $errors],
-            [$rule, '0', $errors],
-            [$rule, 0, $errors],
-            [$rule, '', $errors],
+            [$rule, ...$this->createValueAndErrorsPair(null, $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('0', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair(0, $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('', $errors)],
 
-            [$ruleStrict, '1', $errors],
-            [$ruleStrict, '10', $errors],
-            [$ruleStrict, '5.5', $errors],
-            [$ruleStrict, ['1', '2', '3', '4', '5', '6'], $errors],
-            [$ruleStrict, ['1', '2', '3', 4, 5, 6], $errors],
+            [$ruleStrict, ...$this->createValueAndErrorsPair('1', $errors)],
+            [$ruleStrict, ...$this->createValueAndErrorsPair('10', $errors)],
+            [$ruleStrict, ...$this->createValueAndErrorsPair('5.5', $errors)],
+            [$ruleStrict, ...$this->createValueAndErrorsPair(['1', '2', '3', '4', '5', '6'], $errors)],
+            [$ruleStrict, ...$this->createValueAndErrorsPair(['1', '2', '3', 4, 5, 6], $errors)],
 
-            [$ruleNot, 1, $errors],
-            [$ruleNot, 10, $errors],
-            [$ruleNot, '10', $errors],
-            [$ruleNot, '5', $errors],
+            [$ruleNot, ...$this->createValueAndErrorsPair(1, $errors)],
+            [$ruleNot, ...$this->createValueAndErrorsPair(10, $errors)],
+            [$ruleNot, ...$this->createValueAndErrorsPair('10', $errors)],
+            [$ruleNot, ...$this->createValueAndErrorsPair('5', $errors)],
         ];
     }
 
@@ -70,12 +70,12 @@ final class InRangeHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new InRange(range(1, 10), message: 'Custom error'), 15, [new Error('Custom error')]],
+            [new InRange(range(1, 10), message: 'Custom error'), ...$this->createValueAndErrorsPair(15, [new Error('Custom error')])],
         ];
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new InRangeHandler($this->getTranslator());
+        return new InRangeHandler();
     }
 }

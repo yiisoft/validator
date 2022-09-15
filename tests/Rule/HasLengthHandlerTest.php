@@ -14,28 +14,35 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $defaultRule = new HasLength(min: 25);
-        $message = 'This value must be a string.';
-        $greaterThanMaxMessage = 'This value must contain at most 25 characters.';
-        $notExactlyMessage = 'This value must contain exactly 25 characters.';
-        $lessThanMinMessage = 'This value must contain at least 25 characters.';
+        $errors = [new Error('This value must be a string.')];
+        $lessThanMinErrors = [new Error('This value must contain at least {min, number} {min, plural, one{character} other{characters}}.', parameters: ['min' => 25])];
+        $notExactlyErrors = [new Error('This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' , parameters: ['exactly' => 25])];
 
         return [
-            [$defaultRule, ['not a string'], [new Error($message)]],
-            [$defaultRule, new stdClass(), [new Error($message)]],
-            [$defaultRule, true, [new Error($message)]],
-            [$defaultRule, false, [new Error($message)]],
+            [$defaultRule, ...$this->createValueAndErrorsPair(['not a string'], $errors)],
+            [$defaultRule, ...$this->createValueAndErrorsPair(new stdClass(), $errors)],
+            [$defaultRule, ...$this->createValueAndErrorsPair(true, $errors)],
+            [$defaultRule, ...$this->createValueAndErrorsPair(false, $errors)],
 
-            [new HasLength(max: 25), str_repeat('x', 1250), [new Error($greaterThanMaxMessage)]],
-            [new HasLength(exactly: 25), str_repeat('x', 125), [new Error($notExactlyMessage)]],
+            [
+                new HasLength(max: 25),
+                ...$this->createValueAndErrorsPair(
+                    str_repeat('x', 1250),
+                [new Error('This value must contain at most {max, number} {max, plural, one{character} other{characters}}.', parameters: ['max' => 25])]
+                )
+            ],
+            [new HasLength(exactly: 25), ...$this->createValueAndErrorsPair(str_repeat('x', 125), $notExactlyErrors)],
 
-            [new HasLength(exactly: 25), '', [new Error($notExactlyMessage)]],
+            [new HasLength(exactly: 25), ...$this->createValueAndErrorsPair('', $notExactlyErrors)],
             [
                 new HasLength(min: 10, max: 25),
-                str_repeat('x', 5),
-                [new Error('This value must contain at least 10 characters.')],
+                ...$this->createValueAndErrorsPair(
+                    str_repeat('x', 5),
+                [new Error('This value must contain at least {min, number} {min, plural, one{character} other{characters}}.', parameters: ['min' => 10])]
+                ),
             ],
-            [new HasLength(min: 25), str_repeat('x', 13), [new Error($lessThanMinMessage)]],
-            [new HasLength(min: 25), '', [new Error($lessThanMinMessage)]],
+            [new HasLength(min: 25), ...$this->createValueAndErrorsPair(str_repeat('x', 13), $lessThanMinErrors)],
+            [new HasLength(min: 25), ...$this->createValueAndErrorsPair('', $lessThanMinErrors)],
         ];
     }
 
@@ -73,14 +80,14 @@ final class HasLengthHandlerTest extends AbstractRuleValidatorTest
         );
 
         return [
-            [$rule, null, [new Error('is not string error')]],
-            [$rule, str_repeat('x', 1), [new Error('is too short test')],],
-            [$rule, str_repeat('x', 6), [new Error('is too long test')]],
+            [$rule,...$this->createValueAndErrorsPair( null, [new Error('is not string error')])],
+            [$rule,...$this->createValueAndErrorsPair( str_repeat('x', 1), [new Error('is too short test', parameters: ['min' => 3])])],
+            [$rule, ...$this->createValueAndErrorsPair(str_repeat('x', 6), [new Error('is too long test', parameters: ['max' => 5])])],
         ];
     }
 
     protected function getRuleHandler(): HasLengthHandler
     {
-        return new HasLengthHandler($this->getTranslator());
+        return new HasLengthHandler();
     }
 }

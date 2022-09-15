@@ -60,7 +60,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             [
                 new Nested(['value' => new Required()], requirePropertyPath: true),
                 [],
-                ['value' => ['Property path "value" is not found.']],
+                ['value' => ['Property path "{path}" is not found.']],
             ],
             // https://github.com/yiisoft/validator/issues/200
             [
@@ -118,28 +118,28 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         return [
             'error' => [
                 new Nested(['author.age' => [new Number(min: 20)]]),
-                $value,
-                [new Error('Value must be no less than 20.', ['author', 'age'])],
+                    $value,
+                [new Error('Value must be no less than 20.', ['author', 'age'], ['value' => 18, 'min' => 20])],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
-                $value,
-                [new Error('This value is invalid.', ['author', 'sex'])],
+                    $value,
+                [new Error('This value is invalid.', ['author', 'sex'], ['value' => null])],
             ],
             [
                 $rule,
-                '',
-                [new Error('Value should be an array or an object. string given.')],
+                    '',
+                [new Error('Value should be an array or an object. string given.', parameters: ['path' => 'value'])],
             ],
             [
                 $rule,
-                ['value' => null],
-                [new Error('Value cannot be blank.', ['value'])],
+                    ['value' => null],
+                [new Error('Value cannot be blank.', ['value'], ['value' => null])],
             ],
             [
                 new Nested(['value' => new Required()], requirePropertyPath: true),
-                [],
-                [new Error('Property path "value" is not found.', ['value'])],
+                    [],
+                [new Error('Property path "{path}" is not found.', ['value'], ['path' => 'value'])],
             ],
             [
                 // https://github.com/yiisoft/validator/issues/200
@@ -151,14 +151,14 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                         ]),
                     ],
                 ]),
-                [
+                    [
                     'body' => [
                         'shipping' => [
                             'phone' => '+777777777777',
                         ],
                     ],
                 ],
-                [new Error('Value is invalid.', ['body', 'shipping', 'phone'])],
+                [new Error('Value is invalid.', ['body', 'shipping', 'phone'], ['value' => '+777777777777'])],
             ],
             [
                 new Nested([
@@ -166,17 +166,19 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                         0 => [new Number(min: -10, max: 10)],
                     ]),
                 ]),
-                [0 => [0 => -11]],
-                [new Error('Value must be no less than -10.', [0, 0])],
+                ...$this->createValueAndErrorsPair(
+                    [0 => [0 => -11]],
+                [new Error('Value must be no less than -10.', [0, 0])]
+                ),
             ],
             [
                 new Nested(['author\.data.name\.surname' => [new HasLength(min: 8)]]),
-                [
+                    [
                     'author.data' => [
                         'name.surname' => 'Dmitriy',
                     ],
                 ],
-                [new Error('This value must contain at least 8 characters.', ['author.data', 'name.surname'])],
+                [new Error('This value must contain at least {min, number} {min, plural, one{character} other{characters}}..', ['author.data', 'name.surname'], ['value' => 'Dmitriy', 'min' => 8])],
             ],
         ];
     }
@@ -252,8 +254,8 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     requirePropertyPath: true,
                     noPropertyPathMessage: 'Property is not found.',
                 ),
-                [],
-                [new Error('Property is not found.', ['value'])],
+                    [],
+                [new Error('Property is not found.', ['value'], ['path' => 'value', 'value' => []])],
             ],
         ];
     }
@@ -499,6 +501,6 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new NestedHandler($this->getTranslator());
+        return new NestedHandler();
     }
 }

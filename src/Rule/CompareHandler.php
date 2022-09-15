@@ -43,8 +43,7 @@ final class CompareHandler implements RuleHandlerInterface
             $result->addError(
                 message: $rule->getMessage(),
                 parameters: [
-                    'attribute' => $context->getAttribute(),
-                    'targetValue' => $rule->getTargetValue(),
+                        'targetValue' => $rule->getTargetValue(),
                     'targetAttribute' => $rule->getTargetAttribute(),
                     'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
                     'value' => $value,

@@ -20,11 +20,13 @@ final class CompositeHandlerTest extends AbstractRuleValidatorTest
                     rules: [new Number(max: 13), new Number(min: 21)],
                     when: fn () => true,
                 ),
-                20,
+                ...$this->createValueAndErrorsPair(
+                    20,
                 [
-                    new Error('Value must be no greater than 13.'),
-                    new Error('Value must be no less than 21.'),
-                ],
+                    new Error('Value must be no greater than 13.', parameters: ['max' => 13]),
+                    new Error('Value must be no less than 21.', parameters: ['min' => 21]),
+                ]
+                ),
             ],
         ];
     }
@@ -64,8 +66,10 @@ final class CompositeHandlerTest extends AbstractRuleValidatorTest
                     rules: [new Number(max: 13, tooBigMessage: 'Custom error')],
                     when: fn () => true,
                 ),
-                20,
-                [new Error('Custom error')],
+                ...$this->createValueAndErrorsPair(
+                    20,
+                [new Error('Custom error', parameters: ['max' => 13])]
+                ),
             ],
         ];
     }

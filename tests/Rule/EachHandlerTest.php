@@ -44,8 +44,8 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
                 new Each([new Number(max: 13)]),
                 [10, 20, 30],
                 [
-                    new Error('Value must be no greater than 13. 20 given.', [1]),
-                    new Error('Value must be no greater than 13. 30 given.', [2]),
+                    new Error('{error} {value} given.', [1], ['error' => 'Value must be no greater than 13.', 'value' => 20]),
+                    new Error('{error} {value} given.', [2], ['error' => 'Value must be no greater than 13.', 'value' => 30]),
                 ],
             ],
         ];
@@ -68,8 +68,8 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
                 new Each([new Number(max: 13, tooBigMessage: 'Custom error.')]),
                 [10, 20, 30],
                 [
-                    new Error('Custom error. 20 given.', [1]),
-                    new Error('Custom error. 30 given.', [2]),
+                    new Error('{error} {value} given.', [1], ['error' => 'Custom error.', 'value' => 20]),
+                    new Error('{error} {value} given.', [2], ['error' => 'Custom error.', 'value' => 30]),
                 ],
             ],
         ];
@@ -77,6 +77,6 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new EachHandler($this->getTranslator());
+        return new EachHandler();
     }
 }

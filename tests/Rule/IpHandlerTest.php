@@ -28,105 +28,119 @@ final class IpHandlerTest extends AbstractRuleValidatorTest
         $ipv6NotAllowedMessage = 'Must not be an IPv6 address.';
 
         return [
-            [$rule, 'not.an.ip', [new Error($message)]],
-            [$rule, 'bad:forSure', [new Error($message)]],
-            [$rule, ['what an array', '??'], [new Error($message)]],
-            [$rule, 123456, [new Error($message)]],
-            [$rule, true, [new Error($message)]],
-            [$rule, false, [new Error($message)]],
+            [$rule, ...$this->createValueAndErrorsPair('not.an.ip', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('bad:forSure', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair(['what an array', '??'], [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair(123456, [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair(true, [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair(false, [new Error($message)])],
 
-            [$rule, '2008:fz::0', [new Error($message)]],
-            [$rule, '2008:fa::0::1', [new Error($message)]],
-            [$rule, '!2008:fa::0::1', [new Error($message)]],
-            [$rule, '2008:fa::0:1/64', [new Error($hasSubnetMessage)]],
+            [$rule, ...$this->createValueAndErrorsPair('2008:fz::0', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('2008:fa::0::1', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('!2008:fa::0::1', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('2008:fa::0:1/64', [new Error($hasSubnetMessage)])],
 
-            [$ruleRange, 'babe::cafe', [new Error($notInRangeMessage)]],
-            [$ruleRange, '10.0.0.2', [new Error($notInRangeMessage)]],
+            [$ruleRange, ...$this->createValueAndErrorsPair('babe::cafe', [new Error($notInRangeMessage)])],
+            [$ruleRange, ...$this->createValueAndErrorsPair('10.0.0.2', [new Error($notInRangeMessage)])],
 
-            [$rule, '192.168.005.001', [new Error($message)]], // Leading zeroes are not supported
-            [$rule, '192.168.5.321', [new Error($message)]],
-            [$rule, '!192.168.5.32', [new Error($message)]],
-            [$rule, '192.168.5.32/11', [new Error($hasSubnetMessage)]],
-            [new Ip(allowIpv4: false), '192.168.10.11', [new Error($ipv4NotAllowedMessage)]],
-            [new Ip(allowSubnet: true), '192.168.5.32/33', [new Error($wrongCidrMessage)]],
-            [new Ip(allowSubnet: true), '192.168.5.32/af', [new Error($message)]],
-            [new Ip(allowSubnet: true), '192.168.5.32/11/12', [new Error($message)]],
-            [$ruleRequiredSubnet, '10.0.0.1', [new Error($noSubnetMessage)]],
-            [new Ip(requireSubnet: true, allowNegation: true), '!!192.168.5.32/32', [new Error($message)]],
+            [$rule, ...$this->createValueAndErrorsPair('192.168.005.001', [new Error($message)])], // Leading zeroes are not supported
+            [$rule, ...$this->createValueAndErrorsPair('192.168.5.321', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('!192.168.5.32', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('192.168.5.32/11', [new Error($hasSubnetMessage)])],
+            [new Ip(allowIpv4: false), ...$this->createValueAndErrorsPair('192.168.10.11', [new Error($ipv4NotAllowedMessage)])],
+            [new Ip(allowSubnet: true), ...$this->createValueAndErrorsPair('192.168.5.32/33', [new Error($wrongCidrMessage)])],
+            [new Ip(allowSubnet: true), ...$this->createValueAndErrorsPair('192.168.5.32/af', [new Error($message)])],
+            [new Ip(allowSubnet: true), ...$this->createValueAndErrorsPair('192.168.5.32/11/12', [new Error($message)])],
+            [$ruleRequiredSubnet, ...$this->createValueAndErrorsPair('10.0.0.1', [new Error($noSubnetMessage)])],
+            [new Ip(requireSubnet: true, allowNegation: true), ...$this->createValueAndErrorsPair('!!192.168.5.32/32', [new Error($message)])],
 
-            [new Ip(allowIpv4: false, allowSubnet: true), '!2008:fa::0:1/0', [new Error($message)]],
-            [new Ip(allowIpv4: false, allowSubnet: true), '2008:fz::0/129', [new Error($message)]],
-            [new Ip(allowIpv4: false, requireSubnet: true), '2008:db0::1', [new Error($noSubnetMessage)]],
+            [new Ip(allowIpv4: false, allowSubnet: true),...$this->createValueAndErrorsPair( '!2008:fa::0:1/0', [new Error($message)])],
+            [new Ip(allowIpv4: false, allowSubnet: true), ...$this->createValueAndErrorsPair('2008:fz::0/129', [new Error($message)])],
+            [new Ip(allowIpv4: false, requireSubnet: true), ...$this->createValueAndErrorsPair('2008:db0::1', [new Error($noSubnetMessage)])],
             [
                 new Ip(allowIpv4: false, requireSubnet: true, allowNegation: true),
-                '!!2008:fa::0:1/64',
-                [new Error($message)],
+                ...$this->createValueAndErrorsPair(
+                    '!!2008:fa::0:1/64',
+                [new Error($message)]
+                ),
             ],
 
-            [$rule, '192.168.005.001', [new Error($message)]], // Leading zeroes are not allowed
-            [$rule, '192.168.5.321', [new Error($message)]],
-            [$rule, '!192.168.5.32', [new Error($message)]],
-            [$rule, '192.168.5.32/11', [new Error($hasSubnetMessage)]],
-            [$rule, '2008:fz::0', [new Error($message)]],
-            [$rule, '2008:fa::0::1', [new Error($message)]],
-            [$rule, '!2008:fa::0::1', [new Error($message)]],
-            [$rule, '2008:fa::0:1/64', [new Error($hasSubnetMessage)]],
-            [new Ip(allowIpv4: false), '192.168.10.11', [new Error($ipv4NotAllowedMessage)]],
-            [new Ip(allowIpv6: false), '2008:fa::1', [new Error($ipv6NotAllowedMessage)]],
-            [$ruleRequiredSubnet, '!2008:fa::0:1/0', [new Error($message)]],
-            [$ruleRequiredSubnet, '2008:fz::0/129', [new Error($message)]],
-            [$ruleRequiredSubnet, '192.168.5.32/33', [new Error($wrongCidrMessage)]],
-            [$ruleRequiredSubnet, '192.168.5.32/af', [new Error($message)]],
-            [$ruleRequiredSubnet, '192.168.5.32/11/12', [new Error($message)]],
-            [$ruleRequiredSubnet, '2008:db0::1', [new Error($noSubnetMessage)]],
-            [$ruleRequiredSubnet, '10.0.0.1', [new Error($noSubnetMessage)]],
-            [new Ip(requireSubnet: true, allowNegation: true), '!!192.168.5.32/32', [new Error($message)]],
-            [new Ip(requireSubnet: true, allowNegation: true), '!!2008:fa::0:1/64', [new Error($message)]],
+            [$rule, ...$this->createValueAndErrorsPair('192.168.005.001', [new Error($message)])], // Leading zeroes are not allowed
+            [$rule, ...$this->createValueAndErrorsPair('192.168.5.321', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('!192.168.5.32', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('192.168.5.32/11', [new Error($hasSubnetMessage)])],
+            [$rule, ...$this->createValueAndErrorsPair('2008:fz::0', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('2008:fa::0::1', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('!2008:fa::0::1', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('2008:fa::0:1/64', [new Error($hasSubnetMessage)])],
+            [new Ip(allowIpv4: false), ...$this->createValueAndErrorsPair('192.168.10.11', [new Error($ipv4NotAllowedMessage)])],
+            [new Ip(allowIpv6: false), ...$this->createValueAndErrorsPair('2008:fa::1', [new Error($ipv6NotAllowedMessage)])],
+            [$ruleRequiredSubnet, ...$this->createValueAndErrorsPair('!2008:fa::0:1/0', [new Error($message)])],
+            [$ruleRequiredSubnet, ...$this->createValueAndErrorsPair('2008:fz::0/129', [new Error($message)])],
+            [$ruleRequiredSubnet, ...$this->createValueAndErrorsPair('192.168.5.32/33', [new Error($wrongCidrMessage)])],
+            [$ruleRequiredSubnet, ...$this->createValueAndErrorsPair('192.168.5.32/af', [new Error($message)])],
+            [$ruleRequiredSubnet, ...$this->createValueAndErrorsPair('192.168.5.32/11/12', [new Error($message)])],
+            [$ruleRequiredSubnet, ...$this->createValueAndErrorsPair('2008:db0::1', [new Error($noSubnetMessage)])],
+            [$ruleRequiredSubnet, ...$this->createValueAndErrorsPair('10.0.0.1', [new Error($noSubnetMessage)])],
+            [new Ip(requireSubnet: true, allowNegation: true), ...$this->createValueAndErrorsPair('!!192.168.5.32/32', [new Error($message)])],
+            [new Ip(requireSubnet: true, allowNegation: true), ...$this->createValueAndErrorsPair('!!2008:fa::0:1/64', [new Error($message)])],
 
-            [new Ip(ranges: ['10.0.1.0/24']), '192.5.1.1', [new Error($notInRangeMessage)]],
-            [new Ip(ranges: ['10.0.1.0/24']), '10.0.3.2', [new Error($notInRangeMessage)]],
-            [new Ip(ranges: ['!10.0.1.0/24', '10.0.0.0/8', 'localhost']), '10.0.1.2', [new Error($notInRangeMessage)]],
+            [new Ip(ranges: ['10.0.1.0/24']),...$this->createValueAndErrorsPair( '192.5.1.1', [new Error($notInRangeMessage)])],
+            [new Ip(ranges: ['10.0.1.0/24']),...$this->createValueAndErrorsPair( '10.0.3.2', [new Error($notInRangeMessage)])],
+            [new Ip(ranges: ['!10.0.1.0/24','10.0.0.0/8', 'localhost']),  ...$this->createValueAndErrorsPair('10.0.1.2', [new Error($notInRangeMessage)])],
             [
                 new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '!10.0.0.0/8', 'localhost']),
-                '10.2.2.2',
-                [new Error($notInRangeMessage)],
+                ...$this->createValueAndErrorsPair(
+                    '10.2.2.2',
+                [new Error($notInRangeMessage)]
+                ),
             ],
             [
                 new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '!10.0.0.0/8', 'localhost']),
-                '10.0.1.1/22',
-                [new Error($notInRangeMessage)],
+                ...$this->createValueAndErrorsPair(
+                    '10.0.1.1/22',
+                [new Error($notInRangeMessage)]
+                ),
             ],
-            [new Ip(ranges: ['2001:db0:1:1::/64']), '2001:db0:1:2::7', [new Error($notInRangeMessage)]],
+            [new Ip(ranges: ['2001:db0:1:1::/64']), ...$this->createValueAndErrorsPair('2001:db0:1:2::7', [new Error($notInRangeMessage)])],
             [
                 new Ip(ranges: ['!2001:db0::/32', '2001:db0:1:2::/64']),
-                '2001:db0:1:2::7',
-                [new Error($notInRangeMessage)],
+                ...$this->createValueAndErrorsPair(
+                    '2001:db0:1:2::7',
+                [new Error($notInRangeMessage)]
+                ),
             ],
 
-            [new Ip(ranges: ['10.0.1.0/24']), '192.5.1.1', [new Error($notInRangeMessage)]],
-            [new Ip(ranges: ['10.0.1.0/24']), '2001:db0:1:2::7', [new Error($notInRangeMessage)]],
+            [new Ip(ranges: ['10.0.1.0/24']), ...$this->createValueAndErrorsPair('192.5.1.1', [new Error($notInRangeMessage)])],
+            [new Ip(ranges: ['10.0.1.0/24']), ...$this->createValueAndErrorsPair('2001:db0:1:2::7', [new Error($notInRangeMessage)])],
             [
                 new Ip(ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', '127.0.0.1']),
-                '10.0.3.2',
-                [new Error($notInRangeMessage)],
+                ...$this->createValueAndErrorsPair(
+                    '10.0.3.2',
+                [new Error($notInRangeMessage)]
+                ),
             ],
-            [new Ip(ranges: ['!system', 'any']), '127.0.0.1', [new Error($notInRangeMessage)]],
-            [new Ip(ranges: ['!system', 'any']), 'fe80::face', [new Error($notInRangeMessage)]],
+            [new Ip(ranges: ['!system', 'any']), ...$this->createValueAndErrorsPair('127.0.0.1', [new Error($notInRangeMessage)])],
+            [new Ip(ranges: ['!system', 'any']), ...$this->createValueAndErrorsPair('fe80::face', [new Error($notInRangeMessage)])],
 
             [
                 new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any']),
-                '10.2.2.2',
-                [new Error($notInRangeMessage)],
+                ...$this->createValueAndErrorsPair(
+                    '10.2.2.2',
+                [new Error($notInRangeMessage)]
+                ),
             ],
             [
                 new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any']),
-                '10.0.1.1/22',
-                [new Error($notInRangeMessage)],
+                ...$this->createValueAndErrorsPair(
+                    '10.0.1.1/22',
+                [new Error($notInRangeMessage)]
+                ),
             ],
 
-            [$rule, '01.01.01.01', [new Error($message)]],
-            [$rule, '010.010.010.010', [new Error($message)]],
-            [$rule, '001.001.001.001', [new Error($message)]],
+            [$rule, ...$this->createValueAndErrorsPair('01.01.01.01', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('010.010.010.010', [new Error($message)])],
+            [$rule, ...$this->createValueAndErrorsPair('001.001.001.001', [new Error($message)])],
         ];
     }
 
@@ -210,7 +224,7 @@ final class IpHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new Ip(allowSubnet: true, message: 'Custom error'), '192.168.5.32/af', [new Error('Custom error')]],
+            [new Ip(allowSubnet: true, message: 'Custom error'), ...$this->createValueAndErrorsPair('192.168.5.32/af', [new Error('Custom error')])],
         ];
     }
 

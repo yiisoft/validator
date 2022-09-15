@@ -31,7 +31,7 @@ final class NumberHandler implements RuleHandlerInterface
         if (is_bool($value) || !is_scalar($value)) {
             $result->addError(
                 message: $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.',
-                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
+                parameters: ['value' => $value]
             );
             return $result;
         }
@@ -41,17 +41,17 @@ final class NumberHandler implements RuleHandlerInterface
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
             $result->addError(
                 message: $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.',
-                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
+                parameters: ['value' => $value]
             );
         } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
             $result->addError(
                 message: $rule->getTooSmallMessage(),
-                parameters: ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
+                parameters: ['min' => $rule->getMin(), 'value' => $value]
             );
         } elseif ($rule->getMax() !== null && $value > $rule->getMax()) {
             $result->addError(
                 message: $rule->getTooBigMessage(),
-                parameters: ['max' => $rule->getMax(), 'attribute' => $context->getAttribute(), 'value' => $value]
+                parameters: ['max' => $rule->getMax(), 'value' => $value]
             );
         }
 

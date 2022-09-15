@@ -27,87 +27,148 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
         $errors = [new Error('This value is not a valid email address.')];
 
         return [
-            [$rule, 'rmcreative.ru', $errors],
-            [$rule, 'Carsten Brandt <mail@cebe.cc>', $errors],
-            [$rule, '"Carsten Brandt" <mail@cebe.cc>', $errors],
-            [$rule, '<mail@cebe.cc>', $errors],
-            [$rule, 'info@örtliches.de', $errors],
-            [$rule, 'sam@рмкреатиф.ru', $errors],
-            [$rule, 'ex..ample@example.com', $errors],
-            [$rule, ['developer@yiiframework.com'], $errors],
+            [$rule, ...$this->createValueAndErrorsPair('rmcreative.ru', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('Carsten Brandt <mail@cebe.cc>', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('"Carsten Brandt" <mail@cebe.cc>', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('<mail@cebe.cc>', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('info@örtliches.de', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('sam@рмкреатиф.ru', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('ex..ample@example.com', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair(['developer@yiiframework.com'], $errors)],
 
             // Malicious email addresses that can be used to exploit SwiftMailer vulnerability CVE-2016-10074 while IDN
             // is disabled.
             // https://legalhackers.com/advisories/SwiftMailer-Exploit-Remote-Code-Exec-CVE-2016-10074-Vuln.html
 
             // This is the demo email used in the proof of concept of the exploit
-            [$rule, '"attacker\" -oQ/tmp/ -X/var/www/cache/phpcode.php "@email.com', $errors],
+            [
+                $rule,
+                ...$this->createValueAndErrorsPair(
+                    '"attacker\" -oQ/tmp/ -X/var/www/cache/phpcode.php "@email.com',
+                    $errors
+                ),
+            ],
 
             // Trying more addresses
-            [$rule, '"Attacker -Param2 -Param3"@test.com', $errors],
-            [$rule, '\'Attacker -Param2 -Param3\'@test.com', $errors],
-            [$rule, '"Attacker \" -Param2 -Param3"@test.com', $errors],
-            [$rule, "'Attacker \\' -Param2 -Param3'@test.com", $errors],
-            [$rule, '"attacker\" -oQ/tmp/ -X/var/www/cache/phpcode.php "@email.com', $errors],
+            [$rule, ...$this->createValueAndErrorsPair('"Attacker -Param2 -Param3"@test.com', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('\'Attacker -Param2 -Param3\'@test.com', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair('"Attacker \" -Param2 -Param3"@test.com', $errors)],
+            [$rule, ...$this->createValueAndErrorsPair("'Attacker \\' -Param2 -Param3'@test.com", $errors)],
+            [
+                $rule,
+                ...$this->createValueAndErrorsPair(
+                    '"attacker\" -oQ/tmp/ -X/var/www/cache/phpcode.php "@email.com',
+                    $errors
+                ),
+            ],
 
             // And even more variants
-            [$rule, '"attacker\"\ -oQ/tmp/\ -X/var/www/cache/phpcode.php"@email.com', $errors],
-            [$rule, "\"attacker\\\"\0-oQ/tmp/\0-X/var/www/cache/phpcode.php\"@email.com", $errors],
-            [$rule, '"attacker@cebe.cc\"-Xbeep"@email.com', $errors],
-            [$rule, "'attacker\\' -oQ/tmp/ -X/var/www/cache/phpcode.php'@email.com", $errors],
-            [$rule, "'attacker\\\\' -oQ/tmp/ -X/var/www/cache/phpcode.php'@email.com", $errors],
-            [$rule, "'attacker\\\\'\\ -oQ/tmp/ -X/var/www/cache/phpcode.php'@email.com", $errors],
-            [$rule, "'attacker\\';touch /tmp/hackme'@email.com", $errors],
-            [$rule, "'attacker\\\\';touch /tmp/hackme'@email.com", $errors],
-            [$rule, "'attacker\\';touch/tmp/hackme'@email.com", $errors],
-            [$rule, "'attacker\\\\';touch/tmp/hackme'@email.com", $errors],
-            [$rule, '"attacker\" -oQ/tmp/ -X/var/www/cache/phpcode.php "@email.com', $errors],
-
-            [$ruleAllowedName, 'rmcreative.ru', $errors],
-            [$ruleAllowedName, 'info@örtliches.de', $errors],
-            [$ruleAllowedName, 'üñîçøðé@üñîçøðé.com', $errors],
-            [$ruleAllowedName, 'sam@рмкреатиф.ru', $errors],
-            [$ruleAllowedName, 'Informtation info@oertliches.de', $errors],
-            [$ruleAllowedName, 'John Smith <example.com>', $errors],
             [
-                $ruleAllowedName,
-                'Short Name <localPartMoreThan64Characters-blah-blah-blah-blah-blah-blah-blah-blah@example.com>',
-                $errors,
+                $rule,
+                ...$this->createValueAndErrorsPair(
+                    '"attacker\"\ -oQ/tmp/\ -X/var/www/cache/phpcode.php"@email.com',
+                    $errors
+                ),
             ],
-            [$ruleAllowedName, ['developer@yiiframework.com'], $errors],
+            [
+                $rule,
+                ...$this->createValueAndErrorsPair(
+                    "\"attacker\\\"\0-oQ/tmp/\0-X/var/www/cache/phpcode.php\"@email.com",
+                    $errors
+                ),
+            ],
+            [$rule, ...$this->createValueAndErrorsPair('"attacker@cebe.cc\"-Xbeep"@email.com', $errors)],
+            [
+                $rule,
+                ...$this->createValueAndErrorsPair(
+                    "'attacker\\' -oQ/tmp/ -X/var/www/cache/phpcode.php'@email.com",
+                    $errors
+                ),
+            ],
+            [
+                $rule,
+                ...$this->createValueAndErrorsPair(
+                    "'attacker\\\\' -oQ/tmp/ -X/var/www/cache/phpcode.php'@email.com",
+                    $errors
+                ),
+            ],
+            [
+                $rule,
+                ...$this->createValueAndErrorsPair(
+                    "'attacker\\\\'\\ -oQ/tmp/ -X/var/www/cache/phpcode.php'@email.com",
+                    $errors
+                ),
+            ],
+            [$rule, ...$this->createValueAndErrorsPair("'attacker\\';touch /tmp/hackme'@email.com", $errors)],
+            [$rule, ...$this->createValueAndErrorsPair("'attacker\\\\';touch /tmp/hackme'@email.com", $errors)],
+            [$rule, ...$this->createValueAndErrorsPair("'attacker\\';touch/tmp/hackme'@email.com", $errors)],
+            [$rule, ...$this->createValueAndErrorsPair("'attacker\\\\';touch/tmp/hackme'@email.com", $errors)],
+            [
+                $rule,
+                ...$this->createValueAndErrorsPair(
+                    '"attacker\" -oQ/tmp/ -X/var/www/cache/phpcode.php "@email.com',
+                    $errors
+                ),
+            ],
+
+            [$ruleAllowedName, ...$this->createValueAndErrorsPair('rmcreative.ru', $errors)],
+            [$ruleAllowedName, ...$this->createValueAndErrorsPair('info@örtliches.de', $errors)],
+            [$ruleAllowedName, ...$this->createValueAndErrorsPair('üñîçøðé@üñîçøðé.com', $errors)],
+            [$ruleAllowedName, ...$this->createValueAndErrorsPair('sam@рмкреатиф.ru', $errors)],
+            [$ruleAllowedName, ...$this->createValueAndErrorsPair('Informtation info@oertliches.de', $errors)],
+            [$ruleAllowedName, ...$this->createValueAndErrorsPair('John Smith <example.com>', $errors)],
             [
                 $ruleAllowedName,
-                [
+                ...$this->createValueAndErrorsPair(
+                    'Short Name <localPartMoreThan64Characters-blah-blah-blah-blah-blah-blah-blah-blah@example.com>',
+                    $errors
+                ),
+            ],
+            [$ruleAllowedName, ...$this->createValueAndErrorsPair(['developer@yiiframework.com'], $errors)],
+            [
+                $ruleAllowedName,
+                ...$this->createValueAndErrorsPair([
                     'Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-' .
                     'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
                     'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
                     'blah-blah-blah.com>',
                 ],
-                $errors,
+                    $errors
+                ),
             ],
 
-            [$ruleEnabledIDN, 'rmcreative.ru', $errors],
-            [$ruleEnabledIDN, 'Carsten Brandt <mail@cebe.cc>', $errors],
-            [$ruleEnabledIDN, '"Carsten Brandt" <mail@cebe.cc>', $errors],
-            [$ruleEnabledIDN, '<mail@cebe.cc>', $errors],
+            [$ruleEnabledIDN, ...$this->createValueAndErrorsPair('rmcreative.ru', $errors)],
+            [$ruleEnabledIDN, ...$this->createValueAndErrorsPair('Carsten Brandt <mail@cebe.cc>', $errors)],
+            [$ruleEnabledIDN, ...$this->createValueAndErrorsPair('"Carsten Brandt" <mail@cebe.cc>', $errors)],
+            [$ruleEnabledIDN, ...$this->createValueAndErrorsPair('<mail@cebe.cc>', $errors)],
 
             [
                 $ruleEnabledIDNandAllowedName,
-                'Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.' .
-                'бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-' .
-                'бла.com>',
-                $errors,
+                ...$this->createValueAndErrorsPair(
+                    'Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.' .
+                    'бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-' .
+                    'бла.com>',
+                    $errors
+                ),
             ],
-            [$ruleEnabledIDNandAllowedName, 'Information info@örtliches.de', $errors],
-            [$ruleEnabledIDNandAllowedName, 'rmcreative.ru', $errors],
-            [$ruleEnabledIDNandAllowedName, 'John Smith <example.com>', $errors],
             [
                 $ruleEnabledIDNandAllowedName,
-                'Короткое имя <после-преобразования-в-idn-тут-будет-больше-чем-64-символа@пример.com>',
-                $errors,
+                ...$this->createValueAndErrorsPair('Information info@örtliches.de', $errors),
+            ],
+            [$ruleEnabledIDNandAllowedName, ...$this->createValueAndErrorsPair('rmcreative.ru', $errors)],
+            [$ruleEnabledIDNandAllowedName, ...$this->createValueAndErrorsPair('John Smith <example.com>', $errors)],
+            [
+                $ruleEnabledIDNandAllowedName,
+                ...$this->createValueAndErrorsPair(
+                    'Короткое имя <после-преобразования-в-idn-тут-будет-больше-чем-64-символа@пример.com>',
+                    $errors
+                ),
             ],
 
-            [new Email(checkDNS: true), 'test@nonexistingsubdomain.example.com', $errors],
+            [
+                new Email(checkDNS: true),
+                ...$this->createValueAndErrorsPair('test@nonexistingsubdomain.example.com', $errors),
+            ],
         ];
     }
 
@@ -204,8 +265,10 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
         return [
             [
                 new Email(checkDNS: true, message: 'Custom error'),
+                ...$this->createValueAndErrorsPair(
                 'test@nonexistingsubdomain.example.com',
-                [new Error('Custom error')],
+                [new Error('Custom error')]
+                ),
             ],
         ];
     }
@@ -222,6 +285,6 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new EmailHandler($this->getTranslator());
+        return new EmailHandler();
     }
 }

@@ -13,21 +13,23 @@ final class IsTrueHandlerTest extends AbstractRuleValidatorTest
 {
     public function failedValidationProvider(): array
     {
-        $message = 'The value must be "1".';
-        $strictTrueMessage = 'The value must be "true".';
+        $message = 'The value must be "{true}".';
+
+        $errors = [new Error($message, parameters: ['true' => 1])];
+        $errors1 = [new Error($message, parameters: ['true' => 'true'])];
 
         return [
-            [new IsTrue(), '5', [new Error($message)]],
-            [new IsTrue(), null, [new Error($message)]],
-            [new IsTrue(), [], [new Error($message)]],
-            [new IsTrue(strict: true), true, [new Error($message)]],
-            [new IsTrue(trueValue: true, strict: true), '1', [new Error($strictTrueMessage)]],
-            [new IsTrue(trueValue: true, strict: true), [], [new Error($strictTrueMessage)]],
+            [new IsTrue(), ...$this->createValueAndErrorsPair('5', $errors)],
+            [new IsTrue(), ...$this->createValueAndErrorsPair(null, $errors)],
+            [new IsTrue(), ...$this->createValueAndErrorsPair([], $errors)],
+            [new IsTrue(strict: true), ...$this->createValueAndErrorsPair(true, $errors)],
+            [new IsTrue(trueValue: true, strict: true), ...$this->createValueAndErrorsPair('1', $errors1)],
+            [new IsTrue(trueValue: true, strict: true), ...$this->createValueAndErrorsPair([], $errors1)],
 
-            [new IsTrue(), false, [new Error($message)]],
-            [new IsTrue(), '0', [new Error($message)]],
-            [new IsTrue(strict: true), '0', [new Error($message)]],
-            [new IsTrue(trueValue: true, strict: true), false, [new Error($strictTrueMessage)]],
+            [new IsTrue(), ...$this->createValueAndErrorsPair(false, $errors)],
+            [new IsTrue(), ...$this->createValueAndErrorsPair('0', $errors)],
+            [new IsTrue(strict: true), ...$this->createValueAndErrorsPair('0', $errors)],
+            [new IsTrue(trueValue: true, strict: true), ...$this->createValueAndErrorsPair(false, $errors1)],
         ];
     }
 
@@ -44,12 +46,12 @@ final class IsTrueHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new IsTrue(message: 'Custom error.'), 5, [new Error('Custom error.')]],
+            [new IsTrue(message: 'Custom error.'), ...$this->createValueAndErrorsPair(5, [new Error('Custom error.', parameters: ['true' => 1])])],
         ];
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new IsTrueHandler($this->getTranslator());
+        return new IsTrueHandler();
     }
 }

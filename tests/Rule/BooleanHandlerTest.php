@@ -14,21 +14,27 @@ final class BooleanHandlerTest extends AbstractRuleValidatorTest
     public function failedValidationProvider(): array
     {
         $defaultRule = new Boolean();
-        $defaultError = new Error('The value must be either "1" or "0".');
-        $booleanError = new Error('The value must be either "true" or "false".');
+        $defaultError = new Error(
+            message: 'The value must be either "{true}" or "{false}".',
+            parameters: ['true' => 1, 'false' => 0]
+        );
+        $booleanError = new Error(
+            message:'The value must be either "{true}" or "{false}".',
+            parameters: ['true' => 'true', 'false' => 'false']
+        );
 
         return [
-            [$defaultRule, '5', [$defaultError]],
+            [$defaultRule, ...$this->createValueAndErrorsPair('5', [$defaultError])],
 
-            [$defaultRule, null, [$defaultError]],
-            [$defaultRule, [], [$defaultError]],
+            [$defaultRule, ...$this->createValueAndErrorsPair(null, [$defaultError])],
+            [$defaultRule, ...$this->createValueAndErrorsPair([], [$defaultError])],
 
 
-            [new Boolean(strict: true), true, [$defaultError]],
-            [new Boolean(strict: true), false, [$defaultError]],
+            [new Boolean(strict: true), ...$this->createValueAndErrorsPair(true, [$defaultError])],
+            [new Boolean(strict: true), ...$this->createValueAndErrorsPair(false, [$defaultError])],
 
-            [new Boolean(trueValue: true, falseValue: false, strict: true), '0', [$booleanError]],
-            [new Boolean(trueValue: true, falseValue: false, strict: true), [], [$booleanError]],
+            [new Boolean(trueValue: true, falseValue: false, strict: true), ...$this->createValueAndErrorsPair('0', [$booleanError])],
+            [new Boolean(trueValue: true, falseValue: false, strict: true), ...$this->createValueAndErrorsPair([], [$booleanError])],
         ];
     }
 
@@ -52,12 +58,12 @@ final class BooleanHandlerTest extends AbstractRuleValidatorTest
     public function customErrorMessagesProvider(): array
     {
         return [
-            [new Boolean(message: 'Custom error.'), 5, [new Error('Custom error.')]],
+            [new Boolean(message: 'Custom error.'), ...$this->createValueAndErrorsPair(5, [new Error('Custom error.', parameters: ['true' => '1', 'false' => '0'])])],
         ];
     }
 
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new BooleanHandler($this->getTranslator());
+        return new BooleanHandler();
     }
 }
