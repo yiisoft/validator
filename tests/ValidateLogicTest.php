@@ -14,6 +14,7 @@ use Yiisoft\Validator\Tests\Stub\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\ObjectWithRulesProvider;
 use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\ValidatorInterface;
 
 final class ValidateLogicTest extends TestCase
 {
@@ -172,7 +173,7 @@ final class ValidateLogicTest extends TestCase
         $this->assertTrue($result->isValid());
     }
 
-    private function createValidator(): Validator
+    private function createValidator(): ValidatorInterface
     {
         return FakeValidatorFactory::make();
     }

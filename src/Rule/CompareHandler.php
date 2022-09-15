@@ -25,10 +25,6 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class CompareHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Compare) {
@@ -44,9 +40,9 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $targetValue)) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getMessage(),
-                [
+            $result->addError(
+                message: $rule->getMessage(),
+                parameters: [
                     'attribute' => $context->getAttribute(),
                     'targetValue' => $rule->getTargetValue(),
                     'targetAttribute' => $rule->getTargetAttribute(),
@@ -54,7 +50,6 @@ final class CompareHandler implements RuleHandlerInterface
                     'value' => $value,
                 ]
             );
-            $result->addError($formattedMessage);
         }
 
         return $result;

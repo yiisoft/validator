@@ -14,10 +14,6 @@ use Yiisoft\Validator\ValidationContext;
 
 final class SubsetHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Subset) {
@@ -27,11 +23,10 @@ final class SubsetHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_iterable($value)) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getIterableMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getIterableMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
             return $result;
         }
 
@@ -41,11 +36,10 @@ final class SubsetHandler implements RuleHandlerInterface
                 : $rule->getValues();
             $valuesString = '"' . implode('", "', $values) . '"';
 
-            $formattedMessage = $this->translator->translate(
-                $rule->getSubsetMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value, 'values' => $valuesString]
+            $result->addError(
+                message: $rule->getSubsetMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value, 'values' => $valuesString]
             );
-            $result->addError($formattedMessage);
         }
 
         return $result;

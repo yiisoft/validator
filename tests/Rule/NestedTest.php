@@ -19,6 +19,7 @@ use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\Rule;
 use Yiisoft\Validator\Tests\Stub\SimpleRulesProvider;
 use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\ValidatorInterface;
 
 final class NestedTest extends TestCase
 {
@@ -407,7 +408,7 @@ final class NestedTest extends TestCase
         }
     }
 
-    private function createValidator(): Validator
+    private function createValidator(): ValidatorInterface
     {
         return FakeValidatorFactory::make();
     }

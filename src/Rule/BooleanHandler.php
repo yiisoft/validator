@@ -15,10 +15,6 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class BooleanHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Boolean) {
@@ -37,16 +33,15 @@ final class BooleanHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $formattedMessage = $this->translator->translate(
-            $rule->getMessage(),
-            [
+        $result->addError(
+            message: $rule->getMessage(),
+            parameters: [
                 'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
                 'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
                 'attribute' => $context->getAttribute(),
                 'value' => $value,
             ]
         );
-        $result->addError($formattedMessage);
 
         return $result;
     }

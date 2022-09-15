@@ -21,10 +21,6 @@ use function strlen;
  */
 final class UrlHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Url) {
@@ -44,11 +40,10 @@ final class UrlHandler implements RuleHandlerInterface
             }
         }
 
-        $formattedMessage = $this->translator->translate(
-            $rule->getMessage(),
-            ['attribute' => $context->getAttribute(), 'value' => $value]
+        $result->addError(
+            message: $rule->getMessage(),
+            parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
         );
-        $result->addError($formattedMessage);
 
         return $result;
     }

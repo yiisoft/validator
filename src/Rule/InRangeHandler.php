@@ -19,10 +19,6 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class InRangeHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof InRange) {
@@ -31,11 +27,10 @@ final class InRangeHandler implements RuleHandlerInterface
 
         $result = new Result();
         if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getRange(), $rule->isStrict())) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
         }
 
         return $result;

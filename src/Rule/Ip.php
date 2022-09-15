@@ -397,17 +397,6 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface, 
         return false;
     }
 
-    /**
-     * Used to get the Regexp pattern for initial IP address parsing.
-     */
-    public function getIpParsePattern(): string
-    {
-        return '/^(?<not>' . preg_quote(
-            self::NEGATION_CHAR,
-            '/'
-        ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
-    }
-
     public function getOptions(): array
     {
         return [

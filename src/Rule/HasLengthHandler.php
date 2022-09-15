@@ -22,10 +22,6 @@ final class HasLengthHandler implements RuleHandlerInterface
 {
     use LimitHandlerTrait;
 
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate($value, object $rule, ?ValidationContext $context = null): Result
     {
         if (!$rule instanceof HasLength) {
@@ -35,11 +31,10 @@ final class HasLengthHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_string($value)) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
             return $result;
         }
 

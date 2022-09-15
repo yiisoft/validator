@@ -13,10 +13,6 @@ use Yiisoft\Validator\ValidationContext;
 
 final class CallbackHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Callback) {
@@ -36,11 +32,11 @@ final class CallbackHandler implements RuleHandlerInterface
         }
 
         foreach ($callbackResult->getErrors() as $error) {
-            $formattedMessage = $this->translator->translate(
-                $error->getMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getMessage(),
+                valuePath: $error->getValuePath(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage, $error->getValuePath());
         }
 
         return $result;

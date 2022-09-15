@@ -18,10 +18,6 @@ use function strlen;
  */
 final class EmailHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Email) {
@@ -82,11 +78,10 @@ final class EmailHandler implements RuleHandlerInterface
         }
 
         if ($valid === false) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $originalValue]
+            $result->addError(
+                message: $rule->getMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $originalValue]
             );
-            $result->addError($formattedMessage);
         }
 
         return $result;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Closure;
 use InvalidArgumentException;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -17,10 +18,6 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class EachHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Each) {
@@ -37,17 +34,16 @@ final class EachHandler implements RuleHandlerInterface
 
         $result = new Result();
         if (!is_iterable($value)) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getIncorrectInputMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getIncorrectInputMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
 
             return $result;
         }
 
         foreach ($value as $index => $item) {
-            /** @var array<mixed, \Closure|\Closure[]|RuleInterface|RuleInterface[]> $rule */
+            /** @var array<mixed, Closure|Closure[]|RuleInterface|RuleInterface[]> $rule */
             $rule = [$index => $rules];
             $itemResult = $context->getValidator()->validate($item, $rule);
             if ($itemResult->isValid()) {
@@ -63,11 +59,17 @@ final class EachHandler implements RuleHandlerInterface
                     $formatMessage = false;
                 }
 
-                $message = !$formatMessage ? $error->getMessage() : $this->translator->translate($eachRule->getMessage(), [
-                    'error' => $error->getMessage(),
-                    'value' => $item,
-                ]);
-                $result->addError($message, $errorKey);
+                if ($formatMessage) {
+                    $result->addError(
+                        message: $eachRule->getMessage(),
+                        parameters: [
+                            'error' => $error->getMessage(),
+                            'value' => $item,
+                        ]
+                    );
+                } else {
+                    $result->addError($error->getMessage());
+                }
             }
         }
 

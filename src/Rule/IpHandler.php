@@ -22,10 +22,6 @@ use function is_string;
  */
 final class IpHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     /**
      * Negation char.
      *
@@ -42,17 +38,19 @@ final class IpHandler implements RuleHandlerInterface
 
         $this->checkAllowedVersions($rule);
         $result = new Result();
-        $formattedMessage = $this->translator->translate(
-            $rule->getMessage(),
-            ['attribute' => $context->getAttribute(), 'value' => $value]
-        );
         if (!is_string($value)) {
-            $result->addError($formattedMessage);
+            $result->addError(
+                message: $rule->getMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
+            );
             return $result;
         }
 
-        if (preg_match($rule->getIpParsePattern(), $value, $matches) === 0) {
-            $result->addError($formattedMessage);
+        if (preg_match($this->getIpParsePattern(), $value, $matches) === 0) {
+            $result->addError(
+                message: $rule->getMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
+            );
             return $result;
         }
         $negation = !empty($matches['not'] ?? null);
@@ -105,27 +103,24 @@ final class IpHandler implements RuleHandlerInterface
         ?ValidationContext $context
     ): Result {
         if ($cidr === null && $rule->isRequireSubnet()) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getNoSubnetMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getNoSubnetMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
             return $result;
         }
         if ($cidr !== null && !$rule->isAllowSubnet()) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getHasSubnetMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getHasSubnetMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
             return $result;
         }
         if ($negation && !$rule->isAllowNegation()) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
             return $result;
         }
         return $result;
@@ -139,19 +134,17 @@ final class IpHandler implements RuleHandlerInterface
         ?ValidationContext $context
     ): Result {
         if ($ipVersion === IpHelper::IPV6 && !$rule->isAllowIpv6()) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getIpv6NotAllowedMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getIpv6NotAllowedMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
             return $result;
         }
         if ($ipVersion === IpHelper::IPV4 && !$rule->isAllowIpv4()) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getIpv4NotAllowedMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getIpv4NotAllowedMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
             return $result;
         }
         return $result;
@@ -169,20 +162,18 @@ final class IpHandler implements RuleHandlerInterface
             try {
                 IpHelper::getCidrBits($ipCidr);
             } catch (InvalidArgumentException $e) {
-                $formattedMessage = $this->translator->translate(
-                    $rule->getWrongCidrMessage(),
-                    ['attribute' => $context->getAttribute(), 'value' => $value]
+                $result->addError(
+                    message: $rule->getWrongCidrMessage(),
+                    parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
                 );
-                $result->addError($formattedMessage);
                 return $result;
             }
         }
         if (!$rule->isAllowed($ipCidr)) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getNotInRangeMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getNotInRangeMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
             return $result;
         }
         return $result;

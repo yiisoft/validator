@@ -20,10 +20,6 @@ final class RequiredHandler implements RuleHandlerInterface
 {
     use EmptyCheckTrait;
 
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Required) {
@@ -33,11 +29,10 @@ final class RequiredHandler implements RuleHandlerInterface
         $result = new Result();
 
         if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getMessage(),
+                parameters:  ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
         }
 
         return $result;

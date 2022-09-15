@@ -19,10 +19,6 @@ use function is_string;
  */
 final class RegexHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Regex) {
@@ -32,11 +28,10 @@ final class RegexHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_string($value)) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getIncorrectInputMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getIncorrectInputMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
 
             return $result;
         }
@@ -45,11 +40,10 @@ final class RegexHandler implements RuleHandlerInterface
             (!$rule->isNot() && !preg_match($rule->getPattern(), $value)) ||
             ($rule->isNot() && preg_match($rule->getPattern(), $value))
         ) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
         }
 
         return $result;

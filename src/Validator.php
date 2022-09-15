@@ -121,7 +121,7 @@ final class Validator implements ValidatorInterface
                 if ($context->getAttribute() !== null) {
                     $valuePath = [$context->getAttribute(), ...$valuePath];
                 }
-                $compoundResult->addError($error->getMessage(), $valuePath);
+                $compoundResult->addError($error->getMessage(), $valuePath, $error->getParameters());
             }
         }
         return $compoundResult;
@@ -162,10 +162,15 @@ final class Validator implements ValidatorInterface
         return $rule;
     }
 
+    /**
+     * @param Result $result
+     * @param Error[] $errors
+     * @return Result
+     */
     private function addErrors(Result $result, array $errors): Result
     {
         foreach ($errors as $error) {
-            $result->addError($error->getMessage(), $error->getValuePath());
+            $result->addError($error->getMessage(), $error->getValuePath(), $error->getParameters());
         }
         return $result;
     }

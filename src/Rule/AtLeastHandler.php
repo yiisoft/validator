@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\EmptyCheckTrait;
@@ -17,10 +16,6 @@ use Yiisoft\Validator\ValidationContext;
 final class AtLeastHandler implements RuleHandlerInterface
 {
     use EmptyCheckTrait;
-
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
@@ -39,11 +34,10 @@ final class AtLeastHandler implements RuleHandlerInterface
         $result = new Result();
 
         if ($filledCount < $rule->getMin()) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getMessage(),
-                ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getMessage(),
+                parameters: ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
         }
 
         return $result;

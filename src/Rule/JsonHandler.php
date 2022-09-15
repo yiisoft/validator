@@ -17,10 +17,6 @@ use function is_string;
  */
 final class JsonHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Json) {
@@ -30,11 +26,10 @@ final class JsonHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!$this->isValidJson($value)) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+            $result->addError(
+                message: $rule->getMessage(),
+                parameters: ['attribute' => $context->getAttribute(), 'value' => $value]
             );
-            $result->addError($formattedMessage);
         }
 
         return $result;
