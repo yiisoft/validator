@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\DataSet\PHP80;
 
-use Grpc\Call;
 use PHPUnit\Framework\TestCase;
 use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
