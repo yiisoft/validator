@@ -30,8 +30,7 @@ abstract class AbstractRuleTest extends TestCase
 
     public function testHandlerClassName(): void
     {
-        $translator = (new TranslatorFactory())->create();
-        $resolver = new SimpleRuleHandlerContainer($translator);
+        $resolver = new SimpleRuleHandlerContainer();
         $rule = $this->getRule();
         $this->assertInstanceOf($rule->getHandlerClassName(), $resolver->resolve($rule->getHandlerClassName()));
     }

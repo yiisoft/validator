@@ -50,7 +50,7 @@ final class Validator implements ValidatorInterface
      */
     public function validate(
         mixed $data,
-        iterable $rules = null
+        iterable|RulesProviderInterface|null $rules = null
     ): Result {
         $data = $this->normalizeDataSet($data);
 

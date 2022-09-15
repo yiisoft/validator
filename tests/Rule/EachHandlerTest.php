@@ -19,8 +19,8 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
                 new Each([new Number(max: 13)]),
                 [10, 20, 30],
                 [
-                    '1' => ['Value must be no greater than 13. 20 given.'],
-                    '2' => ['Value must be no greater than 13. 30 given.'],
+                    '1' => ['{error} {value} given.'],
+                    '2' => ['{error} {value} given.'],
                 ],
             ],
         ];

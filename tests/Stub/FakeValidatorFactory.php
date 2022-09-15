@@ -17,7 +17,7 @@ final class FakeValidatorFactory
         $translator = (new TranslatorFactory())->create();
         return new TranslateValidatorDecorator(
             new DatasetNormalizerValidatorDecorator(
-                new Validator(new SimpleRuleHandlerContainer($translator)),
+                new Validator(new SimpleRuleHandlerContainer()),
             ),
             $translator,
         );

@@ -29,7 +29,7 @@ final class TranslateValidatorDecorator implements ValidatorInterface
      */
     public function validate(
         mixed $data,
-        iterable|object|string|null $rules = null
+        iterable|RulesProviderInterface|null $rules = null
     ): Result {
         $result = $this->decorated->validate($data, $rules);
 
