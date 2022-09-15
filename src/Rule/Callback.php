@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use InvalidArgumentException;
+use TypeError;
 use Yiisoft\Validator\AttributeEventInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -17,6 +18,8 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
+
+use function get_class;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Callback implements
@@ -74,8 +77,11 @@ final class Callback implements
             return;
         }
 
-        $this->callback = Closure::fromCallable([get_debug_type($dataSet->getObject()), $this->method]);
-        $this->method = null;
+        try {
+            $this->callback = Closure::fromCallable([get_class($dataSet->getObject()), $this->method]);
+        } catch (TypeError) {
+            throw new InvalidArgumentException('Method must exist and have public and static modifers.');
+        }
     }
 
     public function getOptions(): array

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
@@ -68,10 +69,18 @@ final class CallbackHandlerTest extends AbstractRuleValidatorTest
 
     public function testThrowExceptionWithInvalidReturn(): void
     {
-        $this->expectException(InvalidCallbackReturnTypeException::class);
-
         $rule = new Callback(static fn (): string => 'invalid return');
 
+        $this->expectException(InvalidCallbackReturnTypeException::class);
+        $this->validate(null, $rule);
+    }
+
+    public function testValidateUsingMethodOutsideAttributeScope(): void
+    {
+        $rule = new Callback(method: 'validateName');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Using method outside of attribute scope is prohibited.');
         $this->validate(null, $rule);
     }
 

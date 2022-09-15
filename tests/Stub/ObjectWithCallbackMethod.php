@@ -8,7 +8,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\ValidationContext;
 
-final class ObjectWithCallback
+final class ObjectWithCallbackMethod
 {
     #[Callback(method: 'validateName')]
     private string $name;

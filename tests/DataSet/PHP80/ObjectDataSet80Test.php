@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\DataSet\PHP80;
 
-use Grpc\Call;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -16,7 +16,10 @@ use Yiisoft\Validator\Tests\Data\Post;
 use Yiisoft\Validator\Tests\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
-use Yiisoft\Validator\Tests\Stub\ObjectWithCallback;
+use Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod;
+use Yiisoft\Validator\Tests\Stub\ObjectWithNonExistingCallbackMethod;
+use Yiisoft\Validator\Tests\Stub\ObjectWithNonPublicCallbackMethod;
+use Yiisoft\Validator\Tests\Stub\ObjectWithNonStaticCallbackMethod;
 
 final class ObjectDataSet80Test extends TestCase
 {
@@ -129,9 +132,9 @@ final class ObjectDataSet80Test extends TestCase
     /**
      * @link https://github.com/yiisoft/validator/issues/223
      */
-    public function testValidateWithCallback(): void
+    public function testValidateWithCallbackMethod(): void
     {
-        $dataSet = new ObjectDataSet(new ObjectWithCallback());
+        $dataSet = new ObjectDataSet(new ObjectWithCallbackMethod());
         $validator = FakeValidatorFactory::make();
 
         /** @var array $rules */
@@ -142,5 +145,25 @@ final class ObjectDataSet80Test extends TestCase
 
         $result = $validator->validate(['name' => 'bar'], $rules);
         $this->assertSame(['name' => ['Value must be "foo"!']], $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function validateWithWrongCallbackMethodDataProvider(): array
+    {
+        return [
+            [new ObjectWithNonExistingCallbackMethod()],
+            [new ObjectWithNonPublicCallbackMethod()],
+            [new ObjectWithNonStaticCallbackMethod()],
+        ];
+    }
+
+    /**
+     * @link https://github.com/yiisoft/validator/issues/223
+     * @dataProvider validateWithWrongCallbackMethodDataProvider
+     */
+    public function testValidateWithWrongCallbackMethod(object $object): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Method must exist and have public and static modifers.');
+        new ObjectDataSet($object);
     }
 }
