@@ -11,7 +11,6 @@ use Yiisoft\Validator\DatasetNormalizerValidatorDecorator;
 use Yiisoft\Validator\IdMessageReader;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
-use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
 use Yiisoft\Validator\TranslateValidatorDecorator;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
