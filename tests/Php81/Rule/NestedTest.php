@@ -63,7 +63,7 @@ final class NestedTest extends TestCase
 
         $this->assertSame($expectedIsValid, $result->isValid());
         if (!$expectedIsValid) {
-            $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+            $this->assertEquals($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
         }
     }
 

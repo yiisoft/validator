@@ -45,29 +45,29 @@ final class Result
     }
 
     /**
-     * @return string[]
+     * @return ErrorMessage[]
      */
     public function getErrorMessages(): array
     {
-        return ArrayHelper::getColumn($this->errors, static fn (Error $error) => $error->getMessage());
+        return ArrayHelper::getColumn($this->errors, static fn (Error $error) => new ErrorMessage($error->getMessage(), $error->getParameters()));
     }
 
     /**
-     * @psalm-return array<string, non-empty-list<string>>
+     * @psalm-return array<string, non-empty-list<ErrorMessage>>
      */
     public function getErrorMessagesIndexedByPath(string $separator = '.'): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
             $stringValuePath = implode($separator, $error->getValuePath(true));
-            $errors[$stringValuePath][] = $error->getMessage();
+            $errors[$stringValuePath][] = new ErrorMessage($error->getMessage(), $error->getParameters());
         }
 
         return $errors;
     }
 
     /**
-     * @psalm-return array<string, non-empty-list<string>>
+     * @psalm-return array<string, non-empty-list<ErrorMessage>>
      *
      * @throws InvalidArgumentException
      */
@@ -80,7 +80,7 @@ final class Result
                 throw new InvalidArgumentException('Top level attributes can only have string type.');
             }
 
-            $errors[$key][] = $error->getMessage();
+            $errors[$key][] = new ErrorMessage($error->getMessage(), $error->getParameters());
         }
 
         return $errors;
@@ -95,11 +95,11 @@ final class Result
     }
 
     /**
-     * @return string[]
+     * @return ErrorMessage[]
      */
     public function getAttributeErrorMessages(string $attribute): array
     {
-        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): string => $error->getMessage());
+        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): ErrorMessage => new ErrorMessage($error->getMessage(), $error->getParameters()));
     }
 
     private function getAttributeErrorsMap(string $attribute, Closure $getErrorClosure): array
@@ -116,7 +116,7 @@ final class Result
     }
 
     /**
-     * @psalm-return array<string, non-empty-list<string>>
+     * @psalm-return array<string, non-empty-list<ErrorMessage>>
      */
     public function getAttributeErrorMessagesIndexedByPath(string $attribute, string $separator = '.'): array
     {
@@ -128,14 +128,14 @@ final class Result
             }
 
             $valuePath = implode($separator, array_slice($error->getValuePath(true), 1));
-            $errors[$valuePath][] = $error->getMessage();
+            $errors[$valuePath][] = new ErrorMessage($error->getMessage(), $error->getParameters());
         }
 
         return $errors;
     }
 
     /**
-     * @return string[]
+     * @return ErrorMessage[]
      */
     public function getCommonErrorMessages(): array
     {

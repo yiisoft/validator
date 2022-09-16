@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
+use Yiisoft\Validator\DatasetNormalizerValidatorDecorator;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
@@ -181,9 +182,14 @@ class ValidatorTest extends TestCase
             'name' => [new HasLength(min: 8)],
             'age' => [new Number(asInteger: true, min: 18)],
         ];
-        $stringLessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.';
+        $stringLessThanMinMessageTemplate = 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.';
+        $intMessageTemplate = 'Value must be an integer.';
+        $intLessThanMinMessageTemplate = 'Value must be no less than {min}.';
+
+
+        $stringLessThanMinMessage = 'This value must contain at least 8 characters.';
         $intMessage = 'Value must be an integer.';
-        $intLessThanMinMessage = 'Value must be no less than {min}.';
+        $intLessThanMinMessage = 'Value must be no less than 18.';
 
         return [
             'rule / validator, skipOnEmpty: false, value not passed' => [
@@ -421,7 +427,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
+                    new Error($stringLessThanMinMessageTemplate, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
                 ],
             ],
             'validator, skipOnEmpty: true, value is empty' => [
@@ -432,7 +438,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
+                    new Error($stringLessThanMinMessageTemplate, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
                 ],
             ],
             'validator, skipOnEmpty: true, value is not empty' => [
@@ -443,8 +449,8 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
-                    new Error($intLessThanMinMessage, ['age'], ['min' => 18, 'value' => 17]),
+                    new Error($stringLessThanMinMessageTemplate, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
+                    new Error($intLessThanMinMessageTemplate, ['age'], ['min' => 18, 'value' => 17]),
                 ],
             ],
 
@@ -455,7 +461,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
+                    new Error($stringLessThanMinMessageTemplate, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
                 ],
             ],
             'validator, skipOnEmptyCallback, SkipOnNull, value is empty' => [
@@ -466,7 +472,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
+                    new Error($stringLessThanMinMessageTemplate, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
                 ],
             ],
             'validator, skipOnEmptyCallback, SkipOnNull, value is not empty' => [
@@ -477,8 +483,8 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
-                    new Error($intLessThanMinMessage, ['age'], ['min' => 18, 'value' => 17]),
+                    new Error($stringLessThanMinMessageTemplate, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
+                    new Error($intLessThanMinMessageTemplate, ['age'], ['min' => 18, 'value' => 17]),
                 ],
             ],
             'validator, skipOnEmptyCallback, SkipOnNull, value is not empty (empty string)' => [
@@ -489,8 +495,8 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
-                    new Error($intMessage, ['age'], ['value' => null]),
+                    new Error($stringLessThanMinMessageTemplate, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
+                    new Error($intMessageTemplate, ['age'], ['value' => null]),
                 ],
             ],
 
@@ -506,8 +512,8 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
-                    new Error($intMessage, ['age'], ['value' => null]),
+                    new Error($stringLessThanMinMessageTemplate, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
+                    new Error($intMessageTemplate, ['age'], ['value' => null]),
                 ],
             ],
             'validator, skipOnEmptyCallback, custom, value is empty' => [
@@ -523,7 +529,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
+                    new Error($stringLessThanMinMessageTemplate, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
                 ],
             ],
             'validator, skipOnEmptyCallback, custom, value is not empty' => [
@@ -539,8 +545,8 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
-                    new Error($intLessThanMinMessage, ['age'], ['min' => 18, 'value' => 17]),
+                    new Error($stringLessThanMinMessageTemplate, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
+                    new Error($intLessThanMinMessageTemplate, ['age'], ['min' => 18, 'value' => 17]),
                 ],
             ],
             'validator, skipOnEmptyCallback, custom, value is not empty (null)' => [
@@ -556,8 +562,8 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
-                    new Error($intMessage, ['age'], ['value' => null]),
+                    new Error($stringLessThanMinMessageTemplate, ['name'], ['min' => 8, 'value' => 'Dmitriy']),
+                    new Error($intMessageTemplate, ['age'], ['value' => null]),
                 ],
             ],
         ];
@@ -631,7 +637,7 @@ class ValidatorTest extends TestCase
         mixed $data,
         bool $expectedResult,
     ): void {
-        $validator = new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: $skipOnEmpty);
+        $validator = new DatasetNormalizerValidatorDecorator(new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: $skipOnEmpty));
 
         $result = $validator->validate($data);
 
@@ -648,12 +654,12 @@ class ValidatorTest extends TestCase
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrorMessages());
-        $this->assertStringStartsWith('This value must contain at least', $result->getErrorMessages()[0]);
+        $this->assertStringStartsWith('This value must contain at least', $result->getErrorMessages()[0]->getMessage());
     }
 
     public function testRuleWithoutSkipOnEmpty(): void
     {
-        $validator = new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull());
+        $validator = new DatasetNormalizerValidatorDecorator(new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()));
 
         $data = new class () {
             #[NotNull]

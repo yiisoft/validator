@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Stub\EachNestedObjects\Foo;
@@ -147,7 +148,11 @@ final class ValidateLogicTest extends TestCase
     public function testBase(array $expectedErrorMessages, mixed $data, iterable|object|string|null $rules): void
     {
         $result = $this->createValidator()->validate($data, $rules);
-        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
+        $this->assertEquals(
+            $expectedErrorMessages, array_map(
+                fn(array $errors) => array_map(fn(ErrorMessage $error) => $error->getMessage(), $errors),
+                $result->getErrorMessagesIndexedByAttribute(),
+            ));
     }
 
     public function dataWithEmptyArrayOfRules(): array

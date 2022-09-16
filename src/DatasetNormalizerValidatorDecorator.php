@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use Closure;
+use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use ReflectionProperty;
 use Traversable;
+use Yiisoft\Validator\DataSet\ArrayDataSet;
+use Yiisoft\Validator\DataSet\MixedDataSet;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 
 use function is_array;
@@ -42,6 +46,8 @@ final class DatasetNormalizerValidatorDecorator implements ValidatorInterface
         iterable|RulesProviderInterface|null $rules = null,
         ?ValidationContext $context = null,
     ): Result {
+        $data = $this->normalizeDataSet($data);
+
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
         } elseif ($rules instanceof RulesProviderInterface) {
@@ -49,7 +55,27 @@ final class DatasetNormalizerValidatorDecorator implements ValidatorInterface
         } elseif (!$rules instanceof Traversable && !is_array($rules) && $rules !== null) {
             $rules = (new AttributesRulesProvider($rules, $this->rulesPropertyVisibility))->getRules();
         }
+        $context = new ValidationContext($context?->getValidator() ?? $this, $context?->getDataSet() ?? null, null, $context?->getParameters() ?? []);
 
         return $this->decorated->validate($data, $rules, $context);
     }
+
+    #[Pure]
+    private function normalizeDataSet($data): DataSetInterface
+    {
+        if ($data instanceof DataSetInterface) {
+            return $data;
+        }
+
+        if (is_object($data)) {
+            return new ObjectDataSet($data);
+        }
+
+        if (is_array($data)) {
+            return new ArrayDataSet($data);
+        }
+
+        return new MixedDataSet($data);
+    }
+
 }

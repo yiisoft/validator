@@ -23,9 +23,6 @@ final class EachHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Each::class, $rule);
         }
 
-        /** @var Each $eachRule */
-        $eachRule = $rule;
-
         $rules = $rule->getRules();
         if ($rules === []) {
             throw new InvalidArgumentException('Rules are required.');
@@ -52,24 +49,15 @@ final class EachHandler implements RuleHandlerInterface
             foreach ($itemResult->getErrors() as $error) {
                 if ($error->getValuePath() === []) {
                     $errorKey = [$index];
-                    $formatMessage = true;
                 } else {
                     $errorKey = [$index, ...$error->getValuePath()];
-                    $formatMessage = false;
                 }
 
-                if ($formatMessage) {
-                    $result->addError(
-                        message: $eachRule->getMessage(),
-                        valuePath: $errorKey,
-                        parameters: [
-                            'error' => $error->getMessage(),
-                            'value' => $item,
-                        ]
-                    );
-                } else {
-                    $result->addError($error->getMessage(), $errorKey);
-                }
+                $result->addError(
+                    message: $error->getMessage(),
+                    valuePath: $errorKey,
+                    parameters: $error->getParameters()
+                );
             }
         }
 

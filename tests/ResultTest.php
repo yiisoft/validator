@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
 
 class ResultTest extends TestCase
@@ -29,7 +30,7 @@ class ResultTest extends TestCase
         $result->addError('Error 1')
             ->addError('Error 2');
 
-        $this->assertEquals(['Error 1', 'Error 2'], $result->getErrorMessages());
+        $this->assertEquals([new ErrorMessage('Error 1', []), new ErrorMessage('Error 2')], $result->getErrorMessages());
     }
 
     public function addingErrorChangesIsValid(): void
@@ -43,20 +44,22 @@ class ResultTest extends TestCase
     public function testGetErrors(): void
     {
         $this->assertEquals(
-            [new Error('error1'), new Error('error2', ['path', 2])],
+            [new Error('error1'), new Error('error2', ['path', 2]), new Error('error3', ['path'], ['param' => 'value'])],
             $this->createErrorResult()->getErrors()
         );
     }
 
     public function testGetErrorMessages(): void
     {
-        $this->assertSame(['error1', 'error2'], $this->createErrorResult()->getErrorMessages());
+        $this->assertEquals(
+            [new ErrorMessage('error1', []), new ErrorMessage('error2', []), new ErrorMessage('error3', ['param' => 'value'])],
+            $this->createErrorResult()->getErrorMessages());
     }
 
     public function testGetErrorMessagesIndexedByPath(): void
     {
         $this->assertEquals(
-            ['' => ['error1'], 'path.2' => ['error2']],
+            ['' => ['error1'], 'path.2' => ['error2'], 'path' => ['error3']],
             $this->createErrorResult()->getErrorMessagesIndexedByPath()
         );
     }
@@ -79,7 +82,8 @@ class ResultTest extends TestCase
     {
         $result = new Result();
         $result->addError('error1')
-            ->addError('error2', ['path', 2]);
+            ->addError('error2', ['path', 2])
+            ->addError('error3', ['path'], ['param' => 'value']);
 
         return $result;
     }

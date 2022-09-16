@@ -62,7 +62,7 @@ final class NestedHandler implements RuleHandlerInterface
 
             $dataSet = new ObjectDataSet($value, $rule->getPropertyVisibility());
 
-            return $context->getValidator()->validate($dataSet, $context);
+            return $context->getValidator()->validate($dataSet, $dataSet->getRules(), $context);
         }
 
         if (is_array($value)) {
