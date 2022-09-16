@@ -6,16 +6,30 @@ use Psr\Container\ContainerInterface;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\MessageFormatterInterface;
 use Yiisoft\Translator\SimpleMessageFormatter;
+use Yiisoft\Translator\TranslatorInterface;
+use Yiisoft\Validator\DatasetNormalizerValidatorDecorator;
 use Yiisoft\Validator\IdMessageReader;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
+use Yiisoft\Validator\TranslateValidatorDecorator;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
 /* @var array $params */
 
 return [
-    ValidatorInterface::class => Validator::class,
+    ValidatorInterface::class => function (
+        TranslatorInterface $translator,
+        RuleHandlerResolverInterface $ruleHandlerResolver
+    ) {
+        return new TranslateValidatorDecorator(
+            new DatasetNormalizerValidatorDecorator(
+                new Validator($ruleHandlerResolver),
+            ),
+            $translator,
+        );
+    },
     RuleHandlerResolverInterface::class => SimpleRuleHandlerContainer::class,
     'validator.categorySource' => static function (ContainerInterface $container) use ($params) {
         $messageSource = $container->get('validator.messageSource');
