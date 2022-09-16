@@ -24,8 +24,6 @@ use Yiisoft\Validator\Tests\Stub\ObjectWithNestedObject;
 use Yiisoft\Validator\TranslateValidatorDecorator;
 use Yiisoft\Validator\ValidationContext;
 
-use Yiisoft\Validator\ValidationContext;
-
 use function array_slice;
 
 final class NestedHandlerTest extends AbstractRuleValidatorTest
