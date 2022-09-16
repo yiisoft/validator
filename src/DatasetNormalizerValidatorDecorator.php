@@ -77,5 +77,4 @@ final class DatasetNormalizerValidatorDecorator implements ValidatorInterface
 
         return new MixedDataSet($data);
     }
-
 }

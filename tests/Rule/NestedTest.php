@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use stdClass;
-use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NestedHandler;
@@ -20,8 +19,6 @@ use Yiisoft\Validator\Tests\Stub\InheritAttributesObject\InheritAttributesObject
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\Rule;
 use Yiisoft\Validator\Tests\Stub\SimpleRulesProvider;
-use Yiisoft\Validator\TranslateValidatorDecorator;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 
 final class NestedTest extends TestCase

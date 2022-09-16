@@ -53,7 +53,8 @@ class ResultTest extends TestCase
     {
         $this->assertEquals(
             [new ErrorMessage('error1', []), new ErrorMessage('error2', []), new ErrorMessage('error3', ['param' => 'value'])],
-            $this->createErrorResult()->getErrorMessages());
+            $this->createErrorResult()->getErrorMessages()
+        );
     }
 
     public function testGetErrorMessagesIndexedByPath(): void
