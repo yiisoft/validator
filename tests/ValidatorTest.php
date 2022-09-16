@@ -25,7 +25,6 @@ use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Stub\Rule;
 use Yiisoft\Validator\Tests\Stub\ObjectWithAttributesOnly;
-use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
