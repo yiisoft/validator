@@ -59,9 +59,6 @@ final class Validator implements ValidatorInterface
         $context = new ValidationContext($context?->getValidator() ?? $this, $context?->getDataSet() ?? $data, $context?->getAttribute() ?? null, $context?->getParameters() ?? []);
         $results = [];
 
-//        var_dump($rules);
-//        var_dump('qqqqqq');
-//        exit();
         foreach ($rules ?? [] as $attribute => $attributeRules) {
             $result = new Result();
 
