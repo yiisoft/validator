@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
@@ -20,6 +21,9 @@ use Yiisoft\Validator\RuleHandlerInterface;
 
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\ObjectWithNestedObject;
+
+use Yiisoft\Validator\TranslateValidatorDecorator;
+use Yiisoft\Validator\ValidationContext;
 
 use function array_slice;
 
@@ -40,7 +44,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'error' => [
                 new Nested(['author.age' => [new Number(min: 40)]]),
                 $value,
-                ['author.age' => ['Value must be no less than 40.']],
+                ['author.age' => ['Value must be no less than {min}.']],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
@@ -88,7 +92,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     ]),
                 ]),
                 [0 => [0 => -11]],
-                ['0.0' => ['Value must be no less than -10.']],
+                ['0.0' => ['Value must be no less than {min}.']],
             ],
         ];
     }
@@ -119,7 +123,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'error' => [
                 new Nested(['author.age' => [new Number(min: 20)]]),
                 $value,
-                [new Error('Value must be no less than 20.', ['author', 'age'], ['value' => 18, 'min' => 20])],
+                [new Error('Value must be no less than {min}.', ['author', 'age'], ['value' => 18, 'min' => 20])],
             ],
             'key not exists' => [
                 new Nested(['author.sex' => [new InRange(['male', 'female'])]]),
@@ -167,7 +171,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                     ]),
                 ]),
                     [0 => [0 => -11]],
-                    [new Error('Value must be no less than -10.', [0, 0], ['min' => -10, 'value' => -11])],
+                    [new Error('Value must be no less than {min}.', [0, 0], ['min' => -10, 'value' => -11])],
             ],
             [
                 new Nested(['author\.data.name\.surname' => [new HasLength(min: 8)]]),
@@ -176,7 +180,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                         'name.surname' => 'Dmitriy',
                     ],
                 ],
-                [new Error('This value must contain at least {min, number} {min, plural, one{character} other{characters}}..', ['author.data', 'name.surname'], ['value' => 'Dmitriy', 'min' => 8])],
+                [new Error('This value must contain at least {min, number} {min, plural, one{character} other{characters}}.', ['author.data', 'name.surname'], ['value' => 'Dmitriy', 'min' => 8])],
             ],
         ];
     }
@@ -298,74 +302,74 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         ];
 
         $detailedErrorsData = [
-            [['charts', 0, 'points', 0, 'coordinates', 'x'], 'Value must be no less than -10.'],
-            [['charts', 0, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 0, 'points', 0, 'coordinates', 'y'], 'Value must be no greater than 10.'],
-            [['charts', 0, 'points', 0, 'rgb', 0], 'Value must be no less than 0. -1 given.'],
-            [['charts', 0, 'points', 0, 'rgb', 1], 'Value must be no greater than 255. 256 given.'],
-            [['charts', 0, 'points', 1, 'coordinates', 'x'], 'Value must be no less than -10.'],
-            [['charts', 0, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 0, 'points', 1, 'coordinates', 'y'], 'Value must be no greater than 10.'],
-            [['charts', 0, 'points', 1, 'rgb', 1], 'Value must be no less than 0. -2 given.'],
-            [['charts', 0, 'points', 1, 'rgb', 2], 'Value must be no greater than 255. 257 given.'],
-            [['charts', 1, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 1, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 2, 'points', 0, 'coordinates', 'x'], 'Value must be no less than -10.'],
-            [['charts', 2, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 2, 'points', 0, 'coordinates', 'y'], 'Value must be no greater than 10.'],
-            [['charts', 2, 'points', 0, 'rgb', 0], 'Value must be no less than 0. -3 given.'],
-            [['charts', 2, 'points', 0, 'rgb', 1], 'Value must be no greater than 255. 258 given.'],
-            [['charts', 2, 'points', 1, 'coordinates', 'x'], 'Value must be no less than -10.'],
-            [['charts', 2, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 2, 'points', 1, 'coordinates', 'y'], 'Value must be no greater than 10.'],
-            [['charts', 2, 'points', 1, 'rgb', 1], 'Value must be no less than 0. -4 given.'],
-            [['charts', 2, 'points', 1, 'rgb', 2], 'Value must be no greater than 255. 259 given.'],
+            [['charts', 0, 'points', 0, 'coordinates', 'x'], '{error} {value} given.', ['error' => 'Value must be no less than {min}.', 'value' => 1000]],
+            [['charts', 0, 'points', 0, 'coordinates', 'x'], '{error} {value} given.', ['error' => 'Custom error.', 'value' => 1000]],
+            [['charts', 0, 'points', 0, 'coordinates', 'y'], '{error} {value} given.', ['error' => 'Value must be no greater than {max}.', 'value' => 1000]],
+            [['charts', 0, 'points', 0, 'rgb', 0], '{error} {value} given.', ['error' => 'Value must be no less than {min}. -1 given.', 'value' => 1000]],
+            [['charts', 0, 'points', 0, 'rgb', 1], '{error} {value} given.', ['error' => 'Value must be no greater than {max}. 256 given.', 'value' => 1000]],
+            [['charts', 0, 'points', 1, 'coordinates', 'x'], '{error} {value} given.', ['error' => 'Value must be no less than {min}.', 'value' => 1000]],
+            [['charts', 0, 'points', 1, 'coordinates', 'x'], '{error} {value} given.', ['error' => 'Custom error.', 'value' => 1000]],
+            [['charts', 0, 'points', 1, 'coordinates', 'y'], '{error} {value} given.', ['error' => 'Value must be no greater than {max}.', 'value' => 1000]],
+            [['charts', 0, 'points', 1, 'rgb', 1], '{error} {value} given.', ['error' => 'Value must be no less than {min}. -2 given.', 'value' => 1000]],
+            [['charts', 0, 'points', 1, 'rgb', 2], '{error} {value} given.', ['error' => 'Value must be no greater than {max}. 257 given.', 'value' => 1000]],
+            [['charts', 1, 'points', 0, 'coordinates', 'x'], '{error} {value} given.', ['error' => 'Custom error.', 'value' => 1000]],
+            [['charts', 1, 'points', 1, 'coordinates', 'x'], '{error} {value} given.', ['error' => 'Custom error.', 'value' => 1000]],
+            [['charts', 2, 'points', 0, 'coordinates', 'x'], '{error} {value} given.', ['error' => 'Value must be no less than {min}.', 'value' => 1000]],
+            [['charts', 2, 'points', 0, 'coordinates', 'x'], '{error} {value} given.', ['error' => 'Custom error.', 'value' => 1000]],
+            [['charts', 2, 'points', 0, 'coordinates', 'y'], '{error} {value} given.', ['error' => 'Value must be no greater than {max}.', 'value' => 1000]],
+            [['charts', 2, 'points', 0, 'rgb', 0], '{error} {value} given.', ['error' => 'Value must be no less than {min}. -3 given.', 'value' => 1000]],
+            [['charts', 2, 'points', 0, 'rgb', 1], '{error} {value} given.', ['error' => 'Value must be no greater than {max}. 258 given.', 'value' => 1000]],
+            [['charts', 2, 'points', 1, 'coordinates', 'x'], '{error} {value} given.', ['error' => 'Value must be no less than {min}.', 'value' => 1000]],
+            [['charts', 2, 'points', 1, 'coordinates', 'x'], '{error} {value} given.', ['error' => 'Custom error.', 'value' => 1000]],
+            [['charts', 2, 'points', 1, 'coordinates', 'y'], '{error} {value} given.', ['error' => 'Value must be no greater than {max}.', 'value' => 1000]],
+            [['charts', 2, 'points', 1, 'rgb', 1], '{error} {value} given.', ['error' => 'Value must be no less than {min}. -4 given.', 'value' => 1000]],
+            [['charts', 2, 'points', 1, 'rgb', 2], '{error} {value} given.', ['error' => 'Value must be no greater than {max}. 259 given.', 'value' => 1000]],
         ];
         $detailedErrors = [];
         foreach ($detailedErrorsData as $errorData) {
-            $detailedErrors[] = new Error($errorData[1], $errorData[0]);
+            $detailedErrors[] = new Error($errorData[1], $errorData[0], $errorData[2]);
         }
 
         $errorMessages = [
-            'Value must be no less than -10.',
+            'Value must be no less than {min}.',
             'Custom error.',
-            'Value must be no greater than 10.',
-            'Value must be no less than 0. -1 given.',
-            'Value must be no greater than 255. 256 given.',
-            'Value must be no less than -10.',
+            'Value must be no greater than {max}.',
+            'Value must be no less than {min}. -1 given.',
+            'Value must be no greater than {max}. 256 given.',
+            'Value must be no less than {min}.',
             'Custom error.',
-            'Value must be no greater than 10.',
-            'Value must be no less than 0. -2 given.',
-            'Value must be no greater than 255. 257 given.',
+            'Value must be no greater than {max}.',
+            'Value must be no less than {min}. -2 given.',
+            'Value must be no greater than {max}. 257 given.',
             'Custom error.',
             'Custom error.',
-            'Value must be no less than -10.',
+            'Value must be no less than {min}.',
             'Custom error.',
-            'Value must be no greater than 10.',
-            'Value must be no less than 0. -3 given.',
-            'Value must be no greater than 255. 258 given.',
-            'Value must be no less than -10.',
+            'Value must be no greater than {max}.',
+            'Value must be no less than {min}. -3 given.',
+            'Value must be no greater than {max}. 258 given.',
+            'Value must be no less than {min}.',
             'Custom error.',
-            'Value must be no greater than 10.',
-            'Value must be no less than 0. -4 given.',
-            'Value must be no greater than 255. 259 given.',
+            'Value must be no greater than {max}.',
+            'Value must be no less than {min}. -4 given.',
+            'Value must be no greater than {max}. 259 given.',
         ];
         $errorMessagesIndexedByPath = [
-            'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
+            'charts.0.points.0.coordinates.x' => ['Value must be no less than {min}.', 'Custom error.'],
             'charts.0.points.0.coordinates.y' => ['Value must be no greater than 10.'],
             'charts.0.points.0.rgb.0' => ['Value must be no less than 0. -1 given.'],
             'charts.0.points.0.rgb.1' => ['Value must be no greater than 255. 256 given.'],
-            'charts.0.points.1.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
+            'charts.0.points.1.coordinates.x' => ['Value must be no less than {min}.', 'Custom error.'],
             'charts.0.points.1.coordinates.y' => ['Value must be no greater than 10.'],
             'charts.0.points.1.rgb.1' => ['Value must be no less than 0. -2 given.'],
             'charts.0.points.1.rgb.2' => ['Value must be no greater than 255. 257 given.'],
             'charts.1.points.0.coordinates.x' => ['Custom error.'],
             'charts.1.points.1.coordinates.x' => ['Custom error.'],
-            'charts.2.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
+            'charts.2.points.0.coordinates.x' => ['Value must be no less than {min}.', 'Custom error.'],
             'charts.2.points.0.coordinates.y' => ['Value must be no greater than 10.'],
             'charts.2.points.0.rgb.0' => ['Value must be no less than 0. -3 given.'],
             'charts.2.points.0.rgb.1' => ['Value must be no greater than 255. 258 given.'],
-            'charts.2.points.1.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
+            'charts.2.points.1.coordinates.x' => ['Value must be no less than {min}.', 'Custom error.'],
             'charts.2.points.1.coordinates.y' => ['Value must be no greater than 10.'],
             'charts.2.points.1.rgb.1' => ['Value must be no less than 0. -4 given.'],
             'charts.2.points.1.rgb.2' => ['Value must be no greater than 255. 259 given.'],
@@ -495,6 +499,18 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'caption' => ['This value must contain at least 3 characters.'],
             'object.name' => ['This value must contain at least 5 characters.'],
         ], $result->getErrorMessagesIndexedByPath());
+    }
+
+    protected function getValidationContext(): ValidationContext
+    {
+        $validator = FakeValidatorFactory::make();
+
+        return new ValidationContext(
+            $validator,
+            new ArrayDataSet(['attribute' => 100, 'number' => 100, 'string' => '100']),
+            'number',
+            [TranslateValidatorDecorator::IS_TRANSLATION_NEEDED => false]
+        );
     }
 
     protected function getRuleHandler(): RuleHandlerInterface

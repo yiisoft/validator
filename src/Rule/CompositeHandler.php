@@ -49,6 +49,6 @@ final class CompositeHandler implements RuleHandlerInterface
             return new Result();
         }
 
-        return $context->getValidator()->validate($value, $rule->getRules());
+        return $context->getValidator()->validate($value, $rule->getRules(), $context);
     }
 }

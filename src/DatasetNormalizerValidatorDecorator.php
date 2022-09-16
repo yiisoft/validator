@@ -39,7 +39,8 @@ final class DatasetNormalizerValidatorDecorator implements ValidatorInterface
      */
     public function validate(
         mixed $data,
-        iterable|RulesProviderInterface|null $rules = null
+        iterable|RulesProviderInterface|null $rules = null,
+        ?ValidationContext $context = null,
     ): Result {
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
@@ -49,6 +50,6 @@ final class DatasetNormalizerValidatorDecorator implements ValidatorInterface
             $rules = (new AttributesRulesProvider($rules, $this->rulesPropertyVisibility))->getRules();
         }
 
-        return $this->decorated->validate($data, $rules);
+        return $this->decorated->validate($data, $rules, $context);
     }
 }

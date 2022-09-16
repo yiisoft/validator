@@ -14,6 +14,8 @@ use Yiisoft\Translator\TranslatorInterface;
  */
 final class TranslateValidatorDecorator implements ValidatorInterface
 {
+    public const IS_TRANSLATION_NEEDED = 'isTranslationNeeded';
+
     public function __construct(
         private ValidatorInterface $decorated,
         private TranslatorInterface $translator,
@@ -29,14 +31,18 @@ final class TranslateValidatorDecorator implements ValidatorInterface
      */
     public function validate(
         mixed $data,
-        iterable|RulesProviderInterface|null $rules = null
+        iterable|RulesProviderInterface|null $rules = null,
+        ?ValidationContext $context = null,
     ): Result {
-        $result = $this->decorated->validate($data, $rules);
+        $result = $this->decorated->validate($data, $rules, $context);
 
+        $isTranslationNeeded = $context?->getParameter(self::IS_TRANSLATION_NEEDED, true) ?? true;
         $errorResult = new Result();
         foreach ($result->getErrors() as $error) {
             $errorResult->addError(
-                $this->translator->translate($error->getMessage(), $error->getParameters()),
+                $isTranslationNeeded
+                    ? $this->translator->translate($error->getMessage(), $error->getParameters())
+                    : $error->getMessage(),
                 $error->getValuePath(),
                 $error->getParameters(),
             );

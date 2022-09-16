@@ -20,5 +20,5 @@ interface ValidatorInterface
      * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null $rules Rules to apply. If specified,
      * rules are not read from data set even if it is an instance of {@see RulesProviderInterface}.
      */
-    public function validate(mixed $data, iterable|RulesProviderInterface|null $rules = null): Result;
+    public function validate(mixed $data, iterable|RulesProviderInterface|null $rules = null, ?ValidationContext $context = null): Result;
 }

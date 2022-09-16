@@ -62,7 +62,7 @@ final class NestedHandler implements RuleHandlerInterface
 
             $dataSet = new ObjectDataSet($value, $rule->getPropertyVisibility());
 
-            return $context->getValidator()->validate($dataSet);
+            return $context->getValidator()->validate($dataSet, $context);
         }
 
         if (is_array($value)) {
@@ -100,7 +100,7 @@ final class NestedHandler implements RuleHandlerInterface
             $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
             $rules = is_iterable($rules) ? $rules : [$rules];
 
-            $itemResult = $context->getValidator()->validate($validatedValue, $rules);
+            $itemResult = $context->getValidator()->validate($validatedValue, $rules, $context);
 
             if ($itemResult->isValid()) {
                 continue;

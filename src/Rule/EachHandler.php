@@ -44,7 +44,7 @@ final class EachHandler implements RuleHandlerInterface
         foreach ($value as $index => $item) {
             /** @var array<mixed, Closure|Closure[]|RuleInterface|RuleInterface[]> $rule */
             $rule = [$index => $rules];
-            $itemResult = $context->getValidator()->validate($item, $rule);
+            $itemResult = $context->getValidator()->validate($item, $rule, $context);
             if ($itemResult->isValid()) {
                 continue;
             }
