@@ -7,8 +7,8 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Trait\EmptyCheckTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_string;
@@ -18,8 +18,6 @@ use function is_string;
  */
 final class RequiredHandler implements RuleHandlerInterface
 {
-    use EmptyCheckTrait;
-
     public function __construct(private TranslatorInterface $translator)
     {
     }
@@ -31,14 +29,19 @@ final class RequiredHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-
-        if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
-            $formattedMessage = $this->translator->translate(
-                $rule->getMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
-            );
-            $result->addError($formattedMessage);
+        if (is_string($value)) {
+            $value = trim($value);
         }
+
+        if (!(new SkipOnEmpty())($value)) {
+            return $result;
+        }
+
+        $traslatedMessage = $this->translator->translate(
+            $rule->getMessage(),
+            ['attribute' => $context->getAttribute(), 'value' => $value]
+        );
+        $result->addError($traslatedMessage);
 
         return $result;
     }

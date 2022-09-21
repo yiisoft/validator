@@ -13,8 +13,6 @@ use function is_callable;
 
 trait PreValidateTrait
 {
-    use EmptyCheckTrait;
-
     private string $parameterPreviousRulesErrored = 'previousRulesErrored';
 
     private function preValidate(
