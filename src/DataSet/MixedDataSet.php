@@ -6,6 +6,9 @@ namespace Yiisoft\Validator\DataSet;
 
 use Yiisoft\Validator\DataSetInterface;
 
+/**
+ * Used for a single value of any (mixed) data type. Does not support attributes.
+ */
 final class MixedDataSet implements DataSetInterface
 {
     private mixed $value;
