@@ -60,10 +60,7 @@ final class Validator implements ValidatorInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function validate(
-        mixed $data,
-        iterable|object|string|null $rules = null
-    ): Result {
+    public function validate(mixed $data, iterable|object|string|null $rules = null): Result {
         $data = $this->normalizeDataSet($data);
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
@@ -85,18 +82,12 @@ final class Validator implements ValidatorInterface
 
             if (is_int($attribute)) {
                 $validatedData = $data->getData();
-                $validatedContext = $context;
             } else {
                 $validatedData = $data->getAttributeValue($attribute);
-                $validatedContext = $context->withAttribute($attribute);
+                $context = $context->withAttribute($attribute);
             }
 
-            $tempResult = $this->validateInternal(
-                $validatedData,
-                $attributeRules,
-                $validatedContext
-            );
-
+            $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
             $result = $this->addErrors($result, $tempResult->getErrors());
             $results[] = $result;
         }
