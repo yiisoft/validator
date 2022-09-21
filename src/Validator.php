@@ -60,7 +60,8 @@ final class Validator implements ValidatorInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function validate(mixed $data, iterable|object|string|null $rules = null): Result {
+    public function validate(mixed $data, iterable|object|string|null $rules = null): Result
+    {
         $data = $this->normalizeDataSet($data);
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
