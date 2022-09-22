@@ -18,7 +18,6 @@ use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 
-use function gettype;
 use function is_array;
 use function is_callable;
 use function is_int;
@@ -81,7 +80,7 @@ final class Validator implements ValidatorInterface
         foreach ($rules ?? [] as $attribute => $attributeRules) {
             $result = new Result();
 
-            $tempRule = is_array($attributeRules) ? $attributeRules : [$attributeRules];
+            $tempRule = is_iterable($attributeRules) ? $attributeRules : [$attributeRules];
             $attributeRules = $this->normalizeRules($tempRule);
 
             if (is_int($attribute)) {
@@ -198,7 +197,7 @@ final class Validator implements ValidatorInterface
                 sprintf(
                     'Rule should be either an instance of %s or a callable, %s given.',
                     RuleInterface::class,
-                    gettype($rule)
+                    get_debug_type($rule)
                 )
             );
         }

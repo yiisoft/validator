@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use InvalidArgumentException;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -24,7 +25,11 @@ final class CallbackHandler implements RuleHandlerInterface
         }
 
         $callback = $rule->getCallback();
-        $callbackResult = $callback($value, $context);
+        if ($callback === null) {
+            throw new InvalidArgumentException('Using method outside of attribute scope is prohibited.');
+        }
+
+        $callbackResult = $callback($value, $rule, $context);
 
         if (!$callbackResult instanceof Result) {
             throw new InvalidCallbackReturnTypeException($callbackResult);

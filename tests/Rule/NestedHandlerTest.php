@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
@@ -20,6 +21,8 @@ use Yiisoft\Validator\RuleHandlerInterface;
 
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\ObjectWithNestedObject;
+
+use Yiisoft\Validator\ValidationContext;
 
 use function array_slice;
 
@@ -284,7 +287,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         ];
         $xRules = [
             new Number(min: -10, max: 10),
-            new Callback(static function ($value): Result {
+            new Callback(static function (mixed $value, object $rule, ValidationContext $context): Result {
                 $result = new Result();
                 $result->addError('Custom error.');
 
@@ -495,6 +498,51 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'caption' => ['This value must contain at least 3 characters.'],
             'object.name' => ['This value must contain at least 5 characters.'],
         ], $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testPropagateOptions(): void
+    {
+        $rule = new Nested([
+            'posts' => [
+                new Each([new Nested([
+                    'title' => [new HasLength(min: 3)],
+                    'authors' => [
+                        new Each([new Nested([
+                            'name' => [new HasLength(min: 5)],
+                            'age' => [
+                                new Number(min: 18),
+                                new Number(min: 20),
+                            ],
+                        ])]),
+                    ],
+                ])]),
+            ],
+            'meta' => [new HasLength(min: 7)],
+        ], propagateOptions: true, skipOnEmpty: true, skipOnError: true);
+        $options = $rule->getOptions();
+        $paths = [
+            [],
+            ['rules', 'posts', 0],
+            ['rules', 'posts', 0, 'rules', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'title', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'name', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 1],
+            ['rules', 'meta', 0],
+        ];
+        $keys = ['skipOnEmpty', 'skipOnError'];
+
+        foreach ($paths as $path) {
+            foreach ($keys as $key) {
+                $fullPath = $path;
+                $fullPath[] = $key;
+
+                $value = ArrayHelper::getValueByPath($options, $fullPath);
+                $this->assertTrue($value);
+            }
+        }
     }
 
     protected function getRuleHandler(): RuleHandlerInterface

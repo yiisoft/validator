@@ -8,6 +8,7 @@ use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
@@ -20,7 +21,11 @@ use Yiisoft\Validator\ValidationContext;
  * Validates an array by checking each of its elements against a set of rules.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Each implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
+final class Each implements
+    SerializableRuleInterface,
+    BeforeValidationInterface,
+    SkipOnEmptyInterface,
+    PropagateOptionsInterface
 {
     use BeforeValidationTrait;
     use RuleNameTrait;
@@ -28,7 +33,7 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
 
     public function __construct(
         /**
-         * @var iterable<RuleInterface>
+         * @var iterable<BeforeValidationInterface|RuleInterface|SkipOnEmptyInterface>
          */
         private iterable $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
@@ -46,8 +51,26 @@ final class Each implements SerializableRuleInterface, BeforeValidationInterface
     ) {
     }
 
+    public function propagateOptions(): void
+    {
+        $rules = [];
+        foreach ($this->rules as $rule) {
+            $rule = $rule->skipOnEmpty($this->skipOnEmpty);
+            $rule = $rule->skipOnError($this->skipOnError);
+            $rule = $rule->when($this->when);
+
+            $rules[] = $rule;
+
+            if ($rule instanceof PropagateOptionsInterface) {
+                $rule->propagateOptions();
+            }
+        }
+
+        $this->rules = $rules;
+    }
+
     /**
-     * @return iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>
+     * @return iterable<BeforeValidationInterface|BeforeValidationInterface[]|\Closure|\Closure[]|RuleInterface|RuleInterface[]|SkipOnEmptyInterface|SkipOnEmptyInterface[]>
      */
     public function getRules(): iterable
     {

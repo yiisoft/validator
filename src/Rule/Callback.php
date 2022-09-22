@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Attribute;
 use Closure;
+use InvalidArgumentException;
+use TypeError;
+use Yiisoft\Validator\AttributeEventInterface;
 use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
@@ -13,7 +19,14 @@ use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
-final class Callback implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
+use function get_class;
+
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+final class Callback implements
+    SerializableRuleInterface,
+    BeforeValidationInterface,
+    SkipOnEmptyInterface,
+    AttributeEventInterface
 {
     use BeforeValidationTrait;
     use RuleNameTrait;
@@ -21,9 +34,10 @@ final class Callback implements SerializableRuleInterface, BeforeValidationInter
 
     public function __construct(
         /**
-         * @var callable
+         * @var callable|null
          */
-        private $callback,
+        private $callback = null,
+        private ?string $method = null,
 
         /**
          * @var bool|callable|null
@@ -35,14 +49,39 @@ final class Callback implements SerializableRuleInterface, BeforeValidationInter
          */
         private ?Closure $when = null,
     ) {
+        if ($this->callback === null && $this->method === null) {
+            throw new InvalidArgumentException('Either "$callback" or "$method" must be specified.');
+        }
+
+        if ($this->callback !== null && $this->method !== null) {
+            throw new InvalidArgumentException('"$callback" and "$method" are mutually exclusive.');
+        }
     }
 
     /**
-     * @return callable
+     * @return callable|null
      */
-    public function getCallback(): callable
+    public function getCallback(): ?callable
     {
         return $this->callback;
+    }
+
+    public function getMethod(): ?string
+    {
+        return $this->method;
+    }
+
+    public function afterInitAttribute(DataSetInterface $dataSet): void
+    {
+        if (!$dataSet instanceof ObjectDataSet) {
+            return;
+        }
+
+        try {
+            $this->callback = Closure::fromCallable([get_class($dataSet->getObject()), $this->method]);
+        } catch (TypeError) {
+            throw new InvalidArgumentException('Method must exist and have public and static modifers.');
+        }
     }
 
     public function getOptions(): array

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\ValidationContext;
 
 final class CallbackTest extends AbstractRuleTest
 {
@@ -14,14 +16,19 @@ final class CallbackTest extends AbstractRuleTest
     {
         return [
             [
-                new Callback(static fn ($value) => $value),
+                new Callback(
+                    static fn (mixed $value, object $rule, ValidationContext $context): Result => new Result()
+                ),
                 [
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             [
-                new Callback(static fn ($value) => $value, skipOnEmpty: true),
+                new Callback(
+                    static fn (mixed $value, object $rule, ValidationContext $context): Result => new Result(),
+                    skipOnEmpty: true
+                ),
                 [
                     'skipOnEmpty' => true,
                     'skipOnError' => false,

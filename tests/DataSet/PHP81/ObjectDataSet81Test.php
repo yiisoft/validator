@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\DataSet\PHP81;
 
 use PHPUnit\Framework\TestCase;
+use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
@@ -28,7 +29,9 @@ final class ObjectDataSet81Test extends TestCase
     {
         $dataSet = new ObjectDataSet($object);
 
-        $this->assertEquals($expectedRules, $dataSet->getRules());
+        $rulesArray = $this->toNestedArray($dataSet->getRules());
+
+        $this->assertEquals($expectedRules, $rulesArray);
     }
 
     public function dataProvider(): array
@@ -207,35 +210,49 @@ final class ObjectDataSet81Test extends TestCase
             ],
         ];
 
-        $actualRules = $dataSet->getRules();
+        $actualRules = $this->toNestedArray($dataSet->getRules());
 
         // check Chart structure has right structure
         $this->assertIsArray($actualRules);
         $this->assertArrayHasKey('points', $actualRules);
-        $this->assertIsArray($actualRules['points']);
-        $this->assertCount(1, $actualRules['points']);
-        $this->assertInstanceOf(Each::class, $actualRules['points'][0]);
+        $this->assertCount(1, $actualRules = $this->toArray($actualRules['points']));
+        $this->assertInstanceOf(Each::class, $actualRules[0]);
 
         // check Chart structure has right structure
-        $actualFirstEmbeddedRules = $actualRules['points'][0]->getRules();
+        $actualFirstEmbeddedRules = $this->toArray($actualRules[0]->getRules());
         $this->assertIsArray($actualFirstEmbeddedRules);
         $this->assertCount(1, $actualFirstEmbeddedRules);
         $this->assertInstanceOf(Nested::class, $actualFirstEmbeddedRules[0]);
 
         // check Point structure has right structure
-        $innerRules = $actualFirstEmbeddedRules[0]->getRules();
+        $innerRules = $this->toArray($actualFirstEmbeddedRules[0]->getRules());
         // rgb has usual structure. We can check as is
-        $this->assertEquals($firstEmbeddedRules['rgb'], $innerRules['rgb']);
+        $this->assertEquals($firstEmbeddedRules['rgb'], $this->toArray($innerRules['rgb']));
 
         // coordinates has embedded structure, so we need to unpack rules before check it
-        $this->assertIsArray($innerRules['coordinates']);
-        $this->assertCount(1, $innerRules['coordinates']);
-        $this->assertInstanceOf(Each::class, $innerRules['coordinates'][0]);
+        $this->assertIsArray($innerRules = $this->toArray($innerRules['coordinates']));
+        $this->assertCount(1, $innerRules);
+        $this->assertInstanceOf(Each::class, $innerRules[0]);
 
-        $secondInnerRules = $innerRules['coordinates'][0]->getRules();
+        $secondInnerRules = $this->toArray($innerRules[0]->getRules());
         $this->assertIsArray($secondInnerRules);
         $this->assertCount(1, $secondInnerRules);
         $this->assertInstanceOf(Nested::class, $secondInnerRules[0]);
-        $this->assertEquals($secondEmbeddedRules, $secondInnerRules[0]->getRules());
+        $this->assertEquals($secondEmbeddedRules, $this->toNestedArray($secondInnerRules[0]->getRules()));
+    }
+
+    public function toArray(iterable $rules): array
+    {
+        return $rules instanceof Traversable ? iterator_to_array($rules) : (array) $rules;
+    }
+
+    private function toNestedArray(iterable $doubleIterable): array
+    {
+        $actualRules = [];
+        foreach ($doubleIterable as $key => $iterable) {
+            $actualRules[$key] = $this->toArray($iterable);
+        }
+
+        return $actualRules;
     }
 }
