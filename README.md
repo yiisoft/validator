@@ -141,8 +141,8 @@ new Number(asInteger: true, max: 100, skipOnError: true)
 
 #### Skipping empty values
 
-By default, empty values are validated. That is undesirable if you need to allow not specifying a field.
-To change this behavior, use `skipOnEmpty: true`:
+By default, missing and empty values are validated (if the value is missing, it's considered `null`). That is 
+undesirable if you need to allow not specifying a field. To change this behavior, use `skipOnEmpty: true`:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
@@ -152,13 +152,13 @@ new Number(asInteger: true, max: 100, skipOnEmpty: true);
 
 What exactly to consider to be empty is vague and can vary depending on a scope of usage.
 
-`skipOnEmpty` is more like a shortcut, `skipOnEmptyCallback` argument checks if a given value is empty:
+`skipOnEmpty` value is normalized to callback automatically:
 
-- If `skipOnEmpty` is `false`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipNone` is used automatically for 
-`skipOnEmptyCallback` - every value is considered non-empty and validated without skipping (default).
-- If `skipOnEmpty` is `true`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty` is used automatically for
-`skipOnEmptyCallback` - only non-empty values (not `null`, `[]`, or `''`) are validated.
-- If `skipOnEmptyCallback` is set, it takes precedence to determine emptiness.
+- If `skipOnEmpty` is `false` or `null`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipNone` is used automatically as 
+callback - every value is considered non-empty and validated without skipping (default).
+- If `skipOnEmpty` is `true`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty` is used automatically for callback - 
+only passed and non-empty values (not `null`, `[]`, or `''`) are validated.
+- If custom callback  is set, it's used to determine emptiness.
 
 Using first option is usually good for HTML forms. The second one is more suitable for APIs.
 
@@ -168,19 +168,18 @@ The empty values can be also limited to `null` only:
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 
-new Number(asInteger: true, max: 100, skipOnEmptyCallback: new SkipOnNull());
+new Number(asInteger: true, max: 100, skipOnEmpty: new SkipOnNull());
 ```
-
-Note that in this case `skipOnEmpty` will be automatically set to `true`, so there is no need to do it manually.
 
 For even more customization you can use your own class implementing `__invoke()` magic method:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\ValidationContext;
 
 final class SkipOnZero
 {
-    public function __invoke($value): bool
+    public function __invoke(mixed $value, object $rule, ValidationContext $context): bool
     {
         return $value === 0;
     }
@@ -193,11 +192,12 @@ or just a callable:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\ValidationContext;
 
 new Number(
     asInteger: true, 
     max: 100, 
-    skipOnEmptyCallback: static function (mixed $value): bool {
+    skipOnEmptyCallback: static function (mixed $value, object $rule, ValidationContext $context): bool {
         return $value === 0;
     }
 );
@@ -207,12 +207,13 @@ For multiple rules this can be also set more conveniently at validator level:
 
 ```php
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
 $validator = new Validator(new SimpleRuleHandlerContainer($translator), skipOnEmpty: true);
 $validator = new Validator(
     new SimpleRuleHandlerContainer($translator),
-    skipOnEmptyCallback: static function (mixed $value): bool {
+    skipOnEmptyCallback: static function (mixed $value, object $rule, ValidationContext $context): bool {
         return $value === 0;
     }
 );
