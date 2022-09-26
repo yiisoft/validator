@@ -185,7 +185,7 @@ final class SkipOnZero
     }
 }
 
-new Number(asInteger: true, max: 100, skipOnEmptyCallback: new SkipOnZero());
+new Number(asInteger: true, max: 100, skipOnEmpty: new SkipOnZero());
 ```
 
 or just a callable:
@@ -197,7 +197,7 @@ use Yiisoft\Validator\ValidationContext;
 new Number(
     asInteger: true, 
     max: 100, 
-    skipOnEmptyCallback: static function (mixed $value, object $rule, ValidationContext $context): bool {
+    skipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
         return $value === 0;
     }
 );
@@ -213,10 +213,20 @@ use Yiisoft\Validator\Validator;
 $validator = new Validator(new SimpleRuleHandlerContainer($translator), skipOnEmpty: true);
 $validator = new Validator(
     new SimpleRuleHandlerContainer($translator),
-    skipOnEmptyCallback: static function (mixed $value, object $rule, ValidationContext $context): bool {
+    skipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
         return $value === 0;
     }
 );
+```
+
+Using other parameters such as `$context` also allow to check if attribute is present:
+
+```php
+use Yiisoft\Validator\ValidationContext;
+
+$skipOnEmpty = static function (mixed $value, object $rule, ValidationContext $context): bool {
+    return $context->isAttributeMissing() || $value === '';
+};
 ```
 
 #### Nested and related data
