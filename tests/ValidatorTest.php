@@ -453,7 +453,11 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static function (mixed $value): bool {
+                            skipOnEmpty: static function (
+                                mixed $value,
+                                object $rule,
+                                ValidationContext $context
+                            ): bool {
                                 return $value === 0;
                             }
                         ),
@@ -476,7 +480,11 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static function (mixed $value): bool {
+                            skipOnEmpty: static function (
+                                mixed $value,
+                                object $rule,
+                                ValidationContext $context
+                            ): bool {
                                 return $value === 0;
                             }
                         ),
@@ -498,7 +506,11 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static function (mixed $value): bool {
+                            skipOnEmpty: static function (
+                                mixed $value,
+                                object $rule,
+                                ValidationContext $context
+                            ): bool {
                                 return $value === 0;
                             }
                         ),
@@ -521,7 +533,11 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static function (mixed $value): bool {
+                            skipOnEmpty: static function (
+                                mixed $value,
+                                object $rule,
+                                ValidationContext $context
+                            ): bool {
                                 return $value === 0;
                             }
                         ),
@@ -616,7 +632,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmpty: custom callback, value not passed' => [
                 new Validator(
                     new SimpleRuleHandlerContainer($translator),
-                    defaultSkipOnEmpty: static function (mixed $value): bool {
+                    defaultSkipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
                         return $value === 0;
                     }
                 ),
@@ -632,7 +648,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmpty: custom callback, value is empty' => [
                 new Validator(
                     new SimpleRuleHandlerContainer($translator),
-                    defaultSkipOnEmpty: static function (mixed $value): bool {
+                    defaultSkipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
                         return $value === 0;
                     }
                 ),
@@ -648,7 +664,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmpty: custom callback, value is not empty' => [
                 new Validator(
                     new SimpleRuleHandlerContainer($translator),
-                    defaultSkipOnEmpty: static function (mixed $value): bool {
+                    defaultSkipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
                         return $value === 0;
                     }
                 ),
@@ -665,7 +681,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmpty: custom callback, value is not empty (null)' => [
                 new Validator(
                     new SimpleRuleHandlerContainer($translator),
-                    defaultSkipOnEmpty: static function (mixed $value): bool {
+                    defaultSkipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
                         return $value === 0;
                     }
                 ),
