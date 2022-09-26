@@ -66,6 +66,11 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
             : null;
     }
 
+    public function hasAttribute(string $attribute): bool
+    {
+        return true;
+    }
+
     public function getData(): array
     {
         if ($this->dataSetProvided) {

@@ -14,7 +14,7 @@ use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
- * Validates that the specified value is neither null nor empty.
+ * Validates that the specified value is passed and not empty.
  */
 final class RequiredHandler implements RuleHandlerInterface
 {
@@ -29,19 +29,23 @@ final class RequiredHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
+        if ($context->isAttributeMissing()) {
+            $translatedMessage = $this->translator->translate($rule->getNotPassedMessage());
+            $result->addError($translatedMessage);
+
+            return $result;
+        }
+
         if (is_string($value)) {
             $value = trim($value);
         }
 
-        if (!(new SkipOnEmpty())($value)) {
+        if (!(new SkipOnEmpty())($value, $rule, $context)) {
             return $result;
         }
 
-        $traslatedMessage = $this->translator->translate(
-            $rule->getMessage(),
-            ['attribute' => $context->getAttribute(), 'value' => $value]
-        );
-        $result->addError($traslatedMessage);
+        $translatedMessage = $this->translator->translate($rule->getMessage());
+        $result->addError($translatedMessage);
 
         return $result;
     }

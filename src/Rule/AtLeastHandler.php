@@ -29,7 +29,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         $filledCount = 0;
 
         foreach ($rule->getAttributes() as $attribute) {
-            if (!(new SkipOnEmpty())($value->{$attribute})) {
+            if (!(new SkipOnEmpty())($value->{$attribute}, $rule, $context)) {
                 $filledCount++;
             }
         }

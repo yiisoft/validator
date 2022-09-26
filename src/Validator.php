@@ -126,20 +126,14 @@ final class Validator implements ValidatorInterface
      * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
      * @param ValidationContext $context
      *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     *
      * @return Result
      */
     private function validateInternal($value, iterable $rules, ValidationContext $context): Result
     {
         $compoundResult = new Result();
         foreach ($rules as $rule) {
-            if ($rule instanceof BeforeValidationInterface) {
-                $preValidateResult = $this->preValidate($value, $context, $rule);
-                if ($preValidateResult) {
-                    continue;
-                }
+            if ($rule instanceof BeforeValidationInterface && $this->preValidate($value, $context, $rule)) {
+                continue;
             }
 
             $ruleHandler = $this->ruleHandlerResolver->resolve($rule->getHandlerClassName());

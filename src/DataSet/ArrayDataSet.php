@@ -6,22 +6,26 @@ namespace Yiisoft\Validator\DataSet;
 
 use Yiisoft\Validator\DataSetInterface;
 
+use function array_key_exists;
+
 final class ArrayDataSet implements DataSetInterface
 {
-    private array $data;
-
-    public function __construct(array $data = [])
+    public function __construct(private array $data = [])
     {
-        $this->data = $data;
     }
 
     public function getAttributeValue(string $attribute): mixed
     {
-        return $this->data[$attribute] ?? null;
+        return $this->hasAttribute($attribute) ? $this->data[$attribute] : null;
     }
 
     public function getData(): array
     {
         return $this->data;
+    }
+
+    public function hasAttribute(string $attribute): bool
+    {
+        return array_key_exists($attribute, $this->data);
     }
 }

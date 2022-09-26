@@ -21,8 +21,8 @@ trait PreValidateTrait
         BeforeValidationInterface $rule
     ): bool {
         if (
-            $rule instanceof SkipOnEmptyInterface
-            && (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value)
+            $rule instanceof SkipOnEmptyInterface &&
+            (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $rule, $context)
         ) {
             return true;
         }
