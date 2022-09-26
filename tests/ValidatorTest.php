@@ -166,7 +166,7 @@ class ValidatorTest extends TestCase
                     skipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
                         return $context->isAttributeMissing();
                     }
-                )
+                ),
             ],
         ];
         $notStrictRules = [
