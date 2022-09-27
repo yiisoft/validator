@@ -133,12 +133,9 @@ final class Validator implements ValidatorInterface
     /**
      * @param $value
      * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
-     * @param ValidationContext $context
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     *
-     * @return Result
      */
     private function validateInternal($value, iterable $rules, ValidationContext $context): Result
     {

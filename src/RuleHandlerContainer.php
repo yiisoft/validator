@@ -11,11 +11,8 @@ use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 
 final class RuleHandlerContainer implements RuleHandlerResolverInterface
 {
-    private ContainerInterface $container;
-
-    public function __construct(ContainerInterface $container)
+    public function __construct(private ContainerInterface $container)
     {
-        $this->container = $container;
     }
 
     public function resolve(string $className): RuleHandlerInterface

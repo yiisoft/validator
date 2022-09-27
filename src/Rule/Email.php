@@ -82,57 +82,36 @@ final class Email implements SerializableRuleInterface, BeforeValidationInterfac
         }
     }
 
-    /**
-     * @return string
-     */
     public function getPattern(): string
     {
         return $this->pattern;
     }
 
-    /**
-     * @return string
-     */
     public function getFullPattern(): string
     {
         return $this->fullPattern;
     }
 
-    /**
-     * @return string
-     */
     public function getIdnEmailPattern(): string
     {
         return $this->idnEmailPattern;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowName(): bool
     {
         return $this->allowName;
     }
 
-    /**
-     * @return bool
-     */
     public function isCheckDNS(): bool
     {
         return $this->checkDNS;
     }
 
-    /**
-     * @return bool
-     */
     public function isEnableIDN(): bool
     {
         return $this->enableIDN;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

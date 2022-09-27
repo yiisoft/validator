@@ -62,7 +62,7 @@ final class IpHandler implements RuleHandlerInterface
 
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             $result->addError($formattedMessage);
             return $result;
         }
@@ -168,7 +168,7 @@ final class IpHandler implements RuleHandlerInterface
         if ($cidr !== null) {
             try {
                 IpHelper::getCidrBits($ipCidr);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException) {
                 $formattedMessage = $this->translator->translate(
                     $rule->getWrongCidrMessage(),
                     ['attribute' => $context->getAttribute(), 'value' => $value]

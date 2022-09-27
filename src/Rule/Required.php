@@ -39,9 +39,6 @@ final class Required implements SerializableRuleInterface, BeforeValidationInter
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

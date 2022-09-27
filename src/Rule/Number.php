@@ -75,57 +75,36 @@ final class Number implements SerializableRuleInterface, BeforeValidationInterfa
     ) {
     }
 
-    /**
-     * @return bool
-     */
     public function isAsInteger(): bool
     {
         return $this->asInteger;
     }
 
-    /**
-     * @return float|int|null
-     */
     public function getMin(): float|int|null
     {
         return $this->min;
     }
 
-    /**
-     * @return float|int|null
-     */
     public function getMax(): float|int|null
     {
         return $this->max;
     }
 
-    /**
-     * @return string
-     */
     public function getTooSmallMessage(): string
     {
         return $this->tooSmallMessage;
     }
 
-    /**
-     * @return string
-     */
     public function getTooBigMessage(): string
     {
         return $this->tooBigMessage;
     }
 
-    /**
-     * @return string
-     */
     public function getIntegerPattern(): string
     {
         return $this->integerPattern;
     }
 
-    /**
-     * @return string
-     */
     public function getNumberPattern(): string
     {
         return $this->numberPattern;
