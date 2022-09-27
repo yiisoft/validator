@@ -58,9 +58,6 @@ final class Callback implements
         }
     }
 
-    /**
-     * @return callable|null
-     */
     public function getCallback(): ?callable
     {
         return $this->callback;
@@ -78,7 +75,7 @@ final class Callback implements
         }
 
         try {
-            $this->callback = Closure::fromCallable([get_class($dataSet->getObject()), $this->method]);
+            $this->callback = Closure::fromCallable([$dataSet->getObject()::class, $this->method]);
         } catch (TypeError) {
             throw new InvalidArgumentException('Method must exist and have public and static modifers.');
         }

@@ -86,17 +86,11 @@ final class Url implements SerializableRuleInterface, BeforeValidationInterface,
         return $this->validSchemes;
     }
 
-    /**
-     * @return bool
-     */
     public function isEnableIDN(): bool
     {
         return $this->enableIDN;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

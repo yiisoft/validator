@@ -137,7 +137,7 @@ final class AttributesRulesProviderTest extends TestCase
         $classNames = [];
         foreach ($rules as $attribute => $attributeRules) {
             $classNames[$attribute] = array_map(
-                static fn (RuleInterface $rule): string => get_class($rule),
+                static fn (RuleInterface $rule): string => $rule::class,
                 $attributeRules instanceof Traversable ? iterator_to_array($attributeRules) : $attributeRules
             );
         }

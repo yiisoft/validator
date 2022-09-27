@@ -9,13 +9,8 @@ use Yiisoft\Validator\RulesProviderInterface;
 
 final class RulesProvidedDataSet implements RulesProviderInterface, DataSetInterface
 {
-    private array $data;
-    private array $rules;
-
-    public function __construct(array $data, array $rules)
+    public function __construct(private array $data, private array $rules)
     {
-        $this->data = $data;
-        $this->rules = $rules;
     }
 
     public function getAttributeValue(string $attribute): mixed

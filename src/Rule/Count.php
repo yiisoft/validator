@@ -91,9 +91,6 @@ final class Count implements SerializableRuleInterface, BeforeValidationInterfac
         );
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

@@ -6,20 +6,17 @@ namespace Yiisoft\Validator;
 
 final class Error
 {
-    private string $message;
-
-    /**
-     * @psalm-var list<int|string>
-     */
-    private array $valuePath;
-
     /**
      * @psalm-param list<int|string> $valuePath
      */
-    public function __construct(string $message, array $valuePath = [])
+    public function __construct(
+        private string $message,
+        /**
+         * @psalm-var list<int|string>
+         */
+        private array $valuePath = []
+    )
     {
-        $this->message = $message;
-        $this->valuePath = $valuePath;
     }
 
     public function getMessage(): string
@@ -37,9 +34,7 @@ final class Error
         }
 
         return array_map(
-            static function ($key): string {
-                return str_replace(['.', '*'], ['\\' . '.', '\\' . '*'], (string)$key);
-            },
+            static fn($key): string => str_replace(['.', '*'], ['\\' . '.', '\\' . '*'], (string)$key),
             $this->valuePath
         );
     }

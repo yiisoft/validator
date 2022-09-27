@@ -77,17 +77,11 @@ final class Each implements
         return $this->rules;
     }
 
-    /**
-     * @return string
-     */
     public function getIncorrectInputMessage(): string
     {
         return $this->incorrectInputMessage;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

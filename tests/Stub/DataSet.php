@@ -8,11 +8,8 @@ use Yiisoft\Validator\DataSetInterface;
 
 final class DataSet implements DataSetInterface
 {
-    private array $data;
-
-    public function __construct(array $data = [])
+    public function __construct(private array $data = [])
     {
-        $this->data = $data;
     }
 
     public function getAttributeValue(string $attribute): mixed

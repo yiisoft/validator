@@ -90,17 +90,11 @@ final class HasLength implements SerializableRuleInterface, BeforeValidationInte
         );
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;
     }
 
-    /**
-     * @return string
-     */
     public function getEncoding(): string
     {
         return $this->encoding;

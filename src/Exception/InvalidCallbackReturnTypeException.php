@@ -17,7 +17,7 @@ final class InvalidCallbackReturnTypeException extends \Exception implements Fri
         $message = sprintf(
             'Return value of callback must be an instance of %s, %s returned.',
             Result::class,
-            is_object($result) ? get_class($result) : gettype($result)
+            get_debug_type($result)
         );
 
         parent::__construct($message, $code, $previous);
