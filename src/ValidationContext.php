@@ -16,7 +16,7 @@ final class ValidationContext
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
      * @param array $parameters Arbitrary parameters.
      */
-    public function __construct(private ValidatorInterface $validator, private ?\Yiisoft\Validator\DataSetInterface $dataSet, private ?string $attribute = null, private array $parameters = [])
+    public function __construct(private ValidatorInterface $validator, private ?DataSetInterface $dataSet, private ?string $attribute = null, private array $parameters = [])
     {
     }
 

@@ -15,8 +15,7 @@ final class Error
          * @psalm-var list<int|string>
          */
         private array $valuePath = []
-    )
-    {
+    ) {
     }
 
     public function getMessage(): string
@@ -34,7 +33,7 @@ final class Error
         }
 
         return array_map(
-            static fn($key): string => str_replace(['.', '*'], ['\\' . '.', '\\' . '*'], (string)$key),
+            static fn ($key): string => str_replace(['.', '*'], ['\\' . '.', '\\' . '*'], (string)$key),
             $this->valuePath
         );
     }

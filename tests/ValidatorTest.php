@@ -94,7 +94,7 @@ class ValidatorTest extends TestCase
         $result = $validator->validate(new DataSet(['property' => '']), [
             'property' => [
                 new Required(
-                    when: static fn(mixed $value, ?ValidationContext $context): bool => false,
+                    when: static fn (mixed $value, ?ValidationContext $context): bool => false,
                 ),
             ],
         ]);
@@ -332,7 +332,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static fn(mixed $value): bool => $value === 0
+                            skipOnEmpty: static fn (mixed $value): bool => $value === 0
                         ),
                     ],
                 ],
@@ -353,7 +353,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static fn(mixed $value): bool => $value === 0
+                            skipOnEmpty: static fn (mixed $value): bool => $value === 0
                         ),
                     ],
                 ],
@@ -373,7 +373,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static fn(mixed $value): bool => $value === 0
+                            skipOnEmpty: static fn (mixed $value): bool => $value === 0
                         ),
                     ],
                 ],
@@ -394,7 +394,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static fn(mixed $value): bool => $value === 0
+                            skipOnEmpty: static fn (mixed $value): bool => $value === 0
                         ),
                     ],
                 ],
@@ -487,7 +487,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmptyCallback, custom, value not passed' => [
                 new Validator(
                     new SimpleRuleHandlerContainer($translator),
-                    defaultSkipOnEmpty: static fn(mixed $value): bool => $value === 0
+                    defaultSkipOnEmpty: static fn (mixed $value): bool => $value === 0
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -501,7 +501,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmptyCallback, custom, value is empty' => [
                 new Validator(
                     new SimpleRuleHandlerContainer($translator),
-                    defaultSkipOnEmpty: static fn(mixed $value): bool => $value === 0
+                    defaultSkipOnEmpty: static fn (mixed $value): bool => $value === 0
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -515,7 +515,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmptyCallback, custom, value is not empty' => [
                 new Validator(
                     new SimpleRuleHandlerContainer($translator),
-                    defaultSkipOnEmpty: static fn(mixed $value): bool => $value === 0
+                    defaultSkipOnEmpty: static fn (mixed $value): bool => $value === 0
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -530,7 +530,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmptyCallback, custom, value is not empty (null)' => [
                 new Validator(
                     new SimpleRuleHandlerContainer($translator),
-                    defaultSkipOnEmpty: static fn(mixed $value): bool => $value === 0
+                    defaultSkipOnEmpty: static fn (mixed $value): bool => $value === 0
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',

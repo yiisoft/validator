@@ -94,7 +94,7 @@ final class JsonHandlerTest extends AbstractRuleValidatorTest
 1e00,2e+00,2e-00
 ,"rosebud"]
 JSON_WRAP
-,
+                ,
             ],
             // JSON test from http://www.json.org/JSON_checker/test/pass2.json
             [$rule, '[[[[[[[[[[[[[[[[[[["Not too deep"]]]]]]]]]]]]]]]]]]]'],
@@ -109,7 +109,7 @@ JSON_WRAP
     }
 }
 JSON_WRAP
-,
+                ,
             ],
         ];
     }
