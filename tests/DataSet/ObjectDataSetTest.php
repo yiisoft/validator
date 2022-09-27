@@ -9,6 +9,7 @@ use ReflectionProperty;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Tests\Stub\ObjectWithCallsCount;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
@@ -16,10 +17,19 @@ use Yiisoft\Validator\Tests\Stub\ObjectWithRulesProvider;
 
 final class ObjectDataSetTest extends TestCase
 {
-    public function testPropertyVisibility(): void
+    public function propertyVisibilityDataProvider(): array
     {
-        $object = new ObjectWithDifferentPropertyVisibility();
+        return [
+            [new ObjectWithDifferentPropertyVisibility()],
+            [new ObjectWithDifferentPropertyVisibility()], // Not a duplicate. Used to test caching.
+        ];
+    }
 
+    /**
+     * @dataProvider propertyVisibilityDataProvider
+     */
+    public function testPropertyVisibility(ObjectWithDifferentPropertyVisibility $object): void
+    {
         $data = new ObjectDataSet($object);
         $this->assertSame(['name' => '', 'age' => 17, 'number' => 42], $data->getData());
         $this->assertSame('', $data->getAttributeValue('name'));
@@ -61,10 +71,19 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame(['name', 'age'], array_keys($data->getRules()));
     }
 
-    public function testObjectWithDataSet(): void
+    public function objectWithDataSetDataProvider(): array
     {
-        $object = new ObjectWithDataSet();
+        return [
+            [new ObjectWithDataSet()],
+            [new ObjectWithDataSet()], // Not a duplicate. Used to test caching.
+        ];
+    }
 
+    /**
+     * @dataProvider objectWithDataSetDataProvider
+     */
+    public function testObjectWithDataSet(ObjectWithDataSet $object): void
+    {
         $data = new ObjectDataSet($object);
 
         $this->assertSame(['key1' => 7, 'key2' => 42], $data->getData());
@@ -79,10 +98,19 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame([], $data->getRules());
     }
 
-    public function testObjectWithRulesProvider(): void
+    public function objectWithRulesProvider(): array
     {
-        $object = new ObjectWithRulesProvider();
+        return [
+            [new ObjectWithRulesProvider()],
+            [new ObjectWithRulesProvider()], // Not a duplicate. Used to test caching.
+        ];
+    }
 
+    /**
+     * @dataProvider objectWithRulesProvider
+     */
+    public function testObjectWithRulesProvider(ObjectWithRulesProvider $object): void
+    {
         $data = new ObjectDataSet($object);
         $rules = $data->getRules();
 
@@ -99,10 +127,19 @@ final class ObjectDataSetTest extends TestCase
         $this->assertInstanceOf(Equal::class, $rules['age'][1]);
     }
 
-    public function testObjectWithDataSetAndRulesProvider(): void
+    public function objectWithDataSetAndRulesProviderDataProvider(): array
     {
-        $object = new ObjectWithDataSetAndRulesProvider();
+        return [
+            [new ObjectWithDataSetAndRulesProvider()],
+            [new ObjectWithDataSetAndRulesProvider()], // Not a duplicate. Used to test caching.
+        ];
+    }
 
+    /**
+     * @dataProvider objectWithDataSetAndRulesProviderDataProvider
+     */
+    public function testObjectWithDataSetAndRulesProvider(ObjectWithDataSetAndRulesProvider $object): void
+    {
         $data = new ObjectDataSet($object);
         $rules = $data->getRules();
 
@@ -121,5 +158,23 @@ final class ObjectDataSetTest extends TestCase
         $this->assertCount(2, $rules['key2']);
         $this->assertInstanceOf(Required::class, $rules['key2'][0]);
         $this->assertInstanceOf(Equal::class, $rules['key2'][1]);
+    }
+
+    public function testCaching(): void
+    {
+        $object1 = new ObjectWithCallsCount();
+        $object2 = new ObjectWithCallsCount();
+
+        $data1 = new ObjectDataSet($object1);
+        $data2 = new ObjectDataSet($object2);
+
+        $data1->getRules();
+        $data2->getRules();
+
+        $data1->getData();
+        $data2->getData();
+
+        $this->assertSame(1, ObjectWithCallsCount::$getRulesCallsCount);
+        $this->assertSame(1, ObjectWithCallsCount::$getDataCallsCount);
     }
 }
