@@ -91,13 +91,10 @@ class ValidatorTest extends TestCase
     public function testPreValidation(): void
     {
         $validator = FakeValidatorFactory::make();
-        $result = $validator->validate(new DataSet(['property' => '']), [
-            'property' => [
-                new Required(
-                    when: static fn (mixed $value, ?ValidationContext $context): bool => false,
-                ),
-            ],
-        ]);
+        $result = $validator->validate(
+            new DataSet(['property' => '']),
+            ['property' => [new Required(when: static fn (mixed $value, ?ValidationContext $context): bool => false)]],
+        );
 
         $this->assertTrue($result->isValid());
     }

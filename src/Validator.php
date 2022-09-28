@@ -131,7 +131,6 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param $value
      * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
      *
      * @throws ContainerExceptionInterface
