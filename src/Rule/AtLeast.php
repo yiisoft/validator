@@ -51,9 +51,6 @@ final class AtLeast implements SerializableRuleInterface, BeforeValidationInterf
     ) {
     }
 
-    /**
-     * @return array
-     */
     public function getAttributes(): array
     {
         return $this->attributes;
@@ -64,9 +61,6 @@ final class AtLeast implements SerializableRuleInterface, BeforeValidationInterf
         return $this->min;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

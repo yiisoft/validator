@@ -148,8 +148,6 @@ trait LimitTrait
 
     /**
      * Limit related options intended to be merged with other rule options.
-     *
-     * @return array
      */
     #[ArrayShape([
         'min' => 'int|null',
