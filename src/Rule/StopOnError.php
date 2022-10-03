@@ -64,7 +64,7 @@ final class StopOnError implements SerializableRuleInterface, BeforeValidationIn
     }
 
     /**
-     * @return RulesProviderInterface|class-string|iterable|null
+     * @return class-string|iterable|RulesProviderInterface|null
      *
      * @psalm-return RulesProviderInterface|class-string|iterable<mixed, Closure|RuleInterface|array<Closure|RuleInterface>>|null
      */
