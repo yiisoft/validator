@@ -238,19 +238,19 @@ final class NestedTest extends TestCase
         ];
     }
 
-//    /**
-//     * @dataProvider dataNestedWithoutRulesToNonObject
-//     */
-//    public function testNestedWithoutRulesToNonObject(string $expectedValueName, object $data): void
-//    {
-//        $validator = $this->createValidator();
-//
-//        $this->expectException(InvalidArgumentException::class);
-//        $this->expectExceptionMessage(
-//            'Nested rule without rules could be used for objects only. ' . $expectedValueName . ' given.'
-//        );
-//        $validator->validate($data);
-//    }
+    /**
+     * @dataProvider dataNestedWithoutRulesToNonObject
+     */
+    public function testNestedWithoutRulesToNonObject(string $expectedValueName, object $data): void
+    {
+        $validator = $this->createValidator();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Nested rule without rules could be used for objects only. ' . $expectedValueName . ' given.'
+        );
+        $validator->validate($data);
+    }
 
     public function dataHandler(): array
     {
