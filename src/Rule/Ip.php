@@ -227,105 +227,66 @@ final class Ip implements SerializableRuleInterface, BeforeValidationInterface, 
         $this->ranges = $this->prepareRanges($ranges);
     }
 
-    /**
-     * @return array
-     */
     public function getNetworks(): array
     {
         return $this->networks;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowIpv4(): bool
     {
         return $this->allowIpv4;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowIpv6(): bool
     {
         return $this->allowIpv6;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowSubnet(): bool
     {
         return $this->allowSubnet;
     }
 
-    /**
-     * @return bool
-     */
     public function isRequireSubnet(): bool
     {
         return $this->requireSubnet;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowNegation(): bool
     {
         return $this->allowNegation;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;
     }
 
-    /**
-     * @return string
-     */
     public function getIpv4NotAllowedMessage(): string
     {
         return $this->ipv4NotAllowedMessage;
     }
 
-    /**
-     * @return string
-     */
     public function getIpv6NotAllowedMessage(): string
     {
         return $this->ipv6NotAllowedMessage;
     }
 
-    /**
-     * @return string
-     */
     public function getWrongCidrMessage(): string
     {
         return $this->wrongCidrMessage;
     }
 
-    /**
-     * @return string
-     */
     public function getNoSubnetMessage(): string
     {
         return $this->noSubnetMessage;
     }
 
-    /**
-     * @return string
-     */
     public function getHasSubnetMessage(): string
     {
         return $this->hasSubnetMessage;
     }
 
-    /**
-     * @return string
-     */
     public function getNotInRangeMessage(): string
     {
         return $this->notInRangeMessage;

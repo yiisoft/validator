@@ -209,9 +209,9 @@ For multiple rules this can be also set more conveniently at validator level:
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 
-$validator = new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true);
+$validator = new Validator(new SimpleRuleHandlerContainer($translator), skipOnEmpty: true);
 $validator = new Validator(
-    new SimpleRuleHandlerContainer(),
+    new SimpleRuleHandlerContainer($translator),
     skipOnEmptyCallback: static function (mixed $value): bool {
         return $value === 0;
     }

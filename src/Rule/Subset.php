@@ -42,33 +42,21 @@ final class Subset implements SerializableRuleInterface, BeforeValidationInterfa
     ) {
     }
 
-    /**
-     * @return iterable
-     */
     public function getValues(): iterable
     {
         return $this->values;
     }
 
-    /**
-     * @return bool
-     */
     public function isStrict(): bool
     {
         return $this->strict;
     }
 
-    /**
-     * @return string
-     */
     public function getIterableMessage(): string
     {
         return $this->iterableMessage;
     }
 
-    /**
-     * @return string
-     */
     public function getSubsetMessage(): string
     {
         return $this->subsetMessage;

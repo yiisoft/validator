@@ -42,9 +42,7 @@ final class Error
         }
 
         return array_map(
-            static function ($key): string {
-                return str_replace(['.', '*'], ['\\' . '.', '\\' . '*'], (string)$key);
-            },
+            static fn ($key): string => str_replace(['.', '*'], ['\\' . '.', '\\' . '*'], (string)$key),
             $this->valuePath
         );
     }

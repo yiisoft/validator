@@ -12,6 +12,7 @@ use ReflectionProperty;
 use Traversable;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
@@ -35,7 +36,11 @@ use function sprintf;
  * Can be used for validation of nested structures.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Nested implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
+final class Nested implements
+    SerializableRuleInterface,
+    BeforeValidationInterface,
+    SkipOnEmptyInterface,
+    PropagateOptionsInterface
 {
     use BeforeValidationTrait;
     use RuleNameTrait;
@@ -80,6 +85,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
+        private bool $propagateOptions = false,
 
         /**
          * @var bool|callable|null
@@ -92,7 +98,7 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
          */
         private ?Closure $when = null,
     ) {
-        $this->rules = $this->prepareRules($rules);
+        $this->prepareRules($rules);
     }
 
     /**
@@ -108,17 +114,11 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         return $this->propertyVisibility;
     }
 
-    /**
-     * @return bool
-     */
     public function getRequirePropertyPath(): bool
     {
         return $this->requirePropertyPath;
     }
 
-    /**
-     * @return string
-     */
     public function getNoPropertyPathMessage(): string
     {
         return $this->noPropertyPathMessage;
@@ -127,10 +127,12 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
     /**
      * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null $source
      */
-    private function prepareRules(iterable|object|string|null $source): ?iterable
+    private function prepareRules(iterable|object|string|null $source): void
     {
         if ($source === null) {
-            return null;
+            $this->rules = null;
+
+            return;
         }
 
         if ($source instanceof RulesProviderInterface) {
@@ -144,7 +146,15 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         self::ensureArrayHasRules($rules);
 
-        return $this->normalizeRules ? $this->normalizeRules($rules) : $rules;
+        $this->rules = $rules;
+
+        if ($this->normalizeRules) {
+            $this->normalizeRules();
+        }
+
+        if ($this->propagateOptions) {
+            $this->propagateOptions();
+        }
     }
 
     private static function ensureArrayHasRules(iterable &$rules)
@@ -163,8 +173,11 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
         }
     }
 
-    private function normalizeRules(iterable $rules): iterable
+    private function normalizeRules(): void
     {
+        /** @var iterable $rules */
+        $rules = $this->rules;
+
         while (true) {
             $breakWhile = true;
             $rulesMap = [];
@@ -209,7 +222,27 @@ final class Nested implements SerializableRuleInterface, BeforeValidationInterfa
             }
         }
 
-        return $rules;
+        $this->rules = $rules;
+    }
+
+    public function propagateOptions(): void
+    {
+        $rules = [];
+        foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
+            foreach ($attributeRules as $attributeRule) {
+                $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
+                $attributeRule = $attributeRule->skipOnError($this->skipOnError);
+                $attributeRule = $attributeRule->when($this->when);
+
+                $rules[$attributeRulesIndex][] = $attributeRule;
+
+                if ($attributeRule instanceof PropagateOptionsInterface) {
+                    $attributeRule->propagateOptions();
+                }
+            }
+        }
+
+        $this->rules = $rules;
     }
 
     #[ArrayShape([

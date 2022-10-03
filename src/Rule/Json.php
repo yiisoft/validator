@@ -39,9 +39,6 @@ final class Json implements SerializableRuleInterface, BeforeValidationInterface
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\DataSet\ArrayDataSet;
+use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
@@ -592,6 +593,51 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             'number',
             [TranslateValidatorDecorator::IS_TRANSLATION_NEEDED => false]
         );
+    }
+
+    public function testPropagateOptions(): void
+    {
+        $rule = new Nested([
+            'posts' => [
+                new Each([new Nested([
+                    'title' => [new HasLength(min: 3)],
+                    'authors' => [
+                        new Each([new Nested([
+                            'name' => [new HasLength(min: 5)],
+                            'age' => [
+                                new Number(min: 18),
+                                new Number(min: 20),
+                            ],
+                        ])]),
+                    ],
+                ])]),
+            ],
+            'meta' => [new HasLength(min: 7)],
+        ], propagateOptions: true, skipOnEmpty: true, skipOnError: true);
+        $options = $rule->getOptions();
+        $paths = [
+            [],
+            ['rules', 'posts', 0],
+            ['rules', 'posts', 0, 'rules', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'title', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'name', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 1],
+            ['rules', 'meta', 0],
+        ];
+        $keys = ['skipOnEmpty', 'skipOnError'];
+
+        foreach ($paths as $path) {
+            foreach ($keys as $key) {
+                $fullPath = $path;
+                $fullPath[] = $key;
+
+                $value = ArrayHelper::getValueByPath($options, $fullPath);
+                $this->assertTrue($value);
+            }
+        }
     }
 
     protected function getRuleHandler(): RuleHandlerInterface

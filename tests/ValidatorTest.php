@@ -92,15 +92,10 @@ class ValidatorTest extends TestCase
     public function testPreValidation(): void
     {
         $validator = FakeValidatorFactory::make();
-        $result = $validator->validate(new DataSet(['property' => '']), [
-            'property' => [
-                new Required(
-                    when: static function (mixed $value, ?ValidationContext $context): bool {
-                        return false;
-                    },
-                ),
-            ],
-        ]);
+        $result = $validator->validate(
+            new DataSet(['property' => '']),
+            ['property' => [new Required(when: static fn (mixed $value, ?ValidationContext $context): bool => false)]],
+        );
 
         $this->assertTrue($result->isValid());
     }
@@ -339,9 +334,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static function (mixed $value): bool {
-                                return $value === 0;
-                            }
+                            skipOnEmpty: static fn (mixed $value): bool => $value === 0
                         ),
                     ],
                 ],
@@ -362,9 +355,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static function (mixed $value): bool {
-                                return $value === 0;
-                            }
+                            skipOnEmpty: static fn (mixed $value): bool => $value === 0
                         ),
                     ],
                 ],
@@ -384,9 +375,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static function (mixed $value): bool {
-                                return $value === 0;
-                            }
+                            skipOnEmpty: static fn (mixed $value): bool => $value === 0
                         ),
                     ],
                 ],
@@ -407,9 +396,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static function (mixed $value): bool {
-                                return $value === 0;
-                            }
+                            skipOnEmpty: static fn (mixed $value): bool => $value === 0
                         ),
                     ],
                 ],
@@ -569,8 +556,6 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @param Validator $validator
-     * @param ArrayDataSet $data
      * @param Rule[] $rules
      * @param Error[] $expectedErrors
      *
