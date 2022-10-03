@@ -7,7 +7,6 @@ use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\MessageFormatterInterface;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\TranslatorInterface;
-use Yiisoft\Validator\DatasetNormalizerValidatorDecorator;
 use Yiisoft\Validator\IdMessageReader;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
@@ -23,9 +22,7 @@ return [
         RuleHandlerResolverInterface $ruleHandlerResolver
     ) {
         return new TranslateValidatorDecorator(
-            new DatasetNormalizerValidatorDecorator(
-                new Validator($ruleHandlerResolver),
-            ),
+            new Validator($ruleHandlerResolver),
             $translator,
         );
     },

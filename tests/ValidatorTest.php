@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
-use Yiisoft\Validator\DatasetNormalizerValidatorDecorator;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
@@ -621,7 +620,7 @@ class ValidatorTest extends TestCase
         mixed $data,
         bool $expectedResult,
     ): void {
-        $validator = new DatasetNormalizerValidatorDecorator(new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: $skipOnEmpty));
+        $validator = new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: $skipOnEmpty);
 
         $result = $validator->validate($data);
 
@@ -643,7 +642,7 @@ class ValidatorTest extends TestCase
 
     public function testRuleWithoutSkipOnEmpty(): void
     {
-        $validator = new DatasetNormalizerValidatorDecorator(new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()));
+        $validator = new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull());
 
         $data = new class () {
             #[NotNull]

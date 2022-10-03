@@ -9,11 +9,15 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use ReflectionProperty;
+use Traversable;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
+
+use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 
 use function is_callable;
 use function is_int;
@@ -37,6 +41,13 @@ final class Validator implements ValidatorInterface
          * @var bool|callable|null
          */
         $defaultSkipOnEmpty = null,
+        /**
+         * @var int What visibility levels to use when reading rules from the class specified in `$rules` argument in
+         * {@see validate()} method.
+         */
+        private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
+        | ReflectionProperty::IS_PROTECTED
+        | ReflectionProperty::IS_PUBLIC,
     ) {
         $this->defaultSkipOnEmptyCallback = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
     }
@@ -54,6 +65,15 @@ final class Validator implements ValidatorInterface
         ?ValidationContext $context = null,
     ): Result {
         $data = $this->normalizeDataSet($data);
+
+        if ($rules === null && $data instanceof RulesProviderInterface) {
+            $rules = $data->getRules();
+        } elseif ($rules instanceof RulesProviderInterface) {
+            $rules = $rules->getRules();
+        } elseif (!$rules instanceof Traversable && !is_array($rules) && $rules !== null) {
+            $rules = (new AttributesRulesProvider($rules, $this->rulesPropertyVisibility))->getRules();
+        }
+        $context = new ValidationContext($context?->getValidator() ?? $this, $context?->getDataSet() ?? null, null, $context?->getParameters() ?? []);
 
         $compoundResult = new Result();
         $context = new ValidationContext($context?->getValidator() ?? $this, $context?->getDataSet() ?? $data, $context?->getAttribute() ?? null, $context?->getParameters() ?? []);
