@@ -6,15 +6,15 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\Lazy;
-use Yiisoft\Validator\Rule\LazyHandler;
+use Yiisoft\Validator\Rule\StopOnError;
+use Yiisoft\Validator\Rule\StopOnErrorHandler;
 use Yiisoft\Validator\RuleHandlerInterface;
 
-final class LazyHandlerTest extends AbstractRuleValidatorTest
+final class StopOnErrorHandlerTest extends AbstractRuleValidatorTest
 {
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new LazyHandler($this->getTranslator());
+        return new StopOnErrorHandler($this->getTranslator());
     }
 
     public function customErrorMessagesProvider(): array
@@ -26,7 +26,7 @@ final class LazyHandlerTest extends AbstractRuleValidatorTest
     {
         return [
             'at least one succeed property' => [
-                new Lazy([
+                new StopOnError([
                     new HasLength(min: 1),
                     new HasLength(max: 10),
                 ]),
@@ -39,7 +39,7 @@ final class LazyHandlerTest extends AbstractRuleValidatorTest
     {
         return [
             'case1' => [
-                new Lazy([
+                new StopOnError([
                     new HasLength(min: 10),
                     new HasLength(max: 1),
                 ]),
@@ -47,7 +47,7 @@ final class LazyHandlerTest extends AbstractRuleValidatorTest
                 [new Error('This value must contain at least 10 characters.')],
             ],
             'case2' => [
-                new Lazy([
+                new StopOnError([
                     new HasLength(max: 1),
                     new HasLength(min: 10),
                 ]),
@@ -55,7 +55,7 @@ final class LazyHandlerTest extends AbstractRuleValidatorTest
                 [new Error('This value must contain at most 1 character.')],
             ],
             'nested rules instead of plain structure' => [
-                new Lazy([
+                new StopOnError([
                     [
                         new HasLength(max: 1),
                         new HasLength(min: 10),

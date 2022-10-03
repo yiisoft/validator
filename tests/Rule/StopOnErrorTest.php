@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\Rule\Lazy;
+use Yiisoft\Validator\Rule\StopOnError;
 use Yiisoft\Validator\SerializableRuleInterface;
 
-final class LazyTest extends AbstractRuleTest
+final class StopOnErrorTest extends AbstractRuleTest
 {
     public function testSkipOnEmptyInConstructor(): void
     {
-        $rule = new Lazy(skipOnEmpty: true);
+        $rule = new StopOnError(skipOnEmpty: true);
 
         $this->assertTrue($rule->getSkipOnEmpty());
     }
 
     public function testSkipOnEmptySetter(): void
     {
-        $rule = (new Lazy())->skipOnEmpty(true);
+        $rule = (new StopOnError())->skipOnEmpty(true);
 
         $this->assertTrue($rule->getSkipOnEmpty());
     }
@@ -27,7 +27,7 @@ final class LazyTest extends AbstractRuleTest
     {
         return [
             [
-                new Lazy(),
+                new StopOnError(),
                 [
                     'rules' => null,
                     'skipOnEmpty' => false,
@@ -39,6 +39,6 @@ final class LazyTest extends AbstractRuleTest
 
     protected function getRule(): SerializableRuleInterface
     {
-        return new Lazy();
+        return new StopOnError();
     }
 }

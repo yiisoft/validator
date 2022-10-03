@@ -25,14 +25,14 @@ use Yiisoft\Validator\ValidationContext;
  * So to make validation we can configure it like this:
  *
  * ```php
- * $rule = new Lazy([
+ * $rule = new StopOnError([
  *      new HasLength(min: 3),
  *      new ExistInDatabase(), // Heavy operation. It would be great not to call it if the previous rule was failed.
  *     )];
  * ]);
  * ```
  */
-final class LazyHandler implements RuleHandlerInterface
+final class StopOnErrorHandler implements RuleHandlerInterface
 {
     public function __construct(private TranslatorInterface $translator)
     {
@@ -40,13 +40,13 @@ final class LazyHandler implements RuleHandlerInterface
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
-        if (!$rule instanceof Lazy) {
-            throw new UnexpectedRuleException(Lazy::class, $rule);
+        if (!$rule instanceof StopOnError) {
+            throw new UnexpectedRuleException(StopOnError::class, $rule);
         }
 
         if ($rule->getRules() === []) {
             throw new InvalidArgumentException(
-                'Rules for Lazy rule are required.'
+                'Rules for StopOnError rule are required.'
             );
         }
 
@@ -57,8 +57,8 @@ final class LazyHandler implements RuleHandlerInterface
             $rules = [$rule];
 
             if (is_iterable($rule)) {
-                if (!$rule instanceof Lazy) {
-                    $rules = [new Lazy($rule)];
+                if (!$rule instanceof StopOnError) {
+                    $rules = [new StopOnError($rule)];
                 }
             }
 

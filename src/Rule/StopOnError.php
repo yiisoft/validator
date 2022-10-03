@@ -24,7 +24,7 @@ use Yiisoft\Validator\ValidationContext;
  * Can be used for validation of nested structures.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Lazy implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
+final class StopOnError implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
 {
     use BeforeValidationTrait;
     use RuleNameTrait;
@@ -58,7 +58,7 @@ final class Lazy implements SerializableRuleInterface, BeforeValidationInterface
     ) {
         if ($this->rules === []) {
             throw new InvalidArgumentException(
-                'Rules for Lazy rule are required.'
+                'Rules for StopOnError rule are required.'
             );
         }
     }
@@ -87,6 +87,6 @@ final class Lazy implements SerializableRuleInterface, BeforeValidationInterface
 
     public function getHandlerClassName(): string
     {
-        return LazyHandler::class;
+        return StopOnErrorHandler::class;
     }
 }
