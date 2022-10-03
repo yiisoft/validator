@@ -52,33 +52,21 @@ final class InRange implements SerializableRuleInterface, BeforeValidationInterf
     ) {
     }
 
-    /**
-     * @return iterable
-     */
     public function getRange(): iterable
     {
         return $this->range;
     }
 
-    /**
-     * @return bool
-     */
     public function isStrict(): bool
     {
         return $this->strict;
     }
 
-    /**
-     * @return bool
-     */
     public function isNot(): bool
     {
         return $this->not;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

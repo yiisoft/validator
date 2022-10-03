@@ -53,33 +53,21 @@ final class Boolean implements SerializableRuleInterface, BeforeValidationInterf
     ) {
     }
 
-    /**
-     * @return mixed
-     */
     public function getTrueValue(): mixed
     {
         return $this->trueValue;
     }
 
-    /**
-     * @return mixed
-     */
     public function getFalseValue(): mixed
     {
         return $this->falseValue;
     }
 
-    /**
-     * @return bool
-     */
     public function isStrict(): bool
     {
         return $this->strict;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

@@ -51,33 +51,21 @@ final class Regex implements SerializableRuleInterface, BeforeValidationInterfac
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getPattern(): string
     {
         return $this->pattern;
     }
 
-    /**
-     * @return bool
-     */
     public function isNot(): bool
     {
         return $this->not;
     }
 
-    /**
-     * @return string
-     */
     public function getIncorrectInputMessage(): string
     {
         return $this->incorrectInputMessage;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

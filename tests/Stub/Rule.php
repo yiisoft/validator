@@ -8,13 +8,8 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class Rule implements SerializableRuleInterface
 {
-    private array $options;
-    private string $name;
-
-    public function __construct(string $name, array $options)
+    public function __construct(private string $name, private array $options)
     {
-        $this->name = $name;
-        $this->options = $options;
     }
 
     public function getName(): string

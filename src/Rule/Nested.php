@@ -114,17 +114,11 @@ final class Nested implements
         return $this->propertyVisibility;
     }
 
-    /**
-     * @return bool
-     */
     public function getRequirePropertyPath(): bool
     {
         return $this->requirePropertyPath;
     }
 
-    /**
-     * @return string
-     */
     public function getNoPropertyPathMessage(): string
     {
         return $this->noPropertyPathMessage;
