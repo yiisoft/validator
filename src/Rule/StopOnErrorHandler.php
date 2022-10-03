@@ -57,9 +57,7 @@ final class StopOnErrorHandler implements RuleHandlerInterface
             $rules = [$rule];
 
             if (is_iterable($rule)) {
-                if (!$rule instanceof StopOnError) {
-                    $rules = [new StopOnError($rule)];
-                }
+                $rules = [new StopOnError($rule)];
             }
 
             $lastResult = $context->getValidator()->validate($value, $rules);
