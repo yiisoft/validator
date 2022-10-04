@@ -637,7 +637,7 @@ class ValidatorTest extends TestCase
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrorMessages());
-        $this->assertStringStartsWith('This value must contain at least', $result->getErrorMessages()[0]->getMessage());
+        $this->assertStringStartsWith('This value must contain at least', $result->getErrorMessages()[0]);
     }
 
     public function testRuleWithoutSkipOnEmpty(): void

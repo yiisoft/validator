@@ -150,10 +150,7 @@ final class ValidateLogicTest extends TestCase
         $result = $this->createValidator()->validate($data, $rules);
         $this->assertEquals(
             $expectedErrorMessages,
-            array_map(
-                fn (array $errors) => array_map(fn (ErrorMessage $error) => $error->getMessage(), $errors),
-                $result->getErrorMessagesIndexedByAttribute(),
-            )
+            $result->getErrorMessagesIndexedByAttribute(),
         );
     }
 

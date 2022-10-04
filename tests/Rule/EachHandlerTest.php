@@ -39,10 +39,7 @@ final class EachHandlerTest extends AbstractRuleValidatorTest
         $result = $this->validate($value, $rule);
 
         $this->assertFalse($result->isValid(), print_r($result->getErrorMessagesIndexedByPath(), true));
-        $this->assertEquals($expectedErrors, array_map(
-            fn (array $errors) => array_map(fn (ErrorMessage $error) => $error->getMessage(), $errors),
-            $result->getErrorMessagesIndexedByPath()
-        ));
+        $this->assertEquals($expectedErrors, $result->getErrorMessagesIndexedByPath());
     }
 
     public function failedValidationProvider(): array

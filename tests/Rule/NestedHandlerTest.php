@@ -107,10 +107,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         $this->assertFalse($result->isValid(), print_r($result->getErrorMessagesIndexedByPath(), true));
         $this->assertEquals(
             $expectedErrors,
-            array_map(
-                fn (array $errors) => array_map(fn (ErrorMessage $error) => $error->getMessage(), $errors),
                 $result->getErrorMessagesIndexedByPath()
-            )
         );
     }
 
@@ -558,10 +555,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         $this->assertEquals($expectedErrorMessages, $result->getErrorMessages());
         $this->assertEquals(
             $expectedErrorMessagesIndexedByPath,
-            array_map(
-                fn (array $errors) => array_map(fn (ErrorMessage $error) => $error->getMessage(), $errors),
                 $result->getErrorMessagesIndexedByPath()
-            )
         );
     }
 
@@ -576,10 +570,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 'caption' => ['This value must contain at least 3 characters.'],
                 'object.name' => ['This value must contain at least 5 characters.'],
             ],
-            array_map(
-                fn (array $errors) => array_map(fn (ErrorMessage $error) => $error->getMessage(), $errors),
                 $result->getErrorMessagesIndexedByPath()
-            )
         );
     }
 

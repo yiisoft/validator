@@ -49,7 +49,7 @@ final class Result
      */
     public function getErrorMessages(): array
     {
-        return ArrayHelper::getColumn($this->errors, static fn (Error $error) => $error->getMessage());
+        return ArrayHelper::getColumn($this->errors, static fn (Error $error): string => (string) $error->getMessage());
     }
 
     /**
@@ -60,7 +60,7 @@ final class Result
         $errors = [];
         foreach ($this->errors as $error) {
             $stringValuePath = implode($separator, $error->getValuePath(true));
-            $errors[$stringValuePath][] = $error->getMessage();
+            $errors[$stringValuePath][] = (string) $error->getMessage();
         }
 
         return $errors;
@@ -80,14 +80,14 @@ final class Result
                 throw new InvalidArgumentException('Top level attributes can only have string type.');
             }
 
-            $errors[$key][] = $error->getMessage();
+            $errors[$key][] = (string) $error->getMessage();
         }
 
         return $errors;
     }
 
     /**
-     * @return string[]
+     * @return Error[]
      */
     public function getAttributeErrors(string $attribute): array
     {
@@ -128,7 +128,7 @@ final class Result
             }
 
             $valuePath = implode($separator, array_slice($error->getValuePath(true), 1));
-            $errors[$valuePath][] = $error->getMessage();
+            $errors[$valuePath][] = (string) $error->getMessage();
         }
 
         return $errors;
