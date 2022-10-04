@@ -14,9 +14,9 @@ final class ErrorMessage implements Stringable
      */
     private array $parameters;
 
-    public function __construct(string $message, array $parameters)
+    public function __construct(string|Stringable $message, array $parameters)
     {
-        $this->message = $message;
+        $this->message = (string) $message;
         $this->parameters = $parameters;
     }
 

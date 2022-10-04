@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Error;
+use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -97,7 +98,7 @@ abstract class AbstractRuleValidatorTest extends TestCase
 
         foreach ($errors as $error) {
             $newErrors[] = new Error(
-                $error->getMessage(),
+                (string) $error->getMessage(),
                 $error->getValuePath(),
                 array_merge($error->getParameters(), ['value' => $value])
             );

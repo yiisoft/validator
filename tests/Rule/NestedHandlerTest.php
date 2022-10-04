@@ -302,7 +302,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
             new Number(min: -10, max: 10),
             new Callback(static function (mixed $value, object $rule, ValidationContext $context): Result {
                 $result = new Result();
-                $result->addError('Custom error.');
+                $result->addError('Custom error.', parameters: ['value' => $value]);
 
                 return $result;
             }),

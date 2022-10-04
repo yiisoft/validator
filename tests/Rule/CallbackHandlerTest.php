@@ -22,7 +22,7 @@ final class CallbackHandlerTest extends AbstractRuleValidatorTest
                 new Callback(static function (mixed $value, object $rule, ValidationContext $context): Result {
                     $result = new Result();
                     if ($value !== 42) {
-                        $result->addError('Value should be 42!');
+                        $result->addError('Value should be 42!', parameters: ['value' => $value]);
                     }
 
                     return $result;
@@ -59,7 +59,7 @@ final class CallbackHandlerTest extends AbstractRuleValidatorTest
                 new Callback(static function (mixed $value, object $rule, ValidationContext $context): Result {
                     $result = new Result();
                     if ($value !== 42) {
-                        $result->addError('Custom error');
+                        $result->addError('Custom error', parameters: ['value' => $value]);
                     }
 
                     return $result;

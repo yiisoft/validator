@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Stringable;
+
 final class Error
 {
-    private string $message;
+    private ErrorMessage $message;
 
     /**
      * @psalm-var list<int|string>
@@ -20,14 +22,14 @@ final class Error
     /**
      * @psalm-param list<int|string> $valuePath
      */
-    public function __construct(string $message, array $valuePath = [], array $parameters = [])
+    public function __construct(string|Stringable|ErrorMessage $message, array $valuePath = [], array $parameters = [])
     {
-        $this->message = $message;
+        $this->message = $message instanceof ErrorMessage ? $message : new ErrorMessage((string) $message, $parameters);
         $this->valuePath = $valuePath;
         $this->parameters = $parameters;
     }
 
-    public function getMessage(): string
+    public function getMessage(): ErrorMessage
     {
         return $this->message;
     }
