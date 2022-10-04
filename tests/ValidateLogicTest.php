@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Stub\EachNestedObjects\Foo;

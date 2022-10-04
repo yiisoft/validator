@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
-use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Required;
@@ -145,7 +144,8 @@ final class ObjectDataSet80Test extends TestCase
         $this->assertInstanceOf(Callback::class, $rules['name'][0]);
 
         $result = $validator->validate(['name' => 'bar'], $rules);
-        $this->assertSame(['name' => ['Value must be "foo"!']],
+        $this->assertSame(
+            ['name' => ['Value must be "foo"!']],
             $result->getErrorMessagesIndexedByPath()
         );
     }

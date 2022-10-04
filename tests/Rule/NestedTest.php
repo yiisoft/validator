@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use stdClass;
-use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
@@ -404,7 +403,8 @@ final class NestedTest extends TestCase
 
         $this->assertSame($expectedIsValid, $result->isValid());
         if (!$expectedIsValid) {
-            $this->assertEquals($expectedErrorMessagesIndexedByPath,
+            $this->assertEquals(
+                $expectedErrorMessagesIndexedByPath,
                 $result->getErrorMessagesIndexedByPath()
             );
         }

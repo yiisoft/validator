@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Error;
-use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\EachHandler;
 use Yiisoft\Validator\Rule\Number;

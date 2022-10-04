@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Error;
-use Yiisoft\Validator\ErrorMessage;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
@@ -107,7 +106,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         $this->assertFalse($result->isValid(), print_r($result->getErrorMessagesIndexedByPath(), true));
         $this->assertEquals(
             $expectedErrors,
-                $result->getErrorMessagesIndexedByPath()
+            $result->getErrorMessagesIndexedByPath()
         );
     }
 
@@ -555,7 +554,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
         $this->assertEquals($expectedErrorMessages, $result->getErrorMessages());
         $this->assertEquals(
             $expectedErrorMessagesIndexedByPath,
-                $result->getErrorMessagesIndexedByPath()
+            $result->getErrorMessagesIndexedByPath()
         );
     }
 
@@ -570,7 +569,7 @@ final class NestedHandlerTest extends AbstractRuleValidatorTest
                 'caption' => ['This value must contain at least 3 characters.'],
                 'object.name' => ['This value must contain at least 5 characters.'],
             ],
-                $result->getErrorMessagesIndexedByPath()
+            $result->getErrorMessagesIndexedByPath()
         );
     }
 
