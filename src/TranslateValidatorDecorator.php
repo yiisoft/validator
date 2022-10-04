@@ -49,7 +49,7 @@ final class TranslateValidatorDecorator implements ValidatorInterface
         $errorResult = new Result();
         foreach ($result->getErrors() as $error) {
             $errorResult->addError(
-                $this->translator->translate($error->getMessage(), $error->getParameters()),
+                $this->translator->translate($error->getMessage()->getMessage(), $error->getParameters()),
                 $error->getValuePath(),
                 $error->getParameters(),
             );
