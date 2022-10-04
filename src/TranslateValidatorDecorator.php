@@ -42,7 +42,7 @@ final class TranslateValidatorDecorator implements ValidatorInterface
         );
         $result = $this->decorated->validate($data, $rules, $context);
 
-        if (!($context->getParameter(self::IS_TRANSLATION_NEEDED, true) ?? true)) {
+        if (!($context->getParameter(self::IS_TRANSLATION_NEEDED, true))) {
             return $result;
         }
 
