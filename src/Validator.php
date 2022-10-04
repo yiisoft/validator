@@ -73,15 +73,17 @@ final class Validator implements ValidatorInterface
         } elseif (!$rules instanceof Traversable && !is_array($rules) && $rules !== null) {
             $rules = (new AttributesRulesProvider($rules, $this->rulesPropertyVisibility))->getRules();
         }
-        $context = new ValidationContext($context?->getValidator() ?? $this, $context?->getDataSet() ?? null, null, $context?->getParameters() ?? []);
+
+        $context = new ValidationContext(
+            $context?->getValidator() ?? $this,
+            $context?->getDataSet() ?? $data,
+            $context?->getAttribute() ?? null,
+            $context?->getParameters() ?? [],
+        );
 
         $compoundResult = new Result();
-        $context = new ValidationContext($context?->getValidator() ?? $this, $context?->getDataSet() ?? $data, $context?->getAttribute() ?? null, $context?->getParameters() ?? []);
-        $results = [];
 
         foreach ($rules ?? [] as $attribute => $attributeRules) {
-            $result = new Result();
-
             $tempRule = is_iterable($attributeRules) ? $attributeRules : [$attributeRules];
             $attributeRules = $this->normalizeRules($tempRule);
 
@@ -93,18 +95,12 @@ final class Validator implements ValidatorInterface
                 $validatedContext = $context->withAttribute($attribute);
             }
 
-            $tempResult = $this->validateInternal(
+            $this->validateInternal(
                 $validatedData,
                 $attributeRules,
-                $validatedContext
+                $validatedContext,
+                $compoundResult,
             );
-
-            $result = $this->addErrors($result, $tempResult->getErrors());
-            $results[] = $result;
-        }
-
-        foreach ($results as $result) {
-            $compoundResult = $this->addErrors($compoundResult, $result->getErrors());
         }
 
         if ($data instanceof PostValidationHookInterface) {
@@ -120,9 +116,8 @@ final class Validator implements ValidatorInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    private function validateInternal($value, iterable $rules, ValidationContext $context): Result
+    private function validateInternal($value, iterable $rules, ValidationContext $context, Result $compoundResult): void
     {
-        $compoundResult = new Result();
         foreach ($rules as $rule) {
             if ($rule instanceof BeforeValidationInterface) {
                 $preValidateResult = $this->preValidate($value, $context, $rule);
@@ -147,7 +142,6 @@ final class Validator implements ValidatorInterface
                 $compoundResult->addError($error->getMessage(), $valuePath, $error->getParameters());
             }
         }
-        return $compoundResult;
     }
 
     /**
@@ -201,19 +195,5 @@ final class Validator implements ValidatorInterface
         }
 
         return new MixedDataSet($data);
-    }
-
-    /**
-     * @param Result $result
-     * @param Error[] $errors
-     *
-     * @return Result
-     */
-    private function addErrors(Result $result, array $errors): Result
-    {
-        foreach ($errors as $error) {
-            $result->addError($error->getMessage(), $error->getValuePath(), $error->getParameters());
-        }
-        return $result;
     }
 }

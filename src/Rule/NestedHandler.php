@@ -83,7 +83,6 @@ final class NestedHandler implements RuleHandlerInterface
         }
 
         $compoundResult = new Result();
-        $results = [];
         foreach ($rule->getRules() as $valuePath => $rules) {
             if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($data, $valuePath)) {
                 /**
@@ -106,8 +105,6 @@ final class NestedHandler implements RuleHandlerInterface
                 continue;
             }
 
-            $result = new Result();
-
             foreach ($itemResult->getErrors() as $error) {
                 $errorValuePath = is_int($valuePath) ? [$valuePath] : StringHelper::parsePath($valuePath);
                 if (!empty($error->getValuePath())) {
@@ -116,14 +113,7 @@ final class NestedHandler implements RuleHandlerInterface
                 /**
                  * @psalm-suppress InvalidScalarArgument
                  */
-                $result->addError($error->getMessage(), $errorValuePath, $error->getParameters());
-            }
-            $results[] = $result;
-        }
-
-        foreach ($results as $result) {
-            foreach ($result->getErrors() as $error) {
-                $compoundResult->addError($error->getMessage(), $error->getValuePath(), $error->getParameters());
+                $compoundResult->addError($error->getMessage(), $errorValuePath, $error->getParameters());
             }
         }
 
