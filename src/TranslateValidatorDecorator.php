@@ -34,16 +34,22 @@ final class TranslateValidatorDecorator implements ValidatorInterface
         iterable|RulesProviderInterface|null $rules = null,
         ?ValidationContext $context = null,
     ): Result {
-        $context = new ValidationContext($context?->getValidator() ?? $this, $context?->getDataSet() ?? null, null, $context?->getParameters() ?? []);
+        $context = new ValidationContext(
+            $context?->getValidator() ?? $this,
+            $context?->getDataSet() ?? null,
+            null,
+            $context?->getParameters() ?? []
+        );
         $result = $this->decorated->validate($data, $rules, $context);
 
-        $isTranslationNeeded = $context->getParameter(self::IS_TRANSLATION_NEEDED, true) ?? true;
+        if (!($context->getParameter(self::IS_TRANSLATION_NEEDED, true) ?? true)) {
+            return $result;
+        }
+
         $errorResult = new Result();
         foreach ($result->getErrors() as $error) {
             $errorResult->addError(
-                $isTranslationNeeded
-                    ? $this->translator->translate($error->getMessage(), $error->getParameters())
-                    : $error->getMessage(),
+                $this->translator->translate($error->getMessage(), $error->getParameters()),
                 $error->getValuePath(),
                 $error->getParameters(),
             );
