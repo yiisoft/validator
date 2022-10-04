@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-final class ErrorMessage
+use Stringable;
+
+final class ErrorMessage implements Stringable
 {
     private string $message;
     /**
