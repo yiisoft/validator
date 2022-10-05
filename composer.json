@@ -40,7 +40,7 @@
     "suggest": {
         "ext-intl": "Allows using IDN validation for emails",
         "yiisoft/di": "To create rule handlers via Yii DI",
-        "yiisoft/translator": "Formats and translates validator messages"
+        "yiisoft/translator": "To format and translate validator messages"
     },
     "autoload": {
         "psr-4": {
