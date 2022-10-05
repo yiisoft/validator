@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub;
+namespace Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod;
 
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\ValidationContext;
 
-final class ObjectWithNonStaticCallbackMethod
+final class ObjectWithNonPublicCallbackMethod
 {
     #[Callback(method: 'validateName')]
     private string $name;
 
-    public function validateName(mixed $value, object $rule, ValidationContext $context): Result
+    protected static function validateName(mixed $value, object $rule, ValidationContext $context): Result
     {
         $result = new Result();
         if ($value !== 'foo') {
