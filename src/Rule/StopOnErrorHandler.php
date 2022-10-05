@@ -34,7 +34,7 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class StopOnErrorHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
+    public function __construct()
     {
     }
 
@@ -51,7 +51,7 @@ final class StopOnErrorHandler implements RuleHandlerInterface
         }
 
         $compoundResult = new Result();
-        $results = [];
+        $validator = $context->getValidator();
 
         foreach ($rule->getRules() as $rule) {
             $rules = [$rule];
@@ -60,17 +60,13 @@ final class StopOnErrorHandler implements RuleHandlerInterface
                 $rules = [new StopOnError($rule)];
             }
 
-            $lastResult = $context->getValidator()->validate($value, $rules);
-            $results[] = $lastResult;
-
-            if (!$lastResult->isValid()) {
-                break;
-            }
-        }
-
-        foreach ($results as $result) {
+            $result = $validator->validate($value, $rules);
             foreach ($result->getErrors() as $error) {
-                $compoundResult->addError($error->getMessage(), $error->getValuePath());
+                $compoundResult->addError($error->getMessage(), $error->getValuePath(), $error->getParameters());
+            }
+
+            if (!$result->isValid()) {
+                break;
             }
         }
 

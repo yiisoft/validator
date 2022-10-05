@@ -14,7 +14,7 @@ final class StopOnErrorHandlerTest extends AbstractRuleValidatorTest
 {
     protected function getRuleHandler(): RuleHandlerInterface
     {
-        return new StopOnErrorHandler($this->getTranslator());
+        return new StopOnErrorHandler();
     }
 
     public function customErrorMessagesProvider(): array
@@ -43,16 +43,20 @@ final class StopOnErrorHandlerTest extends AbstractRuleValidatorTest
                     new HasLength(min: 10),
                     new HasLength(max: 1),
                 ]),
-                'hello',
-                [new Error('This value must contain at least 10 characters.')],
+                ...$this->createValueAndErrorsPair(
+                    'hello',
+                    [new Error('This value must contain at least 10 characters.', parameters: ['min' => 10])]
+                ),
             ],
             'case2' => [
                 new StopOnError([
                     new HasLength(max: 1),
                     new HasLength(min: 10),
                 ]),
-                'hello',
-                [new Error('This value must contain at most 1 character.')],
+                ...$this->createValueAndErrorsPair(
+                    'hello',
+                    [new Error('This value must contain at most 1 character.', parameters: ['max' => 1])]
+                ),
             ],
             'nested rules instead of plain structure' => [
                 new StopOnError([
@@ -61,8 +65,10 @@ final class StopOnErrorHandlerTest extends AbstractRuleValidatorTest
                         new HasLength(min: 10),
                     ],
                 ]),
-                'hello',
-                [new Error('This value must contain at most 1 character.')],
+                ...$this->createValueAndErrorsPair(
+                    'hello',
+                    [new Error('This value must contain at most 1 character.', parameters: ['max' => 1])]
+                ),
             ],
         ];
     }
