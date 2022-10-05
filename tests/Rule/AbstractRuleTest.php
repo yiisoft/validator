@@ -34,7 +34,7 @@ abstract class AbstractRuleTest extends TestCase
         $this->assertInstanceOf($rule->getHandlerClassName(), $resolver->resolve($rule->getHandlerClassName()));
     }
 
-    abstract protected function optionsDataProvider(): array;
+    abstract public function optionsDataProvider(): array;
 
     /**
      * @return BeforeValidationTrait|SerializableRuleInterface

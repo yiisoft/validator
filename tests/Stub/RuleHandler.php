@@ -10,7 +10,7 @@ use Yiisoft\Validator\ValidationContext;
 
 final class RuleHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ?ValidationContext $context = null): Result
+    public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         return new Result();
     }

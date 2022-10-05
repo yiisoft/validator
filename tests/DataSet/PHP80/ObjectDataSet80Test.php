@@ -16,10 +16,10 @@ use Yiisoft\Validator\Tests\Data\Post;
 use Yiisoft\Validator\Tests\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
-use Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod;
-use Yiisoft\Validator\Tests\Stub\ObjectWithNonExistingCallbackMethod;
-use Yiisoft\Validator\Tests\Stub\ObjectWithNonPublicCallbackMethod;
-use Yiisoft\Validator\Tests\Stub\ObjectWithNonStaticCallbackMethod;
+use Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod\ObjectWithCallbackMethod;
+use Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod\ObjectWithNonExistingCallbackMethod;
+use Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod\ObjectWithNonPublicCallbackMethod;
+use Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod\ObjectWithNonStaticCallbackMethod;
 
 final class ObjectDataSet80Test extends TestCase
 {
