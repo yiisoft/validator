@@ -18,12 +18,18 @@ use Yiisoft\Validator\ValidatorInterface;
 
 return [
     ValidatorInterface::class => function (
-        TranslatorInterface $translator,
+        ContainerInterface $container,
         RuleHandlerResolverInterface $ruleHandlerResolver
     ) {
+        $validator = new Validator($ruleHandlerResolver);
+
+        if (!$container->has(TranslatorInterface::class)) {
+            return $validator;
+        }
+
         return new TranslateValidatorDecorator(
             new Validator($ruleHandlerResolver),
-            $translator,
+            $container->get(TranslatorInterface::class),
         );
     },
     RuleHandlerResolverInterface::class => SimpleRuleHandlerContainer::class,

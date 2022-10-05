@@ -22,7 +22,6 @@
         "ext-mbstring": "*",
         "psr/container": "^1.0|^2.0",
         "yiisoft/arrays": "^2.1",
-        "yiisoft/translator": "^1.1",
         "yiisoft/friendly-exception": "^1.0",
         "yiisoft/network-utilities": "^1.0",
         "yiisoft/strings": "^2.1"
@@ -35,11 +34,13 @@
         "roave/infection-static-analysis-plugin": "^1.16",
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^4.18",
-        "yiisoft/test-support": "^3.0"
+        "yiisoft/test-support": "^3.0",
+        "yiisoft/translator": "^1.1"
     },
     "suggest": {
         "ext-intl": "Allows using IDN validation for emails",
-        "yiisoft/di": "To create rule handlers via Yii DI"
+        "yiisoft/di": "To create rule handlers via Yii DI",
+        "yiisoft/translator": "Formats and translates validator messages"
     },
     "autoload": {
         "psr-4": {
