@@ -19,8 +19,6 @@ use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
-use function get_class;
-
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Callback implements
     SerializableRuleInterface,
@@ -58,9 +56,6 @@ final class Callback implements
         }
     }
 
-    /**
-     * @return callable|null
-     */
     public function getCallback(): ?callable
     {
         return $this->callback;
@@ -78,7 +73,7 @@ final class Callback implements
         }
 
         try {
-            $this->callback = Closure::fromCallable([get_class($dataSet->getObject()), $this->method]);
+            $this->callback = Closure::fromCallable([$dataSet->getObject()::class, $this->method]);
         } catch (TypeError) {
             throw new InvalidArgumentException('Method must exist and have public and static modifers.');
         }

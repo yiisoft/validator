@@ -31,6 +31,7 @@
         "jetbrains/phpstorm-attributes": "^1.0",
         "phpbench/phpbench": "^1.2",
         "phpunit/phpunit": "^9.5",
+        "rector/rector": "^0.14.3",
         "roave/infection-static-analysis-plugin": "^1.16",
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^4.18",

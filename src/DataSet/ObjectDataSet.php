@@ -24,6 +24,7 @@ use function get_class;
 final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 {
     private bool $dataSetProvided;
+
     /**
      * @var ReflectionProperty[] Used to avoid error "Typed property must not be accessed before initialization".
      */

@@ -34,7 +34,7 @@ final class JsonHandlerTest extends AbstractRuleValidatorTest
             // JSON test from http://www.json.org/JSON_checker/test/pass1.json
             [
                 $rule,
-                <<<'JSON'
+                <<<'JSON_WRAP'
 [
     "JSON Test Pattern pass1",
     {"object with 1 member":["array with 1 element"]},
@@ -93,21 +93,23 @@ final class JsonHandlerTest extends AbstractRuleValidatorTest
 1e-1,
 1e00,2e+00,2e-00
 ,"rosebud"]
-JSON,
+JSON_WRAP
+                ,
             ],
             // JSON test from http://www.json.org/JSON_checker/test/pass2.json
             [$rule, '[[[[[[[[[[[[[[[[[[["Not too deep"]]]]]]]]]]]]]]]]]]]'],
             // JSON test from http://www.json.org/JSON_checker/test/pass3.json
             [
                 $rule,
-                <<<'JSON'
+                <<<'JSON_WRAP'
 {
     "JSON Test Pattern pass3": {
         "The outermost value": "must be an object or array.",
         "In this test": "It is an object."
     }
 }
-JSON,
+JSON_WRAP
+                ,
             ],
         ];
     }

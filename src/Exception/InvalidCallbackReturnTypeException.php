@@ -7,8 +7,6 @@ namespace Yiisoft\Validator\Exception;
 use Throwable;
 use Yiisoft\FriendlyException\FriendlyExceptionInterface;
 use Yiisoft\Validator\Result;
-use function get_class;
-use function is_object;
 
 final class InvalidCallbackReturnTypeException extends \Exception implements FriendlyExceptionInterface
 {
@@ -17,7 +15,7 @@ final class InvalidCallbackReturnTypeException extends \Exception implements Fri
         $message = sprintf(
             'Return value of callback must be an instance of %s, %s returned.',
             Result::class,
-            is_object($result) ? get_class($result) : gettype($result)
+            get_debug_type($result)
         );
 
         parent::__construct($message, $code, $previous);
