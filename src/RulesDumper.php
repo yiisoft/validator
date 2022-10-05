@@ -44,8 +44,6 @@ final class RulesDumper
      * ```
      *
      * @param iterable $rules
-     *
-     * @return array
      */
     public function asArray(iterable $rules): array
     {

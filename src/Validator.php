@@ -78,8 +78,11 @@ final class Validator implements ValidatorInterface
         foreach ($rules ?? [] as $attribute => $attributeRules) {
             $result = new Result();
 
-            $tempRule = is_iterable($attributeRules) ? $attributeRules : [$attributeRules];
-            $attributeRules = $this->normalizeRules($tempRule);
+            if (!is_iterable($attributeRules)) {
+                $attributeRules = [$attributeRules];
+            }
+
+            $attributeRules = $this->normalizeRules($attributeRules);
 
             if (is_int($attribute)) {
                 $validatedData = $data->getData();
@@ -89,12 +92,18 @@ final class Validator implements ValidatorInterface
             }
 
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
-            $result = $this->addErrors($result, $tempResult->getErrors());
+
+            foreach ($tempResult->getErrors() as $error) {
+                $result->addError($error->getMessage(), $error->getValuePath());
+            }
+
             $results[] = $result;
         }
 
         foreach ($results as $result) {
-            $compoundResult = $this->addErrors($compoundResult, $result->getErrors());
+            foreach ($result->getErrors() as $error) {
+                $compoundResult->addError($error->getMessage(), $error->getValuePath());
+            }
         }
 
         if ($data instanceof PostValidationHookInterface) {
@@ -123,11 +132,7 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param $value
      * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
-     * @param ValidationContext $context
-     *
-     * @return Result
      */
     private function validateInternal($value, iterable $rules, ValidationContext $context): Result
     {
@@ -189,13 +194,5 @@ final class Validator implements ValidatorInterface
         }
 
         return $rule;
-    }
-
-    private function addErrors(Result $result, array $errors): Result
-    {
-        foreach ($errors as $error) {
-            $result->addError($error->getMessage(), $error->getValuePath());
-        }
-        return $result;
     }
 }

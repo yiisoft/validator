@@ -37,7 +37,7 @@ The package provides data validation capabilities.
 The package could be installed with composer:
 
 ```shell
-composer require yiisoft/validator --prefer-dist
+composer require yiisoft/validator
 ```
 
 ## General usage
@@ -720,8 +720,24 @@ new Number(
     min: 100
 );
 ```
-
 If callable returns `true` rule is applied, when the value returned is `false`, rule is skipped.
+
+### Lazy or early exiting validation
+
+When validation propagation is not needed `\Yiisoft\Validator\Rule\StopOnError` rule may be used.
+
+```php
+use Yiisoft\Validator\Rule\StopOnError;
+
+new StopOnError([
+    new Rule1();
+    new Rule2();
+    new Rule3();
+])
+```
+
+When the validator get negative result of validation it stop all the rest rules inside `StopOnError`. 
+According to the example above, if `Rule2` fails `Rule3` won't even be tried to run.
 
 ### Validation rule handlers
 

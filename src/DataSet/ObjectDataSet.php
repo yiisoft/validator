@@ -20,11 +20,7 @@ use Yiisoft\Validator\RulesProviderInterface;
  */
 final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 {
-    private object $object;
-
     private bool $dataSetProvided;
-
-    private int $propertyVisibility;
 
     /**
      * @var ReflectionProperty[]
@@ -34,17 +30,12 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     private iterable $rules;
 
     public function __construct(
-        object $object,
-        int $propertyVisibility = ReflectionProperty::IS_PRIVATE|ReflectionProperty::IS_PROTECTED|ReflectionProperty::IS_PUBLIC
+        private object $object,
+        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE|ReflectionProperty::IS_PROTECTED|ReflectionProperty::IS_PUBLIC
     ) {
-        $this->object = $object;
-        $this->propertyVisibility = $propertyVisibility;
         $this->parseObject();
     }
 
-    /**
-     * @return object
-     */
     public function getObject(): object
     {
         return $this->object;
