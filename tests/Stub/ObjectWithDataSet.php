@@ -23,21 +23,16 @@ final class ObjectWithDataSet implements DataSetInterface
 
     public function getAttributeValue(string $attribute): mixed
     {
-        return $this->getObjectData()[$attribute] ?? null;
+        return $this->hasAttribute($attribute) ? $this->getData()[$attribute] : null;
     }
 
     public function getData(): mixed
     {
-        return $this->getObjectData();
+        return ['key1' => 7, 'key2' => 42];
     }
 
     public function hasAttribute(string $attribute): bool
     {
-        return array_key_exists($attribute, $this->getObjectData());
-    }
-
-    private function getObjectData(): array
-    {
-        return ['key1' => 7, 'key2' => 42];
+        return array_key_exists($attribute, $this->getData());
     }
 }

@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
@@ -24,6 +25,7 @@ use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\NotNullRule\NotNull;
+use Yiisoft\Validator\Tests\Stub\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Stub\Rule;
 use Yiisoft\Validator\Tests\Stub\ObjectWithAttributesOnly;
 use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
@@ -272,6 +274,29 @@ class ValidatorTest extends TestCase
                 new ArrayDataSet([]),
                 [new Error('Value not passed.', ['orderBy'])],
             ],
+
+            [
+                [
+                    'name' => [new Required(), new HasLength(min: 3, skipOnError: true)],
+                    'description' => [new Required(), new HasLength(min: 5, skipOnError: true)],
+                ],
+                new ObjectDataSet(
+                    new class () {
+                        private string $title = '';
+                        private string $description = 'abc123';
+                    }
+                ),
+                [new Error('Value not passed.', ['name'])],
+            ],
+            [
+                null,
+                new ObjectDataSet(new ObjectWithDataSet()),
+                [
+                    new Error('Value not passed.', ['name']),
+                    new Error('Value must be a number.', ['age']),
+                    new Error('Value must be a number.', ['number']),
+                ],
+            ],
         ];
     }
 
@@ -280,7 +305,7 @@ class ValidatorTest extends TestCase
      * @link https://github.com/yiisoft/validator/issues/289
      * @dataProvider requiredDataProvider
      */
-    public function testRequired(array $rules, DataSetInterface $dataSet, array $expectedErrors): void
+    public function testRequired(array|null $rules, DataSetInterface $dataSet, array $expectedErrors): void
     {
         $validator = FakeValidatorFactory::make();
         $result = $validator->validate($dataSet, $rules);

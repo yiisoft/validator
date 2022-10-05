@@ -25,39 +25,39 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame('', $data->getAttributeValue('name'));
         $this->assertSame(17, $data->getAttributeValue('age'));
         $this->assertSame(42, $data->getAttributeValue('number'));
-        $this->assertSame(null, $data->getAttributeValue('non-exist'));
+        $this->assertNull($data->getAttributeValue('non-exist'));
         $this->assertSame(['name', 'age', 'number'], array_keys($data->getRules()));
 
         $data = new ObjectDataSet($object, ReflectionProperty::IS_PRIVATE);
         $this->assertSame(['number' => 42], $data->getData());
-        $this->assertSame(null, $data->getAttributeValue('name'));
-        $this->assertSame(null, $data->getAttributeValue('age'));
+        $this->assertNull($data->getAttributeValue('name'));
+        $this->assertNull($data->getAttributeValue('age'));
         $this->assertSame(42, $data->getAttributeValue('number'));
-        $this->assertSame(null, $data->getAttributeValue('non-exist'));
+        $this->assertNull($data->getAttributeValue('non-exist'));
         $this->assertSame(['number'], array_keys($data->getRules()));
 
         $data = new ObjectDataSet($object, ReflectionProperty::IS_PROTECTED);
         $this->assertSame(['age' => 17], $data->getData());
-        $this->assertSame(null, $data->getAttributeValue('name'));
+        $this->assertNull($data->getAttributeValue('name'));
         $this->assertSame(17, $data->getAttributeValue('age'));
-        $this->assertSame(null, $data->getAttributeValue('number'));
-        $this->assertSame(null, $data->getAttributeValue('non-exist'));
+        $this->assertNull($data->getAttributeValue('number'));
+        $this->assertNull($data->getAttributeValue('non-exist'));
         $this->assertSame(['age'], array_keys($data->getRules()));
 
         $data = new ObjectDataSet($object, ReflectionProperty::IS_PUBLIC);
         $this->assertSame(['name' => ''], $data->getData());
         $this->assertSame('', $data->getAttributeValue('name'));
-        $this->assertSame(null, $data->getAttributeValue('age'));
-        $this->assertSame(null, $data->getAttributeValue('number'));
-        $this->assertSame(null, $data->getAttributeValue('non-exist'));
+        $this->assertNull($data->getAttributeValue('age'));
+        $this->assertNull($data->getAttributeValue('number'));
+        $this->assertNull($data->getAttributeValue('non-exist'));
         $this->assertSame(['name'], array_keys($data->getRules()));
 
         $data = new ObjectDataSet($object, ReflectionProperty::IS_PUBLIC|ReflectionProperty::IS_PROTECTED);
         $this->assertSame(['name' => '', 'age' => 17], $data->getData());
         $this->assertSame('', $data->getAttributeValue('name'));
         $this->assertSame(17, $data->getAttributeValue('age'));
-        $this->assertSame(null, $data->getAttributeValue('number'));
-        $this->assertSame(null, $data->getAttributeValue('non-exist'));
+        $this->assertNull($data->getAttributeValue('number'));
+        $this->assertNull($data->getAttributeValue('non-exist'));
         $this->assertSame(['name', 'age'], array_keys($data->getRules()));
     }
 
@@ -71,18 +71,17 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame(7, $data->getAttributeValue('key1'));
         $this->assertSame(42, $data->getAttributeValue('key2'));
 
-        $this->assertSame(null, $data->getAttributeValue('name'));
-        $this->assertSame(null, $data->getAttributeValue('age'));
-        $this->assertSame(null, $data->getAttributeValue('number'));
-        $this->assertSame(null, $data->getAttributeValue('non-exist'));
+        $this->assertNull($data->getAttributeValue('name'));
+        $this->assertNull($data->getAttributeValue('age'));
+        $this->assertNull($data->getAttributeValue('number'));
+        $this->assertNull($data->getAttributeValue('non-exist'));
 
-        $this->assertSame([], $data->getRules());
+        $this->assertSame(['name', 'age', 'number'], array_keys($data->getRules()));
     }
 
     public function testObjectWithRulesProvider(): void
     {
         $object = new ObjectWithRulesProvider();
-
         $data = new ObjectDataSet($object);
         $rules = $data->getRules();
 
@@ -91,7 +90,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame('', $data->getAttributeValue('name'));
         $this->assertSame(17, $data->getAttributeValue('age'));
         $this->assertSame(42, $data->getAttributeValue('number'));
-        $this->assertSame(null, $data->getAttributeValue('non-exist'));
+        $this->assertNull($data->getAttributeValue('non-exist'));
 
         $this->assertSame(['age'], array_keys($rules));
         $this->assertCount(2, $rules['age']);
@@ -110,10 +109,10 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame(7, $data->getAttributeValue('key1'));
         $this->assertSame(42, $data->getAttributeValue('key2'));
 
-        $this->assertSame(null, $data->getAttributeValue('name'));
-        $this->assertSame(null, $data->getAttributeValue('age'));
-        $this->assertSame(null, $data->getAttributeValue('number'));
-        $this->assertSame(null, $data->getAttributeValue('non-exist'));
+        $this->assertNull($data->getAttributeValue('name'));
+        $this->assertNull($data->getAttributeValue('age'));
+        $this->assertNull($data->getAttributeValue('number'));
+        $this->assertNull($data->getAttributeValue('non-exist'));
 
         $this->assertSame(['key1', 'key2'], array_keys($rules));
         $this->assertCount(1, $rules['key1']);
