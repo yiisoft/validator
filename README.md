@@ -175,11 +175,10 @@ For even more customization you can use your own class implementing `__invoke()`
 
 ```php
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\ValidationContext;
 
 final class SkipOnZero
 {
-    public function __invoke(mixed $value, object $rule, ValidationContext $context): bool
+    public function __invoke(mixed $value, bool $isAttributeMissing): bool
     {
         return $value === 0;
     }
@@ -192,12 +191,11 @@ or just a callable:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\ValidationContext;
 
 new Number(
     asInteger: true, 
     max: 100, 
-    skipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
+    skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
         return $value === 0;
     }
 );
@@ -207,25 +205,22 @@ For multiple rules this can be also set more conveniently at validator level:
 
 ```php
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
 $validator = new Validator(new SimpleRuleHandlerContainer($translator), skipOnEmpty: true);
 $validator = new Validator(
     new SimpleRuleHandlerContainer($translator),
-    skipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
+    skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
         return $value === 0;
     }
 );
 ```
 
-Using other parameters such as `$context` also allow to check if attribute is present:
+Using `$isAttributeMissing` parameter such as `$context` also allows to check if attribute is missing / present:
 
 ```php
-use Yiisoft\Validator\ValidationContext;
-
-$skipOnEmpty = static function (mixed $value, object $rule, ValidationContext $context): bool {
-    return $context->isAttributeMissing() || $value === '';
+$skipOnEmpty = static function (mixed $value, bool $isAttributeMissing): bool {
+    return $isAttributeMissing || $value === '';
 };
 ```
 

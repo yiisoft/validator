@@ -43,7 +43,7 @@ class ValidatorTest extends TestCase
             'int' => [
                 new Number(asInteger: true),
                 new Number(asInteger: true, min: 44),
-                static function ($value): Result {
+                static function (mixed $value): Result {
                     $result = new Result();
                     if ($value !== 42) {
                         $result->addError('Value should be 42!', ['int']);
@@ -160,8 +160,8 @@ class ValidatorTest extends TestCase
             'sort' => [
                 new InRange(
                     ['asc', 'desc'],
-                    skipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
-                        return $context->isAttributeMissing();
+                    skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
+                        return $isAttributeMissing;
                     }
                 ),
             ],
@@ -171,8 +171,8 @@ class ValidatorTest extends TestCase
             'sort' => [
                 new InRange(
                     ['asc', 'desc'],
-                    skipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
-                        return $context->isAttributeMissing() || $value === '';
+                    skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
+                        return $isAttributeMissing || $value === '';
                     }
                 ),
             ],
@@ -473,11 +473,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static function (
-                                mixed $value,
-                                object $rule,
-                                ValidationContext $context
-                            ): bool {
+                            skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
                                 return $value === 0;
                             }
                         ),
@@ -500,11 +496,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static function (
-                                mixed $value,
-                                object $rule,
-                                ValidationContext $context
-                            ): bool {
+                            skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
                                 return $value === 0;
                             }
                         ),
@@ -526,11 +518,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static function (
-                                mixed $value,
-                                object $rule,
-                                ValidationContext $context
-                            ): bool {
+                            skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
                                 return $value === 0;
                             }
                         ),
@@ -553,11 +541,7 @@ class ValidatorTest extends TestCase
                         new Number(
                             asInteger: true,
                             min: 18,
-                            skipOnEmpty: static function (
-                                mixed $value,
-                                object $rule,
-                                ValidationContext $context
-                            ): bool {
+                            skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
                                 return $value === 0;
                             }
                         ),
@@ -652,7 +636,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmpty: custom callback, value not passed' => [
                 new Validator(
                     new SimpleRuleHandlerContainer($translator),
-                    defaultSkipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
+                    defaultSkipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
                         return $value === 0;
                     }
                 ),
@@ -668,7 +652,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmpty: custom callback, value is empty' => [
                 new Validator(
                     new SimpleRuleHandlerContainer($translator),
-                    defaultSkipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
+                    defaultSkipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
                         return $value === 0;
                     }
                 ),
@@ -684,7 +668,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmpty: custom callback, value is not empty' => [
                 new Validator(
                     new SimpleRuleHandlerContainer($translator),
-                    defaultSkipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
+                    defaultSkipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
                         return $value === 0;
                     }
                 ),
@@ -701,7 +685,7 @@ class ValidatorTest extends TestCase
             'validator, skipOnEmpty: custom callback, value is not empty (null)' => [
                 new Validator(
                     new SimpleRuleHandlerContainer($translator),
-                    defaultSkipOnEmpty: static function (mixed $value, object $rule, ValidationContext $context): bool {
+                    defaultSkipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
                         return $value === 0;
                     }
                 ),

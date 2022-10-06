@@ -40,7 +40,7 @@ final class RequiredHandler implements RuleHandlerInterface
             $value = trim($value);
         }
 
-        if (!(new SkipOnEmpty())($value, $rule, $context)) {
+        if (!(new SkipOnEmpty())($value, $context->isAttributeMissing())) {
             return $result;
         }
 
