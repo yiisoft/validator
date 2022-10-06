@@ -82,4 +82,9 @@ final class ValidationContext
     {
         $this->parameters[$key] = $value;
     }
+
+    public function isAttributeMissing(): bool
+    {
+        return $this->attribute !== null && $this->dataSet !== null && !$this->dataSet->hasAttribute($this->attribute);
+    }
 }

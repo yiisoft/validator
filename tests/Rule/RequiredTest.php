@@ -15,9 +15,8 @@ final class RequiredTest extends AbstractRuleTest
             [
                 new Required(),
                 [
-                    'message' => [
-                        'message' => 'Value cannot be blank.',
-                    ],
+                    'message' => 'Value cannot be blank.',
+                    'notPassedMessage' => 'Value not passed.',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
