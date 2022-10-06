@@ -76,7 +76,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertNull($data->getAttributeValue('number'));
         $this->assertNull($data->getAttributeValue('non-exist'));
 
-        $this->assertSame(['name', 'age', 'number'], array_keys($data->getRules()));
+        $this->assertSame([], $data->getRules());
     }
 
     public function testObjectWithRulesProvider(): void

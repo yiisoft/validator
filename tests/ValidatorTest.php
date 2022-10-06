@@ -291,11 +291,7 @@ class ValidatorTest extends TestCase
             [
                 null,
                 new ObjectDataSet(new ObjectWithDataSet()),
-                [
-                    new Error('Value not passed.', ['name']),
-                    new Error('Value must be a number.', ['age']),
-                    new Error('Value must be a number.', ['number']),
-                ],
+                [],
             ],
         ];
     }

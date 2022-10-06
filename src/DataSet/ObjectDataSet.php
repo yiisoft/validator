@@ -86,6 +86,11 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         $this->rules = $objectHasRules ? $this->object->getRules() : [];
 
         $this->dataSetProvided = $this->object instanceof DataSetInterface;
+        // Providing data set assumes object has its own attributes and rules getting logic. So further parsing of
+        // Reflection properties and rules is intentionally skipped.
+        if ($this->dataSetProvided) {
+            return;
+        }
 
         $reflection = new ReflectionObject($this->object);
         foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
