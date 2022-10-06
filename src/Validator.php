@@ -7,8 +7,6 @@ namespace Yiisoft\Validator;
 use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use ReflectionException;
 use ReflectionProperty;
 use Traversable;
@@ -57,8 +55,10 @@ final class Validator implements ValidatorInterface
      * @param DataSetInterface|mixed|RulesProviderInterface $data
      * @param iterable|RulesProviderInterface|null $rules
      * @param ValidationContext|null $context
-     * @return Result
+     *
      * @throws ReflectionException
+     *
+     * @return Result
      */
     public function validate(
         mixed $data,

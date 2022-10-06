@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Closure;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Yiisoft\Translator\TranslatorInterface;
 
 /**
@@ -26,6 +23,7 @@ final class TranslateValidatorDecorator implements ValidatorInterface
      * @param DataSetInterface|mixed|RulesProviderInterface $data
      * @param iterable|RulesProviderInterface|null $rules
      * @param ValidationContext|null $context
+     *
      * @return Result
      */
     public function validate(
