@@ -16,7 +16,7 @@ final class ArrayDataSet implements DataSetInterface
 
     public function getAttributeValue(string $attribute): mixed
     {
-        return $this->hasAttribute($attribute) ? $this->data[$attribute] : null;
+        return $this->data[$attribute] ?? null;
     }
 
     public function getData(): array
