@@ -22,7 +22,7 @@ trait PreValidateTrait
     ): bool {
         if (
             $rule instanceof SkipOnEmptyInterface &&
-            (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $rule, $context)
+            (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $context->isAttributeMissing())
         ) {
             return true;
         }
