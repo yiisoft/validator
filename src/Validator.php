@@ -89,10 +89,9 @@ final class Validator implements ValidatorInterface
 
             if (is_int($attribute)) {
                 $validatedData = $data->getData();
-                $validatedContext = $context;
             } else {
                 $validatedData = $data->getAttributeValue($attribute);
-                $validatedContext = $context->withAttribute($attribute);
+                $context = $context->withAttribute($attribute);
             }
 
             $this->validateInternal(
@@ -112,18 +111,12 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     private function validateInternal($value, iterable $rules, ValidationContext $context, Result $compoundResult): void
     {
         foreach ($rules as $rule) {
-            if ($rule instanceof BeforeValidationInterface) {
-                $preValidateResult = $this->preValidate($value, $context, $rule);
-                if ($preValidateResult) {
-                    continue;
-                }
+            if ($rule instanceof BeforeValidationInterface && $this->preValidate($value, $context, $rule)) {
+                continue;
             }
 
             $ruleHandler = $this->ruleHandlerResolver->resolve($rule->getHandlerClassName());

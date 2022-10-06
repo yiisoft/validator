@@ -12,6 +12,8 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 
+use function array_key_exists;
+
 /**
  * This data set makes use of attributes introduced in PHP 8. It simplifies rules configuration process, especially for
  * nested data and relations. Please refer to the guide for example.
@@ -52,9 +54,16 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
             return $this->object->getAttributeValue($attribute);
         }
 
-        return isset($this->reflectionProperties[$attribute])
+        return $this->hasAttribute($attribute)
             ? $this->reflectionProperties[$attribute]->getValue($this->object)
             : null;
+    }
+
+    public function hasAttribute(string $attribute): bool
+    {
+        return $this->dataSetProvided
+            ? $this->object->hasAttribute($attribute)
+            : array_key_exists($attribute, $this->reflectionProperties);
     }
 
     public function getData(): array
@@ -77,6 +86,8 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         $this->rules = $objectHasRules ? $this->object->getRules() : [];
 
         $this->dataSetProvided = $this->object instanceof DataSetInterface;
+        // Providing data set assumes object has its own attributes and rules getting logic. So further parsing of
+        // Reflection properties and rules is intentionally skipped.
         if ($this->dataSetProvided) {
             return;
         }

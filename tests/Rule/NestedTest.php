@@ -318,7 +318,6 @@ final class NestedTest extends TestCase
                     }
                 },
                 [],
-                true,
             ],
             'wo-rules' => [
                 new class () {
@@ -396,18 +395,10 @@ final class NestedTest extends TestCase
      */
     public function testHandler(
         object $data,
-        array $expectedErrorMessagesIndexedByPath,
-        bool $expectedIsValid = false
+        array $expectedErrorMessagesIndexedByPath
     ): void {
         $result = $this->createValidator()->validate($data);
-
-        $this->assertSame($expectedIsValid, $result->isValid());
-        if (!$expectedIsValid) {
-            $this->assertEquals(
-                $expectedErrorMessagesIndexedByPath,
-                $result->getErrorMessagesIndexedByPath()
-            );
-        }
+        $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
     private function createValidator(): ValidatorInterface

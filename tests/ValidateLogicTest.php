@@ -132,7 +132,7 @@ final class ValidateLogicTest extends TestCase
             ],
             'array-and-object' => [
                 [
-                    'name' => ['Value cannot be blank.'],
+                    'name' => ['Value not passed.'],
                     'bars' => ['Value must be array or iterable.'],
                 ],
                 [],

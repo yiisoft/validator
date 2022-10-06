@@ -6,8 +6,8 @@ namespace Yiisoft\Validator\SkipOnEmptyCallback;
 
 final class SkipOnEmpty
 {
-    public function __invoke(mixed $value): bool
+    public function __invoke(mixed $value, bool $isAttributeMissing): bool
     {
-        return $value === null || $value === [] || $value === '';
+        return $isAttributeMissing || $value === null || $value === [] || $value === '';
     }
 }

@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\SkipOnEmptyCallback;
 
 final class SkipNone
 {
-    public function __invoke(mixed $value): bool
+    public function __invoke(mixed $value, bool $isAttributeMissing): bool
     {
         return false;
     }

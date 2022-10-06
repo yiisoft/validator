@@ -10,6 +10,8 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RulesProviderInterface;
 
+use function array_key_exists;
+
 final class ObjectWithDataSetAndRulesProvider implements DataSetInterface, RulesProviderInterface
 {
     #[Required]
@@ -37,6 +39,11 @@ final class ObjectWithDataSetAndRulesProvider implements DataSetInterface, Rules
     public function getData(): mixed
     {
         return $this->getObjectData();
+    }
+
+    public function hasAttribute(string $attribute): bool
+    {
+        return array_key_exists($attribute, $this->getObjectData());
     }
 
     private function getObjectData(): array

@@ -26,6 +26,7 @@ final class Required implements SerializableRuleInterface, BeforeValidationInter
 
     public function __construct(
         private string $message = 'Value cannot be blank.',
+        private string $notPassedMessage = 'Value not passed.',
 
         /**
          * @var bool|callable|null
@@ -44,12 +45,16 @@ final class Required implements SerializableRuleInterface, BeforeValidationInter
         return $this->message;
     }
 
+    public function getNotPassedMessage(): string
+    {
+        return $this->notPassedMessage;
+    }
+
     public function getOptions(): array
     {
         return [
-            'message' => [
-                'message' => $this->message,
-            ],
+            'message' => $this->message,
+            'notPassedMessage' => $this->notPassedMessage,
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];

@@ -6,8 +6,8 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Trait\EmptyCheckTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -15,8 +15,6 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class AtLeastHandler implements RuleHandlerInterface
 {
-    use EmptyCheckTrait;
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof AtLeast) {
@@ -26,7 +24,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         $filledCount = 0;
 
         foreach ($rule->getAttributes() as $attribute) {
-            if (!$this->isEmpty($value->{$attribute})) {
+            if (!(new SkipOnEmpty())($value->{$attribute}, $context->isAttributeMissing())) {
                 $filledCount++;
             }
         }
