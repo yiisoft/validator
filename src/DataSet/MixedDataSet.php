@@ -27,6 +27,6 @@ final class MixedDataSet implements DataSetInterface
 
     public function hasAttribute(string $attribute): bool
     {
-        return true;
+        return false;
     }
 }
