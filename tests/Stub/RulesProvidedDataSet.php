@@ -17,7 +17,7 @@ final class RulesProvidedDataSet implements RulesProviderInterface, DataSetInter
 
     public function getAttributeValue(string $attribute): mixed
     {
-        return $this->hasAttribute($attribute) ? $this->data[$attribute] : null;
+        return $this->data[$attribute] ?? null;
     }
 
     public function getRules(): iterable
