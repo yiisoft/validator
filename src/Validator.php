@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use ReflectionException;
 use ReflectionProperty;
 use Traversable;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
@@ -54,10 +55,10 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
-     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null $rules
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @param iterable|RulesProviderInterface|null $rules
+     * @param ValidationContext|null $context
+     * @return Result
+     * @throws ReflectionException
      */
     public function validate(
         mixed $data,

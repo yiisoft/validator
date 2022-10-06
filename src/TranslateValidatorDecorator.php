@@ -24,10 +24,9 @@ final class TranslateValidatorDecorator implements ValidatorInterface
 
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
-     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null $rules
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @param iterable|RulesProviderInterface|null $rules
+     * @param ValidationContext|null $context
+     * @return Result
      */
     public function validate(
         mixed $data,
