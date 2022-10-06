@@ -330,7 +330,7 @@ final class NestedTest extends TestCase
                     }
                 },
                 [
-                    'object.name' => ['Value cannot be blank.'],
+                    'object.name' => ['Value not passed.'],
                     'object.age' => ['Value must be no less than 21.'],
                 ],
             ],
@@ -345,7 +345,7 @@ final class NestedTest extends TestCase
                     }
                 },
                 [
-                    'object.name' => ['Value cannot be blank.'],
+                    'object.name' => ['Value not passed.'],
                 ],
             ],
             'wo-rules-only-protected' => [

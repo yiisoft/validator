@@ -183,19 +183,19 @@ class ValidatorTest extends TestCase
                 ['merchantId' => [new Required(), new Number(asInteger: true)]],
                 new ArrayDataSet(['merchantId' => null]),
                 [
-                    new Error('Value cannot be blank.', ['merchantId']),
-                    new Error('Value must be an integer.', ['merchantId']),
+                    new Error('Value cannot be blank.', ['merchantId'], ['value' => null]),
+                    new Error('Value must be an integer.', ['merchantId'], ['value' => null]),
                 ],
             ],
             [
                 ['merchantId' => [new Required(), new Number(asInteger: true, skipOnError: true)]],
                 new ArrayDataSet(['merchantId' => null]),
-                [new Error('Value cannot be blank.', ['merchantId'])],
+                [new Error('Value cannot be blank.', ['merchantId'], ['value' => null])],
             ],
             [
                 ['merchantId' => [new Required(), new Number(asInteger: true, skipOnError: true)]],
                 new ArrayDataSet(['merchantIdd' => 1]),
-                [new Error('Value not passed.', ['merchantId'])],
+                [new Error('Value not passed.', ['merchantId'], ['value' => null])],
             ],
 
             [
@@ -223,18 +223,18 @@ class ValidatorTest extends TestCase
             [
                 $strictRules,
                 new ArrayDataSet(['orderBy' => 'name', 'sort' => 'up']),
-                [new Error('This value is invalid.', ['sort'])],
+                [new Error('This value is invalid.', ['sort'], ['value' => 'up'])],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet(['orderBy' => 'name', 'sort' => 'up']),
-                [new Error('This value is invalid.', ['sort'])],
+                [new Error('This value is invalid.', ['sort'], ['value' => 'up'])],
             ],
 
             [
                 $strictRules,
                 new ArrayDataSet(['orderBy' => 'name', 'sort' => '']),
-                [new Error('This value is invalid.', ['sort'])],
+                [new Error('This value is invalid.', ['sort'], ['value' => ''])],
             ],
             [
                 $notStrictRules,
@@ -256,23 +256,23 @@ class ValidatorTest extends TestCase
             [
                 $strictRules,
                 new ArrayDataSet(['orderBy' => '']),
-                [new Error('Value cannot be blank.', ['orderBy'])],
+                [new Error('Value cannot be blank.', ['orderBy'], ['value' => ''])],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet(['orderBy' => '']),
-                [new Error('Value cannot be blank.', ['orderBy'])],
+                [new Error('Value cannot be blank.', ['orderBy'], ['value' => ''])],
             ],
 
             [
                 $strictRules,
                 new ArrayDataSet([]),
-                [new Error('Value not passed.', ['orderBy'])],
+                [new Error('Value not passed.', ['orderBy'], ['value' => null])],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet([]),
-                [new Error('Value not passed.', ['orderBy'])],
+                [new Error('Value not passed.', ['orderBy'], ['value' => null])],
             ],
 
             [
@@ -286,7 +286,7 @@ class ValidatorTest extends TestCase
                         private string $description = 'abc123';
                     }
                 ),
-                [new Error('Value not passed.', ['name'])],
+                [new Error('Value not passed.', ['name'], ['value' => null])],
             ],
             [
                 null,
@@ -588,7 +588,7 @@ class ValidatorTest extends TestCase
             ],
 
             'validator, skipOnEmpty: SkipOnNull, value not passed' => [
-                new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                 ]),
@@ -598,7 +598,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmpty: SkipOnNull, value is empty' => [
-                new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => null,
@@ -609,7 +609,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmpty: SkipOnNull, value is not empty' => [
-                new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => 17,
@@ -621,7 +621,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmpty: SkipOnNull, value is not empty (empty string)' => [
-                new Validator(new SimpleRuleHandlerContainer($translator), defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), defaultSkipOnEmpty: new SkipOnNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => '',
@@ -635,7 +635,7 @@ class ValidatorTest extends TestCase
 
             'validator, skipOnEmpty: custom callback, value not passed' => [
                 new Validator(
-                    new SimpleRuleHandlerContainer($translator),
+                    new SimpleRuleHandlerContainer(),
                     defaultSkipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
                         return $value === 0;
                     }
@@ -651,7 +651,7 @@ class ValidatorTest extends TestCase
             ],
             'validator, skipOnEmpty: custom callback, value is empty' => [
                 new Validator(
-                    new SimpleRuleHandlerContainer($translator),
+                    new SimpleRuleHandlerContainer(),
                     defaultSkipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
                         return $value === 0;
                     }
@@ -667,7 +667,7 @@ class ValidatorTest extends TestCase
             ],
             'validator, skipOnEmpty: custom callback, value is not empty' => [
                 new Validator(
-                    new SimpleRuleHandlerContainer($translator),
+                    new SimpleRuleHandlerContainer(),
                     defaultSkipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
                         return $value === 0;
                     }
@@ -684,7 +684,7 @@ class ValidatorTest extends TestCase
             ],
             'validator, skipOnEmpty: custom callback, value is not empty (null)' => [
                 new Validator(
-                    new SimpleRuleHandlerContainer($translator),
+                    new SimpleRuleHandlerContainer(),
                     defaultSkipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
                         return $value === 0;
                     }

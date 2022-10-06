@@ -25,17 +25,14 @@ final class RequiredHandler implements RuleHandlerInterface
 
         $result = new Result();
         if ($context->isAttributeMissing()) {
-            $translatedMessage = $this->translator->translate($rule->getNotPassedMessage());
-            $result->addError($translatedMessage);
+            $result->addError(
+                message: $rule->getNotPassedMessage(),
+                parameters:  ['value' => $value]
+            );
 
             return $result;
         }
 
-        if ($this->isEmpty(is_string($value) ? trim($value) : $value)) {
-            $result->addError(
-                message: $rule->getMessage(),
-                parameters:  ['value' => $value]
-            );
         if (is_string($value)) {
             $value = trim($value);
         }
@@ -44,8 +41,10 @@ final class RequiredHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $translatedMessage = $this->translator->translate($rule->getMessage());
-        $result->addError($translatedMessage);
+        $result->addError(
+            message: $rule->getMessage(),
+            parameters:  ['value' => $value]
+        );
 
         return $result;
     }

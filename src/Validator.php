@@ -97,7 +97,7 @@ final class Validator implements ValidatorInterface
             $this->validateInternal(
                 $validatedData,
                 $attributeRules,
-                $validatedContext,
+                $context,
                 $compoundResult,
             );
         }
