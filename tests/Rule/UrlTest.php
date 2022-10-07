@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use PHPUnit\Runner\BeforeFirstTestHook;
+use PHPUnit\Runner\BeforeTestHook;
+use Xepozz\InternalMocker\Mocker;
+use Xepozz\InternalMocker\MockerState;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\SerializableRuleInterface;
 
@@ -11,9 +15,13 @@ final class UrlTest extends AbstractRuleTest
 {
     public function optionsDataProvider(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
+        MockerState::addCondition(
+            __NAMESPACE__,
+            'extension_loaded',
+            [],
+            false,
+//            true,
+        );
 
         return [
             [
@@ -72,7 +80,6 @@ final class UrlTest extends AbstractRuleTest
     }
 
     /**
-     * @requires extension intl
      * @dataProvider optionsDataProvider
      */
     public function testOptions(SerializableRuleInterface $rule, array $expectedOptions): void

@@ -5,21 +5,23 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use RuntimeException;
+use Xepozz\InternalMocker\MockerState;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
-
-use function extension_loaded;
+use Yiisoft\Validator\Tests\MockerExtension;
 
 final class UrlHandlerTest extends AbstractRuleValidatorTest
 {
+    public function __construct(?string $name = null, array $data = [], $dataName = '')
+    {
+        MockerExtension::load();
+        parent::__construct($name, $data, $dataName);
+    }
+
     public function failedValidationProvider(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         $rule = new Url();
         $errors = [new Error('This value is not a valid URL.')];
 
@@ -47,7 +49,6 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
     }
 
     /**
-     * @requires extension intl
      * @dataProvider failedValidationProvider
      */
     public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
@@ -57,10 +58,6 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
 
     public function passedValidationProvider(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         $rule = new Url();
 
         return [
@@ -94,7 +91,6 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
     }
 
     /**
-     * @requires extension intl
      * @dataProvider passedValidationProvider
      */
     public function testValidationPassed(object $config, mixed $value): void
@@ -104,34 +100,27 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
 
     public function customErrorMessagesProvider(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         return [
             [new Url(enableIDN: true, message: 'Custom error'), '', [new Error('Custom error')]],
         ];
     }
 
     /**
-     * @requires extension intl
      * @dataProvider customErrorMessagesProvider
      */
     public function testCustomErrorMessages(object $config, mixed $value, array $expectedErrorMessages): void
     {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
-        }
-
         parent::testCustomErrorMessages($config, $value, $expectedErrorMessages);
     }
 
     public function testEnableIdnWithMissingIntlExtension(): void
     {
-        if (extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be unavailable for this test.');
-        }
-
+        MockerState::addCondition(
+            'Yiisoft\\Validator\\Rule',
+            'function_exists',
+            ['idn_to_ascii'],
+            false,
+        );
         $this->expectException(RuntimeException::class);
         new Url(enableIDN: true);
     }

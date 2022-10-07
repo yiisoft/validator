@@ -15,8 +15,6 @@ use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidationContext;
 
-use function function_exists;
-
 /**
  * Validates that the value is a valid HTTP or HTTPS URL.
  *

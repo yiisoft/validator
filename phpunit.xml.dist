@@ -26,6 +26,9 @@
             <directory phpVersion="8.1" phpVersionOperator=">=">./tests/Php81</directory>
         </testsuite>
     </testsuites>
+    <extensions>
+        <extension class="Yiisoft\Validator\Tests\MockerExtension"/>
+    </extensions>
     <coverage>
         <include>
             <directory>./src</directory>

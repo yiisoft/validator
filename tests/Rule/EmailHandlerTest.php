@@ -5,21 +5,23 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use RuntimeException;
+use Xepozz\InternalMocker\MockerState;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\EmailHandler;
 use Yiisoft\Validator\RuleHandlerInterface;
-
-use function extension_loaded;
+use Yiisoft\Validator\Tests\MockerExtension;
 
 final class EmailHandlerTest extends AbstractRuleValidatorTest
 {
+    public function __construct(?string $name = null, array $data = [], $dataName = '')
+    {
+        MockerExtension::load();
+        parent::__construct($name, $data, $dataName);
+    }
+
     public function failedValidationProvider(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
@@ -116,8 +118,17 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
      */
     public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
     {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
+        /**
+         * @var $config Email
+         */
+        if ($config->isCheckDNS()) {
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'checkdnsrr',
+                [],
+                false,
+                true,
+            );
         }
 
         parent::testValidationFailed($config, $value, $expectedErrors);
@@ -125,10 +136,6 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
 
     public function passedValidationProvider(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
@@ -192,8 +199,17 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
      */
     public function testValidationPassed(object $config, mixed $value): void
     {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
+        /**
+         * @var $config Email
+         */
+        if ($config->isCheckDNS()) {
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'checkdnsrr',
+                [],
+                true,
+                true,
+            );
         }
 
         parent::testValidationPassed($config, $value);
@@ -210,11 +226,41 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
+    /**
+     * @dataProvider customErrorMessagesProvider
+     */
+    public function testCustomErrorMessages(object $config, mixed $value, array $expectedErrorMessages): void
+    {
+        /**
+         * @var $config Email
+         */
+        if ($config->isCheckDNS()) {
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'checkdnsrr',
+                [],
+                false,
+                true,
+            );
+        }
+        parent::testCustomErrorMessages($config, $value, $expectedErrorMessages);
+    }
+
     public function testEnableIdnWithMissingIntlExtension(): void
     {
-        if (extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be unavailable for this test.');
-        }
+        MockerState::addCondition(
+            'Yiisoft\\Validator\\Rule',
+            'function_exists',
+            ['idn_to_ascii'],
+            false,
+        );
+
+        MockerState::addCondition(
+            'Yiisoft\\Validator\\Tests\\Rule',
+            'extension_loaded',
+            ['intl'],
+            false,
+        );
 
         $this->expectException(RuntimeException::class);
         new Email(enableIDN: true);
