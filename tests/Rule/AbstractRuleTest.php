@@ -37,8 +37,5 @@ abstract class AbstractRuleTest extends TestCase
 
     abstract public function optionsDataProvider(): array;
 
-    /**
-     * @return SerializableRuleInterface
-     */
     abstract protected function getRule(): SerializableRuleInterface;
 }
