@@ -16,6 +16,7 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
 {
     public function __construct(?string $name = null, array $data = [], $dataName = '')
     {
+        defined('INTL_IDNA_VARIANT_UTS46') || define('INTL_IDNA_VARIANT_UTS46', 1);
         MockerExtension::load();
         parent::__construct($name, $data, $dataName);
     }
@@ -130,10 +131,6 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
                 true,
             );
 
-//            [$ruleEnabledIDN, 'rmcreative.ru', $errors],
-//            [$ruleEnabledIDN, 'Carsten Brandt <mail@cebe.cc>', $errors],
-//            [$ruleEnabledIDN, '"Carsten Brandt" <mail@cebe.cc>', $errors],
-//            [$ruleEnabledIDN, '<mail@cebe.cc>', $errors],
             MockerState::addCondition(
                 'Yiisoft\\Validator\\Rule',
                 'idn_to_ascii',

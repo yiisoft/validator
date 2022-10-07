@@ -16,6 +16,7 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
 {
     public function __construct(?string $name = null, array $data = [], $dataName = '')
     {
+        defined('INTL_IDNA_VARIANT_UTS46') || define('INTL_IDNA_VARIANT_UTS46', 1);
         MockerExtension::load();
         parent::__construct($name, $data, $dataName);
     }
