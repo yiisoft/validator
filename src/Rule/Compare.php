@@ -19,10 +19,10 @@ use Yiisoft\Validator\WhenInterface;
 
 abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
 {
-    use SkipOnErrorTrait;
-    use WhenTrait;
     use RuleNameTrait;
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
+    use WhenTrait;
 
     /**
      * Constant for specifying the comparison as string values.

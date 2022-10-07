@@ -45,10 +45,10 @@ final class Nested implements
     SkipOnEmptyInterface,
     PropagateOptionsInterface
 {
-    use SkipOnErrorTrait;
-    use WhenTrait;
     use RuleNameTrait;
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
+    use WhenTrait;
 
     private const SEPARATOR = '.';
     private const EACH_SHORTCUT = '*';
