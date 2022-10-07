@@ -130,7 +130,8 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
                 false,
                 true,
             );
-
+        }
+        if ($config->isEnableIDN()) {
             MockerState::addCondition(
                 'Yiisoft\\Validator\\Rule',
                 'idn_to_ascii',
@@ -180,6 +181,14 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
                 false,
             );
         }
+
+        MockerState::addCondition(
+            'Yiisoft\\Validator\\Rule',
+            'idn_to_ascii',
+            [],
+            false,
+            true,
+        );
 
         parent::testValidationFailed($config, $value, $expectedErrors);
     }
@@ -261,6 +270,136 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
                 true,
             );
         }
+        if ($config->isEnableIDN()) {
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['5011', 0, 1],
+                '5011',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['example.com', 0, 1],
+                'example.com',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['cebe.cc', 0, 1],
+                'cebe.cc',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['test-', 0, 1],
+                false,
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['dummy.com', 0, 1],
+                'dummy.com',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['example', 0, 1],
+                'example',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['äüößìà.de', 0, 1],
+                'xn--ss-kian6b3czb.de',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['xn--zcack7ayc9a.de', 0, 1],
+                'xn--zcack7ayc9a.de',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['info', 0, 1],
+                'info',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['örtliches.de', 0, 1],
+                'xn--rtliches-m4a.de',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['sam', 0, 1],
+                'sam',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['рмкреатиф.ru', 0, 1],
+                'xn--80ajkfjxcst.ru',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['rmcreative.ru', 0, 1],
+                'rmcreative.ru',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['gmail.com', 0, 1],
+                'gmail.com',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['üñîçøðé', 0, 1],
+                'xn--7caenjc8bya',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['üñîçøðé.com', 0, 1],
+                'xn--7caenjc8bya.com',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['test', 0, 1],
+                'test',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['mail', 0, 1],
+                'mail',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['john.smith', 0, 1],
+                'john.smith',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['shortmail', 0, 1],
+                'shortmail',
+            );
+        }
+
+        MockerState::addCondition(
+            'Yiisoft\\Validator\\Rule',
+            'idn_to_ascii',
+            [],
+            false,
+            true,
+        );
 
         parent::testValidationPassed($config, $value);
     }

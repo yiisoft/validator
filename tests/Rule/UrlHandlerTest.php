@@ -49,6 +49,31 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
+    /**
+     * @dataProvider failedValidationProvider
+     */
+    public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
+    {
+        /**
+         * @var $config Url
+         */
+        if ($config->isEnableIDN()) {
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['', 0, 1],
+                false,
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['http://' . str_pad('base', 2000, 'url') . '.de', 0, 1],
+                'xn--zcack7ayc9a.de',
+            );
+        }
+        parent::testValidationFailed($config, $value, $expectedErrors);
+    }
+
     public function passedValidationProvider(): array
     {
         $rule = new Url();
@@ -120,6 +145,26 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         return [
             [new Url(enableIDN: true, message: 'Custom error'), '', [new Error('Custom error')]],
         ];
+    }
+
+    /**
+     * @dataProvider customErrorMessagesProvider
+     */
+    public function testCustomErrorMessages(object $config, mixed $value, array $expectedErrorMessages): void
+    {
+        /**
+         * @var $config Url
+         */
+        if ($config->isEnableIDN()) {
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['', 0, 1],
+                false,
+            );
+        }
+
+        parent::testCustomErrorMessages($config, $value, $expectedErrorMessages);
     }
 
     public function testEnableIdnWithMissingIntlExtension(): void
