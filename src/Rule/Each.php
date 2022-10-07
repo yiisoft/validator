@@ -30,10 +30,10 @@ final class Each implements
     SkipOnEmptyInterface,
     PropagateOptionsInterface
 {
-    use SkipOnErrorTrait;
-    use WhenTrait;
     use RuleNameTrait;
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
+    use WhenTrait;
 
     public function __construct(
         /**

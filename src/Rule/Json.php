@@ -22,10 +22,10 @@ use Yiisoft\Validator\WhenInterface;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Json implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
-    use SkipOnErrorTrait;
-    use WhenTrait;
     use RuleNameTrait;
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
+    use WhenTrait;
 
     public function __construct(
         private string $message = 'The value is not JSON.',

@@ -25,10 +25,10 @@ use Yiisoft\Validator\WhenInterface;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class InRange implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
-    use SkipOnErrorTrait;
-    use WhenTrait;
     use RuleNameTrait;
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
+    use WhenTrait;
 
     public function __construct(
         private iterable $range,

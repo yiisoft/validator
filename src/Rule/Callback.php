@@ -29,10 +29,10 @@ final class Callback implements
     SkipOnEmptyInterface,
     AttributeEventInterface
 {
-    use SkipOnErrorTrait;
-    use WhenTrait;
     use RuleNameTrait;
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
+    use WhenTrait;
 
     public function __construct(
         /**
