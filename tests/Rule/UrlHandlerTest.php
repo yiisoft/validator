@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 use RuntimeException;
 use Xepozz\InternalMocker\MockerState;
 use Yiisoft\Validator\Error;
-use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
