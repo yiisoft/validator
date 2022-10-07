@@ -13,6 +13,7 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 
+use function array_key_exists;
 use function get_class;
 
 /**
@@ -71,6 +72,13 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         return $this->getData()[$attribute] ?? null;
     }
 
+    public function hasAttribute(string $attribute): bool
+    {
+        return $this->dataSetProvided
+            ? $this->object->hasAttribute($attribute)
+            : array_key_exists($attribute, $this->reflectionProperties);
+    }
+
     public function getData(): array
     {
         $cacheItem = $this->getCacheItem();
@@ -119,6 +127,8 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         $objectHasRules = $this->object instanceof RulesProviderInterface;
         $rules = $objectHasRules ? $this->object->getRules() : [];
 
+        // Providing data set assumes object has its own attributes and rules getting logic. So further parsing of
+        // Reflection properties and rules is intentionally skipped.
         if ($this->dataSetProvided) {
             return $rules;
         }

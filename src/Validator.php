@@ -60,10 +60,8 @@ final class Validator implements ValidatorInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function validate(
-        mixed $data,
-        iterable|object|string|null $rules = null
-    ): Result {
+    public function validate(mixed $data, iterable|object|string|null $rules = null): Result
+    {
         $data = $this->normalizeDataSet($data);
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
@@ -88,21 +86,17 @@ final class Validator implements ValidatorInterface
 
             if (is_int($attribute)) {
                 $validatedData = $data->getData();
-                $validatedContext = $context;
             } else {
                 $validatedData = $data->getAttributeValue($attribute);
-                $validatedContext = $context->withAttribute($attribute);
+                $context = $context->withAttribute($attribute);
             }
 
-            $tempResult = $this->validateInternal(
-                $validatedData,
-                $attributeRules,
-                $validatedContext
-            );
+            $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
 
             foreach ($tempResult->getErrors() as $error) {
                 $result->addError($error->getMessage(), $error->getValuePath());
             }
+
             $results[] = $result;
         }
 
@@ -139,19 +133,13 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     private function validateInternal($value, iterable $rules, ValidationContext $context): Result
     {
         $compoundResult = new Result();
         foreach ($rules as $rule) {
-            if ($rule instanceof BeforeValidationInterface) {
-                $preValidateResult = $this->preValidate($value, $context, $rule);
-                if ($preValidateResult) {
-                    continue;
-                }
+            if ($rule instanceof BeforeValidationInterface && $this->preValidate($value, $context, $rule)) {
+                continue;
             }
 
             $ruleHandler = $this->ruleHandlerResolver->resolve($rule->getHandlerClassName());

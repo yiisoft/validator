@@ -8,6 +8,8 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
+use function array_key_exists;
+
 final class ObjectWithDataSet implements DataSetInterface
 {
     #[Required]
@@ -21,16 +23,16 @@ final class ObjectWithDataSet implements DataSetInterface
 
     public function getAttributeValue(string $attribute): mixed
     {
-        return $this->getObjectData()[$attribute] ?? null;
+        return $this->getData()[$attribute] ?? null;
     }
 
     public function getData(): mixed
     {
-        return $this->getObjectData();
+        return ['key1' => 7, 'key2' => 42];
     }
 
-    private function getObjectData(): array
+    public function hasAttribute(string $attribute): bool
     {
-        return ['key1' => 7, 'key2' => 42];
+        return array_key_exists($attribute, $this->getData());
     }
 }

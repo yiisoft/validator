@@ -6,6 +6,8 @@ namespace Yiisoft\Validator\Tests\Stub;
 
 use Yiisoft\Validator\DataSetInterface;
 
+use function array_key_exists;
+
 final class DataSet implements DataSetInterface
 {
     public function __construct(private array $data = [])
@@ -20,5 +22,10 @@ final class DataSet implements DataSetInterface
     public function getData(): mixed
     {
         return $this->data;
+    }
+
+    public function hasAttribute(string $attribute): bool
+    {
+        return array_key_exists($attribute, $this->data);
     }
 }

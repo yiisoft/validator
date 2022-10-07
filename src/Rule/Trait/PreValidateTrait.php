@@ -13,8 +13,6 @@ use function is_callable;
 
 trait PreValidateTrait
 {
-    use EmptyCheckTrait;
-
     private string $parameterPreviousRulesErrored = 'previousRulesErrored';
 
     private function preValidate(
@@ -23,8 +21,8 @@ trait PreValidateTrait
         BeforeValidationInterface $rule
     ): bool {
         if (
-            $rule instanceof SkipOnEmptyInterface
-            && (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value)
+            $rule instanceof SkipOnEmptyInterface &&
+            (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $context->isAttributeMissing())
         ) {
             return true;
         }
