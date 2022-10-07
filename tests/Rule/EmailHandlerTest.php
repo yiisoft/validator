@@ -129,6 +129,59 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
                 false,
                 true,
             );
+
+//            [$ruleEnabledIDN, 'rmcreative.ru', $errors],
+//            [$ruleEnabledIDN, 'Carsten Brandt <mail@cebe.cc>', $errors],
+//            [$ruleEnabledIDN, '"Carsten Brandt" <mail@cebe.cc>', $errors],
+//            [$ruleEnabledIDN, '<mail@cebe.cc>', $errors],
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['mail', 0, 1],
+                'mail',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['info', 0, 1],
+                'info',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['örtliches.de', 0, 1],
+                'xn--rtliches-m4a.de',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['после-преобразования-в-idn-тут-будет-больше-чем-64-символа', 0, 1],
+                false,
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['пример.com', 0, 1],
+                'xn--e1afmkfd.com',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['cebe.cc', 0, 1],
+                'cebe.cc',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['тест', 0, 1],
+                'xn--e1aybc',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.com', 0, 1],
+                false,
+            );
         }
 
         parent::testValidationFailed($config, $value, $expectedErrors);
@@ -252,13 +305,6 @@ final class EmailHandlerTest extends AbstractRuleValidatorTest
             'Yiisoft\\Validator\\Rule',
             'function_exists',
             ['idn_to_ascii'],
-            false,
-        );
-
-        MockerState::addCondition(
-            'Yiisoft\\Validator\\Tests\\Rule',
-            'extension_loaded',
-            ['intl'],
             false,
         );
 

@@ -24,6 +24,10 @@ final class MockerExtension implements BeforeTestHook, BeforeFirstTestHook
             ],
             [
                 'namespace' => 'Yiisoft\\Validator\\Rule',
+                'name' => 'idn_to_ascii',
+            ],
+            [
+                'namespace' => 'Yiisoft\\Validator\\Rule',
                 'name' => 'checkdnsrr',
                 'result' => true,
                 'default' => true,

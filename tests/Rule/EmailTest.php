@@ -4,13 +4,27 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Xepozz\InternalMocker\MockerState;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Tests\MockerExtension;
 
 final class EmailTest extends AbstractRuleTest
 {
+    public function __construct(?string $name = null, array $data = [], $dataName = '')
+    {
+        MockerExtension::load();
+        parent::__construct($name, $data, $dataName);
+    }
+
     public function optionsDataProvider(): array
     {
+        MockerState::addCondition(
+            'Yiisoft\\Validator\\Rule',
+            'function_exists',
+            ['idn_to_ascii'],
+            true,
+        );
         return [
             [
                 new Email(),
@@ -77,14 +91,6 @@ final class EmailTest extends AbstractRuleTest
                 ],
             ],
         ];
-    }
-
-    /**
-     * @dataProvider optionsDataProvider
-     */
-    public function testOptions(SerializableRuleInterface $rule, array $expectedOptions): void
-    {
-        parent::testOptions($rule, $expectedOptions);
     }
 
     protected function getRule(): SerializableRuleInterface

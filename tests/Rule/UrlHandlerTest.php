@@ -49,14 +49,6 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         ];
     }
 
-    /**
-     * @dataProvider failedValidationProvider
-     */
-    public function testValidationFailed(object $config, mixed $value, array $expectedErrors): void
-    {
-        parent::testValidationFailed($config, $value, $expectedErrors);
-    }
-
     public function passedValidationProvider(): array
     {
         $rule = new Url();
@@ -128,14 +120,6 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
         return [
             [new Url(enableIDN: true, message: 'Custom error'), '', [new Error('Custom error')]],
         ];
-    }
-
-    /**
-     * @dataProvider customErrorMessagesProvider
-     */
-    public function testCustomErrorMessages(object $config, mixed $value, array $expectedErrorMessages): void
-    {
-        parent::testCustomErrorMessages($config, $value, $expectedErrorMessages);
     }
 
     public function testEnableIdnWithMissingIntlExtension(): void
