@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use RuntimeException;
 use Xepozz\InternalMocker\MockerState;
 use Yiisoft\Validator\Error;
+use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
@@ -95,6 +96,30 @@ final class UrlHandlerTest extends AbstractRuleValidatorTest
      */
     public function testValidationPassed(object $config, mixed $value): void
     {
+        /**
+         * @var $config Url
+         */
+        if ($config->isEnableIDN()) {
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['äüößìà.de', 0, 1],
+                'xn--ss-y1a5b0g1frd.de',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['xn--zcack7ayc9a.de', 0, 1],
+                'xn--zcack7ayc9a.de',
+            );
+            MockerState::addCondition(
+                'Yiisoft\\Validator\\Rule',
+                'idn_to_ascii',
+                ['домен.рф', 0, 1],
+                'xn--d1acufc.xn--p1ai1111',
+            );
+        }
+
         parent::testValidationPassed($config, $value);
     }
 
