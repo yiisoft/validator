@@ -11,12 +11,6 @@ use Yiisoft\Validator\Tests\MockerExtension;
 
 final class UrlTest extends AbstractRuleTest
 {
-    public function __construct(?string $name = null, array $data = [], $dataName = '')
-    {
-        MockerExtension::load();
-        parent::__construct($name, $data, $dataName);
-    }
-
     public function optionsDataProvider(): array
     {
         MockerState::addCondition(
