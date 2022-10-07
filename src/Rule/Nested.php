@@ -11,18 +11,20 @@ use JetBrains\PhpStorm\ArrayShape;
 use ReflectionProperty;
 use Traversable;
 use Yiisoft\Strings\StringHelper;
-use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\PropagateOptionsInterface;
-use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
+use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
+use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\WhenInterface;
 
 use function array_pop;
 use function count;
@@ -38,11 +40,13 @@ use function sprintf;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
     SerializableRuleInterface,
-    BeforeValidationInterface,
+    SkipOnErrorInterface,
+    WhenInterface,
     SkipOnEmptyInterface,
     PropagateOptionsInterface
 {
-    use BeforeValidationTrait;
+    use SkipOnErrorTrait;
+    use WhenTrait;
     use RuleNameTrait;
     use SkipOnEmptyTrait;
 

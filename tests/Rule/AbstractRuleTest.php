@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
@@ -39,7 +38,7 @@ abstract class AbstractRuleTest extends TestCase
     abstract public function optionsDataProvider(): array;
 
     /**
-     * @return BeforeValidationTrait|SerializableRuleInterface
+     * @return SerializableRuleInterface
      */
     abstract protected function getRule(): SerializableRuleInterface;
 }

@@ -7,20 +7,8 @@ namespace Yiisoft\Validator\Rule\Trait;
 use Closure;
 use Yiisoft\Validator\ValidationContext;
 
-trait BeforeValidationTrait
+trait WhenTrait
 {
-    public function skipOnError(bool $value): static
-    {
-        $new = clone $this;
-        $new->skipOnError = $value;
-        return $new;
-    }
-
-    public function shouldSkipOnError(): bool
-    {
-        return $this->skipOnError;
-    }
-
     /**
      * @psalm-param Closure(mixed, ValidationContext):bool|null $value
      */
