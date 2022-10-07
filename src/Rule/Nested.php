@@ -171,7 +171,11 @@ final class Nested implements
                 continue;
             }
             if (!$rule instanceof RuleInterface) {
-                $message = sprintf('Each rule should be an instance of %s, %s given.', RuleInterface::class, get_debug_type($rule));
+                $message = sprintf(
+                    'Each rule should be an instance of %s, %s given.',
+                    RuleInterface::class,
+                    get_debug_type($rule)
+                );
                 throw new InvalidArgumentException($message);
             }
         }
@@ -234,9 +238,15 @@ final class Nested implements
         $rules = [];
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
             foreach ($attributeRules as $attributeRule) {
-                $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
-                $attributeRule = $attributeRule->skipOnError($this->skipOnError);
-                $attributeRule = $attributeRule->when($this->when);
+                if ($attributeRule instanceof SkipOnEmptyInterface) {
+                    $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
+                }
+                if ($attributeRule instanceof SkipOnErrorInterface) {
+                    $attributeRule = $attributeRule->skipOnError($this->skipOnError);
+                }
+                if ($attributeRule instanceof WhenInterface) {
+                    $attributeRule = $attributeRule->when($this->when);
+                }
 
                 $rules[$attributeRulesIndex][] = $attributeRule;
 
