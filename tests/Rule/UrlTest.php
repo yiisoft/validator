@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Xepozz\InternalMocker\MockerState;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\SerializableRuleInterface;
-use Yiisoft\Validator\Tests\MockerExtension;
 
 final class UrlTest extends AbstractRuleTest
 {

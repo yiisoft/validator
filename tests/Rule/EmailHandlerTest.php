@@ -10,7 +10,6 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\EmailHandler;
 use Yiisoft\Validator\RuleHandlerInterface;
-use Yiisoft\Validator\Tests\MockerExtension;
 
 final class EmailHandlerTest extends AbstractRuleValidatorTest
 {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Yiisoft\Validator\Tests\MockerExtension;
 
 require_once 'vendor/autoload.php';

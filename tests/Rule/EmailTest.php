@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Xepozz\InternalMocker\MockerState;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\SerializableRuleInterface;
-use Yiisoft\Validator\Tests\MockerExtension;
 
 final class EmailTest extends AbstractRuleTest
 {
