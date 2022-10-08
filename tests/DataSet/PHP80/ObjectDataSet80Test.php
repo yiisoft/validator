@@ -164,6 +164,6 @@ final class ObjectDataSet80Test extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Method must exist and have public and static modifers.');
-        new ObjectDataSet($object);
+        (new ObjectDataSet($object))->getRules();
     }
 }

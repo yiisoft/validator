@@ -9,6 +9,8 @@ use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RulesProviderInterface;
 
+use function array_key_exists;
+
 final class ObjectWithCallsCount implements RulesProviderInterface, DataSetInterface
 {
     public string $name = '';
@@ -37,5 +39,10 @@ final class ObjectWithCallsCount implements RulesProviderInterface, DataSetInter
     public function getAttributeValue(string $attribute): mixed
     {
         return $this->getData()[$attribute] ?? null;
+    }
+
+    public function hasAttribute(string $attribute): bool
+    {
+        return array_key_exists($attribute, $this->getData());
     }
 }

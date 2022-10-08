@@ -6,7 +6,9 @@ namespace Yiisoft\Validator\Tests\DataSet;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
+use Yiisoft\Validator\DataSet\CacheObjectDataSetDecorator;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\ObjectDataSetInterface;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\ObjectWithCallsCount;
@@ -17,109 +19,138 @@ use Yiisoft\Validator\Tests\Stub\ObjectWithRulesProvider;
 
 final class ObjectDataSetTest extends TestCase
 {
+    public function setUp(): void
+    {
+        ObjectWithCallsCount::$getRulesCallsCount = 0;
+        ObjectWithCallsCount::$getDataCallsCount = 0;
+    }
+
     public function propertyVisibilityDataProvider(): array
     {
         return [
-            [new ObjectWithDifferentPropertyVisibility()],
-            [new ObjectWithDifferentPropertyVisibility()], // Not a duplicate. Used to test caching.
+            [
+                new ObjectDataSet(new ObjectWithDifferentPropertyVisibility()),
+                ['name' => '', 'age' => 17, 'number' => 42],
+                ['name' => '', 'age' => 17, 'number' => 42, 'non-exist' => null],
+                ['name', 'age', 'number'],
+            ],
+            [
+                new ObjectDataSet(new ObjectWithDifferentPropertyVisibility(), ReflectionProperty::IS_PRIVATE),
+                ['number' => 42],
+                ['name' => null, 'age' => null, 'number' => 42, 'non-exist' => null],
+                ['number'],
+            ],
+            [
+                new ObjectDataSet(new ObjectWithDifferentPropertyVisibility(), ReflectionProperty::IS_PROTECTED),
+                ['age' => 17],
+                ['name' => null, 'age' => 17, 'number' => null, 'non-exist' => null],
+                ['age'],
+            ],
+            [
+                new ObjectDataSet(new ObjectWithDifferentPropertyVisibility(), ReflectionProperty::IS_PUBLIC),
+                ['name' => ''],
+                ['name' => '', 'age' => null, 'number' => null, 'non-exist' => null],
+                ['name'],
+            ],
+            [
+                new ObjectDataSet(
+                    new ObjectWithDifferentPropertyVisibility(),
+                    ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED
+                ),
+                ['name' => '', 'age' => 17],
+                ['name' => '', 'age' => 17, 'number' => null, 'non-exist' => null],
+                ['name', 'age'],
+            ],
         ];
     }
 
     /**
      * @dataProvider propertyVisibilityDataProvider
      */
-    public function testPropertyVisibility(ObjectWithDifferentPropertyVisibility $object): void
-    {
-        $data = new ObjectDataSet($object);
-        $this->assertSame(['name' => '', 'age' => 17, 'number' => 42], $data->getData());
-        $this->assertSame('', $data->getAttributeValue('name'));
-        $this->assertSame(17, $data->getAttributeValue('age'));
-        $this->assertSame(42, $data->getAttributeValue('number'));
-        $this->assertNull($data->getAttributeValue('non-exist'));
-        $this->assertSame(['name', 'age', 'number'], array_keys($data->getRules()));
+    public function testPropertyVisibility(
+        ObjectDataSet $initialDataSet,
+        array $expectedData,
+        array $expectedAttributeValuesMap,
+        array $expectedRulesKeys
+    ): void {
+        $dataSets = [
+            $initialDataSet,
+            new CacheObjectDataSetDecorator($initialDataSet),
+            new CacheObjectDataSetDecorator($initialDataSet), // Not a duplicate. Used to test caching.
+        ];
+        foreach ($dataSets as $dataSet) {
+            /** @var ObjectDataSet $dataSet */
 
-        $data = new ObjectDataSet($object, ReflectionProperty::IS_PRIVATE);
-        $this->assertSame(['number' => 42], $data->getData());
-        $this->assertNull($data->getAttributeValue('name'));
-        $this->assertNull($data->getAttributeValue('age'));
-        $this->assertSame(42, $data->getAttributeValue('number'));
-        $this->assertNull($data->getAttributeValue('non-exist'));
-        $this->assertSame(['number'], array_keys($data->getRules()));
+            $this->assertSame($expectedData, $dataSet->getData());
 
-        $data = new ObjectDataSet($object, ReflectionProperty::IS_PROTECTED);
-        $this->assertSame(['age' => 17], $data->getData());
-        $this->assertNull($data->getAttributeValue('name'));
-        $this->assertSame(17, $data->getAttributeValue('age'));
-        $this->assertNull($data->getAttributeValue('number'));
-        $this->assertNull($data->getAttributeValue('non-exist'));
-        $this->assertSame(['age'], array_keys($data->getRules()));
+            foreach ($expectedAttributeValuesMap as $attribute => $value) {
+                $this->assertSame($value, $dataSet->getAttributeValue($attribute));
+            }
 
-        $data = new ObjectDataSet($object, ReflectionProperty::IS_PUBLIC);
-        $this->assertSame(['name' => ''], $data->getData());
-        $this->assertSame('', $data->getAttributeValue('name'));
-        $this->assertNull($data->getAttributeValue('age'));
-        $this->assertNull($data->getAttributeValue('number'));
-        $this->assertNull($data->getAttributeValue('non-exist'));
-        $this->assertSame(['name'], array_keys($data->getRules()));
-
-        $data = new ObjectDataSet($object, ReflectionProperty::IS_PUBLIC|ReflectionProperty::IS_PROTECTED);
-        $this->assertSame(['name' => '', 'age' => 17], $data->getData());
-        $this->assertSame('', $data->getAttributeValue('name'));
-        $this->assertSame(17, $data->getAttributeValue('age'));
-        $this->assertNull($data->getAttributeValue('number'));
-        $this->assertNull($data->getAttributeValue('non-exist'));
-        $this->assertSame(['name', 'age'], array_keys($data->getRules()));
+            $this->assertSame($expectedRulesKeys, array_keys($dataSet->getRules()));
+        }
     }
 
     public function objectWithDataSetDataProvider(): array
     {
+        $dataSet = new ObjectDataSet(new ObjectWithDataSet());
+
         return [
-            [new ObjectWithDataSet()],
-            [new ObjectWithDataSet()], // Not a duplicate. Used to test caching.
+            [new ObjectDataSet(new ObjectWithDataSet())],
+            [new ObjectDataSet(new ObjectWithDataSet())], // Not a duplicate. Used to test caching.
+            [$dataSet],
+            [$dataSet], // Not a duplicate. Used to test caching.
+            [new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithDataSet()))],
+            // Not a duplicate. Used to test caching.
+            [new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithDataSet()))],
         ];
     }
 
     /**
      * @dataProvider objectWithDataSetDataProvider
      */
-    public function testObjectWithDataSet(ObjectWithDataSet $object): void
+    public function testObjectWithDataSet(ObjectDataSetInterface $dataSet): void
     {
-        $data = new ObjectDataSet($object);
+        $this->assertSame(['key1' => 7, 'key2' => 42], $dataSet->getData());
+        $this->assertSame(7, $dataSet->getAttributeValue('key1'));
+        $this->assertSame(42, $dataSet->getAttributeValue('key2'));
 
-        $this->assertSame(['key1' => 7, 'key2' => 42], $data->getData());
-        $this->assertSame(7, $data->getAttributeValue('key1'));
-        $this->assertSame(42, $data->getAttributeValue('key2'));
+        $this->assertNull($dataSet->getAttributeValue('name'));
+        $this->assertNull($dataSet->getAttributeValue('age'));
+        $this->assertNull($dataSet->getAttributeValue('number'));
+        $this->assertNull($dataSet->getAttributeValue('non-exist'));
 
-        $this->assertNull($data->getAttributeValue('name'));
-        $this->assertNull($data->getAttributeValue('age'));
-        $this->assertNull($data->getAttributeValue('number'));
-        $this->assertNull($data->getAttributeValue('non-exist'));
-
-        $this->assertSame([], $data->getRules());
+        $this->assertSame([], $dataSet->getRules());
     }
 
     public function objectWithRulesProvider(): array
     {
+        $dataSet = new ObjectDataSet(new ObjectWithRulesProvider());
+
         return [
-            [new ObjectWithRulesProvider()],
-            [new ObjectWithRulesProvider()], // Not a duplicate. Used to test caching.
+            [new ObjectDataSet(new ObjectWithRulesProvider())],
+            [new ObjectDataSet(new ObjectWithRulesProvider())], // Not a duplicate. Used to test caching.
+            [$dataSet],
+            [$dataSet], // Not a duplicate. Used to test caching.
+            [new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithRulesProvider()))],
+            // Not a duplicate. Used to test caching.
+            [new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithRulesProvider()))],
         ];
     }
 
     /**
      * @dataProvider objectWithRulesProvider
      */
-    public function testObjectWithRulesProvider(ObjectWithRulesProvider $object): void
+    public function testObjectWithRulesProvider(ObjectDataSetInterface $dataSet): void
     {
-        $data = new ObjectDataSet($object);
-        $rules = $data->getRules();
+        $rules = $dataSet->getRules();
 
-        $this->assertSame(['name' => '', 'age' => 17, 'number' => 42], $data->getData());
+        $this->assertSame(['name' => '', 'age' => 17, 'number' => 42], $dataSet->getData());
 
-        $this->assertSame('', $data->getAttributeValue('name'));
-        $this->assertSame(17, $data->getAttributeValue('age'));
-        $this->assertSame(42, $data->getAttributeValue('number'));
-        $this->assertNull($data->getAttributeValue('non-exist'));
+        $this->assertSame('', $dataSet->getAttributeValue('name'));
+        $this->assertSame(17, $dataSet->getAttributeValue('age'));
+        $this->assertSame(42, $dataSet->getAttributeValue('number'));
+        $this->assertNull($dataSet->getAttributeValue('non-exist'));
 
         $this->assertSame(['age'], array_keys($rules));
         $this->assertCount(2, $rules['age']);
@@ -129,28 +160,34 @@ final class ObjectDataSetTest extends TestCase
 
     public function objectWithDataSetAndRulesProviderDataProvider(): array
     {
+        $dataSet = new ObjectDataSet(new ObjectWithDataSetAndRulesProvider());
+
         return [
-            [new ObjectWithDataSetAndRulesProvider()],
-            [new ObjectWithDataSetAndRulesProvider()], // Not a duplicate. Used to test caching.
+            [new ObjectDataSet(new ObjectWithDataSetAndRulesProvider())],
+            [new ObjectDataSet(new ObjectWithDataSetAndRulesProvider())], // Not a duplicate. Used to test caching.
+            [$dataSet],
+            [$dataSet], // Not a duplicate. Used to test caching.
+            [new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithDataSetAndRulesProvider()))],
+            // Not a duplicate. Used to test caching.
+            [new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithDataSetAndRulesProvider()))],
         ];
     }
 
     /**
      * @dataProvider objectWithDataSetAndRulesProviderDataProvider
      */
-    public function testObjectWithDataSetAndRulesProvider(ObjectWithDataSetAndRulesProvider $object): void
+    public function testObjectWithDataSetAndRulesProvider(ObjectDataSetInterface $dataSet): void
     {
-        $data = new ObjectDataSet($object);
-        $rules = $data->getRules();
+        $rules = $dataSet->getRules();
 
-        $this->assertSame(['key1' => 7, 'key2' => 42], $data->getData());
-        $this->assertSame(7, $data->getAttributeValue('key1'));
-        $this->assertSame(42, $data->getAttributeValue('key2'));
+        $this->assertSame(['key1' => 7, 'key2' => 42], $dataSet->getData());
+        $this->assertSame(7, $dataSet->getAttributeValue('key1'));
+        $this->assertSame(42, $dataSet->getAttributeValue('key2'));
 
-        $this->assertNull($data->getAttributeValue('name'));
-        $this->assertNull($data->getAttributeValue('age'));
-        $this->assertNull($data->getAttributeValue('number'));
-        $this->assertNull($data->getAttributeValue('non-exist'));
+        $this->assertNull($dataSet->getAttributeValue('name'));
+        $this->assertNull($dataSet->getAttributeValue('age'));
+        $this->assertNull($dataSet->getAttributeValue('number'));
+        $this->assertNull($dataSet->getAttributeValue('non-exist'));
 
         $this->assertSame(['key1', 'key2'], array_keys($rules));
         $this->assertCount(1, $rules['key1']);
@@ -160,21 +197,54 @@ final class ObjectDataSetTest extends TestCase
         $this->assertInstanceOf(Equal::class, $rules['key2'][1]);
     }
 
-    public function testCaching(): void
+    public function cachingDataProvider(): array
     {
-        $object1 = new ObjectWithCallsCount();
-        $object2 = new ObjectWithCallsCount();
+        $objectDataSet = new ObjectDataSet(new ObjectWithCallsCount());
 
-        $data1 = new ObjectDataSet($object1);
-        $data2 = new ObjectDataSet($object2);
+        return [
+            [
+                [
+                    new ObjectDataSet(new ObjectWithCallsCount()),
+                    new ObjectDataSet(new ObjectWithCallsCount()), // Not a duplicate. Used to test caching.
+                ],
+                2,
+                2,
+            ],
+            [
+                [
+                    $objectDataSet,
+                    $objectDataSet, // Not a duplicate. Used to test caching.
+                ],
+                1,
+                2,
+            ],
+            [
+                [
+                    new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithCallsCount())),
+                    // Not a duplicate. Used to test caching.
+                    new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithCallsCount())),
+                ],
+                1,
+                1,
+            ],
+        ];
+    }
 
-        $data1->getRules();
-        $data2->getRules();
+    /**
+     * @param ObjectDataSetInterface[] $objectDataSets
+     * @dataProvider cachingDataProvider
+     */
+    public function testCaching(array $objectDataSets, int $expectedRulesCallsCount, int $expectedDataCallsCount): void
+    {
+        foreach ($objectDataSets as $objectDataSet) {
+            $objectDataSet->getRules();
+        }
 
-        $data1->getData();
-        $data2->getData();
+        foreach ($objectDataSets as $objectDataSet) {
+            $objectDataSet->getData();
+        }
 
-        $this->assertSame(1, ObjectWithCallsCount::$getRulesCallsCount);
-        $this->assertSame(1, ObjectWithCallsCount::$getDataCallsCount);
+        $this->assertSame($expectedRulesCallsCount, ObjectWithCallsCount::$getRulesCallsCount);
+        $this->assertSame($expectedDataCallsCount, ObjectWithCallsCount::$getDataCallsCount);
     }
 }
