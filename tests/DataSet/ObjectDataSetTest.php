@@ -15,6 +15,7 @@ use Yiisoft\Validator\Tests\Stub\ObjectWithCallsCount;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
+use Yiisoft\Validator\Tests\Stub\ObjectWithDynamicDataSet;
 use Yiisoft\Validator\Tests\Stub\ObjectWithRulesProvider;
 
 final class ObjectDataSetTest extends TestCase
@@ -195,6 +196,36 @@ final class ObjectDataSetTest extends TestCase
         $this->assertCount(2, $rules['key2']);
         $this->assertInstanceOf(Required::class, $rules['key2'][0]);
         $this->assertInstanceOf(Equal::class, $rules['key2'][1]);
+    }
+
+    public function objectWithDynamicDataSetProvider(): array
+    {
+        return [
+            [
+                new ObjectDataSet(new ObjectWithDynamicDataSet('A')),
+                ['name' => 'A'],
+            ],
+            [
+                new ObjectDataSet(new ObjectWithDynamicDataSet('B')),
+                ['name' => 'B'],
+            ],
+            [
+                new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithDynamicDataSet('A'))),
+                ['name' => 'A'],
+            ],
+            [
+                new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithDynamicDataSet('B'))),
+                ['name' => 'B'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider objectWithDynamicDataSetProvider
+     */
+    public function testObjectWithDynamicDataSet(ObjectDataSetInterface $dataSet, array $expectedData): void
+    {
+        $this->assertSame($expectedData, $dataSet->getData());
     }
 
     public function cachingDataProvider(): array
