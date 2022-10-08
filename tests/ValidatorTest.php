@@ -169,7 +169,10 @@ class ValidatorTest extends TestCase
             'sort' => [
                 new InRange(
                     ['asc', 'desc'],
-                    skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $isAttributeMissing || $value === ''
+                    skipOnEmpty: static fn (
+                        mixed $value,
+                        bool $isAttributeMissing
+                    ): bool => $isAttributeMissing || $value === ''
                 ),
             ],
         ];
