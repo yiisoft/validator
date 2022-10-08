@@ -36,7 +36,8 @@ trait PreValidateTrait
         }
 
         if ($rule instanceof WhenInterface) {
-            return ($rule->getWhen() !== null) && !($rule->getWhen())($value, $context);
+            $when = $rule->getWhen();
+            return $when !== null && !$when($value, $context);
         }
 
         return false;
