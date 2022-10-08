@@ -23,7 +23,8 @@ final class CacheObjectDataSetDecorator implements ObjectDataSetInterface, Rules
     ])]
     private static array $cache = [];
 
-    public function __construct(private ObjectDataSetInterface|RulesProviderInterface $decorated) {
+    public function __construct(private ObjectDataSetInterface|RulesProviderInterface $decorated)
+    {
         $this->cacheKey = get_class($this->decorated->getObject());
 
         $this->deleteCacheItem('data');
