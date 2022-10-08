@@ -29,6 +29,7 @@ final class ObjectDataSet implements RulesProviderInterface, ObjectDataSetInterf
      */
     private ?array $reflectionProperties = null;
     private ?iterable $rules = null;
+    private ?array $data = null;
 
     public function __construct(
         private object $object,
@@ -136,14 +137,20 @@ final class ObjectDataSet implements RulesProviderInterface, ObjectDataSetInterf
 
     public function getData(): array
     {
-        if ($this->dataSetProvided) {
-            return $this->object->getData();
+        if ($this->data !== null) {
+            return $this->data;
         }
 
-        $data = [];
-        foreach ($this->getReflectionProperties() as $name => $property) {
-            $data[$name] = $property->getValue($this->object);
+        if ($this->dataSetProvided) {
+            $data = $this->object->getData();
+        } else {
+            $data = [];
+            foreach ($this->getReflectionProperties() as $name => $property) {
+                $data[$name] = $property->getValue($this->object);
+            }
         }
+
+        $this->data = $data;
 
         return $data;
     }
