@@ -225,7 +225,7 @@ final class ObjectDataSetTest extends TestCase
                     new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithCallsCount())),
                 ],
                 1,
-                1,
+                2,
             ],
         ];
     }

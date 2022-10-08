@@ -17,8 +17,7 @@ final class CacheObjectDataSetDecorator implements ObjectDataSetInterface, Rules
     #[ArrayShape([
         [
             'rules' => 'iterable',
-            'reflectionProperties' => 'array',
-            'data' => 'array',
+            'propertyVisibility' => 'int',
         ],
     ])]
     private static array $cache = [];
@@ -26,8 +25,6 @@ final class CacheObjectDataSetDecorator implements ObjectDataSetInterface, Rules
     public function __construct(private ObjectDataSetInterface|RulesProviderInterface $decorated)
     {
         $this->cacheKey = get_class($this->decorated->getObject());
-
-        $this->deleteCacheItem('data');
     }
 
     public function getAttributeValue(string $attribute): mixed
@@ -37,14 +34,7 @@ final class CacheObjectDataSetDecorator implements ObjectDataSetInterface, Rules
 
     public function getData(): mixed
     {
-        if ($this->hasCacheItem('data')) {
-            return $this->getCacheItem('data');
-        }
-
-        $data = $this->decorated->getData();
-        $this->updateCacheItem('data', $data);
-
-        return $data;
+        return $this->decorated->getData();
     }
 
     public function hasAttribute(string $attribute): bool
@@ -70,24 +60,6 @@ final class CacheObjectDataSetDecorator implements ObjectDataSetInterface, Rules
         return $rules;
     }
 
-    public function getReflectionProperties(): array
-    {
-        if (
-            $this->hasCacheItem('reflectionProperties') &&
-            $this->hasCacheItem('propertyVisibility') &&
-            $this->decorated->getPropertyVisibility() === $this->getCacheItem('propertyVisibility')
-        ) {
-            return $this->getCacheItem('reflectionProperties');
-        }
-
-        $reflectionProperties = $this->decorated->getReflectionProperties();
-
-        $this->updateCacheItem('reflectionProperties', $reflectionProperties);
-        $this->updateCacheItem('propertyVisibility', $this->getPropertyVisibility());
-
-        return $reflectionProperties;
-    }
-
     public function getPropertyVisibility(): int
     {
         return $this->decorated->getPropertyVisibility();
@@ -105,8 +77,7 @@ final class CacheObjectDataSetDecorator implements ObjectDataSetInterface, Rules
 
     #[ArrayShape([
         'rules' => 'iterable',
-        'reflectionProperties' => 'array',
-        'data' => 'array',
+        'propertyVisibility' => 'int',
     ])]
     private function getCacheItem(string $key): mixed
     {
@@ -116,10 +87,5 @@ final class CacheObjectDataSetDecorator implements ObjectDataSetInterface, Rules
     private function updateCacheItem(string $key, mixed $value): void
     {
         self::$cache[$this->cacheKey][$key] = $value;
-    }
-
-    private function deleteCacheItem(string $key): void
-    {
-        unset(self::$cache[$this->cacheKey][$key]);
     }
 }
