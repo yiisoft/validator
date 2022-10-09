@@ -14,7 +14,7 @@ final class CallbackTest extends AbstractRuleTest
 {
     public function testGetName(): void
     {
-        $rule = new Callback(callback: fn() => new Result());
+        $rule = new Callback(callback: fn () => new Result());
         $this->assertSame('callback', $rule->getName());
     }
 
