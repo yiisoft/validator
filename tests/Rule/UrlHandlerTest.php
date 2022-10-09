@@ -10,7 +10,6 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
-use Yiisoft\Validator\Tests\MockerExtension;
 
 final class UrlHandlerTest extends AbstractRuleValidatorTest
 {
