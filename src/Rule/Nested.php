@@ -11,18 +11,20 @@ use JetBrains\PhpStorm\ArrayShape;
 use ReflectionProperty;
 use Traversable;
 use Yiisoft\Strings\StringHelper;
-use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\PropagateOptionsInterface;
-use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
+use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
+use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\WhenInterface;
 
 use function array_pop;
 use function count;
@@ -38,13 +40,15 @@ use function sprintf;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
     SerializableRuleInterface,
-    BeforeValidationInterface,
+    SkipOnErrorInterface,
+    WhenInterface,
     SkipOnEmptyInterface,
     PropagateOptionsInterface
 {
-    use BeforeValidationTrait;
     use RuleNameTrait;
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
+    use WhenTrait;
 
     private const SEPARATOR = '.';
     private const EACH_SHORTCUT = '*';
@@ -167,7 +171,11 @@ final class Nested implements
                 continue;
             }
             if (!$rule instanceof RuleInterface) {
-                $message = sprintf('Each rule should be an instance of %s, %s given.', RuleInterface::class, get_debug_type($rule));
+                $message = sprintf(
+                    'Each rule should be an instance of %s, %s given.',
+                    RuleInterface::class,
+                    get_debug_type($rule)
+                );
                 throw new InvalidArgumentException($message);
             }
         }
@@ -230,9 +238,15 @@ final class Nested implements
         $rules = [];
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
             foreach ($attributeRules as $attributeRule) {
-                $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
-                $attributeRule = $attributeRule->skipOnError($this->skipOnError);
-                $attributeRule = $attributeRule->when($this->when);
+                if ($attributeRule instanceof SkipOnEmptyInterface) {
+                    $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
+                }
+                if ($attributeRule instanceof SkipOnErrorInterface) {
+                    $attributeRule = $attributeRule->skipOnError($this->skipOnError);
+                }
+                if ($attributeRule instanceof WhenInterface) {
+                    $attributeRule = $attributeRule->when($this->when);
+                }
 
                 $rules[$attributeRulesIndex][] = $attributeRule;
 
