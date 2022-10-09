@@ -10,6 +10,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class CountTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Count(min: 3);
+        $this->assertSame('count', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

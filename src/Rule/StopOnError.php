@@ -8,7 +8,6 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
-use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -27,7 +26,6 @@ use Yiisoft\Validator\WhenInterface;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class StopOnError implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
-    use RuleNameTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
@@ -63,6 +61,11 @@ final class StopOnError implements SerializableRuleInterface, SkipOnErrorInterfa
                 'Rules for StopOnError rule are required.'
             );
         }
+    }
+
+    public function getName(): string
+    {
+        return 'stopOnError';
     }
 
     /**

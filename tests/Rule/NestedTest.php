@@ -63,7 +63,7 @@ final class NestedTest extends TestCase
     {
         $rule = new Nested();
 
-        $this->assertEquals('nested', $rule->getName());
+        $this->assertSame('nested', $rule->getName());
     }
 
     public function testHandlerClassName(): void

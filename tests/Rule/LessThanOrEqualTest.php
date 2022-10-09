@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class LessThanOrEqualTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new LessThanOrEqual(1);
+        $this->assertSame('lessThanOrEqual', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

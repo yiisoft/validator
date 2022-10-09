@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class SubsetTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Subset([]);
+        $this->assertSame('subset', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

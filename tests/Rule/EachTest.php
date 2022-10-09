@@ -10,6 +10,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class EachTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Each([]);
+        $this->assertSame('each', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

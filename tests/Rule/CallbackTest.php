@@ -12,6 +12,12 @@ use Yiisoft\Validator\ValidationContext;
 
 final class CallbackTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Callback(callback: fn() => new Result());
+        $this->assertSame('callback', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

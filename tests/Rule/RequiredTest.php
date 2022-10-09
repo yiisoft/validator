@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class RequiredTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Required();
+        $this->assertSame('required', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

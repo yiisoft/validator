@@ -12,7 +12,6 @@ use ReflectionProperty;
 use Traversable;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\PropagateOptionsInterface;
-use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -45,7 +44,6 @@ final class Nested implements
     SkipOnEmptyInterface,
     PropagateOptionsInterface
 {
-    use RuleNameTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
@@ -103,6 +101,11 @@ final class Nested implements
         private ?Closure $when = null,
     ) {
         $this->prepareRules($rules);
+    }
+
+    public function getName(): string
+    {
+        return 'nested';
     }
 
     /**

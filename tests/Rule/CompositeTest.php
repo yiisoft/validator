@@ -10,6 +10,12 @@ use Yiisoft\Validator\Rule\Number;
 
 final class CompositeTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Composite([]);
+        $this->assertSame('composite', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [
