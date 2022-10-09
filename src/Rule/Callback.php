@@ -9,26 +9,30 @@ use Closure;
 use InvalidArgumentException;
 use TypeError;
 use Yiisoft\Validator\AttributeEventInterface;
-use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
+use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
+use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\WhenInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Callback implements
     SerializableRuleInterface,
-    BeforeValidationInterface,
+    SkipOnErrorInterface,
+    WhenInterface,
     SkipOnEmptyInterface,
     AttributeEventInterface
 {
-    use BeforeValidationTrait;
     use RuleNameTrait;
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
+    use WhenTrait;
 
     public function __construct(
         /**

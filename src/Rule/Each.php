@@ -7,15 +7,17 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
-use Yiisoft\Validator\BeforeValidationInterface;
 use Yiisoft\Validator\PropagateOptionsInterface;
-use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
+use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
+use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\WhenInterface;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.
@@ -23,17 +25,19 @@ use Yiisoft\Validator\ValidationContext;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
     SerializableRuleInterface,
-    BeforeValidationInterface,
+    SkipOnErrorInterface,
+    WhenInterface,
     SkipOnEmptyInterface,
     PropagateOptionsInterface
 {
-    use BeforeValidationTrait;
     use RuleNameTrait;
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
+    use WhenTrait;
 
     public function __construct(
         /**
-         * @var iterable<BeforeValidationInterface|RuleInterface|SkipOnEmptyInterface>
+         * @var iterable<RuleInterface>
          */
         private iterable $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
@@ -55,9 +59,15 @@ final class Each implements
     {
         $rules = [];
         foreach ($this->rules as $rule) {
-            $rule = $rule->skipOnEmpty($this->skipOnEmpty);
-            $rule = $rule->skipOnError($this->skipOnError);
-            $rule = $rule->when($this->when);
+            if ($rule instanceof SkipOnEmptyInterface) {
+                $rule = $rule->skipOnEmpty($this->skipOnEmpty);
+            }
+            if ($rule instanceof SkipOnErrorInterface) {
+                $rule = $rule->skipOnError($this->skipOnError);
+            }
+            if ($rule instanceof WhenInterface) {
+                $rule = $rule->when($this->when);
+            }
 
             $rules[] = $rule;
 
@@ -70,7 +80,7 @@ final class Each implements
     }
 
     /**
-     * @return iterable<BeforeValidationInterface|BeforeValidationInterface[]|\Closure|\Closure[]|RuleInterface|RuleInterface[]|SkipOnEmptyInterface|SkipOnEmptyInterface[]>
+     * @return iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>
      */
     public function getRules(): iterable
     {

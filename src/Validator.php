@@ -138,7 +138,7 @@ final class Validator implements ValidatorInterface
     {
         $compoundResult = new Result();
         foreach ($rules as $rule) {
-            if ($rule instanceof BeforeValidationInterface && $this->preValidate($value, $context, $rule)) {
+            if ($this->preValidate($value, $context, $rule)) {
                 continue;
             }
 

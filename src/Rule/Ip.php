@@ -8,13 +8,15 @@ use Attribute;
 use Closure;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
-use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
+use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
+use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\WhenInterface;
 
 use function array_key_exists;
 use function strlen;
@@ -25,11 +27,12 @@ use function strlen;
  * It also may change the value if normalization of IPv6 expansion is enabled.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Ip implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
+final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
-    use BeforeValidationTrait;
     use RuleNameTrait;
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
+    use WhenTrait;
 
     /**
      * Negation char.

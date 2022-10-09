@@ -7,13 +7,15 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use RuntimeException;
-use Yiisoft\Validator\BeforeValidationInterface;
-use Yiisoft\Validator\Rule\Trait\BeforeValidationTrait;
 use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
+use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
+use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\WhenInterface;
 
 /**
  * Validates that the value is a valid HTTP or HTTPS URL.
@@ -22,11 +24,12 @@ use Yiisoft\Validator\ValidationContext;
  * It does not check the remaining parts of a URL.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Url implements SerializableRuleInterface, BeforeValidationInterface, SkipOnEmptyInterface
+final class Url implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
-    use BeforeValidationTrait;
     use RuleNameTrait;
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
+    use WhenTrait;
 
     public function __construct(
         /**
