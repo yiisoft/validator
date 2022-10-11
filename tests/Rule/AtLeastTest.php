@@ -69,14 +69,14 @@ final class AtLeastTest extends TestCase
     {
         return [
             [
-                new class() {
+                new class () {
                     public $attr1 = 1;
                     public $attr2 = null;
                 },
                 [new AtLeast(['attr1', 'attr2'])],
             ],
             [
-                new class() {
+                new class () {
                     public $attr1 = null;
                     public $attr2 = 1;
                 },
@@ -91,12 +91,12 @@ final class AtLeastTest extends TestCase
                 [new AtLeast(['attr2'])],
             ],
             [
-                new class() {
+                new class () {
                     public $obj;
 
                     public function __construct()
                     {
-                        $this->obj = new class() {
+                        $this->obj = new class () {
                             public $attr1 = 1;
                             public $attr2 = null;
                         };
@@ -105,12 +105,12 @@ final class AtLeastTest extends TestCase
                 ['obj' => new AtLeast(['attr1', 'attr2'])],
             ],
             [
-                new class() {
+                new class () {
                     public $obj;
 
                     public function __construct()
                     {
-                        $this->obj = new class() {
+                        $this->obj = new class () {
                             public $attr1 = null;
                             public $attr2 = 1;
                         };
@@ -143,7 +143,7 @@ final class AtLeastTest extends TestCase
     {
         return [
             [
-                new class() {
+                new class () {
                     public $attr1 = 1;
                     public $attr2 = null;
                 },
@@ -151,7 +151,7 @@ final class AtLeastTest extends TestCase
                 ['' => ['The model is not valid. Must have at least "1" filled attributes.']],
             ],
             [
-                new class() {
+                new class () {
                     public $attr1 = 1;
                     public $attr2 = null;
                 },
@@ -174,7 +174,7 @@ final class AtLeastTest extends TestCase
 
     public function testCustomErrorMessage(): void
     {
-        $object = new class() {
+        $object = new class () {
             public $attr1 = 1;
             public $attr2 = null;
         };
