@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule\Trait;
 
-use Yiisoft\Validator\BeforeValidationInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnEmptyNormalizer;
+use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
-
-use function is_callable;
+use Yiisoft\Validator\WhenInterface;
 
 trait PreValidateTrait
 {
@@ -18,7 +18,7 @@ trait PreValidateTrait
     private function preValidate(
         $value,
         ValidationContext $context,
-        BeforeValidationInterface $rule
+        RuleInterface $rule
     ): bool {
         if (
             $rule instanceof SkipOnEmptyInterface &&
@@ -27,10 +27,19 @@ trait PreValidateTrait
             return true;
         }
 
-        if ($rule->shouldSkipOnError() && $context->getParameter($this->parameterPreviousRulesErrored) === true) {
+        if (
+            $rule instanceof SkipOnErrorInterface
+            && $rule->shouldSkipOnError()
+            && $context->getParameter($this->parameterPreviousRulesErrored) === true
+        ) {
             return true;
         }
 
-        return is_callable($rule->getWhen()) && !($rule->getWhen())($value, $context);
+        if ($rule instanceof WhenInterface) {
+            $when = $rule->getWhen();
+            return $when !== null && !$when($value, $context);
+        }
+
+        return false;
     }
 }
