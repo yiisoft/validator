@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class BooleanTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Boolean();
+        $this->assertSame('boolean', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

@@ -10,7 +10,6 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
-use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -24,7 +23,6 @@ use Yiisoft\Validator\WhenInterface;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class IsTrue implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
-    use RuleNameTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
@@ -51,6 +49,11 @@ final class IsTrue implements SerializableRuleInterface, SkipOnErrorInterface, W
          */
         private ?Closure $when = null,
     ) {
+    }
+
+    public function getName(): string
+    {
+        return 'isTrue';
     }
 
     public function getTrueValue(): mixed

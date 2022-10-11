@@ -9,6 +9,12 @@ use Yiisoft\Validator\Rule\CompareTo;
 
 final class CompareToTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new CompareTo();
+        $this->assertSame('compareTo', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

@@ -66,4 +66,9 @@ final class LessThanOrEqual extends Compare
             when: $this->when
         );
     }
+
+    public function getName(): string
+    {
+        return 'lessThanOrEqual';
+    }
 }

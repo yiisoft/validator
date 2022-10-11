@@ -21,12 +21,6 @@ abstract class AbstractRuleTest extends TestCase
         $this->assertEquals($expectedOptions, $options);
     }
 
-    public function testGetName(): void
-    {
-        $rule = $this->getRule();
-        $this->assertEquals(lcfirst(substr($rule::class, strrpos($rule::class, '\\') + 1)), $rule->getName());
-    }
-
     public function testHandlerClassName(): void
     {
         $translator = (new TranslatorFactory())->create();

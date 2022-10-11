@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class UrlTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Url();
+        $this->assertSame('url', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         if (!extension_loaded('intl')) {

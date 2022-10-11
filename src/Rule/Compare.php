@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use Closure;
 use InvalidArgumentException;
 use RuntimeException;
-use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -19,7 +18,6 @@ use Yiisoft\Validator\WhenInterface;
 
 abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
 {
-    use RuleNameTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;

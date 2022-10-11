@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class NumberTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Number();
+        $this->assertSame('number', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

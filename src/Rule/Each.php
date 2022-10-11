@@ -8,7 +8,6 @@ use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\PropagateOptionsInterface;
-use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -30,7 +29,6 @@ final class Each implements
     SkipOnEmptyInterface,
     PropagateOptionsInterface
 {
-    use RuleNameTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
@@ -53,6 +51,11 @@ final class Each implements
          */
         private ?Closure $when = null,
     ) {
+    }
+
+    public function getName(): string
+    {
+        return 'each';
     }
 
     public function propagateOptions(): void

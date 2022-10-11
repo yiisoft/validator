@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class AtLeastTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new AtLeast([]);
+        $this->assertSame('atLeast', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

@@ -70,4 +70,9 @@ final class Equal extends Compare
             when: $this->when
         );
     }
+
+    public function getName(): string
+    {
+        return 'equal';
+    }
 }

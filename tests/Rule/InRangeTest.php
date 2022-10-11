@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class InRangeTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new InRange(range(1, 10));
+        $this->assertSame('inRange', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

@@ -10,6 +10,12 @@ use Yiisoft\Validator\Rule\HasLength;
 
 final class HasLengthTest extends TestCase
 {
+    public function testGetName(): void
+    {
+        $rule = new HasLength(min: 3);
+        $this->assertSame('hasLength', $rule->getName());
+    }
+
     /**
      * @dataProvider getOptionsProvider
      */

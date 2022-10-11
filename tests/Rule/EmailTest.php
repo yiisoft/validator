@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class EmailTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Email();
+        $this->assertSame('email', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         if (!extension_loaded('intl')) {

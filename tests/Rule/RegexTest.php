@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class RegexTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Regex('//');
+        $this->assertSame('regex', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

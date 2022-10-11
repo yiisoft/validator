@@ -70,4 +70,9 @@ final class NotEqual extends Compare
             when: $this->when
         );
     }
+
+    public function getName(): string
+    {
+        return 'notEqual';
+    }
 }
