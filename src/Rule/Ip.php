@@ -8,7 +8,6 @@ use Attribute;
 use Closure;
 use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
-use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -29,7 +28,6 @@ use function strlen;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
-    use RuleNameTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
@@ -228,6 +226,11 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
         }
 
         $this->ranges = $this->prepareRanges($ranges);
+    }
+
+    public function getName(): string
+    {
+        return 'ip';
     }
 
     public function getNetworks(): array

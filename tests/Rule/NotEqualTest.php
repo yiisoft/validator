@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class NotEqualTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new NotEqual(1);
+        $this->assertSame('notEqual', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

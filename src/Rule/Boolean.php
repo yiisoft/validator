@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -22,7 +21,6 @@ use Yiisoft\Validator\WhenInterface;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
 {
-    use RuleNameTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
@@ -54,6 +52,11 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
          */
         private ?Closure $when = null,
     ) {
+    }
+
+    public function getName(): string
+    {
+        return 'boolean';
     }
 
     public function getTrueValue(): mixed

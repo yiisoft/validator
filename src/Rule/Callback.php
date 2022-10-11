@@ -11,7 +11,6 @@ use TypeError;
 use Yiisoft\Validator\AttributeEventInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -29,7 +28,6 @@ final class Callback implements
     SkipOnEmptyInterface,
     AttributeEventInterface
 {
-    use RuleNameTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
@@ -58,6 +56,11 @@ final class Callback implements
         if ($this->callback !== null && $this->method !== null) {
             throw new InvalidArgumentException('"$callback" and "$method" are mutually exclusive.');
         }
+    }
+
+    public function getName(): string
+    {
+        return 'callback';
     }
 
     public function getCallback(): ?callable

@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class StopOnErrorTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new StopOnError();
+        $this->assertSame('stopOnError', $rule->getName());
+    }
+
     public function testSkipOnEmptyInConstructor(): void
     {
         $rule = new StopOnError(skipOnEmpty: true);

@@ -26,4 +26,9 @@ final class CompareTo extends Compare
     {
         return CompareHandler::class;
     }
+
+    public function getName(): string
+    {
+        return 'compareTo';
+    }
 }

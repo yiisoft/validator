@@ -8,7 +8,6 @@ use Attribute;
 use Closure;
 use Countable;
 use Yiisoft\Validator\Rule\Trait\LimitTrait;
-use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -26,7 +25,6 @@ use Yiisoft\Validator\WhenInterface;
 final class Count implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use LimitTrait;
-    use RuleNameTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
@@ -92,6 +90,11 @@ final class Count implements SerializableRuleInterface, SkipOnErrorInterface, Wh
             $greaterThanMaxMessage,
             $notExactlyMessage
         );
+    }
+
+    public function getName(): string
+    {
+        return 'count';
     }
 
     public function getMessage(): string

@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use Yiisoft\Validator\Rule\Trait\LimitTrait;
-use Yiisoft\Validator\Rule\Trait\RuleNameTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -26,7 +25,6 @@ use Yiisoft\Validator\WhenInterface;
 final class HasLength implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use LimitTrait;
-    use RuleNameTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
@@ -91,6 +89,11 @@ final class HasLength implements SerializableRuleInterface, SkipOnErrorInterface
             $greaterThanMaxMessage,
             $notExactlyMessage
         );
+    }
+
+    public function getName(): string
+    {
+        return 'hasLength';
     }
 
     public function getMessage(): string

@@ -10,6 +10,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class IpTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Ip();
+        $this->assertSame('ip', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [

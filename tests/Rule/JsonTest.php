@@ -9,6 +9,12 @@ use Yiisoft\Validator\SerializableRuleInterface;
 
 final class JsonTest extends AbstractRuleTest
 {
+    public function testGetName(): void
+    {
+        $rule = new Json();
+        $this->assertSame('json', $rule->getName());
+    }
+
     public function optionsDataProvider(): array
     {
         return [
