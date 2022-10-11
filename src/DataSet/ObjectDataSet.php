@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\DataSet;
 
+use JetBrains\PhpStorm\ArrayShape;
 use ReflectionAttribute;
 use ReflectionObject;
 use ReflectionProperty;
 use Yiisoft\Validator\AttributeEventInterface;
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\ObjectDataSetInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 
 use function array_key_exists;
+use function get_class;
 
 /**
  * This data set makes use of attributes introduced in PHP 8. It simplifies rules configuration process, especially for
@@ -21,15 +22,23 @@ use function array_key_exists;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  */
-final class ObjectDataSet implements RulesProviderInterface, ObjectDataSetInterface
+final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 {
     private bool $dataSetProvided;
     /**
      * @var ReflectionProperty[]
      */
     private ?array $reflectionProperties = null;
-    private ?iterable $rules = null;
     private ?array $data = null;
+
+    #[ArrayShape([
+        [
+            'rules' => 'iterable',
+            'propertyVisibility' => 'int',
+        ],
+    ])]
+    private static array $cache = [];
+    private string $cacheKey;
 
     public function __construct(
         private object $object,
@@ -38,23 +47,22 @@ final class ObjectDataSet implements RulesProviderInterface, ObjectDataSetInterf
         ReflectionProperty::IS_PUBLIC
     ) {
         $this->dataSetProvided = $this->object instanceof DataSetInterface;
+        $this->cacheKey = get_class($this->object);
     }
 
     public function getRules(): iterable
     {
-        if ($this->rules !== null) {
-            return $this->rules;
-        }
-
         $objectHasRules = $this->object instanceof RulesProviderInterface;
         $rules = $objectHasRules ? $this->object->getRules() : [];
 
         // Providing data set assumes object has its own attributes and rules getting logic. So further parsing of
         // Reflection properties and rules is skipped intentionally.
         if ($this->dataSetProvided || $objectHasRules === true) {
-            $this->rules = $rules;
-
             return $rules;
+        }
+
+        if ($this->hasCache() && $this->propertyVisibility === $this->getCacheItem('propertyVisibility')) {
+            return $this->getCacheItem('rules');
         }
 
         foreach ($this->getReflectionProperties() as $property) {
@@ -69,7 +77,8 @@ final class ObjectDataSet implements RulesProviderInterface, ObjectDataSetInterf
             }
         }
 
-        $this->rules = $rules;
+        $this->updateCacheItem('rules', $rules);
+        $this->updateCacheItem('propertyVisibility', $this->propertyVisibility);
 
         return $rules;
     }
@@ -107,11 +116,6 @@ final class ObjectDataSet implements RulesProviderInterface, ObjectDataSetInterf
         $this->reflectionProperties = $reflectionProperties;
 
         return $reflectionProperties;
-    }
-
-    public function getPropertyVisibility(): int
-    {
-        return $this->propertyVisibility;
     }
 
     public function getObject(): object
@@ -153,5 +157,24 @@ final class ObjectDataSet implements RulesProviderInterface, ObjectDataSetInterf
         $this->data = $data;
 
         return $data;
+    }
+
+    private function hasCache(): bool
+    {
+        return isset(self::$cache[$this->cacheKey]);
+    }
+
+    #[ArrayShape([
+        'rules' => 'iterable',
+        'propertyVisibility' => 'int',
+    ])]
+    private function getCacheItem(string $key): mixed
+    {
+        return self::$cache[$this->cacheKey][$key];
+    }
+
+    private function updateCacheItem(string $key, mixed $value): void
+    {
+        self::$cache[$this->cacheKey][$key] = $value;
     }
 }

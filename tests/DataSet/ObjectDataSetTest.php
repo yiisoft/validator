@@ -6,9 +6,7 @@ namespace Yiisoft\Validator\Tests\DataSet;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
-use Yiisoft\Validator\DataSet\CacheObjectDataSetDecorator;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
-use Yiisoft\Validator\ObjectDataSetInterface;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Stub\ObjectWithCallsCount;
@@ -76,8 +74,7 @@ final class ObjectDataSetTest extends TestCase
     ): void {
         $dataSets = [
             $initialDataSet,
-            new CacheObjectDataSetDecorator($initialDataSet),
-            new CacheObjectDataSetDecorator($initialDataSet), // Not a duplicate. Used to test caching.
+            $initialDataSet, // Not a duplicate. Used to test caching.
         ];
         foreach ($dataSets as $dataSet) {
             /** @var ObjectDataSet $dataSet */
@@ -101,16 +98,13 @@ final class ObjectDataSetTest extends TestCase
             [new ObjectDataSet(new ObjectWithDataSet())], // Not a duplicate. Used to test caching.
             [$dataSet],
             [$dataSet], // Not a duplicate. Used to test caching.
-            [new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithDataSet()))],
-            // Not a duplicate. Used to test caching.
-            [new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithDataSet()))],
         ];
     }
 
     /**
      * @dataProvider objectWithDataSetDataProvider
      */
-    public function testObjectWithDataSet(ObjectDataSetInterface $dataSet): void
+    public function testObjectWithDataSet(ObjectDataSet $dataSet): void
     {
         $this->assertSame(['key1' => 7, 'key2' => 42], $dataSet->getData());
         $this->assertSame(7, $dataSet->getAttributeValue('key1'));
@@ -133,16 +127,13 @@ final class ObjectDataSetTest extends TestCase
             [new ObjectDataSet(new ObjectWithRulesProvider())], // Not a duplicate. Used to test caching.
             [$dataSet],
             [$dataSet], // Not a duplicate. Used to test caching.
-            [new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithRulesProvider()))],
-            // Not a duplicate. Used to test caching.
-            [new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithRulesProvider()))],
         ];
     }
 
     /**
      * @dataProvider objectWithRulesProvider
      */
-    public function testObjectWithRulesProvider(ObjectDataSetInterface $dataSet): void
+    public function testObjectWithRulesProvider(ObjectDataSet $dataSet): void
     {
         $rules = $dataSet->getRules();
 
@@ -168,16 +159,13 @@ final class ObjectDataSetTest extends TestCase
             [new ObjectDataSet(new ObjectWithDataSetAndRulesProvider())], // Not a duplicate. Used to test caching.
             [$dataSet],
             [$dataSet], // Not a duplicate. Used to test caching.
-            [new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithDataSetAndRulesProvider()))],
-            // Not a duplicate. Used to test caching.
-            [new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithDataSetAndRulesProvider()))],
         ];
     }
 
     /**
      * @dataProvider objectWithDataSetAndRulesProviderDataProvider
      */
-    public function testObjectWithDataSetAndRulesProvider(ObjectDataSetInterface $dataSet): void
+    public function testObjectWithDataSetAndRulesProvider(ObjectDataSet $dataSet): void
     {
         $rules = $dataSet->getRules();
 
@@ -209,21 +197,13 @@ final class ObjectDataSetTest extends TestCase
                 new ObjectDataSet(new ObjectWithDynamicDataSet('B')),
                 ['name' => 'B'],
             ],
-            [
-                new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithDynamicDataSet('A'))),
-                ['name' => 'A'],
-            ],
-            [
-                new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithDynamicDataSet('B'))),
-                ['name' => 'B'],
-            ],
         ];
     }
 
     /**
      * @dataProvider objectWithDynamicDataSetProvider
      */
-    public function testObjectWithDynamicDataSet(ObjectDataSetInterface $dataSet, array $expectedData): void
+    public function testObjectWithDynamicDataSet(ObjectDataSet $dataSet, array $expectedData): void
     {
         $this->assertSame($expectedData, $dataSet->getData());
     }
@@ -246,23 +226,14 @@ final class ObjectDataSetTest extends TestCase
                     $objectDataSet,
                     $objectDataSet, // Not a duplicate. Used to test caching.
                 ],
-                1,
-                1,
-            ],
-            [
-                [
-                    new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithCallsCount())),
-                    // Not a duplicate. Used to test caching.
-                    new CacheObjectDataSetDecorator(new ObjectDataSet(new ObjectWithCallsCount())),
-                ],
-                1,
                 2,
+                1,
             ],
         ];
     }
 
     /**
-     * @param ObjectDataSetInterface[] $objectDataSets
+     * @param ObjectDataSet[] $objectDataSets
      * @dataProvider cachingDataProvider
      */
     public function testCaching(array $objectDataSets, int $expectedRulesCallsCount, int $expectedDataCallsCount): void
