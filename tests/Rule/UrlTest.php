@@ -82,8 +82,8 @@ final class UrlTest extends TestCase
      */
     public function testOptions(Url $rule, array $expectedOptions): void
     {
-        if (extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
         $options = $rule->getOptions();
@@ -130,8 +130,8 @@ final class UrlTest extends TestCase
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
-        if (extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
         $result = ValidatorFactory::make()->validate($data, $rules);
@@ -171,8 +171,8 @@ final class UrlTest extends TestCase
      */
     public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
     {
-        if (extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
         $result = ValidatorFactory::make()->validate($data, $rules);
@@ -183,8 +183,8 @@ final class UrlTest extends TestCase
 
     public function testCustomErrorMessage(): void
     {
-        if (extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
         $data = '';

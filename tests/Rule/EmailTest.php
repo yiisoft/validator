@@ -92,8 +92,8 @@ final class EmailTest extends TestCase
      */
     public function testOptions(Email $rule, array $expectedOptions): void
     {
-        if (extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
         $options = $rule->getOptions();
