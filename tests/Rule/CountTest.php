@@ -10,6 +10,8 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\CountHandler;
+use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 final class CountTest extends TestCase
@@ -193,5 +195,16 @@ final class CountTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('At least one of these attributes must be specified: $min, $max, $exactly.');
         new Count();
+    }
+
+    public function testDifferentRuleInHandler(): void
+    {
+        $rule = new RuleWithCustomHandler(CountHandler::class);
+        $validator = ValidatorFactory::make();
+
+        $this->expectExceptionMessageMatches(
+            '/.*' . preg_quote(Count::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
+        );
+        $validator->validate([], [$rule]);
     }
 }

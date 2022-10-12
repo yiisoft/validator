@@ -7,6 +7,8 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Rule\Regex;
+use Yiisoft\Validator\Rule\RegexHandler;
+use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 final class RegexTest extends TestCase
@@ -125,5 +127,16 @@ final class RegexTest extends TestCase
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testDifferentRuleInHandler(): void
+    {
+        $rule = new RuleWithCustomHandler(RegexHandler::class);
+        $validator = ValidatorFactory::make();
+
+        $this->expectExceptionMessageMatches(
+            '/.*' . preg_quote(Regex::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
+        );
+        $validator->validate([], [$rule]);
     }
 }

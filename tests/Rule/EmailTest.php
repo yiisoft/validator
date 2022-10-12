@@ -7,6 +7,8 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Email;
+use Yiisoft\Validator\Rule\EmailHandler;
+use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 final class EmailTest extends TestCase
@@ -320,5 +322,16 @@ final class EmailTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         new Email(enableIDN: true);
+    }
+
+    public function testDifferentRuleInHandler(): void
+    {
+        $rule = new RuleWithCustomHandler(EmailHandler::class);
+        $validator = ValidatorFactory::make();
+
+        $this->expectExceptionMessageMatches(
+            '/.*' . preg_quote(Email::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
+        );
+        $validator->validate([], [$rule]);
     }
 }
