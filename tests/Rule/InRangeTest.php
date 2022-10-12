@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use ArrayObject;
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\InRange;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Rule\InRangeHandler;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
+use Yiisoft\Validator\Validator;
 
-final class InRangeTest extends AbstractRuleTest
+final class InRangeTest extends TestCase
 {
     public function testGetName(): void
     {
@@ -15,7 +20,7 @@ final class InRangeTest extends AbstractRuleTest
         $this->assertSame('inRange', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -60,8 +65,111 @@ final class InRangeTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    /**
+     * @dataProvider dataOptions
+     */
+    public function testOptions(InRange $rule, array $expectedOptions): void
     {
-        return new InRange([]);
+        $options = $rule->getOptions();
+        $this->assertSame($expectedOptions, $options);
+    }
+
+    public function dataValidationPassed(): array
+    {
+        return [
+            [1, [new InRange(range(1, 10))]],
+            [10, [new InRange(range(1, 10))]],
+            ['10', [new InRange(range(1, 10))]],
+            ['5', [new InRange(range(1, 10))]],
+
+            [['a'], [new InRange([['a'], ['b']])]],
+            ['a', [new InRange(new ArrayObject(['a', 'b']))]],
+
+            [1, [new InRange(range(1, 10), strict: true)]],
+            [5, [new InRange(range(1, 10), strict: true)]],
+            [10, [new InRange(range(1, 10), strict: true)]],
+
+            [0, [new InRange(range(1, 10), not: true)]],
+            [11, [new InRange(range(1, 10), not: true)]],
+            [5.5, [new InRange(range(1, 10), not: true)]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationPassed
+     */
+    public function testValidationPassed(mixed $data, array $rules): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function dataValidationFailed(): array
+    {
+        $errors = ['' => ['This value is invalid.']];
+
+        return [
+            [0, [new InRange(range(1, 10))], $errors],
+            [11, [new InRange(range(1, 10))], $errors],
+            [5.5, [new InRange(range(1, 10))], $errors],
+
+            [null, [new InRange(range(1, 10))], $errors],
+            ['0', [new InRange(range(1, 10))], $errors],
+            [0, [new InRange(range(1, 10))], $errors],
+            ['', [new InRange(range(1, 10))], $errors],
+
+            ['1', [new InRange(range(1, 10), strict: true)], $errors],
+            ['10', [new InRange(range(1, 10), strict: true)], $errors],
+            ['5.5', [new InRange(range(1, 10), strict: true)], $errors],
+            [['1', '2', '3', '4', '5', '6'], [new InRange(range(1, 10), strict: true)], $errors],
+            [['1', '2', '3', 4, 5, 6], [new InRange(range(1, 10), strict: true)], $errors],
+
+            [1, [new InRange(range(1, 10), not: true)], $errors],
+            [10, [new InRange(range(1, 10), not: true)], $errors],
+            ['10', [new InRange(range(1, 10), not: true)], $errors],
+            ['5', [new InRange(range(1, 10), not: true)], $errors],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationFailed
+     */
+    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testCustomErrorMessage(): void
+    {
+        $data = 15;
+        $rules = [new InRange(range(1, 10), message: 'Custom error')];
+
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            ['' => ['Custom error']],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    public function testDifferentRuleInHandler(): void
+    {
+        $rule = new RuleWithCustomHandler(InRangeHandler::class);
+        $validator = $this->createValidator();
+
+        $this->expectExceptionMessageMatches(
+            '/.*' . preg_quote(InRange::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
+        );
+        $validator->validate([], [$rule]);
+    }
+
+    private function createValidator(): Validator
+    {
+        return FakeValidatorFactory::make();
     }
 }
