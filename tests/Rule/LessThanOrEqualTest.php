@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Yiisoft\Validator\Rule\LessThanOrEqual;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Validator;
 
-final class LessThanOrEqualTest extends AbstractRuleTest
+final class LessThanOrEqualTest extends TestCase
 {
     public function testGetName(): void
     {
@@ -15,7 +18,7 @@ final class LessThanOrEqualTest extends AbstractRuleTest
         $this->assertSame('lessThanOrEqual', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -116,16 +119,78 @@ final class LessThanOrEqualTest extends AbstractRuleTest
         ];
     }
 
-    public function testWithoutParameters()
+    /**
+     * @dataProvider dataOptions
+     */
+    public function testOptions(LessThanOrEqual $rule, array $expectedOptions): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-
-        $rule = new LessThanOrEqual();
+        $options = $rule->getOptions();
+        $this->assertSame($expectedOptions, $options);
     }
 
-    protected function getRule(): SerializableRuleInterface
+    public function testWithoutParameters(): void
     {
-        return new LessThanOrEqual(1);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+        new LessThanOrEqual();
+    }
+
+    public function dataValidationPassed(): array
+    {
+        return [
+            [100, [new LessThanOrEqual(101)]],
+            [100, [new LessThanOrEqual(100)]],
+            ['100', [new LessThanOrEqual('101')]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationPassed
+     */
+    public function testValidationPassed(mixed $data, array $rules): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function dataValidationFailed(): array
+    {
+        $message = 'Value must be less than or equal to "100".';
+
+        return [
+            [101, [new LessThanOrEqual(100)], ['' => [$message]]],
+            ['101', [new LessThanOrEqual(100)], ['' => [$message]]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationFailed
+     */
+    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testCustomErrorMessage(): void
+    {
+        $data = 101;
+        $rules = [new LessThanOrEqual(100, message: 'Custom error')];
+
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            ['' => ['Custom error']],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    private function createValidator(): Validator
+    {
+        return FakeValidatorFactory::make();
     }
 }
