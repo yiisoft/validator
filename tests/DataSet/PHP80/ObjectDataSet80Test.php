@@ -12,14 +12,14 @@ use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Tests\Data\Post;
-use Yiisoft\Validator\Tests\Data\TitleTrait;
+use Yiisoft\Validator\Tests\Support\Data\Post;
+use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
-use Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod\ObjectWithCallbackMethod;
-use Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod\ObjectWithNonExistingCallbackMethod;
-use Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod\ObjectWithNonPublicCallbackMethod;
-use Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod\ObjectWithNonStaticCallbackMethod;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithCallbackMethod;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonExistingCallbackMethod;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonPublicCallbackMethod;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonStaticCallbackMethod;
 
 final class ObjectDataSet80Test extends TestCase
 {

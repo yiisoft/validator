@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Data;
+namespace Yiisoft\Validator\Tests\Support\Data;
 
 final class Post
 {

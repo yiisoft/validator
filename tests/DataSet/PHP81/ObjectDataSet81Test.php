@@ -14,8 +14,8 @@ use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Tests\Data\Charts\Chart;
-use Yiisoft\Validator\Tests\Data\TitleTrait;
+use Yiisoft\Validator\Tests\Support\Data\Charts\Chart;
+use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
 
 final class ObjectDataSet81Test extends TestCase

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub\EachNestedObjects;
+namespace Yiisoft\Validator\Tests\Support\Data\EachNestedObjects;
 
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Nested;

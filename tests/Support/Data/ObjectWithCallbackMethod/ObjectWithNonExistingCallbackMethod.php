@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod;
+namespace Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod;
 
 use Yiisoft\Validator\Rule\Callback;
 

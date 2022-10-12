@@ -9,7 +9,7 @@ use ReflectionProperty;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Validator;
 
 final class NestedTest extends TestCase

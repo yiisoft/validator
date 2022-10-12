@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub\InheritAttributesObject;
+namespace Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject;
 
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\Number;

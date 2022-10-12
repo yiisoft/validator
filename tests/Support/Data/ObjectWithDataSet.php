@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub;
+namespace Yiisoft\Validator\Tests\Support\Data;
 
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Rule\Number;

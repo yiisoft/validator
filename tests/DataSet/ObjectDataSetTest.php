@@ -9,10 +9,10 @@ use ReflectionProperty;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDataSet;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDataSetAndRulesProvider;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
-use Yiisoft\Validator\Tests\Stub\ObjectWithRulesProvider;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 
 final class ObjectDataSetTest extends TestCase
 {
