@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\SerializableRuleInterface;
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\CompareTo;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Validator;
 
-final class CompareToTest extends AbstractRuleTest
+final class CompareToTest extends TestCase
 {
     public function testGetName(): void
     {
@@ -15,7 +17,7 @@ final class CompareToTest extends AbstractRuleTest
         $this->assertSame('compareTo', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -192,8 +194,124 @@ final class CompareToTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    /**
+     * @dataProvider dataOptions
+     */
+    public function testOptions(CompareTo $rule, array $expectedOptions): void
     {
-        return new CompareTo(1);
+        $options = $rule->getOptions();
+        $this->assertSame($expectedOptions, $options);
+    }
+
+    public function dataValidationPassed(): array
+    {
+        return [
+            [100, [new CompareTo(100)]],
+            [['attribute' => 100, 'number' => 100], ['number' => new CompareTo(null, 'attribute')]],
+            ['100', [new CompareTo(100)]],
+
+            [100, [new CompareTo(100, operator: '===')]],
+            ['100', [new CompareTo(100, operator: '===')]],
+            [100.0, [new CompareTo(100, operator: '===')]],
+
+            [100.00001, [new CompareTo(100, operator: '!=')]],
+            [false, [new CompareTo(100, operator: '!=')]],
+
+            [false, [new CompareTo(100, operator: '!==')]],
+
+            [101, [new CompareTo(100, operator: '>')]],
+
+            [100, [new CompareTo(100, operator: '>=')]],
+            [101, [new CompareTo(100, operator: '>=')]],
+            [99, [new CompareTo(100, operator: '<')]],
+
+            [100, [new CompareTo(100, operator: '<=')]],
+            [99, [new CompareTo(100, operator: '<=')]],
+            [['attribute' => 100, 'number' => 99], ['number' => new CompareTo(null, 'attribute', operator: '<=')]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationPassed
+     */
+    public function testValidationPassed(mixed $data, array $rules): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function dataValidationFailed(): array
+    {
+        $messageEqual = 'Value must be equal to "100".';
+        $messageNotEqual = 'Value must not be equal to "100".';
+        $messageGreaterThan = 'Value must be greater than "100".';
+        $messageGreaterOrEqualThan = 'Value must be greater than or equal to "100".';
+        $messageLessThan = 'Value must be less than "100".';
+        $messageLessOrEqualThan = 'Value must be less than or equal to "100".';
+
+        return [
+            [101, [new CompareTo(100)], ['' => [$messageEqual]]],
+
+            [101, [new CompareTo(100, operator: '===')], ['' => [$messageEqual]]],
+            [
+                ['attribute' => 100, 'number' => 101],
+                ['number' => new CompareTo(null, 'attribute', operator: '===')],
+                ['number' => [$messageEqual]]
+            ],
+
+            [100, [new CompareTo(100, operator: '!=')], ['' => [$messageNotEqual]]],
+            ['100', [new CompareTo(100, operator: '!=')], ['' => [$messageNotEqual]]],
+            [100.0, [new CompareTo(100, operator: '!=')], ['' => [$messageNotEqual]]],
+
+            [100, [new CompareTo(100, operator: '!==')], ['' => [$messageNotEqual]]],
+            ['100', [new CompareTo(100, operator: '!==')], ['' => [$messageNotEqual]]],
+            [100.0, [new CompareTo(100, operator: '!==')], ['' => [$messageNotEqual]]],
+
+            [100, [new CompareTo(100, operator: '>')], ['' => [$messageGreaterThan]]],
+            [99, [new CompareTo(100, operator: '>')], ['' => [$messageGreaterThan]]],
+
+            [99, [new CompareTo(100, operator: '>=')], ['' => [$messageGreaterOrEqualThan]]],
+
+            [100, [new CompareTo(100, operator: '<')], ['' => [$messageLessThan]]],
+            [101, [new CompareTo(100, operator: '<')], ['' => [$messageLessThan]]],
+
+            [101, [new CompareTo(100, operator: '<=')], ['' => [$messageLessOrEqualThan]]],
+            [
+                ['attribute' => 100, 'number' => 101],
+                ['number' => new CompareTo(null, 'attribute', operator: '<=')],
+                ['number' => [$messageLessOrEqualThan]]
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationFailed
+     */
+    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testCustomErrorMessage(): void
+    {
+        $data = 101;
+        $rules = [new CompareTo(100, message: 'Custom error')];
+
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            ['' => ['Custom error']],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    private function createValidator(): Validator
+    {
+        return FakeValidatorFactory::make();
     }
 }
