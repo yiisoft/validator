@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Yiisoft\Validator\Rule\GreaterThanOrEqual;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Validator;
 
-final class GreaterThanOrEqualTest extends AbstractRuleTest
+final class GreaterThanOrEqualTest extends TestCase
 {
     public function testGetName(): void
     {
@@ -15,7 +18,7 @@ final class GreaterThanOrEqualTest extends AbstractRuleTest
         $this->assertSame('greaterThanOrEqual', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -116,16 +119,77 @@ final class GreaterThanOrEqualTest extends AbstractRuleTest
         ];
     }
 
-    public function testWithoutParameters()
+    /**
+     * @dataProvider dataOptions
+     */
+    public function testOptions(GreaterThanOrEqual $rule, array $expectedOptions): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-
-        $rule = new GreaterThanOrEqual();
+        $options = $rule->getOptions();
+        $this->assertSame($expectedOptions, $options);
     }
 
-    protected function getRule(): SerializableRuleInterface
+    public function dataValidationPassed(): array
     {
-        return new GreaterThanOrEqual(1);
+        return [
+            [100, [new GreaterThanOrEqual(99)]],
+            ['100', [new GreaterThanOrEqual('100')]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationPassed
+     */
+    public function testValidationPassed(mixed $data, array $rules): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function dataValidationFailed(): array
+    {
+        $message = 'Value must be greater than or equal to "100".';
+
+        return [
+            [99, [new GreaterThanOrEqual(100)], ['' => [$message]]],
+            ['99', [new GreaterThanOrEqual(100)], ['' => [$message]]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationFailed
+     */
+    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testCustomErrorMessage(): void
+    {
+        $data = 99;
+        $rules = [new GreaterThanOrEqual(100, message: 'Custom error')];
+
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            ['' => ['Custom error']],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    public function testWithoutParameters(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+        new GreaterThanOrEqual();
+    }
+
+    private function createValidator(): Validator
+    {
+        return FakeValidatorFactory::make();
     }
 }
