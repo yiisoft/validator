@@ -95,7 +95,7 @@ final class UrlTest extends TestCase
             ['https://google.de', [new Url()]],
             [
                 'https://www.google.de/search?q=yii+framework&ie=utf-8&oe=utf-8&rls=org.mozilla:de:official&client=firefox-a&gws_rd=cr',
-                [new Url()]
+                [new Url()],
             ],
             ['http://example.com/*12', [new Url()]],
             ['http://example.com/?test', [new Url()]],

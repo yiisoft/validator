@@ -98,11 +98,10 @@ final class CompositeTest extends TestCase
                     new Composite(
                         rules: [new Number(max: 13)],
                         when: fn () => false,
-                    )
+                    ),
                 ],
             ],
             [
-
                 20,
                 [
                     new Composite(
@@ -112,7 +111,6 @@ final class CompositeTest extends TestCase
                 ],
             ],
             [
-
                 null,
                 [
                     new Composite(
@@ -173,7 +171,7 @@ final class CompositeTest extends TestCase
             new Composite(
                 rules: [new Number(max: 13, tooBigMessage: 'Custom error')],
                 when: fn () => true,
-            )
+            ),
         ];
 
         $result = $this->createValidator()->validate($data, $rules);
