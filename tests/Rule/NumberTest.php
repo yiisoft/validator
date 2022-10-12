@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use PHPUnit\Framework\TestCase;
+use stdClass;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Rule\NumberHandler;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
+use Yiisoft\Validator\Validator;
 
-final class NumberTest extends AbstractRuleTest
+final class NumberTest extends TestCase
 {
     public function testGetName(): void
     {
@@ -15,7 +20,7 @@ final class NumberTest extends AbstractRuleTest
         $this->assertSame('number', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -136,8 +141,155 @@ final class NumberTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    /**
+     * @dataProvider dataOptions
+     */
+    public function testOptions(Number $rule, array $expectedOptions): void
     {
-        return new Number();
+        $options = $rule->getOptions();
+        $this->assertSame($expectedOptions, $options);
+    }
+
+    public function dataValidationPassed(): array
+    {
+        return [
+            [20, [new Number()]],
+            [0, [new Number()]],
+            [.5, [new Number()]],
+            [-20, [new Number()]],
+            ['20', [new Number()]],
+            [25.45, [new Number()]],
+            ['25,45', [new Number()]],
+            ['-1.23', [new Number()]],
+            ['-4.423e-12', [new Number()]],
+            ['12E3', [new Number()]],
+
+            [20, [new Number(asInteger: true)]],
+            [0, [new Number(asInteger: true)]],
+            ['20', [new Number(asInteger: true)]],
+            ['020', [new Number(asInteger: true)]],
+            [0x14, [new Number(asInteger: true)]],
+            ['5.5e1', [new Number()]],
+
+            [1, [new Number(min: 1)]],
+            [PHP_INT_MAX + 1, [new Number(min: 1)]],
+
+            [1, [new Number(asInteger: true, min: 1)]],
+
+            [1, [new Number(max: 1)]],
+            [1, [new Number(max: 1.25)]],
+            ['22e-12', [new Number(max: 1.25)]],
+            ['125e-2', [new Number(max: 1.25)]],
+            [1, [new Number(asInteger: true, max: 1.25)]],
+
+            [0, [new Number(min: -10, max: 20)]],
+            [-10, [new Number(min: -10, max: 20)]],
+
+            [0, [new Number(asInteger: true, min: -10, max: 20)]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationPassed
+     */
+    public function testValidationPassed(mixed $data, array $rules): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function dataValidationFailed(): array
+    {
+        $notANumberMessage = 'Value must be a number.';
+        $notAnIntegerMessage = 'Value must be an integer.';
+
+        return [
+            ['12:45', [new Number()], ['' => [$notANumberMessage]]],
+
+            [false, [new Number()], ['' => [$notANumberMessage]]],
+            [true, [new Number()], ['' => [$notANumberMessage]]],
+
+            ['e12', [new Number()], ['' => [$notANumberMessage]]],
+            ['-e3', [new Number()], ['' => [$notANumberMessage]]],
+            ['-4.534-e-12', [new Number()], ['' => [$notANumberMessage]]],
+            ['12.23^4', [new Number()], ['' => [$notANumberMessage]]],
+            ['43^32', [new Number()], ['' => [$notANumberMessage]]],
+
+            [[1, 2, 3], [new Number()], ['' => [$notANumberMessage]]],
+            [new stdClass(), [new Number()], ['' => [$notANumberMessage]]],
+            [fopen('php://stdin', 'rb'), [new Number()], ['' => [$notANumberMessage]]],
+
+            [25.45, [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
+            ['25,45', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
+            ['0x14', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
+
+            ['-1.23', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
+            ['-4.423e-12', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
+            ['12E3', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
+            ['e12', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
+            ['-e3', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
+            ['-4.534-e-12', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
+            ['12.23^4', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
+
+            [-1, [new Number(min: 1)], ['' => ['Value must be no less than 1.']]],
+            ['22e-12', [new Number(min: 1)], ['' => ['Value must be no less than 1.']]],
+
+            [-1, [new Number(asInteger: true, min: 1)], ['' => ['Value must be no less than 1.']]],
+            ['22e-12', [new Number(asInteger: true, min: 1)], ['' => [$notAnIntegerMessage]]],
+            [1.5, [new Number(max: 1.25)], ['' => ['Value must be no greater than 1.25.']]],
+
+            // TODO: fix wrong message
+            [1.5, [new Number(asInteger: true, max: 1.25)], ['' => [$notAnIntegerMessage]]],
+            ['22e-12', [new Number(asInteger: true, max: 1.25)], ['' => [$notAnIntegerMessage]]],
+            ['125e-2', [new Number(asInteger: true, max: 1.25)], ['' => [$notAnIntegerMessage]]],
+
+            [-11, [new Number(min: -10, max: 20)], ['' => ['Value must be no less than -10.']]],
+            [21, [new Number(min: -10, max: 20)], ['' => ['Value must be no greater than 20.']]],
+            [-11, [new Number(asInteger: true, min: -10, max: 20)], ['' => ['Value must be no less than -10.']]],
+            [22, [new Number(asInteger: true, min: -10, max: 20)], ['' => ['Value must be no greater than 20.']]],
+            ['20e-1', [new Number(asInteger: true, min: -10, max: 20)], ['' => [$notAnIntegerMessage]]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationFailed
+     */
+    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testCustomErrorMessage(): void
+    {
+        $data = 0;
+        $rules = [new Number(min: 5, tooSmallMessage: 'Value is too small.')];
+
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            ['' => ['Value is too small.']],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    public function testDifferentRuleInHandler(): void
+    {
+        $rule = new RuleWithCustomHandler(NumberHandler::class);
+        $validator = $this->createValidator();
+
+        $this->expectExceptionMessageMatches(
+            '/.*' . preg_quote(Number::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
+        );
+        $validator->validate([], [$rule]);
+    }
+
+    private function createValidator(): Validator
+    {
+        return FakeValidatorFactory::make();
     }
 }
