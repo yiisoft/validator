@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Yiisoft\Validator\Rule\NotEqual;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Validator;
 
-final class NotEqualTest extends AbstractRuleTest
+final class NotEqualTest extends TestCase
 {
     public function testGetName(): void
     {
@@ -15,7 +18,7 @@ final class NotEqualTest extends AbstractRuleTest
         $this->assertSame('notEqual', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -173,16 +176,75 @@ final class NotEqualTest extends AbstractRuleTest
         ];
     }
 
-    public function testWithoutParameters()
+    /**
+     * @dataProvider dataOptions
+     */
+    public function testOptions(NotEqual $rule, array $expectedOptions): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-
-        $rule = new NotEqual();
+        $options = $rule->getOptions();
+        $this->assertSame($expectedOptions, $options);
     }
 
-    protected function getRule(): SerializableRuleInterface
+    public function dataValidationPassed(): array
     {
-        return new NotEqual(1);
+        return [
+            [101, [new NotEqual(100)]],
+            ['101', [new NotEqual(100, strict: true)]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationPassed
+     */
+    public function testValidationPassed(mixed $data, array $rules): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function dataValidationFailed(): array
+    {
+        return [
+            [100, [new NotEqual(100)], ['' => ['Value must not be equal to "100".']]],
+            [100, [new NotEqual(100, strict: true)], ['' => ['Value must not be equal to "100".']]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationFailed
+     */
+    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testCustomErrorMessage(): void
+    {
+        $data = 100;
+        $rules = [new NotEqual(100, message: 'Custom error')];
+
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            ['' => ['Custom error']],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    public function testWithoutParameters(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+        new NotEqual();
+    }
+
+    private function createValidator(): Validator
+    {
+        return FakeValidatorFactory::make();
     }
 }
