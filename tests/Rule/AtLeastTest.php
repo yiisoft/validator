@@ -206,12 +206,4 @@ final class AtLeastTest extends TestCase
     {
         return FakeValidatorFactory::make();
     }
-
-    private function createObject(mixed $attr1, mixed $attr2): stdClass
-    {
-        $object = new stdClass();
-        $object->attr1 = $attr1;
-        $object->attr2 = $attr2;
-        return $object;
-    }
 }
