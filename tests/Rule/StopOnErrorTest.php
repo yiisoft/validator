@@ -64,7 +64,7 @@ final class StopOnErrorTest extends TestCase
                     new StopOnError([
                         new HasLength(min: 1),
                         new HasLength(max: 10),
-                    ])
+                    ]),
                 ],
             ],
         ];
@@ -89,7 +89,7 @@ final class StopOnErrorTest extends TestCase
                     new StopOnError([
                         new HasLength(min: 10),
                         new HasLength(max: 1),
-                    ])
+                    ]),
                 ],
                 ['' => ['This value must contain at least 10 characters.']],
             ],
@@ -99,7 +99,7 @@ final class StopOnErrorTest extends TestCase
                     new StopOnError([
                         new HasLength(max: 1),
                         new HasLength(min: 10),
-                    ])
+                    ]),
                 ],
                 ['' => ['This value must contain at most 1 character.']],
             ],
@@ -111,7 +111,7 @@ final class StopOnErrorTest extends TestCase
                             new HasLength(max: 1),
                             new HasLength(min: 10),
                         ],
-                    ])
+                    ]),
                 ],
                 ['' => ['This value must contain at most 1 character.']],
             ],

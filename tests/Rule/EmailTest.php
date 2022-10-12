@@ -272,7 +272,7 @@ final class EmailTest extends TestCase
             [
                 'test@nonexistingsubdomain.example.com',
                 [new Email(checkDNS: true)],
-                $errors
+                $errors,
             ],
         ];
     }

@@ -406,19 +406,19 @@ final class IpTest extends TestCase
             ['8.8.8.8', [new Ip(ranges: ['!system', 'any'])]],
             [
                 '10.0.1.2',
-                [new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any'])]
+                [new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any'])],
             ],
             [
                 '2001:db0:1:2::7',
-                [new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any'])]
+                [new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any'])],
             ],
             [
                 '127.0.0.1',
-                [new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any'])]
+                [new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any'])],
             ],
             [
                 '10.0.1.28/28',
-                [new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any'])]
+                [new Ip(allowSubnet: true, ranges: ['10.0.1.0/24', '2001:db0:1:2::/64', 'localhost', '!any'])],
             ],
 
             ['1.2.3.4', [new Ip(networks: ['myNetworkEu' => ['1.2.3.4/10', '5.6.7.8']], ranges: ['myNetworkEu'])]],
@@ -462,12 +462,12 @@ final class IpTest extends TestCase
             [
                 'babe::cafe',
                 [new Ip(ranges: ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'])],
-                ['' => [$notInRangeMessage]]
+                ['' => [$notInRangeMessage]],
             ],
             [
                 '10.0.0.2',
                 [new Ip(ranges: ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'])],
-                ['' => [$notInRangeMessage]]
+                ['' => [$notInRangeMessage]],
             ],
 
             ['192.168.005.001', [new Ip()], ['' => [$message]]], // Leading zeroes are not supported
