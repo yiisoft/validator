@@ -4,65 +4,29 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use PHPUnit\Framework\TestCase;
 use stdClass;
-use Yiisoft\Validator\Error;
-use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\AtLeastHandler;
-use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
+use Yiisoft\Validator\ValidationContext;
 
-final class AtLeastHandlerTest extends AbstractRuleValidatorTest
+final class AtLeastHandlerTest extends TestCase
 {
-    public function failedValidationProvider(): array
+    public function testDifferentRule(): void
     {
-        return [
-            [
-                new AtLeast(['attr2']),
-                $this->createObject(1, null),
-                [new Error('The model is not valid. Must have at least "1" filled attributes.')],
-            ],
-            [
-                new AtLeast(['attr1', 'attr2'], min: 2),
-                $this->createObject(1, null),
-                [new Error('The model is not valid. Must have at least "2" filled attributes.')],
-            ],
-        ];
+        $handler = $this->createHandler();
+        $context = new ValidationContext(FakeValidatorFactory::make(), null);
+
+        $this->expectExceptionMessageMatches('/' . AtLeastHandler::class . '/');
+        $this->expectExceptionMessageMatches('/' . stdClass::class . '/');
+        $handler->validate('value', new stdClass(), $context);
     }
 
-    public function passedValidationProvider(): array
+    private function createHandler(): AtLeastHandler
     {
-        return [
-            [
-                new AtLeast(['attr1', 'attr2']),
-                $this->createObject(1, null),
-            ],
-            [
-                new AtLeast(['attr2']),
-                $this->createObject(null, 1),
-            ],
-        ];
-    }
-
-    public function customErrorMessagesProvider(): array
-    {
-        return [
-            [
-                new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom error'),
-                $this->createObject(1, null),
-                [new Error('Custom error')],
-            ],
-        ];
-    }
-
-    protected function getRuleHandler(): RuleHandlerInterface
-    {
-        return new AtLeastHandler($this->getTranslator());
-    }
-
-    private function createObject(mixed $attr1, mixed $attr2): stdClass
-    {
-        $object = new stdClass();
-        $object->attr1 = $attr1;
-        $object->attr2 = $attr2;
-        return $object;
+        return new AtLeastHandler(
+            (new TranslatorFactory())->create()
+        );
     }
 }

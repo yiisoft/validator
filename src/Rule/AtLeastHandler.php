@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
@@ -29,7 +30,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         $filledCount = 0;
 
         foreach ($rule->getAttributes() as $attribute) {
-            if (!(new SkipOnEmpty())($value->{$attribute}, $context->isAttributeMissing())) {
+            if (!(new SkipOnEmpty())(ArrayHelper::getValue($value, $attribute), $context->isAttributeMissing())) {
                 $filledCount++;
             }
         }
