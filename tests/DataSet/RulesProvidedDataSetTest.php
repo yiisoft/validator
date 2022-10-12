@@ -9,7 +9,7 @@ use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Stub\RulesProvidedDataSet;
+use Yiisoft\Validator\Tests\Support\DataSet\RulesProvidedDataSet;
 
 final class RulesProvidedDataSetTest extends AbstractDataSetTest
 {

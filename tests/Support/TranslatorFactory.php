@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub;
+namespace Yiisoft\Validator\Tests\Support;
 
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\SimpleMessageFormatter;

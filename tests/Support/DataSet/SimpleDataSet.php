@@ -2,27 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub;
+namespace Yiisoft\Validator\Tests\Support\DataSet;
 
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\RulesProviderInterface;
 
 use function array_key_exists;
 
-final class RulesProvidedDataSet implements RulesProviderInterface, DataSetInterface
+final class SimpleDataSet implements DataSetInterface
 {
-    public function __construct(private array $data, private array $rules)
+    public function __construct(private array $data = [])
     {
     }
 
     public function getAttributeValue(string $attribute): mixed
     {
         return $this->data[$attribute] ?? null;
-    }
-
-    public function getRules(): iterable
-    {
-        return $this->rules;
     }
 
     public function getData(): mixed

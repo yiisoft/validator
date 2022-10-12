@@ -28,7 +28,7 @@ use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttribut
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRule;
-use Yiisoft\Validator\Tests\Stub\SimpleRulesProvider;
+use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Support;
 
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
-use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
+use Yiisoft\Validator\Tests\Support\TranslatorFactory;
 use Yiisoft\Validator\Validator;
 
 final class ValidatorFactory

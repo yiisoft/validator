@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub;
+namespace Yiisoft\Validator\Tests\Support\RulesProvider;
 
 use Yiisoft\Validator\RulesProviderInterface;
 
