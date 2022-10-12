@@ -6,7 +6,13 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
+use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\HasLengthHandler;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
+use Yiisoft\Validator\Validator;
 
 final class HasLengthTest extends TestCase
 {
@@ -16,15 +22,7 @@ final class HasLengthTest extends TestCase
         $this->assertSame('hasLength', $rule->getName());
     }
 
-    /**
-     * @dataProvider getOptionsProvider
-     */
-    public function testGetOptions(HasLength $rule, array $expectedOptions): void
-    {
-        $this->assertEquals($expectedOptions, $rule->getOptions());
-    }
-
-    public function getOptionsProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -33,9 +31,6 @@ final class HasLengthTest extends TestCase
                     'min' => 3,
                     'max' => null,
                     'exactly' => null,
-                    'message' => [
-                        'message' => 'This value must be a string.',
-                    ],
                     'lessThanMinMessage' => [
                         'message' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'parameters' => ['min' => 3],
@@ -48,6 +43,9 @@ final class HasLengthTest extends TestCase
                         'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
+                    'message' => [
+                        'message' => 'This value must be a string.',
+                    ],
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -59,9 +57,6 @@ final class HasLengthTest extends TestCase
                     'min' => null,
                     'max' => 3,
                     'exactly' => null,
-                    'message' => [
-                        'message' => 'This value must be a string.',
-                    ],
                     'lessThanMinMessage' => [
                         'message' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'parameters' => ['min' => null],
@@ -74,6 +69,9 @@ final class HasLengthTest extends TestCase
                         'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
+                    'message' => [
+                        'message' => 'This value must be a string.',
+                    ],
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -85,9 +83,6 @@ final class HasLengthTest extends TestCase
                     'min' => 3,
                     'max' => 4,
                     'exactly' => null,
-                    'message' => [
-                        'message' => 'This value must be a string.',
-                    ],
                     'lessThanMinMessage' => [
                         'message' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'parameters' => ['min' => 3],
@@ -100,6 +95,9 @@ final class HasLengthTest extends TestCase
                         'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
+                    'message' => [
+                        'message' => 'This value must be a string.',
+                    ],
                     'encoding' => 'windows-1251',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -108,7 +106,117 @@ final class HasLengthTest extends TestCase
         ];
     }
 
-    public function initWithMinAndMaxAndExactlyDataProvider(): array
+    /**
+     * @dataProvider dataOptions
+     */
+    public function testOptions(HasLength $rule, array $expectedOptions): void
+    {
+        $options = $rule->getOptions();
+        $this->assertSame($expectedOptions, $options);
+    }
+
+    public function dataValidationPassed(): array
+    {
+        return [
+            [str_repeat('x', 25), [new HasLength(exactly: 25)]],
+            [str_repeat('€', 25), [new HasLength(exactly: 25)]],
+
+            [str_repeat('x', 125), [new HasLength(min: 25)]],
+            [str_repeat('€', 25), [new HasLength(min: 25)]],
+
+            [str_repeat('x', 25), [new HasLength(max: 25)]],
+            [str_repeat('Ä', 24), [new HasLength(max: 25)]],
+            ['', [new HasLength(max: 25)]],
+
+            [str_repeat('x', 15), [new HasLength(min: 10, max: 25)]],
+            [str_repeat('x', 10), [new HasLength(min: 10, max: 25)]],
+            [str_repeat('x', 20), [new HasLength(min: 10, max: 25)]],
+            [str_repeat('x', 25), [new HasLength(min: 10, max: 25)]],
+
+            [str_repeat('x', 5), [new HasLength(min: 1)]],
+            [str_repeat('x', 5), [new HasLength(max: 100)]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationPassed
+     */
+    public function testValidationPassed(mixed $data, array $rules): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function dataValidationFailed(): array
+    {
+        $message = 'This value must be a string.';
+        $greaterThanMaxMessage = 'This value must contain at most 25 characters.';
+        $notExactlyMessage = 'This value must contain exactly 25 characters.';
+        $lessThanMinMessage = 'This value must contain at least 25 characters.';
+
+        return [
+            [['not a string'], [new HasLength(min: 25)], ['' => [$message]]],
+            [new MixedDataSet(new stdClass()), [new HasLength(min: 25)], ['' => [$message]]],
+            [true, [new HasLength(min: 25)], ['' => [$message]]],
+            [false, [new HasLength(min: 25)], ['' => [$message]]],
+
+            [str_repeat('x', 1250), [new HasLength(max: 25)], ['' => [$greaterThanMaxMessage]]],
+            [str_repeat('x', 125), [new HasLength(exactly: 25)], ['' => [$notExactlyMessage]]],
+
+            ['', [new HasLength(exactly: 25)], ['' => [$notExactlyMessage]]],
+            [
+                str_repeat('x', 5),
+                [new HasLength(min: 10, max: 25)],
+                ['' => ['This value must contain at least 10 characters.']],
+            ],
+            [str_repeat('x', 13), [new HasLength(min: 25)], ['' => [$lessThanMinMessage]]],
+            ['', [new HasLength(min: 25)], ['' => [$lessThanMinMessage]]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationFailed
+     */
+    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function dataCustomErrorMessage(): array
+    {
+        $rules = [
+            new HasLength(
+                min: 3,
+                max: 5,
+                message: 'is not string error',
+                lessThanMinMessage: 'is too short test',
+                greaterThanMaxMessage: 'is too long test'
+            )
+        ];
+
+        return [
+            [null, $rules, ['' => ['is not string error']]],
+            [str_repeat('x', 1), $rules, ['' => ['is too short test']]],
+            [str_repeat('x', 6), $rules, ['' => ['is too long test']]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataCustomErrorMessage
+     */
+    public function testCustomErrorMessage(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function dataInitWithMinAndMaxAndExactly(): array
     {
         return [
             [['min' => 3, 'exactly' => 3]],
@@ -118,7 +226,7 @@ final class HasLengthTest extends TestCase
     }
 
     /**
-     * @dataProvider initWithMinAndMaxAndExactlyDataProvider
+     * @dataProvider dataInitWithMinAndMaxAndExactly
      */
     public function testInitWithMinAndMaxAndExactly(array $arguments): void
     {
@@ -142,5 +250,21 @@ final class HasLengthTest extends TestCase
         $this->expectExceptionMessage('At least one of these attributes must be specified: $min, $max, $exactly.');
 
         new HasLength();
+    }
+
+    public function testDifferentRuleInHandler(): void
+    {
+        $rule = new RuleWithCustomHandler(HasLengthHandler::class);
+        $validator = $this->createValidator();
+
+        $this->expectExceptionMessageMatches(
+            '/.*' . preg_quote(HasLength::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
+        );
+        $validator->validate([], [$rule]);
+    }
+
+    private function createValidator(): Validator
+    {
+        return FakeValidatorFactory::make();
     }
 }
