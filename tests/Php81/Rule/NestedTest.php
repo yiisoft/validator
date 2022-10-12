@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Validator;
 
@@ -69,6 +69,6 @@ final class NestedTest extends TestCase
 
     private function createValidator(): Validator
     {
-        return FakeValidatorFactory::make();
+        return ValidatorFactory::make();
     }
 }

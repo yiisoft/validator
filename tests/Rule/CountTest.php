@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Count;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Validator;
 
 final class CountTest extends TestCase
@@ -198,6 +198,6 @@ final class CountTest extends TestCase
 
     private function createValidator(): Validator
     {
-        return FakeValidatorFactory::make();
+        return ValidatorFactory::make();
     }
 }

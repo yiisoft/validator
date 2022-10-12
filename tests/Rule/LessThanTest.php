@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\Rule\LessThan;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Validator;
 
 final class LessThanTest extends TestCase
@@ -188,6 +188,6 @@ final class LessThanTest extends TestCase
 
     private function createValidator(): Validator
     {
-        return FakeValidatorFactory::make();
+        return ValidatorFactory::make();
     }
 }

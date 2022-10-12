@@ -14,7 +14,7 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Data\Post;
 use Yiisoft\Validator\Tests\Data\TitleTrait;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
 use Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod\ObjectWithCallbackMethod;
 use Yiisoft\Validator\Tests\Stub\ObjectWithCallbackMethod\ObjectWithNonExistingCallbackMethod;
@@ -135,7 +135,7 @@ final class ObjectDataSet80Test extends TestCase
     public function testValidateWithCallbackMethod(): void
     {
         $dataSet = new ObjectDataSet(new ObjectWithCallbackMethod());
-        $validator = FakeValidatorFactory::make();
+        $validator = ValidatorFactory::make();
 
         /** @var array $rules */
         $rules = $dataSet->getRules();

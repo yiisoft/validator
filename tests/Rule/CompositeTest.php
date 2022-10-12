@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
 use Yiisoft\Validator\Validator;
 
@@ -196,6 +196,6 @@ final class CompositeTest extends TestCase
 
     private function createValidator(): Validator
     {
-        return FakeValidatorFactory::make();
+        return ValidatorFactory::make();
     }
 }

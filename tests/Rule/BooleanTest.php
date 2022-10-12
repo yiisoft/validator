@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\BooleanHandler;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
 use Yiisoft\Validator\Validator;
 
@@ -176,6 +176,6 @@ final class BooleanTest extends TestCase
 
     private function createValidator(): Validator
     {
-        return FakeValidatorFactory::make();
+        return ValidatorFactory::make();
     }
 }

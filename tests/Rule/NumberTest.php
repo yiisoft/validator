@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\NumberHandler;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
 use Yiisoft\Validator\Validator;
 
@@ -290,6 +290,6 @@ final class NumberTest extends TestCase
 
     private function createValidator(): Validator
     {
-        return FakeValidatorFactory::make();
+        return ValidatorFactory::make();
     }
 }

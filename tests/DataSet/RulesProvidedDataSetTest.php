@@ -8,7 +8,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\RulesProvidedDataSet;
 
 final class RulesProvidedDataSetTest extends AbstractDataSetTest
@@ -16,7 +16,7 @@ final class RulesProvidedDataSetTest extends AbstractDataSetTest
     protected function validate(array $dataSet, array $rules): Result
     {
         $dataObject = new RulesProvidedDataSet($dataSet, $rules);
-        $validator = FakeValidatorFactory::make();
+        $validator = ValidatorFactory::make();
 
         return $validator->validate($dataObject);
     }
@@ -38,7 +38,7 @@ final class RulesProvidedDataSetTest extends AbstractDataSetTest
                 ],
             ]
         );
-        $validator = FakeValidatorFactory::make();
+        $validator = ValidatorFactory::make();
         $result = $validator->validate(
             $dataSet,
             [
@@ -68,7 +68,7 @@ final class RulesProvidedDataSetTest extends AbstractDataSetTest
                 ],
             ]
         );
-        $validator = FakeValidatorFactory::make();
+        $validator = ValidatorFactory::make();
         $result = $validator->validate(
             $dataSet,
             []

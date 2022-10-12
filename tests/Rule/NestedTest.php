@@ -23,7 +23,7 @@ use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Stub\EachNestedObjects\Foo;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Stub\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Stub\ObjectWithNestedObject;
@@ -255,7 +255,7 @@ final class NestedTest extends TestCase
      */
     public function testNestedWithoutRulesToNonObject(string $expectedValueName, object $data): void
     {
-        $validator = FakeValidatorFactory::make();
+        $validator = ValidatorFactory::make();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
@@ -410,7 +410,7 @@ final class NestedTest extends TestCase
         object $data,
         array $expectedErrorMessagesIndexedByPath
     ): void {
-        $result = FakeValidatorFactory::make()->validate($data);
+        $result = ValidatorFactory::make()->validate($data);
         $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
@@ -465,7 +465,7 @@ final class NestedTest extends TestCase
 
     public function testNestedWithoutRulesWithObject(): void
     {
-        $validator = FakeValidatorFactory::make();
+        $validator = ValidatorFactory::make();
         $result = $validator->validate(new ObjectWithNestedObject());
 
         $this->assertFalse($result->isValid());
@@ -711,7 +711,7 @@ final class NestedTest extends TestCase
         array $expectedErrorMessages,
         array $expectedErrorMessagesIndexedByPath
     ): void {
-        $result = FakeValidatorFactory::make()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $errorsData = array_map(
             static fn (Error $error) => [
@@ -809,7 +809,7 @@ final class NestedTest extends TestCase
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
-        $result = FakeValidatorFactory::make()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertTrue($result->isValid());
     }
@@ -892,7 +892,7 @@ final class NestedTest extends TestCase
      */
     public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
     {
-        $result = FakeValidatorFactory::make()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
@@ -985,7 +985,7 @@ final class NestedTest extends TestCase
      */
     public function testValidationFailedWithDetailedErrors(mixed $data, array $rules, array $errors): void
     {
-        $result = FakeValidatorFactory::make()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $errorsData = array_map(
             static fn (Error $error) => [
@@ -1010,7 +1010,7 @@ final class NestedTest extends TestCase
             )
         ];
 
-        $result = FakeValidatorFactory::make()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
@@ -1022,7 +1022,7 @@ final class NestedTest extends TestCase
     public function testDifferentRuleInHandler(): void
     {
         $rule = new RuleWithCustomHandler(NestedHandler::class);
-        $validator = FakeValidatorFactory::make();
+        $validator = ValidatorFactory::make();
 
         $this->expectExceptionMessageMatches(
             '/.*' . preg_quote(Nested::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
