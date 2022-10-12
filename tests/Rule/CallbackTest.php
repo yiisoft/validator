@@ -70,7 +70,7 @@ final class CallbackTest extends TestCase
                         }
 
                         return $result;
-                    })
+                    }),
                 ],
             ],
         ];
@@ -99,7 +99,7 @@ final class CallbackTest extends TestCase
                         }
 
                         return $result;
-                    })
+                    }),
                 ],
                 ['' => ['Value should be 42!']],
             ],
@@ -128,7 +128,7 @@ final class CallbackTest extends TestCase
                 }
 
                 return $result;
-            })
+            }),
         ];
 
         $result = $this->createValidator()->validate($data, $rules);
