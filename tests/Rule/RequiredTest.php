@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Rule\RequiredHandler;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
+use Yiisoft\Validator\Validator;
 
-final class RequiredTest extends AbstractRuleTest
+final class RequiredTest extends TestCase
 {
     public function testGetName(): void
     {
@@ -15,7 +19,7 @@ final class RequiredTest extends AbstractRuleTest
         $this->assertSame('required', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -30,8 +34,81 @@ final class RequiredTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    /**
+     * @dataProvider dataOptions
+     */
+    public function testOptions(Required $rule, array $expectedOptions): void
     {
-        return new Required();
+        $options = $rule->getOptions();
+        $this->assertSame($expectedOptions, $options);
+    }
+
+    public function dataValidationPassed(): array
+    {
+        return [
+            ['not empty', [new Required()]],
+            [['with', 'elements'], [new Required()]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationPassed
+     */
+    public function testValidationPassed(mixed $data, array $rules): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function dataValidationFailed(): array
+    {
+        $message = 'Value cannot be blank.';
+
+        return [
+            [null, [new Required()], ['' => [$message]]],
+            [[], [new Required()], ['' => [$message]]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationFailed
+     */
+    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testCustomErrorMessage(): void
+    {
+        $data = null;
+        $rules = [new Required(message: 'Custom error')];
+
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            ['' => ['Custom error']],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    public function testDifferentRuleInHandler(): void
+    {
+        $rule = new RuleWithCustomHandler(RequiredHandler::class);
+        $validator = $this->createValidator();
+
+        $this->expectExceptionMessageMatches(
+            '/.*' . preg_quote(Required::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
+        );
+        $validator->validate([], [$rule]);
+    }
+
+    private function createValidator(): Validator
+    {
+        return FakeValidatorFactory::make();
     }
 }
