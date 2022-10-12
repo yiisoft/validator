@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\IsTrue;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Rule\IsTrueHandler;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
+use Yiisoft\Validator\Validator;
 
-final class IsTrueTest extends AbstractRuleTest
+final class IsTrueTest extends TestCase
 {
     public function testGetName(): void
     {
@@ -15,7 +19,7 @@ final class IsTrueTest extends AbstractRuleTest
         $this->assertSame('isTrue', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -72,8 +76,90 @@ final class IsTrueTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    /**
+     * @dataProvider dataOptions
+     */
+    public function testOptions(IsTrue $rule, array $expectedOptions): void
     {
-        return new IsTrue();
+        $options = $rule->getOptions();
+        $this->assertSame($expectedOptions, $options);
+    }
+
+    public function dataValidationPassed(): array
+    {
+        return [
+            [true, [new IsTrue()]],
+            ['1', [new IsTrue()]],
+            ['1', [new IsTrue(strict: true)]],
+            [true, [new IsTrue(trueValue: true, strict: true)]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationPassed
+     */
+    public function testValidationPassed(mixed $data, array $rules): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function dataValidationFailed(): array
+    {
+        return [
+            ['5', [new IsTrue()], ['' => ['The value must be "1".']]],
+            [null, [new IsTrue()], ['' => ['The value must be "1".']]],
+            [[], [new IsTrue()], ['' => ['The value must be "1".']]],
+            [true, [new IsTrue(strict: true)], ['' => ['The value must be "1".']]],
+            ['1', [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
+            [[], [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
+
+            [false, [new IsTrue()], ['' => ['The value must be "1".']]],
+            ['0', [new IsTrue()], ['' => ['The value must be "1".']]],
+            ['0', [new IsTrue(strict: true)], ['' => ['The value must be "1".']]],
+            [false, [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationFailed
+     */
+    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testCustomErrorMessage(): void
+    {
+        $data = 5;
+        $rules = [new IsTrue(message: 'Custom error.')];
+
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            ['' => ['Custom error.']],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    public function testDifferentRuleInHandler(): void
+    {
+        $rule = new RuleWithCustomHandler(IsTrueHandler::class);
+        $validator = $this->createValidator();
+
+        $this->expectExceptionMessageMatches(
+            '/.*' . preg_quote(IsTrue::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
+        );
+        $validator->validate([], [$rule]);
+    }
+
+    private function createValidator(): Validator
+    {
+        return FakeValidatorFactory::make();
     }
 }
