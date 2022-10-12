@@ -24,9 +24,9 @@ use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Stub\DataSet;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Stub\NotNullRule\NotNull;
+use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
-use Yiisoft\Validator\Tests\Stub\Rule;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRule;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithAttributesOnly;
 use Yiisoft\Validator\Tests\Stub\TranslatorFactory;
 use Yiisoft\Validator\ValidationContext;
@@ -682,7 +682,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @param Rule[] $rules
+     * @param StubRule[] $rules
      * @param Error[] $expectedErrors
      *
      * @dataProvider skipOnEmptyDataProvider

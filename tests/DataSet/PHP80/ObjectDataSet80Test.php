@@ -15,7 +15,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Support\Data\Post;
 use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Stub\NotRuleAttribute;
+use Yiisoft\Validator\Tests\Support\Rule\NotRuleAttribute;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithCallbackMethod;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonExistingCallbackMethod;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonPublicCallbackMethod;

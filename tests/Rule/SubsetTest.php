@@ -10,7 +10,7 @@ use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Subset;
 use Yiisoft\Validator\Rule\SubsetHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
+use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\Validator;
 
 final class SubsetTest extends TestCase

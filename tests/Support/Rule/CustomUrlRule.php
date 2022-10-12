@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub;
+namespace Yiisoft\Validator\Tests\Support\Rule;
 
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\HasLength;

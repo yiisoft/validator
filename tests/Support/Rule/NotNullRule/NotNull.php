@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub\NotNullRule;
+namespace Yiisoft\Validator\Tests\Support\Rule\NotNullRule;
 
 use Attribute;
 use Yiisoft\Validator\RuleInterface;

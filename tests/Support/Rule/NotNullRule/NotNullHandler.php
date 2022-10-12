@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub\NotNullRule;
+namespace Yiisoft\Validator\Tests\Support\Rule\NotNullRule;
 
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;

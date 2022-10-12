@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub;
+namespace Yiisoft\Validator\Tests\Support\Rule;
 
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
+
+use const Yiisoft\Validator\Tests\Stub\PHP_FLOAT_EPSILON;
 
 final class PiHandler implements RuleHandlerInterface
 {

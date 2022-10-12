@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\CompareHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
+use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 
 final class CompareTest extends TestCase
 {

@@ -27,9 +27,9 @@ use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
-use Yiisoft\Validator\Tests\Stub\Rule;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRule;
 use Yiisoft\Validator\Tests\Stub\SimpleRulesProvider;
-use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
+use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
@@ -159,8 +159,8 @@ final class NestedTest extends TestCase
             ],
             [
                 new Nested([
-                    'author.name' => new Rule('author-name', ['key' => 'name']),
-                    'author.age' => new Rule('author-age', ['key' => 'age']),
+                    'author.name' => new StubRule('author-name', ['key' => 'name']),
+                    'author.age' => new StubRule('author-age', ['key' => 'age']),
                 ]),
                 [
                     'requirePropertyPath' => false,
@@ -178,8 +178,8 @@ final class NestedTest extends TestCase
             [
                 new Nested([
                     'author' => [
-                        'name' => new Rule('author-name', ['key' => 'name']),
-                        'age' => new Rule('author-age', ['key' => 'age']),
+                        'name' => new StubRule('author-name', ['key' => 'name']),
+                        'age' => new StubRule('author-age', ['key' => 'age']),
                     ],
                 ]),
                 [

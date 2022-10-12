@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Stub;
+namespace Yiisoft\Validator\Tests\Support\Rule\StubRule;
 
 use Yiisoft\Validator\SerializableRuleInterface;
 
-final class Rule implements SerializableRuleInterface
+final class StubRule implements SerializableRuleInterface
 {
     public function __construct(private string $name, private array $options)
     {
@@ -24,6 +24,6 @@ final class Rule implements SerializableRuleInterface
 
     public function getHandlerClassName(): string
     {
-        return RuleHandler::class;
+        return StubRuleHandler::class;
     }
 }
