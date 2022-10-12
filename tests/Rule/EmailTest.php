@@ -19,6 +19,10 @@ final class EmailTest extends TestCase
 
     public function dataOptions(): array
     {
+        if (!extension_loaded('intl')) {
+            return [];
+        }
+
         return [
             [
                 new Email(),
@@ -92,7 +96,7 @@ final class EmailTest extends TestCase
      */
     public function testOptions(Email $rule, array $expectedOptions): void
     {
-        if (!function_exists('idn_to_ascii')) {
+        if (!extension_loaded('intl')) {
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
@@ -102,6 +106,10 @@ final class EmailTest extends TestCase
 
     public function dataValidationPassed(): array
     {
+        if (!extension_loaded('intl')) {
+            return [];
+        }
+
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
@@ -165,7 +173,7 @@ final class EmailTest extends TestCase
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
-        if (!function_exists('idn_to_ascii')) {
+        if (!extension_loaded('intl')) {
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
@@ -176,6 +184,10 @@ final class EmailTest extends TestCase
 
     public function dataValidationFailed(): array
     {
+        if (!extension_loaded('intl')) {
+            return [];
+        }
+
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
@@ -276,7 +288,7 @@ final class EmailTest extends TestCase
      */
     public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
     {
-        if (!function_exists('idn_to_ascii')) {
+        if (!extension_loaded('intl')) {
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
@@ -302,7 +314,7 @@ final class EmailTest extends TestCase
 
     public function testEnableIdnWithMissingIntlExtension(): void
     {
-        if (function_exists('idn_to_ascii')) {
+        if (extension_loaded('intl')) {
             $this->markTestSkipped('The intl extension must be unavailable for this test.');
         }
 
