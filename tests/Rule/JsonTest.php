@@ -110,7 +110,7 @@ final class JsonTest extends TestCase
 ,"rosebud"]
 JSON_WRAP
                 ,
-                [new Json()]
+                [new Json()],
             ],
             // JSON test from http://www.json.org/JSON_checker/test/pass2.json
             ['[[[[[[[[[[[[[[[[[[["Not too deep"]]]]]]]]]]]]]]]]]]]', [new Json()]],

@@ -195,7 +195,7 @@ final class HasLengthTest extends TestCase
                 message: 'is not string error',
                 lessThanMinMessage: 'is too short test',
                 greaterThanMaxMessage: 'is too long test'
-            )
+            ),
         ];
 
         return [
