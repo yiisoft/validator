@@ -78,11 +78,14 @@ final class UrlTest extends TestCase
     }
 
     /**
-     * @requires extension intl
      * @dataProvider dataOptions
      */
     public function testOptions(Url $rule, array $expectedOptions): void
     {
+        if (extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        }
+
         $options = $rule->getOptions();
         $this->assertSame($expectedOptions, $options);
     }
@@ -123,11 +126,14 @@ final class UrlTest extends TestCase
     }
 
     /**
-     * @requires extension intl
      * @dataProvider dataValidationPassed
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
+        if (extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        }
+
         $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertTrue($result->isValid());
@@ -161,22 +167,26 @@ final class UrlTest extends TestCase
     }
 
     /**
-     * @requires extension intl
      * @dataProvider dataValidationFailed
      */
     public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
     {
+        if (extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        }
+
         $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
-    /**
-     * @requires extension intl
-     */
     public function testCustomErrorMessage(): void
     {
+        if (extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        }
+
         $data = '';
         $rules = [new Url(enableIDN: true, message: 'Custom error')];
 

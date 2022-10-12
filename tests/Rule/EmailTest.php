@@ -88,21 +88,20 @@ final class EmailTest extends TestCase
     }
 
     /**
-     * @requires extension intl
      * @dataProvider dataOptions
      */
     public function testOptions(Email $rule, array $expectedOptions): void
     {
+        if (extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        }
+
         $options = $rule->getOptions();
         $this->assertSame($expectedOptions, $options);
     }
 
     public function dataValidationPassed(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
@@ -177,10 +176,6 @@ final class EmailTest extends TestCase
 
     public function dataValidationFailed(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
