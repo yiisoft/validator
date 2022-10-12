@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\StopOnError;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Rule\StopOnErrorHandler;
+use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
+use Yiisoft\Validator\Validator;
 
-final class StopOnErrorTest extends AbstractRuleTest
+final class StopOnErrorTest extends TestCase
 {
     public function testGetName(): void
     {
@@ -18,33 +23,125 @@ final class StopOnErrorTest extends AbstractRuleTest
     public function testSkipOnEmptyInConstructor(): void
     {
         $rule = new StopOnError(skipOnEmpty: true);
-
         $this->assertTrue($rule->getSkipOnEmpty());
     }
 
     public function testSkipOnEmptySetter(): void
     {
         $rule = (new StopOnError())->skipOnEmpty(true);
-
         $this->assertTrue($rule->getSkipOnEmpty());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
                 new StopOnError(),
                 [
-                    'rules' => null,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'rules' => null,
                 ],
             ],
         ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    /**
+     * @dataProvider dataOptions
+     */
+    public function testOptions(StopOnError $rule, array $expectedOptions): void
     {
-        return new StopOnError();
+        $options = $rule->getOptions();
+        $this->assertSame($expectedOptions, $options);
+    }
+
+    public function dataValidationPassed(): array
+    {
+        return [
+            'at least one succeed property' => [
+                'hello',
+                [
+                    new StopOnError([
+                        new HasLength(min: 1),
+                        new HasLength(max: 10),
+                    ])
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationPassed
+     */
+    public function testValidationPassed(mixed $data, array $rules): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+    }
+
+    public function dataValidationFailed(): array
+    {
+        return [
+            'case1' => [
+                'hello',
+                [
+                    new StopOnError([
+                        new HasLength(min: 10),
+                        new HasLength(max: 1),
+                    ])
+                ],
+                ['' => ['This value must contain at least 10 characters.']],
+            ],
+            'case2' => [
+                'hello',
+                [
+                    new StopOnError([
+                        new HasLength(max: 1),
+                        new HasLength(min: 10),
+                    ])
+                ],
+                ['' => ['This value must contain at most 1 character.']],
+            ],
+            'nested rules instead of plain structure' => [
+                'hello',
+                [
+                    new StopOnError([
+                        [
+                            new HasLength(max: 1),
+                            new HasLength(min: 10),
+                        ],
+                    ])
+                ],
+                ['' => ['This value must contain at most 1 character.']],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationFailed
+     */
+    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    {
+        $result = $this->createValidator()->validate($data, $rules);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testDifferentRuleInHandler(): void
+    {
+        $rule = new RuleWithCustomHandler(StopOnErrorHandler::class);
+        $validator = $this->createValidator();
+
+        $this->expectExceptionMessageMatches(
+            '/.*' . preg_quote(StopOnError::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
+        );
+        $validator->validate([], [$rule]);
+    }
+
+    private function createValidator(): Validator
+    {
+        return FakeValidatorFactory::make();
     }
 }
