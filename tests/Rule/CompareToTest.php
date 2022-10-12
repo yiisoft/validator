@@ -257,7 +257,7 @@ final class CompareToTest extends TestCase
             [
                 ['attribute' => 100, 'number' => 101],
                 ['number' => new CompareTo(null, 'attribute', operator: '===')],
-                ['number' => [$messageEqual]]
+                ['number' => [$messageEqual]],
             ],
 
             [100, [new CompareTo(100, operator: '!=')], ['' => [$messageNotEqual]]],
@@ -280,7 +280,7 @@ final class CompareToTest extends TestCase
             [
                 ['attribute' => 100, 'number' => 101],
                 ['number' => new CompareTo(null, 'attribute', operator: '<=')],
-                ['number' => [$messageLessOrEqualThan]]
+                ['number' => [$messageLessOrEqualThan]],
             ],
         ];
     }
