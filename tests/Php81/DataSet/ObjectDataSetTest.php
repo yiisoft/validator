@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\DataSet\PHP81;
+namespace Yiisoft\Validator\Tests\Php81\DataSet;
 
 use PHPUnit\Framework\TestCase;
 use Traversable;
@@ -18,7 +18,7 @@ use Yiisoft\Validator\Tests\Support\Data\Charts\Chart;
 use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Support\Rule\NotRuleAttribute;
 
-final class ObjectDataSet81Test extends TestCase
+final class ObjectDataSetTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
