@@ -7,7 +7,9 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\AtLeastHandler;
 use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
+use Yiisoft\Validator\Tests\Support\RuleWithCustomHandler;
 use Yiisoft\Validator\Validator;
 
 final class AtLeastTest extends TestCase
@@ -187,6 +189,17 @@ final class AtLeastTest extends TestCase
             ['' => ['Custom error']],
             $result->getErrorMessagesIndexedByPath()
         );
+    }
+
+    public function testDifferentRuleInHandler(): void
+    {
+        $rule = new RuleWithCustomHandler(AtLeastHandler::class);
+        $validator = $this->createValidator();
+
+        $this->expectExceptionMessageMatches(
+            '/.*' . preg_quote(AtLeast::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
+        );
+        $validator->validate([], [$rule]);
     }
 
     private function createValidator(): Validator
