@@ -171,7 +171,7 @@ final class EmailTest extends TestCase
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertTrue($result->isValid());
     }
@@ -286,7 +286,7 @@ final class EmailTest extends TestCase
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
@@ -297,7 +297,7 @@ final class EmailTest extends TestCase
         $data = 'test@nonexistingsubdomain.example.com';
         $rules = [new Email(checkDNS: true, message: 'Custom error')];
 
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
@@ -314,10 +314,5 @@ final class EmailTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         new Email(enableIDN: true);
-    }
-
-    private function createValidator(): Validator
-    {
-        return ValidatorFactory::make();
     }
 }

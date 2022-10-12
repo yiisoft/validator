@@ -110,7 +110,7 @@ final class EachTest extends TestCase
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertTrue($result->isValid());
     }
@@ -134,7 +134,7 @@ final class EachTest extends TestCase
      */
     public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
     {
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
@@ -145,7 +145,7 @@ final class EachTest extends TestCase
         $data = [10, 20, 30];
         $rules = [new Each([new Number(max: 13, tooBigMessage: 'Custom error.')])];
 
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
@@ -160,16 +160,11 @@ final class EachTest extends TestCase
     public function testDifferentRuleInHandler(): void
     {
         $rule = new RuleWithCustomHandler(EachHandler::class);
-        $validator = $this->createValidator();
+        $validator = ValidatorFactory::make();
 
         $this->expectExceptionMessageMatches(
             '/.*' . preg_quote(Each::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
         );
         $validator->validate([], [$rule]);
-    }
-
-    private function createValidator(): Validator
-    {
-        return ValidatorFactory::make();
     }
 }

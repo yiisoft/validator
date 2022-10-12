@@ -81,7 +81,7 @@ final class CallbackTest extends TestCase
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertTrue($result->isValid());
     }
@@ -111,7 +111,7 @@ final class CallbackTest extends TestCase
      */
     public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
     {
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
@@ -131,7 +131,7 @@ final class CallbackTest extends TestCase
             }),
         ];
 
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
@@ -145,7 +145,7 @@ final class CallbackTest extends TestCase
         $rule = new Callback(
             static fn (mixed $value, object $rule, ValidationContext $context): string => 'invalid return'
         );
-        $validator = $this->createValidator();
+        $validator = ValidatorFactory::make();
 
         $this->expectException(InvalidCallbackReturnTypeException::class);
         $validator->validate(null, [$rule]);
@@ -154,7 +154,7 @@ final class CallbackTest extends TestCase
     public function testValidateUsingMethodOutsideAttributeScope(): void
     {
         $rule = new Callback(method: 'validateName');
-        $validator = $this->createValidator();
+        $validator = ValidatorFactory::make();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Using method outside of attribute scope is prohibited.');
@@ -164,16 +164,11 @@ final class CallbackTest extends TestCase
     public function testDifferentRuleInHandler(): void
     {
         $rule = new RuleWithCustomHandler(CallbackHandler::class);
-        $validator = $this->createValidator();
+        $validator = ValidatorFactory::make();
 
         $this->expectExceptionMessageMatches(
             '/.*' . preg_quote(Callback::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
         );
         $validator->validate([], [$rule]);
-    }
-
-    private function createValidator(): Validator
-    {
-        return ValidatorFactory::make();
     }
 }

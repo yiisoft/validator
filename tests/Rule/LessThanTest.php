@@ -141,7 +141,7 @@ final class LessThanTest extends TestCase
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertTrue($result->isValid());
     }
@@ -159,7 +159,7 @@ final class LessThanTest extends TestCase
      */
     public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
     {
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
@@ -170,7 +170,7 @@ final class LessThanTest extends TestCase
         $data = 101;
         $rules = [new LessThan(100, message: 'Custom error')];
 
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
@@ -184,10 +184,5 @@ final class LessThanTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
         new LessThan();
-    }
-
-    private function createValidator(): Validator
-    {
-        return ValidatorFactory::make();
     }
 }

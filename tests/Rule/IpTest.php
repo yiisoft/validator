@@ -431,7 +431,7 @@ final class IpTest extends TestCase
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertTrue($result->isValid());
     }
@@ -562,7 +562,7 @@ final class IpTest extends TestCase
      */
     public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
     {
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
@@ -573,7 +573,7 @@ final class IpTest extends TestCase
         $data = '192.168.5.32/af';
         $rules = [new Ip(allowSubnet: true, message: 'Custom error')];
 
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
@@ -635,7 +635,7 @@ final class IpTest extends TestCase
     public function testInitException(): void
     {
         $rule = new Ip(allowIpv4: false, allowIpv6: false);
-        $validator = $this->createValidator();
+        $validator = ValidatorFactory::make();
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Both IPv4 and IPv6 checks can not be disabled at the same time');
@@ -645,17 +645,11 @@ final class IpTest extends TestCase
     public function testDifferentRuleInHandler(): void
     {
         $rule = new RuleWithCustomHandler(IpHandler::class);
-        $validator = $this->createValidator();
+        $validator = ValidatorFactory::make();
 
         $this->expectExceptionMessageMatches(
             '/.*' . preg_quote(Ip::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
         );
         $validator->validate([], [$rule]);
-    }
-
-
-    private function createValidator(): Validator
-    {
-        return ValidatorFactory::make();
     }
 }

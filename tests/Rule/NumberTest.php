@@ -194,7 +194,7 @@ final class NumberTest extends TestCase
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertTrue($result->isValid());
     }
@@ -257,7 +257,7 @@ final class NumberTest extends TestCase
      */
     public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
     {
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
@@ -268,7 +268,7 @@ final class NumberTest extends TestCase
         $data = 0;
         $rules = [new Number(min: 5, tooSmallMessage: 'Value is too small.')];
 
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
@@ -280,16 +280,11 @@ final class NumberTest extends TestCase
     public function testDifferentRuleInHandler(): void
     {
         $rule = new RuleWithCustomHandler(NumberHandler::class);
-        $validator = $this->createValidator();
+        $validator = ValidatorFactory::make();
 
         $this->expectExceptionMessageMatches(
             '/.*' . preg_quote(Number::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
         );
         $validator->validate([], [$rule]);
-    }
-
-    private function createValidator(): Validator
-    {
-        return ValidatorFactory::make();
     }
 }

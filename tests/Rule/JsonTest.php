@@ -135,7 +135,7 @@ JSON_WRAP
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertTrue($result->isValid());
     }
@@ -159,7 +159,7 @@ JSON_WRAP
      */
     public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
     {
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
@@ -170,7 +170,7 @@ JSON_WRAP
         $data = '';
         $rules = [new Json(message: 'bad json')];
 
-        $result = $this->createValidator()->validate($data, $rules);
+        $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
@@ -182,16 +182,11 @@ JSON_WRAP
     public function testDifferentRuleInHandler(): void
     {
         $rule = new RuleWithCustomHandler(JsonHandler::class);
-        $validator = $this->createValidator();
+        $validator = ValidatorFactory::make();
 
         $this->expectExceptionMessageMatches(
             '/.*' . preg_quote(Json::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
         );
         $validator->validate([], [$rule]);
-    }
-
-    private function createValidator(): Validator
-    {
-        return ValidatorFactory::make();
     }
 }
