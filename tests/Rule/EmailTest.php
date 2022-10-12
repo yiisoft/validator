@@ -92,7 +92,7 @@ final class EmailTest extends TestCase
      */
     public function testOptions(Email $rule, array $expectedOptions): void
     {
-        if (!extension_loaded('intl')) {
+        if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
@@ -165,7 +165,7 @@ final class EmailTest extends TestCase
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
-        if (!extension_loaded('intl')) {
+        if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
@@ -276,7 +276,7 @@ final class EmailTest extends TestCase
      */
     public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
     {
-        if (!extension_loaded('intl')) {
+        if (!function_exists('idn_to_ascii')) {
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
 
@@ -302,7 +302,7 @@ final class EmailTest extends TestCase
 
     public function testEnableIdnWithMissingIntlExtension(): void
     {
-        if (extension_loaded('intl')) {
+        if (function_exists('idn_to_ascii')) {
             $this->markTestSkipped('The intl extension must be unavailable for this test.');
         }
 
