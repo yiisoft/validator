@@ -9,7 +9,6 @@ use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\BooleanHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
-use Yiisoft\Validator\Validator;
 
 final class BooleanTest extends TestCase
 {

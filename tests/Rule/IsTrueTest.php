@@ -9,7 +9,6 @@ use Yiisoft\Validator\Rule\IsTrue;
 use Yiisoft\Validator\Rule\IsTrueHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
-use Yiisoft\Validator\Validator;
 
 final class IsTrueTest extends TestCase
 {

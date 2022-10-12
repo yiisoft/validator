@@ -10,7 +10,6 @@ use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\InRangeHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
-use Yiisoft\Validator\Validator;
 
 final class InRangeTest extends TestCase
 {

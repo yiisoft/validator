@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Validator;
 
 final class RegexTest extends TestCase
 {

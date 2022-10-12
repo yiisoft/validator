@@ -10,7 +10,6 @@ use Yiisoft\Validator\Rule\StopOnError;
 use Yiisoft\Validator\Rule\StopOnErrorHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
-use Yiisoft\Validator\Validator;
 
 final class StopOnErrorTest extends TestCase
 {

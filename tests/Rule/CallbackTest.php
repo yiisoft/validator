@@ -13,7 +13,6 @@ use Yiisoft\Validator\Rule\CallbackHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\Validator;
 
 final class CallbackTest extends TestCase
 {

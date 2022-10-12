@@ -12,7 +12,6 @@ use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\HasLengthHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
-use Yiisoft\Validator\Validator;
 
 final class HasLengthTest extends TestCase
 {

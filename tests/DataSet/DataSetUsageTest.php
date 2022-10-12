@@ -116,7 +116,6 @@ final class DataSetUsageTest extends TestCase
         $this->assertFalse($result->isAttributeValid('int'));
     }
 
-
     public function testExplicitRulesHavePriority(): void
     {
         $dataSet = new RulesProvidedDataSet(

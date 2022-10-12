@@ -429,10 +429,10 @@ final class NestedTest extends TestCase
                                         new Number(min: 18),
                                         new Number(min: 20),
                                     ],
-                                ])
+                                ]),
                             ]),
                         ],
-                    ])
+                    ]),
                 ]),
             ],
             'meta' => [new HasLength(min: 7)],
@@ -607,13 +607,13 @@ final class NestedTest extends TestCase
                                                     'y' => $yRules,
                                                 ]),
                                                 'rgb' => $rgbRules,
-                                            ])
+                                            ]),
                                         ]),
                                     ],
-                                ])
+                                ]),
                             ]),
                         ],
-                    ])
+                    ]),
                 ],
                 $detailedErrors,
                 $errorMessages,
@@ -627,7 +627,7 @@ final class NestedTest extends TestCase
                         'charts.*.points.*.coordinates.x' => $xRules,
                         'charts.*.points.*.coordinates.y' => $yRules,
                         'charts.*.points.*.rgb' => $rgbRules,
-                    ])
+                    ]),
                 ],
                 $detailedErrors,
                 $errorMessages,
@@ -642,7 +642,7 @@ final class NestedTest extends TestCase
                             'y' => $yRules,
                         ]),
                         'charts.*.points.*.rgb' => $rgbRules,
-                    ])
+                    ]),
                 ],
                 $detailedErrors,
                 $errorMessages,
@@ -666,7 +666,7 @@ final class NestedTest extends TestCase
                         'charts\.list.*.points\*list.*.coordinates\.data.x' => $xRules,
                         'charts\.list.*.points\*list.*.coordinates\.data.y' => $yRules,
                         'charts\.list.*.points\*list.*.rgb' => $rgbRules,
-                    ])
+                    ]),
                 ],
                 [
                     [
@@ -675,19 +675,19 @@ final class NestedTest extends TestCase
                     ],
                     [
                         $errorMessages[1],
-                        ['charts.list', 0, 'points*list', 0, 'coordinates.data', 'x']
+                        ['charts.list', 0, 'points*list', 0, 'coordinates.data', 'x'],
                     ],
                     [
                         $errorMessages[2],
-                        ['charts.list', 0, 'points*list', 0, 'coordinates.data', 'y']
+                        ['charts.list', 0, 'points*list', 0, 'coordinates.data', 'y'],
                     ],
                     [
                         $errorMessages[3],
-                        ['charts.list', 0, 'points*list', 0, 'rgb', 0]
+                        ['charts.list', 0, 'points*list', 0, 'rgb', 0],
                     ],
                     [
                         $errorMessages[4],
-                        ['charts.list', 0, 'points*list', 0, 'rgb', 1]
+                        ['charts.list', 0, 'points*list', 0, 'rgb', 1],
                     ],
                 ],
                 array_slice($errorMessages, 0, 5),
@@ -716,7 +716,7 @@ final class NestedTest extends TestCase
         $errorsData = array_map(
             static fn (Error $error) => [
                 $error->getMessage(),
-                $error->getValuePath()
+                $error->getValuePath(),
             ],
             $result->getErrors()
         );
@@ -741,7 +741,7 @@ final class NestedTest extends TestCase
                         'author.name' => [
                             new HasLength(min: 3),
                         ],
-                    ])
+                    ]),
                 ],
             ],
             [
@@ -759,7 +759,7 @@ final class NestedTest extends TestCase
                                 'name' => [new HasLength(min: 3)],
                             ]),
                         ],
-                    ])
+                    ]),
                 ],
             ],
             'key not exists, skip empty' => [
@@ -782,7 +782,7 @@ final class NestedTest extends TestCase
                         'author\.data.name\.surname' => [
                             new HasLength(min: 3),
                         ],
-                    ])
+                    ]),
                 ],
             ],
             'keys containing separator, multiple nested rules' => [
@@ -798,7 +798,7 @@ final class NestedTest extends TestCase
                                 new HasLength(min: 3),
                             ],
                         ]),
-                    ])
+                    ]),
                 ],
             ],
         ];
@@ -869,7 +869,7 @@ final class NestedTest extends TestCase
                                 'phone' => [new Regex('/^\+\d{11}$/')],
                             ]),
                         ],
-                    ])
+                    ]),
                 ],
                 ['body.shipping.phone' => ['Value is invalid.']],
             ],
@@ -880,7 +880,7 @@ final class NestedTest extends TestCase
                         0 => new Nested([
                             0 => [new Number(min: -10, max: 10)],
                         ]),
-                    ])
+                    ]),
                 ],
                 ['0.0' => ['Value must be no less than -10.']],
             ],
@@ -953,7 +953,7 @@ final class NestedTest extends TestCase
                                 'phone' => [new Regex('/^\+\d{11}$/')],
                             ]),
                         ],
-                    ])
+                    ]),
                 ],
                 [['Value is invalid.', ['body', 'shipping', 'phone']]],
             ],
@@ -964,7 +964,7 @@ final class NestedTest extends TestCase
                         0 => new Nested([
                             0 => [new Number(min: -10, max: 10)],
                         ]),
-                    ])
+                    ]),
                 ],
                 [['Value must be no less than -10.', [0, 0]]],
             ],
@@ -990,7 +990,7 @@ final class NestedTest extends TestCase
         $errorsData = array_map(
             static fn (Error $error) => [
                 $error->getMessage(),
-                $error->getValuePath()
+                $error->getValuePath(),
             ],
             $result->getErrors()
         );
@@ -1007,7 +1007,7 @@ final class NestedTest extends TestCase
                 ['value' => new Required()],
                 requirePropertyPath: true,
                 noPropertyPathMessage: 'Property is not found.',
-            )
+            ),
         ];
 
         $result = ValidatorFactory::make()->validate($data, $rules);

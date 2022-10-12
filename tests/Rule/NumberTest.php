@@ -10,7 +10,6 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\NumberHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
-use Yiisoft\Validator\Validator;
 
 final class NumberTest extends TestCase
 {
