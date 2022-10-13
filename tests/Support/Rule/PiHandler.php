@@ -8,7 +8,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
-use const Yiisoft\Validator\Tests\Stub\PHP_FLOAT_EPSILON;
+use function abs;
 
 final class PiHandler implements RuleHandlerInterface
 {
@@ -16,7 +16,7 @@ final class PiHandler implements RuleHandlerInterface
     {
         $result = new Result();
 
-        if (!(\abs($value - M_PI) < PHP_FLOAT_EPSILON)) {
+        if (!(abs($value - M_PI) < PHP_FLOAT_EPSILON)) {
             $result->addError('Value must be Pi.');
         }
 
