@@ -22,7 +22,6 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
-use Yiisoft\Validator\Tests\Support\DataSet\SimpleDataSet;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
@@ -36,7 +35,7 @@ class ValidatorTest extends TestCase
 {
     public function testAddingRulesViaConstructor(): void
     {
-        $dataObject = new SimpleDataSet(['bool' => true, 'int' => 41]);
+        $dataObject = new ArrayDataSet(['bool' => true, 'int' => 41]);
         $validator = ValidatorFactory::make();
         $result = $validator->validate($dataObject, [
             'bool' => [new Boolean()],
@@ -96,7 +95,7 @@ class ValidatorTest extends TestCase
     {
         $validator = ValidatorFactory::make();
         $result = $validator->validate(
-            new SimpleDataSet(['property' => '']),
+            new ArrayDataSet(['property' => '']),
             ['property' => [new Required(when: static fn (mixed $value, ?ValidationContext $context): bool => false)]],
         );
 
@@ -110,7 +109,7 @@ class ValidatorTest extends TestCase
         $validator = ValidatorFactory::make();
 
         $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
-        $validator->validate(new SimpleDataSet(['property' => '']), [
+        $validator->validate(new ArrayDataSet(['property' => '']), [
             'property' => [
                 new class ($ruleHandler) implements RuleInterface {
                     public function __construct(private $ruleHandler)
@@ -136,7 +135,7 @@ class ValidatorTest extends TestCase
         $this->expectException(RuleHandlerNotFoundException::class);
 
         $validator = ValidatorFactory::make();
-        $validator->validate(new SimpleDataSet(['property' => '']), [
+        $validator->validate(new ArrayDataSet(['property' => '']), [
             'property' => [
                 new class () implements RuleInterface {
                     public function getName(): string

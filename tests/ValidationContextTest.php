@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Tests\Support\DataSet\SimpleDataSet;
+use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
 
@@ -21,7 +21,7 @@ final class ValidationContextTest extends TestCase
 
     public function testConstructor(): void
     {
-        $dataSet = new SimpleDataSet();
+        $dataSet = new ArrayDataSet();
 
         $context = new ValidationContext(ValidatorFactory::make(), $dataSet, 'name', ['key' => 42]);
 

@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\DataSet;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Tests\Support\DataSet\RulesProvidedDataSet;
-use Yiisoft\Validator\Tests\Support\DataSet\SimpleDataSet;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 final class DataSetUsageTest extends TestCase
 {
-    public function dataSimpleDataSetUsage(): array
+    public function dataArrayDataSetUsage(): array
     {
         return [
             [
@@ -27,11 +27,11 @@ final class DataSetUsageTest extends TestCase
     }
 
     /**
-     * @dataProvider dataSimpleDataSetUsage
+     * @dataProvider dataArrayDataSetUsage
      */
-    public function testSimpleDataSetUsage(array $dataSet, array $rules): void
+    public function testArrayDataSetUsage(array $dataSet, array $rules): void
     {
-        $dataObject = new SimpleDataSet($dataSet);
+        $dataObject = new ArrayDataSet($dataSet);
         $result = ValidatorFactory::make()->validate($dataObject, $rules);
 
         $this->assertTrue($result->isValid());
@@ -58,9 +58,9 @@ final class DataSetUsageTest extends TestCase
         $this->assertTrue($result->isValid());
     }
 
-    public function testSimpleDataSetResult(): void
+    public function testArrayDataSetResult(): void
     {
-        $dataObject = new SimpleDataSet([
+        $dataObject = new ArrayDataSet([
             'bool' => true,
             'int' => 41,
         ]);
