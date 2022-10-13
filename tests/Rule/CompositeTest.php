@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 
-final class CompositeTest extends TestCase
+final class CompositeTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+    use DifferentRuleInHandlerTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Composite([]);
@@ -79,15 +84,6 @@ final class CompositeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(Composite $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
-    }
-
     public function dataValidationPassed(): array
     {
         return [
@@ -121,16 +117,6 @@ final class CompositeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
-    }
-
     public function dataValidationFailed(): array
     {
         return [
@@ -149,47 +135,21 @@ final class CompositeTest extends TestCase
                     ],
                 ],
             ],
+            'custom error' => [
+                20,
+                [
+                    new Composite(
+                        rules: [new Number(max: 13, tooBigMessage: 'Custom error')],
+                        when: fn () => true,
+                    ),
+                ],
+                ['' => ['Custom error']]
+            ],
         ];
     }
 
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    protected function getDifferentRuleInHandlerItems(): array
     {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testCustomErrorMessage(): void
-    {
-        $data = 20;
-        $rules = [
-            new Composite(
-                rules: [new Number(max: 13, tooBigMessage: 'Custom error')],
-                when: fn () => true,
-            ),
-        ];
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            ['' => ['Custom error']],
-            $result->getErrorMessagesIndexedByPath()
-        );
-    }
-
-    public function testDifferentRuleInHandler(): void
-    {
-        $rule = new RuleWithCustomHandler(CompositeHandler::class);
-        $validator = ValidatorFactory::make();
-
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(Composite::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
+        return [Composite::class, CompositeHandler::class];
     }
 }

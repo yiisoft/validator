@@ -22,6 +22,9 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
@@ -33,8 +36,11 @@ use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
-final class NestedTest extends TestCase
+final class NestedTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+    use DifferentRuleInHandlerTestTrait;
+
     public function testDefaultValues(): void
     {
         $rule = new Nested();
@@ -198,16 +204,6 @@ final class NestedTest extends TestCase
                 ],
             ],
         ];
-    }
-
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(Nested $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-
-        $this->assertEquals($expectedOptions, $options);
     }
 
     public function testValidationRuleIsNotInstanceOfRule(): void
@@ -804,16 +800,6 @@ final class NestedTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
-    }
-
     public function dataValidationFailed(): array
     {
         return [
@@ -884,18 +870,18 @@ final class NestedTest extends TestCase
                 ],
                 ['0.0' => ['Value must be no less than -10.']],
             ],
+            'custom error' => [
+                [],
+                [
+                    new Nested(
+                        ['value' => new Required()],
+                        requirePropertyPath: true,
+                        noPropertyPathMessage: 'Property is not found.',
+                    ),
+                ],
+                ['value' => ['Property is not found.']]
+            ],
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
     public function dataValidationFailedWithDetailedErrors(): array
@@ -999,34 +985,8 @@ final class NestedTest extends TestCase
         $this->assertSame($errors, $errorsData);
     }
 
-    public function testCustomErrorMessage(): void
+    protected function getDifferentRuleInHandlerItems(): array
     {
-        $data = [];
-        $rules = [
-            new Nested(
-                ['value' => new Required()],
-                requirePropertyPath: true,
-                noPropertyPathMessage: 'Property is not found.',
-            ),
-        ];
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            ['value' => ['Property is not found.']],
-            $result->getErrorMessagesIndexedByPath()
-        );
-    }
-
-    public function testDifferentRuleInHandler(): void
-    {
-        $rule = new RuleWithCustomHandler(NestedHandler::class);
-        $validator = ValidatorFactory::make();
-
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(Nested::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
+        return [Nested::class, NestedHandler::class];
     }
 }

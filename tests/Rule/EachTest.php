@@ -8,11 +8,17 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\EachHandler;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 
-final class EachTest extends TestCase
+final class EachTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+    use DifferentRuleInHandlerTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Each([]);
@@ -85,15 +91,6 @@ final class EachTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(Each $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
-    }
-
     public function dataValidationPassed(): array
     {
         return [
@@ -102,16 +99,6 @@ final class EachTest extends TestCase
                 [new Each([new Number(max: 20)])],
             ],
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
     }
 
     public function dataValidationFailed(): array
@@ -125,45 +112,19 @@ final class EachTest extends TestCase
                     '2' => ['Value must be no greater than 13. 30 given.'],
                 ],
             ],
+            'custom error' => [
+                [10, 20, 30],
+                [new Each([new Number(max: 13, tooBigMessage: 'Custom error.')])],
+                [
+                    '1' => ['Custom error. 20 given.'],
+                    '2' => ['Custom error. 30 given.'],
+                ]
+            ]
         ];
     }
 
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    protected function getDifferentRuleInHandlerItems(): array
     {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testCustomErrorMessage(): void
-    {
-        $data = [10, 20, 30];
-        $rules = [new Each([new Number(max: 13, tooBigMessage: 'Custom error.')])];
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            [
-                '1' => ['Custom error. 20 given.'],
-                '2' => ['Custom error. 30 given.'],
-            ],
-            $result->getErrorMessagesIndexedByPath()
-        );
-    }
-
-    public function testDifferentRuleInHandler(): void
-    {
-        $rule = new RuleWithCustomHandler(EachHandler::class);
-        $validator = ValidatorFactory::make();
-
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(Each::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
+        return [Each::class, EachHandler::class];
     }
 }

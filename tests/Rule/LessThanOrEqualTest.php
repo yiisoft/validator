@@ -7,10 +7,14 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\Rule\LessThanOrEqual;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
-final class LessThanOrEqualTest extends TestCase
+final class LessThanOrEqualTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+
     public function testGetName(): void
     {
         $rule = new LessThanOrEqual(1);
@@ -118,22 +122,6 @@ final class LessThanOrEqualTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(LessThanOrEqual $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
-    }
-
-    public function testWithoutParameters(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-        new LessThanOrEqual();
-    }
-
     public function dataValidationPassed(): array
     {
         return [
@@ -143,16 +131,6 @@ final class LessThanOrEqualTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
-    }
-
     public function dataValidationFailed(): array
     {
         $message = 'Value must be less than or equal to "100".';
@@ -160,31 +138,14 @@ final class LessThanOrEqualTest extends TestCase
         return [
             [101, [new LessThanOrEqual(100)], ['' => [$message]]],
             ['101', [new LessThanOrEqual(100)], ['' => [$message]]],
+            'custom error' => [101, [new LessThanOrEqual(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
     }
 
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    public function testWithoutParameters(): void
     {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testCustomErrorMessage(): void
-    {
-        $data = 101;
-        $rules = [new LessThanOrEqual(100, message: 'Custom error')];
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            ['' => ['Custom error']],
-            $result->getErrorMessagesIndexedByPath()
-        );
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+        new LessThanOrEqual();
     }
 }

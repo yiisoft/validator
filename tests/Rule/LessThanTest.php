@@ -7,10 +7,14 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\Rule\LessThan;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
-final class LessThanTest extends TestCase
+final class LessThanTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+
     public function testGetName(): void
     {
         $rule = new LessThan(1);
@@ -118,15 +122,6 @@ final class LessThanTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(LessThan $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
-    }
-
     public function dataValidationPassed(): array
     {
         return [
@@ -135,47 +130,13 @@ final class LessThanTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
-    }
-
     public function dataValidationFailed(): array
     {
         return [
             [100, [new LessThan(100)], ['' => ['Value must be less than "100".']]],
             ['101', [new LessThan(100)], ['' => ['Value must be less than "100".']]],
+            'custom error' => [101, [new LessThan(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testCustomErrorMessage(): void
-    {
-        $data = 101;
-        $rules = [new LessThan(100, message: 'Custom error')];
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            ['' => ['Custom error']],
-            $result->getErrorMessagesIndexedByPath()
-        );
     }
 
     public function testWithoutParameters(): void

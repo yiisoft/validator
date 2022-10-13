@@ -8,11 +8,17 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\EmailHandler;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
-final class EmailTest extends TestCase
+final class EmailTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+    use DifferentRuleInHandlerTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Email();
@@ -93,17 +99,11 @@ final class EmailTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(Email $rule, array $expectedOptions): void
+    public function beforeTestOptions(): void
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
-
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
     }
 
     public function dataValidationPassed(): array
@@ -170,18 +170,11 @@ final class EmailTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
+    public function beforeTestValidationPassed(): void
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
     }
 
     public function dataValidationFailed(): array
@@ -282,36 +275,19 @@ final class EmailTest extends TestCase
                 [new Email(checkDNS: true)],
                 $errors,
             ],
+            'custom error' => [
+                'test@nonexistingsubdomain.example.com',
+                [new Email(checkDNS: true, message: 'Custom error')],
+                ['' => ['Custom error']],
+            ]
         ];
     }
 
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    public function beforeTestValidationFailed(): void
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testCustomErrorMessage(): void
-    {
-        $data = 'test@nonexistingsubdomain.example.com';
-        $rules = [new Email(checkDNS: true, message: 'Custom error')];
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            ['' => ['Custom error']],
-            $result->getErrorMessagesIndexedByPath()
-        );
     }
 
     public function testEnableIdnWithMissingIntlExtension(): void
@@ -324,14 +300,8 @@ final class EmailTest extends TestCase
         new Email(enableIDN: true);
     }
 
-    public function testDifferentRuleInHandler(): void
+    protected function getDifferentRuleInHandlerItems(): array
     {
-        $rule = new RuleWithCustomHandler(EmailHandler::class);
-        $validator = ValidatorFactory::make();
-
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(Email::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
+        return [Email::class, EmailHandler::class];
     }
 }

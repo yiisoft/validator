@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\BooleanHandler;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
-final class BooleanTest extends TestCase
+final class BooleanTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+    use DifferentRuleInHandlerTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Boolean();
@@ -82,15 +85,6 @@ final class BooleanTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(Boolean $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
-    }
-
     public function dataValidationPassed(): array
     {
         return [
@@ -106,16 +100,6 @@ final class BooleanTest extends TestCase
             [true, [new Boolean(trueValue: true, falseValue: false, strict: true)]],
             [false, [new Boolean(trueValue: true, falseValue: false, strict: true)]],
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
     }
 
     public function dataValidationFailed(): array
@@ -134,42 +118,13 @@ final class BooleanTest extends TestCase
 
             ['0', [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
             [[], [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
+
+            'custom error' => [5, [new Boolean(message: 'Custom error.')], ['' => ['Custom error.']]]
         ];
     }
 
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    protected function getDifferentRuleInHandlerItems(): array
     {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testCustomErrorMessage(): void
-    {
-        $data = 5;
-        $rules = [new Boolean(message: 'Custom error.')];
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            ['' => ['Custom error.']],
-            $result->getErrorMessagesIndexedByPath()
-        );
-    }
-
-    public function testDifferentRuleInHandler(): void
-    {
-        $rule = new RuleWithCustomHandler(BooleanHandler::class);
-        $validator = ValidatorFactory::make();
-
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(Boolean::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
+        return [Boolean::class, BooleanHandler::class];
     }
 }

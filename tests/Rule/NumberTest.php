@@ -8,11 +8,17 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\NumberHandler;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 
-final class NumberTest extends TestCase
+final class NumberTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+    use DifferentRuleInHandlerTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Number();
@@ -140,15 +146,6 @@ final class NumberTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(Number $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
-    }
-
     public function dataValidationPassed(): array
     {
         return [
@@ -186,16 +183,6 @@ final class NumberTest extends TestCase
 
             [0, [new Number(asInteger: true, min: -10, max: 20)]],
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
     }
 
     public function dataValidationFailed(): array
@@ -248,42 +235,16 @@ final class NumberTest extends TestCase
             [-11, [new Number(asInteger: true, min: -10, max: 20)], ['' => ['Value must be no less than -10.']]],
             [22, [new Number(asInteger: true, min: -10, max: 20)], ['' => ['Value must be no greater than 20.']]],
             ['20e-1', [new Number(asInteger: true, min: -10, max: 20)], ['' => [$notAnIntegerMessage]]],
+            'custom error' => [
+                0,
+                [new Number(min: 5, tooSmallMessage: 'Value is too small.')],
+                ['' => ['Value is too small.']]
+            ]
         ];
     }
 
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    protected function getDifferentRuleInHandlerItems(): array
     {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testCustomErrorMessage(): void
-    {
-        $data = 0;
-        $rules = [new Number(min: 5, tooSmallMessage: 'Value is too small.')];
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            ['' => ['Value is too small.']],
-            $result->getErrorMessagesIndexedByPath()
-        );
-    }
-
-    public function testDifferentRuleInHandler(): void
-    {
-        $rule = new RuleWithCustomHandler(NumberHandler::class);
-        $validator = ValidatorFactory::make();
-
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(Number::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
+        return [Number::class, NumberHandler::class];
     }
 }

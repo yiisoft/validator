@@ -8,11 +8,17 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\RegexHandler;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
-final class RegexTest extends TestCase
+final class RegexTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+    use DifferentRuleInHandlerTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Regex('//');
@@ -55,15 +61,6 @@ final class RegexTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(Regex $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
-    }
-
     public function dataValidationPassed(): array
     {
         return [
@@ -71,16 +68,6 @@ final class RegexTest extends TestCase
             ['ab', [new Regex('/a/')]],
             ['b', [new Regex('/a/', not: true)]],
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
     }
 
     public function dataValidationFailed(): array
@@ -96,47 +83,14 @@ final class RegexTest extends TestCase
             [new stdClass(), [new Regex('/a/')], ['' => [$incorrectInputMessage]]],
             [new stdClass(), [new Regex('/a/', not: true)], ['' => [$incorrectInputMessage]]],
             ['b', [new Regex('/a/')], ['' => [$message]]],
-        ];
-    }
 
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function dataCustomErrorMessage(): array
-    {
-        return [
             ['b', [new Regex('/a/', message: 'Custom message.')], ['' => ['Custom message.']]],
             [null, [new Regex('/a/', incorrectInputMessage: 'Custom message.')], ['' => ['Custom message.']]],
         ];
     }
 
-    /**
-     * @dataProvider dataCustomErrorMessage
-     */
-    public function testCustomErrorMessage(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    protected function getDifferentRuleInHandlerItems(): array
     {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testDifferentRuleInHandler(): void
-    {
-        $rule = new RuleWithCustomHandler(RegexHandler::class);
-        $validator = ValidatorFactory::make();
-
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(Regex::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
+        return [Regex::class, RegexHandler::class];
     }
 }

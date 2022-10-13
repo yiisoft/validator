@@ -7,10 +7,14 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\Rule\GreaterThanOrEqual;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
-final class GreaterThanOrEqualTest extends TestCase
+final class GreaterThanOrEqualTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+
     public function testGetName(): void
     {
         $rule = new GreaterThanOrEqual(1);
@@ -118,31 +122,12 @@ final class GreaterThanOrEqualTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(GreaterThanOrEqual $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
-    }
-
     public function dataValidationPassed(): array
     {
         return [
             [100, [new GreaterThanOrEqual(99)]],
             ['100', [new GreaterThanOrEqual('100')]],
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
     }
 
     public function dataValidationFailed(): array
@@ -152,32 +137,8 @@ final class GreaterThanOrEqualTest extends TestCase
         return [
             [99, [new GreaterThanOrEqual(100)], ['' => [$message]]],
             ['99', [new GreaterThanOrEqual(100)], ['' => [$message]]],
+            'custom error' => [99, [new GreaterThanOrEqual(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testCustomErrorMessage(): void
-    {
-        $data = 99;
-        $rules = [new GreaterThanOrEqual(100, message: 'Custom error')];
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            ['' => ['Custom error']],
-            $result->getErrorMessagesIndexedByPath()
-        );
     }
 
     public function testWithoutParameters(): void

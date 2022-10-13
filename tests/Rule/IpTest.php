@@ -8,11 +8,17 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Ip;
 use Yiisoft\Validator\Rule\IpHandler;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 
-final class IpTest extends TestCase
+final class IpTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+    use DifferentRuleInHandlerTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Ip();
@@ -333,15 +339,6 @@ final class IpTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(Ip $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
-    }
-
     public function dataValidationPassed(): array
     {
         return [
@@ -423,16 +420,6 @@ final class IpTest extends TestCase
             ['1.2.3.4', [new Ip(networks: ['myNetworkEu' => ['1.2.3.4/10', '5.6.7.8']], ranges: ['myNetworkEu'])]],
             ['5.6.7.8', [new Ip(networks: ['myNetworkEu' => ['1.2.3.4/10', '5.6.7.8']], ranges: ['myNetworkEu'])]],
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
     }
 
     public function dataValidationFailed(): array
@@ -553,32 +540,13 @@ final class IpTest extends TestCase
             ['01.01.01.01', [new Ip()], ['' => [$message]]],
             ['010.010.010.010', [new Ip()], ['' => [$message]]],
             ['001.001.001.001', [new Ip()], ['' => [$message]]],
+
+            'custom error' => [
+                '192.168.5.32/af',
+                [new Ip(allowSubnet: true, message: 'Custom error')],
+                ['' => ['Custom error']]
+            ],
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testCustomErrorMessage(): void
-    {
-        $data = '192.168.5.32/af';
-        $rules = [new Ip(allowSubnet: true, message: 'Custom error')];
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            ['' => ['Custom error']],
-            $result->getErrorMessagesIndexedByPath()
-        );
     }
 
     public function testNetworkAliasException(): void
@@ -641,14 +609,8 @@ final class IpTest extends TestCase
         $validator->validate('', [$rule]);
     }
 
-    public function testDifferentRuleInHandler(): void
+    protected function getDifferentRuleInHandlerItems(): array
     {
-        $rule = new RuleWithCustomHandler(IpHandler::class);
-        $validator = ValidatorFactory::make();
-
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(Ip::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
+        return [Ip::class, IpHandler::class];
     }
 }

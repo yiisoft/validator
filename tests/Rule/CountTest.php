@@ -11,11 +11,17 @@ use stdClass;
 use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\CountHandler;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
-final class CountTest extends TestCase
+final class CountTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+    use DifferentRuleInHandlerTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Count(min: 3);
@@ -56,15 +62,6 @@ final class CountTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(Count $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
-    }
-
     public function dataValidationPassed(): array
     {
         return [
@@ -88,16 +85,6 @@ final class CountTest extends TestCase
                 [new Count(min: 3)],
             ],
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
     }
 
     public function dataValidationFailed(): array
@@ -130,38 +117,11 @@ final class CountTest extends TestCase
                 ['' => [$lessThanMinmessage]],
             ],
             [[0, 0, 0, 0], [new Count(max: 3)], ['' => [$greaterThanMaxMessage]]],
-        ];
-    }
 
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function dataCustomErrorMessage(): array
-    {
-        return [
             [[0, 0, 0, 0], [new Count(max: 3, greaterThanMaxMessage: 'Custom message.')], ['' => ['Custom message.']]],
             [[0, 0, 0, 0], [new Count(exactly: 3, notExactlyMessage: 'Custom message.')], ['' => ['Custom message.']]],
             [[0, 0], [new Count(min: 3, lessThanMinMessage: 'Custom message.')], ['' => ['Custom message.']]],
         ];
-    }
-
-    /**
-     * @dataProvider dataCustomErrorMessage
-     */
-    public function testCustomErrorMessage(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
     public function dataInitWithMinAndMaxAndExactly(): array
@@ -197,14 +157,8 @@ final class CountTest extends TestCase
         new Count();
     }
 
-    public function testDifferentRuleInHandler(): void
+    protected function getDifferentRuleInHandlerItems(): array
     {
-        $rule = new RuleWithCustomHandler(CountHandler::class);
-        $validator = ValidatorFactory::make();
-
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(Count::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
+        return [Count::class, CountHandler::class];
     }
 }

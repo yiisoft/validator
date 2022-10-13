@@ -5,17 +5,21 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\CallbackHandler;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\ValidationContext;
 
-final class CallbackTest extends TestCase
+final class CallbackTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+    use DifferentRuleInHandlerTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Callback(callback: fn () => new Result());
@@ -47,15 +51,6 @@ final class CallbackTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(Callback $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
-    }
-
     public function dataValidationPassed(): array
     {
         return [
@@ -75,16 +70,6 @@ final class CallbackTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
-    }
-
     public function dataValidationFailed(): array
     {
         return [
@@ -102,41 +87,21 @@ final class CallbackTest extends TestCase
                 ],
                 ['' => ['Value should be 42!']],
             ],
+            'custom error' => [
+                41,
+                [
+                    new Callback(static function (mixed $value, object $rule, ValidationContext $context): Result {
+                        $result = new Result();
+                        if ($value !== 42) {
+                            $result->addError('Custom error');
+                        }
+
+                        return $result;
+                    }),
+                ],
+                ['' => ['Custom error']]
+            ]
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testCustomErrorMessage(): void
-    {
-        $data = 41;
-        $rules = [
-            new Callback(static function (mixed $value, object $rule, ValidationContext $context): Result {
-                $result = new Result();
-                if ($value !== 42) {
-                    $result->addError('Custom error');
-                }
-
-                return $result;
-            }),
-        ];
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            ['' => ['Custom error']],
-            $result->getErrorMessagesIndexedByPath()
-        );
     }
 
     public function testThrowExceptionWithInvalidReturn(): void
@@ -160,14 +125,8 @@ final class CallbackTest extends TestCase
         $validator->validate(null, [$rule]);
     }
 
-    public function testDifferentRuleInHandler(): void
+    protected function getDifferentRuleInHandlerItems(): array
     {
-        $rule = new RuleWithCustomHandler(CallbackHandler::class);
-        $validator = ValidatorFactory::make();
-
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(Callback::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
+        return [Callback::class, CallbackHandler::class];
     }
 }

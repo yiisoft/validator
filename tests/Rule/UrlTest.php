@@ -8,11 +8,17 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 
-final class UrlTest extends TestCase
+final class UrlTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+    use DifferentRuleInHandlerTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Url();
@@ -81,17 +87,11 @@ final class UrlTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(Url $rule, array $expectedOptions): void
+    public function beforeTestOptions(): void
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
-
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
     }
 
     public function dataValidationPassed(): array
@@ -133,18 +133,11 @@ final class UrlTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
+    public function beforeTestValidationPassed(): void
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
     }
 
     public function dataValidationFailed(): array
@@ -175,51 +168,16 @@ final class UrlTest extends TestCase
 
             ['', [new Url(enableIDN: true)], $errors],
             ['http://' . str_pad('base', 2000, 'url') . '.de', [new Url(enableIDN: true)], $errors],
+
+            'custom error' => ['', [new Url(enableIDN: true, message: 'Custom error')], ['' => ['Custom error']]],
         ];
     }
 
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    public function beforeTestValidationFailed(): void
     {
         if (!extension_loaded('intl')) {
             $this->markTestSkipped('The intl extension must be available for this test.');
         }
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testCustomErrorMessage(): void
-    {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
-        }
-
-        $data = '';
-        $rules = [new Url(enableIDN: true, message: 'Custom error')];
-
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            ['' => ['Custom error']],
-            $result->getErrorMessagesIndexedByPath()
-        );
-    }
-
-    public function testDifferentRuleInHandler(): void
-    {
-        $rule = new RuleWithCustomHandler(UrlHandler::class);
-        $validator = ValidatorFactory::make();
-
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(Url::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
     }
 
     public function testEnableIdnWithMissingIntlExtension(): void
@@ -230,5 +188,10 @@ final class UrlTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         new Url(enableIDN: true);
+    }
+
+    protected function getDifferentRuleInHandlerItems(): array
+    {
+        return [Url::class, UrlHandler::class];
     }
 }

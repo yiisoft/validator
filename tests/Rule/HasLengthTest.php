@@ -10,11 +10,17 @@ use stdClass;
 use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\HasLengthHandler;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 
-final class HasLengthTest extends TestCase
+final class HasLengthTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+    use DifferentRuleInHandlerTestTrait;
+
     public function testGetName(): void
     {
         $rule = new HasLength(min: 3);
@@ -105,15 +111,6 @@ final class HasLengthTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(HasLength $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
-    }
-
     public function dataValidationPassed(): array
     {
         return [
@@ -137,22 +134,22 @@ final class HasLengthTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
-    }
-
     public function dataValidationFailed(): array
     {
         $message = 'This value must be a string.';
         $greaterThanMaxMessage = 'This value must contain at most 25 characters.';
         $notExactlyMessage = 'This value must contain exactly 25 characters.';
         $lessThanMinMessage = 'This value must contain at least 25 characters.';
+
+        $customErrorRules = [
+            new HasLength(
+                min: 3,
+                max: 5,
+                message: 'is not string error',
+                lessThanMinMessage: 'is too short test',
+                greaterThanMaxMessage: 'is too long test'
+            )
+        ];
 
         return [
             [['not a string'], [new HasLength(min: 25)], ['' => [$message]]],
@@ -171,48 +168,11 @@ final class HasLengthTest extends TestCase
             ],
             [str_repeat('x', 13), [new HasLength(min: 25)], ['' => [$lessThanMinMessage]]],
             ['', [new HasLength(min: 25)], ['' => [$lessThanMinMessage]]],
+
+            [null, $customErrorRules, ['' => ['is not string error']]],
+            [str_repeat('x', 1), $customErrorRules, ['' => ['is too short test']]],
+            [str_repeat('x', 6), $customErrorRules, ['' => ['is too long test']]],
         ];
-    }
-
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function dataCustomErrorMessage(): array
-    {
-        $rules = [
-            new HasLength(
-                min: 3,
-                max: 5,
-                message: 'is not string error',
-                lessThanMinMessage: 'is too short test',
-                greaterThanMaxMessage: 'is too long test'
-            ),
-        ];
-
-        return [
-            [null, $rules, ['' => ['is not string error']]],
-            [str_repeat('x', 1), $rules, ['' => ['is too short test']]],
-            [str_repeat('x', 6), $rules, ['' => ['is too long test']]],
-        ];
-    }
-
-    /**
-     * @dataProvider dataCustomErrorMessage
-     */
-    public function testCustomErrorMessage(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
     public function dataInitWithMinAndMaxAndExactly(): array
@@ -251,14 +211,8 @@ final class HasLengthTest extends TestCase
         new HasLength();
     }
 
-    public function testDifferentRuleInHandler(): void
+    protected function getDifferentRuleInHandlerItems(): array
     {
-        $rule = new RuleWithCustomHandler(HasLengthHandler::class);
-        $validator = ValidatorFactory::make();
-
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(HasLength::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
+        return [HasLength::class, HasLengthHandler::class];
     }
 }

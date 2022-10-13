@@ -7,19 +7,14 @@ namespace Yiisoft\Validator\Tests\Rule;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\CompareHandler;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 
 final class CompareTest extends TestCase
 {
-    public function testDifferentRuleInHandler(): void
-    {
-        $rule = new RuleWithCustomHandler(CompareHandler::class);
-        $validator = ValidatorFactory::make();
+    use DifferentRuleInHandlerTestTrait;
 
-        $this->expectExceptionMessageMatches(
-            '/.*' . preg_quote(Compare::class) . '.*' . preg_quote(RuleWithCustomHandler::class) . '.*/'
-        );
-        $validator->validate([], [$rule]);
+    protected function getDifferentRuleInHandlerItems(): array
+    {
+        return [Compare::class, CompareHandler::class];
     }
 }
