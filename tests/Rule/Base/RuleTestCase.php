@@ -9,7 +9,7 @@ use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 abstract class RuleTestCase extends TestCase
 {
-    abstract function dataValidationPassed(): array;
+    abstract public function dataValidationPassed(): array;
 
     public function beforeTestValidationPassed(): void
     {
@@ -27,7 +27,7 @@ abstract class RuleTestCase extends TestCase
         $this->assertTrue($result->isValid());
     }
 
-    abstract function dataValidationFailed(): array;
+    abstract public function dataValidationFailed(): array;
 
     public function beforeTestValidationFailed(): void
     {

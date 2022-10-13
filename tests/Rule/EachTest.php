@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\EachHandler;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 
 final class EachTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
     use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
 
     public function testGetName(): void
     {
@@ -118,8 +115,8 @@ final class EachTest extends RuleTestCase
                 [
                     '1' => ['Custom error. 20 given.'],
                     '2' => ['Custom error. 30 given.'],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 

@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\RegexHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
-use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 final class RegexTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
     use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
 
     public function testGetName(): void
     {

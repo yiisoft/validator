@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Countable;
 use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\Count;
@@ -14,13 +13,11 @@ use Yiisoft\Validator\Rule\CountHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
-use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 final class CountTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
     use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
 
     public function testGetName(): void
     {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\DataSet\MixedDataSet;
 use Yiisoft\Validator\Rule\HasLength;
@@ -13,13 +12,11 @@ use Yiisoft\Validator\Rule\HasLengthHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 
 final class HasLengthTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
     use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
 
     public function testGetName(): void
     {
@@ -148,7 +145,7 @@ final class HasLengthTest extends RuleTestCase
                 message: 'is not string error',
                 lessThanMinMessage: 'is too short test',
                 greaterThanMaxMessage: 'is too long test'
-            )
+            ),
         ];
 
         return [

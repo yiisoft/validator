@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\Rule\GreaterThanOrEqual;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 final class GreaterThanOrEqualTest extends RuleTestCase
 {

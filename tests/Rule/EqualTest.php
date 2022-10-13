@@ -8,7 +8,6 @@ use RuntimeException;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 final class EqualTest extends RuleTestCase
 {

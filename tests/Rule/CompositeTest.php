@@ -10,13 +10,11 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 
 final class CompositeTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
     use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
 
     public function testGetName(): void
     {
@@ -143,7 +141,7 @@ final class CompositeTest extends RuleTestCase
                         when: fn () => true,
                     ),
                 ],
-                ['' => ['Custom error']]
+                ['' => ['Custom error']],
             ],
         ];
     }

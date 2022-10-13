@@ -17,8 +17,8 @@ use Yiisoft\Validator\ValidationContext;
 
 final class CallbackTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
     use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
 
     public function testGetName(): void
     {
@@ -99,8 +99,8 @@ final class CallbackTest extends RuleTestCase
                         return $result;
                     }),
                 ],
-                ['' => ['Custom error']]
-            ]
+                ['' => ['Custom error']],
+            ],
         ];
     }
 

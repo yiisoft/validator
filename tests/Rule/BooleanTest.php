@@ -12,8 +12,8 @@ use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
 final class BooleanTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
     use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
 
     public function testGetName(): void
     {
@@ -119,7 +119,7 @@ final class BooleanTest extends RuleTestCase
             ['0', [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
             [[], [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
 
-            'custom error' => [5, [new Boolean(message: 'Custom error.')], ['' => ['Custom error.']]]
+            'custom error' => [5, [new Boolean(message: 'Custom error.')], ['' => ['Custom error.']]],
         ];
     }
 

@@ -5,19 +5,16 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use ArrayObject;
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\InRangeHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 
 final class InRangeTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
     use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
 
     public function testGetName(): void
     {

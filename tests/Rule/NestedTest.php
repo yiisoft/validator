@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use stdClass;
 use Yiisoft\Arrays\ArrayHelper;
@@ -32,14 +31,13 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRule;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
-use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
 final class NestedTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
     use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
 
     public function testDefaultValues(): void
     {
@@ -879,7 +877,7 @@ final class NestedTest extends RuleTestCase
                         noPropertyPathMessage: 'Property is not found.',
                     ),
                 ],
-                ['value' => ['Property is not found.']]
+                ['value' => ['Property is not found.']],
             ],
         ];
     }

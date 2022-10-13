@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\EmailHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
-use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 final class EmailTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
     use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
 
     public function testGetName(): void
     {
@@ -279,7 +276,7 @@ final class EmailTest extends RuleTestCase
                 'test@nonexistingsubdomain.example.com',
                 [new Email(checkDNS: true, message: 'Custom error')],
                 ['' => ['Custom error']],
-            ]
+            ],
         ];
     }
 

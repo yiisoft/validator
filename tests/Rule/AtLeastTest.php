@@ -12,8 +12,8 @@ use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
 final class AtLeastTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
     use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
 
     public function testGetName(): void
     {
