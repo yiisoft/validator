@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\DataSet;
 
-use JetBrains\PhpStorm\ArrayShape;
 use ReflectionAttribute;
 use ReflectionObject;
 use ReflectionProperty;
@@ -31,13 +30,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     private ?array $reflectionProperties = null;
     private ?array $data = null;
 
-    #[ArrayShape([
-        [
-            'rules' => 'iterable',
-            'propertyVisibility' => 'int',
-        ],
-    ])]
-    private static array $cache = [];
+    private static array $cachedRules = [];
     private string $cacheKey;
 
     public function __construct(
@@ -47,7 +40,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         ReflectionProperty::IS_PUBLIC
     ) {
         $this->dataSetProvided = $this->object instanceof DataSetInterface;
-        $this->cacheKey = get_class($this->object);
+        $this->cacheKey = get_class($this->object) . '_' . $this->propertyVisibility;
     }
 
     public function getRules(): iterable
@@ -61,8 +54,8 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
             return $rules;
         }
 
-        if ($this->hasCache() && $this->propertyVisibility === $this->getCacheItem('propertyVisibility')) {
-            return $this->getCacheItem('rules');
+        if ($this->hasCachedRules()) {
+            return $this->getCachedRules();
         }
 
         foreach ($this->getReflectionProperties() as $property) {
@@ -77,8 +70,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
             }
         }
 
-        $this->updateCacheItem('rules', $rules);
-        $this->updateCacheItem('propertyVisibility', $this->propertyVisibility);
+        $this->setCachedRules($rules);
 
         return $rules;
     }
@@ -86,7 +78,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     /**
      * @return ReflectionProperty[] Used to avoid error "Typed property must not be accessed before initialization".
      */
-    public function getReflectionProperties(): array
+    private function getReflectionProperties(): array
     {
         if ($this->reflectionProperties !== null) {
             return $this->reflectionProperties;
@@ -159,22 +151,18 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         return $data;
     }
 
-    private function hasCache(): bool
+    private function hasCachedRules(): bool
     {
-        return isset(self::$cache[$this->cacheKey]);
+        return array_key_exists($this->cacheKey, self::$cachedRules);
     }
 
-    #[ArrayShape([
-        'rules' => 'iterable',
-        'propertyVisibility' => 'int',
-    ])]
-    private function getCacheItem(string $key): mixed
+    private function getCachedRules(): array
     {
-        return self::$cache[$this->cacheKey][$key];
+        return self::$cachedRules[$this->cacheKey];
     }
 
-    private function updateCacheItem(string $key, mixed $value): void
+    private function setCachedRules(array $rules): void
     {
-        self::$cache[$this->cacheKey][$key] = $value;
+        self::$cachedRules[$this->cacheKey] = $rules;
     }
 }

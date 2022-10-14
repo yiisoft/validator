@@ -43,20 +43,4 @@ class ObjectDataSetBench
         $dataSet = new ObjectDataSet(new ObjectWithDifferentPropertyVisibility());
         $dataSet->getRules();
     }
-
-    /**
-     * @Revs(100000)
-     * @Iterations(5)
-     */
-    public function benchGetRulesWithNewInstanceAndNoCache(): void
-    {
-        // Changing property visibility allows to clear cache without additional mocks, etc.
-        $propertyVisibility = self::$currentPropertyVisibility === ReflectionProperty::IS_PUBLIC
-            ? ReflectionProperty::IS_PRIVATE
-            : ReflectionProperty::IS_PUBLIC;
-        self::$currentPropertyVisibility = $propertyVisibility;
-
-        $dataSet = new ObjectDataSet(new ObjectWithDifferentPropertyVisibility(), $propertyVisibility);
-        $dataSet->getRules();
-    }
 }
