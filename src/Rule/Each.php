@@ -39,7 +39,6 @@ final class Each implements
          */
         private iterable $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
-        private string $message = '{error} {value} given.',
 
         /**
          * @var bool|callable|null
@@ -95,14 +94,8 @@ final class Each implements
         return $this->incorrectInputMessage;
     }
 
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
-
     #[ArrayShape([
         'incorrectInputMessage' => 'array',
-        'message' => 'array',
         'skipOnEmpty' => 'bool',
         'skipOnError' => 'bool',
         'rules' => 'array',
@@ -121,9 +114,6 @@ final class Each implements
         return [
             'incorrectInputMessage' => [
                 'message' => $this->getIncorrectInputMessage(),
-            ],
-            'message' => [
-                'message' => $this->getMessage(),
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,

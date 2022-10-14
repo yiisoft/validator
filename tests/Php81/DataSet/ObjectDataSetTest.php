@@ -205,7 +205,6 @@ final class ObjectDataSetTest extends TestCase
                 new Each(
                     [new Number(min: 0, max: 255)],
                     incorrectInputMessage: 'Custom message 5.',
-                    message: 'Custom message 6.',
                 ),
             ],
         ];
