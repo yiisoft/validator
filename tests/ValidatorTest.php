@@ -814,7 +814,7 @@ class ValidatorTest extends TestCase
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
-                        'value' => 17
+                        'value' => 17,
                     ], ['age']),
                 ],
             ],

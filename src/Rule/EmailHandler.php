@@ -63,9 +63,9 @@ final class EmailHandler implements RuleHandlerInterface
                 $valid = false;
             } else {
                 $valid = preg_match($rule->getPattern(), $value) || ($rule->isAllowName() && preg_match(
-                            $rule->getFullPattern(),
-                            $value
-                        ));
+                    $rule->getFullPattern(),
+                    $value
+                ));
                 if ($valid && $rule->isCheckDNS()) {
                     $valid = checkdnsrr($matches['domain'] . '.') || checkdnsrr($matches['domain'] . '.', 'A');
                 }
