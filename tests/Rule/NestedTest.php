@@ -32,7 +32,6 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRule;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\Validator;
 
 final class NestedTest extends RuleTestCase
 {
