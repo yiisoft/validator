@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\RuleHandlerContainer;
-use Yiisoft\Validator\Tests\Stub\PiHandler;
+use Yiisoft\Validator\Tests\Support\Rule\PiHandler;
 use Yiisoft\Validator\RuleHandlerInterface;
 
 class RuleHandlerContainerTest extends TestCase

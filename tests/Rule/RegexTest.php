@@ -4,18 +4,25 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use stdClass;
 use Yiisoft\Validator\Rule\Regex;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Rule\RegexHandler;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
-final class RegexTest extends AbstractRuleTest
+final class RegexTest extends RuleTestCase
 {
+    use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Regex('//');
         $this->assertSame('regex', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -51,8 +58,36 @@ final class RegexTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    public function dataValidationPassed(): array
     {
-        return new Regex('//');
+        return [
+            ['a', [new Regex('/a/')]],
+            ['ab', [new Regex('/a/')]],
+            ['b', [new Regex('/a/', not: true)]],
+        ];
+    }
+
+    public function dataValidationFailed(): array
+    {
+        $incorrectInputMessage = 'Value should be string.';
+        $message = 'Value is invalid.';
+
+        return [
+            [['a', 'b'], [new Regex('/a/')], ['' => [$incorrectInputMessage]]],
+            [['a', 'b'], [new Regex('/a/', not: true)], ['' => [$incorrectInputMessage]]],
+            [null, [new Regex('/a/')], ['' => [$incorrectInputMessage]]],
+            [null, [new Regex('/a/', not: true)], ['' => [$incorrectInputMessage]]],
+            [new stdClass(), [new Regex('/a/')], ['' => [$incorrectInputMessage]]],
+            [new stdClass(), [new Regex('/a/', not: true)], ['' => [$incorrectInputMessage]]],
+            ['b', [new Regex('/a/')], ['' => [$message]]],
+
+            ['b', [new Regex('/a/', message: 'Custom message.')], ['' => ['Custom message.']]],
+            [null, [new Regex('/a/', incorrectInputMessage: 'Custom message.')], ['' => ['Custom message.']]],
+        ];
+    }
+
+    protected function getDifferentRuleInHandlerItems(): array
+    {
+        return [Regex::class, RegexHandler::class];
     }
 }

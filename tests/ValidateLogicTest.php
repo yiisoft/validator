@@ -7,12 +7,12 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesProviderInterface;
-use Yiisoft\Validator\Tests\Stub\EachNestedObjects\Foo;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDataSet;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDataSetAndRulesProvider;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
-use Yiisoft\Validator\Tests\Stub\ObjectWithRulesProvider;
+use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Validator;
 
 final class ValidateLogicTest extends TestCase
@@ -174,6 +174,6 @@ final class ValidateLogicTest extends TestCase
 
     private function createValidator(): Validator
     {
-        return FakeValidatorFactory::make();
+        return ValidatorFactory::make();
     }
 }

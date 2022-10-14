@@ -4,15 +4,28 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\DataSet;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
+use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Equal;
+use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDataSet;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDataSetAndRulesProvider;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
-use Yiisoft\Validator\Tests\Stub\ObjectWithRulesProvider;
+use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithCallbackMethod;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonExistingCallbackMethod;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonPublicCallbackMethod;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonStaticCallbackMethod;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
+use Yiisoft\Validator\Tests\Support\Data\Post;
+use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
+use Yiisoft\Validator\Tests\Support\Rule\NotRuleAttribute;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 final class ObjectDataSetTest extends TestCase
 {
@@ -120,5 +133,149 @@ final class ObjectDataSetTest extends TestCase
         $this->assertCount(2, $rules['key2']);
         $this->assertInstanceOf(Required::class, $rules['key2'][0]);
         $this->assertInstanceOf(Equal::class, $rules['key2'][1]);
+    }
+
+    /**
+     * @dataProvider dataCollectRules
+     *
+     * @param RuleInterface[]|RuleInterface[][]|RuleInterface[][][] $expectedRules
+     */
+    public function testCollectRules(object $object, array $expectedRules): void
+    {
+        $dataSet = new ObjectDataSet($object);
+
+        $actualRules = [];
+        foreach ($dataSet->getRules() as $attribute => $rules) {
+            $actualRules[$attribute] = $rules instanceof Traversable ? iterator_to_array($rules) : (array) $rules;
+        }
+
+        $this->assertEquals($expectedRules, $actualRules);
+    }
+
+    public function dataCollectRules(): array
+    {
+        return [
+            [
+                new class () {
+                },
+                [],
+            ],
+            [
+                new class () {
+                    private $property1;
+                },
+                [],
+            ],
+            [
+                new class () {
+                    #[NotRuleAttribute]
+                    private $property1;
+                },
+                [],
+            ],
+            [
+                new class () {
+                    #[Required(skipOnEmpty: true)]
+                    private $property1;
+                },
+                [
+                    'property1' => [
+                        new Required(skipOnEmpty: true),
+                    ],
+                ],
+            ],
+            [
+                new class () {
+                    use TitleTrait;
+                },
+                [
+                    'title' => [
+                        new HasLength(max: 255),
+                    ],
+                ],
+            ],
+            [
+                new class () {
+                    #[Required(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    private $property1;
+                    #[Required(skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    private $property2;
+                },
+                [
+                    'property1' => [
+                        new Required(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
+                    ],
+                    'property2' => [
+                        new Required(skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: true),
+                    ],
+                ],
+            ],
+            [
+                new class () {
+                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    #[HasLength(max: 255, skipOnEmpty: false)]
+                    private $property1;
+                },
+                [
+                    'property1' => [
+                        new HasLength(max: 255, skipOnEmpty: true),
+                        new HasLength(max: 255, skipOnEmpty: false),
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @link https://github.com/yiisoft/validator/issues/198
+     */
+    public function testGetRulesViaTraits(): void
+    {
+        $dataSet = new ObjectDataSet(new Post());
+        $expectedRules = ['title' => [new HasLength(max: 255)]];
+
+        $this->assertEquals($expectedRules, $dataSet->getRules());
+    }
+
+    /**
+     * @link https://github.com/yiisoft/validator/issues/223
+     */
+    public function testValidateWithCallbackMethod(): void
+    {
+        $dataSet = new ObjectDataSet(new ObjectWithCallbackMethod());
+        $validator = ValidatorFactory::make();
+
+        /** @var array $rules */
+        $rules = $dataSet->getRules();
+        $this->assertSame(['name'], array_keys($rules));
+        $this->assertCount(1, $rules['name']);
+        $this->assertInstanceOf(Callback::class, $rules['name'][0]);
+
+        $result = $validator->validate(['name' => 'bar'], $rules);
+        $this->assertSame(['name' => ['Value must be "foo"!']], $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function validateWithWrongCallbackMethodDataProvider(): array
+    {
+        return [
+            [new ObjectWithNonExistingCallbackMethod()],
+            [new ObjectWithNonPublicCallbackMethod()],
+            [new ObjectWithNonStaticCallbackMethod()],
+        ];
+    }
+
+    /**
+     * @link https://github.com/yiisoft/validator/issues/223
+     * @dataProvider validateWithWrongCallbackMethodDataProvider
+     */
+    public function testValidateWithWrongCallbackMethod(object $object): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Method must exist and have public and static modifers.');
+        new ObjectDataSet($object);
     }
 }

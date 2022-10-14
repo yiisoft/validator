@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
-use stdClass;
 use Yiisoft\Validator\Rule\AtLeast;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
-use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\Rule\AtLeastHandler;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
-final class AtLeastTest extends TestCase
+final class AtLeastTest extends RuleTestCase
 {
+    use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
+
     public function testGetName(): void
     {
         $rule = new AtLeast([]);
@@ -54,15 +57,6 @@ final class AtLeastTest extends TestCase
                 ],
             ],
         ];
-    }
-
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(AtLeast $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-        $this->assertSame($expectedOptions, $options);
     }
 
     public function dataValidationPassed(): array
@@ -129,16 +123,6 @@ final class AtLeastTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationPassed
-     */
-    public function testValidationPassed(mixed $data, array $rules): void
-    {
-        $result = $this->createValidator()->validate($data, $rules);
-
-        $this->assertTrue($result->isValid());
-    }
-
     public function dataValidationFailed(): array
     {
         return [
@@ -158,47 +142,19 @@ final class AtLeastTest extends TestCase
                 [new AtLeast(['attr1', 'attr2'], min: 2)],
                 ['' => ['The model is not valid. Must have at least "2" filled attributes.']],
             ],
+            'custom error' => [
+                new class () {
+                    public $attr1 = 1;
+                    public $attr2 = null;
+                },
+                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom error')],
+                ['' => ['Custom error']],
+            ],
         ];
     }
 
-    /**
-     * @dataProvider dataValidationFailed
-     */
-    public function testValidationFailed(object $object, array $rules, array $errorMessagesIndexedByPath): void
+    protected function getDifferentRuleInHandlerItems(): array
     {
-        $result = $this->createValidator()->validate($object, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    public function testCustomErrorMessage(): void
-    {
-        $object = new class () {
-            public $attr1 = 1;
-            public $attr2 = null;
-        };
-        $rules = [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom error')];
-
-        $result = $this->createValidator()->validate($object, $rules);
-
-        $this->assertFalse($result->isValid());
-        $this->assertSame(
-            ['' => ['Custom error']],
-            $result->getErrorMessagesIndexedByPath()
-        );
-    }
-
-    private function createValidator(): Validator
-    {
-        return FakeValidatorFactory::make();
-    }
-
-    private function createObject(mixed $attr1, mixed $attr2): stdClass
-    {
-        $object = new stdClass();
-        $object->attr1 = $attr1;
-        $object->attr2 = $attr2;
-        return $object;
+        return [AtLeast::class, AtLeastHandler::class];
     }
 }
