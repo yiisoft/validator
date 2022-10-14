@@ -33,6 +33,8 @@ use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRule;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
 use Yiisoft\Validator\ValidationContext;
 
+use function array_slice;
+
 final class NestedTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
