@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\DataSet;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
+use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Equal;
@@ -135,7 +136,7 @@ final class ObjectDataSetTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProvider
+     * @dataProvider dataCollectRules
      *
      * @param RuleInterface[]|RuleInterface[][]|RuleInterface[][][] $expectedRules
      */
@@ -151,7 +152,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertEquals($expectedRules, $actualRules);
     }
 
-    public function dataProvider(): array
+    public function dataCollectRules(): array
     {
         return [
             [
