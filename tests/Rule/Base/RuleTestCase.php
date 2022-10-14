@@ -11,10 +11,6 @@ abstract class RuleTestCase extends TestCase
 {
     abstract public function dataValidationPassed(): array;
 
-    public function beforeTestValidationPassed(): void
-    {
-    }
-
     /**
      * @dataProvider dataValidationPassed
      */
@@ -29,10 +25,6 @@ abstract class RuleTestCase extends TestCase
 
     abstract public function dataValidationFailed(): array;
 
-    public function beforeTestValidationFailed(): void
-    {
-    }
-
     /**
      * @dataProvider dataValidationFailed
      */
@@ -44,5 +36,13 @@ abstract class RuleTestCase extends TestCase
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    protected function beforeTestValidationPassed(): void
+    {
+    }
+
+    protected function beforeTestValidationFailed(): void
+    {
     }
 }
