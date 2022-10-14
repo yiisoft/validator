@@ -12,6 +12,6 @@ final class ValidatorFactory
     public static function make(): Validator
     {
         $translator = (new TranslatorFactory())->create();
-        return new Validator(new SimpleRuleHandlerContainer($translator));
+        return new Validator(new SimpleRuleHandlerContainer(), $translator);
     }
 }

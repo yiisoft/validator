@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -17,10 +16,6 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class AtLeastHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof AtLeast) {
@@ -38,11 +33,14 @@ final class AtLeastHandler implements RuleHandlerInterface
         $result = new Result();
 
         if ($filledCount < $rule->getMin()) {
-            $formattedMessage = $this->translator->translate(
+            $result->addError(
                 $rule->getMessage(),
-                ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
+                [
+                    'min' => $rule->getMin(),
+                    'attribute' => $context->getAttribute(),
+                    'value' => $value,
+                ],
             );
-            $result->addError($formattedMessage);
         }
 
         return $result;

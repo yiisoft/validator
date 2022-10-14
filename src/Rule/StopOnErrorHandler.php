@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use InvalidArgumentException;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -34,10 +33,6 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class StopOnErrorHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof StopOnError) {
@@ -70,7 +65,7 @@ final class StopOnErrorHandler implements RuleHandlerInterface
 
         foreach ($results as $result) {
             foreach ($result->getErrors() as $error) {
-                $compoundResult->addError($error->getMessage(), $error->getValuePath());
+                $compoundResult->addError($error->getMessage(), $error->getParameters(), $error->getValuePath());
             }
         }
 

@@ -11,16 +11,30 @@ final class Error
      */
     public function __construct(
         private string $message,
+
+        /**
+         * @psalm-var array<string,scalar|null>
+         */
+        private array $parameters = [],
+
         /**
          * @psalm-var list<int|string>
          */
-        private array $valuePath = []
+        private array $valuePath = [],
     ) {
     }
 
     public function getMessage(): string
     {
         return $this->message;
+    }
+
+    /**
+     * @psalm-return array<string,scalar|null>
+     */
+    public function getParameters(): array
+    {
+        return $this->parameters;
     }
 
     /**
@@ -33,7 +47,7 @@ final class Error
         }
 
         return array_map(
-            static fn ($key): string => str_replace(['.', '*'], ['\\' . '.', '\\' . '*'], (string)$key),
+            static fn ($key): string => str_replace(['.', '*'], ['\\' . '.', '\\' . '*'], (string) $key),
             $this->valuePath
         );
     }

@@ -34,9 +34,6 @@ final class EachTest extends RuleTestCase
                     'incorrectInputMessage' => [
                         'message' => 'Value must be array or iterable.',
                     ],
-                    'message' => [
-                        'message' => '{error} {value} given.',
-                    ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                     'rules' => [
@@ -105,16 +102,16 @@ final class EachTest extends RuleTestCase
                 [10, 20, 30],
                 [new Each([new Number(max: 13)])],
                 [
-                    '1' => ['Value must be no greater than 13. 20 given.'],
-                    '2' => ['Value must be no greater than 13. 30 given.'],
+                    '1' => ['Value must be no greater than 13.'],
+                    '2' => ['Value must be no greater than 13.'],
                 ],
             ],
             'custom error' => [
                 [10, 20, 30],
                 [new Each([new Number(max: 13, tooBigMessage: 'Custom error.')])],
                 [
-                    '1' => ['Custom error. 20 given.'],
-                    '2' => ['Custom error. 30 given.'],
+                    '1' => ['Custom error.'],
+                    '2' => ['Custom error.'],
                 ],
             ],
         ];

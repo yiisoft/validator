@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -14,10 +13,6 @@ use Yiisoft\Validator\ValidationContext;
 
 final class SubsetHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Subset) {
@@ -27,11 +22,13 @@ final class SubsetHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_iterable($value)) {
-            $formattedMessage = $this->translator->translate(
+            $result->addError(
                 $rule->getIterableMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+                [
+                    'attribute' => $context->getAttribute(),
+                    'value' => (string) $value,
+                ],
             );
-            $result->addError($formattedMessage);
             return $result;
         }
 
@@ -41,11 +38,13 @@ final class SubsetHandler implements RuleHandlerInterface
                 : $rule->getValues();
             $valuesString = '"' . implode('", "', $values) . '"';
 
-            $formattedMessage = $this->translator->translate(
+            $result->addError(
                 $rule->getSubsetMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value, 'values' => $valuesString]
+                [
+                    'attribute' => $context->getAttribute(),
+                    'values' => $valuesString,
+                ],
             );
-            $result->addError($formattedMessage);
         }
 
         return $result;
