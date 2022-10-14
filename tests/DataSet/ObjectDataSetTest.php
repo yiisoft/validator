@@ -275,7 +275,7 @@ final class ObjectDataSetTest extends TestCase
     public function testValidateWithWrongCallbackMethod(object $object): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Method must exist and have public and static modifers.');
+        $this->expectExceptionMessage('Method must exist and have public and static modifiers.');
         new ObjectDataSet($object);
     }
 }
