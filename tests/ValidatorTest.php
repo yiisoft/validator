@@ -781,4 +781,15 @@ class ValidatorTest extends TestCase
 
         $this->assertFalse($result->isValid());
     }
+
+    public function testValidateWithSingleRule(): void
+    {
+        $result = ValidatorFactory::make()->validate(3, new Number(min: 5));
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            ['' => ['Value must be no less than 5.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+    }
 }
