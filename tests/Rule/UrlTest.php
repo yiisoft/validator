@@ -86,13 +86,6 @@ final class UrlTest extends RuleTestCase
         ];
     }
 
-    public function beforeTestOptions(): void
-    {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
-        }
-    }
-
     public function dataValidationPassed(): array
     {
         if (!extension_loaded('intl')) {
@@ -173,6 +166,13 @@ final class UrlTest extends RuleTestCase
 
         $this->expectException(RuntimeException::class);
         new Url(enableIDN: true);
+    }
+
+    protected function beforeTestOptions(): void
+    {
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
+        }
     }
 
     protected function beforeTestValidationPassed(): void

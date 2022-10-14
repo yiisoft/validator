@@ -98,13 +98,6 @@ final class EmailTest extends RuleTestCase
         ];
     }
 
-    public function beforeTestOptions(): void
-    {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
-        }
-    }
-
     public function dataValidationPassed(): array
     {
         if (!extension_loaded('intl')) {
@@ -283,6 +276,13 @@ final class EmailTest extends RuleTestCase
 
         $this->expectException(RuntimeException::class);
         new Email(enableIDN: true);
+    }
+
+    protected function beforeTestOptions(): void
+    {
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
+        }
     }
 
     protected function beforeTestValidationPassed(): void

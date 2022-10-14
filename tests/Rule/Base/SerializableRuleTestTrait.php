@@ -10,10 +10,6 @@ trait SerializableRuleTestTrait
 {
     abstract public function dataOptions(): array;
 
-    public function beforeTestOptions(): void
-    {
-    }
-
     /**
      * @dataProvider dataOptions
      */
@@ -23,5 +19,9 @@ trait SerializableRuleTestTrait
 
         $options = $rule->getOptions();
         $this->assertSame($expectedOptions, $options);
+    }
+
+    protected function beforeTestOptions(): void
+    {
     }
 }
