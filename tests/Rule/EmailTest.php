@@ -11,6 +11,8 @@ use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
+use function extension_loaded;
+
 final class EmailTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
