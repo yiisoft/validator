@@ -141,17 +141,17 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
     public function getData(): array
     {
+        if ($this->dataSetProvided) {
+            return $this->object->getData();
+        }
+
         if ($this->data !== null) {
             return $this->data;
         }
 
-        if ($this->dataSetProvided) {
-            $data = $this->object->getData();
-        } else {
-            $data = [];
-            foreach ($this->getReflectionProperties() as $name => $property) {
-                $data[$name] = $property->getValue($this->object);
-            }
+        $data = [];
+        foreach ($this->getReflectionProperties() as $name => $property) {
+            $data[$name] = $property->getValue($this->object);
         }
 
         $this->data = $data;

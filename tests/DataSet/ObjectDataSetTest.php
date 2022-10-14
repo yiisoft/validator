@@ -227,7 +227,7 @@ final class ObjectDataSetTest extends TestCase
                     $objectDataSet, // Not a duplicate. Used to test caching.
                 ],
                 2,
-                1,
+                2,
             ],
         ];
     }
