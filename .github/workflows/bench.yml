@@ -25,6 +25,7 @@ jobs:
   phpbench:
     uses: yiisoft/actions/.github/workflows/phpbench.yml@master
     with:
+      extensions: intl
       os: >-
         ['ubuntu-latest', 'windows-latest']
       php: >-
