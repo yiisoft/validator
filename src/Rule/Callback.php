@@ -85,9 +85,7 @@ final class Callback implements
         $method = $this->method;
 
         $reflection = new ReflectionObject($object);
-        try {
-            $reflection->getMethod($method);
-        } catch (ReflectionException) {
+        if (!$reflection->hasMethod($method)) {
             throw new InvalidArgumentException(sprintf(
                 'Method "%s" does not exist in class "%s".',
                 $method,
