@@ -71,7 +71,7 @@ final class RequiredTest extends RuleTestCase
             [['with', 'elements'], [new Required()]],
             'skip on null' => [
                 '',
-                [new Required(emptyCallback: new SkipOnNull())]
+                [new Required(emptyCallback: new SkipOnNull())],
             ],
         ];
     }
@@ -86,7 +86,7 @@ final class RequiredTest extends RuleTestCase
             'custom empty callback' => [
                 '42',
                 [new Required(emptyCallback: static fn (mixed $value): bool => $value === '42')],
-                $singleMessageCannotBeBlank
+                $singleMessageCannotBeBlank,
             ],
             'custom error' => [null, [new Required(message: 'Custom error')], ['' => ['Custom error']]],
         ];
