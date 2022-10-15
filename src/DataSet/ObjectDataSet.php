@@ -23,19 +23,20 @@ use function array_key_exists;
 final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 {
     private bool $dataSetProvided;
+    private bool $rulesProvided;
 
-    /**
-     * @var ReflectionProperty[]
-     */
-    private array $reflectionProperties = [];
+    private ?array $cachedData = null;
 
-    private iterable $rules;
+    private static array $cache = [];
+    private ?string $cacheKey;
 
     public function __construct(
         private object $object,
-        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE|ReflectionProperty::IS_PROTECTED|ReflectionProperty::IS_PUBLIC
+        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC
     ) {
-        $this->parseObject();
+        $this->dataSetProvided = $this->object instanceof DataSetInterface;
+        $this->rulesProvided = $this->object instanceof RulesProviderInterface;
+        $this->cacheKey = $this->object::class . '_' . $this->propertyVisibility;
     }
 
     public function getObject(): object
@@ -45,7 +46,15 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
     public function getRules(): iterable
     {
-        return $this->rules;
+        if ($this->rulesProvided) {
+            return $this->object->getRules();
+        }
+
+        if ($this->dataSetProvided) {
+            return [];
+        }
+
+        return $this->getCachedRules();
     }
 
     public function getAttributeValue(string $attribute): mixed
@@ -54,16 +63,14 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
             return $this->object->getAttributeValue($attribute);
         }
 
-        return $this->hasAttribute($attribute)
-            ? $this->reflectionProperties[$attribute]->getValue($this->object)
-            : null;
+        return $this->getData()[$attribute] ?? null;
     }
 
     public function hasAttribute(string $attribute): bool
     {
         return $this->dataSetProvided
             ? $this->object->hasAttribute($attribute)
-            : array_key_exists($attribute, $this->reflectionProperties);
+            : array_key_exists($attribute, $this->getCachedReflectionProperties());
     }
 
     public function getData(): array
@@ -72,46 +79,65 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
             return $this->object->getData();
         }
 
-        $data = [];
-        foreach ($this->reflectionProperties as $name => $property) {
-            $data[$name] = $property->getValue($this->object);
+        if ($this->cachedData !== null) {
+            return $this->cachedData;
         }
-        return $data;
+
+        $this->cachedData = [];
+        foreach ($this->getCachedReflectionProperties() as $name => $property) {
+            $this->cachedData[$name] = $property->getValue($this->object);
+        }
+
+        return $this->cachedData;
+    }
+
+    private function getCachedRules(): array
+    {
+        $this->assertRulesAndReflectionPropertiesInCache();
+        return self::$cache[$this->cacheKey]['rules'];
+    }
+
+    private function getCachedReflectionProperties(): array
+    {
+        $this->assertRulesAndReflectionPropertiesInCache();
+        return self::$cache[$this->cacheKey]['reflectionProperties'];
     }
 
     // TODO: use Generator to collect attributes
-    private function parseObject(): void
+    private function assertRulesAndReflectionPropertiesInCache(): void
     {
-        $objectHasRules = $this->object instanceof RulesProviderInterface;
-        $this->rules = $objectHasRules ? $this->object->getRules() : [];
-
-        $this->dataSetProvided = $this->object instanceof DataSetInterface;
-        // Providing data set assumes object has its own attributes and rules getting logic. So further parsing of
-        // Reflection properties and rules is intentionally skipped.
-        if ($this->dataSetProvided) {
+        if (array_key_exists($this->cacheKey, self::$cache)) {
             return;
         }
+
+        $rules = [];
+        $reflectionProperties = [];
 
         $reflection = new ReflectionObject($this->object);
         foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
             if (PHP_VERSION_ID < 80100) {
                 $property->setAccessible(true);
             }
-            $this->reflectionProperties[$property->getName()] = $property;
+            $reflectionProperties[$property->getName()] = $property;
 
-            if ($objectHasRules === true) {
+            if ($this->rulesProvided) {
                 continue;
             }
 
             $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             foreach ($attributes as $attribute) {
                 $rule = $attribute->newInstance();
-                $this->rules[$property->getName()][] = $rule;
+                $rules[$property->getName()][] = $rule;
 
                 if ($rule instanceof AttributeEventInterface) {
                     $rule->afterInitAttribute($this);
                 }
             }
         }
+
+        self::$cache[$this->cacheKey] = [
+            'rules' => $rules,
+            'reflectionProperties' => $reflectionProperties,
+        ];
     }
 }
