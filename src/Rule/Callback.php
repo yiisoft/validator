@@ -7,6 +7,8 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use InvalidArgumentException;
+use ReflectionException;
+use ReflectionObject;
 use TypeError;
 use Yiisoft\Validator\AttributeEventInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -79,13 +81,21 @@ final class Callback implements
             return;
         }
 
+        $object = $dataSet->getObject();
+        $method = $this->method;
+
+        $reflection = new ReflectionObject($object);
         try {
-            $object = $dataSet->getObject();
-            $method = $this->method;
-            $this->callback = Closure::bind(fn(...$args) => $object->{$method}(...$args), $object, $object);
-        } catch (TypeError) {
-            throw new InvalidArgumentException('Method must exist and have public and static modifiers.');
+            $reflection->getMethod($method);
+        } catch (ReflectionException) {
+            throw new InvalidArgumentException(sprintf(
+                'Method "%s" does not exist in class "%s".',
+                $method,
+                $object::class,
+            ));
         }
+
+        $this->callback = Closure::bind(fn(...$args) => $object->{$method}(...$args), $object, $object);
     }
 
     public function getOptions(): array
