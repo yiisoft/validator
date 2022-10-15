@@ -128,7 +128,7 @@ final class CallbackTest extends RuleTestCase
 
     public function testValidateUsingNonStaticMethod(): void
     {
-        $object = new  class (1) {
+        $object = new class (1) {
             public function __construct(
                 #[Callback(method: 'validateName')]
                 private $age,
