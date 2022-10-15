@@ -9,7 +9,6 @@ use Closure;
 use InvalidArgumentException;
 use ReflectionException;
 use ReflectionObject;
-use TypeError;
 use Yiisoft\Validator\AttributeEventInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSetInterface;
@@ -95,7 +94,7 @@ final class Callback implements
             ));
         }
 
-        $this->callback = Closure::bind(fn(...$args) => $object->{$method}(...$args), $object, $object);
+        $this->callback = Closure::bind(fn (...$args) => $object->{$method}(...$args), $object, $object);
     }
 
     public function getOptions(): array
