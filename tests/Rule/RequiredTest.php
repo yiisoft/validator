@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Closure;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\RequiredHandler;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
@@ -15,10 +18,36 @@ final class RequiredTest extends RuleTestCase
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
 
-    public function testGetName(): void
+    public function testDefaultValues(): void
     {
         $rule = new Required();
+
+        $this->assertInstanceOf(SkipOnEmpty::class, $rule->getEmptyCallback());
+        $this->assertSame(RequiredHandler::class, $rule->getHandlerClassName());
+        $this->assertSame('Value cannot be blank.', $rule->getMessage());
         $this->assertSame('required', $rule->getName());
+        $this->assertSame('Value not passed.', $rule->getNotPassedMessage());
+        $this->assertNull($rule->getWhen());
+        $this->assertFalse($rule->shouldSkipOnError());
+    }
+
+    public function dataGetEmptyCallback(): array
+    {
+        return [
+            'null' => [null, SkipOnEmpty::class],
+            'skip on null' => [new SkipOnNull(), SkipOnNull::class],
+            'closure' => [static fn () => false, Closure::class],
+        ];
+    }
+
+    /**
+     * @dataProvider dataGetEmptyCallback
+     */
+    public function testGetEmptyCallback(?callable $callback, string $expectedCallbackClassName): void
+    {
+        $rule = new Required(emptyCallback: $callback);
+
+        $this->assertInstanceOf($expectedCallbackClassName, $rule->getEmptyCallback());
     }
 
     public function dataOptions(): array
@@ -29,7 +58,6 @@ final class RequiredTest extends RuleTestCase
                 [
                     'message' => 'Value cannot be blank.',
                     'notPassedMessage' => 'Value not passed.',
-                    'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
@@ -41,16 +69,25 @@ final class RequiredTest extends RuleTestCase
         return [
             ['not empty', [new Required()]],
             [['with', 'elements'], [new Required()]],
+            'skip on null' => [
+                '',
+                [new Required(emptyCallback: new SkipOnNull())]
+            ],
         ];
     }
 
     public function dataValidationFailed(): array
     {
-        $message = 'Value cannot be blank.';
+        $singleMessageCannotBeBlank = ['' => ['Value cannot be blank.']];
 
         return [
-            [null, [new Required()], ['' => [$message]]],
-            [[], [new Required()], ['' => [$message]]],
+            [null, [new Required()], $singleMessageCannotBeBlank],
+            [[], [new Required()], $singleMessageCannotBeBlank],
+            'custom empty callback' => [
+                '42',
+                [new Required(emptyCallback: static fn (mixed $value): bool => $value === '42')],
+                $singleMessageCannotBeBlank
+            ],
             'custom error' => [null, [new Required(message: 'Custom error')], ['' => ['Custom error']]],
         ];
     }
