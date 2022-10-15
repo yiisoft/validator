@@ -16,7 +16,7 @@ use function array_key_exists;
 
 /**
  * This data set makes use of attributes introduced in PHP 8. It simplifies rules configuration process, especially for
- * nested data and relations. Please refer to the guide for example.
+ * nested data and relations. Please refer to the guide for examples.
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  */
@@ -28,11 +28,13 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     private ?array $cachedData = null;
 
     private static array $cache = [];
-    private ?string $cacheKey;
+    private string $cacheKey;
 
     public function __construct(
         private object $object,
-        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC
+        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
+        ReflectionProperty::IS_PROTECTED |
+        ReflectionProperty::IS_PUBLIC
     ) {
         $this->dataSetProvided = $this->object instanceof DataSetInterface;
         $this->rulesProvided = $this->object instanceof RulesProviderInterface;
