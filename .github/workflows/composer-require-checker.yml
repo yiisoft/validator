@@ -7,6 +7,7 @@ on:
       - '.gitignore'
       - '.gitattributes'
       - 'infection.json.dist'
+      - 'phpunit.xml.dist'
       - 'psalm.xml'
 
   push:
@@ -17,24 +18,16 @@ on:
       - '.gitignore'
       - '.gitattributes'
       - 'infection.json.dist'
+      - 'phpunit.xml.dist'
       - 'psalm.xml'
 
-name: build
+name: Composer require checker
 
 jobs:
-  phpunit:
-    uses: yiisoft/actions/.github/workflows/phpunit.yml@master
+  composer-require-checker:
+    uses: yiisoft/actions/.github/workflows/composer-require-checker.yml@master
     with:
-      extensions: intl
       os: >-
-        ['ubuntu-latest', 'windows-latest']
-      php: >-
-        ['8.0', '8.1']
-  phpunit_without_extensions:
-    uses: yiisoft/actions/.github/workflows/phpunit.yml@master
-    with:
-      extensions: intl
-      os: >-
-        ['ubuntu-latest', 'windows-latest']
+        ['ubuntu-latest']
       php: >-
         ['8.0', '8.1']
