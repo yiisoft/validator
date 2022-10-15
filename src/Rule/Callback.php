@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use InvalidArgumentException;
-use ReflectionException;
 use ReflectionObject;
 use Yiisoft\Validator\AttributeEventInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
