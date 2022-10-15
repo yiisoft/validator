@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
+use RuntimeException;
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
@@ -123,6 +124,35 @@ final class CallbackTest extends RuleTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Using method outside of attribute scope is prohibited.');
         $validator->validate(null, [$rule]);
+    }
+
+    public function testValidateUsingNonStaticMethod(): void
+    {
+        $object = new  class (1) {
+            public function __construct(
+                #[Callback(method: 'validateName')]
+                private $age,
+            ) {
+            }
+
+            private function validateName($value, $rule, $context): Result
+            {
+                if ($value !== $this->age) {
+                    throw new RuntimeException('Method scope was not bound the object.');
+                }
+
+                $result = new Result();
+                $result->addError('Hello from non-static method.');
+
+                return $result;
+            }
+        };
+
+        $validator = ValidatorFactory::make();
+        $result = $validator->validate($object);
+
+        $this->assertFalse($result->isValid());
+        $this->assertEquals('Hello from non-static method.', $result->getErrorMessages()[0]);
     }
 
     protected function getDifferentRuleInHandlerItems(): array

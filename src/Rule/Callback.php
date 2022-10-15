@@ -80,7 +80,9 @@ final class Callback implements
         }
 
         try {
-            $this->callback = Closure::fromCallable([$dataSet->getObject()::class, $this->method]);
+            $object = $dataSet->getObject();
+            $method = $this->method;
+            $this->callback = Closure::bind(fn(...$args) => $object->{$method}(...$args), $object, $object);
         } catch (TypeError) {
             throw new InvalidArgumentException('Method must exist and have public and static modifiers.');
         }
