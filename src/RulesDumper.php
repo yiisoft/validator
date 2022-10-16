@@ -54,7 +54,7 @@ final class RulesDumper
     {
         $result = [];
         foreach ($rules as $attribute => $rule) {
-            if (is_array($rule)) {
+            if (is_iterable($rule)) {
                 $result[$attribute] = $this->fetchOptions($rule);
             } elseif ($rule instanceof SerializableRuleInterface) {
                 $result[$attribute] = array_merge([$rule->getName()], $rule->getOptions());
@@ -62,8 +62,9 @@ final class RulesDumper
                 $result[$attribute] = [$rule->getName()];
             } else {
                 throw new InvalidArgumentException(sprintf(
-                    'Rules should be a rule or an array of rules that implements %s.',
+                    'Rules should be a rule or an array of rules that implements "%s". Type "%s" given.',
                     RuleInterface::class,
+                    get_debug_type($rule),
                 ));
             }
         }
