@@ -79,6 +79,10 @@ final class Callback implements
             return;
         }
 
+        if ($this->method === null) {
+            return;
+        }
+
         $object = $dataSet->getObject();
         $method = $this->method;
 
