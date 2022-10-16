@@ -125,7 +125,6 @@ final class CallbackTest extends RuleTestCase
                 null,
                 ['age' => ['Hello from non-static method.']],
             ],
-
         ];
     }
 
