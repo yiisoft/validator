@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\DataSet;
 
+use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\ExpectedValues;
 use ReflectionAttribute;
 use ReflectionObject;
 use ReflectionProperty;
@@ -25,6 +27,12 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     private bool $dataSetProvided;
     private bool $rulesProvided;
 
+    #[ArrayShape([
+        [
+            'rules' => 'iterable',
+            'reflectionAttributes' => 'array',
+        ],
+    ])]
     private static array $cache = [];
     private string $cacheKey;
 
@@ -134,12 +142,12 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         return array_key_exists($this->cacheKey, self::$cache);
     }
 
-    private function getCacheItem(string $name): array
+    private function getCacheItem(#[ExpectedValues(['rules', 'reflectionAttributes'])] string $name): array
     {
         return self::$cache[$this->cacheKey][$name];
     }
 
-    private function setCacheItem(string $name, array $rules): void
+    private function setCacheItem(#[ExpectedValues(['rules', 'reflectionAttributes'])] string $name, array $rules): void
     {
         self::$cache[$this->cacheKey][$name] = $rules;
     }
