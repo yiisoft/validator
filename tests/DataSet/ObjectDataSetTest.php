@@ -13,20 +13,16 @@ use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\Tests\Stub\ObjectWithCallsCount;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDataSet;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDataSetAndRulesProvider;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDynamicDataSet;
-use Yiisoft\Validator\Tests\Stub\ObjectWithRulesProvider;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithCallbackMethod;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonExistingCallbackMethod;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonPublicCallbackMethod;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonStaticCallbackMethod;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallsCount;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDynamicDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\Post;
 use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
@@ -344,7 +340,7 @@ final class ObjectDataSetTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Method must exist and have public and static modifiers.');
-        new ObjectDataSet($object);
+        (new ObjectDataSet($object))->getRules();
     }
 
     public function objectWithDynamicDataSetProvider(): array
