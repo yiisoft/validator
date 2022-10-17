@@ -145,7 +145,7 @@ By default, missing and empty values are validated (if the value is missing, it'
 undesirable if you need to allow not specifying a field. To change this behavior, use `skipOnEmpty: true`.
 
 Note that not all rules have this option, but only those that implement `Yiisoft\Validator\SkipOnEmptyInterface`.
-For example, `Required` rule doesn't. For more details about customization see "Requiring values" section.
+For example, `Required` rule doesn't. For more details about it customization see "Requiring values" section.
 
 ```php
 use Yiisoft\Validator\Rule\Number;
