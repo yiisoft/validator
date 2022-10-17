@@ -175,12 +175,12 @@ final class ObjectDataSetTest extends TestCase
             ],
             [
                 new class () {
-                    #[Required(skipOnEmpty: true)]
+                    #[Required()]
                     private $property1;
                 },
                 [
                     'property1' => [
-                        new Required(skipOnEmpty: true),
+                        new Required(),
                     ],
                 ],
             ],
@@ -196,20 +196,20 @@ final class ObjectDataSetTest extends TestCase
             ],
             [
                 new class () {
-                    #[Required(skipOnEmpty: true)]
+                    #[Required()]
                     #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property1;
-                    #[Required(skipOnEmpty: true)]
+                    #[Required()]
                     #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property2;
                 },
                 [
                     'property1' => [
-                        new Required(skipOnEmpty: true),
+                        new Required(),
                         new HasLength(max: 255, skipOnEmpty: true),
                     ],
                     'property2' => [
-                        new Required(skipOnEmpty: true),
+                        new Required(),
                         new HasLength(max: 255, skipOnEmpty: true),
                     ],
                 ],

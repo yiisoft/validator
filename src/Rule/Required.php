@@ -6,39 +6,46 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
-use Yiisoft\Validator\SkipOnEmptyInterface;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
 /**
  * Validates that the specified value is neither null nor empty.
+ *
+ * @psalm-type EmptyCallback = callable(mixed,bool):bool
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Required implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class Required implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface
 {
-    use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
+
+    /**
+     * @var callable
+     * @psalm-var EmptyCallback
+     */
+    private $emptyCallback;
 
     public function __construct(
         private string $message = 'Value cannot be blank.',
         private string $notPassedMessage = 'Value not passed.',
-
         /**
-         * @var bool|callable|null
+         * @var callable
+         * @psalm-var EmptyCallback
          */
-        private $skipOnEmpty = null,
+        ?callable $emptyCallback = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @psalm-var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
+        $this->emptyCallback = $emptyCallback ?? new SkipOnEmpty();
     }
 
     public function getName(): string
@@ -56,12 +63,19 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
         return $this->notPassedMessage;
     }
 
+    /**
+     * @psalm-return EmptyCallback
+     */
+    public function getEmptyCallback(): callable
+    {
+        return $this->emptyCallback;
+    }
+
     public function getOptions(): array
     {
         return [
             'message' => $this->message,
             'notPassedMessage' => $this->notPassedMessage,
-            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
     }
