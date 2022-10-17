@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use RuntimeException;
 use Yiisoft\Validator\Rule\Equal;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
-final class EqualTest extends AbstractRuleTest
+final class EqualTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Equal(1);
         $this->assertSame('equal', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -173,16 +177,29 @@ final class EqualTest extends AbstractRuleTest
         ];
     }
 
-    public function testWithoutParameters()
+    public function dataValidationPassed(): array
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-
-        $rule = new Equal();
+        return [
+            [100, [new Equal(100)]],
+            ['100', [new Equal(100)]],
+        ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    public function dataValidationFailed(): array
     {
-        return new Equal(1);
+        $message = 'Value must be equal to "100".';
+
+        return [
+            [101, [new Equal(100)], ['' => [$message]]],
+            [101, [new Equal(100, strict: true)], ['' => [$message]]],
+            'custom error' => [101, [new Equal(100, message: 'Custom error')], ['' => ['Custom error']]],
+        ];
+    }
+
+    public function testWithoutParameters(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+        new Equal();
     }
 }

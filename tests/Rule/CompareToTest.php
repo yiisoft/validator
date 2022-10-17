@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\Rule\CompareTo;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
-final class CompareToTest extends AbstractRuleTest
+final class CompareToTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+
     public function testGetName(): void
     {
         $rule = new CompareTo();
         $this->assertSame('compareTo', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -192,8 +195,80 @@ final class CompareToTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    public function dataValidationPassed(): array
     {
-        return new CompareTo(1);
+        return [
+            [100, [new CompareTo(100)]],
+            [['attribute' => 100, 'number' => 100], ['number' => new CompareTo(null, 'attribute')]],
+            ['100', [new CompareTo(100)]],
+
+            [100, [new CompareTo(100, operator: '===')]],
+            ['100', [new CompareTo(100, operator: '===')]],
+            [100.0, [new CompareTo(100, operator: '===')]],
+
+            [100.00001, [new CompareTo(100, operator: '!=')]],
+            [false, [new CompareTo(100, operator: '!=')]],
+
+            [false, [new CompareTo(100, operator: '!==')]],
+
+            [101, [new CompareTo(100, operator: '>')]],
+
+            [100, [new CompareTo(100, operator: '>=')]],
+            [101, [new CompareTo(100, operator: '>=')]],
+            [99, [new CompareTo(100, operator: '<')]],
+
+            [100, [new CompareTo(100, operator: '<=')]],
+            [99, [new CompareTo(100, operator: '<=')]],
+            [['attribute' => 100, 'number' => 99], ['number' => new CompareTo(null, 'attribute', operator: '<=')]],
+        ];
+    }
+
+    public function dataValidationFailed(): array
+    {
+        $messageEqual = 'Value must be equal to "100".';
+        $messageNotEqual = 'Value must not be equal to "100".';
+        $messageGreaterThan = 'Value must be greater than "100".';
+        $messageGreaterOrEqualThan = 'Value must be greater than or equal to "100".';
+        $messageLessThan = 'Value must be less than "100".';
+        $messageLessOrEqualThan = 'Value must be less than or equal to "100".';
+
+        return [
+            [101, [new CompareTo(100)], ['' => [$messageEqual]]],
+
+            [101, [new CompareTo(100, operator: '===')], ['' => [$messageEqual]]],
+            [
+                ['attribute' => 100, 'number' => 101],
+                ['number' => new CompareTo(null, 'attribute', operator: '===')],
+                ['number' => [$messageEqual]],
+            ],
+
+            [100, [new CompareTo(100, operator: '!=')], ['' => [$messageNotEqual]]],
+            ['100', [new CompareTo(100, operator: '!=')], ['' => [$messageNotEqual]]],
+            [100.0, [new CompareTo(100, operator: '!=')], ['' => [$messageNotEqual]]],
+
+            [100, [new CompareTo(100, operator: '!==')], ['' => [$messageNotEqual]]],
+            ['100', [new CompareTo(100, operator: '!==')], ['' => [$messageNotEqual]]],
+            [100.0, [new CompareTo(100, operator: '!==')], ['' => [$messageNotEqual]]],
+
+            [100, [new CompareTo(100, operator: '>')], ['' => [$messageGreaterThan]]],
+            [99, [new CompareTo(100, operator: '>')], ['' => [$messageGreaterThan]]],
+
+            [99, [new CompareTo(100, operator: '>=')], ['' => [$messageGreaterOrEqualThan]]],
+
+            [100, [new CompareTo(100, operator: '<')], ['' => [$messageLessThan]]],
+            [101, [new CompareTo(100, operator: '<')], ['' => [$messageLessThan]]],
+
+            [101, [new CompareTo(100, operator: '<=')], ['' => [$messageLessOrEqualThan]]],
+            [
+                ['attribute' => 100, 'number' => 101],
+                ['number' => new CompareTo(null, 'attribute', operator: '<=')],
+                ['number' => [$messageLessOrEqualThan]],
+            ],
+            'custom error' => [
+                101,
+                [new CompareTo(100, message: 'Custom error')],
+                ['' => ['Custom error']],
+            ],
+        ];
     }
 }

@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use RuntimeException;
 use Yiisoft\Validator\Rule\GreaterThanOrEqual;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
-final class GreaterThanOrEqualTest extends AbstractRuleTest
+final class GreaterThanOrEqualTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+
     public function testGetName(): void
     {
         $rule = new GreaterThanOrEqual(1);
         $this->assertSame('greaterThanOrEqual', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -116,16 +120,29 @@ final class GreaterThanOrEqualTest extends AbstractRuleTest
         ];
     }
 
-    public function testWithoutParameters()
+    public function dataValidationPassed(): array
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-
-        $rule = new GreaterThanOrEqual();
+        return [
+            [100, [new GreaterThanOrEqual(99)]],
+            ['100', [new GreaterThanOrEqual('100')]],
+        ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    public function dataValidationFailed(): array
     {
-        return new GreaterThanOrEqual(1);
+        $message = 'Value must be greater than or equal to "100".';
+
+        return [
+            [99, [new GreaterThanOrEqual(100)], ['' => [$message]]],
+            ['99', [new GreaterThanOrEqual(100)], ['' => [$message]]],
+            'custom error' => [99, [new GreaterThanOrEqual(100, message: 'Custom error')], ['' => ['Custom error']]],
+        ];
+    }
+
+    public function testWithoutParameters(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+        new GreaterThanOrEqual();
     }
 }

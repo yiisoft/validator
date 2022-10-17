@@ -131,7 +131,7 @@ if ($result->isValid() === false) {
 #### Skipping validation on error
 
 By default, if an error occurred during validation of an attribute, further rules for this attribute are processed.
-To change this behavior, use `skipOnError: true` when configuring rules:  
+To change this behavior, use `skipOnError: true` when configuring rules:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
@@ -141,7 +141,7 @@ new Number(asInteger: true, max: 100, skipOnError: true)
 
 #### Skipping empty values
 
-By default, missing and empty values are validated (if the value is missing, it's considered `null`). That is 
+By default, missing and empty values are validated (if the value is missing, it's considered `null`). That is
 undesirable if you need to allow not specifying a field. To change this behavior, use `skipOnEmpty: true`:
 
 ```php
@@ -154,10 +154,10 @@ What exactly to consider to be empty is vague and can vary depending on a scope 
 
 `skipOnEmpty` value is normalized to callback automatically:
 
-- If `skipOnEmpty` is `false` or `null`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipNone` is used automatically as 
-callback - every value is considered non-empty and validated without skipping (default).
-- If `skipOnEmpty` is `true`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty` is used automatically for callback - 
-only passed and non-empty values (not `null`, `[]`, or `''`) are validated.
+- If `skipOnEmpty` is `false` or `null`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipNone` is used automatically as
+  callback - every value is considered non-empty and validated without skipping (default).
+- If `skipOnEmpty` is `true`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty` is used automatically for callback -
+  only passed and non-empty values (not `null`, `[]`, or `''`) are validated.
 - If custom callback  is set, it's used to determine emptiness.
 
 Using first option is usually good for HTML forms. The second one is more suitable for APIs.
@@ -207,9 +207,9 @@ For multiple rules this can be also set more conveniently at validator level:
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 
-$validator = new Validator(new SimpleRuleHandlerContainer($translator), skipOnEmpty: true);
+$validator = new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true);
 $validator = new Validator(
-    new SimpleRuleHandlerContainer($translator),
+    new SimpleRuleHandlerContainer(),
     skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
         return $value === 0;
     }
@@ -228,7 +228,7 @@ $skipOnEmpty = static function (mixed $value, bool $isAttributeMissing): bool {
 
 ##### Basic usage
 
-In many cases there is a need to validate related data in addition to current entity / model. There is a `Nested` rule 
+In many cases there is a need to validate related data in addition to current entity / model. There is a `Nested` rule
 for this purpose:
 
 ```php
@@ -289,7 +289,7 @@ $rule = new Nested([
 
 ##### Advanced usage
 
-A more complex real-life example is a chart that is made of points. This data is represented as arrays. `Nested` can be 
+A more complex real-life example is a chart that is made of points. This data is represented as arrays. `Nested` can be
 combined with `Each` rule to validate such similar structures:
 
 ```php
@@ -393,13 +393,13 @@ $rule = new Nested([
 ]);
 ```
 
-This is less verbose, but the downside of this approach is that you can't additionally configure dynamically generated 
+This is less verbose, but the downside of this approach is that you can't additionally configure dynamically generated
 `Nested` and `Each` pairs. If you need to that, please refer to example provided in "Basic usage" section.
 
 ###### Using keys containing separator / shortcut
 
-If a key contains the separator (`.`), it must be escaped with backslash (`\`) in rule config in order to work 
-correctly. In the input data escaping is not needed. Here is an example with two nested keys named `author.data` and 
+If a key contains the separator (`.`), it must be escaped with backslash (`\`) in rule config in order to work
+correctly. In the input data escaping is not needed. Here is an example with two nested keys named `author.data` and
 `name.surname`:
 
 ```php
@@ -545,7 +545,7 @@ final class Post
 
 ##### Callbacks
 
-`Callback::$callback` property is not supported, also you can't use `callable` type with attributes. However, 
+`Callback::$callback` property is not supported, also you can't use `callable` type with attributes. However,
 `Callback::$method` can be set instead:
 
 ```php
@@ -639,7 +639,7 @@ final class Color
 
 ###### Function / method calls
 
-You can't use a function / method call result with attributes. This problem can be overcome either with custom rule or 
+You can't use a function / method call result with attributes. This problem can be overcome either with custom rule or
 `Callback::$method` property. An example of custom rule:
 
 ```php
@@ -687,7 +687,7 @@ final class Coordinates
 
 ###### Passing instances
 
-If you have PHP >= 8.1, you can utilize passing instances in attributes' scope. Otherwise, again fallback to custom 
+If you have PHP >= 8.1, you can utilize passing instances in attributes' scope. Otherwise, again fallback to custom
 rules approach described above.
 
 ```php
@@ -731,7 +731,7 @@ new StopOnError([
 ])
 ```
 
-When the validator get negative result of validation it stop all the rest rules inside `StopOnError`. 
+When the validator get negative result of validation it stop all the rest rules inside `StopOnError`.
 According to the example above, if `Rule2` fails `Rule3` won't even be tried to run.
 
 ### Validation rule handlers
@@ -828,7 +828,7 @@ final class CompanyNameHandler implements Rule\RuleHandlerInterface
 }
 ```
 
-> Note: Do not call handler's `validate()` method directly. It must be used via Validator only. 
+> Note: Do not call handler's `validate()` method directly. It must be used via Validator only.
 
 ##### Resolving rule handler dependencies
 
@@ -894,7 +894,7 @@ $ruleHandler = $ruleHandlerResolver->resolve(PiHandler::class);
 
 #### Using common arguments for multiple rules of the same type
 
-Because concrete rules' implementations (`Number`, etc.) are marked as final, you can not extend them to set up 
+Because concrete rules' implementations (`Number`, etc.) are marked as final, you can not extend them to set up
 common arguments. For this and more complex cases use composition instead of inheritance:
 
 ```php

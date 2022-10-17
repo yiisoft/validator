@@ -11,6 +11,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use ReflectionProperty;
 use Traversable;
+use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSet\MixedDataSet;
@@ -37,6 +38,7 @@ final class Validator implements ValidatorInterface
 
     public function __construct(
         private RuleHandlerResolverInterface $ruleHandlerResolver,
+        private TranslatorInterface $translator,
         /**
          * @var int What visibility levels to use when reading rules from the class specified in `$rules` argument in
          * {@see validate()} method.
@@ -94,7 +96,7 @@ final class Validator implements ValidatorInterface
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
 
             foreach ($tempResult->getErrors() as $error) {
-                $result->addError($error->getMessage(), $error->getValuePath());
+                $result->addError($error->getMessage(), $error->getParameters(), $error->getValuePath());
             }
 
             $results[] = $result;
@@ -102,7 +104,11 @@ final class Validator implements ValidatorInterface
 
         foreach ($results as $result) {
             foreach ($result->getErrors() as $error) {
-                $compoundResult->addError($error->getMessage(), $error->getValuePath());
+                $compoundResult->addError(
+                    $this->translator->translate($error->getMessage(), $error->getParameters()),
+                    $error->getParameters(),
+                    $error->getValuePath()
+                );
             }
         }
 
@@ -155,7 +161,7 @@ final class Validator implements ValidatorInterface
                 if ($context->getAttribute() !== null) {
                     $valuePath = [$context->getAttribute(), ...$valuePath];
                 }
-                $compoundResult->addError($error->getMessage(), $valuePath);
+                $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePath);
             }
         }
         return $compoundResult;

@@ -31,29 +31,38 @@ trait LimitHandlerTrait
         Result $result
     ): void {
         if ($rule->getExactly() !== null && $number !== $rule->getExactly()) {
-            $formattedMessage = $this->translator->translate(
+            $result->addError(
                 $rule->getNotExactlyMessage(),
-                ['exactly' => $rule->getExactly(), 'attribute' => $context->getAttribute(), 'value' => $value]
+                [
+                    'exactly' => $rule->getExactly(),
+                    'attribute' => $context->getAttribute(),
+                    'value' => $value,
+                ],
             );
-            $result->addError($formattedMessage);
 
             return;
         }
 
         if ($rule->getMin() !== null && $number < $rule->getMin()) {
-            $formattedMessage = $this->translator->translate(
+            $result->addError(
                 $rule->getLessThanMinMessage(),
-                ['min' => $rule->getMin(), 'attribute' => $context->getAttribute(), 'value' => $value]
+                [
+                    'min' => $rule->getMin(),
+                    'attribute' => $context->getAttribute(),
+                    'value' => $value,
+                ],
             );
-            $result->addError($formattedMessage);
         }
 
         if ($rule->getMax() !== null && $number > $rule->getMax()) {
-            $formattedMessage = $this->translator->translate(
+            $result->addError(
                 $rule->getGreaterThanMaxMessage(),
-                ['max' => $rule->getMax(), 'attribute' => $context->getAttribute(), 'value' => $value]
+                [
+                    'max' => $rule->getMax(),
+                    'attribute' => $context->getAttribute(),
+                    'value' => $value,
+                ],
             );
-            $result->addError($formattedMessage);
         }
     }
 }

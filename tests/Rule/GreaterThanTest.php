@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use RuntimeException;
 use Yiisoft\Validator\Rule\GreaterThan;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
-final class GreaterThanTest extends AbstractRuleTest
+final class GreaterThanTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+
     public function testGetName(): void
     {
         $rule = new GreaterThan(1);
         $this->assertSame('greaterThan', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -116,16 +120,27 @@ final class GreaterThanTest extends AbstractRuleTest
         ];
     }
 
-    public function testWithoutParameters()
+    public function dataValidationPassed(): array
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-
-        new GreaterThan();
+        return [
+            [100, [new GreaterThan(99)]],
+            ['100', [new GreaterThan('99')]],
+        ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    public function dataValidationFailed(): array
     {
-        return new GreaterThan(1);
+        return [
+            [99, [new GreaterThan(100)], ['' => ['Value must be greater than "100".']]],
+            ['100', [new GreaterThan(100)], ['' => ['Value must be greater than "100".']]],
+            'custom error' => [99, [new GreaterThan(100, message: 'Custom error')], ['' => ['Custom error']]],
+        ];
+    }
+
+    public function testWithoutParameters(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+        new GreaterThan();
     }
 }

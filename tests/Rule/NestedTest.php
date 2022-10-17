@@ -5,23 +5,41 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use stdClass;
+use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\Error;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\InRange;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Regex;
+use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RulesProviderInterface;
-use Yiisoft\Validator\Tests\Stub\EachNestedObjects\Foo;
-use Yiisoft\Validator\Tests\Stub\FakeValidatorFactory;
-use Yiisoft\Validator\Tests\Stub\InheritAttributesObject\InheritAttributesObject;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
-use Yiisoft\Validator\Tests\Stub\Rule;
-use Yiisoft\Validator\Tests\Stub\SimpleRulesProvider;
-use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
+use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRule;
+use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
+use Yiisoft\Validator\ValidationContext;
 
-final class NestedTest extends TestCase
+use function array_slice;
+
+final class NestedTest extends RuleTestCase
 {
+    use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
+
     public function testDefaultValues(): void
     {
         $rule = new Nested();
@@ -146,8 +164,8 @@ final class NestedTest extends TestCase
             ],
             [
                 new Nested([
-                    'author.name' => new Rule('author-name', ['key' => 'name']),
-                    'author.age' => new Rule('author-age', ['key' => 'age']),
+                    'author.name' => new StubRule('author-name', ['key' => 'name']),
+                    'author.age' => new StubRule('author-age', ['key' => 'age']),
                 ]),
                 [
                     'requirePropertyPath' => false,
@@ -165,8 +183,8 @@ final class NestedTest extends TestCase
             [
                 new Nested([
                     'author' => [
-                        'name' => new Rule('author-name', ['key' => 'name']),
-                        'age' => new Rule('author-age', ['key' => 'age']),
+                        'name' => new StubRule('author-name', ['key' => 'name']),
+                        'age' => new StubRule('author-age', ['key' => 'age']),
                     ],
                 ]),
                 [
@@ -185,16 +203,6 @@ final class NestedTest extends TestCase
                 ],
             ],
         ];
-    }
-
-    /**
-     * @dataProvider dataOptions
-     */
-    public function testOptions(Nested $rule, array $expectedOptions): void
-    {
-        $options = $rule->getOptions();
-
-        $this->assertEquals($expectedOptions, $options);
     }
 
     public function testValidationRuleIsNotInstanceOfRule(): void
@@ -242,11 +250,11 @@ final class NestedTest extends TestCase
      */
     public function testNestedWithoutRulesToNonObject(string $expectedValueName, object $data): void
     {
-        $validator = $this->createValidator();
+        $validator = ValidatorFactory::make();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Nested rule without rules could be used for objects only. ' . $expectedValueName . ' given.'
+            'Nested rule without rules could be used for objects only.'
         );
         $validator->validate($data);
     }
@@ -397,12 +405,587 @@ final class NestedTest extends TestCase
         object $data,
         array $expectedErrorMessagesIndexedByPath
     ): void {
-        $result = $this->createValidator()->validate($data);
+        $result = ValidatorFactory::make()->validate($data);
         $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
-    private function createValidator(): Validator
+    public function testPropagateOptions(): void
     {
-        return FakeValidatorFactory::make();
+        $rule = new Nested([
+            'posts' => [
+                new Each([
+                    new Nested([
+                        'title' => [new HasLength(min: 3)],
+                        'authors' => [
+                            new Each([
+                                new Nested([
+                                    'name' => [new HasLength(min: 5)],
+                                    'age' => [
+                                        new Number(min: 18),
+                                        new Number(min: 20),
+                                    ],
+                                ]),
+                            ]),
+                        ],
+                    ]),
+                ]),
+            ],
+            'meta' => [new HasLength(min: 7)],
+        ], propagateOptions: true, skipOnEmpty: true, skipOnError: true);
+        $options = $rule->getOptions();
+        $paths = [
+            [],
+            ['rules', 'posts', 0],
+            ['rules', 'posts', 0, 'rules', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'title', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'name', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 1],
+            ['rules', 'meta', 0],
+        ];
+        $keys = ['skipOnEmpty', 'skipOnError'];
+
+        foreach ($paths as $path) {
+            foreach ($keys as $key) {
+                $fullPath = $path;
+                $fullPath[] = $key;
+
+                $value = ArrayHelper::getValueByPath($options, $fullPath);
+                $this->assertTrue($value);
+            }
+        }
+    }
+
+    public function testNestedWithoutRulesWithObject(): void
+    {
+        $validator = ValidatorFactory::make();
+        $result = $validator->validate(new ObjectWithNestedObject());
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            [
+                'caption' => ['This value must contain at least 3 characters.'],
+                'object.name' => ['This value must contain at least 5 characters.'],
+            ],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    public function dataWithOtherNestedAndEach(): array
+    {
+        $data = [
+            'charts' => [
+                [
+                    'points' => [
+                        ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
+                        ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],
+                    ],
+                ],
+                [
+                    'points' => [
+                        ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],
+                        ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],
+                    ],
+                ],
+                [
+                    'points' => [
+                        ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],
+                        ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],
+                    ],
+                ],
+            ],
+        ];
+        $xRules = [
+            new Number(min: -10, max: 10),
+            new Callback(static function (mixed $value, object $rule, ValidationContext $context): Result {
+                $result = new Result();
+                $result->addError('Custom error.');
+
+                return $result;
+            }),
+        ];
+        $yRules = [new Number(min: -10, max: 10)];
+        $rgbRules = [
+            new Count(exactly: 3),
+            new Each([new Number(min: 0, max: 255)]),
+        ];
+
+        $detailedErrorsData = [
+            [['charts', 0, 'points', 0, 'coordinates', 'x'], 'Value must be no less than -10.'],
+            [['charts', 0, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
+            [['charts', 0, 'points', 0, 'coordinates', 'y'], 'Value must be no greater than 10.'],
+            [['charts', 0, 'points', 0, 'rgb', 0], 'Value must be no less than 0.'],
+            [['charts', 0, 'points', 0, 'rgb', 1], 'Value must be no greater than 255.'],
+            [['charts', 0, 'points', 1, 'coordinates', 'x'], 'Value must be no less than -10.'],
+            [['charts', 0, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
+            [['charts', 0, 'points', 1, 'coordinates', 'y'], 'Value must be no greater than 10.'],
+            [['charts', 0, 'points', 1, 'rgb', 1], 'Value must be no less than 0.'],
+            [['charts', 0, 'points', 1, 'rgb', 2], 'Value must be no greater than 255.'],
+            [['charts', 1, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
+            [['charts', 1, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
+            [['charts', 2, 'points', 0, 'coordinates', 'x'], 'Value must be no less than -10.'],
+            [['charts', 2, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
+            [['charts', 2, 'points', 0, 'coordinates', 'y'], 'Value must be no greater than 10.'],
+            [['charts', 2, 'points', 0, 'rgb', 0], 'Value must be no less than 0.'],
+            [['charts', 2, 'points', 0, 'rgb', 1], 'Value must be no greater than 255.'],
+            [['charts', 2, 'points', 1, 'coordinates', 'x'], 'Value must be no less than -10.'],
+            [['charts', 2, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
+            [['charts', 2, 'points', 1, 'coordinates', 'y'], 'Value must be no greater than 10.'],
+            [['charts', 2, 'points', 1, 'rgb', 1], 'Value must be no less than 0.'],
+            [['charts', 2, 'points', 1, 'rgb', 2], 'Value must be no greater than 255.'],
+        ];
+        $detailedErrors = [];
+        foreach ($detailedErrorsData as $errorData) {
+            $detailedErrors[] = [$errorData[1], $errorData[0]];
+        }
+
+        $errorMessages = [
+            'Value must be no less than -10.',
+            'Custom error.',
+            'Value must be no greater than 10.',
+            'Value must be no less than 0.',
+            'Value must be no greater than 255.',
+            'Value must be no less than -10.',
+            'Custom error.',
+            'Value must be no greater than 10.',
+            'Value must be no less than 0.',
+            'Value must be no greater than 255.',
+            'Custom error.',
+            'Custom error.',
+            'Value must be no less than -10.',
+            'Custom error.',
+            'Value must be no greater than 10.',
+            'Value must be no less than 0.',
+            'Value must be no greater than 255.',
+            'Value must be no less than -10.',
+            'Custom error.',
+            'Value must be no greater than 10.',
+            'Value must be no less than 0.',
+            'Value must be no greater than 255.',
+        ];
+        $errorMessagesIndexedByPath = [
+            'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
+            'charts.0.points.0.coordinates.y' => ['Value must be no greater than 10.'],
+            'charts.0.points.0.rgb.0' => ['Value must be no less than 0.'],
+            'charts.0.points.0.rgb.1' => ['Value must be no greater than 255.'],
+            'charts.0.points.1.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
+            'charts.0.points.1.coordinates.y' => ['Value must be no greater than 10.'],
+            'charts.0.points.1.rgb.1' => ['Value must be no less than 0.'],
+            'charts.0.points.1.rgb.2' => ['Value must be no greater than 255.'],
+            'charts.1.points.0.coordinates.x' => ['Custom error.'],
+            'charts.1.points.1.coordinates.x' => ['Custom error.'],
+            'charts.2.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
+            'charts.2.points.0.coordinates.y' => ['Value must be no greater than 10.'],
+            'charts.2.points.0.rgb.0' => ['Value must be no less than 0.'],
+            'charts.2.points.0.rgb.1' => ['Value must be no greater than 255.'],
+            'charts.2.points.1.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
+            'charts.2.points.1.coordinates.y' => ['Value must be no greater than 10.'],
+            'charts.2.points.1.rgb.1' => ['Value must be no less than 0.'],
+            'charts.2.points.1.rgb.2' => ['Value must be no greater than 255.'],
+        ];
+
+        return [
+            'base' => [
+                $data,
+                [
+                    new Nested([
+                        'charts' => [
+                            new Each([
+                                new Nested([
+                                    'points' => [
+                                        new Each([
+                                            new Nested([
+                                                'coordinates' => new Nested([
+                                                    'x' => $xRules,
+                                                    'y' => $yRules,
+                                                ]),
+                                                'rgb' => $rgbRules,
+                                            ]),
+                                        ]),
+                                    ],
+                                ]),
+                            ]),
+                        ],
+                    ]),
+                ],
+                $detailedErrors,
+                $errorMessages,
+                $errorMessagesIndexedByPath,
+            ],
+            // https://github.com/yiisoft/validator/issues/195
+            'withShortcut' => [
+                $data,
+                [
+                    new Nested([
+                        'charts.*.points.*.coordinates.x' => $xRules,
+                        'charts.*.points.*.coordinates.y' => $yRules,
+                        'charts.*.points.*.rgb' => $rgbRules,
+                    ]),
+                ],
+                $detailedErrors,
+                $errorMessages,
+                $errorMessagesIndexedByPath,
+            ],
+            'withShortcutAndGrouping' => [
+                $data,
+                [
+                    new Nested([
+                        'charts.*.points.*.coordinates' => new Nested([
+                            'x' => $xRules,
+                            'y' => $yRules,
+                        ]),
+                        'charts.*.points.*.rgb' => $rgbRules,
+                    ]),
+                ],
+                $detailedErrors,
+                $errorMessages,
+                $errorMessagesIndexedByPath,
+            ],
+            'withShortcutAndKeysContainingSeparatorAndShortcut' => [
+                [
+                    'charts.list' => [
+                        [
+                            'points*list' => [
+                                [
+                                    'coordinates.data' => ['x' => -11, 'y' => 11],
+                                    'rgb' => [-1, 256, 0],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    new Nested([
+                        'charts\.list.*.points\*list.*.coordinates\.data.x' => $xRules,
+                        'charts\.list.*.points\*list.*.coordinates\.data.y' => $yRules,
+                        'charts\.list.*.points\*list.*.rgb' => $rgbRules,
+                    ]),
+                ],
+                [
+                    [
+                        $errorMessages[0],
+                        ['charts.list', 0, 'points*list', 0, 'coordinates.data', 'x'],
+                    ],
+                    [
+                        $errorMessages[1],
+                        ['charts.list', 0, 'points*list', 0, 'coordinates.data', 'x'],
+                    ],
+                    [
+                        $errorMessages[2],
+                        ['charts.list', 0, 'points*list', 0, 'coordinates.data', 'y'],
+                    ],
+                    [
+                        $errorMessages[3],
+                        ['charts.list', 0, 'points*list', 0, 'rgb', 0],
+                    ],
+                    [
+                        $errorMessages[4],
+                        ['charts.list', 0, 'points*list', 0, 'rgb', 1],
+                    ],
+                ],
+                array_slice($errorMessages, 0, 5),
+                [
+                    'charts\.list.0.points\*list.0.coordinates\.data.x' => [$errorMessages[0], $errorMessages[1]],
+                    'charts\.list.0.points\*list.0.coordinates\.data.y' => [$errorMessages[2]],
+                    'charts\.list.0.points\*list.0.rgb.0' => [$errorMessages[3]],
+                    'charts\.list.0.points\*list.0.rgb.1' => [$errorMessages[4]],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataWithOtherNestedAndEach
+     */
+    public function testWithOtherNestedAndEach(
+        mixed $data,
+        array $rules,
+        array $expectedDetailedErrors,
+        array $expectedErrorMessages,
+        array $expectedErrorMessagesIndexedByPath
+    ): void {
+        $result = ValidatorFactory::make()->validate($data, $rules);
+
+        $errorsData = array_map(
+            static fn (Error $error) => [
+                $error->getMessage(),
+                $error->getValuePath(),
+            ],
+            $result->getErrors()
+        );
+
+        $this->assertSame($expectedDetailedErrors, $errorsData);
+        $this->assertSame($expectedErrorMessages, $result->getErrorMessages());
+        $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function dataValidationPassed(): array
+    {
+        return [
+            [
+                [
+                    'author' => [
+                        'name' => 'Dmitry',
+                        'age' => 18,
+                    ],
+                ],
+                [
+                    new Nested([
+                        'author.name' => [
+                            new HasLength(min: 3),
+                        ],
+                    ]),
+                ],
+            ],
+            [
+                [
+                    'author' => [
+                        'name' => 'Dmitry',
+                        'age' => 18,
+                    ],
+                ],
+                [
+                    new Nested([
+                        'author' => [
+                            new Required(),
+                            new Nested([
+                                'name' => [new HasLength(min: 3)],
+                            ]),
+                        ],
+                    ]),
+                ],
+            ],
+            'key not exists, skip empty' => [
+                [
+                    'author' => [
+                        'name' => 'Dmitry',
+                        'age' => 18,
+                    ],
+                ],
+                [new Nested(['author.sex' => [new InRange(['male', 'female'], skipOnEmpty: true)]])],
+            ],
+            'keys containing separator, one nested rule' => [
+                [
+                    'author.data' => [
+                        'name.surname' => 'Dmitriy',
+                    ],
+                ],
+                [
+                    new Nested([
+                        'author\.data.name\.surname' => [
+                            new HasLength(min: 3),
+                        ],
+                    ]),
+                ],
+            ],
+            'keys containing separator, multiple nested rules' => [
+                [
+                    'author.data' => [
+                        'name.surname' => 'Dmitriy',
+                    ],
+                ],
+                [
+                    new Nested([
+                        'author\.data' => new Nested([
+                            'name\.surname' => [
+                                new HasLength(min: 3),
+                            ],
+                        ]),
+                    ]),
+                ],
+            ],
+        ];
+    }
+
+    public function dataValidationFailed(): array
+    {
+        return [
+            'error' => [
+                [
+                    'author' => [
+                        'name' => 'Alex',
+                        'age' => 38,
+                    ],
+                ],
+                [new Nested(['author.age' => [new Number(min: 40)]])],
+                ['author.age' => ['Value must be no less than 40.']],
+            ],
+            'key not exists' => [
+                [
+                    'author' => [
+                        'name' => 'Alex',
+                        'age' => 38,
+                    ],
+                ],
+                [new Nested(['author.sex' => [new InRange(['male', 'female'])]])],
+                ['author.sex' => ['This value is invalid.']],
+            ],
+            [
+                '',
+                [new Nested(['value' => new Required()])],
+                ['' => ['Value should be an array or an object. string given.']],
+            ],
+            [
+                ['value' => null],
+                [new Nested(['value' => new Required()])],
+                ['value' => ['Value cannot be blank.']],
+            ],
+            [
+                [],
+                [new Nested(['value' => new Required()], requirePropertyPath: true)],
+                ['value' => ['Property path "value" is not found.']],
+            ],
+            // https://github.com/yiisoft/validator/issues/200
+            [
+                [
+                    'body' => [
+                        'shipping' => [
+                            'phone' => '+777777777777',
+                        ],
+                    ],
+                ],
+                [
+                    new Nested([
+                        'body.shipping' => [
+                            new Required(),
+                            new Nested([
+                                'phone' => [new Regex('/^\+\d{11}$/')],
+                            ]),
+                        ],
+                    ]),
+                ],
+                ['body.shipping.phone' => ['Value is invalid.']],
+            ],
+            [
+                [0 => [0 => -11]],
+                [
+                    new Nested([
+                        0 => new Nested([
+                            0 => [new Number(min: -10, max: 10)],
+                        ]),
+                    ]),
+                ],
+                ['0.0' => ['Value must be no less than -10.']],
+            ],
+            'custom error' => [
+                [],
+                [
+                    new Nested(
+                        ['value' => new Required()],
+                        requirePropertyPath: true,
+                        noPropertyPathMessage: 'Property is not found.',
+                    ),
+                ],
+                ['value' => ['Property is not found.']],
+            ],
+        ];
+    }
+
+    public function dataValidationFailedWithDetailedErrors(): array
+    {
+        return [
+            'error' => [
+                [
+                    'author' => [
+                        'name' => 'Dmitry',
+                        'age' => 18,
+                    ],
+                ],
+                [new Nested(['author.age' => [new Number(min: 20)]])],
+                [['Value must be no less than 20.', ['author', 'age']]],
+            ],
+            'key not exists' => [
+                [
+                    'author' => [
+                        'name' => 'Dmitry',
+                        'age' => 18,
+                    ],
+                ],
+                [new Nested(['author.sex' => [new InRange(['male', 'female'])]])],
+                [['This value is invalid.', ['author', 'sex']]],
+            ],
+            [
+                '',
+                [new Nested(['value' => new Required()])],
+                [['Value should be an array or an object. string given.', []]],
+            ],
+            [
+                ['value' => null],
+                [new Nested(['value' => new Required()])],
+                [['Value cannot be blank.', ['value']]],
+            ],
+            [
+                [],
+                [new Nested(['value' => new Required()], requirePropertyPath: true)],
+                [['Property path "value" is not found.', ['value']]],
+            ],
+            [
+                // https://github.com/yiisoft/validator/issues/200
+                [
+                    'body' => [
+                        'shipping' => [
+                            'phone' => '+777777777777',
+                        ],
+                    ],
+                ],
+                [
+                    new Nested([
+                        'body.shipping' => [
+                            new Required(),
+                            new Nested([
+                                'phone' => [new Regex('/^\+\d{11}$/')],
+                            ]),
+                        ],
+                    ]),
+                ],
+                [['Value is invalid.', ['body', 'shipping', 'phone']]],
+            ],
+            [
+                [0 => [0 => -11]],
+                [
+                    new Nested([
+                        0 => new Nested([
+                            0 => [new Number(min: -10, max: 10)],
+                        ]),
+                    ]),
+                ],
+                [['Value must be no less than -10.', [0, 0]]],
+            ],
+            [
+                [
+                    'author.data' => [
+                        'name.surname' => 'Dmitriy',
+                    ],
+                ],
+                [new Nested(['author\.data.name\.surname' => [new HasLength(min: 8)]])],
+                [['This value must contain at least 8 characters.', ['author.data', 'name.surname']]],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationFailedWithDetailedErrors
+     */
+    public function testValidationFailedWithDetailedErrors(mixed $data, array $rules, array $errors): void
+    {
+        $result = ValidatorFactory::make()->validate($data, $rules);
+
+        $errorsData = array_map(
+            static fn (Error $error) => [
+                $error->getMessage(),
+                $error->getValuePath(),
+            ],
+            $result->getErrors()
+        );
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame($errors, $errorsData);
+    }
+
+    protected function getDifferentRuleInHandlerItems(): array
+    {
+        return [Nested::class, NestedHandler::class];
     }
 }

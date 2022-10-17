@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use InvalidArgumentException;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
@@ -14,10 +13,9 @@ use Yiisoft\Validator\ValidationContext;
 
 final class CallbackHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
+    /**
+     * @throws InvalidCallbackReturnTypeException
+     */
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Callback) {
@@ -41,11 +39,14 @@ final class CallbackHandler implements RuleHandlerInterface
         }
 
         foreach ($callbackResult->getErrors() as $error) {
-            $formattedMessage = $this->translator->translate(
+            $result->addError(
                 $error->getMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+                [
+                    'attribute' => $context->getAttribute(),
+                    'value' => $value,
+                ],
+                $error->getValuePath(),
             );
-            $result->addError($formattedMessage, $error->getValuePath());
         }
 
         return $result;

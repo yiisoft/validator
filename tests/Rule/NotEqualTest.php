@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use RuntimeException;
 use Yiisoft\Validator\Rule\NotEqual;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
-final class NotEqualTest extends AbstractRuleTest
+final class NotEqualTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+
     public function testGetName(): void
     {
         $rule = new NotEqual(1);
         $this->assertSame('notEqual', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -173,16 +177,27 @@ final class NotEqualTest extends AbstractRuleTest
         ];
     }
 
-    public function testWithoutParameters()
+    public function dataValidationPassed(): array
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-
-        $rule = new NotEqual();
+        return [
+            [101, [new NotEqual(100)]],
+            ['101', [new NotEqual(100, strict: true)]],
+        ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    public function dataValidationFailed(): array
     {
-        return new NotEqual(1);
+        return [
+            [100, [new NotEqual(100)], ['' => ['Value must not be equal to "100".']]],
+            [100, [new NotEqual(100, strict: true)], ['' => ['Value must not be equal to "100".']]],
+            'custom error' => [100, [new NotEqual(100, message: 'Custom error')], ['' => ['Custom error']]],
+        ];
+    }
+
+    public function testWithoutParameters(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+        new NotEqual();
     }
 }

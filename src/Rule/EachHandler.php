@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Closure;
 use InvalidArgumentException;
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -17,18 +17,11 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class EachHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Each) {
             throw new UnexpectedRuleException(Each::class, $rule);
         }
-
-        /** @var Each $eachRule */
-        $eachRule = $rule;
 
         $rules = $rule->getRules();
         if ($rules === []) {
@@ -37,17 +30,19 @@ final class EachHandler implements RuleHandlerInterface
 
         $result = new Result();
         if (!is_iterable($value)) {
-            $formattedMessage = $this->translator->translate(
+            $result->addError(
                 $rule->getIncorrectInputMessage(),
-                ['attribute' => $context->getAttribute(), 'value' => $value]
+                [
+                    'attribute' => $context->getAttribute(),
+                    'value' => $value,
+                ],
             );
-            $result->addError($formattedMessage);
 
             return $result;
         }
 
         foreach ($value as $index => $item) {
-            /** @var array<mixed, \Closure|\Closure[]|RuleInterface|RuleInterface[]> $rule */
+            /** @var array<mixed, Closure|Closure[]|RuleInterface|RuleInterface[]> $rule */
             $rule = [$index => $rules];
             $itemResult = $context->getValidator()->validate($item, $rule);
             if ($itemResult->isValid()) {
@@ -55,19 +50,13 @@ final class EachHandler implements RuleHandlerInterface
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                if ($error->getValuePath() === []) {
-                    $errorKey = [$index];
-                    $formatMessage = true;
-                } else {
-                    $errorKey = [$index, ...$error->getValuePath()];
-                    $formatMessage = false;
-                }
-
-                $message = !$formatMessage ? $error->getMessage() : $this->translator->translate($eachRule->getMessage(), [
-                    'error' => $error->getMessage(),
-                    'value' => $item,
-                ]);
-                $result->addError($message, $errorKey);
+                $result->addError(
+                    $error->getMessage(),
+                    $error->getParameters(),
+                    $error->getValuePath() === []
+                        ? [$index]
+                        : [$index, ...$error->getValuePath()],
+                );
             }
         }
 

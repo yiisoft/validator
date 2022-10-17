@@ -43,7 +43,7 @@ class ResultTest extends TestCase
     public function testGetErrors(): void
     {
         $this->assertEquals(
-            [new Error('error1'), new Error('error2', ['path', 2])],
+            [new Error('error1'), new Error('error2', [], ['path', 2])],
             $this->createErrorResult()->getErrors()
         );
     }
@@ -78,8 +78,9 @@ class ResultTest extends TestCase
     private function createErrorResult(): Result
     {
         $result = new Result();
-        $result->addError('error1')
-            ->addError('error2', ['path', 2]);
+        $result
+            ->addError('error1')
+            ->addError('error2', [], ['path', 2]);
 
         return $result;
     }
@@ -109,7 +110,7 @@ class ResultTest extends TestCase
     {
         $result = new Result();
 
-        $result->addError('error1', [1]);
+        $result->addError('error1', [], [1]);
 
         $this->expectException(InvalidArgumentException::class);
         $result->getErrorMessagesIndexedByAttribute();
@@ -122,18 +123,18 @@ class ResultTest extends TestCase
         $this->assertEquals([], $result->getAttributeErrors('attribute1'));
         $this->assertEquals(
             [
-                new Error('error2.1', ['attribute2']),
-                new Error('error2.2', ['attribute2']),
-                new Error('error2.3', ['attribute2', 'nested']),
-                new Error('error2.4', ['attribute2', 'nested']),
+                new Error('error2.1', [], ['attribute2']),
+                new Error('error2.2', [], ['attribute2']),
+                new Error('error2.3', [], ['attribute2', 'nested']),
+                new Error('error2.4', [], ['attribute2', 'nested']),
             ],
             $result->getAttributeErrors('attribute2')
         );
         $this->assertEquals([new Error('error3.1'), new Error('error3.2')], $result->getAttributeErrors(''));
         $this->assertEquals(
             [
-                new Error('error4.1', ['attribute4', 'subattribute4.1', 'subattribute4*2']),
-                new Error('error4.2', ['attribute4', 'subattribute4.3', 'subattribute4*4']),
+                new Error('error4.1', [], ['attribute4', 'subattribute4.1', 'subattribute4*2']),
+                new Error('error4.2', [], ['attribute4', 'subattribute4.3', 'subattribute4*4']),
             ],
             $result->getAttributeErrors('attribute4')
         );
@@ -176,14 +177,15 @@ class ResultTest extends TestCase
     private function createAttributeErrorResult(): Result
     {
         $result = new Result();
-        $result->addError('error2.1', ['attribute2'])
-            ->addError('error2.2', ['attribute2'])
-            ->addError('error2.3', ['attribute2', 'nested'])
-            ->addError('error2.4', ['attribute2', 'nested'])
+        $result
+            ->addError('error2.1', [], ['attribute2'])
+            ->addError('error2.2', [], ['attribute2'])
+            ->addError('error2.3', [], ['attribute2', 'nested'])
+            ->addError('error2.4', [], ['attribute2', 'nested'])
             ->addError('error3.1')
             ->addError('error3.2')
-            ->addError('error4.1', ['attribute4', 'subattribute4.1', 'subattribute4*2'])
-            ->addError('error4.2', ['attribute4', 'subattribute4.3', 'subattribute4*4']);
+            ->addError('error4.1', [], ['attribute4', 'subattribute4.1', 'subattribute4*2'])
+            ->addError('error4.2', [], ['attribute4', 'subattribute4.3', 'subattribute4*4']);
 
         return $result;
     }

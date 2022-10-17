@@ -11,7 +11,7 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 
 final class AttributesRulesProviderTest extends TestCase
 {

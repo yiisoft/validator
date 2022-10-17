@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -21,10 +20,6 @@ use function strlen;
  */
 final class UrlHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Url) {
@@ -44,11 +39,13 @@ final class UrlHandler implements RuleHandlerInterface
             }
         }
 
-        $formattedMessage = $this->translator->translate(
+        $result->addError(
             $rule->getMessage(),
-            ['attribute' => $context->getAttribute(), 'value' => $value]
+            [
+                'attribute' => $context->getAttribute(),
+                'value' => $value,
+            ],
         );
-        $result->addError($formattedMessage);
 
         return $result;
     }

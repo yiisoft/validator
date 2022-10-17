@@ -5,18 +5,24 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\EachHandler;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
-final class EachTest extends AbstractRuleTest
+final class EachTest extends RuleTestCase
 {
+    use DifferentRuleInHandlerTestTrait;
+    use SerializableRuleTestTrait;
+
     public function testGetName(): void
     {
         $rule = new Each([]);
         $this->assertSame('each', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -27,9 +33,6 @@ final class EachTest extends AbstractRuleTest
                 [
                     'incorrectInputMessage' => [
                         'message' => 'Value must be array or iterable.',
-                    ],
-                    'message' => [
-                        'message' => '{error} {value} given.',
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -82,8 +85,40 @@ final class EachTest extends AbstractRuleTest
         ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    public function dataValidationPassed(): array
     {
-        return new Each([]);
+        return [
+            [
+                [10, 11],
+                [new Each([new Number(max: 20)])],
+            ],
+        ];
+    }
+
+    public function dataValidationFailed(): array
+    {
+        return [
+            [
+                [10, 20, 30],
+                [new Each([new Number(max: 13)])],
+                [
+                    '1' => ['Value must be no greater than 13.'],
+                    '2' => ['Value must be no greater than 13.'],
+                ],
+            ],
+            'custom error' => [
+                [10, 20, 30],
+                [new Each([new Number(max: 13, tooBigMessage: 'Custom error.')])],
+                [
+                    '1' => ['Custom error.'],
+                    '2' => ['Custom error.'],
+                ],
+            ],
+        ];
+    }
+
+    protected function getDifferentRuleInHandlerItems(): array
+    {
+        return [Each::class, EachHandler::class];
     }
 }

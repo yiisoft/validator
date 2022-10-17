@@ -82,7 +82,7 @@ final class Callback implements
         try {
             $this->callback = Closure::fromCallable([$dataSet->getObject()::class, $this->method]);
         } catch (TypeError) {
-            throw new InvalidArgumentException('Method must exist and have public and static modifers.');
+            throw new InvalidArgumentException('Method must exist and have public and static modifiers.');
         }
     }
 

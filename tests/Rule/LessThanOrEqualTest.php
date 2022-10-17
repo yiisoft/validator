@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use RuntimeException;
 use Yiisoft\Validator\Rule\LessThanOrEqual;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
+use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
-final class LessThanOrEqualTest extends AbstractRuleTest
+final class LessThanOrEqualTest extends RuleTestCase
 {
+    use SerializableRuleTestTrait;
+
     public function testGetName(): void
     {
         $rule = new LessThanOrEqual(1);
         $this->assertSame('lessThanOrEqual', $rule->getName());
     }
 
-    public function optionsDataProvider(): array
+    public function dataOptions(): array
     {
         return [
             [
@@ -116,16 +120,30 @@ final class LessThanOrEqualTest extends AbstractRuleTest
         ];
     }
 
-    public function testWithoutParameters()
+    public function dataValidationPassed(): array
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-
-        $rule = new LessThanOrEqual();
+        return [
+            [100, [new LessThanOrEqual(101)]],
+            [100, [new LessThanOrEqual(100)]],
+            ['100', [new LessThanOrEqual('101')]],
+        ];
     }
 
-    protected function getRule(): SerializableRuleInterface
+    public function dataValidationFailed(): array
     {
-        return new LessThanOrEqual(1);
+        $message = 'Value must be less than or equal to "100".';
+
+        return [
+            [101, [new LessThanOrEqual(100)], ['' => [$message]]],
+            ['101', [new LessThanOrEqual(100)], ['' => [$message]]],
+            'custom error' => [101, [new LessThanOrEqual(100, message: 'Custom error')], ['' => ['Custom error']]],
+        ];
+    }
+
+    public function testWithoutParameters(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+        new LessThanOrEqual();
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -25,10 +24,6 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class CompareHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Compare) {
@@ -44,7 +39,7 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $targetValue)) {
-            $formattedMessage = $this->translator->translate(
+            $result->addError(
                 $rule->getMessage(),
                 [
                     'attribute' => $context->getAttribute(),
@@ -52,9 +47,8 @@ final class CompareHandler implements RuleHandlerInterface
                     'targetAttribute' => $rule->getTargetAttribute(),
                     'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
                     'value' => $value,
-                ]
+                ],
             );
-            $result->addError($formattedMessage);
         }
 
         return $result;

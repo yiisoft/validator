@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -18,10 +17,6 @@ use function is_string;
  */
 final class RequiredHandler implements RuleHandlerInterface
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Required) {
@@ -30,8 +25,7 @@ final class RequiredHandler implements RuleHandlerInterface
 
         $result = new Result();
         if ($context->isAttributeMissing()) {
-            $translatedMessage = $this->translator->translate($rule->getNotPassedMessage());
-            $result->addError($translatedMessage);
+            $result->addError($rule->getNotPassedMessage());
 
             return $result;
         }
@@ -44,8 +38,7 @@ final class RequiredHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $translatedMessage = $this->translator->translate($rule->getMessage());
-        $result->addError($translatedMessage);
+        $result->addError($rule->getMessage());
 
         return $result;
     }

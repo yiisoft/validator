@@ -17,12 +17,10 @@
     <testsuites>
         <testsuite name="Validator">
             <directory>./tests</directory>
-            <exclude>./tests/DataSet/PHP81</exclude>
             <exclude>./tests/Php81</exclude>
         </testsuite>
 
-        <testsuite name="Validator 81">
-            <directory phpVersion="8.1.0" phpVersionOperator=">=">./tests/DataSet/PHP81</directory>
+        <testsuite name="Validator PHP 8.1">
             <directory phpVersion="8.1" phpVersionOperator=">=">./tests/Php81</directory>
         </testsuite>
     </testsuites>
