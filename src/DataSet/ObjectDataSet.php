@@ -25,8 +25,6 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     private bool $dataSetProvided;
     private bool $rulesProvided;
 
-    private ?array $cachedData = null;
-
     private static array $cache = [];
     private string $cacheKey;
 
@@ -41,22 +39,64 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         $this->cacheKey = $this->object::class . '_' . $this->propertyVisibility;
     }
 
-    public function getObject(): object
-    {
-        return $this->object;
-    }
-
     public function getRules(): iterable
     {
-        if ($this->rulesProvided) {
-            return $this->object->getRules();
-        }
-
+        // Providing data set assumes object has its own attributes and rules getting logic. So further parsing of
+        // Reflection properties and rules is skipped intentionally at the very beginning.
         if ($this->dataSetProvided) {
             return [];
         }
 
-        return $this->getCachedRules();
+        if ($this->rulesProvided) {
+            return $this->object->getRules();
+        }
+
+        if ($this->hasCache()) {
+            return $this->getCacheItem('rules');
+        }
+
+        $rules = [];
+        foreach ($this->getReflectionProperties() as $property) {
+            // TODO: use Generator to collect attributes.
+            $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
+            foreach ($attributes as $attribute) {
+                $rule = $attribute->newInstance();
+                $rules[$property->getName()][] = $rule;
+
+                if ($rule instanceof AttributeEventInterface) {
+                    $rule->afterInitAttribute($this);
+                }
+            }
+        }
+
+        $this->setCacheItem('rules', $rules);
+
+        return $rules;
+    }
+
+    private function getReflectionProperties(): array
+    {
+        if ($this->hasCache()) {
+            return $this->getCacheItem('reflectionProperties');
+        }
+
+        $reflection = new ReflectionObject($this->object);
+        foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
+            if (PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
+
+            $reflectionProperties[$property->getName()] = $property;
+        }
+
+        $this->setCacheItem('reflectionProperties', $reflectionProperties);
+
+        return $reflectionProperties;
+    }
+
+    public function getObject(): object
+    {
+        return $this->object;
     }
 
     public function getAttributeValue(string $attribute): mixed
@@ -72,7 +112,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     {
         return $this->dataSetProvided
             ? $this->object->hasAttribute($attribute)
-            : array_key_exists($attribute, $this->getCachedReflectionProperties());
+            : array_key_exists($attribute, $this->getReflectionProperties());
     }
 
     public function getData(): array
@@ -81,65 +121,26 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
             return $this->object->getData();
         }
 
-        if ($this->cachedData !== null) {
-            return $this->cachedData;
+        $data = [];
+        foreach ($this->getReflectionProperties() as $name => $property) {
+            $data[$name] = $property->getValue($this->object);
         }
 
-        $this->cachedData = [];
-        foreach ($this->getCachedReflectionProperties() as $name => $property) {
-            $this->cachedData[$name] = $property->getValue($this->object);
-        }
-
-        return $this->cachedData;
+        return $data;
     }
 
-    private function getCachedRules(): array
+    private function hasCache(): bool
     {
-        $this->assertRulesAndReflectionPropertiesInCache();
-        return self::$cache[$this->cacheKey]['rules'];
+        return array_key_exists($this->cacheKey, self::$cache);
     }
 
-    private function getCachedReflectionProperties(): array
+    private function getCacheItem(string $name): array
     {
-        $this->assertRulesAndReflectionPropertiesInCache();
-        return self::$cache[$this->cacheKey]['reflectionProperties'];
+        return self::$cache[$this->cacheKey][$name];
     }
 
-    // TODO: use Generator to collect attributes
-    private function assertRulesAndReflectionPropertiesInCache(): void
+    private function setCacheItem(string $name, array $rules): void
     {
-        if (array_key_exists($this->cacheKey, self::$cache)) {
-            return;
-        }
-
-        $rules = [];
-        $reflectionProperties = [];
-
-        $reflection = new ReflectionObject($this->object);
-        foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
-            if (PHP_VERSION_ID < 80100) {
-                $property->setAccessible(true);
-            }
-            $reflectionProperties[$property->getName()] = $property;
-
-            if ($this->rulesProvided) {
-                continue;
-            }
-
-            $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
-            foreach ($attributes as $attribute) {
-                $rule = $attribute->newInstance();
-                $rules[$property->getName()][] = $rule;
-
-                if ($rule instanceof AttributeEventInterface) {
-                    $rule->afterInitAttribute($this);
-                }
-            }
-        }
-
-        self::$cache[$this->cacheKey] = [
-            'rules' => $rules,
-            'reflectionProperties' => $reflectionProperties,
-        ];
+        self::$cache[$this->cacheKey][$name] = $rules;
     }
 }
