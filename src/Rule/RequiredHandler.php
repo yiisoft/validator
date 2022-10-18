@@ -29,10 +29,6 @@ final class RequiredHandler implements RuleHandlerInterface
             return $result;
         }
 
-        if (is_string($value)) {
-            $value = trim($value);
-        }
-
         if (!$rule->getEmptyCallback()($value, $context->isAttributeMissing())) {
             return $result;
         }
