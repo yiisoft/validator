@@ -52,7 +52,7 @@ final class UrlHandler implements RuleHandlerInterface
 
     private function idnToAscii(string $idn): string
     {
-        $result = idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
+        $result = idn_to_ascii($idn);
 
         return $result === false ? '' : $result;
     }
