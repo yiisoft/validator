@@ -9,8 +9,6 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
-use function is_string;
-
 /**
  * Validates that the specified value is passed and not empty.
  */
