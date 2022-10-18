@@ -932,7 +932,18 @@ final class Coordinate implements RuleInterface
 }
 ```
 
-### Grouping multiple validation rules
+### Rules
+
+#### Passing single rule
+
+```php
+use Yiisoft\Validator\Validator;
+
+/** @var Validator $validator */
+$validator->validate(3, new Number(min: 5));
+```
+
+#### Grouping multiple validation rules
 
 To reuse multiple validation rules it is advised to group rules like the following:
 
