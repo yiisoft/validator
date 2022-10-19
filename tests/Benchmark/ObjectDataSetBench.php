@@ -10,7 +10,7 @@ use PhpBench\Benchmark\Metadata\Annotations\ParamProviders;
 use PhpBench\Benchmark\Metadata\Annotations\Revs;
 use ReflectionProperty;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
-use Yiisoft\Validator\Tests\Stub\ObjectWithDifferentPropertyVisibility;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 
 class ObjectDataSetBench
 {
