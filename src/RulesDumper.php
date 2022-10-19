@@ -61,7 +61,7 @@ final class RulesDumper
                 $result[$attribute] = [$rule->getName()];
             } else {
                 throw new InvalidArgumentException(sprintf(
-                    'Rules should be a rule or an array of rules that implements "%s". Type "%s" given.',
+                    'Each rule must implement "%s". Type "%s" given.',
                     RuleInterface::class,
                     get_debug_type($rule),
                 ));
