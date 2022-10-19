@@ -25,7 +25,7 @@ final class RulesDumperTest extends TestCase
                             skipOnEmpty: true,
                             skipOnError: true
                         ),
-                        (fn() => yield from [$rule, $rule])(),
+                        (fn () => yield from [$rule, $rule])(),
                     ],
                 ],
                 [
