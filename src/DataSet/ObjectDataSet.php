@@ -9,6 +9,7 @@ use JetBrains\PhpStorm\ExpectedValues;
 use ReflectionAttribute;
 use ReflectionObject;
 use ReflectionProperty;
+use stdClass;
 use Yiisoft\Validator\AttributeEventInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\RuleInterface;
@@ -34,7 +35,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         ],
     ])]
     private static array $cache = [];
-    private string $cacheKey;
+    private string|null $cacheKey = null;
 
     public function __construct(
         private object $object,
@@ -44,22 +45,25 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     ) {
         $this->dataSetProvided = $this->object instanceof DataSetInterface;
         $this->rulesProvided = $this->object instanceof RulesProviderInterface;
-        $this->cacheKey = $this->object::class . '_' . $this->propertyVisibility;
+
+        if ($this->canCache()) {
+            $this->cacheKey = $this->object::class . '_' . $this->propertyVisibility;
+        }
     }
 
     public function getRules(): iterable
     {
-        // Providing data set assumes object has its own attributes and rules getting logic. So further parsing of
-        // Reflection properties and rules is skipped intentionally at the very beginning.
-        if ($this->dataSetProvided) {
-            return [];
-        }
-
         if ($this->rulesProvided) {
             return $this->object->getRules();
         }
 
-        if ($this->hasCache()) {
+        // Providing data set assumes object has its own attributes and rules getting logic. So further parsing of
+        // Reflection properties and rules is skipped intentionally.
+        if ($this->dataSetProvided) {
+            return [];
+        }
+
+        if ($this->hasCacheItem('rules')) {
             return $this->getCacheItem('rules');
         }
 
@@ -77,18 +81,22 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
             }
         }
 
-        $this->setCacheItem('rules', $rules);
+        if ($this->canCache()) {
+            $this->setCacheItem('rules', $rules);
+        }
 
         return $rules;
     }
 
     private function getReflectionProperties(): array
     {
-        if ($this->hasCache()) {
+        if ($this->hasCacheItem('reflectionProperties')) {
             return $this->getCacheItem('reflectionProperties');
         }
 
         $reflection = new ReflectionObject($this->object);
+        $reflectionProperties = [];
+
         foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
             if (PHP_VERSION_ID < 80100) {
                 $property->setAccessible(true);
@@ -97,7 +105,9 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
             $reflectionProperties[$property->getName()] = $property;
         }
 
-        $this->setCacheItem('reflectionProperties', $reflectionProperties);
+        if ($this->canCache()) {
+            $this->setCacheItem('reflectionProperties', $reflectionProperties);
+        }
 
         return $reflectionProperties;
     }
@@ -137,17 +147,26 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         return $data;
     }
 
-    private function hasCache(): bool
+    private function canCache(): bool
     {
-        return array_key_exists($this->cacheKey, self::$cache);
+        return !$this->object instanceof stdClass;
     }
 
-    private function getCacheItem(#[ExpectedValues(['rules', 'reflectionAttributes'])] string $name): array
+    private function hasCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): bool
+    {
+        if (!array_key_exists($this->cacheKey, self::$cache)) {
+            return false;
+        }
+
+        return array_key_exists($name, self::$cache[$this->cacheKey]);
+    }
+
+    private function getCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): array
     {
         return self::$cache[$this->cacheKey][$name];
     }
 
-    private function setCacheItem(#[ExpectedValues(['rules', 'reflectionAttributes'])] string $name, array $rules): void
+    private function setCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name, array $rules): void
     {
         self::$cache[$this->cacheKey][$name] = $rules;
     }
