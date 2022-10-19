@@ -10,6 +10,7 @@ use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\CallbackHandler;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
@@ -114,7 +115,7 @@ final class CallbackTest extends RuleTestCase
                     private function validateName(mixed $value, RuleInterface $rule, ValidationContext $context): Result
                     {
                         if ($value !== $this->age) {
-                            throw new RuntimeException('Method scope was not bound the object.');
+                            throw new RuntimeException('Method scope was not bound to the object.');
                         }
 
                         $result = new Result();
