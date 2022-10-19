@@ -57,7 +57,7 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
-     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null $rules
+     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RuleInterface|RulesProviderInterface|null $rules
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
@@ -69,6 +69,8 @@ final class Validator implements ValidatorInterface
             $rules = $data->getRules();
         } elseif ($rules instanceof RulesProviderInterface) {
             $rules = $rules->getRules();
+        } elseif ($rules instanceof RuleInterface) {
+            $rules = [$rules];
         } elseif (!$rules instanceof Traversable && !is_array($rules) && $rules !== null) {
             $rules = (new AttributesRulesProvider($rules, $this->rulesPropertyVisibility))->getRules();
         }
