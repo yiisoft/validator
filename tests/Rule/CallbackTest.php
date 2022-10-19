@@ -106,11 +106,12 @@ final class CallbackTest extends RuleTestCase
                 new class (1) {
                     public function __construct(
                         #[Callback(method: 'validateName')]
+                        #[Callback(method: 'staticValidateName')]
                         private $age,
                     ) {
                     }
 
-                    private function validateName($value, $rule, $context): Result
+                    private function validateName(mixed $value, RuleInterface $rule, ValidationContext $context): Result
                     {
                         if ($value !== $this->age) {
                             throw new RuntimeException('Method scope was not bound the object.');
@@ -121,9 +122,21 @@ final class CallbackTest extends RuleTestCase
 
                         return $result;
                     }
+
+                    private static function staticValidateName(mixed $value, RuleInterface $rule, ValidationContext $context): Result
+                    {
+                        if ($value !== $context->getDataSet()?->getAttributeValue('age')) {
+                            throw new RuntimeException('Method scope was not bound to the object.');
+                        }
+
+                        $result = new Result();
+                        $result->addError('Hello from static method.');
+
+                        return $result;
+                    }
                 },
                 null,
-                ['age' => ['Hello from non-static method.']],
+                ['age' => ['Hello from non-static method.', 'Hello from static method.']],
             ],
         ];
     }
