@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesDumper;
@@ -16,7 +17,7 @@ final class RulesDumperTest extends TestCase
             [
                 [
                     'attributeName' => [
-                        new Number(
+                        $rule = new Number(
                             asInteger: true,
                             min: 10,
                             max: 100,
@@ -25,11 +26,12 @@ final class RulesDumperTest extends TestCase
                             skipOnEmpty: true,
                             skipOnError: true
                         ),
+                        (fn () => yield from [$rule, $rule])(),
                     ],
                 ],
                 [
                     'attributeName' => [
-                        [
+                        $dump = [
                             'number',
                             'asInteger' => true,
                             'min' => 10,
@@ -50,6 +52,10 @@ final class RulesDumperTest extends TestCase
                             'integerPattern' => '/^\s*[+-]?\d+\s*$/',
                             'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                         ],
+                        [
+                            $dump,
+                            $dump,
+                        ],
                     ],
                 ],
             ],
@@ -65,5 +71,17 @@ final class RulesDumperTest extends TestCase
         $result = $dumper->asArray($rules);
 
         $this->assertEquals($expected, $result);
+    }
+
+    public function testException(): void
+    {
+        $dumper = new RulesDumper();
+
+        $this->expectException(InvalidArgumentException::class);
+
+        $message = 'Each rule must implement "Yiisoft\Validator\RuleInterface". Type "string" given.';
+        $this->expectExceptionMessage($message);
+
+        $dumper->asArray(['not a rule']);
     }
 }

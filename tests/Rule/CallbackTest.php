@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
+use RuntimeException;
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\CallbackHandler;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
@@ -100,6 +102,45 @@ final class CallbackTest extends RuleTestCase
                     }),
                 ],
                 ['' => ['Custom error']],
+            ],
+            'non-static callable' => [
+                new class (1) {
+                    public function __construct(
+                        #[Callback(method: 'validateName')]
+                        #[Callback(method: 'staticValidateName')]
+                        private $age,
+                    ) {
+                    }
+
+                    private function validateName(mixed $value, RuleInterface $rule, ValidationContext $context): Result
+                    {
+                        if ($value !== $this->age) {
+                            throw new RuntimeException('Method scope was not bound to the object.');
+                        }
+
+                        $result = new Result();
+                        $result->addError('Hello from non-static method.');
+
+                        return $result;
+                    }
+
+                    private static function staticValidateName(
+                        mixed $value,
+                        RuleInterface $rule,
+                        ValidationContext $context
+                    ): Result {
+                        if ($value !== $context->getDataSet()?->getAttributeValue('age')) {
+                            throw new RuntimeException('Method scope was not bound to the object.');
+                        }
+
+                        $result = new Result();
+                        $result->addError('Hello from static method.');
+
+                        return $result;
+                    }
+                },
+                null,
+                ['age' => ['Hello from non-static method.', 'Hello from static method.']],
             ],
         ];
     }
