@@ -16,8 +16,6 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithCallbackMethod;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonExistingCallbackMethod;
-use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonPublicCallbackMethod;
-use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonStaticCallbackMethod;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
@@ -259,23 +257,17 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame(['name' => ['Value must be "foo"!']], $result->getErrorMessagesIndexedByPath());
     }
 
-    public function validateWithWrongCallbackMethodDataProvider(): array
+    public function testValidateWithWrongCallbackMethod(): void
     {
-        return [
-            [new ObjectWithNonExistingCallbackMethod()],
-            [new ObjectWithNonPublicCallbackMethod()],
-            [new ObjectWithNonStaticCallbackMethod()],
-        ];
-    }
-
-    /**
-     * @link https://github.com/yiisoft/validator/issues/223
-     * @dataProvider validateWithWrongCallbackMethodDataProvider
-     */
-    public function testValidateWithWrongCallbackMethod(object $object): void
-    {
+        $object = new ObjectWithNonExistingCallbackMethod();
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Method must exist and have public and static modifiers.');
+        $this->expectExceptionMessage(
+            sprintf(
+                'Method "%s" does not exist in class "%s".',
+                'validateName',
+                $object::class,
+            )
+        );
         new ObjectDataSet($object);
     }
 }
