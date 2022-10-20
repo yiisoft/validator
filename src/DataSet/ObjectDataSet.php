@@ -41,7 +41,8 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         private object $object,
         private int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
         ReflectionProperty::IS_PROTECTED |
-        ReflectionProperty::IS_PUBLIC
+        ReflectionProperty::IS_PUBLIC,
+        private bool $useCache = true
     ) {
         $this->dataSetProvided = $this->object instanceof DataSetInterface;
         $this->rulesProvided = $this->object instanceof RulesProviderInterface;
@@ -149,7 +150,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
     private function canCache(): bool
     {
-        return !$this->object instanceof stdClass;
+        return $this->useCache === true;
     }
 
     private function hasCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): bool
