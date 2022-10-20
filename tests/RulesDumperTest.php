@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesDumper;
@@ -70,5 +71,17 @@ final class RulesDumperTest extends TestCase
         $result = $dumper->asArray($rules);
 
         $this->assertEquals($expected, $result);
+    }
+
+    public function testException(): void
+    {
+        $dumper = new RulesDumper();
+
+        $this->expectException(InvalidArgumentException::class);
+
+        $message = 'Each rule must implement "Yiisoft\Validator\RuleInterface". Type "string" given.';
+        $this->expectExceptionMessage($message);
+
+        $dumper->asArray(['not a rule']);
     }
 }
