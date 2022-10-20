@@ -1,7 +1,5 @@
 {
-    "symbol-whitelist": [
-        "idn_to_ascii"
-    ],
+    "symbol-whitelist": [],
     "php-core-extensions": [
         "Core",
         "date",
@@ -10,7 +8,8 @@
         "Phar",
         "Reflection",
         "SPL",
-        "standard"
+        "standard",
+        "intl"
     ],
     "scan-files": []
 }
