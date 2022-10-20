@@ -125,10 +125,10 @@ final class CallbackTest extends RuleTestCase
                     }
 
                     private static function staticValidateName(
-                        mixed $value, RuleInterface $rule, 
+                        mixed $value,
+                        RuleInterface $rule,
                         ValidationContext $context
-                    ): Result
-                    {
+                    ): Result {
                         if ($value !== $context->getDataSet()?->getAttributeValue('age')) {
                             throw new RuntimeException('Method scope was not bound to the object.');
                         }
