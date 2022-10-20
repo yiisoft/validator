@@ -332,7 +332,7 @@ final class ObjectDataSetTest extends TestCase
                 $object::class,
             )
         );
-        new ObjectDataSet($object);
+        (new ObjectDataSet($object))->getRules();
     }
 
     public function objectWithDynamicDataSetProvider(): array
