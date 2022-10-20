@@ -16,7 +16,7 @@ final class RulesDumperTest extends TestCase
             [
                 [
                     'attributeName' => [
-                        new Number(
+                        $rule = new Number(
                             asInteger: true,
                             min: 10,
                             max: 100,
@@ -25,11 +25,12 @@ final class RulesDumperTest extends TestCase
                             skipOnEmpty: true,
                             skipOnError: true
                         ),
+                        (fn () => yield from [$rule, $rule])(),
                     ],
                 ],
                 [
                     'attributeName' => [
-                        [
+                        $dump = [
                             'number',
                             'asInteger' => true,
                             'min' => 10,
@@ -49,6 +50,10 @@ final class RulesDumperTest extends TestCase
                             'skipOnError' => true,
                             'integerPattern' => '/^\s*[+-]?\d+\s*$/',
                             'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
+                        ],
+                        [
+                            $dump,
+                            $dump,
                         ],
                     ],
                 ],
