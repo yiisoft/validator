@@ -88,30 +88,6 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         return $rules;
     }
 
-    private function getReflectionProperties(): array
-    {
-        if ($this->hasCacheItem('reflectionProperties')) {
-            return $this->getCacheItem('reflectionProperties');
-        }
-
-        $reflection = new ReflectionObject($this->object);
-        $reflectionProperties = [];
-
-        foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
-            if (PHP_VERSION_ID < 80100) {
-                $property->setAccessible(true);
-            }
-
-            $reflectionProperties[$property->getName()] = $property;
-        }
-
-        if ($this->canCache()) {
-            $this->setCacheItem('reflectionProperties', $reflectionProperties);
-        }
-
-        return $reflectionProperties;
-    }
-
     public function getObject(): object
     {
         return $this->object;
@@ -145,6 +121,30 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         }
 
         return $data;
+    }
+
+    private function getReflectionProperties(): array
+    {
+        if ($this->hasCacheItem('reflectionProperties')) {
+            return $this->getCacheItem('reflectionProperties');
+        }
+
+        $reflection = new ReflectionObject($this->object);
+        $reflectionProperties = [];
+
+        foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
+            if (PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
+
+            $reflectionProperties[$property->getName()] = $property;
+        }
+
+        if ($this->canCache()) {
+            $this->setCacheItem('reflectionProperties', $reflectionProperties);
+        }
+
+        return $reflectionProperties;
     }
 
     private function canCache(): bool
