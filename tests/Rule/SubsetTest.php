@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use ArrayObject;
-use Yiisoft\Validator\DataSet\MixedDataSet;
+use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Rule\Subset;
 use Yiisoft\Validator\Rule\SubsetHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -53,7 +53,7 @@ final class SubsetTest extends RuleTestCase
             [['1', '2', '3', 4, 5, 6], [new Subset(range(1, 10))]],
 
             [['a', 'b'], [new Subset(['a', 'b', 'c'])]],
-            [new MixedDataSet(new ArrayObject(['a', 'b'])), [new Subset(['a', 'b', 'c'])]],
+            [new SingleValueDataSet(new ArrayObject(['a', 'b'])), [new Subset(['a', 'b', 'c'])]],
         ];
     }
 

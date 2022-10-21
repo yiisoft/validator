@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\DataSet;
 
+use BadMethodCallException;
 use Yiisoft\Validator\DataSetInterface;
 
 /**
  * Used for a single value of any (mixed) data type. Does not support attributes.
  */
-final class MixedDataSet implements DataSetInterface
+final class SingleValueDataSet implements DataSetInterface
 {
     public function __construct(private mixed $value)
     {
@@ -17,7 +18,7 @@ final class MixedDataSet implements DataSetInterface
 
     public function getAttributeValue(string $attribute): mixed
     {
-        return null;
+        throw new BadMethodCallException('Single value data set does not support attributes.');
     }
 
     public function getData(): mixed
@@ -27,6 +28,6 @@ final class MixedDataSet implements DataSetInterface
 
     public function hasAttribute(string $attribute): bool
     {
-        return false;
+        throw new BadMethodCallException('Single value data set does not support attributes.');
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
@@ -86,9 +87,23 @@ class ValidatorTest extends TestCase
     public function testNullAsDataSet(): void
     {
         $validator = ValidatorFactory::make();
-        $result = $validator->validate(null, ['property' => [new CompareTo(null)]]);
-
+        $result = $validator->validate(null, [[new CompareTo(null)]]);
         $this->assertTrue($result->isValid());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Properties can\'t be used in rules with single value data set');
+        $validator->validate(null, ['property' => [new CompareTo(null)]]);
+    }
+
+    public function testSingleValueAsDataSet(): void
+    {
+        $validator = ValidatorFactory::make();
+        $result = $validator->validate(1, [[new InRange([1, 2])]]);
+        $this->assertTrue($result->isValid());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Properties can\'t be used in rules with single value data set');
+        $validator->validate(null, ['property' => [new CompareTo(null)]]);
     }
 
     public function testPreValidation(): void
