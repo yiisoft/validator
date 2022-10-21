@@ -705,8 +705,8 @@ final class Post
 
 ### Requiring values
 
-Use `Yiisoft\Validator\Rule\Required` rule to make sure value is presented. What values exactly are considered empty can
-be customized via `$emptyCallback` option. Normalization is not performed here, so only a callable or special class is 
+Use `Yiisoft\Validator\Rule\Required` rule to make sure a value is present. What values are considered empty can
+be customized via `$emptyCallback` option. Normalization is not performed, so only a callable or special class is 
 needed. For more details see "Skipping empty values" section.
 
 ```php
@@ -714,7 +714,6 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 
 $rules = [new Required(emptyCallback: new SkipOnNull())];
-```
 
 ### Conditional validation
 
