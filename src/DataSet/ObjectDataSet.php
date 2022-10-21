@@ -99,7 +99,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
             return $this->object->getAttributeValue($attribute);
         }
 
-        return $this->getData()[$attribute] ?? null;
+        return ($this->getReflectionProperties()[$attribute] ?? null)?->getValue($this->getObject());
     }
 
     public function hasAttribute(string $attribute): bool
