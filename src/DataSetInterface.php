@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-/**
- * DataSetInterface represents a key-value data set.
- */
 interface DataSetInterface
 {
     /**
