@@ -28,7 +28,7 @@ abstract class RuleTestCase extends TestCase
     /**
      * @dataProvider dataValidationFailed
      */
-    public function testValidationFailed(mixed $data, array $rules, array $errorMessagesIndexedByPath): void
+    public function testValidationFailed(mixed $data, array|null $rules, array $errorMessagesIndexedByPath): void
     {
         $this->beforeTestValidationFailed();
 

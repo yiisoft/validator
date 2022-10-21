@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use JetBrains\PhpStorm\Language;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -28,6 +29,7 @@ final class Regex implements SerializableRuleInterface, SkipOnErrorInterface, Wh
     use WhenTrait;
 
     public function __construct(
+        #[Language('RegExp')]
         /**
          * @var string the regular expression to be matched with
          */

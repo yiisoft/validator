@@ -63,7 +63,7 @@ class ValidatorTest extends TestCase
         $class->property = true;
 
         return [
-            'object' => [$class],
+            'object' => [new ObjectDataSet($class, useCache: false)],
             'true' => [true],
             'non-empty-string' => ['true'],
             'integer' => [12345],
