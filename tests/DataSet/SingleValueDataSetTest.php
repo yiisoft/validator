@@ -8,7 +8,7 @@ use BadMethodCallException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\SingleValueDataSet;
 
-final class MixedDataSetTest extends TestCase
+final class SingleValueDataSetTest extends TestCase
 {
     public function testGetData(): void
     {
