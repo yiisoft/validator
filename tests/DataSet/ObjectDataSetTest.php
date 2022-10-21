@@ -324,6 +324,8 @@ final class ObjectDataSetTest extends TestCase
     public function testValidateWithWrongCallbackMethod(): void
     {
         $object = new ObjectWithNonExistingCallbackMethod();
+        $dataSet = new ObjectDataSet($object);
+
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             sprintf(
@@ -332,7 +334,7 @@ final class ObjectDataSetTest extends TestCase
                 $object::class,
             )
         );
-        (new ObjectDataSet($object))->getRules();
+        $dataSet->getRules();
     }
 
     public function objectWithDynamicDataSetProvider(): array
