@@ -142,7 +142,7 @@ new Number(asInteger: true, max: 100, skipOnError: true)
 #### Skipping empty values
 
 By default, missing and empty values are validated (if the value is missing, it's considered `null`). That is
-undesirable if you need to allow not specifying a field. To change this behavior, use `skipOnEmpty: true`.
+undesirable if you need a field to be optional. To change this behavior, use `skipOnEmpty: true`.
 
 Note that not all rules have this option, but only those that implement `Yiisoft\Validator\SkipOnEmptyInterface`.
 For example, `Required` rule doesn't. For more details about its customization see "Requiring values" section.
