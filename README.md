@@ -144,8 +144,8 @@ new Number(asInteger: true, max: 100, skipOnError: true)
 By default, missing and empty values are validated (if the value is missing, it's considered `null`). That is
 undesirable if you need a field to be optional. To change this behavior, use `skipOnEmpty: true`.
 
-Note that not every rule has this option, but only the ones that implement `Yiisoft\Validator\SkipOnEmptyInterface`.
-For example, `Required` rule doesn't. For more details see "Requiring values" section.
+Note that not every rule has this option, but only the ones that implement `Yiisoft\Validator\SkipOnEmptyInterface`. For 
+example, `Required` rule doesn't. For more details see "Requiring values" section.
 
 ```php
 use Yiisoft\Validator\Rule\Number;
@@ -705,15 +705,16 @@ final class Post
 
 ### Requiring values
 
-Use `Yiisoft\Validator\Rule\Required` rule to make sure a value is present. What values are considered empty can
-be customized via `$emptyCallback` option. Normalization is not performed, so only a callable or special class is 
-needed. For more details see "Skipping empty values" section.
+Use `Yiisoft\Validator\Rule\Required` rule to make sure a value is present. What values are considered empty can be 
+customized via `$emptyCallback` option. Normalization is not performed, so only a callable or special class is needed. 
+For more details see "Skipping empty values" section.
 
 ```php
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 
 $rules = [new Required(emptyCallback: new SkipOnNull())];
+```
 
 ### Conditional validation
 
