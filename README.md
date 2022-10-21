@@ -144,8 +144,8 @@ new Number(asInteger: true, max: 100, skipOnError: true)
 By default, missing and empty values are validated (if the value is missing, it's considered `null`). That is
 undesirable if you need a field to be optional. To change this behavior, use `skipOnEmpty: true`.
 
-Note that not all rules have this option, but only those that implement `Yiisoft\Validator\SkipOnEmptyInterface`.
-For example, `Required` rule doesn't. For more details about its customization see "Requiring values" section.
+Note that not every rule has this option, but only the ones that implement `Yiisoft\Validator\SkipOnEmptyInterface`.
+For example, `Required` rule doesn't. For more details see "Requiring values" section.
 
 ```php
 use Yiisoft\Validator\Rule\Number;
