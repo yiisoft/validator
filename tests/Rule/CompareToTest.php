@@ -223,6 +223,7 @@ final class CompareToTest extends RuleTestCase
             [['attribute' => 100, 'number' => 99], ['number' => new CompareTo(null, 'attribute', operator: '<=')]],
 
             ['100.50', [new CompareTo('100.5', type: Compare::TYPE_NUMBER)]],
+            ['100.50', [new CompareTo('100.5', type: Compare::TYPE_NUMBER, operator: '===')]],
         ];
     }
 
