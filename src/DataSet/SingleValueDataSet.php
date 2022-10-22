@@ -9,7 +9,7 @@ use Yiisoft\Validator\DataSetInterface;
 /**
  * Used for a single value of any (mixed) data type. Does not support attributes.
  */
-final class MixedDataSet implements DataSetInterface
+final class SingleValueDataSet implements DataSetInterface
 {
     public function __construct(private mixed $value)
     {
