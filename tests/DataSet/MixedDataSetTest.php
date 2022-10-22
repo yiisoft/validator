@@ -13,7 +13,9 @@ final class MixedDataSetTest extends TestCase
     {
         $data = new MixedDataSet(['test' => 'hello']);
 
-        $this->assertNull($data->getAttributeValue('test'));
         $this->assertSame(['test' => 'hello'], $data->getData());
+
+        $this->assertFalse($data->hasAttribute('test'));
+        $this->assertNull($data->getAttributeValue('test'));
     }
 }
