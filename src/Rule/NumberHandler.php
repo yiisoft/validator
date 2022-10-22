@@ -10,6 +10,8 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function is_bool;
+
 /**
  * Validates that the value is a number.
  *
@@ -28,13 +30,11 @@ final class NumberHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (is_bool($value) || !is_scalar($value)) {
-            $result->addError(
-                $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.',
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
+            $result->addError($rule->getNotANumberMessage(), [
+                'attribute' => $context->getAttribute(),
+                'value' => $value,
+            ]);
+
             return $result;
         }
 
