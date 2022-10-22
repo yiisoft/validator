@@ -57,12 +57,12 @@ final class ObjectDataSetTest extends TestCase
             ],
             [
                 new class () {
-                    #[Required(skipOnEmpty: true)]
+                    #[Required()]
                     private $property1;
                 },
                 [
                     'property1' => [
-                        new Required(skipOnEmpty: true),
+                        new Required(),
                     ],
                 ],
             ],
@@ -78,20 +78,20 @@ final class ObjectDataSetTest extends TestCase
             ],
             [
                 new class () {
-                    #[Required(skipOnEmpty: true)]
+                    #[Required()]
                     #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property1;
-                    #[Required(skipOnEmpty: true)]
+                    #[Required()]
                     #[HasLength(max: 255, skipOnEmpty: true)]
                     private $property2;
                 },
                 [
                     'property1' => [
-                        new Required(skipOnEmpty: true),
+                        new Required(),
                         new HasLength(max: 255, skipOnEmpty: true),
                     ],
                     'property2' => [
-                        new Required(skipOnEmpty: true),
+                        new Required(),
                         new HasLength(max: 255, skipOnEmpty: true),
                     ],
                 ],
@@ -99,7 +99,7 @@ final class ObjectDataSetTest extends TestCase
             [
                 new class () {
                     #[Each([
-                        new Required(skipOnEmpty: true),
+                        new Required(),
                         new HasLength(max: 255, skipOnEmpty: true),
                     ])]
                     #[HasLength(max: 255, skipOnEmpty: true)]
@@ -108,7 +108,7 @@ final class ObjectDataSetTest extends TestCase
                 [
                     'property1' => [
                         new Each([
-                            new Required(skipOnEmpty: true),
+                            new Required(),
                             new HasLength(max: 255, skipOnEmpty: true),
                         ]),
                         new HasLength(max: 255, skipOnEmpty: true),
@@ -118,11 +118,11 @@ final class ObjectDataSetTest extends TestCase
             [
                 new class () {
                     #[Nested([
-                        new Required(skipOnEmpty: true),
+                        new Required(),
                         new HasLength(max: 255, skipOnEmpty: true),
                     ])]
                     #[Each([
-                        new Required(skipOnEmpty: true),
+                        new Required(),
                         new HasLength(max: 255, skipOnEmpty: true),
                     ])]
                     #[HasLength(max: 255, skipOnEmpty: true)]
@@ -131,11 +131,11 @@ final class ObjectDataSetTest extends TestCase
                 [
                     'property1' => [
                         new Nested([
-                            new Required(skipOnEmpty: true),
+                            new Required(),
                             new HasLength(max: 255, skipOnEmpty: true),
                         ]),
                         new Each([
-                            new Required(skipOnEmpty: true),
+                            new Required(),
                             new HasLength(max: 255, skipOnEmpty: true),
                         ]),
                         new HasLength(max: 255, skipOnEmpty: true),
@@ -158,11 +158,11 @@ final class ObjectDataSetTest extends TestCase
             [
                 new class () {
                     #[Nested([
-                        new Required(skipOnEmpty: true),
+                        new Required(),
                         new HasLength(max: 255, skipOnEmpty: true),
                     ])]
                     #[Nested([
-                        new Required(skipOnEmpty: true),
+                        new Required(),
                         new HasLength(max: 255, skipOnEmpty: true),
                     ])]
                     #[HasLength(max: 255, skipOnEmpty: true)]
@@ -172,11 +172,11 @@ final class ObjectDataSetTest extends TestCase
                 [
                     'property1' => [
                         new Nested([
-                            new Required(skipOnEmpty: true),
+                            new Required(),
                             new HasLength(max: 255, skipOnEmpty: true),
                         ]),
                         new Nested([
-                            new Required(skipOnEmpty: true),
+                            new Required(),
                             new HasLength(max: 255, skipOnEmpty: true),
                         ]),
                         new HasLength(max: 255, skipOnEmpty: true),

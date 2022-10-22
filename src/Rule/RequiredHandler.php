@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_string;
@@ -34,7 +33,7 @@ final class RequiredHandler implements RuleHandlerInterface
             $value = trim($value);
         }
 
-        if (!(new SkipOnEmpty())($value, $context->isAttributeMissing())) {
+        if (!$rule->getEmptyCallback()($value, $context->isAttributeMissing())) {
             return $result;
         }
 

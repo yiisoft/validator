@@ -63,7 +63,7 @@ class ValidatorTest extends TestCase
         $class->property = true;
 
         return [
-            'object' => [$class],
+            'object' => [new ObjectDataSet($class, useCache: false)],
             'true' => [true],
             'non-empty-string' => ['true'],
             'integer' => [12345],
@@ -862,7 +862,7 @@ class ValidatorTest extends TestCase
             'null' => [
                 null,
                 new class () {
-                    #[Required]
+                    #[Number]
                     public ?string $name = null;
                 },
                 false,
@@ -870,7 +870,7 @@ class ValidatorTest extends TestCase
             'false' => [
                 false,
                 new class () {
-                    #[Required]
+                    #[Number]
                     public ?string $name = null;
                 },
                 false,
@@ -878,7 +878,7 @@ class ValidatorTest extends TestCase
             'true' => [
                 true,
                 new class () {
-                    #[Required]
+                    #[Number]
                     public ?string $name = null;
                 },
                 true,
@@ -886,7 +886,7 @@ class ValidatorTest extends TestCase
             'callable' => [
                 new SkipOnNull(),
                 new class () {
-                    #[Required]
+                    #[Number]
                     public ?string $name = null;
                 },
                 true,
@@ -894,7 +894,7 @@ class ValidatorTest extends TestCase
             'do-not-override-rule' => [
                 false,
                 new class () {
-                    #[Required(skipOnEmpty: true)]
+                    #[Number(skipOnEmpty: true)]
                     public string $name = '';
                 },
                 true,

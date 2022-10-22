@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Countable;
 use InvalidArgumentException;
 use stdClass;
-use Yiisoft\Validator\DataSet\MixedDataSet;
+use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\CountHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -69,7 +69,7 @@ final class CountTest extends RuleTestCase
             [[0, 0], [new Count(max: 3)]],
             [[0, 0, 0], [new Count(max: 3)]],
             [
-                new MixedDataSet(
+                new SingleValueDataSet(
                     new class () implements Countable {
                         protected int $myCount = 3;
 
