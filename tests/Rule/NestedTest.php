@@ -24,6 +24,7 @@ use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
@@ -39,6 +40,7 @@ final class NestedTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testDefaultValues(): void
     {
@@ -982,6 +984,11 @@ final class NestedTest extends RuleTestCase
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errors, $errorsData);
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new Nested(), new Nested(skipOnError: true));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

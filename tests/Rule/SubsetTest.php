@@ -11,11 +11,13 @@ use Yiisoft\Validator\Rule\SubsetHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class SubsetTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -76,6 +78,11 @@ final class SubsetTest extends RuleTestCase
                 ['data' => ['Custom error']],
             ],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new Subset([]), new Subset([], skipOnError: true));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

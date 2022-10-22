@@ -12,11 +12,13 @@ use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class RequiredTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testDefaultValues(): void
     {
@@ -90,6 +92,11 @@ final class RequiredTest extends RuleTestCase
             ],
             'custom error' => [null, [new Required(message: 'Custom error')], ['' => ['Custom error']]],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new Required(), new Required(skipOnError: true));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

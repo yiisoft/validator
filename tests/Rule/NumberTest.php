@@ -10,11 +10,13 @@ use Yiisoft\Validator\Rule\NumberHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class NumberTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -238,6 +240,11 @@ final class NumberTest extends RuleTestCase
                 ['' => ['Value is too small.']],
             ],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new Number(), new Number(skipOnError: true));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

@@ -11,12 +11,15 @@ use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
+
 use function extension_loaded;
 
 final class UrlTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -166,6 +169,11 @@ final class UrlTest extends RuleTestCase
 
         $this->expectException(RuntimeException::class);
         new Url(enableIDN: true);
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new Url(), new Url(skipOnError: true));
     }
 
     protected function beforeTestOptions(): void

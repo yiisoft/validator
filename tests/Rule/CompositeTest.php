@@ -10,11 +10,13 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class CompositeTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -144,6 +146,11 @@ final class CompositeTest extends RuleTestCase
                 ['' => ['Custom error']],
             ],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new Composite([]), new Composite([], skipOnError: true));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

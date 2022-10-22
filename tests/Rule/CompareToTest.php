@@ -8,10 +8,12 @@ use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class CompareToTest extends RuleTestCase
 {
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -276,5 +278,10 @@ final class CompareToTest extends RuleTestCase
 
             ['100.50', [new CompareTo('100.5', operator: '===')], ['' => ['Value must be equal to "100.5".']]],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new CompareTo(), new CompareTo(skipOnError: true));
     }
 }

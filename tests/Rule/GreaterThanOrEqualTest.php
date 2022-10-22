@@ -8,10 +8,12 @@ use RuntimeException;
 use Yiisoft\Validator\Rule\GreaterThanOrEqual;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class GreaterThanOrEqualTest extends RuleTestCase
 {
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -144,5 +146,10 @@ final class GreaterThanOrEqualTest extends RuleTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
         new GreaterThanOrEqual();
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new GreaterThanOrEqual(1), new GreaterThanOrEqual(1, skipOnError: true));
     }
 }

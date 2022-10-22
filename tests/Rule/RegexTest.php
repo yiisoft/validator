@@ -10,11 +10,13 @@ use Yiisoft\Validator\Rule\RegexHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class RegexTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -84,6 +86,11 @@ final class RegexTest extends RuleTestCase
             ['b', [new Regex('/a/', message: 'Custom message.')], ['' => ['Custom message.']]],
             [null, [new Regex('/a/', incorrectInputMessage: 'Custom message.')], ['' => ['Custom message.']]],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new Regex('//'), new Regex('//', skipOnError: true));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

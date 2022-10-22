@@ -13,11 +13,13 @@ use Yiisoft\Validator\Rule\CountHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class CountTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -152,6 +154,11 @@ final class CountTest extends RuleTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('At least one of these attributes must be specified: $min, $max, $exactly.');
         new Count();
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new Count(min: 3), new Count(min: 3, skipOnError: true));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

@@ -10,11 +10,13 @@ use Yiisoft\Validator\Rule\StopOnErrorHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class StopOnErrorTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -99,6 +101,11 @@ final class StopOnErrorTest extends RuleTestCase
                 ['' => ['This value must contain at most 1 character.']],
             ],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new StopOnError(), new StopOnError(skipOnError: true));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

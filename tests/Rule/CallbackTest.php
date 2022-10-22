@@ -14,6 +14,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
 
@@ -21,6 +22,7 @@ final class CallbackTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -164,6 +166,14 @@ final class CallbackTest extends RuleTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Using method outside of attribute scope is prohibited.');
         $validator->validate(null, [$rule]);
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(
+            new Callback(callback: fn () => new Result()),
+            new Callback(callback: fn () => new Result(), skipOnError: true),
+        );
     }
 
     protected function getDifferentRuleInHandlerItems(): array

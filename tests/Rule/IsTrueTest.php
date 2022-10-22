@@ -9,11 +9,13 @@ use Yiisoft\Validator\Rule\IsTrueHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class IsTrueTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -104,6 +106,11 @@ final class IsTrueTest extends RuleTestCase
             [false, [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
             'custom error' => [5, [new IsTrue(message: 'Custom error.')], ['' => ['Custom error.']]],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new IsTrue(), new IsTrue(skipOnError: true));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

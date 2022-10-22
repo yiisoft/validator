@@ -9,11 +9,13 @@ use Yiisoft\Validator\Rule\JsonHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class JsonTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -136,6 +138,11 @@ JSON_WRAP
             [null, [new Json()], $errors],
             'custom error' => ['', [new Json(message: 'bad json')], ['' => ['bad json']]],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new Json(), new Json(skipOnError: true));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

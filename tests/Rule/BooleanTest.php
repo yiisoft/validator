@@ -9,11 +9,13 @@ use Yiisoft\Validator\Rule\BooleanHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class BooleanTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -121,6 +123,11 @@ final class BooleanTest extends RuleTestCase
 
             'custom error' => [5, [new Boolean(message: 'Custom error.')], ['' => ['Custom error.']]],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new Boolean(), new Boolean(skipOnError: true));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

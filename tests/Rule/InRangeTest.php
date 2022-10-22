@@ -10,11 +10,13 @@ use Yiisoft\Validator\Rule\InRangeHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 
 final class InRangeTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
 
     public function testGetName(): void
     {
@@ -115,6 +117,11 @@ final class InRangeTest extends RuleTestCase
 
             'custom error' => [15, [new InRange(range(1, 10), message: 'Custom error')], ['' => ['Custom error']]],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testskipOnErrorInternal(new InRange(range(1, 10)), new InRange(range(1, 10), skipOnError: true));
     }
 
     protected function getDifferentRuleInHandlerItems(): array
