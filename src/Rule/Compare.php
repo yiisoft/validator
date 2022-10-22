@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Closure;
 use InvalidArgumentException;
-use RuntimeException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
