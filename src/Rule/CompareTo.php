@@ -22,11 +22,6 @@ use Attribute;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class CompareTo extends Compare
 {
-    public function getHandlerClassName(): string
-    {
-        return CompareHandler::class;
-    }
-
     public function getName(): string
     {
         return 'compareTo';

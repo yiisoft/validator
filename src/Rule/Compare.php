@@ -16,6 +16,8 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
+use function in_array;
+
 abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
 {
     use SkipOnEmptyTrait;
@@ -24,28 +26,28 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
 
     /**
      * Constant for specifying the comparison as string values.
-     * No conversion will be done before comparison.
+     * Values will be converted to strings before comparison.
      *
      * @see $type
      */
     public const TYPE_STRING = 'string';
     /**
      * Constant for specifying the comparison as numeric values.
-     * String values will be converted into numbers before comparison.
+     * Values will be converted to float numbers before comparison.
      *
      * @see $type
      */
     public const TYPE_NUMBER = 'number';
 
     private array $validOperators = [
-        '==' => 1,
-        '===' => 1,
-        '!=' => 1,
-        '!==' => 1,
-        '>' => 1,
-        '>=' => 1,
-        '<' => 1,
-        '<=' => 1,
+        '==',
+        '===',
+        '!=',
+        '!==',
+        '>',
+        '>=',
+        '<',
+        '<=',
     ];
 
     public function __construct(
@@ -96,7 +98,7 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
          */
         private ?Closure $when = null,
     ) {
-        if (!isset($this->validOperators[$operator])) {
+        if (!in_array($operator, $this->validOperators, true)) {
             throw new InvalidArgumentException("Operator \"$operator\" is not supported.");
         }
     }
@@ -130,7 +132,6 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
             '>=' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
             '<' => 'Value must be less than "{targetValueOrAttribute}".',
             '<=' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
-            default => throw new RuntimeException("Unknown operator: $this->operator."),
         };
     }
 

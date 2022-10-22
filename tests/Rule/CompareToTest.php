@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
@@ -220,6 +221,8 @@ final class CompareToTest extends RuleTestCase
             [100, [new CompareTo(100, operator: '<=')]],
             [99, [new CompareTo(100, operator: '<=')]],
             [['attribute' => 100, 'number' => 99], ['number' => new CompareTo(null, 'attribute', operator: '<=')]],
+
+            ['100.50', [new CompareTo('100.5', type: Compare::TYPE_NUMBER)]],
         ];
     }
 
@@ -269,6 +272,8 @@ final class CompareToTest extends RuleTestCase
                 [new CompareTo(100, message: 'Custom error')],
                 ['' => ['Custom error']],
             ],
+
+            ['100.50', [new CompareTo('100.5', operator: '===')], ['' => ['Value must be equal to "100.5".']]],
         ];
     }
 }
