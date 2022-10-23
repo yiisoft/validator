@@ -20,10 +20,10 @@ use Yiisoft\Validator\ValidationContext;
 final class CountTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
+    use LimitTestTrait;
     use SerializableRuleTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
-    use LimitTestTrait;
 
     public function testGetName(): void
     {
