@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use InvalidArgumentException;
 use stdClass;
 use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\HasLengthHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\LimitTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
@@ -22,6 +22,7 @@ final class HasLengthTest extends RuleTestCase
     use SerializableRuleTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
+    use LimitTestTrait;
 
     public function testGetName(): void
     {
@@ -177,42 +178,6 @@ final class HasLengthTest extends RuleTestCase
         ];
     }
 
-    public function dataInitWithMinAndMaxAndExactly(): array
-    {
-        return [
-            [['min' => 3, 'exactly' => 3]],
-            [['max' => 3, 'exactly' => 3]],
-            [['min' => 3, 'max' => 3, 'exactly' => 3]],
-        ];
-    }
-
-    /**
-     * @dataProvider dataInitWithMinAndMaxAndExactly
-     */
-    public function testInitWithMinAndMaxAndExactly(array $arguments): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('$exactly is mutually exclusive with $min and $max.');
-
-        new HasLength(...$arguments);
-    }
-
-    public function testInitWithMinAndMax(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Use $exactly instead.');
-
-        new HasLength(min: 3, max: 3);
-    }
-
-    public function testInitWithoutRequiredArguments(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('At least one of these attributes must be specified: $min, $max, $exactly.');
-
-        new HasLength();
-    }
-
     public function testSkipOnError(): void
     {
         $this->testSkipOnErrorInternal(new HasLength(min: 3), new HasLength(min: 3, skipOnError: true));
@@ -227,5 +192,10 @@ final class HasLengthTest extends RuleTestCase
     protected function getDifferentRuleInHandlerItems(): array
     {
         return [HasLength::class, HasLengthHandler::class];
+    }
+
+    protected function getRuleClass(): string
+    {
+        return HasLength::class;
     }
 }

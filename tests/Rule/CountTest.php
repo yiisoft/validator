@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Countable;
-use InvalidArgumentException;
 use stdClass;
 use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\CountHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\LimitTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
@@ -23,6 +23,7 @@ final class CountTest extends RuleTestCase
     use SerializableRuleTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
+    use LimitTestTrait;
 
     public function testGetName(): void
     {
@@ -126,70 +127,6 @@ final class CountTest extends RuleTestCase
         ];
     }
 
-    public function dataInitWithMinAndMaxAndExactly(): array
-    {
-        return [
-            [['min' => 3, 'exactly' => 3]],
-            [['max' => 3, 'exactly' => 3]],
-            [['min' => 3, 'max' => 3, 'exactly' => 3]],
-        ];
-    }
-
-    /**
-     * @dataProvider dataInitWithMinAndMaxAndExactly
-     */
-    public function testInitWithMinAndMaxAndExactly(array $arguments): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('$exactly is mutually exclusive with $min and $max.');
-        new Count(...$arguments);
-    }
-
-    public function testInitWithMinAndMax(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Use $exactly instead.');
-        new Count(min: 3, max: 3);
-    }
-
-    public function testInitWithoutRequiredArguments(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('At least one of these attributes must be specified: $min, $max, $exactly.');
-        new Count();
-    }
-
-    public function dataInitWithNonPositiveValues(): array
-    {
-        return [
-            [['min' => 0, 'max' => 2]],
-            [['min' => -1, 'max' => 2]],
-            [['min' => 2, 'max' => 0]],
-            [['min' => 2, 'max' => -1]],
-            [['min' => -1, 'max' => 0]],
-            [['min' => 0, 'max' => -1]],
-            [['exactly' => 0]],
-            [['exactly' => -1]],
-        ];
-    }
-
-    /**
-     * @dataProvider dataInitWithNonPositiveValues
-     */
-    public function testInitWithNonPositiveValues(array $arguments): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Only positive values are allowed.');
-        new Count(...$arguments);
-    }
-
-    public function testInitWithMinGreaterThanMax(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('$min must be lower than $max.');
-        new Count(min: 2, max: 1);
-    }
-
     public function testSkipOnError(): void
     {
         $this->testSkipOnErrorInternal(new Count(min: 3), new Count(min: 3, skipOnError: true));
@@ -199,6 +136,11 @@ final class CountTest extends RuleTestCase
     {
         $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
         $this->testWhenInternal(new Count(min: 3), new Count(min: 3, when: $when));
+    }
+
+    protected function getRuleClass(): string
+    {
+        return Count::class;
     }
 
     protected function getDifferentRuleInHandlerItems(): array
