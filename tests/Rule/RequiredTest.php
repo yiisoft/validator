@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Closure;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\RequiredHandler;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -27,7 +26,7 @@ final class RequiredTest extends RuleTestCase
     {
         $rule = new Required();
 
-        $this->assertInstanceOf(SkipOnEmpty::class, $rule->getEmptyCallback());
+        $this->assertInstanceOf(Closure::class, $rule->getEmptyCallback());
         $this->assertSame(RequiredHandler::class, $rule->getHandlerClassName());
         $this->assertSame('Value cannot be blank.', $rule->getMessage());
         $this->assertSame('required', $rule->getName());
@@ -39,7 +38,7 @@ final class RequiredTest extends RuleTestCase
     public function dataGetEmptyCallback(): array
     {
         return [
-            'null' => [null, SkipOnEmpty::class],
+            'null' => [null, Closure::class],
             'skip on null' => [new SkipOnNull(), SkipOnNull::class],
             'closure' => [static fn () => false, Closure::class],
         ];
@@ -94,6 +93,7 @@ final class RequiredTest extends RuleTestCase
                 $singleMessageCannotBeBlank,
             ],
             'custom error' => [null, [new Required(message: 'Custom error')], ['' => ['Custom error']]],
+            'empty after trimming' => [' ', [new Required()], $singleMessageCannotBeBlank],
         ];
     }
 
