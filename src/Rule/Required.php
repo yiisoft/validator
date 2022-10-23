@@ -14,8 +14,6 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
-use function is_string;
-
 /**
  * Validates that the specified value is neither null nor empty.
  *
