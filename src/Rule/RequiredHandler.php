@@ -9,8 +9,6 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
-use function is_string;
-
 /**
  * Validates that the specified value is passed and not empty.
  */
@@ -27,10 +25,6 @@ final class RequiredHandler implements RuleHandlerInterface
             $result->addError($rule->getNotPassedMessage());
 
             return $result;
-        }
-
-        if (is_string($value)) {
-            $value = trim($value);
         }
 
         if (!$rule->getEmptyCallback()($value, $context->isAttributeMissing())) {
