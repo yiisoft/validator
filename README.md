@@ -130,8 +130,8 @@ if ($result->isValid() === false) {
 
 #### Skipping validation on error
 
-By default, if an error occurred during validation of an attribute, further rules for this attribute are processed.
-To change this behavior, use `skipOnError: true` when configuring rules:
+By default, if an error occurred during validation of an attribute, further rules for this attribute are processed. To 
+change this behavior, use `skipOnError: true` when configuring rules:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
@@ -705,8 +705,8 @@ final class Post
 
 ### Requiring values
 
-Use `Yiisoft\Validator\Rule\Required` rule to make sure value is provided. What values are considered empty can
-be customized via `$emptyCallback` option. Normalization is not performed here, so only a callable or special class is 
+Use `Yiisoft\Validator\Rule\Required` rule to make sure value is provided. What values are considered empty can be 
+customized via `$emptyCallback` option. Normalization is not performed here, so only a callable or special class is 
 needed. For more details see "Skipping empty values" section.
 
 ```php
