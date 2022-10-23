@@ -10,12 +10,15 @@ use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\ValidationContext;
 
 final class JsonTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
     use SkipOnErrorTestTrait;
+    use WhenTestTrait;
 
     public function testGetName(): void
     {
@@ -142,7 +145,13 @@ JSON_WRAP
 
     public function testSkipOnError(): void
     {
-        $this->testskipOnErrorInternal(new Json(), new Json(skipOnError: true));
+        $this->testSkipOnErrorInternal(new Json(), new Json(skipOnError: true));
+    }
+
+    public function testWhen(): void
+    {
+        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $this->testWhenInternal(new Json(), new Json(when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

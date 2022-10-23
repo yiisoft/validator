@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Base;
 
-use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\SkipOnErrorInterface;
 
 trait SkipOnErrorTestTrait
 {
     abstract public function testSkipOnError(): void;
 
-    private function testskipOnErrorInternal(RuleInterface $nonSkippingRule, RuleInterface $skippingRule): void
+    private function testSkipOnErrorInternal(
+        SkipOnErrorInterface $nonSkippingRule,
+        SkipOnErrorInterface $skippingRule
+    ): void
     {
         $this->assertFalse($nonSkippingRule->shouldSkipOnError());
 

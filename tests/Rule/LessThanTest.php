@@ -9,11 +9,14 @@ use Yiisoft\Validator\Rule\LessThan;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\ValidationContext;
 
 final class LessThanTest extends RuleTestCase
 {
     use SerializableRuleTestTrait;
     use SkipOnErrorTestTrait;
+    use WhenTestTrait;
 
     public function testGetName(): void
     {
@@ -148,6 +151,12 @@ final class LessThanTest extends RuleTestCase
 
     public function testSkipOnError(): void
     {
-        $this->testskipOnErrorInternal(new LessThan(1), new LessThan(1, skipOnError: true));
+        $this->testSkipOnErrorInternal(new LessThan(1), new LessThan(1, skipOnError: true));
+    }
+
+    public function testWhen(): void
+    {
+        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $this->testWhenInternal(new LessThan(1), new LessThan(1, when: $when));
     }
 }

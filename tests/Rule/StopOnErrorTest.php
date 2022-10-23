@@ -11,29 +11,20 @@ use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\ValidationContext;
 
 final class StopOnErrorTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
     use SkipOnErrorTestTrait;
+    use WhenTestTrait;
 
     public function testGetName(): void
     {
         $rule = new StopOnError();
         $this->assertSame('stopOnError', $rule->getName());
-    }
-
-    public function testSkipOnEmptyInConstructor(): void
-    {
-        $rule = new StopOnError(skipOnEmpty: true);
-        $this->assertTrue($rule->getSkipOnEmpty());
-    }
-
-    public function testSkipOnEmptySetter(): void
-    {
-        $rule = (new StopOnError())->skipOnEmpty(true);
-        $this->assertTrue($rule->getSkipOnEmpty());
     }
 
     public function dataOptions(): array
@@ -106,6 +97,12 @@ final class StopOnErrorTest extends RuleTestCase
     public function testSkipOnError(): void
     {
         $this->testskipOnErrorInternal(new StopOnError(), new StopOnError(skipOnError: true));
+    }
+
+    public function testWhen(): void
+    {
+        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $this->testWhenInternal(new StopOnError(), new StopOnError(when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

@@ -11,12 +11,15 @@ use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\ValidationContext;
 
 final class NumberTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
     use SkipOnErrorTestTrait;
+    use WhenTestTrait;
 
     public function testGetName(): void
     {
@@ -244,7 +247,13 @@ final class NumberTest extends RuleTestCase
 
     public function testSkipOnError(): void
     {
-        $this->testskipOnErrorInternal(new Number(), new Number(skipOnError: true));
+        $this->testSkipOnErrorInternal(new Number(), new Number(skipOnError: true));
+    }
+
+    public function testWhen(): void
+    {
+        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $this->testWhenInternal(new Number(), new Number(when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array
