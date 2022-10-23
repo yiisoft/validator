@@ -77,12 +77,8 @@ trait LimitTrait
             );
         }
 
-        if ($this->exactly !== null && ($this->min !== null || $this->max !== null)) {
+        if (($this->min !== null || $this->max !== null) && $this->exactly !== null) {
             throw new InvalidArgumentException('$exactly is mutually exclusive with $min and $max.');
-        }
-
-        if ($this->min === $this->max && $this->min !== null) {
-            throw new InvalidArgumentException('Use $exactly instead.');
         }
 
         if (
@@ -93,8 +89,14 @@ trait LimitTrait
             throw new InvalidArgumentException('Only positive values are allowed.');
         }
 
-        if ($this->min !== null && $this->max !== null && $this->min > $this->max) {
-            throw new InvalidArgumentException('$min must be lower than $max.');
+        if ($this->min !== null && $this->max !== null) {
+            if ($this->min > $this->max) {
+                throw new InvalidArgumentException('$min must be lower than $max.');
+            }
+
+            if ($this->min === $this->max) {
+                throw new InvalidArgumentException('Use $exactly instead.');
+            }
         }
     }
 

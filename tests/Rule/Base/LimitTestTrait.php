@@ -58,6 +58,7 @@ trait LimitTestTrait
             [['min' => 2, 'max' => -1]],
             [['min' => -1, 'max' => 0]],
             [['min' => 0, 'max' => -1]],
+            [['min' => -2, 'max' => -1]],
             [['exactly' => 0]],
             [['exactly' => -1]],
         ];
