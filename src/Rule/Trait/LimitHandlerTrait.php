@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Trait;
 
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\ValidationContext;
 
 /**
  * A trait attachable to a handler of rule with limits.
