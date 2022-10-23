@@ -71,17 +71,17 @@ trait LimitTrait
         $this->greaterThanMaxMessage = $greaterThanMinMessage;
         $this->notExactlyMessage = $notExactlyMessage;
 
-        if (!$this->min && !$this->max && !$this->exactly) {
+        if ($this->min === null && $this->max === null && $this->exactly === null) {
             throw new InvalidArgumentException(
                 'At least one of these attributes must be specified: $min, $max, $exactly.'
             );
         }
 
-        if ($this->exactly && ($this->min || $this->max)) {
+        if ($this->exactly !== null && ($this->min !== null || $this->max !== null)) {
             throw new InvalidArgumentException('$exactly is mutually exclusive with $min and $max.');
         }
 
-        if ($this->min && $this->max && $this->min === $this->max) {
+        if ($this->min === $this->max && $this->min !== null) {
             throw new InvalidArgumentException('Use $exactly instead.');
         }
     }
