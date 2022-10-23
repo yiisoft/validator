@@ -47,13 +47,7 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
          */
         private ?Closure $when = null,
     ) {
-        $this->emptyCallback = $emptyCallback ?? static function (mixed $value, bool $isAttributeMissing): bool {
-            if (is_string($value)) {
-                $value = trim($value);
-            }
-
-            return (new SkipOnEmpty())($value, $isAttributeMissing);
-        };
+        $this->emptyCallback = $emptyCallback ?? new SkipOnEmpty();
     }
 
     public function getName(): string
