@@ -127,6 +127,8 @@ final class UrlTest extends RuleTestCase
             ['http://äüößìà.de', [new Url(enableIDN: true)]],
             ['http://xn--zcack7ayc9a.de', [new Url(enableIDN: true)]],
             ['домен.рф', [new Url(pattern: '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i', enableIDN: true)]],
+
+            ['http://' . str_repeat('a', 1989) . '.de', [new Url()]],
         ];
     }
 
@@ -137,6 +139,7 @@ final class UrlTest extends RuleTestCase
         }
 
         $errors = ['' => ['This value is not a valid URL.']];
+        $longUrl = 'http://' . str_repeat('u', 1990) . '.de';
 
         return [
             ['google.de', [new Url()], $errors],
@@ -157,7 +160,9 @@ final class UrlTest extends RuleTestCase
             ['//yiiframework.com', [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps'])], $errors],
 
             ['', [new Url(enableIDN: true)], $errors],
-            ['http://' . str_pad('base', 2000, 'url') . '.de', [new Url(enableIDN: true)], $errors],
+            [$longUrl, [new Url(enableIDN: true)], $errors],
+            [$longUrl, [new Url()], $errors],
+            [1, [new Url()], $errors],
 
             'custom error' => ['', [new Url(enableIDN: true, message: 'Custom error')], ['' => ['Custom error']]],
         ];
