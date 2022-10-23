@@ -37,8 +37,8 @@ final class EmailHandler implements RuleHandlerInterface
         } else {
             /** @psalm-var array{name:string,local:string,open:string,domain:string,close:string} $matches */
             if ($rule->isEnableIDN()) {
-                $matches['local'] = $this->idnToAscii($matches['local']);
-                $matches['domain'] = $this->idnToAscii($matches['domain']);
+                $matches['local'] = idn_to_ascii($matches['local']);
+                $matches['domain'] = idn_to_ascii($matches['domain']);
                 $value = implode([
                     $matches['name'],
                     $matches['open'],
@@ -87,10 +87,5 @@ final class EmailHandler implements RuleHandlerInterface
         }
 
         return $result;
-    }
-
-    private function idnToAscii($idn): false|string
-    {
-        return idn_to_ascii($idn, 0, INTL_IDNA_VARIANT_UTS46);
     }
 }

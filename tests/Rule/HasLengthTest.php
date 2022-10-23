@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use stdClass;
-use Yiisoft\Validator\DataSet\MixedDataSet;
+use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\HasLengthHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -150,7 +150,7 @@ final class HasLengthTest extends RuleTestCase
 
         return [
             [['not a string'], [new HasLength(min: 25)], ['' => [$message]]],
-            [new MixedDataSet(new stdClass()), [new HasLength(min: 25)], ['' => [$message]]],
+            [new SingleValueDataSet(new stdClass()), [new HasLength(min: 25)], ['' => [$message]]],
             [true, [new HasLength(min: 25)], ['' => [$message]]],
             [false, [new HasLength(min: 25)], ['' => [$message]]],
 

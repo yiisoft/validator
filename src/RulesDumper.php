@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
-use function is_array;
 
 /**
  * RulesDumper allows to get an array of rule names and corresponding settings from a set of rules.
@@ -54,7 +53,7 @@ final class RulesDumper
     {
         $result = [];
         foreach ($rules as $attribute => $rule) {
-            if (is_array($rule)) {
+            if (is_iterable($rule)) {
                 $result[$attribute] = $this->fetchOptions($rule);
             } elseif ($rule instanceof SerializableRuleInterface) {
                 $result[$attribute] = array_merge([$rule->getName()], $rule->getOptions());
@@ -62,8 +61,9 @@ final class RulesDumper
                 $result[$attribute] = [$rule->getName()];
             } else {
                 throw new InvalidArgumentException(sprintf(
-                    'Rules should be a rule or an array of rules that implements %s.',
+                    'Each rule must implement "%s". Type "%s" given.',
                     RuleInterface::class,
+                    get_debug_type($rule),
                 ));
             }
         }

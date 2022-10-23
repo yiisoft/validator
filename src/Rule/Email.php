@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use JetBrains\PhpStorm\Language;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -29,12 +30,14 @@ final class Email implements SerializableRuleInterface, SkipOnErrorInterface, Wh
     use WhenTrait;
 
     public function __construct(
+        #[Language('RegExp')]
         /**
          * @var string the regular expression used to validate value.
          *
          * @link http://www.regular-expressions.info/email.html
          */
         private string $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/',
+        #[Language('RegExp')]
         /**
          * @var string the regular expression used to validate email addresses with the name part. This property is used
          * only when {@see $allowName} is `true`.
@@ -42,6 +45,7 @@ final class Email implements SerializableRuleInterface, SkipOnErrorInterface, Wh
          * @see $allowName
          */
         private string $fullPattern = '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/',
+        #[Language('RegExp')]
         /**
          * @var string the regular expression used to validate complex emails when {@see $enableIDN} is `true`.
          */

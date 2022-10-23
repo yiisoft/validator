@@ -14,7 +14,7 @@ use Traversable;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
-use Yiisoft\Validator\DataSet\MixedDataSet;
+use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
@@ -136,7 +136,7 @@ final class Validator implements ValidatorInterface
             return new ArrayDataSet($data);
         }
 
-        return new MixedDataSet($data);
+        return new SingleValueDataSet($data);
     }
 
     /**
