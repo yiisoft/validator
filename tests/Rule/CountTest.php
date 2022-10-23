@@ -159,6 +159,37 @@ final class CountTest extends RuleTestCase
         new Count();
     }
 
+    public function dataInitWithNonPositiveValues(): array
+    {
+        return [
+            [['min' => 0, 'max' => 2]],
+            [['min' => -1, 'max' => 2]],
+            [['min' => 2, 'max' => 0]],
+            [['min' => 2, 'max' => -1]],
+            [['min' => -1, 'max' => 0]],
+            [['min' => 0, 'max' => -1]],
+            [['exactly' => 0]],
+            [['exactly' => -1]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataInitWithNonPositiveValues
+     */
+    public function testInitWithNonPositiveValues(array $arguments): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Only positive values are allowed.');
+        new Count(...$arguments);
+    }
+
+    public function testInitWithMinGreaterThanMax(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$min must be lower than $max.');
+        new Count(min: 2, max: 1);
+    }
+
     public function testSkipOnError(): void
     {
         $this->testSkipOnErrorInternal(new Count(min: 3), new Count(min: 3, skipOnError: true));

@@ -84,6 +84,18 @@ trait LimitTrait
         if ($this->min === $this->max && $this->min !== null) {
             throw new InvalidArgumentException('Use $exactly instead.');
         }
+
+        if (
+            ($this->min !== null && $this->min <= 0) ||
+            ($this->max !== null && $this->max <= 0) ||
+            ($this->exactly !== null && $this->exactly <= 0)
+        ) {
+            throw new InvalidArgumentException('Only positive values are allowed.');
+        }
+
+        if ($this->min !== null && $this->max !== null && $this->min > $this->max) {
+            throw new InvalidArgumentException('$min must be lower than $max.');
+        }
     }
 
     /**
