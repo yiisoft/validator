@@ -334,11 +334,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
                         'value' => null,
@@ -353,11 +349,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
                         'value' => null,
@@ -372,11 +364,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
@@ -395,11 +383,7 @@ class ValidatorTest extends TestCase
                     'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: true)],
                 ],
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                 ],
             ],
             'rule, skipOnEmpty: true, value is empty' => [
@@ -413,11 +397,7 @@ class ValidatorTest extends TestCase
                     'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: true)],
                 ],
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                 ],
             ],
             'rule, skipOnEmpty: true, value is not empty' => [
@@ -431,11 +411,7 @@ class ValidatorTest extends TestCase
                     'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: true)],
                 ],
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
@@ -454,11 +430,7 @@ class ValidatorTest extends TestCase
                     'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new SkipOnNull())],
                 ],
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                 ],
             ],
             'rule, skipOnEmpty: SkipOnNull, value is empty' => [
@@ -472,11 +444,7 @@ class ValidatorTest extends TestCase
                     'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new SkipOnNull())],
                 ],
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                 ],
             ],
             'rule, skipOnEmpty: SkipOnNull, value is not empty' => [
@@ -490,11 +458,7 @@ class ValidatorTest extends TestCase
                     'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new SkipOnNull())],
                 ],
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
@@ -513,11 +477,7 @@ class ValidatorTest extends TestCase
                     'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new SkipOnNull())],
                 ],
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
                         'value' => '',
@@ -541,11 +501,7 @@ class ValidatorTest extends TestCase
                     ],
                 ],
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
                         'value' => null,
@@ -569,11 +525,7 @@ class ValidatorTest extends TestCase
                     ],
                 ],
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                 ],
             ],
             'rule, skipOnEmpty, custom callback, value is not empty' => [
@@ -593,11 +545,7 @@ class ValidatorTest extends TestCase
                     ],
                 ],
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
@@ -622,11 +570,7 @@ class ValidatorTest extends TestCase
                     ],
                 ],
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
                         'value' => null,
@@ -641,11 +585,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                 ],
             ],
             'validator, skipOnEmpty: true, value is empty' => [
@@ -656,11 +596,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                 ],
             ],
             'validator, skipOnEmpty: true, value is not empty' => [
@@ -671,11 +607,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
@@ -691,11 +623,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                 ],
             ],
             'validator, skipOnEmpty: SkipOnNull, value is empty' => [
@@ -706,11 +634,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                 ],
             ],
             'validator, skipOnEmpty: SkipOnNull, value is not empty' => [
@@ -721,11 +645,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
@@ -741,11 +661,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
                         'value' => '',
@@ -764,11 +680,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
                         'value' => null,
@@ -787,11 +699,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                 ],
             ],
             'validator, skipOnEmpty: custom callback, value is not empty' => [
@@ -806,11 +714,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
@@ -830,11 +734,7 @@ class ValidatorTest extends TestCase
                 ]),
                 $rules,
                 [
-                    new Error($stringLessThanMinMessage, [
-                        'min' => 8,
-                        'attribute' => 'name',
-                        'value' => 'Dmitriy',
-                    ], ['name']),
+                    new Error($stringLessThanMinMessage, ['min' => 8], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
                         'value' => null,

@@ -42,7 +42,7 @@ final class CountHandler implements RuleHandlerInterface
         }
 
         $count = count($value);
-        $this->validateLimits($value, $rule, $context, $count, $result);
+        $this->validateLimits($rule, $count, $result);
 
         return $result;
     }
