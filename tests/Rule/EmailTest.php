@@ -123,6 +123,7 @@ final class EmailTest extends RuleTestCase
             ['user+mailbox/department=shipping@example.com', [$rule]],
             ['!#$%&\'*+-/=?^_`.{|}~@example.com', [$rule]],
             ['test@nonexistingsubdomain.example.com', [$rule]], // checkDNS is disabled
+            ['name@' . str_repeat('a', 245) . '.com', [$rule]],
 
             ['sam@rmcreative.ru', [$ruleAllowedName]],
             ['5011@gmail.com', [$ruleAllowedName]],
@@ -190,6 +191,7 @@ final class EmailTest extends RuleTestCase
             ['sam@рмкреатиф.ru', [$rule], $errors],
             ['ex..ample@example.com', [$rule], $errors],
             [['developer@yiiframework.com'], [$rule], $errors],
+            ['name@' . str_repeat('a', 246) . '.com', [$rule], $errors],
 
             // Malicious email addresses that can be used to exploit SwiftMailer vulnerability CVE-2016-10074 while IDN
             // is disabled.
