@@ -908,8 +908,11 @@ final class NestedTest extends RuleTestCase
             ],
             [
                 [],
-                [new Nested(['value' => new Required()], requirePropertyPath: true)],
-                [['Property path "value" is not found.', ['value']]],
+                [new Nested(['value1' => new Required(), 'value2' => new Required()], requirePropertyPath: true)],
+                [
+                    ['Property path "value1" is not found.', ['value1']],
+                    ['Property path "value2" is not found.', ['value2']],
+                ],
             ],
             [
                 // https://github.com/yiisoft/validator/issues/200
