@@ -124,6 +124,7 @@ final class EmailTest extends RuleTestCase
             ['!#$%&\'*+-/=?^_`.{|}~@example.com', [$rule]],
             ['test@nonexistingsubdomain.example.com', [$rule]], // checkDNS is disabled
             ['name@' . str_repeat('a', 245) . '.com', [$rule]],
+            ['SAM@RMCREATIVE.RU', [$rule]],
 
             ['sam@rmcreative.ru', [$ruleAllowedName]],
             ['5011@gmail.com', [$ruleAllowedName]],

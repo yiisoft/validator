@@ -29,7 +29,7 @@ final class EmailHandler implements RuleHandlerInterface
         if (!is_string($value)) {
             $valid = false;
         } elseif (!preg_match(
-            '/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?((?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))$/i',
+            '/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?((?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))/',
             $value,
             $matches
         )) {
