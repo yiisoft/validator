@@ -123,6 +123,7 @@ final class EmailTest extends RuleTestCase
             ['user+mailbox/department=shipping@example.com', [$rule]],
             ['!#$%&\'*+-/=?^_`.{|}~@example.com', [$rule]],
             ['test@nonexistingsubdomain.example.com', [$rule]], // checkDNS is disabled
+            ['name@gmail.con', [$rule]],
             [str_repeat('a', 64) . '@gmail.com', [$rule]],
             ['name@' . str_repeat('a', 245) . '.com', [$rule]],
             ['SAM@RMCREATIVE.RU', [$rule]],
@@ -169,6 +170,7 @@ final class EmailTest extends RuleTestCase
 
             ['ipetrov@gmail.com', [new Email(allowName: true, checkDNS: true)]],
             ['Ivan Petrov <ipetrov@gmail.com>', [new Email(allowName: true, checkDNS: true)]],
+            ['name@ñandu.cl', [new Email(checkDNS: true, enableIDN: true)]],
         ];
     }
 
@@ -267,11 +269,14 @@ final class EmailTest extends RuleTestCase
                 $errors,
             ],
 
+            ['name@ñandu.cl', [new Email(checkDNS: true)], $errors],
+            ['gmail.con', [new Email(checkDNS: true)], $errors],
             [
                 'test@nonexistingsubdomain.example.com',
                 [new Email(checkDNS: true)],
                 $errors,
             ],
+
             'custom error' => [
                 'test@nonexistingsubdomain.example.com',
                 [new Email(checkDNS: true, message: 'Custom error')],

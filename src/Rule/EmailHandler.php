@@ -70,7 +70,7 @@ final class EmailHandler implements RuleHandlerInterface
                     $value
                 ));
                 if ($valid && $rule->isCheckDNS()) {
-                    $valid = checkdnsrr($matches['domain'] . '.') || checkdnsrr($matches['domain'] . '.', 'A');
+                    $valid = checkdnsrr($matches['domain']);
                 }
             }
         }
