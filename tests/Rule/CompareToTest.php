@@ -198,6 +198,25 @@ final class CompareToTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
+            [
+                new CompareTo(1, 'test'),
+                [
+                    'targetValue' => 1,
+                    'targetAttribute' => 'test',
+                    'message' => [
+                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'type' => 'string',
+                    'operator' => '==',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
         ];
     }
 

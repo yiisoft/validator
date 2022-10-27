@@ -136,11 +136,6 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
 
     public function getOptions(): array
     {
-        $targetValueOrAttribute = $this->targetValue;
-        if ($targetValueOrAttribute === null) {
-            $targetValueOrAttribute = $this->targetAttribute;
-        }
-
         return [
             'targetValue' => $this->targetValue,
             'targetAttribute' => $this->targetAttribute,
@@ -149,7 +144,7 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
                 'parameters' => [
                     'targetValue' => $this->targetValue,
                     'targetAttribute' => $this->targetAttribute,
-                    'targetValueOrAttribute' => $targetValueOrAttribute,
+                    'targetValueOrAttribute' => $this->targetValue ?? $this->targetAttribute,
                 ],
             ],
             'type' => $this->type,
