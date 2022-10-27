@@ -10,7 +10,7 @@ final class SkipOnEmpty
 {
     public function __invoke(mixed $value, bool $isAttributeMissing, bool $trimString = false): bool
     {
-        if (is_string($value)) {
+        if (is_string($value) && $trimString) {
             $value = trim($value);
 
             return $value === '';
