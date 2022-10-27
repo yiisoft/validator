@@ -20,18 +20,14 @@ final class IsTrueHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(IsTrue::class, $rule);
         }
 
-        if ($rule->isStrict()) {
-            $valid = $value === $rule->getTrueValue();
-        } else {
-            $valid = $value == $rule->getTrueValue();
-        }
+        $valid = $rule->isStrict() ? $value === $rule->getTrueValue() : $value == $rule->getTrueValue();
 
         $result = new Result();
-
         if ($valid) {
             return $result;
         }
 
+        /** @psalm-var scalar $value */
         $result->addError(
             $rule->getMessage(),
             [
