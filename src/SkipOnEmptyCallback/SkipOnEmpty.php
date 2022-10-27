@@ -8,9 +8,13 @@ use function is_string;
 
 final class SkipOnEmpty
 {
-    public function __invoke(mixed $value, bool $isAttributeMissing, bool $trimString = false): bool
+    public function __construct(private bool $trimString = false)
     {
-        if (is_string($value) && $trimString) {
+    }
+
+    public function __invoke(mixed $value, bool $isAttributeMissing): bool
+    {
+        if (is_string($value) && $this->trimString) {
             $value = trim($value);
         }
 

@@ -45,7 +45,7 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
          */
         private ?Closure $when = null,
     ) {
-        $this->emptyCallback = $emptyCallback ?? new SkipOnEmpty();
+        $this->emptyCallback = $emptyCallback ?? new SkipOnEmpty(trimString: true);
     }
 
     public function getName(): string
