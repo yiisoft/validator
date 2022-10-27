@@ -77,18 +77,16 @@ final class NestedHandler implements RuleHandlerInterface
 
         $compoundResult = new Result();
         $results = [];
+        /** @var int|string $valuePath */
         foreach ($rule->getRules() as $valuePath => $rules) {
             if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($data, $valuePath)) {
-                /**
-                 * @psalm-suppress InvalidScalarArgument
-                 */
                 $compoundResult->addError(
                     $rule->getNoPropertyPathMessage(),
                     [
                         'path' => $valuePath,
                         'attribute' => $context->getAttribute(),
                     ],
-                    StringHelper::parsePath($valuePath)
+                    is_int($valuePath) ? [$valuePath] : StringHelper::parsePath($valuePath),
                 );
 
                 continue;
@@ -110,9 +108,6 @@ final class NestedHandler implements RuleHandlerInterface
                 if (!empty($error->getValuePath())) {
                     array_push($errorValuePath, ...$error->getValuePath());
                 }
-                /**
-                 * @psalm-suppress InvalidScalarArgument
-                 */
                 $result->addError($error->getMessage(), $error->getParameters(), $errorValuePath);
             }
             $results[] = $result;
