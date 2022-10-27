@@ -17,7 +17,7 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Validates that the specified value is neither null nor empty.
  *
- * @psalm-type EmptyCallback = callable(mixed,bool,bool):bool
+ * @psalm-type EmptyCallback = callable(mixed,bool):bool
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Required implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface
