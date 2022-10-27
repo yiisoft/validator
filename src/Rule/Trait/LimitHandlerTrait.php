@@ -15,7 +15,7 @@ trait LimitHandlerTrait
     /**
      * Runs limits specific validation.
      *
-     * @param RuleInterface|LimitTrait $rule A rule matching to this handler.
+     * @param LimitTrait|RuleInterface $rule A rule matching to this handler.
      * @param int $number A validated number to compare with set limits.
      * @param Result $result Result for adding errors.
      *
