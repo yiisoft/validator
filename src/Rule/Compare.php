@@ -38,15 +38,15 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
      */
     public const TYPE_NUMBER = 'number';
 
-    private array $validOperators = [
-        '==',
-        '===',
-        '!=',
-        '!==',
-        '>',
-        '>=',
-        '<',
-        '<=',
+    private array $validOperatorsMap = [
+        '==' => 1,
+        '===' => 1,
+        '!=' => 1,
+        '!==' => 1,
+        '>' => 1,
+        '>=' => 1,
+        '<' => 1,
+        '<=' => 1,
     ];
 
     public function __construct(
@@ -97,7 +97,7 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
          */
         private ?Closure $when = null,
     ) {
-        if (!in_array($operator, $this->validOperators, true)) {
+        if (!isset($this->validOperatorsMap[$this->operator])) {
             throw new InvalidArgumentException("Operator \"$operator\" is not supported.");
         }
     }
