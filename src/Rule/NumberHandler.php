@@ -42,7 +42,7 @@ final class NumberHandler implements RuleHandlerInterface
 
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
             $result->addError(
-                $rule->isAsInteger() ? 'Value must be an integer.' : 'Value must be a number.',
+                $rule->getNotANumberMessage(),
                 [
                     'attribute' => $context->getAttribute(),
                     'value' => $value,
