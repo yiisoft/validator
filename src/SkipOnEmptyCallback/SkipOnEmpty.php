@@ -12,10 +12,8 @@ final class SkipOnEmpty
     {
         if (is_string($value) && $trimString) {
             $value = trim($value);
-
-            return $value === '';
         }
 
-        return $isAttributeMissing || $value === null || $value === [];
+        return $isAttributeMissing || $value === null || $value === [] || $value === '';
     }
 }
