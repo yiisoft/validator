@@ -96,6 +96,7 @@ final class NestedHandler implements RuleHandlerInterface
                 continue;
             }
 
+            /** @psalm-var mixed $validatedValue */
             $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
             $rules = is_iterable($rules) ? $rules : [$rules];
 
