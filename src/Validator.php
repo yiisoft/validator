@@ -142,7 +142,7 @@ final class Validator implements ValidatorInterface
     /**
      * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
      */
-    private function validateInternal($value, iterable $rules, ValidationContext $context): Result
+    private function validateInternal(mixed $value, iterable $rules, ValidationContext $context): Result
     {
         $compoundResult = new Result();
         foreach ($rules as $rule) {
