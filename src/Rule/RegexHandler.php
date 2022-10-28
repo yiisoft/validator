@@ -31,7 +31,7 @@ final class RegexHandler implements RuleHandlerInterface
                 $rule->getIncorrectInputMessage(),
                 [
                     'attribute' => $context->getAttribute(),
-                    'value' => $value,
+                    'valueType' => get_debug_type($value),
                 ],
             );
 

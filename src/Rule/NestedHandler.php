@@ -71,10 +71,10 @@ final class NestedHandler implements RuleHandlerInterface
             $data = (new ObjectDataSet($value, $rule->getPropertyVisibility()))->getData();
         } else {
             return (new Result())->addError(
-                'Value should be an array or an object. {type} given.',
+                'Value should be an array or an object. {valueType} given.',
                 [
                     'attribute' => $context->getAttribute(),
-                    'type' => get_debug_type($value),
+                    'valueType' => get_debug_type($value),
                 ],
             );
         }
