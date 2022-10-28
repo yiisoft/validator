@@ -170,7 +170,7 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param array $rules
+     * @param iterable<RuleInterface> $rules
      *
      * @return iterable<RuleInterface>
      */
