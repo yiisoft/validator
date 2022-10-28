@@ -80,7 +80,13 @@ final class EmailHandler implements RuleHandlerInterface
         }
 
         if ($valid === false) {
-            $result->addError($rule->getMessage());
+            $result->addError(
+                $rule->getMessage(),
+                [
+                    'attribute' => $context->getAttribute(),
+                    'value' => $originalValue,
+                ]
+            );
         }
 
         return $result;

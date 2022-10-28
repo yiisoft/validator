@@ -30,13 +30,18 @@ final class HasLengthHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($rule->getMessage());
-
+            $result->addError(
+                $rule->getMessage(),
+                [
+                    'attribute' => $context->getAttribute(),
+                    'value' => $value,
+                ],
+            );
             return $result;
         }
 
         $length = mb_strlen($value, $rule->getEncoding());
-        $this->validateLimits($rule, $length, $result);
+        $this->validateLimits($value, $rule, $context, $length, $result);
 
         return $result;
     }

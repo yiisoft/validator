@@ -22,8 +22,13 @@ final class SubsetHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_iterable($value)) {
-            $result->addError($rule->getIterableMessage());
-
+            $result->addError(
+                $rule->getIterableMessage(),
+                [
+                    'attribute' => $context->getAttribute(),
+                    'value' => (string) $value,
+                ],
+            );
             return $result;
         }
 
@@ -33,7 +38,13 @@ final class SubsetHandler implements RuleHandlerInterface
                 : $rule->getValues();
             $valuesString = '"' . implode('", "', $values) . '"';
 
-            $result->addError($rule->getSubsetMessage(), ['values' => $valuesString]);
+            $result->addError(
+                $rule->getSubsetMessage(),
+                [
+                    'attribute' => $context->getAttribute(),
+                    'values' => $valuesString,
+                ],
+            );
         }
 
         return $result;
