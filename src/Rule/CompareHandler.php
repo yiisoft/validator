@@ -82,7 +82,6 @@ final class CompareHandler implements RuleHandlerInterface
             '>=' => $value >= $targetValue,
             '<' => $value < $targetValue,
             '<=' => $value <= $targetValue,
-            default => false,
         };
     }
 }

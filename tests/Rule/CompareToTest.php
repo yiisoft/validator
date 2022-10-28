@@ -4,13 +4,19 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\ValidationContext;
 
 final class CompareToTest extends RuleTestCase
 {
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
+    use WhenTestTrait;
 
     public function testGetName(): void
     {
@@ -192,6 +198,25 @@ final class CompareToTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
+            [
+                new CompareTo(1, 'test'),
+                [
+                    'targetValue' => 1,
+                    'targetAttribute' => 'test',
+                    'message' => [
+                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'type' => 'string',
+                    'operator' => '==',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
         ];
     }
 
@@ -220,6 +245,9 @@ final class CompareToTest extends RuleTestCase
             [100, [new CompareTo(100, operator: '<=')]],
             [99, [new CompareTo(100, operator: '<=')]],
             [['attribute' => 100, 'number' => 99], ['number' => new CompareTo(null, 'attribute', operator: '<=')]],
+
+            ['100.50', [new CompareTo('100.5', type: Compare::TYPE_NUMBER)]],
+            ['100.50', [new CompareTo('100.5', type: Compare::TYPE_NUMBER, operator: '===')]],
         ];
     }
 
@@ -269,6 +297,19 @@ final class CompareToTest extends RuleTestCase
                 [new CompareTo(100, message: 'Custom error')],
                 ['' => ['Custom error']],
             ],
+
+            ['100.50', [new CompareTo('100.5', operator: '===')], ['' => ['Value must be equal to "100.5".']]],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testSkipOnErrorInternal(new CompareTo(), new CompareTo(skipOnError: true));
+    }
+
+    public function testWhen(): void
+    {
+        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $this->testWhenInternal(new CompareTo(), new CompareTo(when: $when));
     }
 }

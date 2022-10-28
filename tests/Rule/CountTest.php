@@ -5,19 +5,25 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Countable;
-use InvalidArgumentException;
 use stdClass;
 use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\CountHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\LimitTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\ValidationContext;
 
 final class CountTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
+    use LimitTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
+    use WhenTestTrait;
 
     public function testGetName(): void
     {
@@ -121,37 +127,20 @@ final class CountTest extends RuleTestCase
         ];
     }
 
-    public function dataInitWithMinAndMaxAndExactly(): array
+    public function testSkipOnError(): void
     {
-        return [
-            [['min' => 3, 'exactly' => 3]],
-            [['max' => 3, 'exactly' => 3]],
-            [['min' => 3, 'max' => 3, 'exactly' => 3]],
-        ];
+        $this->testSkipOnErrorInternal(new Count(min: 3), new Count(min: 3, skipOnError: true));
     }
 
-    /**
-     * @dataProvider dataInitWithMinAndMaxAndExactly
-     */
-    public function testInitWithMinAndMaxAndExactly(array $arguments): void
+    public function testWhen(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('$exactly is mutually exclusive with $min and $max.');
-        new Count(...$arguments);
+        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $this->testWhenInternal(new Count(min: 3), new Count(min: 3, when: $when));
     }
 
-    public function testInitWithMinAndMax(): void
+    protected function getRuleClass(): string
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Use $exactly instead.');
-        new Count(min: 3, max: 3);
-    }
-
-    public function testInitWithoutRequiredArguments(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('At least one of these attributes must be specified: $min, $max, $exactly.');
-        new Count();
+        return Count::class;
     }
 
     protected function getDifferentRuleInHandlerItems(): array

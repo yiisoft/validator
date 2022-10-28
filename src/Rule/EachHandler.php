@@ -53,9 +53,7 @@ final class EachHandler implements RuleHandlerInterface
                 $result->addError(
                     $error->getMessage(),
                     $error->getParameters(),
-                    $error->getValuePath() === []
-                        ? [$index]
-                        : [$index, ...$error->getValuePath()],
+                    $error->getValuePath() === [] ? [$index] : [$index, ...$error->getValuePath()],
                 );
             }
         }

@@ -8,10 +8,15 @@ use RuntimeException;
 use Yiisoft\Validator\Rule\LessThanOrEqual;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\ValidationContext;
 
 final class LessThanOrEqualTest extends RuleTestCase
 {
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
+    use WhenTestTrait;
 
     public function testGetName(): void
     {
@@ -145,5 +150,16 @@ final class LessThanOrEqualTest extends RuleTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
         new LessThanOrEqual();
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testSkipOnErrorInternal(new LessThanOrEqual(1), new LessThanOrEqual(1, skipOnError: true));
+    }
+
+    public function testWhen(): void
+    {
+        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $this->testWhenInternal(new LessThanOrEqual(1), new LessThanOrEqual(1, when: $when));
     }
 }

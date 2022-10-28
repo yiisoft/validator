@@ -24,6 +24,8 @@ use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
@@ -39,6 +41,15 @@ final class NestedTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
+    use WhenTestTrait;
+
+    public function testGetName(): void
+    {
+        $rule = new Nested();
+
+        $this->assertSame('nested', $rule->getName());
+    }
 
     public function testDefaultValues(): void
     {
@@ -61,27 +72,6 @@ final class NestedTest extends RuleTestCase
         $rule = new Nested(propertyVisibility: ReflectionProperty::IS_PRIVATE);
 
         $this->assertSame(ReflectionProperty::IS_PRIVATE, $rule->getPropertyVisibility());
-    }
-
-    public function testSkipOnEmptyInConstructor(): void
-    {
-        $rule = new Nested(skipOnEmpty: true);
-
-        $this->assertTrue($rule->getSkipOnEmpty());
-    }
-
-    public function testSkipOnEmptySetter(): void
-    {
-        $rule = (new Nested())->skipOnEmpty(true);
-
-        $this->assertTrue($rule->getSkipOnEmpty());
-    }
-
-    public function testGetName(): void
-    {
-        $rule = new Nested();
-
-        $this->assertSame('nested', $rule->getName());
     }
 
     public function testHandlerClassName(): void
@@ -918,8 +908,11 @@ final class NestedTest extends RuleTestCase
             ],
             [
                 [],
-                [new Nested(['value' => new Required()], requirePropertyPath: true)],
-                [['Property path "value" is not found.', ['value']]],
+                [new Nested(['value1' => new Required(), 'value2' => new Required()], requirePropertyPath: true)],
+                [
+                    ['Property path "value1" is not found.', ['value1']],
+                    ['Property path "value2" is not found.', ['value2']],
+                ],
             ],
             [
                 // https://github.com/yiisoft/validator/issues/200
@@ -982,6 +975,17 @@ final class NestedTest extends RuleTestCase
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errors, $errorsData);
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testSkipOnErrorInternal(new Nested(), new Nested(skipOnError: true));
+    }
+
+    public function testWhen(): void
+    {
+        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $this->testWhenInternal(new Nested(), new Nested(when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

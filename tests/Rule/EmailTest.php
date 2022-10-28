@@ -11,12 +11,19 @@ use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+
+use Yiisoft\Validator\ValidationContext;
+
 use function extension_loaded;
 
 final class EmailTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
+    use WhenTestTrait;
 
     public function testGetName(): void
     {
@@ -116,6 +123,10 @@ final class EmailTest extends RuleTestCase
             ['user+mailbox/department=shipping@example.com', [$rule]],
             ['!#$%&\'*+-/=?^_`.{|}~@example.com', [$rule]],
             ['test@nonexistingsubdomain.example.com', [$rule]], // checkDNS is disabled
+            ['name@gmail.con', [$rule]],
+            [str_repeat('a', 64) . '@gmail.com', [$rule]],
+            ['name@' . str_repeat('a', 245) . '.com', [$rule]],
+            ['SAM@RMCREATIVE.RU', [$rule]],
 
             ['sam@rmcreative.ru', [$ruleAllowedName]],
             ['5011@gmail.com', [$ruleAllowedName]],
@@ -159,6 +170,7 @@ final class EmailTest extends RuleTestCase
 
             ['ipetrov@gmail.com', [new Email(allowName: true, checkDNS: true)]],
             ['Ivan Petrov <ipetrov@gmail.com>', [new Email(allowName: true, checkDNS: true)]],
+            ['name@ñandu.cl', [new Email(checkDNS: true, enableIDN: true)]],
         ];
     }
 
@@ -183,6 +195,8 @@ final class EmailTest extends RuleTestCase
             ['sam@рмкреатиф.ru', [$rule], $errors],
             ['ex..ample@example.com', [$rule], $errors],
             [['developer@yiiframework.com'], [$rule], $errors],
+            [str_repeat('a', 65) . '@gmail.com', [$rule], $errors],
+            ['name@' . str_repeat('a', 246) . '.com', [$rule], $errors],
 
             // Malicious email addresses that can be used to exploit SwiftMailer vulnerability CVE-2016-10074 while IDN
             // is disabled.
@@ -255,11 +269,14 @@ final class EmailTest extends RuleTestCase
                 $errors,
             ],
 
+            ['name@ñandu.cl', [new Email(checkDNS: true)], $errors],
+            ['gmail.con', [new Email(checkDNS: true)], $errors],
             [
                 'test@nonexistingsubdomain.example.com',
                 [new Email(checkDNS: true)],
                 $errors,
             ],
+
             'custom error' => [
                 'test@nonexistingsubdomain.example.com',
                 [new Email(checkDNS: true, message: 'Custom error')],
@@ -276,6 +293,17 @@ final class EmailTest extends RuleTestCase
 
         $this->expectException(RuntimeException::class);
         new Email(enableIDN: true);
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testSkipOnErrorInternal(new Email(), new Email(skipOnError: true));
+    }
+
+    public function testWhen(): void
+    {
+        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $this->testWhenInternal(new Email(), new Email(when: $when));
     }
 
     protected function beforeTestOptions(): void

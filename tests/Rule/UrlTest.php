@@ -10,6 +10,9 @@ use Yiisoft\Validator\Rule\UrlHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\ValidationContext;
 
 use function extension_loaded;
 
@@ -17,6 +20,8 @@ final class UrlTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use SerializableRuleTestTrait;
+    use SkipOnErrorTestTrait;
+    use WhenTestTrait;
 
     public function testGetName(): void
     {
@@ -122,6 +127,8 @@ final class UrlTest extends RuleTestCase
             ['http://äüößìà.de', [new Url(enableIDN: true)]],
             ['http://xn--zcack7ayc9a.de', [new Url(enableIDN: true)]],
             ['домен.рф', [new Url(pattern: '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i', enableIDN: true)]],
+
+            ['http://' . str_repeat('a', 1989) . '.de', [new Url()]],
         ];
     }
 
@@ -132,6 +139,7 @@ final class UrlTest extends RuleTestCase
         }
 
         $errors = ['' => ['This value is not a valid URL.']];
+        $longUrl = 'http://' . str_repeat('u', 1990) . '.de';
 
         return [
             ['google.de', [new Url()], $errors],
@@ -152,7 +160,9 @@ final class UrlTest extends RuleTestCase
             ['//yiiframework.com', [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps'])], $errors],
 
             ['', [new Url(enableIDN: true)], $errors],
-            ['http://' . str_pad('base', 2000, 'url') . '.de', [new Url(enableIDN: true)], $errors],
+            [$longUrl, [new Url(enableIDN: true)], $errors],
+            [$longUrl, [new Url()], $errors],
+            [1, [new Url()], $errors],
 
             'custom error' => ['', [new Url(enableIDN: true, message: 'Custom error')], ['' => ['Custom error']]],
         ];
@@ -166,6 +176,17 @@ final class UrlTest extends RuleTestCase
 
         $this->expectException(RuntimeException::class);
         new Url(enableIDN: true);
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testSkipOnErrorInternal(new Url(), new Url(skipOnError: true));
+    }
+
+    public function testWhen(): void
+    {
+        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $this->testWhenInternal(new Url(), new Url(when: $when));
     }
 
     protected function beforeTestOptions(): void

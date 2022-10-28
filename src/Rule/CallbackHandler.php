@@ -27,26 +27,9 @@ final class CallbackHandler implements RuleHandlerInterface
             throw new InvalidArgumentException('Using method outside of attribute scope is prohibited.');
         }
 
-        $callbackResult = $callback($value, $rule, $context);
-
-        if (!$callbackResult instanceof Result) {
-            throw new InvalidCallbackReturnTypeException($callbackResult);
-        }
-
-        $result = new Result();
-        if ($callbackResult->isValid()) {
-            return $result;
-        }
-
-        foreach ($callbackResult->getErrors() as $error) {
-            $result->addError(
-                $error->getMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-                $error->getValuePath(),
-            );
+        $result = $callback($value, $rule, $context);
+        if (!$result instanceof Result) {
+            throw new InvalidCallbackReturnTypeException($result);
         }
 
         return $result;
