@@ -72,7 +72,13 @@ final class NestedHandler implements RuleHandlerInterface
         } else {
             $message = sprintf('Value should be an array or an object. %s given.', get_debug_type($value));
 
-            throw new InvalidArgumentException($message);
+            return (new Result())->addError(
+                $message,
+                [
+                    'attribute' => $context->getAttribute(),
+                    'value' => $value,
+                ],
+            );
         }
 
         $compoundResult = new Result();
