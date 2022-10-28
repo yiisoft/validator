@@ -39,7 +39,13 @@ final class UrlHandler implements RuleHandlerInterface
             }
         }
 
-        $result->addError($rule->getMessage());
+        $result->addError(
+            $rule->getMessage(),
+            [
+                'attribute' => $context->getAttribute(),
+                'value' => $value,
+            ],
+        );
 
         return $result;
     }

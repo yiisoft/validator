@@ -27,7 +27,13 @@ final class RegexHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError($rule->getIncorrectInputMessage());
+            $result->addError(
+                $rule->getIncorrectInputMessage(),
+                [
+                    'attribute' => $context->getAttribute(),
+                    'value' => $value,
+                ],
+            );
 
             return $result;
         }
@@ -36,7 +42,13 @@ final class RegexHandler implements RuleHandlerInterface
             (!$rule->isNot() && !preg_match($rule->getPattern(), $value)) ||
             ($rule->isNot() && preg_match($rule->getPattern(), $value))
         ) {
-            $result->addError($rule->getMessage());
+            $result->addError(
+                $rule->getMessage(),
+                [
+                    'attribute' => $context->getAttribute(),
+                    'value' => $value,
+                ],
+            );
         }
 
         return $result;

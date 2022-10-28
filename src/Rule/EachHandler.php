@@ -30,7 +30,13 @@ final class EachHandler implements RuleHandlerInterface
 
         $result = new Result();
         if (!is_iterable($value)) {
-            $result->addError($rule->getIncorrectInputMessage());
+            $result->addError(
+                $rule->getIncorrectInputMessage(),
+                [
+                    'attribute' => $context->getAttribute(),
+                    'value' => $value,
+                ],
+            );
 
             return $result;
         }

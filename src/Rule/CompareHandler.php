@@ -41,7 +41,13 @@ final class CompareHandler implements RuleHandlerInterface
         if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $targetValue)) {
             $result->addError(
                 $rule->getMessage(),
-                ['targetValueOrAttribute' => $targetValue ?? $targetAttribute],
+                [
+                    'attribute' => $context->getAttribute(),
+                    'targetValue' => $rule->getTargetValue(),
+                    'targetAttribute' => $rule->getTargetAttribute(),
+                    'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
+                    'value' => $value,
+                ],
             );
         }
 
