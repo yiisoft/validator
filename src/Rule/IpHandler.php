@@ -38,17 +38,17 @@ final class IpHandler implements RuleHandlerInterface
         $this->checkAllowedVersions($rule);
         $result = new Result();
         $message = $rule->getMessage();
-        $messageParameters = [
-            'attribute' => $context->getAttribute(),
-            'value' => $value,
-        ];
+
         if (!is_string($value)) {
-            $result->addError($message, $messageParameters);
+            $result->addError($message, [
+                'attribute' => $context->getAttribute(),
+                'valueType' => get_debug_type($value),
+            ]);
             return $result;
         }
 
         if (preg_match($rule->getIpParsePattern(), $value, $matches) === 0) {
-            $result->addError($message, $messageParameters);
+            $result->addError($message, ['attribute' => $context->getAttribute(), 'value' => $value]);
             return $result;
         }
         $negation = !empty($matches['not'] ?? null);
@@ -59,7 +59,7 @@ final class IpHandler implements RuleHandlerInterface
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
         } catch (InvalidArgumentException) {
-            $result->addError($message, $messageParameters);
+            $result->addError($message, ['attribute' => $context->getAttribute(), 'value' => $value]);
             return $result;
         }
 
@@ -97,8 +97,8 @@ final class IpHandler implements RuleHandlerInterface
         Result $result,
         ?string $cidr,
         bool $negation,
-        mixed $value,
-        ?ValidationContext $context
+        string $value,
+        ValidationContext $context
     ): Result {
         if ($cidr === null && $rule->isRequireSubnet()) {
             $result->addError(
@@ -137,7 +137,7 @@ final class IpHandler implements RuleHandlerInterface
         Ip $rule,
         Result $result,
         int $ipVersion,
-        mixed $value,
+        string $value,
         ValidationContext $context
     ): Result {
         if ($ipVersion === IpHelper::IPV6 && !$rule->isAllowIpv6()) {
@@ -168,7 +168,7 @@ final class IpHandler implements RuleHandlerInterface
         Result $result,
         ?string $cidr,
         string $ipCidr,
-        mixed $value,
+        string $value,
         ValidationContext $context
     ): Result {
         if ($cidr !== null) {
