@@ -188,7 +188,7 @@ class ValidatorTest extends TestCase
                     ),
                     new Error(
                         'Value must be an integer.',
-                        ['attribute' => 'merchantId', 'value' => null],
+                        ['attribute' => 'merchantId', 'valueType' => 'null'],
                         ['merchantId']
                     ),
                 ],
@@ -341,7 +341,7 @@ class ValidatorTest extends TestCase
                     ], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
-                        'value' => null,
+                        'valueType' => 'null',
                     ], ['age']),
                 ],
             ],
@@ -360,7 +360,7 @@ class ValidatorTest extends TestCase
                     ], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
-                        'value' => null,
+                        'valueType' => 'null',
                     ], ['age']),
                 ],
             ],
@@ -548,7 +548,7 @@ class ValidatorTest extends TestCase
                     ], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
-                        'value' => null,
+                        'valueType' => 'null',
                     ], ['age']),
                 ],
             ],
@@ -629,7 +629,7 @@ class ValidatorTest extends TestCase
                     ], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
-                        'value' => null,
+                        'valueType' => 'null',
                     ], ['age']),
                 ],
             ],
@@ -771,7 +771,7 @@ class ValidatorTest extends TestCase
                     ], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
-                        'value' => null,
+                        'valueType' => 'null',
                     ], ['age']),
                 ],
             ],
@@ -837,7 +837,7 @@ class ValidatorTest extends TestCase
                     ], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
-                        'value' => null,
+                        'valueType' => 'null',
                     ], ['age']),
                 ],
             ],
