@@ -32,7 +32,7 @@ final class NumberHandler implements RuleHandlerInterface
         if (is_bool($value) || !is_scalar($value)) {
             $result->addError($rule->getNotANumberMessage(), [
                 'attribute' => $context->getAttribute(),
-                'value' => $value,
+                'valueType' => get_debug_type($value),
             ]);
 
             return $result;
