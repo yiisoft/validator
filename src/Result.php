@@ -49,7 +49,13 @@ final class Result
      */
     public function getErrorMessages(): array
     {
-        return ArrayHelper::getColumn($this->errors, static fn (Error $error) => $error->getMessage());
+        /** @var string[] $errorMessages */
+        $errorMessages = ArrayHelper::getColumn(
+            $this->errors,
+            static fn (Error $error): string => $error->getMessage(),
+        );
+
+        return $errorMessages;
     }
 
     /**
