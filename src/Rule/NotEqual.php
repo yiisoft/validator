@@ -40,7 +40,7 @@ final class NotEqual extends Compare
         private string|null $message = null,
         private string $type = self::TYPE_STRING,
         private bool $strict = false,
-        mixed $skipOnEmpty = false,
+        bool|callable|null $skipOnEmpty = false,
         private bool $skipOnError = false,
         private ?Closure $when = null,
     ) {

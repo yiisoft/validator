@@ -38,7 +38,7 @@ final class GreaterThanOrEqual extends Compare
         private string|null $targetAttribute = null,
         private string|null $message = null,
         private string $type = self::TYPE_STRING,
-        mixed $skipOnEmpty = false,
+        bool|callable|null $skipOnEmpty = false,
         private bool $skipOnError = false,
         private ?Closure $when = null,
     ) {
