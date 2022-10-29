@@ -23,12 +23,22 @@ final class EmailHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Email::class, $rule);
         }
 
-        $originalValue = $value;
         $result = new Result();
-
         if (!is_string($value)) {
-            $valid = false;
-        } elseif (!preg_match(
+            $result->addError(
+                $rule->getMessage(),
+                [
+                    'attribute' => $context->getAttribute(),
+                    'valueType' => get_debug_type($value),
+                ]
+            );
+
+            return $result;
+        }
+
+        $originalValue = $value;
+
+        if (!preg_match(
             '/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?((?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))/',
             $value,
             $matches
