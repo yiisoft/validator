@@ -123,6 +123,9 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         return $data;
     }
 
+    /**
+     * @psalm-return array<string, ReflectionProperty>
+     */
     private function getReflectionProperties(): array
     {
         if ($this->hasCacheItem('reflectionProperties')) {
