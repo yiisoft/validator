@@ -186,7 +186,7 @@ final class Nested implements
 
     private function normalizeRules(): void
     {
-        /** @var iterable $rules */
+        /** @var iterable<RuleInterface> $rules */
         $rules = $this->rules;
 
         while (true) {
