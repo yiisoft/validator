@@ -24,20 +24,27 @@ final class JsonHandler implements RuleHandlerInterface
 
         $result = new Result();
 
+        if (!is_string($value)) {
+            $result->addError($rule->getMessage(), [
+                'attribute' => $context->getAttribute(),
+                'valueType' => get_debug_type($value),
+            ]);
+
+            return $result;
+        }
+
+
         if (!$this->isValidJson($value)) {
-            $result->addError(
-                $rule->getMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
+            $result->addError($rule->getMessage(), [
+                'attribute' => $context->getAttribute(),
+                'value' => $value,
+            ]);
         }
 
         return $result;
     }
 
-    private function isValidJson($value): bool
+    private function isValidJson(string $value): bool
     {
         // Regular expression is built based on JSON grammar specified at
         // https://tools.ietf.org/html/rfc8259
@@ -56,6 +63,6 @@ final class JsonHandler implements RuleHandlerInterface
         /x
         REGEX;
 
-        return is_string($value) && preg_match($regex, $value) === 1;
+        return preg_match($regex, $value) === 1;
     }
 }
