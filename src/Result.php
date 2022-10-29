@@ -91,7 +91,15 @@ final class Result
      */
     public function getAttributeErrors(string $attribute): array
     {
-        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): Error => $error);
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $firstItem = $error->getValuePath()[0] ?? '';
+            if ($firstItem === $attribute) {
+                $errors[] = $error;
+            }
+        }
+
+        return $errors;
     }
 
     /**
@@ -99,16 +107,11 @@ final class Result
      */
     public function getAttributeErrorMessages(string $attribute): array
     {
-        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): string => $error->getMessage());
-    }
-
-    private function getAttributeErrorsMap(string $attribute, Closure $getErrorClosure): array
-    {
         $errors = [];
         foreach ($this->errors as $error) {
             $firstItem = $error->getValuePath()[0] ?? '';
             if ($firstItem === $attribute) {
-                $errors[] = $getErrorClosure($error);
+                $errors[] = $error->getMessage();
             }
         }
 
@@ -144,7 +147,7 @@ final class Result
 
     /**
      * @psalm-param array<string,scalar|null> $parameters
-     * @psalm-param array<int|string> $valuePath
+     * @psalm-param list<int|string> $valuePath
      */
     public function addError(string $message, array $parameters = [], array $valuePath = []): self
     {
