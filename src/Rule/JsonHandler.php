@@ -23,7 +23,6 @@ final class JsonHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-
         if (!is_string($value)) {
             $result->addError($rule->getMessage(), [
                 'attribute' => $context->getAttribute(),
