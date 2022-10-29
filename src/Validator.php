@@ -50,7 +50,7 @@ final class Validator implements ValidatorInterface
         /**
          * @var bool|callable|null
          */
-        $defaultSkipOnEmpty = null,
+        bool|callable|null $defaultSkipOnEmpty = null,
     ) {
         $this->defaultSkipOnEmptyCallback = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
     }
