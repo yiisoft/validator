@@ -122,7 +122,7 @@ final class Validator implements ValidatorInterface
     }
 
     #[Pure]
-    private function normalizeDataSet($data): DataSetInterface
+    private function normalizeDataSet(mixed $data): DataSetInterface
     {
         if ($data instanceof DataSetInterface) {
             return $data;
