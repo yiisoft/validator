@@ -28,15 +28,12 @@ final class HasLengthHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-
         if (!is_string($value)) {
-            $result->addError(
-                $rule->getMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
+            $result->addError($rule->getMessage(), [
+                'attribute' => $context->getAttribute(),
+                'valueType' => get_debug_type($value),
+            ]);
+
             return $result;
         }
 
