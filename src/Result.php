@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Closure;
 use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 
