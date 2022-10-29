@@ -27,8 +27,6 @@ final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
             throw new RuleHandlerInterfaceNotImplementedException($className);
         }
 
-        $classInstance = new $className();
-
-        return $this->instances[$className] = $classInstance;
+        return $this->instances[$className] = new $className();
     }
 }
