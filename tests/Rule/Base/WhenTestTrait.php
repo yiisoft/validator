@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule\Base;
 
 use Closure;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
 trait WhenTestTrait
@@ -16,7 +15,7 @@ trait WhenTestTrait
     {
         $this->assertNull($ruleWithoutWhen->getWhen());
 
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $new = $ruleWithoutWhen->when($when);
         $this->assertNull($ruleWithoutWhen->getWhen());
         $this->assertInstanceOf(Closure::class, $new->getWhen());
