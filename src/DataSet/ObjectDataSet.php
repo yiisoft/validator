@@ -54,7 +54,10 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     public function getRules(): iterable
     {
         if ($this->rulesProvided) {
-            return $this->object->getRules();
+            /** @var RulesProviderInterface $object */
+            $object = $this->object;
+
+            return $object->getRules();
         }
 
         // Providing data set assumes object has its own attributes and rules getting logic. So further parsing of
@@ -96,7 +99,10 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     public function getAttributeValue(string $attribute): mixed
     {
         if ($this->dataSetProvided) {
-            return $this->object->getAttributeValue($attribute);
+            /** @var DataSetInterface $object */
+            $object = $this->object;
+
+            return $object->getAttributeValue($attribute);
         }
 
         return ($this->getReflectionProperties()[$attribute] ?? null)?->getValue($this->getObject());
@@ -104,15 +110,26 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
     public function hasAttribute(string $attribute): bool
     {
-        return $this->dataSetProvided
-            ? $this->object->hasAttribute($attribute)
-            : array_key_exists($attribute, $this->getReflectionProperties());
+        if (!$this->dataSetProvided) {
+            return array_key_exists($attribute, $this->getReflectionProperties());
+        }
+
+        /** @var DataSetInterface $object */
+        $object = $this->object;
+
+        return $object->hasAttribute($attribute);
     }
 
+    /**
+     * @psalm-return array<string, mixed>
+     */
     public function getData(): array
     {
         if ($this->dataSetProvided) {
-            return $this->object->getData();
+            /** @var DataSetInterface $object */
+            $object = $this->object;
+
+            return $object->getData();
         }
 
         $data = [];
