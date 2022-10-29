@@ -23,11 +23,11 @@ final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
             return $this->instances[$className];
         }
 
-        $classInstance = new $className();
-
-        if (!$classInstance instanceof RuleHandlerInterface) {
+        if (!is_subclass_of($className, RuleHandlerInterface::class)) {
             throw new RuleHandlerInterfaceNotImplementedException($className);
         }
+
+        $classInstance = new $className();
 
         return $this->instances[$className] = $classInstance;
     }
