@@ -11,6 +11,9 @@ use function array_key_exists;
 
 final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 {
+    /**
+     * @var array<class-string, RuleHandlerInterface>
+     */
     private array $instances = [];
 
     public function resolve(string $className): RuleHandlerInterface
