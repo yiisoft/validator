@@ -164,7 +164,7 @@ final class Nested implements
         }
     }
 
-    private static function ensureArrayHasRules(iterable &$rules)
+    private static function ensureArrayHasRules(iterable &$rules): void
     {
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
 
@@ -194,12 +194,13 @@ final class Nested implements
             $rulesMap = [];
 
             foreach ($rules as $valuePath => $rule) {
+                $valuePath = (string) $valuePath;
                 if ($valuePath === self::EACH_SHORTCUT) {
                     throw new InvalidArgumentException('Bare shortcut is prohibited. Use "Each" rule instead.');
                 }
 
                 $parts = StringHelper::parsePath(
-                    (string) $valuePath,
+                    $valuePath,
                     delimiter: self::EACH_SHORTCUT,
                     preserveDelimiterEscaping: true
                 );
