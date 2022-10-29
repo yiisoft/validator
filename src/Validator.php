@@ -181,7 +181,7 @@ final class Validator implements ValidatorInterface
         }
     }
 
-    private function normalizeRule($rule): RuleInterface
+    private function normalizeRule(mixed $rule): RuleInterface
     {
         if (is_callable($rule)) {
             return new Callback($rule);
