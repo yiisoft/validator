@@ -23,6 +23,7 @@ use function is_array;
 use function is_callable;
 use function is_int;
 use function is_object;
+use function is_string;
 
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
@@ -79,6 +80,8 @@ final class Validator implements ValidatorInterface
         $context = new ValidationContext($this, $data);
         $results = [];
 
+        /** @var mixed $attribute */
+        /** @var RuleInterface|iterable $attributeRules */
         foreach ($rules ?? [] as $attribute => $attributeRules) {
             $result = new Result();
 
@@ -89,10 +92,19 @@ final class Validator implements ValidatorInterface
             $attributeRules = $this->normalizeRules($attributeRules);
 
             if (is_int($attribute)) {
+                /** @psalm-suppress MixedAssignment */
                 $validatedData = $data->getData();
-            } else {
+            } elseif (is_string($attribute)) {
+                /** @psalm-suppress MixedAssignment */
                 $validatedData = $data->getAttributeValue($attribute);
                 $context = $context->withAttribute($attribute);
+            } else {
+                $message = sprintf(
+                    'An attribute can only have an integer or a string type. %s given',
+                    get_debug_type($attribute),
+                );
+
+                throw new InvalidArgumentException($message);
             }
 
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
@@ -140,12 +152,11 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
+     * @param iterable<RuleInterface> $rules
      */
     private function validateInternal(mixed $value, iterable $rules, ValidationContext $context): Result
     {
         $compoundResult = new Result();
-        /** @var RuleInterface $rule */
         foreach ($rules as $rule) {
             if ($this->preValidate($value, $context, $rule)) {
                 continue;
