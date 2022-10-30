@@ -45,11 +45,7 @@ final class Equal extends Compare
          * @var bool Whether this validator strictly check.
          */
         private bool $strict = false,
-
-        /**
-         * @var bool|callable
-         */
-        $skipOnEmpty = false,
+        bool|callable|null $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
