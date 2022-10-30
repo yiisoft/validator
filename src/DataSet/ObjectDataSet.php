@@ -72,25 +72,25 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
         if ($this->hasCacheItem('rules')) {
             /** @var iterable $rules */
-            return $this->getCacheItem('rules');
-        }
+            $rules = $this->getCacheItem('rules');
+        } else {
+            $rules = [];
+            foreach ($this->getReflectionProperties() as $property) {
+                // TODO: use Generator to collect attributes.
+                $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
+                foreach ($attributes as $attribute) {
+                    $rule = $attribute->newInstance();
+                    $rules[$property->getName()][] = $rule;
 
-        $rules = [];
-        foreach ($this->getReflectionProperties() as $property) {
-            // TODO: use Generator to collect attributes.
-            $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
-            foreach ($attributes as $attribute) {
-                $rule = $attribute->newInstance();
-                $rules[$property->getName()][] = $rule;
-
-                if ($rule instanceof AttributeEventInterface) {
-                    $rule->afterInitAttribute($this);
+                    if ($rule instanceof AttributeEventInterface) {
+                        $rule->afterInitAttribute($this);
+                    }
                 }
             }
-        }
 
-        if ($this->canCache()) {
-            $this->setCacheItem('rules', $rules);
+            if ($this->canCache()) {
+                $this->setCacheItem('rules', $rules);
+            }
         }
 
         return $rules;
@@ -150,22 +150,22 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     {
         if ($this->hasCacheItem('reflectionProperties')) {
             /** @var array<string, ReflectionProperty> $reflectionProperties */
-            return $this->getCacheItem('reflectionProperties');
-        }
+            $reflectionProperties = $this->getCacheItem('reflectionProperties');
+        } else {
+            $reflection = new ReflectionObject($this->object);
+            $reflectionProperties = [];
 
-        $reflection = new ReflectionObject($this->object);
-        $reflectionProperties = [];
+            foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
+                if (PHP_VERSION_ID < 80100) {
+                    $property->setAccessible(true);
+                }
 
-        foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
-            if (PHP_VERSION_ID < 80100) {
-                $property->setAccessible(true);
+                $reflectionProperties[$property->getName()] = $property;
             }
 
-            $reflectionProperties[$property->getName()] = $property;
-        }
-
-        if ($this->canCache()) {
-            $this->setCacheItem('reflectionProperties', $reflectionProperties);
+            if ($this->canCache()) {
+                $this->setCacheItem('reflectionProperties', $reflectionProperties);
+            }
         }
 
         return $reflectionProperties;
