@@ -9,6 +9,7 @@ use JetBrains\PhpStorm\ExpectedValues;
 use ReflectionAttribute;
 use ReflectionObject;
 use ReflectionProperty;
+use RuntimeException;
 use Yiisoft\Validator\AttributeEventInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\RuleInterface;
@@ -27,6 +28,9 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     private bool $dataSetProvided;
     private bool $rulesProvided;
 
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     #[ArrayShape([
         [
             'rules' => 'iterable',
@@ -67,7 +71,10 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         }
 
         if ($this->hasCacheItem('rules')) {
-            return $this->getCacheItem('rules');
+            /** @var iterable $rules */
+            $rules = $this->getCacheItem('rules');
+
+            return $rules;
         }
 
         $rules = [];
@@ -120,10 +127,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         return $object->hasAttribute($attribute);
     }
 
-    /**
-     * @psalm-return array<string, mixed>
-     */
-    public function getData(): array
+    public function getData(): mixed
     {
         if ($this->dataSetProvided) {
             /** @var DataSetInterface $object */
@@ -134,6 +138,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
         $data = [];
         foreach ($this->getReflectionProperties() as $name => $property) {
+            /** @psalm-suppress MixedAssignment */
             $data[$name] = $property->getValue($this->object);
         }
 
@@ -146,7 +151,10 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     private function getReflectionProperties(): array
     {
         if ($this->hasCacheItem('reflectionProperties')) {
-            return $this->getCacheItem('reflectionProperties');
+            /** @var array<string, ReflectionProperty> $reflectionProperties */
+            $reflectionProperties = $this->getCacheItem('reflectionProperties');
+
+            return $reflectionProperties;
         }
 
         $reflection = new ReflectionObject($this->object);
@@ -174,6 +182,10 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
     private function hasCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): bool
     {
+        if ($this->cacheKey === null) {
+            throw new RuntimeException('$cacheKey is not set.');
+        }
+
         if (!array_key_exists($this->cacheKey, self::$cache)) {
             return false;
         }
@@ -181,13 +193,22 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         return array_key_exists($name, self::$cache[$this->cacheKey]);
     }
 
-    private function getCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): array
+    private function getCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): mixed
     {
+        if ($this->cacheKey === null) {
+            throw new RuntimeException('$cacheKey is not set.');
+        }
+
         return self::$cache[$this->cacheKey][$name];
     }
 
-    private function setCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name, array $rules): void
+    private function setCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name, mixed $value): void
     {
-        self::$cache[$this->cacheKey][$name] = $rules;
+        if ($this->cacheKey === null) {
+            throw new RuntimeException('$cacheKey is not set.');
+        }
+
+        /** @psalm-suppress MixedAssignment */
+        self::$cache[$this->cacheKey][$name] = $value;
     }
 }
