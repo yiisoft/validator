@@ -185,7 +185,7 @@ final class HasLengthTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new HasLength(min: 3), new HasLength(min: 3, when: $when));
     }
 

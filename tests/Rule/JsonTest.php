@@ -150,7 +150,7 @@ JSON_WRAP
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Json(), new Json(when: $when));
     }
 

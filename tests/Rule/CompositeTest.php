@@ -158,7 +158,7 @@ final class CompositeTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Composite([]), new Composite([], when: $when));
     }
 

@@ -90,7 +90,7 @@ final class SubsetTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Subset([]), new Subset([], when: $when));
     }
 

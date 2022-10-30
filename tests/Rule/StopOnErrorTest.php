@@ -101,7 +101,7 @@ final class StopOnErrorTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new StopOnError(), new StopOnError(when: $when));
     }
 

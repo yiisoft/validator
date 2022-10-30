@@ -215,7 +215,7 @@ final class EqualTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Equal(1), new Equal(1, when: $when));
     }
 }

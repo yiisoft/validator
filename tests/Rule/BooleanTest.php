@@ -135,7 +135,7 @@ final class BooleanTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Boolean(), new Boolean(when: $when));
     }
 

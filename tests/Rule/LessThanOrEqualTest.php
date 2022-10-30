@@ -159,7 +159,7 @@ final class LessThanOrEqualTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new LessThanOrEqual(1), new LessThanOrEqual(1, when: $when));
     }
 }
