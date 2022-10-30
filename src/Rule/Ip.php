@@ -41,6 +41,7 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
     private const NEGATION_CHAR = '!';
     /**
      * @var array<string, list<string>>
+     *
      * @see $networks
      */
     private array $defaultNetworks = [
@@ -287,6 +288,7 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
      *  - Removes duplicates.
      *
      * @param string[] $ranges
+     *
      * @return string[]
      */
     private function prepareRanges(array $ranges): array
