@@ -183,7 +183,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     private function hasCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): bool
     {
         if ($this->cacheKey === null) {
-            throw new RuntimeException('$cacheKey is not set.');
+            return false;
         }
 
         if (!array_key_exists($this->cacheKey, self::$cache)) {
@@ -196,7 +196,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     private function getCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): mixed
     {
         if ($this->cacheKey === null) {
-            throw new RuntimeException('$cacheKey is not set.');
+            return null;
         }
 
         return self::$cache[$this->cacheKey][$name];
