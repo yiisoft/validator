@@ -72,9 +72,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
         if ($this->hasCacheItem('rules')) {
             /** @var iterable $rules */
-            $rules = $this->getCacheItem('rules');
-
-            return $rules;
+            return $this->getCacheItem('rules');
         }
 
         $rules = [];
@@ -152,9 +150,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     {
         if ($this->hasCacheItem('reflectionProperties')) {
             /** @var array<string, ReflectionProperty> $reflectionProperties */
-            $reflectionProperties = $this->getCacheItem('reflectionProperties');
-
-            return $reflectionProperties;
+            return $this->getCacheItem('reflectionProperties');
         }
 
         $reflection = new ReflectionObject($this->object);
