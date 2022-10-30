@@ -13,7 +13,6 @@ use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
-use Yiisoft\Validator\ValidationContext;
 
 final class IpTest extends RuleTestCase
 {

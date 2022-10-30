@@ -14,7 +14,6 @@ use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
-use Yiisoft\Validator\ValidationContext;
 
 use function extension_loaded;
 
