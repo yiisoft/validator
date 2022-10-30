@@ -32,9 +32,11 @@ final class CompareHandler implements RuleHandlerInterface
 
         $result = new Result();
         $targetAttribute = $rule->getTargetAttribute();
+        /** @var mixed $targetValue */
         $targetValue = $rule->getTargetValue();
 
         if ($targetValue === null && $targetAttribute !== null) {
+            /** @var mixed $targetValue */
             $targetValue = $context->getDataSet()?->getAttributeValue($targetAttribute);
         }
 
