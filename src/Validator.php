@@ -81,7 +81,7 @@ final class Validator implements ValidatorInterface
         $results = [];
 
         /** @var mixed $attribute */
-        /** @var RuleInterface|iterable $attributeRules */
+        /** @var iterable|RuleInterface $attributeRules */
         foreach ($rules ?? [] as $attribute => $attributeRules) {
             $result = new Result();
 
