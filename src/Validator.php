@@ -145,6 +145,7 @@ final class Validator implements ValidatorInterface
     private function validateInternal(mixed $value, iterable $rules, ValidationContext $context): Result
     {
         $compoundResult = new Result();
+        /** @var RuleInterface $rule */
         foreach ($rules as $rule) {
             if ($this->preValidate($value, $context, $rule)) {
                 continue;
