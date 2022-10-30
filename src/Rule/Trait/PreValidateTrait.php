@@ -15,11 +15,7 @@ trait PreValidateTrait
 {
     private string $parameterPreviousRulesErrored = 'previousRulesErrored';
 
-    private function preValidate(
-        $value,
-        ValidationContext $context,
-        RuleInterface $rule
-    ): bool {
+    private function preValidate(mixed $value, ValidationContext $context, RuleInterface $rule): bool {
         if (
             $rule instanceof SkipOnEmptyInterface &&
             (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $context->isAttributeMissing())
