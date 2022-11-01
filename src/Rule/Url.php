@@ -42,7 +42,7 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
          */
         private string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
         /**
-         * @var array list of URI schemes which should be considered valid. By default, http and https
+         * @var string[] list of URI schemes which should be considered valid. By default, http and https
          * are considered to be valid schemes.
          */
         private array $validSchemes = ['http', 'https'],
@@ -77,11 +77,7 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
 
     public function getPattern(): string
     {
-        if (str_contains($this->pattern, '{schemes}')) {
-            return str_replace('{schemes}', '((?i)' . implode('|', $this->validSchemes) . ')', $this->pattern);
-        }
-
-        return $this->pattern;
+        return strtr($this->pattern, ['{schemes}' => '((?i)' . implode('|', $this->validSchemes) . ')']);
     }
 
     /**
