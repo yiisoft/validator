@@ -20,22 +20,21 @@ final class SubsetHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-
         if (!is_iterable($value)) {
-            $result->addError(
-                $rule->getIterableMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => (string) $value,
-                ],
-            );
+            $result->addError($rule->getIterableMessage(), [
+                'attribute' => $context->getAttribute(),
+                'valueType' => get_debug_type($value),
+            ]);
+
             return $result;
         }
 
         if (!ArrayHelper::isSubset($value, $rule->getValues(), $rule->isStrict())) {
-            $values = $rule->getValues() instanceof Traversable
-                ? iterator_to_array($rule->getValues())
-                : $rule->getValues();
+            $values = $rule->getValues();
+            if ($values instanceof Traversable) {
+                $values = iterator_to_array($values);
+            }
+
             $valuesString = '"' . implode('", "', $values) . '"';
 
             $result->addError(
