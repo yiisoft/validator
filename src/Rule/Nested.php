@@ -134,7 +134,7 @@ final class Nested implements
     }
 
     /**
-     * @param null|RulesProviderInterface|class-string|object|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $source
+     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|object|RulesProviderInterface|null $source
      */
     private function prepareRules(iterable|object|string|null $source): void
     {
