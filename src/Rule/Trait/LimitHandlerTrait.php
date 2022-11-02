@@ -26,7 +26,7 @@ trait LimitHandlerTrait
      */
     private function validateLimits(
         mixed $value,
-        object $rule,
+        LimitTrait|RuleInterface $rule,
         ValidationContext $context,
         int $number,
         Result $result
