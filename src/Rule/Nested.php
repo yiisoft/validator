@@ -134,7 +134,7 @@ final class Nested implements
     }
 
     /**
-     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null $source
+     * @param null|RulesProviderInterface|class-string|object|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $source
      */
     private function prepareRules(iterable|object|string|null $source): void
     {
@@ -155,6 +155,7 @@ final class Nested implements
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         self::ensureArrayHasRules($rules);
 
+        /** @var iterable<RuleInterface> $rules */
         $this->rules = $rules;
 
         if ($this->normalizeRules) {
@@ -188,8 +189,15 @@ final class Nested implements
 
     private function normalizeRules(): void
     {
+        if ($this->rules === null) {
+            return;
+        }
+
         /** @var iterable<RuleInterface> $rules */
         $rules = $this->rules;
+        if ($rules instanceof Traversable) {
+            $rules = iterator_to_array($rules);
+        }
 
         while (true) {
             $breakWhile = true;
@@ -252,8 +260,22 @@ final class Nested implements
 
     public function propagateOptions(): void
     {
+        if ($this->rules === null) {
+            return;
+        }
+
         $rules = [];
+        /** @var iterable<RuleInterface> $attributeRules */
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
+            if (!is_int($attributeRulesIndex) && !is_string($attributeRulesIndex)) {
+                $message = sprintf(
+                    'A value path can only have an integer or a string type. %s given',
+                    get_debug_type($attributeRulesIndex),
+                );
+
+                throw new InvalidArgumentException($message);
+            }
+
             foreach ($attributeRules as $attributeRule) {
                 if ($attributeRule instanceof SkipOnEmptyInterface) {
                     $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
