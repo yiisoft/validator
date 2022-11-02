@@ -36,6 +36,7 @@ final class EachHandler implements RuleHandlerInterface
             return $result;
         }
 
+        /** @var mixed $item */
         foreach ($value as $index => $item) {
             if (!is_int($index)) {
                 $result->addError($rule->getIncorrectInputMessage(), [
