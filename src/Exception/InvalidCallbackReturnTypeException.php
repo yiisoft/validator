@@ -10,10 +10,7 @@ use Yiisoft\Validator\Result;
 
 final class InvalidCallbackReturnTypeException extends \Exception implements FriendlyExceptionInterface
 {
-    /**
-     * @param class-string $result
-     */
-    public function __construct(string $result, int $code = 0, ?Throwable $previous = null)
+    public function __construct(mixed $result, int $code = 0, ?Throwable $previous = null)
     {
         $message = sprintf(
             'Return value of callback must be an instance of %s, %s returned.',
