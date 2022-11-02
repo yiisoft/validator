@@ -95,7 +95,8 @@ final class Callback implements
             ));
         }
 
-        $this->callback = Closure::bind(fn (...$args) => $object->{$method}(...$args), $object, $object);
+        /** @psalm-suppress MixedMethodCall */
+        $this->callback = Closure::bind(fn (mixed ...$args): mixed => $object->{$method}(...$args), $object, $object);
     }
 
     public function getOptions(): array
