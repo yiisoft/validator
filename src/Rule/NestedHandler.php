@@ -68,7 +68,16 @@ final class NestedHandler implements RuleHandlerInterface
         if (is_array($value)) {
             $data = $value;
         } elseif (is_object($value)) {
+            /** @var mixed $data */
             $data = (new ObjectDataSet($value, $rule->getPropertyVisibility()))->getData();
+            if (!is_array($data) && !is_object($data)) {
+                $message = sprintf(
+                    'An object set data can only have an array or an object type. %s given',
+                    get_debug_type($data),
+                );
+
+                throw new InvalidArgumentException($message);
+            }
         } else {
             return (new Result())->addError(
                 'Value should be an array or an object. {valueType} given.',
@@ -83,20 +92,27 @@ final class NestedHandler implements RuleHandlerInterface
         $results = [];
         /** @var int|string $valuePath */
         foreach ($rule->getRules() as $valuePath => $rules) {
-            if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($data, $valuePath)) {
+            if (is_array($data) && $rule->getRequirePropertyPath() && !ArrayHelper::pathExists($data, $valuePath)) {
+                if (is_int($valuePath)) {
+                    $valuePathList = [$valuePath];
+                } else {
+                    /** @var list<string> $valuePathList */
+                    $valuePathList = StringHelper::parsePath($valuePath);
+                }
+
                 $compoundResult->addError(
                     $rule->getNoPropertyPathMessage(),
                     [
                         'path' => $valuePath,
                         'attribute' => $context->getAttribute(),
                     ],
-                    is_int($valuePath) ? [$valuePath] : StringHelper::parsePath($valuePath),
+                    $valuePathList,
                 );
 
                 continue;
             }
 
-            /** @psalm-var mixed $validatedValue */
+            /** @var mixed $validatedValue */
             $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
             $rules = is_iterable($rules) ? $rules : [$rules];
 
@@ -107,13 +123,19 @@ final class NestedHandler implements RuleHandlerInterface
             }
 
             $result = new Result();
-
             foreach ($itemResult->getErrors() as $error) {
-                $errorValuePath = is_int($valuePath) ? [$valuePath] : StringHelper::parsePath($valuePath);
-                if (!empty($error->getValuePath())) {
-                    array_push($errorValuePath, ...$error->getValuePath());
+                if (is_int($valuePath)) {
+                    $valuePathList = [$valuePath];
+                } else {
+                    /** @var list<string> $valuePathList */
+                    $valuePathList = StringHelper::parsePath($valuePath);
                 }
-                $result->addError($error->getMessage(), $error->getParameters(), $errorValuePath);
+
+                if (!empty($valuePathList)) {
+                    array_push($valuePathList, ...$error->getValuePath());
+                }
+
+                $result->addError($error->getMessage(), $error->getParameters(), $valuePathList);
             }
             $results[] = $result;
         }
