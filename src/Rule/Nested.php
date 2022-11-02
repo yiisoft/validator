@@ -54,23 +54,23 @@ final class Nested implements
     private const EACH_SHORTCUT = '*';
 
     /**
-     * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
+     * @var null|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>
      */
     private ?iterable $rules;
 
+    /**
+     * @param null|RulesProviderInterface|class-string|object|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
+     *
+     * Rules for validate value that can be described by:
+     * - object that implement {@see RulesProviderInterface};
+     * - name of class from whose attributes their will be derived;
+     * - array or object implementing the `Traversable` interface that contain {@see RuleInterface} implementations
+     *   or closures.
+     *
+     * `$rules` can be null if validatable value is object. In this case rules will be derived from object via
+     * `getRules()` method if object implement {@see RulesProviderInterface} or from attributes otherwise.
+     */
     public function __construct(
-        /**
-         * Rules for validate value that can be described by:
-         * - object that implement {@see RulesProviderInterface};
-         * - name of class from whose attributes their will be derived;
-         * - array or object implementing the `Traversable` interface that contain {@see RuleInterface} implementations
-         *   or closures.
-         *
-         * `$rules` can be null if validatable value is object. In this case rules will be derived from object via
-         * `getRules()` method if object implement {@see RulesProviderInterface} or from attributes otherwise.
-         *
-         * @var class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null
-         */
         iterable|object|string|null $rules = null,
 
         /**
