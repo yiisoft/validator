@@ -54,12 +54,12 @@ final class Nested implements
     private const EACH_SHORTCUT = '*';
 
     /**
-     * @var null|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>
+     * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
      */
     private ?iterable $rules;
 
     /**
-     * @param null|RulesProviderInterface|class-string|object|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
+     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|object|RulesProviderInterface|null $rules
      *
      * Rules for validate value that can be described by:
      * - object that implement {@see RulesProviderInterface};
