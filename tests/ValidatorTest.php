@@ -229,18 +229,18 @@ class ValidatorTest extends TestCase
             [
                 $strictRules,
                 new ArrayDataSet(['orderBy' => 'name', 'sort' => 'up']),
-                [new Error('This value is invalid.', ['attribute' => 'sort', 'value' => 'up'], ['sort'])],
+                [new Error('This value is invalid.', ['attribute' => 'sort'], ['sort'])],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet(['orderBy' => 'name', 'sort' => 'up']),
-                [new Error('This value is invalid.', ['attribute' => 'sort', 'value' => 'up'], ['sort'])],
+                [new Error('This value is invalid.', ['attribute' => 'sort'], ['sort'])],
             ],
 
             [
                 $strictRules,
                 new ArrayDataSet(['orderBy' => 'name', 'sort' => '']),
-                [new Error('This value is invalid.', ['attribute' => 'sort', 'value' => ''], ['sort'])],
+                [new Error('This value is invalid.', ['attribute' => 'sort'], ['sort'])],
             ],
             [
                 $notStrictRules,
