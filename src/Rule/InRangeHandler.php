@@ -26,13 +26,7 @@ final class InRangeHandler implements RuleHandlerInterface
 
         $result = new Result();
         if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getRange(), $rule->isStrict())) {
-            $result->addError(
-                $rule->getMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
+            $result->addError($rule->getMessage(), ['attribute' => $context->getAttribute()]);
         }
 
         return $result;
