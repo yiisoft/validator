@@ -45,6 +45,7 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
          */
         private ?Closure $when = null,
     ) {
+        /** @psalm-suppress MixedPropertyTypeCoercion */
         $this->emptyCallback = $emptyCallback ?? new SkipOnEmpty(trimString: true);
     }
 
