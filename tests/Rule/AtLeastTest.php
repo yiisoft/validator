@@ -36,6 +36,7 @@ final class AtLeastTest extends RuleTestCase
                         'attr2',
                     ],
                     'min' => 1,
+                    'incorrectInputMessage' => 'Value must be an array or an object.',
                     'message' => [
                         'message' => 'The model is not valid. Must have at least "{min}" filled attributes.',
                         'parameters' => ['min' => 1],
@@ -52,6 +53,7 @@ final class AtLeastTest extends RuleTestCase
                         'attr2',
                     ],
                     'min' => 2,
+                    'incorrectInputMessage' => 'Value must be an array or an object.',
                     'message' => [
                         'message' => 'The model is not valid. Must have at least "{min}" filled attributes.',
                         'parameters' => ['min' => 2],
