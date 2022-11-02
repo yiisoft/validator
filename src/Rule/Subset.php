@@ -23,6 +23,9 @@ final class Subset implements SerializableRuleInterface, SkipOnErrorInterface, W
     use WhenTrait;
 
     public function __construct(
+        /**
+         * @var iterable<scalar>
+         */
         private iterable $values,
         /**
          * @var bool whether the comparison is strict (both type and value must be the same)
@@ -48,6 +51,9 @@ final class Subset implements SerializableRuleInterface, SkipOnErrorInterface, W
         return 'subset';
     }
 
+    /**
+     * @return iterable<scalar>
+     */
     public function getValues(): iterable
     {
         return $this->values;
