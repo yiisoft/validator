@@ -30,6 +30,7 @@ final class LessThanOrEqual extends Compare
         private $targetValue = null,
         /**
          * @var string|null $targetAttribute The attribute to be less than or equal to. When both this property and
+         *
          * @see $targetValue} are set, the {@see $targetValue} takes precedence.
          */
         private string|null $targetAttribute = null,
