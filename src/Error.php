@@ -6,19 +6,14 @@ namespace Yiisoft\Validator;
 
 final class Error
 {
-    /**
-     * @psalm-param list<int|string> $valuePath
-     */
     public function __construct(
         private string $message,
-
         /**
-         * @psalm-var array<string,scalar|null>
+         * @var array<string, scalar|null>
          */
         private array $parameters = [],
-
         /**
-         * @psalm-var list<int|string>
+         * @var list<int|string>
          */
         private array $valuePath = [],
     ) {
@@ -30,7 +25,7 @@ final class Error
     }
 
     /**
-     * @psalm-return array<string,scalar|null>
+     * @return array<string, scalar|null>
      */
     public function getParameters(): array
     {
@@ -38,7 +33,7 @@ final class Error
     }
 
     /**
-     * @psalm-return list<int|string>
+     * @return list<int|string>
      */
     public function getValuePath(bool $escape = false): array
     {

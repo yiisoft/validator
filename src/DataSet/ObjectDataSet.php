@@ -144,7 +144,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     }
 
     /**
-     * @psalm-return array<string, ReflectionProperty>
+     * @return array<string, ReflectionProperty>
      */
     private function getReflectionProperties(): array
     {

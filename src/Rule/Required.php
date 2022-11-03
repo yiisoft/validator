@@ -41,7 +41,7 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
         ?callable $emptyCallback = null,
         private bool $skipOnError = false,
         /**
-         * @psalm-var Closure(mixed, ValidationContext):bool|null
+         * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
@@ -65,7 +65,7 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
     }
 
     /**
-     * @psalm-return EmptyCallback
+     * @return EmptyCallback
      */
     public function getEmptyCallback(): callable
     {

@@ -27,7 +27,7 @@ final class IsTrueHandler implements RuleHandlerInterface
             return $result;
         }
 
-        /** @psalm-var scalar $value */
+        /** @var scalar $value */
         $result->addError(
             $rule->getMessage(),
             [

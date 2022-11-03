@@ -58,7 +58,7 @@ final class Result
     }
 
     /**
-     * @psalm-return array<string, non-empty-list<string>>
+     * @return array<string, non-empty-list<string>>
      */
     public function getErrorMessagesIndexedByPath(string $separator = '.'): array
     {
@@ -72,7 +72,7 @@ final class Result
     }
 
     /**
-     * @psalm-return array<string, non-empty-list<string>>
+     * @return array<string, non-empty-list<string>>
      *
      * @throws InvalidArgumentException
      */
@@ -124,7 +124,7 @@ final class Result
     }
 
     /**
-     * @psalm-return array<string, non-empty-list<string>>
+     * @return array<string, non-empty-list<string>>
      */
     public function getAttributeErrorMessagesIndexedByPath(string $attribute, string $separator = '.'): array
     {
@@ -151,8 +151,8 @@ final class Result
     }
 
     /**
-     * @psalm-param array<string,scalar|null> $parameters
-     * @psalm-param list<int|string> $valuePath
+     * @param array<string,scalar|null> $parameters
+     * @param list<int|string> $valuePath
      */
     public function addError(string $message, array $parameters = [], array $valuePath = []): self
     {

@@ -29,8 +29,7 @@ final class IsTrue implements SerializableRuleInterface, SkipOnErrorInterface, W
 
     public function __construct(
         /**
-         * @var mixed the value representing "true" status. Defaults to `1`.
-         * @psalm-var scalar
+         * @var scalar the value representing "true" status. Defaults to `1`.
          */
         private mixed $trueValue = '1',
         /**
@@ -58,7 +57,7 @@ final class IsTrue implements SerializableRuleInterface, SkipOnErrorInterface, W
     }
 
     /**
-     * @psalm-return scalar
+     * @return scalar
      */
     public function getTrueValue(): mixed
     {
