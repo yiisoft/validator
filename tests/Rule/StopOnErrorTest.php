@@ -48,7 +48,7 @@ final class StopOnErrorTest extends RuleTestCase
                                 ],
                             ],
                             'greaterThanMaxMessage' => [
-                                'message' => 'This value must contain at most {max, number} {max, plural, '.
+                                'message' => 'This value must contain at most {max, number} {max, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'max' => null,

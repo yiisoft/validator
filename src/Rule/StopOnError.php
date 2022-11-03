@@ -6,14 +6,12 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
-use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
