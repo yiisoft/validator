@@ -25,26 +25,31 @@ final class AtLeast implements SerializableRuleInterface, SkipOnErrorInterface, 
     use SkipOnErrorTrait;
     use WhenTrait;
 
-    /**
-     * @param string[] $attributes The list of required attributes that will be checked.
-     * @param int $min The minimum required quantity of filled attributes to pass the validation.
-     * Defaults to 1.
-     * @param string $incorrectInputMessage = 'Value must be array or iterable.',
-     * @param string $message Message to display in case of error.
-     * @param bool|callable|null $skipOnEmpty
-     * @param bool $skipOnError
-     * @param Closure(mixed, ValidationContext):bool|null $when
-     */
     public function __construct(
         /**
-         * @var string[]
+         * @var string[] The list of required attributes that will be checked.
          */
         private array $attributes,
+        /**
+         * @var int The minimum required quantity of filled attributes to pass the validation. Defaults to 1.
+         */
         private int $min = 1,
         private string $incorrectInputMessage = 'Value must be an array or an object.',
+        /**
+         * @var string Message to display in case of error.
+         */
         private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.',
+        /**
+         * @var bool|callable|null
+         */
         private mixed $skipOnEmpty = null,
+        /**
+         * @var bool
+         */
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null
     ) {
     }

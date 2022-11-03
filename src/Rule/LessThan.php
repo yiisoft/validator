@@ -22,24 +22,30 @@ use Yiisoft\Validator\ValidationContext;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class LessThan extends Compare
 {
-    /**
-     * @param scalar|null $targetValue The constant value to be less than. When both this property and
-     * {@see $targetAttribute} are set, this property takes precedence.
-     * @param string|null $targetAttribute The attribute to be less than. When both this property and
-     * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
-     * @param string|null $message User-defined error message.
-     * @param string $type The type of the values being validated.
-     * @param bool|callable|null $skipOnEmpty
-     * @param bool $skipOnError
-     * @param Closure(mixed, ValidationContext):bool|null $when
-     */
     public function __construct(
+        /**
+         * @var scalar|null The constant value to be less than. When both this property and
+         * {@see $targetAttribute} are set, this property takes precedence.
+         */
         private mixed $targetValue = null,
+        /**
+         * @var string|null The attribute to be less than. When both this property and {@see $targetValue} are set, the
+         * {@see $targetValue} takes precedence.
+         */
         private string|null $targetAttribute = null,
+        /**
+         * @var string|null $message User-defined error message.
+         */
         private string|null $message = null,
+        /**
+         * @var string $type The type of the values being validated.
+         */
         private string $type = self::TYPE_STRING,
         bool|callable|null $skipOnEmpty = false,
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
         if ($this->targetValue === null && $this->targetAttribute === null) {
