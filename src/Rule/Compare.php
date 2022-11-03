@@ -47,37 +47,51 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         '<=' => 1,
     ];
 
-    /**
-     * @param mixed $targetValue The constant value to be compared with. When both this property and
-     * {@see $targetAttribute} are set, this property takes precedence.
-     * @param string|null $targetAttribute The name of the attribute to be compared with. When both this property and
-     * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
-     * @param string|null $message User-defined error message.
-     * @param string $type The type of the values being compared.
-     * @param string $operator The operator for comparison. The following operators are supported:
-     *
-     * - `==`: check if two values are equal. The comparison is done is non-strict mode.
-     * - `===`: check if two values are equal. The comparison is done is strict mode.
-     * - `!=`: check if two values are NOT equal. The comparison is done is non-strict mode.
-     * - `!==`: check if two values are NOT equal. The comparison is done is strict mode.
-     * - `>`: check if value being validated is greater than the value being compared with.
-     * - `>=`: check if value being validated is greater than or equal to the value being compared with.
-     * - `<`: check if value being validated is less than the value being compared with.
-     * - `<=`: check if value being validated is less than or equal to the value being compared with.
-     *
-     * When you want to compare numbers, make sure to also change @see $type} to {@see TYPE_NUMBER}.
-     * @param bool|callable|null $skipOnEmpty
-     * @param bool $skipOnError
-     * @param Closure(mixed, ValidationContext):bool|null $when
-     */
     public function __construct(
+        /**
+         * @var scalar|null The constant value to be compared with. When both this property and {@see $targetAttribute}
+         * are set, this property takes precedence.
+         */
         private mixed $targetValue = null,
+        /**
+         * @var string|null The name of the attribute to be compared with. When both this property and
+         * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
+         */
         private string|null $targetAttribute = null,
+        /**
+         * @var string|null User-defined error message.
+         */
         private string|null $message = null,
+        /**
+         * @var string The type of the values being compared.
+         */
         private string $type = self::TYPE_STRING,
+        /**
+         * @var string The operator for comparison. The following operators are supported:
+         *
+         * - `==`: check if two values are equal. The comparison is done is non-strict mode.
+         * - `===`: check if two values are equal. The comparison is done is strict mode.
+         * - `!=`: check if two values are NOT equal. The comparison is done is non-strict mode.
+         * - `!==`: check if two values are NOT equal. The comparison is done is strict mode.
+         * - `>`: check if value being validated is greater than the value being compared with.
+         * - `>=`: check if value being validated is greater than or equal to the value being compared with.
+         * - `<`: check if value being validated is less than the value being compared with.
+         * - `<=`: check if value being validated is less than or equal to the value being compared with.
+         *
+         * When you want to compare numbers, make sure to also change @see $type} to {@see TYPE_NUMBER}.
+         */
         private string $operator = '==',
+        /**
+         * @var bool|callable|null
+         */
         private mixed $skipOnEmpty = null,
+        /**
+         * @var bool
+         */
         private bool $skipOnError = false,
+        /**
+         * @var Closure(mixed, ValidationContext):bool|null
+         */
         private ?Closure $when = null,
     ) {
         if (!isset($this->validOperatorsMap[$this->operator])) {
@@ -85,12 +99,15 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         }
     }
 
+    /**
+     * @return scalar|null
+     */
     public function getTargetValue(): mixed
     {
         return $this->targetValue;
     }
 
-    public function getTargetAttribute(): ?string
+    public function getTargetAttribute(): string|null
     {
         return $this->targetAttribute;
     }

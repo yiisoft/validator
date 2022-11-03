@@ -24,10 +24,10 @@ final class Equal extends Compare
 {
     public function __construct(
         /**
-         * @var mixed The constant value to be equal to. When both this property and {@see $targetAttribute} are set,
-         * this property takes precedence.
+         * @var scalar|null The constant value to be equal to. When both this property and {@see $targetAttribute} are
+         * set, this property takes precedence.
          */
-        private $targetValue = null,
+        private mixed $targetValue = null,
         /**
          * @var string|null The attribute to be equal to. When both this property and {@see $targetValue} are set, the
          * {@see $targetValue} takes precedence.

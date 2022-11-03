@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use InvalidArgumentException;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -26,8 +25,8 @@ use Yiisoft\Validator\ValidationContext;
  * ```php
  * $rule = new StopOnError([
  *      new HasLength(min: 3),
- *      new ExistInDatabase(), // Heavy operation. It would be great not to call it if the previous rule was failed.
- *     )];
+ *      // Heavy operation. It would be great not to call it if the previous rule was failed.
+ *      new ExistsInDatabase(),
  * ]);
  * ```
  */
@@ -39,21 +38,11 @@ final class StopOnErrorHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(StopOnError::class, $rule);
         }
 
-        if ($rule->getRules() === []) {
-            throw new InvalidArgumentException(
-                'Rules for StopOnError rule are required.'
-            );
-        }
-
         $compoundResult = new Result();
         $results = [];
 
-        foreach ($rule->getRules() as $rule) {
-            $rules = [$rule];
-
-            if (is_iterable($rule)) {
-                $rules = [new StopOnError($rule)];
-            }
+        foreach ($rule->getRules() as $relatedRule) {
+            $rules = [$relatedRule];
 
             $lastResult = $context->getValidator()->validate($value, $rules);
             $results[] = $lastResult;

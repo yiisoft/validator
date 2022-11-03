@@ -27,11 +27,11 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
 
     public function __construct(
         /**
-         * @var mixed the value representing "true" status. Defaults to `1`.
+         * @var scalar the value representing "true" status. Defaults to `1`.
          */
         private mixed $trueValue = '1',
         /**
-         * @var mixed the value representing "false" status. Defaults to `0`.
+         * @var scalar the value representing "false" status. Defaults to `0`.
          */
         private mixed $falseValue = '0',
         /**
@@ -59,11 +59,17 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
         return 'boolean';
     }
 
+    /**
+     * @return scalar
+     */
     public function getTrueValue(): mixed
     {
         return $this->trueValue;
     }
 
+    /**
+     * @return scalar
+     */
     public function getFalseValue(): mixed
     {
         return $this->falseValue;

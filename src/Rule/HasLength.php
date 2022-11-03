@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\LimitInterface;
 use Yiisoft\Validator\Rule\Trait\LimitTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -22,7 +23,12 @@ use Yiisoft\Validator\WhenInterface;
  * Note, this rule should only be used with strings.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class HasLength implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class HasLength implements
+    SerializableRuleInterface,
+    SkipOnErrorInterface,
+    WhenInterface,
+    SkipOnEmptyInterface,
+    LimitInterface
 {
     use LimitTrait;
     use SkipOnEmptyTrait;

@@ -22,7 +22,7 @@ final class StopOnErrorTest extends RuleTestCase
 
     public function testGetName(): void
     {
-        $rule = new StopOnError();
+        $rule = new StopOnError([new HasLength(min: 10)]);
         $this->assertSame('stopOnError', $rule->getName());
     }
 
@@ -30,11 +30,45 @@ final class StopOnErrorTest extends RuleTestCase
     {
         return [
             [
-                new StopOnError(),
+                new StopOnError([new HasLength(min: 10)]),
                 [
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
-                    'rules' => null,
+                    'rules' => [
+                        [
+                            'hasLength',
+                            'min' => 10,
+                            'max' => null,
+                            'exactly' => null,
+                            'lessThanMinMessage' => [
+                                'message' => 'This value must contain at least {min, number} {min, plural, ' .
+                                    'one{character} other{characters}}.',
+                                'parameters' => [
+                                    'min' => 10,
+                                ],
+                            ],
+                            'greaterThanMaxMessage' => [
+                                'message' => 'This value must contain at most {max, number} {max, plural, '.
+                                    'one{character} other{characters}}.',
+                                'parameters' => [
+                                    'max' => null,
+                                ],
+                            ],
+                            'notExactlyMessage' => [
+                                'message' => 'This value must contain exactly {exactly, number} {exactly, plural, ' .
+                                    'one{character} other{characters}}.',
+                                'parameters' => [
+                                    'exactly' => null,
+                                ],
+                            ],
+                            'message' => [
+                                'message' => 'This value must be a string.',
+                            ],
+                            'encoding' => 'UTF-8',
+                            'skipOnEmpty' => false,
+                            'skipOnError' => false,
+                        ],
+                    ],
                 ],
             ],
         ];
@@ -78,30 +112,24 @@ final class StopOnErrorTest extends RuleTestCase
                 ],
                 ['' => ['This value must contain at most 1 character.']],
             ],
-            'nested rules instead of plain structure' => [
-                'hello',
-                [
-                    new StopOnError([
-                        [
-                            new HasLength(max: 1),
-                            new HasLength(min: 10),
-                        ],
-                    ]),
-                ],
-                ['' => ['This value must contain at most 1 character.']],
-            ],
         ];
     }
 
     public function testSkipOnError(): void
     {
-        $this->testskipOnErrorInternal(new StopOnError(), new StopOnError(skipOnError: true));
+        $this->testskipOnErrorInternal(
+            new StopOnError([new HasLength(min: 10)]),
+            new StopOnError([new HasLength(min: 10)], skipOnError: true),
+        );
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new StopOnError(), new StopOnError(when: $when));
+        $this->testWhenInternal(
+            new StopOnError([new HasLength(min: 10)]),
+            new StopOnError([new HasLength(min: 10)], when: $when),
+        );
     }
 
     protected function getDifferentRuleInHandlerItems(): array

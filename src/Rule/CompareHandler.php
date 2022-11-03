@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use RuntimeException;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -32,25 +33,28 @@ final class CompareHandler implements RuleHandlerInterface
 
         $result = new Result();
         $targetAttribute = $rule->getTargetAttribute();
-        /** @var mixed $targetValue */
         $targetValue = $rule->getTargetValue();
 
         if ($targetValue === null && $targetAttribute !== null) {
             /** @var mixed $targetValue */
             $targetValue = $context->getDataSet()?->getAttributeValue($targetAttribute);
+            if (!is_scalar($targetValue)) {
+                $message = 'The attribute value returned from a custom data set must have a scalar type.';
+
+                throw new RuntimeException($message);
+            }
         }
 
         if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $targetValue)) {
-            $result->addError(
-                $rule->getMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'targetValue' => $rule->getTargetValue(),
-                    'targetAttribute' => $rule->getTargetAttribute(),
-                    'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
-                    'value' => $value,
-                ],
-            );
+            $parameters = [
+                'attribute' => $context->getAttribute(),
+                'targetValue' => $rule->getTargetValue(),
+                'targetAttribute' => $rule->getTargetAttribute(),
+                'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
+            ];
+            is_scalar($value) ? $parameters['value'] = $value : $parameters['valueType'] = get_debug_type($value);
+
+            $result->addError($rule->getMessage(), $parameters);
         }
 
         return $result;

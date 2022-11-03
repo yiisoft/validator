@@ -20,27 +20,27 @@ final class BooleanHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Boolean::class, $rule);
         }
 
-        if ($rule->isStrict()) {
+        if (!is_scalar($value)) {
+            $valid = false;
+        } elseif ($rule->isStrict()) {
             $valid = $value === $rule->getTrueValue() || $value === $rule->getFalseValue();
         } else {
             $valid = $value == $rule->getTrueValue() || $value == $rule->getFalseValue();
         }
 
         $result = new Result();
-
         if ($valid) {
             return $result;
         }
 
-        $result->addError(
-            $rule->getMessage(),
-            [
-                'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
-                'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
-                'attribute' => $context->getAttribute(),
-                'value' => $value,
-            ],
-        );
+        $parameters = [
+            'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
+            'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
+            'attribute' => $context->getAttribute(),
+        ];
+        is_scalar($value) ? $parameters['value'] = $value : $parameters['valueType'] = get_debug_type($value);
+
+        $result->addError($rule->getMessage(), $parameters);
 
         return $result;
     }

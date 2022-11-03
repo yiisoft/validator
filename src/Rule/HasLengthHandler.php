@@ -38,7 +38,7 @@ final class HasLengthHandler implements RuleHandlerInterface
         }
 
         $length = mb_strlen($value, $rule->getEncoding());
-        $this->validateLimits($value, $rule, $context, $length, $result);
+        $this->validateLimits($rule, $context, $length, $result);
 
         return $result;
     }

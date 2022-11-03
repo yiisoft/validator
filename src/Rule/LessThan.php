@@ -23,7 +23,7 @@ use Yiisoft\Validator\ValidationContext;
 final class LessThan extends Compare
 {
     /**
-     * @param mixed $targetValue The constant value to be less than. When both this property and
+     * @param scalar|null $targetValue The constant value to be less than. When both this property and
      * {@see $targetAttribute} are set, this property takes precedence.
      * @param string|null $targetAttribute The attribute to be less than. When both this property and
      * {@see $targetValue} are set, the {@see $targetValue} takes precedence.

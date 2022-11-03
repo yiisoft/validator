@@ -26,7 +26,7 @@ use function is_object;
 use function is_string;
 
 /**
- * Validator validates {@link DataSetInterface} against rules set for data set attributes.
+ * Validator validates {@link LimitInterface} against rules set for data set attributes.
  */
 final class Validator implements ValidatorInterface
 {
@@ -57,7 +57,7 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param DataSetInterface|mixed|RulesProviderInterface $data
+     * @param LimitInterface|mixed|RulesProviderInterface $data
      * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RuleInterface|RulesProviderInterface|null $rules
      *
      * @throws ContainerExceptionInterface
@@ -80,8 +80,10 @@ final class Validator implements ValidatorInterface
         $context = new ValidationContext($this, $data);
         $results = [];
 
-        /** @var mixed $attribute */
-        /** @var iterable|RuleInterface $attributeRules */
+        /**
+         * @var mixed $attribute
+         * @var iterable<RuleInterface|Closure>|RuleInterface $attributeRules
+         */
         foreach ($rules ?? [] as $attribute => $attributeRules) {
             $result = new Result();
 
@@ -182,7 +184,7 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param iterable<RuleInterface> $rules
+     * @param iterable<RuleInterface|Closure> $rules
      *
      * @return iterable<RuleInterface>
      */
@@ -193,7 +195,7 @@ final class Validator implements ValidatorInterface
         }
     }
 
-    private function normalizeRule(mixed $rule): RuleInterface
+    private function normalizeRule(RuleInterface|Closure $rule): RuleInterface
     {
         if (is_callable($rule)) {
             return new Callback($rule);
