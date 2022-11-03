@@ -82,7 +82,7 @@ final class Validator implements ValidatorInterface
 
         /**
          * @var mixed $attribute
-         * @var iterable<RuleInterface|Closure>|RuleInterface $attributeRules
+         * @var iterable<Closure|RuleInterface>|RuleInterface $attributeRules
          */
         foreach ($rules ?? [] as $attribute => $attributeRules) {
             $result = new Result();
@@ -184,7 +184,7 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param iterable<RuleInterface|Closure> $rules
+     * @param iterable<Closure|RuleInterface> $rules
      *
      * @return iterable<RuleInterface>
      */
