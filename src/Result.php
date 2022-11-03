@@ -72,9 +72,9 @@ final class Result
     }
 
     /**
-     * @return array<string, non-empty-list<string>>
-     *
      * @throws InvalidArgumentException
+     *
+     * @return array<string, non-empty-list<string>>
      */
     public function getErrorMessagesIndexedByAttribute(): array
     {
