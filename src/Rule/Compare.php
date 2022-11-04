@@ -78,7 +78,7 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
          * - `<`: check if value being validated is less than the value being compared with.
          * - `<=`: check if value being validated is less than or equal to the value being compared with.
          *
-         * When you want to compare numbers, make sure to also change @see $type} to {@see TYPE_NUMBER}.
+         * When you want to compare numbers, make sure to also change {@see $type} to {@see TYPE_NUMBER}.
          */
         private string $operator = '==',
         /**
