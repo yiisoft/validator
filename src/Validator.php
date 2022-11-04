@@ -98,7 +98,7 @@ final class Validator implements ValidatorInterface
                 $context = $context->withAttribute($attribute);
             } else {
                 $message = sprintf(
-                    'An attribute can only have an integer or a string type. %s given',
+                    'An attribute can only have an integer or a string type. %s given.',
                     get_debug_type($attribute),
                 );
 
