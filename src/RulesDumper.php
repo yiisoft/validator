@@ -60,7 +60,7 @@ final class RulesDumper
         foreach ($rules as $attribute => $rule) {
             if (!is_int($attribute) && !is_string($attribute)) {
                 $message = sprintf(
-                    'An attribute can only have an integer or a string type. %s given',
+                    'An attribute can only have an integer or a string type. %s given.',
                     get_debug_type($attribute),
                 );
 
