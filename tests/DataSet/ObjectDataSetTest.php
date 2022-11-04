@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\DataSet;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
+use RuntimeException;
 use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Callback;
@@ -399,5 +400,20 @@ final class ObjectDataSetTest extends TestCase
 
         $this->assertSame($expectedRulesCallsCount, ObjectWithCallsCount::$getRulesCallsCount);
         $this->assertSame($expectedDataCallsCount, ObjectWithCallsCount::$getDataCallsCount);
+    }
+
+    public function testSetCacheItemWithNoCacheKey(): void
+    {
+        $object = new class () {
+        };
+        $dataSet = new ObjectDataSet($object);
+
+        $property = new ReflectionProperty($dataSet, 'cacheKey');
+        $property->setAccessible(true);
+        $property->setValue($dataSet, null);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('$cacheKey is not set');
+        $dataSet->getRules();
     }
 }
