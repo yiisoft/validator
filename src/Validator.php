@@ -47,7 +47,6 @@ final class Validator implements ValidatorInterface
         private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
-
         bool|callable|null $defaultSkipOnEmpty = null,
     ) {
         $this->defaultSkipOnEmptyCallback = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
