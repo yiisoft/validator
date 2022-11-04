@@ -77,7 +77,7 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
 
     public function getPattern(): string
     {
-        return strtr($this->pattern, ['{schemes}' => '((?i)' . implode('|', $this->validSchemes) . ')']);
+        return str_replace('{schemes}', '((?i)' . implode('|', $this->validSchemes) . ')', $this->pattern);
     }
 
     /**
