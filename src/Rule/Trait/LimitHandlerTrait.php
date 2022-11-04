@@ -32,7 +32,7 @@ trait LimitHandlerTrait
         Result $result
     ): void {
         if (!$rule instanceof LimitInterface || !$rule instanceof RuleInterface) {
-            throw new InvalidArgumentException('$rule must implement bith LimitInterface and RuleInterface.');
+            throw new InvalidArgumentException('$rule must implement both LimitInterface and RuleInterface.');
         }
 
         /**
