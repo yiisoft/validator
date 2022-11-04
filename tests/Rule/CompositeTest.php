@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Number;
@@ -84,6 +85,19 @@ final class CompositeTest extends RuleTestCase
                 ],
             ],
         ];
+    }
+
+    public function testOptionsWithNotRule(): void
+    {
+        $rule = new Composite([
+            new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
+            new class () {
+            },
+        ]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('A rule must be an instance of RuleInterface.');
+        $rule->getOptions();
     }
 
     public function dataValidationPassed(): array

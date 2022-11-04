@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -59,14 +60,16 @@ class Composite implements SerializableRuleInterface, SkipOnErrorInterface, When
     {
         $arrayOfRules = [];
         foreach ($this->getRules() as $rule) {
-            if ($rule instanceof RuleInterface) {
-                $nameArray = [$rule->getName()];
+            if (!$rule instanceof RuleInterface) {
+                throw new InvalidArgumentException('A rule must be an instance of RuleInterface.');
+            }
 
-                if ($rule instanceof SerializableRuleInterface) {
-                    $arrayOfRules[] = array_merge($nameArray, $rule->getOptions());
-                } else {
-                    $arrayOfRules[] = $nameArray;
-                }
+            $nameArray = [$rule->getName()];
+
+            if ($rule instanceof SerializableRuleInterface) {
+                $arrayOfRules[] = array_merge($nameArray, $rule->getOptions());
+            } else {
+                $arrayOfRules[] = $nameArray;
             }
         }
 
