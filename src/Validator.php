@@ -53,7 +53,7 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param LimitInterface|mixed|RulesProviderInterface $data
+     * @param DataSetInterface|mixed|RulesProviderInterface $data
      * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RuleInterface|RulesProviderInterface|null $rules
      *
      * @throws ContainerExceptionInterface
