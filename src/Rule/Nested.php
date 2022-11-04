@@ -203,25 +203,14 @@ final class Nested implements
             $breakWhile = true;
             $rulesMap = [];
 
-            /** @var mixed $valuePath */
+            /** @var int|string $valuePath */
             foreach ($rules as $valuePath => $rule) {
-                if (is_int($valuePath)) {
-                    $valuePath = (string) $valuePath;
-                } elseif (!is_string($valuePath)) {
-                    $message = sprintf(
-                        'A value path can only have an integer or a string type. %s given',
-                        get_debug_type($valuePath),
-                    );
-
-                    throw new InvalidArgumentException($message);
-                }
-
                 if ($valuePath === self::EACH_SHORTCUT) {
                     throw new InvalidArgumentException('Bare shortcut is prohibited. Use "Each" rule instead.');
                 }
 
                 $parts = StringHelper::parsePath(
-                    $valuePath,
+                    (string) $valuePath,
                     delimiter: self::EACH_SHORTCUT,
                     preserveDelimiterEscaping: true
                 );
