@@ -43,9 +43,6 @@ final class AtLeast implements SerializableRuleInterface, SkipOnErrorInterface, 
          * @var bool|callable|null
          */
         private mixed $skipOnEmpty = null,
-        /**
-         * @var bool
-         */
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null

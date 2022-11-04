@@ -48,9 +48,6 @@ final class Validator implements ValidatorInterface
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
 
-        /**
-         * @var bool|callable|null
-         */
         bool|callable|null $defaultSkipOnEmpty = null,
     ) {
         $this->defaultSkipOnEmptyCallback = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
