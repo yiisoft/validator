@@ -31,21 +31,19 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
      */
     private $emptyCallback;
 
+    /**
+     * @psalm-param EmptyCallback|null $emptyCallback
+     */
     public function __construct(
         private string $message = 'Value cannot be blank.',
         private string $notPassedMessage = 'Value not passed.',
-        /**
-         * @var callable
-         * @psalm-var EmptyCallback
-         */
-        ?callable $emptyCallback = null,
+        callable|null $emptyCallback = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        /** @psalm-suppress MixedPropertyTypeCoercion */
         $this->emptyCallback = $emptyCallback ?? new SkipOnEmpty(trimString: true);
     }
 
