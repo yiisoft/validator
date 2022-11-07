@@ -149,23 +149,23 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     private function getReflectionProperties(): array
     {
         if ($this->hasCacheItem('reflectionProperties')) {
-            /** @var array<string, ReflectionProperty> $reflectionProperties */
-            $reflectionProperties = $this->getCacheItem('reflectionProperties');
-        } else {
-            $reflection = new ReflectionObject($this->object);
-            $reflectionProperties = [];
+            /** @var array<string, ReflectionProperty> */
+            return $this->getCacheItem('reflectionProperties');
+        }
 
-            foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
-                if (PHP_VERSION_ID < 80100) {
-                    $property->setAccessible(true);
-                }
+        $reflection = new ReflectionObject($this->object);
+        $reflectionProperties = [];
 
-                $reflectionProperties[$property->getName()] = $property;
+        foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
+            if (PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
             }
 
-            if ($this->canCache()) {
-                $this->setCacheItem('reflectionProperties', $reflectionProperties);
-            }
+            $reflectionProperties[$property->getName()] = $property;
+        }
+
+        if ($this->canCache()) {
+            $this->setCacheItem('reflectionProperties', $reflectionProperties);
         }
 
         return $reflectionProperties;
