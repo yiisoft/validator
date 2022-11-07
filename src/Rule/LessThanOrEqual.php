@@ -27,7 +27,7 @@ final class LessThanOrEqual extends Compare
          * @var scalar|null $targetValue The constant value to be less than or equal to. When both this property and
          * {@see $targetAttribute} are set, this property takes precedence.
          */
-        private $targetValue = null,
+        private int|float|string|bool|null $targetValue = null,
         /**
          * @var string|null $targetAttribute The attribute to be less than or equal to. When both this property and
          *

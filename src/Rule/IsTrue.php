@@ -31,7 +31,7 @@ final class IsTrue implements SerializableRuleInterface, SkipOnErrorInterface, W
         /**
          * @var scalar the value representing "true" status. Defaults to `1`.
          */
-        private mixed $trueValue = '1',
+        private int|float|string|bool $trueValue = '1',
         /**
          * @var bool whether the comparison to {@see $trueValue} is strict. When this is "true", the value and type must
          * both match {@see $trueValue}. Defaults to "false", meaning only the value needs to be matched.
@@ -59,7 +59,7 @@ final class IsTrue implements SerializableRuleInterface, SkipOnErrorInterface, W
     /**
      * @return scalar
      */
-    public function getTrueValue(): mixed
+    public function getTrueValue(): int|float|string|bool
     {
         return $this->trueValue;
     }

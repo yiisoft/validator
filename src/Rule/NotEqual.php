@@ -27,7 +27,7 @@ final class NotEqual extends Compare
          * @var scalar|null The constant value to not be equal to. When both this property and
          * {@see $targetAttribute} are set, this property takes precedence.
          */
-        private $targetValue = null,
+        private int|float|string|bool|null $targetValue = null,
         /**
          * @var string|null The constant value to not be equal to. When both this property and
          * {@see $targetValue} are set, the {@see $targetValue} takes precedence.

@@ -27,7 +27,7 @@ final class LessThan extends Compare
          * @var scalar|null The constant value to be less than. When both this property and
          * {@see $targetAttribute} are set, this property takes precedence.
          */
-        private mixed $targetValue = null,
+        private int|float|string|bool|null $targetValue = null,
         /**
          * @var string|null The attribute to be less than. When both this property and {@see $targetValue} are set, the
          * {@see $targetValue} takes precedence.
