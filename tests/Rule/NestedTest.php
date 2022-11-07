@@ -27,6 +27,7 @@ use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
+use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
@@ -784,6 +785,29 @@ final class NestedTest extends RuleTestCase
                             ],
                         ]),
                     ]),
+                ],
+            ],
+            'property path of non-integer and non-string type, array' => [
+                [0 => 'a', 1 => 'b'],
+                [new Nested([false => new HasLength(min: 1), true => new HasLength(min: 1)])],
+            ],
+            'property path of non-integer and non-string type, iterator' => [
+                [0 => 'a', 1 => 'b'],
+                [new Nested(new IteratorWithBooleanKey())],
+            ],
+            'property path of non-integer and non-string type, generator' => [
+                [0 => 'a', 1 => 'b'],
+                [
+                    new Nested(
+                        new class () implements RulesProviderInterface
+                        {
+                            public function getRules(): iterable
+                            {
+                                yield false => new HasLength(min: 1);
+                                yield true => new HasLength(min: 1);
+                            }
+                        },
+                    ),
                 ],
             ],
         ];
