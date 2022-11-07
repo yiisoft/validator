@@ -52,7 +52,7 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
          * @var scalar|null The constant value to be compared with. When both this property and {@see $targetAttribute}
          * are set, this property takes precedence.
          */
-        private mixed $targetValue = null,
+        private int|float|string|bool|null $targetValue = null,
         /**
          * @var string|null The name of the attribute to be compared with. When both this property and
          * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
@@ -99,7 +99,7 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
     /**
      * @return scalar|null
      */
-    public function getTargetValue(): mixed
+    public function getTargetValue(): int|float|string|bool|null
     {
         return $this->targetValue;
     }
