@@ -799,8 +799,7 @@ final class NestedTest extends RuleTestCase
                 [0 => 'a', 1 => 'b'],
                 [
                     new Nested(
-                        new class () implements RulesProviderInterface
-                        {
+                        new class () implements RulesProviderInterface {
                             public function getRules(): iterable
                             {
                                 yield false => new HasLength(min: 1);
