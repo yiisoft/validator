@@ -71,26 +71,26 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         }
 
         if ($this->hasCacheItem('rules')) {
-            /** @var iterable $rules */
-            $rules = $this->getCacheItem('rules');
-        } else {
-            $rules = [];
-            foreach ($this->getReflectionProperties() as $property) {
-                // TODO: use Generator to collect attributes.
-                $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
-                foreach ($attributes as $attribute) {
-                    $rule = $attribute->newInstance();
-                    $rules[$property->getName()][] = $rule;
+            /** @var iterable */
+            return $this->getCacheItem('rules');
+        }
 
-                    if ($rule instanceof AttributeEventInterface) {
-                        $rule->afterInitAttribute($this);
-                    }
+        $rules = [];
+        foreach ($this->getReflectionProperties() as $property) {
+            // TODO: use Generator to collect attributes.
+            $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
+            foreach ($attributes as $attribute) {
+                $rule = $attribute->newInstance();
+                $rules[$property->getName()][] = $rule;
+
+                if ($rule instanceof AttributeEventInterface) {
+                    $rule->afterInitAttribute($this);
                 }
             }
+        }
 
-            if ($this->canCache()) {
-                $this->setCacheItem('rules', $rules);
-            }
+        if ($this->canCache()) {
+            $this->setCacheItem('rules', $rules);
         }
 
         return $rules;
