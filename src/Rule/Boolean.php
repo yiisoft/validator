@@ -29,11 +29,11 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
         /**
          * @var scalar the value representing "true" status. Defaults to `1`.
          */
-        private mixed $trueValue = '1',
+        private int|float|string|bool $trueValue = '1',
         /**
          * @var scalar the value representing "false" status. Defaults to `0`.
          */
-        private mixed $falseValue = '0',
+        private int|float|string|bool $falseValue = '0',
         /**
          * @var bool whether the comparison to {@see $trueValue} and {@see $falseValue} is strict. When this is `true`,
          * the value and type must both match those of {@see $trueValue} or {@see $falseValue}. Defaults to `false`,
@@ -62,7 +62,7 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
     /**
      * @return scalar
      */
-    public function getTrueValue(): mixed
+    public function getTrueValue(): int|float|string|bool
     {
         return $this->trueValue;
     }
@@ -70,7 +70,7 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
     /**
      * @return scalar
      */
-    public function getFalseValue(): mixed
+    public function getFalseValue(): int|float|string|bool
     {
         return $this->falseValue;
     }
