@@ -822,8 +822,7 @@ final class NestedTest extends RuleTestCase
             ],
             // Incorrect data set type
             'incorrect data set type' => [
-                new class () implements DataSetInterface
-                {
+                new class () implements DataSetInterface {
                     public function getAttributeValue(string $attribute): mixed
                     {
                         return false;
@@ -831,8 +830,7 @@ final class NestedTest extends RuleTestCase
 
                     public function getData(): mixed
                     {
-                        return new class () implements DataSetInterface
-                        {
+                        return new class () implements DataSetInterface {
                             public function getAttributeValue(string $attribute): mixed
                             {
                                 return false;
