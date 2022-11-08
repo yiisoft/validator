@@ -53,6 +53,7 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
          * extension, otherwise an exception would be thrown.
          */
         private bool $enableIDN = false,
+        private string $incorrectInputMessage = 'The value must have a string type.',
         private string $message = 'This value is not a valid URL.',
 
         /**
@@ -93,6 +94,11 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
         return $this->enableIDN;
     }
 
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
+
     public function getMessage(): string
     {
         return $this->message;
@@ -104,6 +110,9 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
             'pattern' => $this->getPattern(),
             'validSchemes' => $this->validSchemes,
             'enableIDN' => $this->enableIDN,
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
+            ],
             'message' => [
                 'message' => $this->message,
             ],
