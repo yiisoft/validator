@@ -17,17 +17,20 @@ use Yiisoft\Validator\ValidatorInterface;
 return [
     ValidatorInterface::class => Validator::class,
     RuleHandlerResolverInterface::class => SimpleRuleHandlerContainer::class,
-    'validator.categorySource' => static function (ContainerInterface $container) use ($params) {
-        $messageSource = $container->get('validator.messageSource');
-        $messageFormatter = $container->has(MessageFormatterInterface::class)
-            ? $container->get(MessageFormatterInterface::class)
-            : new SimpleMessageFormatter();
+    'validator.categorySource' => [
+        'definition' => static function (ContainerInterface $container) use ($params) {
+            $messageSource = $container->get('validator.messageSource');
+            $messageFormatter = $container->has(MessageFormatterInterface::class)
+                ? $container->get(MessageFormatterInterface::class)
+                : new SimpleMessageFormatter();
 
-        return new CategorySource(
-            $params['yiisoft/translator']['validatorCategory'],
-            $messageSource,
-            $messageFormatter,
-        );
-    },
+            return new CategorySource(
+                $params['yiisoft/translator']['validatorCategory'],
+                $messageSource,
+                $messageFormatter,
+            );
+        },
+        'tags' => ['translation.categorySource']
+    ],
     'validator.messageSource' => IdMessageReader::class,
 ];
