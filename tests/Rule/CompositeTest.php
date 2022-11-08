@@ -44,6 +44,9 @@ final class CompositeTest extends RuleTestCase
                             'asInteger' => false,
                             'min' => null,
                             'max' => 13,
+                            'incorrectInputMessage' => [
+                                'message' => 'The allowed types are integer, float and string.',
+                            ],
                             'notANumberMessage' => [
                                 'message' => 'Value must be a number.',
                             ],
@@ -65,6 +68,9 @@ final class CompositeTest extends RuleTestCase
                             'asInteger' => false,
                             'min' => null,
                             'max' => 14,
+                            'incorrectInputMessage' => [
+                                'message' => 'The allowed types are integer, float and string.',
+                            ],
                             'notANumberMessage' => [
                                 'message' => 'Value must be a number.',
                             ],

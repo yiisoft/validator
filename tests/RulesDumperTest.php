@@ -36,6 +36,9 @@ final class RulesDumperTest extends TestCase
                             'asInteger' => true,
                             'min' => 10,
                             'max' => 100,
+                            'incorrectInputMessage' => [
+                                'message' => 'The allowed types are integer, float and string.',
+                            ],
                             'notANumberMessage' => [
                                 'message' => 'Value must be an integer.',
                             ],

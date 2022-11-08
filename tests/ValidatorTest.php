@@ -187,8 +187,8 @@ class ValidatorTest extends TestCase
                         ['merchantId']
                     ),
                     new Error(
-                        'Value must be an integer.',
-                        ['attribute' => 'merchantId', 'valueType' => 'null'],
+                        'The allowed types are integer, float and string.',
+                        ['attribute' => 'merchantId', 'type' => 'null'],
                         ['merchantId']
                     ),
                 ],
@@ -323,6 +323,7 @@ class ValidatorTest extends TestCase
             'age' => [new Number(asInteger: true, min: 18)],
         ];
         $stringLessThanMinMessage = 'This value must contain at least 8 characters.';
+        $incorrectNumberMessage = 'The allowed types are integer, float and string.';
         $intMessage = 'Value must be an integer.';
         $intLessThanMinMessage = 'Value must be no less than 18.';
 
@@ -338,9 +339,9 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                     ], ['name']),
-                    new Error($intMessage, [
+                    new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
-                        'valueType' => 'null',
+                        'type' => 'null',
                     ], ['age']),
                 ],
             ],
@@ -356,9 +357,9 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                     ], ['name']),
-                    new Error($intMessage, [
+                    new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
-                        'valueType' => 'null',
+                        'type' => 'null',
                     ], ['age']),
                 ],
             ],
@@ -535,9 +536,9 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                     ], ['name']),
-                    new Error($intMessage, [
+                    new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
-                        'valueType' => 'null',
+                        'type' => 'null',
                     ], ['age']),
                 ],
             ],
@@ -613,9 +614,9 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                     ], ['name']),
-                    new Error($intMessage, [
+                    new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
-                        'valueType' => 'null',
+                        'type' => 'null',
                     ], ['age']),
                 ],
             ],
@@ -747,9 +748,9 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                     ], ['name']),
-                    new Error($intMessage, [
+                    new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
-                        'valueType' => 'null',
+                        'type' => 'null',
                     ], ['age']),
                 ],
             ],
@@ -810,9 +811,9 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                     ], ['name']),
-                    new Error($intMessage, [
+                    new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
-                        'valueType' => 'null',
+                        'type' => 'null',
                     ], ['age']),
                 ],
             ],

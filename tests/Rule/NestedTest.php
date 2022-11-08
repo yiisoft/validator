@@ -100,6 +100,9 @@ final class NestedTest extends RuleTestCase
                             'asInteger' => false,
                             'min' => null,
                             'max' => null,
+                            'incorrectInputMessage' => [
+                                'message' => 'The allowed types are integer, float and string.',
+                            ],
                             'notANumberMessage' => [
                                 'message' => 'Value must be a number.',
                             ],
@@ -134,6 +137,9 @@ final class NestedTest extends RuleTestCase
                             'asInteger' => false,
                             'min' => null,
                             'max' => null,
+                            'incorrectInputMessage' => [
+                                'message' => 'The allowed types are integer, float and string.',
+                            ],
                             'notANumberMessage' => [
                                 'message' => 'Value must be a number.',
                             ],

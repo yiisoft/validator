@@ -46,6 +46,7 @@ final class Number implements SerializableRuleInterface, SkipOnErrorInterface, W
          * @see tooBigMessage for the customized message used when the number is too big.
          */
         private $max = null,
+        private string $incorrectInputMessage = 'The allowed types are integer, float and string.',
         /**
          * @var string user-defined error message used when the value is smaller than {@link $min}.
          */
@@ -96,6 +97,11 @@ final class Number implements SerializableRuleInterface, SkipOnErrorInterface, W
         return $this->max;
     }
 
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
+
     public function getTooSmallMessage(): string
     {
         return $this->tooSmallMessage;
@@ -127,6 +133,9 @@ final class Number implements SerializableRuleInterface, SkipOnErrorInterface, W
             'asInteger' => $this->asInteger,
             'min' => $this->min,
             'max' => $this->max,
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
+            ],
             'notANumberMessage' => [
                 'message' => $this->getNotANumberMessage(),
             ],
