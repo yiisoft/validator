@@ -58,6 +58,8 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
          * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
          */
         private string|null $targetAttribute = null,
+        private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
+        'a scalar type.',
         /**
          * @var string|null User-defined error message.
          */
@@ -69,10 +71,10 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         /**
          * @var string The operator for comparison. The following operators are supported:
          *
-         * - `==`: check if two values are equal. The comparison is done is non-strict mode.
-         * - `===`: check if two values are equal. The comparison is done is strict mode.
-         * - `!=`: check if two values are NOT equal. The comparison is done is non-strict mode.
-         * - `!==`: check if two values are NOT equal. The comparison is done is strict mode.
+         * - `==`: check if two values are equal. The comparison is done in non-strict mode.
+         * - `===`: check if two values are equal. The comparison is done in strict mode.
+         * - `!=`: check if two values are NOT equal. The comparison is done in non-strict mode.
+         * - `!==`: check if two values are NOT equal. The comparison is done in strict mode.
          * - `>`: check if value being validated is greater than the value being compared with.
          * - `>=`: check if value being validated is greater than or equal to the value being compared with.
          * - `<`: check if value being validated is less than the value being compared with.
@@ -119,6 +121,11 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         return $this->operator;
     }
 
+    public function getIncorrectDataSetTypeMessage(): string
+    {
+        return $this->incorrectDataSetTypeMessage;
+    }
+
     public function getMessage(): string
     {
         return $this->message ?? match ($this->operator) {
@@ -136,6 +143,9 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         return [
             'targetValue' => $this->targetValue,
             'targetAttribute' => $this->targetAttribute,
+            'incorrectDataSetTypeMessage' => [
+                'message' => $this->incorrectDataSetTypeMessage,
+            ],
             'message' => [
                 'message' => $this->getMessage(),
                 'parameters' => [

@@ -39,9 +39,10 @@ final class CompareHandler implements RuleHandlerInterface
             /** @var mixed $targetValue */
             $targetValue = $context->getDataSet()?->getAttributeValue($targetAttribute);
             if (!is_scalar($targetValue)) {
-                $message = 'The attribute value returned from a custom data set must have a scalar type.';
-
-                throw new RuntimeException($message);
+                return $result->addError($rule->getIncorrectDataSetTypeMessage(), [
+                    'attribute' => $context->getAttribute(),
+                    'type' => get_debug_type($targetValue),
+                ]);
             }
         }
 

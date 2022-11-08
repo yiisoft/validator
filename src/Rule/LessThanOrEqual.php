@@ -34,6 +34,8 @@ final class LessThanOrEqual extends Compare
          * @see $targetValue} are set, the {@see $targetValue} takes precedence.
          */
         private string|null $targetAttribute = null,
+        private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
+        'a scalar type.',
         /**
          * @var string|null $message User-defined error message.
          */
@@ -56,12 +58,13 @@ final class LessThanOrEqual extends Compare
         parent::__construct(
             targetValue: $this->targetValue,
             targetAttribute: $this->targetAttribute,
+            incorrectDataSetTypeMessage: $this->incorrectDataSetTypeMessage,
             message: $this->message,
             type: $this->type,
             operator: '<=',
             skipOnEmpty: $skipOnEmpty,
             skipOnError: $this->skipOnError,
-            when: $this->when
+            when: $this->when,
         );
     }
 
