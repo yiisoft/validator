@@ -30,7 +30,7 @@ return [
                 $messageFormatter,
             );
         },
-        'tags' => ['translation.categorySource']
+        'tags' => ['translation.categorySource'],
     ],
     'validator.messageSource' => IdMessageReader::class,
 ];
