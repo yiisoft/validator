@@ -191,20 +191,13 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
     private function getCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): mixed
     {
-        if ($this->cacheKey === null) {
-            return null;
-        }
-
+        /** @psalm-suppress PossiblyNullArrayOffset */
         return self::$cache[$this->cacheKey][$name];
     }
 
     private function setCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name, mixed $value): void
     {
-        if ($this->cacheKey === null) {
-            throw new RuntimeException('$cacheKey is not set.');
-        }
-
-        /** @psalm-suppress MixedAssignment */
+        /** @psalm-suppress PossiblyNullArrayOffset */
         self::$cache[$this->cacheKey][$name] = $value;
     }
 }
