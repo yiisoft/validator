@@ -9,7 +9,6 @@ use JetBrains\PhpStorm\ExpectedValues;
 use ReflectionAttribute;
 use ReflectionObject;
 use ReflectionProperty;
-use RuntimeException;
 use Yiisoft\Validator\AttributeEventInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\RuleInterface;

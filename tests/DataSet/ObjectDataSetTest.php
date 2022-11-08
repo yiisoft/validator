@@ -6,9 +6,7 @@ namespace Yiisoft\Validator\Tests\DataSet;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 use ReflectionProperty;
-use RuntimeException;
 use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Callback;
