@@ -86,6 +86,10 @@ final class Nested implements
         private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
+        private string $noRulesWithNoObjectMessage = 'Nested rule without rules can be used for objects only.',
+        private string $incorrectDataSetTypeMessage = 'An object data set data can only have an array or an object ' .
+        'type.',
+        private string $incorrectInputMessage = 'The value must have an array or an object type.',
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
@@ -121,6 +125,21 @@ final class Nested implements
     public function getPropertyVisibility(): int
     {
         return $this->propertyVisibility;
+    }
+
+    public function getNoRulesWithNoObjectMessage(): string
+    {
+        return $this->noRulesWithNoObjectMessage;
+    }
+
+    public function getIncorrectDataSetTypeMessage(): string
+    {
+        return $this->incorrectDataSetTypeMessage;
+    }
+
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
     }
 
     public function getRequirePropertyPath(): bool
@@ -297,6 +316,9 @@ final class Nested implements
     public function getOptions(): array
     {
         return [
+            'noRulesWithNoObjectMessage' => $this->noRulesWithNoObjectMessage,
+            'incorrectDataSetTypeMessage' => $this->incorrectDataSetTypeMessage,
+            'incorrectInputMessage' => $this->incorrectInputMessage,
             'requirePropertyPath' => $this->getRequirePropertyPath(),
             'noPropertyPathMessage' => [
                 'message' => $this->getNoPropertyPathMessage(),

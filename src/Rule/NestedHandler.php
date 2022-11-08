@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -50,14 +49,14 @@ final class NestedHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Nested::class, $rule);
         }
 
+        $compoundResult = new Result();
+
         if ($rule->getRules() === null) {
             if (!is_object($value)) {
-                throw new InvalidArgumentException(
-                    sprintf(
-                        'Nested rule without rules could be used for objects only. %s given.',
-                        get_debug_type($value)
-                    )
-                );
+                return $compoundResult->addError($rule->getNoRulesWithNoObjectMessage(), [
+                    'attribute' => $context->getAttribute(),
+                    'type' => get_debug_type($value),
+                ]);
             }
 
             $dataSet = new ObjectDataSet($value, $rule->getPropertyVisibility());
@@ -71,24 +70,18 @@ final class NestedHandler implements RuleHandlerInterface
             /** @var mixed $data */
             $data = (new ObjectDataSet($value, $rule->getPropertyVisibility()))->getData();
             if (!is_array($data) && !is_object($data)) {
-                $message = sprintf(
-                    'An object set data can only have an array or an object type. %s given',
-                    get_debug_type($data),
-                );
-
-                throw new InvalidArgumentException($message);
+                return $compoundResult->addError($rule->getIncorrectDataSetTypeMessage(), [
+                    'attribute' => $context->getAttribute(),
+                    'type' => get_debug_type($data),
+                ]);
             }
         } else {
-            return (new Result())->addError(
-                'Value should be an array or an object. {valueType} given.',
-                [
-                    'attribute' => $context->getAttribute(),
-                    'valueType' => get_debug_type($value),
-                ],
-            );
+            return $compoundResult->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getAttribute(),
+                'type' => get_debug_type($value),
+            ]);
         }
 
-        $compoundResult = new Result();
         $results = [];
         /** @var int|string $valuePath */
         foreach ($rule->getRules() as $valuePath => $rules) {
