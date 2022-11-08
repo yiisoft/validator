@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use stdClass;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -290,6 +292,27 @@ final class CompareToTest extends RuleTestCase
         $messageLessOrEqualThan = 'Value must be less than or equal to "100".';
 
         return [
+            'incorrect data set type' => [
+                new class () implements DataSetInterface {
+                    public function getAttributeValue(string $attribute): mixed
+                    {
+                        return new stdClass();
+                    }
+
+                    public function getData(): mixed
+                    {
+                        return false;
+                    }
+
+                    public function hasAttribute(string $attribute): bool
+                    {
+                        return false;
+                    }
+                },
+                [new CompareTo(targetAttribute: 'test')],
+                ['' => ['The attribute value returned from a custom data set must have a scalar type.']],
+            ],
+
             [101, [new CompareTo(100)], ['' => [$messageEqual]]],
 
             [101, [new CompareTo(100, operator: '===')], ['' => [$messageEqual]]],
