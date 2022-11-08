@@ -197,7 +197,10 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
     private function setCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name, mixed $value): void
     {
-        /** @psalm-suppress PossiblyNullArrayOffset */
+        /**
+         * @psalm-suppress PossiblyNullArrayOffset
+         * @psalm-suppress MixedAssignment
+         */
         self::$cache[$this->cacheKey][$name] = $value;
     }
 }
