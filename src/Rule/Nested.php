@@ -117,7 +117,8 @@ final class Nested implements
     /**
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
-     * @return iterable<RuleInterface|iterable<RuleInterface>>|null
+     *
+     * @return iterable<iterable<RuleInterface>|RuleInterface>|null
      */
     public function getRules(): iterable|null
     {
