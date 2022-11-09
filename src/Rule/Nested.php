@@ -115,9 +115,11 @@ final class Nested implements
     }
 
     /**
-     * @return iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     * @return iterable<RuleInterface|iterable<RuleInterface>>|null
      */
-    public function getRules(): ?iterable
+    public function getRules(): iterable|null
     {
         return $this->rules;
     }

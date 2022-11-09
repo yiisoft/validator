@@ -110,7 +110,6 @@ final class NestedHandler implements RuleHandlerInterface
             $rules = is_iterable($rules) ? $rules : [$rules];
 
             $itemResult = $context->getValidator()->validate($validatedValue, $rules);
-
             if ($itemResult->isValid()) {
                 continue;
             }
