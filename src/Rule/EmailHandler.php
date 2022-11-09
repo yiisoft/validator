@@ -25,13 +25,10 @@ final class EmailHandler implements RuleHandlerInterface
 
         $result = new Result();
         if (!is_string($value)) {
-            $result->addError(
-                $rule->getMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'valueType' => get_debug_type($value),
-                ]
-            );
+            $result->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getAttribute(),
+                'type' => get_debug_type($value),
+            ]);
 
             return $result;
         }

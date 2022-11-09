@@ -70,6 +70,7 @@ final class Email implements SerializableRuleInterface, SkipOnErrorInterface, Wh
          * otherwise an exception would be thrown.
          */
         private bool $enableIDN = false,
+        private string $incorrectInputMessage = 'The value must have a string type.',
         private string $message = 'This value is not a valid email address.',
 
         /**
@@ -122,6 +123,11 @@ final class Email implements SerializableRuleInterface, SkipOnErrorInterface, Wh
         return $this->enableIDN;
     }
 
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
+
     public function getMessage(): string
     {
         return $this->message;
@@ -136,6 +142,9 @@ final class Email implements SerializableRuleInterface, SkipOnErrorInterface, Wh
             'allowName' => $this->allowName,
             'checkDNS' => $this->checkDNS,
             'enableIDN' => $this->enableIDN,
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
+            ],
             'message' => [
                 'message' => $this->message,
             ],

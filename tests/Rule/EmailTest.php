@@ -46,6 +46,9 @@ final class EmailTest extends RuleTestCase
                     'allowName' => false,
                     'checkDNS' => false,
                     'enableIDN' => false,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'This value is not a valid email address.',
                     ],
@@ -62,6 +65,9 @@ final class EmailTest extends RuleTestCase
                     'allowName' => true,
                     'checkDNS' => false,
                     'enableIDN' => false,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'This value is not a valid email address.',
                     ],
@@ -78,6 +84,9 @@ final class EmailTest extends RuleTestCase
                     'allowName' => true,
                     'checkDNS' => true,
                     'enableIDN' => false,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'This value is not a valid email address.',
                     ],
@@ -94,6 +103,9 @@ final class EmailTest extends RuleTestCase
                     'allowName' => true,
                     'checkDNS' => false,
                     'enableIDN' => true,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'This value is not a valid email address.',
                     ],
@@ -116,6 +128,7 @@ final class EmailTest extends RuleTestCase
         $ruleEnabledIDNandAllowedName = new Email(allowName: true, enableIDN: true);
 
         return [
+            ['developer@yiiframework.com', [$rule]],
             ['sam@rmcreative.ru', [$rule]],
             ['5011@gmail.com', [$rule]],
             ['Abc.123@example.com', [$rule]],
@@ -127,6 +140,7 @@ final class EmailTest extends RuleTestCase
             ['name@' . str_repeat('a', 245) . '.com', [$rule]],
             ['SAM@RMCREATIVE.RU', [$rule]],
 
+            ['developer@yiiframework.com', [$ruleAllowedName]],
             ['sam@rmcreative.ru', [$ruleAllowedName]],
             ['5011@gmail.com', [$ruleAllowedName]],
             ['Carsten Brandt <mail@cebe.cc>', [$ruleAllowedName]],
@@ -184,8 +198,16 @@ final class EmailTest extends RuleTestCase
         $ruleEnabledIDN = new Email(enableIDN: true);
         $ruleEnabledIDNandAllowedName = new Email(allowName: true, enableIDN: true);
         $errors = ['' => ['This value is not a valid email address.']];
+        $incorrectInputErrors = ['' => ['The value must have a string type.']];
 
         return [
+            'incorrect input, integer' => [1, [$rule], $incorrectInputErrors],
+            'incorrect input, array containing string element' => [
+                ['developer@yiiframework.com'],
+                [$ruleAllowedName],
+                $incorrectInputErrors,
+            ],
+
             ['rmcreative.ru', [$rule], $errors],
             ['Carsten Brandt <mail@cebe.cc>', [$rule], $errors],
             ['"Carsten Brandt" <mail@cebe.cc>', [$rule], $errors],
@@ -193,7 +215,6 @@ final class EmailTest extends RuleTestCase
             ['info@örtliches.de', [$rule], $errors],
             ['sam@рмкреатиф.ru', [$rule], $errors],
             ['ex..ample@example.com', [$rule], $errors],
-            [['developer@yiiframework.com'], [$rule], $errors],
             [str_repeat('a', 65) . '@gmail.com', [$rule], $errors],
             ['name@' . str_repeat('a', 246) . '.com', [$rule], $errors],
 
@@ -235,14 +256,12 @@ final class EmailTest extends RuleTestCase
                 [$ruleAllowedName],
                 $errors,
             ],
-            [['developer@yiiframework.com'], [$ruleAllowedName], $errors],
             [
-                [
-                    'Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-' .
-                    'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
-                    'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
-                    'blah-blah-blah.com>',
-                ],
+
+                'Short Name <domainNameIsMoreThan254Characters@example-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
+                'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-' .
+                'blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah-blah' .
+                '.com>',
                 [$ruleAllowedName],
                 $errors,
             ],
