@@ -12,6 +12,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_int;
+use function is_string;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.
@@ -30,7 +31,7 @@ final class EachHandler implements RuleHandlerInterface
         if (!is_iterable($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getAttribute(),
-                'valueType' => get_debug_type($value),
+                'type' => get_debug_type($value),
             ]);
 
             return $result;
@@ -38,10 +39,10 @@ final class EachHandler implements RuleHandlerInterface
 
         /** @var mixed $item */
         foreach ($value as $index => $item) {
-            if (!is_int($index)) {
-                $result->addError($rule->getIncorrectInputMessage(), [
+            if (!is_int($index) && !is_string($index)) {
+                $result->addError($rule->getIncorrectInputKeyMessage(), [
                     'attribute' => $context->getAttribute(),
-                    'valueType' => get_debug_type($value),
+                    'type' => get_debug_type($value),
                 ]);
 
                 return $result;

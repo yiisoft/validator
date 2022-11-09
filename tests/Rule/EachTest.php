@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Generator;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\EachHandler;
 use Yiisoft\Validator\Rule\Number;
@@ -22,7 +23,7 @@ final class EachTest extends RuleTestCase
 
     public function testGetName(): void
     {
-        $rule = new Each([]);
+        $rule = new Each();
         $this->assertSame('each', $rule->getName());
     }
 
@@ -37,6 +38,9 @@ final class EachTest extends RuleTestCase
                 [
                     'incorrectInputMessage' => [
                         'message' => 'Value must be array or iterable.',
+                    ],
+                    'incorrectInputKeyMessage' => [
+                        'message' => 'Every iterable key must have an integer or a string type.',
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -107,7 +111,18 @@ final class EachTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
+        $getGeneratorWithIncorrectKey = static function (): Generator
+        {
+            yield false => 0;
+        };
+
         return [
+            'incorrect input' => [1, [new Each([new Number(max: 13)])], ['' => ['Value must be array or iterable.']]],
+            'incorrect input key' => [
+                ['attribute' => $getGeneratorWithIncorrectKey()],
+                ['attribute' => new Each([new Number(max: 13)])],
+                ['attribute' => ['Every iterable key must have an integer or a string type.']],
+            ],
             [
                 [10, 20, 30],
                 [new Each([new Number(max: 13)])],
@@ -129,13 +144,13 @@ final class EachTest extends RuleTestCase
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new Each([]), new Each([], skipOnError: true));
+        $this->testSkipOnErrorInternal(new Each(), new Each(skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new Each([]), new Each([], when: $when));
+        $this->testWhenInternal(new Each(), new Each(when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array
