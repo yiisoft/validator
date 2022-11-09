@@ -40,7 +40,8 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
          * meaning only the value needs to be matched.
          */
         private bool $strict = false,
-        private string $message = 'The value must be either "{true}" or "{false}".',
+        private string $nonScalarMessage = 'The non-scalar value must be either "{true}" or "{false}".',
+        private string $scalarMessage = 'The scalar value must be either "{true}" or "{false}".',
 
         /**
          * @var bool|callable|null
@@ -80,23 +81,34 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
         return $this->strict;
     }
 
-    public function getMessage(): string
+    public function getNonScalarMessage(): string
     {
-        return $this->message;
+        return $this->nonScalarMessage;
+    }
+
+    public function getScalarMessage(): string
+    {
+        return $this->scalarMessage;
     }
 
     public function getOptions(): array
     {
+        $messageParameters = [
+            'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+            'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+        ];
+
         return [
             'trueValue' => $this->trueValue,
             'falseValue' => $this->falseValue,
             'strict' => $this->strict,
+            'nonScalarMessage' => [
+                'message' => $this->nonScalarMessage,
+                'parameters' => $messageParameters,
+            ],
             'message' => [
-                'message' => $this->message,
-                'parameters' => [
-                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                ],
+                'message' => $this->scalarMessage,
+                'parameters' => $messageParameters,
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,

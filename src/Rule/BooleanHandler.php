@@ -34,14 +34,19 @@ final class BooleanHandler implements RuleHandlerInterface
         }
 
         $parameters = [
+            'attribute' => $context->getAttribute(),
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
             'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
-            'attribute' => $context->getAttribute(),
         ];
-        is_scalar($value) ? $parameters['value'] = $value : $parameters['valueType'] = get_debug_type($value);
 
-        $result->addError($rule->getMessage(), $parameters);
+        if (is_scalar($value)) {
+            $parameters['value'] = $value;
 
-        return $result;
+            return $result->addError($rule->getScalarMessage(), $parameters);
+        }
+
+        $parameters['type'] = get_debug_type($value);
+
+        return $result->addError($rule->getNonScalarMessage(), $parameters);
     }
 }

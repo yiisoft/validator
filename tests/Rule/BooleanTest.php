@@ -34,8 +34,15 @@ final class BooleanTest extends RuleTestCase
                     'trueValue' => '1',
                     'falseValue' => '0',
                     'strict' => false,
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => '1',
+                            'false' => '0',
+                        ],
+                    ],
                     'message' => [
-                        'message' => 'The value must be either "{true}" or "{false}".',
+                        'message' => 'The scalar value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => '1',
                             'false' => '0',
@@ -51,8 +58,15 @@ final class BooleanTest extends RuleTestCase
                     'trueValue' => true,
                     'falseValue' => false,
                     'strict' => true,
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => 'true',
+                            'false' => 'false',
+                        ],
+                    ],
                     'message' => [
-                        'message' => 'The value must be either "{true}" or "{false}".',
+                        'message' => 'The scalar value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => 'true',
                             'false' => 'false',
@@ -67,7 +81,8 @@ final class BooleanTest extends RuleTestCase
                     trueValue: 'YES',
                     falseValue: 'NO',
                     strict: true,
-                    message: 'Custom message.',
+                    nonScalarMessage: 'Custom message 1.',
+                    scalarMessage: 'Custom message 2.',
                     skipOnEmpty: true,
                     skipOnError: true
                 ),
@@ -75,8 +90,15 @@ final class BooleanTest extends RuleTestCase
                     'trueValue' => 'YES',
                     'falseValue' => 'NO',
                     'strict' => true,
+                    'nonScalarMessage' => [
+                        'message' => 'Custom message 1.',
+                        'parameters' => [
+                            'true' => 'YES',
+                            'false' => 'NO',
+                        ],
+                    ],
                     'message' => [
-                        'message' => 'Custom message.',
+                        'message' => 'Custom message 2.',
                         'parameters' => [
                             'true' => 'YES',
                             'false' => 'NO',
@@ -108,22 +130,24 @@ final class BooleanTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $defaultErrors = ['' => ['The value must be either "1" or "0".']];
-        $booleanErrors = ['' => ['The value must be either "true" or "false".']];
+        $defaultScalarErrors = ['' => ['The scalar value must be either "1" or "0".']];
+        $booleanScalarErrors = ['' => ['The scalar value must be either "true" or "false".']];
+        $defaultNonScalarErrors = ['' => ['The non-scalar value must be either "1" or "0".']];
+        $booleanNonScalarErrors = ['' => ['The non-scalar value must be either "true" or "false".']];
 
         return [
-            ['5', [new Boolean()], $defaultErrors],
+            ['5', [new Boolean()], $defaultScalarErrors],
 
-            [null, [new Boolean()], $defaultErrors],
-            [[], [new Boolean()], $defaultErrors],
+            [null, [new Boolean()], $defaultNonScalarErrors],
+            [[], [new Boolean()], $defaultNonScalarErrors],
 
-            [true, [new Boolean(strict: true)], $defaultErrors],
-            [false, [new Boolean(strict: true)], $defaultErrors],
+            [true, [new Boolean(strict: true)], $defaultScalarErrors],
+            [false, [new Boolean(strict: true)], $defaultScalarErrors],
 
-            ['0', [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
-            [[], [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
+            ['0', [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanScalarErrors],
+            [[], [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanNonScalarErrors],
 
-            'custom error' => [5, [new Boolean(message: 'Custom error.')], ['' => ['Custom error.']]],
+            'custom error' => [5, [new Boolean(scalarMessage: 'Custom error.')], ['' => ['Custom error.']]],
         ];
     }
 
