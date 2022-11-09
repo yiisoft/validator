@@ -20,9 +20,7 @@ return [
     'validator.categorySource' => [
         'definition' => static function (ContainerInterface $container) use ($params) {
             $messageSource = $container->get('validator.messageSource');
-            $messageFormatter = $container->has(MessageFormatterInterface::class)
-                ? $container->get(MessageFormatterInterface::class)
-                : new SimpleMessageFormatter();
+            $messageFormatter = new SimpleMessageFormatter();
 
             return new CategorySource(
                 $params['yiisoft/translator']['validatorCategory'],

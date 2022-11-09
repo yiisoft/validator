@@ -20,8 +20,8 @@ final class TranslatorFactory
             new IdMessageReader(),
             new SimpleMessageFormatter()
         );
-        $translator->addCategorySource($categorySource);
+        $translator->addCategorySources($categorySource);
 
-        return $translator->withCategory('validator');
+        return $translator->withDefaultCategory('validator');
     }
 }
