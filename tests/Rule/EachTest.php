@@ -111,8 +111,7 @@ final class EachTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $getGeneratorWithIncorrectKey = static function (): Generator
-        {
+        $getGeneratorWithIncorrectKey = static function (): Generator {
             yield false => 0;
         };
 
