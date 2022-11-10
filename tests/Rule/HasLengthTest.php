@@ -50,7 +50,7 @@ final class HasLengthTest extends RuleTestCase
                         'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
-                    'message' => [
+                    'incorrectInputMessage' => [
                         'message' => 'This value must be a string.',
                     ],
                     'encoding' => 'UTF-8',
@@ -76,7 +76,7 @@ final class HasLengthTest extends RuleTestCase
                         'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
-                    'message' => [
+                    'incorrectInputMessage' => [
                         'message' => 'This value must be a string.',
                     ],
                     'encoding' => 'UTF-8',
@@ -102,7 +102,7 @@ final class HasLengthTest extends RuleTestCase
                         'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
-                    'message' => [
+                    'incorrectInputMessage' => [
                         'message' => 'This value must be a string.',
                     ],
                     'encoding' => 'windows-1251',
@@ -138,7 +138,7 @@ final class HasLengthTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $message = 'This value must be a string.';
+        $incorrectInputMessage = 'This value must be a string.';
         $greaterThanMaxMessage = 'This value must contain at most 25 characters.';
         $notExactlyMessage = 'This value must contain exactly 25 characters.';
         $lessThanMinMessage = 'This value must contain at least 25 characters.';
@@ -147,17 +147,18 @@ final class HasLengthTest extends RuleTestCase
             new HasLength(
                 min: 3,
                 max: 5,
-                message: 'is not string error',
+                incorrectInputMessage: 'is not string error',
                 lessThanMinMessage: 'is too short test',
                 greaterThanMaxMessage: 'is too long test'
             ),
         ];
 
         return [
-            [['not a string'], [new HasLength(min: 25)], ['' => [$message]]],
-            [new SingleValueDataSet(new stdClass()), [new HasLength(min: 25)], ['' => [$message]]],
-            [true, [new HasLength(min: 25)], ['' => [$message]]],
-            [false, [new HasLength(min: 25)], ['' => [$message]]],
+            'incorrect input, array' => [['not a string'], [new HasLength(min: 25)], ['' => [$incorrectInputMessage]]],
+            'incorrect input, boolean (true)' => [true, [new HasLength(min: 25)], ['' => [$incorrectInputMessage]]],
+            'incorrect input, boolean (false)' => [false, [new HasLength(min: 25)], ['' => [$incorrectInputMessage]]],
+
+            [new SingleValueDataSet(new stdClass()), [new HasLength(min: 25)], ['' => [$incorrectInputMessage]]],
 
             [str_repeat('x', 1250), [new HasLength(max: 25)], ['' => [$greaterThanMaxMessage]]],
             [str_repeat('x', 125), [new HasLength(exactly: 25)], ['' => [$notExactlyMessage]]],

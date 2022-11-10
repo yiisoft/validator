@@ -58,7 +58,7 @@ final class HasLength implements
         /**
          * @var string user-defined error message used when the value is not a string.
          */
-        private string $message = 'This value must be a string.',
+        private string $incorrectInputMessage = 'This value must be a string.',
         /**
          * @var string user-defined error message used when the length of the value is smaller than {@see $min}.
          */
@@ -102,9 +102,9 @@ final class HasLength implements
         return 'hasLength';
     }
 
-    public function getMessage(): string
+    public function getIncorrectInputMessage(): string
     {
-        return $this->message;
+        return $this->incorrectInputMessage;
     }
 
     public function getEncoding(): string
@@ -115,8 +115,8 @@ final class HasLength implements
     public function getOptions(): array
     {
         return array_merge($this->getLimitOptions(), [
-            'message' => [
-                'message' => $this->message,
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
             ],
             'encoding' => $this->encoding,
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
