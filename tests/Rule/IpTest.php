@@ -48,6 +48,9 @@ final class IpTest extends RuleTestCase
                     'allowSubnet' => false,
                     'requireSubnet' => false,
                     'allowNegation' => false,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'Must be a valid IP address.',
                     ],
@@ -92,6 +95,9 @@ final class IpTest extends RuleTestCase
                     'allowSubnet' => false,
                     'requireSubnet' => false,
                     'allowNegation' => false,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'Must be a valid IP address.',
                     ],
@@ -136,6 +142,9 @@ final class IpTest extends RuleTestCase
                     'allowSubnet' => false,
                     'requireSubnet' => false,
                     'allowNegation' => false,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'Must be a valid IP address.',
                     ],
@@ -180,6 +189,9 @@ final class IpTest extends RuleTestCase
                     'allowSubnet' => true,
                     'requireSubnet' => false,
                     'allowNegation' => false,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'Must be a valid IP address.',
                     ],
@@ -224,6 +236,9 @@ final class IpTest extends RuleTestCase
                     'allowSubnet' => true,
                     'requireSubnet' => true,
                     'allowNegation' => false,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'Must be a valid IP address.',
                     ],
@@ -268,6 +283,9 @@ final class IpTest extends RuleTestCase
                     'allowSubnet' => false,
                     'requireSubnet' => false,
                     'allowNegation' => true,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'Must be a valid IP address.',
                     ],
@@ -312,6 +330,9 @@ final class IpTest extends RuleTestCase
                     'allowSubnet' => false,
                     'requireSubnet' => false,
                     'allowNegation' => false,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'Must be a valid IP address.',
                     ],
@@ -426,6 +447,7 @@ final class IpTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
+        $incorrectInputMessage = 'The value must have a string type.';
         $message = 'Must be a valid IP address.';
         $hasSubnetMessage = 'Must not be a subnet.';
         $notInRangeMessage = 'Is not in the allowed range.';
@@ -435,12 +457,13 @@ final class IpTest extends RuleTestCase
         $ipv6NotAllowedMessage = 'Must not be an IPv6 address.';
 
         return [
+            'incorrect input, array' => [['what an array', '??'], [new Ip()], ['' => [$incorrectInputMessage]]],
+            'incorrect input, integer' => [123456, [new Ip()], ['' => [$incorrectInputMessage]]],
+            'incorrect input, boolean (true)' => [true, [new Ip()], ['' => [$incorrectInputMessage]]],
+            'incorrect input, boolean (false)' => [false, [new Ip()], ['' => [$incorrectInputMessage]]],
+
             ['not.an.ip', [new Ip()], ['' => [$message]]],
             ['bad:forSure', [new Ip()], ['' => [$message]]],
-            [['what an array', '??'], [new Ip()], ['' => [$message]]],
-            [123456, [new Ip()], ['' => [$message]]],
-            [true, [new Ip()], ['' => [$message]]],
-            [false, [new Ip()], ['' => [$message]]],
 
             ['2008:fz::0', [new Ip()], ['' => [$message]]],
             ['2008:fa::0::1', [new Ip()], ['' => [$message]]],

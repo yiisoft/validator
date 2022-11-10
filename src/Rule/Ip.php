@@ -96,6 +96,7 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
          * @var bool Whether address may have a {@see NEGATION_CHAR} character at the beginning. Defaults to `false`.
          */
         private bool $allowNegation = false,
+        private string $incorrectInputMessage = 'The value must have a string type.',
         /**
          * @var string User-defined error message is used when validation fails due to the wrong IP address format.
          *
@@ -252,6 +253,11 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
         return $this->allowNegation;
     }
 
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
+
     public function getMessage(): string
     {
         return $this->message;
@@ -373,6 +379,9 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
             'allowSubnet' => $this->allowSubnet,
             'requireSubnet' => $this->requireSubnet,
             'allowNegation' => $this->allowNegation,
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
+            ],
             'message' => [
                 'message' => $this->message,
             ],
