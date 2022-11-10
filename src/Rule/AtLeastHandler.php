@@ -28,12 +28,10 @@ final class AtLeastHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_array($value) && !is_object($value)) {
-            $result->addError($rule->getIncorrectInputMessage(), [
+            return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getAttribute(),
-                'valueType' => get_debug_type($value),
+                'type' => get_debug_type($value),
             ]);
-
-            return $result;
         }
 
         $filledCount = 0;

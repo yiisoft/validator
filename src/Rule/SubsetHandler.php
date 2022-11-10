@@ -21,12 +21,10 @@ final class SubsetHandler implements RuleHandlerInterface
 
         $result = new Result();
         if (!is_iterable($value)) {
-            $result->addError($rule->getIterableMessage(), [
+            return $result->addError($rule->getIterableMessage(), [
                 'attribute' => $context->getAttribute(),
-                'valueType' => get_debug_type($value),
+                'type' => get_debug_type($value),
             ]);
-
-            return $result;
         }
 
         if (!ArrayHelper::isSubset($value, $rule->getValues(), $rule->isStrict())) {
