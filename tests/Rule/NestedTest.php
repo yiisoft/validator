@@ -356,9 +356,9 @@ final class NestedTest extends RuleTestCase
                 [
                     'object.age' => [
                         'Value must be no less than 21.',
-                        'The scalar value must be equal to "23".',
+                        'Value must be equal to "23".',
                     ],
-                    'object.number' => ['The scalar value must be equal to "99".'],
+                    'object.number' => ['Value must be equal to "99".'],
                 ],
             ],
             'nested-into-each' => [

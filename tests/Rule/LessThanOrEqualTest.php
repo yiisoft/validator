@@ -35,7 +35,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
                     'nonScalarMessage' => [
-                        'message' => 'The non-scalar value must be less than or equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -43,7 +43,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'scalarMessage' => [
-                        'message' => 'The scalar value must be less than or equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -65,7 +65,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
                     'nonScalarMessage' => [
-                        'message' => 'The non-scalar value must be less than or equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -73,7 +73,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'scalarMessage' => [
-                        'message' => 'The scalar value must be less than or equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -95,7 +95,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
                     'nonScalarMessage' => [
-                        'message' => 'The non-scalar value must be less than or equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',
@@ -103,7 +103,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'scalarMessage' => [
-                        'message' => 'The scalar value must be less than or equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',
@@ -128,7 +128,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
                     'nonScalarMessage' => [
-                        'message' => 'The non-scalar value must be less than or equal to "{targetValueOrAttribute}".',
+                        'message' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
@@ -163,11 +163,11 @@ final class LessThanOrEqualTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $scalarMessage = 'The scalar value must be less than or equal to "100".';
+        $message = 'Value must be less than or equal to "100".';
 
         return [
-            [101, [new LessThanOrEqual(100)], ['' => [$scalarMessage]]],
-            ['101', [new LessThanOrEqual(100)], ['' => [$scalarMessage]]],
+            [101, [new LessThanOrEqual(100)], ['' => [$message]]],
+            ['101', [new LessThanOrEqual(100)], ['' => [$message]]],
             'custom error' => [
                 101,
                 [new LessThanOrEqual(100, scalarMessage: 'Custom error')],

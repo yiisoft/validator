@@ -40,8 +40,8 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
          * meaning only the value needs to be matched.
          */
         private bool $strict = false,
-        private string $nonScalarMessage = 'The non-scalar value must be either "{true}" or "{false}".',
-        private string $scalarMessage = 'The scalar value must be either "{true}" or "{false}".',
+        private string $nonScalarMessage = 'Value must be either "{true}" or "{false}".',
+        private string $scalarMessage = 'Value must be either "{true}" or "{false}".',
 
         /**
          * @var bool|callable|null

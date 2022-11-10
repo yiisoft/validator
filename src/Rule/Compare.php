@@ -129,25 +129,23 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
 
     public function getNonScalarMessage(): string
     {
-        return $this->nonScalarMessage ?? match ($this->operator) {
-            '==', '===' => 'The non-scalar value must be equal to "{targetValueOrAttribute}".',
-            '!=', '!==' => 'The non-scalar value must not be equal to "{targetValueOrAttribute}".',
-            '>' => 'The non-scalar value must be greater than "{targetValueOrAttribute}".',
-            '>=' => 'The non-scalar value must be greater than or equal to "{targetValueOrAttribute}".',
-            '<' => 'The non-scalar value must be less than "{targetValueOrAttribute}".',
-            '<=' => 'The non-scalar value must be less than or equal to "{targetValueOrAttribute}".',
-        };
+        return $this->nonScalarMessage ?? $this->getMessageByOperator();
     }
 
     public function getScalarMessage(): string
     {
-        return $this->scalarMessage ?? match ($this->operator) {
-            '==', '===' => 'The scalar value must be equal to "{targetValueOrAttribute}".',
-            '!=', '!==' => 'The scalar value must not be equal to "{targetValueOrAttribute}".',
-            '>' => 'The scalar value must be greater than "{targetValueOrAttribute}".',
-            '>=' => 'The scalar value must be greater than or equal to "{targetValueOrAttribute}".',
-            '<' => 'The scalar value must be less than "{targetValueOrAttribute}".',
-            '<=' => 'The scalar value must be less than or equal to "{targetValueOrAttribute}".',
+        return $this->scalarMessage ?? $this->getMessageByOperator();
+    }
+
+    private function getMessageByOperator(): string
+    {
+        return match ($this->operator) {
+            '==', '===' => 'Value must be equal to "{targetValueOrAttribute}".',
+            '!=', '!==' => 'Value must not be equal to "{targetValueOrAttribute}".',
+            '>' => 'Value must be greater than "{targetValueOrAttribute}".',
+            '>=' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
+            '<' => 'Value must be less than "{targetValueOrAttribute}".',
+            '<=' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
         };
     }
 
