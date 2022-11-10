@@ -38,7 +38,6 @@ final class BooleanHandler implements RuleHandlerInterface
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
             'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
         ];
-
         if (is_scalar($value)) {
             $parameters['value'] = $value;
 

@@ -64,7 +64,7 @@ final class ValidateLogicTest extends TestCase
             ],
             'rules-provider-object-and-no-rules' => [
                 [
-                    'age' => ['Value must be equal to "25".'],
+                    'age' => ['The scalar value must be equal to "25".'],
                 ],
                 new ObjectWithRulesProvider(),
                 null,
@@ -80,7 +80,7 @@ final class ValidateLogicTest extends TestCase
             ],
             'rules-provider-and-dataset-object-and-no-rules' => [
                 [
-                    'key2' => ['Value must be equal to "99".'],
+                    'key2' => ['The scalar value must be equal to "99".'],
                 ],
                 new ObjectWithDataSetAndRulesProvider(),
                 null,

@@ -35,10 +35,11 @@ final class Equal extends Compare
         private ?string $targetAttribute = null,
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
+        private string|null $nonScalarMessage = null,
         /**
          * @var string|null User-defined error message.
          */
-        private ?string $message = null,
+        private string|null $scalarMessage = null,
         /**
          * @var string The type of the values being compared.
          */
@@ -62,7 +63,8 @@ final class Equal extends Compare
             targetValue: $this->targetValue,
             targetAttribute: $this->targetAttribute,
             incorrectDataSetTypeMessage: $this->incorrectDataSetTypeMessage,
-            message: $this->message,
+            nonScalarMessage: $this->nonScalarMessage,
+            scalarMessage: $this->scalarMessage,
             type: $this->type,
             operator: $this->strict ? '===' : '==',
             skipOnEmpty: $skipOnEmpty,

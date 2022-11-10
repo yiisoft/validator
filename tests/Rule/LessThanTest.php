@@ -34,8 +34,16 @@ final class LessThanTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be less than "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be less than "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be less than "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -56,30 +64,16 @@ final class LessThanTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be less than "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be less than "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
                             'targetValueOrAttribute' => 1,
                         ],
                     ],
-                    'type' => 'number',
-                    'operator' => '<',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new LessThan(1, type: LessThan::TYPE_NUMBER),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => null,
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'message' => [
-                        'message' => 'Value must be less than "{targetValueOrAttribute}".',
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be less than "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -100,8 +94,16 @@ final class LessThanTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be less than "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be less than "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'attribute',
+                            'targetValueOrAttribute' => 'attribute',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be less than "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',
@@ -115,15 +117,23 @@ final class LessThanTest extends RuleTestCase
                 ],
             ],
             [
-                new LessThan(targetAttribute: 'test', message: 'Custom message for {targetValueOrAttribute}'),
+                new LessThan(targetAttribute: 'test', scalarMessage: 'Custom message for {targetValueOrAttribute}.'),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'test',
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Custom message for {targetValueOrAttribute}',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be less than "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'Custom message for {targetValueOrAttribute}.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
@@ -149,10 +159,12 @@ final class LessThanTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
+        $scalarMessage = 'The scalar value must be less than "100".';
+
         return [
-            [100, [new LessThan(100)], ['' => ['Value must be less than "100".']]],
-            ['101', [new LessThan(100)], ['' => ['Value must be less than "100".']]],
-            'custom error' => [101, [new LessThan(100, message: 'Custom error')], ['' => ['Custom error']]],
+            [100, [new LessThan(100)], ['' => [$scalarMessage]]],
+            ['101', [new LessThan(100)], ['' => [$scalarMessage]]],
+            'custom error' => [101, [new LessThan(100, scalarMessage: 'Custom error')], ['' => ['Custom error']]],
         ];
     }
 

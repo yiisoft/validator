@@ -34,8 +34,16 @@ final class GreaterThanOrEqualTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be greater than or equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be greater than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -56,30 +64,16 @@ final class GreaterThanOrEqualTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be greater than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
                             'targetValueOrAttribute' => 1,
                         ],
                     ],
-                    'type' => 'number',
-                    'operator' => '>=',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new GreaterThanOrEqual(1, type: GreaterThanOrEqual::TYPE_NUMBER),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => null,
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'message' => [
-                        'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be greater than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -100,8 +94,16 @@ final class GreaterThanOrEqualTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be greater than or equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'attribute',
+                            'targetValueOrAttribute' => 'attribute',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be greater than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',
@@ -115,15 +117,26 @@ final class GreaterThanOrEqualTest extends RuleTestCase
                 ],
             ],
             [
-                new GreaterThanOrEqual(targetAttribute: 'test', message: 'Custom message for {targetValueOrAttribute}'),
+                new GreaterThanOrEqual(
+                    targetAttribute: 'test',
+                    scalarMessage: 'Custom message for {targetValueOrAttribute}.',
+                ),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'test',
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Custom message for {targetValueOrAttribute}',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be greater than or equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'Custom message for {targetValueOrAttribute}.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
@@ -149,12 +162,16 @@ final class GreaterThanOrEqualTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $message = 'Value must be greater than or equal to "100".';
+        $scalarMessage = 'The scalar value must be greater than or equal to "100".';
 
         return [
-            [99, [new GreaterThanOrEqual(100)], ['' => [$message]]],
-            ['99', [new GreaterThanOrEqual(100)], ['' => [$message]]],
-            'custom error' => [99, [new GreaterThanOrEqual(100, message: 'Custom error')], ['' => ['Custom error']]],
+            [99, [new GreaterThanOrEqual(100)], ['' => [$scalarMessage]]],
+            ['99', [new GreaterThanOrEqual(100)], ['' => [$scalarMessage]]],
+            'custom error' => [
+                99,
+                [new GreaterThanOrEqual(100, scalarMessage: 'Custom error')],
+                ['' => ['Custom error']],
+            ],
         ];
     }
 

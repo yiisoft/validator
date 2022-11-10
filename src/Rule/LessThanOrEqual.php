@@ -36,12 +36,13 @@ final class LessThanOrEqual extends Compare
         private string|null $targetAttribute = null,
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
+        private string|null $nonScalarMessage = null,
         /**
-         * @var string|null $message User-defined error message.
+         * @var string|null User-defined error message.
          */
-        private string|null $message = null,
+        private string|null $scalarMessage = null,
         /**
-         * @var string $type The type of the values being validated.
+         * @var string The type of the values being validated.
          */
         private string $type = self::TYPE_STRING,
         bool|callable|null $skipOnEmpty = false,
@@ -59,7 +60,8 @@ final class LessThanOrEqual extends Compare
             targetValue: $this->targetValue,
             targetAttribute: $this->targetAttribute,
             incorrectDataSetTypeMessage: $this->incorrectDataSetTypeMessage,
-            message: $this->message,
+            nonScalarMessage: $this->nonScalarMessage,
+            scalarMessage: $this->scalarMessage,
             type: $this->type,
             operator: '<=',
             skipOnEmpty: $skipOnEmpty,

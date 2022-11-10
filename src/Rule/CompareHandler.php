@@ -45,19 +45,25 @@ final class CompareHandler implements RuleHandlerInterface
             }
         }
 
-        if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $targetValue)) {
-            $parameters = [
-                'attribute' => $context->getAttribute(),
-                'targetValue' => $rule->getTargetValue(),
-                'targetAttribute' => $rule->getTargetAttribute(),
-                'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
-            ];
-            is_scalar($value) ? $parameters['value'] = $value : $parameters['valueType'] = get_debug_type($value);
-
-            $result->addError($rule->getMessage(), $parameters);
+        if ($this->compareValues($rule->getOperator(), $rule->getType(), $value, $targetValue)) {
+            return $result;
         }
 
-        return $result;
+        $parameters = [
+            'attribute' => $context->getAttribute(),
+            'targetValue' => $rule->getTargetValue(),
+            'targetAttribute' => $rule->getTargetAttribute(),
+            'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
+        ];
+        if (is_scalar($value)) {
+            $parameters['value'] = $value;
+
+            return $result->addError($rule->getScalarMessage(), $parameters);
+        }
+
+        $parameters['type'] = get_debug_type($value);
+
+        return $result->addError($rule->getNonScalarMessage(), $parameters);
     }
 
     /**
@@ -73,12 +79,13 @@ final class CompareHandler implements RuleHandlerInterface
     private function compareValues(string $operator, string $type, mixed $value, mixed $targetValue): bool
     {
         if ($type === Compare::TYPE_NUMBER) {
-            $value = (float)$value;
-            $targetValue = (float)$targetValue;
+            $value = (float) $value;
+            $targetValue = (float) $targetValue;
         } else {
-            $value = (string)$value;
-            $targetValue = (string)$targetValue;
+            $value = (string) $value;
+            $targetValue = (string) $targetValue;
         }
+
         return match ($operator) {
             '==' => $value == $targetValue,
             '===' => $value === $targetValue,

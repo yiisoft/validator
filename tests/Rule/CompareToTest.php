@@ -36,8 +36,16 @@ final class CompareToTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -58,8 +66,16 @@ final class CompareToTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -80,8 +96,16 @@ final class CompareToTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be greater than or equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be greater than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -102,8 +126,16 @@ final class CompareToTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -124,8 +156,16 @@ final class CompareToTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -146,8 +186,16 @@ final class CompareToTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must not be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -161,15 +209,23 @@ final class CompareToTest extends RuleTestCase
                 ],
             ],
             [
-                new CompareTo('YES', message: 'Custom message for {targetValueOrAttribute}'),
+                new CompareTo('YES', scalarMessage: 'Custom message for {targetValueOrAttribute}.'),
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Custom message for {targetValueOrAttribute}',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'Custom message for {targetValueOrAttribute}.',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -190,8 +246,16 @@ final class CompareToTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
@@ -205,15 +269,23 @@ final class CompareToTest extends RuleTestCase
                 ],
             ],
             [
-                new CompareTo(null, 'test', message: 'Custom message for {targetValueOrAttribute}'),
+                new CompareTo(null, 'test', scalarMessage: 'Custom message for {targetValueOrAttribute}.'),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'test',
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Custom message for {targetValueOrAttribute}',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'Custom message for {targetValueOrAttribute}.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
@@ -234,8 +306,16 @@ final class CompareToTest extends RuleTestCase
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'The attribute value returned from a custom data set must have a scalar type.',
                     ],
-                    'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                    'nonScalarMessage' => [
+                        'message' => 'The non-scalar value must be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'The scalar value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => 'test',
@@ -284,12 +364,12 @@ final class CompareToTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $messageEqual = 'Value must be equal to "100".';
-        $messageNotEqual = 'Value must not be equal to "100".';
-        $messageGreaterThan = 'Value must be greater than "100".';
-        $messageGreaterOrEqualThan = 'Value must be greater than or equal to "100".';
-        $messageLessThan = 'Value must be less than "100".';
-        $messageLessOrEqualThan = 'Value must be less than or equal to "100".';
+        $messageEqual = 'The scalar value must be equal to "100".';
+        $messageNotEqual = 'The scalar value must not be equal to "100".';
+        $messageGreaterThan = 'The scalar value must be greater than "100".';
+        $messageGreaterOrEqualThan = 'The scalar value must be greater than or equal to "100".';
+        $messageLessThan = 'The scalar value must be less than "100".';
+        $messageLessOrEqualThan = 'The scalar value must be less than or equal to "100".';
 
         return [
             'incorrect data set type' => [
@@ -346,11 +426,15 @@ final class CompareToTest extends RuleTestCase
             ],
             'custom error' => [
                 101,
-                [new CompareTo(100, message: 'Custom error')],
+                [new CompareTo(100, scalarMessage: 'Custom error')],
                 ['' => ['Custom error']],
             ],
 
-            ['100.50', [new CompareTo('100.5', operator: '===')], ['' => ['Value must be equal to "100.5".']]],
+            [
+                '100.50',
+                [new CompareTo('100.5', operator: '===')],
+                ['' => ['The scalar value must be equal to "100.5".']],
+            ],
         ];
     }
 

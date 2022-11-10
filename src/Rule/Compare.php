@@ -60,10 +60,11 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         private string|null $targetAttribute = null,
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
+        private string|null $nonScalarMessage = null,
         /**
          * @var string|null User-defined error message.
          */
-        private string|null $message = null,
+        private string|null $scalarMessage = null,
         /**
          * @var string The type of the values being compared.
          */
@@ -126,33 +127,51 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         return $this->incorrectDataSetTypeMessage;
     }
 
-    public function getMessage(): string
+    public function getNonScalarMessage(): string
     {
-        return $this->message ?? match ($this->operator) {
-            '==', '===' => 'Value must be equal to "{targetValueOrAttribute}".',
-            '!=', '!==' => 'Value must not be equal to "{targetValueOrAttribute}".',
-            '>' => 'Value must be greater than "{targetValueOrAttribute}".',
-            '>=' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
-            '<' => 'Value must be less than "{targetValueOrAttribute}".',
-            '<=' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
+        return $this->nonScalarMessage ?? match ($this->operator) {
+            '==', '===' => 'The non-scalar value must be equal to "{targetValueOrAttribute}".',
+            '!=', '!==' => 'The non-scalar value must not be equal to "{targetValueOrAttribute}".',
+            '>' => 'The non-scalar value must be greater than "{targetValueOrAttribute}".',
+            '>=' => 'The non-scalar value must be greater than or equal to "{targetValueOrAttribute}".',
+            '<' => 'The non-scalar value must be less than "{targetValueOrAttribute}".',
+            '<=' => 'The non-scalar value must be less than or equal to "{targetValueOrAttribute}".',
+        };
+    }
+
+    public function getScalarMessage(): string
+    {
+        return $this->scalarMessage ?? match ($this->operator) {
+            '==', '===' => 'The scalar value must be equal to "{targetValueOrAttribute}".',
+            '!=', '!==' => 'The scalar value must not be equal to "{targetValueOrAttribute}".',
+            '>' => 'The scalar value must be greater than "{targetValueOrAttribute}".',
+            '>=' => 'The scalar value must be greater than or equal to "{targetValueOrAttribute}".',
+            '<' => 'The scalar value must be less than "{targetValueOrAttribute}".',
+            '<=' => 'The scalar value must be less than or equal to "{targetValueOrAttribute}".',
         };
     }
 
     public function getOptions(): array
     {
+        $messageParameters = [
+            'targetValue' => $this->targetValue,
+            'targetAttribute' => $this->targetAttribute,
+            'targetValueOrAttribute' => $this->targetValue ?? $this->targetAttribute,
+        ];
+
         return [
             'targetValue' => $this->targetValue,
             'targetAttribute' => $this->targetAttribute,
             'incorrectDataSetTypeMessage' => [
                 'message' => $this->incorrectDataSetTypeMessage,
             ],
-            'message' => [
-                'message' => $this->getMessage(),
-                'parameters' => [
-                    'targetValue' => $this->targetValue,
-                    'targetAttribute' => $this->targetAttribute,
-                    'targetValueOrAttribute' => $this->targetValue ?? $this->targetAttribute,
-                ],
+            'nonScalarMessage' => [
+                'message' => $this->getNonScalarMessage(),
+                'parameters' => $messageParameters,
+            ],
+            'scalarMessage' => [
+                'message' => $this->getScalarMessage(),
+                'parameters' => $messageParameters,
             ],
             'type' => $this->type,
             'operator' => $this->operator,
