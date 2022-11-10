@@ -132,12 +132,17 @@ final class GreaterThanTest extends RuleTestCase
                 ],
             ],
             [
-                new GreaterThan(targetAttribute: 'test', message: 'Custom message for {targetValueOrAttribute}.'),
+                new GreaterThan(
+                    targetAttribute: 'test',
+                    incorrectInputMessage: 'Custom message 1.',
+                    incorrectDataSetTypeMessage: 'Custom message 2.',
+                    message: 'Custom message 3.',
+                ),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'test',
                     'incorrectInputMessage' => [
-                        'message' => 'The allowed types are integer, float, string, boolean and null.',
+                        'message' => 'Custom message 1.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
@@ -145,7 +150,7 @@ final class GreaterThanTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'message' => 'Custom message 2.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
@@ -153,7 +158,7 @@ final class GreaterThanTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'message' => 'Custom message for {targetValueOrAttribute}.',
+                        'message' => 'Custom message 3.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
