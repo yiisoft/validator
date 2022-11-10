@@ -31,18 +31,23 @@ final class GreaterThanOrEqualTest extends RuleTestCase
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'nonScalarMessage' => [
-                        'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
                             'targetValueOrAttribute' => 1,
                         ],
                     ],
-                    'scalarMessage' => [
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'message' => [
                         'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
@@ -61,18 +66,23 @@ final class GreaterThanOrEqualTest extends RuleTestCase
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'nonScalarMessage' => [
-                        'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
                             'targetValueOrAttribute' => 1,
                         ],
                     ],
-                    'scalarMessage' => [
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'message' => [
                         'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
@@ -91,18 +101,23 @@ final class GreaterThanOrEqualTest extends RuleTestCase
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'attribute',
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'nonScalarMessage' => [
-                        'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',
                             'targetValueOrAttribute' => 'attribute',
                         ],
                     ],
-                    'scalarMessage' => [
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'attribute',
+                            'targetValueOrAttribute' => 'attribute',
+                        ],
+                    ],
+                    'message' => [
                         'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => null,
@@ -119,23 +134,28 @@ final class GreaterThanOrEqualTest extends RuleTestCase
             [
                 new GreaterThanOrEqual(
                     targetAttribute: 'test',
-                    scalarMessage: 'Custom message for {targetValueOrAttribute}.',
+                    message: 'Custom message for {targetValueOrAttribute}.',
                 ),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'test',
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'nonScalarMessage' => [
-                        'message' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
                             'targetValueOrAttribute' => 'test',
                         ],
                     ],
-                    'scalarMessage' => [
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
+                    'message' => [
                         'message' => 'Custom message for {targetValueOrAttribute}.',
                         'parameters' => [
                             'targetValue' => null,
@@ -167,11 +187,7 @@ final class GreaterThanOrEqualTest extends RuleTestCase
         return [
             [99, [new GreaterThanOrEqual(100)], ['' => [$message]]],
             ['99', [new GreaterThanOrEqual(100)], ['' => [$message]]],
-            'custom error' => [
-                99,
-                [new GreaterThanOrEqual(100, scalarMessage: 'Custom error')],
-                ['' => ['Custom error']],
-            ],
+            'custom error' => [99, [new GreaterThanOrEqual(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
     }
 

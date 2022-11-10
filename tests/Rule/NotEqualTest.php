@@ -31,18 +31,23 @@ final class NotEqualTest extends RuleTestCase
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'nonScalarMessage' => [
-                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
                             'targetValueOrAttribute' => 1,
                         ],
                     ],
-                    'scalarMessage' => [
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'message' => [
                         'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
@@ -61,18 +66,23 @@ final class NotEqualTest extends RuleTestCase
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'nonScalarMessage' => [
-                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
                             'targetValueOrAttribute' => 1,
                         ],
                     ],
-                    'scalarMessage' => [
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'message' => [
                         'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
@@ -91,18 +101,23 @@ final class NotEqualTest extends RuleTestCase
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'nonScalarMessage' => [
-                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
                             'targetValueOrAttribute' => 'YES',
                         ],
                     ],
-                    'scalarMessage' => [
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
+                    'message' => [
                         'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 'YES',
@@ -121,18 +136,23 @@ final class NotEqualTest extends RuleTestCase
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'nonScalarMessage' => [
-                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
                             'targetValueOrAttribute' => 'YES',
                         ],
                     ],
-                    'scalarMessage' => [
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
+                    'message' => [
                         'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 'YES',
@@ -151,18 +171,23 @@ final class NotEqualTest extends RuleTestCase
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'nonScalarMessage' => [
-                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
                             'targetValueOrAttribute' => 'YES',
                         ],
                     ],
-                    'scalarMessage' => [
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
+                    'message' => [
                         'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 'YES',
@@ -181,18 +206,23 @@ final class NotEqualTest extends RuleTestCase
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'attribute',
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'nonScalarMessage' => [
-                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',
                             'targetValueOrAttribute' => 'attribute',
                         ],
                     ],
-                    'scalarMessage' => [
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'attribute',
+                            'targetValueOrAttribute' => 'attribute',
+                        ],
+                    ],
+                    'message' => [
                         'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => null,
@@ -207,22 +237,27 @@ final class NotEqualTest extends RuleTestCase
                 ],
             ],
             [
-                new NotEqual(targetAttribute: 'test', scalarMessage: 'Custom message for {targetValueOrAttribute}.'),
+                new NotEqual(targetAttribute: 'test', message: 'Custom message for {targetValueOrAttribute}.'),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'test',
-                    'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
-                    ],
-                    'nonScalarMessage' => [
-                        'message' => 'Value must not be equal to "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
                             'targetValueOrAttribute' => 'test',
                         ],
                     ],
-                    'scalarMessage' => [
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
+                    'message' => [
                         'message' => 'Custom message for {targetValueOrAttribute}.',
                         'parameters' => [
                             'targetValue' => null,
@@ -254,7 +289,7 @@ final class NotEqualTest extends RuleTestCase
         return [
             [100, [new NotEqual(100)], ['' => [$message]]],
             [100, [new NotEqual(100, strict: true)], ['' => [$message]]],
-            'custom error' => [100, [new NotEqual(100, scalarMessage: 'Custom error')], ['' => ['Custom error']]],
+            'custom error' => [100, [new NotEqual(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
     }
 

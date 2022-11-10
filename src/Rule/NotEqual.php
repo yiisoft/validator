@@ -33,13 +33,13 @@ final class NotEqual extends Compare
          * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
          */
         private string|null $targetAttribute = null,
+        private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean and null.',
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
-        private string|null $nonScalarMessage = null,
         /**
          * @var string|null User-defined error message.
          */
-        private string|null $scalarMessage = null,
+        private string|null $message = null,
         /**
          * @var string The type of the values being validated.
          */
@@ -62,9 +62,9 @@ final class NotEqual extends Compare
         parent::__construct(
             targetValue: $this->targetValue,
             targetAttribute: $this->targetAttribute,
+            incorrectInputMessage: $this->incorrectInputMessage,
             incorrectDataSetTypeMessage: $this->incorrectDataSetTypeMessage,
-            nonScalarMessage: $this->nonScalarMessage,
-            scalarMessage: $this->scalarMessage,
+            message: $this->message,
             type: $this->type,
             operator: $this->strict ? '!==' : '!=',
             skipOnEmpty: $skipOnEmpty,

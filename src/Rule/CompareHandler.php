@@ -31,6 +31,13 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
+        if ($value !== null && !is_scalar($value)) {
+            return $result->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getAttribute(),
+                'type' => get_debug_type($value),
+            ]);
+        }
+
         $targetAttribute = $rule->getTargetAttribute();
         $targetValue = $rule->getTargetValue();
 
@@ -49,21 +56,13 @@ final class CompareHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $parameters = [
+        return $result->addError($rule->getMessage(), [
             'attribute' => $context->getAttribute(),
             'targetValue' => $rule->getTargetValue(),
             'targetAttribute' => $rule->getTargetAttribute(),
             'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
-        ];
-        if (is_scalar($value)) {
-            $parameters['value'] = $value;
-
-            return $result->addError($rule->getScalarMessage(), $parameters);
-        }
-
-        $parameters['type'] = get_debug_type($value);
-
-        return $result->addError($rule->getNonScalarMessage(), $parameters);
+            'value' => $value,
+        ]);
     }
 
     /**

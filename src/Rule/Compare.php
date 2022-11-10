@@ -58,13 +58,13 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
          * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
          */
         private string|null $targetAttribute = null,
+        private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean and null.',
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
-        private string|null $nonScalarMessage = null,
         /**
          * @var string|null User-defined error message.
          */
-        private string|null $scalarMessage = null,
+        private string|null $message = null,
         /**
          * @var string The type of the values being compared.
          */
@@ -122,24 +122,19 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         return $this->operator;
     }
 
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
+
     public function getIncorrectDataSetTypeMessage(): string
     {
         return $this->incorrectDataSetTypeMessage;
     }
 
-    public function getNonScalarMessage(): string
+    public function getMessage(): string
     {
-        return $this->nonScalarMessage ?? $this->getMessageByOperator();
-    }
-
-    public function getScalarMessage(): string
-    {
-        return $this->scalarMessage ?? $this->getMessageByOperator();
-    }
-
-    private function getMessageByOperator(): string
-    {
-        return match ($this->operator) {
+        return $this->message ?? match ($this->operator) {
             '==', '===' => 'Value must be equal to "{targetValueOrAttribute}".',
             '!=', '!==' => 'Value must not be equal to "{targetValueOrAttribute}".',
             '>' => 'Value must be greater than "{targetValueOrAttribute}".',
@@ -160,15 +155,16 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         return [
             'targetValue' => $this->targetValue,
             'targetAttribute' => $this->targetAttribute,
-            'incorrectDataSetTypeMessage' => [
-                'message' => $this->incorrectDataSetTypeMessage,
-            ],
-            'nonScalarMessage' => [
-                'message' => $this->getNonScalarMessage(),
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
                 'parameters' => $messageParameters,
             ],
-            'scalarMessage' => [
-                'message' => $this->getScalarMessage(),
+            'incorrectDataSetTypeMessage' => [
+                'message' => $this->incorrectDataSetTypeMessage,
+                'parameters' => $messageParameters,
+            ],
+            'message' => [
+                'message' => $this->getMessage(),
                 'parameters' => $messageParameters,
             ],
             'type' => $this->type,
