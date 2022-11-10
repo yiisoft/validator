@@ -24,17 +24,15 @@ final class JsonHandler implements RuleHandlerInterface
 
         $result = new Result();
         if (!is_string($value)) {
-            $result->addError($rule->getMessage(), [
+            return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getAttribute(),
-                'valueType' => get_debug_type($value),
+                'type' => get_debug_type($value),
             ]);
-
-            return $result;
         }
 
 
         if (!$this->isValidJson($value)) {
-            $result->addError($rule->getMessage(), [
+            return $result->addError($rule->getMessage(), [
                 'attribute' => $context->getAttribute(),
                 'value' => $value,
             ]);
