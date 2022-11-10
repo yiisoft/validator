@@ -384,6 +384,9 @@ final class CompareToTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
+            [null, [new CompareTo('')]],
+            [null, [new CompareTo('', operator: '===')]],
+
             [100, [new CompareTo(100)]],
             [['attribute' => 100, 'number' => 100], ['number' => new CompareTo(null, 'attribute')]],
             ['100', [new CompareTo(100)]],
@@ -447,6 +450,8 @@ final class CompareToTest extends RuleTestCase
                 [new CompareTo(targetAttribute: 'test')],
                 ['' => ['The attribute value returned from a custom data set must have a scalar type.']],
             ],
+
+            [null, [new CompareTo(0)], ['' => ['Value must be equal to "0".']]],
 
             [101, [new CompareTo(100)], ['' => [$messageEqual]]],
 
