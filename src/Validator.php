@@ -180,8 +180,6 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param iterable<Closure|RuleInterface> $rules
-     *
      * @return iterable<RuleInterface>
      */
     private function normalizeRules(iterable $rules): iterable
