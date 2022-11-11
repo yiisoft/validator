@@ -41,7 +41,7 @@ final class BooleanTest extends RuleTestCase
                             'false' => '0',
                         ],
                     ],
-                    'message' => [
+                    'scalarMessage' => [
                         'message' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => '1',
@@ -65,7 +65,7 @@ final class BooleanTest extends RuleTestCase
                             'false' => 'false',
                         ],
                     ],
-                    'message' => [
+                    'scalarMessage' => [
                         'message' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => 'true',
@@ -97,7 +97,7 @@ final class BooleanTest extends RuleTestCase
                             'false' => 'NO',
                         ],
                     ],
-                    'message' => [
+                    'scalarMessage' => [
                         'message' => 'Custom message 2.',
                         'parameters' => [
                             'true' => 'YES',
