@@ -225,7 +225,6 @@ final class Nested implements
             $breakWhile = true;
             $rulesMap = [];
 
-            /** @var int|string $valuePath */
             foreach ($rules as $valuePath => $rule) {
                 if ($valuePath === self::EACH_SHORTCUT) {
                     throw new InvalidArgumentException('Bare shortcut is prohibited. Use "Each" rule instead.');
