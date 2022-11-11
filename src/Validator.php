@@ -26,7 +26,7 @@ use function is_object;
 use function is_string;
 
 /**
- * Validator validates {@link LimitInterface} against rules set for data set attributes.
+ * Validator validates {@link DataSetInterface} against rules set for data set attributes.
  */
 final class Validator implements ValidatorInterface
 {
