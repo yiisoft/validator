@@ -272,7 +272,6 @@ final class Nested implements
         }
 
         $rules = [];
-        /** @var iterable<RuleInterface> $attributeRules */
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
             if (!is_int($attributeRulesIndex) && !is_string($attributeRulesIndex)) {
                 $message = sprintf(
@@ -283,7 +282,8 @@ final class Nested implements
                 throw new InvalidArgumentException($message);
             }
 
-            foreach ($attributeRules as $attributeRule) {
+            /** @var iterable<RuleInterface>|null $attributeRules */
+            foreach ($attributeRules ?? [] as $attributeRule) {
                 if ($attributeRule instanceof SkipOnEmptyInterface) {
                     $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
                 }
