@@ -54,9 +54,9 @@ final class Nested implements
     private const EACH_SHORTCUT = '*';
 
     /**
-     * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
+     * @var iterable<iterable<RuleInterface>|RuleInterface>|null
      */
-    private ?iterable $rules;
+    private iterable|null $rules;
 
     /**
      * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|object|RulesProviderInterface|null $rules
@@ -115,9 +115,6 @@ final class Nested implements
     }
 
     /**
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
-     *
      * @return iterable<iterable<RuleInterface>|RuleInterface>|null
      */
     public function getRules(): iterable|null
