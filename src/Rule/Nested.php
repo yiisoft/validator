@@ -174,7 +174,6 @@ final class Nested implements
             $rules = $source;
         }
 
-        $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         self::ensureArrayHasRules($rules);
 
         /** @var iterable<RuleInterface> $rules */
