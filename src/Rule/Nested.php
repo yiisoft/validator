@@ -175,8 +175,6 @@ final class Nested implements
         }
 
         self::ensureArrayHasRules($rules);
-
-        /** @var iterable<RuleInterface> $rules */
         $this->rules = $rules;
 
         if ($this->normalizeRules) {
@@ -188,6 +186,9 @@ final class Nested implements
         }
     }
 
+    /**
+     * @psalm-assert iterable<RuleInterface> $rules
+     */
     private static function ensureArrayHasRules(iterable &$rules): void
     {
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
