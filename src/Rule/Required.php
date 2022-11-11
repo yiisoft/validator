@@ -63,7 +63,7 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
     }
 
     /**
-     * @return EmptyCallback
+     * @psalm-return EmptyCallback
      */
     public function getEmptyCallback(): callable
     {
