@@ -70,7 +70,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         }
 
         if ($this->hasCacheItem('rules')) {
-            /** @var iterable */
+            /** @var array<string, RuleInterface> */
             return $this->getCacheItem('rules');
         }
 
@@ -188,13 +188,17 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         return array_key_exists($name, self::$cache[$this->cacheKey]);
     }
 
-    private function getCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): mixed
+    /**
+     * @psalm-suppress MixedInferredReturnType
+     * @psalm-suppress MixedReturnStatement
+     */
+    private function getCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): array
     {
         /** @psalm-suppress PossiblyNullArrayOffset */
         return self::$cache[$this->cacheKey][$name];
     }
 
-    private function setCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name, mixed $value): void
+    private function setCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name, array $value): void
     {
         /**
          * @psalm-suppress PossiblyNullArrayOffset
