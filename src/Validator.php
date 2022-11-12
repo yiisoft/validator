@@ -183,6 +183,7 @@ final class Validator implements ValidatorInterface
      */
     private function normalizeRules(iterable $rules): iterable
     {
+        /** @var mixed $rule */
         foreach ($rules as $rule) {
             yield $this->normalizeRule($rule);
         }
