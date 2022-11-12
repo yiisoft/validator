@@ -55,6 +55,7 @@ final class Validator implements ValidatorInterface
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
      * @psalm-param RulesType $rules
+     *
      * @throws ReflectionException
      */
     public function validate(mixed $data, iterable|object|string|null $rules = null): Result
