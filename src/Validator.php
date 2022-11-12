@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
+use ReflectionException;
 use ReflectionProperty;
 use Traversable;
 use Yiisoft\Translator\TranslatorInterface;
@@ -27,6 +25,8 @@ use function is_string;
 
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
+ *
+ * @psalm-import-type RulesType from ValidatorInterface
  */
 final class Validator implements ValidatorInterface
 {
@@ -54,10 +54,8 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
-     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RuleInterface|RulesProviderInterface|null $rules
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @psalm-param RulesType $rules
+     * @throws ReflectionException
      */
     public function validate(mixed $data, iterable|object|string|null $rules = null): Result
     {
@@ -68,7 +66,7 @@ final class Validator implements ValidatorInterface
             $rules = $rules->getRules();
         } elseif ($rules instanceof RuleInterface) {
             $rules = [$rules];
-        } elseif (!$rules instanceof Traversable && !is_array($rules) && $rules !== null) {
+        } elseif (is_string($rules) || (is_object($rules) && !$rules instanceof Traversable)) {
             $rules = (new AttributesRulesProvider($rules, $this->rulesPropertyVisibility))->getRules();
         }
 

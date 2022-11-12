@@ -23,6 +23,7 @@ use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 use function array_pop;
@@ -37,6 +38,8 @@ use function sprintf;
 
 /**
  * Can be used for validation of nested structures.
+ *
+ * @psalm-import-type RulesType from ValidatorInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
@@ -59,9 +62,8 @@ final class Nested implements
     private iterable|null $rules;
 
     /**
-     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|object|RulesProviderInterface|null $rules
+     * @param iterable|object|string|null $rules Rules for validate value that can be described by:
      *
-     * Rules for validate value that can be described by:
      * - object that implement {@see RulesProviderInterface};
      * - name of class from whose attributes their will be derived;
      * - array or object implementing the `Traversable` interface that contain {@see RuleInterface} implementations
@@ -69,6 +71,7 @@ final class Nested implements
      *
      * `$rules` can be null if validatable value is object. In this case rules will be derived from object via
      * `getRules()` method if object implement {@see RulesProviderInterface} or from attributes otherwise.
+     * @psalm-param RulesType $rules
      */
     public function __construct(
         iterable|object|string|null $rules = null,
@@ -153,7 +156,7 @@ final class Nested implements
     }
 
     /**
-     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|object|RulesProviderInterface|null $source
+     * @psalm-param RulesType $source
      */
     private function prepareRules(iterable|object|string|null $source): void
     {

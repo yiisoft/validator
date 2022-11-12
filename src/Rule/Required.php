@@ -17,7 +17,7 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Validates that the specified value is neither null nor empty.
  *
- * @psalm-type EmptyCallback = callable(mixed,bool):bool
+ * @psalm-type EmptyCallbackType = callable(mixed,bool):bool
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Required implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface
@@ -27,12 +27,12 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
 
     /**
      * @var callable
-     * @psalm-var EmptyCallback
+     * @psalm-var EmptyCallbackType
      */
     private $emptyCallback;
 
     /**
-     * @psalm-param EmptyCallback|null $emptyCallback
+     * @psalm-param EmptyCallbackType|null $emptyCallback
      */
     public function __construct(
         private string $message = 'Value cannot be blank.',
@@ -63,7 +63,7 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
     }
 
     /**
-     * @psalm-return EmptyCallback
+     * @psalm-return EmptyCallbackType
      */
     public function getEmptyCallback(): callable
     {
