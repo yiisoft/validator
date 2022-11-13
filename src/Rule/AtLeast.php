@@ -27,23 +27,22 @@ final class AtLeast implements SerializableRuleInterface, SkipOnErrorInterface, 
 
     public function __construct(
         /**
-         * The list of required attributes that will be checked.
+         * @var string[] The list of required attributes that will be checked.
          */
         private array $attributes,
         /**
-         * The minimum required quantity of filled attributes to pass the validation.
-         * Defaults to 1.
+         * @var int The minimum required quantity of filled attributes to pass the validation. Defaults to 1.
          */
         private int $min = 1,
+        private string $incorrectInputMessage = 'Value must be an array or an object.',
         /**
-         * Message to display in case of error.
+         * @var string Message to display in case of error.
          */
         private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.',
-
         /**
          * @var bool|callable|null
          */
-        private $skipOnEmpty = null,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -57,6 +56,9 @@ final class AtLeast implements SerializableRuleInterface, SkipOnErrorInterface, 
         return 'atLeast';
     }
 
+    /**
+     * @return string[]
+     */
     public function getAttributes(): array
     {
         return $this->attributes;
@@ -65,6 +67,11 @@ final class AtLeast implements SerializableRuleInterface, SkipOnErrorInterface, 
     public function getMin(): int
     {
         return $this->min;
+    }
+
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
     }
 
     public function getMessage(): string
@@ -77,6 +84,7 @@ final class AtLeast implements SerializableRuleInterface, SkipOnErrorInterface, 
         return [
             'attributes' => $this->attributes,
             'min' => $this->min,
+            'incorrectInputMessage' => $this->incorrectInputMessage,
             'message' => [
                 'message' => $this->message,
                 'parameters' => ['min' => $this->min],

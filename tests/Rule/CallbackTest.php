@@ -180,7 +180,7 @@ final class CallbackTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(
             new Callback(callback: static fn (): Result => new Result()),
             new Callback(callback: static fn (): Result => new Result(), when: $when),

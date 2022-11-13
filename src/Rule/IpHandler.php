@@ -36,21 +36,19 @@ final class IpHandler implements RuleHandlerInterface
         }
 
         $this->checkAllowedVersions($rule);
+
         $result = new Result();
-        $message = $rule->getMessage();
-        $messageParameters = [
-            'attribute' => $context->getAttribute(),
-            'value' => $value,
-        ];
         if (!is_string($value)) {
-            $result->addError($message, $messageParameters);
-            return $result;
+            return $result->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getAttribute(),
+                'type' => get_debug_type($value),
+            ]);
         }
 
         if (preg_match($rule->getIpParsePattern(), $value, $matches) === 0) {
-            $result->addError($message, $messageParameters);
-            return $result;
+            return $result->addError($rule->getMessage(), ['attribute' => $context->getAttribute(), 'value' => $value]);
         }
+
         $negation = !empty($matches['not'] ?? null);
         $ip = $matches['ip'];
         $cidr = $matches['cidr'] ?? null;
@@ -59,18 +57,19 @@ final class IpHandler implements RuleHandlerInterface
         try {
             $ipVersion = IpHelper::getIpVersion($ip, false);
         } catch (InvalidArgumentException) {
-            $result->addError($message, $messageParameters);
-            return $result;
+            return $result->addError($rule->getMessage(), ['attribute' => $context->getAttribute(), 'value' => $value]);
         }
 
         $result = $this->validateValueParts($rule, $result, $cidr, $negation, $value, $context);
         if (!$result->isValid()) {
             return $result;
         }
+
         $result = $this->validateVersion($rule, $result, $ipVersion, $value, $context);
         if (!$result->isValid()) {
             return $result;
         }
+
         return $this->validateCidr($rule, $result, $cidr, $ipCidr, $value, $context);
     }
 
@@ -97,8 +96,8 @@ final class IpHandler implements RuleHandlerInterface
         Result $result,
         ?string $cidr,
         bool $negation,
-        mixed $value,
-        ?ValidationContext $context
+        string $value,
+        ValidationContext $context
     ): Result {
         if ($cidr === null && $rule->isRequireSubnet()) {
             $result->addError(
@@ -137,7 +136,7 @@ final class IpHandler implements RuleHandlerInterface
         Ip $rule,
         Result $result,
         int $ipVersion,
-        mixed $value,
+        string $value,
         ValidationContext $context
     ): Result {
         if ($ipVersion === IpHelper::IPV6 && !$rule->isAllowIpv6()) {
@@ -168,7 +167,7 @@ final class IpHandler implements RuleHandlerInterface
         Result $result,
         ?string $cidr,
         string $ipCidr,
-        mixed $value,
+        string $value,
         ValidationContext $context
     ): Result {
         if ($cidr !== null) {

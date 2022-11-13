@@ -10,7 +10,6 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\ValidationContext;
 
 final class GreaterThanTest extends RuleTestCase
 {
@@ -32,6 +31,22 @@ final class GreaterThanTest extends RuleTestCase
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
                     'message' => [
                         'message' => 'Value must be greater than "{targetValueOrAttribute}".',
                         'parameters' => [
@@ -51,25 +66,22 @@ final class GreaterThanTest extends RuleTestCase
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
-                    'message' => [
-                        'message' => 'Value must be greater than "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
                             'targetValueOrAttribute' => 1,
                         ],
                     ],
-                    'type' => 'number',
-                    'operator' => '>',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new GreaterThan(1, type: GreaterThan::TYPE_NUMBER),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => null,
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
                     'message' => [
                         'message' => 'Value must be greater than "{targetValueOrAttribute}".',
                         'parameters' => [
@@ -89,6 +101,22 @@ final class GreaterThanTest extends RuleTestCase
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'attribute',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'attribute',
+                            'targetValueOrAttribute' => 'attribute',
+                        ],
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'attribute',
+                            'targetValueOrAttribute' => 'attribute',
+                        ],
+                    ],
                     'message' => [
                         'message' => 'Value must be greater than "{targetValueOrAttribute}".',
                         'parameters' => [
@@ -104,12 +132,33 @@ final class GreaterThanTest extends RuleTestCase
                 ],
             ],
             [
-                new GreaterThan(targetAttribute: 'test', message: 'Custom message for {targetValueOrAttribute}'),
+                new GreaterThan(
+                    targetAttribute: 'test',
+                    incorrectInputMessage: 'Custom message 1.',
+                    incorrectDataSetTypeMessage: 'Custom message 2.',
+                    message: 'Custom message 3.',
+                ),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'test',
+                    'incorrectInputMessage' => [
+                        'message' => 'Custom message 1.',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'Custom message 2.',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
                     'message' => [
-                        'message' => 'Custom message for {targetValueOrAttribute}',
+                        'message' => 'Custom message 3.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
@@ -135,9 +184,11 @@ final class GreaterThanTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
+        $message = 'Value must be greater than "100".';
+
         return [
-            [99, [new GreaterThan(100)], ['' => ['Value must be greater than "100".']]],
-            ['100', [new GreaterThan(100)], ['' => ['Value must be greater than "100".']]],
+            [99, [new GreaterThan(100)], ['' => [$message]]],
+            ['100', [new GreaterThan(100)], ['' => [$message]]],
             'custom error' => [99, [new GreaterThan(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
     }
@@ -156,7 +207,7 @@ final class GreaterThanTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new GreaterThan(1), new GreaterThan(1, when: $when));
     }
 }

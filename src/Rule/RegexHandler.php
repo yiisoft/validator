@@ -27,15 +27,10 @@ final class RegexHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_string($value)) {
-            $result->addError(
-                $rule->getIncorrectInputMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
-
-            return $result;
+            return $result->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getAttribute(),
+                'type' => get_debug_type($value),
+            ]);
         }
 
         if (

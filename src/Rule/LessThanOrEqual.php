@@ -24,28 +24,28 @@ final class LessThanOrEqual extends Compare
 {
     public function __construct(
         /**
-         * @var mixed The constant value to be less than or equal to. When both this property
-         * and {@see $targetAttribute} are set, this property takes precedence.
+         * @var scalar|null $targetValue The constant value to be less than or equal to. When both this property and
+         * {@see $targetAttribute} are set, this property takes precedence.
          */
-        private $targetValue = null,
+        private int|float|string|bool|null $targetValue = null,
         /**
-         * @var string|null The attribute to be less than or equal to. When both this property
-         * and {@see $targetValue} are set, the {@see $targetValue} takes precedence.
+         * @var string|null $targetAttribute The attribute to be less than or equal to. When both this property and
+         *
+         * @see $targetValue} are set, the {@see $targetValue} takes precedence.
          */
-        private ?string $targetAttribute = null,
+        private string|null $targetAttribute = null,
+        private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean and null.',
+        private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
+        'a scalar type.',
         /**
          * @var string|null User-defined error message.
          */
-        private ?string $message = null,
+        private string|null $message = null,
         /**
          * @var string The type of the values being validated.
          */
         private string $type = self::TYPE_STRING,
-
-        /**
-         * @var bool|callable
-         */
-        $skipOnEmpty = false,
+        bool|callable|null $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -55,15 +55,18 @@ final class LessThanOrEqual extends Compare
         if ($this->targetValue === null && $this->targetAttribute === null) {
             throw new RuntimeException('Either "targetValue" or "targetAttribute" must be specified.');
         }
+
         parent::__construct(
             targetValue: $this->targetValue,
             targetAttribute: $this->targetAttribute,
+            incorrectInputMessage: $this->incorrectInputMessage,
+            incorrectDataSetTypeMessage: $this->incorrectDataSetTypeMessage,
             message: $this->message,
             type: $this->type,
             operator: '<=',
             skipOnEmpty: $skipOnEmpty,
             skipOnError: $this->skipOnError,
-            when: $this->when
+            when: $this->when,
         );
     }
 

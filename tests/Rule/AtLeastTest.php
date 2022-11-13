@@ -11,7 +11,6 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\ValidationContext;
 
 final class AtLeastTest extends RuleTestCase
 {
@@ -37,6 +36,7 @@ final class AtLeastTest extends RuleTestCase
                         'attr2',
                     ],
                     'min' => 1,
+                    'incorrectInputMessage' => 'Value must be an array or an object.',
                     'message' => [
                         'message' => 'The model is not valid. Must have at least "{min}" filled attributes.',
                         'parameters' => ['min' => 1],
@@ -53,6 +53,7 @@ final class AtLeastTest extends RuleTestCase
                         'attr2',
                     ],
                     'min' => 2,
+                    'incorrectInputMessage' => 'Value must be an array or an object.',
                     'message' => [
                         'message' => 'The model is not valid. Must have at least "{min}" filled attributes.',
                         'parameters' => ['min' => 2],
@@ -165,7 +166,7 @@ final class AtLeastTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new AtLeast([]), new AtLeast([], when: $when));
     }
 

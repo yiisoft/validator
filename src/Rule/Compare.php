@@ -49,21 +49,22 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
 
     public function __construct(
         /**
-         * @var mixed The constant value to be compared with. When both this property
-         * and {@see $targetAttribute} are set, this property takes precedence.
+         * @var scalar|null The constant value to be compared with. When both this property and {@see $targetAttribute}
+         * are set, this property takes precedence.
          */
-        private $targetValue = null,
+        private int|float|string|bool|null $targetValue = null,
         /**
-         * @var string|null The name of the attribute to be compared with. When both this property
-         * and {@see $targetValue} are set, the {@see $targetValue} takes precedence.
-         *
-         * @see $targetValue
+         * @var string|null The name of the attribute to be compared with. When both this property and
+         * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
          */
-        private ?string $targetAttribute = null,
+        private string|null $targetAttribute = null,
+        private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean and null.',
+        private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
+        'a scalar type.',
         /**
          * @var string|null User-defined error message.
          */
-        private ?string $message = null,
+        private string|null $message = null,
         /**
          * @var string The type of the values being compared.
          */
@@ -71,24 +72,22 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         /**
          * @var string The operator for comparison. The following operators are supported:
          *
-         * - `==`: check if two values are equal. The comparison is done is non-strict mode.
-         * - `===`: check if two values are equal. The comparison is done is strict mode.
-         * - `!=`: check if two values are NOT equal. The comparison is done is non-strict mode.
-         * - `!==`: check if two values are NOT equal. The comparison is done is strict mode.
+         * - `==`: check if two values are equal. The comparison is done in non-strict mode.
+         * - `===`: check if two values are equal. The comparison is done in strict mode.
+         * - `!=`: check if two values are NOT equal. The comparison is done in non-strict mode.
+         * - `!==`: check if two values are NOT equal. The comparison is done in strict mode.
          * - `>`: check if value being validated is greater than the value being compared with.
          * - `>=`: check if value being validated is greater than or equal to the value being compared with.
          * - `<`: check if value being validated is less than the value being compared with.
          * - `<=`: check if value being validated is less than or equal to the value being compared with.
          *
-         * When you want to compare numbers, make sure to also change @see $type} to
-         * {@see TYPE_NUMBER}.
+         * When you want to compare numbers, make sure to also change {@see $type} to {@see TYPE_NUMBER}.
          */
         private string $operator = '==',
-
         /**
          * @var bool|callable|null
          */
-        private $skipOnEmpty = null,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -100,12 +99,15 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         }
     }
 
-    public function getTargetValue(): mixed
+    /**
+     * @return scalar|null
+     */
+    public function getTargetValue(): int|float|string|bool|null
     {
         return $this->targetValue;
     }
 
-    public function getTargetAttribute(): ?string
+    public function getTargetAttribute(): string|null
     {
         return $this->targetAttribute;
     }
@@ -118,6 +120,16 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
     public function getOperator(): string
     {
         return $this->operator;
+    }
+
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
+
+    public function getIncorrectDataSetTypeMessage(): string
+    {
+        return $this->incorrectDataSetTypeMessage;
     }
 
     public function getMessage(): string
@@ -134,16 +146,26 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
 
     public function getOptions(): array
     {
+        $messageParameters = [
+            'targetValue' => $this->targetValue,
+            'targetAttribute' => $this->targetAttribute,
+            'targetValueOrAttribute' => $this->targetValue ?? $this->targetAttribute,
+        ];
+
         return [
             'targetValue' => $this->targetValue,
             'targetAttribute' => $this->targetAttribute,
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
+                'parameters' => $messageParameters,
+            ],
+            'incorrectDataSetTypeMessage' => [
+                'message' => $this->incorrectDataSetTypeMessage,
+                'parameters' => $messageParameters,
+            ],
             'message' => [
                 'message' => $this->getMessage(),
-                'parameters' => [
-                    'targetValue' => $this->targetValue,
-                    'targetAttribute' => $this->targetAttribute,
-                    'targetValueOrAttribute' => $this->targetValue ?? $this->targetAttribute,
-                ],
+                'parameters' => $messageParameters,
             ],
             'type' => $this->type,
             'operator' => $this->operator,

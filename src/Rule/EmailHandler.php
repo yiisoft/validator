@@ -23,19 +23,26 @@ final class EmailHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Email::class, $rule);
         }
 
-        $originalValue = $value;
         $result = new Result();
-
         if (!is_string($value)) {
-            $valid = false;
-        } elseif (!preg_match(
+            $result->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getAttribute(),
+                'type' => get_debug_type($value),
+            ]);
+
+            return $result;
+        }
+
+        $originalValue = $value;
+
+        if (!preg_match(
             '/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?((?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))/',
             $value,
             $matches
         )) {
             $valid = false;
         } else {
-            /** @psalm-var array{name:string,local:string,open:string,domain:string,close:string} $matches */
+            /** @var array{name:string,local:string,open:string,domain:string,close:string} $matches */
             if ($rule->isEnableIDN()) {
                 $matches['local'] = idn_to_ascii($matches['local']);
                 $matches['domain'] = idn_to_ascii($matches['domain']);

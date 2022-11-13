@@ -23,18 +23,23 @@ use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 use function array_pop;
 use function count;
 use function implode;
 use function is_array;
+use function is_int;
+use function is_string;
 use function ltrim;
 use function rtrim;
 use function sprintf;
 
 /**
  * Can be used for validation of nested structures.
+ *
+ * @psalm-import-type RulesType from ValidatorInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
@@ -52,23 +57,23 @@ final class Nested implements
     private const EACH_SHORTCUT = '*';
 
     /**
-     * @var iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
+     * @var iterable<iterable<RuleInterface>|RuleInterface>|null
      */
-    private ?iterable $rules;
+    private iterable|null $rules;
 
+    /**
+     * @param iterable|object|string|null $rules Rules for validate value that can be described by:
+     *
+     * - object that implement {@see RulesProviderInterface};
+     * - name of class from whose attributes their will be derived;
+     * - array or object implementing the `Traversable` interface that contain {@see RuleInterface} implementations
+     *   or closures.
+     *
+     * `$rules` can be null if validatable value is object. In this case rules will be derived from object via
+     * `getRules()` method if object implement {@see RulesProviderInterface} or from attributes otherwise.
+     * @psalm-param RulesType $rules
+     */
     public function __construct(
-        /**
-         * Rules for validate value that can be described by:
-         * - object that implement {@see RulesProviderInterface};
-         * - name of class from whose attributes their will be derived;
-         * - array or object implementing the `Traversable` interface that contain {@see RuleInterface} implementations
-         *   or closures.
-         *
-         * `$rules` can be null if validatable value is object. In this case rules will be derived from object via
-         * `getRules()` method if object implement {@see RulesProviderInterface} or from attributes otherwise.
-         *
-         * @var class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null
-         */
         iterable|object|string|null $rules = null,
 
         /**
@@ -84,6 +89,10 @@ final class Nested implements
         private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
+        private string $noRulesWithNoObjectMessage = 'Nested rule without rules can be used for objects only.',
+        private string $incorrectDataSetTypeMessage = 'An object data set data can only have an array or an object ' .
+        'type.',
+        private string $incorrectInputMessage = 'The value must have an array or an object type.',
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
         private bool $normalizeRules = true,
@@ -109,9 +118,9 @@ final class Nested implements
     }
 
     /**
-     * @return iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|null
+     * @return iterable<iterable<RuleInterface>|RuleInterface>|null
      */
-    public function getRules(): ?iterable
+    public function getRules(): iterable|null
     {
         return $this->rules;
     }
@@ -119,6 +128,21 @@ final class Nested implements
     public function getPropertyVisibility(): int
     {
         return $this->propertyVisibility;
+    }
+
+    public function getNoRulesWithNoObjectMessage(): string
+    {
+        return $this->noRulesWithNoObjectMessage;
+    }
+
+    public function getIncorrectDataSetTypeMessage(): string
+    {
+        return $this->incorrectDataSetTypeMessage;
+    }
+
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
     }
 
     public function getRequirePropertyPath(): bool
@@ -132,7 +156,7 @@ final class Nested implements
     }
 
     /**
-     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null $source
+     * @psalm-param RulesType $source
      */
     private function prepareRules(iterable|object|string|null $source): void
     {
@@ -150,9 +174,7 @@ final class Nested implements
             $rules = $source;
         }
 
-        $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
         self::ensureArrayHasRules($rules);
-
         $this->rules = $rules;
 
         if ($this->normalizeRules) {
@@ -164,7 +186,10 @@ final class Nested implements
         }
     }
 
-    private static function ensureArrayHasRules(iterable &$rules)
+    /**
+     * @psalm-assert iterable<RuleInterface> $rules
+     */
+    private static function ensureArrayHasRules(iterable &$rules): void
     {
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
 
@@ -186,8 +211,15 @@ final class Nested implements
 
     private function normalizeRules(): void
     {
-        /** @var iterable $rules */
+        if ($this->rules === null) {
+            return;
+        }
+
+        /** @var iterable<RuleInterface> $rules */
         $rules = $this->rules;
+        if ($rules instanceof Traversable) {
+            $rules = iterator_to_array($rules);
+        }
 
         while (true) {
             $breakWhile = true;
@@ -238,9 +270,23 @@ final class Nested implements
 
     public function propagateOptions(): void
     {
+        if ($this->rules === null) {
+            return;
+        }
+
         $rules = [];
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
-            foreach ($attributeRules as $attributeRule) {
+            if (!is_int($attributeRulesIndex) && !is_string($attributeRulesIndex)) {
+                $message = sprintf(
+                    'A value path can only have an integer or a string type. %s given',
+                    get_debug_type($attributeRulesIndex),
+                );
+
+                throw new InvalidArgumentException($message);
+            }
+
+            /** @var iterable<RuleInterface>|null $attributeRules */
+            foreach ($attributeRules ?? [] as $attributeRule) {
                 if ($attributeRule instanceof SkipOnEmptyInterface) {
                     $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
                 }
@@ -272,6 +318,9 @@ final class Nested implements
     public function getOptions(): array
     {
         return [
+            'noRulesWithNoObjectMessage' => $this->noRulesWithNoObjectMessage,
+            'incorrectDataSetTypeMessage' => $this->incorrectDataSetTypeMessage,
+            'incorrectInputMessage' => $this->incorrectInputMessage,
             'requirePropertyPath' => $this->getRequirePropertyPath(),
             'noPropertyPathMessage' => [
                 'message' => $this->getNoPropertyPathMessage(),

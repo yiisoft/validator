@@ -11,7 +11,6 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\ValidationContext;
 
 final class BooleanTest extends RuleTestCase
 {
@@ -35,8 +34,15 @@ final class BooleanTest extends RuleTestCase
                     'trueValue' => '1',
                     'falseValue' => '0',
                     'strict' => false,
-                    'message' => [
-                        'message' => 'The value must be either "{true}" or "{false}".',
+                    'nonScalarMessage' => [
+                        'message' => 'Value must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => '1',
+                            'false' => '0',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => '1',
                             'false' => '0',
@@ -52,8 +58,15 @@ final class BooleanTest extends RuleTestCase
                     'trueValue' => true,
                     'falseValue' => false,
                     'strict' => true,
-                    'message' => [
-                        'message' => 'The value must be either "{true}" or "{false}".',
+                    'nonScalarMessage' => [
+                        'message' => 'Value must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => 'true',
+                            'false' => 'false',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => 'true',
                             'false' => 'false',
@@ -68,7 +81,8 @@ final class BooleanTest extends RuleTestCase
                     trueValue: 'YES',
                     falseValue: 'NO',
                     strict: true,
-                    message: 'Custom message.',
+                    nonScalarMessage: 'Custom message 1.',
+                    scalarMessage: 'Custom message 2.',
                     skipOnEmpty: true,
                     skipOnError: true
                 ),
@@ -76,8 +90,15 @@ final class BooleanTest extends RuleTestCase
                     'trueValue' => 'YES',
                     'falseValue' => 'NO',
                     'strict' => true,
-                    'message' => [
-                        'message' => 'Custom message.',
+                    'nonScalarMessage' => [
+                        'message' => 'Custom message 1.',
+                        'parameters' => [
+                            'true' => 'YES',
+                            'false' => 'NO',
+                        ],
+                    ],
+                    'scalarMessage' => [
+                        'message' => 'Custom message 2.',
                         'parameters' => [
                             'true' => 'YES',
                             'false' => 'NO',
@@ -109,8 +130,8 @@ final class BooleanTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $defaultErrors = ['' => ['The value must be either "1" or "0".']];
-        $booleanErrors = ['' => ['The value must be either "true" or "false".']];
+        $defaultErrors = ['' => ['Value must be either "1" or "0".']];
+        $booleanErrors = ['' => ['Value must be either "true" or "false".']];
 
         return [
             ['5', [new Boolean()], $defaultErrors],
@@ -124,7 +145,7 @@ final class BooleanTest extends RuleTestCase
             ['0', [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
             [[], [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
 
-            'custom error' => [5, [new Boolean(message: 'Custom error.')], ['' => ['Custom error.']]],
+            'custom error' => [5, [new Boolean(scalarMessage: 'Custom error.')], ['' => ['Custom error.']]],
         ];
     }
 
@@ -135,7 +156,7 @@ final class BooleanTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Boolean(), new Boolean(when: $when));
     }
 

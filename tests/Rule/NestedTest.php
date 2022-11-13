@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use ReflectionProperty;
 use stdClass;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
@@ -27,6 +28,7 @@ use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
+use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
@@ -87,6 +89,10 @@ final class NestedTest extends RuleTestCase
             [
                 new Nested([new Number(integerPattern: '/1/', numberPattern: '/1/')]),
                 [
+                    'noRulesWithNoObjectMessage' => 'Nested rule without rules can be used for objects only.',
+                    'incorrectDataSetTypeMessage' => 'An object data set data can only have an array or an object ' .
+                        'type.',
+                    'incorrectInputMessage' => 'The value must have an array or an object type.',
                     'requirePropertyPath' => false,
                     'noPropertyPathMessage' => [
                         'message' => 'Property path "{path}" is not found.',
@@ -99,6 +105,9 @@ final class NestedTest extends RuleTestCase
                             'asInteger' => false,
                             'min' => null,
                             'max' => null,
+                            'incorrectInputMessage' => [
+                                'message' => 'The allowed types are integer, float and string.',
+                            ],
                             'notANumberMessage' => [
                                 'message' => 'Value must be a number.',
                             ],
@@ -121,6 +130,10 @@ final class NestedTest extends RuleTestCase
             [
                 new Nested(['user.age' => new Number(integerPattern: '/1/', numberPattern: '/1/')]),
                 [
+                    'noRulesWithNoObjectMessage' => 'Nested rule without rules can be used for objects only.',
+                    'incorrectDataSetTypeMessage' => 'An object data set data can only have an array or an object ' .
+                        'type.',
+                    'incorrectInputMessage' => 'The value must have an array or an object type.',
                     'requirePropertyPath' => false,
                     'noPropertyPathMessage' => [
                         'message' => 'Property path "{path}" is not found.',
@@ -133,6 +146,9 @@ final class NestedTest extends RuleTestCase
                             'asInteger' => false,
                             'min' => null,
                             'max' => null,
+                            'incorrectInputMessage' => [
+                                'message' => 'The allowed types are integer, float and string.',
+                            ],
                             'notANumberMessage' => [
                                 'message' => 'Value must be a number.',
                             ],
@@ -158,6 +174,10 @@ final class NestedTest extends RuleTestCase
                     'author.age' => new StubRule('author-age', ['key' => 'age']),
                 ]),
                 [
+                    'noRulesWithNoObjectMessage' => 'Nested rule without rules can be used for objects only.',
+                    'incorrectDataSetTypeMessage' => 'An object data set data can only have an array or an object ' .
+                        'type.',
+                    'incorrectInputMessage' => 'The value must have an array or an object type.',
                     'requirePropertyPath' => false,
                     'noPropertyPathMessage' => [
                         'message' => 'Property path "{path}" is not found.',
@@ -178,6 +198,10 @@ final class NestedTest extends RuleTestCase
                     ],
                 ]),
                 [
+                    'noRulesWithNoObjectMessage' => 'Nested rule without rules can be used for objects only.',
+                    'incorrectDataSetTypeMessage' => 'An object data set data can only have an array or an object ' .
+                        'type.',
+                    'incorrectInputMessage' => 'The value must have an array or an object type.',
                     'requirePropertyPath' => false,
                     'noPropertyPathMessage' => [
                         'message' => 'Property path "{path}" is not found.',
@@ -206,47 +230,6 @@ final class NestedTest extends RuleTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Bare shortcut is prohibited. Use "Each" rule instead.');
         new Nested(['*' => [new Number(min: -10, max: 10)]]);
-    }
-
-    public function dataNestedWithoutRulesToNonObject(): array
-    {
-        return [
-            'array' => [
-                'array',
-                new class () {
-                    #[Nested]
-                    public array $value = [];
-                },
-            ],
-            'boolean' => [
-                'bool',
-                new class () {
-                    #[Nested]
-                    public bool $value = false;
-                },
-            ],
-            'integer' => [
-                'int',
-                new class () {
-                    #[Nested]
-                    public int $value = 42;
-                },
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider dataNestedWithoutRulesToNonObject
-     */
-    public function testNestedWithoutRulesToNonObject(string $expectedValueName, object $data): void
-    {
-        $validator = ValidatorFactory::make();
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'Nested rule without rules could be used for objects only.'
-        );
-        $validator->validate($data);
     }
 
     public function dataHandler(): array
@@ -391,10 +374,8 @@ final class NestedTest extends RuleTestCase
     /**
      * @dataProvider dataHandler
      */
-    public function testHandler(
-        object $data,
-        array $expectedErrorMessagesIndexedByPath
-    ): void {
+    public function testHandler(object $data, array $expectedErrorMessagesIndexedByPath): void
+    {
         $result = ValidatorFactory::make()->validate($data);
         $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
@@ -786,12 +767,101 @@ final class NestedTest extends RuleTestCase
                     ]),
                 ],
             ],
+            'property path of non-integer and non-string type, array' => [
+                [0 => 'a', 1 => 'b'],
+                [new Nested([false => new HasLength(min: 1), true => new HasLength(min: 1)])],
+            ],
+            'property path of non-integer and non-string type, iterator' => [
+                [0 => 'a', 1 => 'b'],
+                [new Nested(new IteratorWithBooleanKey())],
+            ],
+            'property path of non-integer and non-string type, generator' => [
+                [0 => 'a', 1 => 'b'],
+                [
+                    new Nested(
+                        new class () implements RulesProviderInterface {
+                            public function getRules(): iterable
+                            {
+                                yield false => new HasLength(min: 1);
+                                yield true => new HasLength(min: 1);
+                            }
+                        },
+                    ),
+                ],
+            ],
         ];
     }
 
     public function dataValidationFailed(): array
     {
         return [
+            // No rules with no object
+            'no rules with no object, array' => [
+                new class () {
+                    #[Nested]
+                    public array $value = [];
+                },
+                null,
+                ['value' => ['Nested rule without rules can be used for objects only.']],
+            ],
+            'no rules with no object, boolean' => [
+                new class () {
+                    #[Nested]
+                    public bool $value = false;
+                },
+                null,
+                ['value' => ['Nested rule without rules can be used for objects only.']],
+            ],
+            'no rules with no object, integer' => [
+                new class () {
+                    #[Nested]
+                    public int $value = 42;
+                },
+                null,
+                ['value' => ['Nested rule without rules can be used for objects only.']],
+            ],
+            // Incorrect data set type
+            'incorrect data set type' => [
+                new class () implements DataSetInterface {
+                    public function getAttributeValue(string $attribute): mixed
+                    {
+                        return false;
+                    }
+
+                    public function getData(): mixed
+                    {
+                        return new class () implements DataSetInterface {
+                            public function getAttributeValue(string $attribute): mixed
+                            {
+                                return false;
+                            }
+
+                            public function getData(): mixed
+                            {
+                                return false;
+                            }
+
+                            public function hasAttribute(string $attribute): bool
+                            {
+                                return false;
+                            }
+                        };
+                    }
+
+                    public function hasAttribute(string $attribute): bool
+                    {
+                        return false;
+                    }
+                },
+                [new Nested(['value' => new Required()])],
+                ['' => ['An object data set data can only have an array or an object type.']],
+            ],
+            // Incorrect input
+            'incorrect input' => [
+                '',
+                [new Nested(['value' => new Required()])],
+                ['' => ['The value must have an array or an object type.']],
+            ],
             'error' => [
                 [
                     'author' => [
@@ -813,11 +883,6 @@ final class NestedTest extends RuleTestCase
                 ['author.sex' => ['This value is invalid.']],
             ],
             [
-                '',
-                [new Nested(['value' => new Required()])],
-                ['' => ['Value should be an array or an object. string given.']],
-            ],
-            [
                 ['value' => null],
                 [new Nested(['value' => new Required()])],
                 ['value' => ['Value cannot be blank.']],
@@ -826,6 +891,11 @@ final class NestedTest extends RuleTestCase
                 [],
                 [new Nested(['value' => new Required()], requirePropertyPath: true)],
                 ['value' => ['Property path "value" is not found.']],
+            ],
+            [
+                [],
+                [new Nested([0 => new Required()], requirePropertyPath: true)],
+                [0 => ['Property path "0" is not found.']],
             ],
             // https://github.com/yiisoft/validator/issues/200
             [
@@ -899,7 +969,7 @@ final class NestedTest extends RuleTestCase
             [
                 '',
                 [new Nested(['value' => new Required()])],
-                [['Value should be an array or an object. string given.', []]],
+                [['The value must have an array or an object type.', []]],
             ],
             [
                 ['value' => null],
@@ -984,7 +1054,7 @@ final class NestedTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Nested(), new Nested(when: $when));
     }
 

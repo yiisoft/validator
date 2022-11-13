@@ -20,28 +20,32 @@ final class BooleanHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Boolean::class, $rule);
         }
 
-        if ($rule->isStrict()) {
+        if (!is_scalar($value)) {
+            $valid = false;
+        } elseif ($rule->isStrict()) {
             $valid = $value === $rule->getTrueValue() || $value === $rule->getFalseValue();
         } else {
             $valid = $value == $rule->getTrueValue() || $value == $rule->getFalseValue();
         }
 
         $result = new Result();
-
         if ($valid) {
             return $result;
         }
 
-        $result->addError(
-            $rule->getMessage(),
-            [
-                'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
-                'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
-                'attribute' => $context->getAttribute(),
-                'value' => $value,
-            ],
-        );
+        $parameters = [
+            'attribute' => $context->getAttribute(),
+            'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
+            'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
+        ];
+        if (is_scalar($value)) {
+            $parameters['value'] = $value;
 
-        return $result;
+            return $result->addError($rule->getScalarMessage(), $parameters);
+        }
+
+        $parameters['type'] = get_debug_type($value);
+
+        return $result->addError($rule->getNonScalarMessage(), $parameters);
     }
 }

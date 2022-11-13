@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use InvalidArgumentException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -50,14 +49,14 @@ final class NestedHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Nested::class, $rule);
         }
 
+        $compoundResult = new Result();
+
         if ($rule->getRules() === null) {
             if (!is_object($value)) {
-                throw new InvalidArgumentException(
-                    sprintf(
-                        'Nested rule without rules could be used for objects only. %s given.',
-                        get_debug_type($value)
-                    )
-                );
+                return $compoundResult->addError($rule->getNoRulesWithNoObjectMessage(), [
+                    'attribute' => $context->getAttribute(),
+                    'type' => get_debug_type($value),
+                ]);
             }
 
             $dataSet = new ObjectDataSet($value, $rule->getPropertyVisibility());
@@ -68,58 +67,67 @@ final class NestedHandler implements RuleHandlerInterface
         if (is_array($value)) {
             $data = $value;
         } elseif (is_object($value)) {
+            /** @var mixed $data */
             $data = (new ObjectDataSet($value, $rule->getPropertyVisibility()))->getData();
-        } else {
-            $message = sprintf('Value should be an array or an object. %s given.', get_debug_type($value));
-
-            return (new Result())->addError(
-                $message,
-                [
+            if (!is_array($data) && !is_object($data)) {
+                return $compoundResult->addError($rule->getIncorrectDataSetTypeMessage(), [
                     'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
+                    'type' => get_debug_type($data),
+                ]);
+            }
+        } else {
+            return $compoundResult->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getAttribute(),
+                'type' => get_debug_type($value),
+            ]);
         }
 
-        $compoundResult = new Result();
         $results = [];
+        /** @var int|string $valuePath */
         foreach ($rule->getRules() as $valuePath => $rules) {
-            if ($rule->getRequirePropertyPath() && !ArrayHelper::pathExists($data, $valuePath)) {
-                /**
-                 * @psalm-suppress InvalidScalarArgument
-                 */
+            if (is_array($data) && $rule->getRequirePropertyPath() && !ArrayHelper::pathExists($data, $valuePath)) {
+                if (is_int($valuePath)) {
+                    $valuePathList = [$valuePath];
+                } else {
+                    /** @var list<string> $valuePathList */
+                    $valuePathList = StringHelper::parsePath($valuePath);
+                }
+
                 $compoundResult->addError(
                     $rule->getNoPropertyPathMessage(),
                     [
                         'path' => $valuePath,
                         'attribute' => $context->getAttribute(),
                     ],
-                    StringHelper::parsePath($valuePath)
+                    $valuePathList,
                 );
 
                 continue;
             }
 
+            /** @var mixed $validatedValue */
             $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
             $rules = is_iterable($rules) ? $rules : [$rules];
 
             $itemResult = $context->getValidator()->validate($validatedValue, $rules);
-
             if ($itemResult->isValid()) {
                 continue;
             }
 
             $result = new Result();
-
             foreach ($itemResult->getErrors() as $error) {
-                $errorValuePath = is_int($valuePath) ? [$valuePath] : StringHelper::parsePath($valuePath);
-                if (!empty($error->getValuePath())) {
-                    array_push($errorValuePath, ...$error->getValuePath());
+                if (is_int($valuePath)) {
+                    $valuePathList = [$valuePath];
+                } else {
+                    /** @var list<string> $valuePathList */
+                    $valuePathList = StringHelper::parsePath($valuePath);
                 }
-                /**
-                 * @psalm-suppress InvalidScalarArgument
-                 */
-                $result->addError($error->getMessage(), $error->getParameters(), $errorValuePath);
+
+                if (!empty($valuePathList)) {
+                    array_push($valuePathList, ...$error->getValuePath());
+                }
+
+                $result->addError($error->getMessage(), $error->getParameters(), $valuePathList);
             }
             $results[] = $result;
         }

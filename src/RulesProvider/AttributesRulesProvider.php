@@ -20,7 +20,7 @@ final class AttributesRulesProvider implements RulesProviderInterface
 
     public function __construct(
         /**
-         * @param class-string|object $class
+         * @var class-string|object
          */
         private string|object $source,
         private int $propertyVisibility = ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC

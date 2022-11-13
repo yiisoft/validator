@@ -28,20 +28,17 @@ final class HasLengthHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-
         if (!is_string($value)) {
-            $result->addError(
-                $rule->getMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
+            $result->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getAttribute(),
+                'type' => get_debug_type($value),
+            ]);
+
             return $result;
         }
 
         $length = mb_strlen($value, $rule->getEncoding());
-        $this->validateLimits($value, $rule, $context, $length, $result);
+        $this->validateLimits($rule, $context, $length, $result);
 
         return $result;
     }

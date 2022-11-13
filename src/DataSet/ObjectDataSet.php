@@ -27,6 +27,9 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     private bool $dataSetProvided;
     private bool $rulesProvided;
 
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     #[ArrayShape([
         [
             'rules' => 'iterable',
@@ -54,7 +57,10 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     public function getRules(): iterable
     {
         if ($this->rulesProvided) {
-            return $this->object->getRules();
+            /** @var RulesProviderInterface $object */
+            $object = $this->object;
+
+            return $object->getRules();
         }
 
         // Providing data set assumes object has its own attributes and rules getting logic. So further parsing of
@@ -64,6 +70,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         }
 
         if ($this->hasCacheItem('rules')) {
+            /** @var array<string, RuleInterface> */
             return $this->getCacheItem('rules');
         }
 
@@ -96,7 +103,10 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
     public function getAttributeValue(string $attribute): mixed
     {
         if ($this->dataSetProvided) {
-            return $this->object->getAttributeValue($attribute);
+            /** @var DataSetInterface $object */
+            $object = $this->object;
+
+            return $object->getAttributeValue($attribute);
         }
 
         return ($this->getReflectionProperties()[$attribute] ?? null)?->getValue($this->getObject());
@@ -104,28 +114,41 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
     public function hasAttribute(string $attribute): bool
     {
-        return $this->dataSetProvided
-            ? $this->object->hasAttribute($attribute)
-            : array_key_exists($attribute, $this->getReflectionProperties());
+        if (!$this->dataSetProvided) {
+            return array_key_exists($attribute, $this->getReflectionProperties());
+        }
+
+        /** @var DataSetInterface $object */
+        $object = $this->object;
+
+        return $object->hasAttribute($attribute);
     }
 
-    public function getData(): array
+    public function getData(): mixed
     {
         if ($this->dataSetProvided) {
-            return $this->object->getData();
+            /** @var DataSetInterface $object */
+            $object = $this->object;
+
+            return $object->getData();
         }
 
         $data = [];
         foreach ($this->getReflectionProperties() as $name => $property) {
+            /** @psalm-suppress MixedAssignment */
             $data[$name] = $property->getValue($this->object);
         }
 
         return $data;
     }
 
+    /**
+     * @return array<string, ReflectionProperty>
+     */
     private function getReflectionProperties(): array
     {
         if ($this->hasCacheItem('reflectionProperties')) {
+            /** @var array<string, ReflectionProperty> */
             return $this->getCacheItem('reflectionProperties');
         }
 
@@ -154,6 +177,10 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
     private function hasCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): bool
     {
+        if ($this->cacheKey === null) {
+            return false;
+        }
+
         if (!array_key_exists($this->cacheKey, self::$cache)) {
             return false;
         }
@@ -161,13 +188,22 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         return array_key_exists($name, self::$cache[$this->cacheKey]);
     }
 
+    /**
+     * @psalm-suppress MixedInferredReturnType
+     * @psalm-suppress MixedReturnStatement
+     */
     private function getCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name): array
     {
+        /** @psalm-suppress PossiblyNullArrayOffset */
         return self::$cache[$this->cacheKey][$name];
     }
 
-    private function setCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name, array $rules): void
+    private function setCacheItem(#[ExpectedValues(['rules', 'reflectionProperties'])] string $name, array $value): void
     {
-        self::$cache[$this->cacheKey][$name] = $rules;
+        /**
+         * @psalm-suppress PossiblyNullArrayOffset
+         * @psalm-suppress MixedAssignment
+         */
+        self::$cache[$this->cacheKey][$name] = $value;
     }
 }

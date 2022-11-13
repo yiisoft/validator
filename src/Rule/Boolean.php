@@ -27,20 +27,21 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
 
     public function __construct(
         /**
-         * @var mixed the value representing "true" status. Defaults to `1`.
+         * @var scalar the value representing "true" status. Defaults to `1`.
          */
-        private mixed $trueValue = '1',
+        private int|float|string|bool $trueValue = '1',
         /**
-         * @var mixed the value representing "false" status. Defaults to `0`.
+         * @var scalar the value representing "false" status. Defaults to `0`.
          */
-        private mixed $falseValue = '0',
+        private int|float|string|bool $falseValue = '0',
         /**
          * @var bool whether the comparison to {@see $trueValue} and {@see $falseValue} is strict. When this is `true`,
          * the value and type must both match those of {@see $trueValue} or {@see $falseValue}. Defaults to `false`,
          * meaning only the value needs to be matched.
          */
         private bool $strict = false,
-        private string $message = 'The value must be either "{true}" or "{false}".',
+        private string $nonScalarMessage = 'Value must be either "{true}" or "{false}".',
+        private string $scalarMessage = 'Value must be either "{true}" or "{false}".',
 
         /**
          * @var bool|callable|null
@@ -59,12 +60,18 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
         return 'boolean';
     }
 
-    public function getTrueValue(): mixed
+    /**
+     * @return scalar
+     */
+    public function getTrueValue(): int|float|string|bool
     {
         return $this->trueValue;
     }
 
-    public function getFalseValue(): mixed
+    /**
+     * @return scalar
+     */
+    public function getFalseValue(): int|float|string|bool
     {
         return $this->falseValue;
     }
@@ -74,23 +81,34 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
         return $this->strict;
     }
 
-    public function getMessage(): string
+    public function getNonScalarMessage(): string
     {
-        return $this->message;
+        return $this->nonScalarMessage;
+    }
+
+    public function getScalarMessage(): string
+    {
+        return $this->scalarMessage;
     }
 
     public function getOptions(): array
     {
+        $messageParameters = [
+            'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+            'false' => $this->falseValue === false ? 'false' : $this->falseValue,
+        ];
+
         return [
             'trueValue' => $this->trueValue,
             'falseValue' => $this->falseValue,
             'strict' => $this->strict,
-            'message' => [
-                'message' => $this->message,
-                'parameters' => [
-                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                    'false' => $this->falseValue === false ? 'false' : $this->falseValue,
-                ],
+            'nonScalarMessage' => [
+                'message' => $this->nonScalarMessage,
+                'parameters' => $messageParameters,
+            ],
+            'scalarMessage' => [
+                'message' => $this->scalarMessage,
+                'parameters' => $messageParameters,
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,

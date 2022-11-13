@@ -15,7 +15,7 @@ use function is_callable;
  */
 final class SkipOnEmptyNormalizer
 {
-    public static function normalize(mixed $skipOnEmpty): ?callable
+    public static function normalize(mixed $skipOnEmpty): callable
     {
         if ($skipOnEmpty === false || $skipOnEmpty === null) {
             return new SkipNone();

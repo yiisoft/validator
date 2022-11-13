@@ -6,6 +6,9 @@ namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
 
+use function is_int;
+use function is_string;
+
 /**
  * RulesDumper allows to get an array of rule names and corresponding settings from a set of rules.
  * The array is usually passed to the client to use it in client-side validation.
@@ -52,13 +55,24 @@ final class RulesDumper
     private function fetchOptions(iterable $rules): array
     {
         $result = [];
+        /** @var mixed $attribute */
+        /** @var mixed $rule */
         foreach ($rules as $attribute => $rule) {
+            if (!is_int($attribute) && !is_string($attribute)) {
+                $message = sprintf(
+                    'An attribute can only have an integer or a string type. %s given.',
+                    get_debug_type($attribute),
+                );
+
+                throw new InvalidArgumentException($message);
+            }
+
             if (is_iterable($rule)) {
-                $result[$attribute] = $this->fetchOptions($rule);
+                $options = $this->fetchOptions($rule);
             } elseif ($rule instanceof SerializableRuleInterface) {
-                $result[$attribute] = array_merge([$rule->getName()], $rule->getOptions());
+                $options = array_merge([$rule->getName()], $rule->getOptions());
             } elseif ($rule instanceof RuleInterface) {
-                $result[$attribute] = [$rule->getName()];
+                $options = [$rule->getName()];
             } else {
                 throw new InvalidArgumentException(sprintf(
                     'Each rule must implement "%s". Type "%s" given.',
@@ -66,6 +80,8 @@ final class RulesDumper
                     get_debug_type($rule),
                 ));
             }
+
+            $result[$attribute] = $options;
         }
 
         return $result;

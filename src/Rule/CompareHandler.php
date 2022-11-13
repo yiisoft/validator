@@ -31,27 +31,38 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
+        if ($value !== null && !is_scalar($value)) {
+            return $result->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getAttribute(),
+                'type' => get_debug_type($value),
+            ]);
+        }
+
         $targetAttribute = $rule->getTargetAttribute();
         $targetValue = $rule->getTargetValue();
 
         if ($targetValue === null && $targetAttribute !== null) {
+            /** @var mixed $targetValue */
             $targetValue = $context->getDataSet()?->getAttributeValue($targetAttribute);
-        }
-
-        if (!$this->compareValues($rule->getOperator(), $rule->getType(), $value, $targetValue)) {
-            $result->addError(
-                $rule->getMessage(),
-                [
+            if (!is_scalar($targetValue)) {
+                return $result->addError($rule->getIncorrectDataSetTypeMessage(), [
                     'attribute' => $context->getAttribute(),
-                    'targetValue' => $rule->getTargetValue(),
-                    'targetAttribute' => $rule->getTargetAttribute(),
-                    'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
-                    'value' => $value,
-                ],
-            );
+                    'type' => get_debug_type($targetValue),
+                ]);
+            }
         }
 
-        return $result;
+        if ($this->compareValues($rule->getOperator(), $rule->getType(), $value, $targetValue)) {
+            return $result;
+        }
+
+        return $result->addError($rule->getMessage(), [
+            'attribute' => $context->getAttribute(),
+            'targetValue' => $rule->getTargetValue(),
+            'targetAttribute' => $rule->getTargetAttribute(),
+            'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
+            'value' => $value,
+        ]);
     }
 
     /**
@@ -67,12 +78,13 @@ final class CompareHandler implements RuleHandlerInterface
     private function compareValues(string $operator, string $type, mixed $value, mixed $targetValue): bool
     {
         if ($type === Compare::TYPE_NUMBER) {
-            $value = (float)$value;
-            $targetValue = (float)$targetValue;
+            $value = (float) $value;
+            $targetValue = (float) $targetValue;
         } else {
-            $value = (string)$value;
-            $targetValue = (string)$targetValue;
+            $value = (string) $value;
+            $targetValue = (string) $targetValue;
         }
+
         return match ($operator) {
             '==' => $value == $targetValue,
             '===' => $value === $targetValue,

@@ -26,6 +26,7 @@ final class Json implements SerializableRuleInterface, SkipOnErrorInterface, Whe
     use WhenTrait;
 
     public function __construct(
+        private string $incorrectInputMessage = 'The value must have a string type.',
         private string $message = 'The value is not JSON.',
 
         /**
@@ -45,6 +46,11 @@ final class Json implements SerializableRuleInterface, SkipOnErrorInterface, Whe
         return 'json';
     }
 
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
+
     public function getMessage(): string
     {
         return $this->message;
@@ -53,6 +59,9 @@ final class Json implements SerializableRuleInterface, SkipOnErrorInterface, Whe
     public function getOptions(): array
     {
         return [
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
+            ],
             'message' => [
                 'message' => $this->message,
             ],

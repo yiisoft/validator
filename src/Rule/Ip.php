@@ -40,6 +40,8 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
      */
     private const NEGATION_CHAR = '!';
     /**
+     * @var array<string, list<string>>
+     *
      * @see $networks
      */
     private array $defaultNetworks = [
@@ -55,37 +57,35 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
 
     public function __construct(
         /**
-         * @var array Custom network aliases, that can be used in {@see $ranges}.
+         * @var array<string, list<string>> Custom network aliases, that can be used in {@see $ranges}:
          *
-         *  - key - alias name
-         *  - value - array of strings. String can be an IP range, IP address or another alias. String can be
-         *    negated with {@see NEGATION_CHAR} (independent of {@see $allowNegation} option).
+         *  - key - alias name.
+         *  - value - array of strings. String can be an IP range, IP address or another alias. String can be negated
+         * with {@see NEGATION_CHAR} (independent of {@see $allowNegation} option).
          *
          * The following aliases are defined by default in {@see $defaultNetworks} and will be merged with custom ones:
          *
-         *  - `*`: `any`
-         *  - `any`: `0.0.0.0/0, ::/0`
-         *  - `private`: `10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, fd00::/8`
-         *  - `multicast`: `224.0.0.0/4, ff00::/8`
-         *  - `linklocal`: `169.254.0.0/16, fe80::/10`
-         *  - `localhost`: `127.0.0.0/8', ::1`
-         *  - `documentation`: `192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24, 2001:db8::/32`
-         *  - `system`: `multicast, linklocal, localhost, documentation`
-         *
-         * @see $defaultNetworks
+         *  - `*`: `any`.
+         *  - `any`: `0.0.0.0/0, ::/0`.
+         *  - `private`: `10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, fd00::/8`.
+         *  - `multicast`: `224.0.0.0/4, ff00::/8`.
+         *  - `linklocal`: `169.254.0.0/16, fe80::/10`.
+         *  - `localhost`: `127.0.0.0/8', ::1`.
+         *  - `documentation`: `192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24, 2001:db8::/32`.
+         *  - `system`: `multicast, linklocal, localhost, documentation`.
          */
         private array $networks = [],
         /**
-         * @var bool whether the validating value can be an IPv4 address. Defaults to `true`.
+         * @var bool Whether the validating value can be an IPv4 address. Defaults to `true`.
          */
         private bool $allowIpv4 = true,
         /**
-         * @var bool whether the validating value can be an IPv6 address. Defaults to `true`.
+         * @var bool Whether the validating value can be an IPv6 address. Defaults to `true`.
          */
         private bool $allowIpv6 = true,
         /**
-         * @var bool whether the address can be an IP with CIDR subnet, like `192.168.10.0/24`.
-         * The following values are possible:
+         * @var bool Whether the address can be an IP with CIDR subnet, like `192.168.10.0/24`. The following values are
+         * possible:
          *
          * - `false` - the address must not have a subnet (default).
          * - `true` - specifying a subnet is optional.
@@ -93,86 +93,77 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
         private bool $allowSubnet = false,
         private bool $requireSubnet = false,
         /**
-         * @var bool whether address may have a {@see NEGATION_CHAR} character at the beginning.
-         * Defaults to `false`.
+         * @var bool Whether address may have a {@see NEGATION_CHAR} character at the beginning. Defaults to `false`.
          */
         private bool $allowNegation = false,
+        private string $incorrectInputMessage = 'The value must have a string type.',
         /**
-         * @var string user-defined error message is used when validation fails due to the wrong IP address format.
+         * @var string User-defined error message is used when validation fails due to the wrong IP address format.
          *
          * You may use the following placeholders in the message:
          *
-         * - `{attribute}`: the label of the attribute being validated
-         * - `{value}`: the value of the attribute being validated
+         * - `{attribute}`: the label of the attribute being validated.
+         * - `{value}`: the value of the attribute being validated.
          */
         private string $message = 'Must be a valid IP address.',
         /**
-         * @var string user-defined error message is used when validation fails due to the disabled IPv4 validation.
+         * @var string User-defined error message is used when validation fails due to the disabled IPv4 validation when
+         * {@see $allowIpv4} is set.
          *
          * You may use the following placeholders in the message:
          *
-         * - `{attribute}`: the label of the attribute being validated
-         * - `{value}`: the value of the attribute being validated
-         *
-         * @see $allowIpv4
+         * - `{attribute}`: the label of the attribute being validated.
+         * - `{value}`: the value of the attribute being validated.
          */
         private string $ipv4NotAllowedMessage = 'Must not be an IPv4 address.',
         /**
-         * @var string user-defined error message is used when validation fails due to the disabled IPv6 validation.
+         * @var string User-defined error message is used when validation fails due to the disabled IPv6 validation when
+         * {@see $allowIpv6} is set.
          *
          * You may use the following placeholders in the message:
          *
-         * - `{attribute}`: the label of the attribute being validated
-         * - `{value}`: the value of the attribute being validated
-         *
-         * @see $allowIpv6
+         * - `{attribute}`: the label of the attribute being validated.
+         * - `{value}`: the value of the attribute being validated.
          */
         private string $ipv6NotAllowedMessage = 'Must not be an IPv6 address.',
         /**
-         * @var string user-defined error message is used when validation fails due to the wrong CIDR.
+         * @var string User-defined error message is used when validation fails due to the wrong CIDR when
+         * {@see $allowSubnet} is set.
          *
          * You may use the following placeholders in the message:
          *
-         * - `{attribute}`: the label of the attribute being validated
-         * - `{value}`: the value of the attribute being validated
-         *
-         * @see $allowSubnet
+         * - `{attribute}`: the label of the attribute being validated.
+         * - `{value}`: the value of the attribute being validated.
          */
         private string $wrongCidrMessage = 'Contains wrong subnet mask.',
         /**
-         * @var string user-defined error message is used when validation fails due to subnet {@see $allowSubnet} is
-         * used, but the CIDR prefix is not set.
+         * @var string User-defined error message is used when validation fails due to {@see $allowSubnet} is used, but
+         * the CIDR prefix is not set.
          *
          * You may use the following placeholders in the message:
          *
-         * - `{attribute}`: the label of the attribute being validated
-         * - `{value}`: the value of the attribute being validated
-         *
-         * @see $allowSubnet
+         * - `{attribute}`: the label of the attribute being validated.
+         * - `{value}`: the value of the attribute being validated.
          */
         private string $noSubnetMessage = 'Must be an IP address with specified subnet.',
         /**
-         * @var string user-defined error message is used when validation fails
-         * due to {@see $allowSubnet} is false, but CIDR prefix is present.
+         * @var string User-defined error message is used when validation fails due to {@see $allowSubnet} is false, but
+         * CIDR prefix is present.
          *
          * You may use the following placeholders in the message:
          *
-         * - `{attribute}`: the label of the attribute being validated
-         * - `{value}`: the value of the attribute being validated
-         *
-         * @see $allowSubnet
+         * - `{attribute}`: the label of the attribute being validated.
+         * - `{value}`: the value of the attribute being validated.
          */
         private string $hasSubnetMessage = 'Must not be a subnet.',
         /**
-         * @var string user-defined error message is used when validation fails due to IP address
-         * is not allowed by {@see $ranges} check.
+         * @var string User-defined error message is used when validation fails due to IP address is not allowed by
+         * {@see $ranges} check.
          *
          * You may use the following placeholders in the message:
          *
-         * - `{attribute}`: the label of the attribute being validated
-         * - `{value}`: the value of the attribute being validated
-         *
-         * @see $ranges
+         * - `{attribute}`: the label of the attribute being validated.
+         * - `{value}`: the value of the attribute being validated.
          */
         private string $notInRangeMessage = 'Is not in the allowed range.',
         /**
@@ -185,13 +176,13 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
          *
          * When the array is empty, or the option not set, all IP addresses are allowed.
          *
-         * Otherwise, the rules are checked sequentially until the first match is found.
-         * An IP address is forbidden, when it has not matched any of the rules.
+         * Otherwise, the rules are checked sequentially until the first match is found. An IP address is forbidden, when it
+         * has not matched any of the rules.
          *
          * Example:
          *
          * ```php
-         * (new Ip(ranges: [
+         * new Ip(ranges: [
          *     '192.168.10.128'
          *     '!192.168.10.0/24',
          *     'any' // allows any other IP addresses
@@ -202,11 +193,10 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
          * subnet. IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
          */
         private array $ranges = [],
-
         /**
          * @var bool|callable|null
          */
-        private $skipOnEmpty = null,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
@@ -263,6 +253,11 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
         return $this->allowNegation;
     }
 
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
+
     public function getMessage(): string
     {
         return $this->message;
@@ -306,25 +301,25 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
     /**
      * Parses IP address/range for the negation with {@see NEGATION_CHAR}.
      *
-     * @param $string
-     *
-     * @return array `[0 => bool, 1 => string]`
-     *  - boolean: whether the string is negated
-     *  - string: the string without negation (when the negation were present)
+     * @return array{0: bool, 1: string} The result array consists of 2 elements:
+     * - boolean: whether the string is negated
+     * - string: the string without negation (when the negation were present)
      */
-    private function parseNegatedRange($string): array
+    private function parseNegatedRange(string $string): array
     {
         $isNegated = str_starts_with($string, self::NEGATION_CHAR);
         return [$isNegated, $isNegated ? substr($string, strlen(self::NEGATION_CHAR)) : $string];
     }
 
     /**
-     * Prepares array to fill in {@see $ranges}.
+     * Prepares array to fill in {@see $ranges}:
      *
-     *  - Recursively substitutes aliases, described in {@see $networks} with their values,
+     *  - Recursively substitutes aliases, described in {@see $networks} with their values.
      *  - Removes duplicates.
      *
-     * @see $networks
+     * @param string[] $ranges
+     *
+     * @return string[]
      */
     private function prepareRanges(array $ranges): array
     {
@@ -384,6 +379,9 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
             'allowSubnet' => $this->allowSubnet,
             'requireSubnet' => $this->requireSubnet,
             'allowNegation' => $this->allowNegation,
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
+            ],
             'message' => [
                 'message' => $this->message,
             ],

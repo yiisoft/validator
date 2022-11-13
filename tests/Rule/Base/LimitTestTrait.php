@@ -8,6 +8,9 @@ use InvalidArgumentException;
 
 trait LimitTestTrait
 {
+    /**
+     * @return class-string
+     */
     abstract protected function getRuleClass(): string;
 
     public function dataInitWithMinAndMaxAndExactly(): array

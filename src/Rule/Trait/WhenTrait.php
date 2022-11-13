@@ -10,7 +10,7 @@ use Yiisoft\Validator\ValidationContext;
 trait WhenTrait
 {
     /**
-     * @psalm-param Closure(mixed, ValidationContext):bool|null $value
+     * @param Closure(mixed, ValidationContext):bool|null $value
      */
     public function when(?Closure $value): static
     {
@@ -20,7 +20,7 @@ trait WhenTrait
     }
 
     /**
-     * @psalm-return Closure(mixed, ValidationContext):bool|null
+     * @return Closure(mixed, ValidationContext):bool|null
      */
     public function getWhen(): ?Closure
     {

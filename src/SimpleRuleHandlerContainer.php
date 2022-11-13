@@ -11,6 +11,9 @@ use function array_key_exists;
 
 final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 {
+    /**
+     * @var array<class-string, RuleHandlerInterface>
+     */
     private array $instances = [];
 
     public function resolve(string $className): RuleHandlerInterface
@@ -23,12 +26,10 @@ final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
             return $this->instances[$className];
         }
 
-        $classInstance = new $className();
-
-        if (!$classInstance instanceof RuleHandlerInterface) {
+        if (!is_subclass_of($className, RuleHandlerInterface::class)) {
             throw new RuleHandlerInterfaceNotImplementedException($className);
         }
 
-        return $this->instances[$className] = $classInstance;
+        return $this->instances[$className] = new $className();
     }
 }

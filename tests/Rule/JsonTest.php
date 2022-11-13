@@ -11,7 +11,6 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\ValidationContext;
 
 final class JsonTest extends RuleTestCase
 {
@@ -32,6 +31,9 @@ final class JsonTest extends RuleTestCase
             [
                 new Json(),
                 [
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'The value is not JSON.',
                     ],
@@ -130,15 +132,17 @@ JSON_WRAP
 
     public function dataValidationFailed(): array
     {
+        $incorrectInputErrors = ['' => ['The value must have a string type.']];
         $errors = ['' => ['The value is not JSON.']];
 
         return [
+            'incorrect input, array' => [['json'], [new Json()], $incorrectInputErrors],
+            'incorrect input, integer' => [10, [new Json()], $incorrectInputErrors],
+            'incorrect input, null' => [null, [new Json()], $incorrectInputErrors],
+
             ['{"name": "tester"', [new Json()], $errors],
             ['{"name": tester}', [new Json()], $errors],
 
-            [['json'], [new Json()], $errors],
-            [10, [new Json()], $errors],
-            [null, [new Json()], $errors],
             'custom error' => ['', [new Json(message: 'bad json')], ['' => ['bad json']]],
         ];
     }
@@ -150,7 +154,7 @@ JSON_WRAP
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Json(), new Json(when: $when));
     }
 

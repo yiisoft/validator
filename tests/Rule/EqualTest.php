@@ -10,7 +10,6 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\ValidationContext;
 
 final class EqualTest extends RuleTestCase
 {
@@ -32,6 +31,22 @@ final class EqualTest extends RuleTestCase
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
                     'message' => [
                         'message' => 'Value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
@@ -51,25 +66,22 @@ final class EqualTest extends RuleTestCase
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
-                    'message' => [
-                        'message' => 'Value must be equal to "{targetValueOrAttribute}".',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
                             'targetValueOrAttribute' => 1,
                         ],
                     ],
-                    'type' => 'number',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Equal(1, type: Equal::TYPE_NUMBER),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => null,
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 1,
+                        ],
+                    ],
                     'message' => [
                         'message' => 'Value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
@@ -89,6 +101,22 @@ final class EqualTest extends RuleTestCase
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
                     'message' => [
                         'message' => 'Value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
@@ -108,6 +136,22 @@ final class EqualTest extends RuleTestCase
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
                     'message' => [
                         'message' => 'Value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
@@ -127,6 +171,22 @@ final class EqualTest extends RuleTestCase
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => 'YES',
+                            'targetAttribute' => null,
+                            'targetValueOrAttribute' => 'YES',
+                        ],
+                    ],
                     'message' => [
                         'message' => 'Value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
@@ -146,6 +206,22 @@ final class EqualTest extends RuleTestCase
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'attribute',
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float, string, boolean and null.',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'attribute',
+                            'targetValueOrAttribute' => 'attribute',
+                        ],
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'attribute',
+                            'targetValueOrAttribute' => 'attribute',
+                        ],
+                    ],
                     'message' => [
                         'message' => 'Value must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
@@ -161,12 +237,33 @@ final class EqualTest extends RuleTestCase
                 ],
             ],
             [
-                new Equal(targetAttribute: 'test', message: 'Custom message for {targetValueOrAttribute}'),
+                new Equal(
+                    targetAttribute: 'test',
+                    incorrectInputMessage: 'Custom message 1.',
+                    incorrectDataSetTypeMessage: 'Custom message 2.',
+                    message: 'Custom message 3.',
+                ),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'test',
+                    'incorrectInputMessage' => [
+                        'message' => 'Custom message 1.',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'Custom message 2.',
+                        'parameters' => [
+                            'targetValue' => null,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
                     'message' => [
-                        'message' => 'Custom message for {targetValueOrAttribute}',
+                        'message' => 'Custom message 3.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
@@ -215,7 +312,7 @@ final class EqualTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Equal(1), new Equal(1, when: $when));
     }
 }

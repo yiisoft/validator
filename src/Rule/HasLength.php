@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\LimitInterface;
 use Yiisoft\Validator\Rule\Trait\LimitTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -22,7 +23,12 @@ use Yiisoft\Validator\WhenInterface;
  * Note, this rule should only be used with strings.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class HasLength implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class HasLength implements
+    SerializableRuleInterface,
+    SkipOnErrorInterface,
+    WhenInterface,
+    SkipOnEmptyInterface,
+    LimitInterface
 {
     use LimitTrait;
     use SkipOnEmptyTrait;
@@ -52,7 +58,7 @@ final class HasLength implements SerializableRuleInterface, SkipOnErrorInterface
         /**
          * @var string user-defined error message used when the value is not a string.
          */
-        private string $message = 'This value must be a string.',
+        private string $incorrectInputMessage = 'This value must be a string.',
         /**
          * @var string user-defined error message used when the length of the value is smaller than {@see $min}.
          */
@@ -96,9 +102,9 @@ final class HasLength implements SerializableRuleInterface, SkipOnErrorInterface
         return 'hasLength';
     }
 
-    public function getMessage(): string
+    public function getIncorrectInputMessage(): string
     {
-        return $this->message;
+        return $this->incorrectInputMessage;
     }
 
     public function getEncoding(): string
@@ -109,8 +115,8 @@ final class HasLength implements SerializableRuleInterface, SkipOnErrorInterface
     public function getOptions(): array
     {
         return array_merge($this->getLimitOptions(), [
-            'message' => [
-                'message' => $this->message,
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
             ],
             'encoding' => $this->encoding,
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),

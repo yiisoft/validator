@@ -12,7 +12,6 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\ValidationContext;
 
 final class NumberTest extends RuleTestCase
 {
@@ -36,6 +35,9 @@ final class NumberTest extends RuleTestCase
                     'asInteger' => false,
                     'min' => null,
                     'max' => null,
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float and string.',
+                    ],
                     'notANumberMessage' => [
                         'message' => 'Value must be a number.',
                     ],
@@ -59,6 +61,9 @@ final class NumberTest extends RuleTestCase
                     'asInteger' => false,
                     'min' => 1,
                     'max' => null,
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float and string.',
+                    ],
                     'notANumberMessage' => [
                         'message' => 'Value must be a number.',
                     ],
@@ -82,6 +87,9 @@ final class NumberTest extends RuleTestCase
                     'asInteger' => false,
                     'min' => null,
                     'max' => 1,
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float and string.',
+                    ],
                     'notANumberMessage' => [
                         'message' => 'Value must be a number.',
                     ],
@@ -105,6 +113,9 @@ final class NumberTest extends RuleTestCase
                     'asInteger' => false,
                     'min' => 2,
                     'max' => 10,
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float and string.',
+                    ],
                     'notANumberMessage' => [
                         'message' => 'Value must be a number.',
                     ],
@@ -128,6 +139,9 @@ final class NumberTest extends RuleTestCase
                     'asInteger' => true,
                     'min' => null,
                     'max' => null,
+                    'incorrectInputMessage' => [
+                        'message' => 'The allowed types are integer, float and string.',
+                    ],
                     'notANumberMessage' => [
                         'message' => 'Value must be an integer.',
                     ],
@@ -189,24 +203,23 @@ final class NumberTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
+        $incorrectInputMessage = 'The allowed types are integer, float and string.';
         $notANumberMessage = 'Value must be a number.';
         $notAnIntegerMessage = 'Value must be an integer.';
 
         return [
+            [false, [new Number()], ['' => [$incorrectInputMessage]]],
+            [true, [new Number()], ['' => [$incorrectInputMessage]]],
+            [[1, 2, 3], [new Number()], ['' => [$incorrectInputMessage]]],
+            [new stdClass(), [new Number()], ['' => [$incorrectInputMessage]]],
+            [fopen('php://stdin', 'rb'), [new Number()], ['' => [$incorrectInputMessage]]],
+
             ['12:45', [new Number()], ['' => [$notANumberMessage]]],
-
-            [false, [new Number()], ['' => [$notANumberMessage]]],
-            [true, [new Number()], ['' => [$notANumberMessage]]],
-
             ['e12', [new Number()], ['' => [$notANumberMessage]]],
             ['-e3', [new Number()], ['' => [$notANumberMessage]]],
             ['-4.534-e-12', [new Number()], ['' => [$notANumberMessage]]],
             ['12.23^4', [new Number()], ['' => [$notANumberMessage]]],
             ['43^32', [new Number()], ['' => [$notANumberMessage]]],
-
-            [[1, 2, 3], [new Number()], ['' => [$notANumberMessage]]],
-            [new stdClass(), [new Number()], ['' => [$notANumberMessage]]],
-            [fopen('php://stdin', 'rb'), [new Number()], ['' => [$notANumberMessage]]],
 
             [25.45, [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
             ['25,45', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
@@ -252,7 +265,7 @@ final class NumberTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Number(), new Number(when: $when));
     }
 

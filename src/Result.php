@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Closure;
 use InvalidArgumentException;
-use Yiisoft\Arrays\ArrayHelper;
 
 use function array_slice;
 use function implode;
@@ -49,11 +47,11 @@ final class Result
      */
     public function getErrorMessages(): array
     {
-        return ArrayHelper::getColumn($this->errors, static fn (Error $error) => $error->getMessage());
+        return array_map(static fn (Error $error): string => $error->getMessage(), $this->errors);
     }
 
     /**
-     * @psalm-return array<string, non-empty-list<string>>
+     * @return array<string, non-empty-list<string>>
      */
     public function getErrorMessagesIndexedByPath(string $separator = '.'): array
     {
@@ -67,9 +65,9 @@ final class Result
     }
 
     /**
-     * @psalm-return array<string, non-empty-list<string>>
-     *
      * @throws InvalidArgumentException
+     *
+     * @return array<string, non-empty-list<string>>
      */
     public function getErrorMessagesIndexedByAttribute(): array
     {
@@ -91,24 +89,11 @@ final class Result
      */
     public function getAttributeErrors(string $attribute): array
     {
-        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): Error => $error);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getAttributeErrorMessages(string $attribute): array
-    {
-        return $this->getAttributeErrorsMap($attribute, static fn (Error $error): string => $error->getMessage());
-    }
-
-    private function getAttributeErrorsMap(string $attribute, Closure $getErrorClosure): array
-    {
         $errors = [];
         foreach ($this->errors as $error) {
             $firstItem = $error->getValuePath()[0] ?? '';
             if ($firstItem === $attribute) {
-                $errors[] = $getErrorClosure($error);
+                $errors[] = $error;
             }
         }
 
@@ -116,7 +101,23 @@ final class Result
     }
 
     /**
-     * @psalm-return array<string, non-empty-list<string>>
+     * @return string[]
+     */
+    public function getAttributeErrorMessages(string $attribute): array
+    {
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $firstItem = $error->getValuePath()[0] ?? '';
+            if ($firstItem === $attribute) {
+                $errors[] = $error->getMessage();
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @return array<string, non-empty-list<string>>
      */
     public function getAttributeErrorMessagesIndexedByPath(string $attribute, string $separator = '.'): array
     {
@@ -143,8 +144,8 @@ final class Result
     }
 
     /**
-     * @psalm-param array<int|string> $valuePath
-     * @psalm-param array<string,scalar|null> $parameters
+     * @param array<string,scalar|null> $parameters
+     * @param list<int|string> $valuePath
      */
     public function addError(string $message, array $parameters = [], array $valuePath = []): self
     {

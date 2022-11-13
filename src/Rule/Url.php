@@ -42,7 +42,7 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
          */
         private string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
         /**
-         * @var array list of URI schemes which should be considered valid. By default, http and https
+         * @var string[] list of URI schemes which should be considered valid. By default, http and https
          * are considered to be valid schemes.
          */
         private array $validSchemes = ['http', 'https'],
@@ -53,6 +53,7 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
          * extension, otherwise an exception would be thrown.
          */
         private bool $enableIDN = false,
+        private string $incorrectInputMessage = 'The value must have a string type.',
         private string $message = 'This value is not a valid URL.',
 
         /**
@@ -77,11 +78,7 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
 
     public function getPattern(): string
     {
-        if (str_contains($this->pattern, '{schemes}')) {
-            return str_replace('{schemes}', '((?i)' . implode('|', $this->validSchemes) . ')', $this->pattern);
-        }
-
-        return $this->pattern;
+        return str_replace('{schemes}', '((?i)' . implode('|', $this->validSchemes) . ')', $this->pattern);
     }
 
     /**
@@ -97,6 +94,11 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
         return $this->enableIDN;
     }
 
+    public function getIncorrectInputMessage(): string
+    {
+        return $this->incorrectInputMessage;
+    }
+
     public function getMessage(): string
     {
         return $this->message;
@@ -108,6 +110,9 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
             'pattern' => $this->getPattern(),
             'validSchemes' => $this->validSchemes,
             'enableIDN' => $this->enableIDN,
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
+            ],
             'message' => [
                 'message' => $this->message,
             ],

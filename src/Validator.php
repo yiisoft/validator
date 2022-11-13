@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
+use ReflectionException;
 use ReflectionProperty;
 use Traversable;
 use Yiisoft\Translator\TranslatorInterface;
@@ -23,9 +21,12 @@ use function is_array;
 use function is_callable;
 use function is_int;
 use function is_object;
+use function is_string;
 
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
+ *
+ * @psalm-import-type RulesType from ValidatorInterface
  */
 final class Validator implements ValidatorInterface
 {
@@ -46,21 +47,16 @@ final class Validator implements ValidatorInterface
         private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
-
-        /**
-         * @var bool|callable|null
-         */
-        $defaultSkipOnEmpty = null,
+        bool|callable|null $defaultSkipOnEmpty = null,
     ) {
         $this->defaultSkipOnEmptyCallback = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
     }
 
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
-     * @param class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RuleInterface|RulesProviderInterface|null $rules
+     * @psalm-param RulesType $rules
      *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @throws ReflectionException
      */
     public function validate(mixed $data, iterable|object|string|null $rules = null): Result
     {
@@ -71,7 +67,7 @@ final class Validator implements ValidatorInterface
             $rules = $rules->getRules();
         } elseif ($rules instanceof RuleInterface) {
             $rules = [$rules];
-        } elseif (!$rules instanceof Traversable && !is_array($rules) && $rules !== null) {
+        } elseif (is_string($rules) || (is_object($rules) && !$rules instanceof Traversable)) {
             $rules = (new AttributesRulesProvider($rules, $this->rulesPropertyVisibility))->getRules();
         }
 
@@ -79,6 +75,10 @@ final class Validator implements ValidatorInterface
         $context = new ValidationContext($this, $data);
         $results = [];
 
+        /**
+         * @var mixed $attribute
+         * @var mixed $attributeRules
+         */
         foreach ($rules ?? [] as $attribute => $attributeRules) {
             $result = new Result();
 
@@ -89,10 +89,19 @@ final class Validator implements ValidatorInterface
             $attributeRules = $this->normalizeRules($attributeRules);
 
             if (is_int($attribute)) {
+                /** @psalm-suppress MixedAssignment */
                 $validatedData = $data->getData();
-            } else {
+            } elseif (is_string($attribute)) {
+                /** @psalm-suppress MixedAssignment */
                 $validatedData = $data->getAttributeValue($attribute);
                 $context = $context->withAttribute($attribute);
+            } else {
+                $message = sprintf(
+                    'An attribute can only have an integer or a string type. %s given.',
+                    get_debug_type($attribute),
+                );
+
+                throw new InvalidArgumentException($message);
             }
 
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
@@ -122,7 +131,7 @@ final class Validator implements ValidatorInterface
     }
 
     #[Pure]
-    private function normalizeDataSet($data): DataSetInterface
+    private function normalizeDataSet(mixed $data): DataSetInterface
     {
         if ($data instanceof DataSetInterface) {
             return $data;
@@ -140,9 +149,9 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> $rules
+     * @param iterable<RuleInterface> $rules
      */
-    private function validateInternal($value, iterable $rules, ValidationContext $context): Result
+    private function validateInternal(mixed $value, iterable $rules, ValidationContext $context): Result
     {
         $compoundResult = new Result();
         foreach ($rules as $rule) {
@@ -170,18 +179,17 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param array $rules
-     *
      * @return iterable<RuleInterface>
      */
     private function normalizeRules(iterable $rules): iterable
     {
+        /** @var mixed $rule */
         foreach ($rules as $rule) {
             yield $this->normalizeRule($rule);
         }
     }
 
-    private function normalizeRule($rule): RuleInterface
+    private function normalizeRule(mixed $rule): RuleInterface
     {
         if (is_callable($rule)) {
             return new Callback($rule);

@@ -78,7 +78,7 @@ final class ValidationContext
         return ArrayHelper::getValue($this->parameters, $key, $default);
     }
 
-    public function setParameter(string $key, $value): void
+    public function setParameter(string $key, mixed $value): void
     {
         $this->parameters[$key] = $value;
     }

@@ -6,14 +6,12 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
-use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -32,35 +30,19 @@ final class StopOnError implements SerializableRuleInterface, SkipOnErrorInterfa
 
     public function __construct(
         /**
-         * Rules for validate value that can be described by:
-         * - object that implement {@see RulesProviderInterface};
-         * - name of class from whose attributes their will be derived;
-         * - array or object implementing the `Traversable` interface that contain {@see RuleInterface} implementations
-         *   or closures.
-         *
-         * `$rules` can be null if validatable value is object. In this case rules will be derived from object via
-         * `getRules()` method if object implement {@see RulesProviderInterface} or from attributes otherwise.
-         *
-         * @var class-string|iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>|RulesProviderInterface|null
+         * @var iterable<RuleInterface>
          */
-        private iterable|object|string|null $rules = null,
-
+        private iterable $rules,
         /**
          * @var bool|callable|null
          */
-        private $skipOnEmpty = null,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
-
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        if ($this->rules === []) {
-            throw new InvalidArgumentException(
-                'Rules for StopOnError rule are required.'
-            );
-        }
     }
 
     public function getName(): string
@@ -69,11 +51,9 @@ final class StopOnError implements SerializableRuleInterface, SkipOnErrorInterfa
     }
 
     /**
-     * @return class-string|iterable|RulesProviderInterface|null
-     *
-     * @psalm-return RulesProviderInterface|class-string|iterable<mixed, Closure|RuleInterface|array<Closure|RuleInterface>>|null
+     * @return iterable<RuleInterface>
      */
-    public function getRules(): iterable|string|RulesProviderInterface|null
+    public function getRules(): iterable
     {
         return $this->rules;
     }
@@ -88,7 +68,7 @@ final class StopOnError implements SerializableRuleInterface, SkipOnErrorInterfa
         return [
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => $this->rules === null ? null : (new RulesDumper())->asArray($this->rules),
+            'rules' => (new RulesDumper())->asArray($this->rules),
         ];
     }
 

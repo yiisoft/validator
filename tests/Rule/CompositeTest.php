@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Number;
@@ -12,7 +13,6 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\ValidationContext;
 
 final class CompositeTest extends RuleTestCase
 {
@@ -44,6 +44,9 @@ final class CompositeTest extends RuleTestCase
                             'asInteger' => false,
                             'min' => null,
                             'max' => 13,
+                            'incorrectInputMessage' => [
+                                'message' => 'The allowed types are integer, float and string.',
+                            ],
                             'notANumberMessage' => [
                                 'message' => 'Value must be a number.',
                             ],
@@ -65,6 +68,9 @@ final class CompositeTest extends RuleTestCase
                             'asInteger' => false,
                             'min' => null,
                             'max' => 14,
+                            'incorrectInputMessage' => [
+                                'message' => 'The allowed types are integer, float and string.',
+                            ],
                             'notANumberMessage' => [
                                 'message' => 'Value must be a number.',
                             ],
@@ -85,6 +91,19 @@ final class CompositeTest extends RuleTestCase
                 ],
             ],
         ];
+    }
+
+    public function testOptionsWithNotRule(): void
+    {
+        $rule = new Composite([
+            new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
+            new class () {
+            },
+        ]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('A rule must be an instance of RuleInterface.');
+        $rule->getOptions();
     }
 
     public function dataValidationPassed(): array
@@ -158,7 +177,7 @@ final class CompositeTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Composite([]), new Composite([], when: $when));
     }
 

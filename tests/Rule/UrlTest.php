@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use RuntimeException;
+use stdClass;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -12,7 +13,6 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\ValidationContext;
 
 use function extension_loaded;
 
@@ -42,6 +42,9 @@ final class UrlTest extends RuleTestCase
                     'pattern' => '/^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'validSchemes' => ['http', 'https'],
                     'enableIDN' => false,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'This value is not a valid URL.',
                     ],
@@ -55,6 +58,9 @@ final class UrlTest extends RuleTestCase
                     'pattern' => '/^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'validSchemes' => ['http', 'https'],
                     'enableIDN' => true,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'This value is not a valid URL.',
                     ],
@@ -68,6 +74,9 @@ final class UrlTest extends RuleTestCase
                     'pattern' => '/^((?i)http):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'validSchemes' => ['http'],
                     'enableIDN' => false,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'This value is not a valid URL.',
                     ],
@@ -81,6 +90,9 @@ final class UrlTest extends RuleTestCase
                     'pattern' => '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/',
                     'validSchemes' => ['http', 'https'],
                     'enableIDN' => true,
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have a string type.',
+                    ],
                     'message' => [
                         'message' => 'This value is not a valid URL.',
                     ],
@@ -138,10 +150,15 @@ final class UrlTest extends RuleTestCase
             return [];
         }
 
+        $incorrectInputErrors = ['' => ['The value must have a string type.']];
         $errors = ['' => ['This value is not a valid URL.']];
         $longUrl = 'http://' . str_repeat('u', 1990) . '.de';
 
         return [
+            [1, [new Url()], $incorrectInputErrors],
+            [['yiiframework.com'], [new Url()], $incorrectInputErrors],
+            [new stdClass(), [new Url()], $incorrectInputErrors],
+
             ['google.de', [new Url()], $errors],
             ['htp://yiiframework.com', [new Url()], $errors],
             ['ftp://ftp.ruhr-uni-bochum.de/', [new Url()], $errors],
@@ -162,7 +179,6 @@ final class UrlTest extends RuleTestCase
             ['', [new Url(enableIDN: true)], $errors],
             [$longUrl, [new Url(enableIDN: true)], $errors],
             [$longUrl, [new Url()], $errors],
-            [1, [new Url()], $errors],
 
             'custom error' => ['', [new Url(enableIDN: true, message: 'Custom error')], ['' => ['Custom error']]],
         ];
@@ -185,7 +201,7 @@ final class UrlTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value, ValidationContext $context): bool => $value !== null;
+        $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Url(), new Url(when: $when));
     }
 

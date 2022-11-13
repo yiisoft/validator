@@ -25,7 +25,7 @@ trait DifferentRuleInHandlerTestTrait
     }
 
     /**
-     * @psalm-return array{0:string, 1:string}
+     * @return array{0:string, 1:string}
      */
     abstract protected function getDifferentRuleInHandlerItems(): array;
 }

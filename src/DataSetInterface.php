@@ -8,8 +8,6 @@ interface DataSetInterface
 {
     /**
      * Get specified attribute value.
-     *
-     * @return mixed
      */
     public function getAttributeValue(string $attribute): mixed;
 

@@ -27,9 +27,17 @@ final class UrlHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
+        if (!is_string($value)) {
+            $result->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getAttribute(),
+                'type' => get_debug_type($value),
+            ]);
+
+            return $result;
+        }
 
         // make sure the length is limited to avoid DOS attacks
-        if (is_string($value) && strlen($value) < 2000) {
+        if (strlen($value) < 2000) {
             if ($rule->isEnableIDN()) {
                 $value = $this->convertIdn($value);
             }
@@ -39,13 +47,10 @@ final class UrlHandler implements RuleHandlerInterface
             }
         }
 
-        $result->addError(
-            $rule->getMessage(),
-            [
-                'attribute' => $context->getAttribute(),
-                'value' => $value,
-            ],
-        );
+        $result->addError($rule->getMessage(), [
+            'attribute' => $context->getAttribute(),
+            'value' => $value,
+        ]);
 
         return $result;
     }
