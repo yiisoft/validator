@@ -135,6 +135,7 @@ final class AtLeastTest extends RuleTestCase
             public $attr1 = 1;
             public $attr2 = null;
         };
+        $array = ['attr1' => 1, 'attr2' => null];
 
         return [
             'incorrect input' => [
@@ -153,12 +154,12 @@ final class AtLeastTest extends RuleTestCase
                 ['' => ['The model is not valid. Must have at least "2" filled attributes.']],
             ],
             'array' => [
-                ['attr1' => 1, 'attr2' => null],
+                $array,
                 [new AtLeast(['attr2'])],
                 ['' => ['The model is not valid. Must have at least "1" filled attributes.']],
             ],
             'array, custom min' => [
-                ['attr1' => 1, 'attr2' => null],
+                $array,
                 [new AtLeast(['attr2'], min: 2)],
                 ['' => ['The model is not valid. Must have at least "2" filled attributes.']],
             ],
