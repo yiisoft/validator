@@ -131,28 +131,39 @@ final class AtLeastTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
+        $class = new class () {
+            public $attr1 = 1;
+            public $attr2 = null;
+        };
+
         return [
-            [
-                new class () {
-                    public $attr1 = 1;
-                    public $attr2 = null;
-                },
+            'incorrect input' => [
+                1,
+                [new AtLeast(['attr2'])],
+                ['' => ['Value must be an array or an object.']],
+            ],
+            'object' => [
+                $class,
                 [new AtLeast(['attr2'])],
                 ['' => ['The model is not valid. Must have at least "1" filled attributes.']],
             ],
-            [
-                new class () {
-                    public $attr1 = 1;
-                    public $attr2 = null;
-                },
+            'object, custom min' => [
+                $class,
                 [new AtLeast(['attr1', 'attr2'], min: 2)],
                 ['' => ['The model is not valid. Must have at least "2" filled attributes.']],
             ],
+            'array' => [
+                ['attr1' => 1, 'attr2' => null],
+                [new AtLeast(['attr2'])],
+                ['' => ['The model is not valid. Must have at least "1" filled attributes.']],
+            ],
+            'array, custom min' => [
+                ['attr1' => 1, 'attr2' => null],
+                [new AtLeast(['attr2'], min: 2)],
+                ['' => ['The model is not valid. Must have at least "2" filled attributes.']],
+            ],
             'custom error' => [
-                new class () {
-                    public $attr1 = 1;
-                    public $attr2 = null;
-                },
+                $class,
                 [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom error')],
                 ['' => ['Custom error']],
             ],
