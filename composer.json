@@ -22,7 +22,7 @@
         "ext-mbstring": "*",
         "psr/container": "^1.0|^2.0",
         "yiisoft/arrays": "^2.1",
-        "yiisoft/translator": "^2.0",
+        "yiisoft/translator": "dev-master",
         "yiisoft/friendly-exception": "^1.0",
         "yiisoft/network-utilities": "^1.0",
         "yiisoft/strings": "^2.1"
