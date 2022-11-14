@@ -6,6 +6,8 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use RuntimeException;
+use stdClass;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
@@ -26,10 +28,43 @@ final class CallbackTest extends RuleTestCase
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
+    public function testInitWithNoCallbackAndMethodException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Either "$callback" or "$method" must be specified.');
+        new Callback();
+    }
+
+    public function testInitWithBothCallbackAndMethodException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('"$callback" and "$method" are mutually exclusive.');
+        new Callback(callback: static fn (): Result => new Result(), method: 'test');
+    }
+
     public function testGetName(): void
     {
         $rule = new Callback(callback: static fn (): Result => new Result());
         $this->assertSame('callback', $rule->getName());
+    }
+
+    public function testGetMethod(): void
+    {
+        $rule = new Callback(method: 'test');
+        $this->assertSame('test', $rule->getMethod());
+    }
+
+    public function testAfterInitAttributeWithNoMethod(): void
+    {
+        $rule = new Callback(callback: static fn (): Result => new Result());
+        $callback = $rule->getCallback();
+        $this->assertIsCallable($callback);
+        $this->assertNull($rule->getMethod());
+
+        $rule->afterInitAttribute(new ObjectDataSet(new stdClass()));
+        $this->assertIsCallable($callback);
+        $this->assertNull($rule->getMethod());
+        $this->assertSame($callback, $rule->getCallback());
     }
 
     public function dataOptions(): array
@@ -37,9 +72,10 @@ final class CallbackTest extends RuleTestCase
         return [
             [
                 new Callback(
-                    static fn (mixed $value, object $rule, ValidationContext $context): Result => new Result()
+                    static fn (mixed $value, object $rule, ValidationContext $context): Result => new Result(),
                 ),
                 [
+                    'method' => null,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -47,13 +83,22 @@ final class CallbackTest extends RuleTestCase
             [
                 new Callback(
                     static fn (mixed $value, object $rule, ValidationContext $context): Result => new Result(),
-                    skipOnEmpty: true
+                    skipOnEmpty: true,
                 ),
                 [
+                    'method' => null,
                     'skipOnEmpty' => true,
                     'skipOnError' => false,
                 ],
             ],
+            [
+                new Callback(method: 'test'),
+                [
+                    'method' => 'test',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ]
         ];
     }
 
@@ -151,9 +196,8 @@ final class CallbackTest extends RuleTestCase
 
     public function testThrowExceptionWithInvalidReturn(): void
     {
-        $rule = new Callback(
-            static fn (mixed $value, object $rule, ValidationContext $context): string => 'invalid return'
-        );
+        $callback = static fn (mixed $value, object $rule, ValidationContext $context): string => 'invalid return';
+        $rule = new Callback($callback);
         $validator = ValidatorFactory::make();
 
         $this->expectException(InvalidCallbackReturnTypeException::class);
