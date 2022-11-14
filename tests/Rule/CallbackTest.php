@@ -98,7 +98,7 @@ final class CallbackTest extends RuleTestCase
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
-            ]
+            ],
         ];
     }
 
