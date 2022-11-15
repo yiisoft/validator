@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\DataSetHelper;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
@@ -30,6 +31,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithAttributesOnly;
 use Yiisoft\Validator\Tests\Support\TranslatorFactory;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\ValidatorInterface;
 
 class ValidatorTest extends TestCase
 {
@@ -931,5 +933,44 @@ class ValidatorTest extends TestCase
             ['' => ['Value must be no less than 5.']],
             $result->getErrorMessagesIndexedByPath(),
         );
+    }
+
+    public function testComposition(): void
+    {
+        $validator = new class () implements ValidatorInterface {
+            private Validator $validator;
+
+            public function __construct()
+            {
+                $this->validator = new Validator(
+                    new SimpleRuleHandlerContainer(),
+                    (new TranslatorFactory())->create(),
+                );
+            }
+
+            public function validate(
+                mixed $data,
+                iterable|object|string|null $rules = null,
+                ?ValidationContext $context = null
+            ): Result {
+                $dataSet = DataSetHelper::normalize($data);
+                $context ??= new ValidationContext($this, $dataSet);
+
+                $result = $this->validator->validate($data, $rules, $context);
+
+                return $context->getParameter('forceSuccess') === true ? new Result() : $result;
+            }
+        };
+
+        $rules = [
+            static function ($value, $rule, ValidationContext $context) {
+                $context->setParameter('forceSuccess', true);
+                return (new Result())->addError('fail');
+            },
+        ];
+
+        $result = $validator->validate([], $rules);
+
+        $this->assertTrue($result->isValid());
     }
 }

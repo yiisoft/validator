@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 use Yiisoft\Arrays\ArrayHelper;
 
 /**
- * Validation context that rule may take into account when performing validation.
+ * Validation context that might be taken into account when performing validation.
  */
 final class ValidationContext
 {
@@ -18,7 +18,7 @@ final class ValidationContext
      */
     public function __construct(
         private ValidatorInterface $validator,
-        private ?DataSetInterface $dataSet,
+        private ?DataSetInterface $dataSet = null,
         private ?string $attribute = null,
         private array $parameters = []
     ) {
@@ -48,11 +48,10 @@ final class ValidationContext
     /**
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
      */
-    public function withAttribute(?string $attribute): self
+    public function setAttribute(?string $attribute): self
     {
-        $new = clone $this;
-        $new->attribute = $attribute;
-        return $new;
+        $this->attribute = $attribute;
+        return $this;
     }
 
     /**
