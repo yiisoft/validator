@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
-use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
 
@@ -14,9 +13,8 @@ final class ValidationContextTest extends TestCase
 {
     public function testDefault(): void
     {
-        $dataSet = new SingleValueDataSet(null);
-        $context = new ValidationContext(ValidatorFactory::make(), $dataSet);
-        $this->assertSame($dataSet, $context->getDataSet());
+        $context = new ValidationContext(ValidatorFactory::make());
+        $this->assertNull($context->getDataSet());
         $this->assertNull($context->getAttribute());
         $this->assertSame([], $context->getParameters());
     }
@@ -34,7 +32,7 @@ final class ValidationContextTest extends TestCase
 
     public function testSetParameter(): void
     {
-        $context = new ValidationContext(ValidatorFactory::make(), new SingleValueDataSet(null));
+        $context = new ValidationContext(ValidatorFactory::make());
         $context->setParameter('key', 42);
 
         $this->assertSame(['key' => 42], $context->getParameters());
@@ -42,7 +40,7 @@ final class ValidationContextTest extends TestCase
 
     public function testGetParameter(): void
     {
-        $context = new ValidationContext(ValidatorFactory::make(), new SingleValueDataSet(null), null, ['key' => 42]);
+        $context = new ValidationContext(ValidatorFactory::make(), null, null, ['key' => 42]);
 
         $this->assertSame(42, $context->getParameter('key'));
         $this->assertNull($context->getParameter('non-exists'));

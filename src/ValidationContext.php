@@ -12,13 +12,13 @@ use Yiisoft\Arrays\ArrayHelper;
 final class ValidationContext
 {
     /**
-     * @param DataSetInterface $dataSet Data set the attribute belongs to. Null if a single value is validated.
+     * @param DataSetInterface|null $dataSet Data set the attribute belongs to. Null if a single value is validated.
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
      * @param array $parameters Arbitrary parameters.
      */
     public function __construct(
         private ValidatorInterface $validator,
-        private DataSetInterface $dataSet,
+        private ?DataSetInterface $dataSet = null,
         private ?string $attribute = null,
         private array $parameters = []
     ) {
@@ -30,9 +30,9 @@ final class ValidationContext
     }
 
     /**
-     * @return DataSetInterface Data set the attribute belongs to.
+     * @return DataSetInterface|null Data set the attribute belongs to.
      */
-    public function getDataSet(): DataSetInterface
+    public function getDataSet(): ?DataSetInterface
     {
         return $this->dataSet;
     }
@@ -84,6 +84,6 @@ final class ValidationContext
 
     public function isAttributeMissing(): bool
     {
-        return $this->attribute !== null && !$this->dataSet->hasAttribute($this->attribute);
+        return $this->attribute !== null && $this->dataSet !== null && !$this->dataSet->hasAttribute($this->attribute);
     }
 }
