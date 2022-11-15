@@ -11,6 +11,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\LimitHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleHandler;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
 
@@ -58,12 +59,12 @@ final class LimitHandlerTraitTest extends TestCase
                 {
                     public function getName(): string
                     {
-                        return 'test rule';
+                        return 'test';
                     }
 
                     public function getHandlerClassName(): string
                     {
-                        return 'test handler';
+                        return StubRuleHandler::class;
                     }
                 },
             ],
