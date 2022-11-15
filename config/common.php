@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Psr\Container\ContainerInterface;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\IdMessageReader;
+use Yiisoft\Translator\IntlMessageFormatter;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
@@ -14,20 +14,20 @@ use Yiisoft\Validator\ValidatorInterface;
 /* @var array $params */
 
 return [
-    ValidatorInterface::class => Validator::class,
+    ValidatorInterface::class => [
+        'class' => Validator::class,
+        '__construct()' => [
+            'translationCategory' => $params['yiisoft/validator']['translation.category']
+        ],
+    ],
     RuleHandlerResolverInterface::class => SimpleRuleHandlerContainer::class,
-    'validator.categorySource' => [
-        'definition' => static function (ContainerInterface $container) use ($params) {
-            $messageSource = $container->get('validator.messageSource');
-            $messageFormatter = new SimpleMessageFormatter();
-
-            return new CategorySource(
-                $params['yiisoft/translator']['validatorCategory'],
-                $messageSource,
-                $messageFormatter,
-            );
-        },
+    'yii.validator.categorySource' => [
+        'definition' =>
+            static fn (IdMessageReader $idMessageReader) => new CategorySource(
+                $params['yiisoft/validator']['translation.category'],
+                $idMessageReader,
+                extension_loaded('intl') ? new IntlMessageFormatter() : new SimpleMessageFormatter(),
+            ),
         'tags' => ['translation.categorySource'],
     ],
-    'validator.messageSource' => IdMessageReader::class,
 ];
