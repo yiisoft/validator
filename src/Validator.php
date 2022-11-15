@@ -93,7 +93,7 @@ final class Validator implements ValidatorInterface
             } elseif (is_string($attribute)) {
                 /** @psalm-suppress MixedAssignment */
                 $validatedData = $data->getAttributeValue($attribute);
-                $context = $context->withAttribute($attribute);
+                $context->setAttribute($attribute);
             } else {
                 $message = sprintf(
                     'An attribute can only have an integer or a string type. %s given.',

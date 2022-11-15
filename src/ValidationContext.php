@@ -54,7 +54,7 @@ final class ValidationContext
 
     public function withDataSet(DataSetInterface $dataSet): self
     {
-        $new = clone($this);
+        $new = clone $this;
         $new->dataSet = $dataSet;
         return $new;
     }
@@ -62,11 +62,10 @@ final class ValidationContext
     /**
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
      */
-    public function withAttribute(?string $attribute): self
+    public function setAttribute(?string $attribute): self
     {
-        $new = clone $this;
-        $new->attribute = $attribute;
-        return $new;
+        $this->attribute = $attribute;
+        return $this;
     }
 
     /**
