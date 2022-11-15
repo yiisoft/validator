@@ -67,7 +67,10 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
         private ?Closure $when = null,
     ) {
         if ($enableIDN && !function_exists('idn_to_ascii')) {
+            // Tested via separate CI configuration (see ".github/workflows/build.yml").
+            // @codeCoverageIgnoreStart
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
+            // @codeCoverageIgnoreEnd
         }
     }
 
@@ -82,7 +85,7 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
     }
 
     /**
-     * @return array|string[]
+     * @return string[]
      */
     public function getValidSchemes(): array
     {
