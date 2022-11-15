@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Support;
 
 use Yiisoft\Translator\CategorySource;
+use Yiisoft\Translator\IdMessageReader;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\Translator;
 use Yiisoft\Translator\TranslatorInterface;
-use Yiisoft\Validator\IdMessageReader;
 
 final class TranslatorFactory
 {

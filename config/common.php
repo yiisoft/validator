@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
 use Yiisoft\Translator\CategorySource;
+use Yiisoft\Translator\IdMessageReader;
 use Yiisoft\Translator\SimpleMessageFormatter;
-use Yiisoft\Validator\IdMessageReader;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
