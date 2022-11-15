@@ -935,7 +935,7 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function testCustomContext(): void
+    public function testComposition(): void
     {
         $validator = new class () implements ValidatorInterface {
             private Validator $validator;

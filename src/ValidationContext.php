@@ -30,7 +30,7 @@ final class ValidationContext
     }
 
     /**
-     * @return DataSetInterface|null Data set the attribute belongs to.
+     * @return DataSetInterface|null Data set the attribute belongs to. Null if a single value is validated.
      */
     public function getDataSet(): ?DataSetInterface
     {
