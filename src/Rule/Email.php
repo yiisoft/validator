@@ -84,7 +84,9 @@ final class Email implements SerializableRuleInterface, SkipOnErrorInterface, Wh
         private ?Closure $when = null,
     ) {
         if ($enableIDN && !function_exists('idn_to_ascii')) {
+            // @codeCoverageIgnoreStart
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
+            // @codeCoverageIgnoreEnd
         }
     }
 
