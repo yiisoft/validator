@@ -17,7 +17,7 @@ return [
     ValidatorInterface::class => [
         'class' => Validator::class,
         '__construct()' => [
-            'translationCategory' => $params['yiisoft/validator']['translation.category']
+            'translationCategory' => $params['yiisoft/validator']['translation.category'],
         ],
     ],
     RuleHandlerResolverInterface::class => SimpleRuleHandlerContainer::class,
