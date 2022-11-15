@@ -7,18 +7,18 @@ namespace Yiisoft\Validator;
 use Yiisoft\Arrays\ArrayHelper;
 
 /**
- * Validation context that rule may take into account when performing validation.
+ * Validation context that may take into account when performing validation.
  */
 final class ValidationContext
 {
     /**
-     * @param DataSetInterface|null $dataSet Data set the attribute belongs to. Null if a single value is validated.
+     * @param DataSetInterface $dataSet Data set the attribute belongs to. Null if a single value is validated.
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
      * @param array $parameters Arbitrary parameters.
      */
     public function __construct(
         private ValidatorInterface $validator,
-        private ?DataSetInterface $dataSet,
+        private DataSetInterface $dataSet,
         private ?string $attribute = null,
         private array $parameters = []
     ) {
@@ -30,9 +30,9 @@ final class ValidationContext
     }
 
     /**
-     * @return DataSetInterface|null Data set the attribute belongs to. Null if a single value is validated.
+     * @return DataSetInterface Data set the attribute belongs to.
      */
-    public function getDataSet(): ?DataSetInterface
+    public function getDataSet(): DataSetInterface
     {
         return $this->dataSet;
     }
@@ -43,6 +43,20 @@ final class ValidationContext
     public function getAttribute(): ?string
     {
         return $this->attribute;
+    }
+
+    public function withValidator(ValidatorInterface $validator): self
+    {
+        $new = clone $this;
+        $new->validator = $validator;
+        return $new;
+    }
+
+    public function withDataSet(DataSetInterface $dataSet): self
+    {
+        $new = clone($this);
+        $new->dataSet = $dataSet;
+        return $new;
     }
 
     /**
@@ -85,6 +99,6 @@ final class ValidationContext
 
     public function isAttributeMissing(): bool
     {
-        return $this->attribute !== null && $this->dataSet !== null && !$this->dataSet->hasAttribute($this->attribute);
+        return $this->attribute !== null && !$this->dataSet->hasAttribute($this->attribute);
     }
 }

@@ -21,7 +21,13 @@ interface ValidatorInterface
      * {@see RulesProviderInterface::getRules()}.
      * @param iterable|object|string|null $rules Rules to apply. If specified, rules are not read from data set even if
      * it is an instance of {@see RulesProviderInterface}.
+     * @param ValidationContext|null $context Validation context that may take into account when performing validation.
+     *
      * @psalm-param RulesType $rules
      */
-    public function validate(mixed $data, iterable|object|string|null $rules = null): Result;
+    public function validate(
+        mixed $data,
+        iterable|object|string|null $rules = null,
+        ?ValidationContext $context = null
+    ): Result;
 }

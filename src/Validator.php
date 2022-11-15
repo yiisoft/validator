@@ -5,19 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 use ReflectionException;
 use ReflectionProperty;
 use Traversable;
 use Yiisoft\Translator\TranslatorInterface;
-use Yiisoft\Validator\DataSet\ArrayDataSet;
-use Yiisoft\Validator\DataSet\ObjectDataSet;
-use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 
-use function is_array;
 use function is_callable;
 use function is_int;
 use function is_object;
@@ -54,13 +49,17 @@ final class Validator implements ValidatorInterface
 
     /**
      * @param DataSetInterface|mixed|RulesProviderInterface $data
+     *
      * @psalm-param RulesType $rules
      *
      * @throws ReflectionException
      */
-    public function validate(mixed $data, iterable|object|string|null $rules = null): Result
-    {
-        $data = $this->normalizeDataSet($data);
+    public function validate(
+        mixed $data,
+        iterable|object|string|null $rules = null,
+        ?ValidationContext $context = null
+    ): Result {
+        $data = DataSetHelper::normalize($data);
         if ($rules === null && $data instanceof RulesProviderInterface) {
             $rules = $data->getRules();
         } elseif ($rules instanceof RulesProviderInterface) {
@@ -72,7 +71,7 @@ final class Validator implements ValidatorInterface
         }
 
         $compoundResult = new Result();
-        $context = new ValidationContext($this, $data);
+        $context ??= new ValidationContext($this, $data);
         $results = [];
 
         /**
@@ -128,24 +127,6 @@ final class Validator implements ValidatorInterface
         }
 
         return $compoundResult;
-    }
-
-    #[Pure]
-    private function normalizeDataSet(mixed $data): DataSetInterface
-    {
-        if ($data instanceof DataSetInterface) {
-            return $data;
-        }
-
-        if (is_object($data)) {
-            return new ObjectDataSet($data);
-        }
-
-        if (is_array($data)) {
-            return new ArrayDataSet($data);
-        }
-
-        return new SingleValueDataSet($data);
     }
 
     /**
