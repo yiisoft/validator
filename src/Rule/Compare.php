@@ -95,7 +95,16 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         private ?Closure $when = null,
     ) {
         if (!isset($this->validOperatorsMap[$this->operator])) {
-            throw new InvalidArgumentException("Operator \"$operator\" is not supported.");
+            $validOperatorsString = implode(
+                ', ',
+                array_map(
+                    static fn (string $operator): string => '"' . $operator  .'"',
+                    array_keys($this->validOperatorsMap),
+                ),
+            );
+            $message = "Operator \"$operator\" is not supported. The valid operators are: $validOperatorsString.";
+
+            throw new InvalidArgumentException($message);
         }
     }
 
