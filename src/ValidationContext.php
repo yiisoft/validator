@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 use Yiisoft\Arrays\ArrayHelper;
 
 /**
- * Validation context that may take into account when performing validation.
+ * Validation context that might be taken into account when performing validation.
  */
 final class ValidationContext
 {
