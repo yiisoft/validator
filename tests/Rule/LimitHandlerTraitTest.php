@@ -21,8 +21,7 @@ final class LimitHandlerTraitTest extends TestCase
     {
         return [
             [
-                new class () implements LimitInterface
-                {
+                new class () implements LimitInterface {
                     public function getMin(): ?int
                     {
                         return null;
@@ -55,8 +54,7 @@ final class LimitHandlerTraitTest extends TestCase
                 },
             ],
             [
-                new class () implements RuleInterface
-                {
+                new class () implements RuleInterface {
                     public function getName(): string
                     {
                         return 'test';
@@ -76,8 +74,7 @@ final class LimitHandlerTraitTest extends TestCase
      */
     public function testValidateLimitsWithWrongRule(LimitInterface|RuleInterface $rule): void
     {
-        $handler = new class () implements RuleHandlerInterface
-        {
+        $handler = new class () implements RuleHandlerInterface {
             use LimitHandlerTrait;
 
             public function validate(mixed $value, object $rule, ValidationContext $context): Result
@@ -90,8 +87,7 @@ final class LimitHandlerTraitTest extends TestCase
                 ValidationContext $context,
                 int $number,
                 Result $result
-            ): void
-            {
+            ): void {
                 $this->validateLimits($rule, $context, $number, $result);
             }
         };
