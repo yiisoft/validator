@@ -98,7 +98,7 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
             $validOperatorsString = implode(
                 ', ',
                 array_map(
-                    static fn (string $operator): string => '"' . $operator  .'"',
+                    static fn (string $operator): string => '"' . $operator . '"',
                     array_keys($this->validOperatorsMap),
                 ),
             );
