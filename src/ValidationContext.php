@@ -45,18 +45,11 @@ final class ValidationContext
         return $this->attribute;
     }
 
-    public function withValidator(ValidatorInterface $validator): self
+    public function change(ValidatorInterface $validator, DataSetInterface $dataSet): self
     {
-        $new = clone $this;
-        $new->validator = $validator;
-        return $new;
-    }
-
-    public function withDataSet(DataSetInterface $dataSet): self
-    {
-        $new = clone $this;
-        $new->dataSet = $dataSet;
-        return $new;
+        $this->validator = $validator;
+        $this->dataSet = $dataSet;
+        return $this;
     }
 
     /**

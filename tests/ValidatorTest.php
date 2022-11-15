@@ -957,7 +957,7 @@ class ValidatorTest extends TestCase
                 $dataSet = DataSetHelper::normalize($data);
                 $context = $context === null
                     ? new ValidationContext($this, $dataSet)
-                    : $context->withValidator($this)->withDataSet($dataSet);
+                    : $context->change($this, $dataSet);
 
                 $result = $this->validator->validate($data, $rules, $context);
 
