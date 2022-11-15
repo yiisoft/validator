@@ -212,7 +212,10 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
         $this->networks = array_merge($this->defaultNetworks, $this->networks);
 
         if ($requireSubnet) {
+            // Might be a bug of XDebug, because this line is covered by tests (see "IpTest").
+            // @codeCoverageIgnoreStart
             $this->allowSubnet = true;
+            // @codeCoverageIgnoreEnd
         }
 
         $this->ranges = $this->prepareRanges($ranges);
