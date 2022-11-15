@@ -45,13 +45,6 @@ final class ValidationContext
         return $this->attribute;
     }
 
-    public function change(ValidatorInterface $validator, DataSetInterface $dataSet): self
-    {
-        $this->validator = $validator;
-        $this->dataSet = $dataSet;
-        return $this;
-    }
-
     /**
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
      */
