@@ -35,6 +35,19 @@ use Yiisoft\Validator\ValidatorInterface;
 
 class ValidatorTest extends TestCase
 {
+    public function testBase(): void
+    {
+        $validator = new Validator();
+
+        $result = $validator->validate(new ObjectWithAttributesOnly());
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            ['name' => ['This value must contain at least 5 characters.']],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
     public function testAddingRulesViaConstructor(): void
     {
         $dataObject = new ArrayDataSet(['bool' => true, 'int' => 41]);
