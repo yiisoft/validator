@@ -27,6 +27,48 @@ final class IpTest extends RuleTestCase
         $this->assertSame('ip', $rule->getName());
     }
 
+    public function getNetworksData(): array
+    {
+        return [
+            'default' => [
+                [],
+                [
+                    '*' => ['any'],
+                    'any' => ['0.0.0.0/0', '::/0'],
+                    'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
+                    'multicast' => ['224.0.0.0/4', 'ff00::/8'],
+                    'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
+                    'localhost' => ['127.0.0.0/8', '::1'],
+                    'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
+                    'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
+                ],
+            ],
+            'custom' => [
+                ['custom' => ['1.1.1.1/1', '2.2.2.2/2']],
+                [
+                    '*' => ['any'],
+                    'any' => ['0.0.0.0/0', '::/0'],
+                    'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
+                    'multicast' => ['224.0.0.0/4', 'ff00::/8'],
+                    'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
+                    'localhost' => ['127.0.0.0/8', '::1'],
+                    'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
+                    'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
+                    'custom' => ['1.1.1.1/1', '2.2.2.2/2'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider getNetworksData
+     */
+    public function testGetNetworks(array $networksArgument, array $expectedNetworks): void
+    {
+        $rule = new Ip(networks: $networksArgument);
+        $this->assertSame($expectedNetworks, $rule->getNetworks());
+    }
+
     public function dataOptions(): array
     {
         return [
@@ -461,6 +503,11 @@ final class IpTest extends RuleTestCase
             'incorrect input, integer' => [123456, [new Ip()], ['' => [$incorrectInputMessage]]],
             'incorrect input, boolean (true)' => [true, [new Ip()], ['' => [$incorrectInputMessage]]],
             'incorrect input, boolean (false)' => [false, [new Ip()], ['' => [$incorrectInputMessage]]],
+
+            // Small length
+            ['1', [new Ip()], ['' => [$message]]],
+            ['1.1.1.', [new Ip()], ['' => [$message]]],
+            ['1.1.1', [new Ip()], ['' => [$message]]],
 
             ['not.an.ip', [new Ip()], ['' => [$message]]],
             ['bad:forSure', [new Ip()], ['' => [$message]]],

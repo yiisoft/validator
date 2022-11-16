@@ -8,11 +8,13 @@ use Generator;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\EachHandler;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleHandler;
 
 final class EachTest extends RuleTestCase
 {
@@ -92,6 +94,61 @@ final class EachTest extends RuleTestCase
                             'skipOnError' => false,
                             'integerPattern' => '/2/',
                             'numberPattern' => '/2/',
+                        ],
+                    ],
+                ],
+            ],
+            'rule without options' => [
+                new Each([
+                    new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
+                    new class () implements RuleInterface {
+                        public function getName(): string
+                        {
+                            return 'test';
+                        }
+
+                        public function getHandlerClassName(): string
+                        {
+                            return StubRuleHandler::class;
+                        }
+                    },
+                ]),
+                [
+                    'incorrectInputMessage' => [
+                        'message' => 'Value must be array or iterable.',
+                    ],
+                    'incorrectInputKeyMessage' => [
+                        'message' => 'Every iterable key must have an integer or a string type.',
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                    'rules' => [
+                        [
+                            'number',
+                            'asInteger' => false,
+                            'min' => null,
+                            'max' => 13,
+                            'incorrectInputMessage' => [
+                                'message' => 'The allowed types are integer, float and string.',
+                            ],
+                            'notANumberMessage' => [
+                                'message' => 'Value must be a number.',
+                            ],
+                            'tooSmallMessage' => [
+                                'message' => 'Value must be no less than {min}.',
+                                'parameters' => ['min' => null],
+                            ],
+                            'tooBigMessage' => [
+                                'message' => 'Value must be no greater than {max}.',
+                                'parameters' => ['max' => 13],
+                            ],
+                            'skipOnEmpty' => false,
+                            'skipOnError' => false,
+                            'integerPattern' => '/1/',
+                            'numberPattern' => '/1/',
+                        ],
+                        [
+                            'test',
                         ],
                     ],
                 ],

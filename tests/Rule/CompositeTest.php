@@ -8,11 +8,13 @@ use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleHandler;
 
 final class CompositeTest extends RuleTestCase
 {
@@ -86,6 +88,59 @@ final class CompositeTest extends RuleTestCase
                             'skipOnError' => false,
                             'integerPattern' => '/2/',
                             'numberPattern' => '/2/',
+                        ],
+                    ],
+                ],
+            ],
+            'rule without options' => [
+                new Composite([
+                    new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
+                    new class () implements RuleInterface {
+                        public function getName(): string
+                        {
+                            return 'test';
+                        }
+
+                        public function getHandlerClassName(): string
+                        {
+                            return StubRuleHandler::class;
+                        }
+                    },
+                ]),
+                [
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                    'rules' => [
+                        [
+                            'number',
+                            'asInteger' => false,
+                            'min' => null,
+                            'max' => 13,
+                            'incorrectInputMessage' => [
+                                'message' => 'The allowed types are integer, float and string.',
+                            ],
+                            'notANumberMessage' => [
+                                'message' => 'Value must be a number.',
+                            ],
+                            'tooSmallMessage' => [
+                                'message' => 'Value must be no less than {min}.',
+                                'parameters' => [
+                                    'min' => null,
+                                ],
+                            ],
+                            'tooBigMessage' => [
+                                'message' => 'Value must be no greater than {max}.',
+                                'parameters' => [
+                                    'max' => 13,
+                                ],
+                            ],
+                            'skipOnEmpty' => false,
+                            'skipOnError' => false,
+                            'integerPattern' => '/1/',
+                            'numberPattern' => '/1/',
+                        ],
+                        [
+                            'test',
                         ],
                     ],
                 ],

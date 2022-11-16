@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use stdClass;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Rule\Compare;
@@ -18,6 +19,15 @@ final class CompareToTest extends RuleTestCase
     use SerializableRuleTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
+
+    public function testInitWithWrongOperator(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $message = 'Operator "=" is not supported. The valid operators are: "==", "===", "!=", "!==", ">", ">=", ' .
+            '"<", "<=".';
+        $this->expectExceptionMessage($message);
+        new CompareTo(operator: '=');
+    }
 
     public function testGetName(): void
     {

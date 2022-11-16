@@ -57,13 +57,18 @@ final class SubsetTest extends RuleTestCase
             [['1', '2', '3', 4, 5, 6], [new Subset(range(1, 10))]],
 
             [['a', 'b'], [new Subset(['a', 'b', 'c'])]],
-            [new SingleValueDataSet(new ArrayObject(['a', 'b'])), [new Subset(['a', 'b', 'c'])]],
+            [new SingleValueDataSet(new ArrayObject(['a', 'b'])), [new Subset(new ArrayObject(['a', 'b', 'c']))]],
         ];
     }
 
     public function dataValidationFailed(): array
     {
         return [
+            'non-iterable' => [
+                1,
+                [new Subset([1, 2, 3])],
+                ['' => ['Value must be iterable.']],
+            ],
             [
                 [0, 1, 2],
                 [new Subset(range(1, 10))],
@@ -73,6 +78,11 @@ final class SubsetTest extends RuleTestCase
                 [10, 11, 12],
                 [new Subset(range(1, 10))],
                 ['' => ['Values must be ones of "1", "2", "3", "4", "5", "6", "7", "8", "9", "10".']],
+            ],
+            'iterator as a value' => [
+                new SingleValueDataSet(new ArrayObject(['c', 'd'])),
+                [new Subset(new ArrayObject(['a', 'b', 'c']))],
+                ['' => ['Values must be ones of "a", "b", "c".']],
             ],
             'custom error' => [
                 ['data' => ['2']],

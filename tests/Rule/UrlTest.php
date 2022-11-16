@@ -23,10 +23,18 @@ final class UrlTest extends RuleTestCase
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
-    public function testGetName(): void
+    public function testDefaultValues(): void
     {
         $rule = new Url();
+
         $this->assertSame('url', $rule->getName());
+        $this->assertSame(['http', 'https'], $rule->getValidSchemes());
+    }
+
+    public function testGetValidSchemes(): void
+    {
+        $rule = new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']);
+        $this->assertSame(['http', 'https', 'ftp', 'ftps'], $rule->getValidSchemes());
     }
 
     public function dataOptions(): array

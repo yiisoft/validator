@@ -10,7 +10,6 @@ use InvalidArgumentException;
 use ReflectionObject;
 use Yiisoft\Validator\AttributeEventInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -37,7 +36,7 @@ final class Callback implements
          * @var callable|null
          */
         private $callback = null,
-        private ?string $method = null,
+        private string|null $method = null,
 
         /**
          * @var bool|callable|null
@@ -63,22 +62,18 @@ final class Callback implements
         return 'callback';
     }
 
-    public function getCallback(): ?callable
+    public function getCallback(): callable|null
     {
         return $this->callback;
     }
 
-    public function getMethod(): ?string
+    public function getMethod(): string|null
     {
         return $this->method;
     }
 
-    public function afterInitAttribute(DataSetInterface $dataSet): void
+    public function afterInitAttribute(ObjectDataSet $dataSet): void
     {
-        if (!$dataSet instanceof ObjectDataSet) {
-            return;
-        }
-
         if ($this->method === null) {
             return;
         }
@@ -102,6 +97,7 @@ final class Callback implements
     public function getOptions(): array
     {
         return [
+            'method' => $this->method,
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];

@@ -45,7 +45,7 @@ final class IpHandler implements RuleHandlerInterface
             ]);
         }
 
-        if (preg_match($rule->getIpParsePattern(), $value, $matches) === 0) {
+        if (preg_match($this->getIpParsePattern(), $value, $matches) === 0) {
             return $result->addError($rule->getMessage(), ['attribute' => $context->getAttribute(), 'value' => $value]);
         }
 
@@ -53,12 +53,8 @@ final class IpHandler implements RuleHandlerInterface
         $ip = $matches['ip'];
         $cidr = $matches['cidr'] ?? null;
         $ipCidr = $matches['ipCidr'];
-
-        try {
-            $ipVersion = IpHelper::getIpVersion($ip, false);
-        } catch (InvalidArgumentException) {
-            return $result->addError($rule->getMessage(), ['attribute' => $context->getAttribute(), 'value' => $value]);
-        }
+        // Exception can not be thrown here because of the check above (regular expression in "getIpParsePattern()").
+        $ipVersion = IpHelper::getIpVersion($ip, validate: false);
 
         $result = $this->validateValueParts($rule, $result, $cidr, $negation, $value, $context);
         if (!$result->isValid()) {
@@ -76,7 +72,7 @@ final class IpHandler implements RuleHandlerInterface
     /**
      * Used to get the Regexp pattern for initial IP address parsing.
      */
-    public function getIpParsePattern(): string
+    private function getIpParsePattern(): string
     {
         return '/^(?<not>' . preg_quote(
             self::NEGATION_CHAR,

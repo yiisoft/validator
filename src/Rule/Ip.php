@@ -212,7 +212,10 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
         $this->networks = array_merge($this->defaultNetworks, $this->networks);
 
         if ($requireSubnet) {
+            // Might be a bug of XDebug, because this line is covered by tests (see "IpTest").
+            // @codeCoverageIgnoreStart
             $this->allowSubnet = true;
+            // @codeCoverageIgnoreEnd
         }
 
         $this->ranges = $this->prepareRanges($ranges);
@@ -357,17 +360,6 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
         }
 
         return false;
-    }
-
-    /**
-     * Used to get the Regexp pattern for initial IP address parsing.
-     */
-    public function getIpParsePattern(): string
-    {
-        return '/^(?<not>' . preg_quote(
-            self::NEGATION_CHAR,
-            '/'
-        ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
     public function getOptions(): array
