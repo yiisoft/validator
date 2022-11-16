@@ -51,7 +51,7 @@ final class AttributesRulesProviderTest extends TestCase
                     #[HasLength(max: 255)]
                     private string $title = 'Test title';
 
-                    #[Deprecated(reason: '(╯°益°)╯彡┻━┻', replacement: '┬─┬ノ( º _ ºノ)')]
+                    #[Deprecated(reason: 'test reason', replacement: 'test replacement')]
                     private int $viewsCount = 1;
 
                     private bool $active = true;
