@@ -31,8 +31,6 @@ use function array_pop;
 use function count;
 use function implode;
 use function is_array;
-use function is_int;
-use function is_string;
 use function ltrim;
 use function rtrim;
 use function sprintf;
@@ -234,6 +232,7 @@ final class Nested implements
 
                 /**
                  * Might be a bug of XDebug, because these lines are covered by tests.
+                 *
                  * @see NestedTest::dataWithOtherNestedAndEach() for test cases prefixed with "withShortcut".
                  */
                 // @codeCoverageIgnoreStart
@@ -258,6 +257,7 @@ final class Nested implements
             foreach ($rulesMap as $valuePath => $nestedRules) {
                 /**
                  * Might be a bug of XDebug, because this line is covered by tests.
+                 *
                  * @see NestedTest::dataWithOtherNestedAndEach() for test cases prefixed with "withShortcut".
                  */
                 // @codeCoverageIgnoreStart
@@ -279,6 +279,7 @@ final class Nested implements
         /**
          * @psalm-suppress PossiblyNullIterator Rules can't be null at this point because of the order and check with
          * early return in {@see prepareRules()}.
+         *
          * @var int|string $attributeRulesIndex Index is either integer or string because of the array conversion in
          * {@see ensureArrayHasRules()}.
          * @var RuleInterface[] $attributeRules Conversion to array is done in {@see ensureArrayHasRules()}.
