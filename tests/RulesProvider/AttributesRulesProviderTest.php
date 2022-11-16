@@ -38,16 +38,14 @@ final class AttributesRulesProviderTest extends TestCase
             ],
             'object with no properties' => [
                 [],
-                new class ()
-                {
+                new class () {
                 },
             ],
             'object with properties without rule attributes' => [
                 [
                     'title' => [HasLength::class],
                 ],
-                new class ()
-                {
+                new class () {
                     #[HasLength(max: 255)]
                     private string $title = 'Test title';
 
