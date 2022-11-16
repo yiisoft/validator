@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\RulesProvider;
 
+use JetBrains\PhpStorm\Deprecated;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use Traversable;
+use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
@@ -34,18 +36,36 @@ final class AttributesRulesProviderTest extends TestCase
                 ],
                 new ObjectWithDifferentPropertyVisibility(),
             ],
+            'object with no properties' => [
+                [],
+                new class ()
+                {
+                },
+            ],
+            'object with properties without rule attributes' => [
+                [
+                    'title' => [HasLength::class],
+                ],
+                new class ()
+                {
+                    #[HasLength(max: 255)]
+                    private string $title = 'Test title';
+
+                    #[Deprecated(reason: '(╯°益°)╯彡┻━┻', replacement: '┬─┬ノ( º _ ºノ)')]
+                    private int $viewsCount = 1;
+
+                    private bool $active = true;
+                },
+            ],
         ];
     }
 
     /**
      * @dataProvider dataBase
      */
-    public function testBase(
-        array $expectedRuleClassNames,
-        string|object $source
-    ): void {
+    public function testBase(array $expectedRuleClassNames, string|object $source): void
+    {
         $rulesProvider = new AttributesRulesProvider($source);
-
         $ruleClassNames = $this->convertRulesToClassNames($rulesProvider->getRules());
 
         $this->assertSame($expectedRuleClassNames, $ruleClassNames);
