@@ -23,7 +23,10 @@ final class InvalidCallbackReturnTypeException extends \Exception implements Fri
 
     public function getName(): string
     {
+        // Called in "error-handler" package.
+        // @codeCoverageIgnoreStart
         return 'Invalid callable return value';
+        // @codeCoverageIgnoreEnd
     }
 
     public function getSolution(): ?string

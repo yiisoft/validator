@@ -8,13 +8,12 @@ use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleHandler;
+use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
 
 final class CompositeTest extends RuleTestCase
 {
@@ -95,17 +94,7 @@ final class CompositeTest extends RuleTestCase
             'rule without options' => [
                 new Composite([
                     new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
-                    new class () implements RuleInterface {
-                        public function getName(): string
-                        {
-                            return 'test';
-                        }
-
-                        public function getHandlerClassName(): string
-                        {
-                            return StubRuleHandler::class;
-                        }
-                    },
+                    new RuleWithoutOptions(),
                 ]),
                 [
                     'skipOnEmpty' => false,

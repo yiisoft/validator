@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
@@ -23,6 +24,8 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
+use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
@@ -35,6 +38,11 @@ use Yiisoft\Validator\ValidatorInterface;
 
 class ValidatorTest extends TestCase
 {
+    public function setUp(): void
+    {
+        ObjectWithPostValidationHook::$hookCalled = false;
+    }
+
     public function testAddingRulesViaConstructor(): void
     {
         $dataObject = new ArrayDataSet(['bool' => true, 'int' => 41]);
@@ -972,5 +980,48 @@ class ValidatorTest extends TestCase
         $result = $validator->validate([], $rules);
 
         $this->assertTrue($result->isValid());
+    }
+
+    public function testRulesWithWrongKey(): void
+    {
+        $validator = ValidatorFactory::make();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('An attribute can only have an integer or a string type. bool given.');
+        $validator->validate([], new IteratorWithBooleanKey());
+    }
+
+    public function testRulesWithWrongRule(): void
+    {
+        $validator = ValidatorFactory::make();
+
+        $this->expectException(InvalidArgumentException::class);
+        $message = 'Rule should be either an instance of Yiisoft\Validator\RuleInterface or a callable, int given.';
+        $this->expectExceptionMessage($message);
+        $validator->validate([], [new Boolean(), 1]);
+    }
+
+    public function testRulesAsObjectNameWithRuleAttributes(): void
+    {
+        $validator = ValidatorFactory::make();
+        $result = $validator->validate(['name' => 'Test name'], ObjectWithAttributesOnly::class);
+        $this->assertTrue($result->isValid());
+    }
+
+    public function testRulesAsObjectWithRuleAttributes(): void
+    {
+        $validator = ValidatorFactory::make();
+        $result = $validator->validate(['name' => 'Test name'], new ObjectWithAttributesOnly());
+        $this->assertTrue($result->isValid());
+    }
+
+    public function testDataWithPostValidationHook(): void
+    {
+        $validator = ValidatorFactory::make();
+        $this->assertFalse(ObjectWithPostValidationHook::$hookCalled);
+
+        $result = $validator->validate(new ObjectWithPostValidationHook(), ['called' => new Boolean()]);
+        $this->assertFalse($result->isValid());
+        $this->assertTrue(ObjectWithPostValidationHook::$hookCalled);
     }
 }
