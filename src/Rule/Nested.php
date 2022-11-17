@@ -22,6 +22,7 @@ use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
+use Yiisoft\Validator\Tests\Rule\NestedTest;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -30,8 +31,6 @@ use function array_pop;
 use function count;
 use function implode;
 use function is_array;
-use function is_int;
-use function is_string;
 use function ltrim;
 use function rtrim;
 use function sprintf;
@@ -211,16 +210,8 @@ final class Nested implements
 
     private function normalizeRules(): void
     {
-        if ($this->rules === null) {
-            return;
-        }
-
-        /** @var iterable<RuleInterface> $rules */
+        /** @var RuleInterface[] $rules Conversion to array is done in {@see ensureArrayHasRules()}. */
         $rules = $this->rules;
-        if ($rules instanceof Traversable) {
-            $rules = iterator_to_array($rules);
-        }
-
         while (true) {
             $breakWhile = true;
             $rulesMap = [];
@@ -239,6 +230,12 @@ final class Nested implements
                     continue;
                 }
 
+                /**
+                 * Might be a bug of XDebug, because these lines are covered by tests.
+                 *
+                 * @see NestedTest::dataWithOtherNestedAndEach() for test cases prefixed with "withShortcut".
+                 */
+                // @codeCoverageIgnoreStart
                 $breakWhile = false;
 
                 $lastValuePath = array_pop($parts);
@@ -254,10 +251,18 @@ final class Nested implements
 
                 $rulesMap[$remainingValuePath][$lastValuePath] = $rule;
                 unset($rules[$valuePath]);
+                // @codeCoverageIgnoreEnd
             }
 
             foreach ($rulesMap as $valuePath => $nestedRules) {
+                /**
+                 * Might be a bug of XDebug, because this line is covered by tests.
+                 *
+                 * @see NestedTest::dataWithOtherNestedAndEach() for test cases prefixed with "withShortcut".
+                 */
+                // @codeCoverageIgnoreStart
                 $rules[$valuePath] = new Each([new self($nestedRules, normalizeRules: false)]);
+                // @codeCoverageIgnoreEnd
             }
 
             if ($breakWhile === true) {
@@ -270,23 +275,17 @@ final class Nested implements
 
     public function propagateOptions(): void
     {
-        if ($this->rules === null) {
-            return;
-        }
-
         $rules = [];
+        /**
+         * @psalm-suppress PossiblyNullIterator Rules can't be null at this point because of the order and check with
+         * early return in {@see prepareRules()}.
+         *
+         * @var int|string $attributeRulesIndex Index is either integer or string because of the array conversion in
+         * {@see ensureArrayHasRules()}.
+         * @var RuleInterface[] $attributeRules Conversion to array is done in {@see ensureArrayHasRules()}.
+         */
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
-            if (!is_int($attributeRulesIndex) && !is_string($attributeRulesIndex)) {
-                $message = sprintf(
-                    'A value path can only have an integer or a string type. %s given',
-                    get_debug_type($attributeRulesIndex),
-                );
-
-                throw new InvalidArgumentException($message);
-            }
-
-            /** @var iterable<RuleInterface>|null $attributeRules */
-            foreach ($attributeRules ?? [] as $attributeRule) {
+            foreach ($attributeRules as $attributeRule) {
                 if ($attributeRule instanceof SkipOnEmptyInterface) {
                     $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
                 }
