@@ -6,8 +6,12 @@ namespace Yiisoft\Validator\Tests;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
+use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleHandler;
 
 final class RulesDumperTest extends TestCase
 {
@@ -76,7 +80,7 @@ final class RulesDumperTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testException(): void
+    public function testWrongRuleException(): void
     {
         $dumper = new RulesDumper();
 
@@ -86,5 +90,62 @@ final class RulesDumperTest extends TestCase
         $this->expectExceptionMessage($message);
 
         $dumper->asArray(['not a rule']);
+    }
+
+    public function testWrongKeyException(): void
+    {
+        $dumper = new RulesDumper();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('An attribute can only have an integer or a string type. bool given.');
+        $dumper->asArray(new IteratorWithBooleanKey());
+    }
+
+    public function testRuleWithoutOptions(): void
+    {
+        $dumper = new RulesDumper();
+        $rules = [
+            new Boolean(),
+            new class () implements RuleInterface {
+                public function getName(): string
+                {
+                    return 'test';
+                }
+
+                public function getHandlerClassName(): string
+                {
+                    return StubRuleHandler::class;
+                }
+            },
+        ];
+        $expectedRules = [
+            [
+                'boolean',
+                'trueValue' => '1',
+                'falseValue' => '0',
+                'strict' => false,
+                'nonScalarMessage' => [
+                    'message' => 'Value must be either "{true}" or "{false}".',
+                    'parameters' => [
+                        'true' => '1',
+                        'false' => '0',
+                    ],
+                ],
+                'scalarMessage' => [
+                    'message' => 'Value must be either "{true}" or "{false}".',
+                    'parameters' => [
+                        'true' => '1',
+                        'false' => '0',
+                    ],
+                ],
+                'skipOnEmpty' => false,
+                'skipOnError' => false,
+            ],
+            [
+                'test',
+            ],
+        ];
+
+        $this->assertSame($expectedRules, $dumper->asArray($rules));
     }
 }
