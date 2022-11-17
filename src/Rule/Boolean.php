@@ -60,17 +60,11 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
         return 'boolean';
     }
 
-    /**
-     * @return scalar
-     */
     public function getTrueValue(): int|float|string|bool
     {
         return $this->trueValue;
     }
 
-    /**
-     * @return scalar
-     */
     public function getFalseValue(): int|float|string|bool
     {
         return $this->falseValue;
