@@ -14,7 +14,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 
 class ObjectDataSetBench
 {
-    private static $currentPropertyVisibility = ReflectionProperty::IS_PUBLIC;
+    private static int $currentPropertyVisibility = ReflectionProperty::IS_PUBLIC;
 
     public function provideObjectDataSets(): Generator
     {

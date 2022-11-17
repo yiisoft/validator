@@ -56,9 +56,6 @@ final class IsTrue implements SerializableRuleInterface, SkipOnErrorInterface, W
         return 'isTrue';
     }
 
-    /**
-     * @return scalar
-     */
     public function getTrueValue(): int|float|string|bool
     {
         return $this->trueValue;
