@@ -33,6 +33,7 @@ final class Validator implements ValidatorInterface
 {
     use PreValidateTrait;
 
+    private RuleHandlerResolverInterface $ruleHandlerResolver;
     private TranslatorInterface $translator;
 
     /**
@@ -45,7 +46,7 @@ final class Validator implements ValidatorInterface
      * `$rules` argument in {@see validate()} method.
      */
     public function __construct(
-        private RuleHandlerResolverInterface $ruleHandlerResolver,
+        ?RuleHandlerResolverInterface $ruleHandlerResolver = null,
         ?TranslatorInterface $translator = null,
         private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
@@ -53,6 +54,7 @@ final class Validator implements ValidatorInterface
         bool|callable|null $defaultSkipOnEmpty = null,
         private string $translationCategory = 'yii-validator',
     ) {
+        $this->ruleHandlerResolver = $ruleHandlerResolver ?? new SimpleRuleHandlerContainer();
         $this->translator = $translator ?? $this->createDefaultTranslator();
         $this->defaultSkipOnEmptyCallback = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
     }

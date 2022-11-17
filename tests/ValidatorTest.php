@@ -26,6 +26,7 @@ use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
@@ -41,6 +42,19 @@ class ValidatorTest extends TestCase
     public function setUp(): void
     {
         ObjectWithPostValidationHook::$hookCalled = false;
+    }
+
+    public function testBase(): void
+    {
+        $validator = new Validator();
+
+        $result = $validator->validate(new ObjectWithAttributesOnly());
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(
+            ['name' => ['This value must contain at least 5 characters.']],
+            $result->getErrorMessagesIndexedByPath()
+        );
     }
 
     public function testAddingRulesViaConstructor(): void
