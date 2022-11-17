@@ -8,10 +8,9 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
-use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleHandler;
+use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
 
 final class RulesDumperTest extends TestCase
 {
@@ -106,17 +105,7 @@ final class RulesDumperTest extends TestCase
         $dumper = new RulesDumper();
         $rules = [
             new Boolean(),
-            new class () implements RuleInterface {
-                public function getName(): string
-                {
-                    return 'test';
-                }
-
-                public function getHandlerClassName(): string
-                {
-                    return StubRuleHandler::class;
-                }
-            },
+            new RuleWithoutOptions(),
         ];
         $expectedRules = [
             [
