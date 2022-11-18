@@ -22,12 +22,13 @@ return [
     ],
     RuleHandlerResolverInterface::class => SimpleRuleHandlerContainer::class,
     'yii.validator.categorySource' => [
-        'definition' =>
-            static fn (IdMessageReader $idMessageReader) => new CategorySource(
+        'definition' => static function (IdMessageReader $idMessageReader) use ($params): CategorySource {
+            return new CategorySource(
                 $params['yiisoft/validator']['translation.category'],
                 $idMessageReader,
                 extension_loaded('intl') ? new IntlMessageFormatter() : new SimpleMessageFormatter(),
-            ),
+            );
+        },
         'tags' => ['translation.categorySource'],
     ],
 ];

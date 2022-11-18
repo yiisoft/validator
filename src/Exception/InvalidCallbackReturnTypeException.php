@@ -21,14 +21,17 @@ final class InvalidCallbackReturnTypeException extends \Exception implements Fri
         parent::__construct($message, $code, $previous);
     }
 
+    /**
+     * @codeCoverageIgnore Called in "error-handler" package.
+     */
     public function getName(): string
     {
-        // Called in "error-handler" package.
-        // @codeCoverageIgnoreStart
         return 'Invalid callable return value';
-        // @codeCoverageIgnoreEnd
     }
 
+    /**
+     * @codeCoverageIgnore Called in "error-handler" package.
+     */
     public function getSolution(): ?string
     {
         return <<<SOLUTION
