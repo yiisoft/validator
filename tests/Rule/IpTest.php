@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use RuntimeException;
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Ip;
 use Yiisoft\Validator\Rule\IpHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -12,7 +12,6 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 final class IpTest extends RuleTestCase
 {
@@ -408,6 +407,8 @@ final class IpTest extends RuleTestCase
     {
         return [
             ['192.168.10.11', [new Ip()]],
+            ['127.0.0.1', [new Ip()]],
+            ['::1', [new Ip()]],
 
             ['10.0.0.1', [new Ip(ranges: ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'])]],
             ['192.168.5.101', [new Ip(ranges: ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'])]],
@@ -623,7 +624,7 @@ final class IpTest extends RuleTestCase
 
     public function testNetworkAliasException(): void
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Network alias "*" already set as default');
         new Ip(networks: ['*' => ['wrong']], ranges: ['*']);
     }
@@ -671,14 +672,11 @@ final class IpTest extends RuleTestCase
         $this->assertSame($expectedRanges, $rule->getRanges());
     }
 
-    public function testInitException(): void
+    public function testDisableBothIpv4AndIpv6(): void
     {
-        $rule = new Ip(allowIpv4: false, allowIpv6: false);
-        $validator = ValidatorFactory::make();
-
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Both IPv4 and IPv6 checks can not be disabled at the same time');
-        $validator->validate('', [$rule]);
+        new Ip(allowIpv4: false, allowIpv6: false);
     }
 
     public function testSkipOnError(): void

@@ -35,8 +35,6 @@ final class IpHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Ip::class, $rule);
         }
 
-        $this->checkAllowedVersions($rule);
-
         $result = new Result();
         if (!is_string($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
@@ -54,7 +52,7 @@ final class IpHandler implements RuleHandlerInterface
         $cidr = $matches['cidr'] ?? null;
         $ipCidr = $matches['ipCidr'];
         // Exception can not be thrown here because of the check above (regular expression in "getIpParsePattern()").
-        $ipVersion = IpHelper::getIpVersion($ip, validate: false);
+        $ipVersion = IpHelper::getIpVersion($ip);
 
         $result = $this->validateValueParts($rule, $result, $cidr, $negation, $value, $context);
         if (!$result->isValid()) {
@@ -78,13 +76,6 @@ final class IpHandler implements RuleHandlerInterface
             self::NEGATION_CHAR,
             '/'
         ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
-    }
-
-    private function checkAllowedVersions(Ip $rule): void
-    {
-        if (!$rule->isAllowIpv4() && !$rule->isAllowIpv6()) {
-            throw new RuntimeException('Both IPv4 and IPv6 checks can not be disabled at the same time.');
-        }
     }
 
     private function validateValueParts(
