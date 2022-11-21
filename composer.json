@@ -22,7 +22,7 @@
         "ext-mbstring": "*",
         "psr/container": "^1.0|^2.0",
         "yiisoft/arrays": "^2.1",
-        "yiisoft/translator": "dev-fix-empty-and-null-parameters",
+        "yiisoft/translator": "dev-master",
         "yiisoft/friendly-exception": "^1.0",
         "yiisoft/network-utilities": "^1.0",
         "yiisoft/strings": "^2.1"
@@ -76,11 +76,5 @@
         "test": "phpunit --testdox --no-interaction",
         "test-watch": "phpunit-watcher watch"
     },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/yiisoft/translator"
-        }
-    ],
     "minimum-stability": "dev"
 }
