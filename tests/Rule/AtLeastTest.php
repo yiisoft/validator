@@ -143,7 +143,7 @@ final class AtLeastTest extends RuleTestCase
                 [new AtLeast(['attr2'])],
                 ['' => ['Value must be an array or an object.']],
             ],
-            'incorrect input, custom error message' => [
+            'incorrect input, custom message' => [
                 1,
                 [new AtLeast(['attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
                 ['' => ['Attribute - , type - int.']],
@@ -168,15 +168,20 @@ final class AtLeastTest extends RuleTestCase
                 [new AtLeast(['attr2'], min: 2)],
                 ['' => ['The model is not valid. Must have at least "2" filled attributes.']],
             ],
-            'custom error message' => [
+            'custom message' => [
                 $class,
                 [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom error')],
                 ['' => ['Custom error']],
             ],
-            'custom error message with parameters' => [
+            'custom message with parameters' => [
                 $class,
                 [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attribute - {attribute}, min - {min}.')],
                 ['' => ['Attribute - , min - 2.']],
+            ],
+            'custom message with parameters, attribute set' => [
+                ['data' => $class],
+                ['data' => new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attribute - {attribute}, min - {min}.')],
+                ['data' => ['Attribute - data, min - 2.']],
             ],
         ];
     }
