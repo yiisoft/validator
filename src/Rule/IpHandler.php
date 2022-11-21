@@ -53,6 +53,7 @@ final class IpHandler implements RuleHandlerInterface
         /**
          * Exception handling and validation in IpHelper are not needed because of the check above (regular expression
          * in "getIpParsePattern()").
+         *
          * @infection-ignore-all
          */
         $ipVersion = IpHelper::getIpVersion($ip, validate: false);
