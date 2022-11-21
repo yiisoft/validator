@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use InvalidArgumentException;
-use RuntimeException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
