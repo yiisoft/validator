@@ -33,6 +33,7 @@ final class ObjectParser
         private int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
         ReflectionProperty::IS_PROTECTED |
         ReflectionProperty::IS_PUBLIC,
+        private bool $skipStaticProperties = false,
         bool $useCache = true
     ) {
         $this->cacheKey = $useCache
@@ -95,7 +96,7 @@ final class ObjectParser
     /**
      * @return array<string, ReflectionProperty>
      */
-    private function getReflectionProperties(): array
+    public function getReflectionProperties(): array
     {
         if ($this->hasCacheItem('reflectionProperties')) {
             /** @var array<string, ReflectionProperty> */
@@ -106,6 +107,10 @@ final class ObjectParser
         $reflectionProperties = [];
 
         foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
+            if ($this->skipStaticProperties && $property->isStatic()) {
+                continue;
+            }
+
             if (PHP_VERSION_ID < 80100) {
                 $property->setAccessible(true);
             }
