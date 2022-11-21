@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use ArrayObject;
 use InvalidArgumentException;
 use ReflectionProperty;
 use stdClass;
@@ -788,6 +789,10 @@ final class NestedTest extends RuleTestCase
                         },
                     ),
                 ],
+            ],
+            'iterator in rules' => [
+                ['user' => ['age' => 19]],
+                [new Nested(new ArrayObject(['user.age' => new Number(min: 18)]))],
             ],
         ];
     }

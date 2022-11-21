@@ -105,9 +105,6 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         }
     }
 
-    /**
-     * @return scalar|null
-     */
     public function getTargetValue(): int|float|string|bool|null
     {
         return $this->targetValue;

@@ -16,12 +16,12 @@ final class TranslatorFactory
     {
         $translator = new Translator('en');
         $categorySource = new CategorySource(
-            'validator',
+            'yii-validator',
             new IdMessageReader(),
             new SimpleMessageFormatter()
         );
         $translator->addCategorySources($categorySource);
 
-        return $translator->withDefaultCategory('validator');
+        return $translator;
     }
 }

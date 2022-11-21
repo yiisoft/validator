@@ -400,4 +400,11 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame($expectedRulesCallsCount, ObjectWithCallsCount::$getRulesCallsCount);
         $this->assertSame($expectedDataCallsCount, ObjectWithCallsCount::$getDataCallsCount);
     }
+
+    public function testHasAttributeWithDataSetProvided(): void
+    {
+        $objectDataSet = new ObjectDataSet(new ObjectWithDataSet());
+        $this->assertTrue($objectDataSet->hasAttribute('key1'));
+        $this->assertFalse($objectDataSet->hasAttribute('non-existing-key'));
+    }
 }

@@ -36,6 +36,7 @@
         "roave/infection-static-analysis-plugin": "^1.16",
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^4.18",
+        "yiisoft/di": "^1.2",
         "yiisoft/test-support": "^3.0"
     },
     "suggest": {
