@@ -146,7 +146,7 @@ final class AtLeastTest extends RuleTestCase
             'incorrect input, custom error message' => [
                 1,
                 [new AtLeast(['attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - int.']]
+                ['' => ['Attribute - , type - int.']],
             ],
             'object' => [
                 $class,
