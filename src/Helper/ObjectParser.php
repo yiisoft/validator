@@ -37,7 +37,7 @@ final class ObjectParser
         bool $useCache = true
     ) {
         $this->cacheKey = $useCache
-            ? $this->object::class . '_' . $this->propertyVisibility
+            ? $this->object::class . '_' . $this->propertyVisibility . '_' . $this->skipStaticProperties
             : null;
     }
 
