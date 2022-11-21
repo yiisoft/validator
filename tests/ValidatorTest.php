@@ -192,8 +192,7 @@ class ValidatorTest extends TestCase
         array $expectedErrorMessages,
         mixed $data,
         iterable|object|string|null $rules,
-    ): void
-    {
+    ): void {
         $validator = ValidatorFactory::make();
         $result = $validator->validate($data, $rules);
         $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
