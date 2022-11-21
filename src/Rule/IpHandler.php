@@ -51,8 +51,12 @@ final class IpHandler implements RuleHandlerInterface
         $ip = $matches['ip'];
         $cidr = $matches['cidr'] ?? null;
         $ipCidr = $matches['ipCidr'];
-        // Exception can not be thrown here because of the check above (regular expression in "getIpParsePattern()").
-        $ipVersion = IpHelper::getIpVersion($ip);
+        /**
+         * Exception handling and validation in IpHelper are not needed because of the check above (regular expression
+         * in "getIpParsePattern()").
+         * @infection-ignore-all
+         */
+        $ipVersion = IpHelper::getIpVersion($ip, validate: false);
 
         $result = $this->validateValueParts($rule, $result, $cidr, $negation, $value, $context);
         if (!$result->isValid()) {

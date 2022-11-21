@@ -407,8 +407,6 @@ final class IpTest extends RuleTestCase
     {
         return [
             ['192.168.10.11', [new Ip()]],
-            ['127.0.0.1', [new Ip()]],
-            ['::1', [new Ip()]],
 
             ['10.0.0.1', [new Ip(ranges: ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'])]],
             ['192.168.5.101', [new Ip(ranges: ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'])]],
