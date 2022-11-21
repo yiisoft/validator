@@ -143,10 +143,25 @@ final class AtLeastTest extends RuleTestCase
                 [new AtLeast(['attr2'])],
                 ['' => ['Value must be an array or an object.']],
             ],
-            'incorrect input, custom message' => [
+            'custom incorrect input message' => [
+                1,
+                [new AtLeast(['attr2'], incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
+            'custom incorrect input message with parameters' => [
                 1,
                 [new AtLeast(['attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
                 ['' => ['Attribute - , type - int.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['attribute' => 1],
+                [
+                    'attribute' => new AtLeast(
+                        ['attr2'],
+                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                    ),
+                ],
+                ['attribute' => ['Attribute - attribute, type - int.']],
             ],
             'object' => [
                 $class,
@@ -170,8 +185,8 @@ final class AtLeastTest extends RuleTestCase
             ],
             'custom message' => [
                 $class,
-                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom error')],
-                ['' => ['Custom error']],
+                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom message.')],
+                ['' => ['Custom message.']],
             ],
             'custom message with parameters' => [
                 $class,

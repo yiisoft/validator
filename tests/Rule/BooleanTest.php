@@ -168,13 +168,13 @@ final class BooleanTest extends RuleTestCase
                 ['' => ['Attribute - , true - true, false - false, value - 5.']],
             ],
             'custom scalar message with parameters, attribute set' => [
-                ['level' => 5],
+                ['data' => 5],
                 [
-                    'level' => new Boolean(
+                    'data' => new Boolean(
                         scalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
                     ),
                 ],
-                ['level' => ['Attribute - level, true - 1, false - 0, value - 5.']],
+                ['data' => ['Attribute - data, true - 1, false - 0, value - 5.']],
             ],
             'custom non-scalar message' => [
                 [],
@@ -203,13 +203,13 @@ final class BooleanTest extends RuleTestCase
                 ['' => ['Attribute - , true - true, false - false, type - array.']],
             ],
             'custom non-scalar message with parameters, attribute set' => [
-                ['level' => []],
+                ['data' => []],
                 [
-                    'level' => new Boolean(
+                    'data' => new Boolean(
                         nonScalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
-                ['level' => ['Attribute - level, true - 1, false - 0, type - array.']],
+                ['data' => ['Attribute - data, true - 1, false - 0, type - array.']],
             ],
         ];
     }
