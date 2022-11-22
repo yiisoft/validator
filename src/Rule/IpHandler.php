@@ -125,7 +125,8 @@ final class IpHandler implements RuleHandlerInterface
         return null;
     }
 
-    private static function validateCidr(Ip $rule,
+    private static function validateCidr(
+        Ip $rule,
         ?string $cidr,
         string $ipCidr,
         string $value,
