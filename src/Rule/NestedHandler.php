@@ -71,7 +71,6 @@ final class NestedHandler implements RuleHandlerInterface
             $data = (new ObjectDataSet($value, $rule->getPropertyVisibility()))->getData();
             if (!is_array($data) && !is_object($data)) {
                 return $compoundResult->addError($rule->getIncorrectDataSetTypeMessage(), [
-                    'attribute' => $context->getAttribute(),
                     'type' => get_debug_type($data),
                 ]);
             }
