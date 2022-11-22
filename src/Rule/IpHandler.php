@@ -34,16 +34,15 @@ final class IpHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Ip::class, $rule);
         }
 
-        $result = new Result();
         if (!is_string($value)) {
-            return $result->addError($rule->getIncorrectInputMessage(), [
+            return (new Result())->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
 
         if (preg_match($this->getIpParsePattern(), $value, $matches) === 0) {
-            return $result->addError($rule->getMessage(), ['attribute' => $context->getAttribute(), 'value' => $value]);
+            return self::getGenericErrorResult($rule->getMessage(), $context, $value);
         }
 
         $negation = !empty($matches['not'] ?? null);
@@ -58,17 +57,22 @@ final class IpHandler implements RuleHandlerInterface
          */
         $ipVersion = IpHelper::getIpVersion($ip, validate: false);
 
-        $result = $this->validateValueParts($rule, $result, $cidr, $negation, $value, $context);
-        if (!$result->isValid()) {
+        $result = self::validateValueParts($rule, $cidr, $negation, $value, $context);
+        if ($result !== null) {
             return $result;
         }
 
-        $result = $this->validateVersion($rule, $result, $ipVersion, $value, $context);
-        if (!$result->isValid()) {
+        $result = self::validateVersion($rule, $ipVersion, $value, $context);
+        if ($result !== null) {
             return $result;
         }
 
-        return $this->validateCidr($rule, $result, $cidr, $ipCidr, $value, $context);
+        $result = self::validateCidr($rule, $cidr, $ipCidr, $value, $context);
+        if ($result !== null) {
+            return $result;
+        }
+
+        return new Result();
     }
 
     /**
@@ -82,109 +86,71 @@ final class IpHandler implements RuleHandlerInterface
         ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
-    private function validateValueParts(
+    private static function validateValueParts(
         Ip $rule,
-        Result $result,
         ?string $cidr,
         bool $negation,
         string $value,
         ValidationContext $context
-    ): Result {
+    ): Result|null {
         if ($cidr === null && $rule->isRequireSubnet()) {
-            $result->addError(
-                $rule->getNoSubnetMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
-            return $result;
+            return self::getGenericErrorResult($rule->getNoSubnetMessage(), $context, $value);
         }
+
         if ($cidr !== null && !$rule->isAllowSubnet()) {
-            $result->addError(
-                $rule->getHasSubnetMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
-            return $result;
+            return self::getGenericErrorResult($rule->getHasSubnetMessage(), $context, $value);
         }
+
         if ($negation && !$rule->isAllowNegation()) {
-            $result->addError(
-                $rule->getMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
-            return $result;
+            return self::getGenericErrorResult($rule->getMessage(), $context, $value);
         }
-        return $result;
+
+        return null;
     }
 
-    private function validateVersion(
+    private static function validateVersion(
         Ip $rule,
-        Result $result,
         int $ipVersion,
         string $value,
         ValidationContext $context
-    ): Result {
+    ): Result|null {
         if ($ipVersion === IpHelper::IPV6 && !$rule->isAllowIpv6()) {
-            $result->addError(
-                $rule->getIpv6NotAllowedMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
-            return $result;
+            return self::getGenericErrorResult($rule->getIpv6NotAllowedMessage(), $context, $value);
         }
+
         if ($ipVersion === IpHelper::IPV4 && !$rule->isAllowIpv4()) {
-            $result->addError(
-                $rule->getIpv4NotAllowedMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
-            return $result;
+            return self::getGenericErrorResult($rule->getIpv4NotAllowedMessage(), $context, $value);
         }
-        return $result;
+
+        return null;
     }
 
-    private function validateCidr(
-        Ip $rule,
-        Result $result,
+    private static function validateCidr(Ip $rule,
         ?string $cidr,
         string $ipCidr,
         string $value,
         ValidationContext $context
-    ): Result {
+    ): Result|null {
         if ($cidr !== null) {
             try {
                 IpHelper::getCidrBits($ipCidr);
             } catch (InvalidArgumentException) {
-                $result->addError(
-                    $rule->getWrongCidrMessage(),
-                    [
-                        'attribute' => $context->getAttribute(),
-                        'value' => $value,
-                    ],
-                );
-                return $result;
+                return self::getGenericErrorResult($rule->getWrongCidrMessage(), $context, $value);
             }
         }
+
         if (!$rule->isAllowed($ipCidr)) {
-            $result->addError(
-                $rule->getNotInRangeMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
-            return $result;
+            return self::getGenericErrorResult($rule->getNotInRangeMessage(), $context, $value);
         }
-        return $result;
+
+        return null;
+    }
+
+    private static function getGenericErrorResult(string $message, ValidationContext $context, string $value): Result
+    {
+        return (new Result())->addError($message, [
+            'attribute' => $context->getAttribute(),
+            'value' => $value,
+        ]);
     }
 }

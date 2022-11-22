@@ -502,6 +502,22 @@ final class IpTest extends RuleTestCase
             'incorrect input, integer' => [123456, [new Ip()], ['' => [$incorrectInputMessage]]],
             'incorrect input, boolean (true)' => [true, [new Ip()], ['' => [$incorrectInputMessage]]],
             'incorrect input, boolean (false)' => [false, [new Ip()], ['' => [$incorrectInputMessage]]],
+            'incorrect input, null' => [null, [new Ip()], ['' => [$incorrectInputMessage]]],
+            'custom incorrect input message' => [
+                1,
+                [new Ip(incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
+            'custom incorrect input message with parameters' => [
+                1,
+                [new Ip(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['' => ['Attribute - , type - int.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['data' => 1],
+                ['data' => new Ip(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => ['Attribute - data, type - int.']],
+            ],
 
             // Small length
             ['1', [new Ip()], ['' => [$message]]],
@@ -515,6 +531,21 @@ final class IpTest extends RuleTestCase
             ['2008:fa::0::1', [new Ip()], ['' => [$message]]],
             ['!2008:fa::0::1', [new Ip()], ['' => [$message]]],
             ['2008:fa::0:1/64', [new Ip()], ['' => [$hasSubnetMessage]]],
+            'custom has subnet message' => [
+                '2008:fa::0:1/64',
+                [new Ip(hasSubnetMessage: 'Custom has subnet message.')],
+                ['' => ['Custom has subnet message.']],
+            ],
+            'custom has subnet message with parameters' => [
+                '2008:fa::0:1/64',
+                [new Ip(hasSubnetMessage: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - 2008:fa::0:1/64.']],
+            ],
+            'custom has subnet message with parameters, attribute set' => [
+                ['data' => '2008:fa::0:1/64'],
+                ['data' => new Ip(hasSubnetMessage: 'Attribute - {attribute}, value - {value}.')],
+                ['data' => ['Attribute - data, value - 2008:fa::0:1/64.']],
+            ],
 
             [
                 'babe::cafe',
@@ -526,16 +557,99 @@ final class IpTest extends RuleTestCase
                 [new Ip(ranges: ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'])],
                 ['' => [$notInRangeMessage]],
             ],
+            'custom not in range message' => [
+                '10.0.0.2',
+                [
+                    new Ip(
+                        notInRangeMessage: 'Custom not in range message.',
+                        ranges: ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'],
+                    )
+                ],
+                ['' => ['Custom not in range message.']],
+            ],
+            'custom not in range message with parameters' => [
+                '10.0.0.2',
+                [
+                    new Ip(
+                        notInRangeMessage: 'Attribute - {attribute}, value - {value}.',
+                        ranges: ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'],
+                    ),
+                ],
+                ['' => ['Attribute - , value - 10.0.0.2.']],
+            ],
+            'custom not in range message with parameters, attribute set' => [
+                ['data' => '10.0.0.2'],
+                [
+                    'data' => new Ip(
+                        notInRangeMessage: 'Attribute - {attribute}, value - {value}.',
+                        ranges: ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'],
+                    ),
+                ],
+                ['data' => ['Attribute - data, value - 10.0.0.2.']],
+            ],
 
-            ['192.168.005.001', [new Ip()], ['' => [$message]]], // Leading zeroes are not supported
+            'leading zeroes' => ['192.168.005.001', [new Ip()], ['' => [$message]]],
             ['192.168.5.321', [new Ip()], ['' => [$message]]],
             ['!192.168.5.32', [new Ip()], ['' => [$message]]],
             ['192.168.5.32/11', [new Ip()], ['' => [$hasSubnetMessage]]],
             ['192.168.10.11', [new Ip(allowIpv4: false)], ['' => [$ipv4NotAllowedMessage]]],
+            'custom IPv4 not allowed message' => [
+                '192.168.10.11',
+                [new Ip(allowIpv4: false, ipv4NotAllowedMessage: 'Custom IPv4 not allowed message.')],
+                ['' => ['Custom IPv4 not allowed message.']],
+            ],
+            'custom IPv4 not allowed message with parameters' => [
+                '192.168.10.11',
+                [new Ip(allowIpv4: false, ipv4NotAllowedMessage: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - 192.168.10.11.']],
+            ],
+            'custom IPv4 not allowed message with parameters, attribute set' => [
+                ['data' => '192.168.10.11'],
+                [
+                    'data' => new Ip(
+                        allowIpv4: false,
+                        ipv4NotAllowedMessage: 'Attribute - {attribute}, value - {value}.',
+                    ),
+                ],
+                ['data' => ['Attribute - data, value - 192.168.10.11.']],
+            ],
+
             ['192.168.5.32/33', [new Ip(allowSubnet: true)], ['' => [$wrongCidrMessage]]],
+            'custom wrong CIDR message' => [
+                '192.168.5.32/33',
+                [new Ip(allowSubnet: true, wrongCidrMessage: 'Custom wrong CIDR message.')],
+                ['' => ['Custom wrong CIDR message.']],
+            ],
+            'custom wrong CIDR message with parameters' => [
+                '192.168.5.32/33',
+                [new Ip(allowSubnet: true, wrongCidrMessage: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - 192.168.5.32/33.']],
+            ],
+            'custom wrong CIDR message with parameters, attribute set' => [
+                ['data' => '192.168.5.32/33'],
+                ['data' => new Ip(allowSubnet: true, wrongCidrMessage: 'Attribute - {attribute}, value - {value}.')],
+                ['data' => ['Attribute - data, value - 192.168.5.32/33.']],
+            ],
+
             ['192.168.5.32/af', [new Ip(allowSubnet: true)], ['' => [$message]]],
             ['192.168.5.32/11/12', [new Ip(allowSubnet: true)], ['' => [$message]]],
             ['10.0.0.1', [new Ip(requireSubnet: true)], ['' => [$noSubnetMessage]]],
+            'custom no subnet message' => [
+                '10.0.0.1',
+                [new Ip(requireSubnet: true, noSubnetMessage: 'Custom no subnet message.')],
+                ['' => ['Custom no subnet message.']],
+            ],
+            'custom no subnet message with parameters' => [
+                '10.0.0.1',
+                [new Ip(requireSubnet: true, noSubnetMessage: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - 10.0.0.1.']],
+            ],
+            'custom no subnet message with parameters, attribute set' => [
+                ['data' => '10.0.0.1'],
+                ['data' => new Ip(requireSubnet: true, noSubnetMessage: 'Attribute - {attribute}, value - {value}.')],
+                ['data' => ['Attribute - data, value - 10.0.0.1.']],
+            ],
+
             ['!!192.168.5.32/32', [new Ip(requireSubnet: true, allowNegation: true)], ['' => [$message]]],
 
             ['!2008:fa::0:1/0', [new Ip(allowIpv4: false, allowSubnet: true)], ['' => [$message]]],
@@ -547,16 +661,28 @@ final class IpTest extends RuleTestCase
                 ['' => [$message]],
             ],
 
-            ['192.168.005.001', [new Ip()], ['' => [$message]]], // Leading zeroes are not allowed
-            ['192.168.5.321', [new Ip()], ['' => [$message]]],
-            ['!192.168.5.32', [new Ip()], ['' => [$message]]],
-            ['192.168.5.32/11', [new Ip()], ['' => [$hasSubnetMessage]]],
-            ['2008:fz::0', [new Ip()], ['' => [$message]]],
-            ['2008:fa::0::1', [new Ip()], ['' => [$message]]],
-            ['!2008:fa::0::1', [new Ip()], ['' => [$message]]],
-            ['2008:fa::0:1/64', [new Ip()], ['' => [$hasSubnetMessage]]],
-            ['192.168.10.11', [new Ip(allowIpv4: false)], ['' => [$ipv4NotAllowedMessage]]],
             ['2008:fa::1', [new Ip(allowIpv6: false)], ['' => [$ipv6NotAllowedMessage]]],
+            'custom IPv6 not allowed message' => [
+                '2008:fa::1',
+                [new Ip(allowIpv6: false, ipv6NotAllowedMessage: 'Custom IPv6 not allowed message.')],
+                ['' => ['Custom IPv6 not allowed message.']],
+            ],
+            'custom IPv6 not allowed message with parameters' => [
+                '2008:fa::1',
+                [new Ip(allowIpv6: false, ipv6NotAllowedMessage: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - 2008:fa::1.']],
+            ],
+            'custom IPv6 not allowed message with parameters, attribute set' => [
+                ['data' => '2008:fa::1'],
+                [
+                    'data' => new Ip(
+                        allowIpv6: false,
+                        ipv6NotAllowedMessage: 'Attribute - {attribute}, value - {value}.',
+                    ),
+                ],
+                ['data' => ['Attribute - data, value - 2008:fa::1.']],
+            ],
+
             ['!2008:fa::0:1/0', [new Ip(requireSubnet: true)], ['' => [$message]]],
             ['2008:fz::0/129', [new Ip(requireSubnet: true)], ['' => [$message]]],
             ['192.168.5.32/33', [new Ip(requireSubnet: true)], ['' => [$wrongCidrMessage]]],
@@ -612,10 +738,20 @@ final class IpTest extends RuleTestCase
             ['010.010.010.010', [new Ip()], ['' => [$message]]],
             ['001.001.001.001', [new Ip()], ['' => [$message]]],
 
-            'custom error' => [
+            'custom message' => [
                 '192.168.5.32/af',
-                [new Ip(allowSubnet: true, message: 'Custom error')],
-                ['' => ['Custom error']],
+                [new Ip(allowSubnet: true, message: 'Custom message.')],
+                ['' => ['Custom message.']],
+            ],
+            'custom message with parameters' => [
+                '192.168.5.32/af',
+                [new Ip(allowSubnet: true, message: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - 192.168.5.32/af.']],
+            ],
+            'custom message with parameters, attribute set' => [
+                ['data' => '192.168.5.32/af'],
+                ['data' => new Ip(allowSubnet: true, message: 'Attribute - {attribute}, value - {value}.')],
+                ['data' => ['Attribute - data, value - 192.168.5.32/af.']],
             ],
         ];
     }
