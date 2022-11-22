@@ -433,6 +433,22 @@ final class CompareToTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
+        $incorrectDataSet = new class () implements DataSetInterface {
+            public function getAttributeValue(string $attribute): mixed
+            {
+                return new stdClass();
+            }
+
+            public function getData(): mixed
+            {
+                return false;
+            }
+
+            public function hasAttribute(string $attribute): bool
+            {
+                return false;
+            }
+        };
         $messageEqual = 'Value must be equal to "100".';
         $messageNotEqual = 'Value must not be equal to "100".';
         $messageGreaterThan = 'Value must be greater than "100".';
@@ -446,25 +462,46 @@ final class CompareToTest extends RuleTestCase
                 [new CompareTo(false)],
                 ['' => ['The allowed types are integer, float, string, boolean and null.']],
             ],
+            'custom incorrect input message' => [
+                [],
+                [new CompareTo(false, incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
+            'custom incorrect input message with parameters' => [
+                [],
+                [new CompareTo(false, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['' => ['Attribute - , type - array.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['data' => []],
+                ['data' => new CompareTo(false, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => ['Attribute - data, type - array.']],
+            ],
+
             'incorrect data set type' => [
-                new class () implements DataSetInterface {
-                    public function getAttributeValue(string $attribute): mixed
-                    {
-                        return new stdClass();
-                    }
-
-                    public function getData(): mixed
-                    {
-                        return false;
-                    }
-
-                    public function hasAttribute(string $attribute): bool
-                    {
-                        return false;
-                    }
-                },
+                $incorrectDataSet,
                 [new CompareTo(targetAttribute: 'test')],
                 ['' => ['The attribute value returned from a custom data set must have a scalar type.']],
+            ],
+            'custom incorrect data set type message' => [
+                $incorrectDataSet,
+                [
+                    new CompareTo(
+                        targetAttribute: 'test',
+                        incorrectDataSetTypeMessage: 'Custom incorrect data set type message.',
+                    ),
+                ],
+                ['' => ['Custom incorrect data set type message.']],
+            ],
+            'custom incorrect data set type message with parameters' => [
+                $incorrectDataSet,
+                [
+                    new CompareTo(
+                        targetAttribute: 'test',
+                        incorrectDataSetTypeMessage: 'Type - {type}.',
+                    ),
+                ],
+                ['' => ['Type - stdClass.']],
             ],
 
             [null, [new CompareTo(0)], ['' => ['Value must be equal to "0".']]],
@@ -500,7 +537,8 @@ final class CompareToTest extends RuleTestCase
                 ['number' => new CompareTo(null, 'attribute', operator: '<=')],
                 ['number' => [$messageLessOrEqualThan]],
             ],
-            'custom error' => [101, [new CompareTo(100, message: 'Custom error')], ['' => ['Custom error']]],
+
+            'custom message' => [101, [new CompareTo(100, message: 'Custom message.')], ['' => ['Custom message.']]],
 
             ['100.50', [new CompareTo('100.5', operator: '===')], ['' => ['Value must be equal to "100.5".']]],
         ];
