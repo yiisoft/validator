@@ -563,7 +563,7 @@ final class IpTest extends RuleTestCase
                     new Ip(
                         notInRangeMessage: 'Custom not in range message.',
                         ranges: ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'],
-                    )
+                    ),
                 ],
                 ['' => ['Custom not in range message.']],
             ],
