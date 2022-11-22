@@ -139,11 +139,36 @@ JSON_WRAP
             'incorrect input, array' => [['json'], [new Json()], $incorrectInputErrors],
             'incorrect input, integer' => [10, [new Json()], $incorrectInputErrors],
             'incorrect input, null' => [null, [new Json()], $incorrectInputErrors],
+            'custom incorrect input message' => [
+                ['json'],
+                [new Json(incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
+            'custom incorrect input message with parameters' => [
+                ['json'],
+                [new Json(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['' => ['Attribute - , type - array.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['data' => ['json']],
+                ['data' => new Json(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => ['Attribute - data, type - array.']],
+            ],
 
             ['{"name": "tester"', [new Json()], $errors],
             ['{"name": tester}', [new Json()], $errors],
 
-            'custom error' => ['', [new Json(message: 'bad json')], ['' => ['bad json']]],
+            'custom message' => ['bad json', [new Json(message: 'Custom message.')], ['' => ['Custom message.']]],
+            'custom message with parameters' => [
+                'bad json',
+                [new Json(message: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - bad json.']],
+            ],
+            'custom message with parameters, attribute set' => [
+                ['data' => 'bad json'],
+                ['data' => new Json(message: 'Attribute - {attribute}, value - {value}.')],
+                ['data' => ['Attribute - data, value - bad json.']],
+            ],
         ];
     }
 
