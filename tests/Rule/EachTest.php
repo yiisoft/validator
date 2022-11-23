@@ -163,11 +163,53 @@ final class EachTest extends RuleTestCase
 
         return [
             'incorrect input' => [1, [new Each([new Number(max: 13)])], ['' => ['Value must be array or iterable.']]],
+            'custom incorrect input message' => [
+                1,
+                [new Each([new Number(max: 13)], incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
+            'custom incorrect input message with parameters' => [
+                1,
+                [new Each([new Number(max: 13)], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['' => ['Attribute - , type - int.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['data' => 1],
+                [
+                    'data' => new Each(
+                        [new Number(max: 13)],
+                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                    ),
+                ],
+                ['data' => ['Attribute - data, type - int.']],
+            ],
+
             'incorrect input key' => [
                 ['attribute' => $getGeneratorWithIncorrectKey()],
                 ['attribute' => new Each([new Number(max: 13)])],
                 ['attribute' => ['Every iterable key must have an integer or a string type.']],
             ],
+            'custom incorrect input key message' => [
+                ['attribute' => $getGeneratorWithIncorrectKey()],
+                [
+                    'attribute' => new Each(
+                        [new Number(max: 13)],
+                        incorrectInputKeyMessage: 'Custom incorrect input key message.',
+                    ),
+                ],
+                ['attribute' => ['Custom incorrect input key message.']],
+            ],
+            'custom incorrect input key message with parameters' => [
+                ['attribute' => $getGeneratorWithIncorrectKey()],
+                [
+                    'attribute' => new Each(
+                        [new Number(max: 13)],
+                        incorrectInputKeyMessage: 'Attribute - {attribute}, type - {type}.',
+                    ),
+                ],
+                ['attribute' => ['Attribute - attribute, type - Generator.']],
+            ],
+
             [
                 [10, 20, 30],
                 [new Each([new Number(max: 13)])],
@@ -176,12 +218,25 @@ final class EachTest extends RuleTestCase
                     '2' => ['Value must be no greater than 13.'],
                 ],
             ],
-            'custom error' => [
+
+            'custom message' => [
                 [10, 20, 30],
-                [new Each([new Number(max: 13, tooBigMessage: 'Custom error.')])],
+                [new Each([new Number(max: 13, tooBigMessage: 'Custom too big message.')])],
                 [
-                    '1' => ['Custom error.'],
-                    '2' => ['Custom error.'],
+                    '1' => ['Custom too big message.'],
+                    '2' => ['Custom too big message.'],
+                ],
+            ],
+            'custom message with parameters' => [
+                [10, 20, 30],
+                [
+                    new Each(
+                        [new Number(max: 13, tooBigMessage: 'Max - {max}, value - {value}.')],
+                    ),
+                ],
+                [
+                    '1' => ['Max - 13, value - 20.'],
+                    '2' => ['Max - 13, value - 30.'],
                 ],
             ],
         ];
