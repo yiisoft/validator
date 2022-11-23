@@ -539,6 +539,40 @@ final class CompareToTest extends RuleTestCase
             ],
 
             'custom message' => [101, [new CompareTo(100, message: 'Custom message.')], ['' => ['Custom message.']]],
+            'custom message with parameters, target value set' => [
+                101,
+                [
+                    new CompareTo(
+                        100,
+                        message: 'Attribute - {attribute}, target value - {targetValue}, target attribute - ' .
+                        '{targetAttribute}, target value or attribute - {targetValueOrAttribute}, value - {value}.',
+                    ),
+                ],
+                [
+                    '' => [
+                        'Attribute - , target value - 100, target attribute - , target value or attribute - 100, ' .
+                        'value - 101.'
+                    ],
+                ],
+            ],
+            'custom message with parameters, attribute and target attribute set' => [
+                ['attribute' => 100, 'number' => 101],
+                [
+                    'number' => new CompareTo(
+                        null,
+                        'attribute',
+                        message: 'Attribute - {attribute}, target value - {targetValue}, target attribute - ' .
+                        '{targetAttribute}, target value or attribute - {targetValueOrAttribute}, value - {value}.',
+                        operator: '===',
+                    ),
+                ],
+                [
+                    'number' => [
+                        'Attribute - number, target value - , target attribute - attribute, target value or ' .
+                        'attribute - 100, value - 101.'
+                    ],
+                ],
+            ],
 
             ['100.50', [new CompareTo('100.5', operator: '===')], ['' => ['Value must be equal to "100.5".']]],
         ];
