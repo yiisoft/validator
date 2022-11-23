@@ -551,7 +551,7 @@ final class CompareToTest extends RuleTestCase
                 [
                     '' => [
                         'Attribute - , target value - 100, target attribute - , target value or attribute - 100, ' .
-                        'value - 101.'
+                        'value - 101.',
                     ],
                 ],
             ],
@@ -569,7 +569,7 @@ final class CompareToTest extends RuleTestCase
                 [
                     'number' => [
                         'Attribute - number, target value - , target attribute - attribute, target value or ' .
-                        'attribute - 100, value - 101.'
+                        'attribute - 100, value - 101.',
                     ],
                 ],
             ],
