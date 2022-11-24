@@ -19,6 +19,7 @@ use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\InRange;
+use Yiisoft\Validator\Rule\IsTrue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
@@ -1268,5 +1269,24 @@ class ValidatorTest extends TestCase
         $result = $validator->validate(new ObjectWithPostValidationHook(), ['called' => new Boolean()]);
         $this->assertFalse($result->isValid());
         $this->assertTrue(ObjectWithPostValidationHook::$hookCalled);
+    }
+
+    public function testSkippingRuleInPreValidate(): void
+    {
+        $data = ['agree' => false, 'viewsCount' => -1];
+        $rules = [
+            'agree' => [new Boolean(skipOnEmpty: static fn (): bool => true), new IsTrue()],
+            'viewsCount' => [new Number(asInteger: true, min: 0)],
+        ];
+        $validator = ValidatorFactory::make();
+
+        $result = $validator->validate($data, $rules);
+        $this->assertSame(
+            [
+                'agree' => ['The value must be "1".'],
+                'viewsCount' => ['Value must be no less than 0.'],
+            ],
+            $result->getErrorMessagesIndexedByPath(),
+        );
     }
 }
