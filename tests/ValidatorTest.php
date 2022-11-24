@@ -238,8 +238,7 @@ class ValidatorTest extends TestCase
         array $data,
         object $source,
         array $expectedErrorMessages,
-    ): void
-    {
+    ): void {
         $arguments = [
             new SimpleRuleHandlerContainer(),
             (new TranslatorFactory())->create(),
