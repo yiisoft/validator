@@ -601,6 +601,20 @@ final class NestedTest extends RuleTestCase
                 $errorMessages,
                 $errorMessagesIndexedByPath,
             ],
+            'withShortcutAndWithoutShortcut' => [
+                array_merge($data, ['active' => true]),
+                [
+                    new Nested([
+                        'charts.*.points.*.coordinates.x' => $xRules,
+                        'charts.*.points.*.coordinates.y' => $yRules,
+                        'charts.*.points.*.rgb' => $rgbRules,
+                        'active' => new Boolean(),
+                    ]),
+                ],
+                $detailedErrors,
+                $errorMessages,
+                $errorMessagesIndexedByPath,
+            ],
             'withShortcutAndGrouping' => [
                 $data,
                 [
