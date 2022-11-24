@@ -1114,7 +1114,8 @@ final class NestedTest extends RuleTestCase
     public function testInitWithNotARule(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Each rule must be an instance of Yiisoft\Validator\RuleInterface, string given');
+        $message = 'Every rule must be an instance of Yiisoft\Validator\RuleInterface, string given.';
+        $this->expectExceptionMessage($message);
         new Nested([
             'data' => new Nested([
                 'title' => [new HasLength(max: 255)],
