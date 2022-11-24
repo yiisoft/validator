@@ -145,7 +145,72 @@ final class BooleanTest extends RuleTestCase
             ['0', [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
             [[], [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
 
-            'custom error' => [5, [new Boolean(scalarMessage: 'Custom error.')], ['' => ['Custom error.']]],
+            'custom scalar message' => [5, [new Boolean(scalarMessage: 'Custom error.')], ['' => ['Custom error.']]],
+            'custom scalar message with parameters' => [
+                5,
+                [
+                    new Boolean(
+                        scalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
+                    ),
+                ],
+                ['' => ['Attribute - , true - 1, false - 0, value - 5.']],
+            ],
+            'custom scalar message with parameters, custom true and false values, strict' => [
+                5,
+                [
+                    new Boolean(
+                        trueValue: true,
+                        falseValue: false,
+                        strict: true,
+                        scalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
+                    ),
+                ],
+                ['' => ['Attribute - , true - true, false - false, value - 5.']],
+            ],
+            'custom scalar message with parameters, attribute set' => [
+                ['data' => 5],
+                [
+                    'data' => new Boolean(
+                        scalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
+                    ),
+                ],
+                ['data' => ['Attribute - data, true - 1, false - 0, value - 5.']],
+            ],
+            'custom non-scalar message' => [
+                [],
+                [new Boolean(nonScalarMessage: 'Custom error.')],
+                ['' => ['Custom error.']],
+            ],
+            'custom non-scalar message with parameters' => [
+                [],
+                [
+                    new Boolean(
+                        nonScalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
+                    ),
+                ],
+                ['' => ['Attribute - , true - 1, false - 0, type - array.']],
+            ],
+            'custom non-scalar message with parameters, custom true and false values, strict' => [
+                [],
+                [
+                    new Boolean(
+                        trueValue: true,
+                        falseValue: false,
+                        strict: true,
+                        nonScalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
+                    ),
+                ],
+                ['' => ['Attribute - , true - true, false - false, type - array.']],
+            ],
+            'custom non-scalar message with parameters, attribute set' => [
+                ['data' => []],
+                [
+                    'data' => new Boolean(
+                        nonScalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
+                    ),
+                ],
+                ['data' => ['Attribute - data, true - 1, false - 0, type - array.']],
+            ],
         ];
     }
 

@@ -35,13 +35,10 @@ final class SubsetHandler implements RuleHandlerInterface
 
             $valuesString = '"' . implode('", "', $values) . '"';
 
-            $result->addError(
-                $rule->getSubsetMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'values' => $valuesString,
-                ],
-            );
+            $result->addError($rule->getSubsetMessage(), [
+                'attribute' => $context->getAttribute(),
+                'values' => $valuesString,
+            ]);
         }
 
         return $result;

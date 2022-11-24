@@ -143,6 +143,26 @@ final class AtLeastTest extends RuleTestCase
                 [new AtLeast(['attr2'])],
                 ['' => ['Value must be an array or an object.']],
             ],
+            'custom incorrect input message' => [
+                1,
+                [new AtLeast(['attr2'], incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
+            'custom incorrect input message with parameters' => [
+                1,
+                [new AtLeast(['attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['' => ['Attribute - , type - int.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['attribute' => 1],
+                [
+                    'attribute' => new AtLeast(
+                        ['attr2'],
+                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                    ),
+                ],
+                ['attribute' => ['Attribute - attribute, type - int.']],
+            ],
             'object' => [
                 $class,
                 [new AtLeast(['attr2'])],
@@ -163,10 +183,20 @@ final class AtLeastTest extends RuleTestCase
                 [new AtLeast(['attr2'], min: 2)],
                 ['' => ['The model is not valid. Must have at least "2" filled attributes.']],
             ],
-            'custom error' => [
+            'custom message' => [
                 $class,
-                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom error')],
-                ['' => ['Custom error']],
+                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom message.')],
+                ['' => ['Custom message.']],
+            ],
+            'custom message with parameters' => [
+                $class,
+                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attribute - {attribute}, min - {min}.')],
+                ['' => ['Attribute - , min - 2.']],
+            ],
+            'custom message with parameters, attribute set' => [
+                ['data' => $class],
+                ['data' => new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attribute - {attribute}, min - {min}.')],
+                ['data' => ['Attribute - data, min - 2.']],
             ],
         ];
     }

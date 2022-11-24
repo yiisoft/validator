@@ -163,9 +163,24 @@ final class UrlTest extends RuleTestCase
         $longUrl = 'http://' . str_repeat('u', 1990) . '.de';
 
         return [
-            [1, [new Url()], $incorrectInputErrors],
-            [['yiiframework.com'], [new Url()], $incorrectInputErrors],
-            [new stdClass(), [new Url()], $incorrectInputErrors],
+            'incorrect input, integer' => [1, [new Url()], $incorrectInputErrors],
+            'incorrect input, string in array' => [['yiiframework.com'], [new Url()], $incorrectInputErrors],
+            'incorrect input, object' => [new stdClass(), [new Url()], $incorrectInputErrors],
+            'custom incorrect input message' => [
+                1,
+                [new Url(incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
+            'custom incorrect input message with parameters' => [
+                1,
+                [new Url(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['' => ['Attribute - , type - int.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['attribute' => 1],
+                ['attribute' => [new Url(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')]],
+                ['attribute' => ['Attribute - attribute, type - int.']],
+            ],
 
             ['google.de', [new Url()], $errors],
             ['htp://yiiframework.com', [new Url()], $errors],
@@ -188,7 +203,21 @@ final class UrlTest extends RuleTestCase
             [$longUrl, [new Url(enableIDN: true)], $errors],
             [$longUrl, [new Url()], $errors],
 
-            'custom error' => ['', [new Url(enableIDN: true, message: 'Custom error')], ['' => ['Custom error']]],
+            'custom message' => [
+                '',
+                [new Url(enableIDN: true, message: 'Custom message.')],
+                ['' => ['Custom message.']],
+            ],
+            'custom message with parameters' => [
+                'not a url',
+                [new Url(enableIDN: true, message: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - not a url.']],
+            ],
+            'custom message with parameters, attribute set' => [
+                ['attribute' => 'not a url'],
+                ['attribute' => new Url(enableIDN: true, message: 'Attribute - {attribute}, value - {value}.')],
+                ['attribute' => ['Attribute - attribute, value - not a url.']],
+            ],
         ];
     }
 
