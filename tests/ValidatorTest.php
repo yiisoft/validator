@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use stdClass;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -27,6 +28,7 @@ use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
+use Yiisoft\Validator\Tests\RulesProvider\AttributesRulesProviderTest;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
@@ -200,6 +202,56 @@ class ValidatorTest extends TestCase
         $validator = ValidatorFactory::make();
         $result = $validator->validate($data, $rules);
         $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
+    }
+
+    public function dataRulesPropertyVisibility(): array
+    {
+        return [
+            'default' => [
+                null,
+                ['age' => 20, 'number' => 101],
+                new ObjectWithDifferentPropertyVisibility(),
+                [
+                    'name' => ['Value not passed.'],
+                    'age' => ['Value must be no less than 21.'],
+                    'number' => ['Value must be no greater than 100.'],
+                ],
+            ],
+            'custom' => [
+                ReflectionProperty::IS_PRIVATE,
+                ['age' => 20, 'number' => 101],
+                new ObjectWithDifferentPropertyVisibility(),
+                [
+                    'number' => ['Value must be no greater than 100.'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * More variations are covered in {@see AttributesRulesProviderTest::testPropertyVisibility()}.
+     *
+     * @dataProvider dataRulesPropertyVisibility
+     */
+    public function testRulesPropertyVisibility(
+        int|null $rulesPropertyVisibility,
+        array $data,
+        object $source,
+        array $expectedErrorMessages,
+    ): void
+    {
+        $arguments = [
+            new SimpleRuleHandlerContainer(),
+            (new TranslatorFactory())->create(),
+        ];
+        if ($rulesPropertyVisibility !== null) {
+            $arguments[] = $rulesPropertyVisibility;
+        }
+
+        $validator = new Validator(...$arguments);
+
+        $result = $validator->validate($data, $source);
+        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByPath());
     }
 
     public function dataWithEmptyArrayOfRules(): array
