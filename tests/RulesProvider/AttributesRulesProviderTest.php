@@ -46,13 +46,13 @@ final class AttributesRulesProviderTest extends TestCase
                     'title' => [HasLength::class],
                 ],
                 new class () {
-                    #[HasLength(max: 255)]
-                    private string $title = 'Test title';
-
                     #[Deprecated(reason: 'test reason', replacement: 'test replacement')]
                     private int $viewsCount = 1;
 
                     private bool $active = true;
+
+                    #[HasLength(max: 255)]
+                    private string $title = 'Test title';
                 },
             ],
         ];
