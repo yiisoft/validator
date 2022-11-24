@@ -197,7 +197,7 @@ final class Nested implements
                 self::ensureArrayHasRules($rule);
             } elseif (!$rule instanceof RuleInterface) {
                 $message = sprintf(
-                    'Each rule should be an instance of %s, %s given.',
+                    'Every rule must be an instance of %s, %s given.',
                     RuleInterface::class,
                     get_debug_type($rule)
                 );

@@ -12,6 +12,7 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
@@ -1108,6 +1109,18 @@ final class NestedTest extends RuleTestCase
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errors, $errorsData);
+    }
+
+    public function testInitWithNotARule(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Each rule must be an instance of Yiisoft\Validator\RuleInterface, string given');
+        new Nested([
+            'data' => new Nested([
+                'title' => [new HasLength(max: 255)],
+                'active' => [new Boolean(), 'Not a rule'],
+            ]),
+        ]);
     }
 
     public function testSkipOnError(): void
