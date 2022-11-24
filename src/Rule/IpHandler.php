@@ -80,10 +80,9 @@ final class IpHandler implements RuleHandlerInterface
      */
     private static function getIpParsePattern(): string
     {
-        return '/^(?<not>' . preg_quote(
-            self::NEGATION_CHAR,
-            '/'
-        ) . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
+        return '/^(?<not>' .
+            self::NEGATION_CHAR .
+            ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
     private static function validateValueParts(
