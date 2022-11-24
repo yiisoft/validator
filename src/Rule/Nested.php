@@ -191,6 +191,7 @@ final class Nested implements
     private static function ensureArrayHasRules(iterable &$rules): void
     {
         $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
+        /** @var mixed $rule */
         foreach ($rules as &$rule) {
             if (is_iterable($rule)) {
                 self::ensureArrayHasRules($rule);
