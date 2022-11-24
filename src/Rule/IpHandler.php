@@ -41,7 +41,7 @@ final class IpHandler implements RuleHandlerInterface
             ]);
         }
 
-        if (preg_match($this->getIpParsePattern(), $value, $matches) === 0) {
+        if (preg_match(self::getIpParsePattern(), $value, $matches) === 0) {
             return self::getGenericErrorResult($rule->getMessage(), $context, $value);
         }
 
@@ -78,7 +78,7 @@ final class IpHandler implements RuleHandlerInterface
     /**
      * Used to get the Regexp pattern for initial IP address parsing.
      */
-    private function getIpParsePattern(): string
+    private static function getIpParsePattern(): string
     {
         return '/^(?<not>' . preg_quote(
             self::NEGATION_CHAR,
