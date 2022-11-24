@@ -8,8 +8,7 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use ReflectionObject;
-use Yiisoft\Validator\AttributeEventInterface;
-use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -25,7 +24,7 @@ final class Callback implements
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
-    AttributeEventInterface
+    AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -72,13 +71,12 @@ final class Callback implements
         return $this->method;
     }
 
-    public function afterInitAttribute(ObjectDataSet $dataSet): void
+    public function afterInitAttribute(object $object): void
     {
         if ($this->method === null) {
             return;
         }
 
-        $object = $dataSet->getObject();
         $method = $this->method;
 
         $reflection = new ReflectionObject($object);
