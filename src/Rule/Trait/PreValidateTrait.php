@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule\Trait;
 
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
-use Yiisoft\Validator\SkipOnEmptyNormalizer;
+use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;

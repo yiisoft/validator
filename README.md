@@ -169,9 +169,9 @@ The empty values can be also limited to `null` only:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
+use Yiisoft\Validator\EmptyHandler\NullEmpty;
 
-new Number(asInteger: true, max: 100, skipOnEmpty: new SkipOnNull());
+new Number(asInteger: true, max: 100, skipOnEmpty: new NullEmpty());
 ```
 
 For even more customization you can use your own class implementing `__invoke()` magic method:
@@ -711,9 +711,9 @@ needed. For more details see "Skipping empty values" section.
 
 ```php
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
+use Yiisoft\Validator\EmptyHandler\NullEmpty;
 
-$rules = [new Required(emptyCallback: new SkipOnNull())];
+$rules = [new Required(emptyCallback: new NullEmpty())];
 ```
 
 ### Conditional validation

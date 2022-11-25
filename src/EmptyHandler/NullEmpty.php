@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\SkipOnEmptyCallback;
+namespace Yiisoft\Validator\EmptyHandler;
 
-final class SkipOnNull
+final class NullEmpty
 {
     public function __invoke(mixed $value, bool $isAttributeMissing): bool
     {

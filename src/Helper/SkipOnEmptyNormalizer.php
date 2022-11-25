@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator;
+namespace Yiisoft\Validator\Helper;
 
 use InvalidArgumentException;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
+use Yiisoft\Validator\EmptyHandler\NoEmpty;
+use Yiisoft\Validator\EmptyHandler\SimpleEmpty;
 
 use function is_callable;
 
@@ -18,11 +18,11 @@ final class SkipOnEmptyNormalizer
     public static function normalize(mixed $skipOnEmpty): callable
     {
         if ($skipOnEmpty === false || $skipOnEmpty === null) {
-            return new SkipNone();
+            return new NoEmpty();
         }
 
         if ($skipOnEmpty === true) {
-            return new SkipOnEmpty();
+            return new SimpleEmpty();
         }
 
         if (is_callable($skipOnEmpty)) {

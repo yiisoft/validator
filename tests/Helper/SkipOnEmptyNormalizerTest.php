@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests;
+namespace Yiisoft\Validator\Tests\Helper;
 
 use Closure;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipNone;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
-use Yiisoft\Validator\SkipOnEmptyNormalizer;
+use Yiisoft\Validator\EmptyHandler\NoEmpty;
+use Yiisoft\Validator\EmptyHandler\SimpleEmpty;
+use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
 
 final class SkipOnEmptyNormalizerTest extends TestCase
 {
     public function normalizeData(): array
     {
         return [
-            [null, SkipNone::class],
-            [false, SkipNone::class],
-            [true, SkipOnEmpty::class],
+            [null, NoEmpty::class],
+            [false, NoEmpty::class],
+            [true, SimpleEmpty::class],
             [static fn (mixed $value, bool $isAttributeMissing): bool => true, Closure::class],
         ];
     }

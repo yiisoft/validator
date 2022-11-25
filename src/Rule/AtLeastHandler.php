@@ -8,7 +8,7 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
+use Yiisoft\Validator\EmptyHandler\SimpleEmpty;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_array;
@@ -36,7 +36,7 @@ final class AtLeastHandler implements RuleHandlerInterface
 
         $filledCount = 0;
         foreach ($rule->getAttributes() as $attribute) {
-            if (!(new SkipOnEmpty())(ArrayHelper::getValue($value, $attribute), $context->isAttributeMissing())) {
+            if (!(new SimpleEmpty())(ArrayHelper::getValue($value, $attribute), $context->isAttributeMissing())) {
                 $filledCount++;
             }
         }
