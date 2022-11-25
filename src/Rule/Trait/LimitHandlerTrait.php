@@ -43,6 +43,7 @@ trait LimitHandlerTrait
             $result->addError($rule->getNotExactlyMessage(), [
                 'exactly' => $rule->getExactly(),
                 'attribute' => $context->getAttribute(),
+                'number' => $number,
             ]);
 
             return;
@@ -52,6 +53,7 @@ trait LimitHandlerTrait
             $result->addError($rule->getLessThanMinMessage(), [
                 'min' => $rule->getMin(),
                 'attribute' => $context->getAttribute(),
+                'number' => $number,
             ]);
         }
 
@@ -59,6 +61,7 @@ trait LimitHandlerTrait
             $result->addError($rule->getGreaterThanMaxMessage(), [
                 'max' => $rule->getMax(),
                 'attribute' => $context->getAttribute(),
+                'number' => $number,
             ]);
         }
     }

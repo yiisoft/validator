@@ -25,12 +25,10 @@ final class EmailHandler implements RuleHandlerInterface
 
         $result = new Result();
         if (!is_string($value)) {
-            $result->addError($rule->getIncorrectInputMessage(), [
+            return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getAttribute(),
                 'type' => get_debug_type($value),
             ]);
-
-            return $result;
         }
 
         $originalValue = $value;
@@ -87,13 +85,10 @@ final class EmailHandler implements RuleHandlerInterface
         }
 
         if ($valid === false) {
-            $result->addError(
-                $rule->getMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $originalValue,
-                ]
-            );
+            $result->addError($rule->getMessage(), [
+                'attribute' => $context->getAttribute(),
+                'value' => $originalValue,
+            ]);
         }
 
         return $result;

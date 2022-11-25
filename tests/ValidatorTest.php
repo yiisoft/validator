@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use stdClass;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -19,6 +20,7 @@ use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\InRange;
+use Yiisoft\Validator\Rule\IsTrue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
@@ -26,6 +28,7 @@ use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
+use Yiisoft\Validator\Tests\RulesProvider\AttributesRulesProviderTest;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
@@ -41,6 +44,8 @@ use Yiisoft\Validator\Tests\Support\TranslatorFactory;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
+
+use function extension_loaded;
 
 class ValidatorTest extends TestCase
 {
@@ -197,6 +202,55 @@ class ValidatorTest extends TestCase
         $validator = ValidatorFactory::make();
         $result = $validator->validate($data, $rules);
         $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
+    }
+
+    public function dataRulesPropertyVisibility(): array
+    {
+        return [
+            'default' => [
+                null,
+                ['age' => 20, 'number' => 101],
+                new ObjectWithDifferentPropertyVisibility(),
+                [
+                    'name' => ['Value not passed.'],
+                    'age' => ['Value must be no less than 21.'],
+                    'number' => ['Value must be no greater than 100.'],
+                ],
+            ],
+            'custom' => [
+                ReflectionProperty::IS_PRIVATE,
+                ['age' => 20, 'number' => 101],
+                new ObjectWithDifferentPropertyVisibility(),
+                [
+                    'number' => ['Value must be no greater than 100.'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * More variations are covered in {@see AttributesRulesProviderTest::testPropertyVisibility()}.
+     *
+     * @dataProvider dataRulesPropertyVisibility
+     */
+    public function testRulesPropertyVisibility(
+        int|null $rulesPropertyVisibility,
+        array $data,
+        object $source,
+        array $expectedErrorMessages,
+    ): void {
+        $arguments = [
+            new SimpleRuleHandlerContainer(),
+            (new TranslatorFactory())->create(),
+        ];
+        if ($rulesPropertyVisibility !== null) {
+            $arguments[] = $rulesPropertyVisibility;
+        }
+
+        $validator = new Validator(...$arguments);
+
+        $result = $validator->validate($data, $source);
+        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByPath());
     }
 
     public function dataWithEmptyArrayOfRules(): array
@@ -527,6 +581,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
@@ -545,6 +600,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
@@ -563,6 +619,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
@@ -585,6 +642,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                 ],
             ],
@@ -602,6 +660,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                 ],
             ],
@@ -619,6 +678,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 1,
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
@@ -659,6 +719,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
@@ -681,6 +742,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                 ],
             ],
@@ -698,6 +760,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                 ],
             ],
@@ -715,6 +778,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
@@ -737,6 +801,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
@@ -764,6 +829,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
@@ -791,6 +857,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                 ],
             ],
@@ -814,6 +881,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
@@ -842,6 +910,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
@@ -860,6 +929,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                 ],
             ],
@@ -874,6 +944,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                 ],
             ],
@@ -888,6 +959,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
@@ -907,6 +979,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                 ],
             ],
@@ -921,6 +994,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                 ],
             ],
@@ -935,6 +1009,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
@@ -954,6 +1029,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
@@ -976,6 +1052,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
@@ -998,6 +1075,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                 ],
             ],
@@ -1016,6 +1094,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
@@ -1039,6 +1118,7 @@ class ValidatorTest extends TestCase
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
                         'attribute' => 'name',
+                        'number' => 7,
                     ], ['name']),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
@@ -1242,5 +1322,58 @@ class ValidatorTest extends TestCase
         $result = $validator->validate(new ObjectWithPostValidationHook(), ['called' => new Boolean()]);
         $this->assertFalse($result->isValid());
         $this->assertTrue(ObjectWithPostValidationHook::$hookCalled);
+    }
+
+    public function testSkippingRuleInPreValidate(): void
+    {
+        $data = ['agree' => false, 'viewsCount' => -1];
+        $rules = [
+            'agree' => [new Boolean(skipOnEmpty: static fn (): bool => true), new IsTrue()],
+            'viewsCount' => [new Number(asInteger: true, min: 0)],
+        ];
+        $validator = ValidatorFactory::make();
+
+        $result = $validator->validate($data, $rules);
+        $this->assertSame(
+            [
+                'agree' => ['The value must be "1".'],
+                'viewsCount' => ['Value must be no less than 0.'],
+            ],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+    }
+
+    public function testDefaultTranslatorWithIntl(): void
+    {
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be available for this test.');
+        }
+
+        $this->checkDefaultTranslator('3-few');
+    }
+
+    public function testDefaultTranslatorWithoutIntl(): void
+    {
+        if (extension_loaded('intl')) {
+            $this->markTestSkipped('The intl extension must be unavailable for this test.');
+        }
+
+        $this->checkDefaultTranslator('3');
+    }
+
+    private function checkDefaultTranslator(string $expectedErrorMessage): void
+    {
+        $data = ['number' => 3];
+        $rules = [
+            'number' => new Number(
+                asInteger: true,
+                max: 2,
+                tooBigMessage: '{value, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}',
+            ),
+        ];
+        $validator = new Validator(new SimpleRuleHandlerContainer());
+
+        $result = $validator->validate($data, $rules);
+        $this->assertSame(['number' => [$expectedErrorMessage]], $result->getErrorMessagesIndexedByPath());
     }
 }

@@ -12,6 +12,7 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
@@ -600,6 +601,20 @@ final class NestedTest extends RuleTestCase
                 $errorMessages,
                 $errorMessagesIndexedByPath,
             ],
+            'withShortcutAndWithoutShortcut' => [
+                array_merge($data, ['active' => true]),
+                [
+                    new Nested([
+                        'charts.*.points.*.coordinates.x' => $xRules,
+                        'charts.*.points.*.coordinates.y' => $yRules,
+                        'charts.*.points.*.rgb' => $rgbRules,
+                        'active' => new Boolean(),
+                    ]),
+                ],
+                $detailedErrors,
+                $errorMessages,
+                $errorMessagesIndexedByPath,
+            ],
             'withShortcutAndGrouping' => [
                 $data,
                 [
@@ -1108,6 +1123,19 @@ final class NestedTest extends RuleTestCase
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errors, $errorsData);
+    }
+
+    public function testInitWithNotARule(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $message = 'Every rule must be an instance of Yiisoft\Validator\RuleInterface, string given.';
+        $this->expectExceptionMessage($message);
+        new Nested([
+            'data' => new Nested([
+                'title' => [new HasLength(max: 255)],
+                'active' => [new Boolean(), 'Not a rule'],
+            ]),
+        ]);
     }
 
     public function testSkipOnError(): void

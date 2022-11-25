@@ -30,7 +30,10 @@ final class CountHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!is_countable($value)) {
-            $result->addError($rule->getMessage(), ['attribute' => $context->getAttribute()]);
+            $result->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getAttribute(),
+                'type' => get_debug_type($value),
+            ]);
 
             return $result;
         }

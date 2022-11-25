@@ -46,7 +46,6 @@ final class CompareHandler implements RuleHandlerInterface
             $targetValue = $context->getDataSet()?->getAttributeValue($targetAttribute);
             if (!is_scalar($targetValue)) {
                 return $result->addError($rule->getIncorrectDataSetTypeMessage(), [
-                    'attribute' => $context->getAttribute(),
                     'type' => get_debug_type($targetValue),
                 ]);
             }
