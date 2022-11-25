@@ -91,14 +91,19 @@ final class NestedTest extends RuleTestCase
             [
                 new Nested([new Number(integerPattern: '/1/', numberPattern: '/1/')]),
                 [
-                    'noRulesWithNoObjectMessage' => 'Nested rule without rules can be used for objects only.',
-                    'incorrectDataSetTypeMessage' => 'An object data set data can only have an array or an object ' .
-                        'type.',
-                    'incorrectInputMessage' => 'The value must have an array or an object type.',
-                    'requirePropertyPath' => false,
+                    'noRulesWithNoObjectMessage' => [
+                        'message' => 'Nested rule without rules can be used for objects only.',
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'An object data set data can only have an array or an object type.',
+                    ],
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have an array or an object type.',
+                    ],
                     'noPropertyPathMessage' => [
                         'message' => 'Property path "{path}" is not found.',
                     ],
+                    'requirePropertyPath' => false,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                     'rules' => [
@@ -132,14 +137,19 @@ final class NestedTest extends RuleTestCase
             [
                 new Nested(['user.age' => new Number(integerPattern: '/1/', numberPattern: '/1/')]),
                 [
-                    'noRulesWithNoObjectMessage' => 'Nested rule without rules can be used for objects only.',
-                    'incorrectDataSetTypeMessage' => 'An object data set data can only have an array or an object ' .
-                        'type.',
-                    'incorrectInputMessage' => 'The value must have an array or an object type.',
-                    'requirePropertyPath' => false,
+                    'noRulesWithNoObjectMessage' => [
+                        'message' => 'Nested rule without rules can be used for objects only.'
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'An object data set data can only have an array or an object type.',
+                    ],
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have an array or an object type.',
+                    ],
                     'noPropertyPathMessage' => [
                         'message' => 'Property path "{path}" is not found.',
                     ],
+                    'requirePropertyPath' => false,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                     'rules' => [
@@ -176,14 +186,19 @@ final class NestedTest extends RuleTestCase
                     'author.age' => new StubRule('author-age', ['key' => 'age']),
                 ]),
                 [
-                    'noRulesWithNoObjectMessage' => 'Nested rule without rules can be used for objects only.',
-                    'incorrectDataSetTypeMessage' => 'An object data set data can only have an array or an object ' .
-                        'type.',
-                    'incorrectInputMessage' => 'The value must have an array or an object type.',
-                    'requirePropertyPath' => false,
+                    'noRulesWithNoObjectMessage' => [
+                        'message' => 'Nested rule without rules can be used for objects only.',
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'An object data set data can only have an array or an object type.',
+                    ],
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have an array or an object type.',
+                    ],
                     'noPropertyPathMessage' => [
                         'message' => 'Property path "{path}" is not found.',
                     ],
+                    'requirePropertyPath' => false,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                     'rules' => [
@@ -200,14 +215,19 @@ final class NestedTest extends RuleTestCase
                     ],
                 ]),
                 [
-                    'noRulesWithNoObjectMessage' => 'Nested rule without rules can be used for objects only.',
-                    'incorrectDataSetTypeMessage' => 'An object data set data can only have an array or an object ' .
-                        'type.',
-                    'incorrectInputMessage' => 'The value must have an array or an object type.',
-                    'requirePropertyPath' => false,
+                    'noRulesWithNoObjectMessage' => [
+                        'message' => 'Nested rule without rules can be used for objects only.',
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'message' => 'An object data set data can only have an array or an object type.',
+                    ],
+                    'incorrectInputMessage' => [
+                        'message' => 'The value must have an array or an object type.',
+                    ],
                     'noPropertyPathMessage' => [
                         'message' => 'Property path "{path}" is not found.',
                     ],
+                    'requirePropertyPath' => false,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                     'rules' => [

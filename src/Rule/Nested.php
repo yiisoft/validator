@@ -316,13 +316,19 @@ final class Nested implements
     public function getOptions(): array
     {
         return [
-            'noRulesWithNoObjectMessage' => $this->noRulesWithNoObjectMessage,
-            'incorrectDataSetTypeMessage' => $this->incorrectDataSetTypeMessage,
-            'incorrectInputMessage' => $this->incorrectInputMessage,
-            'requirePropertyPath' => $this->getRequirePropertyPath(),
+            'noRulesWithNoObjectMessage' => [
+                'message' => $this->noRulesWithNoObjectMessage,
+            ],
+            'incorrectDataSetTypeMessage' => [
+                'message' => $this->incorrectDataSetTypeMessage,
+            ],
+            'incorrectInputMessage' => [
+                'message' => $this->incorrectInputMessage,
+            ],
             'noPropertyPathMessage' => [
                 'message' => $this->getNoPropertyPathMessage(),
             ],
+            'requirePropertyPath' => $this->getRequirePropertyPath(),
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
             'rules' => $this->rules === null ? null : (new RulesDumper())->asArray($this->rules),

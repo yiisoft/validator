@@ -30,8 +30,8 @@ final class RulesDumper
      *            'number',
      *            'integer' => true,
      *            'max' => 100,
-     *            'notANumberMessage' => 'Value must be an integer.',
-     *            'tooBigMessage' => 'Value must be no greater than 100.'
+     *            'notANumberMessage' => ['message' => 'Value must be an integer.'],
+     *            'tooBigMessage' => ['message' => 'Value must be no greater than 100.'],
      *        ],
      *        ['callback'],
      *    ],
@@ -39,13 +39,11 @@ final class RulesDumper
      *        [
      *            'hasLength',
      *            'max' => 20,
-     *            'message' => 'Value must contain at most 20 characters.'
+     *            'message' => ['message' => 'Value must contain at most 20 characters.'],
      *        ],
      *    ],
      * ]
      * ```
-     *
-     * @param iterable $rules
      */
     public function asArray(iterable $rules): array
     {
