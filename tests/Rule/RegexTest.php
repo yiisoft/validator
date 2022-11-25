@@ -83,10 +83,35 @@ final class RegexTest extends RuleTestCase
             [null, [new Regex('/a/', not: true)], ['' => [$incorrectInputMessage]]],
             [new stdClass(), [new Regex('/a/')], ['' => [$incorrectInputMessage]]],
             [new stdClass(), [new Regex('/a/', not: true)], ['' => [$incorrectInputMessage]]],
+            'custom incorrect input message' => [
+                null,
+                [new Regex('/a/', incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
+            'custom incorrect input message with parameters' => [
+                null,
+                [new Regex('/a/', incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['' => ['Attribute - , type - null.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['data' => null],
+                ['data' => new Regex('/a/', incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => ['Attribute - data, type - null.']],
+            ],
+
             ['b', [new Regex('/a/')], ['' => [$message]]],
 
-            ['b', [new Regex('/a/', message: 'Custom message.')], ['' => ['Custom message.']]],
-            [null, [new Regex('/a/', incorrectInputMessage: 'Custom message.')], ['' => ['Custom message.']]],
+            'custom message' => ['b', [new Regex('/a/', message: 'Custom message.')], ['' => ['Custom message.']]],
+            'custom message with parameters' => [
+                'b',
+                [new Regex('/a/', message: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - b.']],
+            ],
+            'custom message with parameters, attribute set' => [
+                ['data' => 'b'],
+                ['data' => new Regex('/a/', message: 'Attribute - {attribute}, value - {value}.')],
+                ['data' => ['Attribute - data, value - b.']],
+            ],
         ];
     }
 

@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use RuntimeException;
+use InvalidArgumentException;
 use Yiisoft\NetworkUtilities\IpHelper;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -203,9 +203,13 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
          */
         private ?Closure $when = null,
     ) {
+        if (!$this->allowIpv4 && !$this->allowIpv6) {
+            throw new InvalidArgumentException('Both IPv4 and IPv6 checks can not be disabled at the same time.');
+        }
+
         foreach ($networks as $key => $_values) {
             if (array_key_exists($key, $this->defaultNetworks)) {
-                throw new RuntimeException("Network alias \"{$key}\" already set as default.");
+                throw new InvalidArgumentException("Network alias \"{$key}\" already set as default.");
             }
         }
 

@@ -69,6 +69,21 @@ final class SubsetTest extends RuleTestCase
                 [new Subset([1, 2, 3])],
                 ['' => ['Value must be iterable.']],
             ],
+            'custom non-iterable message' => [
+                1,
+                [new Subset([1, 2, 3], iterableMessage: 'Custom non-iterable message.')],
+                ['' => ['Custom non-iterable message.']],
+            ],
+            'custom non-iterable message with parameters' => [
+                1,
+                [new Subset([1, 2, 3], iterableMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['' => ['Attribute - , type - int.']],
+            ],
+            'custom non-iterable message with parameters, attribute set' => [
+                ['data' => 1],
+                ['data' => new Subset([1, 2, 3], iterableMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => ['Attribute - data, type - int.']],
+            ],
             [
                 [0, 1, 2],
                 [new Subset(range(1, 10))],
@@ -84,10 +99,20 @@ final class SubsetTest extends RuleTestCase
                 [new Subset(new ArrayObject(['a', 'b', 'c']))],
                 ['' => ['Values must be ones of "a", "b", "c".']],
             ],
-            'custom error' => [
-                ['data' => ['2']],
-                ['data' => new Subset(['a'], subsetMessage: 'Custom error')],
-                ['data' => ['Custom error']],
+            'custom message' => [
+                ['' => ['c']],
+                ['' => new Subset(['a', 'b'], subsetMessage: 'Custom message.')],
+                ['' => ['Custom message.']],
+            ],
+            'custom subset message with parameters' => [
+                ['' => ['c']],
+                ['' => new Subset(['a', 'b'], subsetMessage: 'Attribute - {attribute}, values - {values}.')],
+                ['' => ['Attribute - , values - "a", "b".']],
+            ],
+            'custom subset message with parameters, attribute set' => [
+                ['data' => ['c']],
+                ['data' => new Subset(['a', 'b'], subsetMessage: 'Attribute - {attribute}, values - {values}.')],
+                ['data' => ['Attribute - data, values - "a", "b".']],
             ],
         ];
     }

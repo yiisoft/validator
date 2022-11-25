@@ -799,6 +799,38 @@ final class NestedTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
+        $incorrectDataSet = new class () implements DataSetInterface {
+            public function getAttributeValue(string $attribute): mixed
+            {
+                return false;
+            }
+
+            public function getData(): mixed
+            {
+                return new class () implements DataSetInterface {
+                    public function getAttributeValue(string $attribute): mixed
+                    {
+                        return false;
+                    }
+
+                    public function getData(): mixed
+                    {
+                        return false;
+                    }
+
+                    public function hasAttribute(string $attribute): bool
+                    {
+                        return false;
+                    }
+                };
+            }
+
+            public function hasAttribute(string $attribute): bool
+            {
+                return false;
+            }
+        };
+
         return [
             // No rules with no object
             'no rules with no object, array' => [
@@ -825,47 +857,73 @@ final class NestedTest extends RuleTestCase
                 null,
                 ['value' => ['Nested rule without rules can be used for objects only.']],
             ],
+            'custom no rules with no object message' => [
+                new class () {
+                    #[Nested(noRulesWithNoObjectMessage: 'Custom no rules with no object message.')]
+                    public array $value = [];
+                },
+                null,
+                ['value' => ['Custom no rules with no object message.']],
+            ],
+            'custom no rules with no object message with parameters' => [
+                new class () {
+                    #[Nested(noRulesWithNoObjectMessage: 'Attribute - {attribute}, type - {type}.')]
+                    public array $value = [];
+                },
+                null,
+                ['value' => ['Attribute - value, type - array.']],
+            ],
             // Incorrect data set type
             'incorrect data set type' => [
-                new class () implements DataSetInterface {
-                    public function getAttributeValue(string $attribute): mixed
-                    {
-                        return false;
-                    }
-
-                    public function getData(): mixed
-                    {
-                        return new class () implements DataSetInterface {
-                            public function getAttributeValue(string $attribute): mixed
-                            {
-                                return false;
-                            }
-
-                            public function getData(): mixed
-                            {
-                                return false;
-                            }
-
-                            public function hasAttribute(string $attribute): bool
-                            {
-                                return false;
-                            }
-                        };
-                    }
-
-                    public function hasAttribute(string $attribute): bool
-                    {
-                        return false;
-                    }
-                },
+                $incorrectDataSet,
                 [new Nested(['value' => new Required()])],
                 ['' => ['An object data set data can only have an array or an object type.']],
+            ],
+            'custom incorrect data set type message' => [
+                $incorrectDataSet,
+                [
+                    new Nested(
+                        ['value' => new Required()],
+                        incorrectDataSetTypeMessage: 'Custom incorrect data set type message.',
+                    ),
+                ],
+                ['' => ['Custom incorrect data set type message.']],
+            ],
+            'custom incorrect data set type message with parameters' => [
+                $incorrectDataSet,
+                [new Nested(['value' => new Required()], incorrectDataSetTypeMessage: 'Type - {type}.')],
+                ['' => ['Type - bool.']],
             ],
             // Incorrect input
             'incorrect input' => [
                 '',
                 [new Nested(['value' => new Required()])],
                 ['' => ['The value must have an array or an object type.']],
+            ],
+            'custom incorrect input message' => [
+                '',
+                [new Nested(['value' => new Required()], incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
+            'custom incorrect input message with parameters' => [
+                '',
+                [
+                    new Nested(
+                        ['value' => new Required()],
+                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                    ),
+                ],
+                ['' => ['Attribute - , type - string.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['data' => ''],
+                [
+                    'data' => new Nested(
+                        ['value' => new Required()],
+                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                    ),
+                ],
+                ['data' => ['Attribute - data, type - string.']],
             ],
             'error' => [
                 [

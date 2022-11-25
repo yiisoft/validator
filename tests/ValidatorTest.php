@@ -24,6 +24,7 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
 use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
@@ -587,7 +588,7 @@ class ValidatorTest extends TestCase
                     ], ['name']),
                 ],
             ],
-            'rule, skipOnEmpty: true, value is empty' => [
+            'rule, skipOnEmpty: true, value is empty (null)' => [
                 $validator,
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -602,6 +603,46 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                     ], ['name']),
+                ],
+            ],
+            'rule, skipOnEmpty: true, value is empty (empty string after trimming), trimString is false' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => ' ',
+                    'age' => 17,
+                ]),
+                [
+                    'name' => [new HasLength(min: 8, skipOnEmpty: true)],
+                    'age' => [new Number(asInteger: true, min: 18)],
+                ],
+                [
+                    new Error($stringLessThanMinMessage, [
+                        'min' => 8,
+                        'attribute' => 'name',
+                    ], ['name']),
+                    new Error($intLessThanMinMessage, [
+                        'min' => 18,
+                        'attribute' => 'age',
+                        'value' => 17,
+                    ], ['age']),
+                ],
+            ],
+            'rule, skipOnEmpty: SkipOnEmpty, value is empty (empty string after trimming), trimString is true' => [
+                $validator,
+                new ArrayDataSet([
+                    'name' => ' ',
+                    'age' => 17,
+                ]),
+                [
+                    'name' => [new HasLength(min: 8, skipOnEmpty: new SkipOnEmpty(trimString: true))],
+                    'age' => [new Number(asInteger: true, min: 18)],
+                ],
+                [
+                    new Error($intLessThanMinMessage, [
+                        'min' => 18,
+                        'attribute' => 'age',
+                        'value' => 17,
+                    ], ['age']),
                 ],
             ],
             'rule, skipOnEmpty: true, value is not empty' => [
