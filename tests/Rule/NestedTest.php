@@ -138,7 +138,7 @@ final class NestedTest extends RuleTestCase
                 new Nested(['user.age' => new Number(integerPattern: '/1/', numberPattern: '/1/')]),
                 [
                     'noRulesWithNoObjectMessage' => [
-                        'message' => 'Nested rule without rules can be used for objects only.'
+                        'message' => 'Nested rule without rules can be used for objects only.',
                     ],
                     'incorrectDataSetTypeMessage' => [
                         'message' => 'An object data set data can only have an array or an object type.',
