@@ -14,7 +14,7 @@ final class ObjectParserTest extends TestCase
         return [
             [
                 ['a' => 4, 'b' => 2],
-                new class() {
+                new class () {
                     public int $a = 4;
                     public static int $b = 2;
                 },
@@ -22,7 +22,7 @@ final class ObjectParserTest extends TestCase
             ],
             [
                 ['a' => 4],
-                new class() {
+                new class () {
                     public int $a = 4;
                     public static int $b = 2;
                 },
@@ -43,7 +43,7 @@ final class ObjectParserTest extends TestCase
 
     public function testSkipStaticPropertiesDefault(): void
     {
-        $object = new class() {
+        $object = new class () {
             public int $a = 4;
             public static int $b = 2;
         };
