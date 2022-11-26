@@ -17,7 +17,7 @@ use function array_key_exists;
 final class ObjectParser
 {
     /**
-     * @psalm-var array<string, array<string, array>>
+     * @var array<string, array<string, array>>
      */
     #[ArrayShape([
         [

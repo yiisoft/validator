@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\DataSet;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
+use stdClass;
 use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Callback;
@@ -399,6 +400,20 @@ final class ObjectDataSetTest extends TestCase
 
         $this->assertSame($expectedRulesCallsCount, ObjectWithCallsCount::$getRulesCallsCount);
         $this->assertSame($expectedDataCallsCount, ObjectWithCallsCount::$getDataCallsCount);
+    }
+
+    public function testWithoutCache(): void
+    {
+        $object1 = new stdClass();
+        $object1->a = 4;
+        $dataSet1 = new ObjectDataSet($object1, useCache: false);
+
+        $object2 = new stdClass();
+        $object2->b = 2;
+        $dataSet2 = new ObjectDataSet($object2, useCache: false);
+
+        $this->assertSame(['a' => 4], $dataSet1->getData());
+        $this->assertSame(['b' => 2], $dataSet2->getData());
     }
 
     public function testHasAttributeWithDataSetProvided(): void

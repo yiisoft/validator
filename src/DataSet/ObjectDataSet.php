@@ -23,7 +23,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
 
     public function __construct(
         private object $object,
-        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
+        int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
         ReflectionProperty::IS_PROTECTED |
         ReflectionProperty::IS_PUBLIC,
         bool $useCache = true
