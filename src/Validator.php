@@ -216,9 +216,9 @@ final class Validator implements ValidatorInterface
             new IdMessageReader(),
             extension_loaded('intl') ? new IntlMessageFormatter() : new SimpleMessageFormatter(),
         );
-
         $translator = new Translator();
         $translator->addCategorySources($categorySource);
+
         return $translator;
     }
 }

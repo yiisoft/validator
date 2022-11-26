@@ -41,31 +41,22 @@ final class NumberHandler implements RuleHandlerInterface
         $pattern = $rule->isAsInteger() ? $rule->getIntegerPattern() : $rule->getNumberPattern();
 
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
-            $result->addError(
-                $rule->getNotANumberMessage(),
-                [
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
+            $result->addError($rule->getNotANumberMessage(), [
+                'attribute' => $context->getAttribute(),
+                'value' => $value,
+            ]);
         } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
-            $result->addError(
-                $rule->getTooSmallMessage(),
-                [
-                    'min' => $rule->getMin(),
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
+            $result->addError($rule->getTooSmallMessage(), [
+                'min' => $rule->getMin(),
+                'attribute' => $context->getAttribute(),
+                'value' => $value,
+            ]);
         } elseif ($rule->getMax() !== null && $value > $rule->getMax()) {
-            $result->addError(
-                $rule->getTooBigMessage(),
-                [
-                    'max' => $rule->getMax(),
-                    'attribute' => $context->getAttribute(),
-                    'value' => $value,
-                ],
-            );
+            $result->addError($rule->getTooBigMessage(), [
+                'max' => $rule->getMax(),
+                'attribute' => $context->getAttribute(),
+                'value' => $value,
+            ]);
         }
 
         return $result;

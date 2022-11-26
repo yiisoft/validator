@@ -207,6 +207,21 @@ final class EmailTest extends RuleTestCase
                 [$ruleAllowedName],
                 $incorrectInputErrors,
             ],
+            'custom incorrect input message' => [
+                1,
+                [new Email(incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
+            'custom incorrect input message with parameters' => [
+                1,
+                [new Email(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['' => ['Attribute - , type - int.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['data' => 1],
+                ['data' => [new Email(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')]],
+                ['data' => ['Attribute - data, type - int.']],
+            ],
 
             ['rmcreative.ru', [$rule], $errors],
             ['Carsten Brandt <mail@cebe.cc>', [$rule], $errors],
@@ -294,10 +309,20 @@ final class EmailTest extends RuleTestCase
                 $errors,
             ],
 
-            'custom error' => [
+            'custom message' => [
                 'test@nonexistingsubdomain.example.com',
-                [new Email(checkDNS: true, message: 'Custom error')],
-                ['' => ['Custom error']],
+                [new Email(checkDNS: true, message: 'Custom message.')],
+                ['' => ['Custom message.']],
+            ],
+            'custom message with parameters' => [
+                'test@nonexistingsubdomain.example.com',
+                [new Email(checkDNS: true, message: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - test@nonexistingsubdomain.example.com.']],
+            ],
+            'custom message with parameters, attribute set' => [
+                ['data' => 'test@nonexistingsubdomain.example.com'],
+                ['data' => new Email(checkDNS: true, message: 'Attribute - {attribute}, value - {value}.')],
+                ['data' => ['Attribute - data, value - test@nonexistingsubdomain.example.com.']],
             ],
         ];
     }

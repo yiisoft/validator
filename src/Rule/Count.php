@@ -61,7 +61,7 @@ final class Count implements
          *
          * @see Countable
          */
-        private string $message = 'This value must be an array or implement \Countable interface.',
+        private string $incorrectInputMessage = 'This value must be an array or implement \Countable interface.',
         /**
          * @var string user-defined error message used when the number of items is smaller than {@see $min}.
          */
@@ -103,16 +103,16 @@ final class Count implements
         return 'count';
     }
 
-    public function getMessage(): string
+    public function getIncorrectInputMessage(): string
     {
-        return $this->message;
+        return $this->incorrectInputMessage;
     }
 
     public function getOptions(): array
     {
         return array_merge($this->getLimitOptions(), [
-            'message' => [
-                'message' => $this->getMessage(),
+            'incorrectInputMessage' => [
+                'message' => $this->getIncorrectInputMessage(),
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
