@@ -9,7 +9,7 @@ use Closure;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
-use Yiisoft\Validator\EmptyHandler\SimpleEmpty;
+use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
@@ -17,7 +17,7 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Validates that the specified value is neither null nor empty.
  *
- * @psalm-type EmptyHandlerType = callable(mixed,bool):bool
+ * @psalm-type EmptyCriteriaType = callable(mixed,bool):bool
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Required implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface
@@ -27,24 +27,24 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
 
     /**
      * @var callable
-     * @psalm-var EmptyHandlerType
+     * @psalm-var EmptyCriteriaType
      */
-    private $emptyHandler;
+    private $emptyCriteria;
 
     /**
-     * @psalm-param EmptyHandlerType|null $emptyHandler
+     * @psalm-param EmptyCriteriaType|null $emptyCriteria
      */
     public function __construct(
         private string $message = 'Value cannot be blank.',
         private string $notPassedMessage = 'Value not passed.',
-        callable|null $emptyHandler = null,
+        callable|null $emptyCriteria = null,
         private bool $skipOnError = false,
         /**
          * @var Closure(mixed, ValidationContext):bool|null
          */
         private ?Closure $when = null,
     ) {
-        $this->emptyHandler = $emptyHandler ?? new SimpleEmpty(trimString: true);
+        $this->emptyCriteria = $emptyCriteria ?? new WhenEmpty(trimString: true);
     }
 
     public function getName(): string
@@ -63,11 +63,11 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
     }
 
     /**
-     * @psalm-return EmptyHandlerType
+     * @psalm-return EmptyCriteriaType
      */
-    public function getEmptyHandler(): callable
+    public function getEmptyCriteria(): callable
     {
-        return $this->emptyHandler;
+        return $this->emptyCriteria;
     }
 
     public function getOptions(): array

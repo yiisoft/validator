@@ -27,7 +27,7 @@ final class RequiredHandler implements RuleHandlerInterface
             return $result;
         }
 
-        if (!$rule->getEmptyHandler()($value, $context->isAttributeMissing())) {
+        if (!$rule->getEmptyCriteria()($value, $context->isAttributeMissing())) {
             return $result;
         }
 

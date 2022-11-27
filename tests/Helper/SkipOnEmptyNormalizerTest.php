@@ -7,8 +7,8 @@ namespace Yiisoft\Validator\Tests\Helper;
 use Closure;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\EmptyHandler\NoEmpty;
-use Yiisoft\Validator\EmptyHandler\SimpleEmpty;
+use Yiisoft\Validator\EmptyCriteria\Never;
+use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
 use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
 
 final class SkipOnEmptyNormalizerTest extends TestCase
@@ -16,9 +16,9 @@ final class SkipOnEmptyNormalizerTest extends TestCase
     public function normalizeData(): array
     {
         return [
-            [null, NoEmpty::class],
-            [false, NoEmpty::class],
-            [true, SimpleEmpty::class],
+            [null, Never::class],
+            [false, Never::class],
+            [true, WhenEmpty::class],
             [static fn (mixed $value, bool $isAttributeMissing): bool => true, Closure::class],
         ];
     }

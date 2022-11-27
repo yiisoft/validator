@@ -40,7 +40,7 @@ final class Validator implements ValidatorInterface
     /**
      * @var callable
      */
-    private $defaultSkipOnEmptyHandler;
+    private $defaultSkipOnEmptyCriteria;
 
     /**
      * @param int $rulesPropertyVisibility What visibility levels to use when reading rules from the class specified in
@@ -57,7 +57,7 @@ final class Validator implements ValidatorInterface
     ) {
         $this->ruleHandlerResolver = $ruleHandlerResolver ?? new SimpleRuleHandlerContainer();
         $this->translator = $translator ?? $this->createDefaultTranslator();
-        $this->defaultSkipOnEmptyHandler = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
+        $this->defaultSkipOnEmptyCriteria = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
     }
 
     /**
@@ -204,7 +204,7 @@ final class Validator implements ValidatorInterface
         }
 
         if ($rule instanceof SkipOnEmptyInterface && $rule->getSkipOnEmpty() === null) {
-            $rule = $rule->skipOnEmpty($this->defaultSkipOnEmptyHandler);
+            $rule = $rule->skipOnEmpty($this->defaultSkipOnEmptyCriteria);
         }
 
         return $rule;

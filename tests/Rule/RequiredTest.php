@@ -7,8 +7,8 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Closure;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\RequiredHandler;
-use Yiisoft\Validator\EmptyHandler\SimpleEmpty;
-use Yiisoft\Validator\EmptyHandler\NullEmpty;
+use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
+use Yiisoft\Validator\EmptyCriteria\WhenNull;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
@@ -26,7 +26,7 @@ final class RequiredTest extends RuleTestCase
     {
         $rule = new Required();
 
-        $this->assertInstanceOf(SimpleEmpty::class, $rule->getEmptyHandler());
+        $this->assertInstanceOf(WhenEmpty::class, $rule->getEmptyCriteria());
         $this->assertSame(RequiredHandler::class, $rule->getHandlerClassName());
         $this->assertSame('Value cannot be blank.', $rule->getMessage());
         $this->assertSame('required', $rule->getName());
@@ -35,23 +35,23 @@ final class RequiredTest extends RuleTestCase
         $this->assertFalse($rule->shouldSkipOnError());
     }
 
-    public function dataGetEmptyCallback(): array
+    public function dataGetEmptyCriteria(): array
     {
         return [
-            'null' => [null, SimpleEmpty::class],
-            'skip on null' => [new NullEmpty(), NullEmpty::class],
+            'null' => [null, WhenEmpty::class],
+            'skip on null' => [new WhenNull(), WhenNull::class],
             'closure' => [static fn () => false, Closure::class],
         ];
     }
 
     /**
-     * @dataProvider dataGetEmptyCallback
+     * @dataProvider dataGetEmptyCriteria
      */
-    public function testGetEmptyCallback(?callable $callback, string $expectedCallbackClassName): void
+    public function testGetEmptyCriteria(?callable $callback, string $expectedCallbackClassName): void
     {
-        $rule = new Required(emptyHandler: $callback);
+        $rule = new Required(emptyCriteria: $callback);
 
-        $this->assertInstanceOf($expectedCallbackClassName, $rule->getEmptyHandler());
+        $this->assertInstanceOf($expectedCallbackClassName, $rule->getEmptyCriteria());
     }
 
     public function dataOptions(): array
@@ -75,7 +75,7 @@ final class RequiredTest extends RuleTestCase
             [['with', 'elements'], [new Required()]],
             'skip on null' => [
                 '',
-                [new Required(emptyHandler: new NullEmpty())],
+                [new Required(emptyCriteria: new WhenNull())],
             ],
         ];
     }
@@ -89,7 +89,7 @@ final class RequiredTest extends RuleTestCase
             [[], [new Required()], $singleMessageCannotBeBlank],
             'custom empty callback' => [
                 '42',
-                [new Required(emptyHandler: static fn (mixed $value): bool => $value === '42')],
+                [new Required(emptyCriteria: static fn (mixed $value): bool => $value === '42')],
                 $singleMessageCannotBeBlank,
             ],
             'custom error' => [null, [new Required(message: 'Custom error')], ['' => ['Custom error']]],

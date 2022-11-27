@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\EmptyHandler;
+namespace Yiisoft\Validator\EmptyCriteria;
 
-final class NoEmpty
+final class Never
 {
     public function __invoke(mixed $value, bool $isAttributeMissing): bool
     {
