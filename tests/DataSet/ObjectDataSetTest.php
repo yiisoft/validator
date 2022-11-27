@@ -356,7 +356,7 @@ final class ObjectDataSetTest extends TestCase
 
     public function testCaching(): void
     {
-        $object = new class() {
+        $object = new class () {
             #[RuleWithCalls]
             public int $x = 7;
         };
