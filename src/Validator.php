@@ -14,6 +14,7 @@ use Yiisoft\Translator\IntlMessageFormatter;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\Translator;
 use Yiisoft\Translator\TranslatorInterface;
+use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
@@ -39,7 +40,7 @@ final class Validator implements ValidatorInterface
     /**
      * @var callable
      */
-    private $defaultSkipOnEmptyCallback;
+    private $defaultSkipOnEmptyCriteria;
 
     /**
      * @param int $rulesPropertyVisibility What visibility levels to use when reading rules from the class specified in
@@ -56,7 +57,7 @@ final class Validator implements ValidatorInterface
     ) {
         $this->ruleHandlerResolver = $ruleHandlerResolver ?? new SimpleRuleHandlerContainer();
         $this->translator = $translator ?? $this->createDefaultTranslator();
-        $this->defaultSkipOnEmptyCallback = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
+        $this->defaultSkipOnEmptyCriteria = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
     }
 
     /**
@@ -203,7 +204,7 @@ final class Validator implements ValidatorInterface
         }
 
         if ($rule instanceof SkipOnEmptyInterface && $rule->getSkipOnEmpty() === null) {
-            $rule = $rule->skipOnEmpty($this->defaultSkipOnEmptyCallback);
+            $rule = $rule->skipOnEmpty($this->defaultSkipOnEmptyCriteria);
         }
 
         return $rule;
