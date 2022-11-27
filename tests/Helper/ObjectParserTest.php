@@ -21,10 +21,11 @@ final class ObjectParserTest extends TestCase
                 false,
             ],
             [
-                ['a' => 4],
+                ['a' => 4, 'c' => 'hello'],
                 new class () {
                     public int $a = 4;
                     public static int $b = 2;
+                    public string $c = 'hello';
                 },
                 true,
             ],
