@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Helper;
 
 use InvalidArgumentException;
-use Yiisoft\Validator\EmptyCriteria\Never;
+use Yiisoft\Validator\EmptyCriteria\NeverEmpty;
 use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
 
 use function is_callable;
@@ -18,7 +18,7 @@ final class SkipOnEmptyNormalizer
     public static function normalize(mixed $skipOnEmpty): callable
     {
         if ($skipOnEmpty === false || $skipOnEmpty === null) {
-            return new Never();
+            return new NeverEmpty();
         }
 
         if ($skipOnEmpty === true) {

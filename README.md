@@ -157,7 +157,7 @@ What exactly to consider to be empty is vague and can vary depending on a scope 
 
 `skipOnEmpty` value is normalized to callback automatically:
 
-- If `skipOnEmpty` is `false` or `null`, `Yiisoft\Validator\EmptyCriteria\Never` is used automatically as
+- If `skipOnEmpty` is `false` or `null`, `Yiisoft\Validator\EmptyCriteria\NeverEmpty` is used automatically as
   callback - every value is considered non-empty and validated without skipping (default).
 - If `skipOnEmpty` is `true`, `Yiisoft\Validator\EmptyCriteria\WhenEmpty` is used automatically for callback -
   only passed and non-empty values (not `null`, `[]`, or `''`) are validated.
