@@ -31,6 +31,7 @@ final class RulesNormalizer
      * @return iterable<int|string, iterable<int|string, RuleInterface>>
      *
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      */
     public static function normalize(
         iterable|object|string|null $rules,
@@ -116,6 +117,8 @@ final class RulesNormalizer
 
     /**
      * @return iterable<int|string, RuleInterface>
+     *
+     * @throws InvalidArgumentException
      */
     private static function normalizeAttributeRules(iterable $rules, ?callable $defaultSkipOnEmptyCriteria): iterable
     {
@@ -126,7 +129,7 @@ final class RulesNormalizer
     }
 
     /**
-     * @throw InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private static function normalizeRule(mixed $rule, ?callable $defaultSkipOnEmptyCriteria): RuleInterface
     {
