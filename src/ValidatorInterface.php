@@ -9,7 +9,7 @@ use Closure;
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
  *
- * @psalm-type RulesType = null|class-string|RuleInterface|RulesProviderInterface|object|iterable<RuleInterface|RuleInterface[]|Closure|Closure[]>
+ * @psalm-type RulesType = null|class-string|object|iterable<RuleInterface|RuleInterface[]|Closure|Closure[]>
  */
 interface ValidatorInterface
 {
