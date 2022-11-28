@@ -6,15 +6,18 @@ namespace Yiisoft\Validator;
 
 use Closure;
 
+/**
+ * @psalm-type WhenType - null|Closure(mixed, ValidationContext):bool
+ */
 interface WhenInterface
 {
     /**
-     * @param Closure(mixed, ValidationContext):bool|null $value
+     * @psalm-param WhenType $value
      */
-    public function when(?Closure $value): static;
+    public function when(Closure|null $value): static;
 
     /**
-     * @return Closure(mixed, ValidationContext):bool|null
+     * @psalm-return WhenType
      */
-    public function getWhen(): ?Closure;
+    public function getWhen(): Closure|null;
 }

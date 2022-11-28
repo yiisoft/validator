@@ -12,11 +12,12 @@ use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Checks if at least {@see AtLeast::$min} of many attributes are filled.
+ * Checks if at least {@see AtLeast::$min} of specified attributes are filled.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class AtLeast implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
@@ -45,9 +46,9 @@ final class AtLeast implements SerializableRuleInterface, SkipOnErrorInterface, 
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @psalm-var WhenType
          */
-        private ?Closure $when = null
+        private Closure|null $when = null
     ) {
     }
 

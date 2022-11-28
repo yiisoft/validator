@@ -12,8 +12,6 @@ interface SerializableRuleInterface extends RuleInterface
 {
     /**
      * Returns rule options as array.
-     *
-     * @return array
      */
     public function getOptions(): array;
 }
