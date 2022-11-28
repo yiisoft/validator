@@ -49,6 +49,15 @@ final class RulesNormalizerTest extends TestCase
 
     /**
      * @dataProvider dataNormalize
+     *
+     * More cases are covered in {@see ValidatorTest}.
+     *
+     * @see ValidatorTest::testDataAndRulesCombinations()
+     * @see ValidatorTest::testRulesPropertyVisibility()
+     * @see ValidatorTest::testWithEmptyArrayOfRules()
+     * @see ValidatorTest::testDiverseTypes()
+     * @see ValidatorTest::testNullAsDataSet()
+     * @see ValidatorTest::testValidateWithSingleRule()
      */
     public function testNormalizeWithArrayResult(
         array $expected,
