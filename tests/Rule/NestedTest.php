@@ -17,7 +17,7 @@ use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\InRange;
+use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
@@ -751,7 +751,7 @@ final class NestedTest extends RuleTestCase
                         'age' => 18,
                     ],
                 ],
-                [new Nested(['author.sex' => [new InRange(['male', 'female'], skipOnEmpty: true)]])],
+                [new Nested(['author.sex' => [new In(['male', 'female'], skipOnEmpty: true)]])],
             ],
             'keys containing separator, one nested rule' => [
                 [
@@ -957,7 +957,7 @@ final class NestedTest extends RuleTestCase
                         'age' => 38,
                     ],
                 ],
-                [new Nested(['author.sex' => [new InRange(['male', 'female'])]])],
+                [new Nested(['author.sex' => [new In(['male', 'female'])]])],
                 ['author.sex' => ['This value is invalid.']],
             ],
             [
@@ -1041,7 +1041,7 @@ final class NestedTest extends RuleTestCase
                         'age' => 18,
                     ],
                 ],
-                [new Nested(['author.sex' => [new InRange(['male', 'female'])]])],
+                [new Nested(['author.sex' => [new In(['male', 'female'])]])],
                 [['This value is invalid.', ['author', 'sex']]],
             ],
             [

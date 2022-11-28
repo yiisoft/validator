@@ -19,7 +19,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\InRange;
+use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\IsTrue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -400,7 +400,7 @@ class ValidatorTest extends TestCase
         $strictRules = [
             'orderBy' => [new Required()],
             'sort' => [
-                new InRange(
+                new In(
                     ['asc', 'desc'],
                     skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $isAttributeMissing
                 ),
@@ -409,7 +409,7 @@ class ValidatorTest extends TestCase
         $notStrictRules = [
             'orderBy' => [new Required()],
             'sort' => [
-                new InRange(
+                new In(
                     ['asc', 'desc'],
                     skipOnEmpty: static fn (
                         mixed $value,

@@ -11,21 +11,18 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Validates that the value is among a list of values.
- *
- * The range can be specified via constructor.
- * If the {@see InRange::$not} is called, the rule will ensure the value is NOT among the specified range.
+ * A handler for {@see In} rule.
  */
-final class InRangeHandler implements RuleHandlerInterface
+final class InHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
-        if (!$rule instanceof InRange) {
-            throw new UnexpectedRuleException(InRange::class, $rule);
+        if (!$rule instanceof In) {
+            throw new UnexpectedRuleException(In::class, $rule);
         }
 
         $result = new Result();
-        if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getRange(), $rule->isStrict())) {
+        if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getValues(), $rule->isStrict())) {
             $result->addError($rule->getMessage(), ['attribute' => $context->getAttribute()]);
         }
 
