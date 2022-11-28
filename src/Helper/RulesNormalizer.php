@@ -43,7 +43,7 @@ final class RulesNormalizer
     ): iterable {
         $rules = self::prepareRulesArray($rules, $propertyVisibility, $data);
 
-        $result = [];
+        $normalizedRules = [];
 
         /**
          * @var mixed $attribute
@@ -59,13 +59,13 @@ final class RulesNormalizer
                 );
             }
 
-            $result[$attribute] = self::normalizeAttributeRules(
+            $normalizedRules[$attribute] = self::normalizeAttributeRules(
                 is_iterable($attributeRules) ? $attributeRules : [$attributeRules],
                 $defaultSkipOnEmptyCriteria
             );
         }
 
-        return $result;
+        return $normalizedRules;
     }
 
     /**
