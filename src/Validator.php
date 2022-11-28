@@ -71,39 +71,27 @@ final class Validator implements ValidatorInterface
         ?ValidationContext $context = null
     ): Result {
         $data = DataSetHelper::normalize($data);
-        $rules = RulesNormalizer::normalize($rules, $this->rulesPropertyVisibility, $data);
+        $rules = RulesNormalizer::normalize(
+            $rules,
+            $this->rulesPropertyVisibility,
+            $data,
+            $this->defaultSkipOnEmptyCriteria
+        );
 
         $compoundResult = new Result();
         $context ??= new ValidationContext($this, $data);
         $results = [];
 
-        /**
-         * @var mixed $attribute
-         * @var mixed $attributeRules
-         */
         foreach ($rules as $attribute => $attributeRules) {
             $result = new Result();
-
-            if (!is_iterable($attributeRules)) {
-                $attributeRules = [$attributeRules];
-            }
-
-            $attributeRules = $this->normalizeRules($attributeRules);
 
             if (is_int($attribute)) {
                 /** @psalm-suppress MixedAssignment */
                 $validatedData = $data->getData();
-            } elseif (is_string($attribute)) {
+            } else {
                 /** @psalm-suppress MixedAssignment */
                 $validatedData = $data->getAttributeValue($attribute);
                 $context->setAttribute($attribute);
-            } else {
-                $message = sprintf(
-                    'An attribute can only have an integer or a string type. %s given.',
-                    get_debug_type($attribute),
-                );
-
-                throw new InvalidArgumentException($message);
             }
 
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
@@ -164,40 +152,6 @@ final class Validator implements ValidatorInterface
             }
         }
         return $compoundResult;
-    }
-
-    /**
-     * @return iterable<RuleInterface>
-     */
-    private function normalizeRules(iterable $rules): iterable
-    {
-        /** @var mixed $rule */
-        foreach ($rules as $rule) {
-            yield $this->normalizeRule($rule);
-        }
-    }
-
-    private function normalizeRule(mixed $rule): RuleInterface
-    {
-        if (is_callable($rule)) {
-            return new Callback($rule);
-        }
-
-        if (!$rule instanceof RuleInterface) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Rule should be either an instance of %s or a callable, %s given.',
-                    RuleInterface::class,
-                    get_debug_type($rule)
-                )
-            );
-        }
-
-        if ($rule instanceof SkipOnEmptyInterface && $rule->getSkipOnEmpty() === null) {
-            $rule = $rule->skipOnEmpty($this->defaultSkipOnEmptyCriteria);
-        }
-
-        return $rule;
     }
 
     private function createDefaultTranslator(): Translator
