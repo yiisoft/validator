@@ -7,22 +7,20 @@ namespace Yiisoft\Validator;
 use InvalidArgumentException;
 use ReflectionException;
 use ReflectionProperty;
-use Traversable;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\IdMessageReader;
 use Yiisoft\Translator\IntlMessageFormatter;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\Translator;
 use Yiisoft\Translator\TranslatorInterface;
+use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
-use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 
 use function extension_loaded;
 use function is_callable;
 use function is_int;
-use function is_object;
 use function is_string;
 
 /**
@@ -73,15 +71,7 @@ final class Validator implements ValidatorInterface
         ?ValidationContext $context = null
     ): Result {
         $data = DataSetHelper::normalize($data);
-        if ($rules === null && $data instanceof RulesProviderInterface) {
-            $rules = $data->getRules();
-        } elseif ($rules instanceof RulesProviderInterface) {
-            $rules = $rules->getRules();
-        } elseif ($rules instanceof RuleInterface) {
-            $rules = [$rules];
-        } elseif (is_string($rules) || (is_object($rules) && !$rules instanceof Traversable)) {
-            $rules = (new AttributesRulesProvider($rules, $this->rulesPropertyVisibility))->getRules();
-        }
+        $rules = RulesNormalizer::normalize($rules, $this->rulesPropertyVisibility, $data);
 
         $compoundResult = new Result();
         $context ??= new ValidationContext($this, $data);
@@ -91,7 +81,7 @@ final class Validator implements ValidatorInterface
          * @var mixed $attribute
          * @var mixed $attributeRules
          */
-        foreach ($rules ?? [] as $attribute => $attributeRules) {
+        foreach ($rules as $attribute => $attributeRules) {
             $result = new Result();
 
             if (!is_iterable($attributeRules)) {
