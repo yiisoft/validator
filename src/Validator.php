@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use InvalidArgumentException;
 use ReflectionException;
 use ReflectionProperty;
 use Yiisoft\Translator\CategorySource;
@@ -15,13 +14,10 @@ use Yiisoft\Translator\Translator;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
-use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 
 use function extension_loaded;
-use function is_callable;
 use function is_int;
-use function is_string;
 
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.

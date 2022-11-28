@@ -28,10 +28,10 @@ final class RulesNormalizer
     /**
      * @psalm-param RulesType $rules
      *
-     * @return iterable<int|string, iterable<int|string, RuleInterface>>
-     *
      * @throws ReflectionException
      * @throws InvalidArgumentException
+     *
+     * @return iterable<int|string, iterable<int|string, RuleInterface>>
      */
     public static function normalize(
         iterable|object|string|null $rules,
@@ -116,9 +116,9 @@ final class RulesNormalizer
     }
 
     /**
-     * @return iterable<int|string, RuleInterface>
-     *
      * @throws InvalidArgumentException
+     *
+     * @return iterable<int|string, RuleInterface>
      */
     private static function normalizeAttributeRules(iterable $rules, ?callable $defaultSkipOnEmptyCriteria): iterable
     {
