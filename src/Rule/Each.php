@@ -12,6 +12,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RulesDumper;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -33,6 +34,8 @@ final class Each implements
     use SkipOnErrorTrait;
     use WhenTrait;
 
+    private RulesDumper $dumper;
+
     public function __construct(
         /**
          * @var iterable<RuleInterface>
@@ -51,6 +54,7 @@ final class Each implements
          */
         private ?Closure $when = null,
     ) {
+        $this->dumper = new RulesDumper();
     }
 
     public function getName(): string
@@ -109,15 +113,6 @@ final class Each implements
     ])]
     public function getOptions(): array
     {
-        $arrayOfRules = [];
-        foreach ($this->rules as $rule) {
-            if ($rule instanceof SerializableRuleInterface) {
-                $arrayOfRules[] = array_merge([$rule->getName()], $rule->getOptions());
-            } else {
-                $arrayOfRules[] = [$rule->getName()];
-            }
-        }
-
         return [
             'incorrectInputMessage' => [
                 'template' => $this->incorrectInputMessage,
@@ -129,7 +124,7 @@ final class Each implements
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => $arrayOfRules,
+            'rules' => $this->dumper->asArray($this->rules),
         ];
     }
 

@@ -6,12 +6,12 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RulesDumper;
 use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -27,6 +27,8 @@ class Composite implements SerializableRuleInterface, SkipOnErrorInterface, When
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
+
+    private RulesDumper $dumper;
 
     public function __construct(
         /**
@@ -44,6 +46,7 @@ class Composite implements SerializableRuleInterface, SkipOnErrorInterface, When
          */
         private ?Closure $when = null,
     ) {
+        $this->dumper = new RulesDumper();
     }
 
     public function getName(): string
@@ -58,25 +61,10 @@ class Composite implements SerializableRuleInterface, SkipOnErrorInterface, When
     ])]
     public function getOptions(): array
     {
-        $arrayOfRules = [];
-        foreach ($this->getRules() as $rule) {
-            if (!$rule instanceof RuleInterface) {
-                throw new InvalidArgumentException('A rule must be an instance of RuleInterface.');
-            }
-
-            $nameArray = [$rule->getName()];
-
-            if ($rule instanceof SerializableRuleInterface) {
-                $arrayOfRules[] = array_merge($nameArray, $rule->getOptions());
-            } else {
-                $arrayOfRules[] = $nameArray;
-            }
-        }
-
         return [
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => $arrayOfRules,
+            'rules' => $this->dumper->asArray($this->rules),
         ];
     }
 
