@@ -19,6 +19,8 @@ interface RuleInterface
      * and so on. For custom rules you can choose different naming scheme because it doesn't affect logic in any way.
      *
      * @see RulesDumper
+     *
+     * @return string A rule name.
      */
     public function getName(): string;
 
@@ -29,6 +31,8 @@ interface RuleInterface
      * name the handler class name will be `AtLeastHandler` and so on.
      *
      * All packages handlers are stored within the same namespace as rules, but this is not a strict requirement.
+     *
+     * @return string A rule handler class name.
      */
     public function getHandlerClassName(): string;
 }
