@@ -19,10 +19,10 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\Tests\Rule\NestedTest;
-use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 use function array_pop;
@@ -35,10 +35,12 @@ use function sprintf;
 
 /**
  * Can be used for validation of nested structures.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
-    SerializableRuleInterface,
+    RuleWithOptionsInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
@@ -99,9 +101,9 @@ final class Nested implements
         private bool $skipOnError = false,
 
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
         $this->prepareRules($rules);
     }
