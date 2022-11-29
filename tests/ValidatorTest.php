@@ -189,7 +189,7 @@ class ValidatorTest extends TestCase
             'array-and-callable' => [
                 ['' => ['test message']],
                 [],
-                static fn () => (new Result())->addError('test message'),
+                static fn (): Result => (new Result())->addError('test message'),
             ],
         ];
     }

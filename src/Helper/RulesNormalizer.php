@@ -78,12 +78,8 @@ final class RulesNormalizer
             return $rules->getRules();
         }
 
-        if ($rules instanceof RuleInterface) {
+        if ($rules instanceof RuleInterface || is_callable($rules)) {
             return [$rules];
-        }
-
-        if (is_callable($rules)) {
-            return [new Callback($rules)];
         }
 
         /** @psalm-suppress RedundantConditionGivenDocblockType */
