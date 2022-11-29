@@ -73,7 +73,7 @@ final class RulesDumper
                 $options = [$rule->getName()];
             } else {
                 throw new InvalidArgumentException(sprintf(
-                    'Each rule must implement "%s". Type "%s" given.',
+                    'Every rule must implement "%s". Type "%s" given.',
                     RuleInterface::class,
                     get_debug_type($rule),
                 ));
