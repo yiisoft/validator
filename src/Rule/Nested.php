@@ -29,7 +29,6 @@ use Yiisoft\Validator\WhenInterface;
 use function array_pop;
 use function count;
 use function implode;
-use function is_callable;
 use function is_string;
 use function ltrim;
 use function rtrim;
