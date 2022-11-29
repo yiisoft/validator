@@ -186,6 +186,11 @@ class ValidatorTest extends TestCase
                 [],
                 new Foo(),
             ],
+            'array-and-callable' => [
+                ['' => ['test message']],
+                [],
+                static fn () => (new Result())->addError('test message'),
+            ],
         ];
     }
 
@@ -195,7 +200,7 @@ class ValidatorTest extends TestCase
     public function testDataAndRulesCombinations(
         array $expectedErrorMessages,
         mixed $data,
-        iterable|object|string|null $rules,
+        iterable|object|callable|null $rules,
     ): void {
         $validator = ValidatorFactory::make();
         $result = $validator->validate($data, $rules);
@@ -1206,7 +1211,7 @@ class ValidatorTest extends TestCase
 
             public function validate(
                 mixed $data,
-                iterable|object|string|null $rules = null,
+                iterable|object|callable|null $rules = null,
                 ?ValidationContext $context = null
             ): Result {
                 $dataSet = DataSetNormalizer::normalize($data);

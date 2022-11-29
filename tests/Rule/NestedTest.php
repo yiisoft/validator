@@ -1149,6 +1149,13 @@ final class NestedTest extends RuleTestCase
         $this->testWhenInternal(new Nested(), new Nested(when: $when));
     }
 
+    public function testInvalidRules(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid rules object.');
+        new Nested(new Required());
+    }
+
     protected function getDifferentRuleInHandlerItems(): array
     {
         return [Nested::class, NestedHandler::class];

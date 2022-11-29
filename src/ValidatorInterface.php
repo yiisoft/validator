@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Closure;
-
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
  *
- * @psalm-type RulesType = null|RuleInterface|RulesProviderInterface|iterable<RuleInterface|RuleInterface[]|Closure|Closure[]>
+ * @psalm-type RulesType = null|RuleInterface|RulesProviderInterface|callable|iterable<RuleInterface|RuleInterface[]|callable|callable[]>
  */
 interface ValidatorInterface
 {
@@ -19,7 +17,7 @@ interface ValidatorInterface
      * @param DataSetInterface|mixed|RulesProviderInterface $data Data set to validate. If {@see RulesProviderInterface}
      * instance provided and rules are not specified explicitly, they are read from the
      * {@see RulesProviderInterface::getRules()}.
-     * @param iterable|object|null $rules Rules to apply. If specified, rules are not read from data set even if it is
+     * @param iterable|object|callable|null $rules Rules to apply. If specified, rules are not read from data set even if it is
      * an instance of {@see RulesProviderInterface}.
      * @param ValidationContext|null $context Validation context that may take into account when performing validation.
      *
@@ -27,7 +25,7 @@ interface ValidatorInterface
      */
     public function validate(
         mixed $data,
-        iterable|object|null $rules = null,
+        iterable|object|callable|null $rules = null,
         ?ValidationContext $context = null
     ): Result;
 }

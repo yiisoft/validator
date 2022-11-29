@@ -28,7 +28,7 @@ final class RulesNormalizer
      * @return iterable<int|string, iterable<int|string, RuleInterface>>
      */
     public static function normalize(
-        iterable|object|null $rules,
+        iterable|object|callable|null $rules,
         mixed $data = null,
         ?callable $defaultSkipOnEmptyCriteria = null,
     ): iterable {
@@ -65,7 +65,7 @@ final class RulesNormalizer
      * @throws InvalidArgumentException
      */
     private static function prepareRulesArray(
-        iterable|object|null $rules,
+        iterable|object|callable|null $rules,
         mixed $data,
     ): iterable {
         if ($rules === null) {
@@ -80,6 +80,10 @@ final class RulesNormalizer
 
         if ($rules instanceof RuleInterface) {
             return [$rules];
+        }
+
+        if (is_callable($rules)) {
+            return [new Callback($rules)];
         }
 
         /** @psalm-suppress RedundantConditionGivenDocblockType */
