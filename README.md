@@ -157,9 +157,9 @@ What exactly to consider to be empty is vague and can vary depending on a scope 
 
 `skipOnEmpty` value is normalized to callback automatically:
 
-- If `skipOnEmpty` is `false` or `null`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipNone` is used automatically as
+- If `skipOnEmpty` is `false` or `null`, `Yiisoft\Validator\EmptyCriteria\NeverEmpty` is used automatically as
   callback - every value is considered non-empty and validated without skipping (default).
-- If `skipOnEmpty` is `true`, `Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty` is used automatically for callback -
+- If `skipOnEmpty` is `true`, `Yiisoft\Validator\EmptyCriteria\WhenEmpty` is used automatically for callback -
   only passed and non-empty values (not `null`, `[]`, or `''`) are validated.
 - If custom callback  is set, it's used to determine emptiness.
 
@@ -169,9 +169,9 @@ The empty values can be also limited to `null` only:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
+use Yiisoft\Validator\EmptyCriteria\WhenNull;
 
-new Number(asInteger: true, max: 100, skipOnEmpty: new SkipOnNull());
+new Number(asInteger: true, max: 100, skipOnEmpty: new WhenNull());
 ```
 
 For even more customization you can use your own class implementing `__invoke()` magic method:
@@ -711,9 +711,9 @@ needed. For more details see "Skipping empty values" section.
 
 ```php
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
+use Yiisoft\Validator\EmptyCriteria\WhenNull;
 
-$rules = [new Required(emptyCallback: new SkipOnNull())];
+$rules = [new Required(emptyCallback: new WhenNull())];
 ```
 
 ### Conditional validation

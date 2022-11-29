@@ -10,37 +10,37 @@ use ReflectionProperty;
 use stdClass;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
-use Yiisoft\Validator\DataSetHelper;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
+use Yiisoft\Validator\EmptyCriteria\WhenNull;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
+use Yiisoft\Validator\Helper\DataSetNormalizer;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\InRange;
+use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\IsTrue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnEmpty;
-use Yiisoft\Validator\SkipOnEmptyCallback\SkipOnNull;
 use Yiisoft\Validator\Tests\RulesProvider\AttributesRulesProviderTest;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithAttributesOnly;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
-use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRule;
-use Yiisoft\Validator\Tests\Support\Data\ObjectWithAttributesOnly;
 use Yiisoft\Validator\Tests\Support\TranslatorFactory;
+use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
@@ -400,7 +400,7 @@ class ValidatorTest extends TestCase
         $strictRules = [
             'orderBy' => [new Required()],
             'sort' => [
-                new InRange(
+                new In(
                     ['asc', 'desc'],
                     skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $isAttributeMissing
                 ),
@@ -409,7 +409,7 @@ class ValidatorTest extends TestCase
         $notStrictRules = [
             'orderBy' => [new Required()],
             'sort' => [
-                new InRange(
+                new In(
                     ['asc', 'desc'],
                     skipOnEmpty: static fn (
                         mixed $value,
@@ -694,7 +694,7 @@ class ValidatorTest extends TestCase
                     'age' => 17,
                 ]),
                 [
-                    'name' => [new HasLength(min: 8, skipOnEmpty: new SkipOnEmpty(trimString: true))],
+                    'name' => [new HasLength(min: 8, skipOnEmpty: new WhenEmpty(trimString: true))],
                     'age' => [new Number(asInteger: true, min: 18)],
                 ],
                 [
@@ -736,7 +736,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new HasLength(min: 8)],
-                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new SkipOnNull())],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new WhenNull())],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
@@ -754,7 +754,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new HasLength(min: 8)],
-                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new SkipOnNull())],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new WhenNull())],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
@@ -772,7 +772,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new HasLength(min: 8)],
-                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new SkipOnNull())],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new WhenNull())],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
@@ -795,7 +795,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new HasLength(min: 8)],
-                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new SkipOnNull())],
+                    'age' => [new Number(asInteger: true, min: 18, skipOnEmpty: new WhenNull())],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
@@ -970,7 +970,7 @@ class ValidatorTest extends TestCase
             ],
 
             'validator, skipOnEmpty: SkipOnNull, value not passed' => [
-                new Validator(new SimpleRuleHandlerContainer(), $translator, defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), $translator, defaultSkipOnEmpty: new WhenNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                 ]),
@@ -984,7 +984,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmpty: SkipOnNull, value is empty' => [
-                new Validator(new SimpleRuleHandlerContainer(), $translator, defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), $translator, defaultSkipOnEmpty: new WhenNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => null,
@@ -999,7 +999,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmpty: SkipOnNull, value is not empty' => [
-                new Validator(new SimpleRuleHandlerContainer(), $translator, defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), $translator, defaultSkipOnEmpty: new WhenNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => 17,
@@ -1019,7 +1019,7 @@ class ValidatorTest extends TestCase
                 ],
             ],
             'validator, skipOnEmpty: SkipOnNull, value is not empty (empty string)' => [
-                new Validator(new SimpleRuleHandlerContainer(), $translator, defaultSkipOnEmpty: new SkipOnNull()),
+                new Validator(new SimpleRuleHandlerContainer(), $translator, defaultSkipOnEmpty: new WhenNull()),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
                     'age' => '',
@@ -1169,7 +1169,7 @@ class ValidatorTest extends TestCase
                 true,
             ],
             'callable' => [
-                new SkipOnNull(),
+                new WhenNull(),
                 new class () {
                     #[Number]
                     public ?string $name = null;
@@ -1219,7 +1219,7 @@ class ValidatorTest extends TestCase
     public function testRuleWithoutSkipOnEmpty(): void
     {
         $translator = (new TranslatorFactory())->create();
-        $validator = new Validator(new SimpleRuleHandlerContainer(), $translator, defaultSkipOnEmpty: new SkipOnNull());
+        $validator = new Validator(new SimpleRuleHandlerContainer(), $translator, defaultSkipOnEmpty: new WhenNull());
 
         $data = new class () {
             #[NotNull]
@@ -1260,7 +1260,7 @@ class ValidatorTest extends TestCase
                 iterable|object|string|null $rules = null,
                 ?ValidationContext $context = null
             ): Result {
-                $dataSet = DataSetHelper::normalize($data);
+                $dataSet = DataSetNormalizer::normalize($data);
                 $context ??= new ValidationContext($this, $dataSet);
 
                 $result = $this->validator->validate($data, $rules, $context);

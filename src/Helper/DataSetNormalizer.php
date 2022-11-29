@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator;
+namespace Yiisoft\Validator\Helper;
 
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSet\SingleValueDataSet;
+use Yiisoft\Validator\DataSetInterface;
 
 use function is_array;
 use function is_object;
 
-final class DataSetHelper
+final class DataSetNormalizer
 {
     public static function normalize(mixed $data): DataSetInterface
     {

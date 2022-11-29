@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\DataSet;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
+use stdClass;
 use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Callback;
@@ -16,25 +17,19 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithCallbackMethod;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithNonExistingCallbackMethod;
-use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallsCount;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDynamicDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\Post;
+use Yiisoft\Validator\Tests\Support\Rule\RuleWithCallsCount;
 use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Support\Rule\NotRuleAttribute;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 
 final class ObjectDataSetTest extends TestCase
 {
-    public function setUp(): void
-    {
-        ObjectWithCallsCount::$getRulesCallsCount = 0;
-        ObjectWithCallsCount::$getDataCallsCount = 0;
-    }
-
     public function propertyVisibilityDataProvider(): array
     {
         return [
@@ -359,46 +354,31 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame($expectedData, $dataSet->getData());
     }
 
-    public function cachingDataProvider(): array
+    public function testCaching(): void
     {
-        $objectDataSet = new ObjectDataSet(new ObjectWithCallsCount());
+        $object = new class () {
+            #[RuleWithCallsCount]
+            public int $x = 7;
+        };
 
-        return [
-            [
-                [
-                    new ObjectDataSet(new ObjectWithCallsCount()),
-                    new ObjectDataSet(new ObjectWithCallsCount()), // Not a duplicate. Used to test caching.
-                ],
-                2,
-                2,
-            ],
-            [
-                [
-                    $objectDataSet,
-                    $objectDataSet, // Not a duplicate. Used to test caching.
-                ],
-                2,
-                2,
-            ],
-        ];
+        (new ObjectDataSet($object))->getRules();
+        (new ObjectDataSet($object))->getRules();
+
+        $this->assertSame(1, RuleWithCallsCount::$afterInitAttributeCallsCount);
     }
 
-    /**
-     * @param ObjectDataSet[] $objectDataSets
-     * @dataProvider cachingDataProvider
-     */
-    public function testCaching(array $objectDataSets, int $expectedRulesCallsCount, int $expectedDataCallsCount): void
+    public function testWithoutCache(): void
     {
-        foreach ($objectDataSets as $objectDataSet) {
-            $objectDataSet->getRules();
-        }
+        $object1 = new stdClass();
+        $object1->a = 4;
+        $dataSet1 = new ObjectDataSet($object1, useCache: false);
 
-        foreach ($objectDataSets as $objectDataSet) {
-            $objectDataSet->getData();
-        }
+        $object2 = new stdClass();
+        $object2->b = 2;
+        $dataSet2 = new ObjectDataSet($object2, useCache: false);
 
-        $this->assertSame($expectedRulesCallsCount, ObjectWithCallsCount::$getRulesCallsCount);
-        $this->assertSame($expectedDataCallsCount, ObjectWithCallsCount::$getDataCallsCount);
+        $this->assertSame(['a' => 4], $dataSet1->getData());
+        $this->assertSame(['b' => 2], $dataSet2->getData());
     }
 
     public function testHasAttributeWithDataSetProvided(): void

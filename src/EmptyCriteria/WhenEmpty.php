@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\SkipOnEmptyCallback;
+namespace Yiisoft\Validator\EmptyCriteria;
 
 use function is_string;
 
-final class SkipOnEmpty
+final class WhenEmpty
 {
     public function __construct(private bool $trimString = false)
     {
