@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Helper;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use ReflectionProperty;
+use stdClass;
 use Yiisoft\Validator\Helper\RulesNormalizer;
-use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 
 final class RulesNormalizerTest extends TestCase
 {
@@ -15,35 +15,6 @@ final class RulesNormalizerTest extends TestCase
     {
         return [
             'null' => [[], null],
-            'default-property-visibility' => [
-                [
-                    'name' => ['required'],
-                    'age' => ['number'],
-                    'number' => ['number'],
-                ],
-                new ObjectWithDifferentPropertyVisibility(),
-            ],
-            'private-properties' => [
-                [
-                    'number' => ['number'],
-                ],
-                new ObjectWithDifferentPropertyVisibility(),
-                ReflectionProperty::IS_PRIVATE,
-            ],
-            'protected-properties' => [
-                [
-                    'age' => ['number'],
-                ],
-                new ObjectWithDifferentPropertyVisibility(),
-                ReflectionProperty::IS_PROTECTED,
-            ],
-            'public-properties' => [
-                [
-                    'name' => ['required'],
-                ],
-                new ObjectWithDifferentPropertyVisibility(),
-                ReflectionProperty::IS_PUBLIC,
-            ],
         ];
     }
 
@@ -61,13 +32,10 @@ final class RulesNormalizerTest extends TestCase
      */
     public function testNormalizeWithArrayResult(
         array $expected,
-        iterable|object|string|null $rules,
-        ?int $propertyVisibility = null,
+        iterable|object|null $rules,
         mixed $data = null
     ): void {
-        $rules = $propertyVisibility === null
-            ? RulesNormalizer::normalize(rules: $rules, data: $data)
-            : RulesNormalizer::normalize(rules: $rules, propertyVisibility: $propertyVisibility, data: $data);
+        $rules = RulesNormalizer::normalize($rules, $data);
 
         $result = [];
         foreach ($rules as $attributeName => $attributeRules) {
@@ -78,5 +46,12 @@ final class RulesNormalizerTest extends TestCase
         }
 
         $this->assertSame($expected, $result);
+    }
+
+    public function testInvalidRules(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('A rules object must implement RulesProviderInterface or RuleInterface.');
+        RulesNormalizer::normalize(new stdClass());
     }
 }
