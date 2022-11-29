@@ -19,31 +19,27 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\SerializableRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\Tests\Rule\NestedTest;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 use function array_pop;
 use function count;
 use function implode;
-use function is_array;
+use function is_string;
 use function ltrim;
 use function rtrim;
 use function sprintf;
 
 /**
  * Can be used for validation of nested structures.
- *
- * @psalm-import-type RulesType from ValidatorInterface
- * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
-    RuleWithOptionsInterface,
+    SerializableRuleInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
@@ -71,7 +67,6 @@ final class Nested implements
      *
      * `$rules` can be null if validatable value is object. In this case rules will be derived from object via
      * `getRules()` method if object implement {@see RulesProviderInterface} or from attributes otherwise.
-     * @psalm-param RulesType $rules
      */
     public function __construct(
         iterable|object|string|null $rules = null,
@@ -105,9 +100,9 @@ final class Nested implements
         private bool $skipOnError = false,
 
         /**
-         * @var WhenType
+         * @var Closure(mixed, ValidationContext):bool|null
          */
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->prepareRules($rules);
     }
@@ -155,9 +150,6 @@ final class Nested implements
         return $this->noPropertyPathMessage;
     }
 
-    /**
-     * @psalm-param RulesType $source
-     */
     private function prepareRules(iterable|object|string|null $source): void
     {
         if ($source === null) {
@@ -168,10 +160,15 @@ final class Nested implements
 
         if ($source instanceof RulesProviderInterface) {
             $rules = $source->getRules();
-        } elseif (!$source instanceof Traversable && !is_array($source)) {
+        } elseif (is_string($source) && class_exists($source)) {
             $rules = (new AttributesRulesProvider($source, $this->rulesPropertyVisibility))->getRules();
-        } else {
+        } elseif (is_iterable($source)) {
             $rules = $source;
+        } else {
+            throw new InvalidArgumentException(
+                'The $rules argument passed to Nested rule can be either: a null, an object implementing ' .
+                'RulesProviderInterface, a class string or an iterable.'
+            );
         }
 
         self::ensureArrayHasRules($rules);
