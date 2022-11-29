@@ -204,55 +204,6 @@ class ValidatorTest extends TestCase
         $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
     }
 
-    public function dataRulesPropertyVisibility(): array
-    {
-        return [
-            'default' => [
-                null,
-                ['age' => 20, 'number' => 101],
-                new ObjectWithDifferentPropertyVisibility(),
-                [
-                    'name' => ['Value not passed.'],
-                    'age' => ['Value must be no less than 21.'],
-                    'number' => ['Value must be no greater than 100.'],
-                ],
-            ],
-            'custom' => [
-                ReflectionProperty::IS_PRIVATE,
-                ['age' => 20, 'number' => 101],
-                new ObjectWithDifferentPropertyVisibility(),
-                [
-                    'number' => ['Value must be no greater than 100.'],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * More variations are covered in {@see AttributesRulesProviderTest::testPropertyVisibility()}.
-     *
-     * @dataProvider dataRulesPropertyVisibility
-     */
-    public function testRulesPropertyVisibility(
-        int|null $rulesPropertyVisibility,
-        array $data,
-        object $source,
-        array $expectedErrorMessages,
-    ): void {
-        $arguments = [
-            new SimpleRuleHandlerContainer(),
-            (new TranslatorFactory())->create(),
-        ];
-        if ($rulesPropertyVisibility !== null) {
-            $arguments[] = $rulesPropertyVisibility;
-        }
-
-        $validator = new Validator(...$arguments);
-
-        $result = $validator->validate($data, $source);
-        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByPath());
-    }
-
     public function dataWithEmptyArrayOfRules(): array
     {
         return [
@@ -1298,20 +1249,6 @@ class ValidatorTest extends TestCase
         $message = 'Rule should be either an instance of Yiisoft\Validator\RuleInterface or a callable, int given.';
         $this->expectExceptionMessage($message);
         $validator->validate([], [new Boolean(), 1]);
-    }
-
-    public function testRulesAsObjectNameWithRuleAttributes(): void
-    {
-        $validator = ValidatorFactory::make();
-        $result = $validator->validate(['name' => 'Test name'], ObjectWithAttributesOnly::class);
-        $this->assertTrue($result->isValid());
-    }
-
-    public function testRulesAsObjectWithRuleAttributes(): void
-    {
-        $validator = ValidatorFactory::make();
-        $result = $validator->validate(['name' => 'Test name'], new ObjectWithAttributesOnly());
-        $this->assertTrue($result->isValid());
     }
 
     public function testDataWithPostValidationHook(): void

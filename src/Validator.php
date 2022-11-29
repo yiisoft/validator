@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use InvalidArgumentException;
 use ReflectionException;
 use ReflectionProperty;
 use Yiisoft\Translator\CategorySource;
@@ -36,16 +37,9 @@ final class Validator implements ValidatorInterface
      */
     private $defaultSkipOnEmptyCriteria;
 
-    /**
-     * @param int $rulesPropertyVisibility What visibility levels to use when reading rules from the class specified in
-     * `$rules` argument in {@see validate()} method.
-     */
     public function __construct(
         ?RuleHandlerResolverInterface $ruleHandlerResolver = null,
         ?TranslatorInterface $translator = null,
-        private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
-        | ReflectionProperty::IS_PROTECTED
-        | ReflectionProperty::IS_PUBLIC,
         bool|callable|null $defaultSkipOnEmpty = null,
         private string $translationCategory = 'yii-validator',
     ) {
@@ -59,17 +53,16 @@ final class Validator implements ValidatorInterface
      *
      * @psalm-param RulesType $rules
      *
-     * @throws ReflectionException
+     * @throws InvalidArgumentException
      */
     public function validate(
         mixed $data,
-        iterable|object|string|null $rules = null,
+        iterable|object|null $rules = null,
         ?ValidationContext $context = null
     ): Result {
         $data = DataSetHelper::normalize($data);
         $rules = RulesNormalizer::normalize(
             $rules,
-            $this->rulesPropertyVisibility,
             $data,
             $this->defaultSkipOnEmptyCriteria
         );
