@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+/**
+ * A main interface for rules to implement.
+ */
 interface RuleInterface
 {
     /**
-     * Get name of a rule used when rule is converted to array.
+     * Gets the name of a rule used during conversion to array.
      */
     public function getName(): string;
 
