@@ -36,7 +36,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
-use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRule;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
 use Yiisoft\Validator\Tests\Support\TranslatorFactory;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
@@ -1079,7 +1079,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @param StubRule[] $rules
+     * @param StubRuleWithOptions[] $rules
      * @param Error[] $expectedErrors
      *
      * @dataProvider skipOnEmptyDataProvider

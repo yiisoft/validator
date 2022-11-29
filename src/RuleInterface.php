@@ -6,7 +6,7 @@ namespace Yiisoft\Validator;
 
 /**
  * A main interface for rules to implement. If you want to include a rule options in addition to a rule name during
- * conversion to array, use extended version of it - {@see SerializableRuleInterface}.
+ * conversion to array, use extended version of it - {@see RuleWithOptionsInterface}.
  */
 interface RuleInterface
 {

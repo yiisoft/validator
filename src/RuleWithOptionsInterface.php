@@ -9,7 +9,7 @@ namespace Yiisoft\Validator;
  * useful for passing to frontend for further identification and implementing client-side validation. If you don't need
  * that (for example for REST API), use {@see RuleInterface} instead.
  */
-interface SerializableRuleInterface extends RuleInterface
+interface RuleWithOptionsInterface extends RuleInterface
 {
     /**
      * Gets a rule options as associative array. It's used for identification on the frontend with further implementing

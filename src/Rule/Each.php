@@ -13,7 +13,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -24,7 +24,7 @@ use Yiisoft\Validator\WhenInterface;
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
-    SerializableRuleInterface,
+    RuleWithOptionsInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,

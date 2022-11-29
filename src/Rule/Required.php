@@ -8,7 +8,7 @@ use Attribute;
 use Closure;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -20,7 +20,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-type EmptyCriteriaType = callable(mixed,bool):bool
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Required implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface
+final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface
 {
     use SkipOnErrorTrait;
     use WhenTrait;

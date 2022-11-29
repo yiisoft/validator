@@ -12,7 +12,7 @@ use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -20,7 +20,7 @@ use Yiisoft\Validator\WhenInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Callback implements
-    SerializableRuleInterface,
+    RuleWithOptionsInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,

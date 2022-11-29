@@ -19,7 +19,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesDumper;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\Tests\Rule\NestedTest;
@@ -42,7 +42,7 @@ use function sprintf;
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
-    SerializableRuleInterface,
+    RuleWithOptionsInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,

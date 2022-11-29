@@ -13,8 +13,8 @@ use function is_string;
  * RulesDumper allows to get an array of rule names and corresponding settings from a set of rules.
  * The array is usually passed to the client to use it in client-side validation.
  *
- * * @see SerializableRuleInterface
- * * @see RuleInterface
+ * @see RuleInterface
+ * @see RuleWithOptionsInterface
  */
 final class RulesDumper
 {
@@ -67,7 +67,7 @@ final class RulesDumper
 
             if (is_iterable($rule)) {
                 $options = $this->fetchOptions($rule);
-            } elseif ($rule instanceof SerializableRuleInterface) {
+            } elseif ($rule instanceof RuleWithOptionsInterface) {
                 $options = array_merge([$rule->getName()], $rule->getOptions());
             } elseif ($rule instanceof RuleInterface) {
                 $options = [$rule->getName()];

@@ -26,7 +26,7 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
-use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
@@ -35,7 +35,7 @@ use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
-use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRule;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
 use Yiisoft\Validator\ValidationContext;
 
@@ -44,7 +44,7 @@ use function array_slice;
 final class NestedTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
-    use SerializableRuleTestTrait;
+    use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
@@ -194,8 +194,8 @@ final class NestedTest extends RuleTestCase
             ],
             [
                 new Nested([
-                    'author.name' => new StubRule('author-name', ['key' => 'name']),
-                    'author.age' => new StubRule('author-age', ['key' => 'age']),
+                    'author.name' => new StubRuleWithOptions('author-name', ['key' => 'name']),
+                    'author.age' => new StubRuleWithOptions('author-age', ['key' => 'age']),
                 ]),
                 [
                     'noRulesWithNoObjectMessage' => [
@@ -226,8 +226,8 @@ final class NestedTest extends RuleTestCase
             [
                 new Nested([
                     'author' => [
-                        'name' => new StubRule('author-name', ['key' => 'name']),
-                        'age' => new StubRule('author-age', ['key' => 'age']),
+                        'name' => new StubRuleWithOptions('author-name', ['key' => 'name']),
+                        'age' => new StubRuleWithOptions('author-age', ['key' => 'age']),
                     ],
                 ]),
                 [
