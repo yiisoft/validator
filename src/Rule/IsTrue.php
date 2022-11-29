@@ -77,7 +77,7 @@ final class IsTrue implements SerializableRuleInterface, SkipOnErrorInterface, W
             'trueValue' => $this->trueValue,
             'strict' => $this->strict,
             'message' => [
-                'message' => $this->message,
+                'template' => $this->message,
                 'parameters' => [
                     'true' => $this->trueValue === true ? 'true' : $this->trueValue,
                 ],

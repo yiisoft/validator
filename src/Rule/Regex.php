@@ -85,10 +85,12 @@ final class Regex implements SerializableRuleInterface, SkipOnErrorInterface, Wh
             'pattern' => $this->pattern,
             'not' => $this->not,
             'incorrectInputMessage' => [
-                'message' => $this->incorrectInputMessage,
+                'template' => $this->incorrectInputMessage,
+                'parameters' => [],
             ],
             'message' => [
-                'message' => $this->message,
+                'template' => $this->message,
+                'parameters' => [],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,

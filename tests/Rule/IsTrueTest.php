@@ -34,7 +34,7 @@ final class IsTrueTest extends RuleTestCase
                     'trueValue' => '1',
                     'strict' => false,
                     'message' => [
-                        'message' => 'The value must be "{true}".',
+                        'template' => 'The value must be "{true}".',
                         'parameters' => [
                             'true' => '1',
                         ],
@@ -49,7 +49,7 @@ final class IsTrueTest extends RuleTestCase
                     'trueValue' => true,
                     'strict' => true,
                     'message' => [
-                        'message' => 'The value must be "{true}".',
+                        'template' => 'The value must be "{true}".',
                         'parameters' => [
                             'true' => 'true',
                         ],
@@ -70,7 +70,7 @@ final class IsTrueTest extends RuleTestCase
                     'trueValue' => 'YES',
                     'strict' => true,
                     'message' => [
-                        'message' => 'Custom message.',
+                        'template' => 'Custom message.',
                         'parameters' => [
                             'true' => 'YES',
                         ],

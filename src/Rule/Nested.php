@@ -308,6 +308,9 @@ final class Nested implements
 
     #[ArrayShape([
         'requirePropertyPath' => 'bool',
+        'noRulesWithNoObjectMessage' => 'array',
+        'incorrectDataSetTypeMessage' => 'array',
+        'incorrectInputMessage' => 'array',
         'noPropertyPathMessage' => 'array',
         'skipOnEmpty' => 'bool',
         'skipOnError' => 'bool',
@@ -317,16 +320,20 @@ final class Nested implements
     {
         return [
             'noRulesWithNoObjectMessage' => [
-                'message' => $this->noRulesWithNoObjectMessage,
+                'template' => $this->noRulesWithNoObjectMessage,
+                'parameters' => [],
             ],
             'incorrectDataSetTypeMessage' => [
-                'message' => $this->incorrectDataSetTypeMessage,
+                'template' => $this->incorrectDataSetTypeMessage,
+                'parameters' => [],
             ],
             'incorrectInputMessage' => [
-                'message' => $this->incorrectInputMessage,
+                'template' => $this->incorrectInputMessage,
+                'parameters' => [],
             ],
             'noPropertyPathMessage' => [
-                'message' => $this->getNoPropertyPathMessage(),
+                'template' => $this->getNoPropertyPathMessage(),
+                'parameters' => [],
             ],
             'requirePropertyPath' => $this->getRequirePropertyPath(),
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),

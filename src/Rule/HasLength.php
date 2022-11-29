@@ -116,7 +116,8 @@ final class HasLength implements
     {
         return array_merge($this->getLimitOptions(), [
             'incorrectInputMessage' => [
-                'message' => $this->incorrectInputMessage,
+                'template' => $this->incorrectInputMessage,
+                'parameters' => [],
             ],
             'encoding' => $this->encoding,
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),

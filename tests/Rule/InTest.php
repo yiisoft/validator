@@ -36,7 +36,8 @@ final class InTest extends RuleTestCase
                     'strict' => false,
                     'not' => false,
                     'message' => [
-                        'message' => 'This value is invalid.',
+                        'template' => 'This value is invalid.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -49,7 +50,8 @@ final class InTest extends RuleTestCase
                     'strict' => true,
                     'not' => false,
                     'message' => [
-                        'message' => 'This value is invalid.',
+                        'template' => 'This value is invalid.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -62,7 +64,8 @@ final class InTest extends RuleTestCase
                     'strict' => false,
                     'not' => true,
                     'message' => [
-                        'message' => 'This value is invalid.',
+                        'template' => 'This value is invalid.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,

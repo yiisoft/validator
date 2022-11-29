@@ -97,11 +97,11 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
             'falseValue' => $this->falseValue,
             'strict' => $this->strict,
             'nonScalarMessage' => [
-                'message' => $this->nonScalarMessage,
+                'template' => $this->nonScalarMessage,
                 'parameters' => $messageParameters,
             ],
             'scalarMessage' => [
-                'message' => $this->scalarMessage,
+                'template' => $this->scalarMessage,
                 'parameters' => $messageParameters,
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),

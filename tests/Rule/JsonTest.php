@@ -32,10 +32,12 @@ final class JsonTest extends RuleTestCase
                 new Json(),
                 [
                     'incorrectInputMessage' => [
-                        'message' => 'The value must have a string type.',
+                        'template' => 'The value must have a string type.',
+                        'parameters' => [],
                     ],
                     'message' => [
-                        'message' => 'The value is not JSON.',
+                        'template' => 'The value is not JSON.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,

@@ -39,19 +39,20 @@ final class HasLengthTest extends RuleTestCase
                     'max' => null,
                     'exactly' => null,
                     'lessThanMinMessage' => [
-                        'message' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                        'template' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'parameters' => ['min' => 3],
                     ],
                     'greaterThanMaxMessage' => [
-                        'message' => 'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                        'template' => 'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.',
                         'parameters' => ['max' => null],
                     ],
                     'notExactlyMessage' => [
-                        'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
+                        'template' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'message' => 'This value must be a string.',
+                        'template' => 'This value must be a string.',
+                        'parameters' => [],
                     ],
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
@@ -65,19 +66,20 @@ final class HasLengthTest extends RuleTestCase
                     'max' => 3,
                     'exactly' => null,
                     'lessThanMinMessage' => [
-                        'message' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                        'template' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
-                        'message' => 'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                        'template' => 'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.',
                         'parameters' => ['max' => 3],
                     ],
                     'notExactlyMessage' => [
-                        'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
+                        'template' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'message' => 'This value must be a string.',
+                        'template' => 'This value must be a string.',
+                        'parameters' => [],
                     ],
                     'encoding' => 'UTF-8',
                     'skipOnEmpty' => false,
@@ -91,19 +93,20 @@ final class HasLengthTest extends RuleTestCase
                     'max' => 4,
                     'exactly' => null,
                     'lessThanMinMessage' => [
-                        'message' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                        'template' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'parameters' => ['min' => 3],
                     ],
                     'greaterThanMaxMessage' => [
-                        'message' => 'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                        'template' => 'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.',
                         'parameters' => ['max' => 4],
                     ],
                     'notExactlyMessage' => [
-                        'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
+                        'template' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'message' => 'This value must be a string.',
+                        'template' => 'This value must be a string.',
+                        'parameters' => [],
                     ],
                     'encoding' => 'windows-1251',
                     'skipOnEmpty' => false,
