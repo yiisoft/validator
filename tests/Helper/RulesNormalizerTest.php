@@ -51,7 +51,7 @@ final class RulesNormalizerTest extends TestCase
     public function testInvalidRules(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('A rules object should implement RulesProviderInterface or RuleInterface.');
+        $this->expectExceptionMessage('A rules object must implement RulesProviderInterface or RuleInterface.');
         RulesNormalizer::normalize(new stdClass());
     }
 }

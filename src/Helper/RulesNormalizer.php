@@ -87,7 +87,7 @@ final class RulesNormalizer
             return $rules;
         }
 
-        throw new InvalidArgumentException('A rules object should implement RulesProviderInterface or RuleInterface.');
+        throw new InvalidArgumentException('A rules object must implement RulesProviderInterface or RuleInterface.');
     }
 
     /**
