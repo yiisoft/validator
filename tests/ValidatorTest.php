@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use ReflectionProperty;
 use stdClass;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -28,7 +27,6 @@ use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
 use Yiisoft\Validator\EmptyCriteria\WhenNull;
-use Yiisoft\Validator\Tests\RulesProvider\AttributesRulesProviderTest;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
