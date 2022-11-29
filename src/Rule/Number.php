@@ -21,6 +21,8 @@ use Yiisoft\Validator\WhenInterface;
  * The format of the number must match the regular expression specified in {@see Number::$integerPattern}
  * or {@see Number::$numberPattern}. Optionally, you may configure the {@see Number::min()} and {@see Number::max()}
  * to ensure the number is within certain range.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
@@ -71,9 +73,9 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
         private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
     }
 

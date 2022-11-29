@@ -21,6 +21,8 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Validates that the value contains certain number of items. Can be applied to arrays or classes implementing
  * {@see Countable} interface.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Count implements
@@ -84,9 +86,9 @@ final class Count implements
         private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
         $this->initLimitProperties(
             $min,

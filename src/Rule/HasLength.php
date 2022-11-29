@@ -21,6 +21,8 @@ use Yiisoft\Validator\WhenInterface;
  * Validates that the value is of certain length.
  *
  * Note, this rule should only be used with strings.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class HasLength implements
@@ -83,9 +85,9 @@ final class HasLength implements
         private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null
+        private Closure|null $when = null
     ) {
         $this->initLimitProperties(
             $min,

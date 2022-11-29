@@ -21,6 +21,8 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Validates an array by checking each of its elements against a set of rules.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
@@ -50,9 +52,9 @@ final class Each implements
         private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
         $this->dumper = new RulesDumper();
     }

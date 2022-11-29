@@ -20,6 +20,8 @@ use Yiisoft\Validator\WhenInterface;
  * Validates that the value matches the pattern specified in constructor.
  *
  * If the {@see Regex::$not} is used, the rule will ensure the value do NOT match the pattern.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
@@ -48,9 +50,9 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
     }
 

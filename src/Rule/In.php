@@ -19,6 +19,8 @@ use Yiisoft\Validator\WhenInterface;
  * Validates that the value is one of the values provided in {@see $values}.
  * If the {@see In::$not} is set, the validation logic is inverted and the rule will ensure that the value is NOT one of
  * them.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
@@ -49,9 +51,9 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
     }
 

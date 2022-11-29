@@ -23,6 +23,8 @@ use function function_exists;
  *
  * Note that this rule only checks if the URL scheme and host part are correct.
  * It does not check the remaining parts of a URL.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
@@ -62,9 +64,9 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
         if ($enableIDN && !function_exists('idn_to_ascii')) {
             // Tested via separate CI configuration (see ".github/workflows/build.yml").

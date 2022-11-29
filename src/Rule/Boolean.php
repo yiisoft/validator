@@ -17,6 +17,8 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Checks if the value is a boolean value or a value corresponding to it.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
@@ -49,9 +51,9 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
         private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
     }
 

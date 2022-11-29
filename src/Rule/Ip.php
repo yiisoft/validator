@@ -24,6 +24,8 @@ use function strlen;
  * Checks if the value is a valid IPv4/IPv6 address or subnet.
  *
  * It also may change the value if normalization of IPv6 expansion is enabled.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
@@ -199,9 +201,9 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
         if (!$this->allowIpv4 && !$this->allowIpv6) {
             throw new InvalidArgumentException('Both IPv4 and IPv6 checks can not be disabled at the same time.');

@@ -15,6 +15,9 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
+/**
+ * @psalm-import-type WhenType from WhenInterface
+ */
 abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
 {
     use SkipOnEmptyTrait;
@@ -90,9 +93,9 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
         if (!isset($this->validOperatorsMap[$this->operator])) {
             $wrapInQuotesCallable = static fn (string $operator): string => '"' . $operator . '"';

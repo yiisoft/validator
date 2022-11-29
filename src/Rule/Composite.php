@@ -20,6 +20,8 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Allows to combine and validate multiple rules.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Composite implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
@@ -42,9 +44,9 @@ class Composite implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
         $this->dumper = new RulesDumper();
     }

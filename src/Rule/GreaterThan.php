@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use RuntimeException;
-use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\WhenInterface;
 
 /**
  * Validates if the specified value is greater than another value or attribute.
@@ -18,6 +18,8 @@ use Yiisoft\Validator\ValidationContext;
  * The default validation function is based on string values, which means the values
  * are checked byte by byte. When validating numbers, make sure to change {@see GreaterThan::$type} to
  * {@see GreaterThan::TYPE_NUMBER} to enable numeric validation.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class GreaterThan extends Compare
@@ -47,9 +49,9 @@ final class GreaterThan extends Compare
         bool|callable|null $skipOnEmpty = false,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
         if ($this->targetValue === null && $this->targetAttribute === null) {
             throw new RuntimeException('Either "targetValue" or "targetAttribute" must be specified.');
