@@ -11,9 +11,9 @@ namespace Yiisoft\Validator;
 interface RuleInterface
 {
     /**
-     * Gets the name of a rule used during conversion to array. The main usage of it is identification, mainly on client
-     * side (frontend), but other applications are possible. This is explicitly specified for optimization and
-     * readability purposes.
+     * Gets the name of a rule used during conversion to array. The main usage of it is identification, mainly on
+     * the frontend for implementing client-side validation but other applications are possible. This is explicitly
+     * specified for optimization and readability purposes.
      *
      * All packages' rule names use class name written in camelCase, so for `AtLeast` rule the name will be `atLeast`
      * and so on. For custom rules you can choose different naming scheme because it doesn't affect logic in any way.
