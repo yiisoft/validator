@@ -146,10 +146,12 @@ final class Email implements SerializableRuleInterface, SkipOnErrorInterface, Wh
             'checkDNS' => $this->checkDNS,
             'enableIDN' => $this->enableIDN,
             'incorrectInputMessage' => [
-                'message' => $this->incorrectInputMessage,
+                'template' => $this->incorrectInputMessage,
+                'parameters' => [],
             ],
             'message' => [
-                'message' => $this->message,
+                'template' => $this->message,
+                'parameters' => [],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,

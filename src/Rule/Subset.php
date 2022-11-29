@@ -80,10 +80,12 @@ final class Subset implements SerializableRuleInterface, SkipOnErrorInterface, W
             'values' => $this->values,
             'strict' => $this->strict,
             'iterableMessage' => [
-                'message' => $this->iterableMessage,
+                'template' => $this->iterableMessage,
+                'parameters' => [],
             ],
             'subsetMessage' => [
-                'message' => $this->subsetMessage,
+                'template' => $this->subsetMessage,
+                'parameters' => [],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,

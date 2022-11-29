@@ -112,7 +112,8 @@ final class Count implements
     {
         return array_merge($this->getLimitOptions(), [
             'incorrectInputMessage' => [
-                'message' => $this->getIncorrectInputMessage(),
+                'template' => $this->getIncorrectInputMessage(),
+                'parameters' => [],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,

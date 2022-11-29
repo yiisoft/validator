@@ -46,17 +46,19 @@ final class CompositeTest extends RuleTestCase
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
-                                'message' => 'The allowed types are integer, float and string.',
+                                'template' => 'The allowed types are integer, float and string.',
+                                'parameters' => [],
                             ],
                             'notANumberMessage' => [
-                                'message' => 'Value must be a number.',
+                                'template' => 'Value must be a number.',
+                                'parameters' => [],
                             ],
                             'tooSmallMessage' => [
-                                'message' => 'Value must be no less than {min}.',
+                                'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
                             'tooBigMessage' => [
-                                'message' => 'Value must be no greater than {max}.',
+                                'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => 13],
                             ],
                             'skipOnEmpty' => false,
@@ -70,17 +72,19 @@ final class CompositeTest extends RuleTestCase
                             'min' => null,
                             'max' => 14,
                             'incorrectInputMessage' => [
-                                'message' => 'The allowed types are integer, float and string.',
+                                'template' => 'The allowed types are integer, float and string.',
+                                'parameters' => [],
                             ],
                             'notANumberMessage' => [
-                                'message' => 'Value must be a number.',
+                                'template' => 'Value must be a number.',
+                                'parameters' => [],
                             ],
                             'tooSmallMessage' => [
-                                'message' => 'Value must be no less than {min}.',
+                                'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
                             'tooBigMessage' => [
-                                'message' => 'Value must be no greater than {max}.',
+                                'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => 14],
                             ],
                             'skipOnEmpty' => false,
@@ -106,19 +110,21 @@ final class CompositeTest extends RuleTestCase
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
-                                'message' => 'The allowed types are integer, float and string.',
+                                'template' => 'The allowed types are integer, float and string.',
+                                'parameters' => [],
                             ],
                             'notANumberMessage' => [
-                                'message' => 'Value must be a number.',
+                                'template' => 'Value must be a number.',
+                                'parameters' => [],
                             ],
                             'tooSmallMessage' => [
-                                'message' => 'Value must be no less than {min}.',
+                                'template' => 'Value must be no less than {min}.',
                                 'parameters' => [
                                     'min' => null,
                                 ],
                             ],
                             'tooBigMessage' => [
-                                'message' => 'Value must be no greater than {max}.',
+                                'template' => 'Value must be no greater than {max}.',
                                 'parameters' => [
                                     'max' => 13,
                                 ],

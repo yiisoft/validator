@@ -32,7 +32,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'incorrectInputMessage' => [
-                        'message' => 'The allowed types are integer, float, string, boolean and null.',
+                        'template' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -40,7 +40,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -48,7 +48,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'message' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
+                        'template' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -67,7 +67,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'incorrectInputMessage' => [
-                        'message' => 'The allowed types are integer, float, string, boolean and null.',
+                        'template' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -75,7 +75,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -83,7 +83,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'message' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
+                        'template' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -102,7 +102,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                     'targetValue' => null,
                     'targetAttribute' => 'attribute',
                     'incorrectInputMessage' => [
-                        'message' => 'The allowed types are integer, float, string, boolean and null.',
+                        'template' => 'The allowed types are integer, float, string, boolean and null.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',
@@ -110,7 +110,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'message' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',
@@ -118,7 +118,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'message' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
+                        'template' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',
@@ -142,7 +142,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                     'targetValue' => null,
                     'targetAttribute' => 'test',
                     'incorrectInputMessage' => [
-                        'message' => 'Custom message 1.',
+                        'template' => 'Custom message 1.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
@@ -150,7 +150,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'message' => 'Custom message 2.',
+                        'template' => 'Custom message 2.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
@@ -158,7 +158,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'message' => 'Custom message 3.',
+                        'template' => 'Custom message 3.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',

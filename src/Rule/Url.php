@@ -114,10 +114,12 @@ final class Url implements SerializableRuleInterface, SkipOnErrorInterface, When
             'validSchemes' => $this->validSchemes,
             'enableIDN' => $this->enableIDN,
             'incorrectInputMessage' => [
-                'message' => $this->incorrectInputMessage,
+                'template' => $this->incorrectInputMessage,
+                'parameters' => [],
             ],
             'message' => [
-                'message' => $this->message,
+                'template' => $this->message,
+                'parameters' => [],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,

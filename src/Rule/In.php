@@ -16,27 +16,29 @@ use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Validates that the value is among a list of values.
- *
- * The range can be specified via constructor.
- * If the {@see InRange::$not} is called, the rule will ensure the value is NOT among the specified range.
+ * Validates that the value is one of the values provided in {@see $values}.
+ * If the {@see In::$not} is set, the validation logic is inverted and the rule will ensure that the value is NOT one of
+ * them.
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class InRange implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class In implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
 
     public function __construct(
-        private iterable $range,
         /**
-         * @var bool whether the comparison is strict (both type and value must be the same)
+         * @var iterable<scalar>
+         */
+        private iterable $values,
+        /**
+         * @var bool Whether the comparison is strict (both type and value must be the same)
          */
         private bool $strict = false,
         /**
-         * @var bool whether to invert the validation logic. Defaults to false. If set to `true`, the value should NOT
-         * be among the list of values passed via constructor.
+         * @var bool Whether to invert the validation logic. Defaults to `false`. If set to `true`, the value must NOT
+         * be among the list of {@see $values}.
          */
         private bool $not = false,
         private string $message = 'This value is invalid.',
@@ -58,9 +60,9 @@ final class InRange implements SerializableRuleInterface, SkipOnErrorInterface, 
         return 'inRange';
     }
 
-    public function getRange(): iterable
+    public function getValues(): iterable
     {
-        return $this->range;
+        return $this->values;
     }
 
     public function isStrict(): bool
@@ -81,11 +83,12 @@ final class InRange implements SerializableRuleInterface, SkipOnErrorInterface, 
     public function getOptions(): array
     {
         return [
-            'range' => $this->range,
+            'values' => $this->values,
             'strict' => $this->strict,
             'not' => $this->not,
             'message' => [
-                'message' => $this->message,
+                'template' => $this->message,
+                'parameters' => [],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
@@ -94,6 +97,6 @@ final class InRange implements SerializableRuleInterface, SkipOnErrorInterface, 
 
     public function getHandlerClassName(): string
     {
-        return InRangeHandler::class;
+        return InHandler::class;
     }
 }

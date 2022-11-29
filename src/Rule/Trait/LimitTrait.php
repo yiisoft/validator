@@ -178,15 +178,15 @@ trait LimitTrait
             'max' => $this->max,
             'exactly' => $this->exactly,
             'lessThanMinMessage' => [
-                'message' => $this->lessThanMinMessage,
+                'template' => $this->lessThanMinMessage,
                 'parameters' => ['min' => $this->min],
             ],
             'greaterThanMaxMessage' => [
-                'message' => $this->greaterThanMaxMessage,
+                'template' => $this->greaterThanMaxMessage,
                 'parameters' => ['max' => $this->max],
             ],
             'notExactlyMessage' => [
-                'message' => $this->notExactlyMessage,
+                'template' => $this->notExactlyMessage,
                 'parameters' => ['exactly' => $this->exactly],
             ],
         ];

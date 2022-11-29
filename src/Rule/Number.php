@@ -134,17 +134,19 @@ final class Number implements SerializableRuleInterface, SkipOnErrorInterface, W
             'min' => $this->min,
             'max' => $this->max,
             'incorrectInputMessage' => [
-                'message' => $this->incorrectInputMessage,
+                'template' => $this->incorrectInputMessage,
+                'parameters' => [],
             ],
             'notANumberMessage' => [
-                'message' => $this->getNotANumberMessage(),
+                'template' => $this->getNotANumberMessage(),
+                'parameters' => [],
             ],
             'tooSmallMessage' => [
-                'message' => $this->tooSmallMessage,
+                'template' => $this->tooSmallMessage,
                 'parameters' => ['min' => $this->min],
             ],
             'tooBigMessage' => [
-                'message' => $this->tooBigMessage,
+                'template' => $this->tooBigMessage,
                 'parameters' => ['max' => $this->max],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
