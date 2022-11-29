@@ -12,6 +12,7 @@ use Yiisoft\Translator\IntlMessageFormatter;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\Translator;
 use Yiisoft\Translator\TranslatorInterface;
+use Yiisoft\Validator\Helper\DataSetNormalizer;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
 use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
@@ -66,7 +67,7 @@ final class Validator implements ValidatorInterface
         iterable|object|string|null $rules = null,
         ?ValidationContext $context = null
     ): Result {
-        $data = DataSetHelper::normalize($data);
+        $data = DataSetNormalizer::normalize($data);
         $rules = RulesNormalizer::normalize(
             $rules,
             $this->rulesPropertyVisibility,
