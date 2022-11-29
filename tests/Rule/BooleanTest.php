@@ -35,14 +35,14 @@ final class BooleanTest extends RuleTestCase
                     'falseValue' => '0',
                     'strict' => false,
                     'nonScalarMessage' => [
-                        'message' => 'Value must be either "{true}" or "{false}".',
+                        'template' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => '1',
                             'false' => '0',
                         ],
                     ],
                     'scalarMessage' => [
-                        'message' => 'Value must be either "{true}" or "{false}".',
+                        'template' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => '1',
                             'false' => '0',
@@ -59,14 +59,14 @@ final class BooleanTest extends RuleTestCase
                     'falseValue' => false,
                     'strict' => true,
                     'nonScalarMessage' => [
-                        'message' => 'Value must be either "{true}" or "{false}".',
+                        'template' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => 'true',
                             'false' => 'false',
                         ],
                     ],
                     'scalarMessage' => [
-                        'message' => 'Value must be either "{true}" or "{false}".',
+                        'template' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => 'true',
                             'false' => 'false',
@@ -91,14 +91,14 @@ final class BooleanTest extends RuleTestCase
                     'falseValue' => 'NO',
                     'strict' => true,
                     'nonScalarMessage' => [
-                        'message' => 'Custom message 1.',
+                        'template' => 'Custom message 1.',
                         'parameters' => [
                             'true' => 'YES',
                             'false' => 'NO',
                         ],
                     ],
                     'scalarMessage' => [
-                        'message' => 'Custom message 2.',
+                        'template' => 'Custom message 2.',
                         'parameters' => [
                             'true' => 'YES',
                             'false' => 'NO',

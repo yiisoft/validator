@@ -376,28 +376,36 @@ final class Ip implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
             'requireSubnet' => $this->requireSubnet,
             'allowNegation' => $this->allowNegation,
             'incorrectInputMessage' => [
-                'message' => $this->incorrectInputMessage,
+                'template' => $this->incorrectInputMessage,
+                'parameters' => [],
             ],
             'message' => [
-                'message' => $this->message,
+                'template' => $this->message,
+                'parameters' => [],
             ],
             'ipv4NotAllowedMessage' => [
-                'message' => $this->ipv4NotAllowedMessage,
+                'template' => $this->ipv4NotAllowedMessage,
+                'parameters' => [],
             ],
             'ipv6NotAllowedMessage' => [
-                'message' => $this->ipv6NotAllowedMessage,
+                'template' => $this->ipv6NotAllowedMessage,
+                'parameters' => [],
             ],
             'wrongCidrMessage' => [
-                'message' => $this->wrongCidrMessage,
+                'template' => $this->wrongCidrMessage,
+                'parameters' => [],
             ],
             'noSubnetMessage' => [
-                'message' => $this->noSubnetMessage,
+                'template' => $this->noSubnetMessage,
+                'parameters' => [],
             ],
             'hasSubnetMessage' => [
-                'message' => $this->hasSubnetMessage,
+                'template' => $this->hasSubnetMessage,
+                'parameters' => [],
             ],
             'notInRangeMessage' => [
-                'message' => $this->notInRangeMessage,
+                'template' => $this->notInRangeMessage,
+                'parameters' => [],
             ],
             'ranges' => $this->ranges,
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),

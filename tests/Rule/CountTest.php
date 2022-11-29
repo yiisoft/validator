@@ -40,22 +40,23 @@ final class CountTest extends RuleTestCase
                     'max' => null,
                     'exactly' => null,
                     'lessThanMinMessage' => [
-                        'message' => 'This value must contain at least {min, number} {min, plural, one{item} ' .
+                        'template' => 'This value must contain at least {min, number} {min, plural, one{item} ' .
                             'other{items}}.',
                         'parameters' => ['min' => 3],
                     ],
                     'greaterThanMaxMessage' => [
-                        'message' => 'This value must contain at most {max, number} {max, plural, one{item} ' .
+                        'template' => 'This value must contain at most {max, number} {max, plural, one{item} ' .
                             'other{items}}.',
                         'parameters' => ['max' => null],
                     ],
                     'notExactlyMessage' => [
-                        'message' => 'This value must contain exactly {exactly, number} {exactly, plural, one{item} ' .
+                        'template' => 'This value must contain exactly {exactly, number} {exactly, plural, one{item} ' .
                             'other{items}}.',
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'message' => 'This value must be an array or implement \Countable interface.',
+                        'template' => 'This value must be an array or implement \Countable interface.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,

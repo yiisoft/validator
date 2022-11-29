@@ -36,17 +36,19 @@ final class NumberTest extends RuleTestCase
                     'min' => null,
                     'max' => null,
                     'incorrectInputMessage' => [
-                        'message' => 'The allowed types are integer, float and string.',
+                        'template' => 'The allowed types are integer, float and string.',
+                        'parameters' => [],
                     ],
                     'notANumberMessage' => [
-                        'message' => 'Value must be a number.',
+                        'template' => 'Value must be a number.',
+                        'parameters' => [],
                     ],
                     'tooSmallMessage' => [
-                        'message' => 'Value must be no less than {min}.',
+                        'template' => 'Value must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
                     'tooBigMessage' => [
-                        'message' => 'Value must be no greater than {max}.',
+                        'template' => 'Value must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,
@@ -62,17 +64,19 @@ final class NumberTest extends RuleTestCase
                     'min' => 1,
                     'max' => null,
                     'incorrectInputMessage' => [
-                        'message' => 'The allowed types are integer, float and string.',
+                        'template' => 'The allowed types are integer, float and string.',
+                        'parameters' => [],
                     ],
                     'notANumberMessage' => [
-                        'message' => 'Value must be a number.',
+                        'template' => 'Value must be a number.',
+                        'parameters' => [],
                     ],
                     'tooSmallMessage' => [
-                        'message' => 'Value must be no less than {min}.',
+                        'template' => 'Value must be no less than {min}.',
                         'parameters' => ['min' => 1],
                     ],
                     'tooBigMessage' => [
-                        'message' => 'Value must be no greater than {max}.',
+                        'template' => 'Value must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,
@@ -88,17 +92,19 @@ final class NumberTest extends RuleTestCase
                     'min' => null,
                     'max' => 1,
                     'incorrectInputMessage' => [
-                        'message' => 'The allowed types are integer, float and string.',
+                        'template' => 'The allowed types are integer, float and string.',
+                        'parameters' => [],
                     ],
                     'notANumberMessage' => [
-                        'message' => 'Value must be a number.',
+                        'template' => 'Value must be a number.',
+                        'parameters' => [],
                     ],
                     'tooSmallMessage' => [
-                        'message' => 'Value must be no less than {min}.',
+                        'template' => 'Value must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
                     'tooBigMessage' => [
-                        'message' => 'Value must be no greater than {max}.',
+                        'template' => 'Value must be no greater than {max}.',
                         'parameters' => ['max' => 1],
                     ],
                     'skipOnEmpty' => false,
@@ -114,17 +120,19 @@ final class NumberTest extends RuleTestCase
                     'min' => 2,
                     'max' => 10,
                     'incorrectInputMessage' => [
-                        'message' => 'The allowed types are integer, float and string.',
+                        'template' => 'The allowed types are integer, float and string.',
+                        'parameters' => [],
                     ],
                     'notANumberMessage' => [
-                        'message' => 'Value must be a number.',
+                        'template' => 'Value must be a number.',
+                        'parameters' => [],
                     ],
                     'tooSmallMessage' => [
-                        'message' => 'Value must be no less than {min}.',
+                        'template' => 'Value must be no less than {min}.',
                         'parameters' => ['min' => 2],
                     ],
                     'tooBigMessage' => [
-                        'message' => 'Value must be no greater than {max}.',
+                        'template' => 'Value must be no greater than {max}.',
                         'parameters' => ['max' => 10],
                     ],
                     'skipOnEmpty' => false,
@@ -140,17 +148,19 @@ final class NumberTest extends RuleTestCase
                     'min' => null,
                     'max' => null,
                     'incorrectInputMessage' => [
-                        'message' => 'The allowed types are integer, float and string.',
+                        'template' => 'The allowed types are integer, float and string.',
+                        'parameters' => [],
                     ],
                     'notANumberMessage' => [
-                        'message' => 'Value must be an integer.',
+                        'template' => 'Value must be an integer.',
+                        'parameters' => [],
                     ],
                     'tooSmallMessage' => [
-                        'message' => 'Value must be no less than {min}.',
+                        'template' => 'Value must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
                     'tooBigMessage' => [
-                        'message' => 'Value must be no greater than {max}.',
+                        'template' => 'Value must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,

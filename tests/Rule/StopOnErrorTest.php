@@ -41,28 +41,29 @@ final class StopOnErrorTest extends RuleTestCase
                             'max' => null,
                             'exactly' => null,
                             'lessThanMinMessage' => [
-                                'message' => 'This value must contain at least {min, number} {min, plural, ' .
+                                'template' => 'This value must contain at least {min, number} {min, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'min' => 10,
                                 ],
                             ],
                             'greaterThanMaxMessage' => [
-                                'message' => 'This value must contain at most {max, number} {max, plural, ' .
+                                'template' => 'This value must contain at most {max, number} {max, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'max' => null,
                                 ],
                             ],
                             'notExactlyMessage' => [
-                                'message' => 'This value must contain exactly {exactly, number} {exactly, plural, ' .
+                                'template' => 'This value must contain exactly {exactly, number} {exactly, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'exactly' => null,
                                 ],
                             ],
                             'incorrectInputMessage' => [
-                                'message' => 'This value must be a string.',
+                                'template' => 'This value must be a string.',
+                                'parameters' => [],
                             ],
                             'encoding' => 'UTF-8',
                             'skipOnEmpty' => false,

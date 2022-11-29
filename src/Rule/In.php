@@ -87,7 +87,8 @@ final class In implements SerializableRuleInterface, SkipOnErrorInterface, WhenI
             'strict' => $this->strict,
             'not' => $this->not,
             'message' => [
-                'message' => $this->message,
+                'template' => $this->message,
+                'parameters' => [],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
