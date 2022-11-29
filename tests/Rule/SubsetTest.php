@@ -36,10 +36,12 @@ final class SubsetTest extends RuleTestCase
                     'values' => [],
                     'strict' => false,
                     'iterableMessage' => [
-                        'message' => 'Value must be iterable.',
+                        'template' => 'Value must be iterable.',
+                        'parameters' => [],
                     ],
                     'subsetMessage' => [
-                        'message' => 'Values must be ones of {values}.',
+                        'template' => 'Values must be ones of {values}.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,

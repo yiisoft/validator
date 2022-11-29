@@ -73,8 +73,14 @@ final class Required implements SerializableRuleInterface, SkipOnErrorInterface,
     public function getOptions(): array
     {
         return [
-            'message' => $this->message,
-            'notPassedMessage' => $this->notPassedMessage,
+            'message' => [
+                'template' => $this->message,
+                'parameters' => [],
+            ],
+            'notPassedMessage' => [
+                'template' => $this->notPassedMessage,
+                'parameters' => [],
+            ],
             'skipOnError' => $this->skipOnError,
         ];
     }

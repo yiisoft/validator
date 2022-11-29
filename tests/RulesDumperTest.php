@@ -40,17 +40,19 @@ final class RulesDumperTest extends TestCase
                             'min' => 10,
                             'max' => 100,
                             'incorrectInputMessage' => [
-                                'message' => 'The allowed types are integer, float and string.',
+                                'template' => 'The allowed types are integer, float and string.',
+                                'parameters' => [],
                             ],
                             'notANumberMessage' => [
-                                'message' => 'Value must be an integer.',
+                                'template' => 'Value must be an integer.',
+                                'parameters' => [],
                             ],
                             'tooBigMessage' => [
-                                'message' => 'Value must be no greater than 100.',
+                                'template' => 'Value must be no greater than 100.',
                                 'parameters' => ['max' => 100],
                             ],
                             'tooSmallMessage' => [
-                                'message' => 'Value must be greater than 10.',
+                                'template' => 'Value must be greater than 10.',
                                 'parameters' => ['min' => 10],
                             ],
                             'skipOnEmpty' => true,
@@ -114,14 +116,14 @@ final class RulesDumperTest extends TestCase
                 'falseValue' => '0',
                 'strict' => false,
                 'nonScalarMessage' => [
-                    'message' => 'Value must be either "{true}" or "{false}".',
+                    'template' => 'Value must be either "{true}" or "{false}".',
                     'parameters' => [
                         'true' => '1',
                         'false' => '0',
                     ],
                 ],
                 'scalarMessage' => [
-                    'message' => 'Value must be either "{true}" or "{false}".',
+                    'template' => 'Value must be either "{true}" or "{false}".',
                     'parameters' => [
                         'true' => '1',
                         'false' => '0',

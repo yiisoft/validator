@@ -84,9 +84,12 @@ final class AtLeast implements SerializableRuleInterface, SkipOnErrorInterface, 
         return [
             'attributes' => $this->attributes,
             'min' => $this->min,
-            'incorrectInputMessage' => $this->incorrectInputMessage,
+            'incorrectInputMessage' => [
+                'template' => $this->incorrectInputMessage,
+                'parameters' => [],
+            ],
             'message' => [
-                'message' => $this->message,
+                'template' => $this->message,
                 'parameters' => ['min' => $this->min],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),

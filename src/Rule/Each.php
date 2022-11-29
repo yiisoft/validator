@@ -120,10 +120,12 @@ final class Each implements
 
         return [
             'incorrectInputMessage' => [
-                'message' => $this->incorrectInputMessage,
+                'template' => $this->incorrectInputMessage,
+                'parameters' => [],
             ],
             'incorrectInputKeyMessage' => [
-                'message' => $this->incorrectInputKeyMessage,
+                'template' => $this->incorrectInputKeyMessage,
+                'parameters' => [],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,

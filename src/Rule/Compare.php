@@ -159,15 +159,15 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
             'targetValue' => $this->targetValue,
             'targetAttribute' => $this->targetAttribute,
             'incorrectInputMessage' => [
-                'message' => $this->incorrectInputMessage,
+                'template' => $this->incorrectInputMessage,
                 'parameters' => $messageParameters,
             ],
             'incorrectDataSetTypeMessage' => [
-                'message' => $this->incorrectDataSetTypeMessage,
+                'template' => $this->incorrectDataSetTypeMessage,
                 'parameters' => $messageParameters,
             ],
             'message' => [
-                'message' => $this->getMessage(),
+                'template' => $this->getMessage(),
                 'parameters' => $messageParameters,
             ],
             'type' => $this->type,

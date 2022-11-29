@@ -305,6 +305,9 @@ final class Nested implements
 
     #[ArrayShape([
         'requirePropertyPath' => 'bool',
+        'noRulesWithNoObjectMessage' => 'array',
+        'incorrectDataSetTypeMessage' => 'array',
+        'incorrectInputMessage' => 'array',
         'noPropertyPathMessage' => 'array',
         'skipOnEmpty' => 'bool',
         'skipOnError' => 'bool',
@@ -313,13 +316,23 @@ final class Nested implements
     public function getOptions(): array
     {
         return [
-            'noRulesWithNoObjectMessage' => $this->noRulesWithNoObjectMessage,
-            'incorrectDataSetTypeMessage' => $this->incorrectDataSetTypeMessage,
-            'incorrectInputMessage' => $this->incorrectInputMessage,
-            'requirePropertyPath' => $this->getRequirePropertyPath(),
-            'noPropertyPathMessage' => [
-                'message' => $this->getNoPropertyPathMessage(),
+            'noRulesWithNoObjectMessage' => [
+                'template' => $this->noRulesWithNoObjectMessage,
+                'parameters' => [],
             ],
+            'incorrectDataSetTypeMessage' => [
+                'template' => $this->incorrectDataSetTypeMessage,
+                'parameters' => [],
+            ],
+            'incorrectInputMessage' => [
+                'template' => $this->incorrectInputMessage,
+                'parameters' => [],
+            ],
+            'noPropertyPathMessage' => [
+                'template' => $this->getNoPropertyPathMessage(),
+                'parameters' => [],
+            ],
+            'requirePropertyPath' => $this->getRequirePropertyPath(),
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
             'rules' => $this->rules === null ? null : (new RulesDumper())->asArray($this->rules),

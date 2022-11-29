@@ -51,10 +51,12 @@ final class UrlTest extends RuleTestCase
                     'validSchemes' => ['http', 'https'],
                     'enableIDN' => false,
                     'incorrectInputMessage' => [
-                        'message' => 'The value must have a string type.',
+                        'template' => 'The value must have a string type.',
+                        'parameters' => [],
                     ],
                     'message' => [
-                        'message' => 'This value is not a valid URL.',
+                        'template' => 'This value is not a valid URL.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -67,10 +69,12 @@ final class UrlTest extends RuleTestCase
                     'validSchemes' => ['http', 'https'],
                     'enableIDN' => true,
                     'incorrectInputMessage' => [
-                        'message' => 'The value must have a string type.',
+                        'template' => 'The value must have a string type.',
+                        'parameters' => [],
                     ],
                     'message' => [
-                        'message' => 'This value is not a valid URL.',
+                        'template' => 'This value is not a valid URL.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -83,10 +87,12 @@ final class UrlTest extends RuleTestCase
                     'validSchemes' => ['http'],
                     'enableIDN' => false,
                     'incorrectInputMessage' => [
-                        'message' => 'The value must have a string type.',
+                        'template' => 'The value must have a string type.',
+                        'parameters' => [],
                     ],
                     'message' => [
-                        'message' => 'This value is not a valid URL.',
+                        'template' => 'This value is not a valid URL.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -99,10 +105,12 @@ final class UrlTest extends RuleTestCase
                     'validSchemes' => ['http', 'https'],
                     'enableIDN' => true,
                     'incorrectInputMessage' => [
-                        'message' => 'The value must have a string type.',
+                        'template' => 'The value must have a string type.',
+                        'parameters' => [],
                     ],
                     'message' => [
-                        'message' => 'This value is not a valid URL.',
+                        'template' => 'This value is not a valid URL.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,

@@ -35,10 +35,12 @@ final class RegexTest extends RuleTestCase
                     'pattern' => '//',
                     'not' => false,
                     'incorrectInputMessage' => [
-                        'message' => 'Value should be string.',
+                        'template' => 'Value should be string.',
+                        'parameters' => [],
                     ],
                     'message' => [
-                        'message' => 'Value is invalid.',
+                        'template' => 'Value is invalid.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -50,10 +52,12 @@ final class RegexTest extends RuleTestCase
                     'pattern' => '//',
                     'not' => true,
                     'incorrectInputMessage' => [
-                        'message' => 'Value should be string.',
+                        'template' => 'Value should be string.',
+                        'parameters' => [],
                     ],
                     'message' => [
-                        'message' => 'Value is invalid.',
+                        'template' => 'Value is invalid.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,

@@ -60,10 +60,12 @@ final class Json implements SerializableRuleInterface, SkipOnErrorInterface, Whe
     {
         return [
             'incorrectInputMessage' => [
-                'message' => $this->incorrectInputMessage,
+                'template' => $this->incorrectInputMessage,
+                'parameters' => [],
             ],
             'message' => [
-                'message' => $this->message,
+                'template' => $this->message,
+                'parameters' => [],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,

@@ -47,10 +47,12 @@ final class EmailTest extends RuleTestCase
                     'checkDNS' => false,
                     'enableIDN' => false,
                     'incorrectInputMessage' => [
-                        'message' => 'The value must have a string type.',
+                        'template' => 'The value must have a string type.',
+                        'parameters' => [],
                     ],
                     'message' => [
-                        'message' => 'This value is not a valid email address.',
+                        'template' => 'This value is not a valid email address.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -66,10 +68,12 @@ final class EmailTest extends RuleTestCase
                     'checkDNS' => false,
                     'enableIDN' => false,
                     'incorrectInputMessage' => [
-                        'message' => 'The value must have a string type.',
+                        'template' => 'The value must have a string type.',
+                        'parameters' => [],
                     ],
                     'message' => [
-                        'message' => 'This value is not a valid email address.',
+                        'template' => 'This value is not a valid email address.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -85,10 +89,12 @@ final class EmailTest extends RuleTestCase
                     'checkDNS' => true,
                     'enableIDN' => false,
                     'incorrectInputMessage' => [
-                        'message' => 'The value must have a string type.',
+                        'template' => 'The value must have a string type.',
+                        'parameters' => [],
                     ],
                     'message' => [
-                        'message' => 'This value is not a valid email address.',
+                        'template' => 'This value is not a valid email address.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -104,10 +110,12 @@ final class EmailTest extends RuleTestCase
                     'checkDNS' => false,
                     'enableIDN' => true,
                     'incorrectInputMessage' => [
-                        'message' => 'The value must have a string type.',
+                        'template' => 'The value must have a string type.',
+                        'parameters' => [],
                     ],
                     'message' => [
-                        'message' => 'This value is not a valid email address.',
+                        'template' => 'This value is not a valid email address.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,

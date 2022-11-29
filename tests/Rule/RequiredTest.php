@@ -60,8 +60,14 @@ final class RequiredTest extends RuleTestCase
             [
                 new Required(),
                 [
-                    'message' => 'Value cannot be blank.',
-                    'notPassedMessage' => 'Value not passed.',
+                    'message' => [
+                        'template' => 'Value cannot be blank.',
+                        'parameters' => [],
+                    ],
+                    'notPassedMessage' => [
+                        'template' => 'Value not passed.',
+                        'parameters' => [],
+                    ],
                     'skipOnError' => false,
                 ],
             ],
