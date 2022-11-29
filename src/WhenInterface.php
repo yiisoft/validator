@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 use Closure;
 
 /**
- * @psalm-type WhenType - null|Closure(mixed, ValidationContext):bool
+ * @psalm-type WhenType = null|Closure(mixed, ValidationContext):bool
  */
 interface WhenInterface
 {
