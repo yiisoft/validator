@@ -166,7 +166,8 @@ final class Nested implements
             $rules = $source;
         } else {
             throw new InvalidArgumentException(
-                'Invalid rules object.'
+                'The $rules argument passed to Nested rule can be either: a null, an object implementing ' .
+                'RulesProviderInterface, a class string or an iterable.'
             );
         }
 
