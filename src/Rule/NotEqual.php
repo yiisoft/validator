@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use RuntimeException;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
 /**

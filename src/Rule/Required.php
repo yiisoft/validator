@@ -11,7 +11,6 @@ use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
 use Yiisoft\Validator\SkipOnErrorInterface;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
 /**
