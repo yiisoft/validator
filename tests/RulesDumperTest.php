@@ -87,7 +87,7 @@ final class RulesDumperTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
 
-        $message = 'Each rule must implement "Yiisoft\Validator\RuleInterface". Type "string" given.';
+        $message = 'Every rule must implement "Yiisoft\Validator\RuleInterface". Type "string" given.';
         $this->expectExceptionMessage($message);
 
         $dumper->asArray(['not a rule']);

@@ -152,7 +152,8 @@ final class CompositeTest extends RuleTestCase
         ]);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('A rule must be an instance of RuleInterface.');
+        $message = 'Every rule must implement "Yiisoft\Validator\RuleInterface". Type "class@anonymous" given.';
+        $this->expectExceptionMessage($message);
         $rule->getOptions();
     }
 
