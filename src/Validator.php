@@ -28,6 +28,8 @@ final class Validator implements ValidatorInterface
 {
     use PreValidateTrait;
 
+    public const DEFAULT_TRANSLATION_CATEGORY = 'yii-validator';
+
     private RuleHandlerResolverInterface $ruleHandlerResolver;
     private TranslatorInterface $translator;
 
@@ -40,7 +42,7 @@ final class Validator implements ValidatorInterface
         ?RuleHandlerResolverInterface $ruleHandlerResolver = null,
         ?TranslatorInterface $translator = null,
         bool|callable|null $defaultSkipOnEmpty = null,
-        private string $translationCategory = 'yii-validator',
+        private string $translationCategory = self::DEFAULT_TRANSLATION_CATEGORY,
     ) {
         $this->ruleHandlerResolver = $ruleHandlerResolver ?? new SimpleRuleHandlerContainer();
         $this->translator = $translator ?? $this->createDefaultTranslator();
