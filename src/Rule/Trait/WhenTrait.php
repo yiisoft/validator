@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Trait;
 
 use Closure;
-use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\WhenInterface;
 
+/**
+ * @psalm-import-type WhenType from WhenInterface
+ */
 trait WhenTrait
 {
     /**
-     * @param Closure(mixed, ValidationContext):bool|null $value
+     * @psalm-param WhenType $value
      */
-    public function when(?Closure $value): static
+    public function when(Closure|null $value): static
     {
         $new = clone $this;
         $new->when = $value;
@@ -20,9 +23,9 @@ trait WhenTrait
     }
 
     /**
-     * @return Closure(mixed, ValidationContext):bool|null
+     * @psalm-return WhenType
      */
-    public function getWhen(): ?Closure
+    public function getWhen(): Closure|null
     {
         return $this->when;
     }

@@ -15,7 +15,7 @@ use Yiisoft\Validator\Rule\CallbackHandler;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
-use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\ValidatorFactory;
@@ -24,7 +24,7 @@ use Yiisoft\Validator\ValidationContext;
 final class CallbackTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
-    use SerializableRuleTestTrait;
+    use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 

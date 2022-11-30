@@ -9,17 +9,18 @@ use Closure;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
 /**
  * Checks if the value is a boolean value or a value corresponding to it.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
+final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -49,9 +50,9 @@ final class Boolean implements SerializableRuleInterface, SkipOnEmptyInterface, 
         private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
     }
 
