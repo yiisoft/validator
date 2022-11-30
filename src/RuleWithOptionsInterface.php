@@ -44,7 +44,7 @@ interface RuleWithOptionsInterface extends RuleInterface
      * For messages the value is a nested array with the following structure (below is a result of the method call):
      *
      * ```php
-     * 'message' => [ // Array is used with no parameters too.
+     * 'message' => [ // Array is used with no parameters either.
      *     'template => 'A message without parameters.',
      *     'parameters' => [], // Explicitly specified even for empty parameters.
      * ],
@@ -52,7 +52,7 @@ interface RuleWithOptionsInterface extends RuleInterface
      *     'template' => 'A message with {parameter}.', // Handler dependent parameters
      *     'parameters' => ['property4' => $this->property4], // Property dependent parameters
      * ],
-     * 'wrongMessage' => 'Wrong message.' // This is possible, but wrong. Use example above for consistent structure.
+     * 'doNotUseThisMessage' => 'Do not use this message.' // This is wrong. Use example above for consistent structure.
      * ```
      *
      * Note that the values that can't be serialized to frontend such as callable must be excluded because they will be
