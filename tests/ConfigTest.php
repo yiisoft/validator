@@ -35,7 +35,7 @@ final class ConfigTest extends TestCase
 
         $translationCategorySource = $translationCategorySources[0];
         $this->assertInstanceOf(CategorySource::class, $translationCategorySource);
-        $this->assertSame('yii-validator', $translationCategorySource->getName());
+        $this->assertSame(Validator::DEFAULT_TRANSLATION_CATEGORY, $translationCategorySource->getName());
     }
 
     public function testCustomTranslationCategory(): void
