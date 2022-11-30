@@ -45,7 +45,7 @@ final class MessagesTest extends TestCase
     public function dataNonEmpty(): array
     {
         return [
-            ['ru']
+            ['ru'],
         ];
     }
 
