@@ -1211,7 +1211,7 @@ class ValidatorTest extends TestCase
 
             public function validate(
                 mixed $data,
-                iterable|object|callable|null $rules = null,
+                callable|iterable|object|string|null $rules = null,
                 ?ValidationContext $context = null
             ): Result {
                 $dataSet = DataSetNormalizer::normalize($data);
@@ -1252,6 +1252,20 @@ class ValidatorTest extends TestCase
         $message = 'Rule should be either an instance of Yiisoft\Validator\RuleInterface or a callable, int given.';
         $this->expectExceptionMessage($message);
         $validator->validate([], [new Boolean(), 1]);
+    }
+
+    public function testRulesAsObjectNameWithRuleAttributes(): void
+    {
+        $validator = ValidatorFactory::make();
+        $result = $validator->validate(['name' => 'Test name'], ObjectWithAttributesOnly::class);
+        $this->assertTrue($result->isValid());
+    }
+
+    public function testRulesAsObjectWithRuleAttributes(): void
+    {
+        $validator = ValidatorFactory::make();
+        $result = $validator->validate(['name' => 'Test name'], new ObjectWithAttributesOnly());
+        $this->assertTrue($result->isValid());
     }
 
     public function testDataWithPostValidationHook(): void

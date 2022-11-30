@@ -39,7 +39,7 @@ final class NumberTest extends RuleTestCase
                         'template' => 'The allowed types are integer, float and string.',
                         'parameters' => [],
                     ],
-                    'notANumberMessage' => [
+                    'notNumberMessage' => [
                         'template' => 'Value must be a number.',
                         'parameters' => [],
                     ],
@@ -67,7 +67,7 @@ final class NumberTest extends RuleTestCase
                         'template' => 'The allowed types are integer, float and string.',
                         'parameters' => [],
                     ],
-                    'notANumberMessage' => [
+                    'notNumberMessage' => [
                         'template' => 'Value must be a number.',
                         'parameters' => [],
                     ],
@@ -95,7 +95,7 @@ final class NumberTest extends RuleTestCase
                         'template' => 'The allowed types are integer, float and string.',
                         'parameters' => [],
                     ],
-                    'notANumberMessage' => [
+                    'notNumberMessage' => [
                         'template' => 'Value must be a number.',
                         'parameters' => [],
                     ],
@@ -123,7 +123,7 @@ final class NumberTest extends RuleTestCase
                         'template' => 'The allowed types are integer, float and string.',
                         'parameters' => [],
                     ],
-                    'notANumberMessage' => [
+                    'notNumberMessage' => [
                         'template' => 'Value must be a number.',
                         'parameters' => [],
                     ],
@@ -151,7 +151,7 @@ final class NumberTest extends RuleTestCase
                         'template' => 'The allowed types are integer, float and string.',
                         'parameters' => [],
                     ],
-                    'notANumberMessage' => [
+                    'notNumberMessage' => [
                         'template' => 'Value must be an integer.',
                         'parameters' => [],
                     ],
@@ -214,8 +214,8 @@ final class NumberTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         $incorrectInputMessage = 'The allowed types are integer, float and string.';
-        $notANumberMessage = 'Value must be a number.';
-        $notAnIntegerMessage = 'Value must be an integer.';
+        $notNumberMessage = 'Value must be a number.';
+        $notIntegerMessage = 'Value must be an integer.';
 
         return [
             [false, [new Number()], ['' => [$incorrectInputMessage]]],
@@ -224,42 +224,42 @@ final class NumberTest extends RuleTestCase
             [new stdClass(), [new Number()], ['' => [$incorrectInputMessage]]],
             [fopen('php://stdin', 'rb'), [new Number()], ['' => [$incorrectInputMessage]]],
 
-            ['12:45', [new Number()], ['' => [$notANumberMessage]]],
-            ['e12', [new Number()], ['' => [$notANumberMessage]]],
-            ['-e3', [new Number()], ['' => [$notANumberMessage]]],
-            ['-4.534-e-12', [new Number()], ['' => [$notANumberMessage]]],
-            ['12.23^4', [new Number()], ['' => [$notANumberMessage]]],
-            ['43^32', [new Number()], ['' => [$notANumberMessage]]],
+            ['12:45', [new Number()], ['' => [$notNumberMessage]]],
+            ['e12', [new Number()], ['' => [$notNumberMessage]]],
+            ['-e3', [new Number()], ['' => [$notNumberMessage]]],
+            ['-4.534-e-12', [new Number()], ['' => [$notNumberMessage]]],
+            ['12.23^4', [new Number()], ['' => [$notNumberMessage]]],
+            ['43^32', [new Number()], ['' => [$notNumberMessage]]],
 
-            [25.45, [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
-            ['25,45', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
-            ['0x14', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
+            [25.45, [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
+            ['25,45', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
+            ['0x14', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
 
-            ['-1.23', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
-            ['-4.423e-12', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
-            ['12E3', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
-            ['e12', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
-            ['-e3', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
-            ['-4.534-e-12', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
-            ['12.23^4', [new Number(asInteger: true)], ['' => [$notAnIntegerMessage]]],
+            ['-1.23', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
+            ['-4.423e-12', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
+            ['12E3', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
+            ['e12', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
+            ['-e3', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
+            ['-4.534-e-12', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
+            ['12.23^4', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
 
             [-1, [new Number(min: 1)], ['' => ['Value must be no less than 1.']]],
             ['22e-12', [new Number(min: 1)], ['' => ['Value must be no less than 1.']]],
 
             [-1, [new Number(asInteger: true, min: 1)], ['' => ['Value must be no less than 1.']]],
-            ['22e-12', [new Number(asInteger: true, min: 1)], ['' => [$notAnIntegerMessage]]],
+            ['22e-12', [new Number(asInteger: true, min: 1)], ['' => [$notIntegerMessage]]],
             [1.5, [new Number(max: 1.25)], ['' => ['Value must be no greater than 1.25.']]],
 
             // TODO: fix wrong message
-            [1.5, [new Number(asInteger: true, max: 1.25)], ['' => [$notAnIntegerMessage]]],
-            ['22e-12', [new Number(asInteger: true, max: 1.25)], ['' => [$notAnIntegerMessage]]],
-            ['125e-2', [new Number(asInteger: true, max: 1.25)], ['' => [$notAnIntegerMessage]]],
+            [1.5, [new Number(asInteger: true, max: 1.25)], ['' => [$notIntegerMessage]]],
+            ['22e-12', [new Number(asInteger: true, max: 1.25)], ['' => [$notIntegerMessage]]],
+            ['125e-2', [new Number(asInteger: true, max: 1.25)], ['' => [$notIntegerMessage]]],
 
             [-11, [new Number(min: -10, max: 20)], ['' => ['Value must be no less than -10.']]],
             [21, [new Number(min: -10, max: 20)], ['' => ['Value must be no greater than 20.']]],
             [-11, [new Number(asInteger: true, min: -10, max: 20)], ['' => ['Value must be no less than -10.']]],
             [22, [new Number(asInteger: true, min: -10, max: 20)], ['' => ['Value must be no greater than 20.']]],
-            ['20e-1', [new Number(asInteger: true, min: -10, max: 20)], ['' => [$notAnIntegerMessage]]],
+            ['20e-1', [new Number(asInteger: true, min: -10, max: 20)], ['' => [$notIntegerMessage]]],
             'custom error' => [
                 0,
                 [new Number(min: 5, tooSmallMessage: 'Value is too small.')],

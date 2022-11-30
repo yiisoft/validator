@@ -43,7 +43,7 @@ final class RulesDumperTest extends TestCase
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
                             ],
-                            'notANumberMessage' => [
+                            'notNumberMessage' => [
                                 'template' => 'Value must be an integer.',
                                 'parameters' => [],
                             ],

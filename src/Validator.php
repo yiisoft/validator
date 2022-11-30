@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
+use ReflectionException;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\IdMessageReader;
 use Yiisoft\Translator\IntlMessageFormatter;
@@ -53,10 +54,11 @@ final class Validator implements ValidatorInterface
      * @psalm-param RulesType $rules
      *
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     public function validate(
         mixed $data,
-        iterable|object|callable|null $rules = null,
+        callable|iterable|object|string|null $rules = null,
         ?ValidationContext $context = null
     ): Result {
         $data = DataSetNormalizer::normalize($data);
