@@ -26,11 +26,11 @@ return [
         'definition' => static function () use ($params): CategorySource {
             $reader = class_exists(MessageSource::class)
                 ? new MessageSource(dirname(__DIR__) . '/messages')
-                : new IdMessageReader();
+                : new IdMessageReader(); // @codeCoverageIgnore
 
             $formatter = extension_loaded('intl')
                 ? new IntlMessageFormatter()
-                : new SimpleMessageFormatter();
+                : new SimpleMessageFormatter(); // @codeCoverageIgnore
 
             return new CategorySource($params['yiisoft/validator']['translation.category'], $reader, $formatter);
         },
