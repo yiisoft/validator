@@ -9,10 +9,9 @@ use Closure;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
 /**
@@ -21,9 +20,11 @@ use Yiisoft\Validator\WhenInterface;
  * The format of the number must match the regular expression specified in {@see Number::$integerPattern}
  * or {@see Number::$numberPattern}. Optionally, you may configure the {@see Number::min()} and {@see Number::max()}
  * to ensure the number is within certain range.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Number implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -71,9 +72,9 @@ final class Number implements SerializableRuleInterface, SkipOnErrorInterface, W
         private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
     }
 
@@ -122,7 +123,7 @@ final class Number implements SerializableRuleInterface, SkipOnErrorInterface, W
         return $this->numberPattern;
     }
 
-    public function getNotANumberMessage(): string
+    public function getNotNumberMessage(): string
     {
         return $this->asInteger ? 'Value must be an integer.' : 'Value must be a number.';
     }
@@ -137,8 +138,8 @@ final class Number implements SerializableRuleInterface, SkipOnErrorInterface, W
                 'template' => $this->incorrectInputMessage,
                 'parameters' => [],
             ],
-            'notANumberMessage' => [
-                'template' => $this->getNotANumberMessage(),
+            'notNumberMessage' => [
+                'template' => $this->getNotNumberMessage(),
                 'parameters' => [],
             ],
             'tooSmallMessage' => [

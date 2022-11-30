@@ -11,14 +11,14 @@ use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
 use Yiisoft\Validator\EmptyCriteria\WhenNull;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
-use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
 final class RequiredTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
-    use SerializableRuleTestTrait;
+    use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 

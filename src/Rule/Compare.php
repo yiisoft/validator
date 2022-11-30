@@ -9,13 +9,15 @@ use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
-abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
+/**
+ * @psalm-import-type WhenType from WhenInterface
+ */
+abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -90,9 +92,9 @@ abstract class Compare implements SerializableRuleInterface, SkipOnEmptyInterfac
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
         if (!isset($this->validOperatorsMap[$this->operator])) {
             $wrapInQuotesCallable = static fn (string $operator): string => '"' . $operator . '"';

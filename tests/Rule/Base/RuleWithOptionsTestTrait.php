@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Base;
 
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 
-trait SerializableRuleTestTrait
+trait RuleWithOptionsTestTrait
 {
     abstract public function dataOptions(): array;
 
     /**
      * @dataProvider dataOptions
      */
-    public function testOptions(SerializableRuleInterface $rule, array $expectedOptions): void
+    public function testOptions(RuleWithOptionsInterface $rule, array $expectedOptions): void
     {
         $this->beforeTestOptions();
 

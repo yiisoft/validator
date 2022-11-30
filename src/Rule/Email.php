@@ -11,19 +11,20 @@ use RuntimeException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\SerializableRuleInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\WhenInterface;
 
 use function function_exists;
 
 /**
  * Validates that the value is a valid email address.
+ *
+ * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Email implements SerializableRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -79,9 +80,9 @@ final class Email implements SerializableRuleInterface, SkipOnErrorInterface, Wh
         private $skipOnEmpty = null,
         private bool $skipOnError = false,
         /**
-         * @var Closure(mixed, ValidationContext):bool|null
+         * @var WhenType
          */
-        private ?Closure $when = null,
+        private Closure|null $when = null,
     ) {
         if ($enableIDN && !function_exists('idn_to_ascii')) {
             // Tested via separate CI configuration (see ".github/workflows/build.yml").

@@ -10,13 +10,13 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
-use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
 final class CompareToTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
+    use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 

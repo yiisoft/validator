@@ -7,13 +7,13 @@ namespace Yiisoft\Validator\Tests\Rule;
 use RuntimeException;
 use Yiisoft\Validator\Rule\LessThanOrEqual;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
-use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
 final class LessThanOrEqualTest extends RuleTestCase
 {
-    use SerializableRuleTestTrait;
+    use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 

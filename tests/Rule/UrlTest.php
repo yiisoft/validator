@@ -10,7 +10,7 @@ use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
-use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
@@ -19,7 +19,7 @@ use function extension_loaded;
 final class UrlTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
-    use SerializableRuleTestTrait;
+    use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 

@@ -10,7 +10,7 @@ use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
-use Yiisoft\Validator\Tests\Rule\Base\SerializableRuleTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
@@ -18,7 +18,7 @@ use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
 final class CompositeTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
-    use SerializableRuleTestTrait;
+    use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
@@ -49,7 +49,7 @@ final class CompositeTest extends RuleTestCase
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
                             ],
-                            'notANumberMessage' => [
+                            'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
@@ -75,7 +75,7 @@ final class CompositeTest extends RuleTestCase
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
                             ],
-                            'notANumberMessage' => [
+                            'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
@@ -113,7 +113,7 @@ final class CompositeTest extends RuleTestCase
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
                             ],
-                            'notANumberMessage' => [
+                            'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
