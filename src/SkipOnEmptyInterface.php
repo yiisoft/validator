@@ -41,6 +41,7 @@ interface SkipOnEmptyInterface
      * ```
      *
      * @param bool|callable|null $value
+     *
      * @return $this
      */
     public function skipOnEmpty(bool|callable|null $value): static;
