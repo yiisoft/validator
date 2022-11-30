@@ -58,7 +58,7 @@ final class Validator implements ValidatorInterface
      */
     public function validate(
         mixed $data,
-        iterable|object|null $rules = null,
+        iterable|object|callable|null $rules = null,
         ?ValidationContext $context = null
     ): Result {
         $data = DataSetNormalizer::normalize($data);
