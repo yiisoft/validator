@@ -31,16 +31,6 @@ interface RuleWithOptionsInterface extends RuleInterface
      * ];
      * ```
      *
-     * Sometimes it's helpful to include dynamic options as well:
-     *
-     * ```php
-     * [
-     *     // ...
-     *     'dynamicOption' => $this->getDynamicOption(), // Dynamic option is not necessarily a rule class property.
-     *     // ...
-     * ];
-     * ```
-     *
      * For messages the value is a nested array with the following structure (below is a result of the method call):
      *
      * ```php
