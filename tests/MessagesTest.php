@@ -9,7 +9,7 @@ use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\Message\Php\MessageSource;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\Translator;
-use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Validator;
 
 use function dirname;
@@ -22,7 +22,7 @@ final class MessagesTest extends TestCase
 
         $categorySource = new CategorySource(
             Validator::DEFAULT_TRANSLATION_CATEGORY,
-            new MessageSource(dirname(__DIR__) . '/messages'),
+            new MessageSource($this->getMessagesPath()),
             new SimpleMessageFormatter(),
         );
 
@@ -32,13 +32,44 @@ final class MessagesTest extends TestCase
         $validator = new Validator(translator: $translator);
 
         $result = $validator->validate(
-            [],
-            new AtLeast(['a', 'b'])
+            'hello',
+            new Regex('~\d+~')
         );
 
         $this->assertSame(
-            ['' => ['Модель должна содержать минимум 1 заполненный атрибут.']],
+            ['' => ['Значение неверно.']],
             $result->getErrorMessagesIndexedByAttribute(),
         );
+    }
+
+    public function dataNonEmpty(): array
+    {
+        return [
+            ['ru']
+        ];
+    }
+
+    /**
+     * @dataProvider dataNonEmpty
+     */
+    public function testNonEmpty(string $locale): void
+    {
+        $file = $this->getMessagesPath() . '/' . $locale . '/' . Validator::DEFAULT_TRANSLATION_CATEGORY . '.php';
+        $this->assertFileExists($file);
+
+        $messages = require $file;
+        $this->assertIsArray($messages);
+
+        foreach ($messages as $id => $message) {
+            $this->assertIsString($id);
+            $this->assertNotEmpty($id);
+            $this->assertIsString($message);
+            $this->assertNotEmpty($message);
+        }
+    }
+
+    private function getMessagesPath(): string
+    {
+        return dirname(__DIR__) . '/messages';
     }
 }
