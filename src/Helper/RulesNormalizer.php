@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Helper;
 
 use InvalidArgumentException;
+use ReflectionException;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidatorInterface;
@@ -24,11 +26,12 @@ final class RulesNormalizer
      * @psalm-param RulesType $rules
      *
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      *
      * @return iterable<int|string, iterable<int|string, RuleInterface>>
      */
     public static function normalize(
-        iterable|object|callable|null $rules,
+        callable|iterable|object|string|null $rules,
         mixed $data = null,
         ?callable $defaultSkipOnEmptyCriteria = null,
     ): iterable {
@@ -62,10 +65,10 @@ final class RulesNormalizer
     /**
      * @psalm-param RulesType $rules
      *
-     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     private static function prepareRulesArray(
-        iterable|object|callable|null $rules,
+        callable|iterable|object|string|null $rules,
         mixed $data,
     ): iterable {
         if ($rules === null) {
@@ -82,12 +85,11 @@ final class RulesNormalizer
             return [$rules];
         }
 
-        /** @psalm-suppress RedundantConditionGivenDocblockType */
         if (is_iterable($rules)) {
             return $rules;
         }
 
-        throw new InvalidArgumentException('A rules object must implement RulesProviderInterface or RuleInterface.');
+        return (new AttributesRulesProvider($rules))->getRules();
     }
 
     /**

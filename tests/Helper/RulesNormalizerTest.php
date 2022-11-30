@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Helper;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 use Yiisoft\Validator\Helper\RulesNormalizer;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 
 final class RulesNormalizerTest extends TestCase
 {
@@ -15,6 +14,22 @@ final class RulesNormalizerTest extends TestCase
     {
         return [
             'null' => [[], null],
+            'object' => [
+                [
+                    'name' => ['required'],
+                    'age' => ['number'],
+                    'number' => ['number'],
+                ],
+                new ObjectWithDifferentPropertyVisibility(),
+            ],
+            'class-string' => [
+                [
+                    'name' => ['required'],
+                    'age' => ['number'],
+                    'number' => ['number'],
+                ],
+                ObjectWithDifferentPropertyVisibility::class,
+            ],
         ];
     }
 
@@ -32,7 +47,7 @@ final class RulesNormalizerTest extends TestCase
      */
     public function testNormalizeWithArrayResult(
         array $expected,
-        iterable|object|null $rules,
+        callable|iterable|object|string|null $rules,
         mixed $data = null
     ): void {
         $rules = RulesNormalizer::normalize($rules, $data);
@@ -46,12 +61,5 @@ final class RulesNormalizerTest extends TestCase
         }
 
         $this->assertSame($expected, $result);
-    }
-
-    public function testInvalidRules(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('A rules object must implement RulesProviderInterface or RuleInterface.');
-        RulesNormalizer::normalize(new stdClass());
     }
 }
