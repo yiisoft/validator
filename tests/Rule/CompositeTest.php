@@ -49,7 +49,7 @@ final class CompositeTest extends RuleTestCase
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
                             ],
-                            'notANumberMessage' => [
+                            'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
@@ -75,7 +75,7 @@ final class CompositeTest extends RuleTestCase
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
                             ],
-                            'notANumberMessage' => [
+                            'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
@@ -113,7 +113,7 @@ final class CompositeTest extends RuleTestCase
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
                             ],
-                            'notANumberMessage' => [
+                            'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],

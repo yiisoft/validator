@@ -41,7 +41,7 @@ final class NumberHandler implements RuleHandlerInterface
         $pattern = $rule->isAsInteger() ? $rule->getIntegerPattern() : $rule->getNumberPattern();
 
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
-            $result->addError($rule->getNotANumberMessage(), [
+            $result->addError($rule->getNotNumberMessage(), [
                 'attribute' => $context->getAttribute(),
                 'value' => $value,
             ]);

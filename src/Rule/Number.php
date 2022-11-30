@@ -123,7 +123,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
         return $this->numberPattern;
     }
 
-    public function getNotANumberMessage(): string
+    public function getNotNumberMessage(): string
     {
         return $this->asInteger ? 'Value must be an integer.' : 'Value must be a number.';
     }
@@ -138,8 +138,8 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
                 'template' => $this->incorrectInputMessage,
                 'parameters' => [],
             ],
-            'notANumberMessage' => [
-                'template' => $this->getNotANumberMessage(),
+            'notNumberMessage' => [
+                'template' => $this->getNotNumberMessage(),
                 'parameters' => [],
             ],
             'tooSmallMessage' => [

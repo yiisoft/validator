@@ -120,7 +120,7 @@ final class NestedTest extends RuleTestCase
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
                             ],
-                            'notANumberMessage' => [
+                            'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
@@ -172,7 +172,7 @@ final class NestedTest extends RuleTestCase
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
                             ],
-                            'notANumberMessage' => [
+                            'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
