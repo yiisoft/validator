@@ -17,7 +17,7 @@ interface ValidatorInterface
      * @param DataSetInterface|mixed|RulesProviderInterface $data Data set to validate. If {@see RulesProviderInterface}
      * instance provided and rules are not specified explicitly, they are read from the
      * {@see RulesProviderInterface::getRules()}.
-     * @param callable|iterable|object|string|null $rules Rules to apply. If specified, rules are not read from data set 
+     * @param callable|iterable|object|string|null $rules Rules to apply. If specified, rules are not read from data set
      * even if it is an instance of {@see RulesProviderInterface}.
      * @param ValidationContext|null $context Validation context that may take into account when performing validation.
      *
