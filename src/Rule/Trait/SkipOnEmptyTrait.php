@@ -52,6 +52,7 @@ trait SkipOnEmptyTrait
      * A special method used to cast `$skipOnEmpty` property for serialization to be possible. Used when building
      * {@see RuleWithOptionsInterface::getOptions()}. The missing details need to be recreated separately on the client
      * side.
+     *
      * @return bool|null A casted value:
      *
      * - `true` - skip an empty value.
