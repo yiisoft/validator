@@ -19,7 +19,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 interface SkipOnEmptyInterface
 {
     /**
-     * Change current "skip on empty" value. Must be done following immutability concept.
+     * Changes current "skip on empty" value. Must be done following immutability concept.
      *
      * @param bool|callable|null $value A new value.
      *
