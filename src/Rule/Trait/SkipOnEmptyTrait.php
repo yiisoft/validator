@@ -4,10 +4,33 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule\Trait;
 
+use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
+
 use function is_bool;
 
+/**
+ * An implementation for {@see SkipOnEmptyInterface} intended to be included in rules. Requires an additional private
+ * class property `$skipOnEmpty`. In package rules it's `null` by default:
+ *
+ * ```php
+ * public function __construct(
+ *     // ...
+ *     private mixed $skipOnEmpty = null,
+ *     // ...
+ * ) {
+ * }
+ * ```
+ */
 trait SkipOnEmptyTrait
 {
+    /**
+     * A setter to change `$skipOnEmpty` property. Implemented following immutability concept.
+     *
+     * @param bool|callable|null $value A new value.
+     *
+     * @return $this The new instance with a changed value.
+     */
     public function skipOnEmpty(bool|callable|null $value): static
     {
         $new = clone $this;
@@ -15,17 +38,36 @@ trait SkipOnEmptyTrait
         return $new;
     }
 
+    /**
+     * A getter for `$skipOnEmpty` property.
+     *
+     * @return bool|callable|null A raw non-normalized value set in the constructor.
+     */
     public function getSkipOnEmpty(): bool|callable|null
     {
         return $this->skipOnEmpty;
     }
 
-    private function getSkipOnEmptyOption(): bool
+    /**
+     * A special method used to cast `$skipOnEmpty` property for serialization to be possible. Used when building
+     * {@see RuleWithOptionsInterface::getOptions()}. The missing details need to be recreated separately on the client
+     * side.
+     * @return bool|null A casted value:
+     *
+     * - `true` - skip an empty value.
+     * - `false` - do not skip an empty value.
+     * - `null` - unable to determine because the callable was initially passed.
+     */
+    private function getSkipOnEmptyOption(): bool|null
     {
         if (is_bool($this->skipOnEmpty)) {
             return $this->skipOnEmpty;
         }
 
-        return $this->skipOnEmpty !== null;
+        if ($this->skipOnEmpty === null) {
+            return false;
+        }
+
+        return null;
     }
 }

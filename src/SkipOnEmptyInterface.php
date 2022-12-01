@@ -11,59 +11,32 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 
 /**
  * An optional interface for rules to implement. It allows skipping validation for a rule when the validated value is
- * "empty". Requires an additional private class property `$skipOnEmpty`. In package rules it's `null` by default:
- *
- * ```php
- * public function __construct(
- *     // ...
- *     private mixed $skipOnEmpty = null,
- *     // ...
- * ) {
- * }
- * ```
+ * "empty".
  *
  * The package ships with {@see SkipOnEmptyTrait} which already implements that interface. All you have to do is include
- * it in the rule class.
+ * it in the rule class along with the interface.
  */
 interface SkipOnEmptyInterface
 {
     /**
-     * A setter to change `$skipOnEmpty` property. Must be implemented following immutability concept:
-     *
-     * ```php
-     * public function skipOnEmpty(bool|callable|null $value): static;
-     * {
-     *     $new = clone $this;
-     *     $new->skipOnEmpty = $value;
-     *
-     *     return $new;
-     * }
-     * ```
-     *
-     * @param bool|callable|null $value
-     *
-     * @return $this
+     * Change current "skip on empty" value. Must be done following immutability concept.
+     * @param bool|callable|null $value A new value.
+     * @return $this The new instance of a rule with a changed value.
      */
     public function skipOnEmpty(bool|callable|null $value): static;
 
     /**
-     * A getter for `$skipOnEmpty` property. Returned value is unchanged. Typical implementation is just a simple
-     * returning of the property:
-     *
-     * ```php
-     * public function getSkipOnEmpty(): bool|callable|null
-     * {
-     *     return $this->skipOnEmpty;
-     * }
-     * ```
+     * Returns current "skip on empty" value.
      *
      * During pre-validation phase it will be normalized to an "empty criteria" - a callable identifying when and which
      * values exactly must be considered as empty and skipped or not skipped at all.
      *
-     * @return bool|callable|null A raw value set in the constructor:
+     * @return bool|callable|null A raw non-normalized value:
      *
-     * - `null` and `false` - never skip a rule (the validated value is always considered as not empty). Matching
-     * criteria - {@see NeverEmpty}.
+     * - `null` - a {@see Validator::$defaultSkipOnEmptyCriteria} is used. If it's `null` there too, it's equivalent to
+     * `false` (see below).
+     * `false` - never skip a rule (the validated value is always considered as not empty). Matching criteria -
+     * {@see NeverEmpty}.
      * - `true` - skip a rule when the validated value is empty: either not passed at all, `null`, an empty string (not
      * trimmed by default) or an empty array. Matching criteria - {@see WhenEmpty}.
      * - `callable` - skip a rule when evaluated to `true`.
