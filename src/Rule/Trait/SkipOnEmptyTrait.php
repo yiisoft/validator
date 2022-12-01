@@ -41,7 +41,7 @@ trait SkipOnEmptyTrait
     /**
      * A getter for `$skipOnEmpty` property.
      *
-     * @return bool|callable|null A raw non-normalized value set in the constructor.
+     * @return bool|callable|null A current raw (non-normalized) value.
      */
     public function getSkipOnEmpty(): bool|callable|null
     {
