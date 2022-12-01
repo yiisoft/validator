@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\EmptyCriteria\NeverEmpty;
 use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\AtLeastHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -65,6 +66,26 @@ final class AtLeastTest extends RuleTestCase
                         'parameters' => ['min' => 2],
                     ],
                     'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
+            'callable skip on empty' => [
+                new AtLeast(['attr1', 'attr2'], skipOnEmpty: new NeverEmpty()),
+                [
+                    'attributes' => [
+                        'attr1',
+                        'attr2',
+                    ],
+                    'min' => 1,
+                    'incorrectInputMessage' => [
+                        'template' => 'Value must be an array or an object.',
+                        'parameters' => [],
+                    ],
+                    'message' => [
+                        'template' => 'The model is not valid. Must have at least "{min}" filled attributes.',
+                        'parameters' => ['min' => 1],
+                    ],
+                    'skipOnEmpty' => null,
                     'skipOnError' => false,
                 ],
             ],
