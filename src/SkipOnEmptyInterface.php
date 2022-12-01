@@ -20,7 +20,9 @@ interface SkipOnEmptyInterface
 {
     /**
      * Change current "skip on empty" value. Must be done following immutability concept.
+     *
      * @param bool|callable|null $value A new value.
+     *
      * @return $this The new instance of a rule with a changed value.
      */
     public function skipOnEmpty(bool|callable|null $value): static;
