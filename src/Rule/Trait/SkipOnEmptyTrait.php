@@ -25,7 +25,7 @@ use function is_bool;
 trait SkipOnEmptyTrait
 {
     /**
-     * A setter to change `$skipOnEmpty` property. Implemented following immutability concept.
+     * An immutable setter to change `$skipOnEmpty` property.
      *
      * @param bool|callable|null $value A new value.
      *
