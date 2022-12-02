@@ -35,7 +35,7 @@ final class ConfigTest extends TestCase
 
         $translationCategorySource = $translationCategorySources[0];
         $this->assertInstanceOf(CategorySource::class, $translationCategorySource);
-        $this->assertSame('yii-validator', $translationCategorySource->getName());
+        $this->assertSame(Validator::DEFAULT_TRANSLATION_CATEGORY, $translationCategorySource->getName());
     }
 
     public function testCustomTranslationCategory(): void
@@ -50,15 +50,6 @@ final class ConfigTest extends TestCase
         /** @var CategorySource $translationCategorySource */
         $translationCategorySource = $container->get('tag@translation.categorySource')[0];
         $this->assertSame('yii-validator-custom', $translationCategorySource->getName());
-    }
-
-    public function testIdMessageReader(): void
-    {
-        $container = $this->createContainer();
-
-        /** @var CategorySource $translationCategorySource */
-        $translationCategorySource = $container->get('tag@translation.categorySource')[0];
-        $this->assertSame('test message', $translationCategorySource->getMessage('test message', 'en'));
     }
 
     public function testIntlMessageFormatter(): void
@@ -97,8 +88,10 @@ final class ConfigTest extends TestCase
         );
     }
 
-    private function getTranslationCategorySource(Container $container): CategorySource
+    public function testTranslationCategorySource(): void
     {
+        $container = $this->createContainer();
+
         /** @var CategorySource[] $translationCategorySource */
         $translationCategorySources = $container->get('tag@translation.categorySource');
         $this->assertCount(1, $translationCategorySources);
@@ -106,7 +99,7 @@ final class ConfigTest extends TestCase
         $translationCategorySource = $translationCategorySources[0];
         $this->assertInstanceOf(CategorySource::class, $translationCategorySource);
 
-        return $translationCategorySource;
+        $this->assertSame('Значение неверно.', $translationCategorySource->getMessage('This value is invalid.', 'ru'));
     }
 
     private function createContainer(array|null $params = null): Container
