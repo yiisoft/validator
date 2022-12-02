@@ -20,7 +20,7 @@ namespace Yiisoft\Validator\Rule\Trait;
 trait SkipOnErrorTrait
 {
     /**
-     * A setter to change `$skipOnError` property. Implemented following immutability concept.
+     * An immutable setter to change `$skipOnError` property.
      *
      * @param bool $value A new value. `true` means to skip the current rule when the previous one errored and `false` -
      * do not skip.
