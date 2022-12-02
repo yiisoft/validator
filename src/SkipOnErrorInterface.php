@@ -16,8 +16,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 interface SkipOnErrorInterface
 {
     /**
-     * Changes current "skip on error" value.
-     * Must be immutable.
+     * Changes current "skip on error" value. Must be immutable.
      *
      * @param bool $value A new value. `true` means to skip the current rule when the previous one errored and `false` -
      * do not skip.
