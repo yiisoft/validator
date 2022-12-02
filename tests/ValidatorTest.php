@@ -1294,4 +1294,20 @@ class ValidatorTest extends TestCase
             $result->getErrorMessagesIndexedByPath(),
         );
     }
+
+    public function testDefaultTranslatorWithIntl(): void
+    {
+        $data = ['number' => 3];
+        $rules = [
+            'number' => new Number(
+                asInteger: true,
+                max: 2,
+                tooBigMessage: '{value, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}',
+            ),
+        ];
+        $validator = new Validator();
+
+        $result = $validator->validate($data, $rules);
+        $this->assertSame(['number' => ['3-few']], $result->getErrorMessagesIndexedByPath());
+    }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use Yiisoft\Translator\CategorySource;
+use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
@@ -57,5 +58,19 @@ final class ConfigTest extends BaseConfigTest
         $this->assertInstanceOf(CategorySource::class, $translationCategorySource);
 
         $this->assertSame('Значение неверно.', $translationCategorySource->getMessage('This value is invalid.', 'ru'));
+    }
+
+    public function testIntlMessageFormatter(): void
+    {
+        $container = $this->createContainer();
+
+        /** @var CategorySource $translationCategorySource */
+        $translationCategorySource = $container->get('tag@translation.categorySource')[0];
+        $message = '{n, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}';
+        // The default formatter argument is ignored in favor of formatter set in config.
+        $this->assertSame(
+            '1-one',
+            $translationCategorySource->format($message, ['n' => 1], 'en', new SimpleMessageFormatter()),
+        );
     }
 }
