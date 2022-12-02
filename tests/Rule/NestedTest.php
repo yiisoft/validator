@@ -1201,9 +1201,9 @@ final class NestedTest extends RuleTestCase
 
     public function testPropagateOptionsWithNullRules(): void
     {
-       $rule = new Nested(null);
-       $rule->propagateOptions();
-       $this->assertNull($rule->getRules());
+        $rule = new Nested(null);
+        $rule->propagateOptions();
+        $this->assertNull($rule->getRules());
     }
 
     protected function getDifferentRuleInHandlerItems(): array
