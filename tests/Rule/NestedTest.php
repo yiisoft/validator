@@ -1199,6 +1199,13 @@ final class NestedTest extends RuleTestCase
         new Nested(new Required());
     }
 
+    public function testPropagateOptionsWithNullRules(): void
+    {
+       $rule = new Nested(null);
+       $rule->propagateOptions();
+       $this->expectNotToPerformAssertions();
+    }
+
     protected function getDifferentRuleInHandlerItems(): array
     {
         return [Nested::class, NestedHandler::class];
