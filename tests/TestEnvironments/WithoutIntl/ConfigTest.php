@@ -10,7 +10,6 @@ use Yiisoft\Validator\Tests\BaseConfigTest;
 
 final class ConfigTest extends BaseConfigTest
 {
-
     public function testSimpleMessageFormatter(): void
     {
         $container = $this->createContainer();
