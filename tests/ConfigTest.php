@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use Yiisoft\Translator\CategorySource;
-use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
 use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
-
-use function extension_loaded;
 
 final class ConfigTest extends BaseConfigTest
 {
@@ -46,24 +43,6 @@ final class ConfigTest extends BaseConfigTest
         /** @var CategorySource $translationCategorySource */
         $translationCategorySource = $container->get('tag@translation.categorySource')[0];
         $this->assertSame('yii-validator-custom', $translationCategorySource->getName());
-    }
-
-    public function testSimpleMessageFormatter(): void
-    {
-        if (extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be unavailable for this test.');
-        }
-
-        $container = $this->createContainer();
-
-        /** @var CategorySource $translationCategorySource */
-        $translationCategorySource = $container->get('tag@translation.categorySource')[0];
-        $message = '{n, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}';
-        // The default formatter argument is ignored in favor of formatter set in config.
-        $this->assertSame(
-            '1',
-            $translationCategorySource->format($message, ['n' => 1], 'en', new SimpleMessageFormatter()),
-        );
     }
 
     public function testTranslationCategorySource(): void

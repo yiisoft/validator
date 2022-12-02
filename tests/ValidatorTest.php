@@ -43,8 +43,6 @@ use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
-use function extension_loaded;
-
 class ValidatorTest extends TestCase
 {
     public function setUp(): void
@@ -1295,25 +1293,5 @@ class ValidatorTest extends TestCase
             ],
             $result->getErrorMessagesIndexedByPath(),
         );
-    }
-
-    public function testDefaultTranslatorWithoutIntl(): void
-    {
-        if (extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be unavailable for this test.');
-        }
-
-        $data = ['number' => 3];
-        $rules = [
-            'number' => new Number(
-                asInteger: true,
-                max: 2,
-                tooBigMessage: '{value, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}',
-            ),
-        ];
-        $validator = new Validator();
-
-        $result = $validator->validate($data, $rules);
-        $this->assertSame(['number' => ['3']], $result->getErrorMessagesIndexedByPath());
     }
 }
