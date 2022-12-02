@@ -15,8 +15,8 @@ use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 final class UrlTest extends TestCase
 {
     use DifferentRuleInHandlerTestTrait;
-    use SkipOnErrorTestTrait;
     use RuleWithOptionsTestTrait;
+    use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
     public function testDefaultValues(): void
