@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
+use stdClass;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
-final class UrlTest extends TestCase
+final class UrlTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
@@ -31,17 +32,6 @@ final class UrlTest extends TestCase
     {
         $rule = new Url(validSchemes: ['http', 'https', 'ftp', 'ftps']);
         $this->assertSame(['http', 'https', 'ftp', 'ftps'], $rule->getValidSchemes());
-    }
-
-    public function testSkipOnError(): void
-    {
-        $this->testSkipOnErrorInternal(new Url(), new Url(skipOnError: true));
-    }
-
-    public function testWhen(): void
-    {
-        $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new Url(), new Url(when: $when));
     }
 
     public function dataOptions(): array
@@ -222,6 +212,17 @@ final class UrlTest extends TestCase
                 ['attribute' => ['Attribute - attribute, value - not a url.']],
             ],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testSkipOnErrorInternal(new Url(), new Url(skipOnError: true));
+    }
+
+    public function testWhen(): void
+    {
+        $when = static fn (mixed $value): bool => $value !== null;
+        $this->testWhenInternal(new Url(), new Url(when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array

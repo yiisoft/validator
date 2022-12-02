@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\EmailHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
-final class EmailTest extends TestCase
+final class EmailTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
@@ -23,17 +23,6 @@ final class EmailTest extends TestCase
     {
         $rule = new Email();
         $this->assertSame('email', $rule->getName());
-    }
-
-    public function testSkipOnError(): void
-    {
-        $this->testSkipOnErrorInternal(new Email(), new Email(skipOnError: true));
-    }
-
-    public function testWhen(): void
-    {
-        $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new Email(), new Email(when: $when));
     }
 
     public function dataOptions(): array
@@ -327,6 +316,17 @@ final class EmailTest extends TestCase
                 ['data' => ['Attribute - data, value - test@nonexistingsubdomain.example.com.']],
             ],
         ];
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testSkipOnErrorInternal(new Email(), new Email(skipOnError: true));
+    }
+
+    public function testWhen(): void
+    {
+        $when = static fn (mixed $value): bool => $value !== null;
+        $this->testWhenInternal(new Email(), new Email(when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array
