@@ -16,10 +16,7 @@
 
     <testsuites>
         <testsuite name="Validator">
-            <directory>./tests</directory>
-            <exclude>
-                <directory>./tests/TestEnvironments</directory>
-            </exclude>
+            <directory>./tests/TestEnvironments/Php81</directory>
         </testsuite>
     </testsuites>
     <coverage>

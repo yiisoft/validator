@@ -31,11 +31,12 @@ jobs:
         ['ubuntu-latest', 'windows-latest']
       php: >-
         ['8.0', '8.1']
-  phpunit_without_extensions:
+  phpunit-php81:
     uses: yiisoft/actions/.github/workflows/phpunit.yml@master
     with:
+      phpunitConfig: phpunit-php81.xml
       coverage: xdebug
       os: >-
         ['ubuntu-latest', 'windows-latest']
       php: >-
-        ['8.0', '8.1']
+        ['8.1']
