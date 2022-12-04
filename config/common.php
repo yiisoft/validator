@@ -30,7 +30,7 @@ return [
 
             $formatter = extension_loaded('intl')
                 ? new IntlMessageFormatter()
-                : new SimpleMessageFormatter(); // @codeCoverageIgnore
+                : new SimpleMessageFormatter();
 
             return new CategorySource($params['yiisoft/validator']['translation.category'], $reader, $formatter);
         },
