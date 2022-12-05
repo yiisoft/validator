@@ -721,10 +721,11 @@ In some cases there is a need to apply rule conditionally. It could be performed
 
 ```php
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\ValidationContext;
 
 new Number(
-    when: static function ($value, DataSetInterface $dataSet) {
-        return $dataSet->getAttributeValue('country') === Country::USA;
+    when: static function ($value, ValidationContext $context): bool {
+        return $context->getDataSet()->getAttributeValue('country') === Country::USA;
     },
     asInteger: true, 
     min: 100
