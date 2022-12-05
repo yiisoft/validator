@@ -27,7 +27,8 @@ trait WhenTrait
     /**
      * An immutable setter to change `$when` property.
      *
-     * @psalm-param WhenType $value A new value:
+     * @psalm-param WhenType $value
+     * @param Closure|null $value A new value:
      *
      * - `null` - always apply the validation.
      * - `callable` - apply the validation depending on a return value: `true` - apply, `false` - do not apply.
@@ -44,7 +45,8 @@ trait WhenTrait
     /**
      * A getter for `$when` property.
      *
-     * @psalm-return WhenType Current value:
+     * @psalm-return WhenType
+     * @return Closure|null Current value:
      *
      * - `null` - always apply the validation.
      * - `callable` - apply the validation depending on a return value: `true` - apply, `false` - do not apply.
