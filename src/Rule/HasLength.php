@@ -43,19 +43,19 @@ final class HasLength implements
          *
          * @see $lessThanMinMessage for the customized message for a too short string.
          */
-        ?int $min = null,
+        int|null $min = null,
         /**
          * @var int|null maximum length. null means no maximum length limit. Can't be combined with
          * {@see $exactly}.
          *
          * @see $greaterThanMaxMessage for the customized message for a too long string.
          */
-        ?int $max = null,
+        int|null $max = null,
         /**
          * @var int|null exact length. `null` means no strict comparison. Mutually exclusive with {@see $min} and
          * {@see $max}.
          */
-        ?int $exactly = null,
+        int|null $exactly = null,
         /**
          * @var string user-defined error message used when the value is not a string.
          */
