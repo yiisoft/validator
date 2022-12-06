@@ -26,8 +26,7 @@ final class InvalidCallbackReturnTypeException extends Exception implements Frie
          * @var Throwable|null The previous throwable used for the exception chaining.
          */
         ?Throwable $previous = null,
-    )
-    {
+    ) {
         $message = sprintf(
             'Return value of callback must be an instance of %s, %s returned.',
             Result::class,

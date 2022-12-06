@@ -43,8 +43,7 @@ final class UnexpectedRuleException extends InvalidArgumentException
          * @var object An actual given object that's not an instance of `$expectedClassName`.
          */
         object $actualObject
-    )
-    {
+    ) {
         $actualClassName = $actualObject::class;
         $message = "Expected \"$expectedClassName\", but {$actualClassName} given.";
 

@@ -24,8 +24,7 @@ final class RuleHandlerInterfaceNotImplementedException extends RuntimeException
          * @var Throwable|null The previous throwable used for the exception chaining.
          */
         ?Throwable $previous = null,
-    )
-    {
+    ) {
         parent::__construct(
             sprintf(
                 'Handler "%s" must implement "%s".',
