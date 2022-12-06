@@ -68,8 +68,10 @@ final class Validator implements ValidatorInterface
             $this->defaultSkipOnEmptyCriteria
         );
 
-        $context ??= new ValidationContext($this, $data);
-        $context->setDataSet($dataSet);
+        $context ??= new ValidationContext();
+        $context
+            ->setValidatorAndRawDataOnce($this, $data)
+            ->setDataSet($dataSet);
 
         $results = [];
         foreach ($rules as $attribute => $attributeRules) {

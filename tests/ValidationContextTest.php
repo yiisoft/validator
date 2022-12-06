@@ -8,21 +8,12 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\ValidationContext;
-use Yiisoft\Validator\Validator;
 
 final class ValidationContextTest extends TestCase
 {
-    public function testDefault(): void
-    {
-        $context = new ValidationContext(new Validator(), 7);
-
-        $this->assertSame(7, $context->getRawData());
-        $this->assertNull($context->getAttribute());
-    }
-
     public function testGetDataSetWithoutDataSet(): void
     {
-        $context = new ValidationContext(new Validator(), 7);
+        $context = new ValidationContext();
 
         $this->expectException(RuntimeException::class);
         $this->expectErrorMessage('Data set in validation context is not set.');
@@ -31,11 +22,8 @@ final class ValidationContextTest extends TestCase
 
     public function testConstructor(): void
     {
-        $data = ['x' => 7];
+        $context = new ValidationContext(['key' => 42]);
 
-        $context = new ValidationContext(new Validator(), $data, ['key' => 42]);
-
-        $this->assertSame($data, $context->getRawData());
         $this->assertSame(42, $context->getParameter('key'));
     }
 
@@ -43,7 +31,7 @@ final class ValidationContextTest extends TestCase
     {
         $dataSet = new ArrayDataSet();
 
-        $context = new ValidationContext(new Validator(), null);
+        $context = new ValidationContext();
         $context->setDataSet($dataSet);
 
         $this->assertSame($dataSet, $context->getDataSet());
@@ -51,7 +39,7 @@ final class ValidationContextTest extends TestCase
 
     public function testSetParameter(): void
     {
-        $context = new ValidationContext(new Validator(), null);
+        $context = new ValidationContext();
         $context->setParameter('key', 42);
 
         $this->assertSame(42, $context->getParameter('key'));
@@ -59,10 +47,28 @@ final class ValidationContextTest extends TestCase
 
     public function testGetParameter(): void
     {
-        $context = new ValidationContext(new Validator(), null, parameters: ['key' => 42]);
+        $context = new ValidationContext(['key' => 42]);
 
         $this->assertSame(42, $context->getParameter('key'));
         $this->assertNull($context->getParameter('non-exists'));
         $this->assertSame(7, $context->getParameter('non-exists', 7));
+    }
+
+    public function testValidateWithoutValidator(): void
+    {
+        $context = new ValidationContext();
+
+        $this->expectException(RuntimeException::class);
+        $this->expectErrorMessage('Validator and raw data in validation context is not set.');
+        $context->validate(42);
+    }
+
+    public function tesGetRawDataWithoutRawData(): void
+    {
+        $context = new ValidationContext();
+
+        $this->expectException(RuntimeException::class);
+        $this->expectErrorMessage('Validator and raw data in validation context is not set.');
+        $context->getRawData();
     }
 }

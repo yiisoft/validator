@@ -6,7 +6,6 @@ namespace Yiisoft\Validator;
 
 use RuntimeException;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\Helper\DataSetNormalizer;
 
 /**
  * Validation context that might be taken into account when performing validation.
@@ -15,6 +14,13 @@ use Yiisoft\Validator\Helper\DataSetNormalizer;
  */
 final class ValidationContext
 {
+    private ?ValidatorInterface $validator = null;
+
+    /**
+     * @var mixed The raw validated data.
+     */
+    private mixed $rawData = null;
+
     /**
      * @var DataSetInterface|null Data set the attribute belongs to. Null if data set not set.
      */
@@ -26,22 +32,30 @@ final class ValidationContext
     private ?string $attribute = null;
 
     /**
-     * @param mixed $rawData The raw validated data.
      * @param array $parameters Arbitrary parameters.
      */
     public function __construct(
-        private ValidatorInterface $validator,
-        private mixed $rawData,
         private array $parameters = []
     ) {
+    }
+
+    public function setValidatorAndRawDataOnce(ValidatorInterface $validator, mixed $rawData): self
+    {
+        if ($this->validator !== null) {
+            return $this;
+        }
+
+        $this->validator = $validator;
+        $this->rawData = $rawData;
+
+        return $this;
     }
 
     /**
      * Validate data in current context.
      *
-     * @param DataSetInterface|mixed|RulesProviderInterface $data Data set to validate. If {@see RulesProviderInterface}
-     * instance provided and rules are not specified explicitly, they are read from the
-     * {@see RulesProviderInterface::getRules()}.
+     * @param mixed $data Data set to validate. If {@see RulesProviderInterface} instance provided and rules are
+     * not specified explicitly, they are read from the {@see RulesProviderInterface::getRules()}.
      * @param callable|iterable|object|string|null $rules Rules to apply. If specified, rules are not read from data set
      * even if it is an instance of {@see RulesProviderInterface}.
      *
@@ -49,6 +63,8 @@ final class ValidationContext
      */
     public function validate(mixed $data, callable|iterable|object|string|null $rules = null): Result
     {
+        $this->checkValidatorAndRawData();
+
         $currentDataSet = $this->dataSet;
         $currentAttribute = $this->attribute;
 
@@ -65,6 +81,8 @@ final class ValidationContext
      */
     public function getRawData(): mixed
     {
+        $this->checkValidatorAndRawData();
+
         return $this->rawData;
     }
 
@@ -129,5 +147,15 @@ final class ValidationContext
     public function isAttributeMissing(): bool
     {
         return $this->attribute !== null && $this->dataSet !== null && !$this->dataSet->hasAttribute($this->attribute);
+    }
+
+    /**
+     * @psalm-assert ValidatorInterface $this->validator
+     */
+    private function checkValidatorAndRawData(): void
+    {
+        if ($this->validator === null) {
+            throw new RuntimeException('Validator and raw data in validation context is not set.');
+        }
     }
 }
