@@ -15,7 +15,6 @@ use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
-use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 
 use function extension_loaded;
 use function is_int;
