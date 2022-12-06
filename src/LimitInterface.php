@@ -32,7 +32,8 @@ interface LimitInterface
     public function getMax(): int|null;
 
     /**
-     * Returns current "exactly" value. A shortcut for the case when {@see getMin()} and {@see getMax()} have the same
+     * Returns current "exactly" value meant for strict comparison.
+     * It is a shortcut for the case when {@see getMin()} and {@see getMax()} have the same
      * not null value.
      *
      * @return int|null A number representing "exactly" value. `null` means no strict comparison so lower / upper limits
