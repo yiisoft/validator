@@ -82,7 +82,6 @@ final class ValidationContext
     public function getRawData(): mixed
     {
         $this->checkValidatorAndRawData();
-
         return $this->rawData;
     }
 
@@ -139,9 +138,10 @@ final class ValidationContext
         return ArrayHelper::getValue($this->parameters, $key, $default);
     }
 
-    public function setParameter(string $key, mixed $value): void
+    public function setParameter(string $key, mixed $value): self
     {
         $this->parameters[$key] = $value;
+        return $this;
     }
 
     public function isAttributeMissing(): bool
