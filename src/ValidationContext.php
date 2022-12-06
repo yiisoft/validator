@@ -91,14 +91,6 @@ final class ValidationContext
     }
 
     /**
-     * @return array Arbitrary parameters.
-     */
-    public function getParameters(): array
-    {
-        return $this->parameters;
-    }
-
-    /**
      * Get named parameter.
      *
      * @param string $key Parameter name.

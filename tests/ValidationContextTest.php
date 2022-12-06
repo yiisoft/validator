@@ -20,7 +20,6 @@ final class ValidationContextTest extends TestCase
         $this->assertSame(7, $context->getRawData());
         $this->assertNull($context->getDataSet());
         $this->assertNull($context->getAttribute());
-        $this->assertSame([], $context->getParameters());
     }
 
     public function testConstructor(): void
@@ -33,7 +32,7 @@ final class ValidationContextTest extends TestCase
         $this->assertSame($data, $context->getRawData());
         $this->assertSame($dataSet, $context->getDataSet());
         $this->assertSame('name', $context->getAttribute());
-        $this->assertSame(['key' => 42], $context->getParameters());
+        $this->assertSame(42, $context->getParameter('key'));
     }
 
     public function testSetParameter(): void
@@ -41,7 +40,7 @@ final class ValidationContextTest extends TestCase
         $context = new ValidationContext(ValidatorFactory::make(), null);
         $context->setParameter('key', 42);
 
-        $this->assertSame(['key' => 42], $context->getParameters());
+        $this->assertSame(42, $context->getParameter('key'));
     }
 
     public function testGetParameter(): void
