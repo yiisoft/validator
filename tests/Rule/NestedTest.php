@@ -388,7 +388,7 @@ final class NestedTest extends RuleTestCase
             'wo-rules-inherit-attributes' => [
                 new class () {
                     #[Nested]
-                    private \Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject $object;
+                    private InheritAttributesObject $object;
 
                     public function __construct()
                     {
