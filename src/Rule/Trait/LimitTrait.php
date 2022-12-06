@@ -14,9 +14,9 @@ use JetBrains\PhpStorm\ArrayShape;
  * ```php
  * public function __construct(
  *     // ...
- *     float|int|null $min = null,
- *     float|int|null $max = null,
- *     float|int|null $exactly = null,
+ *     int|float|null $min = null,
+ *     int|float|null $max = null,
+ *     int|float|null $exactly = null,
  *     string $lessThanMinMessage = 'Less than {min}.',
  *     string $greaterThanMinMessage = 'Greater than {max}.',
  *     string $greaterThanMinMessage = 'Not exactly {exactly}.',
@@ -52,25 +52,25 @@ use JetBrains\PhpStorm\ArrayShape;
 trait LimitTrait
 {
     /**
-     * @var float|int|null Minimum limit. Can't be combined with {@see $exactly}.
+     * @var int|float|null Minimum limit. Can't be combined with {@see $exactly}.
      *
      * @see $lessThanMinMessage for related error message.
      */
-    private float|int|null $min = null;
+    private int|float|null $min = null;
     /**
-     * @var float|int|null Maximum limit. Can't be combined with {@see $exactly}.
+     * @var int|float|null Maximum limit. Can't be combined with {@see $exactly}.
      *
      * @see $greaterThanMaxMessage for related error message.
      */
-    private float|int|null $max = null;
+    private int|float|null $max = null;
     /**
-     * @var float|int|null "Exactly" number. A shortcut / replacement for the case when {@see $min} and {@see $max} have the
+     * @var int|float|null "Exactly" number. A shortcut / replacement for the case when {@see $min} and {@see $max} have the
      * same not-null value. Mutually exclusive with both {@see $min} and {@see $max}. `null` means no strict comparison
      * so lower / upper limits / both must be set.
      *
      * @see $notExactlyMessage for related error message.
      */
-    private float|int|null $exactly = null;
+    private int|float|null $exactly = null;
     /**
      * @var string Validation error message used when a validated value is less than minimum set in {@see $min}.
      */
@@ -89,9 +89,9 @@ trait LimitTrait
      * Initializes limit related properties and runs checks for required, mutually exclusive properties and their
      * allowed values (including dependency on each other).
      *
-     * @param float|int|null $min Minimum limit ({@see $min}).
-     * @param float|int|null $max Maximum limit ({@see $max}).
-     * @param float|int|null $exactly "Exactly" number ({@see $exactly}).
+     * @param int|float|null $min Minimum limit ({@see $min}).
+     * @param int|float|null $max Maximum limit ({@see $max}).
+     * @param int|float|null $exactly "Exactly" number ({@see $exactly}).
      * @param string $lessThanMinMessage "Less than minimum" validation error message ({@see $lessThanMinMessage}).
      * @param string $greaterThanMinMessage "Greater than maximum" validation error message
      * ({@see $greaterThanMinMessage}).
@@ -100,9 +100,9 @@ trait LimitTrait
      * @param bool $allowNegativeLimits
      */
     private function initLimitProperties(
-        float|int|null $min,
-        float|int|null $max,
-        float|int|null $exactly,
+        int|float|null $min,
+        int|float|null $max,
+        int|float|null $exactly,
         string $lessThanMinMessage,
         string $greaterThanMinMessage,
         string $notExactlyMessage,
@@ -155,9 +155,9 @@ trait LimitTrait
     /**
      * A getter for {@see $min} property.
      *
-     * @return float|int|null A number representing minimum boundary. `null` means no lower bound.
+     * @return int|float|null A number representing minimum boundary. `null` means no lower bound.
      */
-    public function getMin(): float|int|null
+    public function getMin(): int|float|null
     {
         return $this->min;
     }
@@ -165,9 +165,9 @@ trait LimitTrait
     /**
      * A getter for {@see $max property}.
      *
-     * @return float|int|null A number representing maximum boundary. `null` means no upper bound.
+     * @return int|float|null A number representing maximum boundary. `null` means no upper bound.
      */
-    public function getMax(): float|int|null
+    public function getMax(): int|float|null
     {
         return $this->max;
     }
@@ -175,10 +175,10 @@ trait LimitTrait
     /**
      * A getter for {@see $exactly} property.
      *
-     * @return float|int|null A number representing "exactly" value. `null` means no strict comparison so lower / upper limits /
+     * @return int|float|null A number representing "exactly" value. `null` means no strict comparison so lower / upper limits /
      * both must be set.
      */
-    public function getExactly(): float|int|null
+    public function getExactly(): int|float|null
     {
         return $this->exactly;
     }

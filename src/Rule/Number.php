@@ -44,26 +44,26 @@ final class Number implements
          */
         private bool $asInteger = false,
         /**
-         * @var float|int|null lower limit of the number. Defaults to `null`, meaning no lower limit. Can't be combined
+         * @var int|float|null lower limit of the number. Defaults to `null`, meaning no lower limit. Can't be combined
          * with {@see $exactly}.
          *
          * @see $lessThanMin for the message used when the number is too small.
          */
-        float|int|null $min = null,
+        int|float|null $min = null,
         /**
-         * @var float|int|null upper limit of the number. Defaults to `null`, meaning no upper limit. Can't be combined
+         * @var int|float|null upper limit of the number. Defaults to `null`, meaning no upper limit. Can't be combined
          * with {@see $exactly}.
          *
          * @see $greaterThanMax for the message used when the number is too big.
          */
-        float|int|null $max = null,
+        int|float|null $max = null,
         /**
-         * @var int|null exact number. `null` means no strict comparison. Mutually exclusive with {@see $min}
+         * @var int|float|null exact number. `null` means no strict comparison. Mutually exclusive with {@see $min}
          * and {@see $max}.
          *
          * @see $notExactlyMessage for the message used when the number does not equal to the set one.
          */
-        float|int|null $exactly = null,
+        int|float|null $exactly = null,
         private string $incorrectInputMessage = 'The allowed types are integer, float and string.',
         /**
          * @var string error message used when the value is smaller than {@link $min}.
