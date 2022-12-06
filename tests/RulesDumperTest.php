@@ -24,8 +24,8 @@ final class RulesDumperTest extends TestCase
                             asInteger: true,
                             min: 10,
                             max: 100,
-                            tooSmallMessage: 'Value must be greater than 10.',
-                            tooBigMessage: 'Value must be no greater than 100.',
+                            lessThanMinMessage: 'Value must be greater than 10.',
+                            greaterThanMaxMessage: 'Value must be no greater than 100.',
                             skipOnEmpty: true,
                             skipOnError: true
                         ),
@@ -39,6 +39,7 @@ final class RulesDumperTest extends TestCase
                             'asInteger' => true,
                             'min' => 10,
                             'max' => 100,
+                            'exactly' => null,
                             'incorrectInputMessage' => [
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
@@ -47,13 +48,17 @@ final class RulesDumperTest extends TestCase
                                 'template' => 'Value must be an integer.',
                                 'parameters' => [],
                             ],
-                            'tooBigMessage' => [
+                            'lessThanMinMessage' => [
+                                'template' => 'Value must be greater than 10.',
+                                'parameters' => ['min' => 10],
+                            ],
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than 100.',
                                 'parameters' => ['max' => 100],
                             ],
-                            'tooSmallMessage' => [
-                                'template' => 'Value must be greater than 10.',
-                                'parameters' => ['min' => 10],
+                            'notExactlyMessage' => [
+                                'template' => 'Value must be equal to {exactly}.',
+                                'parameters' => ['exactly' => null],
                             ],
                             'skipOnEmpty' => true,
                             'skipOnError' => true,

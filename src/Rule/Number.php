@@ -6,6 +6,8 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\LimitInterface;
+use Yiisoft\Validator\Rule\Trait\LimitTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -24,38 +26,57 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class Number implements
+    RuleWithOptionsInterface,
+    SkipOnErrorInterface,
+    WhenInterface,
+    SkipOnEmptyInterface,
+    LimitInterface
 {
+    use LimitTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
 
     public function __construct(
         /**
-         * @var bool whether the value can only be an integer. Defaults to false.
+         * @var bool whether the value can only be an integer. Defaults to `false`.
          */
         private bool $asInteger = false,
         /**
-         * @var float|int lower limit of the number. Defaults to null, meaning no lower limit.
+         * @var float|int|null lower limit of the number. Defaults to `null`, meaning no lower limit. Can't be combined
+         * with {@see $exactly}.
          *
-         * @see tooSmallMessage for the customized message used when the number is too small.
+         * @see $lessThanMin for the message used when the number is too small.
          */
-        private $min = null,
+        float|int|null $min = null,
         /**
-         * @var float|int upper limit of the number. Defaults to null, meaning no upper limit.
+         * @var float|int|null upper limit of the number. Defaults to `null`, meaning no upper limit. Can't be combined
+         * with {@see $exactly}.
          *
-         * @see tooBigMessage for the customized message used when the number is too big.
+         * @see $greaterThanMax for the message used when the number is too big.
          */
-        private $max = null,
+        float|int|null $max = null,
+        /**
+         * @var int|null exact number. `null` means no strict comparison. Mutually exclusive with {@see $min}
+         * and {@see $max}.
+         *
+         * @see $notExactlyMessage for the message used when the number does not equal to the set one.
+         */
+        float|int|null $exactly = null,
         private string $incorrectInputMessage = 'The allowed types are integer, float and string.',
         /**
-         * @var string user-defined error message used when the value is smaller than {@link $min}.
+         * @var string error message used when the value is smaller than {@link $min}.
          */
-        private string $tooSmallMessage = 'Value must be no less than {min}.',
+        private string $lessThanMinMessage = 'Value must be no less than {min}.',
         /**
-         * @var string user-defined error message used when the value is bigger than {@link $max}.
+         * @var string error message used when the value is bigger than {@link $max}.
          */
-        private string $tooBigMessage = 'Value must be no greater than {max}.',
+        private string $greaterThanMaxMessage = 'Value must be no greater than {max}.',
+        /**
+         * @var string error message used when the value does not equal {@see $exactly}.
+         */
+        private string $notExactlyMessage = 'Value must be equal to {exactly}.',
         /**
          * @var string the regular expression for matching integers.
          */
@@ -76,6 +97,16 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
          */
         private Closure|null $when = null,
     ) {
+        $this->initLimitProperties(
+            $min,
+            $max,
+            $exactly,
+            $lessThanMinMessage,
+            $greaterThanMaxMessage,
+            $notExactlyMessage,
+            requireLimits: false,
+            allowNegativeLimits: true,
+        );
     }
 
     public function getName(): string
@@ -88,29 +119,9 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
         return $this->asInteger;
     }
 
-    public function getMin(): float|int|null
-    {
-        return $this->min;
-    }
-
-    public function getMax(): float|int|null
-    {
-        return $this->max;
-    }
-
     public function getIncorrectInputMessage(): string
     {
         return $this->incorrectInputMessage;
-    }
-
-    public function getTooSmallMessage(): string
-    {
-        return $this->tooSmallMessage;
-    }
-
-    public function getTooBigMessage(): string
-    {
-        return $this->tooBigMessage;
     }
 
     public function getIntegerPattern(): string
@@ -130,10 +141,8 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
 
     public function getOptions(): array
     {
-        return [
+        return array_merge($this->getLimitOptions(), [
             'asInteger' => $this->asInteger,
-            'min' => $this->min,
-            'max' => $this->max,
             'incorrectInputMessage' => [
                 'template' => $this->incorrectInputMessage,
                 'parameters' => [],
@@ -142,19 +151,11 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
                 'template' => $this->getNotNumberMessage(),
                 'parameters' => [],
             ],
-            'tooSmallMessage' => [
-                'template' => $this->tooSmallMessage,
-                'parameters' => ['min' => $this->min],
-            ],
-            'tooBigMessage' => [
-                'template' => $this->tooBigMessage,
-                'parameters' => ['max' => $this->max],
-            ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
             'integerPattern' => $this->integerPattern,
             'numberPattern' => $this->numberPattern,
-        ];
+        ]);
     }
 
     public function getHandlerClassName(): string

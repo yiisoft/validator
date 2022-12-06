@@ -45,6 +45,7 @@ return [
     'Value must be a number.' => 'Значение должно быть числом.',
     'Value must be no less than {min}.' => 'Значение должно быть не меньше {min}.',
     'Value must be no greater than {max}.' => 'Значение должно быть не больше {min}.',
+    'Value must be equal to "{exactly}".' => 'Значение должно быть равно «{exactly}».',
     'Value should be string.' => 'Значение должно быть строкой.',
     'Value is invalid.' => 'Значение неверно.',
     'Value cannot be blank.' => 'Значение не может быть пустым.',

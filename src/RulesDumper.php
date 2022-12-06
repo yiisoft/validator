@@ -31,7 +31,7 @@ final class RulesDumper
      *            'integer' => true,
      *            'max' => 100,
      *            'notNumberMessage' => ['template' => 'Value must be an integer.', 'parameters' => []],
-     *            'tooBigMessage' => ['template' => 'Value must be no greater than 100.', 'parameters' => []],
+     *            'greaterThanMaxMessage' => ['template' => 'Value must be no greater than 100.', 'parameters' => []],
      *        ],
      *        ['callback'],
      *    ],

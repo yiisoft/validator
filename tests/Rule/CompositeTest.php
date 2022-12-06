@@ -42,9 +42,22 @@ final class CompositeTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => 13,
+                            'exactly' => null,
+                            'lessThanMinMessage' => [
+                                'template' => 'Value must be no less than {min}.',
+                                'parameters' => ['min' => null],
+                            ],
+                            'greaterThanMaxMessage' => [
+                                'template' => 'Value must be no greater than {max}.',
+                                'parameters' => ['max' => 13],
+                            ],
+                            'notExactlyMessage' => [
+                                'template' => 'Value must be equal to {exactly}.',
+                                'parameters' => ['exactly' => null],
+                            ],
+                            'asInteger' => false,
                             'incorrectInputMessage' => [
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
@@ -52,14 +65,6 @@ final class CompositeTest extends RuleTestCase
                             'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
-                            ],
-                            'tooSmallMessage' => [
-                                'template' => 'Value must be no less than {min}.',
-                                'parameters' => ['min' => null],
-                            ],
-                            'tooBigMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
-                                'parameters' => ['max' => 13],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
@@ -68,9 +73,22 @@ final class CompositeTest extends RuleTestCase
                         ],
                         [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => 14,
+                            'exactly' => null,
+                            'lessThanMinMessage' => [
+                                'template' => 'Value must be no less than {min}.',
+                                'parameters' => ['min' => null],
+                            ],
+                            'greaterThanMaxMessage' => [
+                                'template' => 'Value must be no greater than {max}.',
+                                'parameters' => ['max' => 14],
+                            ],
+                            'notExactlyMessage' => [
+                                'template' => 'Value must be equal to {exactly}.',
+                                'parameters' => ['exactly' => null],
+                            ],
+                            'asInteger' => false,
                             'incorrectInputMessage' => [
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
@@ -78,14 +96,6 @@ final class CompositeTest extends RuleTestCase
                             'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
-                            ],
-                            'tooSmallMessage' => [
-                                'template' => 'Value must be no less than {min}.',
-                                'parameters' => ['min' => null],
-                            ],
-                            'tooBigMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
-                                'parameters' => ['max' => 14],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
@@ -106,9 +116,22 @@ final class CompositeTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => 13,
+                            'exactly' => null,
+                            'lessThanMinMessage' => [
+                                'template' => 'Value must be no less than {min}.',
+                                'parameters' => ['min' => null],
+                            ],
+                            'greaterThanMaxMessage' => [
+                                'template' => 'Value must be no greater than {max}.',
+                                'parameters' => ['max' => 13],
+                            ],
+                            'notExactlyMessage' => [
+                                'template' => 'Value must be equal to {exactly}.',
+                                'parameters' => ['exactly' => null],
+                            ],
+                            'asInteger' => false,
                             'incorrectInputMessage' => [
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
@@ -116,18 +139,6 @@ final class CompositeTest extends RuleTestCase
                             'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
-                            ],
-                            'tooSmallMessage' => [
-                                'template' => 'Value must be no less than {min}.',
-                                'parameters' => [
-                                    'min' => null,
-                                ],
-                            ],
-                            'tooBigMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
-                                'parameters' => [
-                                    'max' => 13,
-                                ],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
@@ -212,7 +223,7 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new Composite(
-                        rules: [new Number(max: 13, tooBigMessage: 'Custom error')],
+                        rules: [new Number(max: 13, greaterThanMaxMessage: 'Custom error')],
                         when: fn () => true,
                     ),
                 ],

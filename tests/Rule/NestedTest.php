@@ -113,9 +113,22 @@ final class NestedTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => null,
+                            'exactly' => null,
+                            'lessThanMinMessage' => [
+                                'template' => 'Value must be no less than {min}.',
+                                'parameters' => ['min' => null],
+                            ],
+                            'greaterThanMaxMessage' => [
+                                'template' => 'Value must be no greater than {max}.',
+                                'parameters' => ['max' => null],
+                            ],
+                            'notExactlyMessage' => [
+                                'template' => 'Value must be equal to {exactly}.',
+                                'parameters' => ['exactly' => null],
+                            ],
+                            'asInteger' => false,
                             'incorrectInputMessage' => [
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
@@ -123,14 +136,6 @@ final class NestedTest extends RuleTestCase
                             'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
-                            ],
-                            'tooSmallMessage' => [
-                                'template' => 'Value must be no less than {min}.',
-                                'parameters' => ['min' => null],
-                            ],
-                            'tooBigMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
-                                'parameters' => ['max' => null],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
@@ -165,9 +170,22 @@ final class NestedTest extends RuleTestCase
                     'rules' => [
                         'user.age' => [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => null,
+                            'exactly' => null,
+                            'lessThanMinMessage' => [
+                                'template' => 'Value must be no less than {min}.',
+                                'parameters' => ['min' => null],
+                            ],
+                            'greaterThanMaxMessage' => [
+                                'template' => 'Value must be no greater than {max}.',
+                                'parameters' => ['max' => null],
+                            ],
+                            'notExactlyMessage' => [
+                                'template' => 'Value must be equal to {exactly}.',
+                                'parameters' => ['exactly' => null],
+                            ],
+                            'asInteger' => false,
                             'incorrectInputMessage' => [
                                 'template' => 'The allowed types are integer, float and string.',
                                 'parameters' => [],
@@ -175,14 +193,6 @@ final class NestedTest extends RuleTestCase
                             'notNumberMessage' => [
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
-                            ],
-                            'tooSmallMessage' => [
-                                'template' => 'Value must be no less than {min}.',
-                                'parameters' => ['min' => null],
-                            ],
-                            'tooBigMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
-                                'parameters' => ['max' => null],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,

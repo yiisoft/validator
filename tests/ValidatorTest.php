@@ -576,7 +576,7 @@ class ValidatorTest extends TestCase
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
-                        'value' => 17,
+                        'number' => 17,
                     ], ['age']),
                 ],
             ],
@@ -635,7 +635,7 @@ class ValidatorTest extends TestCase
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
-                        'value' => 17,
+                        'number' => 17,
                     ], ['age']),
                 ],
             ],
@@ -653,7 +653,7 @@ class ValidatorTest extends TestCase
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
-                        'value' => 17,
+                        'number' => 17,
                     ], ['age']),
                 ],
             ],
@@ -676,7 +676,7 @@ class ValidatorTest extends TestCase
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
-                        'value' => 17,
+                        'number' => 17,
                     ], ['age']),
                 ],
             ],
@@ -735,7 +735,7 @@ class ValidatorTest extends TestCase
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
-                        'value' => 17,
+                        'number' => 17,
                     ], ['age']),
                 ],
             ],
@@ -838,7 +838,7 @@ class ValidatorTest extends TestCase
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
-                        'value' => 17,
+                        'number' => 17,
                     ], ['age']),
                 ],
             ],
@@ -916,7 +916,7 @@ class ValidatorTest extends TestCase
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
-                        'value' => 17,
+                        'number' => 17,
                     ], ['age']),
                 ],
             ],
@@ -966,7 +966,7 @@ class ValidatorTest extends TestCase
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
-                        'value' => 17,
+                        'number' => 17,
                     ], ['age']),
                 ],
             ],
@@ -1051,7 +1051,7 @@ class ValidatorTest extends TestCase
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
-                        'value' => 17,
+                        'number' => 17,
                     ], ['age']),
                 ],
             ],
@@ -1302,7 +1302,7 @@ class ValidatorTest extends TestCase
             'number' => new Number(
                 asInteger: true,
                 max: 2,
-                tooBigMessage: '{value, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}',
+                greaterThanMaxMessage: '{number, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}',
             ),
         ];
         $validator = new Validator();

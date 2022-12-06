@@ -16,31 +16,31 @@ interface LimitInterface
     /**
      * Returns current minimum limit.
      *
-     * @return int|null A number representing minimum boundary. `null` means no lower bound.
+     * @return float|int|null A number representing minimum boundary. `null` means no lower bound.
      *
      * @see getLessThanMinMessage() for related error message.
      */
-    public function getMin(): int|null;
+    public function getMin(): float|int|null;
 
     /**
      * Returns current maximum limit.
      *
-     * @return int|null A number representing maximum boundary. `null` means no upper bound.
+     * @return float|int|null A number representing maximum boundary. `null` means no upper bound.
      *
      * @see getGreaterThanMaxMessage() for related error message.
      */
-    public function getMax(): int|null;
+    public function getMax(): float|int|null;
 
     /**
      * Returns current "exactly" value meant for strict comparison. It is a shortcut for the case when {@see getMin()}
      * and {@see getMax()} have the same not null value.
      *
-     * @return int|null A number representing "exactly" value. `null` means no strict comparison so lower / upper limits
+     * @return float|int|null A number representing "exactly" value. `null` means no strict comparison so lower / upper limits
      * / both must be set.
      *
      * @see getNotExactlyMessage() for related error message
      */
-    public function getExactly(): int|null;
+    public function getExactly(): float|int|null;
 
     /**
      * Returns message used when a validated value is less than minimum set in {@see getMin()}.

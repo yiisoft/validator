@@ -17,7 +17,7 @@ final class ValidatorTest extends TestCase
             'number' => new Number(
                 asInteger: true,
                 max: 2,
-                tooBigMessage: '{value, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}',
+                greaterThanMaxMessage: '{number, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}',
             ),
         ];
         $validator = new Validator();

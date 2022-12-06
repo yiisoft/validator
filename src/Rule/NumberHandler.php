@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Strings\NumericHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\LimitHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
@@ -21,6 +22,8 @@ use function is_bool;
  */
 final class NumberHandler implements RuleHandlerInterface
 {
+    use LimitHandlerTrait;
+
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Number) {
@@ -39,25 +42,22 @@ final class NumberHandler implements RuleHandlerInterface
         }
 
         $pattern = $rule->isAsInteger() ? $rule->getIntegerPattern() : $rule->getNumberPattern();
+        $value = NumericHelper::normalize($value);
 
-        if (!preg_match($pattern, NumericHelper::normalize($value))) {
-            $result->addError($rule->getNotNumberMessage(), [
-                'attribute' => $context->getAttribute(),
-                'value' => $value,
-            ]);
-        } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
-            $result->addError($rule->getTooSmallMessage(), [
-                'min' => $rule->getMin(),
-                'attribute' => $context->getAttribute(),
-                'value' => $value,
-            ]);
-        } elseif ($rule->getMax() !== null && $value > $rule->getMax()) {
-            $result->addError($rule->getTooBigMessage(), [
-                'max' => $rule->getMax(),
+        if (!preg_match($pattern, $value)) {
+            return $result->addError($rule->getNotNumberMessage(), [
                 'attribute' => $context->getAttribute(),
                 'value' => $value,
             ]);
         }
+
+        /**
+         * @psalm-suppress InvalidOperand A value is guaranteed to be numeric here because of normalization via
+         * `NumericHelper`and validation using regular expression  performed above.
+         */
+        $value = $value + 0;
+
+        $this->validateLimits($rule, $context, $value, $result);
 
         return $result;
     }

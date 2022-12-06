@@ -32,9 +32,22 @@ final class NumberTest extends RuleTestCase
             [
                 new Number(),
                 [
-                    'asInteger' => false,
                     'min' => null,
                     'max' => null,
+                    'exactly' => null,
+                    'lessThanMinMessage' => [
+                        'template' => 'Value must be no less than {min}.',
+                        'parameters' => ['min' => null],
+                    ],
+                    'greaterThanMaxMessage' => [
+                        'template' => 'Value must be no greater than {max}.',
+                        'parameters' => ['max' => null],
+                    ],
+                    'notExactlyMessage' => [
+                        'template' => 'Value must be equal to {exactly}.',
+                        'parameters' => ['exactly' => null],
+                    ],
+                    'asInteger' => false,
                     'incorrectInputMessage' => [
                         'template' => 'The allowed types are integer, float and string.',
                         'parameters' => [],
@@ -42,14 +55,6 @@ final class NumberTest extends RuleTestCase
                     'notNumberMessage' => [
                         'template' => 'Value must be a number.',
                         'parameters' => [],
-                    ],
-                    'tooSmallMessage' => [
-                        'template' => 'Value must be no less than {min}.',
-                        'parameters' => ['min' => null],
-                    ],
-                    'tooBigMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
-                        'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -60,9 +65,22 @@ final class NumberTest extends RuleTestCase
             [
                 new Number(min: 1),
                 [
-                    'asInteger' => false,
                     'min' => 1,
                     'max' => null,
+                    'exactly' => null,
+                    'lessThanMinMessage' => [
+                        'template' => 'Value must be no less than {min}.',
+                        'parameters' => ['min' => 1],
+                    ],
+                    'greaterThanMaxMessage' => [
+                        'template' => 'Value must be no greater than {max}.',
+                        'parameters' => ['max' => null],
+                    ],
+                    'notExactlyMessage' => [
+                        'template' => 'Value must be equal to {exactly}.',
+                        'parameters' => ['exactly' => null],
+                    ],
+                    'asInteger' => false,
                     'incorrectInputMessage' => [
                         'template' => 'The allowed types are integer, float and string.',
                         'parameters' => [],
@@ -70,14 +88,6 @@ final class NumberTest extends RuleTestCase
                     'notNumberMessage' => [
                         'template' => 'Value must be a number.',
                         'parameters' => [],
-                    ],
-                    'tooSmallMessage' => [
-                        'template' => 'Value must be no less than {min}.',
-                        'parameters' => ['min' => 1],
-                    ],
-                    'tooBigMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
-                        'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -88,9 +98,22 @@ final class NumberTest extends RuleTestCase
             [
                 new Number(max: 1),
                 [
-                    'asInteger' => false,
                     'min' => null,
                     'max' => 1,
+                    'exactly' => null,
+                    'lessThanMinMessage' => [
+                        'template' => 'Value must be no less than {min}.',
+                        'parameters' => ['min' => null],
+                    ],
+                    'greaterThanMaxMessage' => [
+                        'template' => 'Value must be no greater than {max}.',
+                        'parameters' => ['max' => 1],
+                    ],
+                    'notExactlyMessage' => [
+                        'template' => 'Value must be equal to {exactly}.',
+                        'parameters' => ['exactly' => null],
+                    ],
+                    'asInteger' => false,
                     'incorrectInputMessage' => [
                         'template' => 'The allowed types are integer, float and string.',
                         'parameters' => [],
@@ -98,14 +121,6 @@ final class NumberTest extends RuleTestCase
                     'notNumberMessage' => [
                         'template' => 'Value must be a number.',
                         'parameters' => [],
-                    ],
-                    'tooSmallMessage' => [
-                        'template' => 'Value must be no less than {min}.',
-                        'parameters' => ['min' => null],
-                    ],
-                    'tooBigMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
-                        'parameters' => ['max' => 1],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -116,9 +131,22 @@ final class NumberTest extends RuleTestCase
             [
                 new Number(min: 2, max: 10),
                 [
-                    'asInteger' => false,
                     'min' => 2,
                     'max' => 10,
+                    'exactly' => null,
+                    'lessThanMinMessage' => [
+                        'template' => 'Value must be no less than {min}.',
+                        'parameters' => ['min' => 2],
+                    ],
+                    'greaterThanMaxMessage' => [
+                        'template' => 'Value must be no greater than {max}.',
+                        'parameters' => ['max' => 10],
+                    ],
+                    'notExactlyMessage' => [
+                        'template' => 'Value must be equal to {exactly}.',
+                        'parameters' => ['exactly' => null],
+                    ],
+                    'asInteger' => false,
                     'incorrectInputMessage' => [
                         'template' => 'The allowed types are integer, float and string.',
                         'parameters' => [],
@@ -126,14 +154,6 @@ final class NumberTest extends RuleTestCase
                     'notNumberMessage' => [
                         'template' => 'Value must be a number.',
                         'parameters' => [],
-                    ],
-                    'tooSmallMessage' => [
-                        'template' => 'Value must be no less than {min}.',
-                        'parameters' => ['min' => 2],
-                    ],
-                    'tooBigMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
-                        'parameters' => ['max' => 10],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -144,9 +164,22 @@ final class NumberTest extends RuleTestCase
             [
                 new Number(asInteger: true),
                 [
-                    'asInteger' => true,
                     'min' => null,
                     'max' => null,
+                    'exactly' => null,
+                    'lessThanMinMessage' => [
+                        'template' => 'Value must be no less than {min}.',
+                        'parameters' => ['min' => null],
+                    ],
+                    'greaterThanMaxMessage' => [
+                        'template' => 'Value must be no greater than {max}.',
+                        'parameters' => ['max' => null],
+                    ],
+                    'notExactlyMessage' => [
+                        'template' => 'Value must be equal to {exactly}.',
+                        'parameters' => ['exactly' => null],
+                    ],
+                    'asInteger' => true,
                     'incorrectInputMessage' => [
                         'template' => 'The allowed types are integer, float and string.',
                         'parameters' => [],
@@ -155,13 +188,38 @@ final class NumberTest extends RuleTestCase
                         'template' => 'Value must be an integer.',
                         'parameters' => [],
                     ],
-                    'tooSmallMessage' => [
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                    'integerPattern' => '/^\s*[+-]?\d+\s*$/',
+                    'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
+                ],
+            ],
+            [
+                new Number(exactly: 1),
+                [
+                    'min' => null,
+                    'max' => null,
+                    'exactly' => 1,
+                    'lessThanMinMessage' => [
                         'template' => 'Value must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
-                    'tooBigMessage' => [
+                    'greaterThanMaxMessage' => [
                         'template' => 'Value must be no greater than {max}.',
                         'parameters' => ['max' => null],
+                    ],
+                    'notExactlyMessage' => [
+                        'template' => 'Value must be equal to {exactly}.',
+                        'parameters' => ['exactly' => 1],
+                    ],
+                    'asInteger' => false,
+                    'incorrectInputMessage' => [
+                        'template' => 'The allowed types are integer, float and string.',
+                        'parameters' => [],
+                    ],
+                    'notNumberMessage' => [
+                        'template' => 'Value must be a number.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -262,7 +320,7 @@ final class NumberTest extends RuleTestCase
             ['20e-1', [new Number(asInteger: true, min: -10, max: 20)], ['' => [$notIntegerMessage]]],
             'custom error' => [
                 0,
-                [new Number(min: 5, tooSmallMessage: 'Value is too small.')],
+                [new Number(min: 5, lessThanMinMessage: 'Value is too small.')],
                 ['' => ['Value is too small.']],
             ],
         ];
