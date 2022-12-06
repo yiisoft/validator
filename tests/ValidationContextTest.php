@@ -64,7 +64,7 @@ final class ValidationContextTest extends TestCase
         $context->validate(42);
     }
 
-    public function tesGetRawDataWithoutRawData(): void
+    public function testGetRawDataWithoutRawData(): void
     {
         $context = new ValidationContext();
 
