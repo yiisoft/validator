@@ -27,9 +27,8 @@ use function is_int;
  */
 final class Validator implements ValidatorInterface
 {
-    use PreValidateTrait;
-
     public const DEFAULT_TRANSLATION_CATEGORY = 'yii-validator';
+    private const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 
     private RuleHandlerResolverInterface $ruleHandlerResolver;
     private TranslatorInterface $translator;
@@ -133,7 +132,7 @@ final class Validator implements ValidatorInterface
                 continue;
             }
 
-            $context->setParameter($this->parameterPreviousRulesErrored, true);
+            $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
 
             foreach ($ruleResult->getErrors() as $error) {
                 $valuePath = $error->getValuePath();
@@ -144,6 +143,31 @@ final class Validator implements ValidatorInterface
             }
         }
         return $compoundResult;
+    }
+
+    private function preValidate(mixed $value, ValidationContext $context, RuleInterface $rule): bool
+    {
+        if (
+            $rule instanceof SkipOnEmptyInterface &&
+            (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $context->isAttributeMissing())
+        ) {
+            return true;
+        }
+
+        if (
+            $rule instanceof SkipOnErrorInterface
+            && $rule->shouldSkipOnError()
+            && $context->getParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED) === true
+        ) {
+            return true;
+        }
+
+        if ($rule instanceof WhenInterface) {
+            $when = $rule->getWhen();
+            return $when !== null && !$when($value, $context);
+        }
+
+        return false;
     }
 
     private function createDefaultTranslator(): Translator

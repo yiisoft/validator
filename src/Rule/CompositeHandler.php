@@ -35,8 +35,6 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class CompositeHandler implements RuleHandlerInterface
 {
-    use PreValidateTrait;
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Composite) {
