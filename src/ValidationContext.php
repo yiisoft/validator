@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\Helper\DataSetNormalizer;
 
 /**
  * Validation context that might be taken into account when performing validation.
@@ -41,7 +42,19 @@ final class ValidationContext
      */
     public function validate(mixed $data, callable|iterable|object|string|null $rules = null): Result
     {
-        return $this->validator->validate($data, $rules);
+        $currentDataSet = $this->dataSet;
+        $currentAttribute = $this->attribute;
+
+        $dataSet = DataSetNormalizer::normalize($data);
+        $this->dataSet = $dataSet;
+        $this->attribute = null;
+
+        $result = $this->validator->validate($dataSet, $rules, $this);
+
+        $this->dataSet = $currentDataSet;
+        $this->attribute = $currentAttribute;
+
+        return $result;
     }
 
     /**
