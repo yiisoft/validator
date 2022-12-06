@@ -43,8 +43,6 @@ final class CompositeHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Composite::class, $rule);
         }
 
-        $context->setParameter($this->parameterPreviousRulesErrored, true);
-
         if ($this->preValidate($value, $context, $rule)) {
             return new Result();
         }

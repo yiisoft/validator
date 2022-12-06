@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
+use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -170,15 +171,6 @@ final class CompositeTest extends RuleTestCase
                 ],
             ],
             [
-                20,
-                [
-                    new Composite(
-                        rules: [new Number(max: 13)],
-                        skipOnError: true,
-                    ),
-                ],
-            ],
-            [
                 null,
                 [
                     new Composite(
@@ -206,6 +198,31 @@ final class CompositeTest extends RuleTestCase
                         'Value must be no greater than 13.',
                         'Value must be no less than 21.',
                     ],
+                ],
+            ],
+            'skip on error with previous error' => [
+                20,
+                [
+                    new Equal(19),
+                    new Composite(
+                        rules: [new Number(max: 13)],
+                        skipOnError: true,
+                    ),
+                ],
+                [
+                    '' => ['Value must be equal to "19".'],
+                ],
+            ],
+            'skip on error without previous error' => [
+                20,
+                [
+                    new Composite(
+                        rules: [new Number(max: 13)],
+                        skipOnError: true,
+                    ),
+                ],
+                [
+                    '' => ['Value must be no greater than 13.'],
                 ],
             ],
             'custom error' => [
