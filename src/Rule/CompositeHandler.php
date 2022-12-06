@@ -43,10 +43,6 @@ final class CompositeHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Composite::class, $rule);
         }
 
-        if ($this->preValidate($value, $context, $rule)) {
-            return new Result();
-        }
-
         return $context->getValidator()->validate($value, $rule->getRules());
     }
 }

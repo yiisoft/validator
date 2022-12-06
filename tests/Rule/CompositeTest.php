@@ -179,28 +179,13 @@ final class CompositeTest extends RuleTestCase
                     ),
                 ],
             ],
-            'when false' => [
-                20,
-                [
-                    new Composite(
-                        rules: [new Number(max: 13), new Number(min: 21)],
-                        when: fn () => false,
-                    ),
-                ],
-                [
-                    '' => [
-                        'Value must be no greater than 13.',
-                        'Value must be no less than 21.',
-                    ],
-                ],
-            ],
         ];
     }
 
     public function dataValidationFailed(): array
     {
         return [
-            [
+            'when true' => [
                 20,
                 [
                     new Composite(
