@@ -96,8 +96,6 @@ trait LimitTrait
      * @param string $greaterThanMinMessage "Greater than maximum" validation error message
      * ({@see $greaterThanMinMessage}).
      * @param string $notExactlyMessage "Not exactly" validation error message ({@see $notExactlyMessage}).
-     * @param bool $requireLimits
-     * @param bool $allowNegativeLimits
      */
     private function initLimitProperties(
         int|float|null $min,
