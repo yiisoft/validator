@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 /**
- * An optional interface for rules to implement. Rules including it must have minimum and maximum limits and also
- * "exactly" measure for strict equality. Boundaries can reflect countable items as well as absolute values.
+ * An optional interface for rules to implement. Rules implementing it must have minimum and maximum limits and also
+ * "exactly" value for strict equality. Boundaries can reflect countable items as well as absolute values.
  *
- * The package ships with {@see LimitTrait} which already implements that interface. All you have to do is include it in
+ * The package ships with {@see LimitTrait} which already implements that interface. All you have to do is to include it in
  * the rule class along with the interface.
  */
 interface LimitInterface
