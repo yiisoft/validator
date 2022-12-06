@@ -4,28 +4,50 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Exception;
 
+use Exception;
 use Throwable;
 use Yiisoft\FriendlyException\FriendlyExceptionInterface;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\CallbackHandler;
 
-final class InvalidCallbackReturnTypeException extends \Exception implements FriendlyExceptionInterface
+/**
+ * An exception used by the handler ({@see CallbackHandler}) of {@see Callback} rule for the cases when returned value
+ * is not a {@see Result} instance.
+ */
+final class InvalidCallbackReturnTypeException extends Exception implements FriendlyExceptionInterface
 {
-    public function __construct(mixed $result, int $code = 0, ?Throwable $previous = null)
+    public function __construct(
+        /**
+         * @var mixed The actual wrong value returned from a callback.
+         */
+        mixed $returnValue,
+        /**
+         * @var Throwable|null The previous throwable used for the exception chaining.
+         */
+        ?Throwable $previous = null,
+    )
     {
         $message = sprintf(
             'Return value of callback must be an instance of %s, %s returned.',
             Result::class,
-            get_debug_type($result)
+            get_debug_type($returnValue),
         );
 
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, 0, $previous);
     }
 
+    /**
+     * @return string Human understandable exception name.
+     */
     public function getName(): string
     {
         return 'Invalid callable return value';
     }
 
+    /**
+     * @return string|null Suggestion on how to fix the exception.
+     */
     public function getSolution(): ?string
     {
         return <<<SOLUTION
