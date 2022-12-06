@@ -52,19 +52,19 @@ use JetBrains\PhpStorm\ArrayShape;
 trait LimitTrait
 {
     /**
-     * @var int|float|null Minimum limit. Can't be combined with {@see $exactly}.
+     * @var float|int|null Minimum limit. Can't be combined with {@see $exactly}.
      *
      * @see $lessThanMinMessage for related error message.
      */
     private int|float|null $min = null;
     /**
-     * @var int|float|null Maximum limit. Can't be combined with {@see $exactly}.
+     * @var float|int|null Maximum limit. Can't be combined with {@see $exactly}.
      *
      * @see $greaterThanMaxMessage for related error message.
      */
     private int|float|null $max = null;
     /**
-     * @var int|float|null "Exactly" number. A shortcut / replacement for the case when {@see $min} and {@see $max} have the
+     * @var float|int|null "Exactly" number. A shortcut / replacement for the case when {@see $min} and {@see $max} have the
      * same not-null value. Mutually exclusive with both {@see $min} and {@see $max}. `null` means no strict comparison
      * so lower / upper limits / both must be set.
      *
@@ -89,9 +89,9 @@ trait LimitTrait
      * Initializes limit related properties and runs checks for required, mutually exclusive properties and their
      * allowed values (including dependency on each other).
      *
-     * @param int|float|null $min Minimum limit ({@see $min}).
-     * @param int|float|null $max Maximum limit ({@see $max}).
-     * @param int|float|null $exactly "Exactly" number ({@see $exactly}).
+     * @param float|int|null $min Minimum limit ({@see $min}).
+     * @param float|int|null $max Maximum limit ({@see $max}).
+     * @param float|int|null $exactly "Exactly" number ({@see $exactly}).
      * @param string $lessThanMinMessage "Less than minimum" validation error message ({@see $lessThanMinMessage}).
      * @param string $greaterThanMinMessage "Greater than maximum" validation error message
      * ({@see $greaterThanMinMessage}).
@@ -153,7 +153,7 @@ trait LimitTrait
     /**
      * A getter for {@see $min} property.
      *
-     * @return int|float|null A number representing minimum boundary. `null` means no lower bound.
+     * @return float|int|null A number representing minimum boundary. `null` means no lower bound.
      */
     public function getMin(): int|float|null
     {
@@ -163,7 +163,7 @@ trait LimitTrait
     /**
      * A getter for {@see $max property}.
      *
-     * @return int|float|null A number representing maximum boundary. `null` means no upper bound.
+     * @return float|int|null A number representing maximum boundary. `null` means no upper bound.
      */
     public function getMax(): int|float|null
     {
@@ -173,7 +173,7 @@ trait LimitTrait
     /**
      * A getter for {@see $exactly} property.
      *
-     * @return int|float|null A number representing "exactly" value. `null` means no strict comparison so lower / upper limits /
+     * @return float|int|null A number representing "exactly" value. `null` means no strict comparison so lower / upper limits /
      * both must be set.
      */
     public function getExactly(): int|float|null

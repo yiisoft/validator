@@ -16,7 +16,7 @@ interface LimitInterface
     /**
      * Returns current minimum limit.
      *
-     * @return int|float|null A number representing minimum boundary. `null` means no lower bound.
+     * @return float|int|null A number representing minimum boundary. `null` means no lower bound.
      *
      * @see getLessThanMinMessage() for related error message.
      */
@@ -25,7 +25,7 @@ interface LimitInterface
     /**
      * Returns current maximum limit.
      *
-     * @return int|float|null A number representing maximum boundary. `null` means no upper bound.
+     * @return float|int|null A number representing maximum boundary. `null` means no upper bound.
      *
      * @see getGreaterThanMaxMessage() for related error message.
      */
@@ -35,7 +35,7 @@ interface LimitInterface
      * Returns current "exactly" value meant for strict comparison. It is a shortcut for the case when {@see getMin()}
      * and {@see getMax()} have the same not null value.
      *
-     * @return int|float|null A number representing "exactly" value. `null` means no strict comparison so lower / upper limits
+     * @return float|int|null A number representing "exactly" value. `null` means no strict comparison so lower / upper limits
      * / both must be set.
      *
      * @see getNotExactlyMessage() for related error message
