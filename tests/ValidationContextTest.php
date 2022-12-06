@@ -33,10 +33,9 @@ final class ValidationContextTest extends TestCase
     {
         $data = ['x' => 7];
 
-        $context = new ValidationContext(new Validator(), $data, 'name', ['key' => 42]);
+        $context = new ValidationContext(new Validator(), $data, ['key' => 42]);
 
         $this->assertSame($data, $context->getRawData());
-        $this->assertSame('name', $context->getAttribute());
         $this->assertSame(42, $context->getParameter('key'));
     }
 

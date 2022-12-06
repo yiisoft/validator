@@ -21,14 +21,17 @@ final class ValidationContext
     private ?DataSetInterface $dataSet = null;
 
     /**
+     * @var string|null Validated attribute name. Null if a single value is validated.
+     */
+    private ?string $attribute = null;
+
+    /**
      * @param mixed $rawData The raw validated data.
-     * @param string|null $attribute Validated attribute name. Null if a single value is validated.
      * @param array $parameters Arbitrary parameters.
      */
     public function __construct(
         private ValidatorInterface $validator,
         private mixed $rawData,
-        private ?string $attribute = null,
         private array $parameters = []
     ) {
     }
