@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Validator;
 
 final class ValidationContextTest extends TestCase
 {
@@ -70,5 +71,18 @@ final class ValidationContextTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectErrorMessage('Validator and raw data in validation context is not set.');
         $context->getRawData();
+    }
+
+    public function testSetValidatorAndRawDataOnce(): void
+    {
+        $validator = new Validator();
+
+        $context = new ValidationContext();
+
+        $context
+            ->setValidatorAndRawDataOnce($validator, 1)
+            ->setValidatorAndRawDataOnce($validator, 2);
+
+        $this->assertSame(1, $context->getRawData());
     }
 }
