@@ -21,7 +21,7 @@ trait LimitHandlerTrait
      *
      * @param LimitInterface|RuleInterface $rule A rule matching to this handler.
      * @param ValidationContext $context Validation context.
-     * @param int|float $number A validated number to compare with set limits.
+     * @param float|int $number A validated number to compare with set limits.
      * @param Result $result Result for adding errors.
      *
      * @see LimitTrait for information about limits and messages.
