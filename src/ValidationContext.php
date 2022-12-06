@@ -13,11 +13,13 @@ final class ValidationContext
 {
     /**
      * @param DataSetInterface|null $dataSet Data set the attribute belongs to. Null if a single value is validated.
+     * @param mixed $rawData The raw validated data.
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
      * @param array $parameters Arbitrary parameters.
      */
     public function __construct(
         private ValidatorInterface $validator,
+        private mixed $rawData,
         private ?DataSetInterface $dataSet = null,
         private ?string $attribute = null,
         private array $parameters = []
@@ -27,6 +29,14 @@ final class ValidationContext
     public function getValidator(): ValidatorInterface
     {
         return $this->validator;
+    }
+
+    /**
+     * @return mixed The raw validated data.
+     */
+    public function getRawData(): mixed
+    {
+        return $this->rawData;
     }
 
     /**
