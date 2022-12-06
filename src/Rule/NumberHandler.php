@@ -54,6 +54,7 @@ final class NumberHandler implements RuleHandlerInterface
         /**
          * @psalm-suppress InvalidOperand A value is guaranteed to be numeric here because of normalization via
          * `NumericHelper`and validation using regular expression  performed above.
+         * @infection-ignore-all
          */
         $value = $value + 0;
 
