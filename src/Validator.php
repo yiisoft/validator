@@ -61,15 +61,15 @@ final class Validator implements ValidatorInterface
         callable|iterable|object|string|null $rules = null,
         ?ValidationContext $context = null
     ): Result {
-        $data = DataSetNormalizer::normalize($data);
+        $dataSet = DataSetNormalizer::normalize($data);
         $rules = RulesNormalizer::normalize(
             $rules,
-            $data,
+            $dataSet,
             $this->defaultSkipOnEmptyCriteria
         );
 
         $compoundResult = new Result();
-        $context ??= new ValidationContext($this, $data);
+        $context ??= new ValidationContext($this, $data, $dataSet);
         $results = [];
 
         foreach ($rules as $attribute => $attributeRules) {
@@ -77,10 +77,10 @@ final class Validator implements ValidatorInterface
 
             if (is_int($attribute)) {
                 /** @psalm-suppress MixedAssignment */
-                $validatedData = $data->getData();
+                $validatedData = $dataSet->getData();
             } else {
                 /** @psalm-suppress MixedAssignment */
-                $validatedData = $data->getAttributeValue($attribute);
+                $validatedData = $dataSet->getAttributeValue($attribute);
                 $context->setAttribute($attribute);
             }
 
@@ -107,8 +107,8 @@ final class Validator implements ValidatorInterface
             }
         }
 
-        if ($data instanceof PostValidationHookInterface) {
-            $data->processValidationResult($compoundResult);
+        if ($dataSet instanceof PostValidationHookInterface) {
+            $dataSet->processValidationResult($compoundResult);
         }
 
         return $compoundResult;

@@ -81,7 +81,7 @@ final class LimitHandlerTraitTest extends TestCase
                 $this->validateLimits($rule, $context, $number, $result);
             }
         };
-        $context = new ValidationContext(ValidatorFactory::make(), dataSet: null);
+        $context = new ValidationContext(ValidatorFactory::make(), null);
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('$rule must implement both LimitInterface and RuleInterface.');
