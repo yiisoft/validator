@@ -65,7 +65,7 @@ final class NestedTest extends RuleTestCase
             $rule->getPropertyVisibility(),
         );
         $this->assertFalse($rule->getRequirePropertyPath());
-        $this->assertSame('Property path "{path}" is not found.', $rule->getNoPropertyPathMessage());
+        $this->assertSame('Property "{path}" is not found.', $rule->getNoPropertyPathMessage());
         $this->assertNull($rule->getSkipOnEmpty());
         $this->assertFalse($rule->shouldSkipOnError());
         $this->assertNull($rule->getWhen());
@@ -104,7 +104,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
-                        'template' => 'Property path "{path}" is not found.',
+                        'template' => 'Property "{path}" is not found.',
                         'parameters' => [],
                     ],
                     'requirePropertyPath' => false,
@@ -156,7 +156,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
-                        'template' => 'Property path "{path}" is not found.',
+                        'template' => 'Property "{path}" is not found.',
                         'parameters' => [],
                     ],
                     'requirePropertyPath' => false,
@@ -211,7 +211,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
-                        'template' => 'Property path "{path}" is not found.',
+                        'template' => 'Property "{path}" is not found.',
                         'parameters' => [],
                     ],
                     'requirePropertyPath' => false,
@@ -244,7 +244,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
-                        'template' => 'Property path "{path}" is not found.',
+                        'template' => 'Property "{path}" is not found.',
                         'parameters' => [],
                     ],
                     'requirePropertyPath' => false,
@@ -1008,12 +1008,12 @@ final class NestedTest extends RuleTestCase
             [
                 [],
                 [new Nested(['value' => new Required()], requirePropertyPath: true)],
-                ['value' => ['Property path "value" is not found.']],
+                ['value' => ['Property "value" is not found.']],
             ],
             [
                 [],
                 [new Nested([0 => new Required()], requirePropertyPath: true)],
-                [0 => ['Property path "0" is not found.']],
+                [0 => ['Property "0" is not found.']],
             ],
             // https://github.com/yiisoft/validator/issues/200
             [
@@ -1098,8 +1098,8 @@ final class NestedTest extends RuleTestCase
                 [],
                 [new Nested(['value1' => new Required(), 'value2' => new Required()], requirePropertyPath: true)],
                 [
-                    ['Property path "value1" is not found.', ['value1']],
-                    ['Property path "value2" is not found.', ['value2']],
+                    ['Property "value1" is not found.', ['value1']],
+                    ['Property "value2" is not found.', ['value2']],
                 ],
             ],
             [
@@ -1197,6 +1197,13 @@ final class NestedTest extends RuleTestCase
             'RulesProviderInterface, a class string or an iterable.'
         );
         new Nested(new Required());
+    }
+
+    public function testPropagateOptionsWithNullRules(): void
+    {
+        $rule = new Nested(null);
+        $rule->propagateOptions();
+        $this->assertNull($rule->getRules());
     }
 
     protected function getDifferentRuleInHandlerItems(): array

@@ -16,8 +16,6 @@ abstract class RuleTestCase extends TestCase
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
-        $this->beforeTestValidationPassed();
-
         $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertTrue($result->isValid());
@@ -30,19 +28,9 @@ abstract class RuleTestCase extends TestCase
      */
     public function testValidationFailed(mixed $data, array|null $rules, array $errorMessagesIndexedByPath): void
     {
-        $this->beforeTestValidationFailed();
-
         $result = ValidatorFactory::make()->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
-    }
-
-    protected function beforeTestValidationPassed(): void
-    {
-    }
-
-    protected function beforeTestValidationFailed(): void
-    {
     }
 }

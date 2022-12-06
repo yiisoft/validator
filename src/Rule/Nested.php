@@ -90,7 +90,7 @@ final class Nested implements
         'type.',
         private string $incorrectInputMessage = 'The value must have an array or an object type.',
         private bool $requirePropertyPath = false,
-        private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
+        private string $noPropertyPathMessage = 'Property "{path}" is not found.',
         private bool $normalizeRules = true,
         private bool $propagateOptions = false,
 
@@ -273,11 +273,13 @@ final class Nested implements
 
     public function propagateOptions(): void
     {
+        if ($this->rules === null) {
+            return;
+        }
+
         $rules = [];
+
         /**
-         * @psalm-suppress PossiblyNullIterator Rules can't be null at this point because of the order and check with
-         * early return in {@see prepareRules()}.
-         *
          * @var int|string $attributeRulesIndex Index is either integer or string because of the array conversion in
          * {@see ensureArrayHasRules()}.
          * @var RuleInterface[] $attributeRules Conversion to array is done in {@see ensureArrayHasRules()}.

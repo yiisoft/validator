@@ -15,13 +15,7 @@ trait RuleWithOptionsTestTrait
      */
     public function testOptions(RuleWithOptionsInterface $rule, array $expectedOptions): void
     {
-        $this->beforeTestOptions();
-
         $options = $rule->getOptions();
         $this->assertSame($expectedOptions, $options);
-    }
-
-    protected function beforeTestOptions(): void
-    {
     }
 }

@@ -39,7 +39,7 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
         /**
          * @var string Message to display in case of error.
          */
-        private string $message = 'The model is not valid. Must have at least "{min}" filled attributes.',
+        private string $message = 'The data must have at least "{min}" filled attributes.',
         /**
          * @var bool|callable|null
          */

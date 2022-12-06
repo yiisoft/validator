@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Php81\DataSet;
+namespace Yiisoft\Validator\Tests\TestEnvironments\Php81\DataSet;
 
 use PHPUnit\Framework\TestCase;
 use Traversable;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use RuntimeException;
 use stdClass;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\Rule\UrlHandler;
@@ -13,8 +12,6 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-
-use function extension_loaded;
 
 final class UrlTest extends RuleTestCase
 {
@@ -39,10 +36,6 @@ final class UrlTest extends RuleTestCase
 
     public function dataOptions(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         return [
             [
                 new Url(),
@@ -121,10 +114,6 @@ final class UrlTest extends RuleTestCase
 
     public function dataValidationPassed(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         return [
             ['http://google.de', [new Url()]],
             ['https://google.de', [new Url()]],
@@ -162,10 +151,6 @@ final class UrlTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         $incorrectInputErrors = ['' => ['The value must have a string type.']];
         $errors = ['' => ['This value is not a valid URL.']];
         $longUrl = 'http://' . str_repeat('u', 1990) . '.de';
@@ -229,16 +214,6 @@ final class UrlTest extends RuleTestCase
         ];
     }
 
-    public function testEnableIdnWithMissingIntlExtension(): void
-    {
-        if (extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be unavailable for this test.');
-        }
-
-        $this->expectException(RuntimeException::class);
-        new Url(enableIDN: true);
-    }
-
     public function testSkipOnError(): void
     {
         $this->testSkipOnErrorInternal(new Url(), new Url(skipOnError: true));
@@ -248,27 +223,6 @@ final class UrlTest extends RuleTestCase
     {
         $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Url(), new Url(when: $when));
-    }
-
-    protected function beforeTestOptions(): void
-    {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
-        }
-    }
-
-    protected function beforeTestValidationPassed(): void
-    {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
-        }
-    }
-
-    protected function beforeTestValidationFailed(): void
-    {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
-        }
     }
 
     protected function getDifferentRuleInHandlerItems(): array

@@ -4,18 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use RuntimeException;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\EmailHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
-
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-
-
-use function extension_loaded;
 
 final class EmailTest extends RuleTestCase
 {
@@ -32,10 +27,6 @@ final class EmailTest extends RuleTestCase
 
     public function dataOptions(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         return [
             [
                 new Email(),
@@ -126,10 +117,6 @@ final class EmailTest extends RuleTestCase
 
     public function dataValidationPassed(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
@@ -197,10 +184,6 @@ final class EmailTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        if (!extension_loaded('intl')) {
-            return [];
-        }
-
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIDN = new Email(enableIDN: true);
@@ -335,16 +318,6 @@ final class EmailTest extends RuleTestCase
         ];
     }
 
-    public function testEnableIdnWithMissingIntlExtension(): void
-    {
-        if (extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be unavailable for this test.');
-        }
-
-        $this->expectException(RuntimeException::class);
-        new Email(enableIDN: true);
-    }
-
     public function testSkipOnError(): void
     {
         $this->testSkipOnErrorInternal(new Email(), new Email(skipOnError: true));
@@ -354,27 +327,6 @@ final class EmailTest extends RuleTestCase
     {
         $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Email(), new Email(when: $when));
-    }
-
-    protected function beforeTestOptions(): void
-    {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
-        }
-    }
-
-    protected function beforeTestValidationPassed(): void
-    {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
-        }
-    }
-
-    protected function beforeTestValidationFailed(): void
-    {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
-        }
     }
 
     protected function getDifferentRuleInHandlerItems(): array

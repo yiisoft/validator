@@ -11,7 +11,8 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * A trait attachable to a handler of rule with limits.
+ * A trait attachable to a handler of rule with limits. Requires a rule to implement {@LimitInterface} / include
+ * {@see LimitTrait}.
  */
 trait LimitHandlerTrait
 {

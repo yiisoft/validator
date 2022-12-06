@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Yiisoft\Di\Container;
-use Yiisoft\Di\ContainerConfig;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
@@ -14,10 +11,7 @@ use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
-use function dirname;
-use function extension_loaded;
-
-final class ConfigTest extends TestCase
+final class ConfigTest extends BaseConfigTest
 {
     public function testBase(): void
     {
@@ -52,42 +46,6 @@ final class ConfigTest extends TestCase
         $this->assertSame('yii-validator-custom', $translationCategorySource->getName());
     }
 
-    public function testIntlMessageFormatter(): void
-    {
-        if (!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be available for this test.');
-        }
-
-        $container = $this->createContainer();
-
-        /** @var CategorySource $translationCategorySource */
-        $translationCategorySource = $container->get('tag@translation.categorySource')[0];
-        $message = '{n, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}';
-        // The default formatter argument is ignored in favor of formatter set in config.
-        $this->assertSame(
-            '1-one',
-            $translationCategorySource->format($message, ['n' => 1], 'en', new SimpleMessageFormatter()),
-        );
-    }
-
-    public function testSimpleMessageFormatter(): void
-    {
-        if (extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be unavailable for this test.');
-        }
-
-        $container = $this->createContainer();
-
-        /** @var CategorySource $translationCategorySource */
-        $translationCategorySource = $container->get('tag@translation.categorySource')[0];
-        $message = '{n, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}';
-        // The default formatter argument is ignored in favor of formatter set in config.
-        $this->assertSame(
-            '1',
-            $translationCategorySource->format($message, ['n' => 1], 'en', new SimpleMessageFormatter()),
-        );
-    }
-
     public function testTranslationCategorySource(): void
     {
         $container = $this->createContainer();
@@ -102,24 +60,17 @@ final class ConfigTest extends TestCase
         $this->assertSame('Значение неверно.', $translationCategorySource->getMessage('This value is invalid.', 'ru'));
     }
 
-    private function createContainer(array|null $params = null): Container
+    public function testIntlMessageFormatter(): void
     {
-        $config = ContainerConfig::create()->withDefinitions($this->getCommonDefinitions($params));
+        $container = $this->createContainer();
 
-        return new Container($config);
-    }
-
-    private function getCommonDefinitions(array|null $params): array
-    {
-        if ($params === null) {
-            $params = $this->getParams();
-        }
-
-        return require dirname(__DIR__) . '/config/common.php';
-    }
-
-    private function getParams(): array
-    {
-        return require dirname(__DIR__) . '/config/params.php';
+        /** @var CategorySource $translationCategorySource */
+        $translationCategorySource = $container->get('tag@translation.categorySource')[0];
+        $message = '{n, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}';
+        // The default formatter argument is ignored in favor of formatter set in config.
+        $this->assertSame(
+            '1-one',
+            $translationCategorySource->format($message, ['n' => 1], 'en', new SimpleMessageFormatter()),
+        );
     }
 }

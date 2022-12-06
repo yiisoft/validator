@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Php81\Rule;
+namespace Yiisoft\Validator\Tests\TestEnvironments\Php81\Rule;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
