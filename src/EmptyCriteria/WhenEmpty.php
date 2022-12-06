@@ -30,13 +30,13 @@ final class WhenEmpty
          * meaning no trimming is done.
          */
         private bool $trimString = false,
-    )
-    {
+    ) {
     }
 
     /**
      * @param mixed $value The validated value.
      * @param bool $isAttributeMissing A flag defining whether attribute is missing (not used / not passed at all).
+     *
      * @return bool Whether the validated value is considered empty.
      */
     public function __invoke(mixed $value, bool $isAttributeMissing): bool
