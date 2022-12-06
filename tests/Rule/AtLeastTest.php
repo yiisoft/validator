@@ -42,7 +42,7 @@ final class AtLeastTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The model is not valid. Must have at least "{min}" filled attributes.',
+                        'template' => 'The data must have at least "{min}" filled attributes.',
                         'parameters' => ['min' => 1],
                     ],
                     'skipOnEmpty' => false,
@@ -62,7 +62,7 @@ final class AtLeastTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The model is not valid. Must have at least "{min}" filled attributes.',
+                        'template' => 'The data must have at least "{min}" filled attributes.',
                         'parameters' => ['min' => 2],
                     ],
                     'skipOnEmpty' => false,
@@ -82,7 +82,7 @@ final class AtLeastTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The model is not valid. Must have at least "{min}" filled attributes.',
+                        'template' => 'The data must have at least "{min}" filled attributes.',
                         'parameters' => ['min' => 1],
                     ],
                     'skipOnEmpty' => null,
@@ -193,22 +193,22 @@ final class AtLeastTest extends RuleTestCase
             'object' => [
                 $class,
                 [new AtLeast(['attr2'])],
-                ['' => ['The model is not valid. Must have at least "1" filled attributes.']],
+                ['' => ['The data must have at least "1" filled attributes.']],
             ],
             'object, custom min' => [
                 $class,
                 [new AtLeast(['attr1', 'attr2'], min: 2)],
-                ['' => ['The model is not valid. Must have at least "2" filled attributes.']],
+                ['' => ['The data must have at least "2" filled attributes.']],
             ],
             'array' => [
                 $array,
                 [new AtLeast(['attr2'])],
-                ['' => ['The model is not valid. Must have at least "1" filled attributes.']],
+                ['' => ['The data must have at least "1" filled attributes.']],
             ],
             'array, custom min' => [
                 $array,
                 [new AtLeast(['attr2'], min: 2)],
-                ['' => ['The model is not valid. Must have at least "2" filled attributes.']],
+                ['' => ['The data must have at least "2" filled attributes.']],
             ],
             'custom message' => [
                 $class,
