@@ -8,6 +8,8 @@ use Yiisoft\Arrays\ArrayHelper;
 
 /**
  * Validation context that might be taken into account when performing validation.
+ *
+ * @psalm-import-type RulesType from ValidatorInterface
  */
 final class ValidationContext
 {
@@ -26,9 +28,20 @@ final class ValidationContext
     ) {
     }
 
-    public function getValidator(): ValidatorInterface
+    /**
+     * Validate data in current context.
+     *
+     * @param DataSetInterface|mixed|RulesProviderInterface $data Data set to validate. If {@see RulesProviderInterface}
+     * instance provided and rules are not specified explicitly, they are read from the
+     * {@see RulesProviderInterface::getRules()}.
+     * @param callable|iterable|object|string|null $rules Rules to apply. If specified, rules are not read from data set
+     * even if it is an instance of {@see RulesProviderInterface}.
+     *
+     * @psalm-param RulesType $rules
+     */
+    public function validate(mixed $data, callable|iterable|object|string|null $rules = null): Result
     {
-        return $this->validator;
+        return $this->validator->validate($data, $rules);
     }
 
     /**

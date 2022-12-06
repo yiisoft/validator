@@ -17,7 +17,6 @@ final class ValidationContextTest extends TestCase
 
         $context = new ValidationContext($validator, 7);
 
-        $this->assertSame($validator, $context->getValidator());
         $this->assertSame(7, $context->getRawData());
         $this->assertNull($context->getDataSet());
         $this->assertNull($context->getAttribute());

@@ -46,7 +46,7 @@ final class EachHandler implements RuleHandlerInterface
                 return $result;
             }
 
-            $itemResult = $context->getValidator()->validate($item, $rules);
+            $itemResult = $context->validate($item, $rules);
             if ($itemResult->isValid()) {
                 continue;
             }
