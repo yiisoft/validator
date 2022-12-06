@@ -388,7 +388,7 @@ final class NestedTest extends RuleTestCase
             'wo-rules-inherit-attributes' => [
                 new class () {
                     #[Nested]
-                    private $object;
+                    private InheritAttributesObject $object;
 
                     public function __construct()
                     {
