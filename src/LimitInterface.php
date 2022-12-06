@@ -8,8 +8,8 @@ namespace Yiisoft\Validator;
  * An optional interface for rules to implement. Rules implementing it must have minimum and maximum limits and also
  * "exactly" value for strict equality. Boundaries can reflect countable items as well as absolute values.
  *
- * The package ships with {@see LimitTrait} which already implements that interface. All you have to do is to include it in
- * the rule class along with the interface.
+ * The package ships with {@see LimitTrait} which already implements that interface. All you have to do is to include it
+ * in the rule class along with the interface.
  */
 interface LimitInterface
 {
@@ -32,9 +32,8 @@ interface LimitInterface
     public function getMax(): int|null;
 
     /**
-     * Returns current "exactly" value meant for strict comparison.
-     * It is a shortcut for the case when {@see getMin()} and {@see getMax()} have the same
-     * not null value.
+     * Returns current "exactly" value meant for strict comparison. It is a shortcut for the case when {@see getMin()}
+     * and {@see getMax()} have the same not null value.
      *
      * @return int|null A number representing "exactly" value. `null` means no strict comparison so lower / upper limits
      * / both must be set.
