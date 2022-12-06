@@ -8,58 +8,99 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 
 /**
- * A trait attachable to a rule with limits.
+ * An implementation for {@see LimitInterface} intended to be included in rules. The following arguments need to be
+ * added in constructor and passed with {@see initLimitProperties()} call:
  *
- * @see LimitHandlerTrait
+ * ```php
+ * public function __construct(
+ *     // ...
+ *     int|null $min = null,
+ *     int|null $max = null,
+ *     int|null $exactly = null,
+ *     string $lessThanMinMessage = 'Less than {min}.',
+ *     string $greaterThanMinMessage = 'Greater than {max}.',
+ *     string $greaterThanMinMessage = 'Not exactly {exactly}.',
+ *     // ...
+ * ) {
+ *     // ...
+ *     $this->initLimitProperties(
+ *         $min,
+ *         $max,
+ *         $exactly,
+ *         $lessThanMinMessage,
+ *         $greaterThanMaxMessage,
+ *         $notExactlyMessage,
+ *     );
+ *     // ...
+ * }
+ * ```
+ *
+ * Also, if a rule implements {@see RuleWithOptionsInterface}, you can merge limit related options instead of adding it
+ * manually:
+ *
+ * ```php
+ * public function getOptions(): array
+ * {
+ *     return array_merge($this->getLimitOptions(), [
+ *         // Other rule options.
+ *     ]);
+ * }
+ * ```
+ *
+ * Make sure to include {@see LimitHandlerTrait} in according handler as well.
  */
 trait LimitTrait
 {
     /**
-     * @var int|null Lower limit.
+     * @var int|null Minimum limit. Can't be combined with {@see $exactly}.
      *
-     * @see $lessThanMinMessage for according error message. Can't be combined with {@see $exactly}.
+     * @see $lessThanMinMessage for related error message.
      */
-    private ?int $min = null;
+    private int|null $min = null;
     /**
-     * @var int|null Upper limit.
+     * @var int|null Maximum limit. Can't be combined with {@see $exactly}.
      *
-     * @see $greaterThanMaxMessage for according error message. Can't be combined with {@see $exactly}.
+     * @see $greaterThanMaxMessage for related error message.
      */
-    private ?int $max = null;
+    private int|null $max = null;
     /**
-     * @var int|null Exact number (lower and upper limit match).
+     * @var int|null "Exactly" number. A shortcut / replacement for the case when {@see $min} and {@see $max} have the
+     * same not-null value. Mutually exclusive with both {@see $min} and {@see $max}. `null` means no strict comparison
+     * so lower / upper limits / both must be set.
      *
-     * @see $notExactlyMessage for according error message. `null` means no strict comparison. Mutually exclusive with
-     * {@see $min} and {@see $max}.
+     * @see $notExactlyMessage for related error message.
      */
-    private ?int $exactly = null;
+    private int|null $exactly = null;
     /**
-     * @var string Message used when validated value is lower than {@see $min}.
+     * @var string Validation error message used when a validated value is less than minimum set in {@see $min}.
      */
     private string $lessThanMinMessage;
     /**
-     * @var string Message used when validated value is greater than {@see $max}.
+     * @var string Validation error message used when a validated value is greater than maximum set in {@see $max}.
      */
     private string $greaterThanMaxMessage;
     /**
-     * @var string Message used when validated value doesn't exactly match {@see $exactly}.
+     * @var string Validation error message used when a validated value doesn't exactly match the one set in
+     * {@see $exactly}.
      */
     private string $notExactlyMessage;
 
     /**
-     * Initializes limit related properties and runs checks for required and mutually exclusive properties.
+     * Initializes limit related properties and runs checks for required, mutually exclusive properties and their
+     * allowed values (including dependency on each other).
      *
-     * @param int|null $min {@see $min}
-     * @param int|null $max {@see $max}
-     * @param int|null $exactly {@see $exactly}
-     * @param string $lessThanMinMessage {@see $lessThanMinMessage}
-     * @param string $greaterThanMinMessage {@see $greaterThanMinMessage}
-     * @param string $notExactlyMessage {@see $notExactlyMessage}
+     * @param int|null $min Minimum limit ({@see $min}).
+     * @param int|null $max Maximum limit ({@see $max}).
+     * @param int|null $exactly "Exactly" number ({@see $exactly}).
+     * @param string $lessThanMinMessage "Less than minimum" validation error message ({@see $lessThanMinMessage}).
+     * @param string $greaterThanMinMessage "Greater than maximum" validation error message
+     * ({@see $greaterThanMinMessage}).
+     * @param string $notExactlyMessage "Not exactly" validation error message ({@see $notExactlyMessage}).
      */
     private function initLimitProperties(
-        ?int $min,
-        ?int $max,
-        ?int $exactly,
+        int|null $min,
+        int|null $max,
+        int|null $exactly,
         string $lessThanMinMessage,
         string $greaterThanMinMessage,
         string $notExactlyMessage
@@ -101,39 +142,40 @@ trait LimitTrait
     }
 
     /**
-     * Gets lower limit.
+     * A getter for {@see $min} property.
      *
-     * @return int|null {@see $min}
+     * @return int|null A number representing minimum boundary. `null` means no lower bound.
      */
-    public function getMin(): ?int
+    public function getMin(): int|null
     {
         return $this->min;
     }
 
     /**
-     * Gets upper limit.
+     * A getter for {@see $max property}.
      *
-     * @return int|null {@see $max}
+     * @return int|null A number representing maximum boundary. `null` means no upper bound.
      */
-    public function getMax(): ?int
+    public function getMax(): int|null
     {
         return $this->max;
     }
 
     /**
-     * Gets "exactly" value.
+     * A getter for {@see $exactly} property.
      *
-     * @return int|null {@see $exactly}
+     * @return int|null A number representing "exactly" value. `null` means no strict comparison so lower / upper limits /
+     * both must be set.
      */
-    public function getExactly(): ?int
+    public function getExactly(): int|null
     {
         return $this->exactly;
     }
 
     /**
-     * Gets "less than lower limit" error message.
+     * A getter for {@see $lessThanMinMessage} property.
      *
-     * @return string {@see $lessThanMinMessage}
+     * @return string Validation error message.
      */
     public function getLessThanMinMessage(): string
     {
@@ -141,9 +183,9 @@ trait LimitTrait
     }
 
     /**
-     * Gets "greater than upper limit" error message.
+     * A getter for {@see $greaterThanMaxMessage} property.
      *
-     * @return string {@see $greaterThanMaxMessage}
+     * @return string Validation error message.
      */
     public function getGreaterThanMaxMessage(): string
     {
@@ -151,9 +193,9 @@ trait LimitTrait
     }
 
     /**
-     * Gets "does not match exactly" error message.
+     * A getter for {@see $notExactlyMessage} property.
      *
-     * @return string {@see notExactlyMessage}
+     * @return string Validation error message.
      */
     public function getNotExactlyMessage(): string
     {
@@ -162,6 +204,8 @@ trait LimitTrait
 
     /**
      * Limit related options intended to be merged with other rule options.
+     *
+     * @return array<string, mixed> A map between property name and property value.
      */
     #[ArrayShape([
         'min' => 'int|null',

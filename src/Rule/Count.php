@@ -43,19 +43,19 @@ final class Count implements
          *
          * @see $lessThanMinMessage for the customized message for a value with too few items.
          */
-        ?int $min = null,
+        int|null $min = null,
         /**
          * @var int|null maximum number of items. null means no maximum number limit. Can't be combined with
          * {@see $exactly}.
          *
          * @see $greaterThanMaxMessage for the customized message for a value wuth too many items.
          */
-        ?int $max = null,
+        int|null $max = null,
         /**
          * @var int|null exact number of items. `null` means no strict comparison. Mutually exclusive with {@see $min}
          * and {@see $max}.
          */
-        ?int $exactly = null,
+        int|null $exactly = null,
         /**
          * @var string user-defined error message used when the value is neither an array nor implementing
          * {@see \Countable} interface.

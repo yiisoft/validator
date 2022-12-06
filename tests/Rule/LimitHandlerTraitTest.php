@@ -22,17 +22,17 @@ final class LimitHandlerTraitTest extends TestCase
         return [
             [
                 new class () implements LimitInterface {
-                    public function getMin(): ?int
+                    public function getMin(): int|null
                     {
                         return null;
                     }
 
-                    public function getMax(): ?int
+                    public function getMax(): int|null
                     {
                         return null;
                     }
 
-                    public function getExactly(): ?int
+                    public function getExactly(): int|null
                     {
                         return 1;
                     }
