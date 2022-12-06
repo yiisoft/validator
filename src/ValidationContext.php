@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use RuntimeException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
 
@@ -15,7 +16,11 @@ use Yiisoft\Validator\Helper\DataSetNormalizer;
 final class ValidationContext
 {
     /**
-     * @param DataSetInterface|null $dataSet Data set the attribute belongs to. Null if a single value is validated.
+     * @var DataSetInterface|null Data set the attribute belongs to. Null if data set not set.
+     */
+    private ?DataSetInterface $dataSet = null;
+
+    /**
      * @param mixed $rawData The raw validated data.
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
      * @param array $parameters Arbitrary parameters.
@@ -23,7 +28,6 @@ final class ValidationContext
     public function __construct(
         private ValidatorInterface $validator,
         private mixed $rawData,
-        private ?DataSetInterface $dataSet = null,
         private ?string $attribute = null,
         private array $parameters = []
     ) {
@@ -45,11 +49,7 @@ final class ValidationContext
         $currentDataSet = $this->dataSet;
         $currentAttribute = $this->attribute;
 
-        $dataSet = DataSetNormalizer::normalize($data);
-        $this->dataSet = $dataSet;
-        $this->attribute = null;
-
-        $result = $this->validator->validate($dataSet, $rules, $this);
+        $result = $this->validator->validate($data, $rules, $this);
 
         $this->dataSet = $currentDataSet;
         $this->attribute = $currentAttribute;
@@ -66,11 +66,24 @@ final class ValidationContext
     }
 
     /**
-     * @return DataSetInterface|null Data set the attribute belongs to. Null if a single value is validated.
+     * @return DataSetInterface Data set the attribute belongs to.
      */
-    public function getDataSet(): ?DataSetInterface
+    public function getDataSet(): DataSetInterface
     {
+        if ($this->dataSet === null) {
+            throw new RuntimeException('Data set in validation context is not set.');
+        }
+
         return $this->dataSet;
+    }
+
+    /**
+     * @param DataSetInterface $dataSet Data set the attribute belongs to.
+     */
+    public function setDataSet(DataSetInterface $dataSet): self
+    {
+        $this->dataSet = $dataSet;
+        return $this;
     }
 
     /**

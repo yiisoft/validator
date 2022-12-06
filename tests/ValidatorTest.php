@@ -1212,8 +1212,7 @@ class ValidatorTest extends TestCase
                 callable|iterable|object|string|null $rules = null,
                 ?ValidationContext $context = null
             ): Result {
-                $dataSet = DataSetNormalizer::normalize($data);
-                $context ??= new ValidationContext($this, $data, $dataSet);
+                $context ??= new ValidationContext($this, $data);
 
                 $result = $this->validator->validate($data, $rules, $context);
 
