@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Equal;
@@ -141,6 +142,23 @@ final class CompositeTest extends RuleTestCase
                     ],
                 ],
             ],
+            'callable' => [
+                new Composite([
+                    static fn () => (new Result())->addError('Bad value.'),
+                ]),
+                [
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                    'rules' => [
+                        [
+                            'callback',
+                            'method' => null,
+                            'skipOnEmpty' => false,
+                            'skipOnError' => false,
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -153,7 +171,7 @@ final class CompositeTest extends RuleTestCase
         ]);
 
         $this->expectException(InvalidArgumentException::class);
-        $message = 'Every rule must implement "Yiisoft\Validator\RuleInterface". Type "class@anonymous" given.';
+        $message = 'Rule should be either an instance of Yiisoft\Validator\RuleInterface or a callable, class@anonymous given.';
         $this->expectExceptionMessage($message);
         $rule->getOptions();
     }
@@ -185,6 +203,23 @@ final class CompositeTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         return [
+            'callable' => [
+                20,
+                [
+                    new Composite(
+                        rules: [
+                            static fn () => (new Result())->addError('Bad value.'),
+                            static fn () => (new Result())->addError('Very bad value.'),
+                        ],
+                    ),
+                ],
+                [
+                    '' => [
+                        'Bad value.',
+                        'Very bad value.',
+                    ],
+                ],
+            ],
             'when true' => [
                 20,
                 [

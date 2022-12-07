@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -29,13 +30,18 @@ class Composite implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     use SkipOnErrorTrait;
     use WhenTrait;
 
-    private RulesDumper $dumper;
+    /**
+     * @var iterable<int, RuleInterface>
+     */
+    private iterable $rules;
+
+    private ?RulesDumper $rulesDumper = null;
 
     public function __construct(
         /**
-         * @var iterable<RuleInterface>
+         * @param iterable<RuleInterface|Closure>
          */
-        private iterable $rules = [],
+        iterable $rules = [],
 
         /**
          * @var bool|callable|null
@@ -47,7 +53,7 @@ class Composite implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
          */
         private Closure|null $when = null,
     ) {
-        $this->dumper = new RulesDumper();
+        $this->rules = RulesNormalizer::normalizeList($rules);
     }
 
     public function getName(): string
@@ -65,12 +71,12 @@ class Composite implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         return [
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => $this->dumper->asArray($this->rules),
+            'rules' => $this->getRulesDumper()->asArray($this->rules),
         ];
     }
 
     /**
-     * @return iterable<\Closure|\Closure[]|RuleInterface|RuleInterface[]>
+     * @return iterable<int, RuleInterface>
      */
     public function getRules(): iterable
     {
@@ -80,5 +86,14 @@ class Composite implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     public function getHandlerClassName(): string
     {
         return CompositeHandler::class;
+    }
+
+    private function getRulesDumper(): RulesDumper
+    {
+        if ($this->rulesDumper === null) {
+            $this->rulesDumper = new RulesDumper();
+        }
+
+        return $this->rulesDumper;
     }
 }
