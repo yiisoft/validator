@@ -9,7 +9,7 @@ use Yiisoft\Validator\DataSetInterface;
 /**
  * A data set used for a single value of any (mixed) data type. Does not support attributes.
  *
- * An example of usage:
+ * Examples of usage:
  *
  * ```php
  * $dataSet = new SingleValueDataSet(5);
