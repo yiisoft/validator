@@ -37,7 +37,6 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
 use Yiisoft\Validator\Tests\Support\TranslatorFactory;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
@@ -199,7 +198,7 @@ class ValidatorTest extends TestCase
         mixed $data,
         iterable|object|callable|null $rules,
     ): void {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate($data, $rules);
         $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
     }
@@ -221,7 +220,7 @@ class ValidatorTest extends TestCase
      */
     public function testWithEmptyArrayOfRules(mixed $data): void
     {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate($data, []);
 
         $this->assertTrue($result->isValid());
@@ -230,7 +229,7 @@ class ValidatorTest extends TestCase
     public function testAddingRulesViaConstructor(): void
     {
         $dataObject = new ArrayDataSet(['bool' => true, 'int' => 41]);
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate($dataObject, [
             'bool' => [new Boolean()],
             'int' => [
@@ -271,7 +270,7 @@ class ValidatorTest extends TestCase
      */
     public function testDiverseTypes($dataSet): void
     {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate($dataSet, [new Required()]);
 
         $this->assertTrue($result->isValid());
@@ -279,7 +278,7 @@ class ValidatorTest extends TestCase
 
     public function testNullAsDataSet(): void
     {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate(null, ['property' => [new CompareTo(null)]]);
 
         $this->assertTrue($result->isValid());
@@ -287,7 +286,7 @@ class ValidatorTest extends TestCase
 
     public function testPreValidation(): void
     {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate(
             new ArrayDataSet(['property' => '']),
             ['property' => [new Required(when: static fn (mixed $value, ?ValidationContext $context): bool => false)]],
@@ -300,7 +299,7 @@ class ValidatorTest extends TestCase
     {
         $ruleHandler = new class () {
         };
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
 
         $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
         $validator->validate(new ArrayDataSet(['property' => '']), [
@@ -328,7 +327,7 @@ class ValidatorTest extends TestCase
     {
         $this->expectException(RuleHandlerNotFoundException::class);
 
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $validator->validate(new ArrayDataSet(['property' => '']), [
             'property' => [
                 new class () implements RuleInterface {
@@ -503,7 +502,7 @@ class ValidatorTest extends TestCase
      */
     public function testRequired(array|null $rules, DataSetInterface $dataSet, array $expectedErrors): void
     {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate($dataSet, $rules);
         $this->assertEquals($expectedErrors, $result->getErrors());
     }
@@ -511,7 +510,7 @@ class ValidatorTest extends TestCase
     public function skipOnEmptyDataProvider(): array
     {
         $translator = (new TranslatorFactory())->create();
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $rules = [
             'name' => [new HasLength(min: 8)],
             'age' => [new Number(asInteger: true, min: 18)],
@@ -1158,7 +1157,7 @@ class ValidatorTest extends TestCase
     {
         $object = new ObjectWithAttributesOnly();
 
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
 
         $result = $validator->validate($object);
 
@@ -1184,7 +1183,7 @@ class ValidatorTest extends TestCase
 
     public function testValidateWithSingleRule(): void
     {
-        $result = ValidatorFactory::make()->validate(3, new Number(min: 5));
+        $result = (new Validator())->validate(3, new Number(min: 5));
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
@@ -1233,7 +1232,7 @@ class ValidatorTest extends TestCase
 
     public function testRulesWithWrongKey(): void
     {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('An attribute can only have an integer or a string type. bool given.');
@@ -1242,7 +1241,7 @@ class ValidatorTest extends TestCase
 
     public function testRulesWithWrongRule(): void
     {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
 
         $this->expectException(InvalidArgumentException::class);
         $message = 'Rule should be either an instance of Yiisoft\Validator\RuleInterface or a callable, int given.';
@@ -1252,21 +1251,21 @@ class ValidatorTest extends TestCase
 
     public function testRulesAsObjectNameWithRuleAttributes(): void
     {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate(['name' => 'Test name'], ObjectWithAttributesOnly::class);
         $this->assertTrue($result->isValid());
     }
 
     public function testRulesAsObjectWithRuleAttributes(): void
     {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate(['name' => 'Test name'], new ObjectWithAttributesOnly());
         $this->assertTrue($result->isValid());
     }
 
     public function testDataWithPostValidationHook(): void
     {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $this->assertFalse(ObjectWithPostValidationHook::$hookCalled);
 
         $result = $validator->validate(new ObjectWithPostValidationHook(), ['called' => new Boolean()]);
@@ -1281,7 +1280,7 @@ class ValidatorTest extends TestCase
             'agree' => [new Boolean(skipOnEmpty: static fn (): bool => true), new IsTrue()],
             'viewsCount' => [new Number(asInteger: true, min: 0)],
         ];
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
 
         $result = $validator->validate($data, $rules);
         $this->assertSame(

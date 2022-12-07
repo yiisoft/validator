@@ -18,8 +18,8 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Validator;
 
 final class CallbackTest extends RuleTestCase
 {
@@ -198,7 +198,7 @@ final class CallbackTest extends RuleTestCase
     {
         $callback = static fn (mixed $value, object $rule, ValidationContext $context): string => 'invalid return';
         $rule = new Callback($callback);
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
 
         $this->expectException(InvalidCallbackReturnTypeException::class);
         $message = 'Return value of callback must be an instance of Yiisoft\Validator\Result, string returned.';
@@ -209,7 +209,7 @@ final class CallbackTest extends RuleTestCase
     public function testValidateUsingMethodOutsideAttributeScope(): void
     {
         $rule = new Callback(method: 'validateName');
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Using method outside of attribute scope is prohibited.');

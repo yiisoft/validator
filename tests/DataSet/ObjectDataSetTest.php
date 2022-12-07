@@ -26,7 +26,7 @@ use Yiisoft\Validator\Tests\Support\Data\Post;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCallsCount;
 use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Support\Rule\NotRuleAttribute;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
+use Yiisoft\Validator\Validator;
 
 final class ObjectDataSetTest extends TestCase
 {
@@ -304,7 +304,7 @@ final class ObjectDataSetTest extends TestCase
     public function testValidateWithCallbackMethod(): void
     {
         $dataSet = new ObjectDataSet(new ObjectWithCallbackMethod());
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
 
         /** @var array $rules */
         $rules = $dataSet->getRules();

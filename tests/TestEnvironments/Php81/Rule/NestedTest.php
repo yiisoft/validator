@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Validator;
 
@@ -59,16 +58,11 @@ final class NestedTest extends TestCase
         array $expectedErrorMessagesIndexedByPath,
         ?bool $expectedIsValid = false
     ): void {
-        $result = $this->createValidator()->validate($data);
+        $result = (new Validator())->validate($data);
 
         $this->assertSame($expectedIsValid, $result->isValid());
         if (!$expectedIsValid) {
             $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
         }
-    }
-
-    private function createValidator(): Validator
-    {
-        return ValidatorFactory::make();
     }
 }
