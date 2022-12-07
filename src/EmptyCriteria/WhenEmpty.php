@@ -9,10 +9,15 @@ use function is_string;
 /**
  * Empty criteria is a callable returning `true` if a value must be considered empty.
  *
- * With `WhenEmpty`, a value is considered empty only when it is either not passed at all, is `null`, is an empty string
- * (not trimmed by default) or is an empty array.
+ * With `WhenEmpty`, a value is considered empty only when it is either:
  *
- * Can be used:
+ * - Not passed at all.
+ * - `null`.
+ * - An empty string (not trimmed by default).
+ * - An empty array.
+ *
+ * With regard to validation process, a corresponding rule is skipped only if this condition is met and `WhenEmpty` is
+ * set:
  *
  * - At a rule level via `$skipOnEmpty` property, but only for rules implementing {@see SkipOnEmptyTrait} / including
  * {@see SkipOnEmptyTrait}.
