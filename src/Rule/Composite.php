@@ -39,7 +39,7 @@ class Composite implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
 
     public function __construct(
         /**
-         * @param iterable<RuleInterface|Closure>
+         * @param iterable<Closure|RuleInterface>
          */
         iterable $rules = [],
 
