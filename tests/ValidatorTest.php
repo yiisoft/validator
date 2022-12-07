@@ -15,7 +15,6 @@ use Yiisoft\Validator\EmptyCriteria\WhenNull;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
-use Yiisoft\Validator\Helper\DataSetNormalizer;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\CompareTo;
@@ -1212,8 +1211,7 @@ class ValidatorTest extends TestCase
                 callable|iterable|object|string|null $rules = null,
                 ?ValidationContext $context = null
             ): Result {
-                $dataSet = DataSetNormalizer::normalize($data);
-                $context ??= new ValidationContext($this, $data, $dataSet);
+                $context ??= new ValidationContext();
 
                 $result = $this->validator->validate($data, $rules, $context);
 

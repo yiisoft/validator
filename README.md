@@ -828,7 +828,7 @@ final class CompanyNameHandler implements Rule\RuleHandlerInterface
         
         $result = new Result();
         $dataSet = $context->getDataSet();
-        $hasCompany = $dataSet !== null && $dataSet->getAttributeValue('hasCompany') === true;
+        $hasCompany = $dataSet->getAttributeValue('hasCompany') === true;
 
         if ($hasCompany && $this->isCompanyNameValid($value) === false) {
             $result->addError('Company name is not valid.');

@@ -12,7 +12,6 @@ use Yiisoft\Validator\Rule\Trait\LimitHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\ValidationContext;
 
 final class LimitHandlerTraitTest extends TestCase
@@ -81,7 +80,7 @@ final class LimitHandlerTraitTest extends TestCase
                 $this->validateLimits($rule, $context, $number, $result);
             }
         };
-        $context = new ValidationContext(ValidatorFactory::make(), null);
+        $context = new ValidationContext();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('$rule must implement both LimitInterface and RuleInterface.');

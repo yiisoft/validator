@@ -68,16 +68,19 @@ final class Validator implements ValidatorInterface
             $this->defaultSkipOnEmptyCriteria
         );
 
-        $compoundResult = new Result();
-        $context ??= new ValidationContext($this, $data, $dataSet);
-        $results = [];
+        $context ??= new ValidationContext();
+        $context
+            ->setValidatorAndRawDataOnce($this, $data)
+            ->setDataSet($dataSet);
 
+        $results = [];
         foreach ($rules as $attribute => $attributeRules) {
             $result = new Result();
 
             if (is_int($attribute)) {
                 /** @psalm-suppress MixedAssignment */
                 $validatedData = $dataSet->getData();
+                $context->setAttribute(null);
             } else {
                 /** @psalm-suppress MixedAssignment */
                 $validatedData = $dataSet->getAttributeValue($attribute);
@@ -92,6 +95,8 @@ final class Validator implements ValidatorInterface
 
             $results[] = $result;
         }
+
+        $compoundResult = new Result();
 
         foreach ($results as $result) {
             foreach ($result->getErrors() as $error) {
