@@ -13,9 +13,6 @@ final class InvalidCallbackReturnTypeExceptionTest extends TestCase
     {
         $exception = new InvalidCallbackReturnTypeException('test');
         $this->assertSame(0, $exception->getCode());
-
-        $exception = new InvalidCallbackReturnTypeException('test', 1);
-        $this->assertSame(1, $exception->getCode());
     }
 
     public function testReturnTypes(): void

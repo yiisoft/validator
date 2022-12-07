@@ -31,7 +31,7 @@ interface SkipOnEmptyInterface
      * Returns current "skip on empty" value.
      *
      * During pre-validation phase it will be normalized to an "empty criteria" - a callable identifying when and which
-     * values exactly must be considered as empty and skipped or not skipped at all.
+     * values exactly must be considered as empty for corresponding rules to be skipped or not skipped at all.
      *
      * @return bool|callable|null A raw non-normalized value:
      *
