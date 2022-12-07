@@ -28,8 +28,7 @@ final class ArrayDataSet implements DataSetInterface
          * @var array A mapping between attribute names and their values.
          */
         private array $data = [],
-    )
-    {
+    ) {
     }
 
     /**
@@ -39,6 +38,7 @@ final class ArrayDataSet implements DataSetInterface
      * presence of attribute or return a different default value, use {@see hasAttribute} instead.
      *
      * @param string $attribute Attribute name.
+     *
      * @return mixed Attribute value.
      */
     public function getAttributeValue(string $attribute): mixed
@@ -61,6 +61,7 @@ final class ArrayDataSet implements DataSetInterface
      * with empty values are treated as present too.
      *
      * @param string $attribute Attribute name.
+     *
      * @return bool Whether the attribute exists: `true` - exists and `false` - otherwise.
      */
     public function hasAttribute(string $attribute): bool
