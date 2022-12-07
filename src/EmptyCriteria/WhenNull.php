@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\EmptyCriteria;
 
 /**
- * Empty criteria is a callable identifying when and which values exactly must be considered as empty for according
- * rules to be skipped or not skipped at all.
+ * Empty criteria is a callable returning true if a value must be considered empty.
  *
- * With this criteria, a rule is skipped only when the validated value is `null`.
+ * With `WhenNull` a rule is considered empty only when the value is `null`.
  *
- * Can be set:
+ * Can be used:
  *
  * - At a rule level via `$skipOnEmpty` property, but only for rules implementing {@see SkipOnEmptyTrait} / including
  * {@see SkipOnEmptyTrait}.
