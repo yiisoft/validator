@@ -12,7 +12,7 @@ use PhpBench\Benchmark\Metadata\Annotations\Revs;
 use PhpBench\Benchmark\Metadata\Annotations\Warmup;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
+use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
 /**
@@ -24,7 +24,7 @@ final class MainBench
 
     public function setUp(array $params): void
     {
-        $this->validator = ValidatorFactory::make();
+        $this->validator = new Validator();
     }
 
     /**

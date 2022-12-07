@@ -97,7 +97,7 @@ final class IsTrueTest extends RuleTestCase
         return [
             ['5', [new IsTrue()], ['' => ['The value must be "1".']]],
             [null, [new IsTrue()], ['' => ['The value must be "1".']]],
-            [[], [new IsTrue()], ['' => ['The value must be "1".']]],
+            'xxx' => [[], [new IsTrue()], ['' => ['The value must be "1".']]],
             [true, [new IsTrue(strict: true)], ['' => ['The value must be "1".']]],
             ['1', [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
             [[], [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
