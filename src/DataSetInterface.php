@@ -13,6 +13,7 @@ interface DataSetInterface
      * Returns an attribute value by its name.
      *
      * @param string $attribute Attribute name.
+     *
      * @return mixed Attribute value.
      */
     public function getAttributeValue(string $attribute): mixed;
@@ -29,6 +30,7 @@ interface DataSetInterface
      * empty values are treated as present.
      *
      * @param string $attribute Attribute name.
+     *
      * @return bool Whether the attribute exists: `true` - exists and `false` - otherwise.
      */
     public function hasAttribute(string $attribute): bool;

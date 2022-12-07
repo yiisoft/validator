@@ -31,8 +31,7 @@ final class SingleValueDataSet implements DataSetInterface
          * @var mixed Single value of any (mixed) data type.
          */
         private mixed $value,
-    )
-    {
+    ) {
     }
 
     /**
@@ -40,6 +39,7 @@ final class SingleValueDataSet implements DataSetInterface
      * returned regardless of the attribute name.
      *
      * @param string $attribute Attribute name.
+     *
      * @return mixed `null` value indicating that attributes are not supported.
      */
     public function getAttributeValue(string $attribute): mixed
@@ -62,6 +62,7 @@ final class SingleValueDataSet implements DataSetInterface
      * Whether this data set has the attribute with a given name.
      *
      * @param string $attribute Attribute name.
+     *
      * @return bool `false` value indicating that attributes are not supported.
      */
     public function hasAttribute(string $attribute): bool
