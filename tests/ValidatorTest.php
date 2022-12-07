@@ -25,7 +25,6 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithAttributesOnly;
