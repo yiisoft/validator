@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\EmptyCriteria;
 
 /**
- * Empty criteria is a callable returning true if a value must be considered empty.
+ * Empty criteria is a callable returning `true` if a value must be considered empty.
  *
  * With `WhenNull` a rule is considered empty only when the value is `null`.
  *

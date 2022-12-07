@@ -7,10 +7,10 @@ namespace Yiisoft\Validator\EmptyCriteria;
 use function is_string;
 
 /**
- * Empty criteria is a callable returning true if a value must be considered empty.
+ * Empty criteria is a callable returning `true` if a value must be considered empty.
  *
- * With `WhenEmpty`, a value is considered empty only when it is either not passed at all, is `null`, is an
- * empty string (not trimmed by default) or is an empty array.
+ * With `WhenEmpty`, a value is considered empty only when it is either not passed at all, is `null`, is an empty string
+ * (not trimmed by default) or is an empty array.
  *
  * Can be used:
  *
