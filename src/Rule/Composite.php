@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -23,8 +24,13 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @psalm-import-type WhenType from WhenInterface
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-class Composite implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+class Composite implements
+    RuleWithOptionsInterface,
+    SkipOnErrorInterface,
+    WhenInterface,
+    SkipOnEmptyInterface,
+    AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -86,6 +92,15 @@ class Composite implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     public function getHandlerClassName(): string
     {
         return CompositeHandler::class;
+    }
+
+    public function afterInitAttribute(object $object): void
+    {
+        foreach ($this->rules as $rule) {
+            if ($rule instanceof AfterInitAttributeEventInterface) {
+                $rule->afterInitAttribute($object);
+            }
+        }
     }
 
     private function getRulesDumper(): RulesDumper
