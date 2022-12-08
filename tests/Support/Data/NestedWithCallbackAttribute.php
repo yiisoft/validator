@@ -9,14 +9,14 @@ use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Nested;
 
 #[Nested([
-    'a' => new Callback(method: 'validateA')
+    'a' => new Callback(method: 'validateA'),
 ])]
 final class NestedWithCallbackAttribute
 {
     private int $a = 7;
 
     #[Nested([
-        'x' => new Callback(method: 'validateB')
+        'x' => new Callback(method: 'validateB'),
     ])]
     private array $b = [
         'x' => 5,

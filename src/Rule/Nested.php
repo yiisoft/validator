@@ -314,7 +314,7 @@ final class Nested implements
         if ($this->rules === null) {
             return;
         }
-        
+
         foreach ($this->rules as $rules) {
             foreach ((is_iterable($rules) ? $rules : [$rules]) as $rule) {
                 if ($rule instanceof AfterInitAttributeEventInterface) {
