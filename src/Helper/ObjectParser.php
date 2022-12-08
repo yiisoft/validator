@@ -43,26 +43,32 @@ final class ObjectParser
     }
 
     /**
-     * @return array<string, list<RuleInterface>>
+     * @return array<string, list<RuleInterface>>|array<int, RuleInterface>
      */
     public function getRules(): array
     {
         if ($this->hasCacheItem('rules')) {
-            /** @var array<string, list<RuleInterface>> */
+            /** @var array<string, list<RuleInterface>>|array<int, RuleInterface> */
             return $this->getCacheItem('rules');
         }
 
         $rules = [];
+
+        // Class rules
+        $attributes = $this
+            ->getReflectionObject()
+            ->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
+        foreach ($attributes as $attribute) {
+            $rules[] = $this->createRule($attribute);
+        }
+
+        // Properties rules
         foreach ($this->getReflectionProperties() as $property) {
             // TODO: use Generator to collect attributes.
             $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             foreach ($attributes as $attribute) {
-                $rule = $attribute->newInstance();
-                $rules[$property->getName()][] = $rule;
-
-                if ($rule instanceof AfterInitAttributeEventInterface) {
-                    $rule->afterInitAttribute($this->object);
-                }
+                /** @psalm-suppress UndefinedInterfaceMethod */
+                $rules[$property->getName()][] = $this->createRule($attribute);
             }
         }
 
@@ -141,6 +147,20 @@ final class ObjectParser
         }
 
         return $reflection;
+    }
+
+    /**
+     * @param ReflectionAttribute<RuleInterface> $attribute
+     */
+    private function createRule(ReflectionAttribute $attribute): RuleInterface
+    {
+        $rule = $attribute->newInstance();
+
+        if ($rule instanceof AfterInitAttributeEventInterface) {
+            $rule->afterInitAttribute($this->object);
+        }
+
+        return $rule;
     }
 
     private function hasCacheItem(
