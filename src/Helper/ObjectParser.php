@@ -17,12 +17,13 @@ use function array_key_exists;
 final class ObjectParser
 {
     /**
-     * @var array<string, array<string, array>>
+     * @var array<string, array<string, mixed>>
      */
     #[ArrayShape([
         [
             'rules' => 'array',
             'reflectionAttributes' => 'array',
+            'reflectionObject' => 'object'
         ],
     ])]
     private static array $cache = [];
@@ -103,7 +104,8 @@ final class ObjectParser
             return $this->getCacheItem('reflectionProperties');
         }
 
-        $reflection = new ReflectionObject($this->object);
+        $reflection = $this->getReflectionObject();
+
         $reflectionProperties = [];
 
         foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
@@ -125,8 +127,24 @@ final class ObjectParser
         return $reflectionProperties;
     }
 
+    private function getReflectionObject(): ReflectionObject
+    {
+        if ($this->hasCacheItem('reflectionObject')) {
+            /** @var ReflectionObject */
+            return $this->getCacheItem('reflectionObject');
+        }
+
+        $reflection = new ReflectionObject($this->object);
+
+        if ($this->useCache()) {
+            $this->setCacheItem('reflectionObject', $reflection);
+        }
+
+        return $reflection;
+    }
+
     private function hasCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionObject'])]
         string $name
     ): bool {
         if (!$this->useCache()) {
@@ -141,19 +159,19 @@ final class ObjectParser
     }
 
     private function getCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionObject'])]
         string $name
-    ): array {
+    ): mixed {
         /** @psalm-suppress PossiblyNullArrayOffset */
         return self::$cache[$this->cacheKey][$name];
     }
 
     private function setCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionObject'])]
         string $name,
-        array $value
+        mixed $value
     ): void {
-        /** @psalm-suppress PossiblyNullArrayOffset */
+        /** @psalm-suppress PossiblyNullArrayOffset, MixedAssignment */
         self::$cache[$this->cacheKey][$name] = $value;
     }
 
