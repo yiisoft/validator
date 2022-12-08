@@ -17,12 +17,13 @@ use function array_key_exists;
 final class ObjectParser
 {
     /**
-     * @var array<string, array<string, array>>
+     * @var array<string, array<string, mixed>>
      */
     #[ArrayShape([
         [
             'rules' => 'array',
             'reflectionAttributes' => 'array',
+            'reflectionObject' => 'object',
         ],
     ])]
     private static array $cache = [];
@@ -42,26 +43,32 @@ final class ObjectParser
     }
 
     /**
-     * @return array<string, list<RuleInterface>>
+     * @return array<int, RuleInterface>|array<string, list<RuleInterface>>
      */
     public function getRules(): array
     {
         if ($this->hasCacheItem('rules')) {
-            /** @var array<string, list<RuleInterface>> */
+            /** @var array<int, RuleInterface>|array<string, list<RuleInterface>> */
             return $this->getCacheItem('rules');
         }
 
         $rules = [];
+
+        // Class rules
+        $attributes = $this
+            ->getReflectionObject()
+            ->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
+        foreach ($attributes as $attribute) {
+            $rules[] = $this->createRule($attribute);
+        }
+
+        // Properties rules
         foreach ($this->getReflectionProperties() as $property) {
             // TODO: use Generator to collect attributes.
             $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             foreach ($attributes as $attribute) {
-                $rule = $attribute->newInstance();
-                $rules[$property->getName()][] = $rule;
-
-                if ($rule instanceof AfterInitAttributeEventInterface) {
-                    $rule->afterInitAttribute($this->object);
-                }
+                /** @psalm-suppress UndefinedInterfaceMethod */
+                $rules[$property->getName()][] = $this->createRule($attribute);
             }
         }
 
@@ -103,7 +110,8 @@ final class ObjectParser
             return $this->getCacheItem('reflectionProperties');
         }
 
-        $reflection = new ReflectionObject($this->object);
+        $reflection = $this->getReflectionObject();
+
         $reflectionProperties = [];
 
         foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
@@ -125,8 +133,38 @@ final class ObjectParser
         return $reflectionProperties;
     }
 
+    private function getReflectionObject(): ReflectionObject
+    {
+        if ($this->hasCacheItem('reflectionObject')) {
+            /** @var ReflectionObject */
+            return $this->getCacheItem('reflectionObject');
+        }
+
+        $reflection = new ReflectionObject($this->object);
+
+        if ($this->useCache()) {
+            $this->setCacheItem('reflectionObject', $reflection);
+        }
+
+        return $reflection;
+    }
+
+    /**
+     * @param ReflectionAttribute<RuleInterface> $attribute
+     */
+    private function createRule(ReflectionAttribute $attribute): RuleInterface
+    {
+        $rule = $attribute->newInstance();
+
+        if ($rule instanceof AfterInitAttributeEventInterface) {
+            $rule->afterInitAttribute($this->object);
+        }
+
+        return $rule;
+    }
+
     private function hasCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionObject'])]
         string $name
     ): bool {
         if (!$this->useCache()) {
@@ -141,19 +179,19 @@ final class ObjectParser
     }
 
     private function getCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionObject'])]
         string $name
-    ): array {
+    ): mixed {
         /** @psalm-suppress PossiblyNullArrayOffset */
         return self::$cache[$this->cacheKey][$name];
     }
 
     private function setCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionObject'])]
         string $name,
-        array $value
+        mixed $value
     ): void {
-        /** @psalm-suppress PossiblyNullArrayOffset */
+        /** @psalm-suppress PossiblyNullArrayOffset, MixedAssignment */
         self::$cache[$this->cacheKey][$name] = $value;
     }
 
