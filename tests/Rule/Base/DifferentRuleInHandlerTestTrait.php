@@ -19,7 +19,7 @@ trait DifferentRuleInHandlerTestTrait
 
         $this->expectException(UnexpectedRuleException::class);
         $this->expectExceptionMessage(
-            'Expected "' . $ruleClassName . '", but ' . RuleWithCustomHandler::class . ' given.'
+            'Expected "' . $ruleClassName . '", but "' . RuleWithCustomHandler::class . '" given.'
         );
         $validator->validate([], [$rule]);
     }
