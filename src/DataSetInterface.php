@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 /**
- * An interface for unifying access to different types of validated data. A class implementing it called "data set".
+ * An interface for unifying access to different types of validated data. A class implementing it is called "data set".
  */
 interface DataSetInterface
 {
