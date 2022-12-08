@@ -9,12 +9,12 @@ use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Composite;
 
 #[Composite([
-    new Callback(method: 'validateA')
+    new Callback(method: 'validateA'),
 ])]
 final class CompositeWithCallbackAttribute
 {
     #[Composite([
-        new Callback(method: 'validateB')
+        new Callback(method: 'validateB'),
     ])]
     private int $b = 7;
 

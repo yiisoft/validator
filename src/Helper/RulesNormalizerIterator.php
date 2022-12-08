@@ -37,7 +37,6 @@ final class RulesNormalizerIterator implements IteratorAggregate
         }
     }
 
-
     /**
      * @throws InvalidArgumentException
      */
