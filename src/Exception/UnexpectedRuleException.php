@@ -44,9 +44,12 @@ final class UnexpectedRuleException extends InvalidArgumentException
          */
         object $actualObject
     ) {
-        $actualClassName = $actualObject::class;
-        $message = "Expected \"$expectedClassName\", but {$actualClassName} given.";
-
-        parent::__construct($message);
+        parent::__construct(
+            sprintf(
+                'Expected "%s", but "%s" given.',
+                $expectedClassName,
+                $actualObject::class
+            )
+        );
     }
 }
