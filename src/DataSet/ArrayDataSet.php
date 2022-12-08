@@ -18,7 +18,7 @@ use function array_key_exists;
  * $dataSet = new ArrayDataSet(['name' => 'John', 'age' => 18]);
  * ```
  *
- * When using with validator, there is no need to do it manually, because array will be automatically wrapped with
+ * When using validator, there is no need to wrap your data manually. Array will be automatically wrapped with
  * {@see ArrayDataSet} by {@see DataSetNormalizer} during validation.
  */
 final class ArrayDataSet implements DataSetInterface
