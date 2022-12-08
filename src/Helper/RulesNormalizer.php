@@ -6,11 +6,9 @@ namespace Yiisoft\Validator\Helper;
 
 use InvalidArgumentException;
 use ReflectionException;
-use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
-use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\ValidatorInterface;
 
 use function is_callable;
@@ -53,7 +51,7 @@ final class RulesNormalizer
                 );
             }
 
-            $normalizedRules[$attribute] = self::normalizeRulesGenerator(
+            $normalizedRules[$attribute] = new RulesNormalizerIterator(
                 is_iterable($attributeRules) ? $attributeRules : [$attributeRules],
                 $defaultSkipOnEmptyCriteria
             );
@@ -69,7 +67,7 @@ final class RulesNormalizer
      */
     public static function normalizeList(iterable|callable|RuleInterface $rules): iterable
     {
-        return self::normalizeRulesGenerator(
+        return new RulesNormalizerIterator(
             is_iterable($rules) ? $rules : [$rules]
         );
     }
@@ -102,50 +100,5 @@ final class RulesNormalizer
         }
 
         return (new AttributesRulesProvider($rules))->getRules();
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     *
-     * @return iterable<int, RuleInterface>
-     */
-    private static function normalizeRulesGenerator(
-        iterable $rules,
-        ?callable $defaultSkipOnEmptyCriteria = null
-    ): iterable {
-        /** @var mixed $rule */
-        foreach ($rules as $rule) {
-            yield self::normalizeRule($rule, $defaultSkipOnEmptyCriteria);
-        }
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    private static function normalizeRule(mixed $rule, ?callable $defaultSkipOnEmptyCriteria): RuleInterface
-    {
-        if (is_callable($rule)) {
-            return new Callback($rule);
-        }
-
-        if (!$rule instanceof RuleInterface) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Rule should be either an instance of %s or a callable, %s given.',
-                    RuleInterface::class,
-                    get_debug_type($rule)
-                )
-            );
-        }
-
-        if (
-            $defaultSkipOnEmptyCriteria !== null
-            && $rule instanceof SkipOnEmptyInterface
-            && $rule->getSkipOnEmpty() === null
-        ) {
-            $rule = $rule->skipOnEmpty($defaultSkipOnEmptyCriteria);
-        }
-
-        return $rule;
     }
 }
