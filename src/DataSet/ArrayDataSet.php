@@ -11,7 +11,7 @@ use Yiisoft\Validator\Helper\DataSetNormalizer;
 use function array_key_exists;
 
 /**
- * A data set for storing data as associative array, where keys are attribute names and values are their corresponding
+ * A data set for storing data as an associative array, where keys are attribute names and values are their corresponding
  * values. An example of usage:
  *
  * ```php
