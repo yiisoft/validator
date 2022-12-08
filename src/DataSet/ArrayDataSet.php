@@ -34,7 +34,7 @@ final class ArrayDataSet implements DataSetInterface
     /**
      * Returns an attribute value by its name.
      *
-     * Note that in case of non-existing attribute a default `null` value is returned. If you need to just check the
+     * Note that in case of non-existing attribute a default `null` value is returned. If you need to check the
      * presence of attribute or return a different default value, use {@see hasAttribute} instead.
      *
      * @param string $attribute Attribute name.
