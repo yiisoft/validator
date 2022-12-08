@@ -17,6 +17,8 @@ use Yiisoft\Validator\Validator;
  * {@see SkipOnEmptyTrait}.
  * - At validator level ({@see Validator::$defaultSkipOnEmptyCriteria}).
  *
+ * This is a default behavior for all built-in rules.
+ *
  * A shortcut for `new NeverEmpty()` is `false`.
  */
 final class NeverEmpty

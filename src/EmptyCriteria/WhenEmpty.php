@@ -23,8 +23,6 @@ use function is_string;
  * {@see SkipOnEmptyTrait}.
  * - At validator level ({@see Validator::$defaultSkipOnEmptyCriteria}).
  *
- * This is a default behavior for all built-in rules.
- *
  * A shortcut for `new WhenEmpty()` is `true` (string is not trimmed). If you want a string to be trimmed before
  * checking, use `new WhenEmpty(trimString: false)`.
  */
