@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
@@ -35,20 +34,12 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class CompositeHandler implements RuleHandlerInterface
 {
-    use PreValidateTrait;
-
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Composite) {
             throw new UnexpectedRuleException(Composite::class, $rule);
         }
 
-        $context->setParameter($this->parameterPreviousRulesErrored, true);
-
-        if ($this->preValidate($value, $context, $rule)) {
-            return new Result();
-        }
-
-        return $context->getValidator()->validate($value, $rule->getRules());
+        return $context->validate($value, $rule->getRules());
     }
 }

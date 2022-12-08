@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule\Handler\Container\Tests;
 
+use stdClass;
 use Yiisoft\Test\Support\Container\SimpleContainer;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
@@ -39,10 +40,10 @@ class RuleHandlerContainerTest extends TestCase
 
     public function testNotRuleInterface(): void
     {
-        $handlersContainer = new RuleHandlerContainer(new SimpleContainer(['handler' => new \stdClass()]));
+        $handlersContainer = new RuleHandlerContainer(new SimpleContainer(['handler' => new stdClass()]));
 
         $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
-        $this->expectExceptionMessage('Handler "handler" should implement "' . RuleHandlerInterface::class . '".');
+        $this->expectExceptionMessage('Handler "handler" must implement "' . RuleHandlerInterface::class . '".');
         $this->expectExceptionCode(0);
         $handlersContainer->resolve('handler');
     }

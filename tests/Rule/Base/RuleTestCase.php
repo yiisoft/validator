@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule\Base;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
+use Yiisoft\Validator\Validator;
 
 abstract class RuleTestCase extends TestCase
 {
@@ -16,7 +16,7 @@ abstract class RuleTestCase extends TestCase
      */
     public function testValidationPassed(mixed $data, array $rules): void
     {
-        $result = ValidatorFactory::make()->validate($data, $rules);
+        $result = (new Validator())->validate($data, $rules);
 
         $this->assertTrue($result->isValid());
     }
@@ -28,7 +28,7 @@ abstract class RuleTestCase extends TestCase
      */
     public function testValidationFailed(mixed $data, array|null $rules, array $errorMessagesIndexedByPath): void
     {
-        $result = ValidatorFactory::make()->validate($data, $rules);
+        $result = (new Validator())->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());

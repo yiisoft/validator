@@ -28,7 +28,7 @@ final class RulesNormalizer
      * @throws InvalidArgumentException
      * @throws ReflectionException
      *
-     * @return iterable<int|string, iterable<int|string, RuleInterface>>
+     * @return iterable<int|string, iterable<int, RuleInterface>>
      */
     public static function normalize(
         callable|iterable|object|string|null $rules,
@@ -53,13 +53,25 @@ final class RulesNormalizer
                 );
             }
 
-            $normalizedRules[$attribute] = self::normalizeAttributeRules(
+            $normalizedRules[$attribute] = self::normalizeRulesGenerator(
                 is_iterable($attributeRules) ? $attributeRules : [$attributeRules],
                 $defaultSkipOnEmptyCriteria
             );
         }
 
         return $normalizedRules;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     *
+     * @return iterable<int, RuleInterface>
+     */
+    public static function normalizeList(iterable|callable|RuleInterface $rules): iterable
+    {
+        return self::normalizeRulesGenerator(
+            is_iterable($rules) ? $rules : [$rules]
+        );
     }
 
     /**
@@ -95,10 +107,12 @@ final class RulesNormalizer
     /**
      * @throws InvalidArgumentException
      *
-     * @return iterable<int|string, RuleInterface>
+     * @return iterable<int, RuleInterface>
      */
-    private static function normalizeAttributeRules(iterable $rules, ?callable $defaultSkipOnEmptyCriteria): iterable
-    {
+    private static function normalizeRulesGenerator(
+        iterable $rules,
+        ?callable $defaultSkipOnEmptyCriteria = null
+    ): iterable {
         /** @var mixed $rule */
         foreach ($rules as $rule) {
             yield self::normalizeRule($rule, $defaultSkipOnEmptyCriteria);
@@ -124,7 +138,11 @@ final class RulesNormalizer
             );
         }
 
-        if ($rule instanceof SkipOnEmptyInterface && $rule->getSkipOnEmpty() === null) {
+        if (
+            $defaultSkipOnEmptyCriteria !== null
+            && $rule instanceof SkipOnEmptyInterface
+            && $rule->getSkipOnEmpty() === null
+        ) {
             $rule = $rule->skipOnEmpty($defaultSkipOnEmptyCriteria);
         }
 

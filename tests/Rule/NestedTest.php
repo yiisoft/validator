@@ -31,13 +31,14 @@ use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
 use Yiisoft\Validator\ValidationContext;
+
+use Yiisoft\Validator\Validator;
 
 use function array_slice;
 
@@ -65,7 +66,7 @@ final class NestedTest extends RuleTestCase
             $rule->getPropertyVisibility(),
         );
         $this->assertFalse($rule->getRequirePropertyPath());
-        $this->assertSame('Property path "{path}" is not found.', $rule->getNoPropertyPathMessage());
+        $this->assertSame('Property "{path}" is not found.', $rule->getNoPropertyPathMessage());
         $this->assertNull($rule->getSkipOnEmpty());
         $this->assertFalse($rule->shouldSkipOnError());
         $this->assertNull($rule->getWhen());
@@ -104,7 +105,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
-                        'template' => 'Property path "{path}" is not found.',
+                        'template' => 'Property "{path}" is not found.',
                         'parameters' => [],
                     ],
                     'requirePropertyPath' => false,
@@ -161,7 +162,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
-                        'template' => 'Property path "{path}" is not found.',
+                        'template' => 'Property "{path}" is not found.',
                         'parameters' => [],
                     ],
                     'requirePropertyPath' => false,
@@ -221,7 +222,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
-                        'template' => 'Property path "{path}" is not found.',
+                        'template' => 'Property "{path}" is not found.',
                         'parameters' => [],
                     ],
                     'requirePropertyPath' => false,
@@ -254,7 +255,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
-                        'template' => 'Property path "{path}" is not found.',
+                        'template' => 'Property "{path}" is not found.',
                         'parameters' => [],
                     ],
                     'requirePropertyPath' => false,
@@ -398,7 +399,7 @@ final class NestedTest extends RuleTestCase
             'wo-rules-inherit-attributes' => [
                 new class () {
                     #[Nested]
-                    private $object;
+                    private InheritAttributesObject $object;
 
                     public function __construct()
                     {
@@ -428,7 +429,7 @@ final class NestedTest extends RuleTestCase
      */
     public function testHandler(object $data, array $expectedErrorMessagesIndexedByPath): void
     {
-        $result = ValidatorFactory::make()->validate($data);
+        $result = (new Validator())->validate($data);
         $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
@@ -483,7 +484,7 @@ final class NestedTest extends RuleTestCase
 
     public function testNestedWithoutRulesWithObject(): void
     {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate(new ObjectWithNestedObject());
 
         $this->assertFalse($result->isValid());
@@ -743,7 +744,7 @@ final class NestedTest extends RuleTestCase
         array $expectedErrorMessages,
         array $expectedErrorMessagesIndexedByPath
     ): void {
-        $result = ValidatorFactory::make()->validate($data, $rules);
+        $result = (new Validator())->validate($data, $rules);
 
         $errorsData = array_map(
             static fn (Error $error) => [
@@ -1018,12 +1019,12 @@ final class NestedTest extends RuleTestCase
             [
                 [],
                 [new Nested(['value' => new Required()], requirePropertyPath: true)],
-                ['value' => ['Property path "value" is not found.']],
+                ['value' => ['Property "value" is not found.']],
             ],
             [
                 [],
                 [new Nested([0 => new Required()], requirePropertyPath: true)],
-                [0 => ['Property path "0" is not found.']],
+                [0 => ['Property "0" is not found.']],
             ],
             // https://github.com/yiisoft/validator/issues/200
             [
@@ -1108,8 +1109,8 @@ final class NestedTest extends RuleTestCase
                 [],
                 [new Nested(['value1' => new Required(), 'value2' => new Required()], requirePropertyPath: true)],
                 [
-                    ['Property path "value1" is not found.', ['value1']],
-                    ['Property path "value2" is not found.', ['value2']],
+                    ['Property "value1" is not found.', ['value1']],
+                    ['Property "value2" is not found.', ['value2']],
                 ],
             ],
             [
@@ -1161,7 +1162,7 @@ final class NestedTest extends RuleTestCase
      */
     public function testValidationFailedWithDetailedErrors(mixed $data, array $rules, array $errors): void
     {
-        $result = ValidatorFactory::make()->validate($data, $rules);
+        $result = (new Validator())->validate($data, $rules);
 
         $errorsData = array_map(
             static fn (Error $error) => [

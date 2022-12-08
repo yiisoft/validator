@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'The model is not valid. Must have at least "{min}" filled attributes.' => 'Модель должна содержать минимум {min, number} {min, plural, one{заполненный атрибут} few{заполненных атрибута} many{заполненных атрибутов} other{заполненных атрибута}}.',
+    'The data must have at least "{min}" filled attributes.' => 'Данные должны содержать минимум {min, number} {min, plural, one{заполненный атрибут} few{заполненных атрибута} many{заполненных атрибутов} other{заполненных атрибута}}.',
     'Value must be an array or an object.' => 'Значение должно быть массивом или объектом.',
     'Value must be either "{true}" or "{false}".' => 'Значение должно быть «{true}» или «{false}».',
     'The allowed types are integer, float, string, boolean and null.' => 'Разрешённые типы: integer, float, string, boolean и null.',
@@ -39,12 +39,12 @@ return [
     'Nested rule without rules can be used for objects only.' => 'Правило Nested без указания правил может использоваться только для объектов.',
     'An object data set data can only have an array or an object type.' => 'Данные в объекте должны быть массивом или объектом.',
     'The value must have an array or an object type.' => 'Значение должно быть массивом или объектом.',
-    'Property path "{path}" is not found.' => 'Свойство «{path}» не найдено.',
+    'Property "{path}" is not found.' => 'Свойство «{path}» не найдено.',
     'The allowed types are integer, float and string.' => 'Разрешённые типы: integer, float и string.',
     'Value must be an integer.' => 'Значение должно быть целым числом.',
     'Value must be a number.' => 'Значение должно быть числом.',
     'Value must be no less than {min}.' => 'Значение должно быть не меньше {min}.',
-    'Value must be no greater than {max}.' => 'Значение должно быть не больше {min}.',
+    'Value must be no greater than {max}.' => 'Значение должно быть не больше {max}.',
     'Value must be equal to "{exactly}".' => 'Значение должно быть равно «{exactly}».',
     'Value should be string.' => 'Значение должно быть строкой.',
     'Value is invalid.' => 'Значение неверно.',

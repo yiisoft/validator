@@ -15,7 +15,6 @@ use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
-use Yiisoft\Validator\Rule\Trait\PreValidateTrait;
 
 use function extension_loaded;
 use function is_int;
@@ -27,9 +26,8 @@ use function is_int;
  */
 final class Validator implements ValidatorInterface
 {
-    use PreValidateTrait;
-
     public const DEFAULT_TRANSLATION_CATEGORY = 'yii-validator';
+    private const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 
     private RuleHandlerResolverInterface $ruleHandlerResolver;
     private TranslatorInterface $translator;
@@ -63,26 +61,29 @@ final class Validator implements ValidatorInterface
         callable|iterable|object|string|null $rules = null,
         ?ValidationContext $context = null
     ): Result {
-        $data = DataSetNormalizer::normalize($data);
+        $dataSet = DataSetNormalizer::normalize($data);
         $rules = RulesNormalizer::normalize(
             $rules,
-            $data,
+            $dataSet,
             $this->defaultSkipOnEmptyCriteria
         );
 
-        $compoundResult = new Result();
-        $context ??= new ValidationContext($this, $data);
-        $results = [];
+        $context ??= new ValidationContext();
+        $context
+            ->setValidatorAndRawDataOnce($this, $data)
+            ->setDataSet($dataSet);
 
+        $results = [];
         foreach ($rules as $attribute => $attributeRules) {
             $result = new Result();
 
             if (is_int($attribute)) {
                 /** @psalm-suppress MixedAssignment */
-                $validatedData = $data->getData();
+                $validatedData = $dataSet->getData();
+                $context->setAttribute(null);
             } else {
                 /** @psalm-suppress MixedAssignment */
-                $validatedData = $data->getAttributeValue($attribute);
+                $validatedData = $dataSet->getAttributeValue($attribute);
                 $context->setAttribute($attribute);
             }
 
@@ -94,6 +95,8 @@ final class Validator implements ValidatorInterface
 
             $results[] = $result;
         }
+
+        $compoundResult = new Result();
 
         foreach ($results as $result) {
             foreach ($result->getErrors() as $error) {
@@ -109,8 +112,8 @@ final class Validator implements ValidatorInterface
             }
         }
 
-        if ($data instanceof PostValidationHookInterface) {
-            $data->processValidationResult($compoundResult);
+        if ($dataSet instanceof PostValidationHookInterface) {
+            $dataSet->processValidationResult($compoundResult);
         }
 
         return $compoundResult;
@@ -133,7 +136,7 @@ final class Validator implements ValidatorInterface
                 continue;
             }
 
-            $context->setParameter($this->parameterPreviousRulesErrored, true);
+            $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
 
             foreach ($ruleResult->getErrors() as $error) {
                 $valuePath = $error->getValuePath();
@@ -144,6 +147,31 @@ final class Validator implements ValidatorInterface
             }
         }
         return $compoundResult;
+    }
+
+    private function preValidate(mixed $value, ValidationContext $context, RuleInterface $rule): bool
+    {
+        if (
+            $rule instanceof SkipOnEmptyInterface &&
+            (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $context->isAttributeMissing())
+        ) {
+            return true;
+        }
+
+        if (
+            $rule instanceof SkipOnErrorInterface
+            && $rule->shouldSkipOnError()
+            && $context->getParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED) === true
+        ) {
+            return true;
+        }
+
+        if ($rule instanceof WhenInterface) {
+            $when = $rule->getWhen();
+            return $when !== null && !$when($value, $context);
+        }
+
+        return false;
     }
 
     private function createDefaultTranslator(): Translator

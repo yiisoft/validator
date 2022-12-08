@@ -38,7 +38,7 @@ use function sprintf;
  *
  * @psalm-import-type WhenType from WhenInterface
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
     RuleWithOptionsInterface,
     SkipOnErrorInterface,
@@ -90,7 +90,7 @@ final class Nested implements
         'type.',
         private string $incorrectInputMessage = 'The value must have an array or an object type.',
         private bool $requirePropertyPath = false,
-        private string $noPropertyPathMessage = 'Property path "{path}" is not found.',
+        private string $noPropertyPathMessage = 'Property "{path}" is not found.',
         private bool $normalizeRules = true,
         private bool $propagateOptions = false,
 
