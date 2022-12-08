@@ -11,6 +11,7 @@ use JetBrains\PhpStorm\ArrayShape;
 use ReflectionProperty;
 use Traversable;
 use Yiisoft\Strings\StringHelper;
+use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -44,7 +45,8 @@ final class Nested implements
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
-    PropagateOptionsInterface
+    PropagateOptionsInterface,
+    AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -305,6 +307,21 @@ final class Nested implements
         }
 
         $this->rules = $rules;
+    }
+
+    public function afterInitAttribute(object $object): void
+    {
+        if ($this->rules === null) {
+            return;
+        }
+
+        foreach ($this->rules as $rules) {
+            foreach ((is_iterable($rules) ? $rules : [$rules]) as $rule) {
+                if ($rule instanceof AfterInitAttributeEventInterface) {
+                    $rule->afterInitAttribute($object);
+                }
+            }
+        }
     }
 
     #[ArrayShape([

@@ -9,6 +9,7 @@ use ReflectionProperty;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Tests\Support\Data\NestedClassAttribute;
+use Yiisoft\Validator\Tests\Support\Data\NestedWithCallbackAttribute;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Validator;
 
@@ -75,6 +76,19 @@ final class NestedTest extends TestCase
             [
                 'a' => ['Value must be no less than 7.'],
                 'b' => ['Value must be no greater than 1.'],
+            ],
+            $result->getErrorMessagesIndexedByAttribute()
+        );
+    }
+
+    public function testWithCallbackAttribute(): void
+    {
+        $result = (new Validator())->validate(new NestedWithCallbackAttribute());
+
+        $this->assertSame(
+            [
+                'a' => ['Invalid A.'],
+                'b' => ['Invalid B.'],
             ],
             $result->getErrorMessagesIndexedByAttribute()
         );
