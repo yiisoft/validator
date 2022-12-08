@@ -19,7 +19,7 @@ use Yiisoft\Validator\DataSetInterface;
  * $dataSet = new SingleValueDataSet(false);
  * ```
  *
- * When using with validator, there is no need to do it manually, because such types be automatically wrapped with
+ * When using validator, there is no need to wrap data manually. Such types be automatically wrapped with
  * {@see SingleValueDataSet} by {@see DataSetNormalizer} during validation.
  *
  * For arrays and objects use {@see ArrayDataSet} and {@see ObjectDataSet} accordingly.
