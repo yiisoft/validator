@@ -23,7 +23,7 @@ final class ObjectParser
         [
             'rules' => 'array',
             'reflectionAttributes' => 'array',
-            'reflectionObject' => 'object'
+            'reflectionObject' => 'object',
         ],
     ])]
     private static array $cache = [];
@@ -43,12 +43,12 @@ final class ObjectParser
     }
 
     /**
-     * @return array<string, list<RuleInterface>>|array<int, RuleInterface>
+     * @return array<int, RuleInterface>|array<string, list<RuleInterface>>
      */
     public function getRules(): array
     {
         if ($this->hasCacheItem('rules')) {
-            /** @var array<string, list<RuleInterface>>|array<int, RuleInterface> */
+            /** @var array<int, RuleInterface>|array<string, list<RuleInterface>> */
             return $this->getCacheItem('rules');
         }
 
