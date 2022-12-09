@@ -29,6 +29,8 @@ final class CountHandler implements RuleHandlerInterface
 
         $result = new Result();
 
+        /** @var mixed $value */
+        $value = $rule->getObjectBeingValidated() ?? $value;
         if (!is_countable($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getAttribute(),

@@ -14,11 +14,11 @@ abstract class RuleTestCase extends TestCase
     /**
      * @dataProvider dataValidationPassed
      */
-    public function testValidationPassed(mixed $data, array $rules): void
+    public function testValidationPassed(mixed $data, ?array $rules = null): void
     {
         $result = (new Validator())->validate($data, $rules);
 
-        $this->assertTrue($result->isValid());
+        $this->assertSame([], $result->getErrorMessagesIndexedByPath());
     }
 
     abstract public function dataValidationFailed(): array;
