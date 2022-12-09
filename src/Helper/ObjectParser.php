@@ -181,6 +181,7 @@ final class ObjectParser
      * of property or return a different default value, use {@see hasAttribute()} instead.
      *
      * @param string $attribute Attribute name.
+     *
      * @return mixed Attribute value.
      */
     public function getAttributeValue(string $attribute): mixed
@@ -192,7 +193,6 @@ final class ObjectParser
      * Whether the parsed object has the property with a given name. Note that this means existence only and properties
      * with empty values are treated as present too.
      *
-     * @param string $attribute
      * @return bool Whether the property exists: `true` - exists and `false` - otherwise.
      */
     public function hasAttribute(string $attribute): bool
@@ -252,8 +252,6 @@ final class ObjectParser
 
     /**
      * Returns Reflection of {@see $object}. Repetitive calls utilize cache if it's enabled in {@see $useCache}.
-     *
-     * @return ReflectionObject
      */
     private function getReflectionObject(): ReflectionObject
     {
@@ -291,6 +289,7 @@ final class ObjectParser
      * empty values are treated as present too.
      *
      * @param string $name Cache item name. Can be on of: `rules`, `reflectionProperties`, `reflectionObject`.
+     *
      * @return bool `true` if a item exists, `false` - if it does not or cache is disabled in {@see $useCache}.
      */
     private function hasCacheItem(
@@ -312,6 +311,7 @@ final class ObjectParser
      * Returns a cache item by its name.
      *
      * @param string $name Cache item name. Can be on of: `rules`, `reflectionProperties`, `reflectionObject`.
+     *
      * @return mixed Cache item value.
      */
     private function getCacheItem(
@@ -324,6 +324,7 @@ final class ObjectParser
 
     /**
      * Updates cache item contents by its name.
+     *
      * @param string $name Cache item name. Can be on of: `rules`, `reflectionProperties`, `reflectionObject`.
      * @param mixed $value A new value.
      */
