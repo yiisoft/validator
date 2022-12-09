@@ -19,6 +19,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\Data\CallbackDto;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
@@ -191,6 +192,11 @@ final class CallbackTest extends RuleTestCase
                 },
                 null,
                 ['age' => ['Hello from non-static method.', 'Hello from static method.']],
+            ],
+            'class attribute' => [
+                new CallbackDto(7, 42),
+                null,
+                ['' => ['7 / 42']],
             ],
         ];
     }
