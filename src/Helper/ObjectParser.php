@@ -193,7 +193,6 @@ final class ObjectParser
      * Whether the parsed object has the property with a given name. Note that this means existence only and properties
      * with empty values are treated as present too.
      *
-     * @param string $attribute
      *
      * @return bool Whether the property exists: `true` - exists and `false` - otherwise.
      */
@@ -254,8 +253,6 @@ final class ObjectParser
 
     /**
      * Returns Reflection of {@see $object}. Repetitive calls utilize cache if it's enabled in {@see $useCache}.
-     *
-     * @return ReflectionObject
      */
     private function getReflectionObject(): ReflectionObject
     {
