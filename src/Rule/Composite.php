@@ -49,22 +49,21 @@ class Composite implements
     protected bool $skipOnError = false;
 
     /**
-     * @var WhenType
+     * @psalm-var WhenType
      */
     protected Closure|null $when = null;
 
     private ?RulesDumper $rulesDumper = null;
 
+    /**
+     * @param iterable<Closure|RuleInterface> $rules
+     *
+     * @psalm-param WhenType $when
+     */
     public function __construct(
-        /**
-         * @param iterable<Closure|RuleInterface>
-         */
         iterable $rules = [],
         bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
-        /**
-         * @param WhenType
-         */
         Closure|null $when = null,
     ) {
         $this->rules = RulesNormalizer::normalizeList($rules);
