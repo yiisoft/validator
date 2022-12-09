@@ -161,7 +161,7 @@ final class CompositeTest extends RuleTestCase
                 ],
             ],
             'inheritance' => [
-                new class extends Composite {
+                new class () extends Composite {
                     public function getRules(): iterable
                     {
                         return [
@@ -220,9 +220,11 @@ final class CompositeTest extends RuleTestCase
             'override constructor' => [
                 20,
                 [
-                    new class extends Composite {
-                        public function __construct() { }
-                    }
+                    new class () extends Composite {
+                        public function __construct()
+                        {
+                        }
+                    },
                 ],
             ],
             [
@@ -310,12 +312,12 @@ final class CompositeTest extends RuleTestCase
             'override constructor' => [
                 null,
                 [
-                    new class extends Composite {
+                    new class () extends Composite {
                         public function __construct()
                         {
                             $this->rules = [new Required()];
                         }
-                    }
+                    },
                 ],
                 ['' => ['Value cannot be blank.']],
             ],
