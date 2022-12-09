@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -23,19 +24,20 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @psalm-import-type WhenType from WhenInterface
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
     RuleWithOptionsInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
-    PropagateOptionsInterface
+    PropagateOptionsInterface,
+    AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
 
-    private RulesDumper $dumper;
+    private ?RulesDumper $rulesDumper = null;
 
     public function __construct(
         /**
@@ -55,7 +57,6 @@ final class Each implements
          */
         private Closure|null $when = null,
     ) {
-        $this->dumper = new RulesDumper();
     }
 
     public function getName(): string
@@ -125,12 +126,33 @@ final class Each implements
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => $this->dumper->asArray($this->rules),
+            'rules' => $this->getRulesDumper()->asArray($this->rules),
         ];
     }
 
     public function getHandlerClassName(): string
     {
         return EachHandler::class;
+    }
+
+    public function afterInitAttribute(object $object, int $target): void
+    {
+        foreach ($this->rules as $rule) {
+            if ($rule instanceof AfterInitAttributeEventInterface) {
+                $rule->afterInitAttribute(
+                    $object,
+                    $target === Attribute::TARGET_CLASS ? Attribute::TARGET_PROPERTY : $target
+                );
+            }
+        }
+    }
+
+    private function getRulesDumper(): RulesDumper
+    {
+        if ($this->rulesDumper === null) {
+            $this->rulesDumper = new RulesDumper();
+        }
+
+        return $this->rulesDumper;
     }
 }
