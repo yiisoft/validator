@@ -193,7 +193,6 @@ final class ObjectParser
      * Whether the parsed object has the property with a given name. Note that this means existence only and properties
      * with empty values are treated as present too.
      *
-     *
      * @return bool Whether the property exists: `true` - exists and `false` - otherwise.
      */
     public function hasAttribute(string $attribute): bool
