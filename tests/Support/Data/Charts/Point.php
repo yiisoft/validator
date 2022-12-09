@@ -11,18 +11,9 @@ use Yiisoft\Validator\Rule\Number;
 
 final class Point
 {
-    #[Each(
-        rules: [
-            new Nested(Coordinate::class),
-        ],
-    )]
+    #[Each([new Nested(Coordinate::class)])]
     private $coordinates;
     #[Count(exactly: 3)]
-    #[Each(
-        rules: [
-            new Number(min: 0, max: 255),
-        ],
-        incorrectInputMessage: 'Custom message 5.',
-    )]
+    #[Each([new Number(min: 0, max: 255)], incorrectInputMessage: 'Custom message 5.')]
     private array $rgb;
 }

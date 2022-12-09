@@ -9,10 +9,6 @@ use Yiisoft\Validator\Rule\Nested;
 
 final class Chart
 {
-    #[Each(
-        rules: [
-            new Nested(Point::class),
-        ],
-    )]
+    #[Each([new Nested(Point::class)])]
     private array $points;
 }
