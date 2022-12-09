@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Helper;
 
+use Attribute;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
 use ReflectionAttribute;
@@ -59,7 +60,7 @@ final class ObjectParser
             ->getReflectionObject()
             ->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
         foreach ($attributes as $attribute) {
-            $rules[] = $this->createRule($attribute);
+            $rules[] = $this->createRule($attribute, Attribute::TARGET_CLASS);
         }
 
         // Properties rules
@@ -68,7 +69,7 @@ final class ObjectParser
             $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             foreach ($attributes as $attribute) {
                 /** @psalm-suppress UndefinedInterfaceMethod */
-                $rules[$property->getName()][] = $this->createRule($attribute);
+                $rules[$property->getName()][] = $this->createRule($attribute, Attribute::TARGET_PROPERTY);
             }
         }
 
@@ -152,12 +153,12 @@ final class ObjectParser
     /**
      * @param ReflectionAttribute<RuleInterface> $attribute
      */
-    private function createRule(ReflectionAttribute $attribute): RuleInterface
+    private function createRule(ReflectionAttribute $attribute, int $target): RuleInterface
     {
         $rule = $attribute->newInstance();
 
         if ($rule instanceof AfterInitAttributeEventInterface) {
-            $rule->afterInitAttribute($this->object);
+            $rule->afterInitAttribute($this->object, $target);
         }
 
         return $rule;

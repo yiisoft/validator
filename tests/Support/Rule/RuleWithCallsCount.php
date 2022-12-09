@@ -14,7 +14,7 @@ final class RuleWithCallsCount implements RuleInterface, AfterInitAttributeEvent
 {
     public static int $afterInitAttributeCallsCount = 0;
 
-    public function afterInitAttribute(object $object): void
+    public function afterInitAttribute(object $object, int $target): void
     {
         self::$afterInitAttributeCallsCount++;
     }
