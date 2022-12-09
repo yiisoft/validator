@@ -15,9 +15,9 @@ use Yiisoft\Validator\RuleInterface;
 use function array_key_exists;
 
 /**
- * A helper class used to parse rules (added via PHP attributes) and data from a given object. The attributes introduced
- * in PHP 8 simplify rules' configuration process, especially for nested data and relations. This way the validated
- * structures can be presented as DTO classes with references to each other.
+ * A helper class used to parse rules from PHP attributes (attached to class properties and class itself) and data from
+ * object properties. The attributes introduced in PHP 8 simplify rules' configuration process, especially for nested
+ * data and relations. This way the validated structures can be presented as DTO classes with references to each other.
  *
  * An example of parsed object with both one-to-one and one-to-many relations:
  *
@@ -45,7 +45,7 @@ use function array_key_exists;
  *     public string $name = '';
  * }
  *
- * // "Nested" rule can be also configured through the class attribute.
+ * // Some rules, like "Nested" can be also configured through the class attribute.
  *
  * #[Nested(['url' => new Url()])]
  * final class File
