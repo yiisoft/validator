@@ -39,7 +39,19 @@ class Composite implements
     /**
      * @var iterable<int, RuleInterface>
      */
-    private iterable $rules;
+    protected iterable $rules = [];
+
+    /**
+     * @var bool|callable|null
+     */
+    protected $skipOnEmpty = null;
+
+    protected bool $skipOnError = false;
+
+    /**
+     * @var WhenType
+     */
+    protected Closure|null $when = null;
 
     private ?RulesDumper $rulesDumper = null;
 
@@ -48,18 +60,17 @@ class Composite implements
          * @param iterable<Closure|RuleInterface>
          */
         iterable $rules = [],
-
+        bool|callable|null $skipOnEmpty = null,
+        bool $skipOnError = false,
         /**
-         * @var bool|callable|null
+         * @param WhenType
          */
-        private $skipOnEmpty = null,
-        private bool $skipOnError = false,
-        /**
-         * @var WhenType
-         */
-        private Closure|null $when = null,
+        Closure|null $when = null,
     ) {
         $this->rules = RulesNormalizer::normalizeList($rules);
+        $this->skipOnEmpty = $skipOnEmpty;
+        $this->skipOnError = $skipOnError;
+        $this->when = $when;
     }
 
     public function getName(): string
@@ -77,7 +88,7 @@ class Composite implements
         return [
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => $this->getRulesDumper()->asArray($this->rules),
+            'rules' => $this->getRulesDumper()->asArray($this->getRules()),
         ];
     }
 
@@ -89,21 +100,21 @@ class Composite implements
         return $this->rules;
     }
 
-    public function getHandlerClassName(): string
+    final public function getHandlerClassName(): string
     {
         return CompositeHandler::class;
     }
 
     public function afterInitAttribute(object $object): void
     {
-        foreach ($this->rules as $rule) {
+        foreach ($this->getRules() as $rule) {
             if ($rule instanceof AfterInitAttributeEventInterface) {
                 $rule->afterInitAttribute($object);
             }
         }
     }
 
-    private function getRulesDumper(): RulesDumper
+    protected function getRulesDumper(): RulesDumper
     {
         if ($this->rulesDumper === null) {
             $this->rulesDumper = new RulesDumper();
