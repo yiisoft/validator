@@ -168,10 +168,17 @@ final class CompositeTest extends RuleTestCase
                             new Required(),
                         ];
                     }
+
+                    public function getOptions(): array
+                    {
+                        return [
+                            'specific-key' => 42,
+                            'rules' => $this->dumpRulesAsArray(),
+                        ];
+                    }
                 },
                 [
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'specific-key' => 42,
                     'rules' => [
                         [
                             'required',

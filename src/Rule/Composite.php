@@ -87,7 +87,7 @@ class Composite implements
         return [
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => $this->getRulesDumper()->asArray($this->getRules()),
+            'rules' => $this->dumpRulesAsArray(),
         ];
     }
 
@@ -113,7 +113,12 @@ class Composite implements
         }
     }
 
-    protected function getRulesDumper(): RulesDumper
+    final protected function dumpRulesAsArray(): array
+    {
+        return $this->getRulesDumper()->asArray($this->getRules());
+    }
+
+    private function getRulesDumper(): RulesDumper
     {
         if ($this->rulesDumper === null) {
             $this->rulesDumper = new RulesDumper();
