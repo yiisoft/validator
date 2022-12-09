@@ -10,6 +10,7 @@ use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -159,6 +160,41 @@ final class CompositeTest extends RuleTestCase
                     ],
                 ],
             ],
+            'inheritance' => [
+                new class () extends Composite {
+                    public function getRules(): iterable
+                    {
+                        return [
+                            new Required(),
+                        ];
+                    }
+
+                    public function getOptions(): array
+                    {
+                        return [
+                            'specific-key' => 42,
+                            'rules' => $this->dumpRulesAsArray(),
+                        ];
+                    }
+                },
+                [
+                    'specific-key' => 42,
+                    'rules' => [
+                        [
+                            'required',
+                            'message' => [
+                                'template' => 'Value cannot be blank.',
+                                'parameters' => [],
+                            ],
+                            'notPassedMessage' => [
+                                'template' => 'Value not passed.',
+                                'parameters' => [],
+                            ],
+                            'skipOnError' => false,
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -186,6 +222,16 @@ final class CompositeTest extends RuleTestCase
                         rules: [new Number(max: 13)],
                         when: fn () => false,
                     ),
+                ],
+            ],
+            'override constructor' => [
+                20,
+                [
+                    new class () extends Composite {
+                        public function __construct()
+                        {
+                        }
+                    },
                 ],
             ],
             [
@@ -269,6 +315,18 @@ final class CompositeTest extends RuleTestCase
                     ),
                 ],
                 ['' => ['Custom error']],
+            ],
+            'override constructor' => [
+                null,
+                [
+                    new class () extends Composite {
+                        public function __construct()
+                        {
+                            $this->rules = [new Required()];
+                        }
+                    },
+                ],
+                ['' => ['Value cannot be blank.']],
             ],
         ];
     }
