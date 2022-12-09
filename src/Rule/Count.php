@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use Countable;
+use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\LimitInterface;
 use Yiisoft\Validator\Rule\Trait\LimitTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
@@ -23,18 +24,21 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @psalm-import-type WhenType from WhenInterface
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Count implements
     RuleWithOptionsInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
-    LimitInterface
+    LimitInterface,
+    AfterInitAttributeEventInterface
 {
     use LimitTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
+
+    private ?object $objectBeingValidated = null;
 
     public function __construct(
         /**
@@ -109,6 +113,11 @@ final class Count implements
         return $this->incorrectInputMessage;
     }
 
+    public function getObjectBeingValidated(): ?object
+    {
+        return $this->objectBeingValidated;
+    }
+
     public function getOptions(): array
     {
         return array_merge($this->getLimitOptions(), [
@@ -124,5 +133,12 @@ final class Count implements
     public function getHandlerClassName(): string
     {
         return CountHandler::class;
+    }
+
+    public function afterInitAttribute(object $object, int $target): void
+    {
+        if ($target === Attribute::TARGET_CLASS) {
+            $this->objectBeingValidated = $object;
+        }
     }
 }

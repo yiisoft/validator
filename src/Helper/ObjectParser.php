@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Helper;
 
+use Attribute;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
 use ReflectionAttribute;
@@ -13,7 +14,11 @@ use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\RuleInterface;
 
 use function array_key_exists;
+use function is_int;
 
+/**
+ * @psalm-type RulesCache = array<int,array{0:RuleInterface,1:int}>|array<string,list<array{0:RuleInterface,1:int}>>
+ */
 final class ObjectParser
 {
     /**
@@ -48,8 +53,9 @@ final class ObjectParser
     public function getRules(): array
     {
         if ($this->hasCacheItem('rules')) {
-            /** @var array<int, RuleInterface>|array<string, list<RuleInterface>> */
-            return $this->getCacheItem('rules');
+            /** @psalm-var RulesCache */
+            $rules = $this->getCacheItem('rules');
+            return $this->prepareRules($rules);
         }
 
         $rules = [];
@@ -59,7 +65,7 @@ final class ObjectParser
             ->getReflectionObject()
             ->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
         foreach ($attributes as $attribute) {
-            $rules[] = $this->createRule($attribute);
+            $rules[] = [$attribute->newInstance(), Attribute::TARGET_CLASS];
         }
 
         // Properties rules
@@ -68,7 +74,7 @@ final class ObjectParser
             $attributes = $property->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
             foreach ($attributes as $attribute) {
                 /** @psalm-suppress UndefinedInterfaceMethod */
-                $rules[$property->getName()][] = $this->createRule($attribute);
+                $rules[$property->getName()][] = [$attribute->newInstance(), Attribute::TARGET_PROPERTY];
             }
         }
 
@@ -76,7 +82,7 @@ final class ObjectParser
             $this->setCacheItem('rules', $rules);
         }
 
-        return $rules;
+        return $this->prepareRules($rules);
     }
 
     public function getAttributeValue(string $attribute): mixed
@@ -150,16 +156,35 @@ final class ObjectParser
     }
 
     /**
-     * @param ReflectionAttribute<RuleInterface> $attribute
+     * @psalm-param RulesCache $source
+     *
+     * @return array<int, RuleInterface>|array<string, list<RuleInterface>>
      */
-    private function createRule(ReflectionAttribute $attribute): RuleInterface
+    private function prepareRules(array $source): array
     {
-        $rule = $attribute->newInstance();
-
-        if ($rule instanceof AfterInitAttributeEventInterface) {
-            $rule->afterInitAttribute($this->object);
+        $rules = [];
+        foreach ($source as $key => $data) {
+            if (is_int($key)) {
+                /** @psalm-var array{0:RuleInterface,1:int} $data */
+                $rules[$key] = $this->prepareRule($data[0], $data[1]);
+            } else {
+                /**
+                 * @psalm-var list<array{0:RuleInterface,1:int}> $data
+                 * @psalm-suppress UndefinedInterfaceMethod
+                 */
+                foreach ($data as $rule) {
+                    $rules[$key][] = $this->prepareRule($rule[0], $rule[1]);
+                }
+            }
         }
+        return $rules;
+    }
 
+    private function prepareRule(RuleInterface $rule, int $target): RuleInterface
+    {
+        if ($rule instanceof AfterInitAttributeEventInterface) {
+            $rule->afterInitAttribute($this->object, $target);
+        }
         return $rule;
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Attribute;
 use InvalidArgumentException;
 use RuntimeException;
 use stdClass;
@@ -61,7 +62,7 @@ final class CallbackTest extends RuleTestCase
         $this->assertIsCallable($callback);
         $this->assertNull($rule->getMethod());
 
-        $rule->afterInitAttribute(new ObjectDataSet(new stdClass()));
+        $rule->afterInitAttribute(new ObjectDataSet(new stdClass()), Attribute::TARGET_PROPERTY);
         $this->assertIsCallable($callback);
         $this->assertNull($rule->getMethod());
         $this->assertSame($callback, $rule->getCallback());

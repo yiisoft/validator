@@ -6,5 +6,5 @@ namespace Yiisoft\Validator;
 
 interface AfterInitAttributeEventInterface
 {
-    public function afterInitAttribute(object $object): void;
+    public function afterInitAttribute(object $object, int $target): void;
 }

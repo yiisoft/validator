@@ -73,7 +73,7 @@ final class Callback implements
         return $this->method;
     }
 
-    public function afterInitAttribute(object $object): void
+    public function afterInitAttribute(object $object, int $target): void
     {
         if ($this->method === null) {
             return;
@@ -83,11 +83,13 @@ final class Callback implements
 
         $reflection = new ReflectionObject($object);
         if (!$reflection->hasMethod($method)) {
-            throw new InvalidArgumentException(sprintf(
-                'Method "%s" does not exist in class "%s".',
-                $method,
-                $object::class,
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Method "%s" does not exist in class "%s".',
+                    $method,
+                    $object::class,
+                )
+            );
         }
 
         /** @psalm-suppress MixedMethodCall */
