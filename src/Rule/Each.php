@@ -45,7 +45,7 @@ final class Each implements
 
     public function __construct(
         /**
-         * @param iterable<callable|RuleInterface>|callable|RuleInterface $rules
+         * @param callable|iterable<callable|RuleInterface>|RuleInterface $rules
          */
         iterable|callable|RuleInterface $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
