@@ -31,7 +31,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         $this->dataSetProvided = $this->object instanceof DataSetInterface;
         $this->rulesProvided = $this->object instanceof RulesProviderInterface;
         $this->parser = new ObjectParser(
-            object: $object,
+            source: $object,
             propertyVisibility: $propertyVisibility,
             useCache: $useCache
         );
