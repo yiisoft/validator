@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use Traversable;
 use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\IsTrue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
@@ -144,6 +145,47 @@ final class AttributesRulesProviderTest extends TestCase
         int $propertyVisibility,
     ): void {
         $rulesProvider = new AttributesRulesProvider($source, $propertyVisibility);
+
+        $ruleClassNames = $this->convertRulesToClassNames($rulesProvider->getRules());
+
+        $this->assertSame($expectedRuleClassNames, $ruleClassNames);
+    }
+
+    public function dataStaticProperties(): array
+    {
+        return [
+            [
+                ['a' => [Required::class]],
+                new class() {
+                    #[Required]
+                    public int $a = 1;
+                    #[IsTrue]
+                    public static bool $b = false;
+                },
+                true
+            ],
+            [
+                ['a' => [Required::class], 'b' => [IsTrue::class]],
+                new class() {
+                    #[Required]
+                    public int $a = 1;
+                    #[IsTrue]
+                    public static bool $b = false;
+                },
+                false
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataStaticProperties
+     */
+    public function testStaticProperties(
+        array $expectedRuleClassNames,
+        object $source,
+        bool $skipStaticProperties,
+    ): void {
+        $rulesProvider = new AttributesRulesProvider($source, skipStaticProperties: $skipStaticProperties);
 
         $ruleClassNames = $this->convertRulesToClassNames($rulesProvider->getRules());
 
