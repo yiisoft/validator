@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Helper;
 
 use Attribute;
+use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
 use ReflectionAttribute;
+use ReflectionClass;
 use ReflectionObject;
 use ReflectionProperty;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
@@ -28,23 +30,35 @@ final class ObjectParser
         [
             'rules' => 'array',
             'reflectionAttributes' => 'array',
-            'reflectionObject' => 'object',
+            'reflection' => 'object',
         ],
     ])]
     private static array $cache = [];
-    private string|null $cacheKey;
+    private string|null $cacheKey = null;
 
     public function __construct(
-        private object $object,
+        /**
+         * @var class-string|object
+         */
+        private string|object $source,
         private int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
         ReflectionProperty::IS_PROTECTED |
         ReflectionProperty::IS_PUBLIC,
         private bool $skipStaticProperties = false,
         bool $useCache = true
     ) {
-        $this->cacheKey = $useCache
-            ? $this->object::class . '_' . $this->propertyVisibility . '_' . $this->skipStaticProperties
-            : null;
+        /** @var object|string $source */
+        if (is_string($source) && !class_exists($source)) {
+            throw new InvalidArgumentException(
+                sprintf('Class "%s" not found.', $source)
+            );
+        }
+
+        if ($useCache) {
+            $this->cacheKey = (is_object($source) ? $source::class : $source)
+                . '_' . $this->propertyVisibility
+                . '_' . $this->skipStaticProperties;
+        }
     }
 
     /**
@@ -62,7 +76,7 @@ final class ObjectParser
 
         // Class rules
         $attributes = $this
-            ->getReflectionObject()
+            ->getReflection()
             ->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
         foreach ($attributes as $attribute) {
             $rules[] = [$attribute->newInstance(), Attribute::TARGET_CLASS];
@@ -87,20 +101,26 @@ final class ObjectParser
 
     public function getAttributeValue(string $attribute): mixed
     {
-        return ($this->getReflectionProperties()[$attribute] ?? null)?->getValue($this->object);
+        return is_object($this->source)
+            ? ($this->getReflectionProperties()[$attribute] ?? null)?->getValue($this->source)
+            : null;
     }
 
     public function hasAttribute(string $attribute): bool
     {
-        return array_key_exists($attribute, $this->getReflectionProperties());
+        return is_object($this->source) && array_key_exists($attribute, $this->getReflectionProperties());
     }
 
     public function getData(): array
     {
+        if (!is_object($this->source)) {
+            return [];
+        }
+
         $data = [];
         foreach ($this->getReflectionProperties() as $name => $property) {
             /** @var mixed */
-            $data[$name] = $property->getValue($this->object);
+            $data[$name] = $property->getValue($this->source);
         }
 
         return $data;
@@ -116,7 +136,7 @@ final class ObjectParser
             return $this->getCacheItem('reflectionProperties');
         }
 
-        $reflection = $this->getReflectionObject();
+        $reflection = $this->getReflection();
 
         $reflectionProperties = [];
 
@@ -139,17 +159,19 @@ final class ObjectParser
         return $reflectionProperties;
     }
 
-    private function getReflectionObject(): ReflectionObject
+    private function getReflection(): ReflectionObject|ReflectionClass
     {
-        if ($this->hasCacheItem('reflectionObject')) {
-            /** @var ReflectionObject */
-            return $this->getCacheItem('reflectionObject');
+        if ($this->hasCacheItem('reflection')) {
+            /** @var ReflectionClass|ReflectionObject */
+            return $this->getCacheItem('reflection');
         }
 
-        $reflection = new ReflectionObject($this->object);
+        $reflection = is_object($this->source)
+            ? new ReflectionObject($this->source)
+            : new ReflectionClass($this->source);
 
         if ($this->useCache()) {
-            $this->setCacheItem('reflectionObject', $reflection);
+            $this->setCacheItem('reflection', $reflection);
         }
 
         return $reflection;
@@ -182,14 +204,14 @@ final class ObjectParser
 
     private function prepareRule(RuleInterface $rule, int $target): RuleInterface
     {
-        if ($rule instanceof AfterInitAttributeEventInterface) {
-            $rule->afterInitAttribute($this->object, $target);
+        if (is_object($this->source) && $rule instanceof AfterInitAttributeEventInterface) {
+            $rule->afterInitAttribute($this->source, $target);
         }
         return $rule;
     }
 
     private function hasCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionObject'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflection'])]
         string $name
     ): bool {
         if (!$this->useCache()) {
@@ -204,7 +226,7 @@ final class ObjectParser
     }
 
     private function getCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionObject'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflection'])]
         string $name
     ): mixed {
         /** @psalm-suppress PossiblyNullArrayOffset */
@@ -212,7 +234,7 @@ final class ObjectParser
     }
 
     private function setCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionObject'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflection'])]
         string $name,
         mixed $value
     ): void {
