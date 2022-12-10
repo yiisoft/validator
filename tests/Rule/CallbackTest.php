@@ -202,7 +202,7 @@ final class CallbackTest extends RuleTestCase
         $validator = new Validator();
 
         $this->expectException(InvalidCallbackReturnTypeException::class);
-        $message = 'Return value of callback must be an instance of Yiisoft\Validator\Result, string returned.';
+        $message = 'Return value of callback must be an instance of "Yiisoft\Validator\Result", "string" returned.';
         $this->expectExceptionMessage($message);
         $validator->validate(null, [$rule]);
     }
