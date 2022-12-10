@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -35,13 +36,18 @@ final class Each implements
     use SkipOnErrorTrait;
     use WhenTrait;
 
+    /**
+     * @var iterable<RuleInterface>
+     */
+    private iterable $rules;
+
     private RulesDumper $dumper;
 
     public function __construct(
         /**
-         * @var iterable<RuleInterface>
+         * @param callable|iterable<callable|RuleInterface>|RuleInterface $rules
          */
-        private iterable $rules = [],
+        iterable|callable|RuleInterface $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $incorrectInputKeyMessage = 'Every iterable key must have an integer or a string type.',
 
@@ -55,6 +61,7 @@ final class Each implements
          */
         private Closure|null $when = null,
     ) {
+        $this->rules = RulesNormalizer::normalizeList($rules);
         $this->dumper = new RulesDumper();
     }
 
