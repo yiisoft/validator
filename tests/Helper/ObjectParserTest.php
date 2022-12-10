@@ -4,11 +4,20 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Helper;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Helper\ObjectParser;
+use Yiisoft\Validator\Tests\Support\Data\SimpleDto;
 
 final class ObjectParserTest extends TestCase
 {
+    public function testInvalidSource(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Class "non-exist-class" not found.');
+        new ObjectParser('non-exist-class');
+    }
+
     public function dataSkipStaticProperties(): array
     {
         return [
@@ -52,5 +61,16 @@ final class ObjectParserTest extends TestCase
         $parser = new ObjectParser($object);
 
         $this->assertSame(['a' => 4, 'b' => 2], $parser->getData());
+    }
+
+    public function testDataWithClassString(): void
+    {
+        $parser = new ObjectParser(SimpleDto::class);
+
+        $this->assertSame([], $parser->getData());
+        $this->assertNull($parser->getAttributeValue('a'));
+        $this->assertNull($parser->getAttributeValue('x'));
+        $this->assertFalse($parser->hasAttribute('a'));
+        $this->assertFalse($parser->hasAttribute('x'));
     }
 }
