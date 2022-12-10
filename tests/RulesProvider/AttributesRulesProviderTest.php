@@ -166,23 +166,23 @@ final class AttributesRulesProviderTest extends TestCase
             ],
             [
                 ['a' => [Required::class]],
-                new class() {
+                new class () {
                     #[Required]
                     public int $a = 1;
                     #[IsTrue]
                     public static bool $b = false;
                 },
-                true
+                true,
             ],
             [
                 ['a' => [Required::class], 'b' => [IsTrue::class]],
-                new class() {
+                new class () {
                     #[Required]
                     public int $a = 1;
                     #[IsTrue]
                     public static bool $b = false;
                 },
-                false
+                false,
             ],
         ];
     }
