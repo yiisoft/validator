@@ -58,8 +58,6 @@ final class ObjectParser
             $this->cacheKey = (is_object($source) ? $source::class : $source)
                 . '_' . $this->propertyVisibility
                 . '_' . $this->skipStaticProperties;
-        } else {
-            $this->cacheKey = null;
         }
     }
 
