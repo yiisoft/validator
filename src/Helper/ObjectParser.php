@@ -47,7 +47,7 @@ final class ObjectParser
         private bool $skipStaticProperties = false,
         bool $useCache = true
     ) {
-        /** @var string|object $source */
+        /** @var object|string $source */
         if (is_string($source) && !class_exists($source)) {
             throw new InvalidArgumentException(
                 sprintf('Class "%s" not found.', $source)
@@ -164,7 +164,7 @@ final class ObjectParser
     private function getReflection(): ReflectionObject|ReflectionClass
     {
         if ($this->hasCacheItem('reflection')) {
-            /** @var ReflectionObject|ReflectionClass */
+            /** @var ReflectionClass|ReflectionObject */
             return $this->getCacheItem('reflection');
         }
 
