@@ -34,7 +34,7 @@ final class ObjectParser
         ],
     ])]
     private static array $cache = [];
-    private string|null $cacheKey;
+    private string|null $cacheKey = null;
 
     public function __construct(
         /**
