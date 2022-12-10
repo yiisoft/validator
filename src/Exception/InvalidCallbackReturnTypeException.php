@@ -28,7 +28,7 @@ final class InvalidCallbackReturnTypeException extends Exception implements Frie
         ?Throwable $previous = null,
     ) {
         $message = sprintf(
-            'Return value of callback must be an instance of %s, %s returned.',
+            'Return value of callback must be an instance of "%s", "%s" returned.',
             Result::class,
             get_debug_type($returnValue),
         );
