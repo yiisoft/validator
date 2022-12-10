@@ -155,6 +155,16 @@ final class AttributesRulesProviderTest extends TestCase
     {
         return [
             [
+                ['a' => [Required::class], 'b' => [IsTrue::class]],
+                new class() {
+                    #[Required]
+                    public int $a = 1;
+                    #[IsTrue]
+                    public static bool $b = false;
+                },
+                null
+            ],
+            [
                 ['a' => [Required::class]],
                 new class() {
                     #[Required]
@@ -183,9 +193,11 @@ final class AttributesRulesProviderTest extends TestCase
     public function testStaticProperties(
         array $expectedRuleClassNames,
         object $source,
-        bool $skipStaticProperties,
+        ?bool $skipStaticProperties,
     ): void {
-        $rulesProvider = new AttributesRulesProvider($source, skipStaticProperties: $skipStaticProperties);
+        $rulesProvider = $skipStaticProperties === null
+            ? new AttributesRulesProvider($source)
+            : new AttributesRulesProvider($source, skipStaticProperties: $skipStaticProperties);
 
         $ruleClassNames = $this->convertRulesToClassNames($rulesProvider->getRules());
 
