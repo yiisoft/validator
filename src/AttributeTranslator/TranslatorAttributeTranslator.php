@@ -7,6 +7,9 @@ namespace Yiisoft\Validator\AttributeTranslator;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\AttributeTranslatorInterface;
 
+/**
+ * An attributes translator that used {@see TranslatorInterface} for translation.
+ */
 final class TranslatorAttributeTranslator implements AttributeTranslatorInterface
 {
     public function __construct(
