@@ -38,7 +38,7 @@ final class Count implements
     use SkipOnErrorTrait;
     use WhenTrait;
 
-    private ?object $objectBeingValidated = null;
+    private ?object $objectValidated = null;
 
     public function __construct(
         /**
@@ -113,9 +113,9 @@ final class Count implements
         return $this->incorrectInputMessage;
     }
 
-    public function getObjectBeingValidated(): ?object
+    public function getObjectValidated(): ?object
     {
-        return $this->objectBeingValidated;
+        return $this->objectValidated;
     }
 
     public function getOptions(): array
@@ -138,7 +138,7 @@ final class Count implements
     public function afterInitAttribute(object $object, int $target): void
     {
         if ($target === Attribute::TARGET_CLASS) {
-            $this->objectBeingValidated = $object;
+            $this->objectValidated = $object;
         }
     }
 }

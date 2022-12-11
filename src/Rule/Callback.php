@@ -20,7 +20,7 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * @psalm-import-type WhenType from WhenInterface
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Callback implements
     RuleWithOptionsInterface,
     SkipOnErrorInterface,
@@ -31,6 +31,8 @@ final class Callback implements
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
+
+    private ?object $objectValidated = null;
 
     public function __construct(
         /**
@@ -73,8 +75,17 @@ final class Callback implements
         return $this->method;
     }
 
+    public function getObjectValidated(): ?object
+    {
+        return $this->objectValidated;
+    }
+
     public function afterInitAttribute(object $object, int $target): void
     {
+        if ($target === Attribute::TARGET_CLASS) {
+            $this->objectValidated = $object;
+        }
+
         if ($this->method === null) {
             return;
         }
