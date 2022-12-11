@@ -29,7 +29,7 @@ final class UrlHandler implements RuleHandlerInterface
         $result = new Result();
         if (!is_string($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
 
@@ -48,7 +48,7 @@ final class UrlHandler implements RuleHandlerInterface
         }
 
         $result->addError($rule->getMessage(), [
-            'attribute' => $context->getAttribute(),
+            'attribute' => $context->getTranslatedAttribute(),
             'value' => $value,
         ]);
 

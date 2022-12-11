@@ -26,7 +26,7 @@ final class EmailHandler implements RuleHandlerInterface
         $result = new Result();
         if (!is_string($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -86,7 +86,7 @@ final class EmailHandler implements RuleHandlerInterface
 
         if ($valid === false) {
             $result->addError($rule->getMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'value' => $originalValue,
             ]);
         }
