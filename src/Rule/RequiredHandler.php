@@ -22,7 +22,7 @@ final class RequiredHandler implements RuleHandlerInterface
 
         $result = new Result();
         if ($context->isAttributeMissing()) {
-            $result->addError($rule->getNotPassedMessage());
+            $result->addError($rule->getNotPassedMessage(), ['attribute' => $context->getTranslatedAttribute()]);
 
             return $result;
         }
@@ -31,7 +31,7 @@ final class RequiredHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $result->addError($rule->getMessage());
+        $result->addError($rule->getMessage(), ['attribute' => $context->getTranslatedAttribute()]);
 
         return $result;
     }

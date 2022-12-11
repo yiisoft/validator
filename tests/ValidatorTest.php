@@ -376,7 +376,7 @@ class ValidatorTest extends TestCase
                 [
                     new Error(
                         'Value cannot be blank.',
-                        [],
+                        ['attribute' => 'merchantId'],
                         ['merchantId']
                     ),
                     new Error(
@@ -389,12 +389,12 @@ class ValidatorTest extends TestCase
             [
                 ['merchantId' => [new Required(), new Number(asInteger: true, skipOnError: true)]],
                 new ArrayDataSet(['merchantId' => null]),
-                [new Error('Value cannot be blank.', [], ['merchantId'])],
+                [new Error('Value cannot be blank.', [ 'attribute' => 'merchantId'], ['merchantId'])],
             ],
             [
                 ['merchantId' => [new Required(), new Number(asInteger: true, skipOnError: true)]],
                 new ArrayDataSet(['merchantIdd' => 1]),
-                [new Error('Value not passed.', [], ['merchantId'])],
+                [new Error('Value not passed.', ['attribute' => 'merchantId'], ['merchantId'])],
             ],
 
             [
@@ -455,25 +455,24 @@ class ValidatorTest extends TestCase
             [
                 $strictRules,
                 new ArrayDataSet(['orderBy' => '']),
-                [new Error('Value cannot be blank.', [], ['orderBy'])],
+                [new Error('Value cannot be blank.', ['attribute' => 'orderBy'], ['orderBy'])],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet(['orderBy' => '']),
-                [new Error('Value cannot be blank.', [], ['orderBy'])],
+                [new Error('Value cannot be blank.', ['attribute' => 'orderBy'], ['orderBy'])],
             ],
 
             [
                 $strictRules,
                 new ArrayDataSet([]),
-                [new Error('Value not passed.', [], ['orderBy'])],
+                [new Error('Value not passed.', ['attribute' => 'orderBy'], ['orderBy'])],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet([]),
-                [new Error('Value not passed.', [], ['orderBy'])],
+                [new Error('Value not passed.', ['attribute' => 'orderBy'], ['orderBy'])],
             ],
-
             [
                 [
                     'name' => [new Required(), new HasLength(min: 3, skipOnError: true)],
@@ -485,7 +484,7 @@ class ValidatorTest extends TestCase
                         private string $description = 'abc123';
                     }
                 ),
-                [new Error('Value not passed.', [], ['name'])],
+                [new Error('Value not passed.', ['attribute' => 'name'], ['name'])],
             ],
             [
                 null,
