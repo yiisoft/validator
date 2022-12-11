@@ -206,7 +206,7 @@ new Number(
 For multiple rules this can be also set more conveniently at validator level:
 
 ```php
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 
 $validator = new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true);
@@ -895,7 +895,7 @@ be used.
 use Yiisoft\Di\Container;
 use Yiisoft\Di\ContainerConfig;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
-use Yiisoft\Validator\RuleHandlerContainer;
+use Yiisoft\Validator\RuleHandlerResolver\RuleHandlerContainer;
 
 // Need to be defined in common.php
 $config = [

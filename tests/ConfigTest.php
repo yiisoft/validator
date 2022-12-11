@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
