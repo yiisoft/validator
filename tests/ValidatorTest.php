@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Yiisoft\Validator\AttributeTranslator\NullAttributeTranslator;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSetInterface;
@@ -33,6 +34,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
+use Yiisoft\Validator\Tests\Support\Data\SimpleForm;
 use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
 use Yiisoft\Validator\ValidationContext;
@@ -1290,5 +1292,48 @@ class ValidatorTest extends TestCase
 
         $result = $validator->validate($data, $rules);
         $this->assertSame(['number' => ['3-few']], $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function dataSimpleForm(): array
+    {
+        return [
+            [
+                [
+                    'name' => [
+                        'Имя плохое.',
+                    ],
+                    'mail' => [
+                        'This value is not a valid email address.',
+                    ],
+                ],
+                null,
+            ],
+            [
+                [
+                    'name' => [
+                        'name плохое.',
+                    ],
+                    'mail' => [
+                        'This value is not a valid email address.',
+                    ],
+                ],
+                new ValidationContext(attributeTranslator: new NullAttributeTranslator()),
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataSimpleForm
+     */
+    public function testSimpleForm(array $expectedMessages, ?ValidationContext $validationContext): void
+    {
+        $form = new SimpleForm();
+
+        $result = (new Validator())->validate($form, context: $validationContext);
+
+        $this->assertSame(
+            $expectedMessages,
+            $result->getErrorMessagesIndexedByPath()
+        );
     }
 }

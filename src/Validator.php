@@ -12,6 +12,7 @@ use Yiisoft\Translator\IntlMessageFormatter;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\Translator;
 use Yiisoft\Translator\TranslatorInterface;
+use Yiisoft\Validator\AttributeTranslator\TranslatorAttributeTranslator;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
@@ -31,6 +32,7 @@ final class Validator implements ValidatorInterface
 
     private RuleHandlerResolverInterface $ruleHandlerResolver;
     private TranslatorInterface $translator;
+    private AttributeTranslatorInterface $defaultAttributeTranslator;
 
     /**
      * @var callable
@@ -42,10 +44,13 @@ final class Validator implements ValidatorInterface
         ?TranslatorInterface $translator = null,
         bool|callable|null $defaultSkipOnEmpty = null,
         private string $translationCategory = self::DEFAULT_TRANSLATION_CATEGORY,
+        ?AttributeTranslatorInterface $defaultAttributeTranslator = null,
     ) {
         $this->ruleHandlerResolver = $ruleHandlerResolver ?? new SimpleRuleHandlerContainer();
         $this->translator = $translator ?? $this->createDefaultTranslator();
         $this->defaultSkipOnEmptyCriteria = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
+        $this->defaultAttributeTranslator = $defaultAttributeTranslator
+            ?? new TranslatorAttributeTranslator($this->translator);
     }
 
     /**
@@ -68,9 +73,13 @@ final class Validator implements ValidatorInterface
             $this->defaultSkipOnEmptyCriteria
         );
 
+        $defaultAttributeTranslator =
+            ($dataSet instanceof AttributeTranslatorProviderInterface ? $dataSet->getAttributeTranslator() : null)
+            ?? $this->defaultAttributeTranslator;
+
         $context ??= new ValidationContext();
         $context
-            ->setValidatorAndRawDataOnce($this, $data)
+            ->setContextDataOnce($this, $defaultAttributeTranslator, $data)
             ->setDataSet($dataSet);
 
         $results = [];

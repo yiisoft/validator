@@ -31,23 +31,36 @@ final class ValidationContext
      */
     private ?string $attribute = null;
 
+    private ?AttributeTranslatorInterface $defaultAttributeTranslator = null;
+
     /**
      * @param array $parameters Arbitrary parameters.
      */
     public function __construct(
-        private array $parameters = []
+        private array $parameters = [],
+        private ?AttributeTranslatorInterface $attributeTranslator = null,
     ) {
     }
 
-    public function setValidatorAndRawDataOnce(ValidatorInterface $validator, mixed $rawData): self
-    {
+    public function setContextDataOnce(
+        ValidatorInterface $validator,
+        AttributeTranslatorInterface $attributeTranslator,
+        mixed $rawData
+    ): self {
         if ($this->validator !== null) {
             return $this;
         }
 
         $this->validator = $validator;
+        $this->defaultAttributeTranslator = $attributeTranslator;
         $this->rawData = $rawData;
 
+        return $this;
+    }
+
+    public function setAttributeTranslator(?AttributeTranslatorInterface $attributeTranslator): self
+    {
+        $this->attributeTranslator = $attributeTranslator;
         return $this;
     }
 
@@ -111,6 +124,23 @@ final class ValidationContext
      */
     public function getAttribute(): ?string
     {
+        return $this->attribute;
+    }
+
+    public function getTranslatedAttribute(): ?string
+    {
+        if ($this->attribute === null) {
+            return null;
+        }
+
+        if ($this->attributeTranslator !== null) {
+            return $this->attributeTranslator->translate($this->attribute);
+        }
+
+        if ($this->defaultAttributeTranslator !== null) {
+            return $this->defaultAttributeTranslator->translate($this->attribute);
+        }
+
         return $this->attribute;
     }
 

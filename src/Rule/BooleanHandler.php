@@ -34,7 +34,7 @@ final class BooleanHandler implements RuleHandlerInterface
         }
 
         $parameters = [
-            'attribute' => $context->getAttribute(),
+            'attribute' => $context->getTranslatedAttribute(),
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
             'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
         ];

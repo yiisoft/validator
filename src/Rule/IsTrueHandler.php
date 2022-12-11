@@ -32,7 +32,7 @@ final class IsTrueHandler implements RuleHandlerInterface
             $rule->getMessage(),
             [
                 'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
             ],
         );
 

@@ -33,7 +33,7 @@ final class CountHandler implements RuleHandlerInterface
         $value = $rule->getObjectValidated() ?? $value;
         if (!is_countable($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
 

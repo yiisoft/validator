@@ -13,6 +13,8 @@ use ReflectionClass;
 use ReflectionObject;
 use ReflectionProperty;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
+use Yiisoft\Validator\AttributeTranslatorInterface;
+use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\RuleInterface;
 
 use function array_key_exists;
@@ -124,6 +126,13 @@ final class ObjectParser
         }
 
         return $data;
+    }
+
+    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+    {
+        return $this->source instanceof AttributeTranslatorProviderInterface
+            ? $this->source->getAttributeTranslator()
+            : null;
     }
 
     /**

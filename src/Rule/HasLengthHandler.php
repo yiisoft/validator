@@ -30,7 +30,7 @@ final class HasLengthHandler implements RuleHandlerInterface
         $result = new Result();
         if (!is_string($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
 
