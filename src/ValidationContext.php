@@ -138,7 +138,7 @@ final class ValidationContext
         }
 
         if ($this->defaultAttributeTranslator !== null) {
-            $this->defaultAttributeTranslator->translate($this->attribute);
+            return $this->defaultAttributeTranslator->translate($this->attribute);
         }
 
         return $this->attribute;
