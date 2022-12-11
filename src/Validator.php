@@ -73,9 +73,13 @@ final class Validator implements ValidatorInterface
             $this->defaultSkipOnEmptyCriteria
         );
 
+        $defaultAttributeTranslator =
+            ($dataSet instanceof AttributeTranslatorProviderInterface ? $dataSet->getAttributeTranslator() : null)
+            ?? $this->defaultAttributeTranslator;
+
         $context ??= new ValidationContext();
         $context
-            ->setContextDataOnce($this, $this->defaultAttributeTranslator, $data)
+            ->setContextDataOnce($this, $defaultAttributeTranslator, $data)
             ->setDataSet($dataSet);
 
         $results = [];

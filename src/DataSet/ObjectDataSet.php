@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\DataSet;
 
 use ReflectionProperty;
+use Yiisoft\Validator\AttributeTranslatorInterface;
+use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -15,7 +17,7 @@ use Yiisoft\Validator\RulesProviderInterface;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  */
-final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
+final class ObjectDataSet implements RulesProviderInterface, DataSetInterface, AttributeTranslatorProviderInterface
 {
     private bool $dataSetProvided;
     private bool $rulesProvided;
@@ -86,5 +88,10 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface
         }
 
         return $this->parser->getData();
+    }
+
+    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+    {
+        return $this->parser->getAttributeTranslator();
     }
 }
