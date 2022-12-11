@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
 use Yiisoft\Validator\AttributeTranslator\NullAttributeTranslator;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\ValidationContext;
@@ -85,5 +86,35 @@ final class ValidationContextTest extends TestCase
             ->setContextDataOnce($validator, new NullAttributeTranslator(), 2);
 
         $this->assertSame(1, $context->getRawData());
+    }
+
+    public function dataTranslatedAttributeWithoutTranslator(): array
+    {
+        return [
+            'null' => [null],
+            'string' => ['test'],
+        ];
+    }
+
+    /**
+     * @dataProvider dataTranslatedAttributeWithoutTranslator
+     */
+    public function testTranslatedAttributeWithoutTranslator(?string $attribute): void
+    {
+        $context = new ValidationContext();
+        $context->setAttribute($attribute);
+
+        $this->assertSame($attribute, $context->getTranslatedAttribute());
+    }
+
+    public function testSetAttributeTranslator(): void
+    {
+        $translator = new ArrayAttributeTranslator(['name' => 'Имя']);
+
+        $context = (new ValidationContext())
+            ->setAttributeTranslator($translator)
+            ->setAttribute('name');
+
+        $this->assertSame('Имя', $context->getTranslatedAttribute());
     }
 }
