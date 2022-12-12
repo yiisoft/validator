@@ -114,7 +114,7 @@ final class ObjectParser
          */
         private object $object,
         /**
-         * @var int A constant determining what visibility levels the parsed properties must have. For example: public
+         * @var int Visibility levels the parsed properties must have. For example: public
          * and protected only, this means that the rest (private ones) will be skipped. Defaults to all visibility
          * levels (public, protected and private).
          */
