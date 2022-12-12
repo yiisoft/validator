@@ -89,6 +89,8 @@ use function is_int;
  * rules which can be disabled on demand.
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
+ *
+ * @psalm-type RulesCache = array<int,array{0:RuleInterface,1:int}>|array<string,list<array{0:RuleInterface,1:int}>>
  */
 final class ObjectParser
 {
@@ -118,7 +120,7 @@ final class ObjectParser
         /**
          * @var class-string|object An object for parsing rules and data.
          */
-        private string|object $object,
+        private string|object $source,
         /**
          * @var int Visibility levels the parsed properties must have. For example: public and protected only, this
          * means that the rest (private ones) will be skipped. Defaults to all visibility levels (public, protected and
