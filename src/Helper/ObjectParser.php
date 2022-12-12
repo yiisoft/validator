@@ -19,13 +19,15 @@ use Yiisoft\Validator\RuleInterface;
 
 use function array_key_exists;
 use function is_int;
+use function is_object;
+use function is_string;
 
 /**
  * A helper class used to parse rules from PHP attributes (attached to class properties and class itself) and data from
  * object properties. The attributes introduced in PHP 8 simplify rules' configuration process, especially for nested
  * data and relations. This way the validated structures can be presented as DTO classes with references to each other.
  *
- * An example of parsed object with both one-to-one and one-to-many relations:
+ * An example of parsed object with both one-to-one (requires PHP > 8.0) and one-to-many (requires PHP > 8.1) relations:
  *
  * ```php
  * final class Post
@@ -34,10 +36,11 @@ use function is_int;
  *     public string $title = '';
  *
  *     #[Nested]
- *     public Author $author;
+ *     public Author|null $author = null;
  *
+ *     // Passing instances is available only since PHP 8.1.
  *     #[Each(new Nested([File::class])]
- *     public array $files;
+ *     public array $files = [];
  *
  *     public function __construct()
  *     {
@@ -59,14 +62,15 @@ use function is_int;
  *     public string $url = '';
  * }
  *
- * $post = new Post();
+ * $post = new Post(title: 'Yii3 Overview 3', author: 'Dmitriy');
  * $parser = new ObjectParser($post);
  * $rules = $parser->getRules();
+ * $data = $parser->getData();
  * ```
  *
  * The parsed `$rules` will contain:
  *
- * ```
+ * ```php
  * $rules = [
  *     new Nested([
  *         'title' => [new HasLength(max: 255)],
@@ -78,6 +82,24 @@ use function is_int;
  *         ])),
  *     ]);
  * ];
+ * ```
+ *
+ * And the result of `$data` will be:
+ *
+ * ```php
+ * $data = [
+ *     'title' => 'Yii3 Overview 3',
+ *     'author' => 'John',
+ *     'files' => [],
+ * ];
+ * ```
+ *
+ * A class string is valid as a source too. This way only rules will be parsed:
+ *
+ * ```php
+ * $parser = new ObjectParser(Post::class);
+ * $rules = $parser->getRules(); // The result is the same as in previous example.
+ * $data = $parser->getData(); // Returns empty array.
  * ```
  *
  * Please refer to the guide for more examples.
@@ -98,7 +120,7 @@ final class ObjectParser
      * @var array<string, array<string, mixed>> A cache storage utilizing static class property:
      *
      * - The first nesting level is a mapping between cache keys (dynamically generated on instantiation) and item names
-     * (one of: `rules`, `reflectionProperties`, `reflectionObject`).
+     * (one of: `rules`, `reflectionProperties`, `reflectionSource`).
      * - The second nesting level is a mapping between cache item names and their contents.
      *
      * Different properties' combinations of the same object are cached separately.
@@ -107,7 +129,7 @@ final class ObjectParser
         [
             'rules' => 'array',
             'reflectionAttributes' => 'array',
-            'reflection' => 'object',
+            'reflectionSource' => 'object',
         ],
     ])]
     private static array $cache = [];
@@ -116,9 +138,12 @@ final class ObjectParser
      */
     private string|null $cacheKey = null;
 
+    /**
+     * @throws InvalidArgumentException if a class string provided in {@see $source} refers to a non-existing class.
+     */
     public function __construct(
         /**
-         * @var class-string|object An object for parsing rules and data.
+         * @var class-string|object A source for parsing rules and data. Can be either a class string or an instance.
          */
         private string|object $source,
         /**
@@ -139,7 +164,7 @@ final class ObjectParser
          */
         bool $useCache = true,
     ) {
-        /** @var object|string $source */
+        /** @var string|object $source */
         if (is_string($source) && !class_exists($source)) {
             throw new InvalidArgumentException(
                 sprintf('Class "%s" not found.', $source)
@@ -171,7 +196,7 @@ final class ObjectParser
 
         // Class rules
         $attributes = $this
-            ->getReflection()
+            ->getReflectionSource()
             ->getAttributes(RuleInterface::class, ReflectionAttribute::IS_INSTANCEOF);
         foreach ($attributes as $attribute) {
             $rules[] = [$attribute->newInstance(), Attribute::TARGET_CLASS];
@@ -198,6 +223,8 @@ final class ObjectParser
      * Note that in case of non-existing property a default `null` value is returned. If you need to check the presence
      * of a property or return a different default value, use {@see hasAttribute()} instead.
      *
+     * If a {@see $source} is a class string, `null` value is always returned.
+     *
      * @param string $attribute Attribute name.
      *
      * @return mixed Attribute value.
@@ -213,6 +240,8 @@ final class ObjectParser
      * Whether the parsed object has the property with a given name. Note that this means existence only and properties
      * with empty values are treated as present too.
      *
+     * If a {@see $source} is a class string, `false` value is always returned.
+     *
      * @return bool Whether the property exists: `true` - exists and `false` - otherwise.
      */
     public function hasAttribute(string $attribute): bool
@@ -222,6 +251,8 @@ final class ObjectParser
 
     /**
      * Returns the parsed object's data as a whole in a form of associative array.
+     *
+     * If a {@see $source} is a class string, an empty array is always returned.
      *
      * @return array  A mapping between property names and their values.
      */
@@ -240,6 +271,13 @@ final class ObjectParser
         return $data;
     }
 
+    /**
+     * An optional attribute names translator. It's taken from the {@see $source} object when
+     * @see AttributeTranslatorProviderInterface} is implemented. In case of it's missing or {@see $source} being a
+     * class string, a `null` value is returned.
+     *
+     * @return AttributeTranslatorInterface|null An attribute translator instance or `null if it was not provided.
+     */
     public function getAttributeTranslator(): ?AttributeTranslatorInterface
     {
         return $this->source instanceof AttributeTranslatorProviderInterface
@@ -248,7 +286,7 @@ final class ObjectParser
     }
 
     /**
-     * Returns Reflection properties parsed from {@see $object} in accordance with {@see $propertyVisibility} and
+     * Returns Reflection properties parsed from {@see $source} in accordance with {@see $propertyVisibility} and
      * {@see $skipStaticProperties} values. Repetitive calls utilize cache if it's enabled in {@see $useCache}.
      *
      * @return array<string, ReflectionProperty>
@@ -260,11 +298,11 @@ final class ObjectParser
             return $this->getCacheItem('reflectionProperties');
         }
 
-        $reflection = $this->getReflection();
+        $reflectionSource = $this->getReflectionSource();
 
         $reflectionProperties = [];
 
-        foreach ($reflection->getProperties($this->propertyVisibility) as $property) {
+        foreach ($reflectionSource->getProperties($this->propertyVisibility) as $property) {
             if ($this->skipStaticProperties && $property->isStatic()) {
                 continue;
             }
@@ -282,24 +320,24 @@ final class ObjectParser
     }
 
     /**
-     * Returns Reflection of {@see $object}. Repetitive calls utilize cache if it's enabled in {@see $useCache}.
+     * Returns Reflection of {@see $source}. Repetitive calls utilize cache if it's enabled in {@see $useCache}.
      */
-    private function getReflection(): ReflectionObject|ReflectionClass
+    private function getReflectionSource(): ReflectionObject|ReflectionClass
     {
-        if ($this->hasCacheItem('reflection')) {
+        if ($this->hasCacheItem('reflectionSource')) {
             /** @var ReflectionClass|ReflectionObject */
-            return $this->getCacheItem('reflection');
+            return $this->getCacheItem('reflectionSource');
         }
 
-        $reflection = is_object($this->source)
+        $reflectionSource = is_object($this->source)
             ? new ReflectionObject($this->source)
             : new ReflectionClass($this->source);
 
         if ($this->useCache()) {
-            $this->setCacheItem('reflection', $reflection);
+            $this->setCacheItem('reflectionSource', $reflectionSource);
         }
 
-        return $reflection;
+        return $reflectionSource;
     }
 
     /**
@@ -328,11 +366,12 @@ final class ObjectParser
     }
 
     /**
-     * Creates a rule instance from a Reflection attribute.
+     * Prepares a rule instance created from a Reflection attribute.
      *
-     * @param ReflectionAttribute<RuleInterface> $attribute Reflection attribute.
+     * @param RuleInterface $rule A rule instance.
+     * @param int $target An attribute target.
      *
-     * @return RuleInterface A new rule instance.
+     * @return RuleInterface The same rule instance.
      */
     private function prepareRule(RuleInterface $rule, int $target): RuleInterface
     {
@@ -346,12 +385,12 @@ final class ObjectParser
      * Whether a cache item with a given name exists in the cache. Note that this means existence only and items with
      * empty values are treated as present too.
      *
-     * @param string $name Cache item name. Can be on of: `rules`, `reflectionProperties`, `reflectionObject`.
+     * @param string $name Cache item name. Can be on of: `rules`, `reflectionProperties`, `reflectionSource`.
      *
-     * @return bool `true` if a item exists, `false` - if it does not or cache is disabled in {@see $useCache}.
+     * @return bool `true` if an item exists, `false` - if it does not or cache is disabled in {@see $useCache}.
      */
     private function hasCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties', 'reflection'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionSource'])]
         string $name,
     ): bool {
         if (!$this->useCache()) {
@@ -368,12 +407,12 @@ final class ObjectParser
     /**
      * Returns a cache item by its name.
      *
-     * @param string $name Cache item name. Can be on of: `rules`, `reflectionProperties`, `reflectionObject`.
+     * @param string $name Cache item name. Can be on of: `rules`, `reflectionProperties`, `reflectionSource`.
      *
      * @return mixed Cache item value.
      */
     private function getCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties', 'reflection'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionSource'])]
         string $name,
     ): mixed {
         /** @psalm-suppress PossiblyNullArrayOffset */
@@ -383,11 +422,11 @@ final class ObjectParser
     /**
      * Updates cache item contents by its name.
      *
-     * @param string $name Cache item name. Can be on of: `rules`, `reflectionProperties`, `reflectionObject`.
+     * @param string $name Cache item name. Can be on of: `rules`, `reflectionProperties`, `reflectionSource`.
      * @param mixed $value A new value.
      */
     private function setCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties', 'reflection'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionSource'])]
         string $name,
         mixed $value,
     ): void {
