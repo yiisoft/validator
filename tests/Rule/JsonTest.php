@@ -49,7 +49,7 @@ final class JsonTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            // JSON test from http://www.json.org/JSON_checker/test/pass1.json
+            // JSON test from https://www.json.org/JSON_checker/test/pass1.json
             [
                 <<<'JSON_WRAP'
 [
@@ -114,9 +114,9 @@ JSON_WRAP
                 ,
                 [new Json()],
             ],
-            // JSON test from http://www.json.org/JSON_checker/test/pass2.json
+            // JSON test from https://www.json.org/JSON_checker/test/pass2.json
             ['[[[[[[[[[[[[[[[[[[["Not too deep"]]]]]]]]]]]]]]]]]]]', [new Json()]],
-            // JSON test from http://www.json.org/JSON_checker/test/pass3.json
+            // JSON test from https://www.json.org/JSON_checker/test/pass3.json
             [
                 <<<'JSON_WRAP'
 {

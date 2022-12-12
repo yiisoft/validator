@@ -35,7 +35,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         /**
          * @var string the regular expression used to validate value.
          *
-         * @link http://www.regular-expressions.info/email.html
+         * @link https://www.regular-expressions.info/email.html
          */
         private string $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/',
         #[Language('RegExp')]
