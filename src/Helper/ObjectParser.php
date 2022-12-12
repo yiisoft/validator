@@ -126,7 +126,7 @@ final class ObjectParser
          */
         private bool $skipStaticProperties = false,
         /**
-         * @var bool A flag indicating whether some results of parsing (Reflection of object with properties and
+         * @var bool Whether some results of parsing (Reflection of object with properties and
          * rules) must be cached.
          */
         bool $useCache = true,
