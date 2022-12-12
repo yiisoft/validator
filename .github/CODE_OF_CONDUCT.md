@@ -60,8 +60,7 @@ the project's leadership.
 ## Attribution
 
 This Code of Conduct is adapted from the [Contributor Covenant][homepage],
-version 1.4.0, available at
-[http://contributor-covenant.org/version/1/4/][version]
+version 1.4.0, available at [https://www.contributor-covenant.org/version/1/4/][version]
 
-[homepage]: http://contributor-covenant.org
-[version]: http://contributor-covenant.org/version/1/4/
+[homepage]: https://www.contributor-covenant.org/
+[version]: https://www.contributor-covenant.org/version/1/4/

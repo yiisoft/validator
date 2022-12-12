@@ -56,7 +56,7 @@ final class EmailHandler implements RuleHandlerInterface
 
             if (is_string($matches['local']) && strlen($matches['local']) > 64) {
                 // The maximum total length of a user name or other local-part is 64 octets. RFC 5322 section 4.5.3.1.1
-                // http://tools.ietf.org/html/rfc5321#section-4.5.3.1.1
+                // https://www.rfc-editor.org/rfc/rfc5321#section-4.5.3.1.1
                 $valid = false;
             } elseif (
                 is_string($matches['local']) &&
@@ -67,7 +67,7 @@ final class EmailHandler implements RuleHandlerInterface
                 // upper limit on address lengths should normally be considered to be 254.
                 //
                 // Dominic Sayers, RFC 3696 erratum 1690
-                // http://www.rfc-editor.org/errata_search.php?eid=1690
+                // https://www.rfc-editor.org/errata_search.php?eid=1690
                 $valid = false;
             } else {
                 $valid = preg_match($rule->getPattern(), $value) || ($rule->isAllowName() && preg_match(
