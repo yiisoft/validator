@@ -122,7 +122,7 @@ final class ObjectParser
         ReflectionProperty::IS_PROTECTED |
         ReflectionProperty::IS_PUBLIC,
         /**
-         * @var bool A flag indicating whether the properties with "static" modifier must be skipped.
+         * @var bool Whether the properties with "static" modifier must be skipped.
          */
         private bool $skipStaticProperties = false,
         /**
