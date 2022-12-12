@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator;
+namespace Yiisoft\Validator\RuleHandlerResolver;
 
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
+use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerResolverInterface;
 
 use function array_key_exists;
 

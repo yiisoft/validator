@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests;
+namespace Yiisoft\Validator\Tests\Helper;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\Boolean;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\RulesDumper;
+use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
 

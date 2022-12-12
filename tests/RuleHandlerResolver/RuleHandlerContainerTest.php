@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Rule\Handler\Container\Tests;
+namespace Yiisoft\Validator\Rule\Handler\Container\Tests\RuleHandlerResolver;
 
 use stdClass;
 use Yiisoft\Test\Support\Container\SimpleContainer;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
-use Yiisoft\Validator\RuleHandlerContainer;
+use Yiisoft\Validator\RuleHandlerResolver\RuleHandlerContainer;
 use Yiisoft\Validator\Tests\Support\Rule\PiHandler;
 use Yiisoft\Validator\RuleHandlerInterface;
 
