@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Attribute;
 use InvalidArgumentException;
 use RuntimeException;
 use stdClass;
@@ -18,6 +19,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\Data\CallbackDto;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
@@ -61,7 +63,7 @@ final class CallbackTest extends RuleTestCase
         $this->assertIsCallable($callback);
         $this->assertNull($rule->getMethod());
 
-        $rule->afterInitAttribute(new ObjectDataSet(new stdClass()));
+        $rule->afterInitAttribute(new ObjectDataSet(new stdClass()), Attribute::TARGET_PROPERTY);
         $this->assertIsCallable($callback);
         $this->assertNull($rule->getMethod());
         $this->assertSame($callback, $rule->getCallback());
@@ -191,6 +193,11 @@ final class CallbackTest extends RuleTestCase
                 null,
                 ['age' => ['Hello from non-static method.', 'Hello from static method.']],
             ],
+            'class attribute' => [
+                new CallbackDto(7, 42),
+                null,
+                ['' => ['7 / 42']],
+            ],
         ];
     }
 
@@ -201,7 +208,7 @@ final class CallbackTest extends RuleTestCase
         $validator = new Validator();
 
         $this->expectException(InvalidCallbackReturnTypeException::class);
-        $message = 'Return value of callback must be an instance of Yiisoft\Validator\Result, string returned.';
+        $message = 'Return value of callback must be an instance of "Yiisoft\Validator\Result", "string" returned.';
         $this->expectExceptionMessage($message);
         $validator->validate(null, [$rule]);
     }

@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator;
+namespace Yiisoft\Validator\Helper;
 
 use InvalidArgumentException;
+use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 
 use function is_int;
 use function is_string;

@@ -29,7 +29,7 @@ final class AtLeastHandler implements RuleHandlerInterface
 
         if (!is_array($value) && !is_object($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -43,7 +43,7 @@ final class AtLeastHandler implements RuleHandlerInterface
 
         if ($filledCount < $rule->getMin()) {
             $result->addError($rule->getMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'min' => $rule->getMin(),
             ]);
         }

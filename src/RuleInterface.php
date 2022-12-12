@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Yiisoft\Validator\Helper\RulesDumper;
+
 /**
  * A main interface for rules to implement. A rule contains a set of constraint configuration to apply when validating
  * data. If you want to include a rule options in addition to a rule name during conversion to array, use extended

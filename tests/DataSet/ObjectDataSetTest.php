@@ -23,7 +23,6 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDynamicDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\Post;
-use Yiisoft\Validator\Tests\Support\Rule\RuleWithCallsCount;
 use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Support\Rule\NotRuleAttribute;
 use Yiisoft\Validator\Validator;
@@ -352,19 +351,6 @@ final class ObjectDataSetTest extends TestCase
     public function testObjectWithDynamicDataSet(ObjectDataSet $dataSet, array $expectedData): void
     {
         $this->assertSame($expectedData, $dataSet->getData());
-    }
-
-    public function testCaching(): void
-    {
-        $object = new class () {
-            #[RuleWithCallsCount]
-            public int $x = 7;
-        };
-
-        (new ObjectDataSet($object))->getRules();
-        (new ObjectDataSet($object))->getRules();
-
-        $this->assertSame(1, RuleWithCallsCount::$afterInitAttributeCallsCount);
     }
 
     public function testWithoutCache(): void

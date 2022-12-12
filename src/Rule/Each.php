@@ -7,12 +7,14 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\AfterInitAttributeEventInterface;
+use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\RulesDumper;
+use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -23,25 +25,31 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @psalm-import-type WhenType from WhenInterface
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
     RuleWithOptionsInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
-    PropagateOptionsInterface
+    PropagateOptionsInterface,
+    AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
 
-    private RulesDumper $dumper;
+    /**
+     * @var iterable<RuleInterface>
+     */
+    private iterable $rules;
+
+    private ?RulesDumper $rulesDumper = null;
 
     public function __construct(
         /**
-         * @var iterable<RuleInterface>
+         * @param callable|iterable<callable|RuleInterface>|RuleInterface $rules
          */
-        private iterable $rules = [],
+        iterable|callable|RuleInterface $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $incorrectInputKeyMessage = 'Every iterable key must have an integer or a string type.',
 
@@ -55,7 +63,7 @@ final class Each implements
          */
         private Closure|null $when = null,
     ) {
-        $this->dumper = new RulesDumper();
+        $this->rules = RulesNormalizer::normalizeList($rules);
     }
 
     public function getName(): string
@@ -125,12 +133,33 @@ final class Each implements
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => $this->dumper->asArray($this->rules),
+            'rules' => $this->getRulesDumper()->asArray($this->rules),
         ];
     }
 
     public function getHandlerClassName(): string
     {
         return EachHandler::class;
+    }
+
+    public function afterInitAttribute(object $object, int $target): void
+    {
+        foreach ($this->rules as $rule) {
+            if ($rule instanceof AfterInitAttributeEventInterface) {
+                $rule->afterInitAttribute(
+                    $object,
+                    $target === Attribute::TARGET_CLASS ? Attribute::TARGET_PROPERTY : $target
+                );
+            }
+        }
+    }
+
+    private function getRulesDumper(): RulesDumper
+    {
+        if ($this->rulesDumper === null) {
+            $this->rulesDumper = new RulesDumper();
+        }
+
+        return $this->rulesDumper;
     }
 }

@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator;
+namespace Yiisoft\Validator\RuleHandlerResolver;
 
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
+use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerResolverInterface;
 
 final class RuleHandlerContainer implements RuleHandlerResolverInterface
 {

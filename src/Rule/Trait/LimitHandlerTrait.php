@@ -43,7 +43,7 @@ trait LimitHandlerTrait
         if ($rule->getExactly() !== null && $number !== $rule->getExactly()) {
             $result->addError($rule->getNotExactlyMessage(), [
                 'exactly' => $rule->getExactly(),
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'number' => $number,
             ]);
 
@@ -53,7 +53,7 @@ trait LimitHandlerTrait
         if ($rule->getMin() !== null && $number < $rule->getMin()) {
             $result->addError($rule->getLessThanMinMessage(), [
                 'min' => $rule->getMin(),
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'number' => $number,
             ]);
         }
@@ -61,7 +61,7 @@ trait LimitHandlerTrait
         if ($rule->getMax() !== null && $number > $rule->getMax()) {
             $result->addError($rule->getGreaterThanMaxMessage(), [
                 'max' => $rule->getMax(),
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'number' => $number,
             ]);
         }

@@ -20,7 +20,7 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * @psalm-import-type WhenType from WhenInterface
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Callback implements
     RuleWithOptionsInterface,
     SkipOnErrorInterface,
@@ -31,6 +31,8 @@ final class Callback implements
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
+
+    private ?object $objectValidated = null;
 
     public function __construct(
         /**
@@ -73,8 +75,17 @@ final class Callback implements
         return $this->method;
     }
 
-    public function afterInitAttribute(object $object): void
+    public function getObjectValidated(): ?object
     {
+        return $this->objectValidated;
+    }
+
+    public function afterInitAttribute(object $object, int $target): void
+    {
+        if ($target === Attribute::TARGET_CLASS) {
+            $this->objectValidated = $object;
+        }
+
         if ($this->method === null) {
             return;
         }
@@ -83,11 +94,13 @@ final class Callback implements
 
         $reflection = new ReflectionObject($object);
         if (!$reflection->hasMethod($method)) {
-            throw new InvalidArgumentException(sprintf(
-                'Method "%s" does not exist in class "%s".',
-                $method,
-                $object::class,
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Method "%s" does not exist in class "%s".',
+                    $method,
+                    $object::class,
+                )
+            );
         }
 
         /** @psalm-suppress MixedMethodCall */

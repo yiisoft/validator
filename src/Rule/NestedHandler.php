@@ -54,7 +54,7 @@ final class NestedHandler implements RuleHandlerInterface
         if ($rule->getRules() === null) {
             if (!is_object($value)) {
                 return $compoundResult->addError($rule->getNoRulesWithNoObjectMessage(), [
-                    'attribute' => $context->getAttribute(),
+                    'attribute' => $context->getTranslatedAttribute(),
                     'type' => get_debug_type($value),
                 ]);
             }
@@ -76,7 +76,7 @@ final class NestedHandler implements RuleHandlerInterface
             }
         } else {
             return $compoundResult->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -96,7 +96,7 @@ final class NestedHandler implements RuleHandlerInterface
                     $rule->getNoPropertyPathMessage(),
                     [
                         'path' => $valuePath,
-                        'attribute' => $context->getAttribute(),
+                        'attribute' => $context->getTranslatedAttribute(),
                     ],
                     $valuePathList,
                 );

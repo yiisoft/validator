@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Exception;
 
 use RuntimeException;
 use Throwable;
+use Yiisoft\Validator\RuleHandlerResolver\RuleHandlerContainer;
 
 /**
  * An exception used by {@see RuleHandlerContainer} for the case when a given class name was not found in the container.

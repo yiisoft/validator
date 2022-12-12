@@ -100,6 +100,16 @@ final class RequiredTest extends RuleTestCase
             ],
             'custom error' => [null, [new Required(message: 'Custom error')], ['' => ['Custom error']]],
             'empty after trimming' => [' ', [new Required()], $singleMessageCannotBeBlank],
+            'custom message with attribute' => [
+                ['name' => ''],
+                ['name' => new Required(message: '{attribute} is bad.')],
+                ['name' => ['name is bad.']],
+            ],
+            'custom not passed message with attribute' => [
+                [],
+                ['name' => new Required(notPassedMessage: 'Field "{attribute}" is not passed.')],
+                ['name' => ['Field "name" is not passed.']],
+            ],
         ];
     }
 

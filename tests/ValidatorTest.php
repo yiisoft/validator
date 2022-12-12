@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Yiisoft\Validator\AttributeTranslator\NullAttributeTranslator;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSetInterface;
@@ -33,6 +34,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
+use Yiisoft\Validator\Tests\Support\Data\SimpleForm;
 use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
 use Yiisoft\Validator\ValidationContext;
@@ -374,7 +376,7 @@ class ValidatorTest extends TestCase
                 [
                     new Error(
                         'Value cannot be blank.',
-                        [],
+                        ['attribute' => 'merchantId'],
                         ['merchantId']
                     ),
                     new Error(
@@ -387,12 +389,12 @@ class ValidatorTest extends TestCase
             [
                 ['merchantId' => [new Required(), new Number(asInteger: true, skipOnError: true)]],
                 new ArrayDataSet(['merchantId' => null]),
-                [new Error('Value cannot be blank.', [], ['merchantId'])],
+                [new Error('Value cannot be blank.', [ 'attribute' => 'merchantId'], ['merchantId'])],
             ],
             [
                 ['merchantId' => [new Required(), new Number(asInteger: true, skipOnError: true)]],
                 new ArrayDataSet(['merchantIdd' => 1]),
-                [new Error('Value not passed.', [], ['merchantId'])],
+                [new Error('Value not passed.', ['attribute' => 'merchantId'], ['merchantId'])],
             ],
 
             [
@@ -453,25 +455,24 @@ class ValidatorTest extends TestCase
             [
                 $strictRules,
                 new ArrayDataSet(['orderBy' => '']),
-                [new Error('Value cannot be blank.', [], ['orderBy'])],
+                [new Error('Value cannot be blank.', ['attribute' => 'orderBy'], ['orderBy'])],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet(['orderBy' => '']),
-                [new Error('Value cannot be blank.', [], ['orderBy'])],
+                [new Error('Value cannot be blank.', ['attribute' => 'orderBy'], ['orderBy'])],
             ],
 
             [
                 $strictRules,
                 new ArrayDataSet([]),
-                [new Error('Value not passed.', [], ['orderBy'])],
+                [new Error('Value not passed.', ['attribute' => 'orderBy'], ['orderBy'])],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet([]),
-                [new Error('Value not passed.', [], ['orderBy'])],
+                [new Error('Value not passed.', ['attribute' => 'orderBy'], ['orderBy'])],
             ],
-
             [
                 [
                     'name' => [new Required(), new HasLength(min: 3, skipOnError: true)],
@@ -483,7 +484,7 @@ class ValidatorTest extends TestCase
                         private string $description = 'abc123';
                     }
                 ),
-                [new Error('Value not passed.', [], ['name'])],
+                [new Error('Value not passed.', ['attribute' => 'name'], ['name'])],
             ],
             [
                 null,
@@ -1290,5 +1291,48 @@ class ValidatorTest extends TestCase
 
         $result = $validator->validate($data, $rules);
         $this->assertSame(['number' => ['3-few']], $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function dataSimpleForm(): array
+    {
+        return [
+            [
+                [
+                    'name' => [
+                        'Имя плохое.',
+                    ],
+                    'mail' => [
+                        'This value is not a valid email address.',
+                    ],
+                ],
+                null,
+            ],
+            [
+                [
+                    'name' => [
+                        'name плохое.',
+                    ],
+                    'mail' => [
+                        'This value is not a valid email address.',
+                    ],
+                ],
+                new ValidationContext(attributeTranslator: new NullAttributeTranslator()),
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataSimpleForm
+     */
+    public function testSimpleForm(array $expectedMessages, ?ValidationContext $validationContext): void
+    {
+        $form = new SimpleForm();
+
+        $result = (new Validator())->validate($form, context: $validationContext);
+
+        $this->assertSame(
+            $expectedMessages,
+            $result->getErrorMessagesIndexedByPath()
+        );
     }
 }

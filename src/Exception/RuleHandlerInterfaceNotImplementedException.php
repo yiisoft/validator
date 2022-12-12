@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Exception;
 
 use RuntimeException;
 use Throwable;
-use Yiisoft\Validator\RuleHandlerContainer;
+use Yiisoft\Validator\RuleHandlerResolver\RuleHandlerContainer;
 use Yiisoft\Validator\RuleHandlerInterface;
 
 /**

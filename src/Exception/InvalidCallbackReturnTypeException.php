@@ -28,7 +28,7 @@ final class InvalidCallbackReturnTypeException extends Exception implements Frie
         ?Throwable $previous = null,
     ) {
         $message = sprintf(
-            'Return value of callback must be an instance of %s, %s returned.',
+            'Return value of callback must be an instance of "%s", "%s" returned.',
             Result::class,
             get_debug_type($returnValue),
         );
@@ -50,15 +50,22 @@ final class InvalidCallbackReturnTypeException extends Exception implements Frie
     public function getSolution(): ?string
     {
         return <<<SOLUTION
-            The callback must return an instance of \\Yiisoft\\Validator\\Result. An example of a valid callback:
-                static function (): \\Yiisoft\\Validator\\Result
-                {
-                    \$result = new \\Yiisoft\\Validator\\Result();
+The callback must return an instance of `\Yiisoft\Validator\Result`. An example of a valid callback:
 
-                    ...
+```php
+use Yiisoft\Validator\Result;
 
-                    return \$result;
-                }
-        SOLUTION;
+static function (mixed \$value): Result
+{
+    \$result = new Result();
+
+    if (!in_array(\$value, [7, 42], true)) {
+        \$result->addError('Value must be 7 or 42.');
+    }
+
+    return \$result;
+}
+```
+SOLUTION;
     }
 }

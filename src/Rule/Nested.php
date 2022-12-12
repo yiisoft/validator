@@ -17,7 +17,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\RulesDumper;
+use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
@@ -309,7 +309,7 @@ final class Nested implements
         $this->rules = $rules;
     }
 
-    public function afterInitAttribute(object $object): void
+    public function afterInitAttribute(object $object, int $target): void
     {
         if ($this->rules === null) {
             return;
@@ -318,7 +318,7 @@ final class Nested implements
         foreach ($this->rules as $rules) {
             foreach ((is_iterable($rules) ? $rules : [$rules]) as $rule) {
                 if ($rule instanceof AfterInitAttributeEventInterface) {
-                    $rule->afterInitAttribute($object);
+                    $rule->afterInitAttribute($object, $target);
                 }
             }
         }

@@ -36,7 +36,7 @@ final class IpHandler implements RuleHandlerInterface
 
         if (!is_string($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -149,7 +149,7 @@ final class IpHandler implements RuleHandlerInterface
     private static function getGenericErrorResult(string $message, ValidationContext $context, string $value): Result
     {
         return (new Result())->addError($message, [
-            'attribute' => $context->getAttribute(),
+            'attribute' => $context->getTranslatedAttribute(),
             'value' => $value,
         ]);
     }

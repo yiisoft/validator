@@ -8,7 +8,7 @@ use Yiisoft\Translator\IntlMessageFormatter;
 use Yiisoft\Translator\Message\Php\MessageSource;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 

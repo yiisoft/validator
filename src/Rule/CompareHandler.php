@@ -33,7 +33,7 @@ final class CompareHandler implements RuleHandlerInterface
         $result = new Result();
         if ($value !== null && !is_scalar($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -56,7 +56,7 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         return $result->addError($rule->getMessage(), [
-            'attribute' => $context->getAttribute(),
+            'attribute' => $context->getTranslatedAttribute(),
             'targetValue' => $rule->getTargetValue(),
             'targetAttribute' => $rule->getTargetAttribute(),
             'targetValueOrAttribute' => $targetValue ?? $targetAttribute,

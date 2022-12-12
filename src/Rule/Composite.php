@@ -13,7 +13,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\RulesDumper;
+use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -39,27 +39,37 @@ class Composite implements
     /**
      * @var iterable<int, RuleInterface>
      */
-    private iterable $rules;
+    protected iterable $rules = [];
+
+    /**
+     * @var bool|callable|null
+     */
+    protected $skipOnEmpty = null;
+
+    protected bool $skipOnError = false;
+
+    /**
+     * @psalm-var WhenType
+     */
+    protected Closure|null $when = null;
 
     private ?RulesDumper $rulesDumper = null;
 
+    /**
+     * @param iterable<Closure|RuleInterface> $rules
+     *
+     * @psalm-param WhenType $when
+     */
     public function __construct(
-        /**
-         * @param iterable<Closure|RuleInterface>
-         */
         iterable $rules = [],
-
-        /**
-         * @var bool|callable|null
-         */
-        private $skipOnEmpty = null,
-        private bool $skipOnError = false,
-        /**
-         * @var WhenType
-         */
-        private Closure|null $when = null,
+        bool|callable|null $skipOnEmpty = null,
+        bool $skipOnError = false,
+        Closure|null $when = null,
     ) {
         $this->rules = RulesNormalizer::normalizeList($rules);
+        $this->skipOnEmpty = $skipOnEmpty;
+        $this->skipOnError = $skipOnError;
+        $this->when = $when;
     }
 
     public function getName(): string
@@ -77,7 +87,7 @@ class Composite implements
         return [
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => $this->getRulesDumper()->asArray($this->rules),
+            'rules' => $this->dumpRulesAsArray(),
         ];
     }
 
@@ -89,18 +99,23 @@ class Composite implements
         return $this->rules;
     }
 
-    public function getHandlerClassName(): string
+    final public function getHandlerClassName(): string
     {
         return CompositeHandler::class;
     }
 
-    public function afterInitAttribute(object $object): void
+    public function afterInitAttribute(object $object, int $target): void
     {
-        foreach ($this->rules as $rule) {
+        foreach ($this->getRules() as $rule) {
             if ($rule instanceof AfterInitAttributeEventInterface) {
-                $rule->afterInitAttribute($object);
+                $rule->afterInitAttribute($object, $target);
             }
         }
+    }
+
+    final protected function dumpRulesAsArray(): array
+    {
+        return $this->getRulesDumper()->asArray($this->getRules());
     }
 
     private function getRulesDumper(): RulesDumper

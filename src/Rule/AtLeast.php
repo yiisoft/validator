@@ -19,7 +19,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @psalm-import-type WhenType from WhenInterface
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
