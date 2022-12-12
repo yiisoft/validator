@@ -178,7 +178,7 @@ final class ObjectParser
      * Returns a property value of the parsed object.
      *
      * Note that in case of non-existing property a default `null` value is returned. If you need to check the presence
-     * of property or return a different default value, use {@see hasAttribute()} instead.
+     * of a property or return a different default value, use {@see hasAttribute()} instead.
      *
      * @param string $attribute Attribute name.
      *
