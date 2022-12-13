@@ -94,7 +94,7 @@ use function is_string;
  * ];
  * ```
  *
- * A class string is valid as a source too. This way only rules will be parsed:
+ * A class name string is valid as a source too. This way only rules will be parsed:
  *
  * ```php
  * $parser = new ObjectParser(Post::class);
@@ -139,11 +139,13 @@ final class ObjectParser
     private string|null $cacheKey = null;
 
     /**
-     * @throws InvalidArgumentException if a class string provided in {@see $source} refers to a non-existing class.
+     * @throws InvalidArgumentException if a class name string provided in {@see $source} refers to a non-existing
+     * class.
      */
     public function __construct(
         /**
-         * @var class-string|object A source for parsing rules and data. Can be either a class string or an instance.
+         * @var class-string|object A source for parsing rules and data. Can be either a class name string or an
+         * instance.
          */
         private string|object $source,
         /**
@@ -231,7 +233,7 @@ final class ObjectParser
      * Note that in case of non-existing property a default `null` value is returned. If you need to check the presence
      * of a property or return a different default value, use {@see hasAttribute()} instead.
      *
-     * If a {@see $source} is a class string, `null` value is always returned.
+     * If a {@see $source} is a class name string, `null` value is always returned.
      *
      * @param string $attribute Attribute name.
      *
@@ -248,7 +250,7 @@ final class ObjectParser
      * Whether the parsed object has the property with a given name. Note that this means existence only and properties
      * with empty values are treated as present too.
      *
-     * If a {@see $source} is a class string, `false` value is always returned.
+     * If a {@see $source} is a class name string, `false` value is always returned.
      *
      * @return bool Whether the property exists: `true` - exists and `false` - otherwise.
      */
@@ -260,7 +262,7 @@ final class ObjectParser
     /**
      * Returns the parsed object's data as a whole in a form of associative array.
      *
-     * If a {@see $source} is a class string, an empty array is always returned.
+     * If a {@see $source} is a class name string, an empty array is always returned.
      *
      * @return array A mapping between property names and their values.
      */
@@ -282,7 +284,7 @@ final class ObjectParser
     /**
      * An optional attribute names translator. It's taken from the {@see $source} object when
      * {@see AttributeTranslatorProviderInterface} is implemented. In case of it's missing or {@see $source} being a
-     * class string, a `null` value is returned.
+     * class name string, a `null` value is returned.
      *
      * @return AttributeTranslatorInterface|null An attribute translator instance or `null if it was not provided.
      */
