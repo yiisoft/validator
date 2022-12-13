@@ -327,13 +327,13 @@ final class ObjectParser
     /**
      * Returns Reflection of {@see $source}. Repetitive calls utilize cache if it's enabled in {@see $useCache}.
      *
-     * @return ReflectionObject|ReflectionClass Either a Reflection class or an object instance depending on what was
+     * @return ReflectionClass|ReflectionObject Either a Reflection class or an object instance depending on what was
      * provided in {@see $source}.
      */
     private function getReflectionSource(): ReflectionObject|ReflectionClass
     {
         if ($this->hasCacheItem('reflectionSource')) {
-            /** @var ReflectionObject|ReflectionClass */
+            /** @var ReflectionClass|ReflectionObject */
             return $this->getCacheItem('reflectionSource');
         }
 
