@@ -187,7 +187,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface, A
      * Returns {@see $object} rules specified via {@see RulesProviderInterface::getRules()} implementation or parsed
      * from attributes attached to class properties and class itself. For the latter case repetitive calls utilize cache
      * if it's enabled in {@see $useCache}. Rules provided via separate method have the highest priority over
-     * attributes, so, when using together, the latter ones will be ignored without exception.
+     * attributes, so, when used together, the latter ones will be ignored without exception.
      *
      * @return iterable The resulting rules is an array with the following structure:
      *
