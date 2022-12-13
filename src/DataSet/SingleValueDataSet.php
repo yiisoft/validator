@@ -17,14 +17,12 @@ use Yiisoft\Validator\DataSetInterface;
  * $dataSet = new SingleValueDataSet('text');
  * $dataSet = new SingleValueDataSet(null);
  * $dataSet = new SingleValueDataSet(false);
- * $dataSet = new SingleValueDataSet([]);
- * $dataSet = new SingleValueDataSet(new \stdClass());
  * ```
  *
  * When using validator, there is no need to wrap data manually. Such types be automatically wrapped with
  * {@see SingleValueDataSet} by {@see DataSetNormalizer} during validation.
  *
- * For arrays and objects {@see ArrayDataSet} and {@see ObjectDataSet} can be used accordingly.
+ * For arrays and objects use {@see ArrayDataSet} and {@see ObjectDataSet} accordingly.
  */
 final class SingleValueDataSet implements DataSetInterface
 {
@@ -51,7 +49,7 @@ final class SingleValueDataSet implements DataSetInterface
 
     /**
      * A getter for {@see $data} property. Returns the validated data as a whole. In this case the single value itself
-     * is returned as a data because it can not be decoupled.
+     * returned as a data because it can not be decoupled.
      *
      * @return mixed Single value of any (mixed) data type.
      */

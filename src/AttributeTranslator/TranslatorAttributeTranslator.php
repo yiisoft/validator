@@ -8,7 +8,7 @@ use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\AttributeTranslatorInterface;
 
 /**
- * An attribute translator that uses {@see TranslatorInterface}.
+ * An attributes translator that used {@see TranslatorInterface} for translation.
  */
 final class TranslatorAttributeTranslator implements AttributeTranslatorInterface
 {
