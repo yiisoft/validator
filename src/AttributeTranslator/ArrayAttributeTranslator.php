@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\AttributeTranslator;
 use Yiisoft\Validator\AttributeTranslatorInterface;
 
 /**
- * An attributes translator that used array of translations for translate attribute name.
+ * An attribute translator that uses array of translations.
  */
 final class ArrayAttributeTranslator implements AttributeTranslatorInterface
 {
