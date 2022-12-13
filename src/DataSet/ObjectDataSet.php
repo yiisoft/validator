@@ -9,7 +9,6 @@ use Yiisoft\Validator\AttributeTranslatorInterface;
 use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
-use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
 
@@ -135,8 +134,8 @@ use Yiisoft\Validator\RulesProviderInterface;
  * Rules and data provided via separate methods have the highest priority over attributes and properties so, when used
  * together, the latter ones will be ignored without exception.
  *
- * When {@see RulesProviderInterface} / {@see DataSetInterface} are not implemented, uses {@see ObjectParser} and supports
- * caching for data and attribute methods (partially) and rules (completely) which can be disabled on demand.
+ * When {@see RulesProviderInterface} / {@see DataSetInterface} are not implemented, uses {@see ObjectParser} and
+ * supports caching for data and attribute methods (partially) and rules (completely) which can be disabled on demand.
  *
  * For getting only rules by a class name string, use {@see AttributesRulesProvider} instead.
  *
