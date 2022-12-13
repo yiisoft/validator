@@ -132,7 +132,7 @@ use Yiisoft\Validator\RulesProviderInterface;
  *
  * Please refer to the guide for more examples.
  *
- * Rules and data provided via separate methods have the highest priority over attributes and properties so, when using
+ * Rules and data provided via separate methods have the highest priority over attributes and properties so, when used
  * together, the latter ones will be ignored without exception.
  *
  * When {@see RuleInterface} / {@see DataSetInterface} are not implemented, uses {@see ObjectParser} and supports
