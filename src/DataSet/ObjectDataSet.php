@@ -9,7 +9,6 @@ use Yiisoft\Validator\AttributeTranslatorInterface;
 use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
-use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
 
