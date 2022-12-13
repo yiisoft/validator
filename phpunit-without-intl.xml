@@ -15,7 +15,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Validator">
+        <testsuite name="Yii Validator without intl tests">
             <directory>./tests/TestEnvironments/WithoutIntl</directory>
         </testsuite>
     </testsuites>
