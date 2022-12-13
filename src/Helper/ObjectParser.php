@@ -107,12 +107,12 @@ use function is_string;
  * Note that the rule attributes can be combined with others without affecting parsing. Which properties to parse can be
  * configured via {@see ObjectParser::$propertyVisibility} and {@see ObjectParser::$skipStaticProperties} options.
  *
- * Uses Reflection for getting object data and metadata. Supports caching for Reflection of object with properties and
- * rules which can be disabled on demand.
+ * Uses Reflection for getting object data and metadata. Supports caching for Reflection of a class / an obhect with
+ * properties and rules which can be disabled on demand.
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  *
- * @psalm-type RulesCache = array<int,array{0:RuleInterface,1:int}>|array<string,list<array{0:RuleInterface,1:int}>>
+ * @psalm-type RulesCache = array<int,array{0:RuleInterface,1:Attribute::TARGET_*}>|array<string,list<array{0:RuleInterface,1:Attribute::TARGET_*}>>
  */
 final class ObjectParser
 {
@@ -159,8 +159,8 @@ final class ObjectParser
          */
         private bool $skipStaticProperties = false,
         /**
-         * @var bool Whether some results of parsing (Reflection of object with properties and
-         * rules) must be cached.
+         * @var bool Whether some results of parsing (Reflection of a class / an object with properties and rules) must
+         * be cached.
          */
         bool $useCache = true,
     ) {
@@ -174,7 +174,7 @@ final class ObjectParser
         if ($useCache) {
             $this->cacheKey = (is_object($source) ? $source::class : $source)
                 . '_' . $this->propertyVisibility
-                . '_' . $this->skipStaticProperties;
+                . '_' . (int) $this->skipStaticProperties;
         }
     }
 
@@ -182,7 +182,15 @@ final class ObjectParser
      * Parses rules specified via attributes attached to class properties and class itself. Repetitive calls utilize
      * cache if it's enabled in {@see $useCache}.
      *
-     * @return array<int, RuleInterface>|array<string, list<RuleInterface>>
+     * @return array<int, RuleInterface>|array<string, list<RuleInterface>> The resulting rules array with the following
+     * structure:
+     *
+     * ```php
+     * [
+     *     [new AtLeast(['name', 'author'])], // Parsed from class attribute.
+     *     'files' => [new Count(max: 3)], // Parsed from property attribute.
+     * ],
+     * ```
      */
     public function getRules(): array
     {
@@ -289,7 +297,7 @@ final class ObjectParser
      * Returns Reflection properties parsed from {@see $source} in accordance with {@see $propertyVisibility} and
      * {@see $skipStaticProperties} values. Repetitive calls utilize cache if it's enabled in {@see $useCache}.
      *
-     * @return array<string, ReflectionProperty>
+     * @return array<string, ReflectionProperty> A mapping between Reflection property names and their values.
      */
     private function getReflectionProperties(): array
     {
@@ -298,11 +306,8 @@ final class ObjectParser
             return $this->getCacheItem('reflectionProperties');
         }
 
-        $reflectionSource = $this->getReflectionSource();
-
         $reflectionProperties = [];
-
-        foreach ($reflectionSource->getProperties($this->propertyVisibility) as $property) {
+        foreach ($this->getReflectionSource()->getProperties($this->propertyVisibility) as $property) {
             if ($this->skipStaticProperties && $property->isStatic()) {
                 continue;
             }
@@ -321,11 +326,14 @@ final class ObjectParser
 
     /**
      * Returns Reflection of {@see $source}. Repetitive calls utilize cache if it's enabled in {@see $useCache}.
+     *
+     * @return ReflectionObject|ReflectionClass Either a Reflection class or an object instance depending on what was
+     * provided in {@see $source}.
      */
     private function getReflectionSource(): ReflectionObject|ReflectionClass
     {
         if ($this->hasCacheItem('reflectionSource')) {
-            /** @var ReflectionClass|ReflectionObject */
+            /** @var ReflectionObject|ReflectionClass */
             return $this->getCacheItem('reflectionSource');
         }
 
@@ -333,28 +341,27 @@ final class ObjectParser
             ? new ReflectionObject($this->source)
             : new ReflectionClass($this->source);
 
-        if ($this->useCache()) {
-            $this->setCacheItem('reflectionSource', $reflectionSource);
-        }
+        $this->setCacheItem('reflectionSource', $reflectionSource);
 
         return $reflectionSource;
     }
 
     /**
-     * @psalm-param RulesCache $source
+     * @psalm-param RulesCache $source Raw rules containing additional metadata besides rule instances.
      *
-     * @return array<int, RuleInterface>|array<string, list<RuleInterface>>
+     * @return array<int, RuleInterface>|array<string, list<RuleInterface>> An array of rules ready to use for the
+     * validation.
      */
     private function prepareRules(array $source): array
     {
         $rules = [];
         foreach ($source as $key => $data) {
             if (is_int($key)) {
-                /** @psalm-var array{0:RuleInterface,1:int} $data */
+                /** @psalm-var array{0:RuleInterface,1:Attribute::TARGET_*} $data */
                 $rules[$key] = $this->prepareRule($data[0], $data[1]);
             } else {
                 /**
-                 * @psalm-var list<array{0:RuleInterface,1:int}> $data
+                 * @psalm-var list<array{0:RuleInterface,1:Attribute::TARGET_*}> $data
                  * @psalm-suppress UndefinedInterfaceMethod
                  */
                 foreach ($data as $rule) {
@@ -366,10 +373,10 @@ final class ObjectParser
     }
 
     /**
-     * Prepares a rule instance created from a Reflection attribute.
+     * Prepares a rule instance created from a Reflection attribute to use for the validation.
      *
      * @param RuleInterface $rule A rule instance.
-     * @param int $target An attribute target.
+     * @param Attribute::TARGET_* $target {@see Attribute} target.
      *
      * @return RuleInterface The same rule instance.
      */
@@ -387,7 +394,7 @@ final class ObjectParser
      *
      * @param string $name Cache item name. Can be on of: `rules`, `reflectionProperties`, `reflectionSource`.
      *
-     * @return bool `true` if an item exists, `false` - if it does not or cache is disabled in {@see $useCache}.
+     * @return bool `true` if an item exists, `false` - if it does not or the cache is disabled in {@see $useCache}.
      */
     private function hasCacheItem(
         #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionSource'])]
