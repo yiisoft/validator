@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 /**
- * Provides implementation of {@see AttributeTranslatorInterface} for translations of attribute names.
+ * Provides implementation of {@see AttributeTranslatorInterface} for translate attribute names.
  */
 interface AttributeTranslatorProviderInterface
 {
