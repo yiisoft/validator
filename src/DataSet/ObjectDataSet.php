@@ -138,7 +138,7 @@ use Yiisoft\Validator\RulesProviderInterface;
  * When {@see RuleInterface} / {@see DataSetInterface} are not implemented, uses {@see ObjectParser} and supports
  * caching for data and attribute methods (partially) and rules (completely) which can be disabled on demand.
  *
- * For getting only rules by a class string, use {@see AttributesRulesProvider} instead.
+ * For getting only rules by a class name string, use {@see AttributesRulesProvider} instead.
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  */
