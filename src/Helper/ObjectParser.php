@@ -71,7 +71,7 @@ use function is_string;
  * The parsed `$rules` will contain:
  *
  * ```php
- * $rules = [
+ * [
  *     new Nested([
  *         'title' => [new HasLength(max: 255)],
  *         'author' => new Nested([
@@ -87,7 +87,7 @@ use function is_string;
  * And the result of `$data` will be:
  *
  * ```php
- * $data = [
+ * [
  *     'title' => 'Yii3 Overview 3',
  *     'author' => 'John',
  *     'files' => [],
@@ -262,7 +262,7 @@ final class ObjectParser
      *
      * If a {@see $source} is a class string, an empty array is always returned.
      *
-     * @return array  A mapping between property names and their values.
+     * @return array A mapping between property names and their values.
      */
     public function getData(): array
     {
@@ -281,8 +281,7 @@ final class ObjectParser
 
     /**
      * An optional attribute names translator. It's taken from the {@see $source} object when
-     *
-     * @see AttributeTranslatorProviderInterface} is implemented. In case of it's missing or {@see $source} being a
+     * {@see AttributeTranslatorProviderInterface} is implemented. In case of it's missing or {@see $source} being a
      * class string, a `null` value is returned.
      *
      * @return AttributeTranslatorInterface|null An attribute translator instance or `null if it was not provided.
