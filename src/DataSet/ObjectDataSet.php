@@ -15,7 +15,7 @@ use Yiisoft\Validator\RulesProviderInterface;
 
 /**
  * A data set for object data. The object passed to this data set can provide rules and data by implementing
- * {@see RuleInterface} and {@see DataSetInterface}. Alternatively this data set allows getting rules from PHP
+ * {@see RulesProviderInterface} and {@see DataSetInterface}. Alternatively this data set allows getting rules from PHP
  * attributes (attached to class properties and class itself) and data from object properties.
  *
  * An example of object implementing {@see RulesProviderInterface}:
