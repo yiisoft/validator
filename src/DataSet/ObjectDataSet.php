@@ -276,7 +276,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface, A
      * An optional attribute names translator. It's taken from the {@see $object} when
      * {@see AttributeTranslatorProviderInterface} is implemented. In case of it's missing, a `null` value is returned.
      *
-     * @return AttributeTranslatorInterface|null An attribute translator instance or `null if it was not provided.
+     * @return AttributeTranslatorInterface|null An attribute translator instance or `null` if it was not provided.
      */
     public function getAttributeTranslator(): ?AttributeTranslatorInterface
     {
