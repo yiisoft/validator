@@ -300,8 +300,10 @@ final class ObjectParser
      * {@see $skipStaticProperties} values. Repetitive calls utilize cache if it's enabled in {@see $useCache}.
      *
      * @return array<string, ReflectionProperty> A mapping between Reflection property names and their values.
+     *
+     * @see https://github.com/yiisoft/form for usage in form collector.
      */
-    private function getReflectionProperties(): array
+    public function getReflectionProperties(): array
     {
         if ($this->hasCacheItem('reflectionProperties')) {
             /** @var array<string, ReflectionProperty> */
