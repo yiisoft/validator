@@ -15,14 +15,14 @@
     </php>
 
     <testsuites>
-        <testsuite name="Validator">
+        <testsuite name="Yii Validator common tests">
             <directory>./tests</directory>
             <exclude>
                 <directory>./tests/TestEnvironments</directory>
             </exclude>
         </testsuite>
 
-        <testsuite name="Validator PHP 8.1">
+        <testsuite name="Yii Validator PHP 8.1 tests">
             <directory phpVersion="8.1" phpVersionOperator=">=">./tests/TestEnvironments/Php81</directory>
         </testsuite>
     </testsuites>

@@ -6,15 +6,16 @@
     <br>
 </p>
 
-The package provides data validation capabilities.
-
 [![Latest Stable Version](https://poser.pugx.org/yiisoft/validator/v/stable.png)](https://packagist.org/packages/yiisoft/validator)
 [![Total Downloads](https://poser.pugx.org/yiisoft/validator/downloads.png)](https://packagist.org/packages/yiisoft/validator)
 [![Build status](https://github.com/yiisoft/validator/workflows/build/badge.svg)](https://github.com/yiisoft/validator/actions?query=workflow%3Abuild)
 [![Code Coverage](https://codecov.io/gh/yiisoft/validator/branch/master/graph/badge.svg)](https://codecov.io/gh/yiisoft/validator)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyiisoft%2Fwidget%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/yiisoft/validator/master)
-[![static analysis](https://github.com/yiisoft/validator/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/validator/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/validator/coverage.svg)](https://shepherd.dev/github/yiisoft/validator)
+[![static analysis](https://github.com/yiisoft/validator/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/validator/actions?query=workflow%3A%22static+analysis%22)
+[![psalm-level](https://shepherd.dev/github/yiisoft/validator/level.svg)](https://shepherd.dev/github/yiisoft/validator)
+
+The package provides data validation capabilities.
 
 ## Features
 
@@ -30,6 +31,8 @@ The package provides data validation capabilities.
 ## Requirements
 
 - PHP 8.0 or higher.
+- `JSON` PHP extension.
+- `mbstring` PHP extension.
 
 ## Installation
 
@@ -1013,6 +1016,20 @@ The code is statically analyzed with [Psalm](https://psalm.dev/). To run static 
 ```shell
 ./vendor/bin/psalm
 ```
+
+### Code style
+
+Use [Rector](https://github.com/rectorphp/rector) to make codebase follow some specific rules or
+use either newest or any specific version of PHP:
+
+```shell
+./vendor/bin/rector
+```
+
+### Dependencies
+
+Use [ComposerRequireChecker](https://github.com/maglnet/ComposerRequireChecker) to detect transitive
+[Composer](https://getcomposer.org/) dependencies.
 
 ## License
 
