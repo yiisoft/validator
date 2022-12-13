@@ -16,6 +16,18 @@
         "chat": "https://t.me/yii3en",
         "source": "https://github.com/yiisoft/validator"
     },
+    "funding": [
+        {
+            "type": "opencollective",
+            "url": "https://opencollective.com/yiisoft"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/yiisoft"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": "^8.0",
         "ext-json": "*",
@@ -29,7 +41,7 @@
     },
     "require-dev": {
         "jetbrains/phpstorm-attributes": "^1.0",
-        "maglnet/composer-require-checker": "^4.2",
+        "maglnet/composer-require-checker": "^4.3",
         "phpbench/phpbench": "^1.2",
         "phpunit/phpunit": "^9.5",
         "rector/rector": "^0.15.0",
