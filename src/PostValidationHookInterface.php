@@ -5,11 +5,19 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 /**
- * Allows implementing post-validation processing in the data set object itself.
+ * An optional interface for data set ({@see DataSetInterface}) to implement (used as a replacement). It provides
+ * {@see processValidationResult()} method-based hook allowing to execute custom code after a validation {@see Result}
+ * has been formed.
  *
- * @link https://github.com/yiisoft/form/blob/d2333f9a0a77f6dcb00db1ab8ee95ec4426ea133/src/FormModel.php#L202
+ * @see https://github.com/yiisoft/form/blob/4b385ff44ee1a5f402471e7a1e6aafff31a391fb/src/FormModel.php#L202 for usage
+ * in `FormModel`.
  */
 interface PostValidationHookInterface extends DataSetInterface
 {
+    /**
+     * Method-based hook allowing to execute custom code after a validation {@see Result} has been formed.
+     *
+     * @param Result $result A validation {@see Result} instance.
+     */
     public function processValidationResult(Result $result): void;
 }
