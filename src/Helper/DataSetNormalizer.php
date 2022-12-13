@@ -29,6 +29,7 @@ final class DataSetNormalizer
      * {@see SingleValueDataSet} explicitly or use a custom data set ({@see DataSetInterface}).
      *
      * @param mixed $data Raw validated data of any type.
+     *
      * @return DataSetInterface Data set instance.
      */
     public static function normalize(mixed $data): DataSetInterface
