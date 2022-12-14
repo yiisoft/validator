@@ -8,31 +8,36 @@ use RuntimeException;
 use Throwable;
 use Yiisoft\Validator\RuleHandlerResolver\RuleHandlerContainer;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerResolverInterface;
 
 /**
- * An exception used by {@see RuleHandlerContainer} for the case when a class name was successfully retrieved from the
- * container but this class does not implement {@see RuleHandlerInterface}.
+ * An exception used by {@see RuleHandlerResolverInterface} implementations (e. g., {@see RuleHandlerContainer}) for
+ * the case when a retrieved value is not object or is, but does not implement {@see RuleHandlerInterface}.
  */
 final class RuleHandlerInterfaceNotImplementedException extends RuntimeException
 {
     public function __construct(
         /**
-         * @var string A class name retrieved from the container.
+         * @param mixed A variable retrieved from the container.
          */
-        string $className,
+        mixed $value,
         /**
          * @var Throwable|null The previous throwable used for the exception chaining.
          */
         ?Throwable $previous = null,
     ) {
+        $type = get_debug_type($value);
+
         parent::__construct(
             sprintf(
-                'Handler "%s" must implement "%s".',
-                $className,
+                class_exists($type)
+                    ? 'Handler "%1$s" must implement "%2$s".'
+                    : 'Expected instance of "%2$s". Got "%1$s".',
+                $type,
                 RuleHandlerInterface::class,
             ),
             0,
-            $previous,
+            $previous
         );
     }
 }

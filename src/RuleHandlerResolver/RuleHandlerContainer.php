@@ -26,7 +26,7 @@ final class RuleHandlerContainer implements RuleHandlerResolverInterface
         }
 
         if (!$ruleHandler instanceof RuleHandlerInterface) {
-            throw new RuleHandlerInterfaceNotImplementedException($className);
+            throw new RuleHandlerInterfaceNotImplementedException($ruleHandler);
         }
 
         return $ruleHandler;
