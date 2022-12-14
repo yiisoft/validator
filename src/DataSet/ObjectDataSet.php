@@ -8,6 +8,7 @@ use ReflectionProperty;
 use Yiisoft\Validator\AttributeTranslatorInterface;
 use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\DataWrapperInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -142,7 +143,7 @@ use Yiisoft\Validator\RulesProviderInterface;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  */
-final class ObjectDataSet implements RulesProviderInterface, DataSetInterface, AttributeTranslatorProviderInterface
+final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterface, AttributeTranslatorProviderInterface
 {
     /**
      * @var bool Whether an {@see $object} provided a data set by implementing {@see DataSetInterface}.

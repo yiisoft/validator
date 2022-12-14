@@ -25,8 +25,6 @@ interface DataSetInterface
      */
     public function getData(): ?array;
 
-    public function getSource(): mixed;
-
     /**
      * Whether a data set has the attribute with a given name. Note that this means existence only and attributes with
      * empty values are treated as present.

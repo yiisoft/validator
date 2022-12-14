@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\DataSet;
 
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\DataWrapperInterface;
 
 /**
  * A data set used for a single value of any (mixed) data type. Does not support attributes.
@@ -26,7 +27,7 @@ use Yiisoft\Validator\DataSetInterface;
  *
  * For arrays and objects {@see ArrayDataSet} and {@see ObjectDataSet} can be used accordingly.
  */
-final class SingleValueDataSet implements DataSetInterface
+final class SingleValueDataSet implements DataWrapperInterface
 {
     public function __construct(
         /**

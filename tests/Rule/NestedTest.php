@@ -866,31 +866,6 @@ final class NestedTest extends RuleTestCase
                 return null;
             }
 
-            public function getSource(): mixed
-            {
-                return new class () implements DataSetInterface {
-                    public function getAttributeValue(string $attribute): mixed
-                    {
-                        return false;
-                    }
-
-                    public function getData(): ?array
-                    {
-                        return null;
-                    }
-
-                    public function getSource(): mixed
-                    {
-                        return false;
-                    }
-
-                    public function hasAttribute(string $attribute): bool
-                    {
-                        return false;
-                    }
-                };
-            }
-
             public function hasAttribute(string $attribute): bool
             {
                 return false;

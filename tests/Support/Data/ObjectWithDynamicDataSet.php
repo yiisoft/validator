@@ -24,11 +24,6 @@ final class ObjectWithDynamicDataSet implements DataSetInterface
         return ['name' => $this->name];
     }
 
-    public function getSource(): self
-    {
-        return $this;
-    }
-
     public function hasAttribute(string $attribute): bool
     {
         return array_key_exists($attribute, $this->getData());

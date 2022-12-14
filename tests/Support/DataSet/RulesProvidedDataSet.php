@@ -30,11 +30,6 @@ final class RulesProvidedDataSet implements RulesProviderInterface, DataSetInter
         return $this->data;
     }
 
-    public function getSource(): array
-    {
-        return $this->data;
-    }
-
     public function hasAttribute(string $attribute): bool
     {
         return array_key_exists($attribute, $this->data);

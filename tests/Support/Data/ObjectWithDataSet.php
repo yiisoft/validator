@@ -31,11 +31,6 @@ final class ObjectWithDataSet implements DataSetInterface
         return ['key1' => 7, 'key2' => 42];
     }
 
-    public function getSource(): self
-    {
-        return $this;
-    }
-
     public function hasAttribute(string $attribute): bool
     {
         return array_key_exists($attribute, $this->getData());

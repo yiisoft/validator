@@ -21,11 +21,6 @@ final class ObjectWithPostValidationHook implements PostValidationHookInterface
         return null;
     }
 
-    public function getSource(): array
-    {
-        return $this;
-    }
-
     public function hasAttribute(string $attribute): bool
     {
         return false;

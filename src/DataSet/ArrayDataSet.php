@@ -56,11 +56,6 @@ final class ArrayDataSet implements DataSetInterface
         return $this->data;
     }
 
-    public function getSource(): array
-    {
-        return $this->data;
-    }
-
     /**
      * Whether this data set has the attribute with a given name. Note that this means existence only and attributes
      * with empty values are treated as present too.
