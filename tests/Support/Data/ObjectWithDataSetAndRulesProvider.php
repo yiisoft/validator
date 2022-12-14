@@ -36,9 +36,14 @@ final class ObjectWithDataSetAndRulesProvider implements DataSetInterface, Rules
         return $this->getObjectData()[$attribute] ?? null;
     }
 
-    public function getData(): mixed
+    public function getData(): ?array
     {
         return $this->getObjectData();
+    }
+
+    public function getSource(): self
+    {
+        return $this;
     }
 
     public function hasAttribute(string $attribute): bool

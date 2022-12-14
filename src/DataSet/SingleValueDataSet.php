@@ -55,7 +55,12 @@ final class SingleValueDataSet implements DataSetInterface
      *
      * @return mixed Single value of any (mixed) data type.
      */
-    public function getData(): mixed
+    public function getData(): ?array
+    {
+        return null;
+    }
+
+    public function getSource(): mixed
     {
         return $this->value;
     }

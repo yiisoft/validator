@@ -262,7 +262,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface, A
      * @return mixed Validated data, has mixed type if it was provided via {@see DataSetInterface::getData()}
      * implementation, otherwise it's always an associative array - a mapping between property names and their values.
      */
-    public function getData(): mixed
+    public function getData(): ?array
     {
         if ($this->dataSetProvided) {
             /** @var DataSetInterface $object */
@@ -271,6 +271,11 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface, A
         }
 
         return $this->parser->getData();
+    }
+
+    public function getSource(): object
+    {
+        return $this->object;
     }
 
     /**

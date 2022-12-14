@@ -13,8 +13,8 @@ final class SingleValueDataSetTest extends TestCase
     {
         $data = new SingleValueDataSet(['test' => 'hello']);
 
-        $this->assertSame(['test' => 'hello'], $data->getData());
-
+        $this->assertNull($data->getData());
+        $this->assertSame(['test' => 'hello'], $data->getSource());
         $this->assertFalse($data->hasAttribute('test'));
         $this->assertNull($data->getAttributeValue('test'));
     }

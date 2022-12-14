@@ -439,7 +439,12 @@ final class CompareToTest extends RuleTestCase
                 return new stdClass();
             }
 
-            public function getData(): mixed
+            public function getData(): ?array
+            {
+                return null;
+            }
+
+            public function getSource(): mixed
             {
                 return false;
             }

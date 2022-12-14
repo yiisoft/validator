@@ -49,6 +49,9 @@ final class NestedHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Nested::class, $rule);
         }
 
+        /** @var mixed $value */
+        $value = $context->getParameter('data-as-array') ?? $value;
+
         $compoundResult = new Result();
 
         if ($rule->getRules() === null) {

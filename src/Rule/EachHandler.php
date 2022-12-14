@@ -23,6 +23,9 @@ final class EachHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Each::class, $rule);
         }
 
+        /** @var mixed $value */
+        $value = $context->getParameter('data-as-array') ?? $value;
+
         $rules = $rule->getRules();
 
         $result = new Result();

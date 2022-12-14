@@ -23,7 +23,9 @@ interface DataSetInterface
      *
      * @return mixed Validated data.
      */
-    public function getData(): mixed;
+    public function getData(): ?array;
+
+    public function getSource(): mixed;
 
     /**
      * Whether a data set has the attribute with a given name. Note that this means existence only and attributes with

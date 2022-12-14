@@ -89,11 +89,13 @@ final class Validator implements ValidatorInterface
 
             if (is_int($attribute)) {
                 /** @psalm-suppress MixedAssignment */
-                $validatedData = $dataSet->getData();
+                $validatedData = $dataSet->getSource();
+                $context->setParameter('data-as-array', $dataSet->getData());
                 $context->setAttribute(null);
             } else {
                 /** @psalm-suppress MixedAssignment */
                 $validatedData = $dataSet->getAttributeValue($attribute);
+                $context->setParameter('data-as-array', null);
                 $context->setAttribute($attribute);
             }
 

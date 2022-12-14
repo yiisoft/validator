@@ -861,7 +861,12 @@ final class NestedTest extends RuleTestCase
                 return false;
             }
 
-            public function getData(): mixed
+            public function getData(): ?array
+            {
+                return null;
+            }
+
+            public function getSource(): mixed
             {
                 return new class () implements DataSetInterface {
                     public function getAttributeValue(string $attribute): mixed
@@ -869,7 +874,12 @@ final class NestedTest extends RuleTestCase
                         return false;
                     }
 
-                    public function getData(): mixed
+                    public function getData(): ?array
+                    {
+                        return null;
+                    }
+
+                    public function getSource(): mixed
                     {
                         return false;
                     }
@@ -948,7 +958,7 @@ final class NestedTest extends RuleTestCase
             'custom incorrect data set type message with parameters' => [
                 $incorrectDataSet,
                 [new Nested(['value' => new Required()], incorrectDataSetTypeMessage: 'Type - {type}.')],
-                ['' => ['Type - bool.']],
+                ['' => ['Type - null.']],
             ],
             // Incorrect input
             'incorrect input' => [
