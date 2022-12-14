@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use Countable;
-use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\LimitInterface;
 use Yiisoft\Validator\Rule\Trait\LimitTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
@@ -30,15 +29,12 @@ final class Count implements
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
-    LimitInterface,
-    AfterInitAttributeEventInterface
+    LimitInterface
 {
     use LimitTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
-
-    private ?object $objectValidated = null;
 
     public function __construct(
         /**
@@ -113,11 +109,6 @@ final class Count implements
         return $this->incorrectInputMessage;
     }
 
-    public function getObjectValidated(): ?object
-    {
-        return $this->objectValidated;
-    }
-
     public function getOptions(): array
     {
         return array_merge($this->getLimitOptions(), [
@@ -133,12 +124,5 @@ final class Count implements
     public function getHandlerClassName(): string
     {
         return CountHandler::class;
-    }
-
-    public function afterInitAttribute(object $object, int $target): void
-    {
-        if ($target === Attribute::TARGET_CLASS) {
-            $this->objectValidated = $object;
-        }
     }
 }

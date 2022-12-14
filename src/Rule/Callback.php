@@ -32,8 +32,6 @@ final class Callback implements
     use SkipOnErrorTrait;
     use WhenTrait;
 
-    private ?object $objectValidated = null;
-
     public function __construct(
         /**
          * @var callable|null
@@ -75,17 +73,8 @@ final class Callback implements
         return $this->method;
     }
 
-    public function getObjectValidated(): ?object
-    {
-        return $this->objectValidated;
-    }
-
     public function afterInitAttribute(object $object, int $target): void
     {
-        if ($target === Attribute::TARGET_CLASS) {
-            $this->objectValidated = $object;
-        }
-
         if ($this->method === null) {
             return;
         }

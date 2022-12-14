@@ -30,7 +30,6 @@ final class CountHandler implements RuleHandlerInterface
         $result = new Result();
 
         /** @var mixed $value */
-        $value = $rule->getObjectValidated() ?? $value;
         if (!is_countable($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),

@@ -25,6 +25,8 @@ final class AtLeastHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(AtLeast::class, $rule);
         }
 
+        $value = $context->getParameter('data-as-array') ?? $value;
+
         $result = new Result();
 
         if (!is_array($value) && !is_object($value)) {
