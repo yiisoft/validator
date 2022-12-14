@@ -131,13 +131,14 @@ use Yiisoft\Validator\RulesProviderInterface;
  *
  * Please refer to the guide for more examples.
  *
- * Rules and data provided via separate methods have the highest priority over attributes and properties so, when used
+ * Rules and data provided via separate methods have a higher priority over attributes and properties, so, when used
  * together, the latter ones will be ignored without exception.
  *
  * When {@see RulesProviderInterface} / {@see DataSetInterface} are not implemented, uses {@see ObjectParser} and
  * supports caching for data and attribute methods (partially) and rules (completely) which can be disabled on demand.
  *
- * For getting only rules by a class name string, use {@see AttributesRulesProvider} instead.
+ * For getting only rules by a class name string or to be able to skip static properties, use
+ * {@see AttributesRulesProvider} instead.
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  */
@@ -185,8 +186,8 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface, A
     /**
      * Returns {@see $object} rules specified via {@see RulesProviderInterface::getRules()} implementation or parsed
      * from attributes attached to class properties and class itself. For the latter case repetitive calls utilize cache
-     * if it's enabled in {@see $useCache}. Rules provided via separate method have the highest priority over
-     * attributes, so, when used together, the latter ones will be ignored without exception.
+     * if it's enabled in {@see $useCache}. Rules provided via separate method have a higher priority over attributes,
+     * so, when used together, the latter ones will be ignored without exception.
      *
      * @return iterable The resulting rules is an array with the following structure:
      *
