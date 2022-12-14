@@ -50,7 +50,7 @@ final class NestedHandler implements RuleHandlerInterface
         }
 
         /** @var mixed $value */
-        $value = $context->getParameter('data-as-array') ?? $value;
+        $value = $context->getParameter(ValidationContext::DATA_AS_ARRAY_PARAMETER) ?? $value;
 
         $compoundResult = new Result();
 

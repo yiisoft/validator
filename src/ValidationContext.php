@@ -14,6 +14,8 @@ use Yiisoft\Arrays\ArrayHelper;
  */
 final class ValidationContext
 {
+    public const DATA_AS_ARRAY_PARAMETER = 'yii-validator-data-as-array';
+
     private ?ValidatorInterface $validator = null;
 
     /**
