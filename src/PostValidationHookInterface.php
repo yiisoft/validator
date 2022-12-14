@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 /**
- * An optional interface for data set ({@see DataSetInterface}) to implement (used as a replacement). It provides
+ * An optional interface for data set ({@see DataSetInterface}) to implement. It provides
  * {@see processValidationResult()} method-based hook allowing to execute custom code after a validation {@see Result}
  * has been formed.
  */
