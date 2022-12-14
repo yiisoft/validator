@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Helper;
 use InvalidArgumentException;
 use Yiisoft\Validator\EmptyCriteria\NeverEmpty;
 use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
-
 use Yiisoft\Validator\SkipOnEmptyInterface;
 
 use function is_callable;
