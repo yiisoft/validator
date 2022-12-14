@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\DataSet;
 
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\DataWrapperInterface;
 
 /**

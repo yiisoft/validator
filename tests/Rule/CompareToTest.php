@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use stdClass;
-use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\DataWrapperInterface;
 use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\CompareTo;
