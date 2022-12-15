@@ -18,20 +18,23 @@ final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
      */
     private array $instances = [];
 
-    public function resolve(string $className): RuleHandlerInterface
+    public function resolve(string $ruleClassName): RuleHandlerInterface
     {
-        if (!class_exists($className)) {
-            throw new RuleHandlerNotFoundException($className);
+        if (!class_exists($ruleClassName)) {
+            throw new RuleHandlerNotFoundException($ruleClassName);
         }
 
-        if (array_key_exists($className, $this->instances)) {
-            return $this->instances[$className];
+        if (array_key_exists($ruleClassName, $this->instances)) {
+            return $this->instances[$ruleClassName];
         }
 
-        if (!is_subclass_of($className, RuleHandlerInterface::class)) {
-            throw new RuleHandlerInterfaceNotImplementedException($className);
+        if (!is_subclass_of($ruleClassName, RuleHandlerInterface::class)) {
+            throw new RuleHandlerInterfaceNotImplementedException($ruleClassName);
         }
 
-        return $this->instances[$className] = new $className();
+        $handler = new $ruleClassName();
+        $this->instances[$ruleClassName] = $handler;
+
+        return $handler;
     }
 }

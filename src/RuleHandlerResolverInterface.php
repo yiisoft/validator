@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
-use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
-
 /**
- * Rule handler resolver is obtaining a resolver for a given rule class name.
+ * An interface for dependency injection containers to implement. Allows to resolve a rule handler by a given rule class
+ * name.
  */
 interface RuleHandlerResolverInterface
 {
     /**
-     * Obtain a resolver for a given rule class name.
+     * Resolves a rule handler by a rule class name.
      *
-     * @param string $className Rule class name.
+     * @param string $ruleClassName A rule class name ({@see RuleInterface}).
      *
-     * @throws RuleHandlerNotFoundException
-     * @throws RuleHandlerInterfaceNotImplementedException
+     * @return RuleHandlerInterface A rule handler instance.
      */
-    public function resolve(string $className): RuleHandlerInterface;
+    public function resolve(string $ruleClassName): RuleHandlerInterface;
 }

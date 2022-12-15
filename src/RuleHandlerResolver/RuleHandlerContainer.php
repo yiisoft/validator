@@ -13,20 +13,22 @@ use Yiisoft\Validator\RuleHandlerResolverInterface;
 
 final class RuleHandlerContainer implements RuleHandlerResolverInterface
 {
-    public function __construct(private ContainerInterface $container)
+    public function __construct(
+        private ContainerInterface $container,
+    )
     {
     }
 
-    public function resolve(string $className): RuleHandlerInterface
+    public function resolve(string $ruleClassName): RuleHandlerInterface
     {
         try {
-            $ruleHandler = $this->container->get($className);
+            $ruleHandler = $this->container->get($ruleClassName);
         } catch (NotFoundExceptionInterface $e) {
-            throw new RuleHandlerNotFoundException($className, $e);
+            throw new RuleHandlerNotFoundException($ruleClassName, $e);
         }
 
         if (!$ruleHandler instanceof RuleHandlerInterface) {
-            throw new RuleHandlerInterfaceNotImplementedException($className);
+            throw new RuleHandlerInterfaceNotImplementedException($ruleClassName);
         }
 
         return $ruleHandler;
