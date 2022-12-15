@@ -15,8 +15,7 @@ final class RuleHandlerContainer implements RuleHandlerResolverInterface
 {
     public function __construct(
         private ContainerInterface $container,
-    )
-    {
+    ) {
     }
 
     public function resolve(string $ruleClassName): RuleHandlerInterface
