@@ -11,30 +11,42 @@ use Yiisoft\Validator\RuleHandlerResolverInterface;
 
 use function array_key_exists;
 
+/**
+ * An implementation for {@see RuleHandlerResolverInterface} using internal class instance variable as a storage of rule
+ * handlers' instances.
+ */
 final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 {
     /**
-     * @var array<class-string, RuleHandlerInterface>
+     * @var array<class-string, RuleHandlerInterface> A storage of rule handlers' instances - a mapping where keys are
+     * the rule handlers' class names and values are corresponding rule handlers' instances.
      */
     private array $instances = [];
 
-    public function resolve(string $ruleClassName): RuleHandlerInterface
+    /**
+     * Resolves a rule handler class name to a corresponding rule handler instance.
+     *
+     * @param string $className A rule handler class name ({@see RuleInterface}).
+     *
+     * @return RuleHandlerInterface A corresponding rule handler instance.
+     */
+    public function resolve(string $className): RuleHandlerInterface
     {
-        if (!class_exists($ruleClassName)) {
-            throw new RuleHandlerNotFoundException($ruleClassName);
+        if (!class_exists($className)) {
+            throw new RuleHandlerNotFoundException($className);
         }
 
-        if (array_key_exists($ruleClassName, $this->instances)) {
-            return $this->instances[$ruleClassName];
+        if (array_key_exists($className, $this->instances)) {
+            return $this->instances[$className];
         }
 
-        if (!is_subclass_of($ruleClassName, RuleHandlerInterface::class)) {
-            throw new RuleHandlerInterfaceNotImplementedException($ruleClassName);
+        if (!is_subclass_of($className, RuleHandlerInterface::class)) {
+            throw new RuleHandlerInterfaceNotImplementedException($className);
         }
 
-        $handler = new $ruleClassName();
-        $this->instances[$ruleClassName] = $handler;
+        $instance = new $className();
+        $this->instances[$className] = $instance;
 
-        return $handler;
+        return $instance;
     }
 }
