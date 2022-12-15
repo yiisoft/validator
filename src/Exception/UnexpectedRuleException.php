@@ -21,7 +21,7 @@ use InvalidArgumentException;
  *     public function validate(mixed $value, object $rule, ValidationContext $context): Result
  *     {
  *         if (!$rule instanceof MyRule) {
- *             throw new UnexpectedRuleException(AtLeast::class, $rule);
+ *             throw new UnexpectedRuleException(MyRule::class, $rule);
  *         }
  *
  *         // ...
@@ -31,6 +31,7 @@ use InvalidArgumentException;
  *         return $result;
  *     }
  * }
+ * ```
  */
 final class UnexpectedRuleException extends InvalidArgumentException
 {
