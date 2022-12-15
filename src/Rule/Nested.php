@@ -12,6 +12,7 @@ use ReflectionProperty;
 use Traversable;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
+use Yiisoft\Validator\Helper\PropagateOptionsHelper;
 use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -288,16 +289,7 @@ final class Nested implements
          */
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
             foreach ($attributeRules as $attributeRule) {
-                if ($attributeRule instanceof SkipOnEmptyInterface) {
-                    $attributeRule = $attributeRule->skipOnEmpty($this->skipOnEmpty);
-                }
-                if ($attributeRule instanceof SkipOnErrorInterface) {
-                    $attributeRule = $attributeRule->skipOnError($this->skipOnError);
-                }
-                if ($attributeRule instanceof WhenInterface) {
-                    $attributeRule = $attributeRule->when($this->when);
-                }
-
+                $attributeRule = PropagateOptionsHelper::propagateForSingleRule($this, $attributeRule);
                 $rules[$attributeRulesIndex][] = $attributeRule;
 
                 if ($attributeRule instanceof PropagateOptionsInterface) {

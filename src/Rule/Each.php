@@ -8,6 +8,7 @@ use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
+use Yiisoft\Validator\Helper\PropagateOptionsHelper;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
@@ -75,16 +76,7 @@ final class Each implements
     {
         $rules = [];
         foreach ($this->rules as $rule) {
-            if ($rule instanceof SkipOnEmptyInterface) {
-                $rule = $rule->skipOnEmpty($this->skipOnEmpty);
-            }
-            if ($rule instanceof SkipOnErrorInterface) {
-                $rule = $rule->skipOnError($this->skipOnError);
-            }
-            if ($rule instanceof WhenInterface) {
-                $rule = $rule->when($this->when);
-            }
-
+            $rule = PropagateOptionsHelper::propagateForSingleRule($this, $rule);
             $rules[] = $rule;
 
             if ($rule instanceof PropagateOptionsInterface) {
