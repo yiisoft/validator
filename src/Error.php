@@ -47,13 +47,13 @@ final class Error
          * $data = [
          *     [
          *         1,
-         *         'text', // The value path is '0.1'.
+         *         'text', // The value path is [0, 1].
          *     ],
          *     'post' => [
-         *         'title' => 'Yii3 Overview 3', // The value path is 'post.title'.
+         *         'title' => 'Yii3 Overview 3', // The value path is ['post', 'title'].
          *         'files' => [
          *             [
-         *                 'url' => '...', // The value path is 'post.files.0.url'.
+         *                 'url' => '...', // The value path is ['post', 'files', 0, 'url'].
          *             ],
          *         ],
          *     ],
