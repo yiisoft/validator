@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\DataSet;
 
-use Yiisoft\Validator\DataSetInterface;
-
+use Yiisoft\Validator\DataWrapperInterface;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
 
 use function array_key_exists;
@@ -21,7 +20,7 @@ use function array_key_exists;
  * When using validator, there is no need to wrap your data manually. Array will be automatically wrapped with
  * {@see ArrayDataSet} by {@see DataSetNormalizer} during validation.
  */
-final class ArrayDataSet implements DataSetInterface
+final class ArrayDataSet implements DataWrapperInterface
 {
     public function __construct(
         /**
@@ -52,6 +51,11 @@ final class ArrayDataSet implements DataSetInterface
      * @return array A mapping between attribute names and their values.
      */
     public function getData(): ?array
+    {
+        return $this->data;
+    }
+
+    public function getSource(): array
     {
         return $this->data;
     }
