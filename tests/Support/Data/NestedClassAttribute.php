@@ -13,6 +13,6 @@ use Yiisoft\Validator\Rule\Number;
 ])]
 final class NestedClassAttribute
 {
-    private $a = 1;
-    private $b = 2;
+    private int $a = 1;
+    private int $b = 2;
 }
