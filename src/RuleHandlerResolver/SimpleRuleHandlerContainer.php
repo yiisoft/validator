@@ -13,7 +13,9 @@ use function array_key_exists;
 
 /**
  * An implementation for {@see RuleHandlerResolverInterface} using internal class instance variable as a storage of rule
- * handlers' instances.
+ * handlers' instances. Use it if you don't need Yii specific configuration ({@see https://github.com/yiisoft/config}),
+ * otherwise {@see RuleHandlerContainer} can be added instead. It's enabled by default to you don't need to additionally
+ * configure anything.
  */
 final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 {
