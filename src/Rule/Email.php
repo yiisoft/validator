@@ -159,7 +159,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return EmailHandler::class;
     }

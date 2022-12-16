@@ -35,7 +35,7 @@ interface RuleInterface
      *
      * All packages handlers are stored within the same namespace as rules, but this is not a strict requirement.
      *
-     * @return string A rule handler class name.
+     * @return string|RuleHandlerInterface A rule handler class name or rule handler instance.
      */
-    public function getHandlerClassName(): string;
+    public function getHandler(): string|RuleHandlerInterface;
 }

@@ -15,7 +15,7 @@ final class NotNull implements RuleInterface
         return 'notNull';
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return NotNullHandler::class;
     }

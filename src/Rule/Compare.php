@@ -179,7 +179,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return CompareHandler::class;
     }

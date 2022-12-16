@@ -157,7 +157,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return NumberHandler::class;
     }

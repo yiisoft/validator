@@ -126,7 +126,7 @@ final class HasLength implements
         ]);
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return HasLengthHandler::class;
     }

@@ -18,7 +18,7 @@ final class RuleWithCustomHandler implements RuleInterface
         return 'rule-with-custom-handler';
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return $this->handlerClassName;
     }

@@ -94,7 +94,7 @@ final class Subset implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return SubsetHandler::class;
     }

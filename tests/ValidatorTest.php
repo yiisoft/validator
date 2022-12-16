@@ -26,6 +26,7 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\Tests\Rule\RuleWithBuiltInHandler;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithAttributesOnly;
@@ -314,7 +315,7 @@ class ValidatorTest extends TestCase
                         return 'test';
                     }
 
-                    public function getHandlerClassName(): string
+                    public function getHandler(): string
                     {
                         return $this->ruleHandler::class;
                     }
@@ -336,7 +337,7 @@ class ValidatorTest extends TestCase
                         return 'test';
                     }
 
-                    public function getHandlerClassName(): string
+                    public function getHandler(): string
                     {
                         return 'NonExistClass';
                     }
@@ -1332,6 +1333,18 @@ class ValidatorTest extends TestCase
 
         $this->assertSame(
             $expectedMessages,
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    public function testRuleWithBuiltInHandler(): void
+    {
+        $rule = new RuleWithBuiltInHandler();
+
+        $result = (new Validator())->validate(19, $rule);
+
+        $this->assertSame(
+            ['' => ['Value must be 42.']],
             $result->getErrorMessagesIndexedByPath()
         );
     }
