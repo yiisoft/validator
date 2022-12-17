@@ -26,6 +26,7 @@ jobs:
     uses: yiisoft/actions/.github/workflows/phpunit.yml@master
     with:
       extensions: intl
+      coverage: xdebug
       os: >-
         ['ubuntu-latest', 'windows-latest']
       php: >-
