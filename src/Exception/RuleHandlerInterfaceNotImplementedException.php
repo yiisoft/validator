@@ -12,7 +12,7 @@ use Yiisoft\Validator\RuleHandlerResolverInterface;
 
 /**
  * An exception used by {@see RuleHandlerResolverInterface} implementations (e. g., {@see RuleHandlerContainer}) for
- * the case when a retrieved value is not object or is, but does not implement {@see RuleHandlerInterface}.
+ * the case when a retrieved value is not an object or an object that does not implement {@see RuleHandlerInterface}.
  */
 final class RuleHandlerInterfaceNotImplementedException extends RuntimeException
 {
