@@ -99,7 +99,7 @@ class Composite implements
         return $this->rules;
     }
 
-    final public function getHandlerClassName(): string
+    final public function getHandler(): string
     {
         return CompositeHandler::class;
     }

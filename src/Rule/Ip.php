@@ -414,7 +414,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return IpHandler::class;
     }

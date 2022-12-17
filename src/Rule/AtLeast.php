@@ -98,7 +98,7 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return AtLeastHandler::class;
     }

@@ -83,7 +83,7 @@ final class NestedTest extends RuleTestCase
     {
         $rule = new Nested();
 
-        $this->assertSame(NestedHandler::class, $rule->getHandlerClassName());
+        $this->assertSame(NestedHandler::class, $rule->getHandler());
     }
 
     public function dataOptions(): array

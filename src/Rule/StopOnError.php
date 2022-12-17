@@ -81,7 +81,7 @@ final class StopOnError implements
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return StopOnErrorHandler::class;
     }

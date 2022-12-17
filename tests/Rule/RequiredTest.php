@@ -27,7 +27,7 @@ final class RequiredTest extends RuleTestCase
         $rule = new Required();
 
         $this->assertInstanceOf(WhenEmpty::class, $rule->getEmptyCriteria());
-        $this->assertSame(RequiredHandler::class, $rule->getHandlerClassName());
+        $this->assertSame(RequiredHandler::class, $rule->getHandler());
         $this->assertSame('Value cannot be blank.', $rule->getMessage());
         $this->assertSame('required', $rule->getName());
         $this->assertSame('Value not passed.', $rule->getNotPassedMessage());
