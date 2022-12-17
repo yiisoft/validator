@@ -43,7 +43,7 @@ class RuleHandlerContainerTest extends TestCase
         $handlersContainer = new RuleHandlerContainer(new SimpleContainer(['handler' => new stdClass()]));
 
         $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
-        $this->expectExceptionMessage('Handler "handler" must implement "' . RuleHandlerInterface::class . '".');
+        $this->expectExceptionMessage('Handler "stdClass" must implement "' . RuleHandlerInterface::class . '".');
         $this->expectExceptionCode(0);
         $handlersContainer->resolve('handler');
     }
