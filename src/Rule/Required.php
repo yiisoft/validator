@@ -84,7 +84,7 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return RequiredHandler::class;
     }

@@ -73,7 +73,7 @@ final class Json implements RuleWithOptionsInterface, SkipOnErrorInterface, When
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return JsonHandler::class;
     }

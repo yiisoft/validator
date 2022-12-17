@@ -20,6 +20,7 @@ use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 
 use function extension_loaded;
 use function is_int;
+use function is_string;
 
 /**
  * Validator validates {@link DataSetInterface} against rules set for data set attributes.
@@ -140,7 +141,11 @@ final class Validator implements ValidatorInterface
                 continue;
             }
 
-            $ruleHandler = $this->ruleHandlerResolver->resolve($rule->getHandlerClassName());
+            $ruleHandler = $rule->getHandler();
+            if (is_string($ruleHandler)) {
+                $ruleHandler = $this->ruleHandlerResolver->resolve($ruleHandler);
+            }
+
             $ruleResult = $ruleHandler->validate($value, $rule, $context);
             if ($ruleResult->isValid()) {
                 continue;

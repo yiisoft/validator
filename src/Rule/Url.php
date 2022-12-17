@@ -127,7 +127,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return UrlHandler::class;
     }

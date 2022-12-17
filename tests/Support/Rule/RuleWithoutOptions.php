@@ -14,7 +14,7 @@ final class RuleWithoutOptions implements RuleInterface
         return 'test';
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return StubRuleHandler::class;
     }
