@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Exception;
 
 use InvalidArgumentException;
+use Throwable;
 
 /**
  * An exception used by rule handlers to guarantee that passed rule have desired type. Every handler's validation code
@@ -42,14 +43,24 @@ final class UnexpectedRuleException extends InvalidArgumentException
         /**
          * @var object An actual given object that's not an instance of `$expectedClassName`.
          */
-        object $actualObject
+        object $actualObject,
+        /**
+         * @var int The Exception code.
+         */
+        int $code = 0,
+        /**
+         * @var Throwable|null The previous throwable used for the exception chaining.
+         */
+        ?Throwable $previous = null,
     ) {
         parent::__construct(
             sprintf(
                 'Expected "%s", but "%s" given.',
                 $expectedClassName,
                 $actualObject::class
-            )
+            ),
+            $code,
+            $previous,
         );
     }
 }

@@ -19,6 +19,10 @@ final class RuleHandlerNotFoundException extends RuntimeException
          */
         string $className,
         /**
+         * @var int The Exception code.
+         */
+        int $code = 0,
+        /**
          * @var Throwable|null The previous throwable used for the exception chaining.
          */
         ?Throwable $previous = null,
@@ -29,7 +33,7 @@ final class RuleHandlerNotFoundException extends RuntimeException
                 $className,
                 $className,
             ),
-            0,
+            $code,
             $previous,
         );
     }
