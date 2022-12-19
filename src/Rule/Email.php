@@ -122,6 +122,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     /**
      * @return string The regular expression used to validate the value.
+     *
      * @see $pattern
      */
     public function getPattern(): string
@@ -131,6 +132,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     /**
      * @return string The regular expression used to validate email addresses with the name part.
+     *
      * @see $fullPattern
      */
     public function getFullPattern(): string
@@ -140,6 +142,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     /**
      * @return string The regular expression used to validate complex emails when {@see $enableIDN} is `true`.
+     *
      * @see $idnEmailPattern
      */
     public function getIdnEmailPattern(): string
@@ -149,6 +152,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     /**
      * @return bool Whether to allow a name in the email address (e.g. "John Smith <john.smith@example.com>").
+     *
      * @see $allowName
      */
     public function isNameAllowed(): bool
@@ -158,6 +162,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     /**
      * @return bool Whether to check email's domain exists and has either an A or MX record.
+     *
      * @see $checkDNS
      */
     public function shouldCheckDNS(): bool
@@ -167,6 +172,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     /**
      * @return bool Whether validation process should take IDN (internationalized domain names) into account.
+     *
      * @see $enableIDN
      */
     public function isIDNEnabled(): bool
@@ -176,6 +182,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     /**
      * @return string A message used when the input is incorrect.
+     *
      * @see $incorrectInputMessage
      */
     public function getIncorrectInputMessage(): string
@@ -185,6 +192,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     /**
      * @return string A message used when the value is not valid.
+     *
      * @see $message
      */
     public function getMessage(): string

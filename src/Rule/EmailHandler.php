@@ -14,7 +14,6 @@ use function strlen;
 
 /**
  * Validates that the value is a valid email address.
- *
  */
 final class EmailHandler implements RuleHandlerInterface
 {
