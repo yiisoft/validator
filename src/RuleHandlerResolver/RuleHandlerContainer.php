@@ -47,10 +47,10 @@ final class RuleHandlerContainer implements RuleHandlerResolverInterface
      *
      * @param string $name A rule handler name ({@see RuleInterface}).
      *
-     * @return RuleHandlerInterface A corresponding rule handler instance.
-     *
      * @throws RuleHandlerInterfaceNotImplementedException if a found instance is not a valid rule handler.
      * @throws RuleHandlerNotFoundException if a rule handler instance was not found.
+     *
+     * @return RuleHandlerInterface A corresponding rule handler instance.
      */
     public function resolve(string $name): RuleHandlerInterface
     {
