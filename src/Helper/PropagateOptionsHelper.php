@@ -29,7 +29,7 @@ final class PropagateOptionsHelper
      * values must be changed to be the same as in parent.
      *
      * @return list<RuleInterface> A list of child rules of the same nesting level with changed options' values or
-     * unchanged if none of the required interfaces were implemented.
+     * unchanged if none of the required interfaces were implemented. The order is preserved.
      */
     public static function propagate(RuleInterface $parentRule, iterable $childRules): array
     {
