@@ -98,7 +98,7 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return RegexHandler::class;
     }

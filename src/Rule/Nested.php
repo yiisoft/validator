@@ -345,7 +345,7 @@ final class Nested implements
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return NestedHandler::class;
     }

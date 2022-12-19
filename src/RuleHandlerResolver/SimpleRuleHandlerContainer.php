@@ -20,11 +20,19 @@ use function array_key_exists;
  */
 final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 {
-    /**
-     * @var array<class-string, RuleHandlerInterface> A storage of rule handlers' instances - a mapping where keys are
-     * the rule handlers' class names and values are corresponding rule handlers' instances.
-     */
-    private array $instances = [];
+    public function __construct(
+        /**
+         * @var array<string, RuleHandlerInterface> A storage of rule handlers' instances - a mapping where keys are
+         * the rule handlers' class names and values are corresponding rule handlers' instances.
+         */
+        private array $instances = [],
+    ) {
+        foreach ($instances as $instance) {
+            if (!$instance instanceof RuleHandlerInterface) {
+                throw new RuleHandlerInterfaceNotImplementedException($instance);
+            }
+        }
+    }
 
     /**
      * Resolves a rule handler class name to a corresponding rule handler instance.
@@ -35,12 +43,12 @@ final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
      */
     public function resolve(string $className): RuleHandlerInterface
     {
-        if (!class_exists($className)) {
-            throw new RuleHandlerNotFoundException($className);
-        }
-
         if (array_key_exists($className, $this->instances)) {
             return $this->instances[$className];
+        }
+
+        if (!class_exists($className)) {
+            throw new RuleHandlerNotFoundException($className);
         }
 
         if (!is_subclass_of($className, RuleHandlerInterface::class)) {

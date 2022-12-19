@@ -110,7 +110,7 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return BooleanHandler::class;
     }

@@ -9,7 +9,6 @@ use Closure;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleWithOptionsInterface;
-use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
@@ -26,8 +25,8 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
     use WhenTrait;
 
     /**
-     * @var callable
-     * @psalm-var EmptyCriteriaType
+     * @var callable|null
+     * @psalm-var EmptyCriteriaType|null
      */
     private $emptyCriteria;
 
@@ -44,7 +43,7 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
          */
         private Closure|null $when = null,
     ) {
-        $this->emptyCriteria = $emptyCriteria ?? new WhenEmpty(trimString: true);
+        $this->emptyCriteria = $emptyCriteria;
     }
 
     public function getName(): string
@@ -63,9 +62,9 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
     }
 
     /**
-     * @psalm-return EmptyCriteriaType
+     * @psalm-return EmptyCriteriaType|null
      */
-    public function getEmptyCriteria(): callable
+    public function getEmptyCriteria(): ?callable
     {
         return $this->emptyCriteria;
     }
@@ -85,7 +84,7 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return RequiredHandler::class;
     }

@@ -28,14 +28,14 @@ interface RuleInterface
     public function getName(): string;
 
     /**
-     * A matching handler class name used for processing this rule.
+     * A matching handler class name or instance used for processing this rule.
      *
      * While not required, it's recommended to use rule class name with "Handler" suffix, so for `AtLeast` rule class
      * name the handler class name will be `AtLeastHandler` and so on.
      *
      * All packages handlers are stored within the same namespace as rules, but this is not a strict requirement.
      *
-     * @return string A rule handler class name.
+     * @return RuleHandlerInterface|string A rule handler class name or instance.
      */
-    public function getHandlerClassName(): string;
+    public function getHandler(): string|RuleHandlerInterface;
 }

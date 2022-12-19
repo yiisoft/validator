@@ -23,6 +23,10 @@ final class InvalidCallbackReturnTypeException extends Exception implements Frie
          */
         mixed $returnValue,
         /**
+         * @var int The Exception code.
+         */
+        int $code = 0,
+        /**
          * @var Throwable|null The previous throwable used for the exception chaining.
          */
         ?Throwable $previous = null,
@@ -33,7 +37,7 @@ final class InvalidCallbackReturnTypeException extends Exception implements Frie
             get_debug_type($returnValue),
         );
 
-        parent::__construct($message, 0, $previous);
+        parent::__construct($message, $code, $previous);
     }
 
     /**

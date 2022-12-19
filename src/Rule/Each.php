@@ -119,7 +119,7 @@ final class Each implements
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return EachHandler::class;
     }
