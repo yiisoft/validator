@@ -42,6 +42,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     private const NEGATION_CHARACTER = '!';
     /**
      * @psalm-var array<string, list<string>>
+     *
      * @var array Default network aliases that can be used in {@see $ranges}.
      *
      * @see $networks
@@ -203,6 +204,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         private array $ranges = [],
         /**
          * @var bool|callable|null Whether to skip this rule if the value validated is empty.
+         *
          * @see SkipOnEmptyInterface
          */
         private mixed $skipOnEmpty = null,
@@ -247,6 +249,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
 
     /**
      * @return array Custom network aliases, that can be used in {@see $ranges}.
+     *
      * @see $networks
      */
     public function getNetworks(): array
@@ -256,6 +259,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
 
     /**
      * @return bool Whether the validating value can be an IPv4 address. Defaults to `true`.
+     *
      * @see $allowIpv4
      */
     public function isIpv4Allowed(): bool
@@ -265,6 +269,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
 
     /**
      * @return bool Whether the validating value can be an IPv6 address. Defaults to `true`.
+     *
      * @see $allowIpv6
      */
     public function isIpv6Allowed(): bool
@@ -274,6 +279,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
 
     /**
      * @return bool Whether the address can be an IP with CIDR subnet, like `192.168.10.0/24`.
+     *
      * @see $allowSubnet
      */
     public function isSubnetAllowed(): bool
@@ -283,6 +289,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
 
     /**
      * @return bool Whether subnet is required.
+     *
      * @see $requireSubnet
      */
     public function isSubnetRequired(): bool
@@ -292,6 +299,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
 
     /**
      * @return bool Whether an address may have a {@see NEGATION_CHARACTER} character at the beginning.
+     *
      * @see $allowNegation
      */
     public function isNegationAllowed(): bool
@@ -301,6 +309,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
 
     /**
      * @return string A message used when the input it incorrect.
+     *
      * @see $incorrectInputMessage
      */
     public function getIncorrectInputMessage(): string
@@ -310,6 +319,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
 
     /**
      * @return string Error message used when validation fails due to the wrong IP address format.
+     *
      * @see $message
      */
     public function getMessage(): string
@@ -320,6 +330,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     /**
      * @return string Error message used when validation fails due to the disabled IPv4 validation when
      * {@see $allowIpv4} is set.
+     *
      * @see $ipv4NotAllowedMessage
      */
     public function getIpv4NotAllowedMessage(): string
@@ -330,6 +341,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     /**
      * @return string Error message used when validation fails due to the disabled IPv6 validation when
      * {@see $allowIpv6} is set.
+     *
      * @see $ipv6NotAllowedMessage
      */
     public function getIpv6NotAllowedMessage(): string
@@ -340,6 +352,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     /**
      * @return string Error message used when validation fails due to the wrong CIDR when
      * {@see $allowSubnet} is set.
+     *
      * @see $wrongCidrMessage
      */
     public function getWrongCidrMessage(): string
@@ -350,6 +363,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     /**
      * @return string Error message used when validation fails due to {@see $allowSubnet} is used, but
      * the CIDR prefix is not set.
+     *
      * @see $getNoSubnetMessage
      */
     public function getNoSubnetMessage(): string
@@ -360,6 +374,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     /**
      * @return string Error message used when validation fails due to {@see $allowSubnet} is false, but
      * CIDR prefix is present.
+     *
      * @see $hasSubnetMessage
      */
     public function getHasSubnetMessage(): string
@@ -370,6 +385,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     /**
      * @return string Error message used when validation fails due to IP address is not allowed by
      * {@see $ranges} check.
+     *
      * @see $notInRangeMessage
      */
     public function getNotInRangeMessage(): string
@@ -379,6 +395,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
 
     /**
      * @return string[] The IPv4 or IPv6 ranges that are allowed or forbidden.
+     *
      * @see $ranges
      */
     public function getRanges(): array
