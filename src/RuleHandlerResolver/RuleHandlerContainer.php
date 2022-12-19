@@ -14,7 +14,7 @@ use Yiisoft\Validator\RuleHandlerResolverInterface;
 /**
  * An implementation for {@see RuleHandlerResolverInterface} acting as a wrapper over dependency injection container
  * ({@see ContainerInterface}) throwing more specific exceptions and executing some additional checks (to make sure that
- * if a handler was found, then it's indeed a valid handler to work with) during resolving a rule handler class name.
+ * if a handler was found, then it's indeed a valid handler to work with) during resolving a rule handler name.
  *
  * To use it, make sure to change `config.php` like so:
  *
@@ -41,23 +41,23 @@ final class RuleHandlerContainer implements RuleHandlerResolverInterface
     }
 
     /**
-     * Resolves a rule handler class name to a corresponding rule handler instance. The actual resolving is delegated to
+     * Resolves a rule handler name to a corresponding rule handler instance. The actual resolving is delegated to
      * {@see $container}. Throws more specific exceptions and executes some additional checks (to make sure that if a
      * handler was found, then it's indeed a valid handler to work with).
      *
-     * @param string $className A rule handler class name ({@see RuleInterface}).
-     *
-     * @throws RuleHandlerNotFoundException if a rule handler instance was not found.
-     * @throws RuleHandlerInterfaceNotImplementedException if a found instance is not a valid rule handler.
+     * @param string $name A rule handler name ({@see RuleInterface}).
      *
      * @return RuleHandlerInterface A corresponding rule handler instance.
+     *
+     * @throws RuleHandlerInterfaceNotImplementedException if a found instance is not a valid rule handler.
+     * @throws RuleHandlerNotFoundException if a rule handler instance was not found.
      */
-    public function resolve(string $className): RuleHandlerInterface
+    public function resolve(string $name): RuleHandlerInterface
     {
         try {
-            $ruleHandler = $this->container->get($className);
+            $ruleHandler = $this->container->get($name);
         } catch (NotFoundExceptionInterface $e) {
-            throw new RuleHandlerNotFoundException($className, previous: $e);
+            throw new RuleHandlerNotFoundException($name, previous: $e);
         }
 
         if (!$ruleHandler instanceof RuleHandlerInterface) {

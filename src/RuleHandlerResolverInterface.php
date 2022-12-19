@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 /**
- * An interface allowing to resolve a rule handler class name to a corresponding rule handler instance.
+ * An interface allowing to resolve a rule handler name to a corresponding rule handler instance.
  */
 interface RuleHandlerResolverInterface
 {
     /**
-     * Resolves a rule handler class name to a corresponding rule handler instance.
+     * Resolves a rule handler name to a corresponding rule handler instance.
      *
-     * @param string $className A rule handler class name ({@see RuleInterface}).
+     * @param string $name A rule handler name ({@see RuleInterface}).
      *
      * @return RuleHandlerInterface A corresponding rule handler instance.
      */
-    public function resolve(string $className): RuleHandlerInterface;
+    public function resolve(string $name): RuleHandlerInterface;
 }
