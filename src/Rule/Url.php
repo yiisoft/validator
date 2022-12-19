@@ -128,7 +128,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     }
 
     /**
-     * @return string A message used when the input it incorrect.
+     * @return string A message used when the input is incorrect.
      *
      * @see $incorrectInputMessage
      */
