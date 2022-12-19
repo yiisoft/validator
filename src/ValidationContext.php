@@ -63,6 +63,7 @@ final class ValidationContext
      * @param AttributeTranslatorInterface $attributeTranslator Attribute translator to use by default. If translator
      * is specified via {@see setAttributeTranslator()}, it will be used instead.
      * @param mixed $rawData The raw validated data.
+     *
      * @return $this
      */
     public function setContextDataOnce(
@@ -86,6 +87,7 @@ final class ValidationContext
      *
      * @param AttributeTranslatorInterface|null $attributeTranslator Attribute translator to use. If null,
      * translator passed in {@see setContextData()} will be used.
+     *
      * @return $this
      */
     public function setAttributeTranslator(?AttributeTranslatorInterface $attributeTranslator): self
@@ -210,6 +212,7 @@ final class ValidationContext
      *
      * @param string $name Parameter name.
      * @param mixed $value Parameter value.
+     *
      * @return $this
      */
     public function setParameter(string $name, mixed $value): self
