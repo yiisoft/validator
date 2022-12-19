@@ -11,23 +11,25 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * A helper class used to propagate options' values from a single parent rule to its single child rule.
+ * A helper class used to propagate options' values from a single parent rule to its child rules at all nesting levels
+ * recursively.
  */
 final class PropagateOptionsHelper
 {
     /**
-     * Propagates options' values from a single parent rule to its single child rule. The following options' values are
-     * propagated:
+     * Propagates options' values from a single parent rule to its child rules at all nesting levels recursively. The
+     * following options' values are propagated:
      *
      * - `$skipOnEmpty` (both rules must implement {@see SkipOnEmptyInterface}).
      * - `$skipOnError` (both rules must implement {@see SkipOnErrorInterface}).
      * - `$when` (both rules must implement {@see WhenInterface}).
      *
      * @param RuleInterface $parentRule A parent rule which options' values need to be propagated.
-     * @param iterable<RuleInterface> $childRules A child rule which options' values must be changed to be the same as in parent.
+     * @param iterable<RuleInterface> $childRules Direct child rules (located at the first nesting level) which options'
+     * values must be changed to be the same as in parent.
      *
-     * @return RuleInterface[] A child rule with changed options' values or unchanged if none of the required interfaces
-     * were implemented.
+     * @return RuleInterface[] A list of child rules of the same nesting level with changed options' values or unchanged
+     * if none of the required interfaces were implemented.
      */
     public static function propagate(RuleInterface $parentRule, iterable $childRules): array
     {
