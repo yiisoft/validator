@@ -28,8 +28,8 @@ final class PropagateOptionsHelper
      * @param iterable<RuleInterface> $childRules Direct child rules (located at the first nesting level) which options'
      * values must be changed to be the same as in parent.
      *
-     * @return RuleInterface[] A list of child rules of the same nesting level with changed options' values or unchanged
-     * if none of the required interfaces were implemented.
+     * @return list<RuleInterface> A list of child rules of the same nesting level with changed options' values or
+     * unchanged if none of the required interfaces were implemented.
      */
     public static function propagate(RuleInterface $parentRule, iterable $childRules): array
     {
