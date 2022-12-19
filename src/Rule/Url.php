@@ -106,6 +106,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     /**
      * @return string[] List of URI schemes which should be considered valid. By default, http and https
      * are considered to be valid schemes.
+     * @see $validSchemes
      */
     public function getValidSchemes(): array
     {
@@ -117,6 +118,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
      * domain names). `false` meaning that validation of URLs containing IDN will always
      * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
      * extension, otherwise an exception would be thrown.
+     * @see $enableIDN
      */
     public function isIDNEnabled(): bool
     {
@@ -125,6 +127,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
 
     /**
      * @return string A message used when the input it incorrect.
+     * @see $incorrectInputMessage
      */
     public function getIncorrectInputMessage(): string
     {
@@ -133,6 +136,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
 
     /**
      * @return string A message used when the value is not valid.
+     * @see $message
      */
     public function getMessage(): string
     {
