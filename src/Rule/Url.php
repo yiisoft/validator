@@ -56,12 +56,20 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         private bool $enableIDN = false,
         /**
          * @var string A message used when the input is incorrect.
-         * You can use `{attribute}`, and `{value}` placeholders.
+         *
+         * You may use the following placeholders in the message:
+         *
+         * - `{attribute}`: the label of the attribute being validated.
+         * - `{value}`: the value of the attribute being validated.
          */
         private string $incorrectInputMessage = 'The value must have a string type.',
         /**
          * @var string A message used when the value is not valid.
-         * You can use `{attribute}`, and `{value}` placeholders.
+         *
+         * You may use the following placeholders in the message:
+         *
+         * - `{attribute}`: the label of the attribute being validated.
+         * - `{value}`: the value of the attribute being validated.
          */
         private string $message = 'This value is not a valid URL.',
         /**
