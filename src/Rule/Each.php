@@ -74,17 +74,7 @@ final class Each implements
 
     public function propagateOptions(): void
     {
-        $rules = [];
-        foreach ($this->rules as $rule) {
-            $rule = PropagateOptionsHelper::propagateForSingleRule($this, $rule);
-            $rules[] = $rule;
-
-            if ($rule instanceof PropagateOptionsInterface) {
-                $rule->propagateOptions();
-            }
-        }
-
-        $this->rules = $rules;
+        $this->rules = PropagateOptionsHelper::propagate($this, $this->rules);
     }
 
     /**
