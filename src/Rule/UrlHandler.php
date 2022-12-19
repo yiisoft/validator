@@ -59,6 +59,7 @@ final class UrlHandler implements RuleHandlerInterface
      * Encodes IDN domain name into its ASCII representation.
      *
      * @param string $idn IDN to convert.
+     *
      * @return string Resulting ASCII string.
      */
     private function idnToAscii(string $idn): string
@@ -73,6 +74,7 @@ final class UrlHandler implements RuleHandlerInterface
      * into its ASCII representation.
      *
      * @param string $value IDN or URL to convert.
+     *
      * @return string Resulting ASCII string.
      */
     private function convertIdn(string $value): string

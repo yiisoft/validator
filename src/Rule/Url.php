@@ -64,6 +64,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         private string $message = 'This value is not a valid URL.',
         /**
          * @var bool|callable|null Whether to skip this rule if the value validated is empty.
+         *
          * @see SkipOnEmptyInterface
          */
         private $skipOnEmpty = null,
@@ -74,6 +75,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         /**
          * @var Closure|null A callable to define a condition for applying the rule.
          * @psalm-var WhenType
+         *
          * @see WhenInterface
          */
         private Closure|null $when = null,
