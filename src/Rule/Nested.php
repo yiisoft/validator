@@ -288,14 +288,7 @@ final class Nested implements
          * @var RuleInterface[] $attributeRules Conversion to array is done in {@see ensureArrayHasRules()}.
          */
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
-            foreach ($attributeRules as $attributeRule) {
-                $attributeRule = PropagateOptionsHelper::propagateForSingleRule($this, $attributeRule);
-                $rules[$attributeRulesIndex][] = $attributeRule;
-
-                if ($attributeRule instanceof PropagateOptionsInterface) {
-                    $attributeRule->propagateOptions();
-                }
-            }
+            $rules[$attributeRulesIndex] = PropagateOptionsHelper::propagate($this, $attributeRules);
         }
 
         $this->rules = $rules;
