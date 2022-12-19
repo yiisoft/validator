@@ -63,6 +63,7 @@ final class ValidationContext
      * @param AttributeTranslatorInterface $attributeTranslator Attribute translator to use by default. If translator
      * is specified via {@see setAttributeTranslator()}, it will be used instead.
      * @param mixed $rawData The raw validated data.
+     *
      * @internal
      *
      * @return $this
@@ -145,6 +146,7 @@ final class ValidationContext
 
     /**
      * @param DataSetInterface $dataSet Data set the attribute belongs to.
+     *
      * @internal
      */
     public function setDataSet(DataSetInterface $dataSet): self
@@ -187,6 +189,7 @@ final class ValidationContext
      * Specify name of the attribute validated.
      *
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
+     *
      * @internal
      */
     public function setAttribute(?string $attribute): self
