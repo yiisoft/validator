@@ -104,6 +104,11 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         private bool $allowNegation = false,
         /**
          * @var string A message used when the input it incorrect.
+         *
+         * You may use the following placeholders in the message:
+         *
+         * - `{attribute}`: the label of the attribute being validated.
+         * - `{value}`: the value of the attribute being validated.
          */
         private string $incorrectInputMessage = 'The value must have a string type.',
         /**
