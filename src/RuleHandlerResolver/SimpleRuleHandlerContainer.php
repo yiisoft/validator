@@ -17,6 +17,22 @@ use function array_key_exists;
  * handlers' instances. Use it if you don't need PSR container ({@see ContainerInterface}), otherwise
  * {@see RuleHandlerContainer} can be added instead. It's enabled by default to you don't need to additionally configure
  * anything.
+ *
+ * Note that you can predefine handlers by yourself:
+ *
+ * ```php
+ * $container = new SimpleRuleHandlerContainer(['my-handler' => $myHandlerInstance]);
+ * $validator = new Validator(ruleHandlerResolver: $container);
+ * ```
+ *
+ * This way `my-handler` can be used as an alias and specified in {@see RuleInterface::getHandler()}.
+ *
+ * It's also possible to replace a handler for built-in rule with a custom one:
+ *
+ * ```php
+ * $container = new SimpleRuleHandlerContainer([AtLeast::class => new MyAtLeastHandler()]);
+ * $validator = new Validator(ruleHandlerResolver: $container);
+ * ```
  */
 final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 {
