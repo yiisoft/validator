@@ -21,12 +21,12 @@ use function is_string;
 final class IpHandler implements RuleHandlerInterface
 {
     /**
-     * Negation char.
+     * Negation character.
      *
-     * Used to negate {@see $ranges} or {@see $network} or to negate validating value when {@see $allowNegation}
+     * Used to negate {@see $ranges} or {@see $network} or to negate value validated when {@see $allowNegation}
      * is used.
      */
-    private const NEGATION_CHAR = '!';
+    private const NEGATION_CHARACTER = '!';
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
@@ -81,7 +81,7 @@ final class IpHandler implements RuleHandlerInterface
     private static function getIpParsePattern(): string
     {
         return '/^(?<not>' .
-            self::NEGATION_CHAR .
+            self::NEGATION_CHARACTER .
             ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
@@ -92,15 +92,15 @@ final class IpHandler implements RuleHandlerInterface
         string $value,
         ValidationContext $context
     ): Result|null {
-        if ($cidr === null && $rule->isRequireSubnet()) {
+        if ($cidr === null && $rule->isSubnetRequired()) {
             return self::getGenericErrorResult($rule->getNoSubnetMessage(), $context, $value);
         }
 
-        if ($cidr !== null && !$rule->isAllowSubnet()) {
+        if ($cidr !== null && !$rule->isSubnetAllowed()) {
             return self::getGenericErrorResult($rule->getHasSubnetMessage(), $context, $value);
         }
 
-        if ($negation && !$rule->isAllowNegation()) {
+        if ($negation && !$rule->isNegationAllowed()) {
             return self::getGenericErrorResult($rule->getMessage(), $context, $value);
         }
 
@@ -113,11 +113,11 @@ final class IpHandler implements RuleHandlerInterface
         string $value,
         ValidationContext $context
     ): Result|null {
-        if ($ipVersion === IpHelper::IPV6 && !$rule->isAllowIpv6()) {
+        if ($ipVersion === IpHelper::IPV6 && !$rule->isIpv6Allowed()) {
             return self::getGenericErrorResult($rule->getIpv6NotAllowedMessage(), $context, $value);
         }
 
-        if ($ipVersion === IpHelper::IPV4 && !$rule->isAllowIpv4()) {
+        if ($ipVersion === IpHelper::IPV4 && !$rule->isIpv4Allowed()) {
             return self::getGenericErrorResult($rule->getIpv4NotAllowedMessage(), $context, $value);
         }
 

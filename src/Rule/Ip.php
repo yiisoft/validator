@@ -34,14 +34,15 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     use WhenTrait;
 
     /**
-     * Negation char.
+     * Negation character.
      *
-     * Used to negate {@see $ranges} or {@see $network} or to negate validating value when {@see $allowNegation}
+     * Used to negate {@see $ranges} or {@see $network} or to negate value validated when {@see $allowNegation}
      * is used.
      */
-    private const NEGATION_CHAR = '!';
+    private const NEGATION_CHARACTER = '!';
     /**
-     * @var array<string, list<string>>
+     * @psalm-var array<string, list<string>>
+     * @var array Default network aliases that can be used in {@see $ranges}.
      *
      * @see $networks
      */
@@ -62,7 +63,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
          *
          *  - key - alias name.
          *  - value - array of strings. String can be an IP range, IP address or another alias. String can be negated
-         * with {@see NEGATION_CHAR} (independent of {@see $allowNegation} option).
+         * with {@see NEGATION_CHARACTER} (independent of {@see $allowNegation} option).
          *
          * The following aliases are defined by default in {@see $defaultNetworks} and will be merged with custom ones:
          *
@@ -92,14 +93,20 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
          * - `true` - specifying a subnet is optional.
          */
         private bool $allowSubnet = false,
+        /**
+         * @var bool Whether subnet is required.
+         */
         private bool $requireSubnet = false,
         /**
-         * @var bool Whether address may have a {@see NEGATION_CHAR} character at the beginning. Defaults to `false`.
+         * @var bool Whether an address may have a {@see NEGATION_CHARACTER} character at the beginning.
          */
         private bool $allowNegation = false,
+        /**
+         * @var string A message used when the input it incorrect.
+         */
         private string $incorrectInputMessage = 'The value must have a string type.',
         /**
-         * @var string User-defined error message is used when validation fails due to the wrong IP address format.
+         * @var string Error message used when validation fails due to the wrong IP address format.
          *
          * You may use the following placeholders in the message:
          *
@@ -108,7 +115,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
          */
         private string $message = 'Must be a valid IP address.',
         /**
-         * @var string User-defined error message is used when validation fails due to the disabled IPv4 validation when
+         * @var string Error message used when validation fails due to the disabled IPv4 validation when
          * {@see $allowIpv4} is set.
          *
          * You may use the following placeholders in the message:
@@ -118,7 +125,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
          */
         private string $ipv4NotAllowedMessage = 'Must not be an IPv4 address.',
         /**
-         * @var string User-defined error message is used when validation fails due to the disabled IPv6 validation when
+         * @var string Error message used when validation fails due to the disabled IPv6 validation when
          * {@see $allowIpv6} is set.
          *
          * You may use the following placeholders in the message:
@@ -128,7 +135,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
          */
         private string $ipv6NotAllowedMessage = 'Must not be an IPv6 address.',
         /**
-         * @var string User-defined error message is used when validation fails due to the wrong CIDR when
+         * @var string Error message used when validation fails due to the wrong CIDR when
          * {@see $allowSubnet} is set.
          *
          * You may use the following placeholders in the message:
@@ -138,7 +145,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
          */
         private string $wrongCidrMessage = 'Contains wrong subnet mask.',
         /**
-         * @var string User-defined error message is used when validation fails due to {@see $allowSubnet} is used, but
+         * @var string Error message used when validation fails due to {@see $allowSubnet} is used, but
          * the CIDR prefix is not set.
          *
          * You may use the following placeholders in the message:
@@ -148,7 +155,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
          */
         private string $noSubnetMessage = 'Must be an IP address with specified subnet.',
         /**
-         * @var string User-defined error message is used when validation fails due to {@see $allowSubnet} is false, but
+         * @var string Error message used when validation fails due to {@see $allowSubnet} is false, but
          * CIDR prefix is present.
          *
          * You may use the following placeholders in the message:
@@ -158,7 +165,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
          */
         private string $hasSubnetMessage = 'Must not be a subnet.',
         /**
-         * @var string User-defined error message is used when validation fails due to IP address is not allowed by
+         * @var string Error message used when validation fails due to IP address is not allowed by
          * {@see $ranges} check.
          *
          * You may use the following placeholders in the message:
@@ -172,8 +179,8 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
          *
          * The following preparation tasks are performed:
          *
-         * - Recursively substitutes aliases (described in {@see $networks}) with their values.
-         * - Removes duplicates.
+         * - Recursively substitute aliases (described in {@see $networks}) with their values.
+         * - Remove duplicates.
          *
          * When the array is empty, or the option not set, all IP addresses are allowed.
          *
@@ -195,12 +202,19 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
          */
         private array $ranges = [],
         /**
-         * @var bool|callable|null
+         * @var bool|callable|null Whether to skip this rule if the value validated is empty.
+         * @see SkipOnEmptyInterface
          */
         private mixed $skipOnEmpty = null,
+        /**
+         * @var bool Whether to skip this rule if any of the previous rules gave an error.
+         */
         private bool $skipOnError = false,
         /**
-         * @var WhenType
+         * @var Closure|null A callable to define a condition for applying the rule.
+         * @psalm-var WhenType
+         *
+         * @see WhenInterface
          */
         private Closure|null $when = null,
     ) {
@@ -231,92 +245,158 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         return 'ip';
     }
 
+    /**
+     * @return array Custom network aliases, that can be used in {@see $ranges}.
+     * @see $networks
+     */
     public function getNetworks(): array
     {
         return $this->networks;
     }
 
-    public function isAllowIpv4(): bool
+    /**
+     * @return bool Whether the validating value can be an IPv4 address. Defaults to `true`.
+     * @see $allowIpv4
+     */
+    public function isIpv4Allowed(): bool
     {
         return $this->allowIpv4;
     }
 
-    public function isAllowIpv6(): bool
+    /**
+     * @return bool Whether the validating value can be an IPv6 address. Defaults to `true`.
+     * @see $allowIpv6
+     */
+    public function isIpv6Allowed(): bool
     {
         return $this->allowIpv6;
     }
 
-    public function isAllowSubnet(): bool
+    /**
+     * @return bool Whether the address can be an IP with CIDR subnet, like `192.168.10.0/24`.
+     * @see $allowSubnet
+     */
+    public function isSubnetAllowed(): bool
     {
         return $this->allowSubnet;
     }
 
-    public function isRequireSubnet(): bool
+    /**
+     * @return bool Whether subnet is required.
+     * @see $requireSubnet
+     */
+    public function isSubnetRequired(): bool
     {
         return $this->requireSubnet;
     }
 
-    public function isAllowNegation(): bool
+    /**
+     * @return bool Whether an address may have a {@see NEGATION_CHARACTER} character at the beginning.
+     * @see $allowNegation
+     */
+    public function isNegationAllowed(): bool
     {
         return $this->allowNegation;
     }
 
+    /**
+     * @return string A message used when the input it incorrect.
+     * @see $incorrectInputMessage
+     */
     public function getIncorrectInputMessage(): string
     {
         return $this->incorrectInputMessage;
     }
 
+    /**
+     * @return string Error message used when validation fails due to the wrong IP address format.
+     * @see $message
+     */
     public function getMessage(): string
     {
         return $this->message;
     }
 
+    /**
+     * @return string Error message used when validation fails due to the disabled IPv4 validation when
+     * {@see $allowIpv4} is set.
+     * @see $ipv4NotAllowedMessage
+     */
     public function getIpv4NotAllowedMessage(): string
     {
         return $this->ipv4NotAllowedMessage;
     }
 
+    /**
+     * @return string Error message used when validation fails due to the disabled IPv6 validation when
+     * {@see $allowIpv6} is set.
+     * @see $ipv6NotAllowedMessage
+     */
     public function getIpv6NotAllowedMessage(): string
     {
         return $this->ipv6NotAllowedMessage;
     }
 
+    /**
+     * @return string Error message used when validation fails due to the wrong CIDR when
+     * {@see $allowSubnet} is set.
+     * @see $wrongCidrMessage
+     */
     public function getWrongCidrMessage(): string
     {
         return $this->wrongCidrMessage;
     }
 
+    /**
+     * @return string Error message used when validation fails due to {@see $allowSubnet} is used, but
+     * the CIDR prefix is not set.
+     * @see $getNoSubnetMessage
+     */
     public function getNoSubnetMessage(): string
     {
         return $this->noSubnetMessage;
     }
 
+    /**
+     * @return string Error message used when validation fails due to {@see $allowSubnet} is false, but
+     * CIDR prefix is present.
+     * @see $hasSubnetMessage
+     */
     public function getHasSubnetMessage(): string
     {
         return $this->hasSubnetMessage;
     }
 
+    /**
+     * @return string Error message used when validation fails due to IP address is not allowed by
+     * {@see $ranges} check.
+     * @see $notInRangeMessage
+     */
     public function getNotInRangeMessage(): string
     {
         return $this->notInRangeMessage;
     }
 
+    /**
+     * @return string[] The IPv4 or IPv6 ranges that are allowed or forbidden.
+     * @see $ranges
+     */
     public function getRanges(): array
     {
         return $this->ranges;
     }
 
     /**
-     * Parses IP address/range for the negation with {@see NEGATION_CHAR}.
+     * Parses IP address/range for the negation with {@see NEGATION_CHARACTER}.
      *
      * @return array{0: bool, 1: string} The result array consists of 2 elements:
-     * - boolean: whether the string is negated
-     * - string: the string without negation (when the negation were present)
+     * - `boolean`: whether the string is negated
+     * - `string`: the string without negation (when the negation were present)
      */
     private function parseNegatedRange(string $string): array
     {
-        $isNegated = str_starts_with($string, self::NEGATION_CHAR);
-        return [$isNegated, $isNegated ? substr($string, strlen(self::NEGATION_CHAR)) : $string];
+        $isNegated = str_starts_with($string, self::NEGATION_CHARACTER);
+        return [$isNegated, $isNegated ? substr($string, strlen(self::NEGATION_CHARACTER)) : $string];
     }
 
     /**
@@ -338,7 +418,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
                 $replacements = $this->prepareRanges($this->networks[$range]);
                 foreach ($replacements as &$replacement) {
                     [$isReplacementNegated, $replacement] = $this->parseNegatedRange($replacement);
-                    $result[] = ($isRangeNegated && !$isReplacementNegated ? self::NEGATION_CHAR : '') . $replacement;
+                    $result[] = ($isRangeNegated && !$isReplacementNegated ? self::NEGATION_CHARACTER : '') . $replacement;
                 }
             } else {
                 $result[] = $string;
