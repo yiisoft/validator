@@ -14,6 +14,7 @@ use function strlen;
 
 /**
  * Validates that the value is a valid email address.
+ *
  */
 final class EmailHandler implements RuleHandlerInterface
 {
@@ -41,7 +42,7 @@ final class EmailHandler implements RuleHandlerInterface
             $valid = false;
         } else {
             /** @var array{name:string,local:string,open:string,domain:string,close:string} $matches */
-            if ($rule->isEnableIDN()) {
+            if ($rule->isIDNEnabled()) {
                 $matches['local'] = idn_to_ascii($matches['local']);
                 $matches['domain'] = idn_to_ascii($matches['domain']);
                 $value = implode([
@@ -70,17 +71,17 @@ final class EmailHandler implements RuleHandlerInterface
                 // https://www.rfc-editor.org/errata_search.php?eid=1690
                 $valid = false;
             } else {
-                $valid = preg_match($rule->getPattern(), $value) || ($rule->isAllowName() && preg_match(
+                $valid = preg_match($rule->getPattern(), $value) || ($rule->isNameAllowed() && preg_match(
                     $rule->getFullPattern(),
                     $value
                 ));
-                if ($valid && $rule->isCheckDNS()) {
+                if ($valid && $rule->shouldCheckDNS()) {
                     $valid = checkdnsrr($matches['domain']);
                 }
             }
         }
 
-        if ($valid === false && $rule->isEnableIDN()) {
+        if ($valid === false && $rule->isIDNEnabled()) {
             $valid = (bool) preg_match($rule->getIdnEmailPattern(), $originalValue);
         }
 
