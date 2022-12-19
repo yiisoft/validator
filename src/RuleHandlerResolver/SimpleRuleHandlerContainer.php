@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\RuleHandlerResolver;
 
+use Psr\Container\ContainerInterface;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -13,9 +14,9 @@ use function array_key_exists;
 
 /**
  * An implementation for {@see RuleHandlerResolverInterface} using internal class instance variable as a storage of rule
- * handlers' instances. Use it if you don't need Yii specific configuration ({@see https://github.com/yiisoft/config}),
- * otherwise {@see RuleHandlerContainer} can be added instead. It's enabled by default to you don't need to additionally
- * configure anything.
+ * handlers' instances. Use it if you don't need PSR container ({@see ContainerInterface}), otherwise
+ * {@see RuleHandlerContainer} can be added instead. It's enabled by default to you don't need to additionally configure
+ * anything.
  */
 final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 {

@@ -15,8 +15,8 @@ use Yiisoft\Validator\RuleHandlerResolverInterface;
  * An implementation for {@see RuleHandlerResolverInterface} acting as a wrapper over dependency injection container
  * ({@see ContainerInterface}) throwing more specific exceptions and executing some additional checks (to make sure that
  * if a handler was found, then it's indeed a valid handler to work with) during resolving a rule handler class name.
- * Use it if you need Yii specific configuration ({@see https://github.com/yiisoft/config}). Otherwise
- * {@see SimpleRuleHandlerContainer} can be added instead - make sure to change `config.php` like so:
+ *
+ * To use it, make sure to change `config.php` like so:
  *
  * ```php
  * use Yiisoft\Validator\RuleHandlerResolverInterface;
@@ -26,6 +26,9 @@ use Yiisoft\Validator\RuleHandlerResolverInterface;
  *     RuleHandlerResolverInterface::class => RuleHandlerContainer::class,
  * ];
  * ```
+ *
+ * If you don't need DI container, {@see SimpleRuleHandlerContainer} can be used instead. It's enabled by default to you
+ * don't need to additionally configure anything.
  */
 final class RuleHandlerContainer implements RuleHandlerResolverInterface
 {
