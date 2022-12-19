@@ -22,7 +22,7 @@ final class RuleHandlerContainer implements RuleHandlerResolverInterface
         try {
             $ruleHandler = $this->container->get($className);
         } catch (NotFoundExceptionInterface $e) {
-            throw new RuleHandlerNotFoundException($className, $e);
+            throw new RuleHandlerNotFoundException($className, previous: $e);
         }
 
         if (!$ruleHandler instanceof RuleHandlerInterface) {
