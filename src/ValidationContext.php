@@ -6,35 +6,49 @@ namespace Yiisoft\Validator;
 
 use RuntimeException;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
 
 /**
  * Validation context that might be taken into account when performing validation.
+ * The context is passed to both direct calls of {@see ValidatorInterface::validate()} and when {@see Nested}
+ * or {@see Each} is used.
  *
  * @psalm-import-type RulesType from ValidatorInterface
  */
 final class ValidationContext
 {
+    /**
+     * @var ValidatorInterface|null A validator instance. Null means context data was not set yet
+     * with {@see setContextDataOnce()}.
+     */
     private ?ValidatorInterface $validator = null;
 
     /**
-     * @var mixed The raw validated data.
+     * @var mixed The raw validated data. Null means context data was not set yet with {@see setContextDataOnce()}.
      */
     private mixed $rawData = null;
 
     /**
-     * @var DataSetInterface|null Data set the attribute belongs to. Null if data set not set.
+     * @var DataSetInterface|null Data set the attribute belongs to.
+     * Null if data set was not set yet with {@see setDataSet()}.
      */
     private ?DataSetInterface $dataSet = null;
 
     /**
-     * @var string|null Validated attribute name. Null if a single value is validated.
+     * @var string|null Validated data set attribute name. Null if a single value is validated.
      */
     private ?string $attribute = null;
 
+    /**
+     * @var AttributeTranslatorInterface|null Default attribute translator to use if attribute translator is not set.
+     */
     private ?AttributeTranslatorInterface $defaultAttributeTranslator = null;
 
     /**
      * @param array $parameters Arbitrary parameters.
+     * @param AttributeTranslatorInterface|null $attributeTranslator Optional attribute translator instance to use.
+     * If null is provided, or it's not specified, default passed through {@see setContextDataOnce()} is used.
      */
     public function __construct(
         private array $parameters = [],
@@ -42,6 +56,15 @@ final class ValidationContext
     ) {
     }
 
+    /**
+     * Set context data if it is not set yet.
+     *
+     * @param ValidatorInterface $validator A validator instance.
+     * @param AttributeTranslatorInterface $attributeTranslator Attribute translator to use by default. If translator
+     * is specified via {@see setAttributeTranslator()}, it will be used instead.
+     * @param mixed $rawData The raw validated data.
+     * @return $this
+     */
     public function setContextDataOnce(
         ValidatorInterface $validator,
         AttributeTranslatorInterface $attributeTranslator,
@@ -58,6 +81,13 @@ final class ValidationContext
         return $this;
     }
 
+    /**
+     * Set attribute translator to use.
+     *
+     * @param AttributeTranslatorInterface|null $attributeTranslator Attribute translator to use. If null,
+     * translator passed in {@see setContextData()} will be used.
+     * @return $this
+     */
     public function setAttributeTranslator(?AttributeTranslatorInterface $attributeTranslator): self
     {
         $this->attributeTranslator = $attributeTranslator;
@@ -127,6 +157,11 @@ final class ValidationContext
         return $this->attribute;
     }
 
+    /**
+     * Get translated attribute name.
+     *
+     * @return string|null Translated attribute name.
+     */
     public function getTranslatedAttribute(): ?string
     {
         if ($this->attribute === null) {
@@ -145,6 +180,8 @@ final class ValidationContext
     }
 
     /**
+     * Specify name of the attribute validated.
+     *
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
      */
     public function setAttribute(?string $attribute): self
@@ -156,24 +193,34 @@ final class ValidationContext
     /**
      * Get named parameter.
      *
-     * @param string $key Parameter name.
+     * @param string $name Parameter name.
      * @param mixed $default Default value to return in case parameter with a given name does not exist.
      *
      * @return mixed Parameter value.
      *
      * @see ArrayHelper::getValue()
      */
-    public function getParameter(string $key, mixed $default = null): mixed
+    public function getParameter(string $name, mixed $default = null): mixed
     {
-        return ArrayHelper::getValue($this->parameters, $key, $default);
+        return ArrayHelper::getValue($this->parameters, $name, $default);
     }
 
-    public function setParameter(string $key, mixed $value): self
+    /**
+     * Set parameter value.
+     *
+     * @param string $name Parameter name.
+     * @param mixed $value Parameter value.
+     * @return $this
+     */
+    public function setParameter(string $name, mixed $value): self
     {
-        $this->parameters[$key] = $value;
+        $this->parameters[$name] = $value;
         return $this;
     }
 
+    /**
+     * @return bool If attribute is missing.
+     */
     public function isAttributeMissing(): bool
     {
         return $this->attribute !== null && $this->dataSet !== null && !$this->dataSet->hasAttribute($this->attribute);

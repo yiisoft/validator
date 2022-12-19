@@ -11,6 +11,10 @@ use Yiisoft\Validator\AttributeTranslatorInterface;
  */
 final class ArrayAttributeTranslator implements AttributeTranslatorInterface
 {
+    /**
+     * @param array $translations Translations array where each key is an attribute name and the corresponding name is
+     * a translation.
+     */
     public function __construct(
         /**
          * @var array<string,string>
