@@ -26,7 +26,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         }
 
         /** @var mixed $value */
-        $value = $context->getParameter(ValidationContext::DATA_AS_ARRAY_PARAMETER) ?? $value;
+        $value = $context->getParameter(ValidationContext::VALUE_AS_ARRAY_PARAMETER) ?? $value;
 
         $result = new Result();
 
