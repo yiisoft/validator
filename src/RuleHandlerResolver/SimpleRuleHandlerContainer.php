@@ -15,7 +15,7 @@ use function array_key_exists;
 /**
  * An implementation for {@see RuleHandlerResolverInterface} using internal class instance variable as a storage of rule
  * handlers' instances. Use it if you don't need PSR container ({@see ContainerInterface}), otherwise
- * {@see RuleHandlerContainer} can be added instead. It's enabled by default to you don't need to additionally configure
+ * {@see RuleHandlerContainer} can be used instead. It's enabled by default to you don't need to additionally configure
  * anything.
  *
  * Note that you can predefine handlers by yourself:
