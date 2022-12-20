@@ -24,6 +24,7 @@ use function function_exists;
  * It does not check the remaining parts of a URL.
  *
  * @psalm-import-type WhenType from WhenInterface
+ *
  * @see UrlHandler
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
