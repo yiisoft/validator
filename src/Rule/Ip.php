@@ -25,6 +25,7 @@ use function strlen;
  * It also may change the value if normalization of IPv6 expansion is enabled.
  *
  * @psalm-import-type WhenType from WhenInterface
+ *
  * @see IpHandler
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -77,6 +78,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      *  - `documentation`: `192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24, 2001:db8::/32`.
      *  - `system`: `multicast, linklocal, localhost, documentation`.
      * @psalm-param array<string, list<string>> $networks
+     *
      * @param bool $allowIpv4 Whether the validating value can be an IPv4 address. Defaults to `true`.
      * @param bool $allowIpv6 Whether the validating value can be an IPv6 address. Defaults to `true`.
      * @param bool $allowSubnet Whether the address can be an IP with CIDR subnet, like `192.168.10.0/24`.
