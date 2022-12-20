@@ -6,8 +6,6 @@ namespace Yiisoft\Validator;
 
 use RuntimeException;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Nested;
 
 /**
  * Validation context that might be taken into account when performing validation.
