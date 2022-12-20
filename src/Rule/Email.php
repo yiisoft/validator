@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use JetBrains\PhpStorm\Language;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
