@@ -13,6 +13,9 @@ use Yiisoft\Validator\AttributeTranslatorInterface;
 final class TranslatorAttributeTranslator implements AttributeTranslatorInterface
 {
     public function __construct(
+        /**
+         * @var TranslatorInterface Translator to use.
+         */
         private TranslatorInterface $translator,
     ) {
     }

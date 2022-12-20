@@ -10,10 +10,12 @@ namespace Yiisoft\Validator;
 interface AttributeTranslatorProviderInterface
 {
     /**
+     * Get attribute translator instance to use.
+     *
      * @return AttributeTranslatorInterface|null Attribute translator instance to use. If null is returned,
      * the validator uses default value configured.
      *
-     * @see Validator constructor, `$defaultAttributeTranslator` argument.
+     * @see Validator::$defaultAttributeTranslator (can be configured via constructor).
      */
     public function getAttributeTranslator(): ?AttributeTranslatorInterface;
 }

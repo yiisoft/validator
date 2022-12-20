@@ -11,32 +11,30 @@ use Yiisoft\Validator\Rule\Nested;
 
 /**
  * Validation context that might be taken into account when performing validation.
- * The context is passed to both direct calls of {@see ValidatorInterface::validate()} and when {@see Nested}
- * or {@see Each} is used.
  *
  * @psalm-import-type RulesType from ValidatorInterface
  */
 final class ValidationContext
 {
     /**
-     * @var ValidatorInterface|null A validator instance. Null means context data was not set yet
-     * with {@see setContextDataOnce()}.
+     * @var ValidatorInterface|null A validator instance. `null` means context data was not set
+     * with {@see setContextDataOnce()} yet.
      */
     private ?ValidatorInterface $validator = null;
 
     /**
-     * @var mixed The raw validated data. Null means context data was not set yet with {@see setContextDataOnce()}.
+     * @var mixed The raw validated data. `null` means context data was not set with {@see setContextDataOnce()} yet.
      */
     private mixed $rawData = null;
 
     /**
      * @var DataSetInterface|null Data set the attribute belongs to.
-     * Null if data set was not set yet with {@see setDataSet()}.
+     * `null` if data set was not set with {@see setDataSet()} yet.
      */
     private ?DataSetInterface $dataSet = null;
 
     /**
-     * @var string|null Validated data set attribute name. Null if a single value is validated.
+     * @var string|null Validated data set's attribute name. `null` if a single value is validated.
      */
     private ?string $attribute = null;
 
@@ -45,13 +43,16 @@ final class ValidationContext
      */
     private ?AttributeTranslatorInterface $defaultAttributeTranslator = null;
 
-    /**
-     * @param array $parameters Arbitrary parameters.
-     * @param AttributeTranslatorInterface|null $attributeTranslator Optional attribute translator instance to use.
-     * If null is provided, or it's not specified, default passed through {@see setContextDataOnce()} is used.
-     */
     public function __construct(
+        /**
+         * @var array Arbitrary parameters.
+         */
         private array $parameters = [],
+        /**
+         * @var AttributeTranslatorInterface|null $attributeTranslator Optional attribute translator instance to use.
+         * If `null` is provided, or it's not specified, a default translator passed through
+         * {@see setContextDataOnce()} is used.
+         */
         private ?AttributeTranslatorInterface $attributeTranslator = null,
     ) {
     }
@@ -66,7 +67,7 @@ final class ValidationContext
      *
      * @internal
      *
-     * @return $this
+     * @return $this The same instance of validation context.
      */
     public function setContextDataOnce(
         ValidatorInterface $validator,
@@ -87,10 +88,10 @@ final class ValidationContext
     /**
      * Set attribute translator to use.
      *
-     * @param AttributeTranslatorInterface|null $attributeTranslator Attribute translator to use. If null,
+     * @param AttributeTranslatorInterface|null $attributeTranslator Attribute translator to use. If `null`,
      * translator passed in {@see setContextData()} will be used.
      *
-     * @return $this
+     * @return $this The same instance of validation context.
      */
     public function setAttributeTranslator(?AttributeTranslatorInterface $attributeTranslator): self
     {
@@ -156,7 +157,7 @@ final class ValidationContext
     }
 
     /**
-     * @return string|null Validated attribute name. Null if a single value is validated.
+     * @return string|null Validated data set's attribute name. `null` if a single value is validated.
      */
     public function getAttribute(): ?string
     {
@@ -166,7 +167,8 @@ final class ValidationContext
     /**
      * Get translated attribute name.
      *
-     * @return string|null Translated attribute name.
+     * @return string|null Translated attribute name. `null` if a single value is validated and there is nothing
+     * to translate.
      */
     public function getTranslatedAttribute(): ?string
     {
@@ -219,7 +221,7 @@ final class ValidationContext
      * @param string $name Parameter name.
      * @param mixed $value Parameter value.
      *
-     * @return $this
+     * @return $this The same instance of validation context.
      */
     public function setParameter(string $name, mixed $value): self
     {
@@ -228,7 +230,7 @@ final class ValidationContext
     }
 
     /**
-     * @return bool If attribute is missing.
+     * @return bool If {@see $attribute} is missing in a {@see $dataSet}.
      */
     public function isAttributeMissing(): bool
     {
