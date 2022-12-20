@@ -36,9 +36,9 @@ final class UrlHandler implements RuleHandlerInterface
             return $result;
         }
 
-        // make sure the length is limited to avoid DOS attacks
+        // Make sure the length is limited to avoid DOS attacks.
         if (strlen($value) < 2000) {
-            if ($rule->isEnableIDN()) {
+            if ($rule->isIDNEnabled()) {
                 $value = $this->convertIdn($value);
             }
 
@@ -55,6 +55,13 @@ final class UrlHandler implements RuleHandlerInterface
         return $result;
     }
 
+    /**
+     * Encodes IDN domain name into its ASCII representation.
+     *
+     * @param string $idn IDN to convert.
+     *
+     * @return string Resulting ASCII string.
+     */
     private function idnToAscii(string $idn): string
     {
         $result = idn_to_ascii($idn);
@@ -62,6 +69,14 @@ final class UrlHandler implements RuleHandlerInterface
         return $result === false ? '' : $result;
     }
 
+    /**
+     * Encodes either standalone IDN domain name or a domain name in a URL
+     * into its ASCII representation.
+     *
+     * @param string $value IDN or URL to convert.
+     *
+     * @return string Resulting ASCII string.
+     */
     private function convertIdn(string $value): string
     {
         if (!str_contains($value, '://')) {

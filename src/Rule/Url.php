@@ -20,7 +20,7 @@ use function function_exists;
 /**
  * Validates that the value is a valid HTTP or HTTPS URL.
  *
- * Note that this rule only checks if the URL scheme and host part are correct.
+ * Note that this rule only checks if the URL scheme and host parts are correct.
  * It does not check the remaining parts of a URL.
  *
  * @psalm-import-type WhenType from WhenInterface
@@ -34,36 +34,59 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
 
     public function __construct(
         /**
-         * @var string the regular expression used to validate the value.
+         * @var string The regular expression used to validate the value.
          * The pattern may contain a `{schemes}` token that will be replaced
          * by a regular expression which represents the {@see $schemes}.
          *
-         * Note that if you want to reuse the pattern in HTML5 input it should have ^ and $, should not have any
-         * modifiers and should not be case-insensitive.
+         * Note that if you want to reuse the pattern in HTML5 input, it should have `^` and `$`, should not have any
+         * modifiers, and should not be case-insensitive.
          */
         private string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
         /**
-         * @var string[] list of URI schemes which should be considered valid. By default, http and https
+         * @var string[] List of URI schemes which should be considered valid. By default, http and https
          * are considered to be valid schemes.
          */
         private array $validSchemes = ['http', 'https'],
         /**
-         * @var bool whether validation process should take into account IDN (internationalized
-         * domain names). Defaults to false meaning that validation of URLs containing IDN will always
+         * @var bool Whether validation process should take into account IDN (internationalized
+         * domain names). Defaults to `false` meaning that validation of URLs containing IDN will always
          * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
          * extension, otherwise an exception would be thrown.
          */
         private bool $enableIDN = false,
-        private string $incorrectInputMessage = 'The value must have a string type.',
-        private string $message = 'This value is not a valid URL.',
-
         /**
-         * @var bool|callable|null
+         * @var string A message used when the input is incorrect.
+         *
+         * You may use the following placeholders in the message:
+         *
+         * - `{attribute}`: the label of the attribute being validated.
+         * - `{value}`: the value of the attribute being validated.
+         */
+        private string $incorrectInputMessage = 'The value must have a string type.',
+        /**
+         * @var string A message used when the value is not valid.
+         *
+         * You may use the following placeholders in the message:
+         *
+         * - `{attribute}`: the label of the attribute being validated.
+         * - `{value}`: the value of the attribute being validated.
+         */
+        private string $message = 'This value is not a valid URL.',
+        /**
+         * @var bool|callable|null Whether to skip this rule if the value validated is empty.
+         *
+         * @see SkipOnEmptyInterface
          */
         private $skipOnEmpty = null,
+        /**
+         * @var bool Whether to skip this rule if any of the previous rules gave an error.
+         */
         private bool $skipOnError = false,
         /**
-         * @var WhenType
+         * @var Closure|null A callable to define a condition for applying the rule.
+         * @psalm-var WhenType
+         *
+         * @see WhenInterface
          */
         private Closure|null $when = null,
     ) {
@@ -80,29 +103,53 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         return 'url';
     }
 
+    /**
+     * @return string Ready to use regular expression pattern used for URL validation.
+     */
     public function getPattern(): string
     {
         return str_replace('{schemes}', '((?i)' . implode('|', $this->validSchemes) . ')', $this->pattern);
     }
 
     /**
-     * @return string[]
+     * @return string[] List of URI schemes which should be considered valid. By default, http and https
+     * are considered to be valid schemes.
+     *
+     * @see $validSchemes
      */
     public function getValidSchemes(): array
     {
         return $this->validSchemes;
     }
 
-    public function isEnableIDN(): bool
+    /**
+     * @return bool Whether validation process should take into account IDN (internationalized
+     * domain names). `false` meaning that validation of URLs containing IDN will always
+     * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
+     * extension, otherwise an exception would be thrown.
+     *
+     * @see $enableIDN
+     */
+    public function isIDNEnabled(): bool
     {
         return $this->enableIDN;
     }
 
+    /**
+     * @return string A message used when the input is incorrect.
+     *
+     * @see $incorrectInputMessage
+     */
     public function getIncorrectInputMessage(): string
     {
         return $this->incorrectInputMessage;
     }
 
+    /**
+     * @return string A message used when the value is not valid.
+     *
+     * @see $message
+     */
     public function getMessage(): string
     {
         return $this->message;
