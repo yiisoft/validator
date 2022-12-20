@@ -433,10 +433,14 @@ final class NestedTest extends RuleTestCase
                         'authors' => [
                             new Each([
                                 new Nested([
-                                    'name' => [new HasLength(min: 5)],
-                                    'age' => [
-                                        new Number(min: 18),
-                                        new Number(min: 20),
+                                    [
+                                        'data' => [
+                                            'name' => [new HasLength(min: 5)],
+                                            'age' => [
+                                                new Number(min: 18),
+                                                new Number(min: 20),
+                                            ],
+                                        ],
                                     ],
                                 ]),
                             ]),
@@ -454,9 +458,9 @@ final class NestedTest extends RuleTestCase
             ['rules', 'posts', 0, 'rules', 0, 'rules', 'title', 0],
             ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0],
             ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'name', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 1],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 0, 'data', 'name', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 0, 'data', 'age', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 0, 'data', 'age', 1],
             ['rules', 'meta', 0],
         ];
         $keys = ['skipOnEmpty', 'skipOnError'];

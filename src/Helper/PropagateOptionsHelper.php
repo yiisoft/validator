@@ -34,7 +34,7 @@ final class PropagateOptionsHelper
     public static function propagate(RuleInterface $parentRule, iterable $childRules): array
     {
         $rules = [];
-        foreach ($childRules as $childRule) {
+        foreach ($childRules as $index => $childRule) {
             if ($parentRule instanceof SkipOnEmptyInterface && $childRule instanceof SkipOnEmptyInterface) {
                 $childRule = $childRule->skipOnEmpty($parentRule->getSkipOnEmpty());
             }
@@ -51,7 +51,7 @@ final class PropagateOptionsHelper
                 $childRule->propagateOptions();
             }
 
-            $rules[] = $childRule;
+            $rules[$index] = $childRule;
         }
 
         return $rules;
