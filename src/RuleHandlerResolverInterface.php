@@ -17,8 +17,8 @@ interface RuleHandlerResolverInterface
      *
      * @param string $name A rule handler name ({@see RuleInterface}).
      *
-     * @throws RuleHandlerNotFoundException if a rule handler instance was not found.
-     * @throws RuleHandlerInterfaceNotImplementedException if a found instance is not a valid rule handler.
+     * @throws RuleHandlerNotFoundException If a rule handler instance was not found.
+     * @throws RuleHandlerInterfaceNotImplementedException If a found instance is not a valid rule handler.
      *
      * @return RuleHandlerInterface A corresponding rule handler instance.
      */

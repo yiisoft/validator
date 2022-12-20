@@ -29,7 +29,7 @@ final class SkipOnEmptyNormalizer
      *
      * @param mixed $skipOnEmpty Raw "skip on empty" value of any type.
      *
-     * @throws InvalidArgumentException if the type of {@see $skipOnEmpty} is not valid.
+     * @throws InvalidArgumentException If the type of {@see $skipOnEmpty} is not valid.
      *
      * @return callable An empty criteria callable.
      */
