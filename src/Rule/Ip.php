@@ -25,6 +25,7 @@ use function strlen;
  * It also may change the value if normalization of IPv6 expansion is enabled.
  *
  * @psalm-import-type WhenType from WhenInterface
+ * @see IpHandler
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
@@ -58,171 +59,136 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
     ];
 
+    /**
+     * @param array $networks Custom network aliases, that can be used in {@see $ranges}:
+     *
+     *  - key - alias name.
+     *  - value - array of strings. String can be an IP range, IP address or another alias. String can be negated
+     * with {@see NEGATION_CHARACTER} (independent of {@see $allowNegation} option).
+     *
+     * The following aliases are defined by default in {@see $defaultNetworks} and will be merged with custom ones:
+     *
+     *  - `*`: `any`.
+     *  - `any`: `0.0.0.0/0, ::/0`.
+     *  - `private`: `10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, fd00::/8`.
+     *  - `multicast`: `224.0.0.0/4, ff00::/8`.
+     *  - `linklocal`: `169.254.0.0/16, fe80::/10`.
+     *  - `localhost`: `127.0.0.0/8', ::1`.
+     *  - `documentation`: `192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24, 2001:db8::/32`.
+     *  - `system`: `multicast, linklocal, localhost, documentation`.
+     * @psalm-param array<string, list<string>> $networks
+     * @param bool $allowIpv4 Whether the validating value can be an IPv4 address. Defaults to `true`.
+     * @param bool $allowIpv6 Whether the validating value can be an IPv6 address. Defaults to `true`.
+     * @param bool $allowSubnet Whether the address can be an IP with CIDR subnet, like `192.168.10.0/24`.
+     * The following values are possible:
+     *
+     * - `false` - the address must not have a subnet (default).
+     * - `true` - specifying a subnet is optional.
+     * @param bool $requireSubnet Whether subnet is required.
+     * @param bool $allowNegation Whether an address may have a `!` negation character at the beginning.
+     * @param string $incorrectInputMessage A message used when the input it incorrect.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{type}`: the type of the attribute being validated.
+     * @param string $message Error message used when validation fails due to the wrong IP address format.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{value}`: the value of the attribute being validated.
+     * @param string $ipv4NotAllowedMessage Error message used when validation fails due to the disabled IPv4
+     * validation when {@see $allowIpv4} is set.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{value}`: the value of the attribute being validated.
+     * @param string $ipv6NotAllowedMessage Error message used when validation fails due to the disabled IPv6
+     * validation when {@see $allowIpv6} is set.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{value}`: the value of the attribute being validated.
+     * @param string $wrongCidrMessage string Error message used when validation fails due to the wrong CIDR when
+     * {@see $allowSubnet} is set.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{value}`: the value of the attribute being validated.
+     * @param string $noSubnetMessage Error message used when validation fails due to {@see $allowSubnet} is used, but
+     * the CIDR prefix is not set.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{value}`: the value of the attribute being validated.
+     * @param string $hasSubnetMessage Error message used when validation fails due to {@see $allowSubnet} is false, but
+     * CIDR prefix is present.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{value}`: the value of the attribute being validated.
+     * @param string $notInRangeMessage Error message used when validation fails due to IP address is not allowed by
+     * {@see $ranges} check.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{value}`: the value of the attribute being validated.
+     * @param string[] $ranges The IPv4 or IPv6 ranges that are allowed or forbidden.
+     *
+     * The following preparation tasks are performed:
+     *
+     * - Recursively substitute aliases (described in {@see $networks}) with their values.
+     * - Remove duplicates.
+     *
+     * When the array is empty, or the option not set, all IP addresses are allowed.
+     *
+     * Otherwise, the rules are checked sequentially until the first match is found. An IP address is forbidden,
+     * when it has not matched any of the rules.
+     *
+     * Example:
+     *
+     * ```php
+     * new Ip(ranges: [
+     *     '192.168.10.128'
+     *     '!192.168.10.0/24',
+     *     'any' // allows any other IP addresses
+     * ]);
+     * ```
+     *
+     * In this example, access is allowed for all the IPv4 and IPv6 addresses excluding the `192.168.10.0/24`
+     * subnet. IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
+     * See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
+     * {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
+     * @psalm-param WhenType $when
+     */
     public function __construct(
-        /**
-         * @var array<string, list<string>> Custom network aliases, that can be used in {@see $ranges}:
-         *
-         *  - key - alias name.
-         *  - value - array of strings. String can be an IP range, IP address or another alias. String can be negated
-         * with {@see NEGATION_CHARACTER} (independent of {@see $allowNegation} option).
-         *
-         * The following aliases are defined by default in {@see $defaultNetworks} and will be merged with custom ones:
-         *
-         *  - `*`: `any`.
-         *  - `any`: `0.0.0.0/0, ::/0`.
-         *  - `private`: `10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, fd00::/8`.
-         *  - `multicast`: `224.0.0.0/4, ff00::/8`.
-         *  - `linklocal`: `169.254.0.0/16, fe80::/10`.
-         *  - `localhost`: `127.0.0.0/8', ::1`.
-         *  - `documentation`: `192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24, 2001:db8::/32`.
-         *  - `system`: `multicast, linklocal, localhost, documentation`.
-         */
         private array $networks = [],
-        /**
-         * @var bool Whether the validating value can be an IPv4 address. Defaults to `true`.
-         */
         private bool $allowIpv4 = true,
-        /**
-         * @var bool Whether the validating value can be an IPv6 address. Defaults to `true`.
-         */
         private bool $allowIpv6 = true,
-        /**
-         * @var bool Whether the address can be an IP with CIDR subnet, like `192.168.10.0/24`. The following values are
-         * possible:
-         *
-         * - `false` - the address must not have a subnet (default).
-         * - `true` - specifying a subnet is optional.
-         */
         private bool $allowSubnet = false,
-        /**
-         * @var bool Whether subnet is required.
-         */
         private bool $requireSubnet = false,
-        /**
-         * @var bool Whether an address may have a {@see NEGATION_CHARACTER} character at the beginning.
-         */
         private bool $allowNegation = false,
-        /**
-         * @var string A message used when the input it incorrect.
-         *
-         * You may use the following placeholders in the message:
-         *
-         * - `{attribute}`: the label of the attribute being validated.
-         * - `{value}`: the value of the attribute being validated.
-         */
         private string $incorrectInputMessage = 'The value must have a string type.',
-        /**
-         * @var string Error message used when validation fails due to the wrong IP address format.
-         *
-         * You may use the following placeholders in the message:
-         *
-         * - `{attribute}`: the label of the attribute being validated.
-         * - `{value}`: the value of the attribute being validated.
-         */
         private string $message = 'Must be a valid IP address.',
-        /**
-         * @var string Error message used when validation fails due to the disabled IPv4 validation when
-         * {@see $allowIpv4} is set.
-         *
-         * You may use the following placeholders in the message:
-         *
-         * - `{attribute}`: the label of the attribute being validated.
-         * - `{value}`: the value of the attribute being validated.
-         */
         private string $ipv4NotAllowedMessage = 'Must not be an IPv4 address.',
-        /**
-         * @var string Error message used when validation fails due to the disabled IPv6 validation when
-         * {@see $allowIpv6} is set.
-         *
-         * You may use the following placeholders in the message:
-         *
-         * - `{attribute}`: the label of the attribute being validated.
-         * - `{value}`: the value of the attribute being validated.
-         */
         private string $ipv6NotAllowedMessage = 'Must not be an IPv6 address.',
-        /**
-         * @var string Error message used when validation fails due to the wrong CIDR when
-         * {@see $allowSubnet} is set.
-         *
-         * You may use the following placeholders in the message:
-         *
-         * - `{attribute}`: the label of the attribute being validated.
-         * - `{value}`: the value of the attribute being validated.
-         */
         private string $wrongCidrMessage = 'Contains wrong subnet mask.',
-        /**
-         * @var string Error message used when validation fails due to {@see $allowSubnet} is used, but
-         * the CIDR prefix is not set.
-         *
-         * You may use the following placeholders in the message:
-         *
-         * - `{attribute}`: the label of the attribute being validated.
-         * - `{value}`: the value of the attribute being validated.
-         */
         private string $noSubnetMessage = 'Must be an IP address with specified subnet.',
-        /**
-         * @var string Error message used when validation fails due to {@see $allowSubnet} is false, but
-         * CIDR prefix is present.
-         *
-         * You may use the following placeholders in the message:
-         *
-         * - `{attribute}`: the label of the attribute being validated.
-         * - `{value}`: the value of the attribute being validated.
-         */
         private string $hasSubnetMessage = 'Must not be a subnet.',
-        /**
-         * @var string Error message used when validation fails due to IP address is not allowed by
-         * {@see $ranges} check.
-         *
-         * You may use the following placeholders in the message:
-         *
-         * - `{attribute}`: the label of the attribute being validated.
-         * - `{value}`: the value of the attribute being validated.
-         */
         private string $notInRangeMessage = 'Is not in the allowed range.',
-        /**
-         * @var string[] The IPv4 or IPv6 ranges that are allowed or forbidden.
-         *
-         * The following preparation tasks are performed:
-         *
-         * - Recursively substitute aliases (described in {@see $networks}) with their values.
-         * - Remove duplicates.
-         *
-         * When the array is empty, or the option not set, all IP addresses are allowed.
-         *
-         * Otherwise, the rules are checked sequentially until the first match is found. An IP address is forbidden,
-         * when it has not matched any of the rules.
-         *
-         * Example:
-         *
-         * ```php
-         * new Ip(ranges: [
-         *     '192.168.10.128'
-         *     '!192.168.10.0/24',
-         *     'any' // allows any other IP addresses
-         * ]);
-         * ```
-         *
-         * In this example, access is allowed for all the IPv4 and IPv6 addresses excluding the `192.168.10.0/24`
-         * subnet. IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
-         */
         private array $ranges = [],
-        /**
-         * @var bool|callable|null Whether to skip this rule if the value validated is empty.
-         *
-         * @see SkipOnEmptyInterface
-         */
         private mixed $skipOnEmpty = null,
-        /**
-         * @var bool Whether to skip this rule if any of the previous rules gave an error.
-         */
         private bool $skipOnError = false,
-        /**
-         * @var Closure|null A callable to define a condition for applying the rule.
-         * @psalm-var WhenType
-         *
-         * @see WhenInterface
-         */
         private Closure|null $when = null,
     ) {
         if (!$this->allowIpv4 && !$this->allowIpv6) {
@@ -253,7 +219,9 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * @return array Custom network aliases, that can be used in {@see $ranges}.
+     * Get custom network aliases, that can be used in {@see $ranges}.
+     *
+     * @return array Network aliases.
      *
      * @see $networks
      */
@@ -263,6 +231,8 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
+     * Whether the validating value can be an IPv4 address
+     *
      * @return bool Whether the validating value can be an IPv4 address. Defaults to `true`.
      *
      * @see $allowIpv4
@@ -273,6 +243,8 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
+     * Whether the validating value can be an IPv6 address.
+     *
      * @return bool Whether the validating value can be an IPv6 address. Defaults to `true`.
      *
      * @see $allowIpv6
@@ -283,7 +255,9 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * @return bool Whether the address can be an IP with CIDR subnet, like `192.168.10.0/24`.
+     * Whether the address can be an IP with CIDR subnet, like `192.168.10.0/24`.
+     *
+     * @return bool Whether the address can be an IP with CIDR subnet.
      *
      * @see $allowSubnet
      */
@@ -293,6 +267,8 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
+     * Whether subnet is required.
+     *
      * @return bool Whether subnet is required.
      *
      * @see $requireSubnet
@@ -303,7 +279,9 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * @return bool Whether an address may have a {@see NEGATION_CHARACTER} character at the beginning.
+     * Whether an address may have a `!` negation character at the beginning.
+     *
+     * @return bool Whether an address may have a `!` negation character at the beginning.
      *
      * @see $allowNegation
      */
@@ -313,7 +291,9 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * @return string A message used when the input it incorrect.
+     * Get a message used when the input it incorrect.
+     *
+     * @return string Error message
      *
      * @see $incorrectInputMessage
      */
@@ -323,7 +303,9 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * @return string Error message used when validation fails due to the wrong IP address format.
+     * Get an error message used when validation fails due to the wrong IP address format.
+     *
+     * @return string Error message.
      *
      * @see $message
      */
@@ -333,8 +315,10 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * @return string Error message used when validation fails due to the disabled IPv4 validation when
+     * Get an error message used when validation fails due to the disabled IPv4 validation when
      * {@see $allowIpv4} is set.
+     *
+     * @return string Error message.
      *
      * @see $ipv4NotAllowedMessage
      */
@@ -344,8 +328,10 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * @return string Error message used when validation fails due to the disabled IPv6 validation when
+     * Get error message used when validation fails due to the disabled IPv6 validation when
      * {@see $allowIpv6} is set.
+     *
+     * @return string Error message.
      *
      * @see $ipv6NotAllowedMessage
      */
@@ -355,8 +341,10 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * @return string Error message used when validation fails due to the wrong CIDR when
+     * Get error message used when validation fails due to the wrong CIDR when
      * {@see $allowSubnet} is set.
+     *
+     * @return string Error message.
      *
      * @see $wrongCidrMessage
      */
@@ -366,8 +354,10 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * @return string Error message used when validation fails due to {@see $allowSubnet} is used, but
+     * Get error message used when validation fails due to {@see $allowSubnet} is used, but
      * the CIDR prefix is not set.
+     *
+     * @return string Error message.
      *
      * @see $getNoSubnetMessage
      */
@@ -377,8 +367,10 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * @return string Error message used when validation fails due to {@see $allowSubnet} is false, but
+     * Get error message used when validation fails due to {@see $allowSubnet} is false, but
      * CIDR prefix is present.
+     *
+     * @return string Error message.
      *
      * @see $hasSubnetMessage
      */
@@ -388,8 +380,10 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * @return string Error message used when validation fails due to IP address is not allowed by
+     * Get error message used when validation fails due to IP address is not allowed by
      * {@see $ranges} check.
+     *
+     * @return string Error message.
      *
      * @see $notInRangeMessage
      */
@@ -399,6 +393,8 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
+     * Get the IPv4 or IPv6 ranges that are allowed or forbidden.
+     *
      * @return string[] The IPv4 or IPv6 ranges that are allowed or forbidden.
      *
      * @see $ranges
@@ -411,9 +407,10 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     /**
      * Parses IP address/range for the negation with {@see NEGATION_CHARACTER}.
      *
-     * @return array{0: bool, 1: string} The result array consists of 2 elements:
+     * @return array The result array consists of 2 elements:
      * - `boolean`: whether the string is negated
      * - `string`: the string without negation (when the negation were present)
+     * @psalm-return array{0: bool, 1: string}
      */
     private function parseNegatedRange(string $string): array
     {
@@ -451,7 +448,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * The method checks whether the IP address with specified CIDR is allowed according to the {@see $ranges} list.
+     * Whether the IP address with specified CIDR is allowed according to the {@see $ranges} list.
      */
     public function isAllowed(string $ip): bool
     {

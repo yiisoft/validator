@@ -16,7 +16,7 @@ use function is_string;
 /**
  * Checks if the value is a valid IPv4/IPv6 address or subnet.
  *
- * It also may change the value if normalization of IPv6 expansion is enabled.
+ * @see Ip
  */
 final class IpHandler implements RuleHandlerInterface
 {
@@ -68,11 +68,7 @@ final class IpHandler implements RuleHandlerInterface
         }
 
         $result = self::validateCidr($rule, $cidr, $ipCidr, $value, $context);
-        if ($result !== null) {
-            return $result;
-        }
-
-        return new Result();
+        return $result ?? new Result();
     }
 
     /**
