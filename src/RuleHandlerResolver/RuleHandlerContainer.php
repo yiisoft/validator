@@ -27,7 +27,7 @@ use Yiisoft\Validator\RuleHandlerResolverInterface;
  * ];
  * ```
  *
- * If you don't need DI container, {@see SimpleRuleHandlerContainer} can be used instead. It's enabled by default to you
+ * If you don't need DI container, {@see SimpleRuleHandlerContainer} can be used instead. It's enabled by default, you
  * don't need to additionally configure anything.
  */
 final class RuleHandlerContainer implements RuleHandlerResolverInterface
