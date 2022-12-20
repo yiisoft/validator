@@ -41,16 +41,14 @@ final class ValidationContext
      */
     private ?AttributeTranslatorInterface $defaultAttributeTranslator = null;
 
+    /**
+     * @param array $parameters Arbitrary parameters.
+     * @param AttributeTranslatorInterface|null $attributeTranslator Optional attribute translator instance to use.
+     * If `null` is provided, or it's not specified, a default translator passed through
+     * {@see setContextDataOnce()} is used.
+     */
     public function __construct(
-        /**
-         * @var array Arbitrary parameters.
-         */
         private array $parameters = [],
-        /**
-         * @var AttributeTranslatorInterface|null $attributeTranslator Optional attribute translator instance to use.
-         * If `null` is provided, or it's not specified, a default translator passed through
-         * {@see setContextDataOnce()} is used.
-         */
         private ?AttributeTranslatorInterface $attributeTranslator = null,
     ) {
     }
