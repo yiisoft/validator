@@ -42,8 +42,8 @@ final class RuleHandlerContainer implements RuleHandlerResolverInterface
 
     /**
      * Resolves a rule handler name to a corresponding rule handler instance. The actual resolving is delegated to
-     * {@see $container}. Throws more specific exceptions and executes some additional checks (to make sure that if a
-     * handler was found, then it's indeed a valid handler to work with).
+     * {@see $container}. Throws more specific exceptions and executes additional checks to make sure that if a
+     * handler was found, then it's indeed a valid handler to work with.
      *
      * @param string $name A rule handler name ({@see RuleInterface}).
      *
