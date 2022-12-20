@@ -15,8 +15,7 @@ use function strlen;
 /**
  * Validates that the value is a valid HTTP or HTTPS URL.
  *
- * Note that this rule only checks if the URL scheme and host part are correct.
- * It does not check the remaining parts of a URL.
+ * @see Url
  */
 final class UrlHandler implements RuleHandlerInterface
 {
@@ -38,7 +37,7 @@ final class UrlHandler implements RuleHandlerInterface
 
         // Make sure the length is limited to avoid DOS attacks.
         if (strlen($value) < 2000) {
-            if ($rule->isIDNEnabled()) {
+            if ($rule->isIdnEnabled()) {
                 $value = $this->convertIdn($value);
             }
 
@@ -61,6 +60,8 @@ final class UrlHandler implements RuleHandlerInterface
      * @param string $idn IDN to convert.
      *
      * @return string Resulting ASCII string.
+     *
+     * @see idn_to_ascii()
      */
     private function idnToAscii(string $idn): string
     {
