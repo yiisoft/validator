@@ -91,7 +91,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     /**
      * Get ready to use regular expression pattern applied for URL validation.
      *
-     * @return string Ready to use regular expression pattern applied for URL validation.
+     * @return string Regular expression pattern applied for URL validation.
      */
     public function getPattern(): string
     {
@@ -112,13 +112,13 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     }
 
     /**
-     * Whether to enable IDN validation.
-     *
-     * @return bool Whether the validation process must take
+     * Whether the validation process must take
      * {@link https://en.wikipedia.org/wiki/Internationalized_domain_name IDN (internationalized domain names)}
      * into account. `false` means that validation of URLs containing IDN will always
      * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
-     * extension, otherwise an exception will be thrown.
+     * extension, otherwise an exception will be thrown.     *
+     *
+     * @return bool Whether to enable IDN validation.
      *
      * @see $enableIdn
      */
@@ -130,7 +130,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     /**
      * Get a message used when the input is incorrect.
      *
-     * @return string A message used when the input is incorrect.
+     * @return string Error message.
      *
      * @see $incorrectInputMessage
      */
@@ -142,7 +142,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     /**
      * Get a message used when the value is not valid.
      *
-     * @return string A message used when the value is not valid.
+     * @return string Error message.
      *
      * @see $message
      */
