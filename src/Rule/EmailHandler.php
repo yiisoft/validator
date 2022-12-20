@@ -41,7 +41,7 @@ final class EmailHandler implements RuleHandlerInterface
             $valid = false;
         } else {
             /** @var array{name:string,local:string,open:string,domain:string,close:string} $matches */
-            if ($rule->isIDNEnabled()) {
+            if ($rule->isIdnEnabled()) {
                 $matches['local'] = idn_to_ascii($matches['local']);
                 $matches['domain'] = idn_to_ascii($matches['domain']);
                 $value = implode([
@@ -74,13 +74,13 @@ final class EmailHandler implements RuleHandlerInterface
                     $rule->getFullPattern(),
                     $value
                 ));
-                if ($valid && $rule->shouldCheckDNS()) {
+                if ($valid && $rule->shouldCheckDns()) {
                     $valid = checkdnsrr($matches['domain']);
                 }
             }
         }
 
-        if ($valid === false && $rule->isIDNEnabled()) {
+        if ($valid === false && $rule->isIdnEnabled()) {
             $valid = (bool) preg_match($rule->getIdnEmailPattern(), $originalValue);
         }
 
