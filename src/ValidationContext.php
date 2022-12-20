@@ -129,9 +129,9 @@ final class ValidationContext
     /**
      * Get the raw validated data.
      *
-     * @return mixed The raw validated data.
-     *
      * @throws RuntimeException If validator and raw data are not set in validation context.
+     *
+     * @return mixed The raw validated data.
      */
     public function getRawData(): mixed
     {
@@ -157,6 +157,7 @@ final class ValidationContext
      * Set the data set the attribute belongs to.
      *
      * @param DataSetInterface $dataSet Data set the attribute belongs to.
+     *
      * @return $this The same instance of validation context.
      *
      * @internal
