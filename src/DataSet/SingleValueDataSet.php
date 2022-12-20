@@ -50,10 +50,9 @@ final class SingleValueDataSet implements DataWrapperInterface
     }
 
     /**
-     * A getter for {@see $data} property. Returns the validated data as a whole. In this case the single value itself
-     * is returned as a data because it can not be decoupled.
+     * Returns the validated data as array.
      *
-     * @return null Single value of any (mixed) data type.
+     * @return null Always `null` because does not support data as array.
      */
     public function getData(): ?array
     {
