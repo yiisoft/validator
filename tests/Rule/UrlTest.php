@@ -42,7 +42,7 @@ final class UrlTest extends RuleTestCase
                 [
                     'pattern' => '/^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'validSchemes' => ['http', 'https'],
-                    'enableIDN' => false,
+                    'enableIdn' => false,
                     'incorrectInputMessage' => [
                         'template' => 'The value must have a string type.',
                         'parameters' => [],
@@ -60,7 +60,7 @@ final class UrlTest extends RuleTestCase
                 [
                     'pattern' => '/^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'validSchemes' => ['http', 'https'],
-                    'enableIDN' => true,
+                    'enableIdn' => true,
                     'incorrectInputMessage' => [
                         'template' => 'The value must have a string type.',
                         'parameters' => [],
@@ -78,7 +78,7 @@ final class UrlTest extends RuleTestCase
                 [
                     'pattern' => '/^((?i)http):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'validSchemes' => ['http'],
-                    'enableIDN' => false,
+                    'enableIdn' => false,
                     'incorrectInputMessage' => [
                         'template' => 'The value must have a string type.',
                         'parameters' => [],
@@ -96,7 +96,7 @@ final class UrlTest extends RuleTestCase
                 [
                     'pattern' => '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/',
                     'validSchemes' => ['http', 'https'],
-                    'enableIDN' => true,
+                    'enableIdn' => true,
                     'incorrectInputMessage' => [
                         'template' => 'The value must have a string type.',
                         'parameters' => [],
