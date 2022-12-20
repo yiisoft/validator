@@ -36,6 +36,9 @@ use function array_key_exists;
  */
 final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
 {
+    /**
+     * @throws RuleHandlerInterfaceNotImplementedException if one of the {@see $instances} is not a valid rule handler.
+     */
     public function __construct(
         /**
          * @var array<string, RuleHandlerInterface> A storage of rule handlers' instances - a mapping where keys are
@@ -56,6 +59,9 @@ final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
      * @param string $name A rule handler name ({@see RuleInterface}).
      *
      * @return RuleHandlerInterface A corresponding rule handler instance.
+     *
+     * @throws RuleHandlerNotFoundException if a rule handler instance was not found.
+     * @throws RuleHandlerInterfaceNotImplementedException if a found instance is not a valid rule handler.
      */
     public function resolve(string $name): RuleHandlerInterface
     {
