@@ -76,7 +76,7 @@ final class ValidationContext
      */
     public function validate(mixed $data, callable|iterable|object|string|null $rules = null): Result
     {
-        $this->checkValidatorAndRawData();
+        $this->requireValidator();
 
         $currentDataSet = $this->dataSet;
         $currentAttribute = $this->attribute;
@@ -94,7 +94,7 @@ final class ValidationContext
      */
     public function getRawData(): mixed
     {
-        $this->checkValidatorAndRawData();
+        $this->requireValidator();
         return $this->rawData;
     }
 
@@ -176,16 +176,16 @@ final class ValidationContext
 
     public function isAttributeMissing(): bool
     {
-        return $this->attribute !== null && $this->dataSet !== null && !$this->dataSet->hasAttribute($this->attribute);
+        return $this->attribute !== null && !$this->getDataSet()->hasAttribute($this->attribute);
     }
 
     /**
      * @psalm-assert ValidatorInterface $this->validator
      */
-    private function checkValidatorAndRawData(): void
+    private function requireValidator(): void
     {
         if ($this->validator === null) {
-            throw new RuntimeException('Validator and raw data in validation context is not set.');
+            throw new RuntimeException('Validator in validation context is not set.');
         }
     }
 }
