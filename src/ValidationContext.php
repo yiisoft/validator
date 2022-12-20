@@ -106,6 +106,10 @@ final class ValidationContext
      * even if it is an instance of {@see RulesProviderInterface}.
      *
      * @psalm-param RulesType $rules
+     *
+     * @throws RuntimeException If validator and raw data are not set in validation context.
+     *
+     * @return Result Validation result.
      */
     public function validate(mixed $data, callable|iterable|object|string|null $rules = null): Result
     {
@@ -123,7 +127,11 @@ final class ValidationContext
     }
 
     /**
+     * Get the raw validated data.
+     *
      * @return mixed The raw validated data.
+     *
+     * @throws RuntimeException If validator and raw data are not set in validation context.
      */
     public function getRawData(): mixed
     {
@@ -132,6 +140,8 @@ final class ValidationContext
     }
 
     /**
+     * Get the data set the attribute belongs to.
+     *
      * @return DataSetInterface Data set the attribute belongs to.
      */
     public function getDataSet(): DataSetInterface
@@ -144,7 +154,10 @@ final class ValidationContext
     }
 
     /**
+     * Set the data set the attribute belongs to.
+     *
      * @param DataSetInterface $dataSet Data set the attribute belongs to.
+     * @return $this The same instance of validation context.
      *
      * @internal
      */
@@ -155,6 +168,8 @@ final class ValidationContext
     }
 
     /**
+     * Get validated data set's attribute name.
+     *
      * @return string|null Validated data set's attribute name. `null` if a single value is validated.
      */
     public function getAttribute(): ?string
@@ -186,9 +201,11 @@ final class ValidationContext
     }
 
     /**
-     * Specify name of the attribute validated.
+     * Set the name of the attribute validated.
      *
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
+     *
+     * @return $this The same instance of validation context.
      *
      * @internal
      */
@@ -228,7 +245,9 @@ final class ValidationContext
     }
 
     /**
-     * @return bool If {@see $attribute} is missing in a {@see $dataSet}.
+     * Check whether {@see $attribute} is missing in a {@see $dataSet}.
+     *
+     * @return bool Whether {@see $attribute} is missing in a {@see $dataSet}.
      */
     public function isAttributeMissing(): bool
     {
@@ -236,12 +255,16 @@ final class ValidationContext
     }
 
     /**
+     * Ensure that validator and raw data are set in validation context.
+     *
      * @psalm-assert ValidatorInterface $this->validator
+     *
+     * @throws RuntimeException If validator and raw data are not set in validation context.
      */
     private function checkValidatorAndRawData(): void
     {
         if ($this->validator === null) {
-            throw new RuntimeException('Validator and raw data in validation context is not set.');
+            throw new RuntimeException('Validator and raw data are not set in validation context.');
         }
     }
 }
