@@ -50,7 +50,7 @@ final class ArrayDataSet implements DataWrapperInterface
      *
      * @return array A mapping between attribute names and their values.
      */
-    public function getData(): ?array
+    public function getData(): array
     {
         return $this->data;
     }

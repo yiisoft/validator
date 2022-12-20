@@ -21,7 +21,7 @@ interface DataSetInterface
     /**
      * Returns the validated data as a whole.
      *
-     * @return mixed Validated data.
+     * @return array|null Validated data.
      */
     public function getData(): ?array;
 

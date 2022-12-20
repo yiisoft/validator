@@ -260,7 +260,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
     /**
      * Returns the validated data as a whole.
      *
-     * @return mixed Validated data, has mixed type if it was provided via {@see DataSetInterface::getData()}
+     * @return array|null Validated data, has mixed type if it was provided via {@see DataSetInterface::getData()}
      * implementation, otherwise it's always an associative array - a mapping between property names and their values.
      */
     public function getData(): ?array
