@@ -139,7 +139,7 @@ final class ObjectParser
     private string|null $cacheKey = null;
 
     /**
-     * @throws InvalidArgumentException if a class name string provided in {@see $source} refers to a non-existing
+     * @throws InvalidArgumentException If a class name string provided in {@see $source} refers to a non-existing
      * class.
      */
     public function __construct(

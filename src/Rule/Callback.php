@@ -105,7 +105,7 @@ final class Callback implements
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return CallbackHandler::class;
     }

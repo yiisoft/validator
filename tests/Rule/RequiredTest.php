@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Closure;
+use Yiisoft\Validator\EmptyCriteria\NeverEmpty;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\RequiredHandler;
-use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
 use Yiisoft\Validator\EmptyCriteria\WhenNull;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\ValidationContext;
 
 final class RequiredTest extends RuleTestCase
 {
@@ -26,8 +27,8 @@ final class RequiredTest extends RuleTestCase
     {
         $rule = new Required();
 
-        $this->assertInstanceOf(WhenEmpty::class, $rule->getEmptyCriteria());
-        $this->assertSame(RequiredHandler::class, $rule->getHandlerClassName());
+        $this->assertNull($rule->getEmptyCriteria());
+        $this->assertSame(RequiredHandler::class, $rule->getHandler());
         $this->assertSame('Value cannot be blank.', $rule->getMessage());
         $this->assertSame('required', $rule->getName());
         $this->assertSame('Value not passed.', $rule->getNotPassedMessage());
@@ -38,7 +39,6 @@ final class RequiredTest extends RuleTestCase
     public function dataGetEmptyCriteria(): array
     {
         return [
-            'null' => [null, WhenEmpty::class],
             'skip on null' => [new WhenNull(), WhenNull::class],
             'closure' => [static fn () => false, Closure::class],
         ];
@@ -120,8 +120,17 @@ final class RequiredTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Required(), new Required(when: $when));
+    }
+
+    public function testDefaultEmptyCriteria(): void
+    {
+        $handler = new RequiredHandler(defaultEmptyCriteria: new NeverEmpty());
+
+        $result = $handler->validate('', new Required(), new ValidationContext());
+
+        $this->assertTrue($result->isValid());
     }
 
     protected function getDifferentRuleInHandlerItems(): array

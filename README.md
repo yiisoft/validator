@@ -900,7 +900,7 @@ use Yiisoft\Di\ContainerConfig;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
 use Yiisoft\Validator\RuleHandlerResolver\RuleHandlerContainer;
 
-// Need to be defined in common.php
+// Needs to be defined in common.php
 $config = [
     RuleHandlerResolverInterface::class => RuleHandlerContainer::class,
 ];

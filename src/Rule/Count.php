@@ -121,7 +121,7 @@ final class Count implements
         ]);
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return CountHandler::class;
     }

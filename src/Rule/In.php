@@ -96,7 +96,7 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         ];
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return InHandler::class;
     }

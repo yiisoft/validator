@@ -22,7 +22,7 @@ final class StubRuleWithOptions implements RuleWithOptionsInterface
         return $this->options;
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return StubRuleHandler::class;
     }
