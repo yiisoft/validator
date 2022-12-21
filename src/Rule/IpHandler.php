@@ -73,6 +73,8 @@ final class IpHandler implements RuleHandlerInterface
 
     /**
      * Used to get the Regexp pattern for initial IP address parsing.
+     *
+     * @return string Regular expression pattern.
      */
     private static function getIpParsePattern(): string
     {
@@ -81,6 +83,16 @@ final class IpHandler implements RuleHandlerInterface
             ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
+    /**
+     * Validates value parts.
+     *
+     * @param Ip $rule Instance of the rule.
+     * @param string|null $cidr CIDR for subnet check.
+     * @param bool $negation If negation is used.
+     * @param string $value Value validated.
+     * @param ValidationContext $context Validation context.
+     * @return Result|null Validation result.
+     */
     private static function validateValueParts(
         Ip $rule,
         ?string $cidr,
@@ -103,6 +115,15 @@ final class IpHandler implements RuleHandlerInterface
         return null;
     }
 
+    /**
+     * Validate that IP protocol version is within enabled ones.
+     *
+     * @param Ip $rule Instance of the rule.
+     * @param int $ipVersion Version of the IP protocol.
+     * @param string $value Value validated.
+     * @param ValidationContext $context Validation context.
+     * @return Result|null Validation result.
+     */
     private static function validateVersion(
         Ip $rule,
         int $ipVersion,
@@ -120,6 +141,16 @@ final class IpHandler implements RuleHandlerInterface
         return null;
     }
 
+    /**
+     * Validate that CIDR is valid and the value is in range.
+     *
+     * @param Ip $rule Instance of the rule.
+     * @param string|null $cidr CIDR for subnet check.
+     * @param string $ipCidr IP CIDR.
+     * @param string $value Value validated.
+     * @param ValidationContext $context Validation context.
+     * @return Result|null Validation result.
+     */
     private static function validateCidr(
         Ip $rule,
         ?string $cidr,
@@ -142,6 +173,14 @@ final class IpHandler implements RuleHandlerInterface
         return null;
     }
 
+    /**
+     * Creates a new result with an error.
+     *
+     * @param string $message Error message.
+     * @param ValidationContext $context  Validation context.
+     * @param string $value Value validated.
+     * @return Result Validation result.
+     */
     private static function getGenericErrorResult(string $message, ValidationContext $context, string $value): Result
     {
         return (new Result())->addError($message, [

@@ -22,8 +22,6 @@ use function strlen;
 /**
  * Checks if the value is a valid IPv4/IPv6 address or subnet.
  *
- * It also may change the value if normalization of IPv6 expansion is enabled.
- *
  * @psalm-import-type WhenType from WhenInterface
  *
  * @see IpHandler
@@ -169,9 +167,11 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
-     * {@see SkipOnErrorInterface}.
+     * See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
      * @psalm-param WhenType $when
+     *
+     * @throws InvalidArgumentException If configuration is wrong.
      */
     public function __construct(
         private array $networks = [],
