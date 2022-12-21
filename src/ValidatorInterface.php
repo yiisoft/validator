@@ -22,7 +22,7 @@ interface ValidatorInterface
      * @param DataSetInterface|RulesProviderInterface|mixed $data Data to validate:
      *
      * - A data set ({@see DataSetInterface}) is used as is.
-     * - Implemeting {@see RulesProviderInterface} additionally can be used for providing rules via
+     * - Implementing {@see RulesProviderInterface} additionally can be used for providing rules via
      * {@see RulesProviderInterface::getRules()} (works only when `$rules` argument is not provided and ignored
      * otherwise).
      * - Any other value is normalized to data set using {@see DataSetNormalizer}.
