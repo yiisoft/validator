@@ -18,9 +18,9 @@ use Yiisoft\Validator\WhenInterface;
 use function function_exists;
 
 /**
- * Validates that the value is a valid HTTP or HTTPS URL.
+ * Defines validation rules for a value that is a valid HTTP or HTTPS URL.
  *
- * Note that this rule only checks if the URL scheme and host parts are correct.
+ * Note that the handler only checks if the URL scheme and host parts are correct.
  * It does not check the remaining parts of a URL.
  *
  * @psalm-import-type WhenType from WhenInterface
@@ -64,6 +64,8 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
      * @psalm-param WhenType $when
+     *
+     * @throws RuntimeException If intl extension is not enabled and {@see $enableIdn} is true.
      */
     public function __construct(
         private string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
@@ -71,7 +73,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         private bool $enableIdn = false,
         private string $incorrectInputMessage = 'The value must have a string type.',
         private string $message = 'This value is not a valid URL.',
-        private $skipOnEmpty = null,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
