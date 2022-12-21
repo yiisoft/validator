@@ -263,7 +263,7 @@ final class ValidationContext
     private function requireValidator(): void
     {
         if ($this->validator === null) {
-            throw new RuntimeException('Validator in validation context is not set.');
+            throw new RuntimeException('Validator is not set in validation context.');
         }
     }
 }
