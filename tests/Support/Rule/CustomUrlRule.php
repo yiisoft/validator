@@ -14,7 +14,7 @@ final class CustomUrlRule extends Composite
     public function getRules(): iterable
     {
         yield new Required();
-        yield new Url(enableIDN: true);
+        yield new Url(enableIdn: true);
         yield new HasLength(max: 20);
     }
 
