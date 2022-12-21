@@ -45,7 +45,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
      * are considered to be valid schemes.
      * @param bool $enableIdn Whether the validation process must take
      * {@link https://en.wikipedia.org/wiki/Internationalized_domain_name IDN (internationalized domain names)}
-     * into account . Defaults to `false` means that validation of URLs containing IDN will always
+     * into account . Defaults to `false` meaning that validation of URLs containing IDN will always
      * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
      * extension, otherwise an exception will be thrown.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
