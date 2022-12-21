@@ -116,7 +116,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
      * {@link https://en.wikipedia.org/wiki/Internationalized_domain_name IDN (internationalized domain names)}
      * into account. `false` means that validation of URLs containing IDN will always
      * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
-     * extension, otherwise an exception will be thrown.     *
+     * extension, otherwise an exception will be thrown.
      *
      * @return bool Whether to enable IDN validation.
      *
