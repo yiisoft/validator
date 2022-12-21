@@ -105,7 +105,7 @@ final class ValidationContext
      *
      * @psalm-param RulesType $rules
      *
-     * @throws RuntimeException If validator and raw data are not set in validation context.
+     * @throws RuntimeException If validator is not set in validation context.
      *
      * @return Result Validation result.
      */
@@ -127,7 +127,7 @@ final class ValidationContext
     /**
      * Get the raw validated data.
      *
-     * @throws RuntimeException If validator and raw data are not set in validation context.
+     * @throws RuntimeException If validator is not set in validation context.
      *
      * @return mixed The raw validated data.
      */
@@ -254,11 +254,11 @@ final class ValidationContext
     }
 
     /**
-     * Ensure that validator and raw data are set in validation context.
+     * Ensure that validator is set in validation context.
      *
      * @psalm-assert ValidatorInterface $this->validator
      *
-     * @throws RuntimeException If validator and raw data are not set in validation context.
+     * @throws RuntimeException If validator is not set in validation context.
      */
     private function requireValidator(): void
     {
