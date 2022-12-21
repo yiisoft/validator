@@ -91,6 +91,7 @@ final class IpHandler implements RuleHandlerInterface
      * @param bool $negation If negation is used.
      * @param string $value Value validated.
      * @param ValidationContext $context Validation context.
+     *
      * @return Result|null Validation result.
      */
     private static function validateValueParts(
@@ -122,6 +123,7 @@ final class IpHandler implements RuleHandlerInterface
      * @param int $ipVersion Version of the IP protocol.
      * @param string $value Value validated.
      * @param ValidationContext $context Validation context.
+     *
      * @return Result|null Validation result.
      */
     private static function validateVersion(
@@ -149,6 +151,7 @@ final class IpHandler implements RuleHandlerInterface
      * @param string $ipCidr IP CIDR.
      * @param string $value Value validated.
      * @param ValidationContext $context Validation context.
+     *
      * @return Result|null Validation result.
      */
     private static function validateCidr(
@@ -179,6 +182,7 @@ final class IpHandler implements RuleHandlerInterface
      * @param string $message Error message.
      * @param ValidationContext $context  Validation context.
      * @param string $value Value validated.
+     *
      * @return Result Validation result.
      */
     private static function getGenericErrorResult(string $message, ValidationContext $context, string $value): Result
