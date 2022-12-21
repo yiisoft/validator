@@ -12,6 +12,9 @@ use Yiisoft\Validator\AttributeTranslatorInterface;
  */
 final class TranslatorAttributeTranslator implements AttributeTranslatorInterface
 {
+    /**
+     * @param TranslatorInterface $translator Translator to use.
+     */
     public function __construct(
         private TranslatorInterface $translator,
     ) {
