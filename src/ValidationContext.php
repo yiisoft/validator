@@ -105,13 +105,13 @@ final class ValidationContext
      *
      * @psalm-param RulesType $rules
      *
-     * @throws RuntimeException If validator and raw data are not set in validation context.
+     * @throws RuntimeException If validator is not set in validation context.
      *
      * @return Result Validation result.
      */
     public function validate(mixed $data, callable|iterable|object|string|null $rules = null): Result
     {
-        $this->checkValidatorAndRawData();
+        $this->requireValidator();
 
         $currentDataSet = $this->dataSet;
         $currentAttribute = $this->attribute;
@@ -127,13 +127,13 @@ final class ValidationContext
     /**
      * Get the raw validated data.
      *
-     * @throws RuntimeException If validator and raw data are not set in validation context.
+     * @throws RuntimeException If validator is not set in validation context.
      *
      * @return mixed The raw validated data.
      */
     public function getRawData(): mixed
     {
-        $this->checkValidatorAndRawData();
+        $this->requireValidator();
         return $this->rawData;
     }
 
@@ -250,20 +250,20 @@ final class ValidationContext
      */
     public function isAttributeMissing(): bool
     {
-        return $this->attribute !== null && $this->dataSet !== null && !$this->dataSet->hasAttribute($this->attribute);
+        return $this->attribute !== null && !$this->getDataSet()->hasAttribute($this->attribute);
     }
 
     /**
-     * Ensure that validator and raw data are set in validation context.
+     * Ensure that validator is set in validation context.
      *
      * @psalm-assert ValidatorInterface $this->validator
      *
-     * @throws RuntimeException If validator and raw data are not set in validation context.
+     * @throws RuntimeException If validator is not set in validation context.
      */
-    private function checkValidatorAndRawData(): void
+    private function requireValidator(): void
     {
         if ($this->validator === null) {
-            throw new RuntimeException('Validator and raw data are not set in validation context.');
+            throw new RuntimeException('Validator is not set in validation context.');
         }
     }
 }
