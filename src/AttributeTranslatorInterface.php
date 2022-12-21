@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 /**
- * An interface for translations of attributes names.
+ * Allows translating attribute names.
  */
 interface AttributeTranslatorInterface
 {
     /**
+     * Translate attribute name.
+     *
      * @param string $attribute The attribute name.
      *
      * @return string Translated attribute name.
