@@ -18,7 +18,7 @@ use Yiisoft\Validator\WhenInterface;
 use function function_exists;
 
 /**
- * Defines validation rules for a value that is a valid HTTP or HTTPS URL.
+ * Defines validation options for a value that is a valid HTTP or HTTPS URL.
  *
  * Note that the handler only checks if the URL scheme and host parts are correct.
  * It does not check the remaining parts of a URL.
