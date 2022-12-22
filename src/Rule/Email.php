@@ -18,7 +18,9 @@ use Yiisoft\Validator\WhenInterface;
 use function function_exists;
 
 /**
- * Validates that the value is a valid email address.
+ * Defines validation options to check that the value is a valid email address.
+ *
+ * @see EmailHandler
  *
  * @psalm-import-type WhenType from WhenInterface
  */
@@ -59,6 +61,9 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
      * @psalm-param WhenType $when
+     *
+     * @throws RuntimeException If there was an attempt to enable IDN ({@see $enableIdn}), but "intl" PHP extension is
+     * not installed or not enabled.
      */
     public function __construct(
         private string $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/',
