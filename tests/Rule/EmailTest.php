@@ -35,8 +35,8 @@ final class EmailTest extends RuleTestCase
                     'fullPattern' => '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/',
                     'idnEmailPattern' => '/^([a-zA-Z0-9._%+-]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|\d{1,3})(\]?)$/',
                     'allowName' => false,
-                    'checkDNS' => false,
-                    'enableIDN' => false,
+                    'checkDns' => false,
+                    'enableIdn' => false,
                     'incorrectInputMessage' => [
                         'template' => 'The value must have a string type.',
                         'parameters' => [],
@@ -56,8 +56,8 @@ final class EmailTest extends RuleTestCase
                     'fullPattern' => '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/',
                     'idnEmailPattern' => '/^([a-zA-Z0-9._%+-]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|\d{1,3})(\]?)$/',
                     'allowName' => true,
-                    'checkDNS' => false,
-                    'enableIDN' => false,
+                    'checkDns' => false,
+                    'enableIdn' => false,
                     'incorrectInputMessage' => [
                         'template' => 'The value must have a string type.',
                         'parameters' => [],
@@ -71,14 +71,14 @@ final class EmailTest extends RuleTestCase
                 ],
             ],
             [
-                new Email(allowName: true, checkDNS: true),
+                new Email(allowName: true, checkDns: true),
                 [
                     'pattern' => '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/',
                     'fullPattern' => '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/',
                     'idnEmailPattern' => '/^([a-zA-Z0-9._%+-]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|\d{1,3})(\]?)$/',
                     'allowName' => true,
-                    'checkDNS' => true,
-                    'enableIDN' => false,
+                    'checkDns' => true,
+                    'enableIdn' => false,
                     'incorrectInputMessage' => [
                         'template' => 'The value must have a string type.',
                         'parameters' => [],
@@ -92,14 +92,14 @@ final class EmailTest extends RuleTestCase
                 ],
             ],
             [
-                new Email(allowName: true, enableIDN: true),
+                new Email(allowName: true, enableIdn: true),
                 [
                     'pattern' => '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/',
                     'fullPattern' => '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/',
                     'idnEmailPattern' => '/^([a-zA-Z0-9._%+-]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|\d{1,3})(\]?)$/',
                     'allowName' => true,
-                    'checkDNS' => false,
-                    'enableIDN' => true,
+                    'checkDns' => false,
+                    'enableIdn' => true,
                     'incorrectInputMessage' => [
                         'template' => 'The value must have a string type.',
                         'parameters' => [],
@@ -119,8 +119,8 @@ final class EmailTest extends RuleTestCase
     {
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
-        $ruleEnabledIDN = new Email(enableIDN: true);
-        $ruleEnabledIDNandAllowedName = new Email(allowName: true, enableIDN: true);
+        $ruleEnabledIdn = new Email(enableIdn: true);
+        $ruleEnabledIdnAndAllowedName = new Email(allowName: true, enableIdn: true);
 
         return [
             ['developer@yiiframework.com', [$rule]],
@@ -148,37 +148,37 @@ final class EmailTest extends RuleTestCase
                 [$ruleAllowedName],
             ],
 
-            ['5011@example.com', [$ruleEnabledIDN]],
-            ['test-@dummy.com', [$ruleEnabledIDN]],
-            ['example@äüößìà.de', [$ruleEnabledIDN]],
-            ['example@xn--zcack7ayc9a.de', [$ruleEnabledIDN]],
-            ['info@örtliches.de', [$ruleEnabledIDN]],
-            ['sam@рмкреатиф.ru', [$ruleEnabledIDN]],
-            ['sam@rmcreative.ru', [$ruleEnabledIDN]],
-            ['5011@gmail.com', [$ruleEnabledIDN]],
-            ['üñîçøðé@üñîçøðé.com', [$ruleEnabledIDN]],
+            ['5011@example.com', [$ruleEnabledIdn]],
+            ['test-@dummy.com', [$ruleEnabledIdn]],
+            ['example@äüößìà.de', [$ruleEnabledIdn]],
+            ['example@xn--zcack7ayc9a.de', [$ruleEnabledIdn]],
+            ['info@örtliches.de', [$ruleEnabledIdn]],
+            ['sam@рмкреатиф.ru', [$ruleEnabledIdn]],
+            ['sam@rmcreative.ru', [$ruleEnabledIdn]],
+            ['5011@gmail.com', [$ruleEnabledIdn]],
+            ['üñîçøðé@üñîçøðé.com', [$ruleEnabledIdn]],
 
-            ['info@örtliches.de', [$ruleEnabledIDNandAllowedName]],
-            ['Information <info@örtliches.de>', [$ruleEnabledIDNandAllowedName]],
-            ['sam@рмкреатиф.ru', [$ruleEnabledIDNandAllowedName]],
-            ['sam@rmcreative.ru', [$ruleEnabledIDNandAllowedName]],
-            ['5011@gmail.com', [$ruleEnabledIDNandAllowedName]],
-            ['Carsten Brandt <mail@cebe.cc>', [$ruleEnabledIDNandAllowedName]],
-            ['"Carsten Brandt" <mail@cebe.cc>', [$ruleEnabledIDNandAllowedName]],
-            ['üñîçøðé 日本国 <üñîçøðé@üñîçøðé.com>', [$ruleEnabledIDNandAllowedName]],
-            ['<mail@cebe.cc>', [$ruleEnabledIDNandAllowedName]],
-            ['test@example.com', [$ruleEnabledIDNandAllowedName]],
-            ['John Smith <john.smith@example.com>', [$ruleEnabledIDNandAllowedName]],
+            ['info@örtliches.de', [$ruleEnabledIdnAndAllowedName]],
+            ['Information <info@örtliches.de>', [$ruleEnabledIdnAndAllowedName]],
+            ['sam@рмкреатиф.ru', [$ruleEnabledIdnAndAllowedName]],
+            ['sam@rmcreative.ru', [$ruleEnabledIdnAndAllowedName]],
+            ['5011@gmail.com', [$ruleEnabledIdnAndAllowedName]],
+            ['Carsten Brandt <mail@cebe.cc>', [$ruleEnabledIdnAndAllowedName]],
+            ['"Carsten Brandt" <mail@cebe.cc>', [$ruleEnabledIdnAndAllowedName]],
+            ['üñîçøðé 日本国 <üñîçøðé@üñîçøðé.com>', [$ruleEnabledIdnAndAllowedName]],
+            ['<mail@cebe.cc>', [$ruleEnabledIdnAndAllowedName]],
+            ['test@example.com', [$ruleEnabledIdnAndAllowedName]],
+            ['John Smith <john.smith@example.com>', [$ruleEnabledIdnAndAllowedName]],
             [
                 '"Такое имя достаточно длинное, но оно все равно может пройти валидацию" <shortmail@example.com>',
-                [$ruleEnabledIDNandAllowedName],
+                [$ruleEnabledIdnAndAllowedName],
             ],
 
-            ['5011@gmail.com', [new Email(checkDNS: true)]],
+            ['5011@gmail.com', [new Email(checkDns: true)]],
 
-            ['ipetrov@gmail.com', [new Email(allowName: true, checkDNS: true)]],
-            ['Ivan Petrov <ipetrov@gmail.com>', [new Email(allowName: true, checkDNS: true)]],
-            ['name@ñandu.cl', [new Email(checkDNS: true, enableIDN: true)]],
+            ['ipetrov@gmail.com', [new Email(allowName: true, checkDns: true)]],
+            ['Ivan Petrov <ipetrov@gmail.com>', [new Email(allowName: true, checkDns: true)]],
+            ['name@ñandu.cl', [new Email(checkDns: true, enableIdn: true)]],
         ];
     }
 
@@ -186,8 +186,8 @@ final class EmailTest extends RuleTestCase
     {
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
-        $ruleEnabledIDN = new Email(enableIDN: true);
-        $ruleEnabledIDNandAllowedName = new Email(allowName: true, enableIDN: true);
+        $ruleEnabledIdn = new Email(enableIdn: true);
+        $ruleEnabledIdnAndAllowedName = new Email(allowName: true, enableIdn: true);
         $errors = ['' => ['This value is not a valid email address.']];
         $incorrectInputErrors = ['' => ['The value must have a string type.']];
 
@@ -271,48 +271,48 @@ final class EmailTest extends RuleTestCase
                 $errors,
             ],
 
-            ['rmcreative.ru', [$ruleEnabledIDN], $errors],
-            ['Carsten Brandt <mail@cebe.cc>', [$ruleEnabledIDN], $errors],
-            ['"Carsten Brandt" <mail@cebe.cc>', [$ruleEnabledIDN], $errors],
-            ['<mail@cebe.cc>', [$ruleEnabledIDN], $errors],
+            ['rmcreative.ru', [$ruleEnabledIdn], $errors],
+            ['Carsten Brandt <mail@cebe.cc>', [$ruleEnabledIdn], $errors],
+            ['"Carsten Brandt" <mail@cebe.cc>', [$ruleEnabledIdn], $errors],
+            ['<mail@cebe.cc>', [$ruleEnabledIdn], $errors],
 
             [
                 'Короткое имя <тест@это-доменное-имя.после-преобразования-в-idn.будет-содержать-больше-254-символов.' .
                 'бла-бла-бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-бла.бла-бла-бла-бла-бла-' .
                 'бла.com>',
-                [$ruleEnabledIDNandAllowedName],
+                [$ruleEnabledIdnAndAllowedName],
                 $errors,
             ],
-            ['Information info@örtliches.de', [$ruleEnabledIDNandAllowedName], $errors],
-            ['rmcreative.ru', [$ruleEnabledIDNandAllowedName], $errors],
-            ['John Smith <example.com>', [$ruleEnabledIDNandAllowedName], $errors],
+            ['Information info@örtliches.de', [$ruleEnabledIdnAndAllowedName], $errors],
+            ['rmcreative.ru', [$ruleEnabledIdnAndAllowedName], $errors],
+            ['John Smith <example.com>', [$ruleEnabledIdnAndAllowedName], $errors],
             [
                 'Короткое имя <после-преобразования-в-idn-тут-будет-больше-чем-64-символа@пример.com>',
-                [$ruleEnabledIDNandAllowedName],
+                [$ruleEnabledIdnAndAllowedName],
                 $errors,
             ],
 
-            ['name@ñandu.cl', [new Email(checkDNS: true)], $errors],
-            ['gmail.con', [new Email(checkDNS: true)], $errors],
+            ['name@ñandu.cl', [new Email(checkDns: true)], $errors],
+            ['gmail.con', [new Email(checkDns: true)], $errors],
             [
                 'test@nonexistingsubdomain.example.com',
-                [new Email(checkDNS: true)],
+                [new Email(checkDns: true)],
                 $errors,
             ],
 
             'custom message' => [
                 'test@nonexistingsubdomain.example.com',
-                [new Email(checkDNS: true, message: 'Custom message.')],
+                [new Email(checkDns: true, message: 'Custom message.')],
                 ['' => ['Custom message.']],
             ],
             'custom message with parameters' => [
                 'test@nonexistingsubdomain.example.com',
-                [new Email(checkDNS: true, message: 'Attribute - {attribute}, value - {value}.')],
+                [new Email(checkDns: true, message: 'Attribute - {attribute}, value - {value}.')],
                 ['' => ['Attribute - , value - test@nonexistingsubdomain.example.com.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => 'test@nonexistingsubdomain.example.com'],
-                ['data' => new Email(checkDNS: true, message: 'Attribute - {attribute}, value - {value}.')],
+                ['data' => new Email(checkDns: true, message: 'Attribute - {attribute}, value - {value}.')],
                 ['data' => ['Attribute - data, value - test@nonexistingsubdomain.example.com.']],
             ],
         ];

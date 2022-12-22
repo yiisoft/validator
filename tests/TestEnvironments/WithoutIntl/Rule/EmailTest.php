@@ -13,6 +13,6 @@ final class EmailTest extends TestCase
     public function testEnableIdnWithMissingIntlExtension(): void
     {
         $this->expectException(RuntimeException::class);
-        new Email(enableIDN: true);
+        new Email(enableIdn: true);
     }
 }
