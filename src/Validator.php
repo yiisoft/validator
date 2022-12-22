@@ -34,7 +34,7 @@ final class Validator implements ValidatorInterface
     public const DEFAULT_TRANSLATION_CATEGORY = 'yii-validator';
     /**
      * @const A name of parameter used in {@see ValidationContext} indicating that previous rule in the set caused
-     * validation error. Used with {@see SkipOnErrorInterface} to allow skipping of the current rule if it's
+     * validation error. Used with {@see SkipOnErrorInterface} to allow skipping of the current rule if its
      * configuration allows it.
      */
     private const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';

@@ -176,6 +176,15 @@ final class BooleanTest extends RuleTestCase
                 ],
                 ['data' => ['Attribute - data, true - 1, false - 0, value - 5.']],
             ],
+            'custom scalar message, null' => [
+                null,
+                [
+                    new Boolean(
+                        scalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
+                    ),
+                ],
+                ['' => ['Attribute - , true - 1, false - 0, value - null.']],
+            ],
             'custom non-scalar message' => [
                 [],
                 [new Boolean(nonScalarMessage: 'Custom error.')],

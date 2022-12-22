@@ -10,7 +10,7 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Checks if the value is a boolean value or a value corresponding to it.
+ * A handler for {@see Boolean} rule.
  */
 final class BooleanHandler implements RuleHandlerInterface
 {
@@ -38,8 +38,8 @@ final class BooleanHandler implements RuleHandlerInterface
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
             'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
         ];
-        if (is_scalar($value)) {
-            $parameters['value'] = $value;
+        if ($value === null || is_scalar($value)) {
+            $parameters['value'] = $value ?? 'null';
 
             return $result->addError($rule->getScalarMessage(), $parameters);
         }

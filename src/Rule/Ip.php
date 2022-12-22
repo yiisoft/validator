@@ -91,55 +91,55 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the label of the attribute being validated.
-     * - `{type}`: the type of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
      * @param string $message Error message used when validation fails due to the wrong IP address format.
      *
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the label of the attribute being validated.
-     * - `{value}`: the value of the attribute being validated.
+     * - `{value}`: the value being validated.
      * @param string $ipv4NotAllowedMessage Error message used when validation fails due to the disabled IPv4
      * validation when {@see $allowIpv4} is set.
      *
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the label of the attribute being validated.
-     * - `{value}`: the value of the attribute being validated.
+     * - `{value}`: the value being validated.
      * @param string $ipv6NotAllowedMessage Error message used when validation fails due to the disabled IPv6
      * validation when {@see $allowIpv6} is set.
      *
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the label of the attribute being validated.
-     * - `{value}`: the value of the attribute being validated.
+     * - `{value}`: the value being validated.
      * @param string $wrongCidrMessage string Error message used when validation fails due to the wrong CIDR when
      * {@see $allowSubnet} is set.
      *
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the label of the attribute being validated.
-     * - `{value}`: the value of the attribute being validated.
+     * - `{value}`: the value being validated.
      * @param string $noSubnetMessage Error message used when validation fails due to {@see $allowSubnet} is used, but
      * the CIDR prefix is not set.
      *
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the label of the attribute being validated.
-     * - `{value}`: the value of the attribute being validated.
+     * - `{value}`: the value being validated.
      * @param string $hasSubnetMessage Error message used when validation fails due to {@see $allowSubnet} is false, but
      * CIDR prefix is present.
      *
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the label of the attribute being validated.
-     * - `{value}`: the value of the attribute being validated.
+     * - `{value}`: the value being validated.
      * @param string $notInRangeMessage Error message used when validation fails due to IP address is not allowed by
      * {@see $ranges} check.
      *
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the label of the attribute being validated.
-     * - `{value}`: the value of the attribute being validated.
+     * - `{value}`: the value being validated.
      * @param string[] $ranges The IPv4 or IPv6 ranges that are allowed or forbidden.
      *
      * The following preparation tasks are performed:
@@ -147,7 +147,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      * - Recursively substitute aliases (described in {@see $networks}) with their values.
      * - Remove duplicates.
      *
-     * When the array is empty, or the option not set, all IP addresses are allowed.
+     * When the array is empty or the option not set, all IP addresses are allowed.
      *
      * Otherwise, the rules are checked sequentially until the first match is found. An IP address is forbidden,
      * when it has not matched any of the rules.
@@ -164,10 +164,10 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      *
      * In this example, access is allowed for all the IPv4 and IPv6 addresses excluding the `192.168.10.0/24`
      * subnet. IPv4 address `192.168.10.128` is also allowed, because it is listed before the restriction.
-     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty / not passed.
      * See {@see SkipOnEmptyInterface}.
-     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
-     * See {@see SkipOnErrorInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See
+     * {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
      * @psalm-param WhenType $when
      *
