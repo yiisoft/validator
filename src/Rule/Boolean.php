@@ -55,7 +55,6 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
      * - https://www.php.net/manual/en/language.types.type-juggling.php
      *
      * Defaults to `false` meaning non-strict mode is used.
-     *
      * @param string $messageWithType Error message used when validation fails and neither non-scalar value (int,
      * float, string, bool) nor null was provided as input. The type is used instead of value here for more predictable
      * formatting.
