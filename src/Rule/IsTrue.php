@@ -28,26 +28,18 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     use SkipOnErrorTrait;
     use WhenTrait;
 
-    public function __construct(
-        /**
-         * @var scalar the value representing "true" status. Defaults to `1`.
-         */
-        private int|float|string|bool $trueValue = '1',
-        /**
-         * @var bool whether the comparison to {@see $trueValue} is strict. When this is "true", the value and type must
-         * both match {@see $trueValue}. Defaults to "false", meaning only the value needs to be matched.
-         */
-        private bool $strict = false,
-        private string $message = 'The value must be "{true}".',
+    /**
+     * @const Default message used for all cases.
+     */
+    private const DEFAULT_MESSAGE = 'The value must be "{true}".';
 
-        /**
-         * @var bool|callable|null
-         */
-        private $skipOnEmpty = null,
+    public function __construct(
+        private int|float|string|bool $trueValue = '1',
+        private bool $strict = false,
+        private string $messageWithType = self::DEFAULT_MESSAGE,
+        private string $messageWithValue = self::DEFAULT_MESSAGE,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
-        /**
-         * @var WhenType
-         */
         private Closure|null $when = null,
     ) {
     }
@@ -67,21 +59,42 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
         return $this->strict;
     }
 
-    public function getMessage(): string
+    /**
+     * A getter for {@see $messageWithType}.
+     *
+     * @return string Error message.
+     */
+    public function getMessageWithType(): string
     {
-        return $this->message;
+        return $this->messageWithType;
+    }
+
+    /**
+     * A getter for {@see $messageWithValue}.
+     *
+     * @return string Error message.
+     */
+    public function getMessageWithValue(): string
+    {
+        return $this->messageWithValue;
     }
 
     public function getOptions(): array
     {
+        $messageParameters = [
+            'true' => $this->trueValue === true ? 'true' : $this->trueValue,
+        ];
+
         return [
             'trueValue' => $this->trueValue,
             'strict' => $this->strict,
-            'message' => [
-                'template' => $this->message,
-                'parameters' => [
-                    'true' => $this->trueValue === true ? 'true' : $this->trueValue,
-                ],
+            'messageWithType' => [
+                'template' => $this->messageWithType,
+                'parameters' => $messageParameters,
+            ],
+            'messageWithValue' => [
+                'template' => $this->messageWithValue,
+                'parameters' => $messageParameters,
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
