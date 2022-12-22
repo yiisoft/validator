@@ -8,15 +8,15 @@ use Yiisoft\Validator\Helper\DataSetNormalizer;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 
 /**
- * An interface allowing to validate the data using the set of rules ({@see RuleInterface}) and validation context
- * ({@see ValidationContext}). A class implementing it called "validator".
+ * An interface allowing to validate the data according to the set of rules ({@see RuleInterface}) and validation
+ * context ({@see ValidationContext}). A class implementing it is called "validator".
  *
  * @psalm-type RulesType = null|class-string|object|callable|iterable<RuleInterface|RuleInterface[]|callable|callable[]>
  */
 interface ValidatorInterface
 {
     /**
-     * Validates the data using the set of rules ({@see RuleInterface}) and validation context
+     * Validates the data according to the set of rules ({@see RuleInterface}) and validation context
      * ({@see ValidationContext}).
      *
      * @param DataSetInterface|mixed|RulesProviderInterface $data Data to validate:
@@ -26,9 +26,9 @@ interface ValidatorInterface
      * {@see RulesProviderInterface::getRules()} (works only when `$rules` argument is not provided and ignored
      * otherwise).
      * - Any other value is normalized to data set using {@see DataSetNormalizer}.
-     * @param callable|iterable|object|string|null $rules Rules to apply for validating data. If specified, have higher
-     * priority over {@see RulesProviderInterface::getRules()} provided in `$data` argument. A variety of types are
-     * supported, they are normalized with {@see RulesNormalizer} before using.
+     * @param callable|iterable|object|string|null $rules Rules to apply for validating data. If specified, this
+     * argument has higher priority over {@see RulesProviderInterface::getRules()} provided in `$data` argument. A
+     * variety of types is supported. They are normalized with {@see RulesNormalizer} before usage.
      * @param ValidationContext|null $context Validation context that may be taken into account when performing
      * validation.
      *
