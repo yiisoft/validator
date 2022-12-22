@@ -13,6 +13,6 @@ final class UrlTest extends TestCase
     public function testEnableIdnWithMissingIntlExtension(): void
     {
         $this->expectException(RuntimeException::class);
-        new Url(enableIDN: true);
+        new Url(enableIdn: true);
     }
 }
