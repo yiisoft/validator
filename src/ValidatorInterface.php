@@ -33,13 +33,14 @@ interface ValidatorInterface
      * argument has higher priority over {@see RulesProviderInterface::getRules()} provided in `$data` argument. A
      * variety of types is supported. They are normalized before usage, please refer to {@see RulesNormalizer}
      * documentation to see what structures can be passed.
+     *
      * @param ValidationContext|null $context Validation context that may be taken into account when performing
      * validation.
      *
-     * @return Result The result of validation.
-     *
      * @throws ReflectionException If an object / {@see ObjectDataSet} providing rules or (and) data used in `$data`
      * argument and there was a {@see Reflection} error during parsing them.
+     *
+     * @return Result The result of validation.
      */
     public function validate(
         mixed $data,
