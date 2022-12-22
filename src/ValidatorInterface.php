@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Reflection;
+use ReflectionException;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 
@@ -27,12 +29,17 @@ interface ValidatorInterface
      * otherwise).
      * - Any other value is normalized to data set using {@see DataSetNormalizer}.
      * @param callable|iterable|object|string|null $rules Rules to apply for validating data. If specified, this
+     * @psalm-param RulesType $rules
      * argument has higher priority over {@see RulesProviderInterface::getRules()} provided in `$data` argument. A
-     * variety of types is supported. They are normalized with {@see RulesNormalizer} before usage.
+     * variety of types is supported. They are normalized before usage, please refer to {@see RulesNormalizer}
+     * documentation to see what structures can be passed.
      * @param ValidationContext|null $context Validation context that may be taken into account when performing
      * validation.
      *
-     * @psalm-param RulesType $rules
+     * @return Result The result of validation.
+     *
+     * @throws ReflectionException If an object / {@see ObjectDataSet} providing rules or (and) data used in `$data`
+     * argument and there was a {@see Reflection} error during parsing them.
      */
     public function validate(
         mixed $data,
