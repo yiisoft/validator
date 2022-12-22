@@ -34,6 +34,11 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
     use WhenTrait;
 
     /**
+     * @const Default message used for all cases.
+     */
+    private const DEFAULT_MESSAGE = 'Value must be either "{true}" or "{false}".';
+
+    /**
      * @param scalar $trueValue The value that is considered to be "true". Only scalar values (either int, float, string
      * or bool) are allowed. Defaults to `1` string.
      * @param scalar $falseValue The value that is considered to be "false". Only scalar values (either int, float,
@@ -51,8 +56,9 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
      *
      * Defaults to `false` meaning non-strict mode is used.
      *
-     * @param string $nonScalarMessage Error message used when validation fails and non-scalar value (neither int,
-     * float, string nor bool) was provided as input.
+     * @param string $messageWithType Error message used when validation fails and neither non-scalar value (int,
+     * float, string, bool) nor null was provided as input. The type is used instead of value here for more predictable
+     * formatting.
      *
      * You may use the following placeholders in the message:
      *
@@ -60,8 +66,8 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
      * - `{true}` - the value set in {@see $trueValue} option.
      * - `{false}` - the value set in {@see $falseValue} option.
      * - `{type}`: the type of the value being validated.
-     * @param string $scalarMessage Error message used when validation fails and scalar value (either int, float, string
-     * or bool) was provided as input.
+     * @param string $messageWithValue Error message used when validation fails and either scalar value (int, float,
+     * string, bool) or null was provided as input.
      *
      * You may use the following placeholders in the message:
      *
@@ -80,8 +86,8 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
         private int|float|string|bool $trueValue = '1',
         private int|float|string|bool $falseValue = '0',
         private bool $strict = false,
-        private string $nonScalarMessage = 'Value must be either "{true}" or "{false}".',
-        private string $scalarMessage = 'Value must be either "{true}" or "{false}".',
+        private string $messageWithType = self::DEFAULT_MESSAGE,
+        private string $messageWithValue = self::DEFAULT_MESSAGE,
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
@@ -124,23 +130,23 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
     }
 
     /**
-     * A getter for {@see $nonScalarMessage}.
+     * A getter for {@see $messageWithType}.
      *
      * @return string Error message.
      */
-    public function getNonScalarMessage(): string
+    public function getMessageWithType(): string
     {
-        return $this->nonScalarMessage;
+        return $this->messageWithType;
     }
 
     /**
-     * A getter for {@see $scalarMessage}.
+     * A getter for {@see $messageWithValue}.
      *
      * @return string Error message.
      */
-    public function getScalarMessage(): string
+    public function getMessageWithValue(): string
     {
-        return $this->scalarMessage;
+        return $this->messageWithValue;
     }
 
     public function getOptions(): array
@@ -154,12 +160,12 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
             'trueValue' => $this->trueValue,
             'falseValue' => $this->falseValue,
             'strict' => $this->strict,
-            'nonScalarMessage' => [
-                'template' => $this->nonScalarMessage,
+            'messageWithType' => [
+                'template' => $this->messageWithType,
                 'parameters' => $messageParameters,
             ],
-            'scalarMessage' => [
-                'template' => $this->scalarMessage,
+            'messageWithValue' => [
+                'template' => $this->messageWithValue,
                 'parameters' => $messageParameters,
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),

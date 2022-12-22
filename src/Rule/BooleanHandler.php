@@ -41,11 +41,11 @@ final class BooleanHandler implements RuleHandlerInterface
         if ($value === null || is_scalar($value)) {
             $parameters['value'] = $value ?? 'null';
 
-            return $result->addError($rule->getScalarMessage(), $parameters);
+            return $result->addError($rule->getMessageWithValue(), $parameters);
         }
 
         $parameters['type'] = get_debug_type($value);
 
-        return $result->addError($rule->getNonScalarMessage(), $parameters);
+        return $result->addError($rule->getMessageWithType(), $parameters);
     }
 }
