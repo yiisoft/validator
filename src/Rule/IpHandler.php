@@ -16,17 +16,17 @@ use function is_string;
 /**
  * Checks if the value is a valid IPv4/IPv6 address or subnet.
  *
- * It also may change the value if normalization of IPv6 expansion is enabled.
+ * @see Ip
  */
 final class IpHandler implements RuleHandlerInterface
 {
     /**
-     * Negation char.
+     * Negation character.
      *
-     * Used to negate {@see $ranges} or {@see $network} or to negate validating value when {@see $allowNegation}
+     * Used to negate {@see $ranges} or {@see $network} or to negate value validated when {@see $allowNegation}
      * is used.
      */
-    private const NEGATION_CHAR = '!';
+    private const NEGATION_CHARACTER = '!';
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
@@ -68,23 +68,32 @@ final class IpHandler implements RuleHandlerInterface
         }
 
         $result = self::validateCidr($rule, $cidr, $ipCidr, $value, $context);
-        if ($result !== null) {
-            return $result;
-        }
-
-        return new Result();
+        return $result ?? new Result();
     }
 
     /**
      * Used to get the Regexp pattern for initial IP address parsing.
+     *
+     * @return string Regular expression pattern.
      */
     private static function getIpParsePattern(): string
     {
         return '/^(?<not>' .
-            self::NEGATION_CHAR .
+            self::NEGATION_CHARACTER .
             ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
+    /**
+     * Validates value parts.
+     *
+     * @param Ip $rule Instance of the rule.
+     * @param string|null $cidr CIDR for subnet check.
+     * @param bool $negation If negation is used.
+     * @param string $value Value validated.
+     * @param ValidationContext $context Validation context.
+     *
+     * @return Result|null Validation result.
+     */
     private static function validateValueParts(
         Ip $rule,
         ?string $cidr,
@@ -92,38 +101,59 @@ final class IpHandler implements RuleHandlerInterface
         string $value,
         ValidationContext $context
     ): Result|null {
-        if ($cidr === null && $rule->isRequireSubnet()) {
+        if ($cidr === null && $rule->isSubnetRequired()) {
             return self::getGenericErrorResult($rule->getNoSubnetMessage(), $context, $value);
         }
 
-        if ($cidr !== null && !$rule->isAllowSubnet()) {
+        if ($cidr !== null && !$rule->isSubnetAllowed()) {
             return self::getGenericErrorResult($rule->getHasSubnetMessage(), $context, $value);
         }
 
-        if ($negation && !$rule->isAllowNegation()) {
+        if ($negation && !$rule->isNegationAllowed()) {
             return self::getGenericErrorResult($rule->getMessage(), $context, $value);
         }
 
         return null;
     }
 
+    /**
+     * Validate that IP protocol version is within enabled ones.
+     *
+     * @param Ip $rule Instance of the rule.
+     * @param int $ipVersion Version of the IP protocol.
+     * @param string $value Value validated.
+     * @param ValidationContext $context Validation context.
+     *
+     * @return Result|null Validation result.
+     */
     private static function validateVersion(
         Ip $rule,
         int $ipVersion,
         string $value,
         ValidationContext $context
     ): Result|null {
-        if ($ipVersion === IpHelper::IPV6 && !$rule->isAllowIpv6()) {
+        if ($ipVersion === IpHelper::IPV6 && !$rule->isIpv6Allowed()) {
             return self::getGenericErrorResult($rule->getIpv6NotAllowedMessage(), $context, $value);
         }
 
-        if ($ipVersion === IpHelper::IPV4 && !$rule->isAllowIpv4()) {
+        if ($ipVersion === IpHelper::IPV4 && !$rule->isIpv4Allowed()) {
             return self::getGenericErrorResult($rule->getIpv4NotAllowedMessage(), $context, $value);
         }
 
         return null;
     }
 
+    /**
+     * Validate that CIDR is valid and the value is in range.
+     *
+     * @param Ip $rule Instance of the rule.
+     * @param string|null $cidr CIDR for subnet check.
+     * @param string $ipCidr IP CIDR.
+     * @param string $value Value validated.
+     * @param ValidationContext $context Validation context.
+     *
+     * @return Result|null Validation result.
+     */
     private static function validateCidr(
         Ip $rule,
         ?string $cidr,
@@ -146,6 +176,15 @@ final class IpHandler implements RuleHandlerInterface
         return null;
     }
 
+    /**
+     * Creates a new result with an error.
+     *
+     * @param string $message Error message.
+     * @param ValidationContext $context  Validation context.
+     * @param string $value Value validated.
+     *
+     * @return Result Validation result.
+     */
     private static function getGenericErrorResult(string $message, ValidationContext $context, string $value): Result
     {
         return (new Result())->addError($message, [

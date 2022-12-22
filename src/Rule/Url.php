@@ -18,12 +18,14 @@ use Yiisoft\Validator\WhenInterface;
 use function function_exists;
 
 /**
- * Validates that the value is a valid HTTP or HTTPS URL.
+ * Defines validation options for a value that is a valid HTTP or HTTPS URL.
  *
- * Note that this rule only checks if the URL scheme and host parts are correct.
+ * Note that the handler only checks if the URL scheme and host parts are correct.
  * It does not check the remaining parts of a URL.
  *
  * @psalm-import-type WhenType from WhenInterface
+ *
+ * @see UrlHandler
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
@@ -32,65 +34,50 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     use SkipOnErrorTrait;
     use WhenTrait;
 
+    /**
+     * @param string $pattern The regular expression used to validate the value.
+     * The pattern may contain a `{schemes}` token that will be replaced
+     * by a regular expression which represents the {@see $schemes}.
+     *
+     * Note that if you want to reuse the pattern in HTML5 input, it should have `^` and `$`, should not have any
+     * modifiers and should not be case-insensitive.
+     * @param string[] $validSchemes List of URI schemes which should be considered valid. By default, http and https
+     * are considered to be valid schemes.
+     * @param bool $enableIdn Whether the validation process must take
+     * {@link https://en.wikipedia.org/wiki/Internationalized_domain_name IDN (internationalized domain names)}
+     * into account . Defaults to `false` meaning that validation of URLs containing IDN will always
+     * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
+     * extension, otherwise an exception will be thrown.
+     * @param string $incorrectInputMessage A message used when the input is incorrect.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{type}`: the value's type.
+     * @param string $message @var string A message used when the value is not valid.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{value}`: the value of the attribute being validated.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty. See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
+     * @psalm-param WhenType $when
+     *
+     * @throws RuntimeException If intl extension is not enabled and {@see $enableIdn} is true.
+     */
     public function __construct(
-        /**
-         * @var string The regular expression used to validate the value.
-         * The pattern may contain a `{schemes}` token that will be replaced
-         * by a regular expression which represents the {@see $schemes}.
-         *
-         * Note that if you want to reuse the pattern in HTML5 input, it should have `^` and `$`, should not have any
-         * modifiers, and should not be case-insensitive.
-         */
         private string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
-        /**
-         * @var string[] List of URI schemes which should be considered valid. By default, http and https
-         * are considered to be valid schemes.
-         */
         private array $validSchemes = ['http', 'https'],
-        /**
-         * @var bool Whether validation process should take into account IDN (internationalized
-         * domain names). Defaults to `false` meaning that validation of URLs containing IDN will always
-         * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
-         * extension, otherwise an exception would be thrown.
-         */
-        private bool $enableIDN = false,
-        /**
-         * @var string A message used when the input is incorrect.
-         *
-         * You may use the following placeholders in the message:
-         *
-         * - `{attribute}`: the label of the attribute being validated.
-         * - `{value}`: the value of the attribute being validated.
-         */
+        private bool $enableIdn = false,
         private string $incorrectInputMessage = 'The value must have a string type.',
-        /**
-         * @var string A message used when the value is not valid.
-         *
-         * You may use the following placeholders in the message:
-         *
-         * - `{attribute}`: the label of the attribute being validated.
-         * - `{value}`: the value of the attribute being validated.
-         */
         private string $message = 'This value is not a valid URL.',
-        /**
-         * @var bool|callable|null Whether to skip this rule if the value validated is empty.
-         *
-         * @see SkipOnEmptyInterface
-         */
-        private $skipOnEmpty = null,
-        /**
-         * @var bool Whether to skip this rule if any of the previous rules gave an error.
-         */
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
-        /**
-         * @var Closure|null A callable to define a condition for applying the rule.
-         * @psalm-var WhenType
-         *
-         * @see WhenInterface
-         */
         private Closure|null $when = null,
     ) {
-        if ($enableIDN && !function_exists('idn_to_ascii')) {
+        if ($enableIdn && !function_exists('idn_to_ascii')) {
             // Tested via separate CI configuration (see ".github/workflows/build.yml").
             // @codeCoverageIgnoreStart
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
@@ -104,7 +91,9 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     }
 
     /**
-     * @return string Ready to use regular expression pattern used for URL validation.
+     * Get ready to use regular expression pattern applied for URL validation.
+     *
+     * @return string Regular expression pattern applied for URL validation.
      */
     public function getPattern(): string
     {
@@ -112,6 +101,8 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     }
 
     /**
+     * Get valid URI schemas.
+     *
      * @return string[] List of URI schemes which should be considered valid. By default, http and https
      * are considered to be valid schemes.
      *
@@ -123,20 +114,25 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     }
 
     /**
-     * @return bool Whether validation process should take into account IDN (internationalized
-     * domain names). `false` meaning that validation of URLs containing IDN will always
+     * Whether the validation process must take
+     * {@link https://en.wikipedia.org/wiki/Internationalized_domain_name IDN (internationalized domain names)}
+     * into account. `false` means that validation of URLs containing IDN will always
      * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
-     * extension, otherwise an exception would be thrown.
+     * extension, otherwise an exception will be thrown.
      *
-     * @see $enableIDN
+     * @return bool Whether to enable IDN validation.
+     *
+     * @see $enableIdn
      */
-    public function isIDNEnabled(): bool
+    public function isIdnEnabled(): bool
     {
-        return $this->enableIDN;
+        return $this->enableIdn;
     }
 
     /**
-     * @return string A message used when the input is incorrect.
+     * Get a message used when the input is incorrect.
+     *
+     * @return string Error message.
      *
      * @see $incorrectInputMessage
      */
@@ -146,7 +142,9 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     }
 
     /**
-     * @return string A message used when the value is not valid.
+     * Get a message used when the value is not valid.
+     *
+     * @return string Error message.
      *
      * @see $message
      */
@@ -160,7 +158,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         return [
             'pattern' => $this->getPattern(),
             'validSchemes' => $this->validSchemes,
-            'enableIDN' => $this->enableIDN,
+            'enableIdn' => $this->enableIdn,
             'incorrectInputMessage' => [
                 'template' => $this->incorrectInputMessage,
                 'parameters' => [],
