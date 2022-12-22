@@ -50,7 +50,6 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
      * - https://www.php.net/manual/en/language.types.type-juggling.php
      *
      * Defaults to `false` meaning non-strict mode is used.
-     *
      * @param string $nonScalarMessage Error message used when validation fails and non-scalar value (neither int,
      * float, string nor bool) was provided as input.
      *
