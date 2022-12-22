@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use InvalidArgumentException;
-use ReflectionException;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\IdMessageReader;
 use Yiisoft\Translator\IntlMessageFormatter;
@@ -23,24 +21,57 @@ use function is_int;
 use function is_string;
 
 /**
- * Validator validates {@link DataSetInterface} against rules set for data set attributes.
+ * The only built-in implementation of {@see ValidatorInterface}, the main class / entry point processing all the data
+ * and rules with validation context together and performing the actual validation.
  *
  * @psalm-import-type RulesType from ValidatorInterface
  */
 final class Validator implements ValidatorInterface
 {
+    /**
+     * @const A name for {@see CategorySource} used with translator ({@see TranslatorInterface}).
+     */
     public const DEFAULT_TRANSLATION_CATEGORY = 'yii-validator';
+    /**
+     * @const A name of parameter used in {@see ValidationContext} indicating that previous rule in the set caused
+     * validation error. Used with {@see SkipOnErrorInterface} to allow skipping of the current rule if it's
+     * configuration allows it.
+     */
     private const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
 
+    /**
+     * @var RuleHandlerResolverInterface A container to resolve rule handler names to corresponding instances.
+     */
     private RuleHandlerResolverInterface $ruleHandlerResolver;
+    /**
+     * @var TranslatorInterface A translator instance used for translations of error messages. If it was not set
+     * explicitly in the constructor, a default one created automatically in {@see createDefaultTranslator()}.
+     */
     private TranslatorInterface $translator;
+    /**
+     * @var callable A default "skip on empty" criteria ({@see SkipOnEmptyInterface}), already normalized. Used to
+     * optimize setting the same value in all the rules.
+     */
+    private $defaultSkipOnEmptyCriteria;
+    /**
+     * @var AttributeTranslatorInterface A default translator used for translation of rule ({@see RuleInterface})
+     * attributes. Used to optimize setting the same value in all the rules.
+     */
     private AttributeTranslatorInterface $defaultAttributeTranslator;
 
     /**
-     * @var callable
+     * @param RuleHandlerResolverInterface|null $ruleHandlerResolver Optional container to resolve rule handler names to
+     * corresponding instances. If not provided, {@see SimpleRuleContainer} used as a default one.
+     * @param TranslatorInterface|null $translator Optional translator instance used for translations of error messages.
+     * If not provided, a default one is created via {@see createDefaultTranslator()}.
+     * @param bool|callable|null $defaultSkipOnEmpty Raw non-normalized "skip on empty" value (see
+     * {@see SkipOnEmptyInterface::getSkipOnEmpty()}).
+     * @param string $translationCategory A name for {@see CategorySource} used during creation
+     * ({@see createDefaultTranslator()}) of default translator ({@see TranslatorInterface}) in case `$translator`
+     * argument was not specified explicitly . If not provided, a {@see DEFAULT_TRANSLATION_CATEGORY} will be used.
+     * @param AttributeTranslatorInterface|null $defaultAttributeTranslator A default translator used for translation of
+     * rule ({@see RuleInterface}) attributes. If not provided, a {@see TranslatorAttributeTranslator} will be used.
      */
-    private $defaultSkipOnEmptyCriteria;
-
     public function __construct(
         ?RuleHandlerResolverInterface $ruleHandlerResolver = null,
         ?TranslatorInterface $translator = null,
@@ -55,14 +86,6 @@ final class Validator implements ValidatorInterface
             ?? new TranslatorAttributeTranslator($this->translator);
     }
 
-    /**
-     * @param DataSetInterface|mixed|RulesProviderInterface $data
-     *
-     * @psalm-param RulesType $rules
-     *
-     * @throws InvalidArgumentException
-     * @throws ReflectionException
-     */
     public function validate(
         mixed $data,
         callable|iterable|object|string|null $rules = null,
@@ -131,13 +154,20 @@ final class Validator implements ValidatorInterface
     }
 
     /**
-     * @param iterable<RuleInterface> $rules
+     * Validates input of any type according to normalized rules and validation context. Aggregates errors from all the
+     * rules to a one unified result.
+     *
+     * @param mixed $value The validated value of any type.
+     * @param iterable $rules Normalized rules ({@see RuleInterface} that can be iterated.
+     * @psalm-param iterable<RuleInterface> $rules
+     * @param ValidationContext $context Validation context.
+     * @return Result The result of validation.
      */
     private function validateInternal(mixed $value, iterable $rules, ValidationContext $context): Result
     {
         $compoundResult = new Result();
         foreach ($rules as $rule) {
-            if ($this->preValidate($value, $context, $rule)) {
+            if ($this->shouldSkipRule($rule, $value, $context)) {
                 continue;
             }
 
@@ -164,7 +194,21 @@ final class Validator implements ValidatorInterface
         return $compoundResult;
     }
 
-    private function preValidate(mixed $value, ValidationContext $context, RuleInterface $rule): bool
+    /**
+     * Acts like a pre-validation phase allowing to skip validation for specific rule within a set if any of these
+     * conditions are met:
+     *
+     * - The value is empty / not passed ({@see SkipOnEmptyInterface}).
+     * - The previous rule in the set caused error and the current one was configured for skipping in case of such error
+     * occured ({@see SkipOnErrorInterface}).
+     * - "when" callable returned `false` {@see WhenInterface}.
+     *
+     * @param mixed $value The validated value of any type.
+     * @param ValidationContext $context Validation context.
+     * @param RuleInterface $rule A rule instance.
+     * @return bool Whether to skip validation for this rule - `true` means skip and `false` to not skip.
+     */
+    private function shouldSkipRule(RuleInterface $rule, mixed $value, ValidationContext $context): bool
     {
         if (
             $rule instanceof SkipOnEmptyInterface &&
@@ -189,6 +233,13 @@ final class Validator implements ValidatorInterface
         return false;
     }
 
+    /**
+     * Creates default translator to use if {@see $translator} was not set explicitly in the constructor. Depending on
+     * "intl" extension availability, either {@see IntlMessageFormatter} or {@see SimpleMessageFormatter} is used as
+     * formatter.
+     *
+     * @return Translator Translator instance used for translations of error messages.
+     */
     private function createDefaultTranslator(): Translator
     {
         $categorySource = new CategorySource(
