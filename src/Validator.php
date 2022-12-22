@@ -160,7 +160,9 @@ final class Validator implements ValidatorInterface
      * @param mixed $value The validated value of any type.
      * @param iterable $rules Normalized rules ({@see RuleInterface} that can be iterated.
      * @psalm-param iterable<RuleInterface> $rules
+     *
      * @param ValidationContext $context Validation context.
+     *
      * @return Result The result of validation.
      */
     private function validateInternal(mixed $value, iterable $rules, ValidationContext $context): Result
@@ -206,6 +208,7 @@ final class Validator implements ValidatorInterface
      * @param mixed $value The validated value of any type.
      * @param ValidationContext $context Validation context.
      * @param RuleInterface $rule A rule instance.
+     *
      * @return bool Whether to skip validation for this rule - `true` means skip and `false` to not skip.
      */
     private function shouldSkipRule(RuleInterface $rule, mixed $value, ValidationContext $context): bool
