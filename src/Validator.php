@@ -30,7 +30,7 @@ use function is_string;
 final class Validator implements ValidatorInterface
 {
     public const DEFAULT_TRANSLATION_CATEGORY = 'yii-validator';
-    private const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
+    private const PARAMETER_PREVIOUS_RULES_ERRORED = 'yii-validator-previousRulesErrored';
 
     private RuleHandlerResolverInterface $ruleHandlerResolver;
     private TranslatorInterface $translator;
