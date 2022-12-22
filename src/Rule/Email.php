@@ -40,9 +40,9 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * Be aware that this check can fail due to temporary DNS problems even if the email address is
      * valid and an email would be deliverable. Defaults to `false`.
      * @param bool $enableIdn Whether validation process should take IDN (internationalized domain names) into account.
-     * Defaults to false meaning that validation of emails containing IDN will always fail.
+     * Defaults to `false` meaning that validation of emails containing IDN will always fail.
      * Note that in order to use IDN validation you have to install and enable `intl` PHP extension,
-     * otherwise an exception would be thrown.
+     * otherwise an exception will be thrown.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *
      * You may use the following placeholders in the message:
@@ -69,7 +69,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private bool $enableIdn = false,
         private string $incorrectInputMessage = 'The value must have a string type.',
         private string $message = 'This value is not a valid email address.',
-        private $skipOnEmpty = null,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
