@@ -60,7 +60,7 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the label of the attribute being validated.
-     * - `{true}` - the value set in {@see $trueValue} option.
+     * - `{true}`: the value set in {@see $trueValue} option.
      * - `{type}`: the type of the value being validated.
      * @param string $messageWithValue Error message used when validation fails and either scalar value (int, float,
      * string, bool) or null was provided as input.
@@ -68,7 +68,7 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the label of the attribute being validated.
-     * - `{true}` - the value set in {@see $trueValue} option.
+     * - `{true}`: the value set in {@see $trueValue} option.
      * - `{value}`: the value being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty / not passed.
      * See {@see SkipOnEmptyInterface}.
