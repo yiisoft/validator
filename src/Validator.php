@@ -29,7 +29,7 @@ use function is_string;
 final class Validator implements ValidatorInterface
 {
     /**
-     * @const A name for {@see CategorySource} used with translator ({@see TranslatorInterface}).
+     * @const A name for {@see CategorySource} used with translator ({@see TranslatorInterface}) by default.
      */
     public const DEFAULT_TRANSLATION_CATEGORY = 'yii-validator';
     /**
