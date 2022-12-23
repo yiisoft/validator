@@ -205,9 +205,9 @@ final class Validator implements ValidatorInterface
      * occured ({@see SkipOnErrorInterface}).
      * - "when" callable returned `false` {@see WhenInterface}.
      *
+     * @param RuleInterface $rule A rule instance.
      * @param mixed $value The validated value of any type.
      * @param ValidationContext $context Validation context.
-     * @param RuleInterface $rule A rule instance.
      *
      * @return bool Whether to skip validation for this rule - `true` means skip and `false` to not skip.
      */
