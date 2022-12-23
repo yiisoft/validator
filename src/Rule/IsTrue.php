@@ -94,9 +94,11 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     }
 
     /**
-     * A getter for {@see $trueValue} property.
+     * Gets the value that is considered to be "true".
      *
-     * @return scalar The value that is considered to be "true".
+     * @return scalar A scalar value.
+     *
+     * @see $trueValue
      */
     public function getTrueValue(): int|float|string|bool
     {
@@ -104,9 +106,11 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     }
 
     /**
-     * A getter for {@see $strict} property.
+     * Whether the comparison to {@see $trueValue} is strict.
      *
-     * @return bool Whether the comparison to {@see $trueValue} is strict:
+     * @return bool `true` - strict, `false` - non-strict.
+     *
+     * @see $strict
      */
     public function isStrict(): bool
     {
@@ -114,9 +118,11 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     }
 
     /**
-     * A getter for {@see $messageWithType}.
+     * Gets error message used when validation fails and value is complex to format, so its type is used instead.
      *
-     * @return string Error message.
+     * @return string Error message / template.
+     *
+     * @see $messageWithType
      */
     public function getMessageWithType(): string
     {
@@ -124,9 +130,11 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     }
 
     /**
-     * A getter for {@see $messageWithValue}.
+     * Gets error message used when validation fails and value can be formatted.
      *
-     * @return string Error message.
+     * @return string Error message / template.
+     *
+     * @see $messageWithValue
      */
     public function getMessageWithValue(): string
     {
