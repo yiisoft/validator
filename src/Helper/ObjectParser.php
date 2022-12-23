@@ -355,7 +355,7 @@ final class ObjectParser
     /**
      * @psalm-param array $source Raw rules containing additional metadata besides rule instances.
      *
-     * @return array<int, RuleInterface>|array<string, list<RuleInterface>> An array of rules readies to use for the
+     * @return array<int, RuleInterface>|array<string, list<RuleInterface>> An array of rules ready to use for the
      * validation.
      */
     private function prepareRules(array $source): array
