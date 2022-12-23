@@ -45,7 +45,7 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      *
      * - Strict mode uses `===` operator meaning the type and the value must both match to those set in
      * {@see $trueValue}.
-     * = Non-strict mode uses `==` operator meaning that type juggling is performed first before the comparison. You can
+     * - Non-strict mode uses `==` operator meaning that type juggling is performed first before the comparison. You can
      * read more in the PHP docs:
      *
      * - https://www.php.net/manual/en/language.operators.comparison.php
