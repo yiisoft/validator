@@ -156,9 +156,6 @@ final class Result
      *
      * @param string $attribute Attribute name.
      * @param string $separator Attribute path separator. Dot is used by default.
-     *
-     * @return array
-     * @return array<string, non-empty-list<string>>
      */
     public function getAttributeErrorMessagesIndexedByPath(string $attribute, string $separator = '.'): array
     {
