@@ -29,11 +29,10 @@ interface ValidatorInterface
      * otherwise).
      * - Any other value is normalized to data set using {@see DataSetNormalizer}.
      * @param callable|iterable|object|string|null $rules Rules to apply for validating data. If specified, this
-     * @psalm-param RulesType $rules
      * argument has higher priority over {@see RulesProviderInterface::getRules()} provided in `$data` argument. A
      * variety of types is supported. They are normalized before usage, please refer to {@see RulesNormalizer}
      * documentation to see what structures can be passed.
-     *
+     * @psalm-param RulesType $rules
      * @param ValidationContext|null $context Validation context that may be taken into account when performing
      * validation.
      *
