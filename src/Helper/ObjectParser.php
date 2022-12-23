@@ -152,6 +152,7 @@ final class ObjectParser
          * @var int Visibility levels the parsed properties must have. For example: public and protected only, this
          * means that the rest (private ones) will be skipped. Defaults to all visibility levels (public, protected and
          * private).
+         * @psalm-var int-mask-of<ReflectionProperty::IS_*>
          */
         private int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
         ReflectionProperty::IS_PROTECTED |
@@ -353,7 +354,7 @@ final class ObjectParser
     /**
      * @psalm-param RulesCache $source Raw rules containing additional metadata besides rule instances.
      *
-     * @return array<int, RuleInterface>|array<string, list<RuleInterface>> An array of rules ready to use for the
+     * @return array<int, RuleInterface>|array<string, list<RuleInterface>> An array of rules readies to use for the
      * validation.
      */
     private function prepareRules(array $source): array
