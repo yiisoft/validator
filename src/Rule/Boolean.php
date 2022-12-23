@@ -50,9 +50,9 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
      * = Non-strict mode uses `==` operator meaning that type juggling is performed first before the comparison. You can
      * read more in the PHP docs:
      *
-     * - https://www.php.net/manual/en/language.operators.comparison.php
-     * - https://www.php.net/manual/en/types.comparisons.php
-     * - https://www.php.net/manual/en/language.types.type-juggling.php
+     * - {@link https://www.php.net/manual/en/language.operators.comparison.php}
+     * - {@link https://www.php.net/manual/en/types.comparisons.php}
+     * - {@link https://www.php.net/manual/en/language.types.type-juggling.php}
      *
      * Defaults to `false` meaning non-strict mode is used.
      * @param string $messageWithType Error message used when validation fails and neither non-scalar value (int,
