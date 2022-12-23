@@ -11,7 +11,6 @@ interface RulesProviderInterface
 {
     /**
      * @return iterable A set of validation rules.
-     * @psalm-return iterable<iterable<RuleInterface>|RuleInterface>|null
      */
     public function getRules(): iterable;
 }
