@@ -47,7 +47,7 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
      *
      * - Strict mode uses `===` operator meaning the type and the value must both match to those set in
      * {@see $trueValue} or {@see $falseValue}.
-     * = Non-strict mode uses `==` operator meaning that type juggling is performed first before the comparison. You can
+     * - Non-strict mode uses `==` operator meaning that type juggling is performed first before the comparison. You can
      * read more in the PHP docs:
      *
      * - https://www.php.net/manual/en/language.operators.comparison.php
