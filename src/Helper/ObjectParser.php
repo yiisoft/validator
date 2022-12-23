@@ -318,6 +318,7 @@ final class ObjectParser
             }
 
             if (PHP_VERSION_ID < 80100) {
+                /** @psalm-suppress UnusedMethodCall Need for pslam with PHP 8.1+ */
                 $property->setAccessible(true);
             }
 
