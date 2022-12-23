@@ -10,18 +10,32 @@ use function array_slice;
 use function implode;
 use function is_string;
 
+/**
+ * Validation result that is used by both {@see ValidatorInterface} and {@see RuleHandlerInterface}.
+ */
 final class Result
 {
     /**
-     * @var Error[]
+     * @var Error[] Validation errors.
      */
     private array $errors = [];
 
+    /**
+     * Whether result doesn't have any validation errors.
+     *
+     * @return bool Whether result is valid.
+     */
     public function isValid(): bool
     {
         return $this->errors === [];
     }
 
+    /**
+     * Whether attribute specified doesn't have any validation errors.
+     *
+     * @param string $attribute Attribute name.
+     * @return bool Whether attribute is valid.
+     */
     public function isAttributeValid(string $attribute): bool
     {
         foreach ($this->errors as $error) {
@@ -35,7 +49,7 @@ final class Result
     }
 
     /**
-     * @return Error[]
+     * @return Error[] Validation errors.
      */
     public function getErrors(): array
     {
@@ -43,7 +57,9 @@ final class Result
     }
 
     /**
-     * @return string[]
+     * Get errors messages as an array of strings.
+     *
+     * @return string[] Array messages as strings.
      */
     public function getErrorMessages(): array
     {
@@ -51,7 +67,13 @@ final class Result
     }
 
     /**
-     * @return array<string, non-empty-list<string>>
+     * Get arrays of error messages indexed by attribute path.
+     * Each key is a dot-separated attribute path.
+     * Each value is an array of error message strings.
+     *
+     * @param string $separator Attribute path separator. Dot is used by default.
+     * @return array Arrays of error messages indexed by attribute path.
+     * @psalm-return array<string, non-empty-list<string>>
      */
     public function getErrorMessagesIndexedByPath(string $separator = '.'): array
     {
@@ -65,9 +87,12 @@ final class Result
     }
 
     /**
-     * @throws InvalidArgumentException
+     * Get arrays of error messages indexed by attribute name.
      *
-     * @return array<string, non-empty-list<string>>
+     * @throws InvalidArgumentException If top level attribute has a non-string type.
+     *
+     * @return array Arrays of error messages indexed by attribute name.
+     * @psalm-return array<string, non-empty-list<string>>
      */
     public function getErrorMessagesIndexedByAttribute(): array
     {
@@ -85,7 +110,10 @@ final class Result
     }
 
     /**
-     * @return Error[]
+     * Get an array of error objects for the attribute specified.
+     *
+     * @param string $attribute Attribute name.
+     * @return Error[] Array of error objects.
      */
     public function getAttributeErrors(string $attribute): array
     {
@@ -101,7 +129,9 @@ final class Result
     }
 
     /**
-     * @return string[]
+     * Get an array of error messages for the attribute specified.
+     *
+     * @return string[] Error messages.
      */
     public function getAttributeErrorMessages(string $attribute): array
     {
@@ -117,6 +147,14 @@ final class Result
     }
 
     /**
+     * Get arrays of error messages for the attribute specified indexed by attribute path.
+     * Each key is a dot-separated attribute path.
+     * Each value is an array of error message strings.
+     *
+     * @param string $attribute Attribute name.
+     * @param string $separator Attribute path separator. Dot is used by default.
+     *
+     * @return array
      * @return array<string, non-empty-list<string>>
      */
     public function getAttributeErrorMessagesIndexedByPath(string $attribute, string $separator = '.'): array
@@ -136,7 +174,9 @@ final class Result
     }
 
     /**
-     * @return string[]
+     * Get common error messages that are not attached to any attribute.
+     *
+     * @return string[] Error messages.
      */
     public function getCommonErrorMessages(): array
     {
@@ -144,8 +184,17 @@ final class Result
     }
 
     /**
-     * @param array<string,scalar|null> $parameters
-     * @param list<int|string> $valuePath
+     * Add an error.
+     *
+     * @param string $message The raw validation error message. See {@see Error::$message}.
+     * @param array $parameters Parameters used for {@see $message} translation - a mapping between parameter
+     * names and values. See {@see Error::$parameters}.
+     * @psalm-param array<string,scalar|null> $parameters
+     * @param array $valuePath A sequence of keys determining where a value caused the validation
+     * error is located within a nested structure. See {@see Error::$valuePath}.
+     * @psalm-param list<int|string> $valuePath
+     *
+     * @return $this Same instance of result.
      */
     public function addError(string $message, array $parameters = [], array $valuePath = []): self
     {
