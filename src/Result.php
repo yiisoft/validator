@@ -34,6 +34,7 @@ final class Result
      * Whether attribute specified doesn't have any validation errors.
      *
      * @param string $attribute Attribute name.
+     *
      * @return bool Whether attribute is valid.
      */
     public function isAttributeValid(string $attribute): bool
@@ -72,6 +73,7 @@ final class Result
      * Each value is an array of error message strings.
      *
      * @param string $separator Attribute path separator. Dot is used by default.
+     *
      * @return array Arrays of error messages indexed by attribute path.
      * @psalm-return array<string, non-empty-list<string>>
      */
@@ -113,6 +115,7 @@ final class Result
      * Get an array of error objects for the attribute specified.
      *
      * @param string $attribute Attribute name.
+     *
      * @return Error[] Array of error objects.
      */
     public function getAttributeErrors(string $attribute): array
@@ -190,6 +193,7 @@ final class Result
      * @param array $parameters Parameters used for {@see $message} translation - a mapping between parameter
      * names and values. See {@see Error::$parameters}.
      * @psalm-param array<string,scalar|null> $parameters
+     *
      * @param array $valuePath A sequence of keys determining where a value caused the validation
      * error is located within a nested structure. See {@see Error::$valuePath}.
      * @psalm-param list<int|string> $valuePath

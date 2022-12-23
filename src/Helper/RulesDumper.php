@@ -48,6 +48,7 @@ final class RulesDumper
      * ```
      *
      * @param iterable $rules Arrays of rule objects indexed by attributes.
+     *
      * @return array Array of rule names and corresponding settings indexed by attributes.
      */
     public function asArray(iterable $rules): array
@@ -59,6 +60,7 @@ final class RulesDumper
      * Converts rule objects to arrays of rule names and corresponding settings.
      *
      * @param iterable $rules Arrays of rule objects indexed by attributes.
+     *
      * @return array Array of rule names and corresponding settings indexed by attributes.
      */
     private function fetchOptions(iterable $rules): array

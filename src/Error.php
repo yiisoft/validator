@@ -29,11 +29,13 @@ final class Error
      * complex syntax, works only with {@see IntlMessageFormatter}, requires "intl".
      *
      * @link https://www.php.net/manual/en/book.intl.php
+     *
      * @param array $parameters  Parameters used for {@see $message} translation - a mapping between parameter
      * names and values. Note that only scalar or `null` values are allowed.
      *
      * @link https://www.php.net/manual/ru/function.is-scalar.php
      * @psalm-param array<string, scalar|null> $parameters
+     *
      * @param array $valuePath A sequence of keys determining where a value caused the validation error is located
      * within a nested structure. Examples of different value paths:
      *
