@@ -163,6 +163,8 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface, A
      * and protected only, this means that the rest (private ones) will be skipped. Defaults to all visibility levels
      * (public, protected and private).
      * @param bool $useCache Whether to use cache for data and attribute methods (partially) and rules (completely).
+     *
+     * @psalm-param int-mask-of<ReflectionProperty::IS_*> $propertyVisibility
      */
     public function __construct(
         /**
