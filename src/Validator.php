@@ -68,7 +68,7 @@ final class Validator implements ValidatorInterface
      * {@see SkipOnEmptyInterface::getSkipOnEmpty()}).
      * @param string $translationCategory A name for {@see CategorySource} used during creation
      * ({@see createDefaultTranslator()}) of default translator ({@see TranslatorInterface}) in case `$translator`
-     * argument was not specified explicitly . If not provided, a {@see DEFAULT_TRANSLATION_CATEGORY} will be used.
+     * argument was not specified explicitly. If not provided, a {@see DEFAULT_TRANSLATION_CATEGORY} will be used.
      * @param AttributeTranslatorInterface|null $defaultAttributeTranslator A default translator used for translation of
      * rule ({@see RuleInterface}) attributes. If not provided, a {@see TranslatorAttributeTranslator} will be used.
      */
