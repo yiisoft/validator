@@ -37,7 +37,7 @@ final class Validator implements ValidatorInterface
      * validation error. Used with {@see SkipOnErrorInterface} to allow skipping of the current rule if its
      * configuration allows it.
      */
-    private const PARAMETER_PREVIOUS_RULES_ERRORED = 'previousRulesErrored';
+    private const PARAMETER_PREVIOUS_RULES_ERRORED = 'yii-validator-previousRulesErrored';
 
     /**
      * @var RuleHandlerResolverInterface A container to resolve rule handler names to corresponding instances.
