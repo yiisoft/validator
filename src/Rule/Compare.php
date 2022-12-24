@@ -15,6 +15,20 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
+ * Abstract base for all the comparison validation options.
+ *
+ * The value being compared with {@see Compare::$targetValue} or {@see Compare::$targetAttribute}, which is set
+ * in the constructor.
+ *
+ * It supports different comparison operators, specified
+ * via the {@see Compare::$operator}.
+ *
+ * The default comparison function is based on string values, which means the values
+ * are compared byte by byte. When comparing numbers, make sure to change {@see Compare::$type} to
+ * {@see Compare::TYPE_NUMBER} to enable numeric comparison.
+ *
+ * @see CompareHandler
+ *
  * @psalm-import-type WhenType from WhenInterface
  */
 abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
@@ -38,6 +52,9 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      */
     public const TYPE_NUMBER = 'number';
 
+    /**
+     * @var array Map of valid operators.
+     */
     private array $validOperatorsMap = [
         '==' => 1,
         '===' => 1,
@@ -49,51 +66,69 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
         '<=' => 1,
     ];
 
+    /**
+     * @param scalar|null $targetValue The constant value to be compared with. When both this property and
+     * {@see $targetAttribute} are set, this property takes precedence.
+     * @param string|null $targetAttribute The name of the attribute to be compared with. When both this property and
+     * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
+     * @param string $incorrectInputMessage A message used when the input is incorrect.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{type}`: the type of the attribute being validated.
+     *
+     * @param string $incorrectDataSetTypeMessage A message used when the attribute value returned from a custom
+     * data set s not scalar.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{type}`: type of the value.
+     *
+     * @param string|null $message A message used when the value is not valid.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{targetValue}`: the constant value to be compared with.
+     * - `{targetAttribute}`: the name of the attribute to be compared with.
+     * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
+     *   the attribute to be compared with.
+     * - `{value}`: the value of the attribute being validated.
+     *
+     * @param string $type The type of the values being compared. Either {@see Compare::TYPE_STRING}
+     * or {@see Compare::TYPE_NUMBER}.
+     * @param string $operator The operator for comparison. The following operators are supported:
+     *
+     * - `==`: check if two values are equal. The comparison is done in non-strict mode.
+     * - `===`: check if two values are equal. The comparison is done in strict mode.
+     * - `!=`: check if two values are NOT equal. The comparison is done in non-strict mode.
+     * - `!==`: check if two values are NOT equal. The comparison is done in strict mode.
+     * - `>`: check if value being validated is greater than the value being compared with.
+     * - `>=`: check if value being validated is greater than or equal to the value being compared with.
+     * - `<`: check if value being validated is less than the value being compared with.
+     * - `<=`: check if value being validated is less than or equal to the value being compared with.
+     *
+     * When you want to compare numbers, make sure to also change {@see $type} to {@see TYPE_NUMBER}.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
+     * See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
+     * See {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying the rule.
+     * See {@see WhenInterface}.
+     * @psalm-param WhenType $when
+     */
     public function __construct(
-        /**
-         * @var scalar|null The constant value to be compared with. When both this property and {@see $targetAttribute}
-         * are set, this property takes precedence.
-         */
         private int|float|string|bool|null $targetValue = null,
-        /**
-         * @var string|null The name of the attribute to be compared with. When both this property and
-         * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
-         */
         private string|null $targetAttribute = null,
         private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean and null.',
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
-        /**
-         * @var string|null User-defined error message.
-         */
         private string|null $message = null,
-        /**
-         * @var string The type of the values being compared.
-         */
-        private string $type = self::TYPE_STRING,
-        /**
-         * @var string The operator for comparison. The following operators are supported:
-         *
-         * - `==`: check if two values are equal. The comparison is done in non-strict mode.
-         * - `===`: check if two values are equal. The comparison is done in strict mode.
-         * - `!=`: check if two values are NOT equal. The comparison is done in non-strict mode.
-         * - `!==`: check if two values are NOT equal. The comparison is done in strict mode.
-         * - `>`: check if value being validated is greater than the value being compared with.
-         * - `>=`: check if value being validated is greater than or equal to the value being compared with.
-         * - `<`: check if value being validated is less than the value being compared with.
-         * - `<=`: check if value being validated is less than or equal to the value being compared with.
-         *
-         * When you want to compare numbers, make sure to also change {@see $type} to {@see TYPE_NUMBER}.
-         */
+          private string $type = self::TYPE_STRING,
         private string $operator = '==',
-        /**
-         * @var bool|callable|null
-         */
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
-        /**
-         * @var WhenType
-         */
         private Closure|null $when = null,
     ) {
         if (!isset($this->validOperatorsMap[$this->operator])) {
@@ -107,36 +142,80 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
         }
     }
 
+    /**
+     * Get the constant value to be compared with.
+     *
+     * @return scalar|null Value to be compared with.
+     * @see $targetValue
+     */
     public function getTargetValue(): int|float|string|bool|null
     {
         return $this->targetValue;
     }
 
+    /**
+     * Get the name of the attribute to be compared with.
+     *
+     * @return string|null Name of the attribute to be compared with.
+     * @see $targetAttribute
+     */
     public function getTargetAttribute(): string|null
     {
         return $this->targetAttribute;
     }
 
+    /**
+     * Get the type of the values being compared.
+     *
+     * @return string The type of the values being compared. Either {@see Compare::TYPE_STRING}
+     * or {@see Compare::TYPE_NUMBER}.
+     * @see $type
+     */
     public function getType(): string
     {
         return $this->type;
     }
 
+    /**
+     * Get the operator for comparison.
+     *
+     * @return string The operator for comparison.
+     * @see $operator
+     */
     public function getOperator(): string
     {
         return $this->operator;
     }
 
+    /**
+     * Get message used when the input is incorrect.
+     *
+     * @return string Error message.
+     * @see $incorrectInputMessage
+     */
     public function getIncorrectInputMessage(): string
     {
         return $this->incorrectInputMessage;
     }
 
+    /**
+     * Get message used when the attribute value returned from a custom
+     * data set s not scalar.
+     *
+     * @return string Error message.
+     * @see $incorrectDataSetTypeMessage
+     */
     public function getIncorrectDataSetTypeMessage(): string
     {
         return $this->incorrectDataSetTypeMessage;
     }
 
+    /**
+     * Get a message used when the value is not valid.
+     *
+     * @return string Error message.
+     * @see $message
+     */
     public function getMessage(): string
     {
         return $this->message ?? match ($this->operator) {

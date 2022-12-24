@@ -43,9 +43,12 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
      *
      * - `{attribute}`: the label of the attribute being validated.
      * - `{min}`: the minimum number of attribute values that was not met.
-     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty. See {@see SkipOnEmptyInterface}.
-     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
-     * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
+     * See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
+     * See {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying the rule.
+     * See {@see WhenInterface}.
      * @psalm-param WhenType $when
      */
     public function __construct(
