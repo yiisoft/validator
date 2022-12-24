@@ -20,22 +20,31 @@ final class IsTrueHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(IsTrue::class, $rule);
         }
 
-        $valid = $rule->isStrict() ? $value === $rule->getTrueValue() : $value == $rule->getTrueValue();
+        if (!is_scalar($value)) {
+            $valid = false;
+        } elseif ($rule->isStrict()) {
+            $valid = $value === $rule->getTrueValue();
+        } else {
+            $valid = $value == $rule->getTrueValue();
+        }
 
         $result = new Result();
         if ($valid) {
             return $result;
         }
 
-        /** @var scalar $value */
-        $result->addError(
-            $rule->getMessage(),
-            [
-                'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
-                'attribute' => $context->getTranslatedAttribute(),
-            ],
-        );
+        $parameters = [
+            'attribute' => $context->getTranslatedAttribute(),
+            'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
+        ];
+        if ($value === null || is_scalar($value)) {
+            $parameters['value'] = $value ?? 'null';
 
-        return $result;
+            return $result->addError($rule->getMessageWithValue(), $parameters);
+        }
+
+        $parameters['type'] = get_debug_type($value);
+
+        return $result->addError($rule->getMessageWithType(), $parameters);
     }
 }

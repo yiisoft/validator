@@ -33,7 +33,13 @@ final class IsTrueTest extends RuleTestCase
                 [
                     'trueValue' => '1',
                     'strict' => false,
-                    'message' => [
+                    'messageWithType' => [
+                        'template' => 'The value must be "{true}".',
+                        'parameters' => [
+                            'true' => '1',
+                        ],
+                    ],
+                    'messageWithValue' => [
                         'template' => 'The value must be "{true}".',
                         'parameters' => [
                             'true' => '1',
@@ -48,7 +54,13 @@ final class IsTrueTest extends RuleTestCase
                 [
                     'trueValue' => true,
                     'strict' => true,
-                    'message' => [
+                    'messageWithType' => [
+                        'template' => 'The value must be "{true}".',
+                        'parameters' => [
+                            'true' => 'true',
+                        ],
+                    ],
+                    'messageWithValue' => [
                         'template' => 'The value must be "{true}".',
                         'parameters' => [
                             'true' => 'true',
@@ -62,15 +74,22 @@ final class IsTrueTest extends RuleTestCase
                 new IsTrue(
                     trueValue: 'YES',
                     strict: true,
-                    message: 'Custom message.',
+                    messageWithType: 'Custom message with type.',
+                    messageWithValue: 'Custom message with value.',
                     skipOnEmpty: true,
                     skipOnError: true
                 ),
                 [
                     'trueValue' => 'YES',
                     'strict' => true,
-                    'message' => [
-                        'template' => 'Custom message.',
+                    'messageWithType' => [
+                        'template' => 'Custom message with type.',
+                        'parameters' => [
+                            'true' => 'YES',
+                        ],
+                    ],
+                    'messageWithValue' => [
+                        'template' => 'Custom message with value.',
                         'parameters' => [
                             'true' => 'YES',
                         ],
@@ -97,7 +116,7 @@ final class IsTrueTest extends RuleTestCase
         return [
             ['5', [new IsTrue()], ['' => ['The value must be "1".']]],
             [null, [new IsTrue()], ['' => ['The value must be "1".']]],
-            'xxx' => [[], [new IsTrue()], ['' => ['The value must be "1".']]],
+            [[], [new IsTrue()], ['' => ['The value must be "1".']]],
             [true, [new IsTrue(strict: true)], ['' => ['The value must be "1".']]],
             ['1', [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
             [[], [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
@@ -106,7 +125,70 @@ final class IsTrueTest extends RuleTestCase
             ['0', [new IsTrue()], ['' => ['The value must be "1".']]],
             ['0', [new IsTrue(strict: true)], ['' => ['The value must be "1".']]],
             [false, [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
-            'custom error' => [5, [new IsTrue(message: 'Custom error.')], ['' => ['Custom error.']]],
+
+            'custom message with value' => [
+                5,
+                [new IsTrue(messageWithValue: 'Custom error.')],
+                ['' => ['Custom error.']],
+            ],
+            'custom message with value with parameters' => [
+                5,
+                [new IsTrue(messageWithValue: 'Attribute - {attribute}, true - {true}, value - {value}.')],
+                ['' => ['Attribute - , true - 1, value - 5.']],
+            ],
+            'custom message with value with parameters, custom true value, strict' => [
+                5,
+                [
+                    new IsTrue(
+                        trueValue: true,
+                        strict: true,
+                        messageWithValue: 'Attribute - {attribute}, true - {true}, value - {value}.',
+                    ),
+                ],
+                ['' => ['Attribute - , true - true, value - 5.']],
+            ],
+            'custom message with value with parameters, attribute set' => [
+                ['data' => 5],
+                [
+                    'data' => new IsTrue(messageWithValue: 'Attribute - {attribute}, true - {true}, value - {value}.'),
+                ],
+                ['data' => ['Attribute - data, true - 1, value - 5.']],
+            ],
+            'custom message with value, null' => [
+                null,
+                [new IsTrue(messageWithValue: 'Attribute - {attribute}, true - {true}, value - {value}.'),],
+                ['' => ['Attribute - , true - 1, value - null.']],
+            ],
+            'custom message with type' => [
+                [],
+                [new IsTrue(messageWithType: 'Custom error.')],
+                ['' => ['Custom error.']],
+            ],
+            'custom message with type with parameters' => [
+                [],
+                [
+                    new IsTrue(messageWithType: 'Attribute - {attribute}, true - {true}, type - {type}.'),
+                ],
+                ['' => ['Attribute - , true - 1, type - array.']],
+            ],
+            'custom message with type with parameters, custom true and false values, strict' => [
+                [],
+                [
+                    new IsTrue(
+                        trueValue: true,
+                        strict: true,
+                        messageWithType: 'Attribute - {attribute}, true - {true}, type - {type}.',
+                    ),
+                ],
+                ['' => ['Attribute - , true - true, type - array.']],
+            ],
+            'custom message with type with parameters, attribute set' => [
+                ['data' => []],
+                [
+                    'data' => new IsTrue(messageWithType: 'Attribute - {attribute}, true - {true}, type - {type}.'),
+                ],
+                ['data' => ['Attribute - data, true - 1, type - array.']],
+            ],
         ];
     }
 
