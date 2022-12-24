@@ -71,6 +71,7 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
      * Get the list of required attributes that will be checked.
      *
      * @return string[] The list of attributes.
+     *
      * @see $attributes
      */
     public function getAttributes(): array
@@ -80,7 +81,9 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
 
     /**
      * Get the minimum required quantity of filled attributes to pass the validation.
+     *
      * @return int Minimum require quantity.
+     *
      * @see $min
      */
     public function getMin(): int
@@ -90,7 +93,9 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
 
     /**
      * Get the message used when the input is incorrect.
+     *
      * @return string Error message.
+     *
      * @see $incorrectInputMessage
      */
     public function getIncorrectInputMessage(): string
@@ -102,6 +107,7 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
      * Get the message used when the value is not valid.
      *
      * @return string Error message.
+     *
      * @see $message
      */
     public function getMessage(): string

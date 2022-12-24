@@ -77,14 +77,12 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      *
      * - `{attribute}`: the label of the attribute being validated.
      * - `{type}`: the type of the attribute being validated.
-     *
      * @param string $incorrectDataSetTypeMessage A message used when the attribute value returned from a custom
      * data set s not scalar.
      *
      * You may use the following placeholders in the message:
      *
      * - `{type}`: type of the value.
-     *
      * @param string|null $message A message used when the value is not valid.
      *
      * You may use the following placeholders in the message:
@@ -95,7 +93,6 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
      *   the attribute to be compared with.
      * - `{value}`: the value of the attribute being validated.
-     *
      * @param string $type The type of the values being compared. Either {@see Compare::TYPE_STRING}
      * or {@see Compare::TYPE_NUMBER}.
      * @param string $operator The operator for comparison. The following operators are supported:
@@ -125,7 +122,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
         private string|null $message = null,
-          private string $type = self::TYPE_STRING,
+        private string $type = self::TYPE_STRING,
         private string $operator = '==',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
@@ -146,6 +143,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      * Get the constant value to be compared with.
      *
      * @return scalar|null Value to be compared with.
+     *
      * @see $targetValue
      */
     public function getTargetValue(): int|float|string|bool|null
@@ -157,6 +155,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      * Get the name of the attribute to be compared with.
      *
      * @return string|null Name of the attribute to be compared with.
+     *
      * @see $targetAttribute
      */
     public function getTargetAttribute(): string|null
@@ -169,6 +168,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      *
      * @return string The type of the values being compared. Either {@see Compare::TYPE_STRING}
      * or {@see Compare::TYPE_NUMBER}.
+     *
      * @see $type
      */
     public function getType(): string
@@ -180,6 +180,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      * Get the operator for comparison.
      *
      * @return string The operator for comparison.
+     *
      * @see $operator
      */
     public function getOperator(): string
@@ -191,6 +192,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      * Get message used when the input is incorrect.
      *
      * @return string Error message.
+     *
      * @see $incorrectInputMessage
      */
     public function getIncorrectInputMessage(): string
@@ -203,6 +205,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      * data set s not scalar.
      *
      * @return string Error message.
+     *
      * @see $incorrectDataSetTypeMessage
      */
     public function getIncorrectDataSetTypeMessage(): string
@@ -214,6 +217,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      * Get a message used when the value is not valid.
      *
      * @return string Error message.
+     *
      * @see $message
      */
     public function getMessage(): string

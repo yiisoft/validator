@@ -37,14 +37,12 @@ final class GreaterThanOrEqual extends Compare
      *
      * - `{attribute}`: the label of the attribute being validated.
      * - `{type}`: the type of the attribute being validated.
-     *
      * @param string $incorrectDataSetTypeMessage A message used when the attribute value returned from a custom
      * data set s not scalar.
      *
      * You may use the following placeholders in the message:
      *
      * - `{type}`: type of the value.
-     *
      * @param string|null $message A message used when the value is not valid.
      *
      * You may use the following placeholders in the message:
@@ -55,7 +53,6 @@ final class GreaterThanOrEqual extends Compare
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
      *   the attribute to be compared with.
      * - `{value}`: the value of the attribute being validated.
-     *
      * @param string $type The type of the values being compared. Either {@see Compare::TYPE_STRING}
      * or {@see Compare::TYPE_NUMBER}.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.

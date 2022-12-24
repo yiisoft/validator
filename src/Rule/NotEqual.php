@@ -10,7 +10,6 @@ use RuntimeException;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- *
  * Defines validation options to check that the specified value is not equal to another value or attribute.
  *
  * The value being validated with {@see NotEqual::$targetValue} or {@see NotEqual::$targetAttribute}, which
@@ -44,7 +43,6 @@ final class NotEqual extends Compare
      * You may use the following placeholders in the message:
      *
      * - `{type}`: type of the value.
-     *
      * @param string|null $message A message used when the value is not valid.
      *
      * You may use the following placeholders in the message:
@@ -55,7 +53,6 @@ final class NotEqual extends Compare
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
      *   the attribute to be compared with.
      * - `{value}`: the value of the attribute being validated.
-     *
      * @param string $type The type of the values being validated.
      * @param bool $strict Whether to use strict checks without type juggling.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
@@ -68,7 +65,7 @@ final class NotEqual extends Compare
      */
     public function __construct(
         private int|float|string|bool|null $targetValue = null,
-          private string|null $targetAttribute = null,
+        private string|null $targetAttribute = null,
         private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean and null.',
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',

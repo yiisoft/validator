@@ -80,6 +80,7 @@ final class Callback implements
      * Get the callable that performs validation.
      *
      * @return callable|null The callable that performs validation.
+     *
      * @see $callback
      */
     public function getCallback(): callable|null
@@ -91,6 +92,7 @@ final class Callback implements
      * Get a name of a validated object method that performs the validation.
      *
      * @return string|null Name of a method that performs the validation.
+     *
      * @see $method
      */
     public function getMethod(): string|null
@@ -102,6 +104,7 @@ final class Callback implements
      * Get object being validated.
      *
      * @return object|null Object being validated.
+     *
      * @see $objectValidated
      */
     public function getObjectValidated(): ?object
