@@ -15,7 +15,9 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Checks if at least {@see AtLeast::$min} of specified attributes are filled.
+ * Defines validation options to check that a minimum number of specified attributes are filled.
+ *
+ * @see AtLeastHandler
  *
  * @psalm-import-type WhenType from WhenInterface
  */
@@ -26,28 +28,33 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
     use SkipOnErrorTrait;
     use WhenTrait;
 
+    /**
+     * @param array $attributes string[] The list of required attributes that will be checked.
+     * @param int $min The minimum required quantity of filled attributes to pass the validation. Defaults to 1.
+     * @param string $incorrectInputMessage A message used when the input is incorrect.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{type}`: the type of the attribute being validated.
+     * @param string $message A message used when the value is not valid.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{min}`: the minimum number of attribute values that was not met.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty. See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
+     * @psalm-param WhenType $when
+     */
     public function __construct(
-        /**
-         * @var string[] The list of required attributes that will be checked.
-         */
         private array $attributes,
-        /**
-         * @var int The minimum required quantity of filled attributes to pass the validation. Defaults to 1.
-         */
         private int $min = 1,
         private string $incorrectInputMessage = 'Value must be an array or an object.',
-        /**
-         * @var string Message to display in case of error.
-         */
         private string $message = 'The data must have at least "{min}" filled attributes.',
-        /**
-         * @var bool|callable|null
-         */
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
-        /**
-         * @psalm-var WhenType
-         */
         private Closure|null $when = null
     ) {
     }
@@ -58,23 +65,42 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
     }
 
     /**
-     * @return string[]
+     * Get the list of required attributes that will be checked.
+     *
+     * @return string[] The list of attributes.
+     * @see $attributes
      */
     public function getAttributes(): array
     {
         return $this->attributes;
     }
 
+    /**
+     * Get the minimum required quantity of filled attributes to pass the validation.
+     * @return int Minimum require quantity.
+     * @see $min
+     */
     public function getMin(): int
     {
         return $this->min;
     }
 
+    /**
+     * Get the message used when the input is incorrect.
+     * @return string Error message.
+     * @see $incorrectInputMessage
+     */
     public function getIncorrectInputMessage(): string
     {
         return $this->incorrectInputMessage;
     }
 
+    /**
+     * Get the message used when the value is not valid.
+     *
+     * @return string Error message.
+     * @see $message
+     */
     public function getMessage(): string
     {
         return $this->message;
