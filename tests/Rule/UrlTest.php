@@ -42,7 +42,7 @@ final class UrlTest extends RuleTestCase
                 [
                     'pattern' => '/^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'validSchemes' => ['http', 'https'],
-                    'enableIDN' => false,
+                    'enableIdn' => false,
                     'incorrectInputMessage' => [
                         'template' => 'The value must have a string type.',
                         'parameters' => [],
@@ -56,11 +56,11 @@ final class UrlTest extends RuleTestCase
                 ],
             ],
             [
-                new Url(enableIDN: true),
+                new Url(enableIdn: true),
                 [
                     'pattern' => '/^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'validSchemes' => ['http', 'https'],
-                    'enableIDN' => true,
+                    'enableIdn' => true,
                     'incorrectInputMessage' => [
                         'template' => 'The value must have a string type.',
                         'parameters' => [],
@@ -78,7 +78,7 @@ final class UrlTest extends RuleTestCase
                 [
                     'pattern' => '/^((?i)http):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'validSchemes' => ['http'],
-                    'enableIDN' => false,
+                    'enableIdn' => false,
                     'incorrectInputMessage' => [
                         'template' => 'The value must have a string type.',
                         'parameters' => [],
@@ -92,11 +92,11 @@ final class UrlTest extends RuleTestCase
                 ],
             ],
             [
-                new Url(pattern: '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/', enableIDN: true),
+                new Url(pattern: '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/', enableIdn: true),
                 [
                     'pattern' => '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/',
                     'validSchemes' => ['http', 'https'],
-                    'enableIDN' => true,
+                    'enableIdn' => true,
                     'incorrectInputMessage' => [
                         'template' => 'The value must have a string type.',
                         'parameters' => [],
@@ -141,9 +141,9 @@ final class UrlTest extends RuleTestCase
             ['HtTp://www.yiiframework.com/', [new Url(validSchemes: ['http', 'FTP'])]],
             ['fTp://www.yiiframework.com/', [new Url(validSchemes: ['http', 'FTP'])]],
 
-            ['http://äüößìà.de', [new Url(enableIDN: true)]],
-            ['http://xn--zcack7ayc9a.de', [new Url(enableIDN: true)]],
-            ['домен.рф', [new Url(pattern: '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i', enableIDN: true)]],
+            ['http://äüößìà.de', [new Url(enableIdn: true)]],
+            ['http://xn--zcack7ayc9a.de', [new Url(enableIdn: true)]],
+            ['домен.рф', [new Url(pattern: '/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i', enableIdn: true)]],
 
             ['http://' . str_repeat('a', 1989) . '.de', [new Url()]],
         ];
@@ -192,23 +192,23 @@ final class UrlTest extends RuleTestCase
             // Relative URLs are not supported
             ['//yiiframework.com', [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps'])], $errors],
 
-            ['', [new Url(enableIDN: true)], $errors],
-            [$longUrl, [new Url(enableIDN: true)], $errors],
+            ['', [new Url(enableIdn: true)], $errors],
+            [$longUrl, [new Url(enableIdn: true)], $errors],
             [$longUrl, [new Url()], $errors],
 
             'custom message' => [
                 '',
-                [new Url(enableIDN: true, message: 'Custom message.')],
+                [new Url(enableIdn: true, message: 'Custom message.')],
                 ['' => ['Custom message.']],
             ],
             'custom message with parameters' => [
                 'not a url',
-                [new Url(enableIDN: true, message: 'Attribute - {attribute}, value - {value}.')],
+                [new Url(enableIdn: true, message: 'Attribute - {attribute}, value - {value}.')],
                 ['' => ['Attribute - , value - not a url.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['attribute' => 'not a url'],
-                ['attribute' => new Url(enableIDN: true, message: 'Attribute - {attribute}, value - {value}.')],
+                ['attribute' => new Url(enableIdn: true, message: 'Attribute - {attribute}, value - {value}.')],
                 ['attribute' => ['Attribute - attribute, value - not a url.']],
             ],
         ];
