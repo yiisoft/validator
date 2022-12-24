@@ -73,9 +73,6 @@ final class GreaterThan extends Compare
         private string $type = self::TYPE_STRING,
         bool|callable|null $skipOnEmpty = false,
         private bool $skipOnError = false,
-        /**
-         * @var WhenType
-         */
         private Closure|null $when = null,
     ) {
         if ($this->targetValue === null && $this->targetAttribute === null) {
