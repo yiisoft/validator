@@ -77,6 +77,7 @@ final class Nested implements
 
         /**
          * @var int What visibility levels to use when reading data and rules from validated object.
+         * @psalm-var int-mask-of<ReflectionProperty::IS_*>
          */
         private int $propertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
@@ -84,6 +85,7 @@ final class Nested implements
         /**
          * @var int What visibility levels to use when reading rules from the class specified in {@see $rules}
          * attribute.
+         * @psalm-var int-mask-of<ReflectionProperty::IS_*>
          */
         private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
@@ -124,6 +126,9 @@ final class Nested implements
         return $this->rules;
     }
 
+    /**
+     * @psalm-return int-mask-of<ReflectionProperty::IS_*>
+     */
     public function getPropertyVisibility(): int
     {
         return $this->propertyVisibility;

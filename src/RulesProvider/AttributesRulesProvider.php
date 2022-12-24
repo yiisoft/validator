@@ -102,6 +102,8 @@ final class AttributesRulesProvider implements RulesProviderInterface
      * protected only, this means that the rest (private ones) will be skipped. Defaults to all visibility levels
      * (public, protected and private).
      * @param bool $skipStaticProperties Whether the properties with "static" modifier must be skipped.
+     *
+     * @psalm-param int-mask-of<ReflectionProperty::IS_*> $propertyVisibility
      */
     public function __construct(
         string|object $source,
