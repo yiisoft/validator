@@ -38,7 +38,7 @@ final class Equal extends Compare
      * - `{attribute}`: the label of the attribute being validated.
      * - `{type}`: the type of the attribute being validated.
      * @param string $incorrectDataSetTypeMessage A message used when the attribute value returned from a custom
-     * data set s not scalar.
+     * data set is not a scalar.
      *
      * You may use the following placeholders in the message:
      *
