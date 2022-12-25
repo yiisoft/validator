@@ -49,7 +49,7 @@ final class MainBench
             'data' => $data,
             'rules' => [
                 'bool' => new Boolean(),
-                'int' => new Number(asInteger: true),
+                'int' => new Number(integerOnly: true),
             ],
             'count' => 1,
         ];
@@ -57,7 +57,7 @@ final class MainBench
             'data' => $data,
             'rules' => [
                 'bool' => new Boolean(),
-                'int' => new Number(asInteger: true),
+                'int' => new Number(integerOnly: true),
             ],
             'count' => 10,
         ];
@@ -65,7 +65,7 @@ final class MainBench
             'data' => $data,
             'rules' => [
                 'bool' => new Boolean(),
-                'int' => new Number(asInteger: true),
+                'int' => new Number(integerOnly: true),
             ],
             'count' => 100,
         ];

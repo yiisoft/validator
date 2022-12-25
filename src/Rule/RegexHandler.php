@@ -14,7 +14,7 @@ use function is_string;
 /**
  * Validates that the value matches the pattern specified in constructor.
  *
- * If the {@see Regex::$not} is used, the rule will ensure the value do NOT match the pattern.
+ * @see Regex
  */
 final class RegexHandler implements RuleHandlerInterface
 {
