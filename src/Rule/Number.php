@@ -45,7 +45,6 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      *
      * - `{attribute}`: the label of the attribute being validated.
      * - `{type}`: the type of the attribute being validated.
-     *
      * @param string $tooSmallMessage Error message used when the value is smaller than {@link $min}.
      *
      * You may use the following placeholders in the message:
@@ -53,7 +52,6 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * - `{attribute}`: the label of the attribute being validated.
      * - `{min}`: minimum value.
      * - `{value}`: actual value.
-     *
      * @param string $tooBigMessage Error message used when the value is bigger than {@link $max}.
      *
      * You may use the following placeholders in the message:
@@ -61,7 +59,6 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * - `{attribute}`: the label of the attribute being validated.
      * - `{max}`: maximum value.
      * - `{value}`: actual value.
-     *
      * @param string $integerPattern The regular expression for matching integers.
      * @param string $numberPattern The regular expression for matching numbers. It defaults to a pattern
      * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
@@ -97,6 +94,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * Whether the value can only be an integer.
      *
      * @return bool Whether the value can only be an integer. Defaults to false.
+     *
      * @see $integerOnly
      */
     public function isIntegerOnly(): bool
@@ -108,6 +106,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * Get lower limit of the number. Null means no lower limit.
      *
      * @return float|int|null Lower limit of the number.
+     *
      * @see $min
      */
     public function getMin(): float|int|null
@@ -119,6 +118,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * Get upper limit of the number. Null means no upper limit.
      *
      * @return float|int|null Upper limit of the number.
+     *
      * @see $max
      */
     public function getMax(): float|int|null
@@ -131,6 +131,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * {@see \Countable} interface.
      *
      * @return string Error message.
+     *
      * @see $incorrectInputMessage
      */
     public function getIncorrectInputMessage(): string
@@ -142,6 +143,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * Get error message used when the value is smaller than {@link $min}.
      *
      * @return string Error message.
+     *
      * @see $tooSmallMessage
      */
     public function getTooSmallMessage(): string
@@ -153,6 +155,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * Get error message used when the value is bigger than {@link $max}.
      *
      * @return string Error message.
+     *
      * @see $tooBigMessage
      */
     public function getTooBigMessage(): string
@@ -164,6 +167,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * Get the regular expression for matching integers.
      *
      * @return string The regular expression.
+     *
      * @see $integerPattern
      */
     public function getIntegerPattern(): string
@@ -175,6 +179,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * The regular expression for matching numbers.
      *
      * @return string The regular expression.
+     *
      * @see $numberPattern
      */
     public function getNumberPattern(): string

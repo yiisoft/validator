@@ -41,14 +41,12 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      *
      * - `{attribute}`: the label of the attribute being validated.
      * - `{type}`: the type of the attribute being validated.
-     *
      * @param string $message A message used when the value does not match regular expression.
      *
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the label of the attribute being validated.
      * - `{value}`: the value of the attribute being validated.
-     *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
@@ -78,6 +76,7 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * Get the regular expression to be matched with.
      *
      * @return string The regular expression.
+     *
      * @see $pattern
      */
     public function getPattern(): string
@@ -89,6 +88,7 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * Get whether to invert the validation logic.
      *
      * @return bool Whether to invert the validation logic.
+     *
      * @see $not
      */
     public function isNot(): bool
@@ -100,6 +100,7 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * Get a message used when the input is incorrect.
      *
      * @return string Error message.
+     *
      * @see $incorrectInputMessage
      */
     public function getIncorrectInputMessage(): string
@@ -111,6 +112,7 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * Get a message used when the value does not match regular expression.
      *
      * @return string Error message.
+     *
      * @see $message
      */
     public function getMessage(): string

@@ -33,6 +33,7 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     /**
      * @param iterable $values A set of values to check against.
      * @psalm-param iterable<scalar> $values
+     *
      * @param bool $strict Whether the comparison is strict (both type and value must be the same).
      * @param bool $not Whether to invert the validation logic. Defaults to `false`. If set to `true`, the value must NOT
      * be among the list of {@see $values}.
@@ -41,7 +42,6 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the name of the attribute.
-     *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.

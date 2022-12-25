@@ -51,7 +51,6 @@ final class HasLength implements
      *
      * - `{attribute}`: the label of the attribute being validated.
      * - `{type}`: the type of the attribute being validated.
-     *
      * @param string $lessThanMinMessage Error message used when the length of the value is smaller than {@see $min}.
      *
      * You may use the following placeholders in the message:
@@ -59,7 +58,6 @@ final class HasLength implements
      * - `{attribute}`: the label of the attribute being validated.
      * - `{min}`: minimum number of items required.
      * - `{number}`: actual number of items.
-     *
      * @param string $greaterThanMaxMessage Error message used when the length of the value is greater than {@see $max}.
      *
      * You may use the following placeholders in the message:
@@ -67,7 +65,6 @@ final class HasLength implements
      * - `{attribute}`: the label of the attribute being validated.
      * - `{max}`: maximum number of items required.
      * - `{number}`: actual number of items.
-     *
      * @param string $notExactlyMessage Error message used when the number of items does not equal {@see $exactly}.
      *
      * You may use the following placeholders in the message:
@@ -75,7 +72,6 @@ final class HasLength implements
      * - `{attribute}`: the label of the attribute being validated.
      * - `{exactly}`: exact number of items required.
      * - `{number}`: actual number of items.
-     *
      * @param string $encoding The encoding of the string value to be validated (e.g. 'UTF-8').
      * If this property is not set, application wide encoding will be used.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
@@ -134,6 +130,7 @@ final class HasLength implements
      * If this property is not set, application wide encoding will be used.
      *
      * @return string Encoding of the string value to be validated.
+     *
      * @see $encoding
      */
     public function getEncoding(): string
