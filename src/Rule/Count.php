@@ -52,7 +52,6 @@ final class Count implements
      * {@see $exactly}. See {@see $greaterThanMaxMessage} for the customized message for a value with too many items.
      * @param int|null $exactly Exact number of items. `null` means no strict comparison. Mutually exclusive with
      * {@see $min} and {@see $max}.
-     *
      * @param string $incorrectInputMessage Error message used when the value is neither an array nor implementing
      * {@see \Countable} interface.
      *
@@ -60,7 +59,6 @@ final class Count implements
      *
      * - `{attribute}`: the label of the attribute being validated.
      * - `{type}`: the type of the attribute being validated.
-     *
      * @param string $lessThanMinMessage Error message used when the number of items is smaller than {@see $min}.
      *
      * You may use the following placeholders in the message:
@@ -68,7 +66,6 @@ final class Count implements
      * - `{attribute}`: the label of the attribute being validated.
      * - `{min}`: minimum number of items required.
      * - `{number}`: actual number of items.
-     *
      * @param string $greaterThanMaxMessage Error message used when the number of items is greater than {@see $max}.
      *
      * You may use the following placeholders in the message:
@@ -76,7 +73,6 @@ final class Count implements
      * - `{attribute}`: the label of the attribute being validated.
      * - `{max}`: maximum number of items required.
      * - `{number}`: actual number of items.
-     *
      * @param string $notExactlyMessage Error message used when the number of items does not equal {@see $exactly}.
      *
      * You may use the following placeholders in the message:
@@ -84,7 +80,6 @@ final class Count implements
      * - `{attribute}`: the label of the attribute being validated.
      * - `{exactly}`: exact number of items required.
      * - `{number}`: actual number of items.
-     *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
@@ -127,6 +122,7 @@ final class Count implements
      * Get error message used when the value is neither an array nor implementing {@see \Countable} interface.
      *
      * @return string Error message.
+     *
      * @see $incorrectInputMessage
      */
     public function getIncorrectInputMessage(): string
@@ -138,6 +134,7 @@ final class Count implements
      * Get object being validated.
      *
      * @return object|null Object being validated.
+     *
      * @see $objectValidated
      */
     public function getObjectValidated(): ?object
