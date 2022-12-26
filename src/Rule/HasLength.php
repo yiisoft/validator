@@ -17,9 +17,7 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Defines validation options to check that the value is of a certain length.
- *
- * Note, this rule should only be used with strings.
+ * Defines validation options to check that the value is a string of a certain length.
  *
  * @see HasLengthHandler
  *
@@ -39,9 +37,9 @@ final class HasLength implements
     use WhenTrait;
 
     /**
-     * @param int|null $min Minimum length. null means no minimum length limit. Can't be combined with
+     * @param int|null $min Minimum length. `null` means no minimum length limit. Can't be combined with
      * {@see $exactly}. See {@see $lessThanMinMessage} for the customized message for a too short string.
-     * @param int|null $max maximum length. null means no maximum length limit. Can't be combined with
+     * @param int|null $max maximum length. `null` means no maximum length limit. Can't be combined with
      * {@see $exactly}. See {@see $greaterThanMaxMessage} for the customized message for a too long string.
      * @param int|null $exactly Exact length. `null` means no strict comparison. Mutually exclusive with
      * {@see $min} and {@see $max}.
@@ -50,12 +48,12 @@ final class HasLength implements
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the label of the attribute being validated.
-     * - `{type}`: the type of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
      * @param string $lessThanMinMessage Error message used when the length of the value is smaller than {@see $min}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{min}`: minimum number of items required.
      * - `{number}`: actual number of items.
      * @param string $greaterThanMaxMessage Error message used when the length of the value is greater than {@see $max}.

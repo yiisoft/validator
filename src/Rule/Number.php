@@ -33,10 +33,10 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     use WhenTrait;
 
     /**
-     * @param bool $integerOnly Whether the value can only be an integer. Defaults to false.
-     * @param float|int|null $min Lower limit of the number. Defaults to null, meaning no lower limit.
+     * @param bool $integerOnly Whether the value can only be an integer. Defaults to `false`.
+     * @param float|int|null $min Lower limit of the number. Defaults to `null`, meaning no lower limit.
      * See {@see $tooSmallMessage} for the customized message used when the number is too small.
-     * @param float|int|null $max Upper limit of the number. Defaults to null, meaning no upper limit.
+     * @param float|int|null $max Upper limit of the number. Defaults to `null`, meaning no upper limit.
      * See {@see $tooBigMessage} for the customized message used when the number is too big.
      * @param string $incorrectInputMessage Error message used when the value is neither an array nor implementing
      * {@see \Countable} interface.
@@ -93,7 +93,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     /**
      * Whether the value can only be an integer.
      *
-     * @return bool Whether the value can only be an integer. Defaults to false.
+     * @return bool Whether the value can only be an integer. Defaults to `false`.
      *
      * @see $integerOnly
      */
@@ -103,7 +103,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     }
 
     /**
-     * Get lower limit of the number. Null means no lower limit.
+     * Get lower limit of the number. `null` means no lower limit.
      *
      * @return float|int|null Lower limit of the number.
      *
@@ -115,7 +115,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     }
 
     /**
-     * Get upper limit of the number. Null means no upper limit.
+     * Get upper limit of the number. `null` means no upper limit.
      *
      * @return float|int|null Upper limit of the number.
      *

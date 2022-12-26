@@ -69,7 +69,7 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     /**
      * Get a set of values to check against.
      *
-     * @return iterable A set of values.
+     * @return iterable A set of scalar values.
      */
     public function getValues(): iterable
     {
@@ -98,7 +98,7 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     }
 
     /**
-     * Get error message when the value is not in a set of value.
+     * Get error message when the value is not in a set of {@see $values}.
      *
      * @return string Error message.
      */
