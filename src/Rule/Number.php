@@ -44,7 +44,6 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      *
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{type}`: the type of the value being validated.
-     *
      * @param string $tooSmallMessage Error message used when the value is smaller than {@link $min}.
      *
      * You may use the following placeholders in the message:
@@ -52,7 +51,6 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{min}`: minimum value.
      * - `{value}`: actual value.
-     *
      * @param string $tooBigMessage Error message used when the value is bigger than {@link $max}.
      *
      * You may use the following placeholders in the message:
@@ -60,7 +58,6 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{max}`: maximum value.
      * - `{value}`: actual value.
-     *
      * @param string $integerPattern The regular expression for matching integers.
      * @param string $numberPattern The regular expression for matching numbers. It defaults to a pattern
      * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
