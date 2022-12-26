@@ -116,7 +116,7 @@ final class RulesDumperTest extends TestCase
                 'falseValue' => '0',
                 'strict' => false,
                 'incorrectInputMessage' => [
-                    'template' => 'Value must be either "{true}" or "{false}".',
+                    'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
                     'parameters' => [
                         'true' => '1',
                         'false' => '0',

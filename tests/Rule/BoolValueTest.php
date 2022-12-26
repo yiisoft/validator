@@ -35,7 +35,7 @@ final class BoolValueTest extends RuleTestCase
                     'falseValue' => '0',
                     'strict' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'Value must be either "{true}" or "{false}".',
+                        'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
                         'parameters' => [
                             'true' => '1',
                             'false' => '0',
@@ -59,7 +59,7 @@ final class BoolValueTest extends RuleTestCase
                     'falseValue' => false,
                     'strict' => true,
                     'incorrectInputMessage' => [
-                        'template' => 'Value must be either "{true}" or "{false}".',
+                        'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
                         'parameters' => [
                             'true' => 'true',
                             'false' => 'false',
@@ -136,14 +136,18 @@ final class BoolValueTest extends RuleTestCase
         return [
             ['5', [new BoolValue()], $defaultErrors],
 
-            [null, [new BoolValue()], $defaultErrors],
-            [[], [new BoolValue()], $defaultErrors],
+            [null, [new BoolValue()], ['' => ['The allowed types are integer, float, string, boolean. null given.']]],
+            [[], [new BoolValue()], ['' => ['The allowed types are integer, float, string, boolean. array given.']]],
 
             [true, [new BoolValue(strict: true)], $defaultErrors],
             [false, [new BoolValue(strict: true)], $defaultErrors],
 
             ['0', [new BoolValue(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
-            [[], [new BoolValue(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
+            [
+                [],
+                [new BoolValue(trueValue: true, falseValue: false, strict: true)],
+                ['' => ['The allowed types are integer, float, string, boolean. array given.']],
+            ],
 
             'custom message' => [
                 5,

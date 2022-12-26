@@ -33,13 +33,13 @@ final class TrueValueTest extends RuleTestCase
                 [
                     'trueValue' => '1',
                     'strict' => false,
-                    'messageWithType' => [
-                        'template' => 'The value must be "{true}".',
+                    'incorrectInputMessage' => [
+                        'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
                         'parameters' => [
                             'true' => '1',
                         ],
                     ],
-                    'messageWithValue' => [
+                    'message' => [
                         'template' => 'The value must be "{true}".',
                         'parameters' => [
                             'true' => '1',
@@ -54,13 +54,13 @@ final class TrueValueTest extends RuleTestCase
                 [
                     'trueValue' => true,
                     'strict' => true,
-                    'messageWithType' => [
-                        'template' => 'The value must be "{true}".',
+                    'incorrectInputMessage' => [
+                        'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
                         'parameters' => [
                             'true' => 'true',
                         ],
                     ],
-                    'messageWithValue' => [
+                    'message' => [
                         'template' => 'The value must be "{true}".',
                         'parameters' => [
                             'true' => 'true',
@@ -82,13 +82,13 @@ final class TrueValueTest extends RuleTestCase
                 [
                     'trueValue' => 'YES',
                     'strict' => true,
-                    'messageWithType' => [
+                    'incorrectInputMessage' => [
                         'template' => 'Custom incorrect input message.',
                         'parameters' => [
                             'true' => 'YES',
                         ],
                     ],
-                    'messageWithValue' => [
+                    'message' => [
                         'template' => 'Custom message.',
                         'parameters' => [
                             'true' => 'YES',
@@ -115,11 +115,15 @@ final class TrueValueTest extends RuleTestCase
     {
         return [
             ['5', [new TrueValue()], ['' => ['The value must be "1".']]],
-            [null, [new TrueValue()], ['' => ['The value must be "1".']]],
-            [[], [new TrueValue()], ['' => ['The value must be "1".']]],
+            [null, [new TrueValue()], ['' => ['The allowed types are integer, float, string, boolean. null given.']]],
+            [[], [new TrueValue()], ['' => ['The allowed types are integer, float, string, boolean. array given.']]],
             [true, [new TrueValue(strict: true)], ['' => ['The value must be "1".']]],
             ['1', [new TrueValue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
-            [[], [new TrueValue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
+            [
+                [],
+                [new TrueValue(trueValue: true, strict: true)],
+                ['' => ['The allowed types are integer, float, string, boolean. array given.']],
+            ],
 
             [false, [new TrueValue()], ['' => ['The value must be "1".']]],
             ['0', [new TrueValue()], ['' => ['The value must be "1".']]],

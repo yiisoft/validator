@@ -49,7 +49,7 @@ final class TrueValue implements RuleWithOptionsInterface, SkipOnErrorInterface,
      *
      * Defaults to `false` meaning non-strict mode is used.
      * @param string $incorrectInputMessage Error message used when validation fails because the type of validated value
-     * is incorrect - either non-scalar value (int, float, string, bool) or null was provided. Used for more predictable
+     * is incorrect. Only scalar values are allowed - either int, float, string or bool. Used for more predictable
      * formatting.
      *
      * You may use the following placeholders in the message:
@@ -75,7 +75,7 @@ final class TrueValue implements RuleWithOptionsInterface, SkipOnErrorInterface,
     public function __construct(
         private int|float|string|bool $trueValue = '1',
         private bool $strict = false,
-        private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean and null.',
+        private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean. {type} given.',
         private string $message = 'The value must be "{true}".',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
