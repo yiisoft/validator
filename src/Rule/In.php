@@ -48,7 +48,6 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      * - {@link https://www.php.net/manual/en/language.types.type-juggling.php}
      *
      * Defaults to `false` meaning non-strict mode is used.
-     *
      * @param bool $not Whether to invert the validation logic. Defaults to `false`. If set to `true`, the value must NOT
      * be among the list of {@see $values}.
      * @param string $message Error message when the value is not in a set of value.
