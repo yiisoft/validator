@@ -44,8 +44,9 @@ final class BooleanHandler implements RuleHandlerInterface
     }
 
     /**
-     * @param Boolean $rule A rule instance.
+     * @param bool $rule A rule instance.
      * @param ValidationContext $context Validation context.
+     *
      * @return array A mapping between attribute names and their values.
      * @psalm-return array<string,scalar|null>
      */
