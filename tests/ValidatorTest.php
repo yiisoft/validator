@@ -17,7 +17,7 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\BoolValue;
+use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\In;
@@ -232,7 +232,7 @@ class ValidatorTest extends TestCase
         $dataObject = new ArrayDataSet(['bool' => true, 'int' => 41]);
         $validator = new Validator();
         $result = $validator->validate($dataObject, [
-            'bool' => [new BoolValue()],
+            'bool' => [new BooleanValue()],
             'int' => [
                 new Number(asInteger: true),
                 new Number(asInteger: true, min: 44),
@@ -1232,7 +1232,7 @@ class ValidatorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $message = 'Rule should be either an instance of Yiisoft\Validator\RuleInterface or a callable, int given.';
         $this->expectExceptionMessage($message);
-        $validator->validate([], [new BoolValue(), 1]);
+        $validator->validate([], [new BooleanValue(), 1]);
     }
 
     public function testRulesAsObjectNameWithRuleAttributes(): void
@@ -1254,7 +1254,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $this->assertFalse(ObjectWithPostValidationHook::$hookCalled);
 
-        $result = $validator->validate(new ObjectWithPostValidationHook(), ['called' => new BoolValue()]);
+        $result = $validator->validate(new ObjectWithPostValidationHook(), ['called' => new BooleanValue()]);
         $this->assertFalse($result->isValid());
         $this->assertTrue(ObjectWithPostValidationHook::$hookCalled);
     }
@@ -1263,7 +1263,7 @@ class ValidatorTest extends TestCase
     {
         $data = ['agree' => false, 'viewsCount' => -1];
         $rules = [
-            'agree' => [new BoolValue(skipOnEmpty: static fn (): bool => true), new TrueValue()],
+            'agree' => [new BooleanValue(skipOnEmpty: static fn (): bool => true), new TrueValue()],
             'viewsCount' => [new Number(asInteger: true, min: 0)],
         ];
         $validator = new Validator();

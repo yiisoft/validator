@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\Rule\BoolValue;
-use Yiisoft\Validator\Rule\BoolValueHandler;
+use Yiisoft\Validator\Rule\BooleanValue;
+use Yiisoft\Validator\Rule\BooleanValueHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
-final class BoolValueTest extends RuleTestCase
+final class BooleanValueTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
@@ -21,7 +21,7 @@ final class BoolValueTest extends RuleTestCase
 
     public function testGetName(): void
     {
-        $rule = new BoolValue();
+        $rule = new BooleanValue();
         $this->assertSame('boolean', $rule->getName());
     }
 
@@ -29,7 +29,7 @@ final class BoolValueTest extends RuleTestCase
     {
         return [
             [
-                new BoolValue(),
+                new BooleanValue(),
                 [
                     'trueValue' => '1',
                     'falseValue' => '0',
@@ -53,7 +53,7 @@ final class BoolValueTest extends RuleTestCase
                 ],
             ],
             [
-                new BoolValue(trueValue: true, falseValue: false, strict: true),
+                new BooleanValue(trueValue: true, falseValue: false, strict: true),
                 [
                     'trueValue' => true,
                     'falseValue' => false,
@@ -77,7 +77,7 @@ final class BoolValueTest extends RuleTestCase
                 ],
             ],
             [
-                new BoolValue(
+                new BooleanValue(
                     trueValue: 'YES',
                     falseValue: 'NO',
                     strict: true,
@@ -114,17 +114,17 @@ final class BoolValueTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            [true, [new BoolValue()]],
-            [false, [new BoolValue()]],
+            [true, [new BooleanValue()]],
+            [false, [new BooleanValue()]],
 
-            ['0', [new BoolValue()]],
-            ['1', [new BoolValue()]],
+            ['0', [new BooleanValue()]],
+            ['1', [new BooleanValue()]],
 
-            ['0', [new BoolValue(strict: true)]],
-            ['1', [new BoolValue(strict: true)]],
+            ['0', [new BooleanValue(strict: true)]],
+            ['1', [new BooleanValue(strict: true)]],
 
-            [true, [new BoolValue(trueValue: true, falseValue: false, strict: true)]],
-            [false, [new BoolValue(trueValue: true, falseValue: false, strict: true)]],
+            [true, [new BooleanValue(trueValue: true, falseValue: false, strict: true)]],
+            [false, [new BooleanValue(trueValue: true, falseValue: false, strict: true)]],
         ];
     }
 
@@ -134,30 +134,30 @@ final class BoolValueTest extends RuleTestCase
         $booleanErrors = ['' => ['Value must be either "true" or "false".']];
 
         return [
-            ['5', [new BoolValue()], $defaultErrors],
+            ['5', [new BooleanValue()], $defaultErrors],
 
-            [null, [new BoolValue()], ['' => ['The allowed types are integer, float, string, boolean. null given.']]],
-            [[], [new BoolValue()], ['' => ['The allowed types are integer, float, string, boolean. array given.']]],
+            [null, [new BooleanValue()], ['' => ['The allowed types are integer, float, string, boolean. null given.']]],
+            [[], [new BooleanValue()], ['' => ['The allowed types are integer, float, string, boolean. array given.']]],
 
-            [true, [new BoolValue(strict: true)], $defaultErrors],
-            [false, [new BoolValue(strict: true)], $defaultErrors],
+            [true, [new BooleanValue(strict: true)], $defaultErrors],
+            [false, [new BooleanValue(strict: true)], $defaultErrors],
 
-            ['0', [new BoolValue(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
+            ['0', [new BooleanValue(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
             [
                 [],
-                [new BoolValue(trueValue: true, falseValue: false, strict: true)],
+                [new BooleanValue(trueValue: true, falseValue: false, strict: true)],
                 ['' => ['The allowed types are integer, float, string, boolean. array given.']],
             ],
 
             'custom message' => [
                 5,
-                [new BoolValue(message: 'Custom error.')],
+                [new BooleanValue(message: 'Custom error.')],
                 ['' => ['Custom error.']],
             ],
             'custom message with parameters' => [
                 5,
                 [
-                    new BoolValue(
+                    new BooleanValue(
                         message: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
                     ),
                 ],
@@ -166,7 +166,7 @@ final class BoolValueTest extends RuleTestCase
             'custom message with parameters, custom true and false values, strict' => [
                 5,
                 [
-                    new BoolValue(
+                    new BooleanValue(
                         trueValue: true,
                         falseValue: false,
                         strict: true,
@@ -178,7 +178,7 @@ final class BoolValueTest extends RuleTestCase
             'custom message with parameters, attribute set' => [
                 ['data' => 5],
                 [
-                    'data' => new BoolValue(
+                    'data' => new BooleanValue(
                         message: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
                     ),
                 ],
@@ -186,13 +186,13 @@ final class BoolValueTest extends RuleTestCase
             ],
             'custom incorrect input message' => [
                 [],
-                [new BoolValue(incorrectInputMessage: 'Custom error.')],
+                [new BooleanValue(incorrectInputMessage: 'Custom error.')],
                 ['' => ['Custom error.']],
             ],
             'custom incorrect input message with parameters' => [
                 [],
                 [
-                    new BoolValue(
+                    new BooleanValue(
                         incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
@@ -201,7 +201,7 @@ final class BoolValueTest extends RuleTestCase
             'custom incorrect input message with parameters, custom true and false values, strict' => [
                 [],
                 [
-                    new BoolValue(
+                    new BooleanValue(
                         trueValue: true,
                         falseValue: false,
                         strict: true,
@@ -213,7 +213,7 @@ final class BoolValueTest extends RuleTestCase
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => []],
                 [
-                    'data' => new BoolValue(
+                    'data' => new BooleanValue(
                         incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
@@ -222,7 +222,7 @@ final class BoolValueTest extends RuleTestCase
             'custom incorrect input message, null' => [
                 null,
                 [
-                    new BoolValue(
+                    new BooleanValue(
                         incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
@@ -233,17 +233,17 @@ final class BoolValueTest extends RuleTestCase
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new BoolValue(), new BoolValue(skipOnError: true));
+        $this->testSkipOnErrorInternal(new BooleanValue(), new BooleanValue(skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new BoolValue(), new BoolValue(when: $when));
+        $this->testWhenInternal(new BooleanValue(), new BooleanValue(when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array
     {
-        return [BoolValue::class, BoolValueHandler::class];
+        return [BooleanValue::class, BooleanValueHandler::class];
     }
 }

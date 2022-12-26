@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Helper;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Rule\BoolValue;
+use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
@@ -106,7 +106,7 @@ final class RulesDumperTest extends TestCase
     {
         $dumper = new RulesDumper();
         $rules = [
-            new BoolValue(),
+            new BooleanValue(),
             new RuleWithoutOptions(),
         ];
         $expectedRules = [
