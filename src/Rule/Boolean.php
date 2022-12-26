@@ -61,7 +61,7 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{true}`: the value set in {@see $trueValue} option.
      * - `{false}`: the value set in {@see $falseValue} option.
      * - `{type}`: the type of the value being validated.
@@ -70,7 +70,7 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{true}`: the value set in {@see $trueValue} option.
      * - `{false}`: the value set in {@see $falseValue} option.
      * - `{value}`: the value being validated.

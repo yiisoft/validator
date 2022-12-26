@@ -70,6 +70,7 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      * Get a set of values to check against.
      *
      * @return iterable A set of scalar values.
+     * @psalm-return iterable<scalar>
      */
     public function getValues(): iterable
     {

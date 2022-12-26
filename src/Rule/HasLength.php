@@ -47,7 +47,7 @@ final class HasLength implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $lessThanMinMessage Error message used when the length of the value is smaller than {@see $min}.
      *
@@ -60,14 +60,14 @@ final class HasLength implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{max}`: maximum number of items required.
      * - `{number}`: actual number of items.
      * @param string $notExactlyMessage Error message used when the number of items does not equal {@see $exactly}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{exactly}`: exact number of items required.
      * - `{number}`: actual number of items.
      * @param string $encoding The encoding of the string value to be validated (e.g. 'UTF-8').

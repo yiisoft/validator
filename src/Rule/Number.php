@@ -38,27 +38,29 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * See {@see $tooSmallMessage} for the customized message used when the number is too small.
      * @param float|int|null $max Upper limit of the number. Defaults to `null`, meaning no upper limit.
      * See {@see $tooBigMessage} for the customized message used when the number is too big.
-     * @param string $incorrectInputMessage Error message used when the value is neither an array nor implementing
-     * {@see \Countable} interface.
+     * @param string $incorrectInputMessage Error message used when the value is not numeric.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
-     * - `{type}`: the type of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
+     *
      * @param string $tooSmallMessage Error message used when the value is smaller than {@link $min}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{min}`: minimum value.
      * - `{value}`: actual value.
+     *
      * @param string $tooBigMessage Error message used when the value is bigger than {@link $max}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{max}`: maximum value.
      * - `{value}`: actual value.
+     *
      * @param string $integerPattern The regular expression for matching integers.
      * @param string $numberPattern The regular expression for matching numbers. It defaults to a pattern
      * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
@@ -127,8 +129,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     }
 
     /**
-     * Get error message used when the value is neither an array nor implementing
-     * {@see \Countable} interface.
+     * Get error message used when the value is not numeric.
      *
      * @return string Error message.
      *

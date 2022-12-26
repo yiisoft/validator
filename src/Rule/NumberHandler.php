@@ -15,10 +15,6 @@ use function is_bool;
 /**
  * Validates that the value is a number.
  *
- * The format of the number must match the regular expression specified in {@see Number::$integerPattern}
- * or {@see Number::$numberPattern}. Optionally, you may configure the {@see Number::min()} and {@see Number::max()}
- * to ensure the number is within certain range.
- *
  * @see Number
  */
 final class NumberHandler implements RuleHandlerInterface

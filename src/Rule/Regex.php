@@ -39,13 +39,13 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
-     * - `{type}`: the type of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
      * @param string $message A message used when the value does not match regular expression.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{value}`: the value of the attribute being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
