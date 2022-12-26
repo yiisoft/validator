@@ -10,14 +10,14 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * A handler for {@see Boolean} rule.
+ * A handler for {@see BoolValue} rule.
  */
-final class BooleanHandler implements RuleHandlerInterface
+final class BoolValueHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
-        if (!$rule instanceof Boolean) {
-            throw new UnexpectedRuleException(Boolean::class, $rule);
+        if (!$rule instanceof BoolValue) {
+            throw new UnexpectedRuleException(BoolValue::class, $rule);
         }
 
         if (!is_scalar($value)) {
@@ -44,12 +44,12 @@ final class BooleanHandler implements RuleHandlerInterface
     }
 
     /**
-     * @param Boolean $rule A rule instance.
+     * @param BoolValue $rule A rule instance.
      * @param ValidationContext $context Validation context.
      * @return array A mapping between attribute names and their values.
      * @psalm-return array<string,scalar|null>
      */
-    private function getCommonResultParameters(Boolean $rule, ValidationContext $context): array
+    private function getCommonResultParameters(BoolValue $rule, ValidationContext $context): array
     {
         return [
             'attribute' => $context->getTranslatedAttribute(),

@@ -22,12 +22,12 @@ use Yiisoft\Validator\WhenInterface;
  *
  * If the purpose is to check the truthiness only, use {@see IsTrue} rule instead.
  *
- * @see BooleanHandler Corresponding handler performing the actual validation.
+ * @see BoolValueHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
+final class BoolValue implements RuleWithOptionsInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -180,6 +180,6 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
 
     public function getHandler(): string
     {
-        return BooleanHandler::class;
+        return BoolValueHandler::class;
     }
 }

@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\DataSet;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Boolean;
+use Yiisoft\Validator\Rule\BoolValue;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
@@ -21,7 +21,7 @@ final class DataSetUsageTest extends TestCase
         return [
             [
                 ['bool' => true, 'int' => 41],
-                ['bool' => [new Boolean()], 'int' => [new Number()]],
+                ['bool' => [new BoolValue()], 'int' => [new Number()]],
             ],
         ];
     }
@@ -42,7 +42,7 @@ final class DataSetUsageTest extends TestCase
         return [
             [
                 ['bool' => true, 'int' => 41],
-                ['bool' => [new Boolean()], 'int' => [new Number()]],
+                ['bool' => [new BoolValue()], 'int' => [new Number()]],
             ],
         ];
     }
@@ -65,7 +65,7 @@ final class DataSetUsageTest extends TestCase
             'int' => 41,
         ]);
         $rules = [
-            'bool' => [new Boolean()],
+            'bool' => [new BoolValue()],
             'int' => [
                 new Number(asInteger: true),
                 new Number(asInteger: true, min: 44),
@@ -94,7 +94,7 @@ final class DataSetUsageTest extends TestCase
                 'int' => 41,
             ],
             [
-                'bool' => [new Boolean()],
+                'bool' => [new BoolValue()],
                 'int' => [
                     new Number(asInteger: true),
                     new Number(asInteger: true, min: 44),

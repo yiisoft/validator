@@ -12,7 +12,7 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Boolean;
+use Yiisoft\Validator\Rule\BoolValue;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
@@ -649,7 +649,7 @@ final class NestedTest extends RuleTestCase
                         'charts.*.points.*.coordinates.x' => $xRules,
                         'charts.*.points.*.coordinates.y' => $yRules,
                         'charts.*.points.*.rgb' => $rgbRules,
-                        'active' => new Boolean(),
+                        'active' => new BoolValue(),
                     ]),
                 ],
                 $detailedErrors,
@@ -1174,7 +1174,7 @@ final class NestedTest extends RuleTestCase
         new Nested([
             'data' => new Nested([
                 'title' => [new HasLength(max: 255)],
-                'active' => [new Boolean(), 'Not a rule'],
+                'active' => [new BoolValue(), 'Not a rule'],
             ]),
         ]);
     }
