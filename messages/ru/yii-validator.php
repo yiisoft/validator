@@ -5,6 +5,7 @@ declare(strict_types=1);
 return [
     'The data must have at least "{min}" filled attributes.' => 'Данные должны содержать минимум {min, number} {min, plural, one{заполненный атрибут} few{заполненных атрибута} many{заполненных атрибутов} other{заполненных атрибута}}.',
     'Value must be an array or an object.' => 'Значение должно быть массивом или объектом.',
+    'The allowed types are integer, float, string, boolean. {type} given.' => 'Разрешённые типы: integer, float, string, boolean. Передан {type}.',
     'Value must be either "{true}" or "{false}".' => 'Значение должно быть «{true}» или «{false}».',
     'The allowed types are integer, float, string, boolean and null.' => 'Разрешённые типы: integer, float, string, boolean и null.',
     'The attribute value returned from a custom data set must have a scalar type.' => 'Значение, получаемое из набора данных, должно иметь скалярный тип.',

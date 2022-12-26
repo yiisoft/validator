@@ -10,7 +10,7 @@ use PhpBench\Benchmark\Metadata\Annotations\Iterations;
 use PhpBench\Benchmark\Metadata\Annotations\ParamProviders;
 use PhpBench\Benchmark\Metadata\Annotations\Revs;
 use PhpBench\Benchmark\Metadata\Annotations\Warmup;
-use Yiisoft\Validator\Rule\Boolean;
+use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
@@ -48,7 +48,7 @@ final class MainBench
         yield 'simple 1' => [
             'data' => $data,
             'rules' => [
-                'bool' => new Boolean(),
+                'bool' => new BooleanValue(),
                 'int' => new Number(asInteger: true),
             ],
             'count' => 1,
@@ -56,7 +56,7 @@ final class MainBench
         yield 'simple 10' => [
             'data' => $data,
             'rules' => [
-                'bool' => new Boolean(),
+                'bool' => new BooleanValue(),
                 'int' => new Number(asInteger: true),
             ],
             'count' => 10,
@@ -64,7 +64,7 @@ final class MainBench
         yield 'simple 100' => [
             'data' => $data,
             'rules' => [
-                'bool' => new Boolean(),
+                'bool' => new BooleanValue(),
                 'int' => new Number(asInteger: true),
             ],
             'count' => 100,
