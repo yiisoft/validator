@@ -46,6 +46,7 @@ final class IsTrueHandler implements RuleHandlerInterface
     /**
      * @param IsTrue $rule A rule instance.
      * @param ValidationContext $context Validation context.
+     *
      * @return array A mapping between attribute names and their values.
      * @psalm-return array<string,scalar|null>
      */
