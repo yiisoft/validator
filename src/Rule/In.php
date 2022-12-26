@@ -19,6 +19,8 @@ use Yiisoft\Validator\WhenInterface;
  * If the {@see In::$not} is set, the validation logic is inverted and the rule will ensure that the value
  * is NOT one of them.
  *
+ * Note that sub-arrays are not supported. Use {@see Subset} instead.
+ *
  * @see InHandler
  *
  * @psalm-import-type WhenType from WhenInterface
@@ -31,10 +33,22 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     use WhenTrait;
 
     /**
-     * @param iterable $values A set of values to check against.
+     * @param iterable $values A set of values to check against. Sub-arrays are not supported. Use {@see Subset} instead.
      * @psalm-param iterable<scalar> $values
      *
-     * @param bool $strict Whether the comparison is strict (both type and value must be the same).
+     * @param bool $strict Whether the comparison to {@see $trueValue} and {@see $falseValue} is strict:
+     *
+     * - Strict mode uses `===` operator meaning the type and the value must both match to those set in
+     * {@see $trueValue} or {@see $falseValue}.
+     * - Non-strict mode uses `==` operator meaning that type juggling is performed first before the comparison. You can
+     * read more in the PHP docs:
+     *
+     * - {@link https://www.php.net/manual/en/language.operators.comparison.php}
+     * - {@link https://www.php.net/manual/en/types.comparisons.php}
+     * - {@link https://www.php.net/manual/en/language.types.type-juggling.php}
+     *
+     * Defaults to `false` meaning non-strict mode is used.
+     *
      * @param bool $not Whether to invert the validation logic. Defaults to `false`. If set to `true`, the value must NOT
      * be among the list of {@see $values}.
      * @param string $message Error message when the value is not in a set of value.
