@@ -34,11 +34,6 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
     use WhenTrait;
 
     /**
-     * @const Default message used for all cases.
-     */
-    private const DEFAULT_MESSAGE = 'Value must be either "{true}" or "{false}".';
-
-    /**
      * @param scalar $trueValue The value that is considered to be "true". Only scalar values (either int, float, string
      * or bool) are allowed. Defaults to `1` string.
      * @param scalar $falseValue The value that is considered to be "false". Only scalar values (either int, float,
@@ -55,8 +50,8 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
      * - {@link https://www.php.net/manual/en/language.types.type-juggling.php}
      *
      * Defaults to `false` meaning non-strict mode is used.
-     * @param string $messageWithType Error message used when validation fails and neither non-scalar value (int,
-     * float, string, bool) nor null was provided as input. The type is used instead of value here for more predictable
+     * @param string $incorrectInputMessage Error message used when validation fails because the type of validated value
+     * is incorrect - either non-scalar value (int, float, string, bool) or null was provided. Used for more predictable
      * formatting.
      *
      * You may use the following placeholders in the message:
@@ -65,8 +60,8 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
      * - `{true}`: the value set in {@see $trueValue} option.
      * - `{false}`: the value set in {@see $falseValue} option.
      * - `{type}`: the type of the value being validated.
-     * @param string $messageWithValue Error message used when validation fails and either scalar value (int, float,
-     * string, bool) or null was provided as input.
+     * @param string $message Error message used when validation fails because the validated value does not match
+     * neither "true" nor "false" values.
      *
      * You may use the following placeholders in the message:
      *
@@ -85,8 +80,8 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
         private int|float|string|bool $trueValue = '1',
         private int|float|string|bool $falseValue = '0',
         private bool $strict = false,
-        private string $messageWithType = self::DEFAULT_MESSAGE,
-        private string $messageWithValue = self::DEFAULT_MESSAGE,
+        private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean and null.',
+        private string $message = 'Value must be either "{true}" or "{false}".',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
@@ -135,27 +130,28 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
     }
 
     /**
-     * Gets error message used when validation fails and value is complex to format, so its type is used instead.
+     * Gets error message used when validation fails because the type of validated value is incorrect.
      *
      * @return string Error message / template.
      *
-     * @see $messageWithType
+     * @see $incorrectInputMessage
      */
-    public function getMessageWithType(): string
+    public function getIncorrectInputMessage(): string
     {
-        return $this->messageWithType;
+        return $this->incorrectInputMessage;
     }
 
     /**
-     * Gets error message used when validation fails and value can be formatted.
+     * Error message used when validation fails because the validated value does not match neither "true" nor "false"
+     * values.
      *
      * @return string Error message / template.
      *
-     * @see $messageWithValue
+     * @see $message
      */
-    public function getMessageWithValue(): string
+    public function getMessage(): string
     {
-        return $this->messageWithValue;
+        return $this->message;
     }
 
     public function getOptions(): array
@@ -169,12 +165,12 @@ final class Boolean implements RuleWithOptionsInterface, SkipOnEmptyInterface, S
             'trueValue' => $this->trueValue,
             'falseValue' => $this->falseValue,
             'strict' => $this->strict,
-            'messageWithType' => [
-                'template' => $this->messageWithType,
+            'incorrectInputMessage' => [
+                'template' => $this->incorrectInputMessage,
                 'parameters' => $messageParameters,
             ],
-            'messageWithValue' => [
-                'template' => $this->messageWithValue,
+            'message' => [
+                'template' => $this->message,
                 'parameters' => $messageParameters,
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),

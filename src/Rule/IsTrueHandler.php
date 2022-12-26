@@ -21,30 +21,39 @@ final class IsTrueHandler implements RuleHandlerInterface
         }
 
         if (!is_scalar($value)) {
-            $valid = false;
-        } elseif ($rule->isStrict()) {
+            $parameters = $this->getCommonResultParameters($rule, $context);
+            $parameters['type'] = get_debug_type($value);
+
+            return (new Result())->addError($rule->getIncorrectInputMessage(), $parameters);
+        }
+
+        if ($rule->isStrict()) {
             $valid = $value === $rule->getTrueValue();
         } else {
             $valid = $value == $rule->getTrueValue();
         }
 
-        $result = new Result();
         if ($valid) {
-            return $result;
+            return new Result();
         }
 
-        $parameters = [
+        $parameters = $this->getCommonResultParameters($rule, $context);
+        $parameters['value'] = $value;
+
+        return (new Result())->addError($rule->getMessage(), $parameters);
+    }
+
+    /**
+     * @param IsTrue $rule A rule instance.
+     * @param ValidationContext $context Validation context.
+     * @return array A mapping between attribute names and their values.
+     * @psalm-return array<string,scalar|null>
+     */
+    private function getCommonResultParameters(IsTrue $rule, ValidationContext $context): array
+    {
+        return [
             'attribute' => $context->getTranslatedAttribute(),
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
         ];
-        if ($value === null || is_scalar($value)) {
-            $parameters['value'] = $value ?? 'null';
-
-            return $result->addError($rule->getMessageWithValue(), $parameters);
-        }
-
-        $parameters['type'] = get_debug_type($value);
-
-        return $result->addError($rule->getMessageWithType(), $parameters);
     }
 }

@@ -74,8 +74,8 @@ final class IsTrueTest extends RuleTestCase
                 new IsTrue(
                     trueValue: 'YES',
                     strict: true,
-                    messageWithType: 'Custom message with type.',
-                    messageWithValue: 'Custom message with value.',
+                    incorrectInputMessage: 'Custom incorrect input message.',
+                    message: 'Custom message.',
                     skipOnEmpty: true,
                     skipOnError: true
                 ),
@@ -83,13 +83,13 @@ final class IsTrueTest extends RuleTestCase
                     'trueValue' => 'YES',
                     'strict' => true,
                     'messageWithType' => [
-                        'template' => 'Custom message with type.',
+                        'template' => 'Custom incorrect input message.',
                         'parameters' => [
                             'true' => 'YES',
                         ],
                     ],
                     'messageWithValue' => [
-                        'template' => 'Custom message with value.',
+                        'template' => 'Custom message.',
                         'parameters' => [
                             'true' => 'YES',
                         ],
@@ -126,68 +126,68 @@ final class IsTrueTest extends RuleTestCase
             ['0', [new IsTrue(strict: true)], ['' => ['The value must be "1".']]],
             [false, [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
 
-            'custom message with value' => [
+            'custom message' => [
                 5,
-                [new IsTrue(messageWithValue: 'Custom error.')],
+                [new IsTrue(message: 'Custom error.')],
                 ['' => ['Custom error.']],
             ],
-            'custom message with value with parameters' => [
+            'custom message with parameters' => [
                 5,
-                [new IsTrue(messageWithValue: 'Attribute - {attribute}, true - {true}, value - {value}.')],
+                [new IsTrue(message: 'Attribute - {attribute}, true - {true}, value - {value}.')],
                 ['' => ['Attribute - , true - 1, value - 5.']],
             ],
-            'custom message with value with parameters, custom true value, strict' => [
+            'custom message with parameters, custom true value, strict' => [
                 5,
                 [
                     new IsTrue(
                         trueValue: true,
                         strict: true,
-                        messageWithValue: 'Attribute - {attribute}, true - {true}, value - {value}.',
+                        message: 'Attribute - {attribute}, true - {true}, value - {value}.',
                     ),
                 ],
                 ['' => ['Attribute - , true - true, value - 5.']],
             ],
-            'custom message with value with parameters, attribute set' => [
+            'custom message with parameters, attribute set' => [
                 ['data' => 5],
                 [
-                    'data' => new IsTrue(messageWithValue: 'Attribute - {attribute}, true - {true}, value - {value}.'),
+                    'data' => new IsTrue(message: 'Attribute - {attribute}, true - {true}, value - {value}.'),
                 ],
                 ['data' => ['Attribute - data, true - 1, value - 5.']],
             ],
-            'custom message with value, null' => [
-                null,
-                [new IsTrue(messageWithValue: 'Attribute - {attribute}, true - {true}, value - {value}.'),],
-                ['' => ['Attribute - , true - 1, value - null.']],
-            ],
-            'custom message with type' => [
+            'custom incorrect input message' => [
                 [],
-                [new IsTrue(messageWithType: 'Custom error.')],
+                [new IsTrue(incorrectInputMessage: 'Custom error.')],
                 ['' => ['Custom error.']],
             ],
-            'custom message with type with parameters' => [
+            'custom incorrect input message with parameters' => [
                 [],
                 [
-                    new IsTrue(messageWithType: 'Attribute - {attribute}, true - {true}, type - {type}.'),
+                    new IsTrue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),
                 ],
                 ['' => ['Attribute - , true - 1, type - array.']],
             ],
-            'custom message with type with parameters, custom true and false values, strict' => [
+            'custom incorrect input message with parameters, custom true and false values, strict' => [
                 [],
                 [
                     new IsTrue(
                         trueValue: true,
                         strict: true,
-                        messageWithType: 'Attribute - {attribute}, true - {true}, type - {type}.',
+                        incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.',
                     ),
                 ],
                 ['' => ['Attribute - , true - true, type - array.']],
             ],
-            'custom message with type with parameters, attribute set' => [
+            'custom incorrect input message with parameters, attribute set' => [
                 ['data' => []],
                 [
-                    'data' => new IsTrue(messageWithType: 'Attribute - {attribute}, true - {true}, type - {type}.'),
+                    'data' => new IsTrue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),
                 ],
                 ['data' => ['Attribute - data, true - 1, type - array.']],
+            ],
+            'custom incorrect input message, null' => [
+                null,
+                [new IsTrue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),],
+                ['' => ['Attribute - , true - 1, type - null.']],
             ],
         ];
     }

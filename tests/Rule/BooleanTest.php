@@ -34,14 +34,14 @@ final class BooleanTest extends RuleTestCase
                     'trueValue' => '1',
                     'falseValue' => '0',
                     'strict' => false,
-                    'messageWithType' => [
+                    'incorrectInputMessage' => [
                         'template' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => '1',
                             'false' => '0',
                         ],
                     ],
-                    'messageWithValue' => [
+                    'message' => [
                         'template' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => '1',
@@ -58,14 +58,14 @@ final class BooleanTest extends RuleTestCase
                     'trueValue' => true,
                     'falseValue' => false,
                     'strict' => true,
-                    'messageWithType' => [
+                    'incorrectInputMessage' => [
                         'template' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => 'true',
                             'false' => 'false',
                         ],
                     ],
-                    'messageWithValue' => [
+                    'message' => [
                         'template' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => 'true',
@@ -81,8 +81,8 @@ final class BooleanTest extends RuleTestCase
                     trueValue: 'YES',
                     falseValue: 'NO',
                     strict: true,
-                    messageWithType: 'Custom message 1.',
-                    messageWithValue: 'Custom message 2.',
+                    incorrectInputMessage: 'Custom message 1.',
+                    message: 'Custom message 2.',
                     skipOnEmpty: true,
                     skipOnError: true
                 ),
@@ -90,14 +90,14 @@ final class BooleanTest extends RuleTestCase
                     'trueValue' => 'YES',
                     'falseValue' => 'NO',
                     'strict' => true,
-                    'messageWithType' => [
+                    'incorrectInputMessage' => [
                         'template' => 'Custom message 1.',
                         'parameters' => [
                             'true' => 'YES',
                             'false' => 'NO',
                         ],
                     ],
-                    'messageWithValue' => [
+                    'message' => [
                         'template' => 'Custom message 2.',
                         'parameters' => [
                             'true' => 'YES',
@@ -145,84 +145,84 @@ final class BooleanTest extends RuleTestCase
             ['0', [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
             [[], [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
 
-            'custom message with value' => [
+            'custom message' => [
                 5,
-                [new Boolean(messageWithValue: 'Custom error.')],
+                [new Boolean(message: 'Custom error.')],
                 ['' => ['Custom error.']],
             ],
-            'custom message with value with parameters' => [
+            'custom message with parameters' => [
                 5,
                 [
                     new Boolean(
-                        messageWithValue: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
+                        message: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
                     ),
                 ],
                 ['' => ['Attribute - , true - 1, false - 0, value - 5.']],
             ],
-            'custom message with value with parameters, custom true and false values, strict' => [
+            'custom message with parameters, custom true and false values, strict' => [
                 5,
                 [
                     new Boolean(
                         trueValue: true,
                         falseValue: false,
                         strict: true,
-                        messageWithValue: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
+                        message: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
                     ),
                 ],
                 ['' => ['Attribute - , true - true, false - false, value - 5.']],
             ],
-            'custom message with value with parameters, attribute set' => [
+            'custom message with parameters, attribute set' => [
                 ['data' => 5],
                 [
                     'data' => new Boolean(
-                        messageWithValue: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
+                        message: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
                     ),
                 ],
                 ['data' => ['Attribute - data, true - 1, false - 0, value - 5.']],
             ],
-            'custom message with value, null' => [
-                null,
-                [
-                    new Boolean(
-                        messageWithValue: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
-                    ),
-                ],
-                ['' => ['Attribute - , true - 1, false - 0, value - null.']],
-            ],
-            'custom message with type' => [
+            'custom incorrect input message' => [
                 [],
-                [new Boolean(messageWithType: 'Custom error.')],
+                [new Boolean(incorrectInputMessage: 'Custom error.')],
                 ['' => ['Custom error.']],
             ],
-            'custom message with type with parameters' => [
+            'custom incorrect input message with parameters' => [
                 [],
                 [
                     new Boolean(
-                        messageWithType: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
+                        incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
                 ['' => ['Attribute - , true - 1, false - 0, type - array.']],
             ],
-            'custom message with type with parameters, custom true and false values, strict' => [
+            'custom incorrect input message with parameters, custom true and false values, strict' => [
                 [],
                 [
                     new Boolean(
                         trueValue: true,
                         falseValue: false,
                         strict: true,
-                        messageWithType: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
+                        incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
                 ['' => ['Attribute - , true - true, false - false, type - array.']],
             ],
-            'custom message with type with parameters, attribute set' => [
+            'custom incorrect input message with parameters, attribute set' => [
                 ['data' => []],
                 [
                     'data' => new Boolean(
-                        messageWithType: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
+                        incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
                 ['data' => ['Attribute - data, true - 1, false - 0, type - array.']],
+            ],
+            'custom incorrect input message, null' => [
+                null,
+                [
+                    new Boolean(
+                        incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
+                    ),
+                ],
+                ['' => ['Attribute - , true - 1, false - 0, type - null.']],
             ],
         ];
     }

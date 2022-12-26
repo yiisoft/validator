@@ -115,14 +115,14 @@ final class RulesDumperTest extends TestCase
                 'trueValue' => '1',
                 'falseValue' => '0',
                 'strict' => false,
-                'messageWithType' => [
+                'incorrectInputMessage' => [
                     'template' => 'Value must be either "{true}" or "{false}".',
                     'parameters' => [
                         'true' => '1',
                         'false' => '0',
                     ],
                 ],
-                'messageWithValue' => [
+                'message' => [
                     'template' => 'Value must be either "{true}" or "{false}".',
                     'parameters' => [
                         'true' => '1',
