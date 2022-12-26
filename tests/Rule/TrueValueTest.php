@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\Rule\IsTrue;
-use Yiisoft\Validator\Rule\IsTrueHandler;
+use Yiisoft\Validator\Rule\TrueValue;
+use Yiisoft\Validator\Rule\TrueValueHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
-final class IsTrueTest extends RuleTestCase
+final class TrueValueTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
@@ -21,7 +21,7 @@ final class IsTrueTest extends RuleTestCase
 
     public function testGetName(): void
     {
-        $rule = new IsTrue();
+        $rule = new TrueValue();
         $this->assertSame('isTrue', $rule->getName());
     }
 
@@ -29,7 +29,7 @@ final class IsTrueTest extends RuleTestCase
     {
         return [
             [
-                new IsTrue(),
+                new TrueValue(),
                 [
                     'trueValue' => '1',
                     'strict' => false,
@@ -50,7 +50,7 @@ final class IsTrueTest extends RuleTestCase
                 ],
             ],
             [
-                new IsTrue(trueValue: true, strict: true),
+                new TrueValue(trueValue: true, strict: true),
                 [
                     'trueValue' => true,
                     'strict' => true,
@@ -71,7 +71,7 @@ final class IsTrueTest extends RuleTestCase
                 ],
             ],
             [
-                new IsTrue(
+                new TrueValue(
                     trueValue: 'YES',
                     strict: true,
                     incorrectInputMessage: 'Custom incorrect input message.',
@@ -104,42 +104,42 @@ final class IsTrueTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            [true, [new IsTrue()]],
-            ['1', [new IsTrue()]],
-            ['1', [new IsTrue(strict: true)]],
-            [true, [new IsTrue(trueValue: true, strict: true)]],
+            [true, [new TrueValue()]],
+            ['1', [new TrueValue()]],
+            ['1', [new TrueValue(strict: true)]],
+            [true, [new TrueValue(trueValue: true, strict: true)]],
         ];
     }
 
     public function dataValidationFailed(): array
     {
         return [
-            ['5', [new IsTrue()], ['' => ['The value must be "1".']]],
-            [null, [new IsTrue()], ['' => ['The value must be "1".']]],
-            [[], [new IsTrue()], ['' => ['The value must be "1".']]],
-            [true, [new IsTrue(strict: true)], ['' => ['The value must be "1".']]],
-            ['1', [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
-            [[], [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
+            ['5', [new TrueValue()], ['' => ['The value must be "1".']]],
+            [null, [new TrueValue()], ['' => ['The value must be "1".']]],
+            [[], [new TrueValue()], ['' => ['The value must be "1".']]],
+            [true, [new TrueValue(strict: true)], ['' => ['The value must be "1".']]],
+            ['1', [new TrueValue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
+            [[], [new TrueValue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
 
-            [false, [new IsTrue()], ['' => ['The value must be "1".']]],
-            ['0', [new IsTrue()], ['' => ['The value must be "1".']]],
-            ['0', [new IsTrue(strict: true)], ['' => ['The value must be "1".']]],
-            [false, [new IsTrue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
+            [false, [new TrueValue()], ['' => ['The value must be "1".']]],
+            ['0', [new TrueValue()], ['' => ['The value must be "1".']]],
+            ['0', [new TrueValue(strict: true)], ['' => ['The value must be "1".']]],
+            [false, [new TrueValue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
 
             'custom message' => [
                 5,
-                [new IsTrue(message: 'Custom error.')],
+                [new TrueValue(message: 'Custom error.')],
                 ['' => ['Custom error.']],
             ],
             'custom message with parameters' => [
                 5,
-                [new IsTrue(message: 'Attribute - {attribute}, true - {true}, value - {value}.')],
+                [new TrueValue(message: 'Attribute - {attribute}, true - {true}, value - {value}.')],
                 ['' => ['Attribute - , true - 1, value - 5.']],
             ],
             'custom message with parameters, custom true value, strict' => [
                 5,
                 [
-                    new IsTrue(
+                    new TrueValue(
                         trueValue: true,
                         strict: true,
                         message: 'Attribute - {attribute}, true - {true}, value - {value}.',
@@ -150,26 +150,26 @@ final class IsTrueTest extends RuleTestCase
             'custom message with parameters, attribute set' => [
                 ['data' => 5],
                 [
-                    'data' => new IsTrue(message: 'Attribute - {attribute}, true - {true}, value - {value}.'),
+                    'data' => new TrueValue(message: 'Attribute - {attribute}, true - {true}, value - {value}.'),
                 ],
                 ['data' => ['Attribute - data, true - 1, value - 5.']],
             ],
             'custom incorrect input message' => [
                 [],
-                [new IsTrue(incorrectInputMessage: 'Custom error.')],
+                [new TrueValue(incorrectInputMessage: 'Custom error.')],
                 ['' => ['Custom error.']],
             ],
             'custom incorrect input message with parameters' => [
                 [],
                 [
-                    new IsTrue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),
+                    new TrueValue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),
                 ],
                 ['' => ['Attribute - , true - 1, type - array.']],
             ],
             'custom incorrect input message with parameters, custom true and false values, strict' => [
                 [],
                 [
-                    new IsTrue(
+                    new TrueValue(
                         trueValue: true,
                         strict: true,
                         incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.',
@@ -180,13 +180,13 @@ final class IsTrueTest extends RuleTestCase
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => []],
                 [
-                    'data' => new IsTrue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),
+                    'data' => new TrueValue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),
                 ],
                 ['data' => ['Attribute - data, true - 1, type - array.']],
             ],
             'custom incorrect input message, null' => [
                 null,
-                [new IsTrue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),],
+                [new TrueValue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),],
                 ['' => ['Attribute - , true - 1, type - null.']],
             ],
         ];
@@ -194,17 +194,17 @@ final class IsTrueTest extends RuleTestCase
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new IsTrue(), new IsTrue(skipOnError: true));
+        $this->testSkipOnErrorInternal(new TrueValue(), new TrueValue(skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new IsTrue(), new IsTrue(when: $when));
+        $this->testWhenInternal(new TrueValue(), new TrueValue(when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array
     {
-        return [IsTrue::class, IsTrueHandler::class];
+        return [TrueValue::class, TrueValueHandler::class];
     }
 }

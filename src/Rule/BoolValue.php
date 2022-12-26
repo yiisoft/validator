@@ -20,7 +20,7 @@ use Yiisoft\Validator\WhenInterface;
  * settings accordingly. There is also an option to choose between strict and non-strict mode of comparison
  * (see {@see $strict}).
  *
- * If the purpose is to check the truthiness only, use {@see IsTrue} rule instead.
+ * If the purpose is to check the truthiness only, use {@see TrueValue} rule instead.
  *
  * @see BoolValueHandler Corresponding handler performing the actual validation.
  *

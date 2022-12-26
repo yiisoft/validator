@@ -10,14 +10,14 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * A handler for {@see IsTrue} rule.
+ * A handler for {@see TrueValue} rule.
  */
-final class IsTrueHandler implements RuleHandlerInterface
+final class TrueValueHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
-        if (!$rule instanceof IsTrue) {
-            throw new UnexpectedRuleException(IsTrue::class, $rule);
+        if (!$rule instanceof TrueValue) {
+            throw new UnexpectedRuleException(TrueValue::class, $rule);
         }
 
         if (!is_scalar($value)) {
@@ -44,13 +44,13 @@ final class IsTrueHandler implements RuleHandlerInterface
     }
 
     /**
-     * @param IsTrue $rule A rule instance.
+     * @param TrueValue $rule A rule instance.
      * @param ValidationContext $context Validation context.
      *
      * @return array A mapping between attribute names and their values.
      * @psalm-return array<string,scalar|null>
      */
-    private function getCommonResultParameters(IsTrue $rule, ValidationContext $context): array
+    private function getCommonResultParameters(TrueValue $rule, ValidationContext $context): array
     {
         return [
             'attribute' => $context->getTranslatedAttribute(),

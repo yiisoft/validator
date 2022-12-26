@@ -21,7 +21,7 @@ use Yiisoft\Validator\Rule\BoolValue;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\In;
-use Yiisoft\Validator\Rule\IsTrue;
+use Yiisoft\Validator\Rule\TrueValue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
@@ -1263,7 +1263,7 @@ class ValidatorTest extends TestCase
     {
         $data = ['agree' => false, 'viewsCount' => -1];
         $rules = [
-            'agree' => [new BoolValue(skipOnEmpty: static fn (): bool => true), new IsTrue()],
+            'agree' => [new BoolValue(skipOnEmpty: static fn (): bool => true), new TrueValue()],
             'viewsCount' => [new Number(asInteger: true, min: 0)],
         ];
         $validator = new Validator();

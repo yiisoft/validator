@@ -22,12 +22,12 @@ use Yiisoft\Validator\WhenInterface;
  * A typical scope of application is a user agreement. If the purpose is to also check the falsiness, use
  * {@see BoolValue} rule instead.
  *
- * @see IsTrueHandler Corresponding handler performing the actual validation.
+ * @see TrueValueHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class TrueValue implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -161,6 +161,6 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
 
     public function getHandler(): string
     {
-        return IsTrueHandler::class;
+        return TrueValueHandler::class;
     }
 }
