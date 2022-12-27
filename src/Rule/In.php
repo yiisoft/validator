@@ -36,7 +36,6 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     /**
      * @param iterable $values A set of values to check against. Nested arrays are supported too (the order of items in
      * lists must match, the order of keys in associative arrays is not important).
-     *
      * @param bool $strict Whether the comparison to {@see $trueValue} and {@see $falseValue} is strict:
      *
      * - Strict mode uses `===` operator meaning the type and the value must both match to those set in
