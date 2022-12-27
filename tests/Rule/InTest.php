@@ -92,6 +92,10 @@ final class InTest extends RuleTestCase
             [0, [new In(range(1, 10), not: true)]],
             [11, [new In(range(1, 10), not: true)]],
             [5.5, [new In(range(1, 10), not: true)]],
+
+            [[1, 2], [new In([[1, 2], [3, 4]])]],
+            [['1', 2], [new In([[1, 2], [3, 4]])]],
+            [['1', '2'], [new In([[1, 2], [3, 4]])]],
         ];
     }
 
@@ -119,6 +123,9 @@ final class InTest extends RuleTestCase
             [10, [new In(range(1, 10), not: true)], $errors],
             ['10', [new In(range(1, 10), not: true)], $errors],
             ['5', [new In(range(1, 10), not: true)], $errors],
+
+            [[5, 6], [new In([[1, 2], [3, 4]])], $errors],
+            [[2, 3], [new In([[1, 2], [3, 4]])], $errors],
 
             'custom error' => [15, [new In(range(1, 10), message: 'Custom error')], ['' => ['Custom error']]],
         ];

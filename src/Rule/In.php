@@ -19,8 +19,6 @@ use Yiisoft\Validator\WhenInterface;
  * If the {@see In::$not} is set, the validation logic is inverted and the rule will ensure that the value
  * is NOT one of them.
  *
- * Note that sub-arrays are not supported. Use {@see Subset} instead.
- *
  * @see InHandler
  *
  * @psalm-import-type WhenType from WhenInterface
@@ -33,8 +31,7 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     use WhenTrait;
 
     /**
-     * @param iterable $values A set of values to check against. Sub-arrays are not supported. Use {@see Subset} instead.
-     * @psalm-param iterable<scalar> $values
+     * @param iterable $values A set of values to check against. Sub-arrays are supported too.
      *
      * @param bool $strict Whether the comparison to {@see $trueValue} and {@see $falseValue} is strict:
      *
@@ -82,8 +79,7 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     /**
      * Get a set of values to check against.
      *
-     * @return iterable A set of scalar values.
-     * @psalm-return iterable<scalar>
+     * @return iterable A set of values.
      */
     public function getValues(): iterable
     {
