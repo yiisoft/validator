@@ -67,8 +67,8 @@ final class DataSetUsageTest extends TestCase
         $rules = [
             'bool' => [new BooleanValue()],
             'int' => [
-                new Number(asInteger: true),
-                new Number(asInteger: true, min: 44),
+                new Number(integerOnly: true),
+                new Number(integerOnly: true, min: 44),
                 static function ($value): Result {
                     $result = new Result();
                     if ($value !== 42) {
@@ -96,8 +96,8 @@ final class DataSetUsageTest extends TestCase
             [
                 'bool' => [new BooleanValue()],
                 'int' => [
-                    new Number(asInteger: true),
-                    new Number(asInteger: true, min: 44),
+                    new Number(integerOnly: true),
+                    new Number(integerOnly: true, min: 44),
                     static function ($value): Result {
                         $result = new Result();
                         if ($value !== 42) {

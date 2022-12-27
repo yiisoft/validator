@@ -21,7 +21,7 @@ final class RulesDumperTest extends TestCase
                 [
                     'attributeName' => [
                         $rule = new Number(
-                            asInteger: true,
+                            integerOnly: true,
                             min: 10,
                             max: 100,
                             tooSmallMessage: 'Value must be greater than 10.',
