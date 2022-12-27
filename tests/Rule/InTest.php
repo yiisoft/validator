@@ -96,6 +96,33 @@ final class InTest extends RuleTestCase
             [[1, 2], [new In([[1, 2], [3, 4]])]],
             [['1', 2], [new In([[1, 2], [3, 4]])]],
             [['1', '2'], [new In([[1, 2], [3, 4]])]],
+            [
+                ['data' => ['value' => [1, 2]]],
+                [
+                    new In([
+                        ['data' => ['value' => [1, 2]]],
+                        ['data' => ['value' => [3, 4]]],
+                    ]),
+                ],
+            ],
+            [
+                [
+                    'data2' => ['value2' => [7, 8], 'value1' => [5, 6]],
+                    'data1' => ['value2' => [3, 4], 'value1' => [1, 2]],
+                ],
+                [
+                    new In([
+                        [
+                            'data1' => ['value1' => [1, 2], 'value2' => [3, 4]],
+                            'data2' => ['value1' => [5, 6], 'value2' => [7, 8]],
+                        ],
+                        [
+                            'data1' => ['value1' => [9, 10], 'value2' => [11, 12]],
+                            'data2' => ['value1' => [13, 14], 'value2' => [15, 16]],
+                        ],
+                    ]),
+                ],
+            ],
         ];
     }
 
@@ -124,8 +151,40 @@ final class InTest extends RuleTestCase
             ['10', [new In(range(1, 10), not: true)], $errors],
             ['5', [new In(range(1, 10), not: true)], $errors],
 
+            [['1', 2], [new In([[1, 2], [3, 4]], strict: true)], $errors],
+            [['1', '2'], [new In([[1, 2], [3, 4]], strict: true)], $errors],
             [[5, 6], [new In([[1, 2], [3, 4]])], $errors],
             [[2, 3], [new In([[1, 2], [3, 4]])], $errors],
+            [[2, 1], [new In([[1, 2], [3, 4]])], $errors],
+            [
+                ['data' => ['value' => [5, 6]]],
+                [
+                    new In([
+                        ['data' => ['value' => [1, 2]]],
+                        ['data' => ['value' => [3, 4]]],
+                    ]),
+                ],
+                $errors,
+            ],
+            [
+                [
+                    'data2' => ['value2' => [8, 7], 'value1' => [6, 5]],
+                    'data1' => ['value2' => [4, 3], 'value1' => [2, 1]],
+                ],
+                [
+                    new In([
+                        [
+                            'data1' => ['value1' => [1, 2], 'value2' => [3, 4]],
+                            'data2' => ['value1' => [5, 6], 'value2' => [7, 8]],
+                        ],
+                        [
+                            'data1' => ['value1' => [9, 10], 'value2' => [11, 12]],
+                            'data2' => ['value1' => [13, 14], 'value2' => [15, 16]],
+                        ],
+                    ]),
+                ],
+                $errors,
+            ],
 
             'custom error' => [15, [new In(range(1, 10), message: 'Custom error')], ['' => ['Custom error']]],
         ];

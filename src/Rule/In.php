@@ -19,6 +19,9 @@ use Yiisoft\Validator\WhenInterface;
  * If the {@see In::$not} is set, the validation logic is inverted and the rule will ensure that the value
  * is NOT one of them.
  *
+ * Nested arrays are supported too in both {@see values} argument and the validated value (the order of items in lists
+ * must match, the order of keys in associative arrays is not important).
+ *
  * @see InHandler
  *
  * @psalm-import-type WhenType from WhenInterface
@@ -31,7 +34,8 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     use WhenTrait;
 
     /**
-     * @param iterable $values A set of values to check against. Sub-arrays are supported too.
+     * @param iterable $values A set of values to check against. Nested arrays are supported too (the order of items in
+     * lists must match, the order of keys in associative arrays is not important).
      *
      * @param bool $strict Whether the comparison to {@see $trueValue} and {@see $falseValue} is strict:
      *
