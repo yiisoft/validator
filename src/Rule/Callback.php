@@ -9,6 +9,7 @@ use Closure;
 use InvalidArgumentException;
 use ReflectionObject;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -18,6 +19,10 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
+ * Defines validation options to validating the value using a callback.
+ *
+ * @see CallbackHandler
+ *
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -32,23 +37,29 @@ final class Callback implements
     use SkipOnErrorTrait;
     use WhenTrait;
 
+    /**
+     * @var object|null The object being validated.
+     */
     private ?object $objectValidated = null;
 
+    /**
+     * @param callable|null $callback Callable with the `function ($value, $rule, $context): Result` signature that
+     * performs the validation.
+     * @param string|null $method Name of a validated object method with the `function ($value, $rule, $context): Result`
+     * signature that performs the validation.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
+     * See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
+     * See {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying the rule.
+     * See {@see WhenInterface}.
+     * @psalm-param WhenType $when
+     */
     public function __construct(
-        /**
-         * @var callable|null
-         */
-        private $callback = null,
+        private mixed $callback = null,
         private string|null $method = null,
-
-        /**
-         * @var bool|callable|null
-         */
-        private $skipOnEmpty = null,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
-        /**
-         * @var WhenType
-         */
         private Closure|null $when = null,
     ) {
         if ($this->callback === null && $this->method === null) {
@@ -65,16 +76,37 @@ final class Callback implements
         return 'callback';
     }
 
+    /**
+     * Get the callable that performs validation.
+     *
+     * @return callable|null The callable that performs validation.
+     *
+     * @see $callback
+     */
     public function getCallback(): callable|null
     {
         return $this->callback;
     }
 
+    /**
+     * Get a name of a validated object method that performs the validation.
+     *
+     * @return string|null Name of a method that performs the validation.
+     *
+     * @see $method
+     */
     public function getMethod(): string|null
     {
         return $this->method;
     }
 
+    /**
+     * Get object being validated.
+     *
+     * @return object|null Object being validated.
+     *
+     * @see $objectValidated
+     */
     public function getObjectValidated(): ?object
     {
         return $this->objectValidated;

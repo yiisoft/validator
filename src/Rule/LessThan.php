@@ -10,7 +10,7 @@ use RuntimeException;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Validates if the specified value is less than another value or attribute.
+ * Defines validation options to check that the specified value is less than another value or attribute.
  *
  * The value being validated with {@see LessThan::$targetValue} or {@see LessThan::$targetAttribute}, which
  * is set in the constructor.
@@ -19,38 +19,60 @@ use Yiisoft\Validator\WhenInterface;
  * are checked byte by byte. When validating numbers, make sure to change {@see LessThan::$type} to
  * {@see LessThan::TYPE_NUMBER} to enable numeric validation.
  *
+ * @see CompareHandler
+ *
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class LessThan extends Compare
 {
+    /**
+     * @param scalar|null $targetValue The constant value to be less than. When both this property and
+     * {@see $targetAttribute} are set, this property takes precedence.
+     * @param string|null $targetAttribute The attribute to be less than. When both this property and {@see $targetValue} are set, the
+     * {@see $targetValue} takes precedence.
+     * @param string $incorrectInputMessage A message used when the input is incorrect.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{type}`: the type of the attribute being validated.
+     * @param string $incorrectDataSetTypeMessage A message used when the attribute value returned from a custom
+     * data set s not scalar.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{type}`: type of the value.
+     * @param string|null $message A message used when the value is not valid.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the label of the attribute being validated.
+     * - `{targetValue}`: the constant value to be compared with.
+     * - `{targetAttribute}`: the name of the attribute to be compared with.
+     * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
+     *   the attribute to be compared with.
+     * - `{value}`: the value of the attribute being validated.
+     * @param string $type The type of the values being compared. Either {@see Compare::TYPE_STRING}
+     * or {@see Compare::TYPE_NUMBER}.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
+     * See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
+     * See {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying the rule.
+     * See {@see WhenInterface}.
+     * @psalm-param WhenType $when
+     */
     public function __construct(
-        /**
-         * @var scalar|null The constant value to be less than. When both this property and
-         * {@see $targetAttribute} are set, this property takes precedence.
-         */
         private int|float|string|bool|null $targetValue = null,
-        /**
-         * @var string|null The attribute to be less than. When both this property and {@see $targetValue} are set, the
-         * {@see $targetValue} takes precedence.
-         */
         private string|null $targetAttribute = null,
         private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean and null.',
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
-        /**
-         * @var string|null User-defined error message.
-         */
         private string|null $message = null,
-        /**
-         * @var string The type of the values being validated.
-         */
         private string $type = self::TYPE_STRING,
         bool|callable|null $skipOnEmpty = false,
         private bool $skipOnError = false,
-        /**
-         * @var WhenType
-         */
         private Closure|null $when = null,
     ) {
         if ($this->targetValue === null && $this->targetAttribute === null) {
