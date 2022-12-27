@@ -48,6 +48,7 @@ final class JsonHandler implements RuleHandlerInterface
      * Checks if the given value is a valid JSON.
      *
      * @param string $value Any string.
+     *
      * @return bool Whether the given value is a valid JSON: `true` - valid JSON, `false` - invalid JSON with errors /
      * not a JSON at all.
      */
