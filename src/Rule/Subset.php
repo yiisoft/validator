@@ -18,6 +18,8 @@ use Yiisoft\Validator\WhenInterface;
  * A variation of {@see In} rule allowing to use the set of values instead of single value as an input for checking if
  * it's a subset of the set provided in {@see Subset::$values}.
  *
+ * The order of items in the validated set is not important.
+ *
  * Nested arrays are supported too in both {@see values} argument and in the validated value (the order of values in
  * lists must match, the order of keys in associative arrays is not important).
  *

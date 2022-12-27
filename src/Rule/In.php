@@ -19,6 +19,8 @@ use Yiisoft\Validator\WhenInterface;
  * If the {@see In::$not} is set, the validation logic is inverted and the rule will ensure that the value
  * is NOT one of them.
  *
+ * In case of the validated value being a list, the order of values is important.
+ *
  * Nested arrays are supported too in both {@see values} argument and in the validated value (the order of values in
  * lists must match, the order of keys in associative arrays is not important).
  *

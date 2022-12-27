@@ -62,6 +62,7 @@ final class SubsetTest extends RuleTestCase
             [new SingleValueDataSet(new ArrayObject(['a', 'b'])), [new Subset(new ArrayObject(['a', 'b', 'c']))]],
 
             [[[1, 2], [3, 4]], [new Subset([[1, 2], [3, 4], [5, 6]])]],
+            [[[3, 4], [1, 2]], [new Subset([[1, 2], [3, 4], [5, 6]])]],
             [[['1', 2], ['3', 4]], [new Subset([[1, 2], [3, 4], [5, 6]])]],
             [[['1', '2'], ['3', '4']], [new Subset([[1, 2], [3, 4], [5, 6]])]],
             [
@@ -74,6 +75,30 @@ final class SubsetTest extends RuleTestCase
                         ['data' => ['value' => [1, 2]]],
                         ['data' => ['value' => [3, 4]]],
                         ['data' => ['value' => [5, 6]]],
+                    ]),
+                ],
+            ],
+            [
+                [
+                    [
+                        'data2' => ['value2' => [7, 8], 'value1' => [5, 6]],
+                        'data1' => ['value2' => [3, 4], 'value1' => [1, 2]],
+                    ],
+                    [
+                        'data2' => ['value2' => [15, 16], 'value1' => [13, 14]],
+                        'data1' => ['value2' => [11, 12], 'value1' => [9, 10]],
+                    ],
+                ],
+                [
+                    new Subset([
+                        [
+                            'data1' => ['value1' => [1, 2], 'value2' => [3, 4]],
+                            'data2' => ['value1' => [5, 6], 'value2' => [7, 8]],
+                        ],
+                        [
+                            'data1' => ['value1' => [9, 10], 'value2' => [11, 12]],
+                            'data2' => ['value1' => [13, 14], 'value2' => [15, 16]],
+                        ],
                     ]),
                 ],
             ],
@@ -120,6 +145,51 @@ final class SubsetTest extends RuleTestCase
                 [new Subset(new ArrayObject(['a', 'b', 'c']))],
                 $errors,
             ],
+
+            [[['1', 2], ['3', 4]], [new Subset([[1, 2], [3, 4], [5, 6]], strict: true)], $errors],
+            [[['1', '2'], ['3', '4']], [new Subset([[1, 2], [3, 4], [5, 6]], strict: true)], $errors],
+            [[[7, 8], [9, 10]], [new Subset([[1, 2], [3, 4], [5, 6]], strict: true)], $errors],
+            [[[2, 3], [4, 5]], [new Subset([[1, 2], [3, 4], [5, 6]], strict: true)], $errors],
+            [
+                [
+                    ['data' => ['value' => [3, 4]]],
+                    ['data' => ['value' => [5, 7]]],
+                ],
+                [
+                    new Subset([
+                        ['data' => ['value' => [1, 2]]],
+                        ['data' => ['value' => [3, 4]]],
+                        ['data' => ['value' => [5, 6]]],
+                    ]),
+                ],
+                $errors,
+            ],
+            [
+                [
+                    [
+                        'data2' => ['value2' => [8, 7], 'value1' => [6, 5]],
+                        'data1' => ['value2' => [4, 3], 'value1' => [2, 1]],
+                    ],
+                    [
+                        'data2' => ['value2' => [16, 15], 'value1' => [14, 13]],
+                        'data1' => ['value2' => [12, 11], 'value1' => [10, 9]],
+                    ],
+                ],
+                [
+                    new Subset([
+                        [
+                            'data1' => ['value1' => [1, 2], 'value2' => [3, 4]],
+                            'data2' => ['value1' => [5, 6], 'value2' => [7, 8]],
+                        ],
+                        [
+                            'data1' => ['value1' => [9, 10], 'value2' => [11, 12]],
+                            'data2' => ['value1' => [13, 14], 'value2' => [15, 16]],
+                        ],
+                    ]),
+                ],
+                $errors,
+            ],
+
             'custom message' => [
                 ['' => ['c']],
                 ['' => new Subset(['a', 'b'], message: 'Custom message.')],
