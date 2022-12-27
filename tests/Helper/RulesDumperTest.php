@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Helper;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Rule\Boolean;
+use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
@@ -106,7 +106,7 @@ final class RulesDumperTest extends TestCase
     {
         $dumper = new RulesDumper();
         $rules = [
-            new Boolean(),
+            new BooleanValue(),
             new RuleWithoutOptions(),
         ];
         $expectedRules = [
@@ -115,14 +115,14 @@ final class RulesDumperTest extends TestCase
                 'trueValue' => '1',
                 'falseValue' => '0',
                 'strict' => false,
-                'messageWithType' => [
-                    'template' => 'Value must be either "{true}" or "{false}".',
+                'incorrectInputMessage' => [
+                    'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
                     'parameters' => [
                         'true' => '1',
                         'false' => '0',
                     ],
                 ],
-                'messageWithValue' => [
+                'message' => [
                     'template' => 'Value must be either "{true}" or "{false}".',
                     'parameters' => [
                         'true' => '1',

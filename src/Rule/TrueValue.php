@@ -15,28 +15,23 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * A variation of {@see Boolean} rule limiting the allowed values to "true" only (not limited to boolean "true" type).
- * What value exactly is considered "true" can be configured via {@see $trueValue} setting. There is also an option to
- * choose between strict and non-strict mode of comparison (see {@see $strict}).
+ * A variation of {@see BooleanValue} rule limiting the allowed values to "true" only (not limited to boolean "true"
+ * type). What value exactly is considered "true" can be configured via {@see $trueValue} setting. There is also an
+ * option to choose between strict and non-strict mode of comparison (see {@see $strict}).
  *
- * A typical scope of application is a user agreement. If the purpose is to also check the falsiness, use {@see Boolean}
- * rule instead.
+ * A typical scope of application is a user agreement. If the purpose is to also check the falsiness, use
+ * {@see BooleanValue} rule instead.
  *
- * @see IsTrueHandler Corresponding handler performing the actual validation.
+ * @see TrueValueHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class TrueValue implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
-
-    /**
-     * @const Default message used for all cases.
-     */
-    private const DEFAULT_MESSAGE = 'The value must be "{true}".';
 
     /**
      * @param scalar $trueValue The value that is considered to be "true". Only scalar values (either int, float, string
@@ -53,8 +48,8 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * - https://www.php.net/manual/en/language.types.type-juggling.php
      *
      * Defaults to `false` meaning non-strict mode is used.
-     * @param string $messageWithType Error message used when validation fails and neither non-scalar value (int,
-     * float, string, bool) nor null was provided as input. The type is used instead of value here for more predictable
+     * @param string $incorrectInputMessage Error message used when validation fails because the type of validated value
+     * is incorrect. Only scalar values are allowed - either int, float, string or bool. Used for more predictable
      * formatting.
      *
      * You may use the following placeholders in the message:
@@ -62,8 +57,8 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{true}`: the value set in {@see $trueValue} option.
      * - `{type}`: the type of the value being validated.
-     * @param string $messageWithValue Error message used when validation fails and either scalar value (int, float,
-     * string, bool) or null was provided as input.
+     * @param string $message Error message used when validation fails because the validated value does not match
+     * neither "true" nor "false" values.
      *
      * You may use the following placeholders in the message:
      *
@@ -80,8 +75,8 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     public function __construct(
         private int|float|string|bool $trueValue = '1',
         private bool $strict = false,
-        private string $messageWithType = self::DEFAULT_MESSAGE,
-        private string $messageWithValue = self::DEFAULT_MESSAGE,
+        private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean. {type} given.',
+        private string $message = 'The value must be "{true}".',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
@@ -118,27 +113,28 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     }
 
     /**
-     * Gets error message used when validation fails and value is complex to format, so its type is used instead.
+     * Gets error message used when validation fails because the type of validated value is incorrect.
      *
      * @return string Error message / template.
      *
-     * @see $messageWithType
+     * @see $incorrectInputMessage
      */
-    public function getMessageWithType(): string
+    public function getIncorrectInputMessage(): string
     {
-        return $this->messageWithType;
+        return $this->incorrectInputMessage;
     }
 
     /**
-     * Gets error message used when validation fails and value can be formatted.
+     * Gets error message used when validation fails because the validated value does not match neither "true" nor
+     * "false" values.
      *
      * @return string Error message / template.
      *
-     * @see $messageWithValue
+     * @see $message
      */
-    public function getMessageWithValue(): string
+    public function getMessage(): string
     {
-        return $this->messageWithValue;
+        return $this->message;
     }
 
     public function getOptions(): array
@@ -150,12 +146,12 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
         return [
             'trueValue' => $this->trueValue,
             'strict' => $this->strict,
-            'messageWithType' => [
-                'template' => $this->messageWithType,
+            'incorrectInputMessage' => [
+                'template' => $this->incorrectInputMessage,
                 'parameters' => $messageParameters,
             ],
-            'messageWithValue' => [
-                'template' => $this->messageWithValue,
+            'message' => [
+                'template' => $this->message,
                 'parameters' => $messageParameters,
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
@@ -165,6 +161,6 @@ final class IsTrue implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
 
     public function getHandler(): string
     {
-        return IsTrueHandler::class;
+        return TrueValueHandler::class;
     }
 }
