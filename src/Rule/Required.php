@@ -63,6 +63,7 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
      * - `{attribute}`: the translated label of the attribute being validated.
      * @param callable|null $emptyCriteria An empty criteria used to determine emptiness of the value.
      * @psalm-param EmptyCriteriaType|null $emptyCriteria
+     *
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See
      * {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
