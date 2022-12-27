@@ -27,7 +27,7 @@ return [
     'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.' => 'Значение должно содержать как минимум {min, number} {min, plural, one{символ} few{символа} many{символов} other{символов}}.',
     'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.' => 'Значение должно содержать не более {max, number} {max, plural, one{символа} few{символов} many{символов} other{символов}}.',
     'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => 'Значение должно содержать ровно {exactly, number} {exactly, plural, one{символ} few{символа} many{символов} other{символов}}.',
-    'This value is invalid.' => 'Значение неверно.',
+    'This value is not in the list of acceptable values.' => 'Это значение не в списке допустимых значений.',
     'Must be a valid IP address.' => 'Должно быть правильным IP-адресом.',
     'Must not be an IPv4 address.' => 'Не должно быть IPv4-адресом.',
     'Must not be an IPv6 address.' => 'Не должно быть IPv6-адресом.',

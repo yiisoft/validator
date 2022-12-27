@@ -68,7 +68,7 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         private iterable $values,
         private bool $strict = false,
         private bool $not = false,
-        private string $message = 'This value is invalid.',
+        private string $message = 'This value is not in the list of acceptable values.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
