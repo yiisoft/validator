@@ -19,6 +19,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see https://en.wikipedia.org/wiki/JSON
  * @see https://tools.ietf.org/html/rfc8259
+ * @see BooleanValueHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
  */
@@ -68,8 +69,8 @@ final class Json implements RuleWithOptionsInterface, SkipOnErrorInterface, When
     }
 
     /**
-     * Error message used when validation fails because the validated value either not JSON at all or invalid JSON with
-     * errors.
+     * Gets error message used when validation fails because the validated value either not JSON at all or invalid JSON
+     * with errors.
      *
      * @return string Error message / template.
      *

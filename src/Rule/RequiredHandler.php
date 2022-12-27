@@ -8,22 +8,34 @@ use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Validates that the specified value is passed and not empty.
+ * A handler for {@see Required} rule. Validates that the specified value is passed and not empty.
  *
  * @psalm-import-type EmptyCriteriaType from Required
  */
 final class RequiredHandler implements RuleHandlerInterface
 {
     /**
-     * @var callable
+     * @var callable An empty criteria (either a callable or class implementing `__invoke()` method) used to
+     * determine emptiness of the value. The signature must be like the following:
+     *
+     * ```php
+     * function (mixed $value, bool $isAttributeMissing): bool
+     * ```
+     *
+     * Used as a default when {@see Required::$emptyCriteria} is not set. A customized handler can be added to
+     * {@see SimpleRuleHandlerContainer::$instances} to be applied to all rules of this type without explicitly
+     * specifying empty criteria for each one of them.
+     *
      * @psalm-var EmptyCriteriaType
      */
     private $defaultEmptyCriteria;
 
     /**
+     * @param callable|null $defaultEmptyCriteria A default empty criteria used to determine emptiness of the value.
      * @psalm-param EmptyCriteriaType|null $defaultEmptyCriteria
      */
     public function __construct(
