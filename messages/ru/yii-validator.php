@@ -51,6 +51,6 @@ return [
     'Value cannot be blank.' => 'Значение не может быть пустым.',
     'Value not passed.' => 'Значение не передано.',
     'Value must be iterable.' => 'Значение должно быть итерируемым.',
-    'Values must be ones of {values}.' => 'Значение должно быть одним из {values}.',
+    'This value is not a subset of acceptable values.' => 'Это значение не является подмножеством допустимых значений.',
     'This value is not a valid URL.' => 'Значение не является правильным URL.',
 ];

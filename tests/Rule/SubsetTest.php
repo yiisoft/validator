@@ -35,12 +35,12 @@ final class SubsetTest extends RuleTestCase
                 [
                     'values' => [],
                     'strict' => false,
-                    'iterableMessage' => [
+                    'incorrectInputMessage' => [
                         'template' => 'Value must be iterable.',
                         'parameters' => [],
                     ],
-                    'subsetMessage' => [
-                        'template' => 'Values must be ones of {values}.',
+                    'message' => [
+                        'template' => 'This value is not a subset of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -60,61 +60,80 @@ final class SubsetTest extends RuleTestCase
 
             [['a', 'b'], [new Subset(['a', 'b', 'c'])]],
             [new SingleValueDataSet(new ArrayObject(['a', 'b'])), [new Subset(new ArrayObject(['a', 'b', 'c']))]],
+
+            [[[1, 2], [3, 4]], [new Subset([[1, 2], [3, 4], [5, 6]])]],
+            [[['1', 2], ['3', 4]], [new Subset([[1, 2], [3, 4], [5, 6]])]],
+            [[['1', '2'], ['3', '4']], [new Subset([[1, 2], [3, 4], [5, 6]])]],
+            [
+                [
+                    ['data' => ['value' => [1, 2]]],
+                    ['data' => ['value' => [3, 4]]],
+                ],
+                [
+                    new Subset([
+                        ['data' => ['value' => [1, 2]]],
+                        ['data' => ['value' => [3, 4]]],
+                        ['data' => ['value' => [5, 6]]],
+                    ]),
+                ],
+            ],
         ];
     }
 
     public function dataValidationFailed(): array
     {
+        $errors = ['' => ['This value is not a subset of acceptable values.']];
+
         return [
             'non-iterable' => [
                 1,
                 [new Subset([1, 2, 3])],
                 ['' => ['Value must be iterable.']],
             ],
-            'custom non-iterable message' => [
+            'custom incorrect input message' => [
                 1,
-                [new Subset([1, 2, 3], iterableMessage: 'Custom non-iterable message.')],
+                [new Subset([1, 2, 3], incorrectInputMessage: 'Custom non-iterable message.')],
                 ['' => ['Custom non-iterable message.']],
             ],
-            'custom non-iterable message with parameters' => [
+            'custom incorrect input message with parameters' => [
                 1,
-                [new Subset([1, 2, 3], iterableMessage: 'Attribute - {attribute}, type - {type}.')],
+                [new Subset([1, 2, 3], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
                 ['' => ['Attribute - , type - int.']],
             ],
-            'custom non-iterable message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, attribute set' => [
                 ['data' => 1],
-                ['data' => new Subset([1, 2, 3], iterableMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => new Subset([1, 2, 3], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
                 ['data' => ['Attribute - data, type - int.']],
             ],
             [
                 [0, 1, 2],
                 [new Subset(range(1, 10))],
-                ['' => ['Values must be ones of "1", "2", "3", "4", "5", "6", "7", "8", "9", "10".']],
+                $errors,
             ],
             [
                 [10, 11, 12],
                 [new Subset(range(1, 10))],
-                ['' => ['Values must be ones of "1", "2", "3", "4", "5", "6", "7", "8", "9", "10".']],
+                $errors,
             ],
             'iterator as a value' => [
                 new SingleValueDataSet(new ArrayObject(['c', 'd'])),
                 [new Subset(new ArrayObject(['a', 'b', 'c']))],
-                ['' => ['Values must be ones of "a", "b", "c".']],
+                $errors,
             ],
             'custom message' => [
                 ['' => ['c']],
-                ['' => new Subset(['a', 'b'], subsetMessage: 'Custom message.')],
+                ['' => new Subset(['a', 'b'], message: 'Custom message.')],
                 ['' => ['Custom message.']],
             ],
-            'custom subset message with parameters' => [
+            'custom message with parameters' => [
                 ['' => ['c']],
-                ['' => new Subset(['a', 'b'], subsetMessage: 'Attribute - {attribute}, values - {values}.')],
-                ['' => ['Attribute - , values - "a", "b".']],
+                ['' => new Subset(['a', 'b'], message: 'Attribute - {attribute}.')],
+                ['' => ['Attribute - .']],
             ],
-            'custom subset message with parameters, attribute set' => [
+            'custom message with parameters, attribute set' => [
                 ['data' => ['c']],
-                ['data' => new Subset(['a', 'b'], subsetMessage: 'Attribute - {attribute}, values - {values}.')],
-                ['data' => ['Attribute - data, values - "a", "b".']],
+                ['data' => new Subset(['a', 'b'], message: 'Attribute - {attribute}.')],
+                ['data' => ['Attribute - data.']],
             ],
         ];
     }

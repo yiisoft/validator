@@ -19,8 +19,10 @@ use Yiisoft\Validator\WhenInterface;
  * If the {@see In::$not} is set, the validation logic is inverted and the rule will ensure that the value
  * is NOT one of them.
  *
- * Nested arrays are supported too in both {@see values} argument and the validated value (the order of items in lists
- * must match, the order of keys in associative arrays is not important).
+ * Nested arrays are supported too in both {@see values} argument and in the validated value (the order of values in
+ * lists must match, the order of keys in associative arrays is not important).
+ *
+ * If the validated value is a set, use {@see Subset} instead.
  *
  * @see InHandler
  *
@@ -34,12 +36,11 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     use WhenTrait;
 
     /**
-     * @param iterable $values A set of values to check against. Nested arrays are supported too (the order of items in
+     * @param iterable $values A set of values to check against. Nested arrays are supported too (the order of values in
      * lists must match, the order of keys in associative arrays is not important).
-     * @param bool $strict Whether the comparison to {@see $trueValue} and {@see $falseValue} is strict:
+     * @param bool $strict Whether the comparison to each value in the set is strict:
      *
-     * - Strict mode uses `===` operator meaning the type and the value must both match to those set in
-     * {@see $trueValue} or {@see $falseValue}.
+     * - Strict mode uses `===` operator meaning the type and the value must both match.
      * - Non-strict mode uses `==` operator meaning that type juggling is performed first before the comparison. You can
      * read more in the PHP docs:
      *
