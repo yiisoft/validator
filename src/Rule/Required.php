@@ -51,8 +51,16 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
 
     /**
      * @param string $message Error message used when validation fails because the validated value is empty.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
      * @param string $notPassedMessage Error message used when validation fails because the validated value is not
      * passed.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
      * @param callable|null $emptyCriteria An empty criteria used to determine emptiness of the value.
      * @psalm-param EmptyCriteriaType|null $emptyCriteria
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See
