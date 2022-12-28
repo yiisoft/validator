@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 
 /**
- * Defines validation options to check that the specified value match with another value or attribute.
+ * Defines validation options to check that the specified value matches with another value or attribute.
  *
  * The value being compared with a constant {@see CompareTo::$compareValue}, which is set
  * in the constructor.

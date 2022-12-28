@@ -17,6 +17,8 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Defines validation options to check that a minimum number of specified attributes are filled.
  *
+ * Arrays and objects with public properties are supported as values validated.
+ *
  * @see AtLeastHandler
  *
  * @psalm-import-type WhenType from WhenInterface
@@ -29,7 +31,7 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
     use WhenTrait;
 
     /**
-     * @param array $attributes string[] The list of required attributes that will be checked.
+     * @param string[] $attributes The list of required attributes that will be checked.
      * @param int $min The minimum required quantity of filled attributes to pass the validation. Defaults to 1.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *
