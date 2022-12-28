@@ -19,7 +19,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see https://en.wikipedia.org/wiki/JSON
  * @see https://tools.ietf.org/html/rfc8259
- * @see BooleanValueHandler Corresponding handler performing the actual validation.
+ * @see JsonHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
  */
