@@ -83,7 +83,7 @@ final class Each implements
     private ?RulesDumper $rulesDumper = null;
 
     /**
-     * @param iterable|callable|RuleInterface $rules A set of rules that needs to be applied to each element of the
+     * @param callable|iterable|RuleInterface $rules A set of rules that needs to be applied to each element of the
      * validated iterable. They will be normalized using {@see RulesNormalizer}.
      * @param string $incorrectInputMessage Error message used when validation fails because the validated value is not
      * an iterable.
@@ -213,7 +213,7 @@ final class Each implements
      *
      * @return array The array of rules with their options.
      */
-    final protected function dumpRulesAsArray(): array
+    protected function dumpRulesAsArray(): array
     {
         return $this->getRulesDumper()->asArray($this->getRules());
     }
