@@ -20,7 +20,53 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Allows to combine and validate multiple rules.
+ * Allows to group multiple rules for validation. It's helpful when `skipOnEmpty`, `skipOnError` or `when` options are
+ * the same for every rule in the set.
+ *
+ * For example, with the same `when` closure, without using composite it's specified explicitly for every rule:
+ *
+ * ```php
+ * $when = static function ($value, ValidationContext $context): bool {
+ *     return $context->getDataSet()->getAttributeValue('country') === Country::USA;
+ * };
+ * $rules = [
+ *     new Required(when: $when),
+ *     new HasLength(min: 1, max: 50, skipOnEmpty: true, when: $when),
+ * ];
+ * ```
+ *
+ * When using composite, specifying it only once will be enough:
+ *
+ * ```php
+ * $rule = new Composite([
+ *     new Required(),
+ *     new HasLength(min: 1, max: 50, skipOnEmpty: true),
+ *     when: static function ($value, ValidationContext $context): bool {
+ *         return $context->getDataSet()->getAttributeValue('country') === Country::USA;
+ *     },
+ * ]);
+ * ```
+ *
+ * Another use case is reusing this rule group across different places. It's possible by creating own extended class and
+ * setting the properties in the constructor:
+ *
+ * ```php
+ * class MyComposite extends Composite
+ * {
+ *     public function __construct()
+ *     {
+ *         $this->rules = [
+ *             new Required(),
+ *             new HasLength(min: 1, max: 50, skipOnEmpty: true),
+ *         ];
+ *         $this->when = static function ($value, ValidationContext $context): bool {
+ *             return $context->getDataSet()->getAttributeValue('country') === Country::USA;
+ *         };
+ *     }
+ * };
+ * ```
+ *
+ * @see CompositeHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
  */
@@ -37,27 +83,40 @@ class Composite implements
     use WhenTrait;
 
     /**
-     * @var iterable<int, RuleInterface>
+     * @var iterable<int, RuleInterface> A set of normalized rules that needs to be grouped.
      */
     protected iterable $rules = [];
-
     /**
-     * @var bool|callable|null
+     * @var bool|callable|null Whether to skip this rule group if the validated value is empty / not passed. See
+     * {@see SkipOnEmptyInterface}.
      */
-    protected $skipOnEmpty = null;
-
-    protected bool $skipOnError = false;
-
+    protected $skipOnEmpty;
     /**
+     * @var bool Whether to skip this rule group if any of the previous rules gave an error. See
+     * {@see SkipOnErrorInterface}.
+     */
+    protected bool $skipOnError = false;
+    /**
+     * @var Closure|null A callable to define a condition for applying this rule group. See {@see WhenInterface}.
      * @psalm-var WhenType
      */
     protected Closure|null $when = null;
-
+    /**
+     * @var RulesDumper|null A rules dumper instance used to dump grouped {@see $rules} as array. Lazily created by
+     * {@see getRulesDumper()} only when it's needed.
+     */
     private ?RulesDumper $rulesDumper = null;
 
     /**
-     * @param iterable<Closure|RuleInterface> $rules
-     *
+     * @param iterable $rules A set of rules that needs to be grouped. They will be normalized using
+     * {@see RulesNormalizer}.
+     * @psalm-param iterable<Closure|RuleInterface> $rules
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule group if the validated value is empty / not
+     * passed. See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule group if any of the previous rules gave an error. See
+     * {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying this rule group. See
+     * {@see WhenInterface}.
      * @psalm-param WhenType $when
      */
     public function __construct(
@@ -92,7 +151,9 @@ class Composite implements
     }
 
     /**
-     * @return iterable<int, RuleInterface>
+     * Gets a set of normalized rules that needs to be grouped.
+     *
+     * @return iterable<int, RuleInterface> A set of rules.
      */
     public function getRules(): iterable
     {
@@ -113,11 +174,22 @@ class Composite implements
         }
     }
 
+    /**
+     * Dumps grouped {@see $rules} to array.
+     *
+     * @return array The array of rules with their options.
+     */
     final protected function dumpRulesAsArray(): array
     {
         return $this->getRulesDumper()->asArray($this->getRules());
     }
 
+    /**
+     * Returns existing rules dumper instance for dumping grouped {@see $rules} as array if it's already set. If not set
+     * yet, creates the new instance first.
+     *
+     * @return RulesDumper A rules dumper instance.
+     */
     private function getRulesDumper(): RulesDumper
     {
         if ($this->rulesDumper === null) {
