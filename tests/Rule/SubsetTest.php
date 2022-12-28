@@ -61,11 +61,17 @@ final class SubsetTest extends RuleTestCase
             [['a', 'b'], [new Subset(['a', 'b', 'c'])]],
             [new SingleValueDataSet(new ArrayObject(['a', 'b'])), [new Subset(new ArrayObject(['a', 'b', 'c']))]],
 
-            [[[1, 2], [3, 4]], [new Subset([[1, 2], [3, 4], [5, 6]])]],
-            [[[3, 4], [1, 2]], [new Subset([[1, 2], [3, 4], [5, 6]])]],
-            [[['1', 2], ['3', 4]], [new Subset([[1, 2], [3, 4], [5, 6]])]],
-            [[['1', '2'], ['3', '4']], [new Subset([[1, 2], [3, 4], [5, 6]])]],
-            [
+            'arrays, simple case' => [[[1, 2], [3, 4]], [new Subset([[1, 2], [3, 4], [5, 6]])]],
+            'arrays, reversed order' => [[[3, 4], [1, 2]], [new Subset([[1, 2], [3, 4], [5, 6]])]],
+            'arrays, non-strict equality (partially), non-strict mode' => [
+                [['1', 2], ['3', 4]],
+                [new Subset([[1, 2], [3, 4], [5, 6]])],
+            ],
+            'arrays, non-strict equality (fully), non-strict mode' => [
+                [['1', '2'], ['3', '4']],
+                [new Subset([[1, 2], [3, 4], [5, 6]])],
+            ],
+            'arrays, nested' => [
                 [
                     ['data' => ['value' => [1, 2]]],
                     ['data' => ['value' => [3, 4]]],
@@ -78,7 +84,7 @@ final class SubsetTest extends RuleTestCase
                     ]),
                 ],
             ],
-            [
+            'arrays, nested, different keys order' => [
                 [
                     [
                         'data2' => ['value2' => [7, 8], 'value1' => [5, 6]],
@@ -146,11 +152,27 @@ final class SubsetTest extends RuleTestCase
                 $errors,
             ],
 
-            [[['1', 2], ['3', 4]], [new Subset([[1, 2], [3, 4], [5, 6]], strict: true)], $errors],
-            [[['1', '2'], ['3', '4']], [new Subset([[1, 2], [3, 4], [5, 6]], strict: true)], $errors],
-            [[[7, 8], [9, 10]], [new Subset([[1, 2], [3, 4], [5, 6]], strict: true)], $errors],
-            [[[2, 3], [4, 5]], [new Subset([[1, 2], [3, 4], [5, 6]], strict: true)], $errors],
-            [
+            'arrays, non-strict equality (partially), strict mode' => [
+                [['1', 2], ['3', 4]],
+                [new Subset([[1, 2], [3, 4], [5, 6]], strict: true)],
+                $errors,
+            ],
+            'arrays, non-strict equality (fully), strict mode' => [
+                [['1', '2'], ['3', '4']],
+                [new Subset([[1, 2], [3, 4], [5, 6]], strict: true)],
+                $errors,
+            ],
+            'arrays, items are not from acceptable list' => [
+                [[7, 8], [9, 10]],
+                [new Subset([[1, 2], [3, 4], [5, 6]], strict: true)],
+                $errors,
+            ],
+            'arrays, items from acceptable list but not as units' => [
+                [[2, 3], [4, 5]],
+                [new Subset([[1, 2], [3, 4], [5, 6]], strict: true)],
+                $errors,
+            ],
+            'arrays, nested, not all items are from acceptable list' => [
                 [
                     ['data' => ['value' => [3, 4]]],
                     ['data' => ['value' => [5, 7]]],
@@ -164,7 +186,7 @@ final class SubsetTest extends RuleTestCase
                 ],
                 $errors,
             ],
-            [
+            'arrays, nested, reversed order of values in lists' => [
                 [
                     [
                         'data2' => ['value2' => [8, 7], 'value1' => [6, 5]],
