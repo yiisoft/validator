@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use Traversable;
 use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\IsTrue;
+use Yiisoft\Validator\Rule\TrueValue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
@@ -155,11 +155,11 @@ final class AttributesRulesProviderTest extends TestCase
     {
         return [
             [
-                ['a' => [Required::class], 'b' => [IsTrue::class]],
+                ['a' => [Required::class], 'b' => [TrueValue::class]],
                 new class () {
                     #[Required]
                     public int $a = 1;
-                    #[IsTrue]
+                    #[TrueValue]
                     public static bool $b = false;
                 },
                 null,
@@ -169,17 +169,17 @@ final class AttributesRulesProviderTest extends TestCase
                 new class () {
                     #[Required]
                     public int $a = 1;
-                    #[IsTrue]
+                    #[TrueValue]
                     public static bool $b = false;
                 },
                 true,
             ],
             [
-                ['a' => [Required::class], 'b' => [IsTrue::class]],
+                ['a' => [Required::class], 'b' => [TrueValue::class]],
                 new class () {
                     #[Required]
                     public int $a = 1;
-                    #[IsTrue]
+                    #[TrueValue]
                     public static bool $b = false;
                 },
                 false,

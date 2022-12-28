@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\DataSet;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Boolean;
+use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
@@ -21,7 +21,7 @@ final class DataSetUsageTest extends TestCase
         return [
             [
                 ['bool' => true, 'int' => 41],
-                ['bool' => [new Boolean()], 'int' => [new Number()]],
+                ['bool' => [new BooleanValue()], 'int' => [new Number()]],
             ],
         ];
     }
@@ -42,7 +42,7 @@ final class DataSetUsageTest extends TestCase
         return [
             [
                 ['bool' => true, 'int' => 41],
-                ['bool' => [new Boolean()], 'int' => [new Number()]],
+                ['bool' => [new BooleanValue()], 'int' => [new Number()]],
             ],
         ];
     }
@@ -65,10 +65,10 @@ final class DataSetUsageTest extends TestCase
             'int' => 41,
         ]);
         $rules = [
-            'bool' => [new Boolean()],
+            'bool' => [new BooleanValue()],
             'int' => [
-                new Number(asInteger: true),
-                new Number(asInteger: true, min: 44),
+                new Number(integerOnly: true),
+                new Number(integerOnly: true, min: 44),
                 static function ($value): Result {
                     $result = new Result();
                     if ($value !== 42) {
@@ -94,10 +94,10 @@ final class DataSetUsageTest extends TestCase
                 'int' => 41,
             ],
             [
-                'bool' => [new Boolean()],
+                'bool' => [new BooleanValue()],
                 'int' => [
-                    new Number(asInteger: true),
-                    new Number(asInteger: true, min: 44),
+                    new Number(integerOnly: true),
+                    new Number(integerOnly: true, min: 44),
                     static function ($value): Result {
                         $result = new Result();
                         if ($value !== 42) {

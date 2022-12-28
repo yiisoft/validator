@@ -15,9 +15,7 @@ use function is_bool;
 /**
  * Validates that the value is a number.
  *
- * The format of the number must match the regular expression specified in {@see Number::$integerPattern}
- * or {@see Number::$numberPattern}. Optionally, you may configure the {@see Number::min()} and {@see Number::max()}
- * to ensure the number is within certain range.
+ * @see Number
  */
 final class NumberHandler implements RuleHandlerInterface
 {
@@ -38,7 +36,7 @@ final class NumberHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $pattern = $rule->isAsInteger() ? $rule->getIntegerPattern() : $rule->getNumberPattern();
+        $pattern = $rule->isIntegerOnly() ? $rule->getIntegerPattern() : $rule->getNumberPattern();
 
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
             $result->addError($rule->getNotNumberMessage(), [

@@ -15,9 +15,13 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Validates that the value is one of the values provided in {@see $values}.
- * If the {@see In::$not} is set, the validation logic is inverted and the rule will ensure that the value is NOT one of
- * them.
+ * Defines validation options to check that the value is one of the values provided in {@see $values}.
+ * If the {@see In::$not} is set, the validation logic is inverted and the rule will ensure that the value
+ * is NOT one of them.
+ *
+ * Note that sub-arrays are not supported. Use {@see Subset} instead.
+ *
+ * @see InHandler
  *
  * @psalm-import-type WhenType from WhenInterface
  */
@@ -28,30 +32,44 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     use SkipOnErrorTrait;
     use WhenTrait;
 
+    /**
+     * @param iterable $values A set of values to check against. Sub-arrays are not supported. Use {@see Subset} instead.
+     * @psalm-param iterable<scalar> $values
+     *
+     * @param bool $strict Whether the comparison to {@see $trueValue} and {@see $falseValue} is strict:
+     *
+     * - Strict mode uses `===` operator meaning the type and the value must both match to those set in
+     * {@see $trueValue} or {@see $falseValue}.
+     * - Non-strict mode uses `==` operator meaning that type juggling is performed first before the comparison. You can
+     * read more in the PHP docs:
+     *
+     * - {@link https://www.php.net/manual/en/language.operators.comparison.php}
+     * - {@link https://www.php.net/manual/en/types.comparisons.php}
+     * - {@link https://www.php.net/manual/en/language.types.type-juggling.php}
+     *
+     * Defaults to `false` meaning non-strict mode is used.
+     * @param bool $not Whether to invert the validation logic. Defaults to `false`. If set to `true`, the value must NOT
+     * be among the list of {@see $values}.
+     * @param string $message Error message when the value is not in a set of value.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the name of the attribute.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
+     * See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
+     * See {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying the rule.
+     * See {@see WhenInterface}.
+     * @psalm-param WhenType $when
+     */
     public function __construct(
-        /**
-         * @var iterable<scalar>
-         */
         private iterable $values,
-        /**
-         * @var bool Whether the comparison is strict (both type and value must be the same)
-         */
         private bool $strict = false,
-        /**
-         * @var bool Whether to invert the validation logic. Defaults to `false`. If set to `true`, the value must NOT
-         * be among the list of {@see $values}.
-         */
         private bool $not = false,
         private string $message = 'This value is invalid.',
-
-        /**
-         * @var bool|callable|null
-         */
-        private $skipOnEmpty = null,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
-        /**
-         * @var WhenType
-         */
         private Closure|null $when = null,
     ) {
     }
@@ -61,21 +79,43 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         return 'inRange';
     }
 
+    /**
+     * Get a set of values to check against.
+     *
+     * @return iterable A set of scalar values.
+     * @psalm-return iterable<scalar>
+     */
     public function getValues(): iterable
     {
         return $this->values;
     }
 
+    /**
+     * Whether the comparison is strict (both type and value must be the same).
+     *
+     * @return bool Whether the comparison is strict.
+     */
     public function isStrict(): bool
     {
         return $this->strict;
     }
 
+    /**
+     * Whether to invert the validation logic. Defaults to `false`. If set to `true`, the value must NOT
+     * be among the list of {@see $values}.
+     *
+     * @return bool Whether to invert the validation logic.
+     */
     public function isNot(): bool
     {
         return $this->not;
     }
 
+    /**
+     * Get error message when the value is not in a set of {@see $values}.
+     *
+     * @return string Error message.
+     */
     public function getMessage(): string
     {
         return $this->message;

@@ -52,13 +52,13 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{type}`: the value's type.
      * @param string $message @var string A message used when the value is not valid.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{value}`: the value of the attribute being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.

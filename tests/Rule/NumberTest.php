@@ -142,7 +142,7 @@ final class NumberTest extends RuleTestCase
                 ],
             ],
             [
-                new Number(asInteger: true),
+                new Number(integerOnly: true),
                 [
                     'asInteger' => true,
                     'min' => null,
@@ -186,28 +186,28 @@ final class NumberTest extends RuleTestCase
             ['-4.423e-12', [new Number()]],
             ['12E3', [new Number()]],
 
-            [20, [new Number(asInteger: true)]],
-            [0, [new Number(asInteger: true)]],
-            ['20', [new Number(asInteger: true)]],
-            ['020', [new Number(asInteger: true)]],
-            [0x14, [new Number(asInteger: true)]],
+            [20, [new Number(integerOnly: true)]],
+            [0, [new Number(integerOnly: true)]],
+            ['20', [new Number(integerOnly: true)]],
+            ['020', [new Number(integerOnly: true)]],
+            [0x14, [new Number(integerOnly: true)]],
             ['5.5e1', [new Number()]],
 
             [1, [new Number(min: 1)]],
             [PHP_INT_MAX + 1, [new Number(min: 1)]],
 
-            [1, [new Number(asInteger: true, min: 1)]],
+            [1, [new Number(integerOnly: true, min: 1)]],
 
             [1, [new Number(max: 1)]],
             [1, [new Number(max: 1.25)]],
             ['22e-12', [new Number(max: 1.25)]],
             ['125e-2', [new Number(max: 1.25)]],
-            [1, [new Number(asInteger: true, max: 1.25)]],
+            [1, [new Number(integerOnly: true, max: 1.25)]],
 
             [0, [new Number(min: -10, max: 20)]],
             [-10, [new Number(min: -10, max: 20)]],
 
-            [0, [new Number(asInteger: true, min: -10, max: 20)]],
+            [0, [new Number(integerOnly: true, min: -10, max: 20)]],
         ];
     }
 
@@ -231,35 +231,35 @@ final class NumberTest extends RuleTestCase
             ['12.23^4', [new Number()], ['' => [$notNumberMessage]]],
             ['43^32', [new Number()], ['' => [$notNumberMessage]]],
 
-            [25.45, [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
-            ['25,45', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
-            ['0x14', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
+            [25.45, [new Number(integerOnly: true)], ['' => [$notIntegerMessage]]],
+            ['25,45', [new Number(integerOnly: true)], ['' => [$notIntegerMessage]]],
+            ['0x14', [new Number(integerOnly: true)], ['' => [$notIntegerMessage]]],
 
-            ['-1.23', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
-            ['-4.423e-12', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
-            ['12E3', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
-            ['e12', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
-            ['-e3', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
-            ['-4.534-e-12', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
-            ['12.23^4', [new Number(asInteger: true)], ['' => [$notIntegerMessage]]],
+            ['-1.23', [new Number(integerOnly: true)], ['' => [$notIntegerMessage]]],
+            ['-4.423e-12', [new Number(integerOnly: true)], ['' => [$notIntegerMessage]]],
+            ['12E3', [new Number(integerOnly: true)], ['' => [$notIntegerMessage]]],
+            ['e12', [new Number(integerOnly: true)], ['' => [$notIntegerMessage]]],
+            ['-e3', [new Number(integerOnly: true)], ['' => [$notIntegerMessage]]],
+            ['-4.534-e-12', [new Number(integerOnly: true)], ['' => [$notIntegerMessage]]],
+            ['12.23^4', [new Number(integerOnly: true)], ['' => [$notIntegerMessage]]],
 
             [-1, [new Number(min: 1)], ['' => ['Value must be no less than 1.']]],
             ['22e-12', [new Number(min: 1)], ['' => ['Value must be no less than 1.']]],
 
-            [-1, [new Number(asInteger: true, min: 1)], ['' => ['Value must be no less than 1.']]],
-            ['22e-12', [new Number(asInteger: true, min: 1)], ['' => [$notIntegerMessage]]],
+            [-1, [new Number(integerOnly: true, min: 1)], ['' => ['Value must be no less than 1.']]],
+            ['22e-12', [new Number(integerOnly: true, min: 1)], ['' => [$notIntegerMessage]]],
             [1.5, [new Number(max: 1.25)], ['' => ['Value must be no greater than 1.25.']]],
 
             // TODO: fix wrong message
-            [1.5, [new Number(asInteger: true, max: 1.25)], ['' => [$notIntegerMessage]]],
-            ['22e-12', [new Number(asInteger: true, max: 1.25)], ['' => [$notIntegerMessage]]],
-            ['125e-2', [new Number(asInteger: true, max: 1.25)], ['' => [$notIntegerMessage]]],
+            [1.5, [new Number(integerOnly: true, max: 1.25)], ['' => [$notIntegerMessage]]],
+            ['22e-12', [new Number(integerOnly: true, max: 1.25)], ['' => [$notIntegerMessage]]],
+            ['125e-2', [new Number(integerOnly: true, max: 1.25)], ['' => [$notIntegerMessage]]],
 
             [-11, [new Number(min: -10, max: 20)], ['' => ['Value must be no less than -10.']]],
             [21, [new Number(min: -10, max: 20)], ['' => ['Value must be no greater than 20.']]],
-            [-11, [new Number(asInteger: true, min: -10, max: 20)], ['' => ['Value must be no less than -10.']]],
-            [22, [new Number(asInteger: true, min: -10, max: 20)], ['' => ['Value must be no greater than 20.']]],
-            ['20e-1', [new Number(asInteger: true, min: -10, max: 20)], ['' => [$notIntegerMessage]]],
+            [-11, [new Number(integerOnly: true, min: -10, max: 20)], ['' => ['Value must be no less than -10.']]],
+            [22, [new Number(integerOnly: true, min: -10, max: 20)], ['' => ['Value must be no greater than 20.']]],
+            ['20e-1', [new Number(integerOnly: true, min: -10, max: 20)], ['' => [$notIntegerMessage]]],
             'custom error' => [
                 0,
                 [new Number(min: 5, tooSmallMessage: 'Value is too small.')],
