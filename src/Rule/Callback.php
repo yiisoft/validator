@@ -53,6 +53,7 @@ final class Callback implements
      * @param Closure|null $when A callable to define a condition for applying the rule.
      * See {@see WhenInterface}.
      * @psalm-param WhenType $when
+     *
      * @throws InvalidArgumentException When either no callback or method is specified or
      * both are specified at the same time.
      */
