@@ -154,6 +154,8 @@ class Composite implements
      * Gets a set of normalized rules that needs to be grouped.
      *
      * @return iterable<int, RuleInterface> A set of rules.
+     *
+     * @see $rules
      */
     public function getRules(): iterable
     {
@@ -189,6 +191,8 @@ class Composite implements
      * yet, creates the new instance first.
      *
      * @return RulesDumper A rules dumper instance.
+     *
+     * @see $rulesDumper
      */
     private function getRulesDumper(): RulesDumper
     {
