@@ -35,9 +35,9 @@ final class Equal extends Compare
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
-     * - `{type}`: the type of the attribute being validated.
-     * @param string $incorrectDataSetTypeMessage A message used when the attribute value returned from a custom
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
+     * @param string $incorrectDataSetTypeMessage A message used when the value returned from a custom
      * data set is not a scalar.
      *
      * You may use the following placeholders in the message:
@@ -47,7 +47,7 @@ final class Equal extends Compare
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{targetValue}`: the constant value to be compared with.
      * - `{targetAttribute}`: the name of the attribute to be compared with.
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of

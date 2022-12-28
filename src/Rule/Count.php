@@ -57,27 +57,27 @@ final class Count implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
-     * - `{type}`: the type of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
      * @param string $lessThanMinMessage Error message used when the number of items is smaller than {@see $min}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{min}`: minimum number of items required.
      * - `{number}`: actual number of items.
      * @param string $greaterThanMaxMessage Error message used when the number of items is greater than {@see $max}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{max}`: maximum number of items required.
      * - `{number}`: actual number of items.
      * @param string $notExactlyMessage Error message used when the number of items does not equal {@see $exactly}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{exactly}`: exact number of items required.
      * - `{number}`: actual number of items.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
@@ -119,7 +119,7 @@ final class Count implements
     }
 
     /**
-     * Get error message used when the value is neither an array nor implementing {@see \Countable} interface.
+     * Get error message used when the value is neither an array nor a class implementing {@see \Countable} interface.
      *
      * @return string Error message.
      *

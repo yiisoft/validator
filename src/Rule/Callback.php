@@ -37,7 +37,7 @@ final class Callback implements
     use WhenTrait;
 
     /**
-     * @var object|null The object being validated.
+     * @var object|null The object being validated. Null if PHP attributes aren't used.
      */
     private ?object $validatedObject = null;
 
@@ -105,7 +105,7 @@ final class Callback implements
     /**
      * Get object being validated.
      *
-     * @return object|null Object being validated.
+     * @return object|null Object being validated. Null if PHP attributes aren't used.
      *
      * @see $validatedObject
      */
