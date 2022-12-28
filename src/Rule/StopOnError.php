@@ -58,7 +58,7 @@ final class StopOnError implements
 
     /**
      * @param iterable $rules A set of rules for running the validation. Note that they are not normalized.
-     * @psalm-param iterable<RuleInterface>
+     * @psalm-param iterable<RuleInterface> $rules
      * @param bool|callable|null $skipOnEmpty Whether to skip this `StopOnError` rule with all defined {@see $rules} if
      * the validated value is empty / not passed. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this `StopOnError` rule with all defined {@see $rules} if any of the
