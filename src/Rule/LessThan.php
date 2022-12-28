@@ -19,7 +19,10 @@ use Yiisoft\Validator\WhenInterface;
  * are checked byte by byte. When validating numbers, make sure to change {@see LessThan::$type} to
  * {@see LessThan::TYPE_NUMBER} to enable numeric validation.
  *
+ * `new LessThan()` is a shortcut for `new CompareTo(operator: '<')`.
+ *
  * @see CompareHandler
+ * @see Compare
  *
  * @psalm-import-type WhenType from WhenInterface
  */

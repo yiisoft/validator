@@ -14,6 +14,15 @@ use Attribute;
  *
  * It supports different comparison operators, specified via the {@see CompareTo::$operator}.
  *
+ * There are shortcut classes to use instead of specifying operator manually:
+ *
+ * - {@see Equal} is a shortcut for `new CompareOperator(operator: '==')` and `new CompareOperator(operator: '===')`.
+ * - {@see NotEqual} is a shortcut for `new CompareOperator(operator: '!=')` and `new CompareOperator(operator: '!==')`.
+ * - {@see GreaterThan} is a shortcut for `new CompareTo(operator: '>')`.
+ * - {@see GreaterThanOrEqual} is a shortcut for `new CompareTo(operator: '>=')`.
+ * - {@see LessThan} is a shortcut for `new CompareTo(operator: '<')`.
+ * - {@see LessThanOrEqual} is a shortcut for `new CompareTo(operator: '<=')`.
+ *
  * The default comparison function is based on string values, which means the values
  * are compared byte by byte. When comparing numbers, make sure to change {@see CompareTo::$type} to
  * {@see CompareTo::TYPE_NUMBER} to enable numeric comparison.

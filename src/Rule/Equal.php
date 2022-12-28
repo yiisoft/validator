@@ -19,7 +19,11 @@ use Yiisoft\Validator\WhenInterface;
  * are checked byte by byte. When validating numbers, make sure to change {@see Equal::$type} to
  * {@see Equal::TYPE_NUMBER} to enable numeric validation.
  *
+ * - `new Equal()` is a shortcut for `new CompareTo(operator: '==')`.
+ * - `new Equal(strict:true)` is a shortcut for `new CompareTo(operator: '===')`.
+ *
  * @see CompareHandler
+ * @see Compare
  *
  * @psalm-import-type WhenType from WhenInterface
  */

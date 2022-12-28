@@ -84,6 +84,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      * You may use the following placeholders in the message:
      *
      * - `{type}`: type of the value.
+     *
      * @param string|null $message A message used when the value is not valid.
      *
      * You may use the following placeholders in the message:
@@ -94,6 +95,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
      *   the attribute to be compared with.
      * - `{value}`: the value of the attribute being validated.
+     *
      * @param string $type The type of the values being compared. Either {@see Compare::TYPE_STRING}
      * or {@see Compare::TYPE_NUMBER}.
      * @param string $operator The operator for comparison. The following operators are supported:
