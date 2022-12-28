@@ -154,7 +154,7 @@ final class InTest extends RuleTestCase
             'arrays, non-strict equality (partially), strict mode' => [
                 ['1', 2],
                 [new In([[1, 2], [3, 4]], strict: true)],
-                $errors
+                $errors,
             ],
             'arrays, non-strict equality (fully), strict mode' => [
                 ['1', '2'],
