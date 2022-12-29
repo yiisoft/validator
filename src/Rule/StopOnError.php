@@ -9,13 +9,11 @@ use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
-use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
-use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
@@ -26,13 +24,11 @@ use Yiisoft\Validator\WhenInterface;
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class StopOnError implements
     RuleWithOptionsInterface,
-    SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
     AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
-    use SkipOnErrorTrait;
     use WhenTrait;
 
     private ?RulesDumper $rulesDumper = null;
@@ -46,7 +42,6 @@ final class StopOnError implements
          * @var bool|callable|null
          */
         private mixed $skipOnEmpty = null,
-        private bool $skipOnError = false,
         /**
          * @var WhenType
          */
@@ -69,14 +64,12 @@ final class StopOnError implements
 
     #[ArrayShape([
         'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
         'rules' => 'array|null',
     ])]
     public function getOptions(): array
     {
         return [
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
-            'skipOnError' => $this->skipOnError,
             'rules' => $this->getRulesDumper()->asArray($this->rules),
         ];
     }
