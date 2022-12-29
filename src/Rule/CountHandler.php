@@ -14,8 +14,10 @@ use Yiisoft\Validator\ValidationContext;
 use function count;
 
 /**
- * Validates that the value contains certain number of items. Can be applied to arrays or classes implementing
- * {@see Countable} interface.
+ * Validates that the value contains certain number of items.
+ * Can be applied to arrays or classes implementing {@see Countable} interface.
+ *
+ * @see Count
  */
 final class CountHandler implements RuleHandlerInterface
 {

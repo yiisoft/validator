@@ -12,7 +12,7 @@ use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * A handler for {@see Required} rule. Validates that the specified value is passed and not empty.
+ * A handler for {@see Required} rule. Validates that the specified value is passed and is not empty.
  *
  * @psalm-import-type EmptyCriteriaType from Required
  */
@@ -25,6 +25,8 @@ final class RequiredHandler implements RuleHandlerInterface
      * ```php
      * function (mixed $value, bool $isAttributeMissing): bool
      * ```
+     *
+     * `$isAttributeMissing` is a flag defining whether the attribute is missing (not used / not passed at all).
      *
      * Used as a default when {@see Required::$emptyCriteria} is not set. A customized handler can be added to
      * {@see SimpleRuleHandlerContainer::$instances} to be applied to all rules of this type without explicitly
