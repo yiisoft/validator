@@ -43,9 +43,9 @@ final class Callback implements
 
     /**
      * @param callable|null $callback Callable with the `function ($value, $rule, $context): Result` signature that
-     * performs the validation.
+     * performs the validation. Mutually exclusive with {@see $method}.
      * @param string|null $method Name of a validated object method with the `function ($value, $rule, $context): Result`
-     * signature that performs the validation.
+     * signature that performs the validation. Mutually exclusive with {@see $callback}.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
