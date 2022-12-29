@@ -12,7 +12,7 @@ use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * A handler for {@see Required} rule. Validates that the specified value is passed and not empty.
+ * A handler for {@see Required} rule. Validates that the specified value is passed and is not empty.
  *
  * @psalm-import-type EmptyCriteriaType from Required
  */
