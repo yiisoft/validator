@@ -142,8 +142,8 @@ final class BooleanValue implements RuleWithOptionsInterface, SkipOnEmptyInterfa
     }
 
     /**
-     * Error message used when validation fails because the validated value does not match neither "true" nor "false"
-     * values.
+     * Gets error message used when validation fails because the validated value does not match neither "true" nor
+     * "false" values.
      *
      * @return string Error message / template.
      *

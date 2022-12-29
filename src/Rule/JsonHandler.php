@@ -12,7 +12,10 @@ use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
- * Validates that the value is a valid json.
+ * A handler for {@see Json} rule. Validates that the value is a valid JSON string.
+ *
+ * @see https://en.wikipedia.org/wiki/JSON
+ * @see https://tools.ietf.org/html/rfc8259
  */
 final class JsonHandler implements RuleHandlerInterface
 {
@@ -41,6 +44,14 @@ final class JsonHandler implements RuleHandlerInterface
         return $result;
     }
 
+    /**
+     * Checks if the given value is a valid JSON.
+     *
+     * @param string $value Any string.
+     *
+     * @return bool Whether the given value is a valid JSON: `true` - valid JSON, `false` - invalid JSON with errors /
+     * not a JSON at all.
+     */
     private function isValidJson(string $value): bool
     {
         // Regular expression is built based on JSON grammar specified at
