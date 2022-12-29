@@ -145,7 +145,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
     /**
      * Get the constant value to be compared with.
      *
-     * @return scalar|null Value to be compared with.
+     * @return scalar|null Value to be compared with or `null` if it was not configured.
      *
      * @see $targetValue
      */
@@ -157,7 +157,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
     /**
      * Get the name of the attribute to be compared with.
      *
-     * @return string|null Name of the attribute to be compared with.
+     * @return string|null Name of the attribute to be compared with or `null` if it was not configured.
      *
      * @see $targetAttribute
      */
