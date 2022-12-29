@@ -15,7 +15,9 @@ use function is_array;
 use function is_object;
 
 /**
- * Checks if at least {@see AtLeast::$min} of many attributes are filled.
+ * Validates that a minimum number of specified attributes are filled.
+ *
+ * @see AtLeast
  */
 final class AtLeastHandler implements RuleHandlerInterface
 {

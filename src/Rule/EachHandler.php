@@ -13,7 +13,7 @@ use function is_int;
 use function is_string;
 
 /**
- * Validates an array by checking each of its elements against a set of rules.
+ * A handler for {@see Each} rule. Validates each element of an iterable using a set of rules.
  */
 final class EachHandler implements RuleHandlerInterface
 {

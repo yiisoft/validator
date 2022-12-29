@@ -10,27 +10,7 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Can be used to group rules for validation by `skipOnEmpty`, `skipOnError` or `when`.
- *
- * For example, we have same when closure:
- * ```
- * 'name' => [
- *     new Required(when: fn() => $this->useName),
- *     new HasLength(min: 1, max: 50, skipOnEmpty: true, when: fn() => $this->useName),
- * ],
- * ```
- * So we can configure it like this:
- * ```
- * 'name' => [
- *     new Composite(
- *         rules: [
- *             new Required(),
- *             new HasLength(min: 1, max: 50, skipOnEmpty: true),
- *         ],
- *         when: fn() => $this->useName,
- *     ),
- * ],
- * ```
+ * A handler for {@see Composite} handler. Validates group of rules.
  */
 final class CompositeHandler implements RuleHandlerInterface
 {

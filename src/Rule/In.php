@@ -19,7 +19,12 @@ use Yiisoft\Validator\WhenInterface;
  * If the {@see In::$not} is set, the validation logic is inverted and the rule will ensure that the value
  * is NOT one of them.
  *
- * Note that sub-arrays are not supported. Use {@see Subset} instead.
+ * In case of the validated value being a list, the order of values is important.
+ *
+ * Nested arrays are supported too in both {@see values} argument and in the validated value (the order of values in
+ * lists must match, the order of keys in associative arrays is not important).
+ *
+ * If the validated value is a set, use {@see Subset} instead.
  *
  * @see InHandler
  *
@@ -33,13 +38,11 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     use WhenTrait;
 
     /**
-     * @param iterable $values A set of values to check against. Sub-arrays are not supported. Use {@see Subset} instead.
-     * @psalm-param iterable<scalar> $values
+     * @param iterable $values A set of values to check against. Nested arrays are supported too (the order of values in
+     * lists must match, the order of keys in associative arrays is not important).
+     * @param bool $strict Whether the comparison to each value in the set is strict:
      *
-     * @param bool $strict Whether the comparison to {@see $trueValue} and {@see $falseValue} is strict:
-     *
-     * - Strict mode uses `===` operator meaning the type and the value must both match to those set in
-     * {@see $trueValue} or {@see $falseValue}.
+     * - Strict mode uses `===` operator meaning the type and the value must both match.
      * - Non-strict mode uses `==` operator meaning that type juggling is performed first before the comparison. You can
      * read more in the PHP docs:
      *
@@ -67,7 +70,7 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         private iterable $values,
         private bool $strict = false,
         private bool $not = false,
-        private string $message = 'This value is invalid.',
+        private string $message = 'This value is not in the list of acceptable values.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
@@ -82,8 +85,7 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     /**
      * Get a set of values to check against.
      *
-     * @return iterable A set of scalar values.
-     * @psalm-return iterable<scalar>
+     * @return iterable A set of values.
      */
     public function getValues(): iterable
     {

@@ -984,7 +984,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author.sex' => [new In(['male', 'female'])]])],
-                ['author.sex' => ['This value is invalid.']],
+                ['author.sex' => ['This value is not in the list of acceptable values.']],
             ],
             [
                 ['value' => null],
@@ -1068,7 +1068,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author.sex' => [new In(['male', 'female'])]])],
-                [['This value is invalid.', ['author', 'sex']]],
+                [['This value is not in the list of acceptable values.', ['author', 'sex']]],
             ],
             [
                 '',
