@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\Rule\Boolean;
-use Yiisoft\Validator\Rule\BooleanHandler;
+use Yiisoft\Validator\Rule\BooleanValue;
+use Yiisoft\Validator\Rule\BooleanValueHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
-final class BooleanTest extends RuleTestCase
+final class BooleanValueTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
@@ -21,7 +21,7 @@ final class BooleanTest extends RuleTestCase
 
     public function testGetName(): void
     {
-        $rule = new Boolean();
+        $rule = new BooleanValue();
         $this->assertSame('boolean', $rule->getName());
     }
 
@@ -29,19 +29,19 @@ final class BooleanTest extends RuleTestCase
     {
         return [
             [
-                new Boolean(),
+                new BooleanValue(),
                 [
                     'trueValue' => '1',
                     'falseValue' => '0',
                     'strict' => false,
-                    'nonScalarMessage' => [
-                        'template' => 'Value must be either "{true}" or "{false}".',
+                    'incorrectInputMessage' => [
+                        'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
                         'parameters' => [
                             'true' => '1',
                             'false' => '0',
                         ],
                     ],
-                    'scalarMessage' => [
+                    'message' => [
                         'template' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => '1',
@@ -53,19 +53,19 @@ final class BooleanTest extends RuleTestCase
                 ],
             ],
             [
-                new Boolean(trueValue: true, falseValue: false, strict: true),
+                new BooleanValue(trueValue: true, falseValue: false, strict: true),
                 [
                     'trueValue' => true,
                     'falseValue' => false,
                     'strict' => true,
-                    'nonScalarMessage' => [
-                        'template' => 'Value must be either "{true}" or "{false}".',
+                    'incorrectInputMessage' => [
+                        'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
                         'parameters' => [
                             'true' => 'true',
                             'false' => 'false',
                         ],
                     ],
-                    'scalarMessage' => [
+                    'message' => [
                         'template' => 'Value must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => 'true',
@@ -77,12 +77,12 @@ final class BooleanTest extends RuleTestCase
                 ],
             ],
             [
-                new Boolean(
+                new BooleanValue(
                     trueValue: 'YES',
                     falseValue: 'NO',
                     strict: true,
-                    nonScalarMessage: 'Custom message 1.',
-                    scalarMessage: 'Custom message 2.',
+                    incorrectInputMessage: 'Custom message 1.',
+                    message: 'Custom message 2.',
                     skipOnEmpty: true,
                     skipOnError: true
                 ),
@@ -90,14 +90,14 @@ final class BooleanTest extends RuleTestCase
                     'trueValue' => 'YES',
                     'falseValue' => 'NO',
                     'strict' => true,
-                    'nonScalarMessage' => [
+                    'incorrectInputMessage' => [
                         'template' => 'Custom message 1.',
                         'parameters' => [
                             'true' => 'YES',
                             'false' => 'NO',
                         ],
                     ],
-                    'scalarMessage' => [
+                    'message' => [
                         'template' => 'Custom message 2.',
                         'parameters' => [
                             'true' => 'YES',
@@ -114,17 +114,17 @@ final class BooleanTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            [true, [new Boolean()]],
-            [false, [new Boolean()]],
+            [true, [new BooleanValue()]],
+            [false, [new BooleanValue()]],
 
-            ['0', [new Boolean()]],
-            ['1', [new Boolean()]],
+            ['0', [new BooleanValue()]],
+            ['1', [new BooleanValue()]],
 
-            ['0', [new Boolean(strict: true)]],
-            ['1', [new Boolean(strict: true)]],
+            ['0', [new BooleanValue(strict: true)]],
+            ['1', [new BooleanValue(strict: true)]],
 
-            [true, [new Boolean(trueValue: true, falseValue: false, strict: true)]],
-            [false, [new Boolean(trueValue: true, falseValue: false, strict: true)]],
+            [true, [new BooleanValue(trueValue: true, falseValue: false, strict: true)]],
+            [false, [new BooleanValue(trueValue: true, falseValue: false, strict: true)]],
         ];
     }
 
@@ -134,99 +134,116 @@ final class BooleanTest extends RuleTestCase
         $booleanErrors = ['' => ['Value must be either "true" or "false".']];
 
         return [
-            ['5', [new Boolean()], $defaultErrors],
+            ['5', [new BooleanValue()], $defaultErrors],
 
-            [null, [new Boolean()], $defaultErrors],
-            [[], [new Boolean()], $defaultErrors],
+            [null, [new BooleanValue()], ['' => ['The allowed types are integer, float, string, boolean. null given.']]],
+            [[], [new BooleanValue()], ['' => ['The allowed types are integer, float, string, boolean. array given.']]],
 
-            [true, [new Boolean(strict: true)], $defaultErrors],
-            [false, [new Boolean(strict: true)], $defaultErrors],
+            [true, [new BooleanValue(strict: true)], $defaultErrors],
+            [false, [new BooleanValue(strict: true)], $defaultErrors],
 
-            ['0', [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
-            [[], [new Boolean(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
+            ['0', [new BooleanValue(trueValue: true, falseValue: false, strict: true)], $booleanErrors],
+            [
+                [],
+                [new BooleanValue(trueValue: true, falseValue: false, strict: true)],
+                ['' => ['The allowed types are integer, float, string, boolean. array given.']],
+            ],
 
-            'custom scalar message' => [5, [new Boolean(scalarMessage: 'Custom error.')], ['' => ['Custom error.']]],
-            'custom scalar message with parameters' => [
+            'custom message' => [
+                5,
+                [new BooleanValue(message: 'Custom error.')],
+                ['' => ['Custom error.']],
+            ],
+            'custom message with parameters' => [
                 5,
                 [
-                    new Boolean(
-                        scalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
+                    new BooleanValue(
+                        message: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
                     ),
                 ],
                 ['' => ['Attribute - , true - 1, false - 0, value - 5.']],
             ],
-            'custom scalar message with parameters, custom true and false values, strict' => [
+            'custom message with parameters, custom true and false values, strict' => [
                 5,
                 [
-                    new Boolean(
+                    new BooleanValue(
                         trueValue: true,
                         falseValue: false,
                         strict: true,
-                        scalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
+                        message: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
                     ),
                 ],
                 ['' => ['Attribute - , true - true, false - false, value - 5.']],
             ],
-            'custom scalar message with parameters, attribute set' => [
+            'custom message with parameters, attribute set' => [
                 ['data' => 5],
                 [
-                    'data' => new Boolean(
-                        scalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
+                    'data' => new BooleanValue(
+                        message: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
                     ),
                 ],
                 ['data' => ['Attribute - data, true - 1, false - 0, value - 5.']],
             ],
-            'custom non-scalar message' => [
+            'custom incorrect input message' => [
                 [],
-                [new Boolean(nonScalarMessage: 'Custom error.')],
+                [new BooleanValue(incorrectInputMessage: 'Custom error.')],
                 ['' => ['Custom error.']],
             ],
-            'custom non-scalar message with parameters' => [
+            'custom incorrect input message with parameters' => [
                 [],
                 [
-                    new Boolean(
-                        nonScalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
+                    new BooleanValue(
+                        incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
                 ['' => ['Attribute - , true - 1, false - 0, type - array.']],
             ],
-            'custom non-scalar message with parameters, custom true and false values, strict' => [
+            'custom incorrect input message with parameters, custom true and false values, strict' => [
                 [],
                 [
-                    new Boolean(
+                    new BooleanValue(
                         trueValue: true,
                         falseValue: false,
                         strict: true,
-                        nonScalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
+                        incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
                 ['' => ['Attribute - , true - true, false - false, type - array.']],
             ],
-            'custom non-scalar message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, attribute set' => [
                 ['data' => []],
                 [
-                    'data' => new Boolean(
-                        nonScalarMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
+                    'data' => new BooleanValue(
+                        incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
                 ['data' => ['Attribute - data, true - 1, false - 0, type - array.']],
+            ],
+            'custom incorrect input message, null' => [
+                null,
+                [
+                    new BooleanValue(
+                        incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
+                    ),
+                ],
+                ['' => ['Attribute - , true - 1, false - 0, type - null.']],
             ],
         ];
     }
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new Boolean(), new Boolean(skipOnError: true));
+        $this->testSkipOnErrorInternal(new BooleanValue(), new BooleanValue(skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new Boolean(), new Boolean(when: $when));
+        $this->testWhenInternal(new BooleanValue(), new BooleanValue(when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array
     {
-        return [Boolean::class, BooleanHandler::class];
+        return [BooleanValue::class, BooleanValueHandler::class];
     }
 }

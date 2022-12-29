@@ -112,7 +112,7 @@ use function is_string;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  *
- * @psalm-type RulesCache = array<int,array{0:RuleInterface,1:Attribute::TARGET_*}>|array<string,list<array{0:RuleInterface,1:Attribute::TARGET_*}>>
+ * @psalm-type RulesCacheItem = array{0:RuleInterface,1:Attribute::TARGET_*}
  */
 final class ObjectParser
 {
@@ -152,6 +152,7 @@ final class ObjectParser
          * @var int Visibility levels the parsed properties must have. For example: public and protected only, this
          * means that the rest (private ones) will be skipped. Defaults to all visibility levels (public, protected and
          * private).
+         * @psalm-var int-mask-of<ReflectionProperty::IS_*>
          */
         private int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
         ReflectionProperty::IS_PROTECTED |
@@ -197,7 +198,7 @@ final class ObjectParser
     public function getRules(): array
     {
         if ($this->hasCacheItem('rules')) {
-            /** @psalm-var RulesCache */
+            /** @var array $rules */
             $rules = $this->getCacheItem('rules');
             return $this->prepareRules($rules);
         }
@@ -317,6 +318,7 @@ final class ObjectParser
             }
 
             if (PHP_VERSION_ID < 80100) {
+                /** @psalm-suppress UnusedMethodCall Need for pslam with PHP 8.1+ */
                 $property->setAccessible(true);
             }
 
@@ -351,7 +353,7 @@ final class ObjectParser
     }
 
     /**
-     * @psalm-param RulesCache $source Raw rules containing additional metadata besides rule instances.
+     * @psalm-param array $source Raw rules containing additional metadata besides rule instances.
      *
      * @return array<int, RuleInterface>|array<string, list<RuleInterface>> An array of rules ready to use for the
      * validation.
@@ -359,13 +361,16 @@ final class ObjectParser
     private function prepareRules(array $source): array
     {
         $rules = [];
+        /**
+         * @var mixed $data
+         */
         foreach ($source as $key => $data) {
             if (is_int($key)) {
-                /** @psalm-var array{0:RuleInterface,1:Attribute::TARGET_*} $data */
+                /** @psalm-var RulesCacheItem $data */
                 $rules[$key] = $this->prepareRule($data[0], $data[1]);
             } else {
                 /**
-                 * @psalm-var list<array{0:RuleInterface,1:Attribute::TARGET_*}> $data
+                 * @psalm-var list<RulesCacheItem> $data
                  * @psalm-suppress UndefinedInterfaceMethod
                  */
                 foreach ($data as $rule) {

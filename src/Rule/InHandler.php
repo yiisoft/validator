@@ -11,7 +11,9 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * A handler for {@see In} rule.
+ * Validates that the value is one of the values provided.
+ *
+ * @see In
  */
 final class InHandler implements RuleHandlerInterface
 {

@@ -13,9 +13,9 @@ use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
- * Validates that the value is of certain length.
+ * Validates that the value is a string of a certain length.
  *
- * Note, this rule should only be used with strings.
+ * @see HasLength
  */
 final class HasLengthHandler implements RuleHandlerInterface
 {
