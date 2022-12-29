@@ -52,7 +52,7 @@ final class Count implements
      * {@see $exactly}. See {@see $greaterThanMaxMessage} for the customized message for a value with too many items.
      * @param int|null $exactly Exact number of items. `null` means no strict comparison. Mutually exclusive with
      * {@see $min} and {@see $max}.
-     * @param string $incorrectInputMessage Error message used when the value is neither an array nor a class
+     * @param string $incorrectInputMessage Error message used when the value is neither an array nor an object
      * implementing {@see \Countable} interface.
      *
      * You may use the following placeholders in the message:
@@ -119,7 +119,7 @@ final class Count implements
     }
 
     /**
-     * Get error message used when the value is neither an array nor a class implementing {@see \Countable} interface.
+     * Get error message used when the value is neither an array nor an object implementing {@see \Countable} interface.
      *
      * @return string Error message.
      *

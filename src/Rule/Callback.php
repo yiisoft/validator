@@ -37,7 +37,7 @@ final class Callback implements
     use WhenTrait;
 
     /**
-     * @var object|null The object being validated. Null if PHP attributes aren't used.
+     * @var object|null The object being validated. `null` if PHP attributes aren't used.
      */
     private ?object $validatedObject = null;
 
@@ -54,7 +54,7 @@ final class Callback implements
      * See {@see WhenInterface}.
      * @psalm-param WhenType $when
      *
-     * @throws InvalidArgumentException When either no callback or method is specified or
+     * @throws InvalidArgumentException When neither {@see $callback} nor {@see $method} is specified or
      * both are specified at the same time.
      */
     public function __construct(
