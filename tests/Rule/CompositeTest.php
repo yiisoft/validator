@@ -219,7 +219,7 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new Composite(
-                        rules: [new Number(max: 13)],
+                        [new Number(max: 13)],
                         when: fn () => false,
                     ),
                 ],
@@ -238,7 +238,7 @@ final class CompositeTest extends RuleTestCase
                 null,
                 [
                     new Composite(
-                        rules: [new Number(max: 13)],
+                        [new Number(max: 13)],
                         skipOnEmpty: true,
                     ),
                 ],
@@ -252,12 +252,10 @@ final class CompositeTest extends RuleTestCase
             'callable' => [
                 20,
                 [
-                    new Composite(
-                        rules: [
-                            static fn () => (new Result())->addError('Bad value.'),
-                            static fn () => (new Result())->addError('Very bad value.'),
-                        ],
-                    ),
+                    new Composite([
+                        static fn () => (new Result())->addError('Bad value.'),
+                        static fn () => (new Result())->addError('Very bad value.'),
+                    ]),
                 ],
                 [
                     '' => [
@@ -270,7 +268,7 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new Composite(
-                        rules: [new Number(max: 13), new Number(min: 21)],
+                        [new Number(max: 13), new Number(min: 21)],
                         when: fn () => true,
                     ),
                 ],
@@ -286,7 +284,7 @@ final class CompositeTest extends RuleTestCase
                 [
                     new Equal(19),
                     new Composite(
-                        rules: [new Number(max: 13)],
+                        [new Number(max: 13)],
                         skipOnError: true,
                     ),
                 ],
@@ -298,7 +296,7 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new Composite(
-                        rules: [new Number(max: 13)],
+                        [new Number(max: 13)],
                         skipOnError: true,
                     ),
                 ],
@@ -310,7 +308,7 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new Composite(
-                        rules: [new Number(max: 13, tooBigMessage: 'Custom error')],
+                        [new Number(max: 13, tooBigMessage: 'Custom error')],
                         when: fn () => true,
                     ),
                 ],
