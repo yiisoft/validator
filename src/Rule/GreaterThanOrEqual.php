@@ -58,6 +58,7 @@ final class GreaterThanOrEqual extends Compare
      * - `{value}`: the value of the attribute being validated.
      * @param string $type The type of the values being compared. Either {@see Compare::TYPE_STRING}
      * or {@see Compare::TYPE_NUMBER}.
+     * @psalm-param Compare::TYPE_* $type
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
