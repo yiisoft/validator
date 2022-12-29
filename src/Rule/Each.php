@@ -25,7 +25,7 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Allows to define a set of rules for validating each element of an iterable.
  *
- * An example for simple iterable that can be used to validate RGB point:
+ * An example for simple iterable that can be used to validate RGB color:
  *
  * ```php
  * $rules = [
