@@ -5,19 +5,18 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\StopOnError;
 use Yiisoft\Validator\Rule\StopOnErrorHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
-use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
 final class StopOnErrorTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
-    use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
     public function testGetName(): void
@@ -33,7 +32,6 @@ final class StopOnErrorTest extends RuleTestCase
                 new StopOnError([new HasLength(min: 10)]),
                 [
                     'skipOnEmpty' => false,
-                    'skipOnError' => false,
                     'rules' => [
                         [
                             'hasLength',
@@ -113,15 +111,18 @@ final class StopOnErrorTest extends RuleTestCase
                 ],
                 ['' => ['This value must contain at most 1 character.']],
             ],
+            'case3' => [
+                'hello',
+                [
+                    new Number(),
+                    new StopOnError([
+                        new HasLength(max: 1),
+                        new HasLength(min: 10),
+                    ]),
+                ],
+                ['' => ['Value must be a number.']],
+            ],
         ];
-    }
-
-    public function testSkipOnError(): void
-    {
-        $this->testskipOnErrorInternal(
-            new StopOnError([new HasLength(min: 10)]),
-            new StopOnError([new HasLength(min: 10)], skipOnError: true),
-        );
     }
 
     public function testWhen(): void
