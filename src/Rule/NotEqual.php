@@ -59,6 +59,7 @@ final class NotEqual extends Compare
      * - `{value}`: the value of the attribute being validated.
      * @param string $type The type of the values being validated.
      * @psalm-param Compare::TYPE_* $type
+     *
      * @param bool $strict Whether to use strict checks without type juggling.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
