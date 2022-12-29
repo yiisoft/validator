@@ -83,7 +83,8 @@ class Composite implements
     use WhenTrait;
 
     /**
-     * @var iterable<int, RuleInterface> A set of normalized rules that needs to be grouped.
+     * @var iterable A set of normalized rules that needs to be grouped.
+     * @psalm-var iterable<int, RuleInterface>
      */
     protected iterable $rules = [];
     /**

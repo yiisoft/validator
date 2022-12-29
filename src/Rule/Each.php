@@ -213,7 +213,7 @@ final class Each implements
      *
      * @return array The array of rules with their options.
      */
-    protected function dumpRulesAsArray(): array
+    private function dumpRulesAsArray(): array
     {
         return $this->getRulesDumper()->asArray($this->getRules());
     }
