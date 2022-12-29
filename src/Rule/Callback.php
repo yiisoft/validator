@@ -119,7 +119,7 @@ final class Callback implements
         if ($target === Attribute::TARGET_CLASS) {
             $this->validatedObject = $object;
         }
-        
+
         if ($this->method === null) {
             return;
         }
