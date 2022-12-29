@@ -97,6 +97,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      * @param string $type The type of the values being compared. Either {@see Compare::TYPE_STRING}
      * or {@see Compare::TYPE_NUMBER}.
      * @psalm-param Compare::TYPE_* $type
+     *
      * @param string $operator The operator for comparison. The following operators are supported:
      *
      * - `==`: check if two values are equal. The comparison is done in non-strict mode.
