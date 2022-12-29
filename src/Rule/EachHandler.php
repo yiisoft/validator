@@ -24,7 +24,7 @@ final class EachHandler implements RuleHandlerInterface
         }
 
         /** @var mixed $value */
-        $value = $context->getParameter(ValidationContext::VALUE_AS_ARRAY_PARAMETER) ?? $value;
+        $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
 
         $rules = $rule->getRules();
 

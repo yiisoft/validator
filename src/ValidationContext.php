@@ -14,7 +14,7 @@ use Yiisoft\Arrays\ArrayHelper;
  */
 final class ValidationContext
 {
-    public const VALUE_AS_ARRAY_PARAMETER = 'yii-validator-value-as-array';
+    public const PARAMETER_VALUE_AS_ARRAY = 'yii-validator-value-as-array';
 
     /**
      * @var ValidatorInterface|null A validator instance. `null` means context data was not set

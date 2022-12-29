@@ -114,12 +114,12 @@ final class Validator implements ValidatorInterface
             if (is_int($attribute)) {
                 /** @psalm-suppress MixedAssignment */
                 $validatedData = $dataSet instanceof DataWrapperInterface ? $dataSet->getSource() : $data;
-                $context->setParameter(ValidationContext::VALUE_AS_ARRAY_PARAMETER, $dataSet->getData());
+                $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, $dataSet->getData());
                 $context->setAttribute(null);
             } else {
                 /** @psalm-suppress MixedAssignment */
                 $validatedData = $dataSet->getAttributeValue($attribute);
-                $context->setParameter(ValidationContext::VALUE_AS_ARRAY_PARAMETER, null);
+                $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, null);
                 $context->setAttribute($attribute);
             }
 
