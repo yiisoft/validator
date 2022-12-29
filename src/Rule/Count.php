@@ -119,7 +119,7 @@ final class Count implements
     }
 
     /**
-     * Get error message used when the value is neither an array nor a class implementing {@see \Countable} interface.
+     * Get error message used when the value is neither an array nor an object implementing {@see \Countable} interface.
      *
      * @return string Error message.
      *
