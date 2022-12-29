@@ -51,8 +51,6 @@ final class SingleValueDataSet implements DataWrapperInterface
 
     /**
      * Returns the validated data as array.
-     *
-     * @return null Always `null` because does not support data as array.
      */
     public function getData(): ?array
     {
