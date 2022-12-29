@@ -19,9 +19,9 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * A higher-order rule, applies to a set of rules, runs validation for each one of them in the order they are defined
- * and stops at the rule where validation failed. In particular, it can be useful for preventing the heavy operations to
- * increase performance. It can be set like that for a group of ordered rules:
+ * Applies to a set of rules, runs validation for each one of them in the order they are defined and stops at the rule
+ * where validation failed. In particular, it can be useful for preventing the heavy operations to increase performance.
+ * It can be set like that for a group of ordered rules:
  *
  * ```php
  * $rule = new StopOnError([
