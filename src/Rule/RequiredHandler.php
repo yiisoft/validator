@@ -26,6 +26,8 @@ final class RequiredHandler implements RuleHandlerInterface
      * function (mixed $value, bool $isAttributeMissing): bool
      * ```
      *
+     * `$isAttributeMissing` is a flag defining whether the attribute is missing (not used / not passed at all).
+     *
      * Used as a default when {@see Required::$emptyCriteria} is not set. A customized handler can be added to
      * {@see SimpleRuleHandlerContainer::$instances} to be applied to all rules of this type without explicitly
      * specifying empty criteria for each one of them.

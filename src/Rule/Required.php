@@ -45,6 +45,8 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
      * function (mixed $value, bool $isAttributeMissing): bool
      * ```
      *
+     * `$isAttributeMissing` is a flag defining whether the attribute is missing (not used / not passed at all).
+     *
      * @psalm-var EmptyCriteriaType|null
      */
     private $emptyCriteria;

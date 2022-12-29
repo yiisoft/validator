@@ -25,7 +25,7 @@ final class NeverEmpty
 {
     /**
      * @param mixed $value The validated value.
-     * @param bool $isAttributeMissing A flag defining whether attribute is missing (not used / not passed at all).
+     * @param bool $isAttributeMissing A flag defining whether the attribute is missing (not used / not passed at all).
      *
      * @return bool Whether the validated value is considered empty.
      */
