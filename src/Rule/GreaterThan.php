@@ -19,7 +19,10 @@ use Yiisoft\Validator\WhenInterface;
  * are checked byte by byte. When validating numbers, make sure to change {@see GreaterThan::$type} to
  * {@see GreaterThan::TYPE_NUMBER} to enable numeric validation.
  *
+ * - `new GreaterThan()` is a shortcut for `new CompareTo(operator: '>')`.
+ *
  * @see CompareHandler
+ * @see Compare
  *
  * @psalm-import-type WhenType from WhenInterface
  */
@@ -35,9 +38,9 @@ final class GreaterThan extends Compare
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
-     * - `{type}`: the type of the attribute being validated.
-     * @param string $incorrectDataSetTypeMessage A message used when the attribute value returned from a custom
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
+     * @param string $incorrectDataSetTypeMessage A message used when the value returned from a custom
      * data set s not scalar.
      *
      * You may use the following placeholders in the message:
@@ -47,7 +50,7 @@ final class GreaterThan extends Compare
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{targetValue}`: the constant value to be compared with.
      * - `{targetAttribute}`: the name of the attribute to be compared with.
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of

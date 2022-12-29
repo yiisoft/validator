@@ -15,7 +15,7 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Abstract base for all the comparison validation options.
+ * Abstract base for all the comparison validation rules.
  *
  * The value being compared with {@see Compare::$targetValue} or {@see Compare::$targetAttribute}, which is set
  * in the constructor.
@@ -23,7 +23,7 @@ use Yiisoft\Validator\WhenInterface;
  * It supports different comparison operators, specified
  * via the {@see Compare::$operator}.
  *
- * The default comparison function is based on string values, which means the values
+ * The default comparison is based on string values, which means the values
  * are compared byte by byte. When comparing numbers, make sure to change {@see Compare::$type} to
  * {@see Compare::TYPE_NUMBER} to enable numeric comparison.
  *
@@ -54,6 +54,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
 
     /**
      * @var array Map of valid operators.
+     * It's used instead of a list for better performance.
      */
     private array $validOperatorsMap = [
         '==' => 1,
@@ -75,10 +76,10 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
-     * - `{type}`: the type of the attribute being validated.
-     * @param string $incorrectDataSetTypeMessage A message used when the attribute value returned from a custom
-     * data set s not scalar.
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
+     * @param string $incorrectDataSetTypeMessage A message used when the value returned from a custom
+     * data set is not scalar.
      *
      * You may use the following placeholders in the message:
      *
@@ -87,7 +88,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the label of the attribute being validated.
+     * - `{attribute}`: the translated label of the attribute being validated.
      * - `{targetValue}`: the constant value to be compared with.
      * - `{targetAttribute}`: the name of the attribute to be compared with.
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
@@ -201,7 +202,7 @@ abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface
     }
 
     /**
-     * Get message used when the attribute value returned from a custom
+     * Get message used when the value returned from a custom
      * data set s not scalar.
      *
      * @return string Error message.

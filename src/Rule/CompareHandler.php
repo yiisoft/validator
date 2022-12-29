@@ -71,7 +71,7 @@ final class CompareHandler implements RuleHandlerInterface
      * @param mixed $value The value being compared.
      * @param mixed $targetValue Another value being compared.
      *
-     * @return bool Whether the comparison using the specified operator is true.
+     * @return bool Whether the result of comparison using the specified operator is true.
      */
     private function compareValues(string $operator, string $type, mixed $value, mixed $targetValue): bool
     {

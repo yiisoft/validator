@@ -9,7 +9,6 @@ use Closure;
 use InvalidArgumentException;
 use ReflectionObject;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
-use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -38,9 +37,9 @@ final class Callback implements
     use WhenTrait;
 
     /**
-     * @var object|null The object being validated.
+     * @var object|null The object being validated. Null if PHP attributes aren't used.
      */
-    private ?object $objectValidated = null;
+    private ?object $validatedObject = null;
 
     /**
      * @param callable|null $callback Callable with the `function ($value, $rule, $context): Result` signature that
@@ -54,6 +53,9 @@ final class Callback implements
      * @param Closure|null $when A callable to define a condition for applying the rule.
      * See {@see WhenInterface}.
      * @psalm-param WhenType $when
+     *
+     * @throws InvalidArgumentException When either no callback or method is specified or
+     * both are specified at the same time.
      */
     public function __construct(
         private mixed $callback = null,
@@ -103,19 +105,19 @@ final class Callback implements
     /**
      * Get object being validated.
      *
-     * @return object|null Object being validated.
+     * @return object|null Object being validated. Null if PHP attributes aren't used.
      *
-     * @see $objectValidated
+     * @see $validatedObject
      */
-    public function getObjectValidated(): ?object
+    public function getValidatedObject(): ?object
     {
-        return $this->objectValidated;
+        return $this->validatedObject;
     }
 
     public function afterInitAttribute(object $object, int $target): void
     {
         if ($target === Attribute::TARGET_CLASS) {
-            $this->objectValidated = $object;
+            $this->validatedObject = $object;
         }
 
         if ($this->method === null) {
