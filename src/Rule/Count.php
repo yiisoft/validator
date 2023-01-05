@@ -39,11 +39,6 @@ final class Count implements
     use WhenTrait;
 
     /**
-     * @var object|null Object being validated.
-     */
-    private ?object $objectValidated = null;
-
-    /**
      * @param int|null $min Minimum number of items. null means no minimum number limit. Can't be combined with
      * {@see $exactly}. See {@see $lessThanMinMessage} for the customized message for a value with too few items.
      * @param int|null $max Maximum number of items. null means no maximum number limit. Can't be combined with
@@ -126,18 +121,6 @@ final class Count implements
     public function getIncorrectInputMessage(): string
     {
         return $this->incorrectInputMessage;
-    }
-
-    /**
-     * Get object being validated.
-     *
-     * @return object|null Object being validated.
-     *
-     * @see $objectValidated
-     */
-    public function getObjectValidated(): ?object
-    {
-        return $this->objectValidated;
     }
 
     public function getOptions(): array
