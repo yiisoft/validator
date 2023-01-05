@@ -33,6 +33,23 @@ use Yiisoft\Validator\WhenInterface;
  *
  * Not to be confused with skipping, there is a separate functionality for that, see {@see SkipOnErrorInterface}.
  *
+ * When using with other rules, it will be automatically skipped if the previous rule didn't pass the validation (no
+ * additional configuration is needed):
+ *
+ * ```php
+ * $rules = [
+ *      new SimpleRule1(), // Let's say there is an error.
+ *      // Then this rule is skipped completely with all its related rules.
+ *      new StopOnError([
+ *          new HeavyRule1(), // Skipped.
+ *          new HeavyRule2(), // Skipped.
+ *     ]),
+ *     new SimpleRule2(), // Skipping of intermediate rules depends on `skipOnError` option.
+ * ]);
+ * ```
+ *
+ * Use grouping / ordering / `skipOnError` option to achieve the desired effect,
+ *
  * @see StopOnErrorHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
