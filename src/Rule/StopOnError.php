@@ -48,7 +48,7 @@ use Yiisoft\Validator\WhenInterface;
  * ]);
  * ```
  *
- * Use grouping / ordering / `skipOnError` option to achieve the desired effect,
+ * Use grouping / ordering / `skipOnError` option to achieve the desired effect.
  *
  * @see StopOnErrorHandler Corresponding handler performing the actual validation.
  *
