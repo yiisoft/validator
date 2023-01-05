@@ -16,9 +16,11 @@ use Yiisoft\Validator\Rule\StopOnError;
 final class ValidationContext
 {
     /**
-     * @const A name of parameter indicating that previous rule in the set caused validation error. Used in
-     * {@see Validator} with {@see SkipOnErrorInterface} to allow skipping of the current rule if its configuration
-     * allows it. Used in {@see StopOnError} rule also.
+     * @const A name of parameter indicating that previous rule in the set caused validation error. Used to allow
+     * skipping of the current rule:
+     *
+     * - in {@see Validator} for rules implementing {@see SkipOnErrorInterface}.
+     * - for {@see StopOnError} rule (no additional configuration is needed).
      */
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'yii-validator-previous-rules-errored';
 
