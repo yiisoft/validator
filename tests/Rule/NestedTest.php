@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use ReflectionProperty;
 use stdClass;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
@@ -37,7 +38,6 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
 use Yiisoft\Validator\ValidationContext;
-
 use Yiisoft\Validator\Validator;
 
 use function array_slice;
@@ -1044,6 +1044,16 @@ final class NestedTest extends RuleTestCase
                 ],
                 ['value' => ['Property is not found.']],
             ],
+            [
+                new ObjectDataSet(
+                    new class() {
+                        private int $value = 7;
+                    },
+                    ReflectionProperty::IS_PUBLIC
+                ),
+                new Nested(['value' => new Required()]),
+                ['value' => ['Value cannot be blank.']],
+            ]
         ];
     }
 
