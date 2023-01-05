@@ -1046,14 +1046,14 @@ final class NestedTest extends RuleTestCase
             ],
             [
                 new ObjectDataSet(
-                    new class() {
+                    new class () {
                         private int $value = 7;
                     },
                     ReflectionProperty::IS_PUBLIC
                 ),
                 new Nested(['value' => new Required()]),
                 ['value' => ['Value cannot be blank.']],
-            ]
+            ],
         ];
     }
 
