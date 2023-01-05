@@ -119,8 +119,14 @@ final class StopOnErrorTest extends RuleTestCase
                         new HasLength(max: 1),
                         new HasLength(min: 10),
                     ]),
+                    new HasLength(min: 7),
                 ],
-                ['' => ['Value must be a number.']],
+                [
+                    '' => [
+                        'Value must be a number.',
+                        'This value must contain at least 7 characters.',
+                    ],
+                ],
             ],
         ];
     }
