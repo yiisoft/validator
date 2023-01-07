@@ -121,6 +121,7 @@ final class CountTest extends RuleTestCase
                 ['data' => ['Attribute - data, type - int.']],
             ],
 
+            [[1], new Count(3), ['' => ['This value must contain exactly 3 items.']]],
             [[1], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
             [[], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
             [[0, 0], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
