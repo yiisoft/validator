@@ -46,12 +46,12 @@ final class Count implements
     private ?object $objectValidated = null;
 
     /**
+     * @param int|null $exactly Exact number of items. `null` means no strict comparison. Mutually exclusive with
+     * {@see $min} and {@see $max}.
      * @param int|null $min Minimum number of items. null means no minimum number limit. Can't be combined with
      * {@see $exactly}. See {@see $lessThanMinMessage} for the customized message for a value with too few items.
      * @param int|null $max Maximum number of items. null means no maximum number limit. Can't be combined with
      * {@see $exactly}. See {@see $greaterThanMaxMessage} for the customized message for a value with too many items.
-     * @param int|null $exactly Exact number of items. `null` means no strict comparison. Mutually exclusive with
-     * {@see $min} and {@see $max}.
      * @param string $incorrectInputMessage Error message used when the value is neither an array nor an object
      * implementing {@see \Countable} interface.
      *
@@ -89,9 +89,9 @@ final class Count implements
      * @psalm-param WhenType $when
      */
     public function __construct(
+        int|null $exactly = null,
         int|null $min = null,
         int|null $max = null,
-        int|null $exactly = null,
         private string $incorrectInputMessage = 'This value must be an array or implement \Countable interface.',
         string $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{item} ' .
         'other{items}}.',
