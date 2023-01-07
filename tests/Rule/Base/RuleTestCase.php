@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule\Base;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Validator;
 
 abstract class RuleTestCase extends TestCase
@@ -26,7 +27,7 @@ abstract class RuleTestCase extends TestCase
     /**
      * @dataProvider dataValidationFailed
      */
-    public function testValidationFailed(mixed $data, array|null $rules, array $errorMessagesIndexedByPath): void
+    public function testValidationFailed(mixed $data, array|RuleInterface|null $rules, array $errorMessagesIndexedByPath): void
     {
         $result = (new Validator())->validate($data, $rules);
 
