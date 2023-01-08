@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use stdClass;
-use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\DataWrapperInterface;
 use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -433,13 +433,18 @@ final class CompareToTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectDataSet = new class () implements DataSetInterface {
+        $incorrectDataSet = new class () implements DataWrapperInterface {
             public function getAttributeValue(string $attribute): mixed
             {
                 return new stdClass();
             }
 
-            public function getData(): mixed
+            public function getData(): ?array
+            {
+                return null;
+            }
+
+            public function getSource(): mixed
             {
                 return false;
             }

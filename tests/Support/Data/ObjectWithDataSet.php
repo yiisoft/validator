@@ -26,7 +26,7 @@ final class ObjectWithDataSet implements DataSetInterface
         return $this->getData()[$attribute] ?? null;
     }
 
-    public function getData(): mixed
+    public function getData(): ?array
     {
         return ['key1' => 7, 'key2' => 42];
     }

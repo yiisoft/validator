@@ -111,6 +111,13 @@ final class AtLeastTest extends RuleTestCase
                 [new AtLeast(['attr2'])],
             ],
             [
+                new class () {
+                    private int $attr1 = 1;
+                    private $attr2 = null;
+                },
+                [new AtLeast(['attr1', 'attr2'])],
+            ],
+            [
                 ['attr1' => 1, 'attr2' => null],
                 [new AtLeast(['attr1', 'attr2'])],
             ],

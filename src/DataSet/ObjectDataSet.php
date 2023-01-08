@@ -8,6 +8,7 @@ use ReflectionProperty;
 use Yiisoft\Validator\AttributeTranslatorInterface;
 use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\DataWrapperInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -142,7 +143,7 @@ use Yiisoft\Validator\RulesProviderInterface;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  */
-final class ObjectDataSet implements RulesProviderInterface, DataSetInterface, AttributeTranslatorProviderInterface
+final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterface, AttributeTranslatorProviderInterface
 {
     /**
      * @var bool Whether an {@see $object} provided a data set by implementing {@see DataSetInterface}.
@@ -259,12 +260,13 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface, A
     }
 
     /**
-     * Returns the validated data as a whole.
+     * Returns the validated data as array.
      *
-     * @return mixed Validated data, has mixed type if it was provided via {@see DataSetInterface::getData()}
-     * implementation, otherwise it's always an associative array - a mapping between property names and their values.
+     * @return array|null Result of object {@see DataSetInterface::getData()} method, if it was implemented
+     * {@see DataSetInterface}, otherwise returns the validated data as an associative array - a mapping between
+     * property names and their values.
      */
-    public function getData(): mixed
+    public function getData(): ?array
     {
         if ($this->dataSetProvided) {
             /** @var DataSetInterface $object */
@@ -273,6 +275,11 @@ final class ObjectDataSet implements RulesProviderInterface, DataSetInterface, A
         }
 
         return $this->parser->getData();
+    }
+
+    public function getSource(): object
+    {
+        return $this->object;
     }
 
     /**

@@ -27,6 +27,9 @@ final class AtLeastHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(AtLeast::class, $rule);
         }
 
+        /** @var mixed $value */
+        $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
+
         $result = new Result();
 
         if (!is_array($value) && !is_object($value)) {

@@ -15,6 +15,8 @@ use Yiisoft\Validator\Rule\StopOnError;
  */
 final class ValidationContext
 {
+    public const PARAMETER_VALUE_AS_ARRAY = 'yii-validator-value-as-array';
+
     /**
      * @const A name of parameter indicating that previous rule in the set caused validation error. Used to allow
      * skipping of the current rule:

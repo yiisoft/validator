@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use ReflectionProperty;
 use stdClass;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
@@ -37,7 +38,6 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
 use Yiisoft\Validator\ValidationContext;
-
 use Yiisoft\Validator\Validator;
 
 use function array_slice;
@@ -861,24 +861,9 @@ final class NestedTest extends RuleTestCase
                 return false;
             }
 
-            public function getData(): mixed
+            public function getData(): ?array
             {
-                return new class () implements DataSetInterface {
-                    public function getAttributeValue(string $attribute): mixed
-                    {
-                        return false;
-                    }
-
-                    public function getData(): mixed
-                    {
-                        return false;
-                    }
-
-                    public function hasAttribute(string $attribute): bool
-                    {
-                        return false;
-                    }
-                };
+                return null;
             }
 
             public function hasAttribute(string $attribute): bool
@@ -948,7 +933,7 @@ final class NestedTest extends RuleTestCase
             'custom incorrect data set type message with parameters' => [
                 $incorrectDataSet,
                 [new Nested(['value' => new Required()], incorrectDataSetTypeMessage: 'Type - {type}.')],
-                ['' => ['Type - bool.']],
+                ['' => ['Type - null.']],
             ],
             // Incorrect input
             'incorrect input' => [
@@ -1058,6 +1043,16 @@ final class NestedTest extends RuleTestCase
                     ),
                 ],
                 ['value' => ['Property is not found.']],
+            ],
+            [
+                new ObjectDataSet(
+                    new class () {
+                        private int $value = 7;
+                    },
+                    ReflectionProperty::IS_PUBLIC
+                ),
+                new Nested(['value' => new Required()]),
+                ['value' => ['Value cannot be blank.']],
             ],
         ];
     }
