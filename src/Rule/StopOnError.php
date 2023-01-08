@@ -51,12 +51,6 @@ final class StopOnError implements
     use WhenTrait;
 
     /**
-     * @var RulesDumper|null A rules dumper instance used to dump {@see $rules} as array. Lazily created by
-     * {@see getRulesDumper()} only when it's needed.
-     */
-    private ?RulesDumper $rulesDumper = null;
-
-    /**
      * @param iterable $rules A set of rules for running the validation. Note that they are not normalized.
      * @psalm-param iterable<RuleInterface> $rules
      *
@@ -128,23 +122,6 @@ final class StopOnError implements
      */
     private function dumpRulesAsArray(): array
     {
-        return $this->getRulesDumper()->asArray($this->getRules());
-    }
-
-    /**
-     * Returns existing rules dumper instance for dumping defined {@see $rules} as array if it's already set. If not set
-     * yet, creates the new instance first.
-     *
-     * @return RulesDumper A rules dumper instance.
-     *
-     * @see $rulesDumper
-     */
-    private function getRulesDumper(): RulesDumper
-    {
-        if ($this->rulesDumper === null) {
-            $this->rulesDumper = new RulesDumper();
-        }
-
-        return $this->rulesDumper;
+        return RulesDumper::asArray($this->getRules());
     }
 }

@@ -346,7 +346,7 @@ final class Nested implements
             'requirePropertyPath' => $this->getRequirePropertyPath(),
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => $this->rules === null ? null : (new RulesDumper())->asArray($this->rules),
+            'rules' => $this->rules === null ? null : RulesDumper::asArray($this->rules),
         ];
     }
 
