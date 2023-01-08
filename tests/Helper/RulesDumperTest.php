@@ -75,36 +75,30 @@ final class RulesDumperTest extends TestCase
      */
     public function testAsArray($rules, array $expected): void
     {
-        $dumper = new RulesDumper();
-        $result = $dumper->asArray($rules);
+        $result = RulesDumper::asArray($rules);
 
         $this->assertEquals($expected, $result);
     }
 
     public function testWrongRuleException(): void
     {
-        $dumper = new RulesDumper();
-
         $this->expectException(InvalidArgumentException::class);
 
         $message = 'Every rule must implement "Yiisoft\Validator\RuleInterface". Type "string" given.';
         $this->expectExceptionMessage($message);
 
-        $dumper->asArray(['not a rule']);
+        RulesDumper::asArray(['not a rule']);
     }
 
     public function testWrongKeyException(): void
     {
-        $dumper = new RulesDumper();
-
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('An attribute can only have an integer or a string type. bool given.');
-        $dumper->asArray(new IteratorWithBooleanKey());
+        RulesDumper::asArray(new IteratorWithBooleanKey());
     }
 
     public function testRuleWithoutOptions(): void
     {
-        $dumper = new RulesDumper();
         $rules = [
             new BooleanValue(),
             new RuleWithoutOptions(),
@@ -137,6 +131,6 @@ final class RulesDumperTest extends TestCase
             ],
         ];
 
-        $this->assertSame($expectedRules, $dumper->asArray($rules));
+        $this->assertSame($expectedRules, RulesDumper::asArray($rules));
     }
 }
