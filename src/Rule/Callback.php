@@ -37,11 +37,6 @@ final class Callback implements
     use WhenTrait;
 
     /**
-     * @var object|null The object being validated. `null` if PHP attributes aren't used.
-     */
-    private ?object $validatedObject = null;
-
-    /**
      * @param callable|null $callback Callable with the `function ($value, $rule, $context): Result` signature that
      * performs the validation. Mutually exclusive with {@see $method}.
      * @param string|null $method Name of a validated object method with the `function ($value, $rule, $context): Result`
@@ -102,24 +97,8 @@ final class Callback implements
         return $this->method;
     }
 
-    /**
-     * Get object being validated.
-     *
-     * @return object|null Object being validated. Null if PHP attributes aren't used.
-     *
-     * @see $validatedObject
-     */
-    public function getValidatedObject(): ?object
-    {
-        return $this->validatedObject;
-    }
-
     public function afterInitAttribute(object $object, int $target): void
     {
-        if ($target === Attribute::TARGET_CLASS) {
-            $this->validatedObject = $object;
-        }
-
         if ($this->method === null) {
             return;
         }

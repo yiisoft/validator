@@ -19,11 +19,12 @@ interface DataSetInterface
     public function getAttributeValue(string $attribute): mixed;
 
     /**
-     * Returns the validated data as a whole.
+     * Returns the validated data as an associative array, where keys are attribute names and values are their
+     * corresponding values. `null` means that implementation does not support getting an array of attributes.
      *
-     * @return mixed Validated data.
+     * @return array|null Validated data as array of attributes or `null` when does not support this.
      */
-    public function getData(): mixed;
+    public function getData(): ?array;
 
     /**
      * Whether a data set has the attribute with a given name. Note that this means existence only and attributes with

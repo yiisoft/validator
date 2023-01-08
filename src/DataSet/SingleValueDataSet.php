@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\DataSet;
 
-use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\DataWrapperInterface;
 
 /**
  * A data set used for a single value of any (mixed) data type. Does not support attributes.
@@ -26,7 +26,7 @@ use Yiisoft\Validator\DataSetInterface;
  *
  * For arrays and objects {@see ArrayDataSet} and {@see ObjectDataSet} can be used accordingly.
  */
-final class SingleValueDataSet implements DataSetInterface
+final class SingleValueDataSet implements DataWrapperInterface
 {
     public function __construct(
         /**
@@ -50,12 +50,14 @@ final class SingleValueDataSet implements DataSetInterface
     }
 
     /**
-     * A getter for {@see $data} property. Returns the validated data as a whole. In this case the single value itself
-     * is returned as a data because it can not be decoupled.
-     *
-     * @return mixed Single value of any (mixed) data type.
+     * Returns the validated data as array.
      */
-    public function getData(): mixed
+    public function getData(): ?array
+    {
+        return null;
+    }
+
+    public function getSource(): mixed
     {
         return $this->value;
     }

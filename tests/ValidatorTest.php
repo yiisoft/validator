@@ -10,6 +10,7 @@ use stdClass;
 use Yiisoft\Validator\AttributeTranslator\NullAttributeTranslator;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
 use Yiisoft\Validator\EmptyCriteria\WhenNull;
@@ -35,6 +36,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
+use Yiisoft\Validator\Tests\Support\Data\SimpleDto;
 use Yiisoft\Validator\Tests\Support\Data\SimpleForm;
 use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
@@ -1335,6 +1337,47 @@ class ValidatorTest extends TestCase
             $expectedMessages,
             $result->getErrorMessagesIndexedByPath()
         );
+    }
+
+    public function dataOriginalValueUsage(): array
+    {
+        $data = [
+            'null' => [null, null],
+            'string' => ['hello', 'hello'],
+            'integer' => [42, 42],
+            'array' => [['param' => 7], ['param' => 7]],
+            'array-data-set' => [['param' => 42], new ArrayDataSet(['param' => 42])],
+            'single-value-data-set' => [7, new SingleValueDataSet(7)],
+        ];
+
+        $object = new stdClass();
+        $data['object'] = [$object, $object];
+
+        $simpleDto = new SimpleDto();
+        $data['object-data-set'] = [$simpleDto, new ObjectDataSet($simpleDto)];
+
+        return $data;
+    }
+
+    /**
+     * @dataProvider dataOriginalValueUsage
+     */
+    public function testOriginalValueUsage(mixed $expectedValue, mixed $value): void
+    {
+        $valueHandled = false;
+        $valueInHandler = null;
+
+        (new Validator())->validate(
+            $value,
+            static function ($value) use (&$valueHandled, &$valueInHandler): Result {
+                $valueHandled = true;
+                $valueInHandler = $value;
+                return new Result();
+            },
+        );
+
+        $this->assertTrue($valueHandled);
+        $this->assertSame($expectedValue, $valueInHandler);
     }
 
     public function testRuleWithBuiltInHandler(): void
