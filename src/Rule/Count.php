@@ -39,11 +39,6 @@ final class Count implements
     use WhenTrait;
 
     /**
-     * @var object|null Object being validated.
-     */
-    private ?object $objectValidated = null;
-
-    /**
      * @param int|null $exactly Exact number of items. `null` means no strict comparison. Mutually exclusive with
      * {@see $min} and {@see $max}.
      * @param int|null $min Minimum number of items. null means no minimum number limit. Can't be combined with
