@@ -54,7 +54,7 @@ final class NestedHandler implements RuleHandlerInterface
                 ]);
             }
         } else {
-            return (new Result)->addError($rule->getIncorrectInputMessage(), [
+            return (new Result())->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
