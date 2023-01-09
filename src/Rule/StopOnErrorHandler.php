@@ -21,26 +21,17 @@ final class StopOnErrorHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(StopOnError::class, $rule);
         }
 
-        $compoundResult = new Result();
-        $results = [];
+        if ($context->getParameter(ValidationContext::PARAMETER_PREVIOUS_RULES_ERRORED) === true) {
+            return new Result();
+        }
 
         foreach ($rule->getRules() as $relatedRule) {
-            $rules = [$relatedRule];
-
-            $lastResult = $context->validate($value, $rules);
-            $results[] = $lastResult;
-
-            if (!$lastResult->isValid()) {
-                break;
+            $result = $context->validate($value, $relatedRule);
+            if (!$result->isValid()) {
+                return $result;
             }
         }
 
-        foreach ($results as $result) {
-            foreach ($result->getErrors() as $error) {
-                $compoundResult->addError($error->getMessage(), $error->getParameters(), $error->getValuePath());
-            }
-        }
-
-        return $compoundResult;
+        return new Result();
     }
 }

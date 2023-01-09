@@ -9,7 +9,6 @@ use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
-use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Helper\RulesDumper;
@@ -34,6 +33,23 @@ use Yiisoft\Validator\WhenInterface;
  *
  * Not to be confused with skipping, there is a separate functionality for that, see {@see SkipOnErrorInterface}.
  *
+ * When using with other rules, it will be automatically skipped if the previous rule didn't pass the validation (no
+ * additional configuration is needed):
+ *
+ * ```php
+ * $rules = [
+ *      new SimpleRule1(), // Let's say there is an error.
+ *      // Then this rule is skipped completely with all its related rules.
+ *      new StopOnError([
+ *          new HeavyRule1(), // Skipped.
+ *          new HeavyRule2(), // Skipped.
+ *     ]),
+ *     new SimpleRule2(), // Skipping of intermediate rules depends on `skipOnError` option.
+ * ]);
+ * ```
+ *
+ * Use grouping / ordering / `skipOnError` option to achieve the desired effect.
+ *
  * @see StopOnErrorHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
@@ -41,13 +57,11 @@ use Yiisoft\Validator\WhenInterface;
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class StopOnError implements
     RuleWithOptionsInterface,
-    SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
     AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
-    use SkipOnErrorTrait;
     use WhenTrait;
 
     /**
@@ -56,8 +70,6 @@ final class StopOnError implements
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this `StopOnError` rule with all defined {@see $rules} if
      * the validated value is empty / not passed. See {@see SkipOnEmptyInterface}.
-     * @param bool $skipOnError Whether to skip this `StopOnError` rule with all defined {@see $rules} if any of the
-     * previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying this `StopOnError` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
      * @psalm-param WhenType $when
@@ -65,7 +77,6 @@ final class StopOnError implements
     public function __construct(
         private iterable $rules,
         private mixed $skipOnEmpty = null,
-        private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
     }
@@ -89,14 +100,12 @@ final class StopOnError implements
 
     #[ArrayShape([
         'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
         'rules' => 'array|null',
     ])]
     public function getOptions(): array
     {
         return [
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
-            'skipOnError' => $this->skipOnError,
             'rules' => $this->dumpRulesAsArray(),
         ];
     }
