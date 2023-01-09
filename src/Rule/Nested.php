@@ -120,12 +120,14 @@ final class Nested implements
      * {@see ObjectDataSet} for details on providing rules / data in validated object and {@see ObjectParser} for
      * overview how parsing works.
      * @psalm-param int-mask-of<ReflectionProperty::IS_*> $validatedObjectPropertyVisibility
+     *
      * @param int $rulesSourceClassPropertyVisibility Visibility levels to use for parsed properties when {@see $rules}
      * source is a name of the class providing rules. For example: public and protected only, this means that the rest
      * (private ones) will be skipped. Defaults to all visibility levels (public, protected and private). See
      * {@see ObjectDataSet} for details on providing rules via class and {@see ObjectParser} for overview how parsing
      * works.
      * @psalm-param int-mask-of<ReflectionProperty::IS_*> $rulesSourceClassPropertyVisibility
+     *
      * @param string $noRulesWithNoObjectMessage Error message used when validation fails because the validated value is
      * not an object and the rules were not explicitly specified via {@see $rules}:
      *
