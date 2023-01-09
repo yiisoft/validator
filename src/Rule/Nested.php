@@ -12,6 +12,7 @@ use ReflectionProperty;
 use Traversable;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Helper\PropagateOptionsHelper;
 use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
@@ -36,7 +37,50 @@ use function rtrim;
 use function sprintf;
 
 /**
- * Can be used for validation of nested structures.
+ * Used to define rules for validation of nested structures:
+ *
+ * - For one-to-one relation, using `Nested` rule is enough.
+ * - One-to-many and many-to-many relations require pairing with {@see Each} rule.
+ *
+ * An example with blog post:
+ *
+ * ```php
+ * $rules = [
+ *     new Nested([
+ *         'title' => [new HasLength(max: 255)],
+ *          // One-to-one relation
+ *         'author' => new Nested([
+ *             'name' => [new HasLength(min: 1)],
+ *         ]),
+ *         // One-to-many relation
+ *         'files' => new Each(new Nested([
+ *             'url' => [new Url()],
+ *         ])),
+ *     ]);
+ * ];
+ * ```
+ *
+ * There is an alternative way to write this using dot notation and shortcuts:
+ *
+ * ```php
+ * $rules = [
+ *     new Nested([
+ *         'title' => [new HasLength(max: 255)],
+ *         'author.name' => [new HasLength(min: 1)],
+ *         'files.*.url' => [new Url()],
+ *     ]);
+ * ];
+ * ```
+ *
+ * For more examples please refer to the guide.
+ *
+ * It's also possible to use DTO objects with PHP attributes, see {@see ObjectDataSet} documentation and guide for
+ * details.
+ *
+ * Supports propagation of options (see {@see PropagateOptionsHelper::propagate()} for supported options and
+ * requirements).
+ *
+ * @see NestedHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
  */
@@ -53,7 +97,14 @@ final class Nested implements
     use SkipOnErrorTrait;
     use WhenTrait;
 
+    /**
+     * A character acting as a separator when using alternative (short) syntax.
+     */
     private const SEPARATOR = '.';
+    /**
+     * A character acting as a shortcut when using alternative (short) syntax with {@see Nested} and {@see Each}
+     * combinations.
+     */
     private const EACH_SHORTCUT = '*';
 
     /**
@@ -62,32 +113,69 @@ final class Nested implements
     private iterable|null $rules;
 
     /**
-     * @param iterable|object|string|null $rules Rules for validate value that can be described by:
+     * @param iterable|object|string|null $rules
+     * @param int $validatedObjectPropertyVisibility Visibility levels to use for parsed properties when validated value
+     * is an object providing rules / data. For example: public and protected only, this means that the rest (private
+     * ones) will be skipped. Defaults to all visibility levels (public, protected and private). See
+     * {@see ObjectDataSet} for details on providing rules / data in validated object and {@see ObjectParser} for
+     * overview how parsing works.
+     * @psalm-param int-mask-of<ReflectionProperty::IS_*> $validatedObjectPropertyVisibility
+     * @param int $rulesSourceClassPropertyVisibility Visibility levels to use for parsed properties when {@see $rules}
+     * source is a name of the class providing rules. For example: public and protected only, this means that the rest
+     * (private ones) will be skipped. Defaults to all visibility levels (public, protected and private). See
+     * {@see ObjectDataSet} for details on providing rules via class and {@see ObjectParser} for overview how parsing
+     * works.
+     * @psalm-param int-mask-of<ReflectionProperty::IS_*> $rulesSourceClassPropertyVisibility
+     * @param string $noRulesWithNoObjectMessage Error message used when validation fails because the validated value is
+     * not an object and the rules were not explicitly specified via {@see $rules}:
      *
-     * - object that implement {@see RulesProviderInterface};
-     * - name of class from whose attributes their will be derived;
-     * - array or object implementing the `Traversable` interface that contain {@see RuleInterface} implementations
-     *   or closures.
+     * You may use the following placeholders in the message:
      *
-     * `$rules` can be null if validatable value is object. In this case rules will be derived from object via
-     * `getRules()` method if object implement {@see RulesProviderInterface} or from attributes otherwise.
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
+     * @param string $incorrectDataSetTypeMessage Error message used when validation fails because the validated value
+     * is an object providing wrong type of data (neither array nor an object).
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{type}`: the type of the data set retrieved from the validated object.
+     * @param string $incorrectInputMessage Error message used when validation fails because the validated value is
+     * neither an array nor an object.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
+     * @param bool $requirePropertyPath Whether to require a single data item to be passed in data according to declared
+     * nesting level structure (all keys in the sequence must be the present). Used only when validated value is an
+     * array. Enabled by default. See {@see $noPropertyPathMessage} for customization of error message.
+     * @param string $noPropertyPathMessage Error message used when validation fails because {@see $requirePropertyPath}
+     * option was enabled and the validated array contains missing data item.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{path}`: the path of the value being validated. Can be either a simple key of integer / string type for a s
+     * ingle nesting level or a sequence of keys concatenated using dot notation (see {@see SEPARATOR}).
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * @param bool $normalizeRules Whether to enable rules normalization when {@see EACH_SHORTCUT} is used. Enabled by
+     * default meaning shortcuts are supported. Can be disabled if they are not used to prevent additional checks and
+     * improve performance.
+     * @param bool $propagateOptions Whether the propagation of options is enabled (see
+     * {@see PropagateOptionsHelper::propagate()} for supported options and requirements). Disabled by default.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this `Nested` rule with all defined {@see $rules} if the
+     * validated value is empty / not passed. See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this `Nested` rule with all defined {@see $rules} if any of the previous
+     * rules gave an error. See {@see SkipOnErrorInterface}.
+     * @param Closure|null $when  A callable to define a condition for applying this `Nested` rule with all defined
+     * {@see $rules}. See {@see WhenInterface}.
+     * @psalm-param WhenType $when
      */
     public function __construct(
         iterable|object|string|null $rules = null,
-
-        /**
-         * @var int What visibility levels to use when reading data and rules from validated object.
-         * @psalm-var int-mask-of<ReflectionProperty::IS_*>
-         */
-        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE
+        private int $validatedObjectPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
-        /**
-         * @var int What visibility levels to use when reading rules from the class specified in {@see $rules}
-         * attribute.
-         * @psalm-var int-mask-of<ReflectionProperty::IS_*>
-         */
-        private int $rulesPropertyVisibility = ReflectionProperty::IS_PRIVATE
+        private int $rulesSourceClassPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
         private string $noRulesWithNoObjectMessage = 'Nested rule without rules can be used for objects only.',
@@ -98,16 +186,8 @@ final class Nested implements
         private string $noPropertyPathMessage = 'Property "{path}" is not found.',
         private bool $normalizeRules = true,
         private bool $propagateOptions = false,
-
-        /**
-         * @var bool|callable|null
-         */
-        private $skipOnEmpty = null,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
-
-        /**
-         * @var WhenType
-         */
         private Closure|null $when = null,
     ) {
         $this->prepareRules($rules);
@@ -127,38 +207,92 @@ final class Nested implements
     }
 
     /**
+     * Gets visibility levels to use for parsed properties when validated value is an object providing rules / data.
+     * Defaults to all visibility levels (public, protected and private)
+     *
+     * @return int A number representing visibility levels.
      * @psalm-return int-mask-of<ReflectionProperty::IS_*>
+     *
+     * @see $validatedObjectPropertyVisibility
      */
-    public function getPropertyVisibility(): int
+    public function getValidatedObjectPropertyVisibility(): int
     {
-        return $this->propertyVisibility;
+        return $this->validatedObjectPropertyVisibility;
     }
 
+    /**
+     * Gets error message used when validation fails because the validated value is not an object and the rules were not
+     * explicitly specified via {@see $rules}.
+     *
+     * @return string Error message / template.
+     *
+     * @see $incorrectInputMessage
+     */
     public function getNoRulesWithNoObjectMessage(): string
     {
         return $this->noRulesWithNoObjectMessage;
     }
 
+    /**
+     * Gets error message used when validation fails because the validated value is an object providing wrong type of
+     * data (neither array nor an object).
+     *
+     * @return string Error message / template.
+     *
+     * @see $incorrectDataSetTypeMessage
+     */
     public function getIncorrectDataSetTypeMessage(): string
     {
         return $this->incorrectDataSetTypeMessage;
     }
 
+    /**
+     * Gets error message used when validation fails because the validated value is neither an array nor an object.
+     *
+     * @return string Error message / template.
+     *
+     * @see $incorrectInputMessage
+     */
     public function getIncorrectInputMessage(): string
     {
         return $this->incorrectInputMessage;
     }
 
-    public function getRequirePropertyPath(): bool
+    /**
+     * Whether to require a single data item to be passed in data according to declared nesting level structure (all
+     * keys in the sequence must be the present). Enabled by default.
+     *
+     * @return bool `true` if required and `false` otherwise.
+     *
+     * @see $requirePropertyPath
+     */
+    public function isPropertyPathRequired(): bool
     {
         return $this->requirePropertyPath;
     }
 
+    /**
+     * Gets error message used when validation fails because {@see $requirePropertyPath} option was enabled and the
+     * validated array contains missing data item.
+     *
+     * @return string Error message / template.
+     *
+     * @see $getNoPropertyPathMessage
+     */
     public function getNoPropertyPathMessage(): string
     {
         return $this->noPropertyPathMessage;
     }
 
+    /**
+     * Prepares raw rules passed in the constructor for usage in handler. As a result, {@see $rules} property will
+     * contain normalized rules.
+     *
+     * @param iterable|object|string|null $source Raw rules passed in the constructor.
+     *
+     * @throws InvalidArgumentException When rules' source has wrong type.
+     * @throws InvalidArgumentException When source contains items that are not rules.
+     */
     private function prepareRules(iterable|object|string|null $source): void
     {
         if ($source === null) {
@@ -170,7 +304,7 @@ final class Nested implements
         if ($source instanceof RulesProviderInterface) {
             $rules = $source->getRules();
         } elseif (is_string($source) && class_exists($source)) {
-            $rules = (new AttributesRulesProvider($source, $this->rulesPropertyVisibility))->getRules();
+            $rules = (new AttributesRulesProvider($source, $this->rulesSourceClassPropertyVisibility))->getRules();
         } elseif (is_iterable($source)) {
             $rules = $source;
         } else {
@@ -193,7 +327,12 @@ final class Nested implements
     }
 
     /**
+     * Recursively checks that each item of source iterable is a valid rule instance ({@see RuleInterface}). As a
+     * result, all iterables will be converted to arrays at the end.
+     *
      * @psalm-assert iterable<RuleInterface> $rules
+     *
+     * @throws InvalidArgumentException When iterable contains items that are not rules.
      */
     private static function ensureArrayHasRules(iterable &$rules): void
     {
@@ -214,6 +353,9 @@ final class Nested implements
         }
     }
 
+    /**
+     * Normalizes rules defined with shortcut to separate `Nested` and `Each` rules.
+     */
     private function normalizeRules(): void
     {
         /** @var RuleInterface[] $rules Conversion to array is done in {@see ensureArrayHasRules()}. */
@@ -343,7 +485,7 @@ final class Nested implements
                 'template' => $this->getNoPropertyPathMessage(),
                 'parameters' => [],
             ],
-            'requirePropertyPath' => $this->getRequirePropertyPath(),
+            'requirePropertyPath' => $this->isPropertyPathRequired(),
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
             'rules' => $this->rules === null ? null : RulesDumper::asArray($this->rules),

@@ -36,7 +36,7 @@ final class NestedTest extends TestCase
                 new class () {
                     #[Nested(
                         ['age' => new Number(min: 100, skipOnEmpty: true), 'number' => new Number(max: 7)],
-                        propertyVisibility: ReflectionProperty::IS_PRIVATE
+                        validatedObjectPropertyVisibility: ReflectionProperty::IS_PRIVATE,
                     )]
                     private ObjectWithDifferentPropertyVisibility $object;
 
