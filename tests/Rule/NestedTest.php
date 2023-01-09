@@ -63,9 +63,9 @@ final class NestedTest extends RuleTestCase
         $this->assertNull($rule->getRules());
         $this->assertSame(
             ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
-            $rule->getValidatedObjectPropertyVisibility(),
+            $rule->getPropertyVisibility(),
         );
-        $this->assertFalse($rule->isPropertyPathRequired());
+        $this->assertFalse($rule->getRequirePropertyPath());
         $this->assertSame('Property "{path}" is not found.', $rule->getNoPropertyPathMessage());
         $this->assertNull($rule->getSkipOnEmpty());
         $this->assertFalse($rule->shouldSkipOnError());
@@ -74,9 +74,9 @@ final class NestedTest extends RuleTestCase
 
     public function testPropertyVisibilityInConstructor(): void
     {
-        $rule = new Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PRIVATE);
+        $rule = new Nested(propertyVisibility: ReflectionProperty::IS_PRIVATE);
 
-        $this->assertSame(ReflectionProperty::IS_PRIVATE, $rule->getValidatedObjectPropertyVisibility());
+        $this->assertSame(ReflectionProperty::IS_PRIVATE, $rule->getPropertyVisibility());
     }
 
     public function testHandlerClassName(): void
@@ -296,7 +296,7 @@ final class NestedTest extends RuleTestCase
                 new class () {
                     #[Nested(
                         rules: ObjectWithDifferentPropertyVisibility::class,
-                        rulesSourceClassPropertyVisibility: ReflectionProperty::IS_PRIVATE,
+                        rulesPropertyVisibility: ReflectionProperty::IS_PRIVATE
                     )]
                     private array $array = [
                         'name' => 'hello',
@@ -360,7 +360,7 @@ final class NestedTest extends RuleTestCase
             ],
             'wo-rules-only-public' => [
                 new class () {
-                    #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PUBLIC)]
+                    #[Nested(propertyVisibility: ReflectionProperty::IS_PUBLIC)]
                     private ObjectWithDifferentPropertyVisibility $object;
 
                     public function __construct()
@@ -374,7 +374,7 @@ final class NestedTest extends RuleTestCase
             ],
             'wo-rules-only-protected' => [
                 new class () {
-                    #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PROTECTED)]
+                    #[Nested(propertyVisibility: ReflectionProperty::IS_PROTECTED)]
                     private ObjectWithDifferentPropertyVisibility $object;
 
                     public function __construct()

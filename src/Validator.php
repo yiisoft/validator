@@ -29,13 +29,13 @@ use function is_string;
 final class Validator implements ValidatorInterface
 {
     /**
-     * A name for {@see CategorySource} used with translator ({@see TranslatorInterface}) by default.
+     * @const A name for {@see CategorySource} used with translator ({@see TranslatorInterface}) by default.
      */
     public const DEFAULT_TRANSLATION_CATEGORY = 'yii-validator';
     /**
-     * A name of parameter used in {@see ValidationContext} indicating that previous rule in the set caused validation
-     * error. Used with {@see SkipOnErrorInterface} to allow skipping of the current rule if its configuration allows
-     * it.
+     * @const A name of parameter used in {@see ValidationContext} indicating that previous rule in the set caused
+     * validation error. Used with {@see SkipOnErrorInterface} to allow skipping of the current rule if its
+     * configuration allows it.
      */
     private const PARAMETER_PREVIOUS_RULES_ERRORED = 'yii-validator-previousRulesErrored';
 

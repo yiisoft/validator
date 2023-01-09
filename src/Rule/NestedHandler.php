@@ -17,7 +17,29 @@ use function is_int;
 use function is_object;
 
 /**
- * A handler for {@see Nested} rule. Validates nested structures.
+ * Can be used for validation of nested structures.
+ *
+ * For example, we have an inbound request with the following structure:
+ *
+ * ```php
+ * $request = [
+ *     'author' => [
+ *         'name' => 'Dmitry',
+ *         'age' => 18,
+ *     ],
+ * ];
+ * ```
+ *
+ * So to make validation we can configure it like this:
+ *
+ * ```php
+ * $rule = new Nested([
+ *     'author' => new Nested([
+ *         'name' => [new HasLength(min: 3)],
+ *         'age' => [new Number(min: 18)],
+ *     )];
+ * ]);
+ * ```
  */
 final class NestedHandler implements RuleHandlerInterface
 {
@@ -30,15 +52,17 @@ final class NestedHandler implements RuleHandlerInterface
         /** @var mixed $value */
         $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
 
+        $compoundResult = new Result();
+
         if ($rule->getRules() === null) {
             if (!is_object($value)) {
-                return (new Result())->addError($rule->getNoRulesWithNoObjectMessage(), [
+                return $compoundResult->addError($rule->getNoRulesWithNoObjectMessage(), [
                     'attribute' => $context->getTranslatedAttribute(),
                     'type' => get_debug_type($value),
                 ]);
             }
 
-            $dataSet = new ObjectDataSet($value, $rule->getValidatedObjectPropertyVisibility());
+            $dataSet = new ObjectDataSet($value, $rule->getPropertyVisibility());
 
             return $context->validate($dataSet);
         }
@@ -47,24 +71,23 @@ final class NestedHandler implements RuleHandlerInterface
             $data = $value;
         } elseif (is_object($value)) {
             /** @var mixed $data */
-            $data = (new ObjectDataSet($value, $rule->getValidatedObjectPropertyVisibility()))->getData();
+            $data = (new ObjectDataSet($value, $rule->getPropertyVisibility()))->getData();
             if (!is_array($data) && !is_object($data)) {
-                return (new Result())->addError($rule->getIncorrectDataSetTypeMessage(), [
+                return $compoundResult->addError($rule->getIncorrectDataSetTypeMessage(), [
                     'type' => get_debug_type($data),
                 ]);
             }
         } else {
-            return (new Result)->addError($rule->getIncorrectInputMessage(), [
+            return $compoundResult->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
 
-        $compoundResult = new Result();
-
+        $results = [];
         /** @var int|string $valuePath */
         foreach ($rule->getRules() as $valuePath => $rules) {
-            if (is_array($data) && $rule->isPropertyPathRequired() && !ArrayHelper::pathExists($data, $valuePath)) {
+            if (is_array($data) && $rule->getRequirePropertyPath() && !ArrayHelper::pathExists($data, $valuePath)) {
                 if (is_int($valuePath)) {
                     $valuePathList = [$valuePath];
                 } else {
@@ -93,6 +116,7 @@ final class NestedHandler implements RuleHandlerInterface
                 continue;
             }
 
+            $result = new Result();
             foreach ($itemResult->getErrors() as $error) {
                 if (is_int($valuePath)) {
                     $valuePathList = [$valuePath];
@@ -105,7 +129,14 @@ final class NestedHandler implements RuleHandlerInterface
                     array_push($valuePathList, ...$error->getValuePath());
                 }
 
-                $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePathList);
+                $result->addError($error->getMessage(), $error->getParameters(), $valuePathList);
+            }
+            $results[] = $result;
+        }
+
+        foreach ($results as $result) {
+            foreach ($result->getErrors() as $error) {
+                $compoundResult->addError($error->getMessage(), $error->getParameters(), $error->getValuePath());
             }
         }
 
