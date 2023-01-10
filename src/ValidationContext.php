@@ -6,6 +6,7 @@ namespace Yiisoft\Validator;
 
 use RuntimeException;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\Rule\StopOnError;
 
 /**
  * Validation context that might be taken into account when performing validation.
@@ -15,6 +16,15 @@ use Yiisoft\Arrays\ArrayHelper;
 final class ValidationContext
 {
     public const PARAMETER_VALUE_AS_ARRAY = 'yii-validator-value-as-array';
+
+    /**
+     * @const A name of parameter indicating that previous rule in the set caused validation error. Used to allow
+     * skipping of the current rule:
+     *
+     * - in {@see Validator} for rules implementing {@see SkipOnErrorInterface}.
+     * - for {@see StopOnError} rule (no additional configuration is needed).
+     */
+    public const PARAMETER_PREVIOUS_RULES_ERRORED = 'yii-validator-previous-rules-errored';
 
     /**
      * @var ValidatorInterface|null A validator instance. `null` means context data was not set

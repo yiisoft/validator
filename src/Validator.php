@@ -32,12 +32,6 @@ final class Validator implements ValidatorInterface
      * A name for {@see CategorySource} used with translator ({@see TranslatorInterface}) by default.
      */
     public const DEFAULT_TRANSLATION_CATEGORY = 'yii-validator';
-    /**
-     * A name of parameter used in {@see ValidationContext} indicating that previous rule in the set caused validation
-     * error. Used with {@see SkipOnErrorInterface} to allow skipping of the current rule if its configuration allows
-     * it.
-     */
-    private const PARAMETER_PREVIOUS_RULES_ERRORED = 'yii-validator-previousRulesErrored';
 
     /**
      * @var RuleHandlerResolverInterface A container to resolve rule handler names to corresponding instances.
@@ -185,7 +179,7 @@ final class Validator implements ValidatorInterface
                 continue;
             }
 
-            $context->setParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED, true);
+            $context->setParameter(ValidationContext::PARAMETER_PREVIOUS_RULES_ERRORED, true);
 
             foreach ($ruleResult->getErrors() as $error) {
                 $valuePath = $error->getValuePath();
@@ -225,7 +219,7 @@ final class Validator implements ValidatorInterface
         if (
             $rule instanceof SkipOnErrorInterface
             && $rule->shouldSkipOnError()
-            && $context->getParameter(self::PARAMETER_PREVIOUS_RULES_ERRORED) === true
+            && $context->getParameter(ValidationContext::PARAMETER_PREVIOUS_RULES_ERRORED) === true
         ) {
             return true;
         }
