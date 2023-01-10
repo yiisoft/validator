@@ -18,8 +18,8 @@ final class ValidationContext
     public const PARAMETER_VALUE_AS_ARRAY = 'yii-validator-value-as-array';
 
     /**
-     * @const A name of parameter indicating that previous rule in the set caused validation error. Used to allow
-     * skipping of the current rule:
+     * A name of parameter indicating that previous rule in the set caused validation error. Used to allow skipping of
+     * the current rule:
      *
      * - in {@see Validator} for rules implementing {@see SkipOnErrorInterface}.
      * - for {@see StopOnError} rule (no additional configuration is needed).
