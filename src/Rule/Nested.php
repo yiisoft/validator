@@ -53,9 +53,11 @@ use function sprintf;
  *             'name' => [new HasLength(min: 1)],
  *         ]),
  *         // One-to-many relation
- *         'files' => new Each(new Nested([
- *             'url' => [new Url()],
- *         ])),
+ *         'files' => new Each([
+ *              new Nested([
+ *                 'url' => [new Url()],
+ *             ]),
+ *         ]),
  *     ]);
  * ];
  * ```
@@ -108,12 +110,26 @@ final class Nested implements
     private const EACH_SHORTCUT = '*';
 
     /**
-     * @var iterable<iterable<RuleInterface>|RuleInterface>|null
+     * @var array|null A set of ready to use rule instances. The 1st level is always an array, the 2nd level is either
+     * an array or a single rule.
+     * @psalm-var array<array<RuleInterface>|RuleInterface>|null
      */
-    private iterable|null $rules;
+    private array|null $rules;
 
     /**
-     * @param iterable|object|string|null $rules
+     * @param iterable|object|string|null $rules Rules for validating nested structure. The following types are
+     * supported:
+     *
+     * - Array or object implementing {@see Traversable} interface containing rules. Note that no normalization is done
+     * for a single rule set, so either iterables containing {@see RuleInterface} implementations or a single rule
+     * instances are expected. The maximum nesting level for iterables is 2 and single rules are only allowed within it.
+     * All iterables regardless of the nesting level will be converted to arrays at the end. `Nested` can be used again
+     * within the rules for further nesting.
+     * - Object implementing {@see RulesProviderInterface}.
+     * - Name of a class containing rules declared via PHP attributes.
+     * - `null` if validated value is an object. It can either implement {@see RulesProviderInterface} or contain rules
+     * declared via PHP attributes.
+     * @psalm-param iterable|object|class-string|null $rules
      * @param int $validatedObjectPropertyVisibility Visibility levels to use for parsed properties when validated value
      * is an object providing rules / data. For example: public and protected only, this means that the rest (private
      * ones) will be skipped. Defaults to all visibility levels (public, protected and private). See
@@ -156,8 +172,8 @@ final class Nested implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{path}`: the path of the value being validated. Can be either a simple key of integer / string type for a s
-     * ingle nesting level or a sequence of keys concatenated using dot notation (see {@see SEPARATOR}).
+     * - `{path}`: the path of the value being validated. Can be either a simple key of integer / string type for a
+     * single nesting level or a sequence of keys concatenated using dot notation (see {@see SEPARATOR}).
      * - `{attribute}`: the translated label of the attribute being validated.
      * @param bool $normalizeRules Whether to enable rules normalization when {@see EACH_SHORTCUT} is used. Enabled by
      * default meaning shortcuts are supported. Can be disabled if they are not used to prevent additional checks and
@@ -288,10 +304,11 @@ final class Nested implements
 
     /**
      * Prepares raw rules passed in the constructor for usage in handler. As a result, {@see $rules} property will
-     * contain normalized rules.
+     * contain ready to use rules.
      *
      * @param iterable|object|string|null $source Raw rules passed in the constructor.
      *
+     * @throws InvalidArgumentException When the maximum level for iterables has been reached.
      * @throws InvalidArgumentException When rules' source has wrong type.
      * @throws InvalidArgumentException When source contains items that are not rules.
      */
@@ -317,6 +334,7 @@ final class Nested implements
         }
 
         self::ensureArrayHasRules($rules);
+        /** @var array<array<RuleInterface>|RuleInterface>|null $rules */
         $this->rules = $rules;
 
         if ($this->normalizeRules) {
@@ -329,20 +347,34 @@ final class Nested implements
     }
 
     /**
-     * Recursively checks that each item of source iterable is a valid rule instance ({@see RuleInterface}). As a
-     * result, all iterables will be converted to arrays at the end.
+     * Recursively checks that every item of source iterable is a valid rule instance ({@see RuleInterface}). The
+     * maximum nesting level for iterables is 2 and single rules are only allowed within it. As a result, all iterables
+     * will be converted to arrays at the end, while single rules will be kept as is.
      *
-     * @psalm-assert iterable<RuleInterface> $rules
+     * @param iterable $rules Source iterable that will be checked and converted to array (so it's passed by reference).
+     * @param bool $allowRecursion An extra flag indicating that the maximum nesting level for iterables is reached and
+     * recursion must be stopped.
      *
+     * @throws InvalidArgumentException When the maximum level for iterables has been reached.
      * @throws InvalidArgumentException When iterable contains items that are not rules.
      */
-    private static function ensureArrayHasRules(iterable &$rules): void
+    private static function ensureArrayHasRules(iterable &$rules, bool $allowRecursion = true): void
     {
-        $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
+        if ($rules instanceof Traversable) {
+            $rules = iterator_to_array($rules);
+        }
+
         /** @var mixed $rule */
         foreach ($rules as &$rule) {
             if (is_iterable($rule)) {
-                self::ensureArrayHasRules($rule);
+                if (!$allowRecursion) {
+                    $message = 'The maximum nesting level for iterables is 2. For further nesting, use another ' .
+                        'instance instead.';
+
+                    throw new InvalidArgumentException($message);
+                }
+
+                self::ensureArrayHasRules($rule, false);
             } elseif (!$rule instanceof RuleInterface) {
                 $message = sprintf(
                     'Every rule must be an instance of %s, %s given.',
@@ -430,14 +462,11 @@ final class Nested implements
         }
 
         $rules = [];
-
-        /**
-         * @var int|string $attributeRulesIndex Index is either integer or string because of the array conversion in
-         * {@see ensureArrayHasRules()}.
-         * @var RuleInterface[] $attributeRules Conversion to array is done in {@see ensureArrayHasRules()}.
-         */
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
-            $rules[$attributeRulesIndex] = PropagateOptionsHelper::propagate($this, $attributeRules);
+            $rules[$attributeRulesIndex] = PropagateOptionsHelper::propagate(
+                $this,
+                is_iterable($attributeRules) ? $attributeRules : [$attributeRules],
+            );
         }
 
         $this->rules = $rules;

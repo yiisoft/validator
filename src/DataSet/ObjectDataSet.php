@@ -107,9 +107,11 @@ use Yiisoft\Validator\RulesProviderInterface;
  *         'author' => new Nested([
  *             'name' => [new HasLength(min: 1)],
  *         ]),
- *         'files' => new Each(new Nested([
- *             'url' => [new Url()],
- *         ])),
+ *         'files' => new Each([
+ *             new Nested([
+ *                 'url' => [new Url()],
+ *             ]),
+ *         ]),
  *     ]);
  * ];
  * ```
