@@ -85,6 +85,7 @@ use function sprintf;
  * @see NestedHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
+ * @psalm-type ReadyRulesType = array<array<RuleInterface>|RuleInterface>|null
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
@@ -112,7 +113,7 @@ final class Nested implements
     /**
      * @var array|null A set of ready to use rule instances. The 1st level is always an array, the 2nd level is either
      * an array or a single rule.
-     * @psalm-var array<array<RuleInterface>|RuleInterface>|null
+     * @psalm-var ReadyRulesType
      */
     private array|null $rules;
 
@@ -334,7 +335,7 @@ final class Nested implements
         }
 
         self::ensureArrayHasRules($rules);
-        /** @var array<array<RuleInterface>|RuleInterface>|null $rules */
+        /** @psalm-var ReadyRulesType $rules */
         $this->rules = $rules;
 
         if ($this->handleEachShortcut) {
