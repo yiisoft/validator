@@ -175,9 +175,8 @@ final class Nested implements
      * - `{path}`: the path of the value being validated. Can be either a simple key of integer / string type for a
      * single nesting level or a sequence of keys concatenated using dot notation (see {@see SEPARATOR}).
      * - `{attribute}`: the translated label of the attribute being validated.
-     * @param bool $normalizeRules Whether to enable rules normalization when {@see EACH_SHORTCUT} is used. Enabled by
-     * default meaning shortcuts are supported. Can be disabled if they are not used to prevent additional checks and
-     * improve performance.
+     * @param bool $handleEachShortcut Whether to handle {@see EACH_SHORTCUT}. Enabled by default meaning shortcuts are
+     * supported. Can be disabled if they are not used to prevent additional checks and improve performance.
      * @param bool $propagateOptions Whether the propagation of options is enabled (see
      * {@see PropagateOptionsHelper::propagate()} for supported options and requirements). Disabled by default.
      * @param bool|callable|null $skipOnEmpty Whether to skip this `Nested` rule with all defined {@see $rules} if the
@@ -202,7 +201,7 @@ final class Nested implements
         private string $incorrectInputMessage = 'The value must have an array or an object type.',
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property "{path}" is not found.',
-        private bool $normalizeRules = true,
+        private bool $handleEachShortcut = true,
         private bool $propagateOptions = false,
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
@@ -337,8 +336,8 @@ final class Nested implements
         /** @var array<array<RuleInterface>|RuleInterface>|null $rules */
         $this->rules = $rules;
 
-        if ($this->normalizeRules) {
-            $this->normalizeRules();
+        if ($this->handleEachShortcut) {
+            $this->handleEachShortcut();
         }
 
         if ($this->propagateOptions) {
@@ -388,9 +387,9 @@ final class Nested implements
     }
 
     /**
-     * Normalizes rules defined with shortcut to separate `Nested` and `Each` rules.
+     * Converts rules defined with {@see EACH_SHORTCUT} to separate `Nested` and `Each` rules.
      */
-    private function normalizeRules(): void
+    private function handleEachShortcut(): void
     {
         /** @var RuleInterface[] $rules Conversion to array is done in {@see ensureArrayHasRules()}. */
         $rules = $this->rules;
@@ -443,7 +442,7 @@ final class Nested implements
                  * @see NestedTest::dataWithOtherNestedAndEach() for test cases prefixed with "withShortcut".
                  */
                 // @codeCoverageIgnoreStart
-                $rules[$valuePath] = new Each([new self($nestedRules, normalizeRules: false)]);
+                $rules[$valuePath] = new Each([new self($nestedRules, handleEachShortcut: false)]);
                 // @codeCoverageIgnoreEnd
             }
 
