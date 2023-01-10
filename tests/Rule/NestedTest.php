@@ -1195,16 +1195,6 @@ final class NestedTest extends RuleTestCase
         new Nested(new Required());
     }
 
-    public function testIterableMaximumLevel(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $message = 'The maximum nesting level for iterables is 2. For further nesting, use another instance instead.';
-        $this->expectExceptionMessage($message);
-        new Nested([
-            'attribute1' => [['attribute2' => new BooleanValue()]],
-        ]);
-    }
-
     public function testPropagateOptionsWithNullRules(): void
     {
         $rule = new Nested(null);

@@ -24,7 +24,7 @@ final class RulesNormalizerIterator implements IteratorAggregate
 
     public function __construct(
         private iterable $rules,
-        ?callable $defaultSkipOnEmptyCriteria = null
+        ?callable $defaultSkipOnEmptyCriteria = null,
     ) {
         $this->defaultSkipOnEmptyCriteria = $defaultSkipOnEmptyCriteria;
     }
