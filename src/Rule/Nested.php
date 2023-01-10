@@ -130,6 +130,7 @@ final class Nested implements
      * - `null` if validated value is an object. It can either implement {@see RulesProviderInterface} or contain rules
      * declared via PHP attributes.
      * @psalm-param iterable|object|class-string|null $rules
+     *
      * @param int $validatedObjectPropertyVisibility Visibility levels to use for parsed properties when validated value
      * is an object providing rules / data. For example: public and protected only, this means that the rest (private
      * ones) will be skipped. Defaults to all visibility levels (public, protected and private). See
