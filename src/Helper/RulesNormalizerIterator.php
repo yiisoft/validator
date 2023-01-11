@@ -61,9 +61,9 @@ final class RulesNormalizerIterator implements IteratorAggregate
      * @param callable|null $defaultSkipOnEmptyCriteria A "skip on empty" criteria ({@see SkipOnEmptyInterface}) to
      * apply as default, already normalized. `null` means there is no criteria to apply.
      *
-     * @return RuleInterface Ready to use rule instance.
-     *
      * @throws InvalidArgumentException When rule is neither a callable nor a {@see RuleInterface} implementation.
+     *
+     * @return RuleInterface Ready to use rule instance.
      */
     private static function normalizeRule(mixed $rule, ?callable $defaultSkipOnEmptyCriteria): RuleInterface
     {
