@@ -1,6 +1,6 @@
 # Conditional validation
 
-#### Skipping validation on error
+## `skipOnError`
 
 By default, if an error occurred during validation of an attribute, further rules for this attribute are processed. To
 change this behavior, use `skipOnError: true` when configuring rules:
@@ -11,7 +11,7 @@ use Yiisoft\Validator\Rule\Number;
 new Number(asInteger: true, max: 100, skipOnError: true)
 ```
 
-#### Skipping empty values
+## `skipOnEmpty`
 
 By default, missing and empty values are validated (if the value is missing, it's considered `null`). That is
 undesirable if you need a field to be optional. To change this behavior, use `skipOnEmpty: true`.
@@ -99,9 +99,9 @@ $skipOnEmpty = static function (mixed $value, bool $isAttributeMissing): bool {
 };
 ```
 
-### Conditional validation
+## `when`
 
-In some cases there is a need to apply rule conditionally. It could be performed by using `when()`:
+In some cases there is a need to apply rule conditionally. It could be performed by using `when`:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
