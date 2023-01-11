@@ -88,6 +88,8 @@ if ($result->isValid() === false) {
 
 ## Validating an array
 
+It's possible to validate an array both as a whole and by individual items. For example:
+
 ```php
 use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\Count;
@@ -125,7 +127,7 @@ $result = (new Validator())->validate($data, $rules);
 
 ## Validating an object
 
-Similar to arrays, it's possible to validate the object both as a whole and by individual properties.
+Similar to arrays, it's possible to validate an object both as a whole and by individual properties.
 
 For objects there is an additional option to configure validation with PHP attributes which allows to not pass the rules
 separately in explicit way (passing just the object itself is enough). For example:
