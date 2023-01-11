@@ -168,7 +168,7 @@ $rule = new Nested([
 ```
 
 This is less verbose, but the downside of this approach is that you can't additionally configure dynamically generated
-`Nested` and `Each` pairs. If you need to that, please refer to example provided in "Basic usage" section.
+`Nested` and `Each` pairs. If you need this, please refer to example provided in "Basic usage" section.
 
 ###### Using keys containing separator / shortcut
 
