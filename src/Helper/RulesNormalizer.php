@@ -18,7 +18,7 @@ use function is_string;
 
 /**
  * A helper class used to normalize different types of data to the iterable with rule instances ({@see RuleInterface}).
- * Can be applied to the rules grouped by attributes with applying some default settings if needed.
+ * Can be applied to the rules grouped by attributes with adding some default settings if needed.
  *
  * Note that when using {@see Validator}, normalization is performed automatically.
  *
