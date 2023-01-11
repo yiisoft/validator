@@ -1,6 +1,6 @@
 # Rules
 
-### Requiring values
+## `Required` - requiring values
 
 Use `Yiisoft\Validator\Rule\Required` rule to make sure value is provided. What values are considered empty can be
 customized via `$emptyCallback` option. Normalization is not performed here, so only a callable or special class is
@@ -13,7 +13,7 @@ use Yiisoft\Validator\EmptyCriteria\WhenNull;
 $rules = [new Required(emptyCallback: new WhenNull())];
 ```
 
-## `Nested`
+## `Nested` - nested and related data
 
 ### Basic usage
 
@@ -254,7 +254,7 @@ $data = [
 ];
 ```
 
-## `StopOnError`
+## `StopOnError` - lazy or early exiting validation
 
 When validation propagation is not needed `\Yiisoft\Validator\Rule\StopOnError` rule may be used.
 
