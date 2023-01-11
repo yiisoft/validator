@@ -1,6 +1,8 @@
-#### Nested and related data
+# Rules
 
-##### Basic usage
+## `Nested`
+
+### Basic usage
 
 In many cases there is a need to validate related data in addition to current entity / model. There is a `Nested` rule
 for this purpose:
@@ -26,7 +28,7 @@ $rule = new Nested([
 $errors = $validator->validate($data, [$rule])->getErrorMessagesIndexedByPath();
 ```
 
-##### Other configuration options
+### Other configuration options
 
 A dot notation can be used as an alternative way of configuration. In this case the example above will be presented as
 following:
@@ -61,7 +63,7 @@ $rule = new Nested([
 ]);
 ```
 
-##### Advanced usage
+### Advanced usage
 
 A more complex real-life example is a chart that is made of points. This data is represented as arrays. `Nested` can be
 combined with `Each` rule to validate such similar structures:
@@ -129,7 +131,7 @@ $errors = [
 ];
 ```
 
-###### Using shortcut
+#### Using shortcut
 
 A shortcut can be used to simplify `Nested` and `Each` combinations:
 
@@ -170,7 +172,7 @@ $rule = new Nested([
 This is less verbose, but the downside of this approach is that you can't additionally configure dynamically generated
 `Nested` and `Each` pairs. If you need this, please refer to example provided in "Basic usage" section.
 
-###### Using keys containing separator / shortcut
+#### Using keys containing separator / shortcut
 
 If a key contains the separator (`.`), it must be escaped with backslash (`\`) in rule config in order to work
 correctly. In the input data escaping is not needed. Here is an example with two nested keys named `author.data` and
@@ -239,7 +241,7 @@ $data = [
 ];
 ```
 
-### Lazy or early exiting validation
+## `StopOnError`
 
 When validation propagation is not needed `\Yiisoft\Validator\Rule\StopOnError` rule may be used.
 
