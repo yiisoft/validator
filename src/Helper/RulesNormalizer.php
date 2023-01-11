@@ -28,7 +28,7 @@ final class RulesNormalizer
 {
     /**
      * Normalizes different types of data to the iterable with rule instances ({@see RuleInterface}) maintaining the
-     * grouping by attributes and applyihg some default settings if needed.
+     * grouping by attributes and applying some default settings if needed.
      *
      * Based on rules source and additionally provided data this is what is done initially:
      *
