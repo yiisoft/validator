@@ -1232,7 +1232,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
 
         $this->expectException(InvalidArgumentException::class);
-        $message = 'Rule should be either an instance of Yiisoft\Validator\RuleInterface or a callable, int given.';
+        $message = 'Rule must be either an instance of Yiisoft\Validator\RuleInterface or a callable, int given.';
         $this->expectExceptionMessage($message);
         $validator->validate([], [new BooleanValue(), 1]);
     }
