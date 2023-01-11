@@ -102,7 +102,7 @@ use Yiisoft\Validator\Validator;
 $data = [
     'name' => 'John',
     'age' => 17,
-    'email' => 'jonh@example.com',
+    'email' => 'john@example.com',
     'phone' => null,
 ];
 $rules = [
@@ -161,7 +161,7 @@ final class Person
     }
 }
 
-$person = new Person('Jonh', 17, 'jonh@example.com', null);
+$person = new Person(name: 'John', age: 17, email: 'john@example.com', phone: null);
 $result = (new Validator())->validate($person);
 ```
 
