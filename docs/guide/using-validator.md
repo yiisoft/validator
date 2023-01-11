@@ -116,8 +116,10 @@ $rules = [
     // The rules related to a specific attribute.
 
     'name' => [
-        new Required(), // The name is required (must be passed and have non-empty value).
-        new HasLength(min: 2), // The name's length must be no less than 2 characters.
+        // The name is required (must be passed and have non-empty value).
+        new Required(),
+        // The name's length must be no less than 2 characters.
+        new HasLength(min: 2),
     ],  
     'age' => new Number(min: 21), // The age must be at least 21 years.  
     'email' => new Email(), // Email must be a valid email address.  
