@@ -61,7 +61,7 @@ The package tests are checked with [Infection](https://infection.github.io/) mut
 ./vendor/bin/roave-infection-static-analysis-plugin
 ```
 
-### Static analysis
+## Static analysis
 
 The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
 
@@ -69,7 +69,7 @@ The code is statically analyzed with [Psalm](https://psalm.dev/). To run static 
 ./vendor/bin/psalm
 ```
 
-### Code style
+## Code style
 
 Use [Rector](https://github.com/rectorphp/rector) to make codebase follow some specific rules or
 use either newest or any specific version of PHP:
@@ -78,7 +78,7 @@ use either newest or any specific version of PHP:
 ./vendor/bin/rector
 ```
 
-### Dependencies
+## Dependencies
 
 Use [ComposerRequireChecker](https://github.com/maglnet/ComposerRequireChecker) to detect transitive
 [Composer](https://getcomposer.org/) dependencies.
