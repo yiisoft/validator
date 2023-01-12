@@ -23,52 +23,44 @@ $result = (new Validator())->validate($value, $rules);
 
 ## Validating a custom data set
 
+Most of the time creating a custom data set is not needed because of built-in data sets and automatical normalization of 
+all types during validation. However, this can be useful, for example, to change a default value for certain attributes:
+
 ```php
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Validator;
-use Yiisoft\Validator\ValidatorInterface;
+use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Validator;
 
-final class MoneyTransfer implements DataSetInterface
+final class MyArrayDataSet implements DataSetInterface
 {
-    private $amount;
-    
-    public function __construct($amount) {
-        $this->amount = $amount;
+    public function __construct(private array $data = [],) 
+    {
     }
-    
-    public function getAttributeValue(string $key){
-        if (!isset($this->$key)) {
-            throw new \InvalidArgumentException("There is no \"$key\" in MoneyTransfer.");
+
+    public function getAttributeValue(string $attribute): mixed
+    {
+        if ($this->hasAttribute($attribute)) {
+            return $this->data[$attribute];
         }
-        
-        return $this->$key;
+
+        return $attribute === 'name' ? '' : null;
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    public function hasAttribute(string $attribute): bool
+    {
+        return array_key_exists($attribute, $this->data);
     }
 }
 
-// Usually obtained from container
-$validator = $container->get(ValidatorInterface::class);
-
-$moneyTransfer = new MoneyTransfer(142);
-$rules = [    
-    'amount' => [
-        new Number(asInteger: true, max: 100),
-        static function ($value): Result {
-            $result = new Result();
-            if ($value === 13) {
-                $result->addError('Value should not be 13.');
-            }
-            return $result;
-        }
-    ],
-];
-$result = $validator->validate($moneyTransfer, $rules);
-if ($result->isValid() === false) {
-    foreach ($result->getErrors() as $error) {
-        // ...
-    }
-}
+$data = new MyArrayDataSet([]);
+$rules = ['name' => new HasLength(min: 1), 'age' => new Number(min: 18)];
+$result = (new Validator())->validate($data, $rules);
 ```
 
 ## Validating an array
