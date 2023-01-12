@@ -23,48 +23,6 @@ $result = (new Validator())->validate($value, $rules);
 
 > **Note:** Use `Each` rule to validate multiple values of the same type.
 
-### Custom data set
-
-Most of the time creating a custom data set is not needed because of built-in data sets and automatical normalization of 
-all types during validation. However, this can be useful, for example, to change a default value for certain attributes:
-
-```php
-use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Validator;
-
-final class MyArrayDataSet implements DataSetInterface
-{
-    public function __construct(private array $data = [],) 
-    {
-    }
-
-    public function getAttributeValue(string $attribute): mixed
-    {
-        if ($this->hasAttribute($attribute)) {
-            return $this->data[$attribute];
-        }
-
-        return $attribute === 'name' ? '' : null;
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
-    }
-
-    public function hasAttribute(string $attribute): bool
-    {
-        return array_key_exists($attribute, $this->data);
-    }
-}
-
-$data = new MyArrayDataSet([]);
-$rules = ['name' => new HasLength(min: 1), 'age' => new Number(min: 18)];
-$result = (new Validator())->validate($data, $rules);
-```
-
 ### Array
 
 It's possible to validate an array both as a whole and by individual items. For example:
@@ -148,9 +106,51 @@ $result = (new Validator())->validate($person);
 
 > **Note:** `readonly` properties are supported only starting from PHP 8.1.
 
-> **Note:** Use `Nested` rule to validate related objects and `Each` rule to validate multiple objects. 
+> **Note:** Use `Nested` rule to validate related objects and `Each` rule to validate multiple objects.
 
-## Validation rules
+### Custom data set
+
+Most of the time creating a custom data set is not needed because of built-in data sets and automatical normalization of
+all types during validation. However, this can be useful, for example, to change a default value for certain attributes:
+
+```php
+use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Validator;
+
+final class MyArrayDataSet implements DataSetInterface
+{
+    public function __construct(private array $data = [],) 
+    {
+    }
+
+    public function getAttributeValue(string $attribute): mixed
+    {
+        if ($this->hasAttribute($attribute)) {
+            return $this->data[$attribute];
+        }
+
+        return $attribute === 'name' ? '' : null;
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    public function hasAttribute(string $attribute): bool
+    {
+        return array_key_exists($attribute, $this->data);
+    }
+}
+
+$data = new MyArrayDataSet([]);
+$rules = ['name' => new HasLength(min: 1), 'age' => new Number(min: 18)];
+$result = (new Validator())->validate($data, $rules);
+```
+
+## Rules
 
 ### Passing single rule
 
