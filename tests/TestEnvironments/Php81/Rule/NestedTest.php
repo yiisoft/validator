@@ -36,7 +36,7 @@ final class NestedTest extends TestCase
                 new class () {
                     #[Nested(
                         ['age' => new Number(min: 100, skipOnEmpty: true), 'number' => new Number(max: 7)],
-                        propertyVisibility: ReflectionProperty::IS_PRIVATE
+                        validatedObjectPropertyVisibility: ReflectionProperty::IS_PRIVATE,
                     )]
                     private ObjectWithDifferentPropertyVisibility $object;
 
@@ -77,7 +77,7 @@ final class NestedTest extends TestCase
                 'a' => ['Value must be no less than 7.'],
                 'b' => ['Value must be no greater than 1.'],
             ],
-            $result->getErrorMessagesIndexedByAttribute()
+            $result->getErrorMessagesIndexedByAttribute(),
         );
     }
 
@@ -90,7 +90,7 @@ final class NestedTest extends TestCase
                 'a' => ['Invalid A.'],
                 'b' => ['Invalid B.'],
             ],
-            $result->getErrorMessagesIndexedByAttribute()
+            $result->getErrorMessagesIndexedByAttribute(),
         );
     }
 }

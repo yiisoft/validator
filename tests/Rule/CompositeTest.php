@@ -207,7 +207,8 @@ final class CompositeTest extends RuleTestCase
         ]);
 
         $this->expectException(InvalidArgumentException::class);
-        $message = 'Rule should be either an instance of Yiisoft\Validator\RuleInterface or a callable, class@anonymous given.';
+        $message = 'Rule must be either an instance of Yiisoft\Validator\RuleInterface or a callable, ' .
+            'class@anonymous given.';
         $this->expectExceptionMessage($message);
         $rule->getOptions();
     }
