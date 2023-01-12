@@ -1,40 +1,25 @@
 # Using validator
 
-Library could be used in two ways: validating a single value and validating a set of data.
+Validator allows to check data in any format. Here are some of the most used cases.
 
 ## Validating a single value
 
+In the simplest case the validator can be used to check a single value:
+
 ```php
-use Yiisoft\Validator\ValidatorInterface;
-use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Regex;
+use Yiisoft\Validator\Validator;
 
-// Usually obtained from container
-$validator = $container->get(ValidatorInterface::class);
-
+$value = 'mrX';
 $rules = [
-    new Required(),
-    new Number(min: 10),
-    static function ($value): Result {
-        $result = new Result();
-        if ($value !== 42) {
-            $result->addError('Value should be 42.');
-            // or
-            $result->addError('Value should be {value}.', ['value' => 42]);
-        }
-
-        return $result;
-    }
+    new HasLength(min: 4, max: 20),
+    new Regex('~^[a-z_\-]*$~i'),
 ];
-
-$result = $validator->validate(41, $rules);
-if (!$result->isValid()) {
-    foreach ($result->getErrorMessages() as $error) {
-        // ...
-    }
-}
+$result = (new Validator())->validate($value, $rules);
 ```
+
+> **Note:** Use `Each` rule to validate multiple values of the same type.
 
 ## Validating a custom data set
 
@@ -127,6 +112,8 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
+> **Note:** Use `Nested` rule to validate nested arrays and `Each` rule to validate multiple arrays.
+
 ## Validating an object
 
 Similar to arrays, it's possible to validate an object both as a whole and by individual properties.
@@ -165,59 +152,21 @@ $person = new Person(name: 'John', age: 17, email: 'john@example.com', phone: nu
 $result = (new Validator())->validate($person);
 ```
 
-> **Note:** `readonly` properties are supported only starting from PHP 8.1. 
+> **Note:** `readonly` properties are supported only starting from PHP 8.1.
+
+> **Note:** Use `Nested` rule to validate related objects and `Each` rule to validate multiple objects. 
 
 ## Rules
 
 ### Passing single rule
 
+For a single rule there is an option to omit array:
+
 ```php
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Validator;
 
-/** @var Validator $validator */
-$validator->validate(3, new Number(min: 5));
-```
-
-### Grouping multiple validation rules
-
-To reuse multiple validation rules it is advised to group rules like the following:
-
-```php
-use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\Rule\Regex;
-use \Yiisoft\Validator\Rule\Composite;
-
-final class UsernameRule extends Composite
-{
-    public function getRules(): array
-    {
-        return [
-            new HasLength(min: 2, max: 20),
-            new Regex('~[a-z_\-]~i'),
-        ];
-    }
-}
-```
-
-Then it could be used like the following:
-
-```php
-use Yiisoft\Validator\Validator;
-use Yiisoft\Validator\ValidatorInterface;
-use Yiisoft\Validator\Rule\Email;
-
-// Usually obtained from container
-$validator = $container->get(ValidatorInterface::class);
-
-$rules = [
-    'username' => new UsernameRule(),
-    'email' => [new Email()],
-];
-$result = $validator->validate($user, $rules);
-
-if ($result->isValid() === false) {
-    foreach ($result->getErrors() as $error) {
-        // ...
-    }
-}
+$value = 7;
+$rule = new Number(min: 42);
+$result = (new Validator())->validate($value, $rule);
 ```
