@@ -45,8 +45,6 @@ $data = [
 $rules = [
     // The rules that are not related to a specific attribute
 
-    // An array must contain exactly 4 items.
-    new Count(4),
     // At least one of the attributes ("email" and "phone") must be passed and have non-empty value.  
     new AtLeast(['email', 'phone']),
 
@@ -146,7 +144,7 @@ final class MyArrayDataSet implements DataSetInterface
 }
 
 $data = new MyArrayDataSet([]);
-$rules = ['name' => new HasLength(min: 1), 'age' => new Number(min: 18)];
+$rules = ['name' => new HasLength(min: 2), 'age' => new Number(min: 21)];
 $result = (new Validator())->validate($data, $rules);
 ```
 
@@ -163,4 +161,92 @@ use Yiisoft\Validator\Validator;
 $value = 7;
 $rule = new Number(min: 42);
 $result = (new Validator())->validate($value, $rule);
+```
+
+### Providing rules via dedicated object
+
+Could be helpful for reusing the same set of rules across different places. Two ways are possible - using PHP attributes 
+and specifying explicitly via interface method implementation.
+
+#### Using PHP attributes
+
+In this case, the rules will be automatically parsed, no need to additionally do anything.
+
+```php
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\Validator;
+
+final class PersonRulesProvider implements RulesProviderInterface
+{
+    #[HasLength(min: 2)]
+    public string $name;
+
+    #[Number(min: 21)]
+    protected int $age;
+}
+
+$data = ['name' => 'John', 'age' => 18];
+$rulesProvider = new PersonRulesProvider();
+$result = (new Validator())->validate($data, $rulesProvider);
+```
+
+#### Using interface method implementation
+
+Providing rules via interface method implementation has priority over PHP attributes. So in case of both present, the 
+attributes will be ignored without causing exception.
+
+```php
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\Validator;
+
+final class PersonRulesProvider implements RulesProviderInterface
+{
+    #[HasLength(min: 2)] // Will be silently ignored.
+    public string $name;
+
+    #[Number(min: 21)] // Will be silently ignored.
+    protected int $age;
+    
+    public function getRules() : iterable
+    {
+        return ['name' => new HasLength(min: 2), 'age' => new Number(min: 21)];
+    }
+}
+
+$data = ['name' => 'John', 'age' => 18];
+$rulesProvider = new PersonRulesProvider();
+$result = (new Validator())->validate($data, $rulesProvider);
+```
+
+### Providing rules via data object
+
+In this way rules are provided in addition to data in the same object. Only interface method implementation is 
+supported. Note that the `rules` argument is `null` in `validate()` method call.
+
+```php
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\Validator;
+
+final class Person implements RulesProviderInterface
+{
+    #[HasLength(min: 2)] // Not supported for using with data objects. Will be silently ignored.
+    public string $name;
+
+    #[Number(min: 21)] // Not supported for using with data objects. Will be silently ignored.
+    protected int $age;
+    
+    public function getRules(): iterable
+    {
+        return ['name' => new HasLength(min: 2), 'age' => new Number(min: 21)];
+    }
+}
+
+$data = new Person(name: 'John', age: 18);
+$result = (new Validator())->validate($data);
 ```
