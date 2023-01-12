@@ -2,7 +2,9 @@
 
 Validator allows to check data in any format. Here are some of the most used cases.
 
-## Validating a single value
+## Data
+
+### Single value
 
 In the simplest case the validator can be used to check a single value:
 
@@ -21,7 +23,7 @@ $result = (new Validator())->validate($value, $rules);
 
 > **Note:** Use `Each` rule to validate multiple values of the same type.
 
-## Validating a custom data set
+### Custom data set
 
 Most of the time creating a custom data set is not needed because of built-in data sets and automatical normalization of 
 all types during validation. However, this can be useful, for example, to change a default value for certain attributes:
@@ -63,7 +65,7 @@ $rules = ['name' => new HasLength(min: 1), 'age' => new Number(min: 18)];
 $result = (new Validator())->validate($data, $rules);
 ```
 
-## Validating an array
+### Array
 
 It's possible to validate an array both as a whole and by individual items. For example:
 
@@ -106,7 +108,7 @@ $result = (new Validator())->validate($data, $rules);
 
 > **Note:** Use `Nested` rule to validate nested arrays and `Each` rule to validate multiple arrays.
 
-## Validating an object
+### Object
 
 Similar to arrays, it's possible to validate an object both as a whole and by individual properties.
 
@@ -148,7 +150,7 @@ $result = (new Validator())->validate($person);
 
 > **Note:** Use `Nested` rule to validate related objects and `Each` rule to validate multiple objects. 
 
-## Rules
+## Validation rules
 
 ### Passing single rule
 
