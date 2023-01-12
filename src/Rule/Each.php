@@ -52,7 +52,7 @@ use Yiisoft\Validator\WhenInterface;
  * It's also possible to use DTO objects with PHP attributes, see {@see ObjectDataSet} documentation and guide for
  * details.
  *
- * Supports propagation of options (see {@see PropagateOptionsHelper::propagate()} for supported options and
+ * Supports propagation of options (see {@see PropagateOptionsHelper::propagate()} for available options and
  * requirements).
  *
  * @see EachHandler Corresponding handler performing the actual validation.

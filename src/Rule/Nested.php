@@ -110,7 +110,7 @@ use function sprintf;
  * It's also possible to use DTO objects with PHP attributes, see {@see ObjectDataSet} documentation and guide for
  * details.
  *
- * Supports propagation of options (see {@see PropagateOptionsHelper::propagate()} for supported options and
+ * Supports propagation of options (see {@see PropagateOptionsHelper::propagate()} for available options and
  * requirements).
  *
  * @see NestedHandler Corresponding handler performing the actual validation.
