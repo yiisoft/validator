@@ -1,14 +1,90 @@
 # Conditional validation
 
-## `skipOnError`
+Rules contain several options for skipping themselves in set under certain conditions. Not every rule supports all of 
+these options, but the vast majority does.
 
-By default, if an error occurred during validation of an attribute, further rules for this attribute are processed. To
-change this behavior, use `skipOnError: true` when configuring rules:
+## `skipOnError` - skipping a rule in the set if previous one errored
+
+By default, if an error occurred during validation of an attribute, all further rules in this set are processed. To
+change this behavior, use `skipOnError: true` for rules that need to be skipped:
+
+In the following example checking the length of a username is skipped when it's not filled.
 
 ```php
+use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Regex;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Validator;
 
-new Number(asInteger: true, max: 100, skipOnError: true)
+$data = [];
+$rules = [
+    'name' => [
+        // Validated.
+        new Required(),
+        // Skipped because "name" is required but not filled.
+        new HasLength(min: 4, max: 20, skipOnError: true),
+        // Validated because "skipOnError" is "false" by default. Set to "true" to skip it as well.
+        new Regex('^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'),
+    ],
+    'age' => [
+        // Validated because "age" is a different attribute with its own set of rules..
+        new Required(),
+        // Validated because "skipOnError" is "false" by default. Set to "true" to skip it as well.
+        new Number(min: 21),
+    ],
+];
+$result = (new Validator())->validate($data, $rules);
+```
+
+Note that this setting must be set for every rule that needs to be skipped on error.
+
+The same effect can be achieved with `StopOnError` and `Composite` rules, which can be more convenient for a bigger 
+amount of rules.
+
+Using `StopOnError`:
+
+```php
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Regex;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rule\StopOnError;
+use Yiisoft\Validator\Validator;
+
+$data = [];
+$rules = [
+    'name' => new StopOnError([
+        new Required(),
+        new HasLength(min: 4, max: 20),
+        new Regex('^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'),
+    ]),
+];
+$result = (new Validator())->validate($data, $rules);
+```
+
+Using `Composite`:
+
+```php
+use Yiisoft\Validator\Rule\Composite;
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Regex;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Validator;
+
+$data = [];
+$rules = [
+    'name' => [
+        new Required(),
+        new Composite(
+            [
+                new HasLength(min: 4, max: 20),
+                new Regex('^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'),
+            ],
+            skipOnError: true,
+        )
+    ],
+];
+$result = (new Validator())->validate($data, $rules);
 ```
 
 ## `skipOnEmpty`
