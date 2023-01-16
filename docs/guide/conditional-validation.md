@@ -128,7 +128,7 @@ $result = (new Validator())->validate($data, $rules);
 
 ### Empty criteria basics
 
-What exactly to consider to be empty is vague and can vary depending on a scope of usage.
+What exactly to consider to be empty can vary depending on a scope of usage.
 
 The value passed to `skipOnEmpty` is called "empty criteria". At the end it's always a callback, but shorcuts are 
 supported too because of normalization:
