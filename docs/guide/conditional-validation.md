@@ -227,18 +227,42 @@ It's also possible to set it globally for all rules at the handler level via `Re
 
 ## `when`
 
-In some cases there is a need to apply rule conditionally. It could be performed by using `when`:
+`when` provides an option to set a callable with an arbitrary condition determining whether a rule it was attached to
+must be skipped. The signature of the function is like the following:
 
 ```php
-use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\ValidationContext;
-
-new Number(
-    when: static function ($value, ValidationContext $context): bool {
-        return $context->getDataSet()->getAttributeValue('country') === Country::USA;
-    },
-    asInteger: true, 
-    min: 100
-);
+function (mixed $value, ValidationContext $context): bool;
 ```
-If callable returns `true` rule is applied, when the value returned is `false`, rule is skipped.
+
+where:
+
+- `$value` is validated value;
+- `$context` is a validation context;
+- `true` as returned value  means that rule must be applied and `false` - must be skipped.
+
+In this example the state will be required only for `Brazil` counry. `$context->getDataSet()->getAttributeValue()` 
+method allows to get any other attribute's value within a validated data set.
+
+```php
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Validator;
+
+$data = [];
+$rules = [
+    'country' => [
+        new Required(),
+        new HasLength(min: 2),
+    ],
+    'state' => new Required(
+        when: static function (mixed $value, ValidationContext $context): bool {
+            return $context->getDataSet()->getAttributeValue('country') === 'Brazil';
+        },
+    )
+];
+$result = (new Validator())->validate($data, $rules);
+```
+
+As an alternative for functions, callable classes can be used instead. This approach has a benefit of code reuse 
+possibility. Please refer to "Skip on empty" section to see an example.

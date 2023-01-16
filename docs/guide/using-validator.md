@@ -194,7 +194,7 @@ $result = (new Validator())->validate($data, $rulesProvider);
 
 #### Using interface method implementation
 
-Providing rules via interface method implementation has priority over PHP attributes. So in case of both present, the 
+Providing rules via interface method implementation has priority over PHP attributes. So, in case of both present, the 
 attributes will be ignored without causing exception.
 
 ```php
