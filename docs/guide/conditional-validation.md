@@ -28,7 +28,7 @@ $rules = [
         new Regex('^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'),
     ],
     'age' => [
-        // Validated because "age" is a different attribute with its own set of rules..
+        // Validated because "age" is a different attribute with its own set of rules.
         new Required(),
         // Validated because "skipOnError" is "false" by default. Set to "true" to skip it as well.
         new Number(min: 21),
@@ -87,33 +87,66 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
-## `skipOnEmpty`
+## `skipOnEmpty` - skipping a rule if the validated value is "empty"
 
-By default, missing and empty values are validated (if the value is missing, it's considered `null`). That is
-undesirable if you need a field to be optional. To change this behavior, use `skipOnEmpty: true`.
+By default, missing (when using attributes) and empty values are validated (if the value is missing, it's considered 
+`null`). That is undesirable if you need an attribute to be optional. To change this behavior, use `skipOnEmpty: true`.
 
-Note that not every rule has this option, but only the ones that implement `Yiisoft\Validator\SkipOnEmptyInterface`. For
-example, `Required` rule doesn't. For more details see "Requiring values" section.
+An example with optional language attribute:
 
 ```php
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\In;
+use Yiisoft\Validator\Validator;
 
-new Number(asInteger: true, max: 100, skipOnEmpty: true);
+$data = [];
+$rules = [
+    'language' => [
+        new In(['ru', 'en'], skipOnEmpty: true),
+    ],
+];
+$result = (new Validator())->validate($data, $rules);
 ```
+
+If the attribute is required, it's more appropriate to use `skipOnError: true` instead with preceding `Required` rule. 
+This is because empty values' detection within `Required` rule and for skipping in further rules can be set separately 
+(this is described below in more detail, see "Configuring criterias in other rules" section).
+
+```php
+use Yiisoft\Validator\Rule\In;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Validator;
+
+$data = [];
+$rules = [
+    'language' => [
+        new Required(),
+        new In(['ru', 'en'], skipOnError: true),
+    ],
+];
+$result = (new Validator())->validate($data, $rules);
+```
+
+### Empty criteria basics
 
 What exactly to consider to be empty is vague and can vary depending on a scope of usage.
 
-`skipOnEmpty` value is normalized to callback automatically:
+The value passed to `skipOnEmpty` is called "empty criteria". At the end it's always a callback, but shorcuts are 
+supported too because of normalization:
 
-- If `skipOnEmpty` is `false` or `null`, `Yiisoft\Validator\EmptyCriteria\NeverEmpty` is used automatically as
-  callback - every value is considered non-empty and validated without skipping (default).
-- If `skipOnEmpty` is `true`, `Yiisoft\Validator\EmptyCriteria\WhenEmpty` is used automatically for callback -
-  only passed and non-empty values (not `null`, `[]`, or `''`) are validated.
-- If custom callback  is set, it's used to determine emptiness.
+- When `false` or `null`, `Yiisoft\Validator\EmptyCriteria\NeverEmpty` is used automatically as a callback - every value 
+is considered non-empty and validated without skipping (default).
+- When `true`, `Yiisoft\Validator\EmptyCriteria\WhenEmpty` is used automatically as a callback - only passed
+(corresponding attribute must be present) and non-empty values (not `null`, `[]`, or `''`) are validated.
+- If a custom callback  is set, it's used to determine emptiness.
 
-Using first option is usually good for HTML forms. The second one is more suitable for APIs.
+Using the first option is usually good for HTML forms. The second one is more suitable for APIs.
 
-The empty values can be also limited to `null` only:
+There are some more criterias that do not have shorcuts and need to be set explicitly because they are less used:
+
+- `Yiisoft\Validator\EmptyCriteria\WhenMissing` - a value treated as empty only when it's missing (not passed at all).
+- `Yiisoft\Validator\EmptyCriteria\WhenNull` - limits empty values to `null` only.
+
+An example with using `WhenNull` as parameter (note that instance is passed, not a class name):
 
 ```php
 use Yiisoft\Validator\Rule\Number;
@@ -122,20 +155,23 @@ use Yiisoft\Validator\EmptyCriteria\WhenNull;
 new Number(asInteger: true, max: 100, skipOnEmpty: new WhenNull());
 ```
 
-For even more customization you can use your own class implementing `__invoke()` magic method:
+### Custom empty criteria
+
+For even more customization you can use your own class implementing `__invoke()` magic method. Here is an example when
+a value is empty only when it's missing (when using attributes) or equals exactly to zero.
 
 ```php
 use Yiisoft\Validator\Rule\Number;
 
-final class SkipOnZero
+final class WhenZero
 {
     public function __invoke(mixed $value, bool $isAttributeMissing): bool
     {
-        return $value === 0;
+        return $isAttributeMissing || $value === 0;
     }
 }
 
-new Number(asInteger: true, max: 100, skipOnEmpty: new SkipOnZero());
+new Number(asInteger: true, max: 100, skipOnEmpty: new WhenZero());
 ```
 
 or just a callable:
@@ -147,33 +183,47 @@ new Number(
     asInteger: true, 
     max: 100, 
     skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
-        return $value === 0;
+        return $isAttributeMissing || $value === 0;
     }
 );
 ```
 
-For multiple rules this can be also set more conveniently at validator level:
+Using the class has a benefit of the code reuse possibility.
+
+### Using the same non-default empty criteria for all the rules
+
+For multiple rules this can be also set more conveniently at the validator level:
 
 ```php
 use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 
-$validator = new Validator(new SimpleRuleHandlerContainer(), skipOnEmpty: true);
+$validator = new Validator(skipOnEmpty: true); // Using the shortcut.
 $validator = new Validator(
     new SimpleRuleHandlerContainer(),
+    // Using the custom callback.
     skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
         return $value === 0;
     }
 );
 ```
 
-Using `$isAttributeMissing` parameter such as `$context` also allows to check if attribute is missing / present:
+### Configuring empty criterias in other rules
+
+Some rules, like `Required` can't be skipped on empty values - that would violate the whole purpose of it. However, the 
+empty criteria can be configured here too - not for skipping, but for detecting an empty value:
 
 ```php
-$skipOnEmpty = static function (mixed $value, bool $isAttributeMissing): bool {
-    return $isAttributeMissing || $value === '';
-};
+use Yiisoft\Validator\Rule\Required;
+
+$rule = new Required(
+    emptyCriteria: static function (mixed $value, bool $isAttributeMissing): bool {
+        return $isAttributeMissing || $value === '';
+    },
+);
 ```
+
+It's also possible to set it globally for all rules at the handler level via `RequiredHandler::$defaultEmptyCriteria`.
 
 ## `when`
 
