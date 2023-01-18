@@ -175,6 +175,38 @@ A path can contain integer elements too (when using `Each` rule for example):
 ];
 ```
 
+##### Resolving special characters collision in attribute names
+
+When attribute name contains value path separator (dot - `.` by default) or `Each` rule shortcut (asterisk -`*`), 
+they're automatically escaped using backslash ('\`) in the error messages list:
+
+```php
+[
+    '\*country\.code' => ['Value cannot be blank.'],
+],
+```
+
+In case of using single attribute per rule set, any additional modifications of attribute names in rules configuration 
+are not required, so they must stay as is:
+
+```php
+use Yiisoft\Validator\Rule\In;
+use Yiisoft\Validator\Rule\Required;
+
+$rules = [
+    '*country.code' => [
+        new Required();
+        new In(['ru', 'en'], skipOnError: true),
+    ],
+];
+```
+
+However, when using  `Nested` rule with multiple attributes per rule set, special characters need to be escaped with 
+backslash (`\`) in order for value paths to be correct and to be possible to reverse them back from string to individual 
+items. See "Using keys containing separator / shortcut" section for more details.
+
+This can be used as an alternative to using custom separator.
+
 ##### Filtering by specific attribute
 
 This list can be also filtered by specific attribute. Only top level attributes are supported.
