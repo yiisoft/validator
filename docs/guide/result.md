@@ -4,8 +4,7 @@ The validation result is an object containing errors' data occurred during valid
 
 ### Is validation successful?
 
-To just check the status of validation, in other words, is a data is valid as a whole, use the following `Result` API 
-call:
+To just check the status of validation (whether a data is valid as a whole), use the following `Result` API call:
 
 ```php
 use Yiisoft\Validator\Result;
