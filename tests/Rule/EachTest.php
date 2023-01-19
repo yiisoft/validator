@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Generator;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\EachHandler;
 use Yiisoft\Validator\Rule\Number;
@@ -226,6 +227,31 @@ final class EachTest extends RuleTestCase
                 [
                     '1' => ['Value must be no greater than 13.'],
                     '2' => ['Value must be no greater than 13.'],
+                ],
+            ],
+
+            'single rule' => [
+                [10, 20, 30],
+                [new Each(new Number(max: 13))],
+                [
+                    '1' => ['Value must be no greater than 13.'],
+                    '2' => ['Value must be no greater than 13.'],
+                ],
+            ],
+            'single callable rule' => [
+                [10, 20],
+                [new Each(static fn (): Result => (new Result())->addError('error'))],
+                [
+                    0 => ['error'],
+                    1 => ['error'],
+                ],
+            ],
+            'rules array with callable' => [
+                [10, 20],
+                [new Each([static fn (): Result => (new Result())->addError('error')])],
+                [
+                    0 => ['error'],
+                    1 => ['error'],
                 ],
             ],
 

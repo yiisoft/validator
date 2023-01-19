@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -141,6 +143,58 @@ final class CompositeTest extends RuleTestCase
                     ],
                 ],
             ],
+            'callable' => [
+                new Composite([
+                    static fn () => (new Result())->addError('Bad value.'),
+                ]),
+                [
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                    'rules' => [
+                        [
+                            'callback',
+                            'method' => null,
+                            'skipOnEmpty' => false,
+                            'skipOnError' => false,
+                        ],
+                    ],
+                ],
+            ],
+            'inheritance' => [
+                new class () extends Composite {
+                    public function getRules(): iterable
+                    {
+                        return [
+                            new Required(),
+                        ];
+                    }
+
+                    public function getOptions(): array
+                    {
+                        return [
+                            'specific-key' => 42,
+                            'rules' => $this->dumpRulesAsArray(),
+                        ];
+                    }
+                },
+                [
+                    'specific-key' => 42,
+                    'rules' => [
+                        [
+                            'required',
+                            'message' => [
+                                'template' => 'Value cannot be blank.',
+                                'parameters' => [],
+                            ],
+                            'notPassedMessage' => [
+                                'template' => 'Value not passed.',
+                                'parameters' => [],
+                            ],
+                            'skipOnError' => false,
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -153,7 +207,8 @@ final class CompositeTest extends RuleTestCase
         ]);
 
         $this->expectException(InvalidArgumentException::class);
-        $message = 'Every rule must implement "Yiisoft\Validator\RuleInterface". Type "class@anonymous" given.';
+        $message = 'Rule must be either an instance of Yiisoft\Validator\RuleInterface or a callable, ' .
+            'class@anonymous given.';
         $this->expectExceptionMessage($message);
         $rule->getOptions();
     }
@@ -165,16 +220,26 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new Composite(
-                        rules: [new Number(max: 13)],
+                        [new Number(max: 13)],
                         when: fn () => false,
                     ),
+                ],
+            ],
+            'override constructor' => [
+                20,
+                [
+                    new class () extends Composite {
+                        public function __construct()
+                        {
+                        }
+                    },
                 ],
             ],
             [
                 null,
                 [
                     new Composite(
-                        rules: [new Number(max: 13)],
+                        [new Number(max: 13)],
                         skipOnEmpty: true,
                     ),
                 ],
@@ -185,11 +250,26 @@ final class CompositeTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         return [
+            'callable' => [
+                20,
+                [
+                    new Composite([
+                        static fn () => (new Result())->addError('Bad value.'),
+                        static fn () => (new Result())->addError('Very bad value.'),
+                    ]),
+                ],
+                [
+                    '' => [
+                        'Bad value.',
+                        'Very bad value.',
+                    ],
+                ],
+            ],
             'when true' => [
                 20,
                 [
                     new Composite(
-                        rules: [new Number(max: 13), new Number(min: 21)],
+                        [new Number(max: 13), new Number(min: 21)],
                         when: fn () => true,
                     ),
                 ],
@@ -205,7 +285,7 @@ final class CompositeTest extends RuleTestCase
                 [
                     new Equal(19),
                     new Composite(
-                        rules: [new Number(max: 13)],
+                        [new Number(max: 13)],
                         skipOnError: true,
                     ),
                 ],
@@ -217,7 +297,7 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new Composite(
-                        rules: [new Number(max: 13)],
+                        [new Number(max: 13)],
                         skipOnError: true,
                     ),
                 ],
@@ -229,11 +309,23 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new Composite(
-                        rules: [new Number(max: 13, tooBigMessage: 'Custom error')],
+                        [new Number(max: 13, tooBigMessage: 'Custom error')],
                         when: fn () => true,
                     ),
                 ],
                 ['' => ['Custom error']],
+            ],
+            'override constructor' => [
+                null,
+                [
+                    new class () extends Composite {
+                        public function __construct()
+                        {
+                            $this->rules = [new Required()];
+                        }
+                    },
+                ],
+                ['' => ['Value cannot be blank.']],
             ],
         ];
     }

@@ -17,9 +17,9 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Validates that the value is of certain length.
+ * Defines validation options to check that the value is a string of a certain length.
  *
- * Note, this rule should only be used with strings.
+ * @see HasLengthHandler
  *
  * @psalm-import-type WhenType from WhenInterface
  */
@@ -36,56 +36,64 @@ final class HasLength implements
     use SkipOnErrorTrait;
     use WhenTrait;
 
+    /**
+     * @param int|null $min Minimum length. `null` means no minimum length limit. Can't be combined with
+     * {@see $exactly}. See {@see $lessThanMinMessage} for the customized message for a too short string.
+     * @param int|null $max maximum length. `null` means no maximum length limit. Can't be combined with
+     * {@see $exactly}. See {@see $greaterThanMaxMessage} for the customized message for a too long string.
+     * @param int|null $exactly Exact length. `null` means no strict comparison. Mutually exclusive with
+     * {@see $min} and {@see $max}.
+     * @param string $incorrectInputMessage Error message used when the value is not a string.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
+     * @param string $lessThanMinMessage Error message used when the length of the value is smaller than {@see $min}.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{min}`: minimum number of items required.
+     * - `{number}`: actual number of items.
+     * @param string $greaterThanMaxMessage Error message used when the length of the value is greater than {@see $max}.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{max}`: maximum number of items required.
+     * - `{number}`: actual number of items.
+     * @param string $notExactlyMessage Error message used when the number of items does not equal {@see $exactly}.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{exactly}`: exact number of items required.
+     * - `{number}`: actual number of items.
+     * @param string $encoding The encoding of the string value to be validated (e.g. 'UTF-8').
+     * If this property is not set, application wide encoding will be used.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
+     * See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
+     * See {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying the rule.
+     * See {@see WhenInterface}.
+     * @psalm-param WhenType $when
+     */
     public function __construct(
-        /**
-         * @var int|null minimum length. null means no minimum length limit. Can't be combined with
-         * {@see $exactly}.
-         *
-         * @see $lessThanMinMessage for the customized message for a too short string.
-         */
         int|null $min = null,
-        /**
-         * @var int|null maximum length. null means no maximum length limit. Can't be combined with
-         * {@see $exactly}.
-         *
-         * @see $greaterThanMaxMessage for the customized message for a too long string.
-         */
         int|null $max = null,
-        /**
-         * @var int|null exact length. `null` means no strict comparison. Mutually exclusive with {@see $min} and
-         * {@see $max}.
-         */
         int|null $exactly = null,
-        /**
-         * @var string user-defined error message used when the value is not a string.
-         */
         private string $incorrectInputMessage = 'This value must be a string.',
-        /**
-         * @var string user-defined error message used when the length of the value is smaller than {@see $min}.
-         */
         string $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{character} ' .
         'other{characters}}.',
-        /**
-         * @var string user-defined error message used when the length of the value is greater than {@see $max}.
-         */
         string $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{character} ' .
         'other{characters}}.',
         string $notExactlyMessage = 'This value must contain exactly {exactly, number} {exactly, plural, ' .
         'one{character} other{characters}}.',
-        /**
-         * @var string the encoding of the string value to be validated (e.g. 'UTF-8').
-         * If this property is not set, application wide encoding will be used.
-         */
         private string $encoding = 'UTF-8',
-
-        /**
-         * @var bool|callable|null
-         */
-        private $skipOnEmpty = null,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
-        /**
-         * @var WhenType
-         */
         private Closure|null $when = null
     ) {
         $this->initLimitProperties(
@@ -103,11 +111,26 @@ final class HasLength implements
         return 'hasLength';
     }
 
+    /**
+     * Get error message used when the value is neither an array nor implementing {@see \Countable} interface.
+     *
+     * @return string Error message.
+     *
+     * @see $incorrectInputMessage
+     */
     public function getIncorrectInputMessage(): string
     {
         return $this->incorrectInputMessage;
     }
 
+    /**
+     * Get the encoding of the string value to be validated (e.g. 'UTF-8').
+     * If this property is not set, application wide encoding will be used.
+     *
+     * @return string Encoding of the string value to be validated.
+     *
+     * @see $encoding
+     */
     public function getEncoding(): string
     {
         return $this->encoding;
@@ -126,7 +149,7 @@ final class HasLength implements
         ]);
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return HasLengthHandler::class;
     }

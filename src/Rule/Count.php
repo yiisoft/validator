@@ -18,12 +18,14 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Validates that the value contains certain number of items. Can be applied to arrays or classes implementing
- * {@see Countable} interface.
+ * Defines validation options to check that the value contains certain number of items.
+ * Can be applied to arrays or classes implementing {@see Countable} interface.
+ *
+ * @see CountHandler
  *
  * @psalm-import-type WhenType from WhenInterface
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Count implements
     RuleWithOptionsInterface,
     SkipOnErrorInterface,
@@ -36,57 +38,62 @@ final class Count implements
     use SkipOnErrorTrait;
     use WhenTrait;
 
+    /**
+     * @param int|null $exactly Exact number of items. `null` means no strict comparison. Mutually exclusive with
+     * {@see $min} and {@see $max}.
+     * @param int|null $min Minimum number of items. null means no minimum number limit. Can't be combined with
+     * {@see $exactly}. See {@see $lessThanMinMessage} for the customized message for a value with too few items.
+     * @param int|null $max Maximum number of items. null means no maximum number limit. Can't be combined with
+     * {@see $exactly}. See {@see $greaterThanMaxMessage} for the customized message for a value with too many items.
+     * @param string $incorrectInputMessage Error message used when the value is neither an array nor an object
+     * implementing {@see \Countable} interface.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
+     * @param string $lessThanMinMessage Error message used when the number of items is smaller than {@see $min}.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{min}`: minimum number of items required.
+     * - `{number}`: actual number of items.
+     * @param string $greaterThanMaxMessage Error message used when the number of items is greater than {@see $max}.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{max}`: maximum number of items required.
+     * - `{number}`: actual number of items.
+     * @param string $notExactlyMessage Error message used when the number of items does not equal {@see $exactly}.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{exactly}`: exact number of items required.
+     * - `{number}`: actual number of items.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
+     * See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
+     * See {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying the rule.
+     * See {@see WhenInterface}.
+     * @psalm-param WhenType $when
+     */
     public function __construct(
-        /**
-         * @var int|null minimum number of items. null means no minimum number limit. Can't be combined with
-         * {@see $exactly}.
-         *
-         * @see $lessThanMinMessage for the customized message for a value with too few items.
-         */
-        int|null $min = null,
-        /**
-         * @var int|null maximum number of items. null means no maximum number limit. Can't be combined with
-         * {@see $exactly}.
-         *
-         * @see $greaterThanMaxMessage for the customized message for a value wuth too many items.
-         */
-        int|null $max = null,
-        /**
-         * @var int|null exact number of items. `null` means no strict comparison. Mutually exclusive with {@see $min}
-         * and {@see $max}.
-         */
         int|null $exactly = null,
-        /**
-         * @var string user-defined error message used when the value is neither an array nor implementing
-         * {@see \Countable} interface.
-         *
-         * @see Countable
-         */
+        int|null $min = null,
+        int|null $max = null,
         private string $incorrectInputMessage = 'This value must be an array or implement \Countable interface.',
-        /**
-         * @var string user-defined error message used when the number of items is smaller than {@see $min}.
-         */
         string $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{item} ' .
         'other{items}}.',
-        /**
-         * @var string user-defined error message used when the number of items is greater than {@see $max}.
-         */
         string $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{item} ' .
         'other{items}}.',
-        /**
-         * @var string user-defined error message used when the number of items does not equal {@see $exactly}.
-         */
         string $notExactlyMessage = 'This value must contain exactly {exactly, number} {exactly, plural, one{item} ' .
         'other{items}}.',
-
-        /**
-         * @var bool|callable|null
-         */
-        private $skipOnEmpty = null,
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
-        /**
-         * @var WhenType
-         */
         private Closure|null $when = null,
     ) {
         $this->initLimitProperties(
@@ -104,6 +111,13 @@ final class Count implements
         return 'count';
     }
 
+    /**
+     * Get error message used when the value is neither an array nor an object implementing {@see \Countable} interface.
+     *
+     * @return string Error message.
+     *
+     * @see $incorrectInputMessage
+     */
     public function getIncorrectInputMessage(): string
     {
         return $this->incorrectInputMessage;
@@ -121,7 +135,7 @@ final class Count implements
         ]);
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return CountHandler::class;
     }

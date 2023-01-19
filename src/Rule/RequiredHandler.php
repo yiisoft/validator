@@ -4,16 +4,48 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * Validates that the specified value is passed and not empty.
+ * A handler for {@see Required} rule. Validates that the specified value is passed and is not empty.
+ *
+ * @psalm-import-type EmptyCriteriaType from Required
  */
 final class RequiredHandler implements RuleHandlerInterface
 {
+    /**
+     * @var callable An empty criteria (either a callable or class implementing `__invoke()` method) used to
+     * determine emptiness of the value. The signature must be like the following:
+     *
+     * ```php
+     * function (mixed $value, bool $isAttributeMissing): bool
+     * ```
+     *
+     * `$isAttributeMissing` is a flag defining whether the attribute is missing (not used / not passed at all).
+     *
+     * Used as a default when {@see Required::$emptyCriteria} is not set. A customized handler can be added to
+     * {@see SimpleRuleHandlerContainer::$instances} to be applied to all rules of this type without explicitly
+     * specifying empty criteria for each one of them.
+     *
+     * @psalm-var EmptyCriteriaType
+     */
+    private $defaultEmptyCriteria;
+
+    /**
+     * @param callable|null $defaultEmptyCriteria A default empty criteria used to determine emptiness of the value.
+     * @psalm-param EmptyCriteriaType|null $defaultEmptyCriteria
+     */
+    public function __construct(
+        callable|null $defaultEmptyCriteria = null,
+    ) {
+        $this->defaultEmptyCriteria = $defaultEmptyCriteria ?? new WhenEmpty(trimString: true);
+    }
+
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Required) {
@@ -22,16 +54,18 @@ final class RequiredHandler implements RuleHandlerInterface
 
         $result = new Result();
         if ($context->isAttributeMissing()) {
-            $result->addError($rule->getNotPassedMessage());
+            $result->addError($rule->getNotPassedMessage(), ['attribute' => $context->getTranslatedAttribute()]);
 
             return $result;
         }
 
-        if (!$rule->getEmptyCriteria()($value, $context->isAttributeMissing())) {
+        $emptyCriteria = $rule->getEmptyCriteria() ?? $this->defaultEmptyCriteria;
+
+        if (!$emptyCriteria($value, $context->isAttributeMissing())) {
             return $result;
         }
 
-        $result->addError($rule->getMessage());
+        $result->addError($rule->getMessage(), ['attribute' => $context->getTranslatedAttribute()]);
 
         return $result;
     }

@@ -11,6 +11,11 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
+/**
+ * Validates a value using a callback.
+ *
+ * @see Callback
+ */
 final class CallbackHandler implements RuleHandlerInterface
 {
     /**

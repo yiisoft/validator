@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use RuntimeException;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\Helper\DataSetNormalizer;
+use Yiisoft\Validator\Rule\StopOnError;
 
 /**
  * Validation context that might be taken into account when performing validation.
@@ -14,42 +15,120 @@ use Yiisoft\Validator\Helper\DataSetNormalizer;
  */
 final class ValidationContext
 {
+    public const PARAMETER_VALUE_AS_ARRAY = 'yii-validator-value-as-array';
+
     /**
-     * @param DataSetInterface|null $dataSet Data set the attribute belongs to. Null if a single value is validated.
-     * @param mixed $rawData The raw validated data.
-     * @param string|null $attribute Validated attribute name. Null if a single value is validated.
+     * A name of parameter indicating that previous rule in the set caused validation error. Used to allow skipping of
+     * the current rule:
+     *
+     * - in {@see Validator} for rules implementing {@see SkipOnErrorInterface}.
+     * - for {@see StopOnError} rule (no additional configuration is needed).
+     */
+    public const PARAMETER_PREVIOUS_RULES_ERRORED = 'yii-validator-previous-rules-errored';
+
+    /**
+     * @var ValidatorInterface|null A validator instance. `null` means context data was not set
+     * with {@see setContextDataOnce()} yet.
+     */
+    private ?ValidatorInterface $validator = null;
+
+    /**
+     * @var mixed The raw validated data. `null` means context data was not set with {@see setContextDataOnce()} yet.
+     */
+    private mixed $rawData = null;
+
+    /**
+     * @var DataSetInterface|null Data set the attribute belongs to.
+     * `null` if data set was not set with {@see setDataSet()} yet.
+     */
+    private ?DataSetInterface $dataSet = null;
+
+    /**
+     * @var string|null Validated data set's attribute name. `null` if a single value is validated.
+     */
+    private ?string $attribute = null;
+
+    /**
+     * @var AttributeTranslatorInterface|null Default attribute translator to use if attribute translator is not set.
+     */
+    private ?AttributeTranslatorInterface $defaultAttributeTranslator = null;
+
+    /**
      * @param array $parameters Arbitrary parameters.
+     * @param AttributeTranslatorInterface|null $attributeTranslator Optional attribute translator instance to use.
+     * If `null` is provided, or it's not specified, a default translator passed through
+     * {@see setContextDataOnce()} is used.
      */
     public function __construct(
-        private ValidatorInterface $validator,
-        private mixed $rawData,
-        private ?DataSetInterface $dataSet = null,
-        private ?string $attribute = null,
-        private array $parameters = []
+        private array $parameters = [],
+        private ?AttributeTranslatorInterface $attributeTranslator = null,
     ) {
+    }
+
+    /**
+     * Set context data if it is not set yet.
+     *
+     * @param ValidatorInterface $validator A validator instance.
+     * @param AttributeTranslatorInterface $attributeTranslator Attribute translator to use by default. If translator
+     * is specified via {@see setAttributeTranslator()}, it will be used instead.
+     * @param mixed $rawData The raw validated data.
+     *
+     * @internal
+     *
+     * @return $this The same instance of validation context.
+     */
+    public function setContextDataOnce(
+        ValidatorInterface $validator,
+        AttributeTranslatorInterface $attributeTranslator,
+        mixed $rawData
+    ): self {
+        if ($this->validator !== null) {
+            return $this;
+        }
+
+        $this->validator = $validator;
+        $this->defaultAttributeTranslator = $attributeTranslator;
+        $this->rawData = $rawData;
+
+        return $this;
+    }
+
+    /**
+     * Set attribute translator to use.
+     *
+     * @param AttributeTranslatorInterface|null $attributeTranslator Attribute translator to use. If `null`,
+     * translator passed in {@see setContextData()} will be used.
+     *
+     * @return $this The same instance of validation context.
+     */
+    public function setAttributeTranslator(?AttributeTranslatorInterface $attributeTranslator): self
+    {
+        $this->attributeTranslator = $attributeTranslator;
+        return $this;
     }
 
     /**
      * Validate data in current context.
      *
-     * @param DataSetInterface|mixed|RulesProviderInterface $data Data set to validate. If {@see RulesProviderInterface}
-     * instance provided and rules are not specified explicitly, they are read from the
-     * {@see RulesProviderInterface::getRules()}.
+     * @param mixed $data Data set to validate. If {@see RulesProviderInterface} instance provided and rules are
+     * not specified explicitly, they are read from the {@see RulesProviderInterface::getRules()}.
      * @param callable|iterable|object|string|null $rules Rules to apply. If specified, rules are not read from data set
      * even if it is an instance of {@see RulesProviderInterface}.
      *
      * @psalm-param RulesType $rules
+     *
+     * @throws RuntimeException If validator is not set in validation context.
+     *
+     * @return Result Validation result.
      */
     public function validate(mixed $data, callable|iterable|object|string|null $rules = null): Result
     {
+        $this->requireValidator();
+
         $currentDataSet = $this->dataSet;
         $currentAttribute = $this->attribute;
 
-        $dataSet = DataSetNormalizer::normalize($data);
-        $this->dataSet = $dataSet;
-        $this->attribute = null;
-
-        $result = $this->validator->validate($dataSet, $rules, $this);
+        $result = $this->validator->validate($data, $rules, $this);
 
         $this->dataSet = $currentDataSet;
         $this->attribute = $currentAttribute;
@@ -58,23 +137,51 @@ final class ValidationContext
     }
 
     /**
+     * Get the raw validated data.
+     *
+     * @throws RuntimeException If validator is not set in validation context.
+     *
      * @return mixed The raw validated data.
      */
     public function getRawData(): mixed
     {
+        $this->requireValidator();
         return $this->rawData;
     }
 
     /**
-     * @return DataSetInterface|null Data set the attribute belongs to. Null if a single value is validated.
+     * Get the data set the attribute belongs to.
+     *
+     * @return DataSetInterface Data set the attribute belongs to.
      */
-    public function getDataSet(): ?DataSetInterface
+    public function getDataSet(): DataSetInterface
     {
+        if ($this->dataSet === null) {
+            throw new RuntimeException('Data set in validation context is not set.');
+        }
+
         return $this->dataSet;
     }
 
     /**
-     * @return string|null Validated attribute name. Null if a single value is validated.
+     * Set the data set the attribute belongs to.
+     *
+     * @param DataSetInterface $dataSet Data set the attribute belongs to.
+     *
+     * @return $this The same instance of validation context.
+     *
+     * @internal
+     */
+    public function setDataSet(DataSetInterface $dataSet): self
+    {
+        $this->dataSet = $dataSet;
+        return $this;
+    }
+
+    /**
+     * Get validated data set's attribute name.
+     *
+     * @return string|null Validated data set's attribute name. `null` if a single value is validated.
      */
     public function getAttribute(): ?string
     {
@@ -82,7 +189,36 @@ final class ValidationContext
     }
 
     /**
+     * Get translated attribute name.
+     *
+     * @return string|null Translated attribute name. `null` if a single value is validated and there is nothing
+     * to translate.
+     */
+    public function getTranslatedAttribute(): ?string
+    {
+        if ($this->attribute === null) {
+            return null;
+        }
+
+        if ($this->attributeTranslator !== null) {
+            return $this->attributeTranslator->translate($this->attribute);
+        }
+
+        if ($this->defaultAttributeTranslator !== null) {
+            return $this->defaultAttributeTranslator->translate($this->attribute);
+        }
+
+        return $this->attribute;
+    }
+
+    /**
+     * Set the name of the attribute validated.
+     *
      * @param string|null $attribute Validated attribute name. Null if a single value is validated.
+     *
+     * @return $this The same instance of validation context.
+     *
+     * @internal
      */
     public function setAttribute(?string $attribute): self
     {
@@ -91,35 +227,55 @@ final class ValidationContext
     }
 
     /**
-     * @return array Arbitrary parameters.
-     */
-    public function getParameters(): array
-    {
-        return $this->parameters;
-    }
-
-    /**
      * Get named parameter.
      *
-     * @param string $key Parameter name.
+     * @param string $name Parameter name.
      * @param mixed $default Default value to return in case parameter with a given name does not exist.
      *
      * @return mixed Parameter value.
      *
      * @see ArrayHelper::getValue()
      */
-    public function getParameter(string $key, mixed $default = null): mixed
+    public function getParameter(string $name, mixed $default = null): mixed
     {
-        return ArrayHelper::getValue($this->parameters, $key, $default);
+        return ArrayHelper::getValue($this->parameters, $name, $default);
     }
 
-    public function setParameter(string $key, mixed $value): void
+    /**
+     * Set parameter value.
+     *
+     * @param string $name Parameter name.
+     * @param mixed $value Parameter value.
+     *
+     * @return $this The same instance of validation context.
+     */
+    public function setParameter(string $name, mixed $value): self
     {
-        $this->parameters[$key] = $value;
+        $this->parameters[$name] = $value;
+        return $this;
     }
 
+    /**
+     * Check whether {@see $attribute} is missing in a {@see $dataSet}.
+     *
+     * @return bool Whether {@see $attribute} is missing in a {@see $dataSet}.
+     */
     public function isAttributeMissing(): bool
     {
-        return $this->attribute !== null && $this->dataSet !== null && !$this->dataSet->hasAttribute($this->attribute);
+        return $this->attribute !== null && !$this->getDataSet()->hasAttribute($this->attribute);
+    }
+
+    /**
+     * Ensure that validator is set in validation context.
+     *
+     * @psalm-assert ValidatorInterface $this->validator
+     *
+     * @throws RuntimeException If validator is not set in validation context.
+     */
+    private function requireValidator(): void
+    {
+        if ($this->validator === null) {
+            throw new RuntimeException('Validator is not set in validation context.');
+        }
     }
 }

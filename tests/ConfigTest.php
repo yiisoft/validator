@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
-use Yiisoft\Validator\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
@@ -57,7 +57,10 @@ final class ConfigTest extends BaseConfigTest
         $translationCategorySource = $translationCategorySources[0];
         $this->assertInstanceOf(CategorySource::class, $translationCategorySource);
 
-        $this->assertSame('Значение неверно.', $translationCategorySource->getMessage('This value is invalid.', 'ru'));
+        $this->assertSame(
+            'Это значение не в списке допустимых значений.',
+            $translationCategorySource->getMessage('This value is not in the list of acceptable values.', 'ru'),
+        );
     }
 
     public function testIntlMessageFormatter(): void

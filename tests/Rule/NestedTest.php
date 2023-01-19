@@ -9,10 +9,11 @@ use InvalidArgumentException;
 use ReflectionProperty;
 use stdClass;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Boolean;
+use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
@@ -31,13 +32,13 @@ use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
 use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Validator;
 
 use function array_slice;
 
@@ -62,9 +63,9 @@ final class NestedTest extends RuleTestCase
         $this->assertNull($rule->getRules());
         $this->assertSame(
             ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
-            $rule->getPropertyVisibility(),
+            $rule->getValidatedObjectPropertyVisibility(),
         );
-        $this->assertFalse($rule->getRequirePropertyPath());
+        $this->assertFalse($rule->isPropertyPathRequired());
         $this->assertSame('Property "{path}" is not found.', $rule->getNoPropertyPathMessage());
         $this->assertNull($rule->getSkipOnEmpty());
         $this->assertFalse($rule->shouldSkipOnError());
@@ -73,16 +74,16 @@ final class NestedTest extends RuleTestCase
 
     public function testPropertyVisibilityInConstructor(): void
     {
-        $rule = new Nested(propertyVisibility: ReflectionProperty::IS_PRIVATE);
+        $rule = new Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PRIVATE);
 
-        $this->assertSame(ReflectionProperty::IS_PRIVATE, $rule->getPropertyVisibility());
+        $this->assertSame(ReflectionProperty::IS_PRIVATE, $rule->getValidatedObjectPropertyVisibility());
     }
 
     public function testHandlerClassName(): void
     {
         $rule = new Nested();
 
-        $this->assertSame(NestedHandler::class, $rule->getHandlerClassName());
+        $this->assertSame(NestedHandler::class, $rule->getHandler());
     }
 
     public function dataOptions(): array
@@ -295,7 +296,7 @@ final class NestedTest extends RuleTestCase
                 new class () {
                     #[Nested(
                         rules: ObjectWithDifferentPropertyVisibility::class,
-                        rulesPropertyVisibility: ReflectionProperty::IS_PRIVATE
+                        rulesSourceClassPropertyVisibility: ReflectionProperty::IS_PRIVATE,
                     )]
                     private array $array = [
                         'name' => 'hello',
@@ -359,7 +360,7 @@ final class NestedTest extends RuleTestCase
             ],
             'wo-rules-only-public' => [
                 new class () {
-                    #[Nested(propertyVisibility: ReflectionProperty::IS_PUBLIC)]
+                    #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PUBLIC)]
                     private ObjectWithDifferentPropertyVisibility $object;
 
                     public function __construct()
@@ -373,7 +374,7 @@ final class NestedTest extends RuleTestCase
             ],
             'wo-rules-only-protected' => [
                 new class () {
-                    #[Nested(propertyVisibility: ReflectionProperty::IS_PROTECTED)]
+                    #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PROTECTED)]
                     private ObjectWithDifferentPropertyVisibility $object;
 
                     public function __construct()
@@ -418,7 +419,7 @@ final class NestedTest extends RuleTestCase
      */
     public function testHandler(object $data, array $expectedErrorMessagesIndexedByPath): void
     {
-        $result = ValidatorFactory::make()->validate($data);
+        $result = (new Validator())->validate($data);
         $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
@@ -473,7 +474,7 @@ final class NestedTest extends RuleTestCase
 
     public function testNestedWithoutRulesWithObject(): void
     {
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate(new ObjectWithNestedObject());
 
         $this->assertFalse($result->isValid());
@@ -648,7 +649,7 @@ final class NestedTest extends RuleTestCase
                         'charts.*.points.*.coordinates.x' => $xRules,
                         'charts.*.points.*.coordinates.y' => $yRules,
                         'charts.*.points.*.rgb' => $rgbRules,
-                        'active' => new Boolean(),
+                        'active' => new BooleanValue(),
                     ]),
                 ],
                 $detailedErrors,
@@ -733,7 +734,7 @@ final class NestedTest extends RuleTestCase
         array $expectedErrorMessages,
         array $expectedErrorMessagesIndexedByPath
     ): void {
-        $result = ValidatorFactory::make()->validate($data, $rules);
+        $result = (new Validator())->validate($data, $rules);
 
         $errorsData = array_map(
             static fn (Error $error) => [
@@ -860,24 +861,9 @@ final class NestedTest extends RuleTestCase
                 return false;
             }
 
-            public function getData(): mixed
+            public function getData(): ?array
             {
-                return new class () implements DataSetInterface {
-                    public function getAttributeValue(string $attribute): mixed
-                    {
-                        return false;
-                    }
-
-                    public function getData(): mixed
-                    {
-                        return false;
-                    }
-
-                    public function hasAttribute(string $attribute): bool
-                    {
-                        return false;
-                    }
-                };
+                return null;
             }
 
             public function hasAttribute(string $attribute): bool
@@ -947,7 +933,7 @@ final class NestedTest extends RuleTestCase
             'custom incorrect data set type message with parameters' => [
                 $incorrectDataSet,
                 [new Nested(['value' => new Required()], incorrectDataSetTypeMessage: 'Type - {type}.')],
-                ['' => ['Type - bool.']],
+                ['' => ['Type - null.']],
             ],
             // Incorrect input
             'incorrect input' => [
@@ -998,7 +984,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author.sex' => [new In(['male', 'female'])]])],
-                ['author.sex' => ['This value is invalid.']],
+                ['author.sex' => ['This value is not in the list of acceptable values.']],
             ],
             [
                 ['value' => null],
@@ -1058,6 +1044,16 @@ final class NestedTest extends RuleTestCase
                 ],
                 ['value' => ['Property is not found.']],
             ],
+            [
+                new ObjectDataSet(
+                    new class () {
+                        private int $value = 7;
+                    },
+                    ReflectionProperty::IS_PUBLIC
+                ),
+                new Nested(['value' => new Required()]),
+                ['value' => ['Value cannot be blank.']],
+            ],
         ];
     }
 
@@ -1082,7 +1078,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author.sex' => [new In(['male', 'female'])]])],
-                [['This value is invalid.', ['author', 'sex']]],
+                [['This value is not in the list of acceptable values.', ['author', 'sex']]],
             ],
             [
                 '',
@@ -1151,7 +1147,7 @@ final class NestedTest extends RuleTestCase
      */
     public function testValidationFailedWithDetailedErrors(mixed $data, array $rules, array $errors): void
     {
-        $result = ValidatorFactory::make()->validate($data, $rules);
+        $result = (new Validator())->validate($data, $rules);
 
         $errorsData = array_map(
             static fn (Error $error) => [
@@ -1173,7 +1169,7 @@ final class NestedTest extends RuleTestCase
         new Nested([
             'data' => new Nested([
                 'title' => [new HasLength(max: 255)],
-                'active' => [new Boolean(), 'Not a rule'],
+                'active' => [new BooleanValue(), 'Not a rule'],
             ]),
         ]);
     }

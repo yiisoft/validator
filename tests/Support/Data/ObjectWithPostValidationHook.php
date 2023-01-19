@@ -16,9 +16,9 @@ final class ObjectWithPostValidationHook implements PostValidationHookInterface
         return null;
     }
 
-    public function getData(): mixed
+    public function getData(): ?array
     {
-        return [];
+        return null;
     }
 
     public function hasAttribute(string $attribute): bool

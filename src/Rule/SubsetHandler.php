@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Traversable;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
+/**
+ * A handler for {@see Subset} rule. Validates that the set of values is a subset of another set.
+ */
 final class SubsetHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
@@ -19,28 +21,19 @@ final class SubsetHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Subset::class, $rule);
         }
 
-        $result = new Result();
         if (!is_iterable($value)) {
-            return $result->addError($rule->getIterableMessage(), [
-                'attribute' => $context->getAttribute(),
+            return (new Result())->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
 
         if (!ArrayHelper::isSubset($value, $rule->getValues(), $rule->isStrict())) {
-            $values = $rule->getValues();
-            if ($values instanceof Traversable) {
-                $values = iterator_to_array($values);
-            }
-
-            $valuesString = '"' . implode('", "', $values) . '"';
-
-            $result->addError($rule->getSubsetMessage(), [
-                'attribute' => $context->getAttribute(),
-                'values' => $valuesString,
+            return (new Result())->addError($rule->getMessage(), [
+                'attribute' => $context->getTranslatedAttribute(),
             ]);
         }
 
-        return $result;
+        return new Result();
     }
 }

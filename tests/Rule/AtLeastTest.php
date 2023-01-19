@@ -12,6 +12,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\Data\AtLeastDto;
 
 final class AtLeastTest extends RuleTestCase
 {
@@ -110,6 +111,13 @@ final class AtLeastTest extends RuleTestCase
                 [new AtLeast(['attr2'])],
             ],
             [
+                new class () {
+                    private int $attr1 = 1;
+                    private $attr2 = null;
+                },
+                [new AtLeast(['attr1', 'attr2'])],
+            ],
+            [
                 ['attr1' => 1, 'attr2' => null],
                 [new AtLeast(['attr1', 'attr2'])],
             ],
@@ -152,6 +160,9 @@ final class AtLeastTest extends RuleTestCase
             [
                 ['obj' => ['attr1' => null, 'attr2' => 1]],
                 ['obj' => new AtLeast(['attr2'])],
+            ],
+            'class attribute' => [
+                new AtLeastDto(1),
             ],
         ];
     }
@@ -224,6 +235,11 @@ final class AtLeastTest extends RuleTestCase
                 ['data' => $class],
                 ['data' => new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attribute - {attribute}, min - {min}.')],
                 ['data' => ['Attribute - data, min - 2.']],
+            ],
+            'class attribute' => [
+                new AtLeastDto(),
+                null,
+                ['' => ['The data must have at least "1" filled attributes.']],
             ],
         ];
     }

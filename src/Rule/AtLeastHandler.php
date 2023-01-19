@@ -15,7 +15,9 @@ use function is_array;
 use function is_object;
 
 /**
- * Checks if at least {@see AtLeast::$min} of many attributes are filled.
+ * Validates that a minimum number of specified attributes are filled.
+ *
+ * @see AtLeast
  */
 final class AtLeastHandler implements RuleHandlerInterface
 {
@@ -25,11 +27,14 @@ final class AtLeastHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(AtLeast::class, $rule);
         }
 
+        /** @var mixed $value */
+        $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
+
         $result = new Result();
 
         if (!is_array($value) && !is_object($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -43,7 +48,7 @@ final class AtLeastHandler implements RuleHandlerInterface
 
         if ($filledCount < $rule->getMin()) {
             $result->addError($rule->getMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'min' => $rule->getMin(),
             ]);
         }

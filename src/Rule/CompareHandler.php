@@ -12,15 +12,14 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * Compares the specified value with another value.
  *
- * The value being compared with {@see Compare::$targetValue} or {@see Compare::$targetAttribute}, which is set
- * in the constructor.
- *
- * It supports different comparison operators, specified
- * via the {@see Compare::$operator}.
- *
- * The default comparison function is based on string values, which means the values
- * are compared byte by byte. When comparing numbers, make sure to change {@see Compare::$type} to
- * {@see Compare::TYPE_NUMBER} to enable numeric comparison.
+ * @see Compare
+ * @see Equal
+ * @see GreaterThan
+ * @see GreaterThanOrEqual
+ * @see LessThan
+ * @see LessThanOrEqual
+ * @see CompareTo
+ * @see NotEqual
  */
 final class CompareHandler implements RuleHandlerInterface
 {
@@ -33,7 +32,7 @@ final class CompareHandler implements RuleHandlerInterface
         $result = new Result();
         if ($value !== null && !is_scalar($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -43,7 +42,7 @@ final class CompareHandler implements RuleHandlerInterface
 
         if ($targetValue === null && $targetAttribute !== null) {
             /** @var mixed $targetValue */
-            $targetValue = $context->getDataSet()?->getAttributeValue($targetAttribute);
+            $targetValue = $context->getDataSet()->getAttributeValue($targetAttribute);
             if (!is_scalar($targetValue)) {
                 return $result->addError($rule->getIncorrectDataSetTypeMessage(), [
                     'type' => get_debug_type($targetValue),
@@ -56,7 +55,7 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         return $result->addError($rule->getMessage(), [
-            'attribute' => $context->getAttribute(),
+            'attribute' => $context->getTranslatedAttribute(),
             'targetValue' => $rule->getTargetValue(),
             'targetAttribute' => $rule->getTargetAttribute(),
             'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
@@ -67,12 +66,14 @@ final class CompareHandler implements RuleHandlerInterface
     /**
      * Compares two values with the specified operator.
      *
-     * @param string $operator The comparison operator.
+     * @param string $operator The comparison operator. One of `==`, `===`, `!=`, `!==`, `>`, `>=`, `<`, `<=`.
      * @param string $type The type of the values being compared.
+     * @psalm-param Compare::TYPE_* $type
+     *
      * @param mixed $value The value being compared.
      * @param mixed $targetValue Another value being compared.
      *
-     * @return bool Whether the comparison using the specified operator is true.
+     * @return bool Whether the result of comparison using the specified operator is true.
      */
     private function compareValues(string $operator, string $type, mixed $value, mixed $targetValue): bool
     {

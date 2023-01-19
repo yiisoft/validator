@@ -15,8 +15,7 @@ use function strlen;
 /**
  * Validates that the value is a valid HTTP or HTTPS URL.
  *
- * Note that this rule only checks if the URL scheme and host part are correct.
- * It does not check the remaining parts of a URL.
+ * @see Url
  */
 final class UrlHandler implements RuleHandlerInterface
 {
@@ -29,16 +28,16 @@ final class UrlHandler implements RuleHandlerInterface
         $result = new Result();
         if (!is_string($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
 
             return $result;
         }
 
-        // make sure the length is limited to avoid DOS attacks
+        // Make sure the length is limited to avoid DOS attacks.
         if (strlen($value) < 2000) {
-            if ($rule->isEnableIDN()) {
+            if ($rule->isIdnEnabled()) {
                 $value = $this->convertIdn($value);
             }
 
@@ -48,13 +47,22 @@ final class UrlHandler implements RuleHandlerInterface
         }
 
         $result->addError($rule->getMessage(), [
-            'attribute' => $context->getAttribute(),
+            'attribute' => $context->getTranslatedAttribute(),
             'value' => $value,
         ]);
 
         return $result;
     }
 
+    /**
+     * Encodes IDN domain name into its ASCII representation.
+     *
+     * @param string $idn IDN to convert.
+     *
+     * @return string Resulting ASCII string.
+     *
+     * @see idn_to_ascii()
+     */
     private function idnToAscii(string $idn): string
     {
         $result = idn_to_ascii($idn);
@@ -62,6 +70,14 @@ final class UrlHandler implements RuleHandlerInterface
         return $result === false ? '' : $result;
     }
 
+    /**
+     * Encodes either standalone IDN domain name or a domain name in a URL
+     * into its ASCII representation.
+     *
+     * @param string $value IDN or URL to convert.
+     *
+     * @return string Resulting ASCII string.
+     */
     private function convertIdn(string $value): string
     {
         if (!str_contains($value, '://')) {

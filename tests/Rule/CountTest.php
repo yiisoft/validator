@@ -15,6 +15,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\Data\CountDto;
 
 final class CountTest extends RuleTestCase
 {
@@ -87,6 +88,9 @@ final class CountTest extends RuleTestCase
                 ),
                 [new Count(min: 3)],
             ],
+            'class attribute' => [
+                new CountDto(7),
+            ],
         ];
     }
 
@@ -117,6 +121,7 @@ final class CountTest extends RuleTestCase
                 ['data' => ['Attribute - data, type - int.']],
             ],
 
+            [[1], new Count(3), ['' => ['This value must contain exactly 3 items.']]],
             [[1], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
             [[], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
             [[0, 0], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
@@ -207,6 +212,11 @@ final class CountTest extends RuleTestCase
                     ),
                 ],
                 ['data' => ['Exactly - 3, attribute - data, number - 4.']],
+            ],
+            'class attribute' => [
+                new CountDto(),
+                null,
+                ['' => ['This value must contain at least 2 items.']],
             ],
         ];
     }

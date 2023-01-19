@@ -7,12 +7,12 @@ namespace Yiisoft\Validator\Tests\DataSet;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Boolean;
+use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Tests\Support\DataSet\RulesProvidedDataSet;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
+use Yiisoft\Validator\Validator;
 
 final class DataSetUsageTest extends TestCase
 {
@@ -21,7 +21,7 @@ final class DataSetUsageTest extends TestCase
         return [
             [
                 ['bool' => true, 'int' => 41],
-                ['bool' => [new Boolean()], 'int' => [new Number()]],
+                ['bool' => [new BooleanValue()], 'int' => [new Number()]],
             ],
         ];
     }
@@ -32,7 +32,7 @@ final class DataSetUsageTest extends TestCase
     public function testArrayDataSetUsage(array $dataSet, array $rules): void
     {
         $dataObject = new ArrayDataSet($dataSet);
-        $result = ValidatorFactory::make()->validate($dataObject, $rules);
+        $result = (new Validator())->validate($dataObject, $rules);
 
         $this->assertTrue($result->isValid());
     }
@@ -42,7 +42,7 @@ final class DataSetUsageTest extends TestCase
         return [
             [
                 ['bool' => true, 'int' => 41],
-                ['bool' => [new Boolean()], 'int' => [new Number()]],
+                ['bool' => [new BooleanValue()], 'int' => [new Number()]],
             ],
         ];
     }
@@ -53,7 +53,7 @@ final class DataSetUsageTest extends TestCase
     public function testRulesProvidedDataSetUsage(array $dataSet, array $rules): void
     {
         $dataObject = new RulesProvidedDataSet($dataSet, $rules);
-        $result = ValidatorFactory::make()->validate($dataObject);
+        $result = (new Validator())->validate($dataObject);
 
         $this->assertTrue($result->isValid());
     }
@@ -65,10 +65,10 @@ final class DataSetUsageTest extends TestCase
             'int' => 41,
         ]);
         $rules = [
-            'bool' => [new Boolean()],
+            'bool' => [new BooleanValue()],
             'int' => [
-                new Number(asInteger: true),
-                new Number(asInteger: true, min: 44),
+                new Number(integerOnly: true),
+                new Number(integerOnly: true, min: 44),
                 static function ($value): Result {
                     $result = new Result();
                     if ($value !== 42) {
@@ -79,7 +79,7 @@ final class DataSetUsageTest extends TestCase
                 },
             ],
         ];
-        $result = ValidatorFactory::make()->validate($dataObject, $rules);
+        $result = (new Validator())->validate($dataObject, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertTrue($result->isAttributeValid('bool'));
@@ -94,10 +94,10 @@ final class DataSetUsageTest extends TestCase
                 'int' => 41,
             ],
             [
-                'bool' => [new Boolean()],
+                'bool' => [new BooleanValue()],
                 'int' => [
-                    new Number(asInteger: true),
-                    new Number(asInteger: true, min: 44),
+                    new Number(integerOnly: true),
+                    new Number(integerOnly: true, min: 44),
                     static function ($value): Result {
                         $result = new Result();
                         if ($value !== 42) {
@@ -109,7 +109,7 @@ final class DataSetUsageTest extends TestCase
                 ],
             ]
         );
-        $result = ValidatorFactory::make()->validate($dataObject);
+        $result = (new Validator())->validate($dataObject);
 
         $this->assertFalse($result->isValid());
         $this->assertTrue($result->isAttributeValid('bool'));
@@ -133,7 +133,7 @@ final class DataSetUsageTest extends TestCase
                 ],
             ]
         );
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate(
             $dataSet,
             [
@@ -163,7 +163,7 @@ final class DataSetUsageTest extends TestCase
                 ],
             ]
         );
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
         $result = $validator->validate(
             $dataSet,
             []

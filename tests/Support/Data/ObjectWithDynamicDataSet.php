@@ -19,7 +19,7 @@ final class ObjectWithDynamicDataSet implements DataSetInterface
         return $this->getData()[$attribute] ?? null;
     }
 
-    public function getData(): mixed
+    public function getData(): ?array
     {
         return ['name' => $this->name];
     }

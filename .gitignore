@@ -12,16 +12,15 @@ nbproject
 # windows thumbnail cache
 Thumbs.db
 
-# composer vendor dir
-/vendor
-
-/composer.lock
-
-# composer itself is not needed
-composer.phar
-
 # Mac DS_Store Files
 .DS_Store
+
+# composer vendor dir
+/vendor
+# composer lock file
+/composer.lock
+# composer itself is not needed
+composer.phar
 
 # phpunit itself is not needed
 phpunit.phar
@@ -29,5 +28,3 @@ phpunit.phar
 /phpunit.xml
 # phpunit cache
 .phpunit.result.cache
-
-

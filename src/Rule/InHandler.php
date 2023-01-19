@@ -11,7 +11,9 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
- * A handler for {@see In} rule.
+ * Validates that the value is one of the values provided.
+ *
+ * @see In
  */
 final class InHandler implements RuleHandlerInterface
 {
@@ -23,7 +25,7 @@ final class InHandler implements RuleHandlerInterface
 
         $result = new Result();
         if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getValues(), $rule->isStrict())) {
-            $result->addError($rule->getMessage(), ['attribute' => $context->getAttribute()]);
+            $result->addError($rule->getMessage(), ['attribute' => $context->getTranslatedAttribute()]);
         }
 
         return $result;

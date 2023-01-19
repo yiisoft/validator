@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule\Base;
 
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithCustomHandler;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
+use Yiisoft\Validator\Validator;
 
 trait DifferentRuleInHandlerTestTrait
 {
@@ -15,11 +15,11 @@ trait DifferentRuleInHandlerTestTrait
         [$ruleClassName, $ruleHandlerClassName] = $this->getDifferentRuleInHandlerItems();
 
         $rule = new RuleWithCustomHandler($ruleHandlerClassName);
-        $validator = ValidatorFactory::make();
+        $validator = new Validator();
 
         $this->expectException(UnexpectedRuleException::class);
         $this->expectExceptionMessage(
-            'Expected "' . $ruleClassName . '", but ' . RuleWithCustomHandler::class . ' given.'
+            'Expected "' . $ruleClassName . '", but "' . RuleWithCustomHandler::class . '" given.'
         );
         $validator->validate([], [$rule]);
     }

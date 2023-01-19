@@ -6,6 +6,9 @@ namespace Yiisoft\Validator\Tests\Helper;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Helper\RulesNormalizer;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 
 final class RulesNormalizerTest extends TestCase
@@ -58,6 +61,43 @@ final class RulesNormalizerTest extends TestCase
             foreach ($attributeRules as $rule) {
                 $result[$attributeName][] = $rule->getName();
             }
+        }
+
+        $this->assertSame($expected, $result);
+    }
+
+    public function dataNormalizeList(): array
+    {
+        return [
+            [
+                [],
+                [],
+            ],
+            [
+                ['callback'],
+                static fn () => new Result(),
+            ],
+            [
+                ['number'],
+                new Number(),
+            ],
+            [
+                ['number', 'callback'],
+                [new Number(), static fn () => new Result()],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataNormalizeList
+     */
+    public function testNormalizeList(array $expected, iterable|callable|RuleInterface $rules): void
+    {
+        $rules = RulesNormalizer::normalizeList($rules);
+
+        $result = [];
+        foreach ($rules as $rule) {
+            $result[] = $rule->getName();
         }
 
         $this->assertSame($expected, $result);

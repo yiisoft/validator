@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 /**
- * A main interface for rules to implement. A rule contains a set of constraint configuration to apply when validating
- * data. If you want to include a rule options in addition to a rule name during conversion to array, use extended
- * version of it - {@see RuleWithOptionsInterface}.
+ * A main interface for rules to implement. A rule contains a set of constraint configuration options to apply when
+ * validating data. If you want to include a rule options in addition to a rule name during conversion to array, use
+ * extended version of it - {@see RuleWithOptionsInterface}.
  */
 interface RuleInterface
 {
@@ -19,21 +19,20 @@ interface RuleInterface
      * All packages' rule names use class name written in camelCase, so for `AtLeast` rule the name will be `atLeast.
      * For custom rules you can choose different naming scheme because it doesn't affect logic in any way.
      *
-     * @see RulesDumper
-     *
      * @return string A rule name.
      */
     public function getName(): string;
 
     /**
-     * A matching handler class name used for processing this rule.
+     * A matching handler name or an instance used for processing this rule.
      *
-     * While not required, it's recommended to use rule class name with "Handler" suffix, so for `AtLeast` rule class
-     * name the handler class name will be `AtLeastHandler` and so on.
+     * While not required, for naming of handlers' classes it's recommended to use a rule class name with "Handler"
+     * suffix, so for `AtLeast` rule class name the handler class name will be `AtLeastHandler` and so on.
      *
      * All packages handlers are stored within the same namespace as rules, but this is not a strict requirement.
      *
-     * @return string A rule handler class name.
+     * @return RuleHandlerInterface|string A rule handler name (for example `my-handler`) or an instance (for example
+     * `new MyRuleHandler()`).
      */
-    public function getHandlerClassName(): string;
+    public function getHandler(): string|RuleHandlerInterface;
 }

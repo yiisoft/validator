@@ -15,9 +15,7 @@ use function is_bool;
 /**
  * Validates that the value is a number.
  *
- * The format of the number must match the regular expression specified in {@see Number::$integerPattern}
- * or {@see Number::$numberPattern}. Optionally, you may configure the {@see Number::min()} and {@see Number::max()}
- * to ensure the number is within certain range.
+ * @see Number
  */
 final class NumberHandler implements RuleHandlerInterface
 {
@@ -31,30 +29,30 @@ final class NumberHandler implements RuleHandlerInterface
 
         if (is_bool($value) || !is_scalar($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
 
             return $result;
         }
 
-        $pattern = $rule->isAsInteger() ? $rule->getIntegerPattern() : $rule->getNumberPattern();
+        $pattern = $rule->isIntegerOnly() ? $rule->getIntegerPattern() : $rule->getNumberPattern();
 
         if (!preg_match($pattern, NumericHelper::normalize($value))) {
             $result->addError($rule->getNotNumberMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'value' => $value,
             ]);
         } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
             $result->addError($rule->getTooSmallMessage(), [
                 'min' => $rule->getMin(),
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'value' => $value,
             ]);
         } elseif ($rule->getMax() !== null && $value > $rule->getMax()) {
             $result->addError($rule->getTooBigMessage(), [
                 'max' => $rule->getMax(),
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'value' => $value,
             ]);
         }

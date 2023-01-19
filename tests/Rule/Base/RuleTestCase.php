@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule\Base;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Tests\Support\ValidatorFactory;
+use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\Validator;
 
 abstract class RuleTestCase extends TestCase
 {
@@ -14,11 +15,11 @@ abstract class RuleTestCase extends TestCase
     /**
      * @dataProvider dataValidationPassed
      */
-    public function testValidationPassed(mixed $data, array $rules): void
+    public function testValidationPassed(mixed $data, ?array $rules = null): void
     {
-        $result = ValidatorFactory::make()->validate($data, $rules);
+        $result = (new Validator())->validate($data, $rules);
 
-        $this->assertTrue($result->isValid());
+        $this->assertSame([], $result->getErrorMessagesIndexedByPath());
     }
 
     abstract public function dataValidationFailed(): array;
@@ -26,9 +27,12 @@ abstract class RuleTestCase extends TestCase
     /**
      * @dataProvider dataValidationFailed
      */
-    public function testValidationFailed(mixed $data, array|null $rules, array $errorMessagesIndexedByPath): void
-    {
-        $result = ValidatorFactory::make()->validate($data, $rules);
+    public function testValidationFailed(
+        mixed $data,
+        array|RuleInterface|null $rules,
+        array $errorMessagesIndexedByPath
+    ): void {
+        $result = (new Validator())->validate($data, $rules);
 
         $this->assertFalse($result->isValid());
         $this->assertSame($errorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());

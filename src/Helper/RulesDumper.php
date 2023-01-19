@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator;
+namespace Yiisoft\Validator\Helper;
 
 use InvalidArgumentException;
+use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 
 use function is_int;
 use function is_string;
@@ -44,17 +46,30 @@ final class RulesDumper
      *    ],
      * ]
      * ```
+     *
+     * @param iterable $rules Arrays of rule objects indexed by attributes.
+     *
+     * @return array Array of rule names and corresponding settings indexed by attributes.
      */
-    public function asArray(iterable $rules): array
+    public static function asArray(iterable $rules): array
     {
-        return $this->fetchOptions($rules);
+        return self::fetchOptions($rules);
     }
 
-    private function fetchOptions(iterable $rules): array
+    /**
+     * Converts rule objects to arrays of rule names and corresponding settings.
+     *
+     * @param iterable $rules Arrays of rule objects indexed by attributes.
+     *
+     * @return array Array of rule names and corresponding settings indexed by attributes.
+     */
+    private static function fetchOptions(iterable $rules): array
     {
         $result = [];
-        /** @var mixed $attribute */
-        /** @var mixed $rule */
+        /**
+         * @var mixed $attribute
+         * @var mixed $rule
+         */
         foreach ($rules as $attribute => $rule) {
             if (!is_int($attribute) && !is_string($attribute)) {
                 $message = sprintf(
@@ -66,7 +81,7 @@ final class RulesDumper
             }
 
             if (is_iterable($rule)) {
-                $options = $this->fetchOptions($rule);
+                $options = self::fetchOptions($rule);
             } elseif ($rule instanceof RuleWithOptionsInterface) {
                 $options = array_merge([$rule->getName()], $rule->getOptions());
             } elseif ($rule instanceof RuleInterface) {

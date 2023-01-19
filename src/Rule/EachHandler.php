@@ -13,7 +13,7 @@ use function is_int;
 use function is_string;
 
 /**
- * Validates an array by checking each of its elements against a set of rules.
+ * A handler for {@see Each} rule. Validates each element of an iterable using a set of rules.
  */
 final class EachHandler implements RuleHandlerInterface
 {
@@ -23,12 +23,15 @@ final class EachHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Each::class, $rule);
         }
 
+        /** @var mixed $value */
+        $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
+
         $rules = $rule->getRules();
 
         $result = new Result();
         if (!is_iterable($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getAttribute(),
+                'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
 
@@ -39,7 +42,7 @@ final class EachHandler implements RuleHandlerInterface
         foreach ($value as $index => $item) {
             if (!is_int($index) && !is_string($index)) {
                 $result->addError($rule->getIncorrectInputKeyMessage(), [
-                    'attribute' => $context->getAttribute(),
+                    'attribute' => $context->getTranslatedAttribute(),
                     'type' => get_debug_type($value),
                 ]);
 
