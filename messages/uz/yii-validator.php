@@ -28,7 +28,7 @@ return [
     'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => 'Qiymat {min} ta belgidan iborat boʻlishi kerak',
     'This value is invalid.' => 'Qiymat notoʻgʻri.',
     'Must be a valid IP address.' => 'Toʻgʻri IP manzil boʻlishi kerak.',
-    'Must not be an IPv4 address.' => 'IPv6 boʻlmasligi kerak.',
+    'Must not be an IPv4 address.' => 'IPv4 boʻlmasligi kerak.',
     'Must not be an IPv6 address.' => 'IPv6 boʻlmasligi kerak.',
     'Contains wrong subnet mask.' => 'Notoʻgʻri quyi tarmoq(subnet) maskasi.',
     'Must be an IP address with specified subnet.' => 'Quyi tarmoq(subnet)ga ega IP manzil boʻlishi kerak.',
