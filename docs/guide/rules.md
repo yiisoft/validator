@@ -1,4 +1,4 @@
-# Rules
+# Built-in rules
 
 ## `Required` - requiring values
 
