@@ -29,7 +29,7 @@ use Yiisoft\Validator\Rule\Regex;
 
 final class UsernameRuleSet extends Composite
 {
-    public function getRules(): iterable
+    public function getRules(): array
     {
         return [
             new HasLength(min: 2, max: 20),
@@ -55,7 +55,7 @@ use Yiisoft\Validator\Rule\Number;
 
 final class CoordinatesRuleSet extends Composite
 {
-    public function getRules(): iterable
+    public function getRules(): array
     {
         return [
             'latitude' => new Number(min: -90, max: 90),
@@ -73,7 +73,7 @@ use Yiisoft\Validator\Rule\Number;
 
 final class ChartCoordinateRuleSet extends Composite
 {
-    public function getRules(): iterable
+    public function getRules(): array
     {
         return [new Number(min: -10, max: 10)];
     }

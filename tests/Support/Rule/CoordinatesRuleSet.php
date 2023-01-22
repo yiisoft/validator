@@ -9,7 +9,7 @@ use Yiisoft\Validator\Rule\Number;
 
 final class CoordinatesRuleSet extends Composite
 {
-    public function getRules(): iterable
+    public function getRules(): array
     {
         return [
             'latitude' => new Number(min: -90, max: 90),
