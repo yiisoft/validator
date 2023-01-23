@@ -8,5 +8,5 @@ needed. For more details see "Skipping empty values" section.
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\EmptyCriteria\WhenNull;
 
-$rules = [new Required(emptyCallback: new WhenNull())];
+new Required(emptyCallback: new WhenNull());
 ```
