@@ -50,7 +50,7 @@ return [
     'Value is invalid.' => 'Qiymat notoʻgʻri.',
     'Value cannot be blank.' => 'Qiymat boʻsh boʻlishi mumkin emas.',
     'Value not passed.' => 'Qiymat oʻtmadi.',
-    'Value must be iterable.' => 'Qiymat iteratsiyalangan boʻlishi kerak',
+    'Value must be iterable.' => 'Qiymat takrorlanadigan boʻlishi kerak',
     'This value is not a subset of acceptable values.' => 'Bu qiymat qabul qilinadigan qiymatlar to\'plami emas.',
     'This value is not a valid URL.' => 'Qiymat to\'g\'ri havola emas.',
 ];
