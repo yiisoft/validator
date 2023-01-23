@@ -18,7 +18,7 @@ return [
     'This value must be an array or implement \Countable interface.' => 'Qiymat massiv yoki \Countable interfeysidan meros olingan boʻlishi kerak.',
     'This value must contain at least {min, number} {min, plural, one{item} other{items}}.' => 'Qiymat kamida {min, number} ta {min, plural, one{element} other{element}}dan iborat boʻlishi kerak.',
     'This value must contain at most {max, number} {max, plural, one{item} other{items}}.' => 'Qiymat koʻpi bilan {max, number} ta {max, plural, one{element} other{element}}dan iborat boʻlishi kerak.',
-    'This value must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => 'Qiymat aynan {exactly} ta elementdan iborat boʻlishi kerak.',
+    'This value must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => 'Qiymat aynan {exactly, number} ta {exactly, plural, one{element} other{element}}dan iborat boʻlishi kerak.',
     'Value must be array or iterable.' => 'Qiymat massiv yoki takrorlanadigan(iterable) psevdo-tur boʻlishi kerak',
     'Every iterable key must have an integer or a string type.' => 'Kalit integer yoki string turida boʻlishi kerak.',
     'The value must have a string type.' => 'Qiymat satr turida boʻlishi kerak.',
