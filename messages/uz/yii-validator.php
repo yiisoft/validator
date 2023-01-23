@@ -52,5 +52,5 @@ return [
     'Value not passed.' => 'Qiymat oʻtmadi.',
     'Value must be iterable.' => 'Qiymat takrorlanadigan boʻlishi kerak',
     'This value is not a subset of acceptable values.' => 'Bu qiymat ruxsat etilgan qiymatlarning quyi toʻplami emas.',
-    'This value is not a valid URL.' => 'Qiymat to\'g\'ri havola emas.',
+    'This value is not a valid URL.' => 'Qiymat yaroqli havola emas.',
 ];
