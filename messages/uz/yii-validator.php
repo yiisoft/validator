@@ -43,7 +43,7 @@ return [
     'Property "{path}" is not found.' => '{path} xususiyati topilmadi.',
     'The allowed types are integer, float and string.' => 'Ruxsat berilgan turlar: integer, float va string.',
     'Value must be an integer.' => 'Qiymat butun son boʻlishi kerak.',
-    'Value must be a number.' => 'Qiymat haqiqiy raqam boʻlishi kerak.',
+    'Value must be a number.' => 'Qiymat raqam boʻlishi kerak.',
     'Value must be no less than {min}.' => 'Qiymat {min} dan kichik boʻlmasligi kerak.',
     'Value must be no greater than {max}.' => 'Qiymat {max} dan katta boʻlmasligi kerak.',
     'Value should be string.' => 'Qiymat satr boʻlishi kerak',
