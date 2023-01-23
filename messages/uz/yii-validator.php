@@ -22,7 +22,7 @@ return [
     'Value must be array or iterable.' => 'Qiymat massiv yoki takrorlanadigan(iterable) psevdo-tur boʻlishi kerak',
     'Every iterable key must have an integer or a string type.' => 'Kalit integer yoki string turida boʻlishi kerak.',
     'The value must have a string type.' => 'Qiymat satr turida boʻlishi kerak.',
-    'This value is not a valid email address.' => 'Qiymat notoʻgʻri email.',
+    'This value is not a valid email address.' => 'Qiymat yaroqli elektron pochta manzili emas.',
     'This value must be a string.' => 'Qiymat satr boʻlishi kerak.',
     'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.' => 'Qiymat kamida {min} ta belgidan iborat boʻlishi kerak.',
     'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.' => 'Qiymat koʻpi bilan {max} ta belgidan iborat boʻlishi kerak.',
