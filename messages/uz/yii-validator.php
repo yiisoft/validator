@@ -31,7 +31,7 @@ return [
     'Must be a valid IP address.' => 'Toʻgʻri IP manzil boʻlishi kerak.',
     'Must not be an IPv4 address.' => 'IPv4 manzil boʻlmasligi kerak.',
     'Must not be an IPv6 address.' => 'IPv6 manzil boʻlmasligi kerak.',
-    'Contains wrong subnet mask.' => 'Notoʻgʻri quyi tarmoq(subnet) maskasi.',
+    'Contains wrong subnet mask.' => 'Notoʻgʻri quyi tarmoq(subnet) niqobini o'z ichiga olgan.',
     'Must be an IP address with specified subnet.' => 'Quyi tarmoq(subnet)ga ega IP manzil boʻlishi kerak.',
     'Must not be a subnet.' => 'Quyi tarmoq(subnet) boʻlmasligi kerak.',
     'Is not in the allowed range.' => 'Ruxsat etilgan manzillar qatoriga kirmaydi.',
