@@ -14,7 +14,7 @@ return [
     'Value must be greater than "{targetValueOrAttribute}".' => 'Qiymat {targetValueOrAttribute} dan katta boʻlishi kerak.',
     'Value must be greater than or equal to "{targetValueOrAttribute}".' => 'Qiymat {targetValueOrAttribute} dan katta yoki teng boʻlishi kerak.',
     'Value must be less than "{targetValueOrAttribute}".' => 'Qiymat {targetValueOrAttribute} dan kichik boʻlishi kerak.',
-    'Value must be less than or equal to "{targetValueOrAttribute}".' => 'Qiymat {targetValueOrAttribute} dan kichik yoki teng boʻlishi kerak.',
+    'Value must be less than or equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}" dan kichik yoki teng boʻlishi kerak.',
     'This value must be an array or implement \Countable interface.' => 'Qiymat massiv yoki \Countable interfeysidan meros olingan boʻlishi kerak.',
     'This value must contain at least {min, number} {min, plural, one{item} other{items}}.' => 'Kamida {min} ta elementdan iborat boʻlishi kerak.',
     'This value must contain at most {max, number} {max, plural, one{item} other{items}}.' => 'Koʻpi bilan {max} ta element boʻlishi kerak.',
