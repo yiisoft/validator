@@ -1,63 +1,15 @@
-#### Using attributes
+# Using attributes
 
-##### Basic usage
+## Basic usage
 
 Common flow is the same as you would use usual classes:
 
 1. Declare property.
 2. Add rules to it.
 
-```php
-use Yiisoft\Validator\Rule\Count;
-use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Nested;
-use Yiisoft\Validator\Rule\Number;
-
-final class Chart
-{
-    #[Each([
-        new Nested(Point::class),
-    ])]
-    private array $points;
-}
-
-final class Point
-{
-    #[Nested(Coordinates::class)]
-    private $coordinates;
-    #[Count(exactly: 3)]
-    #[Each([
-        new Number(min: 0, max: 255),
-    ])]
-    private array $rgb;
-}
-
-final class Coordinates
-{
-    #[Number(min: -10, max: 10)]
-    private int $x;
-    #[Number(min: -10, max: 10)]
-    private int $y;
-}
-```
-
-Here are some technical details:
-
-- In case of a flat array `Point::$rgb`, a property type `array` needs to be declared.
-
 Pass object directly to `validate()` method:
 
-```php
-use Yiisoft\Validator\ValidatorInterface;
-
-// Usually obtained from container
-$validator = $container->get(ValidatorInterface::class);
-
-$coordinates = new Coordinates();
-$errors = $validator->validate($coordinates)->getErrorMessagesIndexedByPath();
-```
-
-##### Traits
+## Traits
 
 Traits are supported too:
 
@@ -76,7 +28,7 @@ final class Post
 }
 ```
 
-##### Callbacks
+## Callbacks
 
 `Callback::$callback` property is not supported, also you can't use `callable` type with attributes. However,
 `Callback::$method` can be set instead:
@@ -111,9 +63,9 @@ final class Author
 
 Note that the method must exist and have public and static modifiers.
 
-##### Limitations
+## Limitations
 
-###### Nested attributes
+### Nested attributes
 
 PHP 8.0 supports attributes, but nested declaration is allowed only in PHP 8.1 and above.
 
@@ -170,7 +122,7 @@ final class Color
 
 ```
 
-###### Function / method calls
+### Function / method calls
 
 You can't use a function / method call result with attributes. This problem can be overcome either with custom rule or
 `Callback::$method` property. An example of custom rule:
@@ -218,7 +170,7 @@ final class Coordinates
 }
 ```
 
-###### Passing instances
+### Passing instances
 
 If you have PHP >= 8.1, you can utilize passing instances in attributes' scope. Otherwise, again fallback to custom
 rules approach described above.
