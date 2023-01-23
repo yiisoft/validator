@@ -38,7 +38,7 @@ return [
     'The value must be "{true}".' => 'Qiymat «{true}» boʻlishi kerak.',
     'The value is not JSON.' => 'Qiymat JSON holatida emas.',
     'Nested rule without rules can be used for objects only.' => 'Qoidalarga ega boʻlmagan Nested qoidasi faqat obyektlarga ishlatilishi mumkin.',
-    'An object data set data can only have an array or an object type.' => 'Maʻlumotlar toʻplami qiymatlari massiv yoki obyekt boʻlishi kerak.',
+    'An object data set data can only have an array or an object type.' => 'Obyekt ma\'lumotlari massiv yoki obyekt boʻlishi kerak.',
     'The value must have an array or an object type.' => 'Qiymat massiv yoki obyekt boʻlishi kerak.',
     'Property "{path}" is not found.' => '{path} xususiyati topilmadi.',
     'The allowed types are integer, float and string.' => 'Ruxsat berilgan turlar: integer, float va string.',
