@@ -34,7 +34,7 @@ return [
     'Contains wrong subnet mask.' => 'Notoʻgʻri quyi tarmoq(subnet) maskasi.',
     'Must be an IP address with specified subnet.' => 'Quyi tarmoq(subnet)ga ega IP manzil boʻlishi kerak.',
     'Must not be a subnet.' => 'Quyi tarmoq(subnet) boʻlmasligi kerak.',
-    'Is not in the allowed range.' => 'Qiymat ruxsat berilgan oraliqda emas.',
+    'Is not in the allowed range.' => 'Ruxsat etilgan manzillar qatoriga kirmaydi.',
     'The value must be "{true}".' => 'Qiymat «{true}» boʻlishi kerak.',
     'The value is not JSON.' => 'Qiymat JSON holatida emas.',
     'Nested rule without rules can be used for objects only.' => 'Qoidalarga ega boʻlmagan Nested qoidasi faqat obyektlarga ishlatilishi mumkin.',
