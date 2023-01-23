@@ -6,7 +6,7 @@ return [
     'The data must have at least "{min}" filled attributes.' => 'Kamida {min} ta atributlar toʻldirilgan boʻlishi kerak.',
     'Value must be an array or an object.' => 'Qiymat massiv yoki obyekt boʻlishi kerak.',
     'The allowed types are integer, float, string, boolean. {type} given.' => 'Ruxsat berilgan turlar: integer, float, string, boolean va null. Bu qiymat turi {type}',
-    'Value must be either "{true}" or "{false}".' => 'Qiymat «{true}» yoki «{false}» boʻlishi kerak.',
+    'Value must be either "{true}" or "{false}".' => 'Qiymat "{true}" yoki "{false}" boʻlishi kerak.',
     'The allowed types are integer, float, string, boolean and null.' => 'Ruxsat berilgan turlar: integer, float, string, boolean va null.',
     'The attribute value returned from a custom data set must have a scalar type.' => 'Ma\'lumotlar to\'plamidan olingan qiymat skalyar turdagi bo\'lishi kerak.',
     'Value must be equal to "{targetValueOrAttribute}".' => 'Qiymat «{targetValueOrAttribute}»ga teng boʻlishi kerak.',
