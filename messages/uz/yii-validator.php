@@ -24,7 +24,7 @@ return [
     'The value must have a string type.' => 'Qiymat satr turida boʻlishi kerak.',
     'This value is not a valid email address.' => 'Qiymat yaroqli elektron pochta manzili emas.',
     'This value must be a string.' => 'Qiymat satr boʻlishi kerak.',
-    'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.' => 'Qiymat kamida {min} ta belgidan iborat boʻlishi kerak.',
+    'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.' => 'Qiymat kamida {min, number} ta {min, plural, one{belgi} other{belgi}}dan iborat boʻlishi kerak.',
     'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.' => 'Qiymat koʻpi bilan {max} ta belgidan iborat boʻlishi kerak.',
     'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => 'Qiymat {min} ta belgidan iborat boʻlishi kerak',
     'This value is not in the list of acceptable values.' => 'Bu qiymat qabul qilinadigan qiymatlar ro\'yxatida yo\'q.',
