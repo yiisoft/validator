@@ -62,6 +62,7 @@ Some rules also have guides in addition to PHPDoc:
 - [Composite](built-in-rules-composite.md)
 - [Each](built-in-rules-each.md)
 - [Nested](built-in-rules-nested.md)
+- [Required](built-in-rules-required.md)
 - [StopOnError](built-in-rules-stop-on-error.md)
 
 ## Missing rules

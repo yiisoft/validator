@@ -223,7 +223,8 @@ $rule = new Required(
 );
 ```
 
-It's also possible to set it globally for all rules at the handler level via `RequiredHandler::$defaultEmptyCriteria`.
+It's also possible to set it globally for all rules of this type at the handler level via 
+`RequiredHandler::$defaultEmptyCriteria`.
 
 ## `when`
 
