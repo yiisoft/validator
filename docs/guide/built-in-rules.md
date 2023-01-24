@@ -63,3 +63,11 @@ Some rules also have guides in addition to PHPDoc:
 - [Each](built-in-rules-each.md)
 - [Nested](built-in-rules-nested.md)
 - [StopOnError](built-in-rules-stop-on-error.md)
+
+## Missing rules
+
+Can't find a rule? Feel free to submit an issue / PR, so it can be included in the package after review. Another option,
+if it's less generic, is to search for [an extension] first and [create a custom rule] if nothing was found.
+
+[an extension]:
+[create a custom rule]:

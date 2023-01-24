@@ -45,7 +45,7 @@ final class UserDto
 An active scenario for current validation is determined by a dedicated validation context parameter:
 
 ```php
-$context = new ValidationContext([On::SCENARIO_PARAMETER => $scenario]);
+$context = new ValidationContext([On::SCENARIO_PARAMETER => 'signup']);
 $result = (new Validator())->validate($userDto, context: $context));
 ```
 

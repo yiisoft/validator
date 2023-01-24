@@ -56,6 +56,7 @@ new Callback(
 Below is the example verifying that a value is a valid [YAML] string (additionally requires `yaml` PHP extension):
 
 ```php
+use Exception;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 
@@ -69,7 +70,7 @@ new Callback(
 
         try {
             $data = yaml_parse($value);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return (new Result())->addError($notYamlMessage);
         }
 
@@ -134,7 +135,7 @@ $rules = [
 
 #### Replacing boilerplate code with separate rules and `when`
 
-However some cases of using validation context can lead to boilerplate code:
+However, some cases of using validation context can lead to boilerplate code:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -151,8 +152,8 @@ static function (mixed $value, Callback $rule, ValidationContext $context): Resu
         return (new Result())->addError('Spouse age is required.');
     }
     
-    if (!is_numeric($spouseAge)) {
-        return (new Result())->addError('Spouse age must be a number.');
+    if (!is_int($spouseAge)) {
+        return (new Result())->addError('Spouse age must be an integer.');
     }
     
     if ($spouseAge < 18 || $spouseAge > 100) {
@@ -177,7 +178,7 @@ $rules = [
         integerOnly: true,
         min: 18,
         max: 100,
-        when: static function (mixed $value, ValidationContext $context): {
+        when: static function (mixed $value, ValidationContext $context): bool {
             return $context->getDataSet()->getAttributeValue('married') === true;
         },
     ),
@@ -191,6 +192,7 @@ $rules = [
 When using as PHP attribute, set an object's method as a callback instead:
 
 ```php
+use Exception;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 
@@ -211,7 +213,7 @@ final class Config {
 
         try {
             $data = yaml_parse($value);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return (new Result())->addError($notYamlMessage);
         }
         
@@ -235,6 +237,7 @@ limitations (a callback can't be inside PHP attribute).
 It's also possible to check the object as a whole:
 
 ```php
+use Exception;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 
@@ -255,7 +258,7 @@ final class Config {
 
         try {
             $data = yaml_parse($this->yaml);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return (new Result())->addError($notYamlMessage);
         }
         
@@ -275,6 +278,7 @@ Note using property value (`$this->yaml`) instead of method argument (`$value`).
 A classes implementing `__invoke()` can be used as a callable too:
 
 ```php
+use Exception;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\ValidationContext;
@@ -291,7 +295,7 @@ final class YamlCallback
 
         try {
             $data = yaml_parse($value);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return (new Result())->addError($notYamlMessage);
         }
         
@@ -322,6 +326,7 @@ When using with validator and default `Callback` rule settings, a rule declarati
 callable is enough. It will be automatically normalized before validation:
 
 ```php
+use Exception;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Validator;
 
@@ -336,7 +341,7 @@ $rules = [
 
         try {
             $data = yaml_parse($value);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return (new Result())->addError($notYamlMessage);
         }
 
@@ -353,6 +358,7 @@ $result = (new Validator())->validate($data, $rules);
 Or it can be set within an array of other rules:
 
 ```php
+use Exception;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
@@ -370,7 +376,7 @@ $rules = [
         
             try {
                 $data = yaml_parse($value);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return (new Result())->addError($notYamlMessage);
             }
         
