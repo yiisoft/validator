@@ -242,6 +242,191 @@ So, to sum up:
 
 As for the data, default values set in the child class take precedence.
 
+## Adding attributes support to custom rules
+
+In order for rules to be attached to DTO properties or the whole DTO - the `Attribute` attribute must be added to the 
+custom class. And in order for rules to be fetched from attributes, they must implement the `RuleInterface`.
+
+Example for `Composite`:
+
+```php
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+final class RgbColorRuleSet extends Composite
+{
+    public function getRules(): array
+    {
+        return [
+            new Count(exactly: 3),
+            new Each([new Number(integerOnly: true, min: 0, max: 255)])
+        ];
+    }
+}
+```
+
+Example for custom rule:
+
+```php
+use Yiisoft\Validator\RuleInterface;
+
+final class Yaml implements RuleInterface 
+{  
+    public function __construct(
+        public readonly string $incorrectInputMessage = 'Value must be a string. {type} given.',        
+        public readonly string $message = 'The value is not a valid YAML.',          
+    ) {  
+    }
+  
+    public function getName(): string  
+    {  
+        return 'yaml';  
+    }  
+  
+    public function getHandler(): string  
+    {  
+        return YamlHandler::class;  
+    }  
+}
+```
+
+To allow attaching to the class, modify attribute definition like so:
+
+```php
+use Attribute;
+use Yiisoft\Validator\RuleInterface;
+
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+final class MyCustomRule implements RuleInterface 
+{
+    // ...
+}
+```
+
+## Limitations and workarounds
+
+### Instances
+
+Passing instances in attributes' scope is only possible since PHP 8.1. That means using attributes for complex rules, such as 
+`Composite`, `Each` and `Nested` or rules taking instances as arguments, with PHP 8.0 can be problematic.
+
+The first workaround is to upgrade to PHP 8.1 - this is not that hard as upgrading the major version. Tools like 
+[Rector] can ease the process of upgrading the code base by automating routine tasks.
+
+If this is not an option, use the other ways of providing rules - via rules providers, for example:
+
+```php
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rule\Url;
+use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\Validator;
+
+final class Post
+{
+    public function __construct(
+        private string $title,
+        private Author|null $author = null,
+        private array $files = [],
+    ) {  
+    } 
+}
+
+final class Author
+{        
+    public function __construct(
+        private string $name, 
+        private int $age,
+    ) {  
+    } 
+}
+
+final class File
+{
+    private string $url;
+}
+
+final class PostRulesProvider implements RulesProviderInterface
+{
+    public function getRules(): array
+    {
+        return [
+            new Nested([
+                'title' => new HasLength(min:1, max: 255),
+                'author' => [
+                    'name' => [
+                        new Required(),
+                        new HasLength(min: 1, max: 50),
+                    ],
+                    'age' => new Number(integerOnly: true , min: 18, max: 100),
+                ],
+                'files.*.url' => new Url(),
+            ]),
+        ];
+    }
+}
+
+$post = new Post(title: 'Hello, world!');
+$postRulesProvider = new PostRulesProvider();
+$validator = (new Validator())->validate($post, $postRulesProvider);
+```
+
+For rules without relations, instead of using `Composite` directly - create a child class extending from it and put the 
+rules there. Don't forget to add the attribute support.
+
+```php
+use Attribute;
+use Yiisoft\Validator\Rule\Composite;
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Validator;
+
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+final class RgbColorRuleSet extends Composite
+{
+    public function getRules(): array
+    {
+        return [
+            new Count(exactly: 3),
+            new Each([new Number(integerOnly: true, min: 0, max: 255)])
+        ];
+    }
+}
+
+final class User
+{
+    public function __construct(
+        private string $name,
+        #[RgbColorRuleSet]
+        private array $avatarBackgroundColor;
+    ) {  
+    } 
+}
+```
+
+The `Nested` rule can be used with no arguments, see this [example] above.
+
+### Callables
+
+An attempt to use callables within an attribute's scope will cause the error. This means using [when] for [conditional 
+validation] or `callback` argument for `Callback` rule will not work. 
+
+The workarounds are:
+
+- `Composite` or rules provider described in [Instances] section will also fit here.
+- Create a [custom rule].
+- For `Callback` rule specifically there is possibility to replace a callback with a [method reference].
+
+### Function / method calls
+
+Both function and method calls are not supported within an attribute's scope. If the intent is to call a function / 
+method for validation - use a `Callback` rule with [method reference]. Otherwise, the remaining options are:
+
+- Use `Composite` or rules provider described in [Instances] section.
+- Create a [custom rule].
+
 ## Using rules
 
 Well, the rules are configured. What's next? We can either:
@@ -410,3 +595,4 @@ $options = RulesDumper::asArray($rules);
 [DTO]: https://en.wikipedia.org/wiki/Data_transfer_object
 [constructor property promotion]: https://www.php.net/manual/en/language.oop5.decon.php#language.oop5.decon.constructor.promotion
 [readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[Rector]: https://github.com/rectorphp/rector
