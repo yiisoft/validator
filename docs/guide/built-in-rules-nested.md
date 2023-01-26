@@ -370,7 +370,7 @@ $errors = $result->getErrorMessagesIndexedByPath();
 
 - For more info about different ways of configuring rules via PHP attributes, please refer to [Configuring rules via PHP
 attributes] section. 
-- For more info about possible data / rules combinations passed for validation please refer to "Using validator" 
+- For more info about possible data / rules combinations passed for validation please refer to [Using validator] 
 section. 
 
 ### Using keys containing separator / shortcut
@@ -446,4 +446,5 @@ $data = [
 
 [Result]: result.md
 [Basic usage]: #basic-usage-one-to-one-relation
-[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md 
+[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md
+[Using validator]: using-validator.md
