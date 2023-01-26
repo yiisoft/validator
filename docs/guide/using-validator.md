@@ -102,8 +102,7 @@ $person = new Person(name: 'John', age: 17, email: 'john@example.com', phone: nu
 $result = (new Validator())->validate($person);
 ```
 
-> **Note:** `readonly` properties are supported only starting from PHP 8.1. For versions below that use a getter
-> instead.
+> **Note:** `readonly` properties are supported only starting from PHP 8.1.
 
 > **Note:** Use `Nested` rule to validate related objects and `Each` rule to validate multiple objects.
 
