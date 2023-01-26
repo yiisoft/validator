@@ -1,8 +1,9 @@
 # Configuring rules via PHP attributes
 
-[Attributes] feature introduced in PHP 8 allowed to add an alternative way of configuring rules to this package. When 
-entities / models with their relations are represented as [DTO] classes, attributes make possible to use them for 
-providing rules.
+[Attributes] feature introduced in PHP 8 allowed to add an alternative way of configuring rules to this package. When
+entities / models with their relations are represented as [DTO] classes, attributes make possible to use such classes 
+for providing rules. The rules are defined near the properties themselves which some can find more convenient in terms
+of perception.
 
 ## Configuring for a single entity / model
 
