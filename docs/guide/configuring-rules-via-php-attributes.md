@@ -27,6 +27,7 @@ use Yiisoft\Validator\Rule\Required;
 the PHP attributes equivalent will be:
 
 ```php
+use JetBrains\PhpStorm\Deprecated;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -37,6 +38,8 @@ final class User
         // Multiple attributes.
         #[Required]
         #[HasLength(min: 1, max: 50)]
+        // Can be combined with other attributes not related with rules.
+        #[Deprecated]
         private readonly string $name,
         // Single attribute.
         #[Number(integerOnly: true, min: 18, max: 100)]
@@ -186,7 +189,7 @@ final class WikiArticle
 Well, the rules are configured. What's next? We can either:
 
 - Pass them for validation right away.
-- Filter properties for parsing rules first.
+- Tune parsing of rules (skippable properties, using cache).
 - Use them for something else (e.g. for exporting their options).
 
 Let's use a blog post again for demonstration, but a slightly shortened version:
@@ -260,13 +263,43 @@ $result = (new Validator())->validate($data, Post::class);
 
 The data doesn't have to be within array, the goal of this snippet is to show that is isolated from the rules.
 
-### Attribute rules provider
+### Tuning parsing of rules
 
-To extract rules manually, use `AttributeRulesProvider`. Below are some examples showing what it can be helpful for.
+Data passed for validation as an object will be automatically normalized to `ObjectDataSet`. However, you can manually
+wrap validated object with this set to allow some additional configuration:
 
-#### Tuning skippable properties
+```php
+use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
+use Yiisoft\Validator\Validator;
 
-For example, for fine-tuning to solve some edge cases - to skip DTO's static properties in particular:
+final class Post
+{    
+    public function __construct(
+        #[HasLength(min: 1, max: 255)]
+        public string $title,
+        
+        #[HasLength(min: 1)]
+        protected $content,
+        
+        // Will be skipped from parsing rules declared via PHP attributes.
+        private $author,
+    ) {
+    }
+}
+
+$post = new Post(title: 'Hello, world!', content: 'Test content.');
+$dataSet = new ObjectDataSet(
+    $post,
+    propertyVisibility: ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED,
+    useCache: false,  
+);
+$result = (new Validator())->validate($dataSet);
+```
+
+Some edge cases, like skipping DTO's static properties, require using of `AttributeRulesProvider`. After initializing it 
+can be passed for validation right away - no need to extract rules manually beforehand.
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -285,11 +318,12 @@ final class Post
     }
 }
 
-$rules = (new AttributesRulesProvider(Post::class, skipStaticProperties: true))->getRules();
-$validator = (new Validator())->validate([], $rules);
+$post = new Post(title: 'Hello, world!');
+$rules = new AttributesRulesProvider(Post::class, skipStaticProperties: true);
+$validator = (new Validator())->validate($post, $rules);
 ```
 
-#### Using rules outside the validator scope
+### Using rules outside the validator scope
 
 Let's say we want to extract all rules for exporting their options to client side for further implementing frontend 
 validation:
@@ -309,7 +343,8 @@ final class Post
     }
 }
 
-$rules = (new AttributesRulesProvider(Post::class, skipStaticProperties: true))->getRules();
+// The rules need to be extracted manually first.
+$rules = (new AttributesRulesProvider(Post::class))->getRules();
 $validator = (new Validator())->validate([], $rules);
 $options = RulesDumper::asArray($rules);
 ```
