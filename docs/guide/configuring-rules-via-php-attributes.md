@@ -184,6 +184,64 @@ final class WikiArticle
 }
 ```
 
+## Inheritance
+
+Inheritance is supported, but there are some things to keep in mind:
+
+```php
+use Yiisoft\Validator\Rule\BooleanValue;
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
+
+class Car
+{
+    #[Required]
+    #[HasLength(min: 1, max: 50)]
+    public string $name;
+    
+    #[Required]
+    #[BooleanValue]
+    public $used;
+    
+    #[Required]
+    #[Number(max: 2000)]
+    public float $weight;     
+}
+
+class Truck extends Car
+{       
+    public string $name;
+    
+    #[Number(max: 3500)]
+    public float $weight;      
+}
+```
+
+In this case the set of rules for `Truck` will be:
+
+```php
+use Yiisoft\Validator\Rule\BooleanValue;
+use Yiisoft\Validator\Rule\Required;
+
+[
+    'used' => [
+        new Required(),
+        new BooleanValue(),
+    ],
+    'weight' => [
+        new Number(max: 3500),
+    ],
+];
+```
+
+So, to sum up:
+
+- Parent rules for overridden properties are ignored completely, only the ones from the child class are obtained.
+- All parent rules for properties not overridden in the child class are obtained fully.
+
+As for the data, default values set in the child class take precedence.
+
 ## Using rules
 
 Well, the rules are configured. What's next? We can either:
