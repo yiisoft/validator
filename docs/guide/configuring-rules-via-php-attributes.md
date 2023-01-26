@@ -27,20 +27,22 @@ use Yiisoft\Validator\Rule\Required;
 the PHP attributes equivalent will be:
 
 ```php
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
-final class Author
-{        
+final class User
+{
     public function __construct(
         // Multiple attributes.
         #[Required]
         #[HasLength(min: 1, max: 50)]
-        private readonly string $name;
-        
+        private readonly string $name,
         // Single attribute.
         #[Number(integerOnly: true, min: 18, max: 100)]
-        private readonly int $age;
-    )      
+        private readonly int $age,
+    ) {
+    }
 }
 ```
 
@@ -48,18 +50,20 @@ This example uses [constructor property promotion] feature, also introduced in P
 regular properties as well:
 
 ```php
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
-final class Author
-{   
+final class User
+{
     // Multiple attributes.
     #[Required]
     #[HasLength(min: 1, max: 50)]
     public readonly string $name;
-    
+
     // Single attribute.
     #[Number(integerOnly: true, min: 18, max: 100)]
-    public readonly int $age;   
+    public readonly int $age;
 }
 ```
 
@@ -70,7 +74,12 @@ final class Author
 Given an example of rule set for a blog post configured via arrays only:
 
 ```php
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rule\Url;
 
 [
     new Nested([
@@ -81,7 +90,7 @@ use Yiisoft\Validator\Rule\Number;
         'author' => new Nested([
             'name' => [
                 new Required(),
-                new HasLength(min: 1, max: 50),                
+                new HasLength(min: 1, max: 50),
             ],
             'age' => [
                 new Number(integerOnly: true , min: 18, max: 100),
@@ -93,30 +102,34 @@ use Yiisoft\Validator\Rule\Number;
                 'url' => [new Url()],
             ]),
         ]),
-    ]);
+    ]),
 ];
 ```
 
 it can be applied to DTO classes like this achieving the same effect:
 
 ```php
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rule\Url;
 
 final class Post
 {
     #[HasLength(min: 1, max: 255)]
     public string $title;
-    
+
     // "Nested" can be used without arguments, but make sure to fill the value with the instance in this case (here it's
     // filled right in the constructor).
     #[Nested]
     public Author|null $author = null;
-    
+
     // Passing instances is available only since PHP 8.1.
-    #[Each(new Nested(File::class)]
+    #[Each(new Nested(File::class))]
     public array $files = [];
-    
+
     public function __construct()
     {
         $this->author = new Author();
@@ -130,7 +143,7 @@ final class Author
     public string $name;
 
     #[Number(integerOnly: true, min: 18, max: 100)]
-    public int $age; 
+    public int $age;
 }
 
 // Some rules, like "Nested" can be also configured through the class attribute.
@@ -157,7 +170,7 @@ trait TitleTrait
     public string $title;
 }
 
-final class Post
+final class BlogPost
 {
     use TitleTrait;
 }
@@ -179,31 +192,34 @@ Well, the rules are configured. What's next? We can either:
 Let's use a blog post again for demonstration, but a slightly shortened version:
 
 ```php
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
 final class Post
-{        
+{
     public function __construct(
         #[HasLength(min: 1, max: 255)]
-        private string $title;
-        
+        private string $title,
+
         #[Nested(Author::class)]
-        private Author|null $author;              
-    ) {       
+        private Author|null $author,
+    ) {
     }
 }
 
 final class Author
-{        
+{
     public function __construct(
         #[Required]
         #[HasLength(min: 1, max: 50)]
-        private string $name;
-        
+        private string $name,
+
         #[Number(integerOnly: true, min: 18, max: 100)]
-        private int $age;
+        private int $age,
     ) {
-    }    
+    }
 }
 ```
 
@@ -232,7 +248,6 @@ Sometimes, vice versa, it can be helpful to use the class only for parsing rules
 ```php
 use Yiisoft\Validator\Validator;
 
-
 $data = [
     'title' => 'Hello, world!',
     'author' => [
@@ -254,22 +269,23 @@ To extract rules manually, use `AttributeRulesProvider`. Below are some examples
 For example, for fine-tuning to solve some edge cases - to skip DTO's static properties in particular:
 
 ```php
+use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\Validator;
 
 final class Post
-{   
+{
     // Will be skipped from parsing rules declared via PHP attributes.
     private static $cache = [];
-    
+
     public function __construct(
         #[HasLength(min: 1, max: 255)]
-        private string $title;                      
-    ) {       
+        private string $title,
+    ) {
     }
 }
 
-$rules = new AttributesRulesProvider(Post::class, skipStaticProperties: true)->getRules();
+$rules = (new AttributesRulesProvider(Post::class, skipStaticProperties: true))->getRules();
 $validator = (new Validator())->validate([], $rules);
 ```
 
@@ -280,21 +296,22 @@ validation:
 
 ```php
 use Yiisoft\Validator\Helper\RulesDumper;
+use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\Validator;
 
 final class Post
-{       
+{
     public function __construct(
         #[HasLength(min: 1, max: 255)]
-        private string $title;                      
-    ) {       
+        private string $title,
+    ) {
     }
 }
 
-$rules = new AttributesRulesProvider(Post::class, skipStaticProperties: true)->getRules();
+$rules = (new AttributesRulesProvider(Post::class, skipStaticProperties: true))->getRules();
 $validator = (new Validator())->validate([], $rules);
-$options = (new RulesDumper())->asArray($rules);
+$options = RulesDumper::asArray($rules);
 ```
 
 [Attributes]: https://www.php.net/manual/en/language.attributes.overview.php

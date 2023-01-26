@@ -19,7 +19,7 @@ $rules = [
         new HasLength(min: 4, max: 10),  
     ],  
 ];  
-$options = (new RulesDumper())->asArray($rules);
+$options = RulesDumper::asArray($rules);
 ```
 
 the output will be:
