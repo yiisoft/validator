@@ -1,8 +1,8 @@
-# Configuring rules via PHP attributes
+# Configuring rules using PHP attributes
 
-[Attributes] feature introduced in PHP 8 allowed to add an alternative way of configuring rules to this package. When
-entities / models with their relations are represented as [DTO] classes, attributes make possible to use such classes 
-for providing rules. The rules are defined near the properties themselves which some can find more convenient in terms
+The [Attributes] feature introduced in PHP 8 allowed to add an alternative way of configuring rules to this package.
+If entities/models with their relations are represented as [DTO] classes, attributes make it possible to use such classes 
+to provide rules. The rules are defined near the properties themselves, which some may find more convenient in terms
 of perception.
 
 ## Configuring for a single entity / model
@@ -50,8 +50,8 @@ final class User
 }
 ```
 
-This example uses [constructor property promotion] feature, also introduced in PHP 8, but attributes can be used with 
-regular properties as well:
+This example uses the [constructor property promotion] feature, also introduced in PHP 8, but attributes can also
+be used with regular properties:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -75,7 +75,7 @@ final class User
 
 ## Configuring for multiple entities / models with relations
 
-Given an example of rule set for a blog post configured via arrays only:
+Given an example of rule set for a blog post configured using arrays only:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -110,7 +110,7 @@ use Yiisoft\Validator\Rule\Url;
 ];
 ```
 
-it can be applied to DTO classes like this achieving the same effect:
+it can be applied to such DTO classes to achieve the same effect:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -159,11 +159,11 @@ final class File
 }
 ```
 
-For better understanding of relations concept, it's recommended to read [Nested] and [Each] guides.
+For a better understanding of relations concept, it's recommended to read the [Nested] and [Each] guides.
 
 ## Traits
 
-Attributes can be used in traits as well. It might come in handy for reusing the same set of properties with identical 
+Attributes can also be used in traits as well. This can be useful for reusing the same set of properties with identical 
 rules: 
 
 ```php
@@ -188,7 +188,7 @@ final class WikiArticle
 
 ## Inheritance
 
-Inheritance is supported, but there are some things to keep in mind:
+Inheritance is supported, but there are a few things to keep in mind:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
@@ -237,16 +237,16 @@ use Yiisoft\Validator\Rule\Required;
 ];
 ```
 
-So, to sum up:
+So, to summarize:
 
-- Parent rules for overridden properties are ignored completely, only the ones from the child class are obtained.
-- All parent rules for properties not overridden in the child class are obtained fully.
+- Parent rules for overridden properties are completely ignored, only those from the child class are obtained.
+- All parent rules for properties that are not overridden in the child class are obtained fully.
 
 As for the data, default values set in the child class take precedence.
 
 ## Adding attributes support to custom rules
 
-In order for rules to be attached to DTO properties or the whole DTO - the `Attribute` attribute must be added to the 
+In order to attach rules to DTO properties or the entire DTO, the `Attribute` attribute must be added to the 
 custom class. And in order for rules to be fetched from attributes, they must implement the `RuleInterface`.
 
 Example for `Composite`:
@@ -296,7 +296,7 @@ final class Yaml implements RuleInterface
 }
 ```
 
-To allow attaching to the class, modify attribute definition like so:
+To allow attaching to the class, modify the attribute definition like this:
 
 ```php
 use Attribute;
@@ -313,13 +313,13 @@ final class MyCustomRule implements RuleInterface
 
 ### Instances
 
-Passing instances in attributes' scope is only possible since PHP 8.1. That means using attributes for complex rules, such as 
-`Composite`, `Each` and `Nested` or rules taking instances as arguments, with PHP 8.0 can be problematic.
+Passing instances in the scope of attributes is only possible as of PHP 8.1. This means using attributes for complex
+rules like `Composite`, `Each` and `Nested` or rules that take instances as arguments, can be problematic with PHP 8.0.
 
-The first workaround is to upgrade to PHP 8.1 - this is not that hard as upgrading the major version. Tools like 
+The first workaround is to upgrade to PHP 8.1 - this is not as hard as upgrading to the major version. Tools like 
 [Rector] can ease the process of upgrading the code base by automating routine tasks.
 
-If this is not an option, use the other ways of providing rules - via rules providers, for example:
+If this is not an option, use the other ways of providing rules, such as using rule providers:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -379,8 +379,8 @@ $postRulesProvider = new PostRulesProvider();
 $validator = (new Validator())->validate($post, $postRulesProvider);
 ```
 
-For rules without relations, instead of using `Composite` directly - create a child class extending from it and put the 
-rules there. Don't forget to add the attribute support.
+For rules without relations, instead of using `Composite` directly, create a child class that extends from it and put the 
+rules into it. Don't forget to add the attribute support.
 
 ```php
 use Attribute;
@@ -412,36 +412,36 @@ final class User
 }
 ```
 
-The `Nested` rule can be used with no arguments, see this [example](#configuring-for-a-single-entity--model) above.
+The `Nested` rule can be used without arguments, see this [example](#configuring-for-a-single-entity--model) above.
 
 ### Callables
 
-An attempt to use callables within an attribute's scope will cause the error. This means using [when] for [conditional 
-validation] or `callback` argument for `Callback` rule will not work. 
+Attempting to use callables within the scope of an attribute will cause the error. This means that using [when] for
+[conditional validation] or `callback` argument for the `Callback` rule will not work. 
 
 The workarounds are:
 
-- `Composite` or rules provider described in [Instances] section will also fit here.
+- `Composite` or the rules provider described in the [Instances] section will also work here.
 - Create a [custom rule].
-- For `Callback` rule specifically there is possibility to replace a callback with a [method reference].
+- For the `Callback` rule in particular, it is possible to replace a callback with a [method reference].
 
 ### Function / method calls
 
-Both function and method calls are not supported within an attribute's scope. If the intent is to call a function / 
+Both function and method calls are not supported within the scope of an attribute. If the intent is to call a function / 
 method for validation - use a `Callback` rule with [method reference]. Otherwise, the remaining options are:
 
-- Use `Composite` or rules provider described in [Instances] section.
+- Use `Composite` or rules provider described in the [Instances] section.
 - Create a [custom rule].
 
 ## Using rules
 
 Well, the rules are configured. What's next? We can either:
 
-- Pass them for validation right away.
-- Tune parsing of rules (skippable properties, using cache).
+- Pass them for validation immediately.
+- Tweak the parsing of rules (by skippable properties and using cache).
 - Use them for something else (e.g. for exporting their options).
 
-Let's use a blog post again for demonstration, but a slightly shortened version:
+Let's use a blog post again to demonstrate, but a slightly shortened version:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -477,7 +477,7 @@ final class Author
 
 ### Passing along with data for validation
 
-Probably one of the most neat ways is to pass DTO instances with declared rules filled with data without any additional 
+Probably one of the neatest ways is to pass DTO instances with declared rules filled with data without any additional 
 setup:
 
 ```php
@@ -495,7 +495,7 @@ $result = (new Validator())->validate($post) // Note `$rules` argument is `null`
 
 ### Passing separately for validation
 
-Sometimes, vice versa, it can be helpful to use the class only for parsing rules and provide data separately:
+Sometimes, and vice versa, it can be helpful to use the class only for parsing rules and provide data separately:
 
 ```php
 use Yiisoft\Validator\Validator;
@@ -510,7 +510,7 @@ $data = [
 $result = (new Validator())->validate($data, Post::class);
 ```
 
-The data doesn't have to be within array, the goal of this snippet is to show that is isolated from the rules.
+The data doesn't have to be within an array, the goal of this snippet is to show that is isolated from the rules.
 
 ### Tuning parsing of rules
 
@@ -573,7 +573,7 @@ $validator = (new Validator())->validate($post, $rules);
 
 ### Using rules outside the validator scope
 
-Let's say we want to extract all rules for exporting their options to client side for further implementing frontend 
+Let's say we want to extract all rules for exporting their options to the client side for further implementing frontend 
 validation:
 
 ```php

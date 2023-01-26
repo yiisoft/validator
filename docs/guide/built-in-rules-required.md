@@ -1,6 +1,6 @@
 # `Required` - verifying that a value is provided
 
-Use `Required` rule to make sure a value is provided (not empty).
+Use the `Required` rule to ensure that a value is provided (not empty).
 
 By default, a value is considered empty only when it is either:
 
@@ -11,9 +11,9 @@ By default, a value is considered empty only when it is either:
 
 ## Customizing empty criteria
 
-What values are considered empty can be customized via `$emptyCriteria` option. Unlike in [skipOnEmpty], normalization 
-is not performed here, so only a callable or a special class are accepted. For more details see [Empty criteria basics] 
-section.
+Which values are considered empty can be customized with the `$emptyCriteria` option. Unlike in [skipOnEmpty],
+no normalization is performed here, so only a callable or a special class is accepted. For more details see
+the [Empty criteria basics] section.
 
 An example with custom empty criteria that limits empty values to `null` only:
 
@@ -27,9 +27,9 @@ new Required(emptyCriteria: new WhenNull());
 It's also possible to set it globally for all rules of this type at the handler level via 
 `RequiredHandler::$defaultEmptyCriteria`.
 
-## Using with other rules
+## Use with other rules
 
-`Required` is rarely used on its own. When combining with other rules, make sure it's placed first:
+`Required` is rarely used by itself. When combining it with other rules, make sure it's placed first:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -41,7 +41,7 @@ $rules = [
 ];
 ```
 
-With these settings, in case of an empty value, `HasLength` will still run. In order to prevent that, set up conditional
+With these settings, `HasLength` will still run in the case of an empty value. To prevent this, set up a conditional
 validation:
 
 ```php
@@ -54,7 +54,7 @@ $rules = [
 ];
 ```
 
-The other ways of configuring conditional validation are described in [Conditional validation] section.
+The other ways of configuring conditional validation are described in the [Conditional validation] section.
 
 [skipOnEmpty]: conditional-validation.md#skiponempty---skipping-a-rule-if-the-validated-value-is-empty
 [Empty criteria basics]: conditional-validation.md#empty-criteria-basics

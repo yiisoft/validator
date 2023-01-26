@@ -1,6 +1,6 @@
 ## Result
 
-The validation result is an object containing errors' data occurred during validation.
+The validation result is an object containing errors' data that occurred during validation.
 
 ### Is validation successful?
 
@@ -25,12 +25,12 @@ $result->isAttributeValid('name');
 ### Errors
 
 Most of the time telling only the status of validation is not enough. There are multiple methods to get detailed errors 
-list with their data from result. The difference between them is in the grouping, filtering and representation of every 
-error. Choose one to fit your needs depending on a situation.
+list with their data from the result. The difference between them is in the grouping, filtering, and representation of every 
+error. Choose one to fit your needs depending on the situation.
 
 #### Flat list of error messages
 
-One of the simplest cases is getting the flat list of all error messages. Use the following `Result` API call:
+One of the simplest cases is getting a flat list of all error messages. Use the following `Result` API call:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -52,10 +52,10 @@ An example of output with `age` and `email` attributes:
 It's easy to display and iterate, however, with a bigger amount of attributes and depending on a message, it can be
 problematic to understand which attribute an error belongs to.
 
-##### Error messages not bound to specific attribute
+##### Error messages not bound to a specific attribute
 
-Sometimes error messages are not related to specific attribute. It can happen during validation of multiple attributes
-depending on each other for example. Use the following `Result` API call:
+Sometimes error messages are not related to a specific attribute. It can happen during the validation of
+multiple attributes depending on each other for example. Use the following `Result` API call:
 
 ```php
 $result->getCommonErrorMessages();
@@ -69,9 +69,9 @@ The output for example above:
 ];
 ```
 
-##### Filtering by specific attribute
+##### Filtering by a specific attribute
 
-This list can be also filtered by specific attribute. Only top level attributes are supported.
+This list can be also filtered by a specific attribute. Only top-level attributes are supported.
 
 ```php
 $result->getAttributeErrorMessages('email');
@@ -110,7 +110,7 @@ An example of output:
 ];
 ```
 
-Note that the result is always a 2 dimensional array with attribute names as keys at the first nesting level. This means
+Note that the result is always a 2-dimensional array with attribute names as keys at the first nesting level. This means
 that further nesting of attributes is not supported. Returning to the previous example, when `name` and `email` belong 
 to a `user` attribute, the output will be:
 
@@ -144,8 +144,8 @@ Given `[21, 22, 23, 20]` input, the output will be:
 #### Error messages indexed by path
 
 This is probably the most advanced representation offered by built-in methods. The grouping is done by path - a 
-concatenated attribute sequence showing location of errored value within a data structure. A separator is customizable, 
-dot notation is set as default one. Use the following `Result` API call:
+concatenated attribute sequence showing the location of errored value within a data structure. A separator is customizable, 
+dot notation is set as the default one. Use the following `Result` API call:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -166,7 +166,7 @@ An example of output:
 ];
 ```
 
-A path can contain integer elements too (when using `Each` rule for example):
+A path can contain integer elements too (when using the `Each` rule for example):
 
 ```php
 [
@@ -176,8 +176,8 @@ A path can contain integer elements too (when using `Each` rule for example):
 
 ##### Resolving special characters collision in attribute names
 
-When attribute name contains value path separator (dot - `.` by default) or `Each` rule shortcut (asterisk -`*`), 
-they're automatically escaped using backslash ('\`) in the error messages list:
+When the attribute name contains a value path separator (dot - `.` by default) or `Each` rule shortcut (asterisk -`*`), 
+they're automatically escaped using a backslash (`\​`) in the error messages list:
 
 ```php
 [
@@ -185,8 +185,8 @@ they're automatically escaped using backslash ('\`) in the error messages list:
 ],
 ```
 
-In case of using single attribute per rule set, any additional modifications of attribute names in rules configuration 
-are not required, so they must stay as is:
+In case of using a single attribute per rule set, any additional modifications of attribute names in the rules
+configuration are not required, so they must stay as is:
 
 ```php
 use Yiisoft\Validator\Rule\In;
@@ -200,15 +200,15 @@ $rules = [
 ];
 ```
 
-However, when using  `Nested` rule with multiple attributes per rule set, special characters need to be escaped with 
-backslash (`\`) in order for value paths to be correct and to be possible to reverse them back from string to individual 
-items. See [Using keys containing separator / shortcut] section for more details.
+However, when using the `Nested` rule with multiple attributes per rule set, special characters need to be escaped with 
+a backslash (`\​`) for value paths to be correct and to be possible to reverse them back from string to individual 
+items. See the [Using keys containing separator/shortcut] section for more details.
 
-This can be used as an alternative to using custom separator.
+This can be used as an alternative to using a custom separator.
 
-##### Filtering by specific attribute
+##### Filtering by a specific attribute
 
-This list can be also filtered by specific attribute. Only top level attributes are supported.
+This list can be also filtered by a specific attribute. Only top-level attributes are supported.
 
 ```php
 use Yiisoft\Validator\Result;
@@ -242,11 +242,11 @@ Each error stores the following data:
 
 - Message. Either a simple message like `This value is wrong.` or a template with placeholders enclosed in curly braces 
 (`{}`), for example: `Value must be no less than {min}.`. The actual formatting is done in `Validator` depending on
-configured translator.
+the configured translator.
 - Template parameters for substitution during formatting, for example: `['min' => 7]`.
 - A path to a value within a checked data structure, for example: `['user', 'name', 'firstName']`.
 
-#### An example of application
+#### An example of an application
 
 What this can be useful for? For example, to build a nested tree of error messages indexed by attribute names:
 
@@ -262,14 +262,14 @@ What this can be useful for? For example, to build a nested tree of error messag
 ];
 ```
 
-It's intentionally not provided out of the box due to complexity of iteration. However, this can be useful for dumping 
+It's intentionally not provided out of the box due to the complexity of iteration. However, this can be useful for dumping 
 as JSON and storing in logs for example.
 
 Debugging original error objects is also more convenient.
 
-#### Filtering by specific attribute
+#### Filtering by a specific attribute
 
-This list can be also filtered by specific attribute. Only top level attributes are supported.
+This list can be also filtered by a specific attribute. Only top-level attributes are supported.
 
 ```php
 use Yiisoft\Validator\Result;

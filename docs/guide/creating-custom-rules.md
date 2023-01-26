@@ -6,22 +6,22 @@ When desired validation logic is missing in both built-in rules and extensions -
 
 The key feature of the rules' concept is a separation into 2 parts: 
 
-- Rule (a class implementing `RuleInterface`). Only stores configuration options and a reference to its handler. Does 
+- Rule (a class implementing `RuleInterface`). It only stores configuration options and a reference to its handler. Does 
 not perform actual validation.
 - Rule handler (a class implementing `RuleHandlerInterface`). Given a rule and input data, performs the actual 
 validation within a current validation context. 
 
-Besides responsibilities' separation, this approach allows to automatically resolve dependencies for a handler. For 
+Besides responsibilities' separation, this approach allows automatic resolving dependencies for a handler. For 
 example, if you need a database connection object within a handler, you don't have to pass it there explicitly - it 
 can be automatically obtained from a dependency container.
 
 ## Instructions for creating a custom rule and what to avoid
 
-Let's try to create a rule for checking that a value is a valid [RGB color].
+Let's try to create a rule for checking that a value is valid [RGB color].
 
 ### Creating a rule
 
-The 1st step is creation a rule:
+The 1st step is creating a rule:
 
 ```php
 use Yiisoft\Validator\RuleInterface;
@@ -48,11 +48,11 @@ final class RgbColor implements RuleInterface
 > **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
 Besides required interface method implementations it only contains customizable error message. Of course, more features 
-can be added - conditional validation, client options, etc. But this is a bare mininum to start with.
+can be added - conditional validation, client options, etc. But this is a bare minimum to start with.
 
 ### Creating a handler
 
-The 2nd step is creation of the handler. Let's define what is exactly a valid RGB color:
+The 2nd step is creating the handler. Let's define what is exactly a valid RGB color:
 
 - It's an array (list to be exact).
 - Contains exactly 3 items.
@@ -250,10 +250,10 @@ $result = (new Validator())->validate([205, 92, 92], new RgbColorRuleSet());
 
 ##### Replacing with separate rules and `when`
 
-Below is an attempt of using validation context for validating attributes depending on each other:
+Below is an attempt at using validation context for validating attributes depending on each other:
 
 - Validate company name only when the other attribute `hasCompany` name is filled.
-- The company name must be a string with length between 1 and 50 characters.
+- The company name must be a string with a length between 1 and 50 characters.
 
 ```php
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -314,7 +314,7 @@ Knowing the core principles, let's explore more appropriate real-life examples.
 
 ### Verifying `YAML`
 
-There is built-in rule for validating JSON. But what if we need the same, but for [YAML] for example? Let's try to
+There is built-in rule for validating JSON. But what if we need the same, but, for example, for [YAML] ? Let's try to
 implement it.
 
 Rule:
@@ -439,7 +439,7 @@ section.
 
 ## Making an extension
 
-With a custom rule you can go even further. If it's not too project-specific and you feel that it might be useful to 
+With a custom rule, you can go even further. If it's not too project-specific, and you feel that it might be useful to 
 someone else - make it available as an extension.
 
 [RGB color]: https://en.wikipedia.org/wiki/RGB_color_model

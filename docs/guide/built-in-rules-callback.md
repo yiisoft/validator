@@ -1,7 +1,7 @@
-# `Callback` - a wrapper over `callable`
+# `Callback` - a wrapper around `callable`
 
-This rule allows validation of current attribute value (but not limited to it) with an arbitrary condition set within a 
-callable. The benefit of it is that creation of a separate custom rule and handler is not required.
+This rule allows you to validate the current attribute value (but not limited to it) with an arbitrary condition within a  
+callable.  The advantage is that there is no need to create a separate custom rule and handler.
 
 A condition can be within:
 
@@ -9,12 +9,12 @@ A condition can be within:
 - Callable class.
 - DTO method.
 
-The downside drown from using standalone functions and DTO methods is a lack of reusability. So they are mainly useful 
+The downside of using standalone functions and DTO methods is a lack of reusability. So they are mainly useful 
 for some specific non-repetitive conditions. Reusability can be achieved with callable classes, but depending on other
 factors (the need for additional parameters for example), it might be a good idea to create a full-fledged custom rule 
 with a separate handler instead.
 
-The signature of the function is like the following:
+The function signature looks like this:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -26,14 +26,14 @@ function (mixed $value, Callback $rule, ValidationContext $context): Result;
 
 where:
 
-- `$value` is validated value;
-- `$rule` is a reference to original `Callback` rule;
+- `$value` is a validated value;
+- `$rule` is a reference to the original `Callback` rule;
 - `$context` is a validation context;
-- Returned value is a validation result instance with errors or without them.
+- Returned value is a validation result instance with errors or without errors.
 
 ## Using as a function
 
-An example of passing a standalone callable function to `Callback` rule:
+An example of passing a standalone callable function to a `Callback` rule:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -51,9 +51,9 @@ new Callback(
 
 ## Examples
 
-### Adding and applying validation missing in built-in rules to current attribute's value 
+### Adding and applying validation missing in built-in rules to current attribute value 
 
-Below is the example verifying that a value is a valid [YAML] string (additionally requires `yaml` PHP extension):
+Below is an example that checks if a value is a valid [YAML] string (additionally requires the `yaml` PHP extension):
 
 ```php
 use Exception;
@@ -86,10 +86,10 @@ new Callback(
 > **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to
 > [yaml_parse docs] for more details. 
 
-### Making use of validation context for validating multiple attributes depending on each other
+### Using a validation context to validate interdependent attributes
 
-A validation context can be utilized too - for example, when performing validation of attributes depending on each
-other. In the below example the 3 angles are verified by degree values to form a valid triangle:
+A validation context can also be used - for example, when performing a validation of interdependent attributes.
+each other. In the example below, the 3 angles are validated by degree values to form a valid triangle:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -164,7 +164,7 @@ static function (mixed $value, Callback $rule, ValidationContext $context): Resu
 };
 ```
 
-They can be rewritten using multiple rules (built-in ones if possible) and conditional validation making code less 
+They can be rewritten using multiple rules (built-in ones where possible) and conditional validation making code less 
 verbose and more intuitive:
 
 ```php
@@ -189,7 +189,7 @@ $rules = [
 
 ### For property
 
-When using as PHP attribute, set an object's method as a callback instead:
+When used as a PHP attribute, set an object's method as a callback instead:
 
 ```php
 use Exception;
@@ -226,15 +226,15 @@ final class Config {
 }
 ```
 
-The signature is the same as in a regular function. Note that there are no limitations for visibility levels and static 
+The signature is the same as in a regular function. Note that there are no restrictions on visibility levels and static
 modifiers, all of them can be used (`public`, `protected`, `private`, `static`).
 
-Using a `callback` argument instead of `method` with PHP attributes is prohibited because of the current PHP language 
-limitations (a callback can't be inside PHP attribute). 
+Using a `callback` argument instead of `method` with PHP attributes is prohibited due to current PHP language
+restrictions (a callback can't be inside a PHP attribute).
 
 ### For the whole object
 
-It's also possible to check the object as a whole:
+It's also possible to check the entire object:
 
 ```php
 use Exception;
@@ -271,11 +271,11 @@ final class Config {
 }
 ```
 
-Note using property value (`$this->yaml`) instead of method argument (`$value`).
+Note the use of property value (`$this->yaml`) instead of method argument (`$value`).
 
 ## Using as a callable class
 
-A classes implementing `__invoke()` can be used as a callable too:
+A class that implements `__invoke()` can also be used as a callable:
 
 ```php
 use Exception;
@@ -320,10 +320,10 @@ $rules = [
 ];
 ``` 
 
-## Shortcut for using with validator
+## Shortcut for use with validator
 
-When using with validator and default `Callback` rule settings, a rule declaration can be omitted, so including only a 
-callable is enough. It will be automatically normalized before validation:
+When used with a validator and default `Callback` rule settings, a rule declaration can be omitted, so just including a
+callable is sufficient. It will be normalized automatically before validation:
 
 ```php
 use Exception;

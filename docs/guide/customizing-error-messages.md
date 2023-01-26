@@ -1,13 +1,13 @@
 # Customizing error messages
 
-To use a non-default error message, pass custom message / template when creating validation rule. Generally the 
+To use a non-default error message, pass a custom message/template when creating a validation rule. Generally the 
 `message` option is responsible for storing error message:
 
 ```php
 new Required(message: '{attribute} is required.');
 ```
 
-Some rules, however, have multiple error messages and, therefore, overridden via different corresponding options. But 
+Some rules, however, have multiple error messages and, therefore, are overridden via different corresponding options. But 
 it's easy to differentiate them from the rest of the parameters by `Message` prefix:
 
 ```php
@@ -19,7 +19,7 @@ new HasLength(
 );
 ```
 
-Full list of supported placeholders with descriptions is available in PHPDoc for each message.
+A full list of supported placeholders with descriptions is available in PHPDoc for each message.
 
 ## Translating error messages
 
@@ -34,7 +34,7 @@ To use the translations, it's required to install an additional package for supp
 composer require yiisoft/translator-message-php
 ```
 
-In case of using validator within Yii ecosystem (an application uses [Yii Config] and validator is obtained as a 
+When using a validator within the Yii ecosystem (an application uses [Yii Config] and the validator is obtained as a 
 dependency via [Yii DI] container), the translations are plugged in automatically. Otherwise, a translator object must 
 be created and configured manually. For example, like this:
 
@@ -59,10 +59,10 @@ $validator = new Validator(translator: $translator);
 
 ## Translating attribute names
 
-Almost all error templates have support for `{attribute}` placeholder which substituted with an actual attribute name 
+Almost all error templates have support for `{attribute}` placeholder which is substituted with an actual attribute name 
 that was set during rules configuration. By default, an attribute name is formatted as is. It can be acceptable for 
 English language (for example, `currentPassword is required.`), but when using translations for error messages, it's 
-better to provide and additional attribute translation.
+better to provide an additional attribute translation.
 
 There is a separate interface called `AttributeTranslatorInterface` to solve exactly this task. It ships with 3 
 implementations out of the box:
@@ -76,8 +76,8 @@ There are several ways to use attribute translator.
 
 ### Passing translator to validator instance
 
-It's quite self-explanatory, just create an attribute translator, define all translations and pass it to newly created 
-validator instance. An example for russian language:
+It's quite self-explanatory, just create an attribute translator, define all translations, and pass it to the newly
+created validator instance. An example for the russian language:
 
 ```php
 use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
@@ -92,11 +92,11 @@ $validator = new Validator(defaultAttributeTranslator: $attributeTranslator);
 
 ### Passing within a data object for validation
 
-Another option is providing translations in the validated data object itself. This approach can be used to create form 
+Another option is providing translations in the validated data object itself. This approach can be used to create a form 
 classes for example.
 
-There is another special interface called `AttributeTranslatorProviderInterface` for this case allowing validator to 
-extract translations from the objects implementing it. An example for russian language:
+There is another special interface called `AttributeTranslatorProviderInterface` for this case allowing the validator to 
+extract translations from the objects implementing it. An example for the russian language:
 
 ```php
 final class ChangePasswordForm implements AttributeTranslatorProviderInterface  

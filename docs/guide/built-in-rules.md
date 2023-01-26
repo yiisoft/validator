@@ -2,7 +2,7 @@
 
 ## Available rules
 
-Here is the list of all available built-in rules divided by categories.
+Here is a list of all available built-in rules, sorted by category.
 
 ### String rules
 
@@ -68,7 +68,7 @@ Some rules also have guides in addition to PHPDoc:
 ## Missing rules
 
 Can't find a rule? Feel free to submit an issue / PR, so it can be included in the package after review. Another option,
-if it's less generic, is to search for [an extension] first and [create a custom rule] if nothing was found.
+if it's less generic, is to search for [an extension] first and [create a custom rule] if nothing is found.
 
 [an extension]: extensions.md
 [create a custom rule]: creating-custom-rules.md
