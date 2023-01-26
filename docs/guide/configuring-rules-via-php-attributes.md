@@ -162,7 +162,8 @@ For better understanding of relations concept, it's recommended to read [Nested]
 
 ## Traits
 
-Traits are supported too. They might come in handy for reusing the same set of properties with identical rules: 
+Attributes can be used in traits as well. It might come in handy for reusing the same set of properties with identical 
+rules: 
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
