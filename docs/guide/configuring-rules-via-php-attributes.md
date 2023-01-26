@@ -271,20 +271,19 @@ wrap validated object with this set to allow some additional configuration:
 ```php
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\HasLength;
-use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\Validator;
 
 final class Post
-{    
+{
+    // Will be skipped from parsing rules declared via PHP attributes.
+    private $author;
+
     public function __construct(
         #[HasLength(min: 1, max: 255)]
         public string $title,
-        
+
         #[HasLength(min: 1)]
         protected $content,
-        
-        // Will be skipped from parsing rules declared via PHP attributes.
-        private $author,
     ) {
     }
 }
@@ -293,7 +292,7 @@ $post = new Post(title: 'Hello, world!', content: 'Test content.');
 $dataSet = new ObjectDataSet(
     $post,
     propertyVisibility: ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED,
-    useCache: false,  
+    useCache: false,
 );
 $result = (new Validator())->validate($dataSet);
 ```
