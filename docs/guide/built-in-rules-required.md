@@ -56,6 +56,6 @@ $rules = [
 
 The other ways of configuring conditional validation are described in [Conditional validation] section.
 
-[skipOnEmpty]:
-[Empty criteria basics]:
-[Conditional validation]:
+[skipOnEmpty]: conditional-validation.md#skiponempty---skipping-a-rule-if-the-validated-value-is-empty
+[Empty criteria basics]: conditional-validation.md#empty-criteria-basics
+[Conditional validation]: conditional-validation.md

@@ -80,4 +80,4 @@ final class ChartCoordinateRuleSet extends Composite
 }
 ```
 
-[skipping options]:
+[skipping options]: conditional-validation.md

@@ -450,4 +450,4 @@ someone else - make it available as an extension.
 [scenarios from Yii 2]: https://www.yiiframework.com/doc/guide/2.0/en/structure-models#scenarios
 [Yii Validator Scenarios]: https://github.com/vjik/yii-validator-scenarios
 [Sergei Predvoditelev]: https://github.com/vjik
-[Scenarios]:
+[Scenarios]: extensions.md#scenarios
