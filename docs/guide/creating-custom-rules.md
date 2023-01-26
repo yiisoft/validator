@@ -45,8 +45,7 @@ final class RgbColor implements RuleInterface
 }
 ```
 
-> **Note:** `readonly` properties are supported only starting from PHP 8.1. For versions below that that use a getter 
-> instead.
+> **Note:** `readonly` properties are supported only starting from PHP 8.1.
 
 Besides required interface method implementations it only contains customizable error message. Of course, more features 
 can be added - conditional validation, client options, etc. But this is a bare mininum to start with.
@@ -131,8 +130,7 @@ final class RgbColor implements RuleInterface
 }
 ```
 
-> **Note:** `readonly` properties are supported only starting from PHP 8.1. For versions below that use a getter
-> instead.
+> **Note:** `readonly` properties are supported only starting from PHP 8.1.
 
 > **Note:** Formatting used in `$incorrectItemTypeMessage` and `$incorrectItemValueMessage` requires `intl` PHP 
 > extension.
@@ -308,7 +306,7 @@ $rules = [
 ];
 ```
 
-## More appropriate examples
+## More examples
 
 The idea for previous examples was to show the process of creating custom rules with handlers using "learn by mistakes" 
 principle. So in terms of practical usage they probably less valuable because of replacement with built-in-rules. 
@@ -344,8 +342,7 @@ final class Yaml implements RuleInterface
 }
 ```
 
-> **Note:** `readonly` properties are supported only starting from PHP 8.1. For versions below that use a getter
-> instead.
+> **Note:** `readonly` properties are supported only starting from PHP 8.1.
 
 Handler:
 
