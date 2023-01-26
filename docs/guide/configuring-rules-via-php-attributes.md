@@ -571,7 +571,7 @@ $validator = (new Validator())->validate($post, $rules);
 
 ### Using rules outside the validator scope
 
-Let's say we want to extract all rules for exporting their options to client side for further implementing [frontend] 
+Let's say we want to extract all rules for exporting their options to client side for further implementing frontend 
 validation:
 
 ```php
