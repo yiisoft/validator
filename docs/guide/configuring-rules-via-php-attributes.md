@@ -250,6 +250,12 @@ custom class. And in order for rules to be fetched from attributes, they must im
 Example for `Composite`:
 
 ```php
+use Attribute;
+use Yiisoft\Validator\Rule\Composite;
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Number;
+
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class RgbColorRuleSet extends Composite
 {
@@ -268,23 +274,23 @@ Example for custom rule:
 ```php
 use Yiisoft\Validator\RuleInterface;
 
-final class Yaml implements RuleInterface 
-{  
+final class Yaml implements RuleInterface
+{
     public function __construct(
-        public readonly string $incorrectInputMessage = 'Value must be a string. {type} given.',        
-        public readonly string $message = 'The value is not a valid YAML.',          
-    ) {  
+        public string $incorrectInputMessage = 'Value must be a string. {type} given.',
+        public string $message = 'The value is not a valid YAML.',
+    ) {
     }
-  
-    public function getName(): string  
-    {  
-        return 'yaml';  
-    }  
-  
-    public function getHandler(): string  
-    {  
-        return YamlHandler::class;  
-    }  
+
+    public function getName(): string
+    {
+        return 'yaml';
+    }
+
+    public function getHandler(): string
+    {
+        return YamlHandler::class;
+    }
 }
 ```
 
@@ -314,7 +320,6 @@ The first workaround is to upgrade to PHP 8.1 - this is not that hard as upgradi
 If this is not an option, use the other ways of providing rules - via rules providers, for example:
 
 ```php
-use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
@@ -329,17 +334,17 @@ final class Post
         private string $title,
         private Author|null $author = null,
         private array $files = [],
-    ) {  
-    } 
+    ) {
+    }
 }
 
 final class Author
-{        
+{
     public function __construct(
-        private string $name, 
+        private string $name,
         private int $age,
-    ) {  
-    } 
+    ) {
+    }
 }
 
 final class File
@@ -381,7 +386,6 @@ use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Validator;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class RgbColorRuleSet extends Composite
@@ -400,9 +404,9 @@ final class User
     public function __construct(
         private string $name,
         #[RgbColorRuleSet]
-        private array $avatarBackgroundColor;
-    ) {  
-    } 
+        private array $avatarBackgroundColor,
+    ) {
+    }
 }
 ```
 
