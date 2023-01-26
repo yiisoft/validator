@@ -34,7 +34,7 @@ The output of `$errors` will be:
 In this example an additional instance of `Nested` rule is used for every relation. The other ways of configurations are 
 possible, they are described further on.
 
-More representations of errors' list are covered in "Result" section. 
+More representations of errors' list are covered in [Result] section. 
 
 ## Other configuration options
 
@@ -133,7 +133,7 @@ $rule = new Nested([
 
 ### One-to-many and many-to-many relations
 
-The example in "Basic usage" section shows working only with one-to-one relations, when `Nested` rule is enough for
+The example in [Basic usage] section shows working only with one-to-one relations, when `Nested` rule is enough for
 referencing relations. But it can be combined with other complex rules, such as `Each`, to validate one-to-many and 
 many-to-many relations as well:
 
@@ -239,7 +239,7 @@ $rule = new Nested([
 
 This is less verbose, but the downside of this approach is that you can't additionally configure dynamically generated
 `Nested` and `Each` pairs. If you need this, use explicit form of configuration (please refer to example provided in 
-"Basic usage" section).
+[Basic usage] section).
 
 ### Using PHP attributes
 
@@ -368,7 +368,8 @@ $result = $validator->validate($chartSet); // Note `$rules` argument is `null` h
 $errors = $result->getErrorMessagesIndexedByPath();
 ```
 
-- For more info about different ways of configuring rules via PHP attributes, please refer to "PHP attributes" section. 
+- For more info about different ways of configuring rules via PHP attributes, please refer to [Configuring rules via PHP
+attributes] section. 
 - For more info about possible data / rules combinations passed for validation please refer to "Using validator" 
 section. 
 
@@ -442,3 +443,7 @@ $data = [
     ],
 ];
 ```
+
+[Result]: result.md
+[Basic usage]: #basic-usage-one-to-one-relation
+[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md 

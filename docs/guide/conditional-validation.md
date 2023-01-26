@@ -109,7 +109,7 @@ $result = (new Validator())->validate($data, $rules);
 
 If the attribute is required, it's more appropriate to use `skipOnError: true` instead with preceding `Required` rule. 
 This is because empty values' detection within `Required` rule and for skipping in further rules can be set separately 
-(this is described below in more detail, see "Configuring criterias in other rules" section).
+(this is described below in more detail, see [Configuring empty criterias in other rules] section).
 
 ```php
 use Yiisoft\Validator\Rule\In;
@@ -266,4 +266,7 @@ $result = (new Validator())->validate($data, $rules);
 ```
 
 As an alternative for functions, callable classes can be used instead. This approach has a benefit of code reuse 
-possibility. Please refer to "Skip on empty" section to see an example.
+possibility. Please refer to [Skip on empty] section to see an example.
+
+[Configuring empty criterias in other rules]: #configuring-empty-criterias-in-other-rules
+[Skip on empty]: #skiponempty---skipping-a-rule-if-the-validated-value-is-empty
