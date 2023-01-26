@@ -601,6 +601,8 @@ $options = RulesDumper::asArray($rules);
 [DTO]: https://en.wikipedia.org/wiki/Data_transfer_object
 [constructor property promotion]: https://www.php.net/manual/en/language.oop5.decon.php#language.oop5.decon.constructor.promotion
 [readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[Nested]: built-in-rules-nested.md
+[Each]: built-in-rules-each.md
 [Rector]: https://github.com/rectorphp/rector
 [when]: conditional-validation.md#when
 [conditional validation]: conditional-validation.md

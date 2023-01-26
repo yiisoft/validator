@@ -45,7 +45,7 @@ final class RgbColor implements RuleInterface
 }
 ```
 
-> **Note:** `readonly` properties are supported only starting from PHP 8.1.
+> **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
 Besides required interface method implementations it only contains customizable error message. Of course, more features 
 can be added - conditional validation, client options, etc. But this is a bare mininum to start with.
@@ -130,7 +130,7 @@ final class RgbColor implements RuleInterface
 }
 ```
 
-> **Note:** `readonly` properties are supported only starting from PHP 8.1.
+> **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
 > **Note:** Formatting used in `$incorrectItemTypeMessage` and `$incorrectItemValueMessage` requires `intl` PHP 
 > extension.
@@ -342,7 +342,7 @@ final class Yaml implements RuleInterface
 }
 ```
 
-> **Note:** `readonly` properties are supported only starting from PHP 8.1.
+> **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
 Handler:
 
@@ -443,6 +443,7 @@ With a custom rule you can go even further. If it's not too project-specific and
 someone else - make it available as an extension.
 
 [RGB color]: https://en.wikipedia.org/wiki/RGB_color_model
+[readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
 [array_is_list]: https://www.php.net/manual/en/function.array-is-list.php
 [YAML]: https://en.wikipedia.org/wiki/YAML
 [yaml_parse]: https://www.php.net/manual/en/function.yaml-parse.php

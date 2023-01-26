@@ -102,7 +102,7 @@ $person = new Person(name: 'John', age: 17, email: 'john@example.com', phone: nu
 $result = (new Validator())->validate($person);
 ```
 
-> **Note:** `readonly` properties are supported only starting from PHP 8.1.
+> **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
 > **Note:** Use `Nested` rule to validate related objects and `Each` rule to validate multiple objects.
 
@@ -250,3 +250,5 @@ final class Person implements RulesProviderInterface
 $data = new Person(name: 'John', age: 18);
 $result = (new Validator())->validate($data);
 ```
+
+[readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
