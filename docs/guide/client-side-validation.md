@@ -65,7 +65,7 @@ Here are some specifics of rules structure:
 - Indexing of rules by attribute names is maintained.
 - The first rule element is always a rule name with an `0` integer index.
 - The rest rule elements are key-value pairs where key is an option name and value is a corresponding option value.
-- For complex rules such as `Composite`, `Each` and `Nested` child rules' options are located under the `rules` key.
+- For complex rules, such as `Composite`, `Each` and `Nested`, child rules' options are located under the `rules` key.
 
 Note that the error messages have a special structure:
 
