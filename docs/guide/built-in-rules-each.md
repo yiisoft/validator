@@ -60,6 +60,7 @@ $rule = new Nested([
 ]);
 ```
 
-For more information about using with `Nested`, please refer to `Nested` guide.
+For more information about using with `Nested`, please refer to [Nested] guide.
 
 [RGB color]: https://en.wikipedia.org/wiki/RGB_color_model
+[Nested]: built-in-rules-nested.md
