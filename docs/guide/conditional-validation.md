@@ -237,9 +237,9 @@ function (mixed $value, ValidationContext $context): bool;
 
 where:
 
-- `$value` is validated value;
+- `$value` is a validated value;
 - `$context` is a validation context;
-- `true` as returned value  means that rule must be applied and `false` - must be skipped.
+- `true` as a returned value means that the rule must be applied and `false` - must be skipped.
 
 In this example the state will be required only for `Brazil` counry. `$context->getDataSet()->getAttributeValue()` 
 method allows to get any other attribute's value within a validated data set.
