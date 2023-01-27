@@ -133,7 +133,7 @@ $rules = [
 ];
 ```
 
-#### Replacing boilerplate code with separate rules and `when`
+### Replacing boilerplate code with separate rules and `when`
 
 However, some cases of using validation context can lead to boilerplate code:
 
@@ -273,7 +273,7 @@ final class Config {
 
 Note the use of property value (`$this->yaml`) instead of method argument (`$value`).
 
-## Using as a callable class
+## Using a callable class
 
 A class that implements `__invoke()` can also be used as a callable:
 

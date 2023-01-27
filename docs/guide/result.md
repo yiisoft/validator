@@ -1,8 +1,8 @@
-## Result
+# Result
 
 The validation result is an object containing errors' data that occurred during validation.
 
-### Is validation successful?
+## Is validation successful?
 
 To just check the status of validation (whether a data is valid as a whole), use the following `Result` API call:
 
@@ -22,13 +22,13 @@ use Yiisoft\Validator\Result;
 $result->isAttributeValid('name');
 ```
 
-### Errors
+## Errors
 
 Most of the time telling only the status of validation is not enough. There are multiple methods to get detailed errors 
 list with their data from the result. The difference between them is in the grouping, filtering, and representation of every 
 error. Choose one to fit your needs depending on the situation.
 
-#### Flat list of error messages
+### Flat list of error messages
 
 One of the simplest cases is getting a flat list of all error messages. Use the following `Result` API call:
 
@@ -85,7 +85,7 @@ The output for example above:
 ];
 ```
 
-#### Error messages indexed by attribute
+### Error messages indexed by attribute
 
 To group error messages by attribute, use the following `Result` API call:
 
@@ -141,7 +141,7 @@ Given `[21, 22, 23, 20]` input, the output will be:
 ],
 ```
 
-#### Error messages indexed by path
+### Error messages indexed by path
 
 This is probably the most advanced representation offered by built-in methods. The grouping is done by path - a 
 concatenated attribute sequence showing the location of errored value within a data structure. A separator is customizable, 
@@ -174,7 +174,8 @@ A path can contain integer elements too (when using the `Each` rule for example)
 ];
 ```
 
-##### Resolving special characters collision in attribute names
+#### Resolving special characters collision in attribute names
+
 
 When the attribute name contains a value path separator (dot - `.` by default) or `Each` rule shortcut (asterisk -`*`), 
 they're automatically escaped using a backslash (`\​`) in the error messages list:
@@ -226,7 +227,7 @@ The output for example above:
 ];
 ```
 
-### Error objects list
+## Error objects list
 
 When even these representations are not enough, an initial unmodified list of error objects can be accessed via 
 this method:
