@@ -303,7 +303,7 @@ use Attribute;
 use Yiisoft\Validator\RuleInterface;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class MyCustomRule implements RuleInterface 
+final class Yaml implements RuleInterface 
 {
     // ...
 }
