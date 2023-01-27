@@ -5,7 +5,7 @@ and available for usage. Note that they are not official in terms of not being t
 
 ## Scenarios
 
-Yii 2 has [scenarios] feature out of the box. Those of you that used it might be wondering why it's no longer the case 
+Yii2 has [scenarios] feature out of the box. Those of you that used it might be wondering why it's no longer the case 
 with this package. Well, we think that from architectural point of view it's a design flaw. What seems to be more 
 concise at first, tends to grow and became harder to read and maintain with a bigger amount of attributes / scenarios / 
 business logic, while rewriting cost can be quite high. This was proved in practice, so this approach is discouraged and 

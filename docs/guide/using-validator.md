@@ -21,7 +21,7 @@ $rules = [
 $result = (new Validator())->validate($value, $rules);
 ```
 
-> **Note:** Use `Each` rule to validate multiple values of the same type.
+> **Note:** Use [Each] rule to validate multiple values of the same type.
 
 ### Array
 
@@ -62,7 +62,7 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
-> **Note:** Use `Nested` rule to validate nested arrays and `Each` rule to validate multiple arrays.
+> **Note:** Use [Nested] rule to validate nested arrays and [Each] rule to validate multiple arrays.
 
 ### Object
 
@@ -104,7 +104,7 @@ $result = (new Validator())->validate($person);
 
 > **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
-> **Note:** Use `Nested` rule to validate related objects and `Each` rule to validate multiple objects.
+> **Note:** Use [Nested] rule to validate related objects and [Each] rule to validate multiple objects.
 
 ### Custom data set
 
@@ -251,4 +251,6 @@ $data = new Person(name: 'John', age: 18);
 $result = (new Validator())->validate($data);
 ```
 
+[Each]: built-in-rules-each.md
+[Nested]: built-in-rules-nested.md
 [readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties

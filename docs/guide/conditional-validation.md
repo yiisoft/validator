@@ -130,7 +130,7 @@ $result = (new Validator())->validate($data, $rules);
 
 What exactly to consider to be empty can vary depending on a scope of usage.
 
-The value passed to `skipOnEmpty` is called "empty criteria". At the end it's always a callback, but shorcuts are 
+The value passed to `skipOnEmpty` is called "empty criteria". At the end it's always a callback, but shortcuts are 
 supported too because of normalization:
 
 - When `false` or `null`, `Yiisoft\Validator\EmptyCriteria\NeverEmpty` is used automatically as a callback - every value 
@@ -141,7 +141,7 @@ is considered non-empty and validated without skipping (default).
 
 `false` is usually more suitable for HTML forms and `true` - for APIs.
 
-There are some more criterias that do not have shorcuts and need to be set explicitly because they are less used:
+There are some more criterias that do not have shortcuts and need to be set explicitly because they are less used:
 
 - `Yiisoft\Validator\EmptyCriteria\WhenMissing` - a value treated as empty only when it's missing (not passed at all).
 - `Yiisoft\Validator\EmptyCriteria\WhenNull` - limits empty values to `null` only.
@@ -241,7 +241,7 @@ where:
 - `$context` is a validation context;
 - `true` as a returned value means that the rule must be applied and `false` - must be skipped.
 
-In this example the state will be required only for `Brazil` counry. `$context->getDataSet()->getAttributeValue()` 
+In this example the state will be required only for `Brazil` country. `$context->getDataSet()->getAttributeValue()` 
 method allows to get any other attribute's value within a validated data set.
 
 ```php

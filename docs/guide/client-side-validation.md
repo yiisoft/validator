@@ -1,6 +1,6 @@
 # Client side validation
 
-Unlike Yii 2, the package does not provide any handling of the validation rules on the client side. Likely it will be 
+Unlike Yii2, the package does not provide any handling of the validation rules on the client side. Likely it will be 
 added later as another related package. 
 
 But, despite this, there is a possibility to export rules' options as array for passing to client side using 
