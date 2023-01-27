@@ -1,8 +1,8 @@
-## Result
+# Result
 
 The validation result is an object containing errors' data occurred during validation.
 
-### Is validation successful?
+## Is validation successful?
 
 To just check the status of validation (whether a data is valid as a whole), use the following `Result` API call:
 
@@ -22,13 +22,13 @@ use Yiisoft\Validator\Result;
 $result->isAttributeValid('name');
 ```
 
-### Errors
+## Errors
 
 Most of the time telling only the status of validation is not enough. There are multiple methods to get detailed errors 
 list with their data from result. The difference between them is in the grouping, filtering and representation of every 
 error. Choose one to fit your needs depending on a situation.
 
-#### Flat list of error messages
+### Flat list of error messages
 
 One of the simplest cases is getting the flat list of all error messages. Use the following `Result` API call:
 
@@ -52,7 +52,7 @@ An example of output with `age` and `email` attributes:
 It's easy to display and iterate, however, with a bigger amount of attributes and depending on a message, it can be
 problematic to understand which attribute an error belongs to.
 
-##### Error messages not bound to specific attribute
+#### Error messages not bound to specific attribute
 
 Sometimes error messages are not related to specific attribute. It can happen during validation of multiple attributes
 depending on each other for example. Use the following `Result` API call:
@@ -69,7 +69,7 @@ The output for example above:
 ];
 ```
 
-##### Filtering by specific attribute
+#### Filtering by specific attribute
 
 This list can be also filtered by specific attribute. Only top level attributes are supported.
 
@@ -85,7 +85,7 @@ The output for example above:
 ];
 ```
 
-#### Error messages indexed by attribute
+### Error messages indexed by attribute
 
 To group error messages by attribute, use the following `Result` API call:
 
@@ -141,7 +141,7 @@ Given `[21, 22, 23, 20]` input, the output will be:
 ],
 ```
 
-#### Error messages indexed by path
+### Error messages indexed by path
 
 This is probably the most advanced representation offered by built-in methods. The grouping is done by path - a 
 concatenated attribute sequence showing location of errored value within a data structure. A separator is customizable, 
@@ -174,10 +174,10 @@ A path can contain integer elements too (when using `Each` rule for example):
 ];
 ```
 
-##### Resolving special characters collision in attribute names
+#### Resolving special characters collision in attribute names
 
 When attribute name contains value path separator (dot - `.` by default) or `Each` rule shortcut (asterisk -`*`), 
-they're automatically escaped using backslash ('\`) in the error messages list:
+they're automatically escaped using backslash (`\`) in the error messages list:
 
 ```php
 [
@@ -206,7 +206,7 @@ items. See [Using keys containing separator / shortcut] section for more details
 
 This can be used as an alternative to using custom separator.
 
-##### Filtering by specific attribute
+#### Filtering by specific attribute
 
 This list can be also filtered by specific attribute. Only top level attributes are supported.
 
@@ -226,7 +226,7 @@ The output for example above:
 ];
 ```
 
-### Error objects list
+## Error objects list
 
 When even these representations are not enough, an initial unmodified list of error objects can be accessed via 
 this method:
@@ -246,7 +246,7 @@ configured translator.
 - Template parameters for substitution during formatting, for example: `['min' => 7]`.
 - A path to a value within a checked data structure, for example: `['user', 'name', 'firstName']`.
 
-#### An example of application
+### An example of application
 
 What this can be useful for? For example, to build a nested tree of error messages indexed by attribute names:
 
@@ -267,7 +267,7 @@ as JSON and storing in logs for example.
 
 Debugging original error objects is also more convenient.
 
-#### Filtering by specific attribute
+### Filtering by specific attribute
 
 This list can be also filtered by specific attribute. Only top level attributes are supported.
 
