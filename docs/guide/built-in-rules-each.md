@@ -1,4 +1,4 @@
-# Each — applying the same rules for each data item in the set
+# `Each` — applying the same rules for each data item in the set
 
 `Each` rule allows to apply the same rules for each data item in the set. The following example demonstrates configation
 for validation [RGB color] components:

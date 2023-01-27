@@ -36,7 +36,7 @@ possible, they are described further on.
 
 More representations of errors' list are covered in [Result] section. 
 
-## Other configuration options
+## Configuration options
 
 ### Dot notation
 
@@ -199,9 +199,9 @@ $errors = [
 ];
 ```
 
-### Using shortcut
+### Using `*` shortcut
 
-A shortcut can be used to simplify `Nested` and `Each` combinations:
+A `*` shortcut can be used to simplify `Nested` and `Each` combinations:
 
 ```php
 use Yiisoft\Validator\Rule\Count;

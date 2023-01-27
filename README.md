@@ -17,7 +17,7 @@
 
 The package provides data validation capabilities.
 
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
+- [Documentation](docs/guide/README.md)
 
 ## Features
 

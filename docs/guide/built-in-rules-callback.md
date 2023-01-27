@@ -29,7 +29,7 @@ where:
 - `$value` is validated value;
 - `$rule` is a reference to original `Callback` rule;
 - `$context` is a validation context;
-- Returned value is a validation result instance with errors or without them.
+- returned value is a validation result instance with errors or without them.
 
 ## Using as a function
 
@@ -133,7 +133,7 @@ $rules = [
 ];
 ```
 
-#### Replacing boilerplate code with separate rules and `when`
+### Replacing boilerplate code with separate rules and `when`
 
 However, some cases of using validation context can lead to boilerplate code:
 
@@ -273,7 +273,7 @@ final class Config {
 
 Note using property value (`$this->yaml`) instead of method argument (`$value`).
 
-## Using as a callable class
+## Using a callable class
 
 A classes implementing `__invoke()` can be used as a callable too:
 
