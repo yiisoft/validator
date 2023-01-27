@@ -303,7 +303,7 @@ use Attribute;
 use Yiisoft\Validator\RuleInterface;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class MyCustomRule implements RuleInterface 
+final class Yaml implements RuleInterface 
 {
     // ...
 }
@@ -313,8 +313,8 @@ final class MyCustomRule implements RuleInterface
 
 ### Instances
 
-Passing instances in attributes' scope is only possible since PHP 8.1. That means using attributes for complex rules, such as 
-`Composite`, `Each` and `Nested` or rules taking instances as arguments, with PHP 8.0 can be problematic.
+Passing instances in attributes' scope is only possible since PHP 8.1. That means using attributes for complex rules,
+such as `Composite`, `Each` and `Nested` or rules taking instances as arguments, with PHP 8.0 can be problematic.
 
 The first workaround is to upgrade to PHP 8.1 - this is not that hard as upgrading the major version. Tools like 
 [Rector] can ease the process of upgrading the code base by automating routine tasks.

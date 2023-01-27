@@ -24,9 +24,8 @@ Full list of supported placeholders with descriptions is available in PHPDoc for
 ## Translating error messages
 
 The translation of error messages is implemented with the help of [Yii Translator] package, using messages in English 
-language as a source. The other language that is fully supported currently is Russian, but there will be more in the 
-future. The translations are stored in a regular PHP file in associative array form, where keys are original messages 
-and values are translations. 
+language as a source. The translations are stored in a regular PHP file in associative array form, where keys are 
+original messages and values are translations. 
 
 To use the translations, it's required to install an additional package for support of reading them from PHP files:
 
@@ -56,6 +55,9 @@ $translator->addCategorySources($categorySource);
 
 $validator = new Validator(translator: $translator);
 ```
+
+You can check the available translations by viewing subfolders of the `messages` folder. If a required language is 
+missing, feel free to submit a [PR].
 
 ## Translating attribute names
 
@@ -127,6 +129,7 @@ $form = new PasswordForm();
 $result = (new Validator())->validate($form);
 ```
 
+[PR]: https://github.com/yiisoft/validator/pulls
 [Yii Translator]: https://github.com/yiisoft/translator
 [Yii Config]: https://github.com/yiisoft/config
 [Yii DI]: https://github.com/yiisoft/di
