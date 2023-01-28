@@ -316,10 +316,10 @@ final class Yaml implements RuleInterface
 Passing instances in the scope of attributes is only possible as of PHP 8.1. This means using attributes for complex
 rules like `Composite`, `Each` and `Nested` or rules that take instances as arguments, can be problematic with PHP 8.0.
 
-The first workaround is to upgrade to PHP 8.1 - this is not as hard as upgrading to the major version. Tools like 
+The first workaround is to upgrade to PHP 8.1 - this is fairly simple since it is a minor version. Tools like 
 [Rector] can ease the process of upgrading the code base by automating routine tasks.
 
-If this is not an option, use the other ways of providing rules, such as using rule providers:
+If this is not an option you can use rule providers like below:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -477,8 +477,8 @@ final class Author
 
 ### Passing along with data for validation
 
-Probably one of the neatest ways is to pass DTO instances with declared rules filled with data without any additional 
-setup:
+Probably one of the cleanest ways is to pass DTO instances with declared rules and data. This way doesn't require
+any additional setup:
 
 ```php
 use Yiisoft\Validator\Validator;
@@ -495,7 +495,7 @@ $result = (new Validator())->validate($post) // Note `$rules` argument is `null`
 
 ### Passing separately for validation
 
-Sometimes, and vice versa, it can be helpful to use the class only for parsing rules and provide data separately:
+It can be helpful to use the class for parsing rules and provide data separately:
 
 ```php
 use Yiisoft\Validator\Validator;

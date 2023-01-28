@@ -7,8 +7,8 @@ To use a non-default error message, pass a custom message/template when creating
 new Required(message: '{attribute} is required.');
 ```
 
-Some rules, however, have multiple error messages and, therefore, are overridden via different corresponding options. But 
-it's easy to differentiate them from the rest of the parameters by `Message` prefix:
+Some rules have multiple error messages and are overridden via different corresponding options.
+It is easy to differentiate them from the rest of the parameters by `Message` prefix:
 
 ```php
 new HasLength(  
@@ -61,7 +61,7 @@ missing, feel free to submit a [PR].
 
 ## Translating attribute names
 
-Almost all error templates have support for `{attribute}` placeholder which is substituted with an actual attribute name 
+Almost all error templates have support for an `{attribute}` placeholder which is substituted with an actual attribute name 
 that was set during rules configuration. By default, an attribute name is formatted as is. It can be acceptable for 
 English language (for example, `currentPassword is required.`), but when using translations for error messages, it's 
 better to provide an additional attribute translation.
@@ -79,7 +79,7 @@ There are several ways to use attribute translator.
 ### Passing translator to validator instance
 
 It's quite self-explanatory, just create an attribute translator, define all translations, and pass it to the newly
-created validator instance. An example for the russian language:
+created validator instance. An example for Russian language:
 
 ```php
 use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
@@ -98,7 +98,7 @@ Another option is providing translations in the validated data object itself. Th
 classes for example.
 
 There is another special interface called `AttributeTranslatorProviderInterface` for this case allowing the validator to 
-extract translations from the objects implementing it. An example for the russian language:
+extract translations from the objects implementing it. An example for Russian language:
 
 ```php
 final class ChangePasswordForm implements AttributeTranslatorProviderInterface  

@@ -17,7 +17,7 @@ can be automatically obtained from a dependency container.
 
 ## Instructions for creating a custom rule and what to avoid
 
-Let's try to create a rule for checking that a value is valid [RGB color].
+Let's try to create a rule for checking that a value is a valid [RGB color].
 
 ### Creating a rule
 
