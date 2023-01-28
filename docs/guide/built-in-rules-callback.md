@@ -189,7 +189,7 @@ $rules = [
 
 ### For property
 
-When used as a PHP attribute, set an object's method as a callback instead:
+When using as PHP attribute, set an object's method as a callback instead:
 
 ```php
 use Exception;
@@ -322,8 +322,8 @@ $rules = [
 
 ## Shortcut for use with validator
 
-When used with the validator and default `Callback` rule settings, a rule declaration can be omitted, so just including a
-callable is sufficient. It will be normalized automatically before validation:
+When using with the validator and default `Callback` rule settings, a rule declaration can be omitted, so just including a
+callable is enough. It will be normalized automatically before validation:
 
 ```php
 use Exception;
