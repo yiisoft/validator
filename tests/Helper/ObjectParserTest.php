@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Helper\ObjectParser;
 use Yiisoft\Validator\Tests\Support\Data\SimpleDto;
+use Yiisoft\Validator\Tests\Support\Rule\CustomUrlRuleSet;
 
 final class ObjectParserTest extends TestCase
 {
@@ -72,5 +73,21 @@ final class ObjectParserTest extends TestCase
         $this->assertNull($parser->getAttributeValue('x'));
         $this->assertFalse($parser->hasAttribute('a'));
         $this->assertFalse($parser->hasAttribute('x'));
+    }
+
+    public function testGetRulesExpectingAttributeInheritance(): void
+    {
+        $object = new class () {
+            #[CustomUrlRuleSet]
+            public string $url;
+        };
+        $parser = new ObjectParser($object);
+
+        $this->expectError();
+
+        $className = CustomUrlRuleSet::class;
+        $this->expectErrorMessage("Attempting to use non-attribute class \"$className\" as attribute");
+
+        $parser->getRules();
     }
 }
