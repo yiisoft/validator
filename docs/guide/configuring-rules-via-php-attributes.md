@@ -249,7 +249,7 @@ As for the data, default values set in the child class take precedence.
 In order for rules to be attached to DTO properties or the whole DTO - the `Attribute` attribute must be added to the 
 custom class. And in order for rules to be fetched from attributes, they must implement the `RuleInterface`.
 
-Example for `Composite`:
+For custom `Composite` rules you only need to add the attribute:
 
 ```php
 use Attribute;
@@ -258,6 +258,7 @@ use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Number;
 
+// Make sure to add this because attribute inheritance is not supported.
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class RgbColorRuleSet extends Composite
 {
@@ -274,8 +275,10 @@ final class RgbColorRuleSet extends Composite
 Example for custom rule:
 
 ```php
+use Attribute;
 use Yiisoft\Validator\RuleInterface;
 
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Yaml implements RuleInterface
 {
     public function __construct(
