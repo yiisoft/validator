@@ -1,6 +1,6 @@
 # `Each` — applying the same rules for each data item in the set
 
-`Each` rule allows the same rules to be applied to each data item in the set. The following example shows
+The `Each` rule allows the same rules to be applied to each data item in the set. The following example shows
 the configuration for validating [RGB color] components:
 
 ```php

@@ -88,8 +88,8 @@ $result = (new Validator())->validate($data, $rules);
 
 ## `skipOnEmpty` - skipping a rule if the validated value is "empty"
 
-By default, missing (when using attributes) and empty values are validated (if the value is missing, it is assumed to be  
-`null`). This is undesirable if you want an attribute to be optional. To change this behavior, use `skipOnEmpty: true`.
+Missing/empty values of attributes will still be validated. If the value is missing, it is then assumed to be `null`.
+If you want the attribute to be optional use `skipOnEmpty: true`.
 
 An example with an optional language attribute:
 

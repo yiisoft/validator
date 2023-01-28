@@ -1,4 +1,4 @@
-# `StopOnError` - stop validation on first error
+# `StopOnError` - stop validation on the first error
 
 This rule applies to a group of rules and allows you to stop the validation for the whole group immediately after
 an error occurs in any of the rules. This means that all rules following the rule that failed validation won't be

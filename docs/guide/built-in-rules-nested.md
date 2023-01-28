@@ -12,7 +12,7 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
 
-$data = ['author' => ['name' => 'John', 'age' => '31']];
+$data = ['author' => ['name' => 'John', 'age' => '17']];
 $rule = new Nested([
     'title' => [new Required()],
     'author' => new Nested([
@@ -31,7 +31,7 @@ The output of `$errors` will be:
     'author.age' => ['Value must be no less than 18.'],
 ];
 ```
-In this example, an additional instance of the `Nested` rule is used for each relation. The other types of configuration
+In this example, an additional instance of the `Nested` rule is used for each relation. Other types of configuration
 are possible, they are described below.
 
 Other representations of the error list are covered in the [Result] section. 
@@ -109,8 +109,8 @@ $rule = new Nested([
 ]);
 ```
 
-This limitation is planned to be removed in the future, but for now, in order for this example to work, it needs to be 
-rewritten to be wrapped with another `Nested` instance or the short syntax shown above.
+This limitation is planned to be removed in the future. In order for this example to work, it needs to be rewritten
+to be wrapped with another `Nested` instance or using the short syntax shown above.
 
 #### Inner arrays for single rules
 
@@ -368,7 +368,7 @@ $result = $validator->validate($chartSet); // Note `$rules` argument is `null` h
 $errors = $result->getErrorMessagesIndexedByPath();
 ```
 
-- - For more information about the different ways to configure rules using PHP attributes, see [Configuring rules via PHP
+- For more information about the different ways to configure rules using PHP attributes, see [Configuring rules via PHP
 attributes] section. 
 - For more information about possible data / rules combinations passed for validation, refer to the [Using validator] 
 section. 

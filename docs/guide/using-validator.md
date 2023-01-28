@@ -1,6 +1,6 @@
 # Using validator
 
-Validator allows checking of data in any format. Here are some of the most used cases.
+Validator allows checking of data in any format. Here are some of the most common use cases.
 
 ## Data
 
@@ -194,7 +194,7 @@ $result = (new Validator())->validate($data, $rulesProvider);
 
 #### Using interface method implementation
 
-Providing rules via interface method implementation has priority over PHP attributes. So, in the case of both present,
+Providing rules via interface method implementation has priority over PHP attributes. So, in case both are present,
 the attributes will be ignored without causing an exception.
 
 ```php

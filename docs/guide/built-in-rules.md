@@ -68,7 +68,7 @@ Some rules also have guides in addition to PHPDoc:
 ## Missing rules
 
 Can't find a rule? Feel free to submit an issue / PR, so it can be included in the package after review. Another option,
-if it's less generic, is to search for [an extension] first and [create a custom rule] if nothing is found.
+if your use case is less generic, is to search for [an extension] or [create a custom rule].
 
 [an extension]: extensions.md
 [create a custom rule]: creating-custom-rules.md

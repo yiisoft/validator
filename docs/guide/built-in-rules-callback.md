@@ -1,20 +1,20 @@
 # `Callback` - a wrapper around `callable`
 
 This rule allows you to validate the current attribute value (but not limited to it) with an arbitrary condition within a  
-callable. The advantage is that there is no need to create a separate custom rule and handler.
+callable. The advantage of this type of validator is that there is no need to create a separate custom rule and handler.
 
 A condition can be within:
 
 - Standalone callable function.
 - Callable class.
-- DTO method.
+- DTO (data transfer object) method.
 
 The downside of using standalone functions and DTO methods is a lack of reusability. So they are mainly useful 
 for some specific non-repetitive conditions. Reusability can be achieved with callable classes, but depending on other
-factors (the need for additional parameters for example), it might be a good idea to create a full-fledged custom rule 
-with a separate handler instead.
+factors (the need for additional parameters for example), it might be a good idea to create a full-fledged
+[custom rule](creating-custom-rules.md) with a separate handler instead.
 
-The function signature looks like this:
+The callback function signature is the following:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -26,7 +26,7 @@ function (mixed $value, Callback $rule, ValidationContext $context): Result;
 
 where:
 
-- `$value` is a validated value;
+- `$value` is the validated value;
 - `$rule` is a reference to the original `Callback` rule;
 - `$context` is a validation context;
 - Returned value is a validation result instance with errors or without errors.
@@ -88,8 +88,8 @@ new Callback(
 
 ### Using a validation context to validate interdependent attributes
 
-A validation context can also be used - for example, when performing a validation of interdependent attributes.
-each other. In the example below, the 3 angles are validated by degree values to form a valid triangle:
+A validation context can also be used. In the example below, the 3 angles are validated as degrees to form
+a valid triangle:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -164,8 +164,8 @@ static function (mixed $value, Callback $rule, ValidationContext $context): Resu
 };
 ```
 
-They can be rewritten using multiple rules (built-in ones where possible) and conditional validation making code less 
-verbose and more intuitive:
+They can be rewritten using multiple rules and conditional validation making code more intuitive. We can use built-in
+rules where possible:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
@@ -322,7 +322,7 @@ $rules = [
 
 ## Shortcut for use with validator
 
-When used with a validator and default `Callback` rule settings, a rule declaration can be omitted, so just including a
+When used with the validator and default `Callback` rule settings, a rule declaration can be omitted, so just including a
 callable is sufficient. It will be normalized automatically before validation:
 
 ```php

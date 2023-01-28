@@ -27,7 +27,7 @@ new Required(emptyCriteria: new WhenNull());
 It's also possible to set it globally for all rules of this type at the handler level via 
 `RequiredHandler::$defaultEmptyCriteria`.
 
-## Use with other rules
+## Usage with other rules
 
 `Required` is rarely used by itself. When combining it with other rules, make sure it's placed first:
 
@@ -54,7 +54,7 @@ $rules = [
 ];
 ```
 
-The other ways of configuring conditional validation are described in the [Conditional validation] section.
+Other ways of configuring conditional validation are described in the [Conditional validation] section.
 
 [skipOnEmpty]: conditional-validation.md#skiponempty---skipping-a-rule-if-the-validated-value-is-empty
 [Empty criteria basics]: conditional-validation.md#empty-criteria-basics
