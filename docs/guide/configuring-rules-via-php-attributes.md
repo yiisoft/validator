@@ -246,7 +246,7 @@ As for the data, default values set in the child class take precedence.
 
 ## Adding attributes support to custom rules
 
-In order to attach rules to DTO properties or the entire DTO, the `Attribute` attribute must be added to the 
+In order to attach rules to DTO properties or the whole DTO, the `Attribute` attribute must be added to the 
 custom class. And in order for rules to be fetched from attributes, they must implement the `RuleInterface`.
 
 Example for `Composite`:

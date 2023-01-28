@@ -234,7 +234,7 @@ restrictions (a callback can't be inside a PHP attribute).
 
 ### For the whole object
 
-It's also possible to check the entire object:
+It's also possible to check the whole object:
 
 ```php
 use Exception;
