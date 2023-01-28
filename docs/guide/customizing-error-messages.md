@@ -8,7 +8,7 @@ new Required(message: '{attribute} is required.');
 ```
 
 Some rules have multiple error messages and are overridden via different corresponding options.
-It is easy to differentiate them from the rest of the parameters by `Message` prefix:
+It is easy to differentiate them from the rest of the parameters by `Message` suffix:
 
 ```php
 new HasLength(  

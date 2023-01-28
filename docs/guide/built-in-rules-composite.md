@@ -39,7 +39,7 @@ final class UsernameRuleSet extends Composite
 }
 ```
 
-And use it just like a regular rule:
+And use it just like a single regular rule:
 
 ```php
 use Yiisoft\Validator\Validator;

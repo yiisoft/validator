@@ -1,7 +1,7 @@
-# Configuring rules using PHP attributes
+# Configuring rules via PHP attributes
 
 The [Attributes] feature introduced in PHP 8 allows an alternative way of configuring rules. If entities/models with
-their relations are represented as [DTO] classes, attributes make it possible to use such classes to specify rules.
+their relations are represented as [DTO] classes, attributes make it possible to use such classes to provide rules.
 The rules are defined above the properties themselves, which some developers may find more convenient in terms
 of readability.
 
@@ -75,7 +75,7 @@ final class User
 
 ## Configuring for multiple entities / models with relations
 
-Given an example of rule set for a blog post configured using arrays only:
+Given an example of rule set for a blog post configured via arrays only:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -163,7 +163,7 @@ For a better understanding of relations concept, it's recommended to read the [N
 
 ## Traits
 
-Attributes can also be used in traits as well. This can be useful for reusing the same set of properties with identical 
+Attributes can also be used in traits. It might come in handy for reusing the same set of properties with identical 
 rules: 
 
 ```php
@@ -188,7 +188,7 @@ final class WikiArticle
 
 ## Inheritance
 
-Inheritance is supported, but there are a few things to keep in mind:
+Inheritance is supported, but there are some things to keep in mind:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
@@ -237,9 +237,9 @@ use Yiisoft\Validator\Rule\Required;
 ];
 ```
 
-So, to summarize:
+So, to sum up:
 
-- Parent rules for overridden properties are completely ignored, only those from the child class are obtained.
+- Parent rules for overridden properties are ignored completely, only the ones from the child class are obtained.
 - All parent rules for properties that are not overridden in the child class are obtained fully.
 
 As for the data, default values set in the child class take precedence.
@@ -314,7 +314,7 @@ final class Yaml implements RuleInterface
 ### Instances
 
 Passing instances in the scope of attributes is only possible as of PHP 8.1. This means using attributes for complex
-rules like `Composite`, `Each` and `Nested` or rules that take instances as arguments, can be problematic with PHP 8.0.
+rules such as `Composite`, `Each` and `Nested` or rules that take instances as arguments, can be problematic with PHP 8.0.
 
 The first workaround is to upgrade to PHP 8.1 - this is fairly simple since it is a minor version. Tools like 
 [Rector] can ease the process of upgrading the code base by automating routine tasks.
@@ -421,7 +421,7 @@ Attempting to use callables within the scope of an attribute will cause the erro
 
 The workarounds are:
 
-- `Composite` or the rules provider described in the [Instances] section will also work here.
+- `Composite` or the rules provider described in the [Instances] section will also fit here.
 - Create a [custom rule].
 - For the `Callback` rule in particular, it is possible to replace a callback with a [method reference].
 
@@ -437,11 +437,11 @@ method for validation - use a `Callback` rule with [method reference]. Otherwise
 
 Well, the rules are configured. What's next? We can either:
 
-- Pass them for validation immediately.
-- Tweak the parsing of rules (by skippable properties and using cache).
+- Pass them for validation right away.
+- Tune the parsing of rules (skippable properties, using cache).
 - Use them for something else (e.g. for exporting their options).
 
-Let's use a blog post again to demonstrate, but a slightly shortened version:
+Let's use a blog post again for demonstration, but a slightly shortened version:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;

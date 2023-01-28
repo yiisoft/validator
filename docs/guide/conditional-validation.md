@@ -5,10 +5,10 @@ these options, but the vast majority do.
 
 ## `skipOnError` - skip a rule in the set if the previous one failed
 
-By default, if an error occurs while validating an attribute, all other rules in the set are processed. To
+By default, if an error occurs while validating an attribute, all further rules in the set are processed. To
 change this behavior, use `skipOnError: true` for rules that need to be skipped:
 
-In the following example, the username length check is skipped if the username is not filled.
+In the following example, checking the length of a username is skipped if the username is not filled.
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -39,7 +39,8 @@ $result = (new Validator())->validate($data, $rules);
 
 Note that this setting must be set for each rule that needs to be skipped on error.
 
-The same effect can be achieved with `StopOnError` and `Composite` rules, which can be useful for a larger number of rules.
+The same effect can be achieved with `StopOnError` and `Composite` rules, which can be more convenient for a larger
+number of rules.
 
 Using `StopOnError`:
 
@@ -88,7 +89,7 @@ $result = (new Validator())->validate($data, $rules);
 
 ## `skipOnEmpty` - skipping a rule if the validated value is "empty"
 
-Missing/empty values of attributes will still be validated. If the value is missing, it is then assumed to be `null`.
+By default, missing/empty values of attributes are validated. If the value is missing, it is assumed to be `null`.
 If you want the attribute to be optional use `skipOnEmpty: true`.
 
 An example with an optional language attribute:
@@ -106,7 +107,7 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
-If the attribute is required, it is more appropriate to use `skipOnError: true` instead of the `Required` rule.
+If the attribute is required, it is more appropriate to use `skipOnError: true` instead of the preceding `Required` rule.
 This is because the detection of empty values within the `Required` rule and skipping in further rules
 can be set separately. This is described in more detail below, see [Configuring empty criteria in other rules] section.
 
@@ -132,9 +133,9 @@ What is considered empty can vary depending on the scope of usage.
 The value passed to `skipOnEmpty` is called "empty criteria". It is always a callback at the end, but shortcuts are also
 supported due to normalization:
 
-- When `false` or `null`, `Yiisoft\Validator\EmptyCriteria\NeverEmpty` is automatically used as a callback - every value 
+- When `false` or `null`, `Yiisoft\Validator\EmptyCriteria\NeverEmpty` is used automatically as a callback - every value 
 is considered non-empty and validated without skipping (default).
-- When `true`, `Yiisoft\Validator\EmptyCriteria\WhenEmpty` is automatically used as a callback - only passed
+- When `true`, `Yiisoft\Validator\EmptyCriteria\WhenEmpty` is used automatically as a callback - only passed
 (corresponding attribute must be present) and non-empty values (not `null`, `[]`, or `''`) are validated.
 - If a custom callback is set, it is used to determine emptiness.
 
@@ -142,7 +143,7 @@ is considered non-empty and validated without skipping (default).
 
 There are some more criteria that have no shortcuts and need to be set explicitly because they are less used:
 
-- `Yiisoft\Validator\EmptyCriteria\WhenMissing` - a value that is treated as empty only if it is missing (not passed at all).
+- `Yiisoft\Validator\EmptyCriteria\WhenMissing` - a value is treated as empty only when it is missing (not passed at all).
 - `Yiisoft\Validator\EmptyCriteria\WhenNull` - limits empty values to `null` only.
 
 An example with using `WhenNull` as parameter (note that an instance is passed, not a class name):
@@ -228,8 +229,8 @@ It is also possible to set it globally for all rules of this type at the handler
 
 ## `when`
 
-`when` provides the option to apply the rule dependent on a condition. It determines if the rule will be skipped.
-The function for `when` is as follows:
+`when` provides the option to apply the rule dependent on a condition. A callable result determines if the rule will
+be skipped. The signature of the function is the following:
 
 ```php
 function (mixed $value, ValidationContext $context): bool;
@@ -239,7 +240,7 @@ where:
 
 - `$value` is a validated value;
 - `$context` is a validation context;
-- `true` as a return value means that the rule must be applied and a `false` means it must be skipped.
+- `true` as a returned value means that the rule must be applied and a `false` means it must be skipped.
 
 
 In this example the state is only required when the country is `Brazil`. `$context->getDataSet()->getAttributeValue()`

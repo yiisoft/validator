@@ -11,7 +11,7 @@ By default, a value is considered empty only when it is either:
 
 ## Customizing empty criteria
 
-Which values are considered empty can be customized with the `$emptyCriteria` option. Unlike in [skipOnEmpty],
+Which values are considered empty can be customized via the `$emptyCriteria` option. Unlike in [skipOnEmpty],
 no normalization is performed here, so only a callable or a special class is accepted. For more details see
 the [Empty criteria basics] section.
 

@@ -2,7 +2,7 @@
 
 ## Available rules
 
-Here is a list of all available built-in rules, sorted by category.
+Here is a list of all available built-in rules, divided by category.
 
 ### String rules
 

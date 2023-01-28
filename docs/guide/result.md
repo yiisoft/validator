@@ -207,7 +207,7 @@ items. See the [Using keys containing separator/shortcut] section for more detai
 
 This can be used as an alternative to using a custom separator.
 
-##### Filtering by a specific attribute
+#### Filtering by a specific attribute
 
 This list can be also filtered by a specific attribute. Only top-level attributes are supported.
 
@@ -247,7 +247,7 @@ the configured translator.
 - Template parameters for substitution during formatting, for example: `['min' => 7]`.
 - A path to a value within a checked data structure, for example: `['user', 'name', 'firstName']`.
 
-#### An example of an application
+### An example of an application
 
 What this can be useful for? For example, to build a nested tree of error messages indexed by attribute names:
 
@@ -268,7 +268,7 @@ as JSON and storing in logs for example.
 
 Debugging original error objects is also more convenient.
 
-#### Filtering by a specific attribute
+### Filtering by a specific attribute
 
 This list can be also filtered by a specific attribute. Only top-level attributes are supported.
 

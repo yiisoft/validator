@@ -3,12 +3,12 @@
 Unlike Yii2, the package does not provide any handling of the validation rules on the client side. Likely it will be 
 added later as another related package. 
 
-However, there is a way to export the rule's options as an array for passing to the client side using 
+However, there is a possibility to export the rule's options as an array for passing to the client side using 
 `RulesDumper` class:
 
 - Multiple rules and nesting of rules are supported.
 - If a rule does not provide options, only the name is exported.
-- The option values that can't be serialized / reproduced on the client side - callables, for example, are excluded - 
+- The option values that can't be serialized/reproduced on the client side - callables, for example, are excluded - 
 either completely like `Callback::$callback` or partially like `$skipOnEmpty` if multiple types are supported.
 
 Given built-in `HasLength` rule:
@@ -60,7 +60,7 @@ The resulting array, serialized as JSON, can be unserialized back and applied to
 
 ## Structure of exported options
 
-Here are some specifics about the rules structure:
+Here are some specifics of the rules structure:
 
 - The indexing of rules by attribute names is maintained.
 - The first rule element is always a rule name with an integer index of `0`.
@@ -79,7 +79,7 @@ Note that the error messages have a special structure:
 ];
 ```
 
-It remains the same regardless of the presence of placeholders and parameters:
+It stays the same regardless of the presence of placeholders and parameters:
 
 ```php
 'message' => [

@@ -53,7 +53,7 @@ new Callback(
 
 ### Adding and applying validation missing in built-in rules to current attribute value 
 
-Below is an example that checks if a value is a valid [YAML] string (additionally requires the `yaml` PHP extension):
+Below is an example that verifying that a value is a valid [YAML] string (additionally requires the `yaml` PHP extension):
 
 ```php
 use Exception;

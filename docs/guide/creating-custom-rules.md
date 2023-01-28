@@ -11,7 +11,7 @@ not perform actual validation.
 - Rule handler (a class implementing `RuleHandlerInterface`). Given a rule and input data, performs the actual 
 validation within a current validation context. 
 
-Besides responsibilities' separation, this approach allows automatic resolving dependencies for a handler. For 
+Besides responsibilities' separation, this approach allows to automatically resolve dependencies for a handler. For 
 example, if you need a database connection object within a handler, you don't have to pass it there explicitly - it 
 can be automatically obtained from a dependency container.
 
@@ -314,7 +314,7 @@ Knowing the core principles, let's explore more appropriate real-life examples.
 
 ### Verifying `YAML`
 
-There is built-in rule for validating JSON. But what if we need the same, but, for example, for [YAML] ? Let's try to
+There is built-in rule for validating JSON. But what if we need the same, but for [YAML]? Let's try to
 implement it.
 
 Rule:

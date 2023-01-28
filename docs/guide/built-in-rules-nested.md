@@ -133,9 +133,9 @@ $rule = new Nested([
 
 ### One-to-many and many-to-many relations
 
-The example in the [Basic usage] section shows how to work with one-to-one relations only, when the `Nested' rule is sufficient for
-referencing relations. But it can be combined with other complex rules, such as `Each', to validate one-to-many and
-many-to-many relations as well:
+The example in the [Basic usage] section shows how to work with one-to-one relations only, when the `Nested` rule is
+sufficient for referencing relations. But it can be combined with other complex rules, such as `Each`, to validate
+one-to-many and many-to-many relations as well:
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -188,7 +188,7 @@ $result = (new Validator())->validate($data, $rule);
 $errors = $result->getErrorMessagesIndexedByPath();
 ```
 
-The content of the errors will be:
+The contents of the errors will be:
 
 ```php
 $errors = [
@@ -243,7 +243,7 @@ This is less verbose, but the downside of this approach is that you can't additi
 
 ### Using PHP attributes
 
-Rules and relations can be declared through DTO with PHP attributes: 
+Rules and relations can be declared via DTO with PHP attributes: 
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -368,7 +368,7 @@ $result = $validator->validate($chartSet); // Note `$rules` argument is `null` h
 $errors = $result->getErrorMessagesIndexedByPath();
 ```
 
-- For more information about the different ways to configure rules using PHP attributes, see [Configuring rules via PHP
+- For more information about the different ways to configure rules via PHP attributes, see [Configuring rules via PHP
 attributes] section. 
 - For more information about possible data / rules combinations passed for validation, refer to the [Using validator] 
 section. 
