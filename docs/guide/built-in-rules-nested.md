@@ -375,9 +375,9 @@ section.
 
 ### Using keys containing separator / shortcut
 
-If a key contains the separator (`.`), it must be escaped with backslash (`\`) in rule config in order to work
-correctly. Thus, in the input data escaping is not needed. Here is an example with 2 nested keys named `author.data` and
-`name.surname`:
+If a key contains the attributes separator (`.`) or `Each` shortcut (`*`), it must be escaped with backslash (`\`) in 
+rule config in order to work correctly. Thus, in the input data escaping is not needed. Here is an example with 2 nested 
+keys named `author.data` and `name.surname`:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -415,7 +415,7 @@ $data = [
 ];
 ```
 
-The same applies to the `Each` shortcut:
+The example with the `Each` shortcut (`*`):
 
 ```php
 use Yiisoft\Validator\Rule\Nested;
