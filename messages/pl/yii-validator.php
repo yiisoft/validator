@@ -6,7 +6,7 @@ return [
     'The data must have at least "{min}" filled attributes.' => 'Dane muszą mieć co najmniej "{min}" wypełnionych atrybutów.',
     'Value must be an array or an object.' => 'Wartość musi być tablicą lub obiektem.',
     'The allowed types are integer, float, string, boolean. {type} given.' => 'Dozwolone typy to integer, float, string, boolean. Podano {type}.',
-    'Value must be either "{true}" or "{false}".' => 'Wartość musi być albo "{true}" albo "{false}".',
+    'Value must be either "{true}" or "{false}".' => 'Wartość musi wynosić "{true}" albo "{false}".',
     'The allowed types are integer, float, string, boolean and null.' => 'Dozwolone typy to integer, float, string, boolean i null.',
     'The attribute value returned from a custom data set must have a scalar type.' => 'Wartość atrybutu zwrócona z niestandardowego zestawu danych musi być typu skalarnego.',
     'Value must be equal to "{targetValueOrAttribute}".' => 'Wartość musi być równa "{targetValueOrAttribute}".',
