@@ -16,7 +16,7 @@ return [
     'Value must be less than "{targetValueOrAttribute}".' => 'Wartość musi być mniejsza niż "{targetValueOrAttribute}".',
     'Value must be less than or equal to "{targetValueOrAttribute}".' => 'Wartość musi być równa lub mniejsza od "{targetValueOrAttribute}".',
     'This value must be an array or implement \Countable interface.' => 'Ta wartość musi być tablicą lub implementacją interfejsu \Countable.',
-    'This value must contain at least {min, number} {min, plural, one{item} other{items}}.' => 'Ta wartość musi zawierać co najmniej {min, number} {min, number} {min, plural, one{element} few{elementy} many{elementów} other{elementu}}.',
+    'This value must contain at least {min, number} {min, plural, one{item} other{items}}.' => 'Ta wartość musi zawierać co najmniej {min, number} {min, plural, one{element} few{elementy} many{elementów} other{elementu}}.',
     'This value must contain at most {max, number} {max, plural, one{item} other{items}}.' => 'Ta wartość musi zawierać co najwyżej {max, number} {max, plural, one{element} few{elementy} many{elementów} other{elementu}}.',
     'This value must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => 'Ta wartość musi zawierać dokładnie {exactly, number} {exactly, plural, one{element} few{elementy} many{elementów} other{elementu}}.',
     'Value must be array or iterable.' => 'Wartość musi być tablicą lub iteracją.',
