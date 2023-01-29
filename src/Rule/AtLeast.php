@@ -17,7 +17,7 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Defines validation options to check that a minimum number of specified attributes are filled.
  *
- * Arrays and objects with public properties are supported as values validated.
+ * Both arrays and objects with public properties are supported as validated values.
  *
  * @see AtLeastHandler
  *

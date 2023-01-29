@@ -16,6 +16,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\Rule\CoordinatesRuleSet;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
 
 final class CompositeTest extends RuleTestCase
@@ -220,7 +221,10 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new Composite(
-                        [new Number(max: 13)],
+                        [
+                            new Number(max: 13),
+                            new Number(max: 14),
+                        ],
                         when: fn () => false,
                     ),
                 ],
@@ -239,10 +243,17 @@ final class CompositeTest extends RuleTestCase
                 null,
                 [
                     new Composite(
-                        [new Number(max: 13)],
+                        [
+                            new Number(max: 13),
+                            new Number(max: 14),
+                        ],
                         skipOnEmpty: true,
                     ),
                 ],
+            ],
+            'multiple attributes' => [
+                ['latitude' => -90, 'longitude' => 180],
+                [new CoordinatesRuleSet()],
             ],
         ];
     }
@@ -326,6 +337,14 @@ final class CompositeTest extends RuleTestCase
                     },
                 ],
                 ['' => ['Value cannot be blank.']],
+            ],
+            'multiple attributes' => [
+                ['latitude' => -91, 'longitude' => 181],
+                [new CoordinatesRuleSet()],
+                [
+                    'latitude' => ['Value must be no less than -90.'],
+                    'longitude' => ['Value must be no greater than 180.'],
+                ],
             ],
         ];
     }
