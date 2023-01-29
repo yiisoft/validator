@@ -19,7 +19,7 @@ return [
     'This value must contain at least {min, number} {min, plural, one{item} other{items}}.' => 'Ta wartość musi zawierać co najmniej {min, number} {min, plural, one{element} few{elementy} many{elementów} other{elementu}}.',
     'This value must contain at most {max, number} {max, plural, one{item} other{items}}.' => 'Ta wartość musi zawierać co najwyżej {max, number} {max, plural, one{element} few{elementy} many{elementów} other{elementu}}.',
     'This value must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => 'Ta wartość musi zawierać dokładnie {exactly, number} {exactly, plural, one{element} few{elementy} many{elementów} other{elementu}}.',
-    'Value must be array or iterable.' => 'Wartość musi być tablicą lub iteracją.',
+    'Value must be array or iterable.' => 'Wartość musi być typu tablicowego lub iteracyjnego.',
     'Every iterable key must have an integer or a string type.' => 'Każdy klucz iterowalny musi być liczbą lub tekstem.',
     'The value must have a string type.' => 'Wartość musi być typu tekstowego.',
     'This value is not a valid email address.' => 'Ta wartość nie jest prawidłowym adresem e-mail.',
