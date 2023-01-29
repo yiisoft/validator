@@ -12,7 +12,7 @@ return [
     'Value must be equal to "{targetValueOrAttribute}".' => 'Wartość musi być równa "{targetValueOrAttribute}".',
     'Value must not be equal to "{targetValueOrAttribute}".' => 'Wartość nie może być równa "{targetValueOrAttribute}".',
     'Value must be greater than "{targetValueOrAttribute}".' => 'Wartość musi być większa niż "{targetValueOrAttribute}".',
-    'Value must be greater than or equal to "{targetValueOrAttribute}".' => 'Wartość musi być większa lub równa od "{targetValueOrAttribute}".',
+    'Value must be greater than or equal to "{targetValueOrAttribute}".' => 'Wartość musi być równa lub większa od "{targetValueOrAttribute}".',
     'Value must be less than "{targetValueOrAttribute}".' => 'Wartość musi być mniejsza niż "{targetValueOrAttribute}".',
     'Value must be less than or equal to "{targetValueOrAttribute}".' => 'Wartość musi być mniejsza lub równa od "{targetValueOrAttribute}".',
     'This value must be an array or implement \Countable interface.' => 'Ta wartość musi być tablicą lub implementacją interfejsu \Countable.',
