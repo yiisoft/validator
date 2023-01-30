@@ -29,7 +29,7 @@ where:
 - `$value` is the validated value;
 - `$rule` is a reference to the original `Callback` rule;
 - `$context` is a validation context;
-- Returned value is a validation result instance with errors or without errors.
+- returned value is a validation result instance with or without errors.
 
 ## Using as a function
 
