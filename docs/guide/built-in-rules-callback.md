@@ -1,7 +1,7 @@
 # `Callback` - a wrapper around `callable`
 
 This rule allows validation of current attribute value (but not limited to it) with an arbitrary condition within a  
-callable. The benefit of this type of rule is that there is no need to create a separate custom rule and handler.
+callable. The benefit is that there is no need to create a separate custom rule and handler.
 
 A condition can be within:
 
