@@ -89,7 +89,7 @@ new Callback(
 
 ### Usage of validation context for validating multiple attributes depending on each other
 
-A validation context can also be used. In the example below, the 3 angles are validated as degrees to form
+In the example below, the 3 angles are validated as degrees to form
 a valid triangle:
 
 ```php

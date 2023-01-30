@@ -113,7 +113,7 @@ An example of output:
 
 Note that the result is always a 2-dimensional array with attribute names as keys at the first nesting level. This means
 that further nesting of attributes is not supported (but could be achieved
-[by using `getErrorMessagesIndexedByPath()`](#error-messages-indexed-by-path)).
+by using [`getErrorMessagesIndexedByPath()`](#error-messages-indexed-by-path)).
 Returning to the previous example, when `name` and `email` belong to a `user` attribute, the output will be:
 
 ```php
