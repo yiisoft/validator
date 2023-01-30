@@ -376,7 +376,7 @@ section.
 ### Using keys containing separator / shortcut
 
 If a key contains the separator (`.`), or `Each` shortcut (`*`), it must be escaped with backslash (`\`) in
-the rule config to work correctly. So escaping is not needed in the input data. Here is an example with 2 nested
+the rule config to work correctly. Escaping is not needed in the input data. Here is an example with 2 nested
 keys named `author.data` and `name.surname`:
 
 ```php
