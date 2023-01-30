@@ -1,6 +1,6 @@
 # Using validator
 
-Validator allows checking of data in any format. Here are some of the most common use cases.
+Validator allows to check data in any format. Here are some of the most common use cases.
 
 ## Data
 

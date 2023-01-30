@@ -90,7 +90,7 @@ $result = (new Validator())->validate($data, $rules);
 ## `skipOnEmpty` - skipping a rule if the validated value is "empty"
 
 By default, missing/empty values of attributes are validated. If the value is missing, it is assumed to be `null`.
-If you want the attribute to be optional use `skipOnEmpty: true`.
+If you want the attribute to be optional, use `skipOnEmpty: true`.
 
 An example with an optional language attribute:
 
@@ -107,9 +107,10 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
-If the attribute is required, it is more appropriate to use `skipOnError: true` instead of the preceding `Required` rule.
-This is because the detection of empty values within the `Required` rule and skipping in further rules
-can be set separately. This is described in more detail below, see [Configuring empty criteria in other rules] section.
+If the attribute is required, it is more appropriate to use `skipOnError: true` along with the preceding `Required` rule
+instead of `skipOnEmpty: true`. This is because the detection of empty values within the `Required` rule and skipping
+in further rules can be set separately. This is described in more detail below,
+see [Configuring empty criteria in other rules] section.
 
 ```php
 use Yiisoft\Validator\Rule\In;
@@ -130,8 +131,8 @@ $result = (new Validator())->validate($data, $rules);
 
 What is considered empty can vary depending on the scope of usage.
 
-The value passed to `skipOnEmpty` is called "empty criteria". It is always a callback at the end, but shortcuts are also
-supported due to normalization:
+The value passed to `skipOnEmpty` is called "empty criteria". Due to normalization the following shortcut values are
+supported:
 
 - When `false` or `null`, `Yiisoft\Validator\EmptyCriteria\NeverEmpty` is used automatically as a callback - every value 
 is considered non-empty and validated without skipping (default).
@@ -229,8 +230,8 @@ It is also possible to set it globally for all rules of this type at the handler
 
 ## `when`
 
-`when` provides the option to apply the rule dependent on a condition. A callable result determines if the rule will
-be skipped. The signature of the function is the following:
+`when` provides the option to apply the rule depending on a condition of the provided callable. A callable's result
+determines if the rule will be skipped. The signature of the function is the following:
 
 ```php
 function (mixed $value, ValidationContext $context): bool;
@@ -242,9 +243,8 @@ where:
 - `$context` is a validation context;
 - `true` as a returned value means that the rule must be applied and a `false` means it must be skipped.
 
-
 In this example the state is only required when the country is `Brazil`. `$context->getDataSet()->getAttributeValue()`
-method also allows you to get any other attribute's value within the `ValidationContext`.
+method allows you to get any other attribute's value within the `ValidationContext`.
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
