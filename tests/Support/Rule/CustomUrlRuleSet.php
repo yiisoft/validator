@@ -9,7 +9,7 @@ use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Url;
 
-final class CustomUrlRule extends Composite
+final class CustomUrlRuleSet extends Composite
 {
     public function getRules(): iterable
     {

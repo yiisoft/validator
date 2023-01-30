@@ -10,7 +10,7 @@ use Yiisoft\Validator\Rule\Number;
 final class InheritAttributesObject extends ParentInheritAttributesObject
 {
     #[Number(min: 21)]
-    #[Equal(targetValue: 23)]
+    #[Equal(23)]
     public int $age = 18;
 
     public int $level = 2;

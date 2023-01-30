@@ -39,7 +39,7 @@ use function is_string;
  *     public Author|null $author = null;
  *
  *     // Passing instances is available only since PHP 8.1.
- *     #[Each(new Nested([File::class])]
+ *     #[Each(new Nested(File::class))]
  *     public array $files = [];
  *
  *     public function __construct()
