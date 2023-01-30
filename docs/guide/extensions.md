@@ -1,20 +1,20 @@
 # Extensions
 
-The validator's architecture allows for replenishing its missing functionality via extensions. A few already exist
+The validator's architecture allows to replenish its missing functionality via extensions. A few already exist
 and are available for usage. Note that they are not official in terms of not being part of Yiisoft packages.
 
 ## Scenarios
 
-Yii 2 has a [scenarios] feature out of the box. Those of you that used it might be wondering why it's no longer the case 
+Yii2 has a [scenarios] feature out of the box. Those of you that used it might be wondering why it's no longer the case 
 with this package. Well, we think that from an architectural point of view, it's a design flaw. What seems to be more 
 concise at first, tends to grow and became harder to read and maintain with a bigger amount of
 attributes/scenarios/business logic, while rewriting cost can be quite high. This was proved in practice, so this
-approach is discouraged and the recommended way with this package is to use separate DTO for each scenario.
+approach is discouraged and the recommended way with this package is using separate DTO for each scenario.
 Sure, this will lead to some code duplication, but it's acceptable and will pay off in the future.
 Anyway, we decided to make it available through an extension, but use it with caution.   
 
 [Yii Validator Scenarios] (`vjik/yii-validator-scenarios`) package from a core team member [Sergei Predvoditelev] adds
-special `On` rule which allows wrapping other rules by declaring specific scenarios.
+special `On` rule which allows to wrap other rules by declaring specific scenarios.
 
 An example of the class using scenarios:
 

@@ -1,6 +1,6 @@
 # `Composite` - grouping multiple validation rules
 
-`Composite` allows you to group multiple rules and configure the common [skipping options], such as `skipOnEmpty`, 
+`Composite` allows to group multiple rules and configure the common [skipping options], such as `skipOnEmpty`, 
 `skipOnError` and `when`, for the whole set only once instead of repeating them in each rule:
 
 ```php

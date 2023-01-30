@@ -3,7 +3,7 @@
 Unlike Yii2, the package does not provide any handling of the validation rules on the client side. Likely it will be 
 added later as another related package. 
 
-However, there is a possibility to export the rule's options as an array for passing to the client side using 
+However, there is a possibility to export rules' options as an array for passing to the client side using 
 `RulesDumper` class:
 
 - Multiple rules and nesting of rules are supported.

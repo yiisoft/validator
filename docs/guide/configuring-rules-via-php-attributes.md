@@ -322,7 +322,7 @@ rules such as `Composite`, `Each` and `Nested` or rules that take instances as a
 The first workaround is to upgrade to PHP 8.1 - this is fairly simple since it is a minor version. Tools like 
 [Rector] can ease the process of upgrading the code base by automating routine tasks.
 
-If this is not an option you can use rule providers like below:
+If this is not an option, you can use other ways of providing rules, such as rule providers:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;

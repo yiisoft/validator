@@ -1,6 +1,6 @@
 # Result
 
-The validation result is an object containing errors' data that occurred during validation.
+The validation result is an object containing of errors occurred during validation.
 
 ## Is validation successful?
 
@@ -32,6 +32,7 @@ error. Choose one to fit your needs depending on the situation.
 
 One of the simplest cases is getting a flat list of all error messages. Use the following `Result` API call:
 
+
 ```php
 use Yiisoft\Validator\Result;
 
@@ -52,7 +53,7 @@ An example of output with `age` and `email` attributes:
 It's easy to display and iterate, however, with a bigger amount of attributes and depending on a message, it can be
 problematic to understand which attribute an error belongs to.
 
-##### Error messages not bound to a specific attribute
+#### Error messages not bound to a specific attribute
 
 Sometimes error messages are not related to a specific attribute. It can happen during the validation of
 multiple attributes depending on each other for example. Use the following `Result` API call:
@@ -69,7 +70,7 @@ The output for example above:
 ];
 ```
 
-##### Filtering by a specific attribute
+#### Filtering by a specific attribute
 
 This list can be also filtered by a specific attribute. Only top-level attributes are supported.
 
@@ -111,7 +112,8 @@ An example of output:
 ```
 
 Note that the result is always a 2-dimensional array with attribute names as keys at the first nesting level. This means
-that further nesting of attributes is not supported (but could be achieved by using `getErrorMessagesIndexedByPath()`).
+that further nesting of attributes is not supported (but could be achieved
+[by using `getErrorMessagesIndexedByPath()`](#error-messages-indexed-by-path)).
 Returning to the previous example, when `name` and `email` belong to a `user` attribute, the output will be:
 
 ```php
@@ -175,7 +177,6 @@ A path can contain integer elements too (when using the `Each` rule for example)
 ```
 
 #### Resolving special characters collision in attribute names
-
 
 When the attribute name contains a path separator (dot - `.` by default) or `Each` rule shortcut (asterisk -`*`), 
 they're automatically escaped using a backslash (`\​`) in the error messages list:

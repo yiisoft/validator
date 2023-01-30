@@ -31,7 +31,7 @@ The output of `$errors` will be:
     'author.age' => ['Value must be no less than 18.'],
 ];
 ```
-In this example, an additional instance of the `Nested` rule is used for each relation. Other types of configuration
+In this example, an additional instance of the `Nested` rule is used for each relation. Other ways of configuration
 are possible, they are described below.
 
 Other representations of the error list are covered in the [Result] section. 
@@ -137,6 +137,39 @@ The example in the [Basic usage] section shows how to work with one-to-one relat
 sufficient for referencing relations. But it can be combined with other complex rules, such as `Each`, to validate
 one-to-many and many-to-many relations as well:
 
+Let's take this line chart set as an example: 
+
+```php
+$data = [
+    'charts' => [
+        [
+            'points' => [
+                ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [1, 255, 0]],
+                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, 2, 255]],
+            ],
+        ],
+        [
+            'points' => [
+                ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],
+                ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [128, 128, 128]],
+            ],
+        ],
+        [
+            'points' => [
+                ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [3, 255, 0]],
+                ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, 4, 255]],
+            ],
+        ],
+    ],
+];
+```
+
+Visual representation of it might look like this (also available at [JSFiddle]):
+
+![Chart example](../images/chart.png)
+
+Let's add the rules and modify the data a bit to contain invalid items:
+
 ```php
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
@@ -149,7 +182,7 @@ $data = [
         [
             'points' => [
                 ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
-                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]]
+                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],
             ],
         ],
         [
@@ -301,7 +334,7 @@ $data = [
         [
             'points' => [
                 ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],
-                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]]
+                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],
             ],
         ],
         [
@@ -376,7 +409,7 @@ section.
 ### Using keys containing separator / shortcut
 
 If a key contains the separator (`.`), or `Each` shortcut (`*`), it must be escaped with backslash (`\`) in
-the rule config to work correctly. So escaping is not needed in the input data. Here is an example with 2 nested
+the rule config to work correctly. Escaping is not needed in the input data. Here is an example with 2 nested
 keys named `author.data` and `name.surname`:
 
 ```php
@@ -446,5 +479,6 @@ $data = [
 
 [Result]: result.md
 [Basic usage]: #basic-usage-one-to-one-relation
+[JSFiddle]: http://jsfiddle.net/fys8uadr/
 [Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md
 [Using validator]: using-validator.md
