@@ -53,6 +53,7 @@ new Callback(
 
 ### Value validation
 
+`Callback` rule can be used to add validation missing in built-in rules for a single attribute's value.
 Below is an example that verifying that a value is a valid [YAML] string (additionally requires the `yaml` PHP extension):
 
 ```php
