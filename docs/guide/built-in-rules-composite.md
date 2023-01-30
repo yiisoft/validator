@@ -19,8 +19,8 @@ new Composite(
 
 ## Reusing multiple rules / single rule with the same options
 
-`Composite` is one of the few built-in rules that is not `final`. This means you can extend it and override `getRules()`
-method to create a reusable set of rules:
+`Composite` is one of the few built-in rules that is not `final`. This means that you can extend it and override the
+`getRules()` method to create a reusable set of rules:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -39,7 +39,7 @@ final class UsernameRuleSet extends Composite
 }
 ```
 
-And use it the same as one regular rule:
+And use it just like a single regular rule:
 
 ```php
 use Yiisoft\Validator\Validator;
@@ -47,7 +47,7 @@ use Yiisoft\Validator\Validator;
 $result = (new Validator())->validate('John', new UsernameRuleSet());
 ````
 
-It can be applied for multiple attributes too:
+It can also be applied to multiple attributes:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;

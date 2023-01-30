@@ -2,8 +2,8 @@
 
 ## Basic usage (one-to-one relation)
 
-In many cases there is a need to validate related data in addition to current entity / model. There is a `Nested` rule
-for this purpose. 
+In many cases there is a need to validate related data in addition to the current entity / model.
+There is a `Nested` rule for this purpose. 
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -12,7 +12,7 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
 
-$data = ['author' => ['name' => 'John', 'age' => '31']];
+$data = ['author' => ['name' => 'John', 'age' => '17']];
 $rule = new Nested([
     'title' => [new Required()],
     'author' => new Nested([
@@ -31,17 +31,17 @@ The output of `$errors` will be:
     'author.age' => ['Value must be no less than 18.'],
 ];
 ```
-In this example an additional instance of `Nested` rule is used for every relation. The other ways of configurations are 
-possible, they are described further on.
+In this example, an additional instance of the `Nested` rule is used for each relation. Other ways of configuration
+are possible, they are described below.
 
-More representations of errors' list are covered in [Result] section. 
+Other representations of the error list are covered in the [Result] section. 
 
 ## Configuration options
 
 ### Dot notation
 
-A dot notation can be used as an alternative way of configuration. In this case the example above will be presented as
-following:
+Dot notation can be used as an alternative method of configuration. In this case, the above example is represented as
+follows:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -56,7 +56,7 @@ $rule = new Nested([
 ]);
 ```
 
-It's also possible to combine both of these approaches:
+It's also possible to combine both approaches:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -109,8 +109,8 @@ $rule = new Nested([
 ]);
 ```
 
-This limitation is planned to be removed in the future, but for now in order this example to work it needs to be 
-rewritten using wrapping with another `Nested` instance or short syntax shown above.
+This limitation is planned to be removed in the future. In order for this example to work, it needs to be rewritten
+to be wrapped with another `Nested` instance or using the short syntax shown above.
 
 #### Inner arrays for single rules
 
@@ -133,9 +133,9 @@ $rule = new Nested([
 
 ### One-to-many and many-to-many relations
 
-The example in [Basic usage] section shows working only with one-to-one relations, when `Nested` rule is enough for
-referencing relations. But it can be combined with other complex rules, such as `Each`, to validate one-to-many and 
-many-to-many relations as well.
+The example in the [Basic usage] section shows how to work with one-to-one relations only, when the `Nested` rule is
+sufficient for referencing relations. But it can be combined with other complex rules, such as `Each`, to validate
+one-to-many and many-to-many relations as well:
 
 Let's take this line chart set as an example: 
 
@@ -251,7 +251,7 @@ $rule = new Nested([
 ]);
 ```
 
-With additional grouping it can also be rewritten like this:
+With additional grouping, it can also be rewritten like this:
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -271,7 +271,7 @@ $rule = new Nested([
 ```
 
 This is less verbose, but the downside of this approach is that you can't additionally configure dynamically generated
-`Nested` and `Each` pairs. If you need this, use explicit form of configuration (please refer to example provided in 
+`Nested` and `Each` pairs. If you need to do this, use the explicit form of configuration (see the example provided in 
 [Basic usage] section).
 
 ### Using PHP attributes
@@ -326,7 +326,7 @@ final class Coordinates
 }
 ```
 
-With the data in associative array from previous examples we can use the class just to fetch the rules:
+With the data in the associative array from the previous examples, we can use the class just to fetch the rules:
 
 ```php
 $data = [
@@ -401,15 +401,15 @@ $result = $validator->validate($chartSet); // Note `$rules` argument is `null` h
 $errors = $result->getErrorMessagesIndexedByPath();
 ```
 
-- For more info about different ways of configuring rules via PHP attributes, please refer to [Configuring rules via PHP
+- For more information about the different ways to configure rules via PHP attributes, see [Configuring rules via PHP
 attributes] section. 
-- For more info about possible data / rules combinations passed for validation please refer to [Using validator] 
+- For more information about possible data / rules combinations passed for validation, refer to the [Using validator] 
 section. 
 
 ### Using keys containing separator / shortcut
 
-If a key contains the attributes separator (`.`) or `Each` shortcut (`*`), it must be escaped with backslash (`\`) in 
-rule config in order to work correctly. Thus, in the input data escaping is not needed. Here is an example with 2 nested 
+If a key contains the separator (`.`), or `Each` shortcut (`*`), it must be escaped with backslash (`\`) in
+the rule config to work correctly. In the input data escaping is not needed. Here is an example with 2 nested
 keys named `author.data` and `name.surname`:
 
 ```php
@@ -428,7 +428,7 @@ $data = [
 ];
 ```
 
-Note that in case of using multiple nested rules for configuration escaping is still required:
+Note that escaping is still required when using multiple nested rules for configuration:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;

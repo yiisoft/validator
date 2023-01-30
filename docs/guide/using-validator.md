@@ -1,12 +1,12 @@
 # Using validator
 
-Validator allows to check data in any format. Here are some of the most used cases.
+Validator allows to check data in any format. Here are some of the most common use cases.
 
 ## Data
 
 ### Single value
 
-In the simplest case the validator can be used to check a single value:
+In the simplest case, the validator can be used to check a single value:
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -108,7 +108,7 @@ $result = (new Validator())->validate($person);
 
 ### Custom data set
 
-Most of the time creating a custom data set is not needed because of built-in data sets and automatical normalization of
+Most of the time creating a custom data set is not needed because of built-in data sets and automatic normalization of
 all types during validation. However, this can be useful, for example, to change a default value for certain attributes:
 
 ```php
@@ -152,7 +152,7 @@ $result = (new Validator())->validate($data, $rules);
 
 ### Passing single rule
 
-For a single rule there is an option to omit array:
+For a single rule, there is an option to omit the array:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
@@ -165,7 +165,7 @@ $result = (new Validator())->validate($value, $rule);
 
 ### Providing rules via dedicated object
 
-Could be helpful for reusing the same set of rules across different places. Two ways are possible - using PHP attributes 
+Could help reuse the same set of rules across different places. Two ways are possible - using PHP attributes 
 and specifying explicitly via interface method implementation.
 
 #### Using PHP attributes
@@ -194,8 +194,8 @@ $result = (new Validator())->validate($data, $rulesProvider);
 
 #### Using interface method implementation
 
-Providing rules via interface method implementation has priority over PHP attributes. So, in case of both present, the 
-attributes will be ignored without causing exception.
+Providing rules via interface method implementation has priority over PHP attributes. So, in case both are present,
+the attributes will be ignored without causing an exception.
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
@@ -222,10 +222,10 @@ $rulesProvider = new PersonRulesProvider();
 $result = (new Validator())->validate($data, $rulesProvider);
 ```
 
-### Providing rules via data object
+### Providing rules via the data object
 
-In this way rules are provided in addition to data in the same object. Only interface method implementation is 
-supported. Note that the `rules` argument is `null` in `validate()` method call.
+In this way, rules are provided in addition to data in the same object. Only interface method implementation is 
+supported. Note that the `rules` argument is `null` in the `validate()` method call.
 
 ```php
 use Yiisoft\Validator\Rule\HasLength;
