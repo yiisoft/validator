@@ -32,6 +32,7 @@ error. Choose one to fit your needs depending on the situation.
 
 One of the simplest cases is getting a flat list of all error messages. Use the following `Result` API call:
 
+
 ```php
 use Yiisoft\Validator\Result;
 

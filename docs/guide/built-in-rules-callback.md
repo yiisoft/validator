@@ -1,7 +1,7 @@
 # `Callback` - a wrapper around `callable`
 
-This rule allows you to validate the current attribute value (but not limited to it) with an arbitrary condition within a  
-callable. The advantage of this type of rule is that there is no need to create a separate custom rule and handler.
+This rule allows validation of current attribute value (but not limited to it) with an arbitrary condition within a  
+callable. The benefit of this type of rule is that there is no need to create a separate custom rule and handler.
 
 A condition can be within:
 
@@ -53,8 +53,8 @@ new Callback(
 
 ### Value validation
 
-`Callback` rule can be used to add validation missing in built-in rules for a single attribute's value.
-Below is an example that verifying that a value is a valid [YAML] string (additionally requires the `yaml` PHP extension):
+`Callback` rule can be used to add validation missing in built-in rules for a single attribute's value. Below is the 
+example verifying that a value is a valid [YAML] string (additionally requires `yaml` PHP extension):
 
 ```php
 use Exception;
