@@ -179,7 +179,7 @@ A path can contain integer elements too (when using the `Each` rule for example)
 #### Resolving special characters collision in attribute names
 
 When the attribute name contains a path separator (dot - `.` by default) or `Each` rule shortcut (asterisk -`*`), 
-they're automatically escaped using a backslash (`\​`) in the error messages list:
+they're automatically escaped using a backslash (`\`) in the error messages list:
 
 ```php
 [
@@ -203,7 +203,7 @@ $rules = [
 ```
 
 However, when using the `Nested` rule with multiple attributes per rule set, special characters need to be escaped with 
-a backslash (`\​`) for value paths to be correct and to be possible to reverse them back from string to individual 
+a backslash (`\`) for value paths to be correct and to be possible to reverse them back from string to individual 
 items. See the [Using keys containing separator/shortcut] section for more details.
 
 This can be used as an alternative to using a custom separator.
