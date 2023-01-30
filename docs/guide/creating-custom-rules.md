@@ -205,8 +205,8 @@ final class RgbColorHandler implements RuleHandlerInterface
 
 #### Using built-in rules if possible
 
-Before creating a custom rule, please check thoroughly - maybe it can be replaced with built-in rules, so it's 
-unnecessary at all?
+Before creating a custom rule, please check if it can be replaced with a built-in rule or set of rules. If so, it's 
+unnecessary to create a custom rule.
 
 ##### Replacing with `Composite`
 
