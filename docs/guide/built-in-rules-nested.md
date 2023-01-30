@@ -31,7 +31,7 @@ The output of `$errors` will be:
     'author.age' => ['Value must be no less than 18.'],
 ];
 ```
-In this example, an additional instance of the `Nested` rule is used for each relation. Other types of configuration
+In this example, an additional instance of the `Nested` rule is used for each relation. Other ways of configuration
 are possible, they are described below.
 
 Other representations of the error list are covered in the [Result] section. 
