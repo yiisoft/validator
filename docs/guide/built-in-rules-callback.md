@@ -87,7 +87,7 @@ new Callback(
 > **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to
 > [yaml_parse docs] for more details. 
 
-### Usage of a validation context to validate multiple attributes depending on each other
+### Usage of validation context for validating multiple attributes depending on each other
 
 A validation context can also be used. In the example below, the 3 angles are validated as degrees to form
 a valid triangle:
