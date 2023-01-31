@@ -28,7 +28,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Equal extends Compare
+final class Equal extends AbstractCompare
 {
     /**
      * @param scalar|null $targetValue The constant value to be equal to. When both this property and {@see $targetAttribute} are

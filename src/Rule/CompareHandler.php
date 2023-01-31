@@ -25,8 +25,8 @@ final class CompareHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
-        if (!$rule instanceof Compare) {
-            throw new UnexpectedRuleException(Compare::class, $rule);
+        if (!$rule instanceof AbstractCompare) {
+            throw new UnexpectedRuleException(AbstractCompare::class, $rule);
         }
 
         $result = new Result();
@@ -77,7 +77,7 @@ final class CompareHandler implements RuleHandlerInterface
      */
     private function compareValues(string $operator, string $type, mixed $value, mixed $targetValue): bool
     {
-        if ($type === Compare::TYPE_NUMBER) {
+        if ($type === AbstractCompare::TYPE_NUMBER) {
             $value = (float) $value;
             $targetValue = (float) $targetValue;
         } else {

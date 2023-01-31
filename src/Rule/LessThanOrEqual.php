@@ -27,7 +27,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class LessThanOrEqual extends Compare
+final class LessThanOrEqual extends AbstractCompare
 {
     /**
      * @param scalar|null $targetValue The constant value to be compared with. When both this property and

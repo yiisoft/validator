@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use InvalidArgumentException;
 use stdClass;
 use Yiisoft\Validator\DataWrapperInterface;
-use Yiisoft\Validator\Rule\Compare;
+use Yiisoft\Validator\Rule\AbstractCompare;
 use Yiisoft\Validator\Rule\CompareTo;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -426,8 +426,8 @@ final class CompareToTest extends RuleTestCase
             [99, [new CompareTo(100, operator: '<=')]],
             [['attribute' => 100, 'number' => 99], ['number' => new CompareTo(null, 'attribute', operator: '<=')]],
 
-            ['100.50', [new CompareTo('100.5', type: Compare::TYPE_NUMBER)]],
-            ['100.50', [new CompareTo('100.5', type: Compare::TYPE_NUMBER, operator: '===')]],
+            ['100.50', [new CompareTo('100.5', type: AbstractCompare::TYPE_NUMBER)]],
+            ['100.50', [new CompareTo('100.5', type: AbstractCompare::TYPE_NUMBER, operator: '===')]],
         ];
     }
 

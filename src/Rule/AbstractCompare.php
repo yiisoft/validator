@@ -17,21 +17,25 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Abstract base for all the comparison validation rules.
  *
- * The value being compared with {@see Compare::$targetValue} or {@see Compare::$targetAttribute}, which is set
- * in the constructor.
+ * The value being compared with {@see AbstractCompare::$targetValue} or {@see AbstractCompare::$targetAttribute}, which
+ * is set in the constructor.
  *
  * It supports different comparison operators, specified
- * via the {@see Compare::$operator}.
+ * via the {@see AbstractCompare::$operator}.
  *
  * The default comparison is based on string values, which means the values
  * are compared byte by byte. When comparing numbers, make sure to change {@see Compare::$type} to
- * {@see Compare::TYPE_NUMBER} to enable numeric comparison.
+ * {@see AbstractCompare::TYPE_NUMBER} to enable numeric comparison.
  *
  * @see CompareHandler
  *
  * @psalm-import-type WhenType from WhenInterface
  */
-abstract class Compare implements RuleWithOptionsInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
+abstract class AbstractCompare implements
+    RuleWithOptionsInterface,
+    SkipOnEmptyInterface,
+    SkipOnErrorInterface,
+    WhenInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;

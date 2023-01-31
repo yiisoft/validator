@@ -27,7 +27,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class GreaterThan extends Compare
+final class GreaterThan extends AbstractCompare
 {
     /**
      * @param scalar|null $targetValue The constant value to be greater than. When both this property and
