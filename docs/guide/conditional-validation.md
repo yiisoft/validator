@@ -219,7 +219,7 @@ It only determines what the empty condition is:
 use Yiisoft\Validator\Rule\Required;
 
 $rule = new Required(
-    emptyCriteria: static function (mixed $value, bool $isAttributeMissing): bool {
+    emptyCondition: static function (mixed $value, bool $isAttributeMissing): bool {
         return $isAttributeMissing || $value === '';
     },
 );
