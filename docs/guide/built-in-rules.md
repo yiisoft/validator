@@ -24,7 +24,7 @@ Here is a list of all available built-in rules, divided by category.
 
 ### Comparison rules
 
-- [CompareTo](../blob/master/src/Rule/CompareTo.php)
+- [Compare](../blob/master/src/Rule/Compare.php)
 - [Equal](../blob/master/src/Rule/Equal.php)
 - [GreaterThan](../blob/master/src/Rule/GreaterThan.php)
 - [GreaterThanOrEqual](../blob/master/src/Rule/GreaterThanOrEqual.php)

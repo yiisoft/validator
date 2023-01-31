@@ -16,12 +16,12 @@ use Attribute;
  *
  * There are shortcut classes to use instead of specifying operator manually:
  *
- * - {@see Equal} is a shortcut for `new CompareOperator(operator: '==')` and `new CompareOperator(operator: '===')`.
- * - {@see NotEqual} is a shortcut for `new CompareOperator(operator: '!=')` and `new CompareOperator(operator: '!==')`.
- * - {@see GreaterThan} is a shortcut for `new CompareTo(operator: '>')`.
- * - {@see GreaterThanOrEqual} is a shortcut for `new CompareTo(operator: '>=')`.
- * - {@see LessThan} is a shortcut for `new CompareTo(operator: '<')`.
- * - {@see LessThanOrEqual} is a shortcut for `new CompareTo(operator: '<=')`.
+ * - {@see Equal} is a shortcut for `new Compare(operator: '==')` and `new Compare(operator: '===')`.
+ * - {@see NotEqual} is a shortcut for `new Compare(operator: '!=')` and `new Compare(operator: '!==')`.
+ * - {@see GreaterThan} is a shortcut for `new Compare(operator: '>')`.
+ * - {@see GreaterThanOrEqual} is a shortcut for `new Compare(operator: '>=')`.
+ * - {@see LessThan} is a shortcut for `new Compare(operator: '<')`.
+ * - {@see LessThanOrEqual} is a shortcut for `new Compare(operator: '<=')`.
  *
  * The default comparison function is based on string values, which means the values
  * are compared byte by byte. When comparing numbers, make sure to change {@see Compare::$type} to
@@ -34,6 +34,6 @@ final class Compare extends AbstractCompare
 {
     public function getName(): string
     {
-        return 'compareTo';
+        return 'compare';
     }
 }

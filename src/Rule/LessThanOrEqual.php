@@ -19,7 +19,7 @@ use Yiisoft\Validator\WhenInterface;
  * are checked byte by byte. When validating numbers, make sure to change {@see LessThanOrEqual::$type} to
  * {@see LessThanOrEqual::TYPE_NUMBER} to enable numeric validation.
  *
- * `new LessThanOrEqual()` is a shortcut for `new CompareTo(operator: '<=)`.
+ * `new LessThanOrEqual()` is a shortcut for `new Compare(operator: '<=)`.
  *
  * @see CompareHandler
  * @see AbstractCompare
