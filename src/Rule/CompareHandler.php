@@ -107,8 +107,7 @@ final class CompareHandler implements RuleHandlerInterface
         float|string $value,
         float|string $targetValue,
         bool $strict = false,
-    ): bool
-    {
+    ): bool {
         if ($strict && !$areTypesEqual) {
             return false;
         }
@@ -125,8 +124,7 @@ final class CompareHandler implements RuleHandlerInterface
         float|string $value,
         float|string $targetValue,
         bool $strict = false,
-    ): bool
-    {
+    ): bool {
         if ($strict && !$areTypesEqual) {
             return true;
         }
