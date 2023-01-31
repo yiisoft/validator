@@ -36,7 +36,7 @@ final class RequiredTest extends RuleTestCase
         $this->assertFalse($rule->shouldSkipOnError());
     }
 
-    public function dataGetEmptyCriteria(): array
+    public function dataGetEmptyCondition(): array
     {
         return [
             'skip on null' => [new WhenNull(), WhenNull::class],
@@ -45,9 +45,9 @@ final class RequiredTest extends RuleTestCase
     }
 
     /**
-     * @dataProvider dataGetEmptyCriteria
+     * @dataProvider dataGetEmptyCondition
      */
-    public function testGetEmptyCriteria(?callable $callback, string $expectedCallbackClassName): void
+    public function testGetEmptyCondition(?callable $callback, string $expectedCallbackClassName): void
     {
         $rule = new Required(emptyCondition: $callback);
 
@@ -124,7 +124,7 @@ final class RequiredTest extends RuleTestCase
         $this->testWhenInternal(new Required(), new Required(when: $when));
     }
 
-    public function testDefaultEmptyCriteria(): void
+    public function testDefaultEmptyCondition(): void
     {
         $handler = new RequiredHandler(defaultEmptyCondition: new NeverEmpty());
 
