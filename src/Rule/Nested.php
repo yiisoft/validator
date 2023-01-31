@@ -46,10 +46,10 @@ use function sprintf;
  *
  * ```php
  * $rule = new Nested([
- *     'title' => [new HasLength(max: 255)],
+ *     'title' => [new Length(max: 255)],
  *     // One-to-one relation
  *     'author' => new Nested([
- *         'name' => [new HasLength(min: 1)],
+ *         'name' => [new Length(min: 1)],
  *     ]),
  *     // One-to-many relation
  *     'files' => new Each([
@@ -64,8 +64,8 @@ use function sprintf;
  *
  * ```php
  * $rule = new Nested([
- *     'title' => [new HasLength(max: 255)],
- *     'author.name' => [new HasLength(min: 1)],
+ *     'title' => [new Length(max: 255)],
+ *     'author.name' => [new Length(min: 1)],
  *     'files.*.url' => [new Url()],
  * ]);
  * ```
@@ -76,7 +76,7 @@ use function sprintf;
  * ```php
  * $rule = new Nested([
  *     'author' => [
- *         'name' => [new HasLength(min: 1)],
+ *         'name' => [new Length(min: 1)],
  *     ],
  * ]);
  * ```
@@ -87,7 +87,7 @@ use function sprintf;
  * $rule = new Nested([
  *     'author' => [
  *         'name' => [
- *             'surname' => [new HasLength(min: 1)],
+ *             'surname' => [new Length(min: 1)],
  *         ],
  *     ],
  * ]);
@@ -99,7 +99,7 @@ use function sprintf;
  * $rules = [
  *     new Nested([
  *         'author' => new Nested([
- *             'name' => new HasLength(min: 1),
+ *             'name' => new Length(min: 1),
  *         ]),
  *     ]),
  * ];

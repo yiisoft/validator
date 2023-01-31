@@ -19,12 +19,17 @@ special `On` rule which allows to wrap other rules by declaring specific scenari
 An example of the class using scenarios:
 
 ```php
+use Vjik\Yii\ValidatorScenarios\On;
+use Yiisoft\Validator\Rule\Email;
+use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Required;
+
 final class UserDto
 {
     public function __construct(
         #[On(
             'signup',
-            [new Required(), new HasLength(min: 7, max: 10)]
+            [new Required(), new Length(min: 7, max: 10)]
         )]
         public string $name,
 
@@ -34,7 +39,7 @@ final class UserDto
 
         #[On(
             ['login', 'signup'],
-            [new Required(), new HasLength(min: 8)],
+            [new Required(), new Length(min: 8)],
         )]
         public string $password,
     ) {
@@ -45,6 +50,9 @@ final class UserDto
 An active scenario for current validation is determined by a dedicated validation context parameter:
 
 ```php
+use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Validator;
+
 $context = new ValidationContext([On::SCENARIO_PARAMETER => 'signup']);
 $result = (new Validator())->validate($userDto, context: $context));
 ```

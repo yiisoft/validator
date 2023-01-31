@@ -6,11 +6,11 @@ Here is a list of all available built-in rules, divided by category.
 
 ### String rules
 
-- [HasLength](../blob/master/src/Rule/AtLeast.php)
+- [Length](../blob/master/src/Rule/AtLeast.php)
+- [Regex](../blob/master/src/Rule/Regex.php)
 - [Email](../blob/master/src/Rule/Email.php)
 - [Ip](../blob/master/src/Rule/Ip.php)
 - [Json](../blob/master/src/Rule/Json.php)
-- [Regex](../blob/master/src/Rule/Regex.php)
 - [Url](../blob/master/src/Rule/Url.php)
 
 ### Boolean rules
@@ -26,11 +26,11 @@ Here is a list of all available built-in rules, divided by category.
 
 - [Compare](../blob/master/src/Rule/Compare.php)
 - [Equal](../blob/master/src/Rule/Equal.php)
+- [NotEqual](../blob/master/src/Rule/NotEqual.php)
 - [GreaterThan](../blob/master/src/Rule/GreaterThan.php)
 - [GreaterThanOrEqual](../blob/master/src/Rule/GreaterThanOrEqual.php)
 - [LessThan](../blob/master/src/Rule/LessThan.php)
 - [LessThanOrEqual](../blob/master/src/Rule/LessThanOrEqual.php)
-- [NotEqual](../blob/master/src/Rule/NotEqual.php)
 
 ### Set rules
 

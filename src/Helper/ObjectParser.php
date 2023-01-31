@@ -32,7 +32,7 @@ use function is_string;
  * ```php
  * final class Post
  * {
- *     #[HasLength(max: 255)]
+ *     #[Length(max: 255)]
  *     public string $title = '';
  *
  *     #[Nested]
@@ -50,7 +50,7 @@ use function is_string;
  *
  * final class Author
  * {
- *     #[HasLength(min: 1)]
+ *     #[Length(min: 1)]
  *     public string $name = '';
  * }
  *
@@ -73,9 +73,9 @@ use function is_string;
  * ```php
  * [
  *     new Nested([
- *         'title' => [new HasLength(max: 255)],
+ *         'title' => [new Length(max: 255)],
  *         'author' => new Nested([
- *             'name' => [new HasLength(min: 1)],
+ *             'name' => [new Length(min: 1)],
  *         ]),
  *         'files' => new Each([
  *             new Nested([

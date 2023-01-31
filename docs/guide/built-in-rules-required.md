@@ -41,7 +41,7 @@ $rules = [
 ];
 ```
 
-With these settings, `HasLength` will still run in the case of an empty value. To prevent this, set up a conditional
+With these settings, `Length` will still run in the case of an empty value. To prevent this, set up a conditional
 validation:
 
 ```php

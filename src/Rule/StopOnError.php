@@ -24,7 +24,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * ```php
  * $rule = new StopOnError([
- *      new HasLength(min: 3),
+ *      new Length(min: 3),
  *      // This operation executes DB query and thus heavier. It's preferable not to call it if the previous rule did
  *      not pass the validation.
  *      new ExistsInDatabase(),

@@ -108,7 +108,7 @@ final class Length implements
 
     public function getName(): string
     {
-        return 'hasLength';
+        return 'length';
     }
 
     /**

@@ -34,7 +34,7 @@ final class StopOnErrorTest extends RuleTestCase
                     'skipOnEmpty' => false,
                     'rules' => [
                         [
-                            'hasLength',
+                            'length',
                             'min' => 10,
                             'max' => null,
                             'exactly' => null,

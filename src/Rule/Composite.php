@@ -31,7 +31,7 @@ use Yiisoft\Validator\WhenInterface;
  * };
  * $rules = [
  *     new Required(when: $when),
- *     new HasLength(min: 1, max: 50, skipOnEmpty: true, when: $when),
+ *     new Length(min: 1, max: 50, skipOnEmpty: true, when: $when),
  * ];
  * ```
  *
@@ -40,7 +40,7 @@ use Yiisoft\Validator\WhenInterface;
  * ```php
  * $rule = new Composite([
  *     new Required(),
- *     new HasLength(min: 1, max: 50, skipOnEmpty: true),
+ *     new Length(min: 1, max: 50, skipOnEmpty: true),
  *     when: static function ($value, ValidationContext $context): bool {
  *         return $context->getDataSet()->getAttributeValue('country') === Country::USA;
  *     },
@@ -57,7 +57,7 @@ use Yiisoft\Validator\WhenInterface;
  *     {
  *         $this->rules = [
  *             new Required(),
- *             new HasLength(min: 1, max: 50, skipOnEmpty: true),
+ *             new Length(min: 1, max: 50, skipOnEmpty: true),
  *         ];
  *         $this->when = static function ($value, ValidationContext $context): bool {
  *             return $context->getDataSet()->getAttributeValue('country') === Country::USA;

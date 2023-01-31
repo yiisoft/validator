@@ -39,7 +39,7 @@ final class RulesDumper
      *    ],
      *    'name' => [
      *        [
-     *            'hasLength',
+     *            'length',
      *            'max' => 20,
      *            'message' => ['template' => 'Value must contain at most 20 characters.', 'parameters' => []],
      *        ],

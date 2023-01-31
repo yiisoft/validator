@@ -19,7 +19,7 @@ use Yiisoft\Validator\RulesProviderInterface;
  * ```php
  * final class Post
  * {
- *     #[HasLength(max: 255)]
+ *     #[Length(max: 255)]
  *     public string $title = '';
  *
  *     #[Nested]
@@ -37,7 +37,7 @@ use Yiisoft\Validator\RulesProviderInterface;
  *
  * final class Author
  * {
- *     #[HasLength(min: 1)]
+ *     #[Length(min: 1)]
  *     public string $name = '';
  * }
  *
@@ -59,9 +59,9 @@ use Yiisoft\Validator\RulesProviderInterface;
  * ```php
  * [
  *     new Nested([
- *         'title' => [new HasLength(max: 255)],
+ *         'title' => [new Length(max: 255)],
  *         'author' => new Nested([
- *             'name' => [new HasLength(min: 1)],
+ *             'name' => [new Length(min: 1)],
  *         ]),
  *         'files' => new Each(new Nested([
  *             'url' => [new Url()],
