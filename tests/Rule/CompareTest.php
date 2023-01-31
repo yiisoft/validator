@@ -13,7 +13,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
-final class CompareToTest extends RuleTestCase
+final class CompareTest extends RuleTestCase
 {
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
