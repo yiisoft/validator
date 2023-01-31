@@ -27,7 +27,7 @@ final class RequiredTest extends RuleTestCase
     {
         $rule = new Required();
 
-        $this->assertNull($rule->getEmptyCriteria());
+        $this->assertNull($rule->getEmptyCondition());
         $this->assertSame(RequiredHandler::class, $rule->getHandler());
         $this->assertSame('Value cannot be blank.', $rule->getMessage());
         $this->assertSame('required', $rule->getName());
@@ -51,7 +51,7 @@ final class RequiredTest extends RuleTestCase
     {
         $rule = new Required(emptyCriteria: $callback);
 
-        $this->assertInstanceOf($expectedCallbackClassName, $rule->getEmptyCriteria());
+        $this->assertInstanceOf($expectedCallbackClassName, $rule->getEmptyCondition());
     }
 
     public function dataOptions(): array

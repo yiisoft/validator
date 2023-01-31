@@ -49,7 +49,7 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
      *
      * @psalm-var EmptyCriteriaType|null
      */
-    private $emptyCriteria;
+    private $emptyCondition;
 
     /**
      * @param string $message Error message used when validation fails because the validated value is empty.
@@ -78,7 +78,7 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        $this->emptyCriteria = $emptyCriteria;
+        $this->emptyCondition = $emptyCriteria;
     }
 
     public function getName(): string
@@ -116,11 +116,11 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
      * @return callable|null Empty criteria.
      * @psalm-return EmptyCriteriaType|null
      *
-     * @see $emptyCriteria
+     * @see $emptyCondition
      */
-    public function getEmptyCriteria(): ?callable
+    public function getEmptyCondition(): ?callable
     {
-        return $this->emptyCriteria;
+        return $this->emptyCondition;
     }
 
     public function getOptions(): array
