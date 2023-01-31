@@ -12,7 +12,7 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * Compares the specified value with another value.
  *
- * @see Compare
+ * @see AbstractCompare
  * @see Equal
  * @see GreaterThan
  * @see GreaterThanOrEqual

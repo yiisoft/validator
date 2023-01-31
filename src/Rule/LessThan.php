@@ -22,7 +22,7 @@ use Yiisoft\Validator\WhenInterface;
  * `new LessThan()` is a shortcut for `new CompareTo(operator: '<')`.
  *
  * @see CompareHandler
- * @see Compare
+ * @see AbstractCompare
  *
  * @psalm-import-type WhenType from WhenInterface
  */

@@ -23,7 +23,7 @@ use Yiisoft\Validator\WhenInterface;
  * - `new Equal(strict:true)` is a shortcut for `new CompareTo(operator: '===')`.
  *
  * @see CompareHandler
- * @see Compare
+ * @see AbstractCompare
  *
  * @psalm-import-type WhenType from WhenInterface
  */
