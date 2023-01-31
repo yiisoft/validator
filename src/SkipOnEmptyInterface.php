@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
-use Yiisoft\Validator\EmptyCriteria\NeverEmpty;
-use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
-use Yiisoft\Validator\EmptyCriteria\WhenNull;
+use Yiisoft\Validator\EmptyCondition\NeverEmpty;
+use Yiisoft\Validator\EmptyCondition\WhenEmpty;
+use Yiisoft\Validator\EmptyCondition\WhenNull;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 
 /**

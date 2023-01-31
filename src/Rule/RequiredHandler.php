@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
+use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;

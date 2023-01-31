@@ -19,7 +19,7 @@ An example with custom empty criteria that limits empty values to `null` only:
 
 ```php
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\EmptyCriteria\WhenNull;
+use Yiisoft\Validator\EmptyCondition\WhenNull;
 
 new Required(emptyCriteria: new WhenNull());
 ```

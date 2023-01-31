@@ -2,22 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\EmptyCriteria;
+namespace Yiisoft\Validator\EmptyCondition;
+
+use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\Validator;
 
 /**
  * Empty criteria is a callable returning `true` if a value must be considered empty.
  *
- * With `WhenMissing` a rule is considered empty only when the value is missing. With regard to validation process, a
- * corresponding rule is skipped only if this condition is met and `WhenMissing` is set:
+ * With `NeverEmpty` a value is always considered non-empty. With regard to validation process, a corresponding rule is
+ * never skipped if `NeverEmpty` is set:
  *
  * - At a rule level via `$skipOnEmpty` property, but only for rules implementing {@see SkipOnEmptyTrait} / including
  * {@see SkipOnEmptyTrait}.
  * - At validator level ({@see Validator::$defaultSkipOnEmptyCriteria}).
  *
- * There is no shortcut for this criteria, because it's considered less used. Use new instance directly:
- * `new WhenMissing()`.
+ * This is a default behavior for all built-in rules.
+ *
+ * A shortcut for `new NeverEmpty()` is `false`.
  */
-final class WhenMissing
+final class NeverEmpty
 {
     /**
      * @param mixed $value The validated value.
@@ -27,6 +31,6 @@ final class WhenMissing
      */
     public function __invoke(mixed $value, bool $isAttributeMissing): bool
     {
-        return $isAttributeMissing;
+        return false;
     }
 }

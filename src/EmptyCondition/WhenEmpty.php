@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\EmptyCriteria;
+namespace Yiisoft\Validator\EmptyCondition;
 
 use function is_string;
 

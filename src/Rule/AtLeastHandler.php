@@ -8,7 +8,7 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
-use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
+use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_array;

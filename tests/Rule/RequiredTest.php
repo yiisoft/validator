@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Closure;
-use Yiisoft\Validator\EmptyCriteria\NeverEmpty;
+use Yiisoft\Validator\EmptyCondition\NeverEmpty;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\RequiredHandler;
-use Yiisoft\Validator\EmptyCriteria\WhenNull;
+use Yiisoft\Validator\EmptyCondition\WhenNull;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;

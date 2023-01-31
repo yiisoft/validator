@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\EmptyCriteria;
+namespace Yiisoft\Validator\EmptyCondition;
 
 /**
  * Empty criteria is a callable returning `true` if a value must be considered empty.

@@ -134,9 +134,9 @@ What is considered empty can vary depending on the scope of usage.
 The value passed to `skipOnEmpty` is called "empty criteria". Due to normalization the following shortcut values are
 supported:
 
-- When `false` or `null`, `Yiisoft\Validator\EmptyCriteria\NeverEmpty` is used automatically as a callback - every value 
+- When `false` or `null`, `Yiisoft\Validator\EmptyCondition\NeverEmpty` is used automatically as a callback - every value 
 is considered non-empty and validated without skipping (default).
-- When `true`, `Yiisoft\Validator\EmptyCriteria\WhenEmpty` is used automatically as a callback - only passed
+- When `true`, `Yiisoft\Validator\EmptyCondition\WhenEmpty` is used automatically as a callback - only passed
 (corresponding attribute must be present) and non-empty values (not `null`, `[]`, or `''`) are validated.
 - If a custom callback is set, it is used to determine emptiness.
 
@@ -144,14 +144,14 @@ is considered non-empty and validated without skipping (default).
 
 There are some more criteria that have no shortcuts and need to be set explicitly because they are less used:
 
-- `Yiisoft\Validator\EmptyCriteria\WhenMissing` - a value is treated as empty only when it is missing (not passed at all).
-- `Yiisoft\Validator\EmptyCriteria\WhenNull` - limits empty values to `null` only.
+- `Yiisoft\Validator\EmptyCondition\WhenMissing` - a value is treated as empty only when it is missing (not passed at all).
+- `Yiisoft\Validator\EmptyCondition\WhenNull` - limits empty values to `null` only.
 
 An example with using `WhenNull` as parameter (note that an instance is passed, not a class name):
 
 ```php
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\EmptyCriteria\WhenNull;
+use Yiisoft\Validator\EmptyCondition\WhenNull;
 
 new Number(asInteger: true, max: 100, skipOnEmpty: new WhenNull());
 ```
