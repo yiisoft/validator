@@ -7,8 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use InvalidArgumentException;
 use stdClass;
 use Yiisoft\Validator\DataWrapperInterface;
-use Yiisoft\Validator\Rule\AbstractCompare;
-use Yiisoft\Validator\Rule\CompareTo;
+use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
@@ -26,12 +25,12 @@ final class CompareToTest extends RuleTestCase
         $message = 'Operator "=" is not supported. The valid operators are: "==", "===", "!=", "!==", ">", ">=", ' .
             '"<", "<=".';
         $this->expectExceptionMessage($message);
-        new CompareTo(operator: '=');
+        new Compare(operator: '=');
     }
 
     public function testGetName(): void
     {
-        $rule = new CompareTo();
+        $rule = new Compare();
         $this->assertSame('compareTo', $rule->getName());
     }
 
@@ -39,7 +38,7 @@ final class CompareToTest extends RuleTestCase
     {
         return [
             [
-                new CompareTo(1),
+                new Compare(1),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
@@ -74,7 +73,7 @@ final class CompareToTest extends RuleTestCase
                 ],
             ],
             [
-                new CompareTo(1, type: CompareTo::TYPE_NUMBER),
+                new Compare(1, type: Compare::TYPE_NUMBER),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
@@ -109,7 +108,7 @@ final class CompareToTest extends RuleTestCase
                 ],
             ],
             [
-                new CompareTo(1, type: CompareTo::TYPE_NUMBER, operator: '>='),
+                new Compare(1, type: Compare::TYPE_NUMBER, operator: '>='),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
@@ -144,7 +143,7 @@ final class CompareToTest extends RuleTestCase
                 ],
             ],
             [
-                new CompareTo('YES'),
+                new Compare('YES'),
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
@@ -179,7 +178,7 @@ final class CompareToTest extends RuleTestCase
                 ],
             ],
             [
-                new CompareTo('YES', skipOnEmpty: true),
+                new Compare('YES', skipOnEmpty: true),
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
@@ -214,7 +213,7 @@ final class CompareToTest extends RuleTestCase
                 ],
             ],
             [
-                new CompareTo('YES', operator: '!=='),
+                new Compare('YES', operator: '!=='),
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
@@ -249,7 +248,7 @@ final class CompareToTest extends RuleTestCase
                 ],
             ],
             [
-                new CompareTo('YES', message: 'Custom message for {targetValueOrAttribute}.'),
+                new Compare('YES', message: 'Custom message for {targetValueOrAttribute}.'),
                 [
                     'targetValue' => 'YES',
                     'targetAttribute' => null,
@@ -284,7 +283,7 @@ final class CompareToTest extends RuleTestCase
                 ],
             ],
             [
-                new CompareTo(null, 'test'),
+                new Compare(null, 'test'),
                 [
                     'targetValue' => null,
                     'targetAttribute' => 'test',
@@ -319,7 +318,7 @@ final class CompareToTest extends RuleTestCase
                 ],
             ],
             [
-                new CompareTo(
+                new Compare(
                     null,
                     'test',
                     incorrectInputMessage: 'Custom message 1.',
@@ -360,7 +359,7 @@ final class CompareToTest extends RuleTestCase
                 ],
             ],
             [
-                new CompareTo(1, 'test'),
+                new Compare(1, 'test'),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => 'test',
@@ -400,34 +399,34 @@ final class CompareToTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            [null, [new CompareTo('')]],
-            [null, [new CompareTo('', operator: '===')]],
+            [null, [new Compare('')]],
+            [null, [new Compare('', operator: '===')]],
 
-            [100, [new CompareTo(100)]],
-            [['attribute' => 100, 'number' => 100], ['number' => new CompareTo(null, 'attribute')]],
-            ['100', [new CompareTo(100)]],
+            [100, [new Compare(100)]],
+            [['attribute' => 100, 'number' => 100], ['number' => new Compare(null, 'attribute')]],
+            ['100', [new Compare(100)]],
 
-            [100, [new CompareTo(100, operator: '===')]],
-            ['100', [new CompareTo(100, operator: '===')]],
-            [100.0, [new CompareTo(100, operator: '===')]],
+            [100, [new Compare(100, operator: '===')]],
+            ['100', [new Compare(100, operator: '===')]],
+            [100.0, [new Compare(100, operator: '===')]],
 
-            [100.00001, [new CompareTo(100, operator: '!=')]],
-            [false, [new CompareTo(100, operator: '!=')]],
+            [100.00001, [new Compare(100, operator: '!=')]],
+            [false, [new Compare(100, operator: '!=')]],
 
-            [false, [new CompareTo(100, operator: '!==')]],
+            [false, [new Compare(100, operator: '!==')]],
 
-            [101, [new CompareTo(100, operator: '>')]],
+            [101, [new Compare(100, operator: '>')]],
 
-            [100, [new CompareTo(100, operator: '>=')]],
-            [101, [new CompareTo(100, operator: '>=')]],
-            [99, [new CompareTo(100, operator: '<')]],
+            [100, [new Compare(100, operator: '>=')]],
+            [101, [new Compare(100, operator: '>=')]],
+            [99, [new Compare(100, operator: '<')]],
 
-            [100, [new CompareTo(100, operator: '<=')]],
-            [99, [new CompareTo(100, operator: '<=')]],
-            [['attribute' => 100, 'number' => 99], ['number' => new CompareTo(null, 'attribute', operator: '<=')]],
+            [100, [new Compare(100, operator: '<=')]],
+            [99, [new Compare(100, operator: '<=')]],
+            [['attribute' => 100, 'number' => 99], ['number' => new Compare(null, 'attribute', operator: '<=')]],
 
-            ['100.50', [new CompareTo('100.5', type: AbstractCompare::TYPE_NUMBER)]],
-            ['100.50', [new CompareTo('100.5', type: AbstractCompare::TYPE_NUMBER, operator: '===')]],
+            ['100.50', [new Compare('100.5', type: Compare::TYPE_NUMBER)]],
+            ['100.50', [new Compare('100.5', type: Compare::TYPE_NUMBER, operator: '===')]],
         ];
     }
 
@@ -464,34 +463,34 @@ final class CompareToTest extends RuleTestCase
         return [
             'incorrect input' => [
                 [],
-                [new CompareTo(false)],
+                [new Compare(false)],
                 ['' => ['The allowed types are integer, float, string, boolean and null.']],
             ],
             'custom incorrect input message' => [
                 [],
-                [new CompareTo(false, incorrectInputMessage: 'Custom incorrect input message.')],
+                [new Compare(false, incorrectInputMessage: 'Custom incorrect input message.')],
                 ['' => ['Custom incorrect input message.']],
             ],
             'custom incorrect input message with parameters' => [
                 [],
-                [new CompareTo(false, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                [new Compare(false, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
                 ['' => ['Attribute - , type - array.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => []],
-                ['data' => new CompareTo(false, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => new Compare(false, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
                 ['data' => ['Attribute - data, type - array.']],
             ],
 
             'incorrect data set type' => [
                 $incorrectDataSet,
-                [new CompareTo(targetAttribute: 'test')],
+                [new Compare(targetAttribute: 'test')],
                 ['' => ['The attribute value returned from a custom data set must have a scalar type.']],
             ],
             'custom incorrect data set type message' => [
                 $incorrectDataSet,
                 [
-                    new CompareTo(
+                    new Compare(
                         targetAttribute: 'test',
                         incorrectDataSetTypeMessage: 'Custom incorrect data set type message.',
                     ),
@@ -501,7 +500,7 @@ final class CompareToTest extends RuleTestCase
             'custom incorrect data set type message with parameters' => [
                 $incorrectDataSet,
                 [
-                    new CompareTo(
+                    new Compare(
                         targetAttribute: 'test',
                         incorrectDataSetTypeMessage: 'Type - {type}.',
                     ),
@@ -509,45 +508,45 @@ final class CompareToTest extends RuleTestCase
                 ['' => ['Type - stdClass.']],
             ],
 
-            [null, [new CompareTo(0)], ['' => ['Value must be equal to "0".']]],
+            [null, [new Compare(0)], ['' => ['Value must be equal to "0".']]],
 
-            [101, [new CompareTo(100)], ['' => [$messageEqual]]],
+            [101, [new Compare(100)], ['' => [$messageEqual]]],
 
-            [101, [new CompareTo(100, operator: '===')], ['' => [$messageEqual]]],
+            [101, [new Compare(100, operator: '===')], ['' => [$messageEqual]]],
             [
                 ['attribute' => 100, 'number' => 101],
-                ['number' => new CompareTo(null, 'attribute', operator: '===')],
+                ['number' => new Compare(null, 'attribute', operator: '===')],
                 ['number' => [$messageEqual]],
             ],
 
-            [100, [new CompareTo(100, operator: '!=')], ['' => [$messageNotEqual]]],
-            ['100', [new CompareTo(100, operator: '!=')], ['' => [$messageNotEqual]]],
-            [100.0, [new CompareTo(100, operator: '!=')], ['' => [$messageNotEqual]]],
+            [100, [new Compare(100, operator: '!=')], ['' => [$messageNotEqual]]],
+            ['100', [new Compare(100, operator: '!=')], ['' => [$messageNotEqual]]],
+            [100.0, [new Compare(100, operator: '!=')], ['' => [$messageNotEqual]]],
 
-            [100, [new CompareTo(100, operator: '!==')], ['' => [$messageNotEqual]]],
-            ['100', [new CompareTo(100, operator: '!==')], ['' => [$messageNotEqual]]],
-            [100.0, [new CompareTo(100, operator: '!==')], ['' => [$messageNotEqual]]],
+            [100, [new Compare(100, operator: '!==')], ['' => [$messageNotEqual]]],
+            ['100', [new Compare(100, operator: '!==')], ['' => [$messageNotEqual]]],
+            [100.0, [new Compare(100, operator: '!==')], ['' => [$messageNotEqual]]],
 
-            [100, [new CompareTo(100, operator: '>')], ['' => [$messageGreaterThan]]],
-            [99, [new CompareTo(100, operator: '>')], ['' => [$messageGreaterThan]]],
+            [100, [new Compare(100, operator: '>')], ['' => [$messageGreaterThan]]],
+            [99, [new Compare(100, operator: '>')], ['' => [$messageGreaterThan]]],
 
-            [99, [new CompareTo(100, operator: '>=')], ['' => [$messageGreaterOrEqualThan]]],
+            [99, [new Compare(100, operator: '>=')], ['' => [$messageGreaterOrEqualThan]]],
 
-            [100, [new CompareTo(100, operator: '<')], ['' => [$messageLessThan]]],
-            [101, [new CompareTo(100, operator: '<')], ['' => [$messageLessThan]]],
+            [100, [new Compare(100, operator: '<')], ['' => [$messageLessThan]]],
+            [101, [new Compare(100, operator: '<')], ['' => [$messageLessThan]]],
 
-            [101, [new CompareTo(100, operator: '<=')], ['' => [$messageLessOrEqualThan]]],
+            [101, [new Compare(100, operator: '<=')], ['' => [$messageLessOrEqualThan]]],
             [
                 ['attribute' => 100, 'number' => 101],
-                ['number' => new CompareTo(null, 'attribute', operator: '<=')],
+                ['number' => new Compare(null, 'attribute', operator: '<=')],
                 ['number' => [$messageLessOrEqualThan]],
             ],
 
-            'custom message' => [101, [new CompareTo(100, message: 'Custom message.')], ['' => ['Custom message.']]],
+            'custom message' => [101, [new Compare(100, message: 'Custom message.')], ['' => ['Custom message.']]],
             'custom message with parameters, target value set' => [
                 101,
                 [
-                    new CompareTo(
+                    new Compare(
                         100,
                         message: 'Attribute - {attribute}, target value - {targetValue}, target attribute - ' .
                         '{targetAttribute}, target value or attribute - {targetValueOrAttribute}, value - {value}.',
@@ -563,7 +562,7 @@ final class CompareToTest extends RuleTestCase
             'custom message with parameters, attribute and target attribute set' => [
                 ['attribute' => 100, 'number' => 101],
                 [
-                    'number' => new CompareTo(
+                    'number' => new Compare(
                         null,
                         'attribute',
                         message: 'Attribute - {attribute}, target value - {targetValue}, target attribute - ' .
@@ -579,18 +578,18 @@ final class CompareToTest extends RuleTestCase
                 ],
             ],
 
-            ['100.50', [new CompareTo('100.5', operator: '===')], ['' => ['Value must be equal to "100.5".']]],
+            ['100.50', [new Compare('100.5', operator: '===')], ['' => ['Value must be equal to "100.5".']]],
         ];
     }
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new CompareTo(), new CompareTo(skipOnError: true));
+        $this->testSkipOnErrorInternal(new Compare(), new Compare(skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new CompareTo(), new CompareTo(when: $when));
+        $this->testWhenInternal(new Compare(), new Compare(when: $when));
     }
 }

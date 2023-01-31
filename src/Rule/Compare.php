@@ -9,10 +9,10 @@ use Attribute;
 /**
  * Defines validation options to check that the specified value matches with another value or attribute.
  *
- * The value being compared with a constant {@see CompareTo::$compareValue}, which is set
+ * The value being compared with a constant {@see Compare::$targetValue}, which is set
  * in the constructor.
  *
- * It supports different comparison operators, specified via the {@see CompareTo::$operator}.
+ * It supports different comparison operators, specified via the {@see Compare::$operator}.
  *
  * There are shortcut classes to use instead of specifying operator manually:
  *
@@ -24,13 +24,13 @@ use Attribute;
  * - {@see LessThanOrEqual} is a shortcut for `new CompareTo(operator: '<=')`.
  *
  * The default comparison function is based on string values, which means the values
- * are compared byte by byte. When comparing numbers, make sure to change {@see CompareTo::$type} to
- * {@see CompareTo::TYPE_NUMBER} to enable numeric comparison.
+ * are compared byte by byte. When comparing numbers, make sure to change {@see Compare::$type} to
+ * {@see Compare::TYPE_NUMBER} to enable numeric comparison.
  *
  * @see CompareHandler
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class CompareTo extends AbstractCompare
+final class Compare extends AbstractCompare
 {
     public function getName(): string
     {

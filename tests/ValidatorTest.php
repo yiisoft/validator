@@ -19,7 +19,7 @@ use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\BooleanValue;
-use Yiisoft\Validator\Rule\CompareTo;
+use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\HasLength;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\TrueValue;
@@ -282,7 +282,7 @@ class ValidatorTest extends TestCase
     public function testNullAsDataSet(): void
     {
         $validator = new Validator();
-        $result = $validator->validate(null, ['property' => [new CompareTo(null)]]);
+        $result = $validator->validate(null, ['property' => [new Compare(null)]]);
 
         $this->assertTrue($result->isValid());
     }

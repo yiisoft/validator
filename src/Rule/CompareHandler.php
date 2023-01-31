@@ -18,7 +18,7 @@ use Yiisoft\Validator\ValidationContext;
  * @see GreaterThanOrEqual
  * @see LessThan
  * @see LessThanOrEqual
- * @see CompareTo
+ * @see Compare
  * @see NotEqual
  */
 final class CompareHandler implements RuleHandlerInterface
