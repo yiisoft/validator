@@ -34,7 +34,7 @@ final class RequiredHandler implements RuleHandlerInterface
      *
      * @psalm-var EmptyCriteriaType
      */
-    private $defaultEmptyCriteria;
+    private $defaultEmptyCondition;
 
     /**
      * @param callable|null $defaultEmptyCriteria A default empty criteria used to determine emptiness of the value.
@@ -43,7 +43,7 @@ final class RequiredHandler implements RuleHandlerInterface
     public function __construct(
         callable|null $defaultEmptyCriteria = null,
     ) {
-        $this->defaultEmptyCriteria = $defaultEmptyCriteria ?? new WhenEmpty(trimString: true);
+        $this->defaultEmptyCondition = $defaultEmptyCriteria ?? new WhenEmpty(trimString: true);
     }
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
@@ -59,7 +59,7 @@ final class RequiredHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $emptyCriteria = $rule->getEmptyCondition() ?? $this->defaultEmptyCriteria;
+        $emptyCriteria = $rule->getEmptyCondition() ?? $this->defaultEmptyCondition;
 
         if (!$emptyCriteria($value, $context->isAttributeMissing())) {
             return $result;
