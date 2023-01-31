@@ -30,24 +30,24 @@ interface SkipOnEmptyInterface
     /**
      * Returns current "skip on empty" value.
      *
-     * During pre-validation phase it will be normalized to an "empty criteria" - a callable identifying when and which
+     * During pre-validation phase it will be normalized to an "empty condition" - a callable identifying when and which
      * values exactly must be considered as empty for corresponding rules to be skipped or not skipped at all.
      *
      * @return bool|callable|null A raw non-normalized value:
      *
-     * - `null` - a {@see Validator::$defaultSkipOnEmptyCriteria} is used. If it's `null` there too, it's equivalent to
+     * - `null` - a {@see Validator::$defaultSkipOnEmptyCondition} is used. If it's `null` there too, it's equivalent to
      * `false` (see below).
-     * `false` - never skip a rule (the validated value is always considered as not empty). Matching criteria -
+     * `false` - never skip a rule (the validated value is always considered as not empty). Matching condition -
      * {@see NeverEmpty}.
      * - `true` - skip a rule when the validated value is empty: either not passed at all, `null`, an empty string (not
-     * trimmed by default) or an empty array. Matching criteria - {@see WhenEmpty}.
+     * trimmed by default) or an empty array. Matching condition - {@see WhenEmpty}.
      * - `callable` - skip a rule when evaluated to `true`.
      *
-     * Examples of custom callables with built-in criteria:
+     * Examples of custom callables with built-in condition:
      *
-     * - `new WhenNull()` - less used built-in criteria ({@see WhenNull}). Skip a rule only when the validated value is
+     * - `new WhenNull()` - less used built-in condition ({@see WhenNull}). Skip a rule only when the validated value is
      * `null`.
-     * - `new WhenEmpty(trimString: true)` - built-in criteria with custom arguments ({@see WhenEmpty}).
+     * - `new WhenEmpty(trimString: true)` - built-in condition with custom arguments ({@see WhenEmpty}).
      *
      * A custom callable for skipping only when a value is zero:
      *

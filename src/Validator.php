@@ -43,7 +43,7 @@ final class Validator implements ValidatorInterface
      */
     private TranslatorInterface $translator;
     /**
-     * @var callable A default "skip on empty" criteria ({@see SkipOnEmptyInterface}), already normalized. Used to
+     * @var callable A default "skip on empty" condition ({@see SkipOnEmptyInterface}), already normalized. Used to
      * optimize setting the same value in all the rules.
      */
     private $defaultSkipOnEmptyCondition;

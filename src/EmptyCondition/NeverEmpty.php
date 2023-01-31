@@ -8,14 +8,14 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Validator;
 
 /**
- * Empty criteria is a callable returning `true` if a value must be considered empty.
+ * Empty condition is a callable returning `true` if a value must be considered empty.
  *
  * With `NeverEmpty` a value is always considered non-empty. With regard to validation process, a corresponding rule is
  * never skipped if `NeverEmpty` is set:
  *
  * - At a rule level via `$skipOnEmpty` property, but only for rules implementing {@see SkipOnEmptyTrait} / including
  * {@see SkipOnEmptyTrait}.
- * - At validator level ({@see Validator::$defaultSkipOnEmptyCriteria}).
+ * - At validator level ({@see Validator::$defaultSkipOnEmptyCondition}).
  *
  * This is a default behavior for all built-in rules.
  *

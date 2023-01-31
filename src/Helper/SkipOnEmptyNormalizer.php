@@ -31,7 +31,7 @@ final class SkipOnEmptyNormalizer
      *
      * @throws InvalidArgumentException If the type of {@see $skipOnEmpty} is not valid.
      *
-     * @return callable An empty criteria callable.
+     * @return callable An empty condition as a callable.
      */
     public static function normalize(mixed $skipOnEmpty): callable
     {

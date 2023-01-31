@@ -13,9 +13,10 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Contains a set of options to determine if the value is not empty according to {@see $emptyCriteria}. When rule-level
- * criteria is not set, a handler-level criteria ({@see RequiredHandler::$defaultEmptyCriteria}) is applied (which is
- * also customizable). In case of using attributes, the attribute must be present with passed non-empty value.
+ * Contains a set of options to determine if the value is not empty according to {@see Required::$emptyCondition}. When
+ * rule-level condition is not set, a handler-level condition ({@see RequiredHandler::$defaultEmptyCondition}) is
+ * applied (which is also customizable). In case of using attributes, the attribute must be present with passed
+ * non-empty value.
  *
  * With default settings in order for value to pass the validation it must satisfy all the following conditions:
  *
@@ -28,7 +29,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see RequiredHandler Corresponding handler performing the actual validation.
  *
- * @psalm-type EmptyCriteriaType = callable(mixed,bool):bool
+ * @psalm-type EmptyConditionType = callable(mixed,bool):bool
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -38,7 +39,7 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
     use WhenTrait;
 
     /**
-     * @var callable|null An empty criteria (either a callable or class implementing `__invoke()` method) used to
+     * @var callable|null An empty condition (either a callable or class implementing `__invoke()` method) used to
      * determine emptiness of the value. The signature must be like the following:
      *
      * ```php
@@ -47,7 +48,7 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
      *
      * `$isAttributeMissing` is a flag defining whether the attribute is missing (not used / not passed at all).
      *
-     * @psalm-var EmptyCriteriaType|null
+     * @psalm-var EmptyConditionType|null
      */
     private $emptyCondition;
 
@@ -63,8 +64,8 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the translated label of the attribute being validated.
-     * @param callable|null $emptyCondition An empty criteria used to determine emptiness of the value.
-     * @psalm-param EmptyCriteriaType|null $emptyCondition
+     * @param callable|null $emptyCondition An empty condition used to determine emptiness of the value.
+     * @psalm-param EmptyConditionType|null $emptyCondition
      *
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See
      * {@see SkipOnErrorInterface}.
@@ -111,10 +112,10 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
     }
 
     /**
-     * Gets empty criteria used to determine emptiness of the value.
+     * Gets empty condition used to determine emptiness of the value.
      *
-     * @return callable|null Empty criteria.
-     * @psalm-return EmptyCriteriaType|null
+     * @return callable|null Empty condition.
+     * @psalm-return EmptyConditionType|null
      *
      * @see $emptyCondition
      */

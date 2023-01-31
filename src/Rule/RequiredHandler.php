@@ -14,12 +14,12 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * A handler for {@see Required} rule. Validates that the specified value is passed and is not empty.
  *
- * @psalm-import-type EmptyCriteriaType from Required
+ * @psalm-import-type EmptyConditionType from Required
  */
 final class RequiredHandler implements RuleHandlerInterface
 {
     /**
-     * @var callable An empty criteria (either a callable or class implementing `__invoke()` method) used to
+     * @var callable An empty condition (either a callable or class implementing `__invoke()` method) used to
      * determine emptiness of the value. The signature must be like the following:
      *
      * ```php
@@ -28,17 +28,17 @@ final class RequiredHandler implements RuleHandlerInterface
      *
      * `$isAttributeMissing` is a flag defining whether the attribute is missing (not used / not passed at all).
      *
-     * Used as a default when {@see Required::$emptyCriteria} is not set. A customized handler can be added to
+     * Used as a default when {@see Required::$emptyCondition} is not set. A customized handler can be added to
      * {@see SimpleRuleHandlerContainer::$instances} to be applied to all rules of this type without explicitly
-     * specifying empty criteria for each one of them.
+     * specifying empty condition for each one of them.
      *
-     * @psalm-var EmptyCriteriaType
+     * @psalm-var EmptyConditionType
      */
     private $defaultEmptyCondition;
 
     /**
-     * @param callable|null $defaultEmptyCondition A default empty criteria used to determine emptiness of the value.
-     * @psalm-param EmptyCriteriaType|null $defaultEmptyCondition
+     * @param callable|null $defaultEmptyCondition A default empty condition used to determine emptiness of the value.
+     * @psalm-param EmptyConditionType|null $defaultEmptyCondition
      */
     public function __construct(
         callable|null $defaultEmptyCondition = null,

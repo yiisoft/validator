@@ -10,7 +10,6 @@ use Yiisoft\Validator\Rule\Number;
 new Each([
     new Number(integerOnly: true, min: 0, max: 255),
 ]);
-
 ```
 
 By combining with another built-in rule called `Count` we can be sure that the number of components is exactly 3:

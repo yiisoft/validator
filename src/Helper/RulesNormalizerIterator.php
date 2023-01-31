@@ -24,14 +24,14 @@ use function is_callable;
 final class RulesNormalizerIterator implements IteratorAggregate
 {
     /**
-     * @var callable|null A default "skip on empty" criteria ({@see SkipOnEmptyInterface}), already normalized. Used to
+     * @var callable|null A default "skip on empty" condition ({@see SkipOnEmptyInterface}), already normalized. Used to
      * optimize setting the same value in all the rules. Defaults to `null` meaning that it's not used.
      */
     private $defaultSkipOnEmptyCondition;
 
     /**
      * @param iterable $rules A rules' iterable for checking and normalization.
-     * @param callable|null $defaultSkipOnEmptyCondition A default "skip on empty" criteria
+     * @param callable|null $defaultSkipOnEmptyCondition A default "skip on empty" condition
      * ({@see SkipOnEmptyInterface}), already normalized. Used to optimize setting the same value in all the rules.
      * Defaults to `null` meaning that it's not used.
      */
@@ -55,11 +55,11 @@ final class RulesNormalizerIterator implements IteratorAggregate
      *
      * - A callable is wrapped with {@see Callback} rule.
      * - For any other type verifies that it's a valid rule instance.
-     * - If default "skip on empty" criteria is set, applies it if possible.
+     * - If default "skip on empty" condition is set, applies it if possible.
      *
      * @param mixed $rule A raw rule.
-     * @param callable|null $defaultSkipOnEmptyCondition A "skip on empty" criteria ({@see SkipOnEmptyInterface}) to
-     * apply as default, already normalized. `null` means there is no criteria to apply.
+     * @param callable|null $defaultSkipOnEmptyCondition A "skip on empty" condition ({@see SkipOnEmptyInterface}) to
+     * apply as default, already normalized. `null` means there is no condition to apply.
      *
      * @throws InvalidArgumentException When rule is neither a callable nor a {@see RuleInterface} implementation.
      *

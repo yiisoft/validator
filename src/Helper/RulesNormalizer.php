@@ -43,7 +43,7 @@ final class RulesNormalizer
      *
      * - A callable is wrapped with {@see Callback} rule.
      * - For any other type verifies that it's a valid rule instance.
-     * - If default "skip on empty" criteria is set, applies it if possible.
+     * - If default "skip on empty" condition is set, applies it if possible.
      *
      * For attributes there is an additional internal validation for being integer / string.
      *
@@ -57,7 +57,7 @@ final class RulesNormalizer
      * @psalm-param RulesType $rules
      *
      * @param mixed|null $data Validated data,
-     * @param callable|null $defaultSkipOnEmptyCondition A default "skip on empty" criteria
+     * @param callable|null $defaultSkipOnEmptyCondition A default "skip on empty" condition
      * ({@see SkipOnEmptyInterface}), already normalized. Used to optimize setting the same value in all the rules.
      * Defaults to `null` meaning that it's not used.
      *

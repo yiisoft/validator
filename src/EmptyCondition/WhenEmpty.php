@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\EmptyCondition;
 use function is_string;
 
 /**
- * Empty criteria is a callable returning `true` if a value must be considered empty.
+ * Empty condition is a callable returning `true` if a value must be considered empty.
  *
  * With `WhenEmpty`, a value is considered empty only when it is either:
  *
@@ -21,7 +21,7 @@ use function is_string;
  *
  * - At a rule level via `$skipOnEmpty` property, but only for rules implementing {@see SkipOnEmptyTrait} / including
  * {@see SkipOnEmptyTrait}.
- * - At validator level ({@see Validator::$defaultSkipOnEmptyCriteria}).
+ * - At validator level ({@see Validator::$defaultSkipOnEmptyCondition}).
  *
  * A shortcut for `new WhenEmpty()` is `true` (string is not trimmed). If you want a string to be trimmed before
  * checking, use `new WhenEmpty(trimString: false)`.
