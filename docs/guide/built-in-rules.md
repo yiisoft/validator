@@ -7,52 +7,52 @@ Here is a list of all available built-in rules, divided by category.
 ### String rules
 
 - [Length](../../src/Rule/Length.php)
-- [Regex](../blob/master/src/Rule/Regex.php)
-- [Email](../blob/master/src/Rule/Email.php)
-- [Ip](../blob/master/src/Rule/Ip.php)
-- [Json](../blob/master/src/Rule/Json.php)
-- [Url](../blob/master/src/Rule/Url.php)
+- [Regex](../../src/Rule/Regex.php)
+- [Email](../../src/Rule/Email.php)
+- [Ip](../../src/Rule/Ip.php)
+- [Json](../../src/Rule/Json.php)
+- [Url](../../src/Rule/Url.php)
 
 ### Boolean rules
 
-- [Boolean](../blob/master/src/Rule/Boolean.php)
-- [IsTrue](../blob/master/src/Rule/IsTrue.php)
+- [Boolean](../../src/Rule/Boolean.php)
+- [IsTrue](../../src/Rule/IsTrue.php)
 
 ### Number rules
 
-- [Number](../blob/master/src/Rule/Number.php)
+- [Number](../../src/Rule/Number.php)
 
 ### Comparison rules
 
-- [Compare](../blob/master/src/Rule/Compare.php)
-- [Equal](../blob/master/src/Rule/Equal.php)
-- [NotEqual](../blob/master/src/Rule/NotEqual.php)
-- [GreaterThan](../blob/master/src/Rule/GreaterThan.php)
-- [GreaterThanOrEqual](../blob/master/src/Rule/GreaterThanOrEqual.php)
-- [LessThan](../blob/master/src/Rule/LessThan.php)
-- [LessThanOrEqual](../blob/master/src/Rule/LessThanOrEqual.php)
+- [Compare](../../src/Rule/Compare.php)
+- [Equal](../../src/Rule/Equal.php)
+- [NotEqual](../../src/Rule/NotEqual.php)
+- [GreaterThan](../../src/Rule/GreaterThan.php)
+- [GreaterThanOrEqual](../../src/Rule/GreaterThanOrEqual.php)
+- [LessThan](../../src/Rule/LessThan.php)
+- [LessThanOrEqual](../../src/Rule/LessThanOrEqual.php)
 
 ### Set rules
 
-- [In](../blob/master/src/Rule/In.php)
-- [Subset](../blob/master/src/Rule/Subset.php)
+- [In](../../src/Rule/In.php)
+- [Subset](../../src/Rule/Subset.php)
 
 ### Count rules
 
-- [AtLeast](../blob/master/src/Rule/AtLeast.php)
-- [Count](../blob/master/src/Rule/Count.php)
+- [AtLeast](../../src/Rule/AtLeast.php)
+- [Count](../../src/Rule/Count.php)
 
 ### General purpose rules
 
-- [Callback](../blob/master/src/Rule/Callback.php)
-- [Required](../blob/master/src/Rule/Required.php)
+- [Callback](../../src/Rule/Callback.php)
+- [Required](../../src/Rule/Required.php)
 
 ### Complex rules
 
-- [Composite](../blob/master/src/Rule/Composite.php)
-- [Each](../blob/master/src/Rule/Each.php)
-- [Nested](../blob/master/src/Rule/Nested.php)
-- [StopOnError](../blob/master/src/Rule/StopOnError.php)
+- [Composite](../../src/Rule/Composite.php)
+- [Each](../../src/Rule/Each.php)
+- [Nested](../../src/Rule/Nested.php)
+- [StopOnError](../../src/Rule/StopOnError.php)
 
 ## Guides
 
