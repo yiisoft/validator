@@ -17,7 +17,7 @@ use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NestedHandler;
@@ -429,11 +429,11 @@ final class NestedTest extends RuleTestCase
             'posts' => [
                 new Each([
                     new Nested([
-                        'title' => [new HasLength(min: 3)],
+                        'title' => [new Length(min: 3)],
                         'authors' => [
                             new Each([
                                 new Nested([
-                                    'name' => [new HasLength(min: 5)],
+                                    'name' => [new Length(min: 5)],
                                     'age' => [
                                         new Number(min: 18),
                                         new Number(min: 20),
@@ -444,7 +444,7 @@ final class NestedTest extends RuleTestCase
                     ]),
                 ]),
             ],
-            'meta' => [new HasLength(min: 7)],
+            'meta' => [new Length(min: 7)],
         ], propagateOptions: true, skipOnEmpty: true, skipOnError: true);
         $options = $rule->getOptions();
         $paths = [
@@ -762,7 +762,7 @@ final class NestedTest extends RuleTestCase
                 [
                     new Nested([
                         'author.name' => [
-                            new HasLength(min: 3),
+                            new Length(min: 3),
                         ],
                     ]),
                 ],
@@ -779,7 +779,7 @@ final class NestedTest extends RuleTestCase
                         'author' => [
                             new Required(),
                             new Nested([
-                                'name' => [new HasLength(min: 3)],
+                                'name' => [new Length(min: 3)],
                             ]),
                         ],
                     ]),
@@ -803,7 +803,7 @@ final class NestedTest extends RuleTestCase
                 [
                     new Nested([
                         'author\.data.name\.surname' => [
-                            new HasLength(min: 3),
+                            new Length(min: 3),
                         ],
                     ]),
                 ],
@@ -818,7 +818,7 @@ final class NestedTest extends RuleTestCase
                     new Nested([
                         'author\.data' => new Nested([
                             'name\.surname' => [
-                                new HasLength(min: 3),
+                                new Length(min: 3),
                             ],
                         ]),
                     ]),
@@ -826,7 +826,7 @@ final class NestedTest extends RuleTestCase
             ],
             'property path of non-integer and non-string type, array' => [
                 [0 => 'a', 1 => 'b'],
-                [new Nested([false => new HasLength(min: 1), true => new HasLength(min: 1)])],
+                [new Nested([false => new Length(min: 1), true => new Length(min: 1)])],
             ],
             'property path of non-integer and non-string type, iterator' => [
                 [0 => 'a', 1 => 'b'],
@@ -839,8 +839,8 @@ final class NestedTest extends RuleTestCase
                         new class () implements RulesProviderInterface {
                             public function getRules(): iterable
                             {
-                                yield false => new HasLength(min: 1);
-                                yield true => new HasLength(min: 1);
+                                yield false => new Length(min: 1);
+                                yield true => new Length(min: 1);
                             }
                         },
                     ),
@@ -1136,7 +1136,7 @@ final class NestedTest extends RuleTestCase
                         'name.surname' => 'Dmitriy',
                     ],
                 ],
-                [new Nested(['author\.data.name\.surname' => [new HasLength(min: 8)]])],
+                [new Nested(['author\.data.name\.surname' => [new Length(min: 8)]])],
                 [['This value must contain at least 8 characters.', ['author.data', 'name.surname']]],
             ],
         ];
@@ -1168,7 +1168,7 @@ final class NestedTest extends RuleTestCase
         $this->expectExceptionMessage($message);
         new Nested([
             'data' => new Nested([
-                'title' => [new HasLength(max: 255)],
+                'title' => [new Length(max: 255)],
                 'active' => [new BooleanValue(), 'Not a rule'],
             ]),
         ]);

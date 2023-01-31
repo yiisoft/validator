@@ -10,14 +10,14 @@ of readability.
 Given a single `User` entity / model:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
 [
     'name' => [
         new Required(),
-        new HasLength(min: 1, max: 50),
+        new Length(min: 1, max: 50),
     ],
     'age' => [
         new Number(integerOnly: true, min: 18, max: 100),
@@ -29,7 +29,7 @@ the PHP attributes equivalent will be:
 
 ```php
 use JetBrains\PhpStorm\Deprecated;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
@@ -38,7 +38,7 @@ final class User
     public function __construct(
         // Multiple attributes.
         #[Required]
-        #[HasLength(min: 1, max: 50)]
+        #[Length(min: 1, max: 50)]
         // Can be combined with other attributes not related with rules.
         #[Deprecated]
         private readonly string $name,
@@ -54,7 +54,7 @@ This example uses the [constructor property promotion] feature introduced in PHP
 be used with regular properties:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
@@ -62,7 +62,7 @@ final class User
 {
     // Multiple attributes.
     #[Required]
-    #[HasLength(min: 1, max: 50)]
+    #[Length(min: 1, max: 50)]
     public readonly string $name;
 
     // Single attribute.
@@ -79,7 +79,7 @@ An example of rule set for a blog post configured via arrays only:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -88,13 +88,13 @@ use Yiisoft\Validator\Rule\Url;
 [
     new Nested([
         'title' => [
-            new HasLength(min:1, max: 255),
+            new Length(min:1, max: 255),
         ],
         // One-to-one relation.
         'author' => new Nested([
             'name' => [
                 new Required(),
-                new HasLength(min: 1, max: 50),
+                new Length(min: 1, max: 50),
             ],
             'age' => [
                 new Number(integerOnly: true , min: 18, max: 100),
@@ -114,7 +114,7 @@ It can be applied to such DTO classes to achieve the same effect:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -122,7 +122,7 @@ use Yiisoft\Validator\Rule\Url;
 
 final class Post
 {
-    #[HasLength(min: 1, max: 255)]
+    #[Length(min: 1, max: 255)]
     public string $title;
 
     // "Nested" can be used without arguments, but make sure to fill the value with the instance in this case (here it's
@@ -143,7 +143,7 @@ final class Post
 final class Author
 {
     #[Required]
-    #[HasLength(min: 1, max: 50)]
+    #[Length(min: 1, max: 50)]
     public string $name;
 
     #[Number(integerOnly: true, min: 18, max: 100)]
@@ -164,14 +164,14 @@ For a better understanding of relations concept, it's recommended to read the [N
 ## Traits
 
 Attributes can also be used in traits. It might come in handy for reusing the same set of properties with identical 
-rules: 
+rules:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 
 trait TitleTrait
 {
-    #[HasLength(max: 255)]
+    #[Length(max: 255)]
     public string $title;
 }
 
@@ -192,14 +192,14 @@ Inheritance is supported, but there are some things to keep in mind:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
 class Car
 {
     #[Required]
-    #[HasLength(min: 1, max: 50)]
+    #[Length(min: 1, max: 50)]
     public string $name;
     
     #[Required]
@@ -325,7 +325,7 @@ The first workaround is to upgrade to PHP 8.1 - this is fairly simple since it i
 If this is not an option, you can use other ways of providing rules, such as rule providers:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -363,11 +363,11 @@ final class PostRulesProvider implements RulesProviderInterface
     {
         return [
             new Nested([
-                'title' => new HasLength(min:1, max: 255),
+                'title' => new Length(min:1, max: 255),
                 'author' => [
                     'name' => [
                         new Required(),
-                        new HasLength(min: 1, max: 50),
+                        new Length(min: 1, max: 50),
                     ],
                     'age' => new Number(integerOnly: true , min: 18, max: 100),
                 ],
@@ -447,7 +447,7 @@ Well, the rules are configured. What's next? We can either:
 Let's use a blog post again for demonstration, but a slightly shortened version:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -455,7 +455,7 @@ use Yiisoft\Validator\Rule\Required;
 final class Post
 {
     public function __construct(
-        #[HasLength(min: 1, max: 255)]
+        #[Length(min: 1, max: 255)]
         private string $title,
 
         #[Nested(Author::class)]
@@ -468,7 +468,7 @@ final class Author
 {
     public function __construct(
         #[Required]
-        #[HasLength(min: 1, max: 50)]
+        #[Length(min: 1, max: 50)]
         private string $name,
 
         #[Number(integerOnly: true, min: 18, max: 100)]
@@ -522,7 +522,7 @@ wrap validated object with this set to allow some additional configuration:
 
 ```php
 use Yiisoft\Validator\DataSet\ObjectDataSet;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Validator;
 
 final class Post
@@ -531,10 +531,10 @@ final class Post
     private $author;
 
     public function __construct(
-        #[HasLength(min: 1, max: 255)]
+        #[Length(min: 1, max: 255)]
         public string $title,
 
-        #[HasLength(min: 1)]
+        #[Length(min: 1)]
         protected $content,
     ) {
     }
@@ -553,7 +553,7 @@ Some edge cases, like skipping DTO's static properties, require using of `Attrib
 can be passed for validation right away - no need to extract rules manually beforehand.
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\Validator;
 
@@ -563,7 +563,7 @@ final class Post
     private static $cache = [];
 
     public function __construct(
-        #[HasLength(min: 1, max: 255)]
+        #[Length(min: 1, max: 255)]
         private string $title,
     ) {
     }
@@ -581,14 +581,14 @@ validation:
 
 ```php
 use Yiisoft\Validator\Helper\RulesDumper;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\Validator;
 
 final class Post
 {
     public function __construct(
-        #[HasLength(min: 1, max: 255)]
+        #[Length(min: 1, max: 255)]
         private string $title,
     ) {
     }

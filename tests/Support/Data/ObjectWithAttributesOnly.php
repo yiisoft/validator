@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Support\Data;
 
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 
 final class ObjectWithAttributesOnly
 {
-    #[HasLength(min: 5)]
+    #[Length(min: 5)]
     public string $name = '';
 }

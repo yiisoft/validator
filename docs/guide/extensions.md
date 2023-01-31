@@ -60,13 +60,13 @@ provided by this extension.
 ```php
 use Symfony\Component\Validator\Constraints\{CssColor, NotEqualTo, Positive};
 use Vjik\Yii\ValidatorSymfonyRule\SymfonyRule;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 
 final class Car
 {
     #[Required]
-    #[HasLength(min: 3, skipOnError: true)]
+    #[Length(min: 3, skipOnError: true)]
     public string $name = '';
 
     #[Required]

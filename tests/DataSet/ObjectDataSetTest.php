@@ -12,7 +12,7 @@ use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Equal;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithCallbackMethod;
@@ -246,40 +246,40 @@ final class ObjectDataSetTest extends TestCase
                 },
                 [
                     'title' => [
-                        new HasLength(max: 255),
+                        new Length(max: 255),
                     ],
                 ],
             ],
             [
                 new class () {
                     #[Required()]
-                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    #[Length(max: 255, skipOnEmpty: true)]
                     private $property1;
                     #[Required()]
-                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    #[Length(max: 255, skipOnEmpty: true)]
                     private $property2;
                 },
                 [
                     'property1' => [
                         new Required(),
-                        new HasLength(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: true),
                     ],
                     'property2' => [
                         new Required(),
-                        new HasLength(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: true),
                     ],
                 ],
             ],
             [
                 new class () {
-                    #[HasLength(max: 255, skipOnEmpty: true)]
-                    #[HasLength(max: 255, skipOnEmpty: false)]
+                    #[Length(max: 255, skipOnEmpty: true)]
+                    #[Length(max: 255, skipOnEmpty: false)]
                     private $property1;
                 },
                 [
                     'property1' => [
-                        new HasLength(max: 255, skipOnEmpty: true),
-                        new HasLength(max: 255, skipOnEmpty: false),
+                        new Length(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: false),
                     ],
                 ],
             ],
@@ -292,7 +292,7 @@ final class ObjectDataSetTest extends TestCase
     public function testGetRulesViaTraits(): void
     {
         $dataSet = new ObjectDataSet(new Post());
-        $expectedRules = ['title' => [new HasLength(max: 255)]];
+        $expectedRules = ['title' => [new Length(max: 255)]];
 
         $this->assertEquals($expectedRules, $dataSet->getRules());
     }

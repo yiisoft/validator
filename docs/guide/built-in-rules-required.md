@@ -32,12 +32,12 @@ It's also possible to set it globally for all rules of this type at the handler 
 `Required` is rarely used by itself. When combining it with other rules, make sure it's placed first:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 
 $rules = [
     new Required(),
-    new HasLength(min: 1, max: 50),
+    new Length(min: 1, max: 50),
 ];
 ```
 
@@ -45,12 +45,12 @@ With these settings, `HasLength` will still run in the case of an empty value. T
 validation:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 
 $rules = [
     new Required(),
-    new HasLength(min: 1, max: 50, skipOnError: true),
+    new Length(min: 1, max: 50, skipOnError: true),
 ];
 ```
 

@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\BooleanValue;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Tests\Support\DataSet\RulesProvidedDataSet;
@@ -126,7 +126,7 @@ final class DataSetUsageTest extends TestCase
             [
                 'username' => [
                     new Regex('^[a-z]+$'),
-                    new HasLength(max: 3),
+                    new Length(max: 3),
                 ],
                 'age' => [
                     new Number(max: 25),
@@ -138,7 +138,7 @@ final class DataSetUsageTest extends TestCase
             $dataSet,
             [
                 'username' => [
-                    new HasLength(max: 10),
+                    new Length(max: 10),
                 ],
             ]
         );
@@ -156,7 +156,7 @@ final class DataSetUsageTest extends TestCase
             [
                 'username' => [
                     new Regex('^[a-z]+$'),
-                    new HasLength(max: 3),
+                    new Length(max: 3),
                 ],
                 'age' => [
                     new Number(max: 25),

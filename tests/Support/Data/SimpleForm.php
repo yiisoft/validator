@@ -8,7 +8,7 @@ use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
 use Yiisoft\Validator\AttributeTranslatorInterface;
 use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Email;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\RulesProviderInterface;
 
 final class SimpleForm implements RulesProviderInterface, AttributeTranslatorProviderInterface
@@ -39,7 +39,7 @@ final class SimpleForm implements RulesProviderInterface, AttributeTranslatorPro
     {
         return [
             'name' => [
-                new HasLength(min: 8, lessThanMinMessage: '{attribute} плохое.'),
+                new Length(min: 8, lessThanMinMessage: '{attribute} плохое.'),
             ],
             'mail' => [
                 new Email(),

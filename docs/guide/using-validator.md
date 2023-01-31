@@ -9,13 +9,13 @@ Validator allows to check data in any format. Here are some of the most common u
 In the simplest case, the validator can be used to check a single value:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Validator;
 
 $value = 'mrX';
 $rules = [
-    new HasLength(min: 4, max: 20),
+    new Length(min: 4, max: 20),
     new Regex('~^[a-z_\-]*$~i'),
 ];
 $result = (new Validator())->validate($value, $rules);
@@ -31,7 +31,7 @@ It's possible to validate an array both as a whole and by individual items. For 
 use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Email;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
@@ -54,7 +54,7 @@ $rules = [
         // The name is required (must be passed and have non-empty value).
         new Required(),
         // The name's length must be no less than 2 characters.
-        new HasLength(min: 2),
+        new Length(min: 2),
     ],  
     'age' => new Number(min: 21), // The age must be at least 21 years.  
     'email' => new Email(), // Email must be a valid email address.  
@@ -74,7 +74,7 @@ separately in explicit way (passing just the object itself is enough). For examp
 ```php
 use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\Email;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
@@ -84,7 +84,7 @@ final class Person
 {
     public function __construct(
         #[Required]
-        #[HasLength(min: 2)]
+        #[Length(min: 2)]
         public readonly ?string $name = null,
 
         #[Number(min: 21)]
@@ -113,7 +113,7 @@ all types during validation. However, this can be useful, for example, to change
 
 ```php
 use Yiisoft\Validator\DataSetInterface;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Validator;
 
@@ -144,7 +144,7 @@ final class MyArrayDataSet implements DataSetInterface
 }
 
 $data = new MyArrayDataSet([]);
-$rules = ['name' => new HasLength(min: 2), 'age' => new Number(min: 21)];
+$rules = ['name' => new Length(min: 2), 'age' => new Number(min: 21)];
 $result = (new Validator())->validate($data, $rules);
 ```
 
@@ -173,14 +173,14 @@ and specifying explicitly via interface method implementation.
 In this case, the rules will be automatically parsed, no need to additionally do anything.
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Validator;
 
 final class PersonRulesProvider implements RulesProviderInterface
 {
-    #[HasLength(min: 2)]
+    #[Length(min: 2)]
     public string $name;
 
     #[Number(min: 21)]
@@ -198,14 +198,14 @@ Providing rules via interface method implementation has priority over PHP attrib
 the attributes will be ignored without causing an exception.
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Validator;
 
 final class PersonRulesProvider implements RulesProviderInterface
 {
-    #[HasLength(min: 2)] // Will be silently ignored.
+    #[Length(min: 2)] // Will be silently ignored.
     public string $name;
 
     #[Number(min: 21)] // Will be silently ignored.
@@ -213,7 +213,7 @@ final class PersonRulesProvider implements RulesProviderInterface
     
     public function getRules() : iterable
     {
-        return ['name' => new HasLength(min: 2), 'age' => new Number(min: 21)];
+        return ['name' => new Length(min: 2), 'age' => new Number(min: 21)];
     }
 }
 
@@ -228,14 +228,14 @@ In this way, rules are provided in addition to data in the same object. Only int
 supported. Note that the `rules` argument is `null` in the `validate()` method call.
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Validator;
 
 final class Person implements RulesProviderInterface
 {
-    #[HasLength(min: 2)] // Not supported for using with data objects. Will be silently ignored.
+    #[Length(min: 2)] // Not supported for using with data objects. Will be silently ignored.
     public string $name;
 
     #[Number(min: 21)] // Not supported for using with data objects. Will be silently ignored.
@@ -243,7 +243,7 @@ final class Person implements RulesProviderInterface
     
     public function getRules(): iterable
     {
-        return ['name' => new HasLength(min: 2), 'age' => new Number(min: 21)];
+        return ['name' => new Length(min: 2), 'age' => new Number(min: 21)];
     }
 }
 
