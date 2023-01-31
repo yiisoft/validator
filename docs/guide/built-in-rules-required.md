@@ -9,23 +9,23 @@ By default, a value is considered empty only when it is either:
 - An empty string (after trimming).
 - An empty array.
 
-## Customizing empty criteria
+## Customizing empty condition
 
-Which values are considered empty can be customized via the `$emptyCriteria` option. Unlike in [skipOnEmpty],
+Which values are considered empty can be customized via the `$emptyCondition` option. Unlike in [skipOnEmpty],
 no normalization is performed here, so only a callable or a special class is accepted. For more details see
-the [Empty criteria basics] section.
+the [Empty condition basics] section.
 
-An example with custom empty criteria that limits empty values to `null` only:
+An example with custom empty condition that limits empty values to `null` only:
 
 ```php
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\EmptyCondition\WhenNull;
 
-new Required(emptyCriteria: new WhenNull());
+new Required(emptyCondition: new WhenNull());
 ```
 
 It's also possible to set it globally for all rules of this type at the handler level via 
-`RequiredHandler::$defaultEmptyCriteria`.
+`RequiredHandler::$defaultEmptyCondition`.
 
 ## Usage with other rules
 
@@ -57,5 +57,5 @@ $rules = [
 Other ways of configuring conditional validation are described in the [Conditional validation] section.
 
 [skipOnEmpty]: conditional-validation.md#skiponempty---skipping-a-rule-if-the-validated-value-is-empty
-[Empty criteria basics]: conditional-validation.md#empty-criteria-basics
+[Empty condition basics]: conditional-validation.md#empty-condition-basics
 [Conditional validation]: conditional-validation.md

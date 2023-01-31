@@ -110,7 +110,7 @@ $result = (new Validator())->validate($data, $rules);
 If the attribute is required, it is more appropriate to use `skipOnError: true` along with the preceding `Required` rule
 instead of `skipOnEmpty: true`. This is because the detection of empty values within the `Required` rule and skipping
 in further rules can be set separately. This is described in more detail below,
-see [Configuring empty criteria in other rules] section.
+see [Configuring empty condition in other rules] section.
 
 ```php
 use Yiisoft\Validator\Rule\In;
@@ -127,11 +127,11 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
-### Empty criteria basics
+### Empty condition basics
 
 What is considered empty can vary depending on the scope of usage.
 
-The value passed to `skipOnEmpty` is called "empty criteria". Due to normalization the following shortcut values are
+The value passed to `skipOnEmpty` is called "empty condition". Due to normalization the following shortcut values are
 supported:
 
 - When `false` or `null`, `Yiisoft\Validator\EmptyCondition\NeverEmpty` is used automatically as a callback - every value 
@@ -142,7 +142,7 @@ is considered non-empty and validated without skipping (default).
 
 `false` is usually more suitable for HTML forms and `true` - for APIs.
 
-There are some more criteria that have no shortcuts and need to be set explicitly because they are less used:
+There are some more conditions that have no shortcuts and need to be set explicitly because they are less used:
 
 - `Yiisoft\Validator\EmptyCondition\WhenMissing` - a value is treated as empty only when it is missing (not passed at all).
 - `Yiisoft\Validator\EmptyCondition\WhenNull` - limits empty values to `null` only.
@@ -156,7 +156,7 @@ use Yiisoft\Validator\EmptyCondition\WhenNull;
 new Number(asInteger: true, max: 100, skipOnEmpty: new WhenNull());
 ```
 
-### Custom empty criteria
+### Custom empty condition
 
 For even more customization you can use your own class that implements the `__invoke()` magic method. Here is an example 
 where a value is empty only if it is missing (when using attributes) or equals exactly to zero.
@@ -191,7 +191,7 @@ new Number(
 
 Using the class has the benefit of the code reusability.
 
-### Using the same non-default empty criteria for all the rules
+### Using the same non-default empty condition for all the rules
 
 For multiple rules, this can also be more conveniently set at the validator level:
 
@@ -209,10 +209,10 @@ $validator = new Validator(
 );
 ```
 
-### Configuring empty criteria in other rules
+### Configuring empty condition in other rules
 
 Some rules, such as `Required` can't be skipped for empty values - that would defeat the purpose of the rule.
-However, empty criteria can be configured here for detecting when a value is empty. Note - this does not skip the rule.
+However, empty condition can be configured here for detecting when a value is empty. Note - this does not skip the rule.
 It only determines what the empty condition is:
 
 ```php
@@ -226,7 +226,7 @@ $rule = new Required(
 ```
 
 It is also possible to set it globally for all rules of this type at the handler level via 
-`RequiredHandler::$defaultEmptyCriteria`.
+`RequiredHandler::$defaultEmptyCondition`.
 
 ## `when`
 
@@ -270,5 +270,5 @@ $result = (new Validator())->validate($data, $rules);
 As an alternative to functions, callable classes can be used instead. This approach has the advantage of code reusability.
 See the [Skip on empty] section for an example.
 
-[Configuring empty criterias in other rules]: #configuring-empty-criterias-in-other-rules
+[Configuring empty condition in other rules]: #configuring-empty-condition-in-other-rules
 [Skip on empty]: #skiponempty---skipping-a-rule-if-the-validated-value-is-empty
