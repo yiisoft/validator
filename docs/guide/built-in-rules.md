@@ -6,7 +6,7 @@ Here is a list of all available built-in rules, divided by category.
 
 ### String rules
 
-- [Length](../../blob/master/src/Rule/AtLeast.php)
+- [Length](../../src/Rule/Length.php)
 - [Regex](../blob/master/src/Rule/Regex.php)
 - [Email](../blob/master/src/Rule/Email.php)
 - [Ip](../blob/master/src/Rule/Ip.php)
