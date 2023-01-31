@@ -63,8 +63,8 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the translated label of the attribute being validated.
-     * @param callable|null $emptyCriteria An empty criteria used to determine emptiness of the value.
-     * @psalm-param EmptyCriteriaType|null $emptyCriteria
+     * @param callable|null $emptyCondition An empty criteria used to determine emptiness of the value.
+     * @psalm-param EmptyCriteriaType|null $emptyCondition
      *
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See
      * {@see SkipOnErrorInterface}.
@@ -74,11 +74,11 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
     public function __construct(
         private string $message = 'Value cannot be blank.',
         private string $notPassedMessage = 'Value not passed.',
-        callable|null $emptyCriteria = null,
+        callable|null $emptyCondition = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        $this->emptyCondition = $emptyCriteria;
+        $this->emptyCondition = $emptyCondition;
     }
 
     public function getName(): string

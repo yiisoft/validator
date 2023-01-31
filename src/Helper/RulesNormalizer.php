@@ -57,7 +57,7 @@ final class RulesNormalizer
      * @psalm-param RulesType $rules
      *
      * @param mixed|null $data Validated data,
-     * @param callable|null $defaultSkipOnEmptyCriteria A default "skip on empty" criteria
+     * @param callable|null $defaultSkipOnEmptyCondition A default "skip on empty" criteria
      * ({@see SkipOnEmptyInterface}), already normalized. Used to optimize setting the same value in all the rules.
      * Defaults to `null` meaning that it's not used.
      *
@@ -70,7 +70,7 @@ final class RulesNormalizer
     public static function normalize(
         callable|iterable|object|string|null $rules,
         mixed $data = null,
-        ?callable $defaultSkipOnEmptyCriteria = null,
+        ?callable $defaultSkipOnEmptyCondition = null,
     ): iterable {
         $rules = self::prepareRulesIterable($rules, $data);
 
@@ -92,7 +92,7 @@ final class RulesNormalizer
 
             $normalizedRules[$attribute] = new RulesNormalizerIterator(
                 is_iterable($attributeRules) ? $attributeRules : [$attributeRules],
-                $defaultSkipOnEmptyCriteria,
+                $defaultSkipOnEmptyCondition,
             );
         }
 

@@ -49,7 +49,7 @@ final class RequiredTest extends RuleTestCase
      */
     public function testGetEmptyCriteria(?callable $callback, string $expectedCallbackClassName): void
     {
-        $rule = new Required(emptyCriteria: $callback);
+        $rule = new Required(emptyCondition: $callback);
 
         $this->assertInstanceOf($expectedCallbackClassName, $rule->getEmptyCondition());
     }
@@ -81,7 +81,7 @@ final class RequiredTest extends RuleTestCase
             [['with', 'elements'], [new Required()]],
             'skip on null' => [
                 '',
-                [new Required(emptyCriteria: new WhenNull())],
+                [new Required(emptyCondition: new WhenNull())],
             ],
         ];
     }
@@ -95,7 +95,7 @@ final class RequiredTest extends RuleTestCase
             [[], [new Required()], $singleMessageCannotBeBlank],
             'custom empty callback' => [
                 '42',
-                [new Required(emptyCriteria: static fn (mixed $value): bool => $value === '42')],
+                [new Required(emptyCondition: static fn (mixed $value): bool => $value === '42')],
                 $singleMessageCannotBeBlank,
             ],
             'custom error' => [null, [new Required(message: 'Custom error')], ['' => ['Custom error']]],
@@ -126,7 +126,7 @@ final class RequiredTest extends RuleTestCase
 
     public function testDefaultEmptyCriteria(): void
     {
-        $handler = new RequiredHandler(defaultEmptyCriteria: new NeverEmpty());
+        $handler = new RequiredHandler(defaultEmptyCondition: new NeverEmpty());
 
         $result = $handler->validate('', new Required(), new ValidationContext());
 

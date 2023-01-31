@@ -27,26 +27,26 @@ final class RulesNormalizerIterator implements IteratorAggregate
      * @var callable|null A default "skip on empty" criteria ({@see SkipOnEmptyInterface}), already normalized. Used to
      * optimize setting the same value in all the rules. Defaults to `null` meaning that it's not used.
      */
-    private $defaultSkipOnEmptyCriteria;
+    private $defaultSkipOnEmptyCondition;
 
     /**
      * @param iterable $rules A rules' iterable for checking and normalization.
-     * @param callable|null $defaultSkipOnEmptyCriteria A default "skip on empty" criteria
+     * @param callable|null $defaultSkipOnEmptyCondition A default "skip on empty" criteria
      * ({@see SkipOnEmptyInterface}), already normalized. Used to optimize setting the same value in all the rules.
      * Defaults to `null` meaning that it's not used.
      */
     public function __construct(
         private iterable $rules,
-        ?callable $defaultSkipOnEmptyCriteria = null,
+        ?callable $defaultSkipOnEmptyCondition = null,
     ) {
-        $this->defaultSkipOnEmptyCriteria = $defaultSkipOnEmptyCriteria;
+        $this->defaultSkipOnEmptyCondition = $defaultSkipOnEmptyCondition;
     }
 
     public function getIterator(): Traversable
     {
         /** @var mixed $rule */
         foreach ($this->rules as $rule) {
-            yield self::normalizeRule($rule, $this->defaultSkipOnEmptyCriteria);
+            yield self::normalizeRule($rule, $this->defaultSkipOnEmptyCondition);
         }
     }
 
@@ -58,14 +58,14 @@ final class RulesNormalizerIterator implements IteratorAggregate
      * - If default "skip on empty" criteria is set, applies it if possible.
      *
      * @param mixed $rule A raw rule.
-     * @param callable|null $defaultSkipOnEmptyCriteria A "skip on empty" criteria ({@see SkipOnEmptyInterface}) to
+     * @param callable|null $defaultSkipOnEmptyCondition A "skip on empty" criteria ({@see SkipOnEmptyInterface}) to
      * apply as default, already normalized. `null` means there is no criteria to apply.
      *
      * @throws InvalidArgumentException When rule is neither a callable nor a {@see RuleInterface} implementation.
      *
      * @return RuleInterface Ready to use rule instance.
      */
-    private static function normalizeRule(mixed $rule, ?callable $defaultSkipOnEmptyCriteria): RuleInterface
+    private static function normalizeRule(mixed $rule, ?callable $defaultSkipOnEmptyCondition): RuleInterface
     {
         if (is_callable($rule)) {
             return new Callback($rule);
@@ -82,11 +82,11 @@ final class RulesNormalizerIterator implements IteratorAggregate
         }
 
         if (
-            $defaultSkipOnEmptyCriteria !== null
+            $defaultSkipOnEmptyCondition !== null
             && $rule instanceof SkipOnEmptyInterface
             && $rule->getSkipOnEmpty() === null
         ) {
-            $rule = $rule->skipOnEmpty($defaultSkipOnEmptyCriteria);
+            $rule = $rule->skipOnEmpty($defaultSkipOnEmptyCondition);
         }
 
         return $rule;
