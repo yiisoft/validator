@@ -9,7 +9,8 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
-use function is_string;
+use function gettype;
+use function is_float;
 
 /**
  * Compares the specified value with another value.
@@ -79,6 +80,8 @@ final class CompareHandler implements RuleHandlerInterface
      */
     private function compareValues(string $operator, string $type, mixed $value, mixed $targetValue): bool
     {
+        $areTypesEqual = gettype($value) === gettype($targetValue);
+
         if ($type === AbstractCompare::TYPE_NUMBER) {
             $value = (float) $value;
             $targetValue = (float) $targetValue;
@@ -88,14 +91,55 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         return match ($operator) {
-            '==' => is_string($value) ? $value == $targetValue : abs($value - $targetValue) < PHP_FLOAT_EPSILON,
-            '===' => $value === $targetValue,
-            '!=' => $value != $targetValue,
-            '!==' => $value !== $targetValue,
+            '==' => $this->assertEquals($areTypesEqual, $value, $targetValue),
+            '===' => $this->assertEquals($areTypesEqual, $value, $targetValue, strict: true),
+            '!=' => $this->assertNotEquals($areTypesEqual, $value, $targetValue),
+            '!==' => $this->assertNotEquals($areTypesEqual, $value, $targetValue, strict: true),
             '>' => $value > $targetValue,
             '>=' => $value >= $targetValue,
             '<' => $value < $targetValue,
             '<=' => $value <= $targetValue,
         };
+    }
+
+    private function assertEquals(
+        bool $areTypesEqual,
+        float|string $value,
+        float|string $targetValue,
+        bool $strict = false,
+    ): bool
+    {
+        if ($strict && !$areTypesEqual) {
+            return false;
+        }
+
+        if (is_float($value)) {
+            return $this->assertFloatsEqual($value, $targetValue);
+        }
+
+        return $strict ? $value === $targetValue : $value == $targetValue;
+    }
+
+    private function assertNotEquals(
+        bool $areTypesEqual,
+        float|string $value,
+        float|string $targetValue,
+        bool $strict = false,
+    ): bool
+    {
+        if ($strict && !$areTypesEqual) {
+            return true;
+        }
+
+        if (is_float($value)) {
+            return !$this->assertFloatsEqual($value, $targetValue);
+        }
+
+        return $strict ? $value !== $targetValue : $value != $targetValue;
+    }
+
+    private function assertFloatsEqual(float $value, float $targetValue): bool
+    {
+        return abs($value - $targetValue) < PHP_FLOAT_EPSILON;
     }
 }
