@@ -56,9 +56,9 @@ final class LessThan extends AbstractCompare
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
      *   the attribute to be compared with.
      * - `{value}`: the value of the attribute being validated.
-     * @param string $type The type of the values being compared. Either {@see Compare::TYPE_STRING}
-     * or {@see Compare::TYPE_NUMBER}.
-     * @psalm-param Compare::TYPE_* $type
+     * @param string $type The type of the values being compared. Either {@see AbstractCompare::TYPE_STRING}
+     * or {@see AbstractCompare::TYPE_NUMBER}.
+     * @psalm-param AbstractCompare::TYPE_* $type
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.

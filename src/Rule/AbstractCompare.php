@@ -24,7 +24,7 @@ use Yiisoft\Validator\WhenInterface;
  * via the {@see AbstractCompare::$operator}.
  *
  * The default comparison is based on string values, which means the values
- * are compared byte by byte. When comparing numbers, make sure to change {@see Compare::$type} to
+ * are compared byte by byte. When comparing numbers, make sure to change {@see AbstractCompare::$type} to
  * {@see AbstractCompare::TYPE_NUMBER} to enable numeric comparison.
  *
  * @see CompareHandler
@@ -98,9 +98,9 @@ abstract class AbstractCompare implements
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
      *   the attribute to be compared with.
      * - `{value}`: the value of the attribute being validated.
-     * @param string $type The type of the values being compared. Either {@see Compare::TYPE_STRING}
-     * or {@see Compare::TYPE_NUMBER}.
-     * @psalm-param Compare::TYPE_* $type
+     * @param string $type The type of the values being compared. Either {@see AbstractCompare::TYPE_STRING}
+     * or {@see AbstractCompare::TYPE_NUMBER}.
+     * @psalm-param AbstractCompare::TYPE_* $type
      *
      * @param string $operator The operator for comparison. The following operators are supported:
      *
@@ -173,9 +173,9 @@ abstract class AbstractCompare implements
     /**
      * Get the type of the values being compared.
      *
-     * @return string The type of the values being compared. Either {@see Compare::TYPE_STRING}
-     * or {@see Compare::TYPE_NUMBER}.
-     * @psalm-return Compare::TYPE_* $type
+     * @return string The type of the values being compared. Either {@see AbstractCompare::TYPE_STRING}
+     * or {@see AbstractCompare::TYPE_NUMBER}.
+     * @psalm-return AbstractCompare::TYPE_* $type
      *
      * @see $type
      */

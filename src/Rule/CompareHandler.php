@@ -68,7 +68,7 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @param string $operator The comparison operator. One of `==`, `===`, `!=`, `!==`, `>`, `>=`, `<`, `<=`.
      * @param string $type The type of the values being compared.
-     * @psalm-param Compare::TYPE_* $type
+     * @psalm-param AbstractCompare::TYPE_* $type
      *
      * @param mixed $value The value being compared.
      * @param mixed $targetValue Another value being compared.
