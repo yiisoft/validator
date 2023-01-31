@@ -427,6 +427,8 @@ final class CompareToTest extends RuleTestCase
 
             ['100.50', [new Compare('100.5', type: Compare::TYPE_NUMBER)]],
             ['100.50', [new Compare('100.5', type: Compare::TYPE_NUMBER, operator: '===')]],
+
+            'float numbers equality' => [1 - 0.83, [new Compare(0.17, type: Compare::TYPE_NUMBER)]],
         ];
     }
 

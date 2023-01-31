@@ -9,6 +9,8 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function is_string;
+
 /**
  * Compares the specified value with another value.
  *
@@ -86,7 +88,7 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         return match ($operator) {
-            '==' => $value == $targetValue,
+            '==' => is_string($value) ? $value == $targetValue : abs($value - $targetValue) < PHP_FLOAT_EPSILON,
             '===' => $value === $targetValue,
             '!=' => $value != $targetValue,
             '!==' => $value !== $targetValue,
