@@ -2,33 +2,33 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\EmptyCriteria;
+namespace Yiisoft\Validator\Tests\EmptyCondition;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\EmptyCondition\WhenNull;
+use Yiisoft\Validator\EmptyCondition\WhenMissing;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Validator;
 
-final class WhenNullTest extends TestCase
+final class WhenMissingTest extends TestCase
 {
     public function dataBase(): array
     {
         return [
             [
-                [],
+                ['The allowed types are integer, float and string.'],
                 null,
-                new Number(skipOnEmpty: new WhenNull()),
+                new Number(skipOnEmpty: new WhenMissing()),
             ],
             [
                 [],
                 [],
-                ['property' => new Number(skipOnEmpty: new WhenNull())],
+                ['property' => new Number(skipOnEmpty: new WhenMissing())],
             ],
             [
                 ['Value must be a number.'],
                 '',
-                new Number(skipOnEmpty: new WhenNull()),
+                new Number(skipOnEmpty: new WhenMissing()),
             ],
         ];
     }
