@@ -1,6 +1,6 @@
 # `Callback` - a wrapper around `callable`
 
-This rule allows validation of current attribute value (but not limited to it) with an arbitrary condition within a  
+This rule allows validation of the current attribute value (but not limited to it) with an arbitrary condition within a  
 callable. The benefit is that there is no need to create a separate custom rule and handler.
 
 A condition can be within:
@@ -190,7 +190,7 @@ $rules = [
 
 ### For property
 
-When using as PHP attribute, set an object's method as a callback instead:
+When using as a PHP attribute, set an object's method as a callback instead:
 
 ```php
 use Exception;

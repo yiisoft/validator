@@ -65,7 +65,7 @@ final class CoordinatesRuleSet extends Composite
 }
 ```
 
-Even the problem of reusing only a one rule with the same arguments can be solved with `Composite`:
+Even the problem of reusing only one rule with the same arguments can be solved with `Composite`:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;

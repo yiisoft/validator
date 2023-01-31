@@ -77,7 +77,7 @@ $rule = new Nested([
 
 ### Omitting code
 
-Some code parts can be omitted for brevity.
+Some code can be omitted for brevity.
 
 #### Inner `Nested` instances
 
@@ -133,8 +133,8 @@ $rule = new Nested([
 
 ### One-to-many and many-to-many relations
 
-The example in the [Basic usage] section shows how to work with one-to-one relations only, when the `Nested` rule is
-sufficient for referencing relations. But it can be combined with other complex rules, such as `Each`, to validate
+The example in the [Basic usage] section shows how to work with one-to-one relations only, where the `Nested` rule is
+sufficient for referencing relations. It can be combined with other complex rules, such as `Each`, to validate
 one-to-many and many-to-many relations as well:
 
 Let's take this line chart set as an example: 

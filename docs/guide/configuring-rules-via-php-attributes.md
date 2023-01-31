@@ -75,7 +75,7 @@ final class User
 
 ## Configuring for multiple entities / models with relations
 
-Given an example of rule set for a blog post configured via arrays only:
+An example of rule set for a blog post configured via arrays only:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -110,7 +110,7 @@ use Yiisoft\Validator\Rule\Url;
 ];
 ```
 
-it can be applied to such DTO classes to achieve the same effect:
+It can be applied to such DTO classes to achieve the same effect:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -513,7 +513,7 @@ $data = [
 $result = (new Validator())->validate($data, Post::class);
 ```
 
-The data doesn't have to be within an array, the goal of this snippet is to show that is isolated from the rules.
+The data doesn't have to be within an array, the goal of this snippet is to show that it is isolated from the rules.
 
 ### Tuning parsing of rules
 

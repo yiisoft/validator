@@ -1,6 +1,6 @@
 # Conditional validation
 
-Rules contain several options for skipping themselves in set under certain conditions. Not every rule supports all of 
+Rules contain several options for skipping themselves under certain conditions. Not every rule supports all of 
 these options, but the vast majority do.
 
 ## `skipOnError` - skip a rule in the set if the previous one failed
