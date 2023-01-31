@@ -7,8 +7,8 @@ namespace Yiisoft\Validator\Tests\Helper;
 use Closure;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\EmptyCriteria\NeverEmpty;
-use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
+use Yiisoft\Validator\EmptyCondition\NeverEmpty;
+use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
 
 final class SkipOnEmptyNormalizerTest extends TestCase

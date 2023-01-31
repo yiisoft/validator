@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Closure;
-use Yiisoft\Validator\EmptyCriteria\NeverEmpty;
+use Yiisoft\Validator\EmptyCondition\NeverEmpty;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\RequiredHandler;
-use Yiisoft\Validator\EmptyCriteria\WhenNull;
+use Yiisoft\Validator\EmptyCondition\WhenNull;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -27,7 +27,7 @@ final class RequiredTest extends RuleTestCase
     {
         $rule = new Required();
 
-        $this->assertNull($rule->getEmptyCriteria());
+        $this->assertNull($rule->getEmptyCondition());
         $this->assertSame(RequiredHandler::class, $rule->getHandler());
         $this->assertSame('Value cannot be blank.', $rule->getMessage());
         $this->assertSame('required', $rule->getName());
@@ -36,7 +36,7 @@ final class RequiredTest extends RuleTestCase
         $this->assertFalse($rule->shouldSkipOnError());
     }
 
-    public function dataGetEmptyCriteria(): array
+    public function dataGetEmptyCondition(): array
     {
         return [
             'skip on null' => [new WhenNull(), WhenNull::class],
@@ -45,13 +45,13 @@ final class RequiredTest extends RuleTestCase
     }
 
     /**
-     * @dataProvider dataGetEmptyCriteria
+     * @dataProvider dataGetEmptyCondition
      */
-    public function testGetEmptyCriteria(?callable $callback, string $expectedCallbackClassName): void
+    public function testGetEmptyCondition(?callable $callback, string $expectedCallbackClassName): void
     {
-        $rule = new Required(emptyCriteria: $callback);
+        $rule = new Required(emptyCondition: $callback);
 
-        $this->assertInstanceOf($expectedCallbackClassName, $rule->getEmptyCriteria());
+        $this->assertInstanceOf($expectedCallbackClassName, $rule->getEmptyCondition());
     }
 
     public function dataOptions(): array
@@ -81,7 +81,7 @@ final class RequiredTest extends RuleTestCase
             [['with', 'elements'], [new Required()]],
             'skip on null' => [
                 '',
-                [new Required(emptyCriteria: new WhenNull())],
+                [new Required(emptyCondition: new WhenNull())],
             ],
         ];
     }
@@ -95,7 +95,7 @@ final class RequiredTest extends RuleTestCase
             [[], [new Required()], $singleMessageCannotBeBlank],
             'custom empty callback' => [
                 '42',
-                [new Required(emptyCriteria: static fn (mixed $value): bool => $value === '42')],
+                [new Required(emptyCondition: static fn (mixed $value): bool => $value === '42')],
                 $singleMessageCannotBeBlank,
             ],
             'custom error' => [null, [new Required(message: 'Custom error')], ['' => ['Custom error']]],
@@ -124,9 +124,9 @@ final class RequiredTest extends RuleTestCase
         $this->testWhenInternal(new Required(), new Required(when: $when));
     }
 
-    public function testDefaultEmptyCriteria(): void
+    public function testDefaultEmptyCondition(): void
     {
-        $handler = new RequiredHandler(defaultEmptyCriteria: new NeverEmpty());
+        $handler = new RequiredHandler(defaultEmptyCondition: new NeverEmpty());
 
         $result = $handler->validate('', new Required(), new ValidationContext());
 

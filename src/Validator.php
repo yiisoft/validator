@@ -43,10 +43,10 @@ final class Validator implements ValidatorInterface
      */
     private TranslatorInterface $translator;
     /**
-     * @var callable A default "skip on empty" criteria ({@see SkipOnEmptyInterface}), already normalized. Used to
+     * @var callable A default "skip on empty" condition ({@see SkipOnEmptyInterface}), already normalized. Used to
      * optimize setting the same value in all the rules.
      */
-    private $defaultSkipOnEmptyCriteria;
+    private $defaultSkipOnEmptyCondition;
     /**
      * @var AttributeTranslatorInterface A default translator used for translation of rule ({@see RuleInterface})
      * attributes. Used to optimize setting the same value in all the rules.
@@ -75,7 +75,7 @@ final class Validator implements ValidatorInterface
     ) {
         $this->ruleHandlerResolver = $ruleHandlerResolver ?? new SimpleRuleHandlerContainer();
         $this->translator = $translator ?? $this->createDefaultTranslator();
-        $this->defaultSkipOnEmptyCriteria = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
+        $this->defaultSkipOnEmptyCondition = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
         $this->defaultAttributeTranslator = $defaultAttributeTranslator
             ?? new TranslatorAttributeTranslator($this->translator);
     }
@@ -89,7 +89,7 @@ final class Validator implements ValidatorInterface
         $rules = RulesNormalizer::normalize(
             $rules,
             $dataSet,
-            $this->defaultSkipOnEmptyCriteria
+            $this->defaultSkipOnEmptyCondition
         );
 
         $defaultAttributeTranslator =
