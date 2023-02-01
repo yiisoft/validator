@@ -68,7 +68,7 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @param string $operator The comparison operator. One of `==`, `===`, `!=`, `!==`, `>`, `>=`, `<`, `<=`.
      * @param string $type The type of the values being compared.
-     * @psalm-param AbstractCompare::TYPE_* $type
+     * @psalm-param CompareType::STRING | CompareType::NUMBER $type
      *
      * @param mixed $value The value being compared.
      * @param mixed $targetValue Another value being compared.
@@ -77,7 +77,7 @@ final class CompareHandler implements RuleHandlerInterface
      */
     private function compareValues(string $operator, string $type, mixed $value, mixed $targetValue): bool
     {
-        if ($type === AbstractCompare::TYPE_NUMBER) {
+        if ($type === CompareType::NUMBER) {
             $value = (float) $value;
             $targetValue = (float) $targetValue;
         } else {

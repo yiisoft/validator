@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use RuntimeException;
+use Yiisoft\Validator\Rule\CompareType;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -62,7 +63,7 @@ final class EqualTest extends RuleTestCase
                 ],
             ],
             [
-                new Equal(1, type: Equal::TYPE_NUMBER),
+                new Equal(1, type: CompareType::NUMBER),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,

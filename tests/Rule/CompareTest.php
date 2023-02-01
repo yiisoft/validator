@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use stdClass;
 use Yiisoft\Validator\DataWrapperInterface;
 use Yiisoft\Validator\Rule\Compare;
+use Yiisoft\Validator\Rule\CompareType;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
@@ -73,7 +74,7 @@ final class CompareTest extends RuleTestCase
                 ],
             ],
             [
-                new Compare(1, type: Compare::TYPE_NUMBER),
+                new Compare(1, type: CompareType::NUMBER),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
@@ -108,7 +109,7 @@ final class CompareTest extends RuleTestCase
                 ],
             ],
             [
-                new Compare(1, type: Compare::TYPE_NUMBER, operator: '>='),
+                new Compare(1, type: CompareType::NUMBER, operator: '>='),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,
@@ -425,8 +426,8 @@ final class CompareTest extends RuleTestCase
             [99, [new Compare(100, operator: '<=')]],
             [['attribute' => 100, 'number' => 99], ['number' => new Compare(null, 'attribute', operator: '<=')]],
 
-            ['100.50', [new Compare('100.5', type: Compare::TYPE_NUMBER)]],
-            ['100.50', [new Compare('100.5', type: Compare::TYPE_NUMBER, operator: '===')]],
+            ['100.50', [new Compare('100.5', type: CompareType::NUMBER)]],
+            ['100.50', [new Compare('100.5', type: CompareType::NUMBER, operator: '===')]],
         ];
     }
 

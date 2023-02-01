@@ -56,9 +56,9 @@ final class GreaterThanOrEqual extends AbstractCompare
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
      *   the attribute to be compared with.
      * - `{value}`: the value of the attribute being validated.
-     * @param string $type The type of the values being compared. Either {@see AbstractCompare::TYPE_STRING}
-     * or {@see AbstractCompare::TYPE_NUMBER}.
-     * @psalm-param AbstractCompare::TYPE_* $type
+     * @param string $type The type of the values being compared. Either {@see CompareType::STRING}
+     * or {@see CompareType::NUMBER}.
+     * @psalm-param CompareType::STRING | CompareType::NUMBER $type
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
@@ -75,7 +75,7 @@ final class GreaterThanOrEqual extends AbstractCompare
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
         private string|null $message = null,
-        private string $type = self::TYPE_STRING,
+        private string $type = CompareType::STRING,
         bool|callable|null $skipOnEmpty = false,
         private bool $skipOnError = false,
         private Closure|null $when = null,
