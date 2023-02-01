@@ -401,20 +401,15 @@ final class CompareTest extends RuleTestCase
     {
         return [
             [null, [new Compare('')]],
-            [null, [new Compare('', operator: '===')]],
 
             [100, [new Compare(100)]],
             [['attribute' => 100, 'number' => 100], ['number' => new Compare(null, 'attribute')]],
             ['100', [new Compare(100)]],
 
             [100, [new Compare(100, operator: '===')]],
-            ['100', [new Compare(100, operator: '===')]],
-            [100.0, [new Compare(100, operator: '===')]],
 
             [100.00001, [new Compare(100, operator: '!=')]],
             [false, [new Compare(100, operator: '!=')]],
-
-            [false, [new Compare(100, operator: '!==')]],
 
             [101, [new Compare(100, operator: '>')]],
 
@@ -427,7 +422,21 @@ final class CompareTest extends RuleTestCase
             [['attribute' => 100, 'number' => 99], ['number' => new Compare(null, 'attribute', operator: '<=')]],
 
             ['100.50', [new Compare('100.5', type: CompareType::NUMBER)]],
+            ['100.50', [new Compare(100.5, type: CompareType::NUMBER)]],
             ['100.50', [new Compare('100.5', type: CompareType::NUMBER, operator: '===')]],
+
+            'integer !== boolean' => [false, [new Compare(100, operator: '!==')]],
+            'integer !== string' => ['100', [new Compare(100, operator: '!==')]],
+            'integer !== float' => [100.0, [new Compare(100, operator: '!==')]],
+
+            'float == the same float as expression result' => [
+                1 - 0.83,
+                [new Compare(0.17, type: CompareType::NUMBER)],
+            ],
+            'float === the same float as expression result' => [
+                1 - 0.83,
+                [new Compare(0.17, type: CompareType::NUMBER, operator: '===')],
+            ],
         ];
     }
 
@@ -509,6 +518,10 @@ final class CompareTest extends RuleTestCase
                 ['' => ['Type - stdClass.']],
             ],
 
+            'string === null' => [null, [new Compare('', operator: '===')], ['' => ['Value must be equal to "".']]],
+            'integer === string' => ['100', [new Compare(100, operator: '===')], ['' => [$messageEqual]]],
+            'integer === float' => [100.0, [new Compare(100, operator: '===')], ['' => [$messageEqual]]],
+
             [null, [new Compare(0)], ['' => ['Value must be equal to "0".']]],
 
             [101, [new Compare(100)], ['' => [$messageEqual]]],
@@ -525,8 +538,6 @@ final class CompareTest extends RuleTestCase
             [100.0, [new Compare(100, operator: '!=')], ['' => [$messageNotEqual]]],
 
             [100, [new Compare(100, operator: '!==')], ['' => [$messageNotEqual]]],
-            ['100', [new Compare(100, operator: '!==')], ['' => [$messageNotEqual]]],
-            [100.0, [new Compare(100, operator: '!==')], ['' => [$messageNotEqual]]],
 
             [100, [new Compare(100, operator: '>')], ['' => [$messageGreaterThan]]],
             [99, [new Compare(100, operator: '>')], ['' => [$messageGreaterThan]]],
