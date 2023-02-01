@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\EmptyCriteria;
+namespace Yiisoft\Validator\Tests\EmptyCondition;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\EmptyCriteria\WhenNull;
+use Yiisoft\Validator\EmptyCondition\WhenNull;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Validator;

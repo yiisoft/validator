@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\EmptyCriteria\NeverEmpty;
+use Yiisoft\Validator\EmptyCondition\NeverEmpty;
 use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\AtLeastHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;

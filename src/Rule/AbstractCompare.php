@@ -25,7 +25,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * The default comparison is based on string values, which means the values
  * are compared byte by byte. When comparing numbers, make sure to change {@see AbstractCompare::$type} to
- * {@see AbstractCompare::TYPE_NUMBER} to enable numeric comparison.
+ * {@see CompareType::NUMBER} to enable numeric comparison.
  *
  * @see CompareHandler
  *
@@ -40,21 +40,6 @@ abstract class AbstractCompare implements
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
-
-    /**
-     * Constant for specifying the comparison as string values.
-     * Values will be converted to strings before comparison.
-     *
-     * @see $type
-     */
-    public const TYPE_STRING = 'string';
-    /**
-     * Constant for specifying the comparison as numeric values.
-     * Values will be converted to float numbers before comparison.
-     *
-     * @see $type
-     */
-    public const TYPE_NUMBER = 'number';
 
     /**
      * @var array Map of valid operators.
@@ -98,9 +83,9 @@ abstract class AbstractCompare implements
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
      *   the attribute to be compared with.
      * - `{value}`: the value of the attribute being validated.
-     * @param string $type The type of the values being compared. Either {@see AbstractCompare::TYPE_STRING}
-     * or {@see AbstractCompare::TYPE_NUMBER}.
-     * @psalm-param AbstractCompare::TYPE_* $type
+     * @param string $type The type of the values being compared. Either {@see CompareType::STRING}
+     * or {@see CompareType::NUMBER}.
+     * @psalm-param CompareType::STRING | CompareType::NUMBER $type
      *
      * @param string $operator The operator for comparison. The following operators are supported:
      *
@@ -129,7 +114,7 @@ abstract class AbstractCompare implements
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
         private string|null $message = null,
-        private string $type = self::TYPE_STRING,
+        private string $type = CompareType::STRING,
         private string $operator = '==',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
@@ -173,9 +158,9 @@ abstract class AbstractCompare implements
     /**
      * Get the type of the values being compared.
      *
-     * @return string The type of the values being compared. Either {@see AbstractCompare::TYPE_STRING}
-     * or {@see AbstractCompare::TYPE_NUMBER}.
-     * @psalm-return AbstractCompare::TYPE_* $type
+     * @return string The type of the values being compared. Either {@see CompareType::STRING}
+     * or {@see CompareType::NUMBER}.
+     * @psalm-return CompareType::STRING | CompareType::NUMBER $type
      *
      * @see $type
      */

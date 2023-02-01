@@ -1,4 +1,4 @@
-# `Each` — applying the same rules for each data item in the set
+# `Each` - applying the same rules for each data item in the set
 
 The `Each` rule allows the same rules to be applied to each data item in the set. The following example shows
 the configuration for validating [RGB color] components:
@@ -10,7 +10,6 @@ use Yiisoft\Validator\Rule\Number;
 new Each([
     new Number(integerOnly: true, min: 0, max: 255),
 ]);
-
 ```
 
 By combining with another built-in rule called `Count` we can be sure that the number of components is exactly 3:

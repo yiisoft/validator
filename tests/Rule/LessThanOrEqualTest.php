@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use RuntimeException;
+use Yiisoft\Validator\Rule\CompareType;
 use Yiisoft\Validator\Rule\LessThanOrEqual;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -62,7 +63,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                 ],
             ],
             [
-                new LessThanOrEqual(1, type: LessThanOrEqual::TYPE_NUMBER),
+                new LessThanOrEqual(1, type: CompareType::NUMBER),
                 [
                     'targetValue' => 1,
                     'targetAttribute' => null,

@@ -57,8 +57,9 @@ final class NotEqual extends AbstractCompare
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
      *   the attribute to be compared with.
      * - `{value}`: the value of the attribute being validated.
-     * @param string $type The type of the values being validated.
-     * @psalm-param AbstractCompare::TYPE_* $type
+     * @param string $type The type of the values being compared. Either {@see CompareType::STRING}
+     * or {@see CompareType::NUMBER}.
+     * @psalm-param CompareType::STRING | CompareType::NUMBER $type
      *
      * @param bool $strict Whether to use strict checks without type juggling.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
@@ -76,7 +77,7 @@ final class NotEqual extends AbstractCompare
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
         private string|null $message = null,
-        private string $type = self::TYPE_STRING,
+        private string $type = CompareType::STRING,
         private bool $strict = false,
         bool|callable|null $skipOnEmpty = false,
         private bool $skipOnError = false,

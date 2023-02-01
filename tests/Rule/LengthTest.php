@@ -15,7 +15,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
-final class HasLengthTest extends RuleTestCase
+final class LengthTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use LimitTestTrait;

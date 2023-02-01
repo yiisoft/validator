@@ -25,7 +25,7 @@ use Attribute;
  *
  * The default comparison function is based on string values, which means the values
  * are compared byte by byte. When comparing numbers, make sure to change {@see Compare::$type} to
- * {@see Compare::TYPE_NUMBER} to enable numeric comparison.
+ * {@see CompareType::NUMBER} to enable numeric comparison.
  *
  * @see CompareHandler
  */

@@ -9,9 +9,6 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
-use function gettype;
-use function in_array;
-
 /**
  * Compares the specified value with another value.
  *
@@ -71,7 +68,7 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @param string $operator The comparison operator. One of `==`, `===`, `!=`, `!==`, `>`, `>=`, `<`, `<=`.
      * @param string $type The type of the values being compared.
-     * @psalm-param AbstractCompare::TYPE_* $type
+     * @psalm-param CompareType::STRING | CompareType::NUMBER $type
      *
      * @param mixed $value The value being compared.
      * @param mixed $targetValue Another value being compared.
@@ -80,69 +77,23 @@ final class CompareHandler implements RuleHandlerInterface
      */
     private function compareValues(string $operator, string $type, mixed $value, mixed $targetValue): bool
     {
-        if (!in_array($operator, ['==', '===', '!=', '!=='])) {
-            [$value, $targetValue] = $this->getTypeCastedValues($type, $value, $targetValue);
+        if ($type === CompareType::NUMBER) {
+            $value = (float) $value;
+            $targetValue = (float) $targetValue;
+        } else {
+            $value = (string) $value;
+            $targetValue = (string) $targetValue;
         }
 
         return match ($operator) {
-            '==' => $this->assertEquals($type, $value, $targetValue),
-            '===' => $this->assertEquals($type, $value, $targetValue, strict: true),
-            '!=' => $this->assertNotEquals($type, $value, $targetValue),
-            '!==' => $this->assertNotEquals($type, $value, $targetValue, strict: true),
+            '==' => $value == $targetValue,
+            '===' => $value === $targetValue,
+            '!=' => $value != $targetValue,
+            '!==' => $value !== $targetValue,
             '>' => $value > $targetValue,
             '>=' => $value >= $targetValue,
             '<' => $value < $targetValue,
             '<=' => $value <= $targetValue,
         };
-    }
-
-    private function assertEquals(
-        string $type,
-        mixed $value,
-        mixed $targetValue,
-        bool $strict = false,
-    ): bool {
-        if ($strict && gettype($value) !== gettype($targetValue)) {
-            return false;
-        }
-
-        [$value, $targetValue] = $this->getTypeCastedValues($type, $value, $targetValue);
-
-        if ($type === AbstractCompare::TYPE_NUMBER) {
-            return $this->assertFloatsEqual($value, $targetValue);
-        }
-
-        return $strict ? $value === $targetValue : $value == $targetValue;
-    }
-
-    private function assertNotEquals(
-        string $type,
-        mixed $value,
-        mixed $targetValue,
-        bool $strict = false,
-    ): bool {
-        if ($strict && gettype($value) !== gettype($targetValue)) {
-            return true;
-        }
-
-        [$value, $targetValue] = $this->getTypeCastedValues($type, $value, $targetValue);
-
-        if ($type === AbstractCompare::TYPE_NUMBER) {
-            return !$this->assertFloatsEqual($value, $targetValue);
-        }
-
-        return $strict ? $value !== $targetValue : $value != $targetValue;
-    }
-
-    private function assertFloatsEqual(float $value, float $targetValue): bool
-    {
-        return abs($value - $targetValue) < PHP_FLOAT_EPSILON;
-    }
-
-    private function getTypeCastedValues(string $type, mixed $value, mixed $targetValue)
-    {
-        return $type === AbstractCompare::TYPE_NUMBER
-            ? [(float) $value, (float) $targetValue]
-            : [(string) $value, (string) $targetValue];
     }
 }

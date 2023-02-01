@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Helper;
 
 use InvalidArgumentException;
-use Yiisoft\Validator\EmptyCriteria\NeverEmpty;
-use Yiisoft\Validator\EmptyCriteria\WhenEmpty;
+use Yiisoft\Validator\EmptyCondition\NeverEmpty;
+use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 
 use function is_callable;
@@ -31,7 +31,7 @@ final class SkipOnEmptyNormalizer
      *
      * @throws InvalidArgumentException If the type of {@see $skipOnEmpty} is not valid.
      *
-     * @return callable An empty criteria callable.
+     * @return callable An empty condition as a callable.
      */
     public static function normalize(mixed $skipOnEmpty): callable
     {
