@@ -114,7 +114,7 @@ final class NestedTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'asInteger' => false,
+                            'integerOnly' => false,
                             'min' => null,
                             'max' => null,
                             'incorrectInputMessage' => [
@@ -166,7 +166,7 @@ final class NestedTest extends RuleTestCase
                     'rules' => [
                         'user.age' => [
                             'number',
-                            'asInteger' => false,
+                            'integerOnly' => false,
                             'min' => null,
                             'max' => null,
                             'incorrectInputMessage' => [

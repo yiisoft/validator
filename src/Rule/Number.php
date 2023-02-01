@@ -198,7 +198,7 @@ final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
     public function getOptions(): array
     {
         return [
-            'asInteger' => $this->integerOnly,
+            'integerOnly' => $this->integerOnly,
             'min' => $this->min,
             'max' => $this->max,
             'incorrectInputMessage' => [

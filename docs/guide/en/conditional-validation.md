@@ -153,7 +153,7 @@ An example with using `WhenNull` as parameter (note that an instance is passed, 
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\EmptyCondition\WhenNull;
 
-new Number(asInteger: true, max: 100, skipOnEmpty: new WhenNull());
+new Number(integerOnly: true, max: 100, skipOnEmpty: new WhenNull());
 ```
 
 ### Custom empty condition
@@ -172,7 +172,7 @@ final class WhenZero
     }
 }
 
-new Number(asInteger: true, max: 100, skipOnEmpty: new WhenZero());
+new Number(integerOnly: true, max: 100, skipOnEmpty: new WhenZero());
 ```
 
 or just a callable:
@@ -181,8 +181,8 @@ or just a callable:
 use Yiisoft\Validator\Rule\Number;
 
 new Number(
-    asInteger: true, 
-    max: 100, 
+    integerOnly: true,
+    max: 100,
     skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
         return $isAttributeMissing || $value === 0;
     }
