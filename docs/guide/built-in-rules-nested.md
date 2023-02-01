@@ -3,10 +3,10 @@
 ## Basic usage (one-to-one relation)
 
 In many cases there is a need to validate related data in addition to the current entity / model.
-There is a `Nested` rule for this purpose. 
+There is a `Nested` rule for this purpose.
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -16,7 +16,7 @@ $data = ['author' => ['name' => 'John', 'age' => '17']];
 $rule = new Nested([
     'title' => [new Required()],
     'author' => new Nested([
-        'name' => [new HasLength(min: 3)],
+        'name' => [new Length(min: 3)],
         'age' => [new Number(min: 18)],
     ]),
 ]);
@@ -44,14 +44,14 @@ Dot notation can be used as an alternative method of configuration. In this case
 follows:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
 $rule = new Nested([
     'title' => [new Required()],
-    'author.name' => [new HasLength(min: 3)],
+    'author.name' => [new Length(min: 3)],
     'author.age' => [new Number(min: 18)],
 ]);
 ```
@@ -59,7 +59,7 @@ $rule = new Nested([
 It's also possible to combine both approaches:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -70,7 +70,7 @@ $rule = new Nested([
         'title' => [new Required()],
         'description' => [new Required()],
     ]),
-    'author.name' => [new HasLength(min: 3)],
+    'author.name' => [new Length(min: 3)],
     'author.age' => [new Number(min: 18)],
 ]);
 ```
@@ -84,12 +84,12 @@ Some code can be omitted for brevity.
 Inner `Nested` instances can be omitted, but only for nesting levels no greater than 2:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 
 $rule = new Nested([
     'author' => [
-        'name' => [new HasLength(min: 1)],
+        'name' => [new Length(min: 1)],
     ],
 ]);
 ```
@@ -97,13 +97,13 @@ $rule = new Nested([
 This will not work:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 
 $rule = new Nested([
     'author' => [
         'name' => [
-            'surname' => [new HasLength(min: 1)],
+            'surname' => [new Length(min: 1)],
         ],
     ],
 ]);
@@ -117,13 +117,13 @@ to be wrapped with another `Nested` instance or using the short syntax shown abo
 Inner arrays for single rules can be omitted regardless of nesting level:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 
 $rule = new Nested([
     'author' => [
         'name' => [
-            'surname' => new HasLength(min: 1),
+            'surname' => new Length(min: 1),
         ],
     ],
 ]);
@@ -413,12 +413,12 @@ the rule config to work correctly. In the input data escaping is not needed. Her
 keys named `author.data` and `name.surname`:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 
 $rule = new Nested([
     'author\.data.name\.surname' => [
-        new HasLength(min: 3),
+        new Length(min: 3),
     ],
 ]);
 $data = [
@@ -431,13 +431,13 @@ $data = [
 Note that escaping is still required when using multiple nested rules for configuration:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 
 $rule = new Nested([
     'author\.data' => new Nested([
         'name\.surname' => [
-            new HasLength(min: 3),
+            new Length(min: 3),
         ],
     ]),
 ]);

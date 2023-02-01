@@ -291,12 +291,12 @@ This custom rule can also be separated and refactored using built-in rules reduc
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\ValidationContext;
 
 $rules = [
     'hasCompany' => new BooleanValue(),
-    'companyName' => new HasLength(
+    'companyName' => new Length(
         min: 1,
         max: 50,
         when: static function (mixed $value, ValidationContext $context): bool {

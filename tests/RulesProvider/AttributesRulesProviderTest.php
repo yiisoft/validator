@@ -8,7 +8,7 @@ use JetBrains\PhpStorm\Deprecated;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use Traversable;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\TrueValue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -44,7 +44,7 @@ final class AttributesRulesProviderTest extends TestCase
             ],
             'object with properties without rule attributes' => [
                 [
-                    'title' => [HasLength::class],
+                    'title' => [Length::class],
                 ],
                 new class () {
                     #[Deprecated(reason: 'test reason', replacement: 'test replacement')]
@@ -52,7 +52,7 @@ final class AttributesRulesProviderTest extends TestCase
 
                     private bool $active = true;
 
-                    #[HasLength(max: 255)]
+                    #[Length(max: 255)]
                     private string $title = 'Test title';
                 },
             ],

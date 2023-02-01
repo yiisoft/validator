@@ -11,7 +11,9 @@ Some rules have multiple error messages and are overridden via different corresp
 It is easy to differentiate them from the rest of the parameters by `Message` suffix:
 
 ```php
-new HasLength(  
+use Yiisoft\Validator\Rule\Length;
+
+new Length(  
     min: 4,  
     max: 10,
     lessThanMinMessage: 'The {attribute} is too short.',  
@@ -101,13 +103,20 @@ There is another special interface called `AttributeTranslatorProviderInterface`
 extract translations from the objects implementing it. An example for Russian language:
 
 ```php
+use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
+use Yiisoft\Validator\AttributeTranslatorInterface;
+use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Validator;
+
 final class ChangePasswordForm implements AttributeTranslatorProviderInterface  
 {  
     public function __construct(  
         #[Required(message: '{attribute} обязателен для ввода.')]  
         public string $currentPassword = '',  
   
-        #[HasLength(  
+        #[Length(  
             min: 8,
             skipOnEmpty: false,  
             lessThanMinMessage: '{attribute} должен быть сложный, не менее 8 символов.'  
@@ -125,7 +134,7 @@ final class ChangePasswordForm implements AttributeTranslatorProviderInterface
     }  
 }
 
-$form = new PasswordForm();    
+$form = new ChangePasswordForm();    
 $result = (new Validator())->validate($form);
 ```
 

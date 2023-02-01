@@ -11,12 +11,15 @@ However, there is a possibility to export rules' options as an array for passing
 - The option values that can't be serialized/reproduced on the client side - callables, for example, are excluded - 
 either completely like `Callback::$callback` or partially like `$skipOnEmpty` if multiple types are supported.
 
-Given built-in `HasLength` rule:
+Given built-in `Length` rule:
 
 ```php
+use Yiisoft\Validator\Helper\RulesDumper;
+use Yiisoft\Validator\Rule\Length;
+
 $rules = [  
     'name' => [  
-        new HasLength(min: 4, max: 10),  
+        new Length(min: 4, max: 10),  
     ],  
 ];  
 $options = RulesDumper::asArray($rules);
@@ -28,7 +31,7 @@ the output will be:
 [  
     'name' => [  
         [  
-            'hasLength',  
+            'length',  
             'min' => 4,  
             'max' => 10,  
             'exactly' => null,  

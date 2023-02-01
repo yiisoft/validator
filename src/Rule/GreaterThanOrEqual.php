@@ -19,15 +19,15 @@ use Yiisoft\Validator\WhenInterface;
  * are checked byte by byte. When validating numbers, make sure to change {@see GreaterThanOrEqual::$type} to
  * {@see GreaterThanOrEqual::TYPE_NUMBER} to enable numeric validation.
  *
- *  `new GreaterThanOrEqual()` is a shortcut for `new CompareTo(operator: '>=')`.
+ *  `new GreaterThanOrEqual()` is a shortcut for `new Compare(operator: '>=')`.
  *
  * @see CompareHandler
- * @see Compare
+ * @see AbstractCompare
  *
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class GreaterThanOrEqual extends Compare
+final class GreaterThanOrEqual extends AbstractCompare
 {
     /**
      * @param scalar|null $targetValue The constant value to be greater than or equal to. When both this property and
@@ -56,9 +56,9 @@ final class GreaterThanOrEqual extends Compare
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
      *   the attribute to be compared with.
      * - `{value}`: the value of the attribute being validated.
-     * @param string $type The type of the values being compared. Either {@see Compare::TYPE_STRING}
-     * or {@see Compare::TYPE_NUMBER}.
-     * @psalm-param Compare::TYPE_* $type
+     * @param string $type The type of the values being compared. Either {@see CompareType::STRING}
+     * or {@see CompareType::NUMBER}.
+     * @psalm-param CompareType::STRING | CompareType::NUMBER $type
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
@@ -75,7 +75,7 @@ final class GreaterThanOrEqual extends Compare
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
         private string|null $message = null,
-        private string $type = self::TYPE_STRING,
+        private string $type = CompareType::STRING,
         bool|callable|null $skipOnEmpty = false,
         private bool $skipOnError = false,
         private Closure|null $when = null,

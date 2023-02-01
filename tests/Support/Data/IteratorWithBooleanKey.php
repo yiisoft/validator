@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Support\Data;
 
 use ReturnTypeWillChange;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\RuleInterface;
 
 class IteratorWithBooleanKey implements \Iterator
@@ -15,7 +15,7 @@ class IteratorWithBooleanKey implements \Iterator
 
     public function __construct()
     {
-        $this->array = [new HasLength(min: 1), new HasLength(min: 1)];
+        $this->array = [new Length(min: 1), new Length(min: 1)];
     }
 
     public function rewind(): void

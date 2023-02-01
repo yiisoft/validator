@@ -9,7 +9,7 @@ use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -72,27 +72,27 @@ final class ObjectDataSetTest extends TestCase
                 },
                 [
                     'title' => [
-                        new HasLength(max: 255),
+                        new Length(max: 255),
                     ],
                 ],
             ],
             [
                 new class () {
                     #[Required()]
-                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    #[Length(max: 255, skipOnEmpty: true)]
                     private $property1;
                     #[Required()]
-                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    #[Length(max: 255, skipOnEmpty: true)]
                     private $property2;
                 },
                 [
                     'property1' => [
                         new Required(),
-                        new HasLength(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: true),
                     ],
                     'property2' => [
                         new Required(),
-                        new HasLength(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: true),
                     ],
                 ],
             ],
@@ -100,18 +100,18 @@ final class ObjectDataSetTest extends TestCase
                 new class () {
                     #[Each([
                         new Required(),
-                        new HasLength(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: true),
                     ])]
-                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    #[Length(max: 255, skipOnEmpty: true)]
                     private $property1;
                 },
                 [
                     'property1' => [
                         new Each([
                             new Required(),
-                            new HasLength(max: 255, skipOnEmpty: true),
+                            new Length(max: 255, skipOnEmpty: true),
                         ]),
-                        new HasLength(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: true),
                     ],
                 ],
             ],
@@ -119,39 +119,39 @@ final class ObjectDataSetTest extends TestCase
                 new class () {
                     #[Nested([
                         new Required(),
-                        new HasLength(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: true),
                     ])]
                     #[Each([
                         new Required(),
-                        new HasLength(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: true),
                     ])]
-                    #[HasLength(max: 255, skipOnEmpty: true)]
+                    #[Length(max: 255, skipOnEmpty: true)]
                     private $property1;
                 },
                 [
                     'property1' => [
                         new Nested([
                             new Required(),
-                            new HasLength(max: 255, skipOnEmpty: true),
+                            new Length(max: 255, skipOnEmpty: true),
                         ]),
                         new Each([
                             new Required(),
-                            new HasLength(max: 255, skipOnEmpty: true),
+                            new Length(max: 255, skipOnEmpty: true),
                         ]),
-                        new HasLength(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: true),
                     ],
                 ],
             ],
             [
                 new class () {
-                    #[HasLength(max: 255, skipOnEmpty: true)]
-                    #[HasLength(max: 255, skipOnEmpty: false)]
+                    #[Length(max: 255, skipOnEmpty: true)]
+                    #[Length(max: 255, skipOnEmpty: false)]
                     private $property1;
                 },
                 [
                     'property1' => [
-                        new HasLength(max: 255, skipOnEmpty: true),
-                        new HasLength(max: 255, skipOnEmpty: false),
+                        new Length(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: false),
                     ],
                 ],
             ],
@@ -159,28 +159,28 @@ final class ObjectDataSetTest extends TestCase
                 new class () {
                     #[Nested([
                         new Required(),
-                        new HasLength(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: true),
                     ])]
                     #[Nested([
                         new Required(),
-                        new HasLength(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: true),
                     ])]
-                    #[HasLength(max: 255, skipOnEmpty: true)]
-                    #[HasLength(max: 255, skipOnEmpty: false)]
+                    #[Length(max: 255, skipOnEmpty: true)]
+                    #[Length(max: 255, skipOnEmpty: false)]
                     private $property1;
                 },
                 [
                     'property1' => [
                         new Nested([
                             new Required(),
-                            new HasLength(max: 255, skipOnEmpty: true),
+                            new Length(max: 255, skipOnEmpty: true),
                         ]),
                         new Nested([
                             new Required(),
-                            new HasLength(max: 255, skipOnEmpty: true),
+                            new Length(max: 255, skipOnEmpty: true),
                         ]),
-                        new HasLength(max: 255, skipOnEmpty: true),
-                        new HasLength(max: 255, skipOnEmpty: false),
+                        new Length(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: false),
                     ],
                 ],
             ],

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Support\Data;
 
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 
 final class ObjectWithNestedObject
 {
-    #[HasLength(min: 3)]
+    #[Length(min: 3)]
     public string $caption = '';
 
     #[Nested]

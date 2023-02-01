@@ -6,11 +6,11 @@
 ```php
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\Email;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 
 new Composite(
     [
-        new HasLength(max: 255),
+        new Length(max: 255),
         new Email(),
     ],
     skipOnEmpty: true,
@@ -24,7 +24,7 @@ new Composite(
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Regex;
 
 final class UsernameRuleSet extends Composite
@@ -32,7 +32,7 @@ final class UsernameRuleSet extends Composite
     public function getRules(): array
     {
         return [
-            new HasLength(min: 2, max: 20),
+            new Length(min: 2, max: 20),
             new Regex('~^[a-z_\-]*$~i'),
         ];
     }

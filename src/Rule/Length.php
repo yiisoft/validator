@@ -19,12 +19,12 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Defines validation options to check that the value is a string of a certain length.
  *
- * @see HasLengthHandler
+ * @see LengthHandler
  *
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class HasLength implements
+final class Length implements
     RuleWithOptionsInterface,
     SkipOnErrorInterface,
     WhenInterface,
@@ -108,7 +108,7 @@ final class HasLength implements
 
     public function getName(): string
     {
-        return 'hasLength';
+        return 'length';
     }
 
     /**
@@ -151,6 +151,6 @@ final class HasLength implements
 
     public function getHandler(): string
     {
-        return HasLengthHandler::class;
+        return LengthHandler::class;
     }
 }

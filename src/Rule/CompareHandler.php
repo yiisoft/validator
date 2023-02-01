@@ -12,21 +12,21 @@ use Yiisoft\Validator\ValidationContext;
 /**
  * Compares the specified value with another value.
  *
- * @see Compare
+ * @see AbstractCompare
  * @see Equal
  * @see GreaterThan
  * @see GreaterThanOrEqual
  * @see LessThan
  * @see LessThanOrEqual
- * @see CompareTo
+ * @see Compare
  * @see NotEqual
  */
 final class CompareHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
-        if (!$rule instanceof Compare) {
-            throw new UnexpectedRuleException(Compare::class, $rule);
+        if (!$rule instanceof AbstractCompare) {
+            throw new UnexpectedRuleException(AbstractCompare::class, $rule);
         }
 
         $result = new Result();
@@ -68,7 +68,7 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @param string $operator The comparison operator. One of `==`, `===`, `!=`, `!==`, `>`, `>=`, `<`, `<=`.
      * @param string $type The type of the values being compared.
-     * @psalm-param Compare::TYPE_* $type
+     * @psalm-param CompareType::STRING | CompareType::NUMBER $type
      *
      * @param mixed $value The value being compared.
      * @param mixed $targetValue Another value being compared.
@@ -77,7 +77,7 @@ final class CompareHandler implements RuleHandlerInterface
      */
     private function compareValues(string $operator, string $type, mixed $value, mixed $targetValue): bool
     {
-        if ($type === Compare::TYPE_NUMBER) {
+        if ($type === CompareType::NUMBER) {
             $value = (float) $value;
             $targetValue = (float) $targetValue;
         } else {

@@ -15,16 +15,16 @@ use function is_string;
 /**
  * Validates that the value is a string of a certain length.
  *
- * @see HasLength
+ * @see Length
  */
-final class HasLengthHandler implements RuleHandlerInterface
+final class LengthHandler implements RuleHandlerInterface
 {
     use LimitHandlerTrait;
 
     public function validate($value, object $rule, ValidationContext $context): Result
     {
-        if (!$rule instanceof HasLength) {
-            throw new UnexpectedRuleException(HasLength::class, $rule);
+        if (!$rule instanceof Length) {
+            throw new UnexpectedRuleException(Length::class, $rule);
         }
 
         $result = new Result();

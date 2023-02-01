@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\StopOnError;
 use Yiisoft\Validator\Rule\StopOnErrorHandler;
@@ -21,7 +21,7 @@ final class StopOnErrorTest extends RuleTestCase
 
     public function testGetName(): void
     {
-        $rule = new StopOnError([new HasLength(min: 10)]);
+        $rule = new StopOnError([new Length(min: 10)]);
         $this->assertSame('stopOnError', $rule->getName());
     }
 
@@ -29,12 +29,12 @@ final class StopOnErrorTest extends RuleTestCase
     {
         return [
             [
-                new StopOnError([new HasLength(min: 10)]),
+                new StopOnError([new Length(min: 10)]),
                 [
                     'skipOnEmpty' => false,
                     'rules' => [
                         [
-                            'hasLength',
+                            'length',
                             'min' => 10,
                             'max' => null,
                             'exactly' => null,
@@ -80,8 +80,8 @@ final class StopOnErrorTest extends RuleTestCase
                 'hello',
                 [
                     new StopOnError([
-                        new HasLength(min: 1),
-                        new HasLength(max: 10),
+                        new Length(min: 1),
+                        new Length(max: 10),
                     ]),
                 ],
             ],
@@ -95,8 +95,8 @@ final class StopOnErrorTest extends RuleTestCase
                 'hello',
                 [
                     new StopOnError([
-                        new HasLength(min: 10),
-                        new HasLength(max: 1),
+                        new Length(min: 10),
+                        new Length(max: 1),
                     ]),
                 ],
                 ['' => ['This value must contain at least 10 characters.']],
@@ -105,8 +105,8 @@ final class StopOnErrorTest extends RuleTestCase
                 'hello',
                 [
                     new StopOnError([
-                        new HasLength(max: 1),
-                        new HasLength(min: 10),
+                        new Length(max: 1),
+                        new Length(min: 10),
                     ]),
                 ],
                 ['' => ['This value must contain at most 1 character.']],
@@ -116,10 +116,10 @@ final class StopOnErrorTest extends RuleTestCase
                 [
                     new Number(),
                     new StopOnError([
-                        new HasLength(max: 1),
-                        new HasLength(min: 10),
+                        new Length(max: 1),
+                        new Length(min: 10),
                     ]),
-                    new HasLength(min: 7),
+                    new Length(min: 7),
                 ],
                 [
                     '' => [
@@ -135,8 +135,8 @@ final class StopOnErrorTest extends RuleTestCase
     {
         $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(
-            new StopOnError([new HasLength(min: 10)]),
-            new StopOnError([new HasLength(min: 10)], when: $when),
+            new StopOnError([new Length(min: 10)]),
+            new StopOnError([new Length(min: 10)], when: $when),
         );
     }
 

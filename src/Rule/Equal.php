@@ -19,16 +19,16 @@ use Yiisoft\Validator\WhenInterface;
  * are checked byte by byte. When validating numbers, make sure to change {@see Equal::$type} to
  * {@see Equal::TYPE_NUMBER} to enable numeric validation.
  *
- * - `new Equal()` is a shortcut for `new CompareTo(operator: '==')`.
- * - `new Equal(strict:true)` is a shortcut for `new CompareTo(operator: '===')`.
+ * - `new Equal()` is a shortcut for `new Compare(operator: '==')`.
+ * - `new Equal(strict:true)` is a shortcut for `new Compare(operator: '===')`.
  *
  * @see CompareHandler
- * @see Compare
+ * @see AbstractCompare
  *
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Equal extends Compare
+final class Equal extends AbstractCompare
 {
     /**
      * @param scalar|null $targetValue The constant value to be equal to. When both this property and {@see $targetAttribute} are
@@ -57,9 +57,9 @@ final class Equal extends Compare
      * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
      *   the attribute to be compared with.
      * - `{value}`: the value of the attribute being validated.
-     * @param string $type The type of the values being compared. Either {@see Compare::TYPE_STRING}
-     * or {@see Compare::TYPE_NUMBER}.
-     * @psalm-param Compare::TYPE_* $type
+     * @param string $type The type of the values being compared. Either {@see CompareType::STRING}
+     * or {@see CompareType::NUMBER}.
+     * @psalm-param CompareType::STRING | CompareType::NUMBER $type
      *
      * @param bool $strict Whether to check strictly without type juggling.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
@@ -77,7 +77,7 @@ final class Equal extends Compare
         private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
         'a scalar type.',
         private string|null $message = null,
-        private string $type = self::TYPE_STRING,
+        private string $type = CompareType::STRING,
         private bool $strict = false,
         bool|callable|null $skipOnEmpty = false,
         private bool $skipOnError = false,

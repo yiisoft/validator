@@ -11,7 +11,7 @@ change this behavior, use `skipOnError: true` for rules that need to be skipped:
 In the following example, checking the length of a username is skipped if the username is not filled.
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
@@ -23,7 +23,7 @@ $rules = [
         // Validated.
         new Required(),
         // Skipped because "name" is required but not filled.
-        new HasLength(min: 4, max: 20, skipOnError: true),
+        new Length(min: 4, max: 20, skipOnError: true),
         // Validated because "skipOnError" is "false" by default. Set to "true" to skip it as well.
         new Regex('^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'),
     ],
@@ -45,7 +45,7 @@ number of rules.
 Using `StopOnError`:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\StopOnError;
@@ -55,7 +55,7 @@ $data = [];
 $rules = [
     'name' => new StopOnError([
         new Required(),
-        new HasLength(min: 4, max: 20),
+        new Length(min: 4, max: 20),
         new Regex('^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'),
     ]),
 ];
@@ -66,7 +66,7 @@ Using `Composite`:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
@@ -77,7 +77,7 @@ $rules = [
         new Required(),
         new Composite(
             [
-                new HasLength(min: 4, max: 20),
+                new Length(min: 4, max: 20),
                 new Regex('^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'),
             ],
             skipOnError: true,
@@ -247,7 +247,7 @@ In this example the state is only required when the country is `Brazil`. `$conte
 method allows you to get any other attribute's value within the `ValidationContext`.
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
@@ -256,7 +256,7 @@ $data = [];
 $rules = [
     'country' => [
         new Required(),
-        new HasLength(min: 2),
+        new Length(min: 2),
     ],
     'state' => new Required(
         when: static function (mixed $value, ValidationContext $context): bool {

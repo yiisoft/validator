@@ -8,14 +8,14 @@ This can be useful for performance-intensive validations, such as database queri
 The order of rules within a group is crucial here - the "lightweight" rules need to be placed above the "heavy" ones:
 
 ```php
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\StopOnError;
 use Yiisoft\Validator\Validator;
 
 $data = 2;
 $rule = new StopOnError([
-    new HasLength(min: 3), // "Lightweight" rule, will be run and won't pass the validation.
+    new Length(min: 3), // "Lightweight" rule, will be run and won't pass the validation.
     new MyHeavyRule(), // // "Heavy" rule, won't be run at all because of the existing error.
 ]);
 $result = (new Validator())->validate($data, $rule);

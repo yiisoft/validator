@@ -19,8 +19,8 @@ use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\BooleanValue;
-use Yiisoft\Validator\Rule\CompareTo;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Compare;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\TrueValue;
 use Yiisoft\Validator\Rule\Number;
@@ -282,7 +282,7 @@ class ValidatorTest extends TestCase
     public function testNullAsDataSet(): void
     {
         $validator = new Validator();
-        $result = $validator->validate(null, ['property' => [new CompareTo(null)]]);
+        $result = $validator->validate(null, ['property' => [new Compare(null)]]);
 
         $this->assertTrue($result->isValid());
     }
@@ -478,8 +478,8 @@ class ValidatorTest extends TestCase
             ],
             [
                 [
-                    'name' => [new Required(), new HasLength(min: 3, skipOnError: true)],
-                    'description' => [new Required(), new HasLength(min: 5, skipOnError: true)],
+                    'name' => [new Required(), new Length(min: 3, skipOnError: true)],
+                    'description' => [new Required(), new Length(min: 5, skipOnError: true)],
                 ],
                 new ObjectDataSet(
                     new class () {
@@ -513,7 +513,7 @@ class ValidatorTest extends TestCase
     {
         $validator = new Validator();
         $rules = [
-            'name' => [new HasLength(min: 8)],
+            'name' => [new Length(min: 8)],
             'age' => [new Number(integerOnly: true, min: 18)],
         ];
         $stringLessThanMinMessage = 'This value must contain at least 8 characters.';
@@ -586,7 +586,7 @@ class ValidatorTest extends TestCase
                     'name' => 'Dmitriy',
                 ]),
                 [
-                    'name' => [new HasLength(min: 8)],
+                    'name' => [new Length(min: 8)],
                     'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: true)],
                 ],
                 [
@@ -604,7 +604,7 @@ class ValidatorTest extends TestCase
                     'age' => null,
                 ]),
                 [
-                    'name' => [new HasLength(min: 8)],
+                    'name' => [new Length(min: 8)],
                     'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: true)],
                 ],
                 [
@@ -622,7 +622,7 @@ class ValidatorTest extends TestCase
                     'age' => 17,
                 ]),
                 [
-                    'name' => [new HasLength(min: 8, skipOnEmpty: true)],
+                    'name' => [new Length(min: 8, skipOnEmpty: true)],
                     'age' => [new Number(integerOnly: true, min: 18)],
                 ],
                 [
@@ -645,7 +645,7 @@ class ValidatorTest extends TestCase
                     'age' => 17,
                 ]),
                 [
-                    'name' => [new HasLength(min: 8, skipOnEmpty: new WhenEmpty(trimString: true))],
+                    'name' => [new Length(min: 8, skipOnEmpty: new WhenEmpty(trimString: true))],
                     'age' => [new Number(integerOnly: true, min: 18)],
                 ],
                 [
@@ -663,7 +663,7 @@ class ValidatorTest extends TestCase
                     'age' => 17,
                 ]),
                 [
-                    'name' => [new HasLength(min: 8)],
+                    'name' => [new Length(min: 8)],
                     'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: true)],
                 ],
                 [
@@ -686,7 +686,7 @@ class ValidatorTest extends TestCase
                     'name' => 'Dmitriy',
                 ]),
                 [
-                    'name' => [new HasLength(min: 8)],
+                    'name' => [new Length(min: 8)],
                     'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: new WhenNull())],
                 ],
                 [
@@ -704,7 +704,7 @@ class ValidatorTest extends TestCase
                     'age' => null,
                 ]),
                 [
-                    'name' => [new HasLength(min: 8)],
+                    'name' => [new Length(min: 8)],
                     'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: new WhenNull())],
                 ],
                 [
@@ -722,7 +722,7 @@ class ValidatorTest extends TestCase
                     'age' => 17,
                 ]),
                 [
-                    'name' => [new HasLength(min: 8)],
+                    'name' => [new Length(min: 8)],
                     'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: new WhenNull())],
                 ],
                 [
@@ -745,7 +745,7 @@ class ValidatorTest extends TestCase
                     'age' => '',
                 ]),
                 [
-                    'name' => [new HasLength(min: 8)],
+                    'name' => [new Length(min: 8)],
                     'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: new WhenNull())],
                 ],
                 [
@@ -767,7 +767,7 @@ class ValidatorTest extends TestCase
                     'name' => 'Dmitriy',
                 ]),
                 [
-                    'name' => [new HasLength(min: 8)],
+                    'name' => [new Length(min: 8)],
                     'age' => [
                         new Number(
                             integerOnly: true,
@@ -795,7 +795,7 @@ class ValidatorTest extends TestCase
                     'age' => 0,
                 ]),
                 [
-                    'name' => [new HasLength(min: 8)],
+                    'name' => [new Length(min: 8)],
                     'age' => [
                         new Number(
                             integerOnly: true,
@@ -819,7 +819,7 @@ class ValidatorTest extends TestCase
                     'age' => 17,
                 ]),
                 [
-                    'name' => [new HasLength(min: 8)],
+                    'name' => [new Length(min: 8)],
                     'age' => [
                         new Number(
                             integerOnly: true,
@@ -848,7 +848,7 @@ class ValidatorTest extends TestCase
                     'age' => null,
                 ]),
                 [
-                    'name' => [new HasLength(min: 8)],
+                    'name' => [new Length(min: 8)],
                     'age' => [
                         new Number(
                             integerOnly: true,
