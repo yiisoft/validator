@@ -17,8 +17,8 @@ use Yiisoft\Validator\WhenInterface;
  * Defines validation options to check that the value is a number.
  *
  * The format of the number must match the regular expression specified in {@see AbstractNumber::$pattern}. Optionally,
- * you may configure the {@see AbstractNumber::$min} and {@see AbstractNumber::$max}.
- * to ensure the number is within certain range.
+ * you may configure the {@see AbstractNumber::$min} and {@see AbstractNumber::$max} to ensure the number is within
+ * certain range.
  *
  * @see NumberHandler
  *
@@ -35,16 +35,22 @@ abstract class AbstractNumber implements
     use WhenTrait;
 
     /**
-     * @param float|int|null $min Lower limit of the number. Defaults to `null`, meaning no lower limit.
-     * See {@see $tooSmallMessage} for the customized message used when the number is too small.
-     * @param float|int|null $max Upper limit of the number. Defaults to `null`, meaning no upper limit.
-     * See {@see $tooBigMessage} for the customized message used when the number is too big.
+     * @param float|int|null $min Lower limit of the number. Defaults to `null`, meaning no lower limit. See
+     * {@see $tooSmallMessage} for the customized message used when the number is too small.
+     * @param float|int|null $max Upper limit of the number. Defaults to `null`, meaning no upper limit. See
+     * {@see $tooBigMessage} for the customized message used when the number is too big.
      * @param string $incorrectInputMessage Error message used when the value is not numeric.
      *
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{type}`: the type of the value being validated.
+     * @param string $notNumberMessage Error message used when the value does not match {@see $pattern}.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{value}`: actual value.
      * @param string $tooSmallMessage Error message used when the value is smaller than {@link $min}.
      *
      * You may use the following placeholders in the message:
@@ -59,14 +65,13 @@ abstract class AbstractNumber implements
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{max}`: maximum value.
      * - `{value}`: actual value.
-     * @param string $pattern The regular expression for matching numbers. It defaults to a pattern
-     * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
-     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
-     * See {@see SkipOnEmptyInterface}.
-     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
-     * See {@see SkipOnErrorInterface}.
-     * @param Closure|null $when A callable to define a condition for applying the rule.
-     * See {@see WhenInterface}.
+     * @param string $pattern The regular expression for matching numbers. It defaults to a pattern that matches
+     * floating numbers with optional exponential part (e.g. -1.23e-10).
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty. See
+     * {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See
+     * {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
      * @psalm-param WhenType $when
      */
     public function __construct(
@@ -120,9 +125,11 @@ abstract class AbstractNumber implements
     }
 
     /**
-     * Get error message used when value type does not match.
+     * Get error message used when the value does not match {@see $pattern}
      *
      * @return string Error message.
+     *
+     * @see $notNumberMessage
      */
     public function getNotNumberMessage(): string
     {
