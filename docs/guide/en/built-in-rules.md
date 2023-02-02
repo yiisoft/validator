@@ -21,6 +21,7 @@ Here is a list of all available built-in rules, divided by category.
 ### Number rules
 
 - [Number](../../../src/Rule/Number.php)
+- [Integer](../../../src/Rule/Integer.php)
 
 ### Comparison rules
 
