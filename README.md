@@ -15,19 +15,19 @@
 [![static analysis](https://github.com/yiisoft/validator/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/validator/actions?query=workflow%3A%22static+analysis%22)
 [![psalm-level](https://shepherd.dev/github/yiisoft/validator/level.svg)](https://shepherd.dev/github/yiisoft/validator)
 
-The package provides data validation capabilities.
+This package provides data validation capabilities.
 
 - [Documentation](docs/guide/en/README.md)
 
 ## Features
 
-- Could be used with any object.
+- Can be used with any object.
 - Supports PHP 8 attributes.
 - Skip further validation if an error occurred for the same field.
 - Skip validation of empty value.
-- Error message formatting.
+- Error message formatting and translation.
 - Conditional validation.
-- Could pass context to validation rule.
+- Possibility to pass context to validation rule.
 - Common rules bundled.
 
 ## Requirements
