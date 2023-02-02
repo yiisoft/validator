@@ -3,26 +3,26 @@
 declare(strict_types=1);
 
 return [
-    # AtLeast
+    // AtLeast
     'The data must have at least "{min}" filled attributes.' => 'Данные должны содержать минимум {min, number} {min, plural, one{заполненный атрибут} few{заполненных атрибута} many{заполненных атрибутов} other{заполненных атрибута}}.',
-    # Boolean
+    // Boolean
     'Value must be either "{true}" or "{false}".' => 'Значение должно быть «{true}» или «{false}».',
-    # Compare
+    // Compare
     'Value must be equal to "{targetValueOrAttribute}".' => 'Значение должно быть равно «{targetValueOrAttribute}».',
     'Value must not be equal to "{targetValueOrAttribute}".' => 'Значение не должно быть равно «{targetValueOrAttribute}».',
     'Value must be greater than "{targetValueOrAttribute}".' => 'Значение должно быть больше, чем «{targetValueOrAttribute}».',
     'Value must be greater than or equal to "{targetValueOrAttribute}".' => 'Значение должно быть больше или равно «{targetValueOrAttribute}».',
     'Value must be less than "{targetValueOrAttribute}".' => 'Значение должно быть меньше, чем «{targetValueOrAttribute}».',
     'Value must be less than or equal to "{targetValueOrAttribute}".' => 'Значение должно быть меньше или равно «{targetValueOrAttribute}».',
-    # Count
+    // Count
     'This value must contain at least {min, number} {min, plural, one{item} other{items}}.' => 'Значение должно содержать как минимум {min, number} {min, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
     'This value must contain at most {max, number} {max, plural, one{item} other{items}}.' => 'Значение должно содержать не более {max, number} {max, plural, one{элемента} few{элементов} many{элементов} other{элементов}}.',
     'This value must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => 'Значение должно содержать ровно {exactly, number} {exactly, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
-    # Email
+    // Email
     'This value is not a valid email address.' => 'Значение не является правильным адресом электронной почты.',
-    # In
+    // In
     'This value is not in the list of acceptable values.' => 'Это значение не в списке допустимых значений.',
-    # Ip
+    // Ip
     'Must be a valid IP address.' => 'Должно быть правильным IP-адресом.',
     'Must not be an IPv4 address.' => 'Не должно быть IPv4-адресом.',
     'Must not be an IPv6 address.' => 'Не должно быть IPv6-адресом.',
@@ -30,30 +30,30 @@ return [
     'Must be an IP address with specified subnet.' => 'Должно быть IP адресом с подсетью.',
     'Must not be a subnet.' => 'Не должно быть подсетью.',
     'Is not in the allowed range.' => 'Не входит в список разрешенных диапазонов адресов.',
-    # Json
+    // Json
     'The value is not JSON.' => 'Значение не является строкой JSON.',
-    # Length
+    // Length
     'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.' => 'Значение должно содержать как минимум {min, number} {min, plural, one{символ} few{символа} many{символов} other{символов}}.',
     'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.' => 'Значение должно содержать не более {max, number} {max, plural, one{символа} few{символов} many{символов} other{символов}}.',
     'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => 'Значение должно содержать ровно {exactly, number} {exactly, plural, one{символ} few{символа} many{символов} other{символов}}.',
-    # Nested
+    // Nested
     'Nested rule without rules can be used for objects only.' => 'Правило Nested без указания правил может использоваться только для объектов.',
     'Property "{path}" is not found.' => 'Свойство «{path}» не найдено.',
-    # Number
+    // Number
     'Value must be no less than {min}.' => 'Значение должно быть не меньше {min}.',
     'Value must be no greater than {max}.' => 'Значение должно быть не больше {max}.',
-    # Regex
+    // Regex
     'Value is invalid.' => 'Значение неверно.',
-    # Required
+    // Required
     'Value cannot be blank.' => 'Значение не может быть пустым.',
     'Value not passed.' => 'Значение не передано.',
-    # Subset
+    // Subset
     'This value is not a subset of acceptable values.' => 'Это значение не является подмножеством допустимых значений.',
-    # TrueValue
+    // TrueValue
     'The value must be "{true}".' => 'Значение должно быть «{true}».',
-    # Url
+    // Url
     'This value is not a valid URL.' => 'Значение не является правильным URL.',
-    # Types (can be used in multiple rules)
+    // Types (can be used in multiple rules)
     'Value must be an array or an object.' => 'Значение должно быть массивом или объектом.',
     'The allowed types are integer, float, string, boolean. {type} given.' => 'Разрешённые типы: integer, float, string, boolean. Передан {type}.',
     'The allowed types are integer, float, string, boolean and null.' => 'Разрешённые типы: integer, float, string, boolean и null.',
