@@ -26,7 +26,11 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Number implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+abstract class AbstractNumber implements
+    RuleWithOptionsInterface,
+    SkipOnErrorInterface,
+    WhenInterface,
+    SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
