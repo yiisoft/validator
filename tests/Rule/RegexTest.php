@@ -35,7 +35,7 @@ final class RegexTest extends RuleTestCase
                     'pattern' => '//',
                     'not' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'Value should be string.',
+                        'template' => 'This value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -52,7 +52,7 @@ final class RegexTest extends RuleTestCase
                     'pattern' => '//',
                     'not' => true,
                     'incorrectInputMessage' => [
-                        'template' => 'Value should be string.',
+                        'template' => 'This value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -77,7 +77,7 @@ final class RegexTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputMessage = 'Value should be string.';
+        $incorrectInputMessage = 'This value must be a string.';
         $message = 'Value is invalid.';
 
         return [
