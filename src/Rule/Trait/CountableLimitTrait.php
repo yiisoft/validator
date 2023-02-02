@@ -8,8 +8,8 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 
 /**
- * An implementation for {@see LimitInterface} intended to be included in rules. The following arguments need to be
- * added in constructor and passed with {@see initLimitProperties()} call:
+ * An implementation for {@see CountableLimitInterface} intended to be included in rules. The following arguments need
+ * to be added in constructor and passed with {@see initLimitProperties()} call:
  *
  * ```php
  * public function __construct(
@@ -47,9 +47,9 @@ use JetBrains\PhpStorm\ArrayShape;
  * }
  * ```
  *
- * Make sure to include {@see LimitHandlerTrait} in according handler as well.
+ * Make sure to include {@see CountableLimitHandlerTrait} in according handler as well.
  */
-trait LimitTrait
+trait CountableLimitTrait
 {
     /**
      * @var int|null Minimum limit. Can't be combined with {@see $exactly}.

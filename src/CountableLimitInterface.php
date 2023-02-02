@@ -6,12 +6,12 @@ namespace Yiisoft\Validator;
 
 /**
  * An optional interface for rules to implement. Rules implementing it must have minimum and maximum limits and also
- * "exactly" value for strict equality. Boundaries can reflect countable items as well as absolute values.
+ * "exactly" value for strict equality. Boundaries must reflect numbers of countable items.
  *
- * The package ships with {@see LimitTrait} which already implements that interface. All you have to do is to include it
- * in the rule class along with the interface.
+ * The package ships with {@see CountableLimitTrait} which already implements that interface. All you have to do is to
+ * include it in the rule class along with the interface.
  */
-interface LimitInterface
+interface CountableLimitInterface
 {
     /**
      * Returns current minimum limit.

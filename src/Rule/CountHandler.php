@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Countable;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Trait\LimitHandlerTrait;
+use Yiisoft\Validator\Rule\Trait\CountableLimitHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
@@ -21,7 +21,7 @@ use function count;
  */
 final class CountHandler implements RuleHandlerInterface
 {
-    use LimitHandlerTrait;
+    use CountableLimitHandlerTrait;
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
