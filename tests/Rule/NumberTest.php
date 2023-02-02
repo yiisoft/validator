@@ -32,7 +32,7 @@ final class NumberTest extends RuleTestCase
             [
                 new Number(),
                 [
-                    'asInteger' => false,
+                    'integerOnly' => false,
                     'min' => null,
                     'max' => null,
                     'incorrectInputMessage' => [
@@ -60,7 +60,7 @@ final class NumberTest extends RuleTestCase
             [
                 new Number(min: 1),
                 [
-                    'asInteger' => false,
+                    'integerOnly' => false,
                     'min' => 1,
                     'max' => null,
                     'incorrectInputMessage' => [
@@ -88,7 +88,7 @@ final class NumberTest extends RuleTestCase
             [
                 new Number(max: 1),
                 [
-                    'asInteger' => false,
+                    'integerOnly' => false,
                     'min' => null,
                     'max' => 1,
                     'incorrectInputMessage' => [
@@ -116,7 +116,7 @@ final class NumberTest extends RuleTestCase
             [
                 new Number(min: 2, max: 10),
                 [
-                    'asInteger' => false,
+                    'integerOnly' => false,
                     'min' => 2,
                     'max' => 10,
                     'incorrectInputMessage' => [
@@ -144,7 +144,7 @@ final class NumberTest extends RuleTestCase
             [
                 new Number(integerOnly: true),
                 [
-                    'asInteger' => true,
+                    'integerOnly' => true,
                     'min' => null,
                     'max' => null,
                     'incorrectInputMessage' => [

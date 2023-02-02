@@ -46,7 +46,7 @@ final class CompositeTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'asInteger' => false,
+                            'integerOnly' => false,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -72,7 +72,7 @@ final class CompositeTest extends RuleTestCase
                         ],
                         [
                             'number',
-                            'asInteger' => false,
+                            'integerOnly' => false,
                             'min' => null,
                             'max' => 14,
                             'incorrectInputMessage' => [
@@ -110,7 +110,7 @@ final class CompositeTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'asInteger' => false,
+                            'integerOnly' => false,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [

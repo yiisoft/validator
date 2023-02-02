@@ -36,7 +36,7 @@ final class RulesDumperTest extends TestCase
                     'attributeName' => [
                         $dump = [
                             'number',
-                            'asInteger' => true,
+                            'integerOnly' => true,
                             'min' => 10,
                             'max' => 100,
                             'incorrectInputMessage' => [
