@@ -77,7 +77,7 @@ final class CountableLimitHandlerTraitTest extends TestCase
                 int $number,
                 Result $result
             ): void {
-                $this->validateLimits($rule, $context, $number, $result);
+                $this->validateCountableLimits($rule, $context, $number, $result);
             }
         };
         $context = new ValidationContext();

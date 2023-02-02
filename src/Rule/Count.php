@@ -96,7 +96,7 @@ final class Count implements
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        $this->initLimitProperties(
+        $this->initCountableLimitProperties(
             $min,
             $max,
             $exactly,

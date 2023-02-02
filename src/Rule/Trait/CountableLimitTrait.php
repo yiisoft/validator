@@ -97,7 +97,7 @@ trait CountableLimitTrait
      * ({@see $greaterThanMinMessage}).
      * @param string $notExactlyMessage "Not exactly" validation error message ({@see $notExactlyMessage}).
      */
-    private function initLimitProperties(
+    private function initCountableLimitProperties(
         int|null $min,
         int|null $max,
         int|null $exactly,

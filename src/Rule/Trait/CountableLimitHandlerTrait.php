@@ -26,7 +26,7 @@ trait CountableLimitHandlerTrait
      *
      * @see CountableLimitTrait for information about limits and messages.
      */
-    private function validateLimits(
+    private function validateCountableLimits(
         CountableLimitInterface|RuleInterface $rule,
         ValidationContext $context,
         int $number,

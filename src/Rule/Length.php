@@ -96,7 +96,7 @@ final class Length implements
         private bool $skipOnError = false,
         private Closure|null $when = null
     ) {
-        $this->initLimitProperties(
+        $this->initCountableLimitProperties(
             $min,
             $max,
             $exactly,
