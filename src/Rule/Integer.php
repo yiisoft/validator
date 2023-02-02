@@ -24,9 +24,9 @@ final class Integer extends AbstractNumber
 {
     /**
      * @param float|int|null $min Lower limit of the number. Defaults to `null`, meaning no lower limit. See
-     * {@see $tooSmallMessage} for the customized message used when the number is too small.
+     * {@see $lessThanMinMessage} for the customized message used when the number is too small.
      * @param float|int|null $max Upper limit of the number. Defaults to `null`, meaning no upper limit. See
-     * {@see $tooBigMessage} for the customized message used when the number is too big.
+     * {@see $greaterThanMaxMessage} for the customized message used when the number is too big.
      * @param string $incorrectInputMessage Error message used when the value is not numeric.
      *
      * You may use the following placeholders in the message:
@@ -39,14 +39,14 @@ final class Integer extends AbstractNumber
      *
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{value}`: actual value.
-     * @param string $tooSmallMessage Error message used when the value is smaller than {@link $min}.
+     * @param string $lessThanMinMessage Error message used when the value is smaller than {@link $min}.
      *
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{min}`: minimum value.
      * - `{value}`: actual value.
-     * @param string $tooBigMessage Error message used when the value is bigger than {@link $max}.
+     * @param string $greaterThanMaxMessage Error message used when the value is bigger than {@link $max}.
      *
      * You may use the following placeholders in the message:
      *
@@ -67,8 +67,8 @@ final class Integer extends AbstractNumber
         float|int|null $max = null,
         string $incorrectInputMessage = 'The allowed types are integer, float and string.',
         string $notNumberMessage = 'Value must be an integer.',
-        string $tooSmallMessage = 'Value must be no less than {min}.',
-        string $tooBigMessage = 'Value must be no greater than {max}.',
+        string $lessThanMinMessage = 'Value must be no less than {min}.',
+        string $greaterThanMaxMessage = 'Value must be no greater than {max}.',
         string $pattern = '/^\s*[+-]?\d+\s*$/',
         mixed $skipOnEmpty = null,
         bool $skipOnError = false,
@@ -79,8 +79,8 @@ final class Integer extends AbstractNumber
             max: $max,
             incorrectInputMessage: $incorrectInputMessage,
             notNumberMessage: $notNumberMessage,
-            tooSmallMessage: $tooSmallMessage,
-            tooBigMessage: $tooBigMessage,
+            lessThanMinMessage: $lessThanMinMessage,
+            greaterThanMaxMessage: $greaterThanMaxMessage,
             pattern: $pattern,
             skipOnEmpty: $skipOnEmpty,
             skipOnError: $skipOnError,

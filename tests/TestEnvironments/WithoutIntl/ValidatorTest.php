@@ -16,7 +16,7 @@ final class ValidatorTest extends TestCase
         $rules = [
             'number' => new Integer(
                 max: 2,
-                tooBigMessage: '{value, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}',
+                greaterThanMaxMessage: '{value, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}',
             ),
         ];
         $validator = new Validator();

@@ -56,11 +56,11 @@ final class CompositeTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => 13],
                             ],
@@ -80,11 +80,11 @@ final class CompositeTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => 14],
                             ],
@@ -116,13 +116,13 @@ final class CompositeTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => [
                                     'min' => null,
                                 ],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => [
                                     'max' => 13,
@@ -314,7 +314,7 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new Composite(
-                        [new Number(max: 13, tooBigMessage: 'Custom error')],
+                        [new Number(max: 13, greaterThanMaxMessage: 'Custom error')],
                         when: fn () => true,
                     ),
                 ],

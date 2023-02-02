@@ -42,13 +42,13 @@ final class NumberHandler implements RuleHandlerInterface
                 'value' => $value,
             ]);
         } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
-            $result->addError($rule->getTooSmallMessage(), [
+            $result->addError($rule->getLessThanMinMessage(), [
                 'min' => $rule->getMin(),
                 'attribute' => $context->getTranslatedAttribute(),
                 'value' => $value,
             ]);
         } elseif ($rule->getMax() !== null && $value > $rule->getMax()) {
-            $result->addError($rule->getTooBigMessage(), [
+            $result->addError($rule->getGreaterThanMaxMessage(), [
                 'max' => $rule->getMax(),
                 'attribute' => $context->getTranslatedAttribute(),
                 'value' => $value,

@@ -40,11 +40,11 @@ final class NumberTest extends RuleTestCase
                         'template' => 'Value must be a number.',
                         'parameters' => [],
                     ],
-                    'tooSmallMessage' => [
+                    'lessThanMinMessage' => [
                         'template' => 'Value must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
-                    'tooBigMessage' => [
+                    'greaterThanMaxMessage' => [
                         'template' => 'Value must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
@@ -66,11 +66,11 @@ final class NumberTest extends RuleTestCase
                         'template' => 'Value must be a number.',
                         'parameters' => [],
                     ],
-                    'tooSmallMessage' => [
+                    'lessThanMinMessage' => [
                         'template' => 'Value must be no less than {min}.',
                         'parameters' => ['min' => 1],
                     ],
-                    'tooBigMessage' => [
+                    'greaterThanMaxMessage' => [
                         'template' => 'Value must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
@@ -92,11 +92,11 @@ final class NumberTest extends RuleTestCase
                         'template' => 'Value must be a number.',
                         'parameters' => [],
                     ],
-                    'tooSmallMessage' => [
+                    'lessThanMinMessage' => [
                         'template' => 'Value must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
-                    'tooBigMessage' => [
+                    'greaterThanMaxMessage' => [
                         'template' => 'Value must be no greater than {max}.',
                         'parameters' => ['max' => 1],
                     ],
@@ -118,11 +118,11 @@ final class NumberTest extends RuleTestCase
                         'template' => 'Value must be a number.',
                         'parameters' => [],
                     ],
-                    'tooSmallMessage' => [
+                    'lessThanMinMessage' => [
                         'template' => 'Value must be no less than {min}.',
                         'parameters' => ['min' => 2],
                     ],
-                    'tooBigMessage' => [
+                    'greaterThanMaxMessage' => [
                         'template' => 'Value must be no greater than {max}.',
                         'parameters' => ['max' => 10],
                     ],
@@ -144,11 +144,11 @@ final class NumberTest extends RuleTestCase
                         'template' => 'Value must be an integer.',
                         'parameters' => [],
                     ],
-                    'tooSmallMessage' => [
+                    'lessThanMinMessage' => [
                         'template' => 'Value must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
-                    'tooBigMessage' => [
+                    'greaterThanMaxMessage' => [
                         'template' => 'Value must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
@@ -250,7 +250,7 @@ final class NumberTest extends RuleTestCase
             ['20e-1', [new Integer(min: -10, max: 20)], ['' => [$notIntegerMessage]]],
             'custom error' => [
                 0,
-                [new Number(min: 5, tooSmallMessage: 'Value is too small.')],
+                [new Number(min: 5, lessThanMinMessage: 'Value is too small.')],
                 ['' => ['Value is too small.']],
             ],
         ];

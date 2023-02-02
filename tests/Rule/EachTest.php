@@ -61,11 +61,11 @@ final class EachTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => 13],
                             ],
@@ -85,11 +85,11 @@ final class EachTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => 14],
                             ],
@@ -129,11 +129,11 @@ final class EachTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => 13],
                             ],
@@ -251,7 +251,7 @@ final class EachTest extends RuleTestCase
 
             'custom message' => [
                 [10, 20, 30],
-                [new Each([new Number(max: 13, tooBigMessage: 'Custom too big message.')])],
+                [new Each([new Number(max: 13, greaterThanMaxMessage: 'Custom too big message.')])],
                 [
                     '1' => ['Custom too big message.'],
                     '2' => ['Custom too big message.'],
@@ -261,7 +261,7 @@ final class EachTest extends RuleTestCase
                 [10, 20, 30],
                 [
                     new Each(
-                        [new Number(max: 13, tooBigMessage: 'Max - {max}, value - {value}.')],
+                        [new Number(max: 13, greaterThanMaxMessage: 'Max - {max}, value - {value}.')],
                     ),
                 ],
                 [
