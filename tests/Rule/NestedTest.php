@@ -101,7 +101,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have an array or an object type.',
+                        'template' => 'Value must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -153,7 +153,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have an array or an object type.',
+                        'template' => 'Value must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -208,7 +208,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have an array or an object type.',
+                        'template' => 'Value must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -241,7 +241,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have an array or an object type.',
+                        'template' => 'Value must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -939,7 +939,7 @@ final class NestedTest extends RuleTestCase
             'incorrect input' => [
                 '',
                 [new Nested(['value' => new Required()])],
-                ['' => ['The value must have an array or an object type.']],
+                ['' => ['Value must be an array or an object.']],
             ],
             'custom incorrect input message' => [
                 '',
@@ -1083,7 +1083,7 @@ final class NestedTest extends RuleTestCase
             [
                 '',
                 [new Nested(['value' => new Required()])],
-                [['The value must have an array or an object type.', []]],
+                [['Value must be an array or an object.', []]],
             ],
             [
                 ['value' => null],

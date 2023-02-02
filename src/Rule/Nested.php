@@ -230,7 +230,7 @@ final class Nested implements
         private string $noRulesWithNoObjectMessage = 'Nested rule without rules can be used for objects only.',
         private string $incorrectDataSetTypeMessage = 'An object data set data can only have an array or an object ' .
         'type.',
-        private string $incorrectInputMessage = 'The value must have an array or an object type.',
+        private string $incorrectInputMessage = 'Value must be an array or an object.',
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property "{path}" is not found.',
         private bool $handleEachShortcut = true,

@@ -32,7 +32,6 @@ return [
     // Used in single rule
 
     /** @see AtLeast */
-    'Value must be an array or an object.' => 'Значение должно быть массивом или объектом.',
     'The data must have at least "{min}" filled attributes.' => 'Данные должны содержать минимум {min, number} {min, plural, one{заполненный атрибут} few{заполненных атрибута} many{заполненных атрибутов} other{заполненных атрибута}}.',
     /** @see BooleanValue */
     'Value must be either "{true}" or "{false}".' => 'Значение должно быть «{true}» или «{false}».',
@@ -67,7 +66,6 @@ return [
     /** @see Nested */
     'Nested rule without rules can be used for objects only.' => 'Правило Nested без указания правил может использоваться только для объектов.',
     'An object data set data can only have an array or an object type.' => 'Данные в объекте должны быть массивом или объектом.',
-    'The value must have an array or an object type.' => 'Значение должно быть массивом или объектом.',
     'Property "{path}" is not found.' => 'Свойство «{path}» не найдено.',
     /** @see Number */
     'Value must be a number.' => 'Значение должно быть числом.',
@@ -86,6 +84,11 @@ return [
 
     // Used in multiple rules
 
+    /**
+     * @see AtLeast
+     * @see Nested
+     */
+    'Value must be an array or an object.' => 'Значение должно быть массивом или объектом.',
     /**
      * @see BooleanValue
      * @see TrueValue

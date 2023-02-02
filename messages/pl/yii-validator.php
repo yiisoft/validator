@@ -38,7 +38,6 @@ return [
     'The value is not JSON.' => 'Wartość nie jest w formacie JSON.',
     'Nested rule without rules can be used for objects only.' => 'Zagnieżdżona reguła bez reguł może być używana tylko dla obiektów.',
     'An object data set data can only have an array or an object type.' => 'Dane zestawu danych obiektu mogą zawierać tylko typ tablicowy lub obiektowy.',
-    'The value must have an array or an object type.' => 'Wartość musi być tablicą lub obiektem.',
     'Property "{path}" is not found.' => 'Właściwość "{path}" nie została znaleziona.',
     'The allowed types are integer, float and string.' => 'Dozwolone typy to integer, float i string.',
     'Value must be an integer.' => 'Wartość musi być liczbą całkowitą.',
