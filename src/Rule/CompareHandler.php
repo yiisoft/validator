@@ -106,13 +106,11 @@ final class CompareHandler implements RuleHandlerInterface
             return false;
         }
 
-        [$value, $targetValue] = $this->getTypeCastedValues($type, $value, $targetValue);
-
         if ($type === CompareType::NUMBER) {
-            return $this->assertFloatsEqual($value, $targetValue);
+            return $this->assertFloatsEqual((float) $value, (float) $targetValue);
         }
 
-        return $strict ? $value === $targetValue : $value == $targetValue;
+        return (string) $value == (string) $targetValue;
     }
 
     private function assertNotEquals(
@@ -125,13 +123,11 @@ final class CompareHandler implements RuleHandlerInterface
             return true;
         }
 
-        [$value, $targetValue] = $this->getTypeCastedValues($type, $value, $targetValue);
-
         if ($type === CompareType::NUMBER) {
-            return !$this->assertFloatsEqual($value, $targetValue);
+            return !$this->assertFloatsEqual((float) $value, (float) $targetValue);
         }
 
-        return $strict ? $value !== $targetValue : $value != $targetValue;
+        return (string) $value != (string) $targetValue;
     }
 
     private function assertFloatsEqual(float $value, float $targetValue): bool
@@ -139,7 +135,10 @@ final class CompareHandler implements RuleHandlerInterface
         return abs($value - $targetValue) < PHP_FLOAT_EPSILON;
     }
 
-    private function getTypeCastedValues(string $type, mixed $value, mixed $targetValue)
+    /**
+     * @psalm-return array{0: float, 1: float}|array{0: string, 1: string}
+     */
+    private function getTypeCastedValues(string $type, mixed $value, mixed $targetValue): array
     {
         return $type === CompareType::NUMBER
             ? [(float) $value, (float) $targetValue]

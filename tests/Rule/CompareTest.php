@@ -424,6 +424,8 @@ final class CompareTest extends RuleTestCase
             ['100.50', [new Compare('100.5', type: CompareType::NUMBER)]],
             ['100.50', [new Compare(100.5, type: CompareType::NUMBER)]],
             ['100.50', [new Compare('100.5', type: CompareType::NUMBER, operator: '===')]],
+            ['100.50', [new Compare('100.5')]],
+            ['100.50', [new Compare('100.5', operator: '===')]],
 
             'integer !== boolean' => [false, [new Compare(100, operator: '!==')]],
             'integer !== string' => ['100', [new Compare(100, operator: '!==')]],
@@ -589,8 +591,6 @@ final class CompareTest extends RuleTestCase
                     ],
                 ],
             ],
-
-            ['100.50', [new Compare('100.5', operator: '===')], ['' => ['Value must be equal to "100.5".']]],
         ];
     }
 
