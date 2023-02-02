@@ -17,7 +17,7 @@ use Yiisoft\Validator\ValidationContext;
 trait CountableLimitHandlerTrait
 {
     /**
-     * Runs limits specific validation.
+     * Runs countable limits specific validation.
      *
      * @param CountableLimitInterface|RuleInterface $rule A rule matching to this handler.
      * @param ValidationContext $context Validation context.

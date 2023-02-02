@@ -86,8 +86,8 @@ trait CountableLimitTrait
     private string $notExactlyMessage;
 
     /**
-     * Initializes limit related properties and runs checks for required, mutually exclusive properties and their
-     * allowed values (including dependency on each other).
+     * Initializes countable limit related properties and runs checks for required, mutually exclusive properties and
+     * their allowed values (including dependency on each other).
      *
      * @param int|null $min Minimum limit ({@see $min}).
      * @param int|null $max Maximum limit ({@see $max}).
