@@ -5,10 +5,10 @@ the configuration for validating [RGB color] components:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 
 new Each([
-    new Number(integerOnly: true, min: 0, max: 255),
+    new Integer(min: 0, max: 255),
 ]);
 ```
 
@@ -17,7 +17,7 @@ By combining with another built-in rule called `Count` we can be sure that the n
 ```php
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 
 $rules = [
     // Applies to a whole set.
@@ -25,7 +25,7 @@ $rules = [
     // Applies to individual set items.
     new Each(        
         // For single rules, wrapping with array / iterable is not necessary.
-        new Number(integerOnly: true, min: 0, max: 255),
+        new Integer(min: 0, max: 255),
     ),
 ];
 ```

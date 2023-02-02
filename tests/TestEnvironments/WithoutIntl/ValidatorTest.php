@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\TestEnvironments\WithoutIntl;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Validator;
 
 final class ValidatorTest extends TestCase
@@ -14,8 +14,7 @@ final class ValidatorTest extends TestCase
     {
         $data = ['number' => 3];
         $rules = [
-            'number' => new Number(
-                integerOnly: true,
+            'number' => new Integer(
                 max: 2,
                 tooBigMessage: '{value, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}',
             ),

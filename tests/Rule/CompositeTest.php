@@ -37,8 +37,8 @@ final class CompositeTest extends RuleTestCase
         return [
             [
                 new Composite([
-                    new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
-                    new Number(max: 14, integerPattern: '/2/', numberPattern: '/2/'),
+                    new Number(max: 13, pattern: '/1/'),
+                    new Number(max: 14, pattern: '/2/'),
                 ]),
                 [
                     'skipOnEmpty' => false,
@@ -46,7 +46,6 @@ final class CompositeTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'integerOnly' => false,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -67,12 +66,10 @@ final class CompositeTest extends RuleTestCase
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/1/',
-                            'numberPattern' => '/1/',
+                            'pattern' => '/1/',
                         ],
                         [
                             'number',
-                            'integerOnly' => false,
                             'min' => null,
                             'max' => 14,
                             'incorrectInputMessage' => [
@@ -93,15 +90,14 @@ final class CompositeTest extends RuleTestCase
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/2/',
-                            'numberPattern' => '/2/',
+                            'pattern' => '/2/',
                         ],
                     ],
                 ],
             ],
             'rule without options' => [
                 new Composite([
-                    new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
+                    new Number(max: 13, pattern: '/1/'),
                     new RuleWithoutOptions(),
                 ]),
                 [
@@ -110,7 +106,6 @@ final class CompositeTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'integerOnly' => false,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -135,8 +130,7 @@ final class CompositeTest extends RuleTestCase
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/1/',
-                            'numberPattern' => '/1/',
+                            'pattern' => '/1/',
                         ],
                         [
                             'test',
@@ -202,7 +196,7 @@ final class CompositeTest extends RuleTestCase
     public function testOptionsWithNotRule(): void
     {
         $rule = new Composite([
-            new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
+            new Number(max: 13, pattern: '/1/'),
             new class () {
             },
         ]);

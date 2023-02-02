@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Helper;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\BooleanValue;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
@@ -20,8 +20,7 @@ final class RulesDumperTest extends TestCase
             [
                 [
                     'attributeName' => [
-                        $rule = new Number(
-                            integerOnly: true,
+                        $rule = new Integer(
                             min: 10,
                             max: 100,
                             tooSmallMessage: 'Value must be greater than 10.',
@@ -35,8 +34,7 @@ final class RulesDumperTest extends TestCase
                 [
                     'attributeName' => [
                         $dump = [
-                            'number',
-                            'integerOnly' => true,
+                            'integer',
                             'min' => 10,
                             'max' => 100,
                             'incorrectInputMessage' => [
@@ -57,8 +55,7 @@ final class RulesDumperTest extends TestCase
                             ],
                             'skipOnEmpty' => true,
                             'skipOnError' => true,
-                            'integerPattern' => '/^\s*[+-]?\d+\s*$/',
-                            'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
+                            'pattern' => '/^\s*[+-]?\d+\s*$/',
                         ],
                         [
                             $dump,

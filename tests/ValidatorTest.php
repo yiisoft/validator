@@ -20,6 +20,7 @@ use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Compare;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\TrueValue;
@@ -236,8 +237,8 @@ class ValidatorTest extends TestCase
         $result = $validator->validate($dataObject, [
             'bool' => [new BooleanValue()],
             'int' => [
-                new Number(integerOnly: true),
-                new Number(integerOnly: true, min: 44),
+                new Integer(),
+                new Integer(min: 44),
                 static function (mixed $value): Result {
                     $result = new Result();
                     if ($value !== 42) {
@@ -374,7 +375,7 @@ class ValidatorTest extends TestCase
 
         return [
             [
-                ['merchantId' => [new Required(), new Number(integerOnly: true)]],
+                ['merchantId' => [new Required(), new Integer()]],
                 new ArrayDataSet(['merchantId' => null]),
                 [
                     new Error(
@@ -390,12 +391,12 @@ class ValidatorTest extends TestCase
                 ],
             ],
             [
-                ['merchantId' => [new Required(), new Number(integerOnly: true, skipOnError: true)]],
+                ['merchantId' => [new Required(), new Integer(skipOnError: true)]],
                 new ArrayDataSet(['merchantId' => null]),
                 [new Error('Value cannot be blank.', [ 'attribute' => 'merchantId'], ['merchantId'])],
             ],
             [
-                ['merchantId' => [new Required(), new Number(integerOnly: true, skipOnError: true)]],
+                ['merchantId' => [new Required(), new Integer(skipOnError: true)]],
                 new ArrayDataSet(['merchantIdd' => 1]),
                 [new Error('Value not passed.', ['attribute' => 'merchantId'], ['merchantId'])],
             ],
@@ -514,7 +515,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $rules = [
             'name' => [new Length(min: 8)],
-            'age' => [new Number(integerOnly: true, min: 18)],
+            'age' => [new Integer(min: 18)],
         ];
         $stringLessThanMinMessage = 'This value must contain at least 8 characters.';
         $incorrectNumberMessage = 'The allowed types are integer, float and string.';
@@ -587,7 +588,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new Length(min: 8)],
-                    'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: true)],
+                    'age' => [new Integer(min: 18, skipOnEmpty: true)],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
@@ -605,7 +606,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new Length(min: 8)],
-                    'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: true)],
+                    'age' => [new Integer(min: 18, skipOnEmpty: true)],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
@@ -623,7 +624,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new Length(min: 8, skipOnEmpty: true)],
-                    'age' => [new Number(integerOnly: true, min: 18)],
+                    'age' => [new Integer(min: 18)],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
@@ -646,7 +647,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new Length(min: 8, skipOnEmpty: new WhenEmpty(trimString: true))],
-                    'age' => [new Number(integerOnly: true, min: 18)],
+                    'age' => [new Integer(min: 18)],
                 ],
                 [
                     new Error($intLessThanMinMessage, [
@@ -664,7 +665,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new Length(min: 8)],
-                    'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: true)],
+                    'age' => [new Integer(min: 18, skipOnEmpty: true)],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
@@ -687,7 +688,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new Length(min: 8)],
-                    'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: new WhenNull())],
+                    'age' => [new Integer(min: 18, skipOnEmpty: new WhenNull())],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
@@ -705,7 +706,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new Length(min: 8)],
-                    'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: new WhenNull())],
+                    'age' => [new Integer(min: 18, skipOnEmpty: new WhenNull())],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
@@ -723,7 +724,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new Length(min: 8)],
-                    'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: new WhenNull())],
+                    'age' => [new Integer(min: 18, skipOnEmpty: new WhenNull())],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
@@ -746,7 +747,7 @@ class ValidatorTest extends TestCase
                 ]),
                 [
                     'name' => [new Length(min: 8)],
-                    'age' => [new Number(integerOnly: true, min: 18, skipOnEmpty: new WhenNull())],
+                    'age' => [new Integer(min: 18, skipOnEmpty: new WhenNull())],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
@@ -769,8 +770,7 @@ class ValidatorTest extends TestCase
                 [
                     'name' => [new Length(min: 8)],
                     'age' => [
-                        new Number(
-                            integerOnly: true,
+                        new Integer(
                             min: 18,
                             skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
                         ),
@@ -797,8 +797,7 @@ class ValidatorTest extends TestCase
                 [
                     'name' => [new Length(min: 8)],
                     'age' => [
-                        new Number(
-                            integerOnly: true,
+                        new Integer(
                             min: 18,
                             skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
                         ),
@@ -821,8 +820,7 @@ class ValidatorTest extends TestCase
                 [
                     'name' => [new Length(min: 8)],
                     'age' => [
-                        new Number(
-                            integerOnly: true,
+                        new Integer(
                             min: 18,
                             skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
                         ),
@@ -850,8 +848,7 @@ class ValidatorTest extends TestCase
                 [
                     'name' => [new Length(min: 8)],
                     'age' => [
-                        new Number(
-                            integerOnly: true,
+                        new Integer(
                             min: 18,
                             skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
                         ),
@@ -1266,7 +1263,7 @@ class ValidatorTest extends TestCase
         $data = ['agree' => false, 'viewsCount' => -1];
         $rules = [
             'agree' => [new BooleanValue(skipOnEmpty: static fn (): bool => true), new TrueValue()],
-            'viewsCount' => [new Number(integerOnly: true, min: 0)],
+            'viewsCount' => [new Integer(min: 0)],
         ];
         $validator = new Validator();
 
@@ -1284,8 +1281,7 @@ class ValidatorTest extends TestCase
     {
         $data = ['number' => 3];
         $rules = [
-            'number' => new Number(
-                integerOnly: true,
+            'number' => new Integer(
                 max: 2,
                 tooBigMessage: '{value, selectordinal, one{#-one} two{#-two} few{#-few} other{#-other}}',
             ),

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Attribute;
 use Closure;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -17,15 +16,14 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Defines validation options to check that the value is a number.
  *
- * The format of the number must match the regular expression specified in {@see Number::$integerPattern}
- * or {@see Number::$numberPattern}. Optionally, you may configure the {@see Number::min()} and {@see Number::max()}
+ * The format of the number must match the regular expression specified in {@see AbstractNumber::$pattern}. Optionally,
+ * you may configure the {@see AbstractNumber::$min} and {@see AbstractNumber::$max}.
  * to ensure the number is within certain range.
  *
  * @see NumberHandler
  *
  * @psalm-import-type WhenType from WhenInterface
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 abstract class AbstractNumber implements
     RuleWithOptionsInterface,
     SkipOnErrorInterface,
@@ -37,7 +35,6 @@ abstract class AbstractNumber implements
     use WhenTrait;
 
     /**
-     * @param bool $integerOnly Whether the value can only be an integer. Defaults to `false`.
      * @param float|int|null $min Lower limit of the number. Defaults to `null`, meaning no lower limit.
      * See {@see $tooSmallMessage} for the customized message used when the number is too small.
      * @param float|int|null $max Upper limit of the number. Defaults to `null`, meaning no upper limit.
@@ -62,8 +59,7 @@ abstract class AbstractNumber implements
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{max}`: maximum value.
      * - `{value}`: actual value.
-     * @param string $integerPattern The regular expression for matching integers.
-     * @param string $numberPattern The regular expression for matching numbers. It defaults to a pattern
+     * @param string $pattern The regular expression for matching numbers. It defaults to a pattern
      * that matches floating numbers with optional exponential part (e.g. -1.23e-10).
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
@@ -74,35 +70,17 @@ abstract class AbstractNumber implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private bool $integerOnly = false,
         private float|int|null $min = null,
         private float|int|null $max = null,
         private string $incorrectInputMessage = 'The allowed types are integer, float and string.',
+        private string $notNumberMessage = 'Value must be a number.',
         private string $tooSmallMessage = 'Value must be no less than {min}.',
         private string $tooBigMessage = 'Value must be no greater than {max}.',
-        private string $integerPattern = '/^\s*[+-]?\d+\s*$/',
-        private string $numberPattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
+        private string $pattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return 'number';
-    }
-
-    /**
-     * Whether the value can only be an integer.
-     *
-     * @return bool Whether the value can only be an integer. Defaults to `false`.
-     *
-     * @see $integerOnly
-     */
-    public function isIntegerOnly(): bool
-    {
-        return $this->integerOnly;
     }
 
     /**
@@ -142,6 +120,16 @@ abstract class AbstractNumber implements
     }
 
     /**
+     * Get error message used when value type does not match.
+     *
+     * @return string Error message.
+     */
+    public function getNotNumberMessage(): string
+    {
+        return $this->notNumberMessage;
+    }
+
+    /**
      * Get error message used when the value is smaller than {@link $min}.
      *
      * @return string Error message.
@@ -166,43 +154,20 @@ abstract class AbstractNumber implements
     }
 
     /**
-     * Get the regular expression for matching integers.
-     *
-     * @return string The regular expression.
-     *
-     * @see $integerPattern
-     */
-    public function getIntegerPattern(): string
-    {
-        return $this->integerPattern;
-    }
-
-    /**
      * The regular expression for matching numbers.
      *
      * @return string The regular expression.
      *
-     * @see $numberPattern
+     * @see $pattern
      */
-    public function getNumberPattern(): string
+    public function getPattern(): string
     {
-        return $this->numberPattern;
-    }
-
-    /**
-     * Get error message used when value type does not match.
-     *
-     * @return string Error message.
-     */
-    public function getNotNumberMessage(): string
-    {
-        return $this->integerOnly ? 'Value must be an integer.' : 'Value must be a number.';
+        return $this->pattern;
     }
 
     public function getOptions(): array
     {
         return [
-            'integerOnly' => $this->integerOnly,
             'min' => $this->min,
             'max' => $this->max,
             'incorrectInputMessage' => [
@@ -210,7 +175,7 @@ abstract class AbstractNumber implements
                 'parameters' => [],
             ],
             'notNumberMessage' => [
-                'template' => $this->getNotNumberMessage(),
+                'template' => $this->notNumberMessage,
                 'parameters' => [],
             ],
             'tooSmallMessage' => [
@@ -223,8 +188,7 @@ abstract class AbstractNumber implements
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'integerPattern' => $this->integerPattern,
-            'numberPattern' => $this->numberPattern,
+            'pattern' => $this->pattern,
         ];
     }
 

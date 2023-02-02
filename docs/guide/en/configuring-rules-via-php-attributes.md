@@ -10,6 +10,7 @@ of readability.
 Given a single `User` entity / model:
 
 ```php
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -20,7 +21,7 @@ use Yiisoft\Validator\Rule\Required;
         new Length(min: 1, max: 50),
     ],
     'age' => [
-        new Number(integerOnly: true, min: 18, max: 100),
+        new Integer(min: 18, max: 100),
     ],
 ]
 ```
@@ -29,8 +30,8 @@ the PHP attributes equivalent will be:
 
 ```php
 use JetBrains\PhpStorm\Deprecated;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
-use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
 final class User
@@ -43,7 +44,7 @@ final class User
         #[Deprecated]
         private readonly string $name,
         // Single attribute.
-        #[Number(integerOnly: true, min: 18, max: 100)]
+        #[Integer(min: 18, max: 100)]
         private readonly int $age,
     ) {
     }
@@ -54,8 +55,8 @@ This example uses the [constructor property promotion] feature introduced in PHP
 be used with regular properties:
 
 ```php
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
-use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
 final class User
@@ -66,7 +67,7 @@ final class User
     public readonly string $name;
 
     // Single attribute.
-    #[Number(integerOnly: true, min: 18, max: 100)]
+    #[Integer(min: 18, max: 100)]
     public readonly int $age;
 }
 ```
@@ -79,6 +80,7 @@ An example of rule set for a blog post configured via arrays only:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
@@ -97,7 +99,7 @@ use Yiisoft\Validator\Rule\Url;
                 new Length(min: 1, max: 50),
             ],
             'age' => [
-                new Number(integerOnly: true , min: 18, max: 100),
+                new Integer(min: 18, max: 100),
             ],
         ]),
         // One-to-many relation.
@@ -114,9 +116,9 @@ It can be applied to such DTO classes to achieve the same effect:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
-use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Url;
 
@@ -146,7 +148,7 @@ final class Author
     #[Length(min: 1, max: 50)]
     public string $name;
 
-    #[Number(integerOnly: true, min: 18, max: 100)]
+    #[Integer(min: 18, max: 100)]
     public int $age;
 }
 
@@ -256,7 +258,7 @@ use Attribute;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 
 // Make sure to add this because attribute inheritance is not supported.
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -266,7 +268,7 @@ final class RgbColorRuleSet extends Composite
     {
         return [
             new Count(exactly: 3),
-            new Each([new Number(integerOnly: true, min: 0, max: 255)])
+            new Each([new Integer(min: 0, max: 255)])
         ];
     }
 }
@@ -325,9 +327,9 @@ The first workaround is to upgrade to PHP 8.1 - this is fairly simple since it i
 If this is not an option, you can use other ways of providing rules, such as rule providers:
 
 ```php
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
-use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Url;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -369,7 +371,7 @@ final class PostRulesProvider implements RulesProviderInterface
                         new Required(),
                         new Length(min: 1, max: 50),
                     ],
-                    'age' => new Number(integerOnly: true , min: 18, max: 100),
+                    'age' => new Integer(min: 18, max: 100),
                 ],
                 'files.*.url' => new Url(),
             ]),
@@ -390,7 +392,7 @@ use Attribute;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class RgbColorRuleSet extends Composite
@@ -399,7 +401,7 @@ final class RgbColorRuleSet extends Composite
     {
         return [
             new Count(exactly: 3),
-            new Each([new Number(integerOnly: true, min: 0, max: 255)])
+            new Each([new Integer(min: 0, max: 255)])
         ];
     }
 }
@@ -447,9 +449,9 @@ Well, the rules are configured. What's next? We can either:
 Let's use a blog post again for demonstration, but a slightly shortened version:
 
 ```php
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
-use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
 final class Post
@@ -471,7 +473,7 @@ final class Author
         #[Length(min: 1, max: 50)]
         private string $name,
 
-        #[Number(integerOnly: true, min: 18, max: 100)]
+        #[Integer(min: 18, max: 100)]
         private int $age,
     ) {
     }

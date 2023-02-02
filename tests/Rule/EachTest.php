@@ -34,8 +34,8 @@ final class EachTest extends RuleTestCase
         return [
             [
                 new Each([
-                    new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
-                    new Number(max: 14, integerPattern: '/2/', numberPattern: '/2/'),
+                    new Number(max: 13, pattern: '/1/'),
+                    new Number(max: 14, pattern: '/2/'),
                 ]),
                 [
                     'incorrectInputMessage' => [
@@ -51,7 +51,6 @@ final class EachTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'integerOnly' => false,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -72,12 +71,10 @@ final class EachTest extends RuleTestCase
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/1/',
-                            'numberPattern' => '/1/',
+                            'pattern' => '/1/',
                         ],
                         [
                             'number',
-                            'integerOnly' => false,
                             'min' => null,
                             'max' => 14,
                             'incorrectInputMessage' => [
@@ -98,15 +95,14 @@ final class EachTest extends RuleTestCase
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/2/',
-                            'numberPattern' => '/2/',
+                            'pattern' => '/2/',
                         ],
                     ],
                 ],
             ],
             'rule without options' => [
                 new Each([
-                    new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
+                    new Number(max: 13, pattern: '/1/'),
                     new RuleWithoutOptions(),
                 ]),
                 [
@@ -123,7 +119,6 @@ final class EachTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'integerOnly' => false,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -144,8 +139,7 @@ final class EachTest extends RuleTestCase
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/1/',
-                            'numberPattern' => '/1/',
+                            'pattern' => '/1/',
                         ],
                         [
                             'test',

@@ -31,7 +31,7 @@ use Yiisoft\Validator\WhenInterface;
  * $rules = [
  *     new Count(exactly: 3), // Not required for using with `Each`.
  *     new Each([
- *         new Number(min: 0, max: 255, integerOnly: true),
+ *         new Integer(min: 0, max: 255),
  *         // More rules can be added here.
  *     ]),
  * ];
