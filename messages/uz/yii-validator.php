@@ -87,7 +87,7 @@ return [
      * @see AtLeast
      * @see Nested
      */
-    'Value must be an array or an object.' => 'Qiymat massiv yoki obyekt boʻlishi kerak.',
+    'The value must be an array or an object.' => 'Qiymat massiv yoki obyekt boʻlishi kerak.',
     /**
      * @see BooleanValue
      * @see TrueValue

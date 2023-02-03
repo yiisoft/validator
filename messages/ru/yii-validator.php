@@ -87,7 +87,7 @@ return [
      * @see AtLeast
      * @see Nested
      */
-    'Value must be an array or an object.' => 'Значение должно быть массивом или объектом.',
+    'The value must be an array or an object.' => 'Значение должно быть массивом или объектом.',
     /**
      * @see BooleanValue
      * @see TrueValue

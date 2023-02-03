@@ -87,7 +87,7 @@ return [
      * @see AtLeast
      * @see Nested
      */
-    'Value must be an array or an object.' => 'Wartość musi być tablicą lub obiektem.',
+    'The value must be an array or an object.' => 'Wartość musi być tablicą lub obiektem.',
     /**
      * @see BooleanValue
      * @see TrueValue
