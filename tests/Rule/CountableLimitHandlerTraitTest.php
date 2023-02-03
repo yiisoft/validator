@@ -6,21 +6,21 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\LimitInterface;
+use Yiisoft\Validator\CountableLimitInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Trait\LimitHandlerTrait;
+use Yiisoft\Validator\Rule\Trait\CountableLimitHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
 use Yiisoft\Validator\ValidationContext;
 
-final class LimitHandlerTraitTest extends TestCase
+final class CountableLimitHandlerTraitTest extends TestCase
 {
     public function validateLimitsWithWrongRuleData(): array
     {
         return [
             [
-                new class () implements LimitInterface {
+                new class () implements CountableLimitInterface {
                     public function getMin(): int|null
                     {
                         return null;
@@ -61,10 +61,10 @@ final class LimitHandlerTraitTest extends TestCase
     /**
      * @dataProvider validateLimitsWithWrongRuleData
      */
-    public function testValidateLimitsWithWrongRule(LimitInterface|RuleInterface $rule): void
+    public function testValidateLimitsWithWrongRule(CountableLimitInterface|RuleInterface $rule): void
     {
         $handler = new class () implements RuleHandlerInterface {
-            use LimitHandlerTrait;
+            use CountableLimitHandlerTrait;
 
             public function validate(mixed $value, object $rule, ValidationContext $context): Result
             {
@@ -72,12 +72,12 @@ final class LimitHandlerTraitTest extends TestCase
             }
 
             public function checkValidateLimits(
-                LimitInterface|RuleInterface $rule,
+                CountableLimitInterface|RuleInterface $rule,
                 ValidationContext $context,
                 int $number,
                 Result $result
             ): void {
-                $this->validateLimits($rule, $context, $number, $result);
+                $this->validateCountableLimits($rule, $context, $number, $result);
             }
         };
         $context = new ValidationContext();

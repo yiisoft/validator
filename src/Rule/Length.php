@@ -6,8 +6,8 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use Yiisoft\Validator\LimitInterface;
-use Yiisoft\Validator\Rule\Trait\LimitTrait;
+use Yiisoft\Validator\CountableLimitInterface;
+use Yiisoft\Validator\Rule\Trait\CountableLimitTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -29,9 +29,9 @@ final class Length implements
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
-    LimitInterface
+    CountableLimitInterface
 {
-    use LimitTrait;
+    use CountableLimitTrait;
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
@@ -96,7 +96,7 @@ final class Length implements
         private bool $skipOnError = false,
         private Closure|null $when = null
     ) {
-        $this->initLimitProperties(
+        $this->initCountableLimitProperties(
             $min,
             $max,
             $exactly,

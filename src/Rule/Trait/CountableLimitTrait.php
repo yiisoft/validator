@@ -8,8 +8,8 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 
 /**
- * An implementation for {@see LimitInterface} intended to be included in rules. The following arguments need to be
- * added in constructor and passed with {@see initLimitProperties()} call:
+ * An implementation for {@see CountableLimitInterface} intended to be included in rules. The following arguments need
+ * to be added in constructor and passed with {@see initLimitProperties()} call:
  *
  * ```php
  * public function __construct(
@@ -47,9 +47,9 @@ use JetBrains\PhpStorm\ArrayShape;
  * }
  * ```
  *
- * Make sure to include {@see LimitHandlerTrait} in according handler as well.
+ * Make sure to include {@see CountableLimitHandlerTrait} in according handler as well.
  */
-trait LimitTrait
+trait CountableLimitTrait
 {
     /**
      * @var int|null Minimum limit. Can't be combined with {@see $exactly}.
@@ -86,8 +86,8 @@ trait LimitTrait
     private string $notExactlyMessage;
 
     /**
-     * Initializes limit related properties and runs checks for required, mutually exclusive properties and their
-     * allowed values (including dependency on each other).
+     * Initializes countable limit related properties and runs checks for required, mutually exclusive properties and
+     * their allowed values (including dependency on each other).
      *
      * @param int|null $min Minimum limit ({@see $min}).
      * @param int|null $max Maximum limit ({@see $max}).
@@ -97,7 +97,7 @@ trait LimitTrait
      * ({@see $greaterThanMinMessage}).
      * @param string $notExactlyMessage "Not exactly" validation error message ({@see $notExactlyMessage}).
      */
-    private function initLimitProperties(
+    private function initCountableLimitProperties(
         int|null $min,
         int|null $max,
         int|null $exactly,

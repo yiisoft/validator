@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Trait\LimitHandlerTrait;
+use Yiisoft\Validator\Rule\Trait\CountableLimitHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
@@ -19,7 +19,7 @@ use function is_string;
  */
 final class LengthHandler implements RuleHandlerInterface
 {
-    use LimitHandlerTrait;
+    use CountableLimitHandlerTrait;
 
     public function validate($value, object $rule, ValidationContext $context): Result
     {
@@ -38,7 +38,7 @@ final class LengthHandler implements RuleHandlerInterface
         }
 
         $length = mb_strlen($value, $rule->getEncoding());
-        $this->validateLimits($rule, $context, $length, $result);
+        $this->validateCountableLimits($rule, $context, $length, $result);
 
         return $result;
     }
