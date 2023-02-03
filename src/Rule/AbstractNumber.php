@@ -35,6 +35,19 @@ abstract class AbstractNumber implements
     use WhenTrait;
 
     /**
+     * A default for {@see $incorrectInputMessage}.
+     */
+    protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types are integer, float and string.';
+    /**
+     * A default for {@see $lessThanMinMessage}.
+     */
+    protected const DEFAULT_LESS_THAN_MIN_MESSAGE = 'Value must be no less than {min}.';
+    /**
+     * A default for {@see $greaterThanMaxMessage}.
+     */
+    protected const DEFAULT_GREATER_THAN_MAX_MESSAGE = 'Value must be no greater than {max}.';
+
+    /**
      * @param float|int|null $min Lower limit of the number. Defaults to `null`, meaning no lower limit. See
      * {@see $lessThanMinMessage} for the customized message used when the number is too small.
      * @param float|int|null $max Upper limit of the number. Defaults to `null`, meaning no upper limit. See
@@ -77,10 +90,10 @@ abstract class AbstractNumber implements
     public function __construct(
         private float|int|null $min = null,
         private float|int|null $max = null,
-        private string $incorrectInputMessage = 'The allowed types are integer, float and string.',
+        private string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
         private string $notNumberMessage = 'Value must be a number.',
-        private string $lessThanMinMessage = 'Value must be no less than {min}.',
-        private string $greaterThanMaxMessage = 'Value must be no greater than {max}.',
+        private string $lessThanMinMessage = self::DEFAULT_LESS_THAN_MIN_MESSAGE,
+        private string $greaterThanMaxMessage = self::DEFAULT_GREATER_THAN_MAX_MESSAGE,
         private string $pattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
