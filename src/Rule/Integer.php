@@ -9,10 +9,10 @@ use Closure;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Defines validation options to check that the value is a integer number.
+ * Defines validation options to check that the value is an integer number.
  *
  * The format of the number must match the regular expression specified in {@see Integer::$pattern}. Optionally, you may
- * configure the {@see Integer::$min} and {@see Integer::$max} to ensure the number is within certain range.
+ * configure the {@see Integer::$min} and {@see Integer::$max} to ensure the number is within a certain range.
  *
  * @see NumberHandler
  * @see AbstractNumber

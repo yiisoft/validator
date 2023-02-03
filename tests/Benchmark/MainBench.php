@@ -10,8 +10,8 @@ use PhpBench\Benchmark\Metadata\Annotations\Iterations;
 use PhpBench\Benchmark\Metadata\Annotations\ParamProviders;
 use PhpBench\Benchmark\Metadata\Annotations\Revs;
 use PhpBench\Benchmark\Metadata\Annotations\Warmup;
-use phpDocumentor\Reflection\Types\Integer;
 use Yiisoft\Validator\Rule\BooleanValue;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 

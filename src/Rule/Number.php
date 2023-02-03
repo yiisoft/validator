@@ -12,7 +12,7 @@ use Yiisoft\Validator\WhenInterface;
  * Defines validation options to check that the value is a number.
  *
  * The format of the number must match the regular expression specified in {@see Number::$pattern}. Optionally, you may
- * configure the {@see Number::$min} and {@see Number::$max} to ensure the number is within certain range.
+ * configure the {@see Number::$min} and {@see Number::$max} to ensure the number is within a certain range.
  *
  * @see NumberHandler
  * @see AbstractNumber
