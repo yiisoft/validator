@@ -172,6 +172,7 @@ final class LengthTest extends RuleTestCase
             [str_repeat('x', 125), [new Length(exactly: 25)], ['' => [$notExactlyMessage]]],
 
             ['', [new Length(exactly: 25)], ['' => [$notExactlyMessage]]],
+            ['', [new Length(25)], ['' => [$notExactlyMessage]]],
             [
                 str_repeat('x', 5),
                 [new Length(min: 10, max: 25)],
