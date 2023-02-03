@@ -84,7 +84,7 @@ final class EmailTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The value is not a valid email address.',
+                        'template' => 'This value is not a valid email address.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
