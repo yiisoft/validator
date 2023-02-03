@@ -110,7 +110,7 @@ final class CompareHandler implements RuleHandlerInterface
             return $this->checkFloatsEqual((float) $value, (float) $targetValue);
         }
 
-        return (string) $value == (string) $targetValue;
+        return (string) $value === (string) $targetValue;
     }
 
     private function checkValuesNotEqual(
@@ -127,7 +127,7 @@ final class CompareHandler implements RuleHandlerInterface
             return !$this->checkFloatsEqual((float) $value, (float) $targetValue);
         }
 
-        return (string) $value != (string) $targetValue;
+        return (string) $value !== (string) $targetValue;
     }
 
     private function checkFloatsEqual(float $value, float $targetValue): bool
