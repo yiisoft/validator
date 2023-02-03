@@ -12,6 +12,7 @@ use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\GreaterThan;
 use Yiisoft\Validator\Rule\GreaterThanOrEqual;
 use Yiisoft\Validator\Rule\In;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Ip;
 use Yiisoft\Validator\Rule\Json;
 use Yiisoft\Validator\Rule\Length;
@@ -25,8 +26,6 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Subset;
 use Yiisoft\Validator\Rule\TrueValue;
 use Yiisoft\Validator\Rule\Url;
-
-// TODO: Add import of Integer after merge of PR adding Integer rule.
 
 return [
     // Used in single rule
