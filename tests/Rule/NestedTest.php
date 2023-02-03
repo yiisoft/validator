@@ -90,7 +90,7 @@ final class NestedTest extends RuleTestCase
     {
         return [
             [
-                new Nested([new Number(integerPattern: '/1/', numberPattern: '/1/')]),
+                new Nested([new Number(pattern: '/1/')]),
                 [
                     'noRulesWithNoObjectMessage' => [
                         'template' => 'Nested rule without rules can be used for objects only.',
@@ -114,7 +114,6 @@ final class NestedTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'integerOnly' => false,
                             'min' => null,
                             'max' => null,
                             'incorrectInputMessage' => [
@@ -125,24 +124,23 @@ final class NestedTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => null],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/1/',
-                            'numberPattern' => '/1/',
+                            'pattern' => '/1/',
                         ],
                     ],
                 ],
             ],
             [
-                new Nested(['user.age' => new Number(integerPattern: '/1/', numberPattern: '/1/')]),
+                new Nested(['user.age' => new Number(pattern: '/1/')]),
                 [
                     'noRulesWithNoObjectMessage' => [
                         'template' => 'Nested rule without rules can be used for objects only.',
@@ -166,7 +164,6 @@ final class NestedTest extends RuleTestCase
                     'rules' => [
                         'user.age' => [
                             'number',
-                            'integerOnly' => false,
                             'min' => null,
                             'max' => null,
                             'incorrectInputMessage' => [
@@ -177,18 +174,17 @@ final class NestedTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => null],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/1/',
-                            'numberPattern' => '/1/',
+                            'pattern' => '/1/',
                         ],
                     ],
                 ],
