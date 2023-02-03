@@ -283,9 +283,9 @@ class ValidatorTest extends TestCase
     public function testNullAsDataSet(): void
     {
         $validator = new Validator();
-        $result = $validator->validate(null, ['property' => [new Compare(null)]]);
+        $result = $validator->validate(null, ['property' => [new Compare(1)]]);
 
-        $this->assertTrue($result->isValid());
+        $this->assertFalse($result->isValid());
     }
 
     public function testPreValidation(): void

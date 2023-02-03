@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use RuntimeException;
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\CompareType;
 use Yiisoft\Validator\Rule\LessThan;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -196,7 +196,7 @@ final class LessThanTest extends RuleTestCase
 
     public function testWithoutParameters(): void
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
         new LessThan();
     }

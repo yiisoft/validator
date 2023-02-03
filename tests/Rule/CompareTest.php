@@ -26,12 +26,12 @@ final class CompareTest extends RuleTestCase
         $message = 'Operator "=" is not supported. The valid operators are: "==", "===", "!=", "!==", ">", ">=", ' .
             '"<", "<=".';
         $this->expectExceptionMessage($message);
-        new Compare(operator: '=');
+        new Compare(1, operator: '=');
     }
 
     public function testGetName(): void
     {
-        $rule = new Compare();
+        $rule = new Compare(1);
         $this->assertSame('compare', $rule->getName());
     }
 
@@ -585,12 +585,12 @@ final class CompareTest extends RuleTestCase
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new Compare(), new Compare(skipOnError: true));
+        $this->testSkipOnErrorInternal(new Compare(1), new Compare(1, skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new Compare(), new Compare(when: $when));
+        $this->testWhenInternal(new Compare(1), new Compare(1, when: $when));
     }
 }

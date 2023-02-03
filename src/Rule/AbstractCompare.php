@@ -42,6 +42,16 @@ abstract class AbstractCompare implements
     use WhenTrait;
 
     /**
+     * A default for {@see $incorrectInputMessage}.
+     */
+    protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types are integer, float, string, boolean and null.';
+    /**
+     * A default for {@see $incorrectDataSetTypeMessage}.
+     */
+    protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = 'The attribute value returned from a custom data set ' .
+    'must have a scalar type.';
+
+    /**
      * @var array Map of valid operators.
      * It's used instead of a list for better performance.
      */
@@ -110,9 +120,8 @@ abstract class AbstractCompare implements
     public function __construct(
         private int|float|string|bool|null $targetValue = null,
         private string|null $targetAttribute = null,
-        private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean and null.',
-        private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
-        'a scalar type.',
+        private string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
+        private string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
         private string|null $message = null,
         private string $type = CompareType::STRING,
         private string $operator = '==',
@@ -120,6 +129,10 @@ abstract class AbstractCompare implements
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        if ($this->targetValue === null && $this->targetAttribute === null) {
+            throw new InvalidArgumentException('Either "targetValue" or "targetAttribute" must be specified.');
+        }
+
         if (!isset($this->validOperatorsMap[$this->operator])) {
             $wrapInQuotesCallable = static fn (string $operator): string => '"' . $operator . '"';
             /** @var string[] $validOperators */
