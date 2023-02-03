@@ -180,7 +180,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         private bool $allowSubnet = false,
         private bool $requireSubnet = false,
         private bool $allowNegation = false,
-        private string $incorrectInputMessage = 'This value must be a string.',
+        private string $incorrectInputMessage = 'The value must be a string.',
         private string $message = 'Must be a valid IP address.',
         private string $ipv4NotAllowedMessage = 'Must not be an IPv4 address.',
         private string $ipv6NotAllowedMessage = 'Must not be an IPv6 address.',

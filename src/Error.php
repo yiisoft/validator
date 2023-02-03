@@ -20,7 +20,7 @@ final class Error
      * {@see SimpleMessageFormatter} is usually enough, but for more complex translations
      * {@see IntlMessageFormatter} can be used (requires "intl" PHP extension). Examples:
      *
-     * - `'This value must be a string.'` - simple text, works with both {@see SimpleMessageFormatter} and
+     * - `'The value must be a string.'` - simple text, works with both {@see SimpleMessageFormatter} and
      * {@see IntlMessageFormatter}.
      * - `'The value must be "{true}".'` - simple substitution, works with both formatters.
      * - `'This value must contain at least {min, number} {min, plural, one{item} other{items}}.' - plural form,

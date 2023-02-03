@@ -118,7 +118,7 @@ return [
      * @see Regex
      * @see Url
      */
-    'This value must be a string.' => 'Qiymat satr boʻlishi kerak.',
+    'The value must be a string.' => 'Qiymat satr boʻlishi kerak.',
     /**
      * @see Number
      * @see Integer

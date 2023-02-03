@@ -84,7 +84,7 @@ final class Length implements
         int|null $min = null,
         int|null $max = null,
         int|null $exactly = null,
-        private string $incorrectInputMessage = 'This value must be a string.',
+        private string $incorrectInputMessage = 'The value must be a string.',
         string $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{character} ' .
         'other{characters}}.',
         string $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{character} ' .

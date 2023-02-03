@@ -44,7 +44,7 @@ final class UrlTest extends RuleTestCase
                     'validSchemes' => ['http', 'https'],
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'This value must be a string.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -62,7 +62,7 @@ final class UrlTest extends RuleTestCase
                     'validSchemes' => ['http', 'https'],
                     'enableIdn' => true,
                     'incorrectInputMessage' => [
-                        'template' => 'This value must be a string.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -80,7 +80,7 @@ final class UrlTest extends RuleTestCase
                     'validSchemes' => ['http'],
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'This value must be a string.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -98,7 +98,7 @@ final class UrlTest extends RuleTestCase
                     'validSchemes' => ['http', 'https'],
                     'enableIdn' => true,
                     'incorrectInputMessage' => [
-                        'template' => 'This value must be a string.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -151,7 +151,7 @@ final class UrlTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputErrors = ['' => ['This value must be a string.']];
+        $incorrectInputErrors = ['' => ['The value must be a string.']];
         $errors = ['' => ['This value is not a valid URL.']];
         $longUrl = 'http://' . str_repeat('u', 1990) . '.de';
 

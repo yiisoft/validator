@@ -118,7 +118,7 @@ return [
      * @see Regex
      * @see Url
      */
-    'This value must be a string.' => 'Значение должно быть строкой.',
+    'The value must be a string.' => 'Значение должно быть строкой.',
     /**
      * @see Number
      * @see Integer

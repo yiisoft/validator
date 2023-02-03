@@ -118,7 +118,7 @@ return [
      * @see Regex
      * @see Url
      */
-    'This value must be a string.' => 'Ta wartość musi być tekstem.',
+    'The value must be a string.' => 'Wartość musi być tekstem.',
     /**
      * @see Number
      * @see Integer

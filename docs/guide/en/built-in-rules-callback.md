@@ -64,7 +64,7 @@ use Yiisoft\Validator\Rule\Callback;
 new Callback(
     static function (mixed $value): Result {
         if (!is_string($value)) {
-            return (new Result())->addError('This value must be a string.');
+            return (new Result())->addError('The value must be a string.');
         }
 
         $notYamlMessage = 'This value is not a valid YAML.';
@@ -206,7 +206,7 @@ final class Config {
     private function validateYaml(mixed $value): Result 
     {
         if (!is_string($value)) {
-            return (new Result())->addError('This value must be a string.');
+            return (new Result())->addError('The value must be a string.');
         }
         
         $notYamlMessage = 'This value is not a valid YAML.';
@@ -251,7 +251,7 @@ final class Config {
     private function validate(): Result 
     {
         if (!is_string($this->yaml)) {
-            return (new Result())->addError('This value must be a string.');
+            return (new Result())->addError('The value must be a string.');
         }
         
         $notYamlMessage = 'This value is not a valid YAML.';
@@ -288,7 +288,7 @@ final class YamlCallback
     public function __invoke(mixed $value): Result
     {
         if (!is_string($value)) {
-            return (new Result())->addError('This value must be a string.');
+            return (new Result())->addError('The value must be a string.');
         }
         
         $notYamlMessage = 'This value is not a valid YAML.';
@@ -334,7 +334,7 @@ $data = [];
 $rules = [
     'yaml' => static function (mixed $value): Result {
         if (!is_string($value)) {
-            return (new Result())->addError('This value must be a string.');
+            return (new Result())->addError('The value must be a string.');
         }
 
         $notYamlMessage = 'This value is not a valid YAML.';
@@ -369,7 +369,7 @@ $rules = [
         new Required(),
         static function (mixed $value): Result {
             if (!is_string($value)) {
-                return (new Result())->addError('This value must be a string.');
+                return (new Result())->addError('The value must be a string.');
             }
         
             $notYamlMessage = 'This value is not a valid YAML.';

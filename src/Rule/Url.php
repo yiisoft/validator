@@ -71,7 +71,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         private string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
         private array $validSchemes = ['http', 'https'],
         private bool $enableIdn = false,
-        private string $incorrectInputMessage = 'This value must be a string.',
+        private string $incorrectInputMessage = 'The value must be a string.',
         private string $message = 'This value is not a valid URL.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,

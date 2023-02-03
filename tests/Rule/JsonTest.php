@@ -32,7 +32,7 @@ final class JsonTest extends RuleTestCase
                 new Json(),
                 [
                     'incorrectInputMessage' => [
-                        'template' => 'This value must be a string.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -134,7 +134,7 @@ JSON_WRAP
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputErrors = ['' => ['This value must be a string.']];
+        $incorrectInputErrors = ['' => ['The value must be a string.']];
         $errors = ['' => ['The value is not JSON.']];
 
         return [

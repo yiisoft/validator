@@ -53,7 +53,7 @@ final class Json implements RuleWithOptionsInterface, SkipOnErrorInterface, When
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private string $incorrectInputMessage = 'This value must be a string.',
+        private string $incorrectInputMessage = 'The value must be a string.',
         private string $message = 'The value is not JSON.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
