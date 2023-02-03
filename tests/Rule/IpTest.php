@@ -90,7 +90,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have a string type.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -145,7 +145,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have a string type.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -200,7 +200,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have a string type.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -255,7 +255,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have a string type.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -310,7 +310,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => true,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have a string type.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -365,7 +365,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => true,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have a string type.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -420,7 +420,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have a string type.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -544,7 +544,7 @@ final class IpTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputMessage = 'The value must have a string type.';
+        $incorrectInputMessage = 'The value must be a string.';
         $message = 'Must be a valid IP address.';
         $hasSubnetMessage = 'Must not be a subnet.';
         $notInRangeMessage = 'Is not in the allowed range.';

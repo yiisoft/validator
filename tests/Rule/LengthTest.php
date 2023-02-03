@@ -51,7 +51,7 @@ final class LengthTest extends RuleTestCase
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'This value must be a string.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'encoding' => 'UTF-8',
@@ -78,7 +78,7 @@ final class LengthTest extends RuleTestCase
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'This value must be a string.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'encoding' => 'UTF-8',
@@ -105,7 +105,7 @@ final class LengthTest extends RuleTestCase
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'This value must be a string.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'encoding' => 'windows-1251',
@@ -141,7 +141,7 @@ final class LengthTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputMessage = 'This value must be a string.';
+        $incorrectInputMessage = 'The value must be a string.';
         $greaterThanMaxMessage = 'This value must contain at most 25 characters.';
         $notExactlyMessage = 'This value must contain exactly 25 characters.';
         $lessThanMinMessage = 'This value must contain at least 25 characters.';

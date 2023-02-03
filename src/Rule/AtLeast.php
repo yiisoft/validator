@@ -56,7 +56,7 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
     public function __construct(
         private array $attributes,
         private int $min = 1,
-        private string $incorrectInputMessage = 'Value must be an array or an object.',
+        private string $incorrectInputMessage = 'The value must be an array or an object.',
         private string $message = 'The data must have at least "{min}" filled attributes.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,

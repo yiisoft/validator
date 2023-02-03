@@ -46,7 +46,7 @@ final class RulesDumper
      *                 'parameters' => ['exactly' => null],
      *             ],
      *                 'incorrectInputMessage' => [
-     *                 'template' => 'This value must be a string.',
+     *                 'template' => 'The value must be a string.',
      *                 'parameters' => [],
      *             ],
      *             'encoding' => 'UTF-8',

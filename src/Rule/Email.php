@@ -72,7 +72,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private bool $allowName = false,
         private bool $checkDns = false,
         private bool $enableIdn = false,
-        private string $incorrectInputMessage = 'The value must have a string type.',
+        private string $incorrectInputMessage = 'The value must be a string.',
         private string $message = 'This value is not a valid email address.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
