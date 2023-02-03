@@ -133,6 +133,14 @@ abstract class AbstractCompare implements
             throw new InvalidArgumentException('Either "targetValue" or "targetAttribute" must be specified.');
         }
 
+        if ($this->type !== CompareType::NUMBER && $this->type !== CompareType::STRING) {
+            $numberType = CompareType::NUMBER;
+            $stringType = CompareType::STRING;
+            $message = "Type \"$this->type\" is not supported. The valid types are: \"$numberType\", \"$stringType\".";
+
+            throw new InvalidArgumentException($message);
+        }
+
         if (!isset($this->validOperatorsMap[$this->operator])) {
             $wrapInQuotesCallable = static fn (string $operator): string => '"' . $operator . '"';
             /** @var string[] $validOperators */

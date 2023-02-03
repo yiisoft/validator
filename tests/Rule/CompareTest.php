@@ -20,12 +20,22 @@ final class CompareTest extends RuleTestCase
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
+    public function testInitWithWrongType(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $message = 'Type "float" is not supported. The valid types are: "number", "string".';
+        $this->expectExceptionMessage($message);
+
+        new Compare(1, type: 'float');
+    }
+
     public function testInitWithWrongOperator(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $message = 'Operator "=" is not supported. The valid operators are: "==", "===", "!=", "!==", ">", ">=", ' .
             '"<", "<=".';
         $this->expectExceptionMessage($message);
+
         new Compare(1, operator: '=');
     }
 
