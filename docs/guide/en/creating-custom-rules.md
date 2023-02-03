@@ -216,11 +216,11 @@ effect by just using only built-in rules:
 ```php
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 
 $rules = [
     new Count(exactly: 3),
-    new Each([new Number(integerOnly: true, min: 0, max: 255)])
+    new Each([new Integer(min: 0, max: 255)])
 ];
 ```
 
@@ -231,7 +231,7 @@ regular rule.
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Validator;
 
 final class RgbColorRuleSet extends Composite
@@ -240,7 +240,7 @@ final class RgbColorRuleSet extends Composite
     {
         return [
             new Count(exactly: 3),
-            new Each([new Number(integerOnly: true, min: 0, max: 255)])
+            new Each([new Integer(min: 0, max: 255)])
         ];
     }
 }

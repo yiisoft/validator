@@ -59,7 +59,7 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         #[Language('RegExp')]
         private string $pattern,
         private bool $not = false,
-        private string $incorrectInputMessage = 'Value should be string.',
+        private string $incorrectInputMessage = 'The value must be a string.',
         private string $message = 'Value is invalid.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,

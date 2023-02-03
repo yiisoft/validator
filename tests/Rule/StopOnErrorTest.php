@@ -60,7 +60,7 @@ final class StopOnErrorTest extends RuleTestCase
                                 ],
                             ],
                             'incorrectInputMessage' => [
-                                'template' => 'This value must be a string.',
+                                'template' => 'The value must be a string.',
                                 'parameters' => [],
                             ],
                             'encoding' => 'UTF-8',

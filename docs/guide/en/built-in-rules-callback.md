@@ -64,7 +64,7 @@ use Yiisoft\Validator\Rule\Callback;
 new Callback(
     static function (mixed $value): Result {
         if (!is_string($value)) {
-            return (new Result())->addError('This value must be a string.');
+            return (new Result())->addError('The value must be a string.');
         }
 
         $notYamlMessage = 'This value is not a valid YAML.';
@@ -95,22 +95,22 @@ a valid triangle:
 ```php
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\ValidationContext;
 
 $rules = [
     'angleA' => [
         new Required(),
-        new Number(integerOnly: true),
+        new Integer(),
     ],
     'angleB' => [
         new Required(),
-        new Number(integerOnly: true),
+        new Integer(),
     ],
     'angleC' => [
         new Required(),
-        new Number(integerOnly: true),
+        new Integer(),
     ],
 
     new Callback(
@@ -170,13 +170,12 @@ rules where possible:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\ValidationContext;
 
 $rules = [
     'married' => new BooleanValue(),
-    'spouseAge' => new Number(
-        integerOnly: true,
+    'spouseAge' => new Integer(
         min: 18,
         max: 100,
         when: static function (mixed $value, ValidationContext $context): bool {
@@ -207,7 +206,7 @@ final class Config {
     private function validateYaml(mixed $value): Result 
     {
         if (!is_string($value)) {
-            return (new Result())->addError('This value must be a string.');
+            return (new Result())->addError('The value must be a string.');
         }
         
         $notYamlMessage = 'This value is not a valid YAML.';
@@ -252,7 +251,7 @@ final class Config {
     private function validate(): Result 
     {
         if (!is_string($this->yaml)) {
-            return (new Result())->addError('This value must be a string.');
+            return (new Result())->addError('The value must be a string.');
         }
         
         $notYamlMessage = 'This value is not a valid YAML.';
@@ -289,7 +288,7 @@ final class YamlCallback
     public function __invoke(mixed $value): Result
     {
         if (!is_string($value)) {
-            return (new Result())->addError('This value must be a string.');
+            return (new Result())->addError('The value must be a string.');
         }
         
         $notYamlMessage = 'This value is not a valid YAML.';
@@ -335,7 +334,7 @@ $data = [];
 $rules = [
     'yaml' => static function (mixed $value): Result {
         if (!is_string($value)) {
-            return (new Result())->addError('This value must be a string.');
+            return (new Result())->addError('The value must be a string.');
         }
 
         $notYamlMessage = 'This value is not a valid YAML.';
@@ -370,7 +369,7 @@ $rules = [
         new Required(),
         static function (mixed $value): Result {
             if (!is_string($value)) {
-                return (new Result())->addError('This value must be a string.');
+                return (new Result())->addError('The value must be a string.');
             }
         
             $notYamlMessage = 'This value is not a valid YAML.';

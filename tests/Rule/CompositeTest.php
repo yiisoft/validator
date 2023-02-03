@@ -37,8 +37,8 @@ final class CompositeTest extends RuleTestCase
         return [
             [
                 new Composite([
-                    new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
-                    new Number(max: 14, integerPattern: '/2/', numberPattern: '/2/'),
+                    new Number(max: 13, pattern: '/1/'),
+                    new Number(max: 14, pattern: '/2/'),
                 ]),
                 [
                     'skipOnEmpty' => false,
@@ -46,7 +46,6 @@ final class CompositeTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -57,22 +56,20 @@ final class CompositeTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => 13],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/1/',
-                            'numberPattern' => '/1/',
+                            'pattern' => '/1/',
                         ],
                         [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => 14,
                             'incorrectInputMessage' => [
@@ -83,25 +80,24 @@ final class CompositeTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => 14],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/2/',
-                            'numberPattern' => '/2/',
+                            'pattern' => '/2/',
                         ],
                     ],
                 ],
             ],
             'rule without options' => [
                 new Composite([
-                    new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
+                    new Number(max: 13, pattern: '/1/'),
                     new RuleWithoutOptions(),
                 ]),
                 [
@@ -110,7 +106,6 @@ final class CompositeTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -121,13 +116,13 @@ final class CompositeTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => [
                                     'min' => null,
                                 ],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => [
                                     'max' => 13,
@@ -135,8 +130,7 @@ final class CompositeTest extends RuleTestCase
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/1/',
-                            'numberPattern' => '/1/',
+                            'pattern' => '/1/',
                         ],
                         [
                             'test',
@@ -202,7 +196,7 @@ final class CompositeTest extends RuleTestCase
     public function testOptionsWithNotRule(): void
     {
         $rule = new Composite([
-            new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
+            new Number(max: 13, pattern: '/1/'),
             new class () {
             },
         ]);
@@ -320,7 +314,7 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new Composite(
-                        [new Number(max: 13, tooBigMessage: 'Custom error')],
+                        [new Number(max: 13, greaterThanMaxMessage: 'Custom error')],
                         when: fn () => true,
                     ),
                 ],

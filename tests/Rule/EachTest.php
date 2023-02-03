@@ -34,8 +34,8 @@ final class EachTest extends RuleTestCase
         return [
             [
                 new Each([
-                    new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
-                    new Number(max: 14, integerPattern: '/2/', numberPattern: '/2/'),
+                    new Number(max: 13, pattern: '/1/'),
+                    new Number(max: 14, pattern: '/2/'),
                 ]),
                 [
                     'incorrectInputMessage' => [
@@ -51,7 +51,6 @@ final class EachTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -62,22 +61,20 @@ final class EachTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => 13],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/1/',
-                            'numberPattern' => '/1/',
+                            'pattern' => '/1/',
                         ],
                         [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => 14,
                             'incorrectInputMessage' => [
@@ -88,25 +85,24 @@ final class EachTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => 14],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/2/',
-                            'numberPattern' => '/2/',
+                            'pattern' => '/2/',
                         ],
                     ],
                 ],
             ],
             'rule without options' => [
                 new Each([
-                    new Number(max: 13, integerPattern: '/1/', numberPattern: '/1/'),
+                    new Number(max: 13, pattern: '/1/'),
                     new RuleWithoutOptions(),
                 ]),
                 [
@@ -123,7 +119,6 @@ final class EachTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -134,18 +129,17 @@ final class EachTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => 13],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/1/',
-                            'numberPattern' => '/1/',
+                            'pattern' => '/1/',
                         ],
                         [
                             'test',
@@ -257,7 +251,7 @@ final class EachTest extends RuleTestCase
 
             'custom message' => [
                 [10, 20, 30],
-                [new Each([new Number(max: 13, tooBigMessage: 'Custom too big message.')])],
+                [new Each([new Number(max: 13, greaterThanMaxMessage: 'Custom too big message.')])],
                 [
                     '1' => ['Custom too big message.'],
                     '2' => ['Custom too big message.'],
@@ -267,7 +261,7 @@ final class EachTest extends RuleTestCase
                 [10, 20, 30],
                 [
                     new Each(
-                        [new Number(max: 13, tooBigMessage: 'Max - {max}, value - {value}.')],
+                        [new Number(max: 13, greaterThanMaxMessage: 'Max - {max}, value - {value}.')],
                     ),
                 ],
                 [

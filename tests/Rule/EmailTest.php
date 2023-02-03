@@ -38,7 +38,7 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => false,
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have a string type.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -59,7 +59,7 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => false,
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have a string type.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -80,7 +80,7 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => true,
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have a string type.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -101,7 +101,7 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => false,
                     'enableIdn' => true,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have a string type.',
+                        'template' => 'The value must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -189,7 +189,7 @@ final class EmailTest extends RuleTestCase
         $ruleEnabledIdn = new Email(enableIdn: true);
         $ruleEnabledIdnAndAllowedName = new Email(allowName: true, enableIdn: true);
         $errors = ['' => ['This value is not a valid email address.']];
-        $incorrectInputErrors = ['' => ['The value must have a string type.']];
+        $incorrectInputErrors = ['' => ['The value must be a string.']];
 
         return [
             'incorrect input, integer' => [1, [$rule], $incorrectInputErrors],

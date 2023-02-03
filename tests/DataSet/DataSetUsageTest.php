@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\BooleanValue;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
@@ -67,8 +68,8 @@ final class DataSetUsageTest extends TestCase
         $rules = [
             'bool' => [new BooleanValue()],
             'int' => [
-                new Number(integerOnly: true),
-                new Number(integerOnly: true, min: 44),
+                new Integer(),
+                new Integer(min: 44),
                 static function ($value): Result {
                     $result = new Result();
                     if ($value !== 42) {
@@ -96,8 +97,8 @@ final class DataSetUsageTest extends TestCase
             [
                 'bool' => [new BooleanValue()],
                 'int' => [
-                    new Number(integerOnly: true),
-                    new Number(integerOnly: true, min: 44),
+                    new Integer(),
+                    new Integer(min: 44),
                     static function ($value): Result {
                         $result = new Result();
                         if ($value !== 42) {

@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Helper;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Rule\BooleanValue;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
@@ -20,12 +20,11 @@ final class RulesDumperTest extends TestCase
             [
                 [
                     'attributeName' => [
-                        $rule = new Number(
-                            integerOnly: true,
+                        $rule = new Integer(
                             min: 10,
                             max: 100,
-                            tooSmallMessage: 'Value must be greater than 10.',
-                            tooBigMessage: 'Value must be no greater than 100.',
+                            lessThanMinMessage: 'Value must be greater than 10.',
+                            greaterThanMaxMessage: 'Value must be no greater than 100.',
                             skipOnEmpty: true,
                             skipOnError: true
                         ),
@@ -35,8 +34,7 @@ final class RulesDumperTest extends TestCase
                 [
                     'attributeName' => [
                         $dump = [
-                            'number',
-                            'asInteger' => true,
+                            'integer',
                             'min' => 10,
                             'max' => 100,
                             'incorrectInputMessage' => [
@@ -47,18 +45,17 @@ final class RulesDumperTest extends TestCase
                                 'template' => 'Value must be an integer.',
                                 'parameters' => [],
                             ],
-                            'tooBigMessage' => [
-                                'template' => 'Value must be no greater than 100.',
-                                'parameters' => ['max' => 100],
-                            ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be greater than 10.',
                                 'parameters' => ['min' => 10],
                             ],
+                            'greaterThanMaxMessage' => [
+                                'template' => 'Value must be no greater than 100.',
+                                'parameters' => ['max' => 100],
+                            ],
                             'skipOnEmpty' => true,
                             'skipOnError' => true,
-                            'integerPattern' => '/^\s*[+-]?\d+\s*$/',
-                            'numberPattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
+                            'pattern' => '/^\s*[+-]?\d+\s*$/',
                         ],
                         [
                             $dump,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Helper;
 
+use Error;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Helper\ObjectParser;
@@ -83,10 +84,10 @@ final class ObjectParserTest extends TestCase
         };
         $parser = new ObjectParser($object);
 
-        $this->expectError();
+        $this->expectException(Error::class);
 
         $className = CustomUrlRuleSet::class;
-        $this->expectErrorMessage("Attempting to use non-attribute class \"$className\" as attribute");
+        $this->expectExceptionMessage("Attempting to use non-attribute class \"$className\" as attribute");
 
         $parser->getRules();
     }

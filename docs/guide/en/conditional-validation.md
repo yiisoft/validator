@@ -150,10 +150,10 @@ There are some more conditions that have no shortcuts and need to be set explici
 An example with using `WhenNull` as parameter (note that an instance is passed, not a class name):
 
 ```php
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\EmptyCondition\WhenNull;
 
-new Number(asInteger: true, max: 100, skipOnEmpty: new WhenNull());
+new Integer(max: 100, skipOnEmpty: new WhenNull());
 ```
 
 ### Custom empty condition
@@ -172,17 +172,16 @@ final class WhenZero
     }
 }
 
-new Number(asInteger: true, max: 100, skipOnEmpty: new WhenZero());
+new Integer(max: 100, skipOnEmpty: new WhenZero());
 ```
 
 or just a callable:
 
 ```php
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 
-new Number(
-    asInteger: true, 
-    max: 100, 
+new Integer(
+    max: 100,
     skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {
         return $isAttributeMissing || $value === 0;
     }

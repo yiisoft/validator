@@ -90,7 +90,7 @@ final class NestedTest extends RuleTestCase
     {
         return [
             [
-                new Nested([new Number(integerPattern: '/1/', numberPattern: '/1/')]),
+                new Nested([new Number(pattern: '/1/')]),
                 [
                     'noRulesWithNoObjectMessage' => [
                         'template' => 'Nested rule without rules can be used for objects only.',
@@ -101,7 +101,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have an array or an object type.',
+                        'template' => 'The value must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -114,7 +114,6 @@ final class NestedTest extends RuleTestCase
                     'rules' => [
                         [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => null,
                             'incorrectInputMessage' => [
@@ -125,24 +124,23 @@ final class NestedTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => null],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/1/',
-                            'numberPattern' => '/1/',
+                            'pattern' => '/1/',
                         ],
                     ],
                 ],
             ],
             [
-                new Nested(['user.age' => new Number(integerPattern: '/1/', numberPattern: '/1/')]),
+                new Nested(['user.age' => new Number(pattern: '/1/')]),
                 [
                     'noRulesWithNoObjectMessage' => [
                         'template' => 'Nested rule without rules can be used for objects only.',
@@ -153,7 +151,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have an array or an object type.',
+                        'template' => 'The value must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -166,7 +164,6 @@ final class NestedTest extends RuleTestCase
                     'rules' => [
                         'user.age' => [
                             'number',
-                            'asInteger' => false,
                             'min' => null,
                             'max' => null,
                             'incorrectInputMessage' => [
@@ -177,18 +174,17 @@ final class NestedTest extends RuleTestCase
                                 'template' => 'Value must be a number.',
                                 'parameters' => [],
                             ],
-                            'tooSmallMessage' => [
+                            'lessThanMinMessage' => [
                                 'template' => 'Value must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
-                            'tooBigMessage' => [
+                            'greaterThanMaxMessage' => [
                                 'template' => 'Value must be no greater than {max}.',
                                 'parameters' => ['max' => null],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
-                            'integerPattern' => '/1/',
-                            'numberPattern' => '/1/',
+                            'pattern' => '/1/',
                         ],
                     ],
                 ],
@@ -208,7 +204,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have an array or an object type.',
+                        'template' => 'The value must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -241,7 +237,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must have an array or an object type.',
+                        'template' => 'The value must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -939,7 +935,7 @@ final class NestedTest extends RuleTestCase
             'incorrect input' => [
                 '',
                 [new Nested(['value' => new Required()])],
-                ['' => ['The value must have an array or an object type.']],
+                ['' => ['The value must be an array or an object.']],
             ],
             'custom incorrect input message' => [
                 '',
@@ -1083,7 +1079,7 @@ final class NestedTest extends RuleTestCase
             [
                 '',
                 [new Nested(['value' => new Required()])],
-                [['The value must have an array or an object type.', []]],
+                [['The value must be an array or an object.', []]],
             ],
             [
                 ['value' => null],

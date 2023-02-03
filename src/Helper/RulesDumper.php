@@ -21,30 +21,44 @@ use function is_string;
 final class RulesDumper
 {
     /**
-     * Return all attribute rules as array.
+     * Return rules as array.
      *
      * For example:
      *
      * ```php
      * [
-     *    'amount' => [
-     *        [
-     *            'number',
-     *            'integer' => true,
-     *            'max' => 100,
-     *            'notNumberMessage' => ['template' => 'Value must be an integer.', 'parameters' => []],
-     *            'tooBigMessage' => ['template' => 'Value must be no greater than 100.', 'parameters' => []],
-     *        ],
-     *        ['callback'],
-     *    ],
-     *    'name' => [
-     *        [
-     *            'length',
-     *            'max' => 20,
-     *            'message' => ['template' => 'Value must contain at most 20 characters.', 'parameters' => []],
-     *        ],
-     *    ],
-     * ]
+     *     'name' => [
+     *         [
+     *             'length',
+     *             'min' => 4,
+     *             'max' => 10,
+     *             'exactly' => null,
+     *             'lessThanMinMessage' => [
+     *                 'template' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+     *                 'parameters' => ['min' => 4],
+     *             ],
+     *             'greaterThanMaxMessage' => [
+     *                 'template' => 'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.',
+     *                 'parameters' => ['max' => 10],
+     *             ],
+     *             'notExactlyMessage' => [
+     *                 'template' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
+     *                 'parameters' => ['exactly' => null],
+     *             ],
+     *                 'incorrectInputMessage' => [
+     *                 'template' => 'The value must be a string.',
+     *                 'parameters' => [],
+     *             ],
+     *             'encoding' => 'UTF-8',
+     *             'skipOnEmpty' => false,
+     *             'skipOnError' => false,
+     *         ],
+     *         [
+     *             'callback',
+     *         ],
+     *     ],
+     *     // ...
+     * ],
      * ```
      *
      * @param iterable $rules Arrays of rule objects indexed by attributes.

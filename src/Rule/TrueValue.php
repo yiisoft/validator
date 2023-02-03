@@ -16,8 +16,8 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * A variation of {@see BooleanValue} rule limiting the allowed values to "true" only (not limited to boolean "true"
- * type). What value exactly is considered "true" can be configured via {@see $trueValue} setting. There is also an
- * option to choose between strict and non-strict mode of comparison (see {@see $strict}).
+ * type). What value exactly is considered "true" can be configured via {@see TrueValue::$trueValue} setting. There is
+ * also an option to choose between strict and non-strict mode of comparison (see {@see TrueValue::$strict}).
  *
  * A typical scope of application is a user agreement. If the purpose is to also check the falsiness, use
  * {@see BooleanValue} rule instead.
