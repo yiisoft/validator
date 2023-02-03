@@ -85,10 +85,10 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         return match ($operator) {
-            '==' => $this->assertEquals($type, $value, $targetValue),
-            '===' => $this->assertEquals($type, $value, $targetValue, strict: true),
-            '!=' => $this->assertNotEquals($type, $value, $targetValue),
-            '!==' => $this->assertNotEquals($type, $value, $targetValue, strict: true),
+            '==' => $this->checkValuesEqual($type, $value, $targetValue),
+            '===' => $this->checkValuesEqual($type, $value, $targetValue, strict: true),
+            '!=' => $this->checkValuesNotEqual($type, $value, $targetValue),
+            '!==' => $this->checkValuesNotEqual($type, $value, $targetValue, strict: true),
             '>' => $value > $targetValue,
             '>=' => $value >= $targetValue,
             '<' => $value < $targetValue,
@@ -96,7 +96,7 @@ final class CompareHandler implements RuleHandlerInterface
         };
     }
 
-    private function assertEquals(
+    private function checkValuesEqual(
         string $type,
         mixed $value,
         mixed $targetValue,
@@ -107,13 +107,13 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         if ($type === CompareType::NUMBER) {
-            return $this->assertFloatsEqual((float) $value, (float) $targetValue);
+            return $this->checkFloatsEqual((float) $value, (float) $targetValue);
         }
 
         return (string) $value == (string) $targetValue;
     }
 
-    private function assertNotEquals(
+    private function checkValuesNotEqual(
         string $type,
         mixed $value,
         mixed $targetValue,
@@ -124,13 +124,13 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         if ($type === CompareType::NUMBER) {
-            return !$this->assertFloatsEqual((float) $value, (float) $targetValue);
+            return !$this->checkFloatsEqual((float) $value, (float) $targetValue);
         }
 
         return (string) $value != (string) $targetValue;
     }
 
-    private function assertFloatsEqual(float $value, float $targetValue): bool
+    private function checkFloatsEqual(float $value, float $targetValue): bool
     {
         return abs($value - $targetValue) < PHP_FLOAT_EPSILON;
     }
