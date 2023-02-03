@@ -95,22 +95,22 @@ a valid triangle:
 ```php
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\ValidationContext;
 
 $rules = [
     'angleA' => [
         new Required(),
-        new Number(integerOnly: true),
+        new Integer(),
     ],
     'angleB' => [
         new Required(),
-        new Number(integerOnly: true),
+        new Integer(),
     ],
     'angleC' => [
         new Required(),
-        new Number(integerOnly: true),
+        new Integer(),
     ],
 
     new Callback(
@@ -170,13 +170,12 @@ rules where possible:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
-use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\ValidationContext;
 
 $rules = [
     'married' => new BooleanValue(),
-    'spouseAge' => new Number(
-        integerOnly: true,
+    'spouseAge' => new Integer(
         min: 18,
         max: 100,
         when: static function (mixed $value, ValidationContext $context): bool {

@@ -16,9 +16,9 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Contains a set of options to determine if the value is "true" or "false", not limited to boolean type only. What
- * values exactly are considered "true" and "false" can be configured via {@see $trueValue} and {@see $falseValue}
- * settings accordingly. There is also an option to choose between strict and non-strict mode of comparison
- * (see {@see $strict}).
+ * values exactly are considered "true" and "false" can be configured via {@see BooleanValue::$trueValue} and
+ * {@see BooleanValue::$falseValue} settings accordingly. There is also an option to choose between strict and
+ * non-strict mode of comparison (see {@see BooleanValue::$strict}).
  *
  * If the purpose is to check the truthiness only, use {@see TrueValue} rule instead.
  *

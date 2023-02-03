@@ -21,8 +21,8 @@ final class NumberHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
-        if (!$rule instanceof Number) {
-            throw new UnexpectedRuleException(Number::class, $rule);
+        if (!$rule instanceof AbstractNumber) {
+            throw new UnexpectedRuleException(AbstractNumber::class, $rule);
         }
 
         $result = new Result();
@@ -36,21 +36,19 @@ final class NumberHandler implements RuleHandlerInterface
             return $result;
         }
 
-        $pattern = $rule->isIntegerOnly() ? $rule->getIntegerPattern() : $rule->getNumberPattern();
-
-        if (!preg_match($pattern, NumericHelper::normalize($value))) {
+        if (!preg_match($rule->getPattern(), NumericHelper::normalize($value))) {
             $result->addError($rule->getNotNumberMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'value' => $value,
             ]);
         } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
-            $result->addError($rule->getTooSmallMessage(), [
+            $result->addError($rule->getLessThanMinMessage(), [
                 'min' => $rule->getMin(),
                 'attribute' => $context->getTranslatedAttribute(),
                 'value' => $value,
             ]);
         } elseif ($rule->getMax() !== null && $value > $rule->getMax()) {
-            $result->addError($rule->getTooBigMessage(), [
+            $result->addError($rule->getGreaterThanMaxMessage(), [
                 'max' => $rule->getMax(),
                 'attribute' => $context->getTranslatedAttribute(),
                 'value' => $value,
