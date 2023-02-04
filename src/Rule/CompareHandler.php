@@ -85,10 +85,10 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         return match ($operator) {
-            '==' => $this->checkValuesEqual($type, $value, $targetValue),
-            '===' => $this->checkValuesEqual($type, $value, $targetValue, strict: true),
-            '!=' => $this->checkValuesNotEqual($type, $value, $targetValue),
-            '!==' => $this->checkValuesNotEqual($type, $value, $targetValue, strict: true),
+            '==' => $this->checkValuesAreEqual($type, $value, $targetValue),
+            '===' => $this->checkValuesAreEqual($type, $value, $targetValue, strict: true),
+            '!=' => !$this->checkValuesAreEqual($type, $value, $targetValue),
+            '!==' => !$this->checkValuesAreEqual($type, $value, $targetValue, strict: true),
             '>' => $value > $targetValue,
             '>=' => $value >= $targetValue,
             '<' => $value < $targetValue,
@@ -96,7 +96,7 @@ final class CompareHandler implements RuleHandlerInterface
         };
     }
 
-    private function checkValuesEqual(
+    private function checkValuesAreEqual(
         string $type,
         mixed $value,
         mixed $targetValue,
@@ -111,23 +111,6 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         return (string) $value === (string) $targetValue;
-    }
-
-    private function checkValuesNotEqual(
-        string $type,
-        mixed $value,
-        mixed $targetValue,
-        bool $strict = false,
-    ): bool {
-        if ($strict && gettype($value) !== gettype($targetValue)) {
-            return true;
-        }
-
-        if ($type === CompareType::NUMBER) {
-            return !$this->checkFloatsEqual((float) $value, (float) $targetValue);
-        }
-
-        return (string) $value !== (string) $targetValue;
     }
 
     private function checkFloatsEqual(float $value, float $targetValue): bool
