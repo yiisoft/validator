@@ -194,7 +194,7 @@ final class GreaterThanTest extends RuleTestCase
         ];
     }
 
-    public function testWithoutParameters(): void
+    public function testInitWithoutTarget(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');

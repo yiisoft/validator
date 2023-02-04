@@ -20,6 +20,14 @@ final class CompareTest extends RuleTestCase
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
+    public function testInitWithoutTarget(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
+
+        new Compare();
+    }
+
     public function testInitWithWrongType(): void
     {
         $this->expectException(InvalidArgumentException::class);
