@@ -299,13 +299,6 @@ final class EqualTest extends RuleTestCase
         ];
     }
 
-    public function testInitWithoutTarget(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-        new Equal();
-    }
-
     public function testSkipOnError(): void
     {
         $this->testskipOnErrorInternal(new Equal(1), new Equal(1, skipOnError: true));

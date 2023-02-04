@@ -299,13 +299,6 @@ final class NotEqualTest extends RuleTestCase
         ];
     }
 
-    public function testInitWithoutTarget(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-        new NotEqual();
-    }
-
     public function testSkipOnError(): void
     {
         $this->testSkipOnErrorInternal(new NotEqual(1), new NotEqual(1, skipOnError: true));

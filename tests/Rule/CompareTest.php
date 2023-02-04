@@ -20,21 +20,13 @@ final class CompareTest extends RuleTestCase
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
-    public function testInitWithoutTarget(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-
-        new Compare();
-    }
-
     public function testInitWithWrongType(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $message = 'Type "float" is not supported. The valid types are: "number", "string".';
         $this->expectExceptionMessage($message);
 
-        new Compare(1, type: 'float');
+        new Compare(type: 'float');
     }
 
     public function testInitWithWrongOperator(): void
@@ -49,7 +41,7 @@ final class CompareTest extends RuleTestCase
 
     public function testGetName(): void
     {
-        $rule = new Compare(1);
+        $rule = new Compare();
         $this->assertSame('compare', $rule->getName());
     }
 
@@ -603,12 +595,12 @@ final class CompareTest extends RuleTestCase
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new Compare(1), new Compare(1, skipOnError: true));
+        $this->testSkipOnErrorInternal(new Compare(), new Compare(skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new Compare(1), new Compare(1, when: $when));
+        $this->testWhenInternal(new Compare(), new Compare(when: $when));
     }
 }

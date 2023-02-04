@@ -129,10 +129,6 @@ abstract class AbstractCompare implements
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        if ($this->targetValue === null && $this->targetAttribute === null) {
-            throw new InvalidArgumentException('Either "targetValue" or "targetAttribute" must be specified.');
-        }
-
         if ($this->type !== CompareType::NUMBER && $this->type !== CompareType::STRING) {
             $numberType = CompareType::NUMBER;
             $stringType = CompareType::STRING;

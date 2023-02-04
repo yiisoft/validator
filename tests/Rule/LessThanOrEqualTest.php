@@ -195,13 +195,6 @@ final class LessThanOrEqualTest extends RuleTestCase
         ];
     }
 
-    public function testInitWithoutTarget(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-        new LessThanOrEqual();
-    }
-
     public function testSkipOnError(): void
     {
         $this->testSkipOnErrorInternal(new LessThanOrEqual(1), new LessThanOrEqual(1, skipOnError: true));

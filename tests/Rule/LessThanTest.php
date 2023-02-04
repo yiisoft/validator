@@ -194,13 +194,6 @@ final class LessThanTest extends RuleTestCase
         ];
     }
 
-    public function testInitWithoutTarget(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-        new LessThan();
-    }
-
     public function testSkipOnError(): void
     {
         $this->testSkipOnErrorInternal(new LessThan(1), new LessThan(1, skipOnError: true));
