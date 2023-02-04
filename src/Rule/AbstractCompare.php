@@ -285,6 +285,7 @@ abstract class AbstractCompare implements
      * For example, for `['item1', 'item2']` list, the output will be `"item1", "item2"`.
      *
      * @param string[] $items Initial list of strings to format.
+     *
      * @return string Resulting formatted string.
      */
     private function getQuotedList(array $items): string
