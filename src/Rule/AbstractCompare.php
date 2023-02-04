@@ -14,6 +14,8 @@ use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
+use function in_array;
+
 /**
  * Abstract base for all the comparison validation rules.
  *
@@ -129,19 +131,18 @@ abstract class AbstractCompare implements
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        if ($this->type !== CompareType::NUMBER && $this->type !== CompareType::STRING) {
-            $numberType = CompareType::NUMBER;
-            $stringType = CompareType::STRING;
-            $message = "Type \"$this->type\" is not supported. The valid types are: \"$numberType\", \"$stringType\".";
+        $validTypes = [CompareType::STRING, CompareType::NUMBER];
+        if (!in_array($this->type, $validTypes)) {
+            $validTypesString = $this->getQuotedList($validTypes);
+            $message = "Type \"$this->type\" is not supported. The valid types are: $validTypesString.";
 
             throw new InvalidArgumentException($message);
         }
 
         if (!isset($this->validOperatorsMap[$this->operator])) {
-            $wrapInQuotesCallable = static fn (string $operator): string => '"' . $operator . '"';
             /** @var string[] $validOperators */
             $validOperators = array_keys($this->validOperatorsMap);
-            $validOperatorsString = implode(', ', array_map($wrapInQuotesCallable, $validOperators));
+            $validOperatorsString = $this->getQuotedList($validOperators);
             $message = "Operator \"$operator\" is not supported. The valid operators are: $validOperatorsString.";
 
             throw new InvalidArgumentException($message);
@@ -275,5 +276,21 @@ abstract class AbstractCompare implements
     public function getHandler(): string
     {
         return CompareHandler::class;
+    }
+
+    /**
+     * Formats list of strings as a single string where items separated by the comma and each item is wrapped with
+     * double quotes.
+     *
+     * For example, for `['item1', 'item2']` list, the output will be `"item1", "item2"`.
+     *
+     * @param string[] $items Initial list of strings to format.
+     * @return string Resulting formatted string.
+     */
+    private function getQuotedList(array $items): string
+    {
+        $wrapInQuotesCallable = static fn (string $item): string => '"' . $item . '"';
+
+        return implode(', ', array_map($wrapInQuotesCallable, $items));
     }
 }
