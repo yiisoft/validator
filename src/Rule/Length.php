@@ -37,12 +37,12 @@ final class Length implements
     use WhenTrait;
 
     /**
+     * @param int|null $exactly Exact length. `null` means no strict comparison. Mutually exclusive with
+     * {@see $min} and {@see $max}.
      * @param int|null $min Minimum length. `null` means no minimum length limit. Can't be combined with
      * {@see $exactly}. See {@see $lessThanMinMessage} for the customized message for a too short string.
      * @param int|null $max maximum length. `null` means no maximum length limit. Can't be combined with
      * {@see $exactly}. See {@see $greaterThanMaxMessage} for the customized message for a too long string.
-     * @param int|null $exactly Exact length. `null` means no strict comparison. Mutually exclusive with
-     * {@see $min} and {@see $max}.
      * @param string $incorrectInputMessage Error message used when the value is not a string.
      *
      * You may use the following placeholders in the message:
@@ -81,9 +81,9 @@ final class Length implements
      * @psalm-param WhenType $when
      */
     public function __construct(
+        int|null $exactly = null,
         int|null $min = null,
         int|null $max = null,
-        int|null $exactly = null,
         private string $incorrectInputMessage = 'The value must be a string.',
         string $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{character} ' .
         'other{characters}}.',

@@ -19,7 +19,7 @@ final class ValidationContextTest extends TestCase
         $context = new ValidationContext();
 
         $this->expectException(RuntimeException::class);
-        $this->expectErrorMessage('Data set in validation context is not set.');
+        $this->expectExceptionMessage('Data set in validation context is not set.');
         $context->getDataSet();
     }
 
@@ -62,7 +62,7 @@ final class ValidationContextTest extends TestCase
         $context = new ValidationContext();
 
         $this->expectException(RuntimeException::class);
-        $this->expectErrorMessage('Validator is not set in validation context.');
+        $this->expectExceptionMessage('Validator is not set in validation context.');
         $context->validate(42);
     }
 
@@ -71,7 +71,7 @@ final class ValidationContextTest extends TestCase
         $context = new ValidationContext();
 
         $this->expectException(RuntimeException::class);
-        $this->expectErrorMessage('Validator is not set in validation context.');
+        $this->expectExceptionMessage('Validator is not set in validation context.');
         $context->getRawData();
     }
 
