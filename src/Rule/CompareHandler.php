@@ -106,11 +106,13 @@ final class CompareHandler implements RuleHandlerInterface
             return false;
         }
 
+        [$value, $targetValue] = $this->getTypeCastedValues($type, $value, $targetValue);
+
         if ($type === CompareType::NUMBER) {
-            return $this->checkFloatsEqual((float) $value, (float) $targetValue);
+            return $this->checkFloatsEqual($value, $targetValue);
         }
 
-        return (string) $value === (string) $targetValue;
+        return $value === $targetValue;
     }
 
     private function checkFloatsEqual(float $value, float $targetValue): bool
@@ -123,8 +125,10 @@ final class CompareHandler implements RuleHandlerInterface
      */
     private function getTypeCastedValues(string $type, mixed $value, mixed $targetValue): array
     {
-        return $type === CompareType::NUMBER
-            ? [(float) $value, (float) $targetValue]
-            : [(string) $value, (string) $targetValue];
+        return match ($type) {
+            CompareType::ORIGINAL => [$value, $targetValue],
+            CompareType::STRING => [(string) $value, (string) $targetValue],
+            CompareType::NUMBER => [(float) $value, (float) $targetValue],
+        };
     }
 }
