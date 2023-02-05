@@ -54,10 +54,16 @@ abstract class AbstractCompare implements
     'must have a scalar type.';
 
     /**
+     * @var string[] List of valid types.
+     * @see CompareType
+     */
+    private static array $validTypes = [CompareType::STRING, CompareType::NUMBER];
+    /**
      * @var array Map of valid operators.
      * It's used instead of a list for better performance.
+     * @psalm-var array<string, 1>
      */
-    private array $validOperatorsMap = [
+    private static array $validOperatorsMap = [
         '==' => 1,
         '===' => 1,
         '!=' => 1,
@@ -131,17 +137,15 @@ abstract class AbstractCompare implements
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        $validTypes = [CompareType::STRING, CompareType::NUMBER];
-        if (!in_array($this->type, $validTypes)) {
-            $validTypesString = $this->getQuotedList($validTypes);
+        if (!in_array($this->type, self::$validTypes, true)) {
+            $validTypesString = $this->getQuotedList(self::$validTypes);
             $message = "Type \"$this->type\" is not supported. The valid types are: $validTypesString.";
 
             throw new InvalidArgumentException($message);
         }
 
-        if (!isset($this->validOperatorsMap[$this->operator])) {
-            /** @var string[] $validOperators */
-            $validOperators = array_keys($this->validOperatorsMap);
+        if (!isset(self::$validOperatorsMap[$this->operator])) {
+            $validOperators = array_keys(self::$validOperatorsMap);
             $validOperatorsString = $this->getQuotedList($validOperators);
             $message = "Operator \"$operator\" is not supported. The valid operators are: $validOperatorsString.";
 
@@ -289,8 +293,6 @@ abstract class AbstractCompare implements
      */
     private function getQuotedList(array $items): string
     {
-        $wrapInQuotesCallable = static fn (string $item): string => '"' . $item . '"';
-
-        return implode(', ', array_map($wrapInQuotesCallable, $items));
+        return '"'. implode('", "', $items) . '"';
     }
 }
