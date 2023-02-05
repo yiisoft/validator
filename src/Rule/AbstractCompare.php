@@ -52,18 +52,15 @@ abstract class AbstractCompare implements
      */
     protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = 'The attribute value returned from a custom data set ' .
     'must have a scalar type.';
-
     /**
-     * @var string[] List of valid types.
+     * List of valid types.
      * @see CompareType
      */
-    private static array $validTypes = [CompareType::STRING, CompareType::NUMBER];
+    private const VALID_TYPES = [CompareType::STRING, CompareType::NUMBER];
     /**
-     * @var array Map of valid operators.
-     * It's used instead of a list for better performance.
-     * @psalm-var array<string, 1>
+     * Map of valid operators. It's used instead of a list for better performance.
      */
-    private static array $validOperatorsMap = [
+    private const VALID_OPERATORS_MAP = [
         '==' => 1,
         '===' => 1,
         '!=' => 1,
@@ -137,15 +134,15 @@ abstract class AbstractCompare implements
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        if (!in_array($this->type, self::$validTypes, true)) {
-            $validTypesString = $this->getQuotedList(self::$validTypes);
+        if (!in_array($this->type, self::VALID_TYPES)) {
+            $validTypesString = $this->getQuotedList(self::VALID_TYPES);
             $message = "Type \"$this->type\" is not supported. The valid types are: $validTypesString.";
 
             throw new InvalidArgumentException($message);
         }
 
-        if (!isset(self::$validOperatorsMap[$this->operator])) {
-            $validOperators = array_keys(self::$validOperatorsMap);
+        if (!isset(self::VALID_OPERATORS_MAP[$this->operator])) {
+            $validOperators = array_keys(self::VALID_OPERATORS_MAP);
             $validOperatorsString = $this->getQuotedList($validOperators);
             $message = "Operator \"$operator\" is not supported. The valid operators are: $validOperatorsString.";
 
