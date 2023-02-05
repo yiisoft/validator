@@ -55,6 +55,7 @@ abstract class AbstractCompare implements
 
     /**
      * @var string[] List of valid types.
+     *
      * @see CompareType
      */
     private static array $validTypes = [CompareType::STRING, CompareType::NUMBER];
@@ -294,6 +295,6 @@ abstract class AbstractCompare implements
      */
     private function getQuotedList(array $items): string
     {
-        return '"'. implode('", "', $items) . '"';
+        return '"' . implode('", "', $items) . '"';
     }
 }
