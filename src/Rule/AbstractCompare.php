@@ -54,6 +54,7 @@ abstract class AbstractCompare implements
     'must have a scalar type.';
     /**
      * List of valid types.
+     *
      * @see CompareType
      */
     private const VALID_TYPES = [CompareType::STRING, CompareType::NUMBER];
@@ -291,6 +292,6 @@ abstract class AbstractCompare implements
      */
     private function getQuotedList(array $items): string
     {
-        return '"'. implode('", "', $items) . '"';
+        return '"' . implode('", "', $items) . '"';
     }
 }
