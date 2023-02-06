@@ -51,7 +51,7 @@ abstract class AbstractCompare implements
      * A default for {@see $incorrectDataSetTypeMessage}.
      */
     protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = 'The attribute value returned from a custom data set ' .
-    'must have a scalar type.';
+    'must have a scalar type or be null.';
     /**
      * List of valid types.
      *
@@ -84,11 +84,16 @@ abstract class AbstractCompare implements
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $incorrectDataSetTypeMessage A message used when the value returned from a custom
-     * data set is not scalar.
+     * data set is neither scalar nor null.
      *
      * You may use the following placeholders in the message:
      *
      * - `{type}`: type of the value.
+     * @param string|null $originalTypeComparisionMessage A message used when the value is not valid.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
      * @param string|null $message A message used when the value is not valid.
      *
      * You may use the following placeholders in the message:
@@ -124,10 +129,11 @@ abstract class AbstractCompare implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private int|float|string|bool|null $targetValue = null,
+        private mixed $targetValue = null,
         private string|null $targetAttribute = null,
         private string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
         private string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
+        private string|null $originalTypeComparisionMessage = null,
         private string|null $message = null,
         private string $type = CompareType::STRING,
         private string $operator = '==',
@@ -152,13 +158,13 @@ abstract class AbstractCompare implements
     }
 
     /**
-     * Get the constant value to be compared with.
+     * Get value to be compared with.
      *
-     * @return scalar|null Value to be compared with or `null` if it was not configured.
+     * @return mixed Value to be compared with or `null` if it was not configured.
      *
      * @see $targetValue
      */
-    public function getTargetValue(): int|float|string|bool|null
+    public function getTargetValue(): mixed
     {
         return $this->targetValue;
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Stringable;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -33,7 +34,7 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-        if ($value !== null && !is_scalar($value)) {
+        if (!$this->isInputCorrect($rule, $value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
@@ -46,7 +47,7 @@ final class CompareHandler implements RuleHandlerInterface
         if ($targetValue === null && $targetAttribute !== null) {
             /** @var mixed $targetValue */
             $targetValue = $context->getDataSet()->getAttributeValue($targetAttribute);
-            if (!is_scalar($targetValue)) {
+            if (!$this->isInputCorrect($rule, $targetValue)) {
                 return $result->addError($rule->getIncorrectDataSetTypeMessage(), [
                     'type' => get_debug_type($targetValue),
                 ]);
@@ -54,16 +55,31 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         if ($this->compareValues($rule->getOperator(), $rule->getType(), $value, $targetValue)) {
-            return $result;
+            return new Result();
         }
 
-        return $result->addError($rule->getMessage(), [
+        if ($rule->getType() === CompareType::ORIGINAL) {
+            return (new Result())->addError($rule->getMessage(), [
+                'attribute' => $context->getTranslatedAttribute(),
+            ]);
+        }
+
+        return (new Result())->addError($rule->getMessage(), [
             'attribute' => $context->getTranslatedAttribute(),
             'targetValue' => $rule->getTargetValue(),
             'targetAttribute' => $rule->getTargetAttribute(),
             'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
             'value' => $value,
         ]);
+    }
+
+    private function isInputCorrect(AbstractCompare $rule, mixed $value)
+    {
+        if ($rule->getType() !== CompareType::ORIGINAL) {
+            return $value === null || is_scalar($value) || $value instanceof Stringable;
+        }
+
+        return true;
     }
 
     /**
@@ -110,11 +126,11 @@ final class CompareHandler implements RuleHandlerInterface
         return match ($type) {
             CompareType::ORIGINAL => $value === $targetValue,
             CompareType::STRING => (string) $value === (string) $targetValue,
-            CompareType::NUMBER => $this->checkFloatsEqual((float) $value, (float) $targetValue),
+            CompareType::NUMBER => $this->checkFloatsAreEqual((float) (string) $value, (float) (string) $targetValue),
         };
     }
 
-    private function checkFloatsEqual(float $value, float $targetValue): bool
+    private function checkFloatsAreEqual(float $value, float $targetValue): bool
     {
         return abs($value - $targetValue) < PHP_FLOAT_EPSILON;
     }

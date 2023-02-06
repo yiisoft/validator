@@ -103,7 +103,7 @@ return [
      * @see NotEqual
      */
     'The allowed types are integer, float, string, boolean and null.' => 'Разрешённые типы: integer, float, string, boolean и null.',
-    'The attribute value returned from a custom data set must have a scalar type.' => 'Значение, получаемое из набора данных, должно иметь скалярный тип.',
+    'The attribute value returned from a custom data set must have a scalar type or be null.' => 'Значение, получаемое из набора данных, должно иметь скалярный тип.',
     'Value must be equal to "{targetValueOrAttribute}".' => 'Значение должно быть равно «{targetValueOrAttribute}».',
     'Value must not be equal to "{targetValueOrAttribute}".' => 'Значение не должно быть равно «{targetValueOrAttribute}».',
     'Value must be greater than "{targetValueOrAttribute}".' => 'Значение должно быть больше, чем «{targetValueOrAttribute}».',

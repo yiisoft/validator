@@ -40,7 +40,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -75,7 +75,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -110,7 +110,7 @@ final class LessThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'attribute',

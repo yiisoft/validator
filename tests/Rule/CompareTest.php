@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use stdClass;
+use Stringable;
 use Yiisoft\Validator\DataWrapperInterface;
 use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\CompareType;
@@ -62,7 +63,7 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -97,7 +98,7 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -132,7 +133,7 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -167,7 +168,7 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -202,7 +203,7 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -237,7 +238,7 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -272,7 +273,7 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
                         'parameters' => [
                             'targetValue' => 'YES',
                             'targetAttribute' => null,
@@ -307,7 +308,7 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
                         'parameters' => [
                             'targetValue' => null,
                             'targetAttribute' => 'test',
@@ -383,7 +384,7 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => 'test',
@@ -434,6 +435,28 @@ final class CompareTest extends RuleTestCase
             ['100.50', [new Compare('100.5', type: CompareType::NUMBER)]],
             ['100.50', [new Compare(100.5, type: CompareType::NUMBER)]],
             ['100.50', [new Compare('100.5', type: CompareType::NUMBER, operator: '===')]],
+
+            'stringable == stringable, number' => [
+                new class () implements Stringable
+                {
+                    public function __toString(): string
+                    {
+                        return '100.50';
+                    }
+                },
+                [
+                    new Compare(
+                        new class () implements Stringable
+                        {
+                            public function __toString(): string
+                            {
+                                return '100.5';
+                            }
+                        },
+                        type: CompareType::NUMBER,
+                    ),
+                ],
+            ],
 
             'integer !== boolean' => [false, [new Compare(100, operator: '!==')]],
             'integer !== string' => ['100', [new Compare(100, operator: '!==')]],
@@ -505,7 +528,7 @@ final class CompareTest extends RuleTestCase
             'incorrect data set type' => [
                 $incorrectDataSet,
                 [new Compare(targetAttribute: 'test')],
-                ['' => ['The attribute value returned from a custom data set must have a scalar type.']],
+                ['' => ['The attribute value returned from a custom data set must have a scalar type or be null.']],
             ],
             'custom incorrect data set type message' => [
                 $incorrectDataSet,
@@ -598,6 +621,50 @@ final class CompareTest extends RuleTestCase
                         'attribute - 100, value - 101.',
                     ],
                 ],
+            ],
+
+            'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: string, operator: ==' => [
+                new class () implements Stringable
+                {
+                    public function __toString(): string
+                    {
+                        return '100.50';
+                    }
+                },
+                [
+                    new Compare(
+                        new class () implements Stringable
+                        {
+                            public function __toString(): string
+                            {
+                                return '100.5';
+                            }
+                        },
+                    ),
+                ],
+                ['' => ['Value must be equal to "100.5".']],
+            ],
+            'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: string, operator: ===' => [
+                new class () implements Stringable
+                {
+                    public function __toString(): string
+                    {
+                        return '100.50';
+                    }
+                },
+                [
+                    new Compare(
+                        new class () implements Stringable
+                        {
+                            public function __toString(): string
+                            {
+                                return '100.51';
+                            }
+                        },
+                        operator: '===',
+                    ),
+                ],
+                ['' => ['Value must be equal to "100.5".']],
             ],
 
             ['100.50', [new Compare('100.5')], ['' => ['Value must be equal to "100.5".']]],
