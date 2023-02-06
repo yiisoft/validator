@@ -437,8 +437,7 @@ final class CompareTest extends RuleTestCase
             ['100.50', [new Compare('100.5', type: CompareType::NUMBER, operator: '===')]],
 
             'stringable == stringable, number' => [
-                new class () implements Stringable
-                {
+                new class () implements Stringable {
                     public function __toString(): string
                     {
                         return '100.50';
@@ -446,8 +445,7 @@ final class CompareTest extends RuleTestCase
                 },
                 [
                     new Compare(
-                        new class () implements Stringable
-                        {
+                        new class () implements Stringable {
                             public function __toString(): string
                             {
                                 return '100.5';
@@ -624,8 +622,7 @@ final class CompareTest extends RuleTestCase
             ],
 
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: string, operator: ==' => [
-                new class () implements Stringable
-                {
+                new class () implements Stringable {
                     public function __toString(): string
                     {
                         return '100.50';
@@ -633,8 +630,7 @@ final class CompareTest extends RuleTestCase
                 },
                 [
                     new Compare(
-                        new class () implements Stringable
-                        {
+                        new class () implements Stringable {
                             public function __toString(): string
                             {
                                 return '100.5';
@@ -645,8 +641,7 @@ final class CompareTest extends RuleTestCase
                 ['' => ['Value must be equal to "100.5".']],
             ],
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: string, operator: ===' => [
-                new class () implements Stringable
-                {
+                new class () implements Stringable {
                     public function __toString(): string
                     {
                         return '100.50';
@@ -654,8 +649,7 @@ final class CompareTest extends RuleTestCase
                 },
                 [
                     new Compare(
-                        new class () implements Stringable
-                        {
+                        new class () implements Stringable {
                             public function __toString(): string
                             {
                                 return '100.51';
