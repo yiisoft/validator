@@ -102,7 +102,8 @@ final class CompareHandler implements RuleHandlerInterface
         };
     }
 
-    private function checkValuesAreEqual(string $type, mixed $value, mixed $targetValue, bool $strict = false): bool {
+    private function checkValuesAreEqual(string $type, mixed $value, mixed $targetValue, bool $strict = false): bool
+    {
         if ($strict && gettype($value) !== gettype($targetValue)) {
             return false;
         }
