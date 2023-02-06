@@ -101,7 +101,7 @@ abstract class AbstractCompare implements
      * - `{value}`: the value of the attribute being validated.
      * @param string $type The type of the values being compared. Either {@see CompareType::STRING}
      * or {@see CompareType::NUMBER}.
-     * @psalm-param CompareType::STRING | CompareType::NUMBER $type
+     * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @param string $operator The operator for comparison. The following operators are supported:
      *
@@ -180,7 +180,7 @@ abstract class AbstractCompare implements
      *
      * @return string The type of the values being compared. Either {@see CompareType::STRING}
      * or {@see CompareType::NUMBER}.
-     * @psalm-return CompareType::STRING | CompareType::NUMBER $type
+     * @psalm-return CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @see $type
      */

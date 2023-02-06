@@ -71,7 +71,7 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @param string $operator The comparison operator. One of `==`, `===`, `!=`, `!==`, `>`, `>=`, `<`, `<=`.
      * @param string $type The type of the values being compared.
-     * @psalm-param CompareType::STRING | CompareType::NUMBER $type
+     * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @param mixed $value The value being compared.
      * @param mixed $targetValue Another value being compared.
@@ -81,7 +81,13 @@ final class CompareHandler implements RuleHandlerInterface
     private function compareValues(string $operator, string $type, mixed $value, mixed $targetValue): bool
     {
         if (!in_array($operator, ['==', '===', '!=', '!=='])) {
-            [$value, $targetValue] = $this->getTypeCastedValues($type, $value, $targetValue);
+            if ($type === CompareType::STRING) {
+                $value = (string) $value;
+                $targetValue = (string) $targetValue;
+            } elseif ($type === CompareType::NUMBER) {
+                $value = (float) $value;
+                $targetValue = (float) $targetValue;
+            }
         }
 
         return match ($operator) {
@@ -96,39 +102,20 @@ final class CompareHandler implements RuleHandlerInterface
         };
     }
 
-    private function checkValuesAreEqual(
-        string $type,
-        mixed $value,
-        mixed $targetValue,
-        bool $strict = false,
-    ): bool {
+    private function checkValuesAreEqual(string $type, mixed $value, mixed $targetValue, bool $strict = false): bool {
         if ($strict && gettype($value) !== gettype($targetValue)) {
             return false;
         }
 
-        [$value, $targetValue] = $this->getTypeCastedValues($type, $value, $targetValue);
-
-        if ($type === CompareType::NUMBER) {
-            return $this->checkFloatsEqual($value, $targetValue);
-        }
-
-        return $value === $targetValue;
+        return match ($type) {
+            CompareType::ORIGINAL => $value === $targetValue,
+            CompareType::STRING => (string) $value === (string) $targetValue,
+            CompareType::NUMBER => $this->checkFloatsEqual((float) $value, (float) $targetValue),
+        };
     }
 
     private function checkFloatsEqual(float $value, float $targetValue): bool
     {
         return abs($value - $targetValue) < PHP_FLOAT_EPSILON;
-    }
-
-    /**
-     * @psalm-return array{0: float, 1: float}|array{0: string, 1: string}
-     */
-    private function getTypeCastedValues(string $type, mixed $value, mixed $targetValue): array
-    {
-        return match ($type) {
-            CompareType::ORIGINAL => [$value, $targetValue],
-            CompareType::STRING => [(string) $value, (string) $targetValue],
-            CompareType::NUMBER => [(float) $value, (float) $targetValue],
-        };
     }
 }

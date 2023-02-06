@@ -57,7 +57,7 @@ final class GreaterThanOrEqual extends AbstractCompare
      * - `{value}`: the value of the attribute being validated.
      * @param string $type The type of the values being compared. Either {@see CompareType::STRING}
      * or {@see CompareType::NUMBER}.
-     * @psalm-param CompareType::STRING | CompareType::NUMBER $type
+     * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
