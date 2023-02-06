@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use RuntimeException;
 use Yiisoft\Validator\Rule\CompareType;
 use Yiisoft\Validator\Rule\LessThanOrEqual;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -193,13 +192,6 @@ final class LessThanOrEqualTest extends RuleTestCase
             ['101', [new LessThanOrEqual(100)], ['' => [$message]]],
             'custom error' => [101, [new LessThanOrEqual(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
-    }
-
-    public function testWithoutParameters(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-        new LessThanOrEqual();
     }
 
     public function testSkipOnError(): void

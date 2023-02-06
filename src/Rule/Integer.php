@@ -65,10 +65,10 @@ final class Integer extends AbstractNumber
     public function __construct(
         float|int|null $min = null,
         float|int|null $max = null,
-        string $incorrectInputMessage = 'The allowed types are integer, float and string.',
+        string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
         string $notNumberMessage = 'Value must be an integer.',
-        string $lessThanMinMessage = 'Value must be no less than {min}.',
-        string $greaterThanMaxMessage = 'Value must be no greater than {max}.',
+        string $lessThanMinMessage = self::DEFAULT_LESS_THAN_MIN_MESSAGE,
+        string $greaterThanMaxMessage = self::DEFAULT_GREATER_THAN_MAX_MESSAGE,
         string $pattern = '/^\s*[+-]?\d+\s*$/',
         mixed $skipOnEmpty = null,
         bool $skipOnError = false,
