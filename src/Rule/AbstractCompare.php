@@ -57,7 +57,7 @@ abstract class AbstractCompare implements
      *
      * @see CompareType
      */
-    private const VALID_TYPES = [CompareType::STRING, CompareType::NUMBER];
+    private const VALID_TYPES = [CompareType::ORIGINAL, CompareType::STRING, CompareType::NUMBER];
     /**
      * Map of valid operators. It's used instead of a list for better performance.
      */

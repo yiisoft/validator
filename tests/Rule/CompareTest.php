@@ -23,7 +23,7 @@ final class CompareTest extends RuleTestCase
     public function testInitWithWrongType(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $message = 'Type "float" is not supported. The valid types are: "string", "number".';
+        $message = 'Type "float" is not supported. The valid types are: "original", "string", "number".';
         $this->expectExceptionMessage($message);
 
         new Compare(type: 'float');
