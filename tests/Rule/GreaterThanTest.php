@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use RuntimeException;
 use Yiisoft\Validator\Rule\CompareType;
 use Yiisoft\Validator\Rule\GreaterThan;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -192,13 +191,6 @@ final class GreaterThanTest extends RuleTestCase
             ['100', [new GreaterThan(100)], ['' => [$message]]],
             'custom error' => [99, [new GreaterThan(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
-    }
-
-    public function testWithoutParameters(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-        new GreaterThan();
     }
 
     public function testSkipOnError(): void

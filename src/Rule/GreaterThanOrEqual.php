@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use RuntimeException;
 use Yiisoft\Validator\WhenInterface;
 
 /**
@@ -69,32 +68,27 @@ final class GreaterThanOrEqual extends AbstractCompare
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private int|float|string|bool|null $targetValue = null,
-        private string|null $targetAttribute = null,
-        private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean and null.',
-        private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
-        'a scalar type.',
-        private string|null $message = null,
-        private string $type = CompareType::STRING,
+        int|float|string|bool|null $targetValue = null,
+        string|null $targetAttribute = null,
+        string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
+        string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
+        string|null $message = null,
+        string $type = CompareType::STRING,
         bool|callable|null $skipOnEmpty = false,
-        private bool $skipOnError = false,
-        private Closure|null $when = null,
+        bool $skipOnError = false,
+        Closure|null $when = null,
     ) {
-        if ($this->targetValue === null && $this->targetAttribute === null) {
-            throw new RuntimeException('Either "targetValue" or "targetAttribute" must be specified.');
-        }
-
         parent::__construct(
-            targetValue: $this->targetValue,
-            targetAttribute: $this->targetAttribute,
-            incorrectInputMessage: $this->incorrectInputMessage,
-            incorrectDataSetTypeMessage: $this->incorrectDataSetTypeMessage,
-            message: $this->message,
-            type: $this->type,
+            targetValue: $targetValue,
+            targetAttribute: $targetAttribute,
+            incorrectInputMessage: $incorrectInputMessage,
+            incorrectDataSetTypeMessage: $incorrectDataSetTypeMessage,
+            message: $message,
+            type: $type,
             operator: '>=',
             skipOnEmpty: $skipOnEmpty,
-            skipOnError: $this->skipOnError,
-            when: $this->when,
+            skipOnError: $skipOnError,
+            when: $when,
         );
     }
 

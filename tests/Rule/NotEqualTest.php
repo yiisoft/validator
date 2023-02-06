@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use RuntimeException;
 use Yiisoft\Validator\Rule\CompareType;
 use Yiisoft\Validator\Rule\NotEqual;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -297,13 +296,6 @@ final class NotEqualTest extends RuleTestCase
             [100, [new NotEqual(100, strict: true)], ['' => [$message]]],
             'custom error' => [100, [new NotEqual(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
-    }
-
-    public function testWithoutParameters(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Either "targetValue" or "targetAttribute" must be specified');
-        new NotEqual();
     }
 
     public function testSkipOnError(): void

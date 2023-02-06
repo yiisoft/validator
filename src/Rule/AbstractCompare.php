@@ -14,6 +14,8 @@ use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
+use function in_array;
+
 /**
  * Abstract base for all the comparison validation rules.
  *
@@ -42,10 +44,24 @@ abstract class AbstractCompare implements
     use WhenTrait;
 
     /**
-     * @var array Map of valid operators.
-     * It's used instead of a list for better performance.
+     * A default for {@see $incorrectInputMessage}.
      */
-    private array $validOperatorsMap = [
+    protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types are integer, float, string, boolean and null.';
+    /**
+     * A default for {@see $incorrectDataSetTypeMessage}.
+     */
+    protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = 'The attribute value returned from a custom data set ' .
+    'must have a scalar type.';
+    /**
+     * List of valid types.
+     *
+     * @see CompareType
+     */
+    private const VALID_TYPES = [CompareType::STRING, CompareType::NUMBER];
+    /**
+     * Map of valid operators. It's used instead of a list for better performance.
+     */
+    private const VALID_OPERATORS_MAP = [
         '==' => 1,
         '===' => 1,
         '!=' => 1,
@@ -110,9 +126,8 @@ abstract class AbstractCompare implements
     public function __construct(
         private int|float|string|bool|null $targetValue = null,
         private string|null $targetAttribute = null,
-        private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean and null.',
-        private string $incorrectDataSetTypeMessage = 'The attribute value returned from a custom data set must have ' .
-        'a scalar type.',
+        private string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
+        private string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
         private string|null $message = null,
         private string $type = CompareType::STRING,
         private string $operator = '==',
@@ -120,11 +135,16 @@ abstract class AbstractCompare implements
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        if (!isset($this->validOperatorsMap[$this->operator])) {
-            $wrapInQuotesCallable = static fn (string $operator): string => '"' . $operator . '"';
-            /** @var string[] $validOperators */
-            $validOperators = array_keys($this->validOperatorsMap);
-            $validOperatorsString = implode(', ', array_map($wrapInQuotesCallable, $validOperators));
+        if (!in_array($this->type, self::VALID_TYPES)) {
+            $validTypesString = $this->getQuotedList(self::VALID_TYPES);
+            $message = "Type \"$this->type\" is not supported. The valid types are: $validTypesString.";
+
+            throw new InvalidArgumentException($message);
+        }
+
+        if (!isset(self::VALID_OPERATORS_MAP[$this->operator])) {
+            $validOperators = array_keys(self::VALID_OPERATORS_MAP);
+            $validOperatorsString = $this->getQuotedList($validOperators);
             $message = "Operator \"$operator\" is not supported. The valid operators are: $validOperatorsString.";
 
             throw new InvalidArgumentException($message);
@@ -258,5 +278,20 @@ abstract class AbstractCompare implements
     public function getHandler(): string
     {
         return CompareHandler::class;
+    }
+
+    /**
+     * Formats list of strings as a single string where items separated by the comma and each item is wrapped with
+     * double quotes.
+     *
+     * For example, for `['item1', 'item2']` list, the output will be `"item1", "item2"`.
+     *
+     * @param string[] $items Initial list of strings to format.
+     *
+     * @return string Resulting formatted string.
+     */
+    private function getQuotedList(array $items): string
+    {
+        return '"' . implode('", "', $items) . '"';
     }
 }
