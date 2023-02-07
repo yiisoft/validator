@@ -442,6 +442,7 @@ final class CompareTest extends RuleTestCase
                 return 'd62f2b3f-707f-451a-8819-046ff8436a4f';
             }
         };
+        $dateTime = new DateTime('2023-02-07 12:57:12');
 
         return [
             // Number specific, expressions
@@ -506,19 +507,27 @@ final class CompareTest extends RuleTestCase
                 [new Compare($targetStringableUuid, operator: '>')],
             ],
 
-            // Original specific, datetime objects
+            // Original specific, datetime
 
             'target value: DateTime object, value: DateTime object with the same value, type: original, operator: ==' => [
-                new DateTime('2023-02-01 12:57:12'),
-                [new Compare(new DateTime('2023-02-01 12:57:12'), type: CompareType::ORIGINAL)],
+                new DateTime('2023-02-07 12:57:12'),
+                [new Compare(new DateTime('2023-02-07 12:57:12'), type: CompareType::ORIGINAL)],
+            ],
+            'target value: DateTime object, value: the same DateTime object, type: original, operator: ===' => [
+                $dateTime,
+                [new Compare($dateTime, type: CompareType::ORIGINAL)],
             ],
             'target value: DateTime object, value: DateTime object with the same value, type: original, operator: !==' => [
-                new DateTime('2023-02-01 12:57:12'),
-                [new Compare(new DateTime('2023-02-01 12:57:12'), type: CompareType::ORIGINAL, operator: '!==')],
+                new DateTime('2023-02-07 12:57:12'),
+                [new Compare(new DateTime('2023-02-07 12:57:12'), type: CompareType::ORIGINAL, operator: '!==')],
             ],
             'target value: DateTime object, value: DateTime object with the same value, type: original, operator: >=' => [
-                new DateTime('2023-02-01 12:57:12'),
-                [new Compare(new DateTime('2023-02-01 12:57:12'), type: CompareType::ORIGINAL, operator: '>=')],
+                new DateTime('2023-02-07 12:57:12'),
+                [new Compare(new DateTime('2023-02-07 12:57:12'), type: CompareType::ORIGINAL, operator: '>=')],
+            ],
+            'target value: human-readable DateTime object, value: greater DateTime object, type: original, operator: >' => [
+                new DateTime('2022-06-03'),
+                [new Compare(new DateTime('June 2nd, 2022'), type: CompareType::ORIGINAL, operator: '>')],
             ],
         ];
     }
@@ -840,6 +849,14 @@ final class CompareTest extends RuleTestCase
                 $stringableFloat,
                 [new Compare($targetStringableFloat, type: CompareType::ORIGINAL, operator: '===')],
                 ['' => ['Value must be equal to "100.5".']],
+            ],
+
+            // Original specific, datetime
+
+            'target value: human-readable DateTime string, value: greater DateTime string, type: string, operator: >' => [
+                '2022-06-03',
+                [new Compare('June 2nd, 2022', operator: '>')],
+                ['' => ['Value must be greater than "June 2nd, 2022".']],
             ],
         ];
     }
