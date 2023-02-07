@@ -422,8 +422,7 @@ final class CompareTest extends RuleTestCase
                 return '100.5';
             }
         };
-        $stringableFloat = new class () implements Stringable
-        {
+        $stringableFloat = new class () implements Stringable {
             public function __toString(): string
             {
                 return '100.50';
@@ -435,8 +434,7 @@ final class CompareTest extends RuleTestCase
                 return '3b98a689-7d49-48bb-8741-7e27f220b69a';
             }
         };
-        $stringableUuid = new class () implements Stringable
-        {
+        $stringableUuid = new class () implements Stringable {
             public function __toString(): string
             {
                 return 'd62f2b3f-707f-451a-8819-046ff8436a4f';
@@ -474,7 +472,7 @@ final class CompareTest extends RuleTestCase
                 [new Compare('100.5', type: CompareType::NUMBER, operator: '===')],
             ],
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: original, operator: ==' => [
-                '100.50', [new Compare('100.5', type: CompareType::ORIGINAL)], ['' => ['Value must be equal to "100.5".']]
+                '100.50', [new Compare('100.5', type: CompareType::ORIGINAL)], ['' => ['Value must be equal to "100.5".']],
             ],
 
             // Number / original specific, decimal places, values provided via stringable objects
@@ -701,8 +699,7 @@ final class CompareTest extends RuleTestCase
                 return '100.5';
             }
         };
-        $stringableFloat = new class () implements Stringable
-        {
+        $stringableFloat = new class () implements Stringable {
             public function __toString(): string
             {
                 return '100.50';
@@ -810,13 +807,13 @@ final class CompareTest extends RuleTestCase
             // Number / original specific, decimal places, directly provided values
 
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: string, operator: ==' => [
-                '100.50', [new Compare('100.5')], ['' => ['Value must be equal to "100.5".']]
+                '100.50', [new Compare('100.5')], ['' => ['Value must be equal to "100.5".']],
             ],
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: string, operator: ===' => [
-                '100.50', [new Compare('100.5', operator: '===')], ['' => ['Value must be equal to "100.5".']]
+                '100.50', [new Compare('100.5', operator: '===')], ['' => ['Value must be equal to "100.5".']],
             ],
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: original, operator: ===' => [
-                '100.50', [new Compare('100.5', type: CompareType::ORIGINAL, operator: '===')], ['' => ['Value must be equal to "100.5".']]
+                '100.50', [new Compare('100.5', type: CompareType::ORIGINAL, operator: '===')], ['' => ['Value must be equal to "100.5".']],
             ],
 
             // Number / original specific, decimal places, values provided via stringable objects
@@ -972,8 +969,7 @@ final class CompareTest extends RuleTestCase
         mixed $data,
         array|RuleInterface|null $rules,
         array $errorMessagesIndexedByPath,
-    ): void
-    {
+    ): void {
         parent::testValidationFailed($data, $rules, $errorMessagesIndexedByPath);
     }
 

@@ -69,7 +69,7 @@ final class CompareHandler implements RuleHandlerInterface
 
     private function isInputCorrect(AbstractCompare $rule, mixed $value)
     {
-        return $rule->getType() !== CompareType::ORIGINAL ? $this->isValueSimple($value): true;
+        return $rule->getType() !== CompareType::ORIGINAL ? $this->isValueSimple($value) : true;
     }
 
     private function isValueSimple(mixed $value): bool
