@@ -89,11 +89,6 @@ abstract class AbstractCompare implements
      * You may use the following placeholders in the message:
      *
      * - `{type}`: type of the value.
-     * @param string|null $originalTypeComparisionMessage A message used when the value is not valid.
-     *
-     * You may use the following placeholders in the message:
-     *
-     * - `{attribute}`: the translated label of the attribute being validated.
      * @param string|null $message A message used when the value is not valid.
      *
      * You may use the following placeholders in the message:
@@ -133,7 +128,6 @@ abstract class AbstractCompare implements
         private string|null $targetAttribute = null,
         private string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
         private string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
-        private string|null $originalTypeComparisionMessage = null,
         private string|null $message = null,
         private string $type = CompareType::STRING,
         private string $operator = '==',

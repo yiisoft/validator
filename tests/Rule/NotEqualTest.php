@@ -283,7 +283,7 @@ final class NotEqualTest extends RuleTestCase
     {
         return [
             [101, [new NotEqual(100)]],
-            ['101', [new NotEqual(100, strict: true)]],
+            ['101', [new NotEqual(101, strict: true)]],
         ];
     }
 

@@ -41,8 +41,8 @@ final class CompareHandler implements RuleHandlerInterface
             ]);
         }
 
-        $targetAttribute = $rule->getTargetAttribute();
         $targetValue = $rule->getTargetValue();
+        $targetAttribute = $rule->getTargetAttribute();
 
         if ($targetValue === null && $targetAttribute !== null) {
             /** @var mixed $targetValue */
@@ -58,28 +58,28 @@ final class CompareHandler implements RuleHandlerInterface
             return new Result();
         }
 
-        if ($rule->getType() === CompareType::ORIGINAL) {
-            return (new Result())->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-            ]);
-        }
-
         return (new Result())->addError($rule->getMessage(), [
             'attribute' => $context->getTranslatedAttribute(),
             'targetValue' => $rule->getTargetValue(),
-            'targetAttribute' => $rule->getTargetAttribute(),
-            'targetValueOrAttribute' => $targetValue ?? $targetAttribute,
-            'value' => $value,
+            'targetAttribute' => $targetAttribute,
+            'targetValueOrAttribute' => isset($targetValue) ? $this->getFormattedValue($targetValue) : $targetAttribute,
+            'value' => $this->getFormattedValue($value),
         ]);
     }
 
     private function isInputCorrect(AbstractCompare $rule, mixed $value)
     {
-        if ($rule->getType() !== CompareType::ORIGINAL) {
-            return $value === null || is_scalar($value) || $value instanceof Stringable;
-        }
+        return $rule->getType() !== CompareType::ORIGINAL ? $this->isValueSimple($value): true;
+    }
 
-        return true;
+    private function isValueSimple(mixed $value): bool
+    {
+        return $value === null || is_scalar($value) || $value instanceof Stringable;
+    }
+
+    private function getFormattedValue(mixed $value): int|float|string|Stringable|bool|null
+    {
+        return $this->isValueSimple($value) ? $value : get_debug_type($value);
     }
 
     /**
@@ -101,8 +101,8 @@ final class CompareHandler implements RuleHandlerInterface
                 $value = (string) $value;
                 $targetValue = (string) $targetValue;
             } elseif ($type === CompareType::NUMBER) {
-                $value = (float) $value;
-                $targetValue = (float) $targetValue;
+                $value = $this->prepareNumber($value);
+                $targetValue = $this->prepareNumber($targetValue);
             }
         }
 
@@ -120,19 +120,34 @@ final class CompareHandler implements RuleHandlerInterface
 
     private function checkValuesAreEqual(string $type, mixed $value, mixed $targetValue, bool $strict = false): bool
     {
+        if ($type === CompareType::ORIGINAL) {
+            return $strict ? $value === $targetValue : $value == $targetValue;
+        }
+
         if ($strict && gettype($value) !== gettype($targetValue)) {
             return false;
         }
 
         return match ($type) {
-            CompareType::ORIGINAL => $value === $targetValue,
             CompareType::STRING => (string) $value === (string) $targetValue,
-            CompareType::NUMBER => $this->checkFloatsAreEqual((float) (string) $value, (float) (string) $targetValue),
+            CompareType::NUMBER => $this->checkFloatsAreEqual(
+                $this->prepareNumber($value),
+                $this->prepareNumber($targetValue),
+            ),
         };
     }
 
     private function checkFloatsAreEqual(float $value, float $targetValue): bool
     {
         return abs($value - $targetValue) < PHP_FLOAT_EPSILON;
+    }
+
+    private function prepareNumber(int|float|string|Stringable|bool|null $number): float
+    {
+        if ($number instanceof Stringable) {
+            $number = (string) $number;
+        }
+
+        return (float) $number;
     }
 }
