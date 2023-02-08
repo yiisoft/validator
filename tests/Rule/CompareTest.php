@@ -800,7 +800,7 @@ final class CompareTest extends RuleTestCase
                 ],
                 [
                     'number' => [
-                        'Attribute - number, target value - , target attribute - attribute, target attribute value '.
+                        'Attribute - number, target value - , target attribute - attribute, target attribute value ' .
                         '- 100, target value or attribute - attribute, value - 101.',
                     ],
                 ],
