@@ -84,252 +84,7 @@ final class CompareTest extends RuleTestCase
                             'targetValueOrAttribute' => 1,
                         ],
                     ],
-                    'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Compare(1, type: CompareType::NUMBER),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
                     'type' => 'number',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Compare(1, type: CompareType::NUMBER, operator: '>='),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'type' => 'number',
-                    'operator' => '>=',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Compare('YES'),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Compare('YES', skipOnEmpty: true),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => true,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Compare('YES', operator: '!=='),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must not be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '!==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Compare('YES', message: 'Custom message for {targetValueOrAttribute}.'),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Custom message for {targetValueOrAttribute}.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Compare(null, 'test'),
-                [
-                    'targetValue' => null,
-                    'targetAttribute' => 'test',
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
-                        ],
-                    ],
-                    'type' => 'string',
                     'operator' => '==',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
@@ -337,78 +92,41 @@ final class CompareTest extends RuleTestCase
             ],
             [
                 new Compare(
-                    null,
-                    'test',
+                    new DateTime('2023-02-07 12:57:12'),
+                    targetAttribute: 'test',
                     incorrectInputMessage: 'Custom message 1.',
                     incorrectDataSetTypeMessage: 'Custom message 2.',
                     message: 'Custom message 3.',
+                    type: CompareType::ORIGINAL,
+                    operator: '>=',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                    when: static fn (): bool => true,
                 ),
                 [
-                    'targetValue' => null,
                     'targetAttribute' => 'test',
                     'incorrectInputMessage' => [
                         'template' => 'Custom message 1.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
                         'template' => 'Custom message 2.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
                     'message' => [
                         'template' => 'Custom message 3.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
-                    'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Compare(1, 'test'),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => 'test',
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'type' => 'original',
+                    'operator' => '>=',
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -447,30 +165,30 @@ final class CompareTest extends RuleTestCase
 
             'target value: float, value: float with the same value as expression result, type: number, operator: ==' => [
                 1 - 0.83,
-                [new Compare(0.17, type: CompareType::NUMBER)],
+                [new Compare(0.17)],
             ],
             'target value: float, value: float with the same value as expression result, type: number, operator: ===' => [
                 1 - 0.83,
-                [new Compare(0.17, type: CompareType::NUMBER, operator: '===')],
+                [new Compare(0.17, operator: '===')],
             ],
             'target value: float, value: float with the same value as expression result, type: number, operator: >=' => [
                 1 - 0.83,
-                [new Compare(0.17, type: CompareType::NUMBER, operator: '>=')],
+                [new Compare(0.17, operator: '>=')],
             ],
 
             // Number / original specific, decimal places, directly provided values
 
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: number, operator: ==' => [
                 '100.50',
-                [new Compare('100.5', type: CompareType::NUMBER)],
+                [new Compare('100.5')],
             ],
             'target value: float, value: string float with the same value, but extra decimal place (0), type: number, operator: ==' => [
                 '100.50',
-                [new Compare(100.5, type: CompareType::NUMBER)],
+                [new Compare(100.5)],
             ],
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: number, operator: ===' => [
                 '100.50',
-                [new Compare('100.5', type: CompareType::NUMBER, operator: '===')],
+                [new Compare('100.5', operator: '===')],
             ],
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: original, operator: ==' => [
                 '100.50', [new Compare('100.5', type: CompareType::ORIGINAL)], ['' => ['Value must be equal to "100.5".']],
@@ -480,29 +198,29 @@ final class CompareTest extends RuleTestCase
 
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: number, operator: ==' => [
                 $stringableFloat,
-                [new Compare($targetStringableFloat, type: CompareType::NUMBER)],
+                [new Compare($targetStringableFloat)],
             ],
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: number, operator: >=' => [
                 $stringableFloat,
-                [new Compare($targetStringableFloat, type: CompareType::NUMBER, operator: '>=')],
+                [new Compare($targetStringableFloat, operator: '>=')],
             ],
 
             // String / original specific, character order, directly provided values
 
             'target value: uuidv4, value: greater uuidv4, type: string, operator: >' => [
                 'd62f2b3f-707f-451a-8819-046ff8436a4f',
-                [new Compare('3b98a689-7d49-48bb-8741-7e27f220b69a', operator: '>')],
+                [new Compare('3b98a689-7d49-48bb-8741-7e27f220b69a', type: CompareType::STRING, operator: '>')],
             ],
             'target value: character, value: character located further within alphabet, type: string, operator: ==' => [
                 'b',
-                [new Compare('a', operator: '>')],
+                [new Compare('a', type: CompareType::STRING, operator: '>')],
             ],
 
             // String / original specific, character order, values provided via stringable objects
 
             'target value: stringable uuidv4, value: greater stringable uuidv4, type: string, operator: >' => [
                 $stringableUuid,
-                [new Compare($targetStringableUuid, operator: '>')],
+                [new Compare($targetStringableUuid, type: CompareType::STRING, operator: '>')],
             ],
 
             // Original specific, datetime
@@ -551,117 +269,117 @@ final class CompareTest extends RuleTestCase
         $initialData = [
             // Basic
 
-            'target value: integer, value: integer with the same value, type: string, operator: ==' => [
+            'target value: integer, value: integer with the same value, type: number, operator: ==' => [
                 100,
                 [new Compare(100)],
             ],
-            'target value: integer, value: integer with the same value, type: string, operator: ===' => [
+            'target value: integer, value: integer with the same value, type: number, operator: ===' => [
                 100,
                 [new Compare(100, operator: '===')],
             ],
-            'target value: integer, value: lower integer, type: string, operator: !=' => [
+            'target value: integer, value: lower integer, type: number, operator: !=' => [
                 99,
                 [new Compare(100, operator: '!=')],
             ],
-            'target value: integer, value: greater integer, type: string, operator: !=' => [
+            'target value: integer, value: greater integer, type: number, operator: !=' => [
                 101,
                 [new Compare(100, operator: '!=')],
             ],
-            'target value: integer, value: lower integer, type: string, operator: !==' => [
+            'target value: integer, value: lower integer, type: number, operator: !==' => [
                 101,
                 [new Compare(100, operator: '!==')],
             ],
-            'target value: integer, value: greater integer, type: string, operator: !==' => [
+            'target value: integer, value: greater integer, type: number, operator: !==' => [
                 101,
                 [new Compare(100, operator: '!==')],
             ],
-            'target value: integer, value: greater integer, type: string, operator: >' => [
+            'target value: integer, value: greater integer, type: number, operator: >' => [
                 101,
                 [new Compare(100, operator: '>')],
             ],
-            'target value: integer, value: integer with the same value, type: string, operator: >=' => [
+            'target value: integer, value: integer with the same value, type: number, operator: >=' => [
                 100,
                 [new Compare(100, operator: '>=')],
             ],
-            'target value: integer, value: greater integer, type: string, operator: >=' => [
+            'target value: integer, value: greater integer, type: number, operator: >=' => [
                 101,
                 [new Compare(100, operator: '>=')],
             ],
-            'target value: integer, value: lower integer, type: string, operator: <' => [
+            'target value: integer, value: lower integer, type: number, operator: <' => [
                 99,
                 [new Compare(100, operator: '<')],
             ],
-            'target value: integer, value: integer with the same value, type: string, operator: <=' => [
+            'target value: integer, value: integer with the same value, type: number, operator: <=' => [
                 100,
                 [new Compare(100, operator: '<=')],
             ],
-            'target value: integer, value: lower integer, type: string, operator: <=' => [
+            'target value: integer, value: lower integer, type: number, operator: <=' => [
                 99,
                 [new Compare(100, operator: '<=')],
             ],
 
             // Boolean
 
-            'target value: boolean (false), value: boolean (true), type: string, operator: >=' => [
+            'target value: boolean (false), value: boolean (true), type: number, operator: >=' => [
                 true,
                 [new Compare(false, operator: '>=')],
             ],
 
             // Different types for non-strict equality
 
-            'target value: empty string, value: null, type: string, operator: ==' => [
+            'target value: empty string, value: null, type: number, operator: ==' => [
                 null,
                 [new Compare('')],
             ],
-            'target value: integer, value: string integer with the same value, type: string, operator: ==' => [
+            'target value: integer, value: string integer with the same value, type: number, operator: ==' => [
                 '100',
                 [new Compare(100)],
             ],
 
             // Different types for non-strict inequality
 
-            'target value: integer, value: float, type: string, operator: !=' => [
+            'target value: integer, value: float, type: number, operator: !=' => [
                 100.00001,
                 [new Compare(100, operator: '!=')],
             ],
-            'target value: integer, value: boolean, type: string, operator: !=' => [
+            'target value: integer, value: boolean, type: number, operator: !=' => [
                 false,
                 [new Compare(100, operator: '!=')],
             ],
 
             // Different types for strict inequality
 
-            'target value: integer, value: boolean, type: string, operator: !==' => [
+            'target value: integer, value: boolean, type: number, operator: !==' => [
                 false,
                 [new Compare(100, operator: '!==')],
             ],
-            'target value: integer, value: string integer with the same value, type: string, operator: !==' => [
+            'target value: integer, value: string integer with the same value, type: number, operator: !==' => [
                 '100',
                 [new Compare(100, operator: '!==')],
             ],
-            'target value: integer, value: float with the same value, but extra decimal place (0), type: string, operator: !==' => [
+            'target value: integer, value: float with the same value, but extra decimal place (0), type: number, operator: !==' => [
                 100.0,
                 [new Compare(100, operator: '!==')],
             ],
 
             // Target attribute
 
-            'target attribute: array key, target attribute value: integer, attribute value: integer with the same value, type: string, operator: ==' => [
+            'target attribute: array key, target attribute value: integer, attribute value: integer with the same value, type: number, operator: ==' => [
                 ['attribute' => 100, 'number' => 100],
                 ['number' => new Compare(targetAttribute: 'attribute')],
             ],
-            'target attribute: array key, target attribute value: integer, attribute value: lower integer, type: string, operator: <=' => [
+            'target attribute: array key, target attribute value: integer, attribute value: lower integer, type: number, operator: <=' => [
                 ['attribute' => 100, 'number' => 99],
                 ['number' => new Compare(targetAttribute: 'attribute', operator: '<=')],
             ],
-            'target attribute: object property, target attribute value: integer, attribute value: integer with the same value, type: string, operator: ==' => [
+            'target attribute: object property, target attribute value: integer, attribute value: integer with the same value, type: number, operator: ==' => [
                 new class () {
                     public int $attribute = 100;
                     public int $number = 100;
                 },
                 ['number' => new Compare(targetAttribute: 'attribute', operator: '<=')],
             ],
-            'target attribute: custom data set attribute, target attribute value: integer, attribute value: integer with the same value, type: string, operator: ==' => [
+            'target attribute: custom data set attribute, target attribute value: integer, attribute value: integer with the same value, type: number, operator: ==' => [
                 $customDataSet,
                 ['number' => new Compare(targetAttribute: 'attribute', operator: '<=')],
             ],
@@ -810,17 +528,17 @@ final class CompareTest extends RuleTestCase
 
             'target value: integer (0), value: null, type: string, operator: ==' => [
                 null,
-                [new Compare(0)],
+                [new Compare(0, type: CompareType::STRING)],
                 ['' => ['Value must be equal to "0".']],
             ],
 
             // Number / original specific, decimal places, directly provided values
 
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: string, operator: ==' => [
-                '100.50', [new Compare('100.5')], ['' => ['Value must be equal to "100.5".']],
+                '100.50', [new Compare('100.5', type: CompareType::STRING)], ['' => ['Value must be equal to "100.5".']],
             ],
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: string, operator: ===' => [
-                '100.50', [new Compare('100.5', operator: '===')], ['' => ['Value must be equal to "100.5".']],
+                '100.50', [new Compare('100.5', type: CompareType::STRING, operator: '===')], ['' => ['Value must be equal to "100.5".']],
             ],
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: original, operator: ===' => [
                 '100.50', [new Compare('100.5', type: CompareType::ORIGINAL, operator: '===')], ['' => ['Value must be equal to "100.5".']],
@@ -830,12 +548,12 @@ final class CompareTest extends RuleTestCase
 
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: string, operator: ==' => [
                 $stringableFloat,
-                [new Compare($targetStringableFloat)],
+                [new Compare($targetStringableFloat, type: CompareType::STRING)],
                 ['' => ['Value must be equal to "100.5".']],
             ],
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: string, operator: ===' => [
                 $stringableFloat,
-                [new Compare($targetStringableFloat, operator: '===')],
+                [new Compare($targetStringableFloat, type: CompareType::STRING, operator: '===')],
                 ['' => ['Value must be equal to "100.5".']],
             ],
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: original, operator: ==' => [
@@ -853,7 +571,7 @@ final class CompareTest extends RuleTestCase
 
             'target value: human-readable DateTime string, value: greater DateTime string, type: string, operator: >' => [
                 '2022-06-03',
-                [new Compare('June 2nd, 2022', operator: '>')],
+                [new Compare('June 2nd, 2022', type: CompareType::STRING, operator: '>')],
                 ['' => ['Value must be greater than "June 2nd, 2022".']],
             ],
         ];
@@ -870,62 +588,62 @@ final class CompareTest extends RuleTestCase
         $initialData = [
             // Basic
 
-            'target value: integer, value: lower integer, type: string, operator: ==' => [
+            'target value: integer, value: lower integer, type: number, operator: ==' => [
                 99,
                 [new Compare(100)],
                 ['' => [$messageEqual]],
             ],
-            'target value: integer, value: greater integer, type: string, operator: ==' => [
+            'target value: integer, value: greater integer, type: number, operator: ==' => [
                 101,
                 [new Compare(100)],
                 ['' => [$messageEqual]],
             ],
-            'target value: integer, value: lower integer, type: string, operator: ===' => [
+            'target value: integer, value: lower integer, type: number, operator: ===' => [
                 99,
                 [new Compare(100, operator: '===')],
                 ['' => [$messageEqual]],
             ],
-            'target value: integer, value: greater integer, type: string, operator: ===' => [
+            'target value: integer, value: greater integer, type: number, operator: ===' => [
                 101,
                 [new Compare(100, operator: '===')],
                 ['' => [$messageEqual]],
             ],
-            'target value: integer, value: integer with the same value, type: string, operator: !=' => [
+            'target value: integer, value: integer with the same value, type: number, operator: !=' => [
                 100,
                 [new Compare(100, operator: '!=')],
                 ['' => [$messageNotEqual]],
             ],
-            'target value: integer, value: integer with the same value, type: string, operator: !==' => [
+            'target value: integer, value: integer with the same value, type: number, operator: !==' => [
                 100,
                 [new Compare(100, operator: '!==')],
                 ['' => [$messageNotEqual]],
             ],
-            'target value: integer, value: integer with the same value, type: string, operator: >' => [
+            'target value: integer, value: integer with the same value, type: number, operator: >' => [
                 100,
                 [new Compare(100, operator: '>')],
                 ['' => [$messageGreaterThan]],
             ],
-            'target value: integer, value: lower integer, type: string, operator: >' => [
+            'target value: integer, value: lower integer, type: number, operator: >' => [
                 99,
                 [new Compare(100, operator: '>')],
                 ['' => [$messageGreaterThan]],
             ],
-            'target value: integer, value: lower integer, type: string, operator: >=' => [
+            'target value: integer, value: lower integer, type: number, operator: >=' => [
                 99,
                 [new Compare(100, operator: '>=')],
                 ['' => [$messageGreaterOrEqualThan]],
             ],
-            'target value: integer, value: integer with the same value, type: string, operator: <' => [
+            'target value: integer, value: integer with the same value, type: number, operator: <' => [
                 100,
                 [new Compare(100, operator: '<')],
                 ['' => [$messageLessThan]],
             ],
-            'target value: integer, value: greater integer, type: string, operator: <' => [
+            'target value: integer, value: greater integer, type: number, operator: <' => [
                 101,
                 [new Compare(100, operator: '<')],
                 ['' => [$messageLessThan]],
             ],
-            'target value: integer, value: greater integer, type: string, operator: <=' => [
+            'target value: integer, value: greater integer, type: number, operator: <=' => [
                 101,
                 [new Compare(100, operator: '<=')],
                 ['' => [$messageLessOrEqualThan]],
@@ -933,17 +651,17 @@ final class CompareTest extends RuleTestCase
 
             // Different types for strict equality
 
-            'target value: empty string, value: null, type: string, operator: ===' => [
+            'target value: empty string, value: null, type: number, operator: ===' => [
                 null,
                 [new Compare('', operator: '===')],
                 ['' => ['Value must be equal to "".']],
             ],
-            'target value: integer, value: string integer with the same value, type: string, operator: ===' => [
+            'target value: integer, value: string integer with the same value, type: number, operator: ===' => [
                 '100',
                 [new Compare(100, operator: '===')],
                 ['' => [$messageEqual]],
             ],
-            'target value: integer, value: float with the same value, but extra decimal place (0), type: string, operator: ===' => [
+            'target value: integer, value: float with the same value, but extra decimal place (0), type: number, operator: ===' => [
                 100.0,
                 [new Compare(100, operator: '===')],
                 ['' => [$messageEqual]],
@@ -951,12 +669,12 @@ final class CompareTest extends RuleTestCase
 
             // Different types for non-strict inequality
 
-            'target value: integer, value: string integer with the same value, type: string, operator: !=' => [
+            'target value: integer, value: string integer with the same value, type: number, operator: !=' => [
                 '100',
                 [new Compare(100, operator: '!=')],
                 ['' => [$messageNotEqual]],
             ],
-            'target value: integer, value: float with the same value, but extra decimal place (0), type: string, operator: !=' => [
+            'target value: integer, value: float with the same value, but extra decimal place (0), type: number, operator: !=' => [
                 100.0,
                 [new Compare(100, operator: '!=')],
                 ['' => [$messageNotEqual]],
@@ -964,12 +682,12 @@ final class CompareTest extends RuleTestCase
 
             // Target attribute
 
-            'target attribute: array key, target attribute value: string integer, attribute value: integer with the same value, type: string, operator: ===' => [
+            'target attribute: array key, target attribute value: string integer, attribute value: integer with the same value, type: number, operator: ===' => [
                 ['attribute' => '100', 'number' => 100],
                 ['number' => new Compare(null, 'attribute', operator: '===')],
                 ['number' => ['Value must be equal to "attribute".']],
             ],
-            'target attribute: array key, target attribute value: integer, attribute value: greater integer, type: string, operator: <=' => [
+            'target attribute: array key, target attribute value: integer, attribute value: greater integer, type: number, operator: <=' => [
                 ['attribute' => 100, 'number' => 101],
                 ['number' => new Compare(null, 'attribute', operator: '<=')],
                 ['number' => ['Value must be less than or equal to "attribute".']],
@@ -994,8 +712,8 @@ final class CompareTest extends RuleTestCase
     private function extendDataWithDifferentTypes(array $initialData): array
     {
         $dynamicData = [];
-        $mainType = CompareType::STRING;
-        $remainingTypes = [CompareType::ORIGINAL, CompareType::NUMBER];
+        $mainType = CompareType::NUMBER;
+        $remainingTypes = [CompareType::ORIGINAL, CompareType::STRING];
         foreach ($remainingTypes as $type) {
             foreach ($initialData as $key => $item) {
                 $rules = [];

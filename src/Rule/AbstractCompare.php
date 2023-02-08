@@ -129,7 +129,7 @@ abstract class AbstractCompare implements
         private string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
         private string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
         private string|null $message = null,
-        private string $type = CompareType::STRING,
+        private string $type = CompareType::NUMBER,
         private string $operator = '==',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
@@ -247,14 +247,19 @@ abstract class AbstractCompare implements
 
     public function getOptions(): array
     {
-        $messageParameters = [
-            'targetValue' => $this->targetValue,
-            'targetAttribute' => $this->targetAttribute,
-            'targetValueOrAttribute' => $this->targetValue ?? $this->targetAttribute,
-        ];
+        $isTargetValueSimple = $this->targetValue === null || is_scalar($this->targetValue);
 
-        return [
-            'targetValue' => $this->targetValue,
+        if (!$isTargetValueSimple) {
+            $messageParameters = ['targetAttribute' => $this->targetAttribute];
+        } else {
+            $messageParameters = [
+                'targetValue' => $this->targetValue,
+                'targetAttribute' => $this->targetAttribute,
+                'targetValueOrAttribute' => $this->targetAttribute ?? $this->targetValue,
+            ];
+        }
+
+        $options = [
             'targetAttribute' => $this->targetAttribute,
             'incorrectInputMessage' => [
                 'template' => $this->incorrectInputMessage,
@@ -273,6 +278,11 @@ abstract class AbstractCompare implements
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
+        if (!$isTargetValueSimple) {
+            return $options;
+        }
+
+        return array_merge(['targetValue' => $this->targetValue], $options);
     }
 
     public function getHandler(): string
