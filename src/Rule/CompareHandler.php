@@ -62,7 +62,8 @@ final class CompareHandler implements RuleHandlerInterface
             'attribute' => $context->getTranslatedAttribute(),
             'targetValue' => $rule->getTargetValue(),
             'targetAttribute' => $targetAttribute,
-            'targetValueOrAttribute' => isset($targetValue) ? $this->getFormattedValue($targetValue) : $targetAttribute,
+            'targetAttributeValue' => $targetAttribute !== null ? $this->getFormattedValue($targetValue) : null,
+            'targetValueOrAttribute' => $targetAttribute ?? $this->getFormattedValue($targetValue),
             'value' => $this->getFormattedValue($value),
         ]);
     }

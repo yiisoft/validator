@@ -793,14 +793,15 @@ final class CompareTest extends RuleTestCase
                         null,
                         'attribute',
                         message: 'Attribute - {attribute}, target value - {targetValue}, target attribute - ' .
-                        '{targetAttribute}, target value or attribute - {targetValueOrAttribute}, value - {value}.',
+                        '{targetAttribute}, target attribute value - {targetAttributeValue}, target value or ' .
+                        'attribute - {targetValueOrAttribute}, value - {value}.',
                         operator: '===',
                     ),
                 ],
                 [
                     'number' => [
-                        'Attribute - number, target value - , target attribute - attribute, target value or ' .
-                        'attribute - 100, value - 101.',
+                        'Attribute - number, target value - , target attribute - attribute, target attribute value '.
+                        '- 100, target value or attribute - attribute, value - 101.',
                     ],
                 ],
             ],
@@ -966,12 +967,12 @@ final class CompareTest extends RuleTestCase
             'target attribute: array key, target attribute value: string integer, attribute value: integer with the same value, type: string, operator: ===' => [
                 ['attribute' => '100', 'number' => 100],
                 ['number' => new Compare(null, 'attribute', operator: '===')],
-                ['number' => [$messageEqual]],
+                ['number' => ['Value must be equal to "attribute".']],
             ],
             'target attribute: array key, target attribute value: integer, attribute value: greater integer, type: string, operator: <=' => [
                 ['attribute' => 100, 'number' => 101],
                 ['number' => new Compare(null, 'attribute', operator: '<=')],
-                ['number' => [$messageLessOrEqualThan]],
+                ['number' => ['Value must be less than or equal to "attribute".']],
             ],
         ];
 
