@@ -29,7 +29,7 @@ use Yiisoft\Validator\WhenInterface;
 final class LessThan extends AbstractCompare
 {
     /**
-     * @param scalar|null $targetValue The constant value to be less than. When both this property and
+     * @param mixed $targetValue The constant value to be less than. When both this property and
      * {@see $targetAttribute} are set, this property takes precedence.
      * @param string|null $targetAttribute The attribute to be less than. When both this property and {@see $targetValue} are set, the
      * {@see $targetValue} takes precedence.
@@ -68,12 +68,12 @@ final class LessThan extends AbstractCompare
      * @psalm-param WhenType $when
      */
     public function __construct(
-        int|float|string|bool|null $targetValue = null,
+        mixed $targetValue = null,
         string|null $targetAttribute = null,
         string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
         string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
         string|null $message = null,
-        string $type = CompareType::STRING,
+        string $type = CompareType::NUMBER,
         bool|callable|null $skipOnEmpty = false,
         bool $skipOnError = false,
         Closure|null $when = null,

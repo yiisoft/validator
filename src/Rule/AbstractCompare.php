@@ -73,7 +73,7 @@ abstract class AbstractCompare implements
     ];
 
     /**
-     * @param scalar|null $targetValue The constant value to be compared with. When both this property and
+     * @param mixed $targetValue The constant value to be compared with. When both this property and
      * {@see $targetAttribute} are set, this property takes precedence.
      * @param string|null $targetAttribute The name of the attribute to be compared with. When both this property and
      * {@see $targetValue} are set, the {@see $targetValue} takes precedence.

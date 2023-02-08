@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use DateTime;
 use Yiisoft\Validator\Rule\CompareType;
 use Yiisoft\Validator\Rule\LessThanOrEqual;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -55,41 +56,6 @@ final class LessThanOrEqualTest extends RuleTestCase
                             'targetValueOrAttribute' => 1,
                         ],
                     ],
-                    'type' => 'string',
-                    'operator' => '<=',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new LessThanOrEqual(1, type: CompareType::NUMBER),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
                     'type' => 'number',
                     'operator' => '<=',
                     'skipOnEmpty' => false,
@@ -97,78 +63,41 @@ final class LessThanOrEqualTest extends RuleTestCase
                 ],
             ],
             [
-                new LessThanOrEqual(null, 'attribute'),
-                [
-                    'targetValue' => null,
-                    'targetAttribute' => 'attribute',
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'attribute',
-                            'targetValueOrAttribute' => 'attribute',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'attribute',
-                            'targetValueOrAttribute' => 'attribute',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'attribute',
-                            'targetValueOrAttribute' => 'attribute',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '<=',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
                 new LessThanOrEqual(
+                    new DateTime('2023-02-07 12:57:12'),
                     targetAttribute: 'test',
                     incorrectInputMessage: 'Custom message 1.',
                     incorrectDataSetTypeMessage: 'Custom message 2.',
                     message: 'Custom message 3.',
+                    type: CompareType::ORIGINAL,
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                    when: static fn (): bool => true,
                 ),
                 [
-                    'targetValue' => null,
                     'targetAttribute' => 'test',
                     'incorrectInputMessage' => [
                         'template' => 'Custom message 1.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
                         'template' => 'Custom message 2.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
                     'message' => [
                         'template' => 'Custom message 3.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
-                    'type' => 'string',
+                    'type' => 'original',
                     'operator' => '<=',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];

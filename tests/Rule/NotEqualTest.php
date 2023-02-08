@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use DateTime;
 use Yiisoft\Validator\Rule\CompareType;
 use Yiisoft\Validator\Rule\NotEqual;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -55,41 +56,6 @@ final class NotEqualTest extends RuleTestCase
                             'targetValueOrAttribute' => 1,
                         ],
                     ],
-                    'type' => 'string',
-                    'operator' => '!=',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new NotEqual(1, type: CompareType::NUMBER),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must not be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
                     'type' => 'number',
                     'operator' => '!=',
                     'skipOnEmpty' => false,
@@ -97,183 +63,42 @@ final class NotEqualTest extends RuleTestCase
                 ],
             ],
             [
-                new NotEqual('YES'),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must not be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '!=',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new NotEqual('YES', strict: true),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must not be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '!==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new NotEqual('YES', skipOnEmpty: true),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must not be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '!=',
-                    'skipOnEmpty' => true,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new NotEqual(null, 'attribute'),
-                [
-                    'targetValue' => null,
-                    'targetAttribute' => 'attribute',
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'attribute',
-                            'targetValueOrAttribute' => 'attribute',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'attribute',
-                            'targetValueOrAttribute' => 'attribute',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must not be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'attribute',
-                            'targetValueOrAttribute' => 'attribute',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '!=',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
                 new NotEqual(
+                    new DateTime('2023-02-07 12:57:12'),
                     targetAttribute: 'test',
                     incorrectInputMessage: 'Custom message 1.',
                     incorrectDataSetTypeMessage: 'Custom message 2.',
                     message: 'Custom message 3.',
+                    type: CompareType::ORIGINAL,
+                    strict: true,
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                    when: static fn (): bool => true,
                 ),
                 [
-                    'targetValue' => null,
                     'targetAttribute' => 'test',
                     'incorrectInputMessage' => [
                         'template' => 'Custom message 1.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
                         'template' => 'Custom message 2.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
                     'message' => [
                         'template' => 'Custom message 3.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
-                    'type' => 'string',
-                    'operator' => '!=',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'type' => 'original',
+                    'operator' => '!==',
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
