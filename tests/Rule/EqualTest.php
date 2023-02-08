@@ -114,11 +114,9 @@ final class EqualTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $message = 'Value must be equal to "100".';
-
         return [
-            [101, [new Equal(100)], ['' => [$message]]],
-            [101, [new Equal(100, strict: true)], ['' => [$message]]],
+            [101, [new Equal(100)], ['' => ['Value must be equal to "100".']]],
+            ['100', [new Equal(100, strict: true)], ['' => ['Value must be strictly equal to "100".']]],
             'custom error' => [101, [new Equal(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
     }

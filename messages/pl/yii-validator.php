@@ -103,9 +103,11 @@ return [
      * @see NotEqual
      */
     'The allowed types are integer, float, string, boolean and null.' => 'Dozwolone typy to integer, float, string, boolean i null.',
-    'The attribute value returned from a custom data set must have a scalar type or be null.' => 'Wartość atrybutu zwrócona z niestandardowego zestawu danych musi być typu skalarnego.',
+    'The attribute value returned from a custom data set must have a scalar type or be null.' => 'Wartość atrybutu zwrócona z niestandardowego zestawu danych musi być typu skalarnego.', // TODO: Actualize
     'Value must be equal to "{targetValueOrAttribute}".' => 'Wartość musi być równa "{targetValueOrAttribute}".',
+    'Value must be strictly equal to "{targetValueOrAttribute}".' => 'Wartość musi być równa "{targetValueOrAttribute}".', // TODO: Actualize
     'Value must not be equal to "{targetValueOrAttribute}".' => 'Wartość nie może być równa "{targetValueOrAttribute}".',
+    'Value must not be strictly equal to "{targetValueOrAttribute}".' => 'Wartość nie może być równa "{targetValueOrAttribute}".', // TODO: Actualize
     'Value must be greater than "{targetValueOrAttribute}".' => 'Wartość musi być większa niż "{targetValueOrAttribute}".',
     'Value must be greater than or equal to "{targetValueOrAttribute}".' => 'Wartość musi być równa lub większa od "{targetValueOrAttribute}".',
     'Value must be less than "{targetValueOrAttribute}".' => 'Wartość musi być mniejsza niż "{targetValueOrAttribute}".',

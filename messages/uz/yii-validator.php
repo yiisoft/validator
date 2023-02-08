@@ -103,9 +103,11 @@ return [
      * @see NotEqual
      */
     'The allowed types are integer, float, string, boolean and null.' => 'Ruxsat berilgan turlar: integer, float, string, boolean va null.',
-    'The attribute value returned from a custom data set must have a scalar type or be null.' => 'Maʼlumotlar toʻplamidan olingan qiymat skalyar turdagi boʻlishi kerak.',
+    'The attribute value returned from a custom data set must have a scalar type or be null.' => 'Maʼlumotlar toʻplamidan olingan qiymat skalyar turdagi boʻlishi kerak.', // TODO: Actualize
     'Value must be equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"ga teng boʻlishi kerak.',
+    'Value must be strictly equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"ga teng boʻlishi kerak.', // TODO: Actualize
     'Value must not be equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"ga teng boʻlmasligi kerak.',
+    'Value must not be strictly equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"ga teng boʻlmasligi kerak.', // TODO: Actualize
     'Value must be greater than "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"dan katta boʻlishi kerak.',
     'Value must be greater than or equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"dan katta yoki teng boʻlishi kerak.',
     'Value must be less than "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"dan kichik boʻlishi kerak.',
