@@ -9,14 +9,12 @@ use Closure;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Defines validation options to check that the specified value is greater than or equal to another value provided
- * directly or within an attribute.
- *
- * The value being validated with {@see Equal::$targetValue} or {@see Equal::$targetAttribute}, which is set in the
- * constructor.
+ * Defines validation options to check that the specified value is equal to "target" value provided directly
+ * ({@see GreaterThanOrEqual::$targetValue}) or within an attribute ({@see GreaterThanOrEqual::$targetAttribute}).
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
- * strings byte by byte and compare original values as is. See {@see AbstractCompare::$type} for all possible options.
+ * strings byte by byte and compare original values as is. See {@see GreaterThanOrEqual::$type} for all possible
+ * options.
  *
  *  `new GreaterThanOrEqual()` is a shortcut for `new Compare(operator: '>=')`.
  *
@@ -29,7 +27,7 @@ use Yiisoft\Validator\WhenInterface;
 final class GreaterThanOrEqual extends AbstractCompare
 {
     /**
-     * @param mixed $targetValue The constant value to be greater than or equal to. When both this property and
+     * @param mixed $targetValue The value to be greater than or equal to. When both this property and
      * {@see $targetAttribute} are set, this property takes precedence.
      * @param string|null $targetAttribute The attribute to be greater than or equal to. When both this property and
      * {@see $targetValue} are set, the {@see $targetValue} takes precedence.

@@ -9,14 +9,11 @@ use Closure;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Defines validation options to check that the specified value is not equal to another value provided directly or
- * within an attribute.
- *
- * The value being validated with {@see Equal::$targetValue} or {@see Equal::$targetAttribute}, which is set in the
- * constructor.
+ * Defines validation options to check that the specified value is equal to another value provided directly
+ * ({@see NotEqual::$targetValue}) or within an attribute ({@see NotEqual::$targetAttribute}).
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
- * strings byte by byte and compare original values as is. See {@see AbstractCompare::$type} for all possible options.
+ * strings byte by byte and compare original values as is. See {@see NotEqual::$type} for all possible options.
  *
  * - `new NotEqual()` is a shortcut for `new Compare(operator: '!=')`.
  * - `new NotEqual(strict:true)` is a shortcut for `new Compare(operator: '!==')`.
@@ -30,9 +27,9 @@ use Yiisoft\Validator\WhenInterface;
 final class NotEqual extends AbstractCompare
 {
     /**
-     * @param mixed $targetValue The constant value to not be equal to. When both this property and
-     * {@see $targetAttribute} are set, this property takes precedence.
-     * @param string|null $targetAttribute The constant value to not be equal to. When both this property and
+     * @param mixed $targetValue The value to not be equal to. When both this property and {@see $targetAttribute} are
+     * set, this property takes precedence.
+     * @param string|null $targetAttribute The attribute to not be equal to. When both this property and
      * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *

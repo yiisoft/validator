@@ -20,8 +20,8 @@ use function in_array;
 /**
  * Abstract base for all the comparison validation rules.
  *
- * The value being compared with {@see AbstractCompare::$targetValue} or {@see AbstractCompare::$targetAttribute}, which
- * is set in the constructor.
+ * The validated value is compared with {@see AbstractCompare::$targetValue} or
+ * {@see AbstractCompare::$targetAttribute}.
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
  * strings byte by byte and compare original values as is. See {@see AbstractCompare::$type} for all possible options.
@@ -72,8 +72,8 @@ abstract class AbstractCompare implements
     ];
 
     /**
-     * @param mixed $targetValue The constant value to be compared with. When both this property and
-     * {@see $targetAttribute} are set, this property takes precedence.
+     * @param mixed $targetValue The value to be compared with. When both this property and {@see $targetAttribute} are
+     * set, this property takes precedence.
      * @param string|null $targetAttribute The name of the attribute to be compared with. When both this property and
      * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
