@@ -14,7 +14,7 @@ use function gettype;
 use function in_array;
 
 /**
- * Compares the specified value with another value.
+ * Compares the specified value with "target" value provided directly or within an attribute.
  *
  * @see AbstractCompare
  * @see Equal
@@ -91,8 +91,8 @@ final class CompareHandler implements RuleHandlerInterface
      * @param string $type The type of the values being compared.
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
-     * @param mixed $value The value being compared.
-     * @param mixed $targetValue Another value being compared.
+     * @param mixed $value The validated value.
+     * @param mixed $targetValue "Target" value set in rule options.
      *
      * @return bool Whether the result of comparison using the specified operator is true.
      */

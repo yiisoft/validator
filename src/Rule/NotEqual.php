@@ -9,7 +9,7 @@ use Closure;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Defines validation options to check that the specified value is equal to another value provided directly
+ * Defines validation options to check that the specified value is equal to "target" value provided directly
  * ({@see NotEqual::$targetValue}) or within an attribute ({@see NotEqual::$targetAttribute}).
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
