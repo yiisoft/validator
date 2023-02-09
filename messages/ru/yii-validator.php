@@ -102,8 +102,8 @@ return [
      * @see LessThanOrEqual
      * @see NotEqual
      */
-    'The allowed types are integer, float, string, boolean and null.' => 'Разрешённые типы: integer, float, string, boolean и null.',
-    'The attribute value returned from a custom data set must have a scalar type or be null.' => 'Значение, получаемое из набора данных, должно иметь скалярный тип или быть null.',
+    'The allowed types are integer, float, string, boolean, null and object implementing \Stringable interface.' => 'Разрешённые типы: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable.',
+    'The attribute value returned from a custom data set must have one of the following types: integer, float, string, boolean, null or an object implementing \Stringable interface.' => 'Значение, получаемое из пользовательского набора данных, должно иметь один из следующих типов: integer, float, string, bool, null или объект, реализующий интерфейс \Stringable.',
     'Value must be equal to "{targetValueOrAttribute}".' => 'Значение должно быть равно «{targetValueOrAttribute}».',
     'Value must be strictly equal to "{targetValueOrAttribute}".' => 'Значение должно быть строго равно «{targetValueOrAttribute}».',
     'Value must not be equal to "{targetValueOrAttribute}".' => 'Значение не должно быть равно «{targetValueOrAttribute}».',
