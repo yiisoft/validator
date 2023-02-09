@@ -41,6 +41,7 @@ final class CompareHandler implements RuleHandlerInterface
             ]);
         }
 
+        /** @var mixed $targetValue */
         $targetValue = $rule->getTargetValue();
         $targetAttribute = $rule->getTargetAttribute();
 
@@ -60,7 +61,7 @@ final class CompareHandler implements RuleHandlerInterface
 
         return (new Result())->addError($rule->getMessage(), [
             'attribute' => $context->getTranslatedAttribute(),
-            'targetValue' => $rule->getTargetValue(),
+            'targetValue' => $this->getFormattedValue($rule->getTargetValue()),
             'targetAttribute' => $targetAttribute,
             'targetAttributeValue' => $targetAttribute !== null ? $this->getFormattedValue($targetValue) : null,
             'targetValueOrAttribute' => $targetAttribute ?? $this->getFormattedValue($targetValue),
@@ -68,19 +69,19 @@ final class CompareHandler implements RuleHandlerInterface
         ]);
     }
 
-    private function isInputCorrect(AbstractCompare $rule, mixed $value)
+    private function isInputCorrect(AbstractCompare $rule, mixed $value): bool
     {
-        return $rule->getType() !== CompareType::ORIGINAL ? $this->isValueSimple($value) : true;
+        return $rule->getType() !== CompareType::ORIGINAL ? $this->isValueAllowedForTypeCasting($value) : true;
     }
 
-    private function isValueSimple(mixed $value): bool
+    private function isValueAllowedForTypeCasting(mixed $value): bool
     {
         return $value === null || is_scalar($value) || $value instanceof Stringable;
     }
 
-    private function getFormattedValue(mixed $value): int|float|string|Stringable|bool|null
+    private function getFormattedValue(mixed $value): int|float|string|bool|null
     {
-        return $this->isValueSimple($value) ? $value : get_debug_type($value);
+        return $value === null || is_scalar($value) ? $value : get_debug_type($value);
     }
 
     /**
@@ -143,7 +144,7 @@ final class CompareHandler implements RuleHandlerInterface
         return abs($value - $targetValue) < PHP_FLOAT_EPSILON;
     }
 
-    private function prepareNumber(int|float|string|Stringable|bool|null $number): float
+    private function prepareNumber(mixed $number): float
     {
         if ($number instanceof Stringable) {
             $number = (string) $number;
