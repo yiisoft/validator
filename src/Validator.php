@@ -86,6 +86,9 @@ final class Validator implements ValidatorInterface
         ?ValidationContext $context = null
     ): Result {
         $dataSet = DataSetNormalizer::normalize($data);
+        /** @psalm-suppress MixedAssignment */
+        $originalData = $dataSet instanceof DataWrapperInterface ? $dataSet->getSource() : $data;
+
         $rules = RulesNormalizer::normalize(
             $rules,
             $dataSet,
@@ -107,7 +110,7 @@ final class Validator implements ValidatorInterface
 
             if (is_int($attribute)) {
                 /** @psalm-suppress MixedAssignment */
-                $validatedData = $dataSet instanceof DataWrapperInterface ? $dataSet->getSource() : $data;
+                $validatedData = $originalData;
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, $dataSet->getData());
                 $context->setAttribute(null);
             } else {
@@ -142,8 +145,8 @@ final class Validator implements ValidatorInterface
             }
         }
 
-        if ($dataSet instanceof PostValidationHookInterface) {
-            $dataSet->processValidationResult($compoundResult);
+        if ($originalData instanceof PostValidationHookInterface) {
+            $originalData->processValidationResult($compoundResult);
         }
 
         return $compoundResult;
