@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests\Support\Data;
 use Yiisoft\Validator\PostValidationHookInterface;
 use Yiisoft\Validator\Result;
 
-final class ObjectWithPostValidationHook implements PostValidationHookInterface
+final class DatasetWithPostValidationHook implements PostValidationHookInterface
 {
     public static $hookCalled = false;
 
