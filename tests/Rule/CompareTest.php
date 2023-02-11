@@ -273,15 +273,15 @@ final class CompareTest extends RuleTestCase
 
             'target value: object, value: similar object in a different instance, type: original, operator: ==' => [
                 new stdClass(),
-                [new Compare(new stdClass(), type: CompareType::ORIGINAL)]
+                [new Compare(new stdClass(), type: CompareType::ORIGINAL)],
             ],
             'target value: object, value: the same object, type: original, operator: ===' => [
                 $object,
-                [new Compare($object, type: CompareType::ORIGINAL, operator: '===')]
+                [new Compare($object, type: CompareType::ORIGINAL, operator: '===')],
             ],
             'target value: object, value: similar object but with different property type, type: original, operator: ===' => [
                 $objectWithDifferentPropertyType,
-                [new Compare($object, type: CompareType::ORIGINAL)]
+                [new Compare($object, type: CompareType::ORIGINAL)],
             ],
 
             // Original specific, arrays
