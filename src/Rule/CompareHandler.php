@@ -34,7 +34,7 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-        if (!$this->isInputCorrect($rule, $value)) {
+        if (!$this->isInputCorrect($rule->getType(), $value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
@@ -48,7 +48,7 @@ final class CompareHandler implements RuleHandlerInterface
         if ($targetValue === null && $targetAttribute !== null) {
             /** @var mixed $targetValue */
             $targetValue = $context->getDataSet()->getAttributeValue($targetAttribute);
-            if (!$this->isInputCorrect($rule, $targetValue)) {
+            if (!$this->isInputCorrect($rule->getType(), $targetValue)) {
                 return $result->addError($rule->getIncorrectDataSetTypeMessage(), [
                     'type' => get_debug_type($targetValue),
                 ]);
@@ -61,25 +61,26 @@ final class CompareHandler implements RuleHandlerInterface
 
         return (new Result())->addError($rule->getMessage(), [
             'attribute' => $context->getTranslatedAttribute(),
-            'targetValue' => $this->getFormattedValue($rule->getTargetValue()),
+            'targetValue' => $this->getFormattedValue($rule->getType(), $rule->getTargetValue()),
             'targetAttribute' => $targetAttribute,
-            'targetAttributeValue' => $targetAttribute !== null ? $this->getFormattedValue($targetValue) : null,
-            'targetValueOrAttribute' => $targetAttribute ?? $this->getFormattedValue($targetValue),
-            'value' => $this->getFormattedValue($value),
+            'targetAttributeValue' => $targetAttribute !== null ? $this->getFormattedValue($rule->getType(), $targetValue) : null,
+            'targetValueOrAttribute' => $targetAttribute ?? $this->getFormattedValue($rule->getType(), $targetValue),
+            'value' => $this->getFormattedValue($rule->getType(), $value),
         ]);
     }
 
     /**
      * Checks whether the validated value has correct type depending on selected {@see AbstractCompare::$type}.
      *
-     * @param AbstractCompare $rule The rule used for comparison.
+     * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
+     * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      * @param mixed $value The validated value.
      *
      * @return bool `true` if value is correct and `false` otherwise.
      */
-    private function isInputCorrect(AbstractCompare $rule, mixed $value): bool
+    private function isInputCorrect(string $type, mixed $value): bool
     {
-        return $rule->getType() !== CompareType::ORIGINAL ? $this->isValueAllowedForTypeCasting($value) : true;
+        return $type !== CompareType::ORIGINAL ? $this->isValueAllowedForTypeCasting($value) : true;
     }
 
     /**
@@ -98,17 +99,23 @@ final class CompareHandler implements RuleHandlerInterface
     /**
      * Gets representation of the value for using with error parameter.
      *
+     * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
+     * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      * @param mixed $value The мalidated value.
      *
      * @return scalar|null Formatted value.
      */
-    private function getFormattedValue(mixed $value): int|float|string|bool|null
+    private function getFormattedValue(string $type, mixed $value): int|float|string|bool|null
     {
         if ($value === null || is_scalar($value)) {
             return $value;
         }
 
-        return $value instanceof Stringable ? (string) $value : get_debug_type($value);
+        if ($value instanceof Stringable && $type !== CompareType::ORIGINAL) {
+            return (string) $value;
+        }
+
+        return get_debug_type($value);
     }
 
     /**
@@ -152,6 +159,7 @@ final class CompareHandler implements RuleHandlerInterface
      * handles strict comparison before type casting and takes edge cases for float numbers into account.
      *
      * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
+     * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      * @param mixed $value The validated value.
      * @param mixed $targetValue "Target" value set in rule options.
      * @param bool $strict Whether the values must be equal (when set to `false`, default) / strictly equal (when set to

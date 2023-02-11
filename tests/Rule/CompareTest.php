@@ -671,12 +671,12 @@ final class CompareTest extends RuleTestCase
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: original, operator: ==' => [
                 $stringableFloat,
                 [new Compare($targetStringableFloat, type: CompareType::ORIGINAL)],
-                ['' => ['Value must be equal to "100.5".']],
+                ['' => ['Value must be equal to "Stringable@anonymous".']],
             ],
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: original, operator: ===' => [
                 $stringableFloat,
                 [new Compare($targetStringableFloat, type: CompareType::ORIGINAL, operator: '===')],
-                ['' => ['Value must be strictly equal to "100.5".']],
+                ['' => ['Value must be strictly equal to "Stringable@anonymous".']],
             ],
 
             // String / original specific, character order, directly provided values
@@ -697,7 +697,7 @@ final class CompareTest extends RuleTestCase
             'target value: stringable uuidv4, value: greater stringable uuidv4, type: original, operator: >' => [
                 $stringableUuid,
                 [new Compare($targetStringableUuid, type: CompareType::ORIGINAL, operator: '>')],
-                ['' => ['Value must be greater than "3b98a689-7d49-48bb-8741-7e27f220b69a".']],
+                ['' => ['Value must be greater than "Stringable@anonymous".']],
             ],
 
             // Original specific, datetime
