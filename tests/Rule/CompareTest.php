@@ -250,7 +250,7 @@ final class CompareTest extends RuleTestCase
                 $dateTime,
                 [new Compare($dateTime, type: CompareType::ORIGINAL)],
             ],
-            'target value: DateTime object, value: the same DateTime object, type: default, operator: ===' => [
+            'target value: Unix Timestamp string, value: DateTime object with the same value, type: number, operator: ==' => [
                 $dateTime->format('U'),
                 [new Compare($dateTime)],
             ],
