@@ -21,7 +21,7 @@ use function in_array;
  * Abstract base for all the comparison validation rules.
  *
  * The validated value is compared with {@see AbstractCompare::$targetValue} or
- * {@see AbstractCompare::$targetAttribute}.
+ * {@see AbstractCompare::$targetAttribute} value of validated data set.
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
  * strings byte by byte and compare original values as is. See {@see AbstractCompare::$type} for all possible options.
