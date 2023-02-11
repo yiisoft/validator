@@ -9,25 +9,10 @@ use Yiisoft\Validator\Result;
 
 final class ObjectWithPostValidationHook implements PostValidationHookInterface
 {
-    public static $hookCalled = false;
-
-    public function getAttributeValue(string $attribute): mixed
-    {
-        return null;
-    }
-
-    public function getData(): ?array
-    {
-        return null;
-    }
-
-    public function hasAttribute(string $attribute): bool
-    {
-        return false;
-    }
+    public bool $hookCalled = false;
 
     public function processValidationResult(Result $result): void
     {
-        self::$hookCalled = true;
+        $this->hookCalled = true;
     }
 }

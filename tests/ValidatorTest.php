@@ -35,6 +35,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithAttributesOnly;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
+use Yiisoft\Validator\Tests\Support\Data\DataSetWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\SimpleDto;
@@ -47,11 +48,6 @@ use Yiisoft\Validator\ValidatorInterface;
 
 class ValidatorTest extends TestCase
 {
-    public function setUp(): void
-    {
-        ObjectWithPostValidationHook::$hookCalled = false;
-    }
-
     public function testBase(): void
     {
         $validator = new Validator();
@@ -1248,14 +1244,26 @@ class ValidatorTest extends TestCase
         $this->assertTrue($result->isValid());
     }
 
-    public function testDataWithPostValidationHook(): void
+    public function testDataSetWithPostValidationHook(): void
     {
         $validator = new Validator();
-        $this->assertFalse(ObjectWithPostValidationHook::$hookCalled);
+        $dataSet = new DataSetWithPostValidationHook();
 
-        $result = $validator->validate(new ObjectWithPostValidationHook(), ['called' => new BooleanValue()]);
-        $this->assertFalse($result->isValid());
-        $this->assertTrue(ObjectWithPostValidationHook::$hookCalled);
+        $result = $validator->validate($dataSet);
+
+        $this->assertTrue($result->isValid());
+        $this->assertTrue($dataSet->hookCalled);
+    }
+
+    public function testObjectWithPostValidationHook(): void
+    {
+        $validator = new Validator();
+        $object = new ObjectWithPostValidationHook();
+
+        $result = $validator->validate($object);
+
+        $this->assertTrue($result->isValid());
+        $this->assertTrue($object->hookCalled);
     }
 
     public function testSkippingRuleInPreValidate(): void

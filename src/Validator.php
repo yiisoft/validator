@@ -86,6 +86,9 @@ final class Validator implements ValidatorInterface
         ?ValidationContext $context = null
     ): Result {
         $dataSet = DataSetNormalizer::normalize($data);
+        /** @psalm-suppress MixedAssignment */
+        $originalData = $dataSet instanceof DataWrapperInterface ? $dataSet->getSource() : $data;
+
         $rules = RulesNormalizer::normalize(
             $rules,
             $dataSet,
@@ -101,13 +104,11 @@ final class Validator implements ValidatorInterface
             ->setContextDataOnce($this, $defaultAttributeTranslator, $data)
             ->setDataSet($dataSet);
 
-        $results = [];
+        $result = new Result();
         foreach ($rules as $attribute => $attributeRules) {
-            $result = new Result();
-
             if (is_int($attribute)) {
                 /** @psalm-suppress MixedAssignment */
-                $validatedData = $dataSet instanceof DataWrapperInterface ? $dataSet->getSource() : $data;
+                $validatedData = $originalData;
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, $dataSet->getData());
                 $context->setAttribute(null);
             } else {
@@ -120,17 +121,7 @@ final class Validator implements ValidatorInterface
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
 
             foreach ($tempResult->getErrors() as $error) {
-                $result->addError($error->getMessage(), $error->getParameters(), $error->getValuePath());
-            }
-
-            $results[] = $result;
-        }
-
-        $compoundResult = new Result();
-
-        foreach ($results as $result) {
-            foreach ($result->getErrors() as $error) {
-                $compoundResult->addError(
+                $result->addError(
                     $this->translator->translate(
                         $error->getMessage(),
                         $error->getParameters(),
@@ -142,11 +133,11 @@ final class Validator implements ValidatorInterface
             }
         }
 
-        if ($dataSet instanceof PostValidationHookInterface) {
-            $dataSet->processValidationResult($compoundResult);
+        if ($originalData instanceof PostValidationHookInterface) {
+            $originalData->processValidationResult($result);
         }
 
-        return $compoundResult;
+        return $result;
     }
 
     /**
