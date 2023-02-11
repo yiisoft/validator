@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use DateTimeInterface;
 use Stringable;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
@@ -94,7 +95,9 @@ final class CompareHandler implements RuleHandlerInterface
      */
     private function isValueAllowedForTypeCasting(mixed $value): bool
     {
-        return $value === null || is_scalar($value) || $value instanceof Stringable;
+        return $value === null || is_scalar(
+                $value
+            ) || $value instanceof Stringable || $value instanceof DateTimeInterface;
     }
 
     /**
@@ -217,6 +220,8 @@ final class CompareHandler implements RuleHandlerInterface
     {
         if ($number instanceof Stringable) {
             $number = (string) $number;
+        } elseif ($number instanceof DateTimeInterface) {
+            $number = $number->format('U');
         }
 
         return (float) $number;
