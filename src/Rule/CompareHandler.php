@@ -96,8 +96,8 @@ final class CompareHandler implements RuleHandlerInterface
     private function isValueAllowedForTypeCasting(mixed $value): bool
     {
         return $value === null || is_scalar(
-                $value
-            ) || $value instanceof Stringable || $value instanceof DateTimeInterface;
+            $value
+        ) || $value instanceof Stringable || $value instanceof DateTimeInterface;
     }
 
     /**
