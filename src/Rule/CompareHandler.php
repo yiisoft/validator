@@ -74,6 +74,7 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
+     *
      * @param mixed $value The validated value.
      *
      * @return bool `true` if value is correct and `false` otherwise.
@@ -101,6 +102,7 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
+     *
      * @param mixed $value The мalidated value.
      *
      * @return scalar|null Formatted value.
@@ -160,6 +162,7 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
+     *
      * @param mixed $value The validated value.
      * @param mixed $targetValue "Target" value set in rule options.
      * @param bool $strict Whether the values must be equal (when set to `false`, default) / strictly equal (when set to
