@@ -55,7 +55,7 @@ final class CompareHandler implements RuleHandlerInterface
             }
         }
 
-        if ($this->compareValues($rule->getOperator(), $rule->getType(), $value, $targetValue)) {
+        if ($this->compareValues($rule->getType(), $rule->getOperator(), $value, $targetValue)) {
             return new Result();
         }
 
