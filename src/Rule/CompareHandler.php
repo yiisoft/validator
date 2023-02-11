@@ -107,7 +107,7 @@ final class CompareHandler implements RuleHandlerInterface
      * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
-     * @param mixed $value The мalidated value.
+     * @param mixed $value The validated value.
      *
      * @return scalar|null Formatted value.
      */
