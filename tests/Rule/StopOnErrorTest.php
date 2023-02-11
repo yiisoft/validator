@@ -6,12 +6,14 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\StopOnError;
 use Yiisoft\Validator\Rule\StopOnErrorHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Validator;
 
 final class StopOnErrorTest extends RuleTestCase
 {
@@ -32,6 +34,7 @@ final class StopOnErrorTest extends RuleTestCase
                 new StopOnError([new Length(min: 10)]),
                 [
                     'skipOnEmpty' => false,
+                    'skipOnError' => false,
                     'rules' => [
                         [
                             'length',
@@ -91,7 +94,7 @@ final class StopOnErrorTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         return [
-            'case1' => [
+            'basic' => [
                 'hello',
                 [
                     new StopOnError([
@@ -101,7 +104,7 @@ final class StopOnErrorTest extends RuleTestCase
                 ],
                 ['' => ['This value must contain at least 10 characters.']],
             ],
-            'case2' => [
+            'basic, different order' => [
                 'hello',
                 [
                     new StopOnError([
@@ -111,7 +114,7 @@ final class StopOnErrorTest extends RuleTestCase
                 ],
                 ['' => ['This value must contain at most 1 character.']],
             ],
-            'case3' => [
+            'combined with other top level rules' => [
                 'hello',
                 [
                     new Number(),
@@ -124,8 +127,75 @@ final class StopOnErrorTest extends RuleTestCase
                 [
                     '' => [
                         'Value must be a number.',
+                        'This value must contain at most 1 character.',
                         'This value must contain at least 7 characters.',
                     ],
+                ],
+            ],
+            'combined with other top level rules, skipOnError: true' => [
+                'hello',
+                [
+                    new Number(),
+                    new StopOnError(
+                        [
+                            new Length(max: 1),
+                            new Length(min: 10),
+                        ],
+                        skipOnError: true,
+                    ),
+                    new Length(min: 7),
+                ],
+                [
+                    '' => [
+                        'Value must be a number.',
+                        'This value must contain at least 7 characters.',
+                    ],
+                ],
+            ],
+            'attributes, multiple StopOnError rules combined with other top level rules' => [
+                [],
+                [
+                    'a' => new Required(),
+                    'b' => new StopOnError([
+                        new Required(),
+                        new Number(min: 7),
+                    ]),
+                    'c' => new StopOnError([
+                        new Required(),
+                        new Number(min: 42),
+                    ]),
+                    'd' => new Required(),
+                ],
+                [
+                    'a' => ['Value not passed.'],
+                    'b' => ['Value cannot be blank.'],
+                    'c' => ['Value cannot be blank.'],
+                    'd' => ['Value not passed.'],
+                ],
+            ],
+            'attributes, multiple StopOnError rules combined with other top level rules, skipOnError: true' => [
+                [],
+                [
+                    'a' => new Required(),
+                    'b' => new StopOnError(
+                        [
+                            new Required(),
+                            new Number(min: 7),
+                        ],
+                        skipOnError: true,
+                    ),
+                    'c' => new StopOnError(
+                        [
+                            new Required(),
+                            new Number(min: 42),
+                        ],
+                        skipOnError: true,
+                    ),
+                    'd' => new Required(),
+                ],
+                [
+                    'a' => ['Value not passed.'],
+                    'd' => ['Value not passed.'],
                 ],
             ],
         ];

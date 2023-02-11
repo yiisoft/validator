@@ -9,6 +9,7 @@ use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Helper\RulesDumper;
@@ -57,11 +58,13 @@ use Yiisoft\Validator\WhenInterface;
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class StopOnError implements
     RuleWithOptionsInterface,
-    WhenInterface,
     SkipOnEmptyInterface,
+    SkipOnErrorInterface,
+    WhenInterface,
     AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
     use WhenTrait;
 
     /**
@@ -70,6 +73,8 @@ final class StopOnError implements
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this `StopOnError` rule with all defined {@see $rules} if
      * the validated value is empty / not passed. See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this `StopOnError` rule with all defined {@see $rules} if any of the
+     * previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying this `StopOnError` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
      * @psalm-param WhenType $when
@@ -77,6 +82,7 @@ final class StopOnError implements
     public function __construct(
         private iterable $rules,
         private mixed $skipOnEmpty = null,
+        private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
     }
@@ -100,12 +106,14 @@ final class StopOnError implements
 
     #[ArrayShape([
         'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
         'rules' => 'array|null',
     ])]
     public function getOptions(): array
     {
         return [
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
+            'skipOnError' => $this->skipOnError,
             'rules' => $this->dumpRulesAsArray(),
         ];
     }
