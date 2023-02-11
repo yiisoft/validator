@@ -71,8 +71,10 @@ final class CompareHandler implements RuleHandlerInterface
 
     /**
      * Checks whether the validated value has correct type depending on selected {@see AbstractCompare::$type}.
+     *
      * @param AbstractCompare $rule The rule used for comparison.
      * @param mixed $value The validated value.
+     *
      * @return bool `true` if value is correct and `false` otherwise.
      */
     private function isInputCorrect(AbstractCompare $rule, mixed $value): bool
@@ -83,7 +85,9 @@ final class CompareHandler implements RuleHandlerInterface
     /**
      * Checks whether the validated value is allowed for types that require type casting - {@see CompareType::NUMBER}
      * and {@see CompareType::STRING}.
+     *
      * @param mixed $value The Validated value.
+     *
      * @return bool `true` if value is allowed and `false` otherwise.
      */
     private function isValueAllowedForTypeCasting(mixed $value): bool
@@ -95,6 +99,7 @@ final class CompareHandler implements RuleHandlerInterface
      * Gets representation of the value for using with error parameter.
      *
      * @param mixed $value The мalidated value.
+     *
      * @return scalar|null Formatted value.
      */
     private function getFormattedValue(mixed $value): int|float|string|bool|null
@@ -151,6 +156,7 @@ final class CompareHandler implements RuleHandlerInterface
      * @param mixed $targetValue "Target" value set in rule options.
      * @param bool $strict Whether the values must be equal (when set to `false`, default) / strictly equal (when set to
      * `true`).
+     *
      * @return bool `true` if values are equal and `false` otherwise.
      */
     private function checkValuesAreEqual(string $type, mixed $value, mixed $targetValue, bool $strict = false): bool
@@ -178,7 +184,9 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @param float $value The validated number.
      * @param float $targetValue "Target" number set in rule options.
+     *
      * @return bool `true` if numbers are equal and `false` otherwise.
+     *
      * @link https://floating-point-gui.de/
      */
     private function checkFloatsAreEqual(float $value, float $targetValue): bool
@@ -191,6 +199,7 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @param mixed $number Raw number. Can be within an object implementing {@see Stringable} interface or other
      * primitive type, such as `int`, `float`, `string`.
+     *
      * @return float Float number ready for comparison.
      */
     private function normalizeNumber(mixed $number): float
