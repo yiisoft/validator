@@ -19,6 +19,8 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
+use Yiisoft\Validator\Tests\Support\Data\CompareObject;
+
 use function is_string;
 
 final class CompareTest extends RuleTestCase
@@ -162,12 +164,8 @@ final class CompareTest extends RuleTestCase
             }
         };
         $dateTime = new DateTime('2023-02-07 12:57:12');
-        $object = new stdClass();
-        $object->a = 1;
-        $object->b = 2;
-        $objectWithDifferentPropertyType = new stdClass();
-        $objectWithDifferentPropertyType->a = 1;
-        $objectWithDifferentPropertyType->b = '2';
+        $object = new CompareObject(a: 1, b: 2);
+        $objectWithDifferentPropertyType = new CompareObject(a: 1, b: '2');
         $array = [1, 2];
 
         return [
@@ -235,15 +233,11 @@ final class CompareTest extends RuleTestCase
                 [new Compare('a', type: CompareType::ORIGINAL, operator: '>')],
             ],
 
-            // String / original specific, character order, values provided via stringable objects
+            // String specific, character order, values provided via stringable objects
 
             'target value: stringable uuidv4, value: greater stringable uuidv4, type: string, operator: >' => [
                 $stringableUuid,
                 [new Compare($targetStringableUuid, type: CompareType::STRING, operator: '>')],
-            ],
-            'target value: stringable uuidv4, value: greater stringable uuidv4, type: original, operator: >' => [
-                $stringableUuid,
-                [new Compare($targetStringableUuid, type: CompareType::ORIGINAL, operator: '>')],
             ],
 
             // Original specific, datetime
@@ -322,6 +316,9 @@ final class CompareTest extends RuleTestCase
             {
                 return true;
             }
+        };
+        $subFloatFromInt = static function (int $value1, float $value2): int {
+            return $value1 - (int) $value2;
         };
         $initialData = [
             // Basic
@@ -419,6 +416,29 @@ final class CompareTest extends RuleTestCase
                 [new Compare(100, operator: '!==')],
             ],
 
+            // Large integers
+
+            'target value: string with large integer, value: string with the same integer, type: number, operator: ===' => [
+                PHP_INT_MAX . '0',
+                [new Compare(PHP_INT_MAX . '0', operator: '===')],
+            ],
+            'target value: string with large integer, value: string with greater integer, type: number, operator: >' => [
+                PHP_INT_MAX . '0',
+                [new Compare('-' . PHP_INT_MAX . '12', operator: '>')],
+            ],
+            'target value: large integer in scientific notation, value: greater integer, type: number, operator: ===' => [
+                4.5e19,
+                [new Compare(4.5e19, operator: '===')],
+            ],
+            'target value: large integer in scientific notation, value: greater integer, type: number, operator: >' => [
+                4.5e20,
+                [new Compare(-4.5e19, operator: '>')],
+            ],
+            'target value: integer, value: the same integer as expression result, type: number, operator: ===' => [
+                $subFloatFromInt(1234567890, 1234567890),
+                [new Compare(0, operator: '===')],
+            ],
+
             // Target attribute
 
             'target attribute: array key, target attribute value: integer, attribute value: integer with the same value, type: number, operator: ==' => [
@@ -489,15 +509,21 @@ final class CompareTest extends RuleTestCase
                 return '100.50';
             }
         };
-        $object = new stdClass();
-        $object->a = 1;
-        $object->b = 2;
-        $objectWithDifferentPropertyValue = new stdClass();
-        $objectWithDifferentPropertyValue->a = 1;
-        $objectWithDifferentPropertyValue->b = 3;
-        $objectWithDifferentPropertyType = new stdClass();
-        $objectWithDifferentPropertyType->a = 1;
-        $objectWithDifferentPropertyType->b = 3;
+        $targetStringableUuid = new class () implements Stringable {
+            public function __toString(): string
+            {
+                return '3b98a689-7d49-48bb-8741-7e27f220b69a';
+            }
+        };
+        $stringableUuid = new class () implements Stringable {
+            public function __toString(): string
+            {
+                return 'd62f2b3f-707f-451a-8819-046ff8436a4f';
+            }
+        };
+        $object = new CompareObject(a: 1, b: 2);
+        $objectWithDifferentPropertyValue = new CompareObject(a: 1, b: 3);
+        $objectWithDifferentPropertyType = new CompareObject(a: 1, b: '2');
         $array = [1, 2];
         $reversedArray = [2, 1];
 
@@ -653,6 +679,27 @@ final class CompareTest extends RuleTestCase
                 ['' => ['Value must be strictly equal to "100.5".']],
             ],
 
+            // String / original specific, character order, directly provided values
+
+            'target value: character, value: character located further within alphabet, type: number, operator: >' => [
+                'b',
+                [new Compare('a', type: CompareType::NUMBER, operator: '>')],
+                ['' => ['Value must be greater than "a".']],
+            ],
+
+            // String specific, character order, values provided via stringable objects
+
+            'target value: stringable uuidv4, value: greater stringable uuidv4, type: number, operator: >' => [
+                $stringableUuid,
+                [new Compare($targetStringableUuid, type: CompareType::NUMBER, operator: '>')],
+                ['' => ['Value must be greater than "3b98a689-7d49-48bb-8741-7e27f220b69a".']],
+            ],
+            'target value: stringable uuidv4, value: greater stringable uuidv4, type: original, operator: >' => [
+                $stringableUuid,
+                [new Compare($targetStringableUuid, type: CompareType::ORIGINAL, operator: '>')],
+                ['' => ['Value must be greater than "3b98a689-7d49-48bb-8741-7e27f220b69a".']],
+            ],
+
             // Original specific, datetime
 
             'target value: human-readable DateTime string, value: greater DateTime string, type: string, operator: >' => [
@@ -671,17 +718,17 @@ final class CompareTest extends RuleTestCase
             'target value: object, value: similar object with different property value, type: original, operator: ==' => [
                 $objectWithDifferentPropertyValue,
                 [new Compare($object, type: CompareType::ORIGINAL)],
-                ['' => ['Value must be equal to "stdClass".']],
+                ['' => [sprintf('Value must be equal to "%s".', CompareObject::class)]],
             ],
             'target value: object, value: similar object with different property value, type: original, operator: ===' => [
                 $objectWithDifferentPropertyValue,
                 [new Compare($object, type: CompareType::ORIGINAL, operator: '===')],
-                ['' => ['Value must be strictly equal to "stdClass".']],
+                ['' => [sprintf('Value must be strictly equal to "%s".', CompareObject::class)]],
             ],
             'target value: object, value: similar object but with different property type, type: original, operator: ===' => [
                 $objectWithDifferentPropertyType,
                 [new Compare($object, type: CompareType::ORIGINAL, operator: '===')],
-                ['' => ['Value must be strictly equal to "stdClass".']],
+                ['' => [sprintf('Value must be strictly equal to "%s".', CompareObject::class)]],
             ],
 
             // Original specific, arrays
