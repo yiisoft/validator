@@ -69,16 +69,34 @@ final class CompareHandler implements RuleHandlerInterface
         ]);
     }
 
+    /**
+     * Checks whether the validated value has correct type depending on selected {@see AbstractCompare::$type}.
+     * @param AbstractCompare $rule The rule used for comparison.
+     * @param mixed $value The validated value.
+     * @return bool `true` if value is correct and `false` otherwise.
+     */
     private function isInputCorrect(AbstractCompare $rule, mixed $value): bool
     {
         return $rule->getType() !== CompareType::ORIGINAL ? $this->isValueAllowedForTypeCasting($value) : true;
     }
 
+    /**
+     * Checks whether the validated value is allowed for types that require type casting - {@see CompareType::NUMBER}
+     * and {@see CompareType::STRING}.
+     * @param mixed $value The Validated value.
+     * @return bool `true` if value is allowed and `false` otherwise.
+     */
     private function isValueAllowedForTypeCasting(mixed $value): bool
     {
         return $value === null || is_scalar($value) || $value instanceof Stringable;
     }
 
+    /**
+     * Gets representation of the value for using with error parameter.
+     *
+     * @param mixed $value The мalidated value.
+     * @return scalar|null Formatted value.
+     */
     private function getFormattedValue(mixed $value): int|float|string|bool|null
     {
         if ($value === null || is_scalar($value)) {
@@ -89,10 +107,10 @@ final class CompareHandler implements RuleHandlerInterface
     }
 
     /**
-     * Compares two values with the specified operator.
+     * Compares two values according to the specified type and operator.
      *
      * @param string $operator The comparison operator. One of `==`, `===`, `!=`, `!==`, `>`, `>=`, `<`, `<=`.
-     * @param string $type The type of the values being compared.
+     * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @param mixed $value The validated value.
@@ -100,15 +118,15 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @return bool Whether the result of comparison using the specified operator is true.
      */
-    private function compareValues(string $operator, string $type, mixed $value, mixed $targetValue): bool
+    private function compareValues(string $type, string $operator, mixed $value, mixed $targetValue): bool
     {
         if (!in_array($operator, ['==', '===', '!=', '!=='])) {
             if ($type === CompareType::STRING) {
                 $value = (string) $value;
                 $targetValue = (string) $targetValue;
             } elseif ($type === CompareType::NUMBER) {
-                $value = $this->prepareNumber($value);
-                $targetValue = $this->prepareNumber($targetValue);
+                $value = $this->normalizeNumber($value);
+                $targetValue = $this->normalizeNumber($targetValue);
             }
         }
 
@@ -124,6 +142,17 @@ final class CompareHandler implements RuleHandlerInterface
         };
     }
 
+    /**
+     * Checks whether a validated value equals to "target" value. For types other than {@see CompareType::ORIGINAL},
+     * handles strict comparison before type casting and takes edge cases for float numbers into account.
+     *
+     * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
+     * @param mixed $value The validated value.
+     * @param mixed $targetValue "Target" value set in rule options.
+     * @param bool $strict Whether the values must be equal (when set to `false`, default) / strictly equal (when set to
+     * `true`).
+     * @return bool `true` if values are equal and `false` otherwise.
+     */
     private function checkValuesAreEqual(string $type, mixed $value, mixed $targetValue, bool $strict = false): bool
     {
         if ($type === CompareType::ORIGINAL) {
@@ -137,18 +166,34 @@ final class CompareHandler implements RuleHandlerInterface
         return match ($type) {
             CompareType::STRING => (string) $value === (string) $targetValue,
             CompareType::NUMBER => $this->checkFloatsAreEqual(
-                $this->prepareNumber($value),
-                $this->prepareNumber($targetValue),
+                $this->normalizeNumber($value),
+                $this->normalizeNumber($targetValue),
             ),
         };
     }
 
+    /**
+     * Checks whether a validated float number equals to "target" float number. Handles a known problem of losing
+     * precision during arithmetical operations.
+     *
+     * @param float $value The validated number.
+     * @param float $targetValue "Target" number set in rule options.
+     * @return bool `true` if numbers are equal and `false` otherwise.
+     * @link https://floating-point-gui.de/
+     */
     private function checkFloatsAreEqual(float $value, float $targetValue): bool
     {
         return abs($value - $targetValue) < PHP_FLOAT_EPSILON;
     }
 
-    private function prepareNumber(mixed $number): float
+    /**
+     * Normalizes number that might be stored in a different type to float number.
+     *
+     * @param mixed $number Raw number. Can be within an object implementing {@see Stringable} interface or other
+     * primitive type, such as `int`, `float`, `string`.
+     * @return float Float number ready for comparison.
+     */
+    private function normalizeNumber(mixed $number): float
     {
         if ($number instanceof Stringable) {
             $number = (string) $number;
