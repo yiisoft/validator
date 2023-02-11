@@ -14,18 +14,18 @@ abstract class BaseConfigTest extends TestCase
 {
     final protected function createContainer(array|null $params = null): Container
     {
-        $config = ContainerConfig::create()->withDefinitions($this->getContainerDefinitions($params));
+        $config = ContainerConfig::create()->withDefinitions($this->getCommonDefinitions($params));
 
         return new Container($config);
     }
 
-    final protected function getContainerDefinitions(array|null $params): array
+    final protected function getCommonDefinitions(array|null $params): array
     {
         if ($params === null) {
             $params = $this->getParams();
         }
 
-        return require dirname(__DIR__) . '/config/di.php';
+        return require dirname(__DIR__) . '/config/common.php';
     }
 
     final protected function getParams(): array
