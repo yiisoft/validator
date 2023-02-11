@@ -162,6 +162,13 @@ final class CompareTest extends RuleTestCase
             }
         };
         $dateTime = new DateTime('2023-02-07 12:57:12');
+        $object = new stdClass();
+        $object->a = 1;
+        $object->b = 2;
+        $objectWithDifferentPropertyType = new stdClass();
+        $objectWithDifferentPropertyType->a = 1;
+        $objectWithDifferentPropertyType->b = '2';
+        $array = [1, 2];
 
         return [
             // Number specific, expressions
@@ -247,6 +254,40 @@ final class CompareTest extends RuleTestCase
             'target value: human-readable DateTime object, value: greater DateTime object, type: original, operator: >' => [
                 new DateTime('2022-06-03'),
                 [new Compare(new DateTime('June 2nd, 2022'), type: CompareType::ORIGINAL, operator: '>')],
+            ],
+
+            // Original specific, objects
+
+            'target value: object, value: similar object in a different instance, type: original, operator: ==' => [
+                new stdClass(),
+                [new Compare(new stdClass(), type: CompareType::ORIGINAL, operator: '==')]
+            ],
+            'target value: object, value: the same object, type: original, operator: ===' => [
+                $object,
+                [new Compare($object, type: CompareType::ORIGINAL, operator: '===')]
+            ],
+            'target value: object, value: similar object but with different property type, type: original, operator: ===' => [
+                $objectWithDifferentPropertyType,
+                [new Compare($object, type: CompareType::ORIGINAL, operator: '==')]
+            ],
+
+            // Original specific, arrays
+
+            'target value: array, value: similar array declared separately, type: original, operator: ==' => [
+                [1, 2],
+                [new Compare([1, 2], type: CompareType::ORIGINAL, operator: '==')],
+            ],
+            'target value: array, value: similar array declared separately, type: original, operator: ===' => [
+                [1, 2],
+                [new Compare([1, 2], type: CompareType::ORIGINAL, operator: '===')],
+            ],
+            'target value: array, value: similar array but with different item type, type: original, operator: ==' => [
+                [1, 2],
+                [new Compare([1, '2'], type: CompareType::ORIGINAL, operator: '==')],
+            ],
+            'target value: array, value: the same array, type: original, operator: ===' => [
+                $array,
+                [new Compare($array, type: CompareType::ORIGINAL, operator: '==')],
             ],
         ];
     }
@@ -435,6 +476,17 @@ final class CompareTest extends RuleTestCase
                 return '100.50';
             }
         };
+        $object = new stdClass();
+        $object->a = 1;
+        $object->b = 2;
+        $objectWithDifferentPropertyValue = new stdClass();
+        $objectWithDifferentPropertyValue->a = 1;
+        $objectWithDifferentPropertyValue->b = 3;
+        $objectWithDifferentPropertyType = new stdClass();
+        $objectWithDifferentPropertyType->a = 1;
+        $objectWithDifferentPropertyType->b = 3;
+        $array = [1, 2];
+        $reversedArray = [2, 1];
 
         return [
             // Incorrect input
@@ -586,6 +638,47 @@ final class CompareTest extends RuleTestCase
                 '2022-06-03',
                 [new Compare('June 2nd, 2022', type: CompareType::STRING, operator: '>')],
                 ['' => ['Value must be greater than "June 2nd, 2022".']],
+            ],
+
+            // Original specific, objects
+
+            'target value: object, value: similar object in a different instance, type: original, operator: ===' => [
+                new stdClass(),
+                [new Compare(new stdClass(), type: CompareType::ORIGINAL, operator: '===')],
+                ['' => ['Value must be strictly equal to "stdClass".']],
+            ],
+            'target value: object, value: similar object with different property value, type: original, operator: ==' => [
+                $objectWithDifferentPropertyValue,
+                [new Compare($object, type: CompareType::ORIGINAL, operator: '==')],
+                ['' => ['Value must be equal to "stdClass".']],
+            ],
+            'target value: object, value: similar object with different property value, type: original, operator: ===' => [
+                $objectWithDifferentPropertyValue,
+                [new Compare($object, type: CompareType::ORIGINAL, operator: '===')],
+                ['' => ['Value must be strictly equal to "stdClass".']],
+            ],
+            'target value: object, value: similar object but with different property type, type: original, operator: ===' => [
+                $objectWithDifferentPropertyType,
+                [new Compare($object, type: CompareType::ORIGINAL, operator: '===')],
+                ['' => ['Value must be strictly equal to "stdClass".']],
+            ],
+
+            // Original specific, arrays
+
+            'target value: array, value: similar array but with different item type, type: original, operator: ===' => [
+                [1, 2],
+                [new Compare([1, '2'], type: CompareType::ORIGINAL, operator: '===')],
+                ['' => ['Value must be strictly equal to "array".']],
+            ],
+            'target value: array, value: similar array but with different items order, type: original, operator: ==' => [
+                $reversedArray,
+                [new Compare($array, type: CompareType::ORIGINAL, operator: '==')],
+                ['' => ['Value must be equal to "array".']],
+            ],
+            'target value: array, value: similar array but reversed, type: original, operator: ===' => [
+                $reversedArray,
+                [new Compare($array, type: CompareType::ORIGINAL, operator: '===')],
+                ['' => ['Value must be strictly equal to "array".']],
             ],
         ];
     }
