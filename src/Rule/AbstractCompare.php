@@ -107,7 +107,7 @@ abstract class AbstractCompare implements
      * value, e.g. "object" for predictable formatting.
      * @param string $type The type of the values being compared:
      *
-     * - {@see CompareType::NUMBER}: default, both values will be converted to float numbers before comparison.
+     * - {@see CompareType::NUMBER} - default, both values will be converted to float numbers before comparison.
      * - {@see CompareType::ORIGINAL} - compare the values as is.
      * - {@see CompareType::STRING} - cast both values to strings before comparison.
      *
