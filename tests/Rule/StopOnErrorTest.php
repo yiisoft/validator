@@ -13,7 +13,6 @@ use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\Validator;
 
 final class StopOnErrorTest extends RuleTestCase
 {
