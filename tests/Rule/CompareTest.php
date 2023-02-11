@@ -171,7 +171,7 @@ final class CompareTest extends RuleTestCase
         $array = [1, 2];
 
         return [
-            // Number specific, expressions
+            // Number / string specific, expressions
 
             'target value: float, value: float with the same value as expression result, type: number, operator: ==' => [
                 1 - 0.83,
@@ -184,6 +184,10 @@ final class CompareTest extends RuleTestCase
             'target value: float, value: float with the same value as expression result, type: number, operator: >=' => [
                 1 - 0.83,
                 [new Compare(0.17, operator: '>=')],
+            ],
+            'target value: float, value: float with the same value as expression result, type: string, operator: ==' => [
+                1 - 0.83,
+                [new Compare(0.17, type: CompareType::STRING)],
             ],
 
             // Number / original specific, decimal places, directly provided values
@@ -201,7 +205,8 @@ final class CompareTest extends RuleTestCase
                 [new Compare('100.5', operator: '===')],
             ],
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: original, operator: ==' => [
-                '100.50', [new Compare('100.5', type: CompareType::ORIGINAL)], ['' => ['Value must be equal to "100.5".']],
+                '100.50',
+                [new Compare('100.5', type: CompareType::ORIGINAL)],
             ],
 
             // Number / original specific, decimal places, values provided via stringable objects
@@ -221,9 +226,13 @@ final class CompareTest extends RuleTestCase
                 'd62f2b3f-707f-451a-8819-046ff8436a4f',
                 [new Compare('3b98a689-7d49-48bb-8741-7e27f220b69a', type: CompareType::STRING, operator: '>')],
             ],
-            'target value: character, value: character located further within alphabet, type: string, operator: ==' => [
+            'target value: character, value: character located further within alphabet, type: string, operator: >' => [
                 'b',
                 [new Compare('a', type: CompareType::STRING, operator: '>')],
+            ],
+            'target value: character, value: character located further within alphabet, type: original, operator: >' => [
+                'b',
+                [new Compare('a', type: CompareType::ORIGINAL, operator: '>')],
             ],
 
             // String / original specific, character order, values provided via stringable objects
@@ -231,6 +240,10 @@ final class CompareTest extends RuleTestCase
             'target value: stringable uuidv4, value: greater stringable uuidv4, type: string, operator: >' => [
                 $stringableUuid,
                 [new Compare($targetStringableUuid, type: CompareType::STRING, operator: '>')],
+            ],
+            'target value: stringable uuidv4, value: greater stringable uuidv4, type: original, operator: >' => [
+                $stringableUuid,
+                [new Compare($targetStringableUuid, type: CompareType::ORIGINAL, operator: '>')],
             ],
 
             // Original specific, datetime
@@ -260,7 +273,7 @@ final class CompareTest extends RuleTestCase
 
             'target value: object, value: similar object in a different instance, type: original, operator: ==' => [
                 new stdClass(),
-                [new Compare(new stdClass(), type: CompareType::ORIGINAL, operator: '==')]
+                [new Compare(new stdClass(), type: CompareType::ORIGINAL)]
             ],
             'target value: object, value: the same object, type: original, operator: ===' => [
                 $object,
@@ -268,14 +281,14 @@ final class CompareTest extends RuleTestCase
             ],
             'target value: object, value: similar object but with different property type, type: original, operator: ===' => [
                 $objectWithDifferentPropertyType,
-                [new Compare($object, type: CompareType::ORIGINAL, operator: '==')]
+                [new Compare($object, type: CompareType::ORIGINAL)]
             ],
 
             // Original specific, arrays
 
             'target value: array, value: similar array declared separately, type: original, operator: ==' => [
                 [1, 2],
-                [new Compare([1, 2], type: CompareType::ORIGINAL, operator: '==')],
+                [new Compare([1, 2], type: CompareType::ORIGINAL)],
             ],
             'target value: array, value: similar array declared separately, type: original, operator: ===' => [
                 [1, 2],
@@ -283,11 +296,11 @@ final class CompareTest extends RuleTestCase
             ],
             'target value: array, value: similar array but with different item type, type: original, operator: ==' => [
                 [1, 2],
-                [new Compare([1, '2'], type: CompareType::ORIGINAL, operator: '==')],
+                [new Compare([1, '2'], type: CompareType::ORIGINAL)],
             ],
             'target value: array, value: the same array, type: original, operator: ===' => [
                 $array,
-                [new Compare($array, type: CompareType::ORIGINAL, operator: '==')],
+                [new Compare($array, type: CompareType::ORIGINAL)],
             ],
         ];
     }
@@ -597,6 +610,14 @@ final class CompareTest extends RuleTestCase
                 ['' => ['Value must be equal to "0".']],
             ],
 
+            // Number / string specific, expressions
+
+            'target value: float, value: float with the same value as expression result, type: original, operator: ==' => [
+                1 - 0.83,
+                [new Compare(0.17, type: CompareType::ORIGINAL)],
+                ['' => ['Value must be equal to "0.17".']],
+            ],
+
             // Number / original specific, decimal places, directly provided values
 
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: string, operator: ==' => [
@@ -649,7 +670,7 @@ final class CompareTest extends RuleTestCase
             ],
             'target value: object, value: similar object with different property value, type: original, operator: ==' => [
                 $objectWithDifferentPropertyValue,
-                [new Compare($object, type: CompareType::ORIGINAL, operator: '==')],
+                [new Compare($object, type: CompareType::ORIGINAL)],
                 ['' => ['Value must be equal to "stdClass".']],
             ],
             'target value: object, value: similar object with different property value, type: original, operator: ===' => [
@@ -672,7 +693,7 @@ final class CompareTest extends RuleTestCase
             ],
             'target value: array, value: similar array but with different items order, type: original, operator: ==' => [
                 $reversedArray,
-                [new Compare($array, type: CompareType::ORIGINAL, operator: '==')],
+                [new Compare($array, type: CompareType::ORIGINAL)],
                 ['' => ['Value must be equal to "array".']],
             ],
             'target value: array, value: similar array but reversed, type: original, operator: ===' => [
