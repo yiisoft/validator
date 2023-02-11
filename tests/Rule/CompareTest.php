@@ -61,7 +61,8 @@ final class CompareTest extends RuleTestCase
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
+                        'template' => 'The allowed types are integer, float, string, boolean, null and object ' .
+                            'implementing \Stringable interface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -69,7 +70,9 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
+                        'template' => 'The attribute value returned from a custom data set must have one of the ' .
+                            'following types: integer, float, string, boolean, null or an object implementing ' .
+                            '\Stringable interface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -439,7 +442,12 @@ final class CompareTest extends RuleTestCase
             'incorrect input' => [
                 [],
                 [new Compare(false)],
-                ['' => ['The allowed types are integer, float, string, boolean and null.']],
+                [
+                    '' => [
+                        'The allowed types are integer, float, string, boolean, null and object implementing ' .
+                        '\Stringable interface.',
+                    ],
+                ],
             ],
             'custom incorrect input message' => [
                 [],
@@ -462,7 +470,12 @@ final class CompareTest extends RuleTestCase
             'incorrect data set type' => [
                 $incorrectDataSet,
                 [new Compare(targetAttribute: 'test')],
-                ['' => ['The attribute value returned from a custom data set must have a scalar type or be null.']],
+                [
+                    '' => [
+                        'The attribute value returned from a custom data set must have one of the following types: ' .
+                            'integer, float, string, boolean, null or an object implementing \Stringable interface.',
+                    ],
+                ],
             ],
             'custom incorrect data set type message' => [
                 $incorrectDataSet,

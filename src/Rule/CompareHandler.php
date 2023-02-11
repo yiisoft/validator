@@ -81,7 +81,11 @@ final class CompareHandler implements RuleHandlerInterface
 
     private function getFormattedValue(mixed $value): int|float|string|bool|null
     {
-        return $value === null || is_scalar($value) ? $value : get_debug_type($value);
+        if ($value === null || is_scalar($value)) {
+            return $value;
+        }
+
+        return $value instanceof Stringable ? (string) $value : get_debug_type($value);
     }
 
     /**

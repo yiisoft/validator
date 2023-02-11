@@ -33,7 +33,8 @@ final class GreaterThanOrEqualTest extends RuleTestCase
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
+                        'template' => 'The allowed types are integer, float, string, boolean, null and object ' .
+                            'implementing \Stringable interface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -41,7 +42,9 @@ final class GreaterThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type or be null.',
+                        'template' => 'The attribute value returned from a custom data set must have one of the ' .
+                            'following types: integer, float, string, boolean, null or an object implementing ' .
+                            '\Stringable interface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
