@@ -17,6 +17,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Helper\RulesDumper;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -62,9 +63,10 @@ use Yiisoft\Validator\WhenInterface;
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
     RuleWithOptionsInterface,
+    SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
-    SkipOnEmptyInterface,
+    RulesProviderInterface,
     PropagateOptionsInterface,
     AfterInitAttributeEventInterface
 {
@@ -130,7 +132,8 @@ final class Each implements
     /**
      * Gets a set of normalized rules that needs to be applied to each element of the validated iterable.
      *
-     * @return iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> A set of rules.
+     * @return iterable A set of rules.
+     * @psalm-return iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>
      *
      * @see $rules
      */

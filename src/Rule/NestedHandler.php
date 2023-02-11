@@ -30,7 +30,7 @@ final class NestedHandler implements RuleHandlerInterface
         /** @var mixed $value */
         $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
 
-        if ($rule->getRules() === null) {
+        if ($rule->getRules() === []) {
             if (!is_object($value)) {
                 return (new Result())->addError($rule->getNoRulesWithNoObjectMessage(), [
                     'attribute' => $context->getTranslatedAttribute(),

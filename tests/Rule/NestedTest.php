@@ -60,7 +60,7 @@ final class NestedTest extends RuleTestCase
     {
         $rule = new Nested();
 
-        $this->assertNull($rule->getRules());
+        $this->assertSame([], $rule->getRules());
         $this->assertSame(
             ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
             $rule->getValidatedObjectPropertyVisibility(),
@@ -327,19 +327,7 @@ final class NestedTest extends RuleTestCase
                     'array.age' => ['Value must be no less than 99.'],
                 ],
             ],
-            'empty-rules' => [
-                new class () {
-                    #[Nested([])]
-                    private ObjectWithDifferentPropertyVisibility $object;
-
-                    public function __construct()
-                    {
-                        $this->object = new ObjectWithDifferentPropertyVisibility();
-                    }
-                },
-                [],
-            ],
-            'wo-rules' => [
+            'rules-from-validated-value' => [
                 new class () {
                     #[Nested]
                     private ObjectWithDifferentPropertyVisibility $object;
@@ -354,7 +342,7 @@ final class NestedTest extends RuleTestCase
                     'object.age' => ['Value must be no less than 21.'],
                 ],
             ],
-            'wo-rules-only-public' => [
+            'rules-from-validated-value-only-public' => [
                 new class () {
                     #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PUBLIC)]
                     private ObjectWithDifferentPropertyVisibility $object;
@@ -368,7 +356,7 @@ final class NestedTest extends RuleTestCase
                     'object.name' => ['Value cannot be blank.'],
                 ],
             ],
-            'wo-rules-only-protected' => [
+            'rules-from-validated-value-only-protected' => [
                 new class () {
                     #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PROTECTED)]
                     private ObjectWithDifferentPropertyVisibility $object;
@@ -382,7 +370,7 @@ final class NestedTest extends RuleTestCase
                     'object.age' => ['Value must be no less than 21.'],
                 ],
             ],
-            'wo-rules-inherit-attributes' => [
+            'rules-from-validated-value-inherit-attributes' => [
                 new class () {
                     #[Nested]
                     private InheritAttributesObject $object;
@@ -400,7 +388,7 @@ final class NestedTest extends RuleTestCase
                     'object.number' => ['Value must be equal to "99".'],
                 ],
             ],
-            'nested-into-each' => [
+            'nested-with-each' => [
                 new Foo(),
                 [
                     'name' => ['Value cannot be blank.'],
@@ -1045,10 +1033,10 @@ final class NestedTest extends RuleTestCase
                     new class () {
                         private int $value = 7;
                     },
-                    ReflectionProperty::IS_PUBLIC
+                    ReflectionProperty::IS_PUBLIC,
                 ),
                 new Nested(['value' => new Required()]),
-                ['value' => ['Value cannot be blank.']],
+                ['value' => ['Value not passed.']],
             ],
         ];
     }
@@ -1185,17 +1173,17 @@ final class NestedTest extends RuleTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'The $rules argument passed to Nested rule can be either: a null, an object implementing ' .
+            'The $rules argument passed to Nested rule can be either: an empty array, an object implementing ' .
             'RulesProviderInterface, a class string or an iterable.'
         );
         new Nested(new Required());
     }
 
-    public function testPropagateOptionsWithNullRules(): void
+    public function testPropagateOptionsWithEmptyRules(): void
     {
-        $rule = new Nested(null);
+        $rule = new Nested();
         $rule->propagateOptions();
-        $this->assertNull($rule->getRules());
+        $this->assertSame([], $rule->getRules());
     }
 
     protected function getDifferentRuleInHandlerItems(): array

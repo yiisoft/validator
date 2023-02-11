@@ -116,14 +116,15 @@ use function sprintf;
  * @see NestedHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
- * @psalm-type ReadyRulesType = array<array<RuleInterface>|RuleInterface>|null
+ * @psalm-type ReadyRulesType = array<array<RuleInterface>|RuleInterface>
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
     RuleWithOptionsInterface,
+    SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
-    SkipOnEmptyInterface,
+    RulesProviderInterface,
     PropagateOptionsInterface,
     AfterInitAttributeEventInterface
 {
@@ -142,14 +143,14 @@ final class Nested implements
     private const EACH_SHORTCUT = '*';
 
     /**
-     * @var array|null A set of ready to use rule instances. The 1st level is always an array of rules, the 2nd level is
+     * @var array A set of ready to use rule instances. The 1st level is always an array of rules, the 2nd level is
      * either an array of rules or a single rule.
      * @psalm-var ReadyRulesType
      */
-    private array|null $rules;
+    private array $rules;
 
     /**
-     * @param iterable|object|string|null $rules Rules for validating nested structure. The following types are
+     * @param iterable|object|string $rules Rules for validating nested structure. The following types are
      * supported:
      *
      * - Array or object implementing {@see Traversable} interface containing rules. Either iterables containing
@@ -158,9 +159,9 @@ final class Nested implements
      * be converted to arrays at the end.
      * - Object implementing {@see RulesProviderInterface}.
      * - Name of a class containing rules declared via PHP attributes.
-     * - `null` if validated value is an object. It can either implement {@see RulesProviderInterface} or contain rules
-     * declared via PHP attributes.
-     * @psalm-param iterable|object|class-string|null $rules
+     * - Empty array if validated value is an object. It can either implement {@see RulesProviderInterface} or contain
+     * rules declared via PHP attributes.
+     * @psalm-param iterable|object|class-string $rules
      *
      * @param int $validatedObjectPropertyVisibility Visibility levels to use for parsed properties when validated value
      * is an object providing rules / data. For example: public and protected only, this means that the rest (private
@@ -220,7 +221,7 @@ final class Nested implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        iterable|object|string|null $rules = null,
+        iterable|object|string $rules = [],
         private int $validatedObjectPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
@@ -248,9 +249,12 @@ final class Nested implements
     }
 
     /**
-     * @return iterable<iterable<RuleInterface>|RuleInterface>|null
+     * Gets a set of rules for running the validation.
+     * @return iterable A set of rules. The empty array means the rules are expected to be provided with a validated
+     * value.
+     * @psalm-return iterable<iterable<RuleInterface>|RuleInterface>
      */
-    public function getRules(): iterable|null
+    public function getRules(): iterable
     {
         return $this->rules;
     }
@@ -337,15 +341,15 @@ final class Nested implements
      * Prepares raw rules passed in the constructor for usage in handler. As a result, {@see $rules} property will
      * contain ready to use rules.
      *
-     * @param iterable|object|string|null $source Raw rules passed in the constructor.
+     * @param iterable|object|string $source Raw rules passed in the constructor.
      *
      * @throws InvalidArgumentException When rules' source has wrong type.
      * @throws InvalidArgumentException When source contains items that are not rules.
      */
-    private function prepareRules(iterable|object|string|null $source): void
+    private function prepareRules(iterable|object|string $source): void
     {
-        if ($source === null) {
-            $this->rules = null;
+        if ($source === []) {
+            $this->rules = [];
 
             return;
         }
@@ -358,7 +362,7 @@ final class Nested implements
             $rules = $source;
         } else {
             throw new InvalidArgumentException(
-                'The $rules argument passed to Nested rule can be either: a null, an object implementing ' .
+                'The $rules argument passed to Nested rule can be either: an empty array, an object implementing ' .
                 'RulesProviderInterface, a class string or an iterable.'
             );
         }
@@ -476,7 +480,7 @@ final class Nested implements
 
     public function propagateOptions(): void
     {
-        if ($this->rules === null) {
+        if ($this->rules === []) {
             return;
         }
 
@@ -493,10 +497,6 @@ final class Nested implements
 
     public function afterInitAttribute(object $object, int $target): void
     {
-        if ($this->rules === null) {
-            return;
-        }
-
         foreach ($this->rules as $rules) {
             foreach ((is_iterable($rules) ? $rules : [$rules]) as $rule) {
                 if ($rule instanceof AfterInitAttributeEventInterface) {
@@ -514,7 +514,7 @@ final class Nested implements
         'noPropertyPathMessage' => 'array',
         'skipOnEmpty' => 'bool',
         'skipOnError' => 'bool',
-        'rules' => 'array|null',
+        'rules' => 'array',
     ])]
     public function getOptions(): array
     {
@@ -538,7 +538,7 @@ final class Nested implements
             'requirePropertyPath' => $this->isPropertyPathRequired(),
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => $this->rules === null ? null : RulesDumper::asArray($this->rules),
+            'rules' => RulesDumper::asArray($this->rules),
         ];
     }
 

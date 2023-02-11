@@ -12,6 +12,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Helper\RulesDumper;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -57,8 +58,9 @@ use Yiisoft\Validator\WhenInterface;
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class StopOnError implements
     RuleWithOptionsInterface,
-    WhenInterface,
     SkipOnEmptyInterface,
+    WhenInterface,
+    RulesProviderInterface,
     AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
