@@ -102,8 +102,8 @@ return [
      * @see LessThanOrEqual
      * @see NotEqual
      */
-    'The allowed types are integer, float, string, boolean, null and object implementing \Stringable interface.' => 'Ruxsat berilgan turlar: integer, float, string, boolean va null.', // TODO: Actualize
-    'The attribute value returned from a custom data set must have one of the following types: integer, float, string, boolean, null or an object implementing \Stringable interface.' => 'Maʼlumotlar toʻplamidan olingan qiymat skalyar turdagi boʻlishi kerak.', // TODO: Actualize
+    'The allowed types are integer, float, string, boolean, null and object implementing \Stringable interface or \DateTimeInterface.' => 'Ruxsat berilgan turlar: integer, float, string, boolean va null.', // TODO: Actualize
+    'The attribute value returned from a custom data set must have one of the following types: integer, float, string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface.' => 'Maʼlumotlar toʻplamidan olingan qiymat skalyar turdagi boʻlishi kerak.', // TODO: Actualize
     'Value must be equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"ga teng boʻlishi kerak.',
     'Value must be strictly equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"ga teng boʻlishi kerak.', // TODO: Actualize
     'Value must not be equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"ga teng boʻlmasligi kerak.',

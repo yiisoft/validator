@@ -95,9 +95,10 @@ final class CompareHandler implements RuleHandlerInterface
      */
     private function isValueAllowedForTypeCasting(mixed $value): bool
     {
-        return $value === null || is_scalar(
-            $value
-        ) || $value instanceof Stringable || $value instanceof DateTimeInterface;
+        return $value === null ||
+            is_scalar($value) ||
+            $value instanceof Stringable ||
+            $value instanceof DateTimeInterface;
     }
 
     /**
@@ -211,8 +212,8 @@ final class CompareHandler implements RuleHandlerInterface
     /**
      * Normalizes number that might be stored in a different type to float number.
      *
-     * @param mixed $number Raw number. Can be within an object implementing {@see Stringable} interface or other
-     * primitive type, such as `int`, `float`, `string`.
+     * @param mixed $number Raw number. Can be within an object implementing {@see Stringable} /
+     * {@see DateTimeInterface} or other primitive type, such as `int`, `float`, `string`.
      *
      * @return float Float number ready for comparison.
      */
