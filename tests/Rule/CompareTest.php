@@ -317,9 +317,7 @@ final class CompareTest extends RuleTestCase
                 return true;
             }
         };
-        $subFloatFromInt = static function (int $value1, float $value2): int {
-            return $value1 - (int) $value2;
-        };
+        $subFloatFromInt = static fn(int $value1, float $value2): int => $value1 - (int) $value2;
         $initialData = [
             // Basic
 
@@ -435,7 +433,7 @@ final class CompareTest extends RuleTestCase
                 [new Compare(-4.5e19, operator: '>')],
             ],
             'target value: integer, value: the same integer as expression result, type: number, operator: ===' => [
-                $subFloatFromInt(1234567890, 1234567890),
+                $subFloatFromInt(1_234_567_890, 1_234_567_890),
                 [new Compare(0, operator: '===')],
             ],
 
