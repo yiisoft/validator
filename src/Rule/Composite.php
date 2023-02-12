@@ -106,7 +106,7 @@ class Composite implements
     protected Closure|null $when = null;
 
     /**
-     * @param iterable|callable|RuleInterface $rules A set of rules that needs to be grouped. They will be normalized
+     * @param callable|iterable|RuleInterface $rules A set of rules that needs to be grouped. They will be normalized
      * using {@see RulesNormalizer}.
      * @psalm-param iterable<Closure|RuleInterface> $rules
      *
