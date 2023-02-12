@@ -104,7 +104,7 @@ final class CompareHandler implements RuleHandlerInterface
     /**
      * Gets representation of the value for using with error parameter.
      *
-     * @param mixed $value The мalidated value.
+     * @param mixed $value The validated value.
      *
      * @return scalar|null Formatted value.
      */
