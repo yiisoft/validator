@@ -250,6 +250,7 @@ final class Nested implements
 
     /**
      * Gets a set of rules for running the validation.
+     *
      * @return iterable A set of rules. The empty array means the rules are expected to be provided with a validated
      * value.
      * @psalm-return iterable<iterable<RuleInterface>|RuleInterface>
