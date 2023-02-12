@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\StopOnError;
 use Yiisoft\Validator\Rule\StopOnErrorHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -125,6 +126,19 @@ final class StopOnErrorTest extends RuleTestCase
                     '' => [
                         'Value must be a number.',
                         'This value must contain at least 7 characters.',
+                    ],
+                ],
+            ],
+            'case4' => [
+                [],
+                [
+                    'a' => new StopOnError([
+                        new Required(),
+                    ]),
+                ],
+                [
+                    'a' => [
+                        'Value not passed.',
                     ],
                 ],
             ],
