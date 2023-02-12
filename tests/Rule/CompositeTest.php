@@ -9,6 +9,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Equal;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -338,6 +339,23 @@ final class CompositeTest extends RuleTestCase
                 [
                     'latitude' => ['Value must be no less than -90.'],
                     'longitude' => ['Value must be no greater than 180.'],
+                ],
+            ],
+            'attribute with multiple rules' => [
+                [],
+                new class () extends Composite {
+                    public function getRules(): array
+                    {
+                        return [
+                            'name' => [new Required(), new Length(min: 1)],
+                        ];
+                    }
+                },
+                [
+                    'name' => [
+                        'Value not passed.',
+                        'The value must be a string.',
+                    ],
                 ],
             ],
         ];

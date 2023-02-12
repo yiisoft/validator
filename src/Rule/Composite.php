@@ -86,7 +86,7 @@ class Composite implements
 
     /**
      * @var iterable A set of normalized rules that needs to be grouped.
-     * @psalm-var iterable<int, RuleInterface>
+     * @psalm-var iterable<iterable<RuleInterface>|RuleInterface>
      */
     protected iterable $rules = [];
     /**
@@ -106,8 +106,8 @@ class Composite implements
     protected Closure|null $when = null;
 
     /**
-     * @param iterable $rules A set of rules that needs to be grouped. They will be normalized using
-     * {@see RulesNormalizer}.
+     * @param iterable|callable|RuleInterface $rules A set of rules that needs to be grouped. They will be normalized
+     * using {@see RulesNormalizer}.
      * @psalm-param iterable<Closure|RuleInterface> $rules
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule group if the validated value is empty / not
@@ -119,7 +119,7 @@ class Composite implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        iterable $rules = [],
+        iterable|callable|RuleInterface $rules = [],
         bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
         Closure|null $when = null,
@@ -153,7 +153,7 @@ class Composite implements
      * Gets a set of normalized rules that needs to be grouped.
      *
      * @return iterable A set of rules.
-     * @psalm-return iterable<int, RuleInterface>
+     * @psalm-return iterable<iterable<RuleInterface>|RuleInterface>
      *
      * @see $rules
      */
