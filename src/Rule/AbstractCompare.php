@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Closure;
+use DateTimeInterface;
 use InvalidArgumentException;
 use Stringable;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
@@ -112,7 +113,8 @@ abstract class AbstractCompare implements
      * - {@see CompareType::STRING} - cast both values to strings before comparison.
      *
      * {@see CompareType::NUMBER} and {@see CompareType::STRING} allow only scalar and `null` values, also objects
-     * implementing {@see Stringable} interface.
+     * implementing {@see Stringable} interface or {@see DateTimeInterface} (validated values must be in Unix Timestamp
+     * format).
      *
      * {@see CompareType::ORIGINAL} allows any values. All PHP comparison rules apply here, see comparison operators -
      * {@see https://www.php.net/manual/en/language.operators.comparison.php} and PHP type comparison tables -

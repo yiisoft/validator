@@ -250,10 +250,6 @@ final class CompareTest extends RuleTestCase
                 $dateTime,
                 [new Compare($dateTime, type: CompareType::ORIGINAL)],
             ],
-            'target value: Unix Timestamp string, value: DateTime object with the same value, type: number, operator: ==' => [
-                $dateTime->format('U'),
-                [new Compare($dateTime)],
-            ],
             'target value: DateTime object, value: DateTime object with the same value, type: original, operator: !==' => [
                 new DateTime('2023-02-07 12:57:12'),
                 [new Compare(new DateTime('2023-02-07 12:57:12'), type: CompareType::ORIGINAL, operator: '!==')],
@@ -265,6 +261,17 @@ final class CompareTest extends RuleTestCase
             'target value: human-readable DateTime object, value: greater DateTime object, type: original, operator: >' => [
                 new DateTime('2022-06-03'),
                 [new Compare(new DateTime('June 2nd, 2022'), type: CompareType::ORIGINAL, operator: '>')],
+            ],
+
+            // Number / string specific, DateTime object and Unix Timestamp
+
+            'target value: Unix Timestamp string, value: DateTime object with the same value, type: number, operator: ==' => [
+                $dateTime->format('U'),
+                [new Compare($dateTime)],
+            ],
+            'target value: Unix Timestamp string, value: DateTime object with the same value, type: string, operator: ==' => [
+                $dateTime->format('U'),
+                [new Compare($dateTime, type: CompareType::STRING)],
             ],
 
             // Original specific, objects
@@ -523,6 +530,7 @@ final class CompareTest extends RuleTestCase
                 return 'd62f2b3f-707f-451a-8819-046ff8436a4f';
             }
         };
+        $dateTime = new DateTime('2023-02-07 12:57:12');
         $object = new CompareObject(a: 1, b: 2);
         $objectWithDifferentPropertyValue = new CompareObject(a: 1, b: 3);
         $objectWithDifferentPropertyType = new CompareObject(a: 1, b: '2');
@@ -615,8 +623,7 @@ final class CompareTest extends RuleTestCase
                 ['attribute' => 100, 'number' => 101],
                 [
                     'number' => new Compare(
-                        null,
-                        'attribute',
+                        targetAttribute: 'attribute',
                         message: 'Attribute - {attribute}, target value - {targetValue}, target attribute - ' .
                         '{targetAttribute}, target attribute value - {targetAttributeValue}, target value or ' .
                         'attribute - {targetValueOrAttribute}, value - {value}.',
@@ -674,12 +681,12 @@ final class CompareTest extends RuleTestCase
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: original, operator: ==' => [
                 $stringableFloat,
                 [new Compare($targetStringableFloat, type: CompareType::ORIGINAL)],
-                ['' => ['Value must be equal to "Stringable@anonymous".']],
+                ['' => ['Value must be equal to "100.5".']],
             ],
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: original, operator: ===' => [
                 $stringableFloat,
                 [new Compare($targetStringableFloat, type: CompareType::ORIGINAL, operator: '===')],
-                ['' => ['Value must be strictly equal to "Stringable@anonymous".']],
+                ['' => ['Value must be strictly equal to "100.5".']],
             ],
 
             // String / original specific, character order, directly provided values
@@ -700,7 +707,7 @@ final class CompareTest extends RuleTestCase
             'target value: stringable uuidv4, value: greater stringable uuidv4, type: original, operator: >' => [
                 $stringableUuid,
                 [new Compare($targetStringableUuid, type: CompareType::ORIGINAL, operator: '>')],
-                ['' => ['Value must be greater than "Stringable@anonymous".']],
+                ['' => ['Value must be greater than "3b98a689-7d49-48bb-8741-7e27f220b69a".']],
             ],
 
             // Original specific, datetime
@@ -709,6 +716,14 @@ final class CompareTest extends RuleTestCase
                 '2022-06-03',
                 [new Compare('June 2nd, 2022', type: CompareType::STRING, operator: '>')],
                 ['' => ['Value must be greater than "June 2nd, 2022".']],
+            ],
+
+            // Number / string specific, DateTime object and Unix Timestamp
+
+            'target value: Unix Timestamp string, value: DateTime object with the same value, type: original, operator: ==' => [
+                $dateTime->format('U'),
+                [new Compare($dateTime, type: CompareType::ORIGINAL)],
+                ['' => ['Value must be equal to "1675774632".']],
             ],
 
             // Original specific, objects

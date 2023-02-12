@@ -62,11 +62,11 @@ final class CompareHandler implements RuleHandlerInterface
 
         return (new Result())->addError($rule->getMessage(), [
             'attribute' => $context->getTranslatedAttribute(),
-            'targetValue' => $this->getFormattedValue($rule->getType(), $rule->getTargetValue()),
+            'targetValue' => $this->getFormattedValue($rule->getTargetValue()),
             'targetAttribute' => $targetAttribute,
-            'targetAttributeValue' => $targetAttribute !== null ? $this->getFormattedValue($rule->getType(), $targetValue) : null,
-            'targetValueOrAttribute' => $targetAttribute ?? $this->getFormattedValue($rule->getType(), $targetValue),
-            'value' => $this->getFormattedValue($rule->getType(), $value),
+            'targetAttributeValue' => $targetAttribute !== null ? $this->getFormattedValue($targetValue) : null,
+            'targetValueOrAttribute' => $targetAttribute ?? $this->getFormattedValue($targetValue),
+            'value' => $this->getFormattedValue($value),
         ]);
     }
 
@@ -104,21 +104,22 @@ final class CompareHandler implements RuleHandlerInterface
     /**
      * Gets representation of the value for using with error parameter.
      *
-     * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
-     * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
-     *
      * @param mixed $value The мalidated value.
      *
      * @return scalar|null Formatted value.
      */
-    private function getFormattedValue(string $type, mixed $value): int|float|string|bool|null
+    private function getFormattedValue(mixed $value): int|float|string|bool|null
     {
         if ($value === null || is_scalar($value)) {
             return $value;
         }
 
-        if ($value instanceof Stringable && $type !== CompareType::ORIGINAL) {
+        if ($value instanceof Stringable) {
             return (string) $value;
+        }
+
+        if ($value instanceof DateTimeInterface) {
+            return $value->format('U');
         }
 
         return get_debug_type($value);
@@ -185,7 +186,7 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         return match ($type) {
-            CompareType::STRING => (string) $value === (string) $targetValue,
+            CompareType::STRING => $this->normalizeString($value) === $this->normalizeString($targetValue),
             CompareType::NUMBER => $this->checkFloatsAreEqual(
                 $this->normalizeNumber($value),
                 $this->normalizeNumber($targetValue),
@@ -226,5 +227,22 @@ final class CompareHandler implements RuleHandlerInterface
         }
 
         return (float) $number;
+    }
+
+    /**
+     * Normalizes string that might be stored in a different type to simple string.
+     *
+     * @param mixed $string Raw string. Can be within an object implementing {@see DateTimeInterface} or other primitive
+     * type, such as `int`, `float`, `string`.
+     *
+     * @return string String ready for comparison.
+     */
+    private function normalizeString(mixed $string): string
+    {
+        if ($string instanceof DateTimeInterface) {
+            $string = $string->format('U');
+        }
+
+        return (string) $string;
     }
 }
