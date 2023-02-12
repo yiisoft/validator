@@ -139,7 +139,7 @@ final class ValidationContext
 
         $this->dataSet = $currentDataSet;
         $this->attribute = $currentAttribute;
-        $this->isDataSetMissing = $currentIsDataSetMissing;
+        $this->isDataSetMissing = $isCurrentDataSetMissing;
 
         return $result;
     }
