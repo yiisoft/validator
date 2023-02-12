@@ -132,7 +132,7 @@ final class ValidationContext
 
         $currentDataSet = $this->dataSet;
         $currentAttribute = $this->attribute;
-        $currentIsDataSetMissing = $this->isDataSetMissing;
+        $isCurrentDataSetMissing = $this->isDataSetMissing;
 
         $this->isDataSetMissing = $this->isAttributeMissing();
         $result = $this->validator->validate($data, $rules, $this);
