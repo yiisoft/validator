@@ -141,8 +141,8 @@ final class CompareHandler implements RuleHandlerInterface
     {
         if (!in_array($operator, ['==', '===', '!=', '!=='])) {
             if ($type === CompareType::STRING) {
-                $value = (string) $value;
-                $targetValue = (string) $targetValue;
+                $value = $this->normalizeString($value);
+                $targetValue = $this->normalizeString($targetValue);
             } elseif ($type === CompareType::NUMBER) {
                 $value = $this->normalizeNumber($value);
                 $targetValue = $this->normalizeNumber($targetValue);

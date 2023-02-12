@@ -273,6 +273,14 @@ final class CompareTest extends RuleTestCase
                 $dateTime->format('U'),
                 [new Compare($dateTime, type: CompareType::STRING)],
             ],
+            'target value: Unix Timestamp string, value: DateTime object with the same value, type: number, operator: >=' => [
+                $dateTime->format('U'),
+                [new Compare($dateTime, operator: '>=')],
+            ],
+            'target value: Unix Timestamp string, value: DateTime object with the same value, type: string, operator: >=' => [
+                $dateTime->format('U'),
+                [new Compare($dateTime, type: CompareType::STRING, operator: '>=')],
+            ],
 
             // Original specific, objects
 
@@ -724,6 +732,11 @@ final class CompareTest extends RuleTestCase
                 $dateTime->format('U'),
                 [new Compare($dateTime, type: CompareType::ORIGINAL)],
                 ['' => ['Value must be equal to "1675774632".']],
+            ],
+            'target value: Unix Timestamp string, value: DateTime object with the same value, type: original, operator: >=' => [
+                $dateTime->format('U'),
+                [new Compare($dateTime, type: CompareType::ORIGINAL, operator: '>=')],
+                ['' => ['Value must be greater than or equal to "1675774632".']],
             ],
 
             // Original specific, objects
