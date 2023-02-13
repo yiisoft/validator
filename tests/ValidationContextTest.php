@@ -14,7 +14,7 @@ use Yiisoft\Validator\Validator;
 
 final class ValidationContextTest extends TestCase
 {
-    public function testGetIsolatedDataSetWithoutDataSet(): void
+    public function testGetDataSetWithoutDataSet(): void
     {
         $context = new ValidationContext();
 
