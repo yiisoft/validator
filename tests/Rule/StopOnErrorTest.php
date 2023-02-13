@@ -130,16 +130,16 @@ final class StopOnErrorTest extends RuleTestCase
                 ],
             ],
             'case4' => [
-                [],
+                ['b' => null],
                 [
                     'a' => new StopOnError([
                         new Required(),
                     ]),
+                    'b' => new Required(),
                 ],
                 [
-                    'a' => [
-                        'Value not passed.',
-                    ],
+                    'a' => ['Value not passed.'],
+                    'b' => ['Value cannot be blank.'],
                 ],
             ],
         ];
