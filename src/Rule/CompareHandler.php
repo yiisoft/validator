@@ -48,7 +48,7 @@ final class CompareHandler implements RuleHandlerInterface
 
         if ($targetValue === null && $targetAttribute !== null) {
             /** @var mixed $targetValue */
-            $targetValue = $context->getDataSet()->getAttributeValue($targetAttribute);
+            $targetValue = $context->getIsolatedDataSet()->getAttributeValue($targetAttribute);
             if (!$this->isInputCorrect($rule->getType(), $targetValue)) {
                 return $result->addError($rule->getIncorrectDataSetTypeMessage(), [
                     'type' => get_debug_type($targetValue),
