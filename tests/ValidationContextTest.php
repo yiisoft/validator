@@ -14,13 +14,13 @@ use Yiisoft\Validator\Validator;
 
 final class ValidationContextTest extends TestCase
 {
-    public function testGetDataSetWithoutDataSet(): void
+    public function testGetIsolatedDataSetWithoutDataSet(): void
     {
         $context = new ValidationContext();
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Data set in validation context is not set.');
-        $context->getDataSet();
+        $context->getIsolatedDataSet();
     }
 
     public function testConstructor(): void
@@ -30,14 +30,14 @@ final class ValidationContextTest extends TestCase
         $this->assertSame(42, $context->getParameter('key'));
     }
 
-    public function testDataSet(): void
+    public function testIsolatedDataSet(): void
     {
         $dataSet = new ArrayDataSet();
 
         $context = new ValidationContext();
-        $context->setDataSet($dataSet);
+        $context->setIsolatedDataSet($dataSet);
 
-        $this->assertSame($dataSet, $context->getDataSet());
+        $this->assertSame($dataSet, $context->getIsolatedDataSet());
     }
 
     public function testSetParameter(): void
@@ -78,14 +78,17 @@ final class ValidationContextTest extends TestCase
     public function testSetContextDataOnce(): void
     {
         $validator = new Validator();
+        $data1 = ['1'];
+        $data2 = ['2'];
+        $dataSet1 = new ArrayDataSet($data1);
+        $dataSet2 = new ArrayDataSet($data2);
 
-        $context = new ValidationContext();
+        $context = (new ValidationContext())
+            ->setContextDataOnce($validator, new NullAttributeTranslator(), $data1, $dataSet1)
+            ->setContextDataOnce($validator, new NullAttributeTranslator(), $data2, $dataSet2);
 
-        $context
-            ->setContextDataOnce($validator, new NullAttributeTranslator(), 1)
-            ->setContextDataOnce($validator, new NullAttributeTranslator(), 2);
-
-        $this->assertSame(1, $context->getRawData());
+        $this->assertSame($data1, $context->getRawData());
+        $this->assertSame($dataSet1, $context->getDataSet());
     }
 
     public function dataTranslatedAttributeWithoutTranslator(): array

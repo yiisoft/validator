@@ -1050,6 +1050,26 @@ final class NestedTest extends RuleTestCase
                 new Nested(['value' => new Required()]),
                 ['value' => ['Value cannot be blank.']],
             ],
+            'nested context' => [
+                [
+                    'method' => 'get',
+                    'attributes' => ['abc' => null],
+                ],
+                [
+                    'method' => [new Required()],
+                    'attributes' => new Nested([
+                        'abc' => [
+                            new Required(when: static function (mixed $value, ValidationContext $context): bool {
+                                $method = $context->getDataSet()->getAttributeValue('method');
+                                return $method === 'get';
+                            }),
+                        ]
+                    ]),
+                ],
+                [
+                    'attributes.abc' => ['Value cannot be blank.'],
+                ],
+            ],
         ];
     }
 
