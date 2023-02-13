@@ -80,6 +80,7 @@ final class ValidationContext
      * @param AttributeTranslatorInterface $attributeTranslator Attribute translator to use by default. If translator
      * is specified via {@see setAttributeTranslator()}, it will be used instead.
      * @param mixed $rawData The raw validated data.
+     * @param DataSetInterface $dataSet Global data set ({@see $dataSet}.
      *
      * @internal
      *
@@ -89,7 +90,7 @@ final class ValidationContext
         ValidatorInterface $validator,
         AttributeTranslatorInterface $attributeTranslator,
         mixed $rawData,
-        DataSetInterface $dataSet
+        DataSetInterface $dataSet,
     ): self {
         if ($this->validator !== null) {
             return $this;
@@ -159,6 +160,13 @@ final class ValidationContext
         return $this->rawData;
     }
 
+    /**
+     * Get the global data set the attribute belongs to.
+     *
+     * @return DataSetInterface Data set instance.
+     *
+     * @see $dataSet
+     */
     public function getDataSet(): DataSetInterface
     {
         $this->requireValidator();
@@ -166,9 +174,11 @@ final class ValidationContext
     }
 
     /**
-     * Get the data set the attribute belongs to.
+     * Get the current scope's data set the attribute belongs to.
      *
-     * @return DataSetInterface Data set the attribute belongs to.
+     * @return DataSetInterface Data set instance.
+     *
+     * @see $isolatedDataSet
      */
     public function getIsolatedDataSet(): DataSetInterface
     {
@@ -180,13 +190,15 @@ final class ValidationContext
     }
 
     /**
-     * Set the data set the attribute belongs to.
+     * Set the current scope's data set the attribute belongs to.
      *
-     * @param DataSetInterface $dataSet Data set the attribute belongs to.
+     * @param DataSetInterface $dataSet Data set instance.
      *
      * @return $this The same instance of validation context.
      *
      * @internal
+     *
+     * @see $isolatedDataSet
      */
     public function setIsolatedDataSet(DataSetInterface $dataSet): self
     {
