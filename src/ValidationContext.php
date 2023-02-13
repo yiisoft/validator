@@ -134,6 +134,7 @@ final class ValidationContext
         $currentAttribute = $this->attribute;
         $isCurrentDataSetMissing = $this->isDataSetMissing;
 
+        // The lack of an attribute means that in the context of further validation there is no data set at all.
         $this->isDataSetMissing = $this->isAttributeMissing();
         $result = $this->validator->validate($data, $rules, $this);
 
