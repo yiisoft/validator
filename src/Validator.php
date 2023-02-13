@@ -102,7 +102,7 @@ final class Validator implements ValidatorInterface
         $context ??= new ValidationContext();
         $context
             ->setContextDataOnce($this, $defaultAttributeTranslator, $data, $dataSet)
-            ->setIsolatedDataSet($dataSet);
+            ->setDataSet($dataSet);
 
         $result = new Result();
         foreach ($rules as $attribute => $attributeRules) {

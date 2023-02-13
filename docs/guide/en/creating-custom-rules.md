@@ -269,7 +269,7 @@ final class CompanyNameHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(CompanyName::class, $rule);
         }
 
-        if ($context->getDataSet()->getAttributeValue('hasCompany') !== true) {
+        if ($context->getGlobalDataSet()->getAttributeValue('hasCompany') !== true) {
             return new Result();
         }
 
@@ -300,7 +300,7 @@ $rules = [
         min: 1,
         max: 50,
         when: static function (mixed $value, ValidationContext $context): bool {
-            return $context->getDataSet()->getAttributeValue('hasCompany') === true;
+            return $context->getGlobalDataSet()->getAttributeValue('hasCompany') === true;
         },
     ),
 ];

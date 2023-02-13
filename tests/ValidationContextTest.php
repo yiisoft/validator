@@ -20,7 +20,7 @@ final class ValidationContextTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Data set in validation context is not set.');
-        $context->getIsolatedDataSet();
+        $context->getDataSet();
     }
 
     public function testConstructor(): void
@@ -30,14 +30,14 @@ final class ValidationContextTest extends TestCase
         $this->assertSame(42, $context->getParameter('key'));
     }
 
-    public function testIsolatedDataSet(): void
+    public function testDataSet(): void
     {
         $dataSet = new ArrayDataSet();
 
         $context = new ValidationContext();
-        $context->setIsolatedDataSet($dataSet);
+        $context->setDataSet($dataSet);
 
-        $this->assertSame($dataSet, $context->getIsolatedDataSet());
+        $this->assertSame($dataSet, $context->getDataSet());
     }
 
     public function testSetParameter(): void
@@ -88,7 +88,7 @@ final class ValidationContextTest extends TestCase
             ->setContextDataOnce($validator, new NullAttributeTranslator(), $data2, $dataSet2);
 
         $this->assertSame($data1, $context->getRawData());
-        $this->assertSame($dataSet1, $context->getDataSet());
+        $this->assertSame($dataSet1, $context->getGlobalDataSet());
     }
 
     public function dataTranslatedAttributeWithoutTranslator(): array

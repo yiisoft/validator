@@ -1060,7 +1060,7 @@ final class NestedTest extends RuleTestCase
                     'attributes' => new Nested([
                         'abc' => [
                             new Required(when: static function (mixed $value, ValidationContext $context): bool {
-                                $method = $context->getDataSet()->getAttributeValue('method');
+                                $method = $context->getGlobalDataSet()->getAttributeValue('method');
                                 return $method === 'get';
                             }),
                         ],

@@ -42,14 +42,14 @@ final class ValidationContext
      * @var DataSetInterface|null Global data set the attribute belongs to.
      * `null` if data set was not set with {@see setContextDataOnce()} yet.
      */
-    private ?DataSetInterface $dataSet = null;
+    private ?DataSetInterface $globalDataSet = null;
 
     /**
      * @var DataSetInterface|null Current scope's data set the attribute belongs to (for example, when using with
      * {@see Nested} rule).
-     * `null` if data set was not set with {@see setIsolatedDataSet()} yet.
+     * `null` if data set was not set with {@see setDataSet()} yet.
      */
-    private ?DataSetInterface $isolatedDataSet = null;
+    private ?DataSetInterface $dataSet = null;
 
     /**
      * @var string|null Validated data set's attribute name. `null` if a single value is validated.
@@ -80,7 +80,7 @@ final class ValidationContext
      * @param AttributeTranslatorInterface $attributeTranslator Attribute translator to use by default. If translator
      * is specified via {@see setAttributeTranslator()}, it will be used instead.
      * @param mixed $rawData The raw validated data.
-     * @param DataSetInterface $dataSet Global data set ({@see $dataSet}.
+     * @param DataSetInterface $dataSet Global data set ({@see $globalDataSet}.
      *
      * @internal
      *
@@ -99,7 +99,7 @@ final class ValidationContext
         $this->validator = $validator;
         $this->defaultAttributeTranslator = $attributeTranslator;
         $this->rawData = $rawData;
-        $this->dataSet = $dataSet;
+        $this->globalDataSet = $dataSet;
 
         return $this;
     }
@@ -136,12 +136,12 @@ final class ValidationContext
     {
         $this->requireValidator();
 
-        $currentIsolatedDataSet = $this->isolatedDataSet;
+        $currentIsolatedDataSet = $this->dataSet;
         $currentAttribute = $this->attribute;
 
         $result = $this->validator->validate($data, $rules, $this);
 
-        $this->isolatedDataSet = $currentIsolatedDataSet;
+        $this->dataSet = $currentIsolatedDataSet;
         $this->attribute = $currentAttribute;
 
         return $result;
@@ -165,12 +165,12 @@ final class ValidationContext
      *
      * @return DataSetInterface Data set instance.
      *
-     * @see $dataSet
+     * @see $globalDataSet
      */
-    public function getDataSet(): DataSetInterface
+    public function getGlobalDataSet(): DataSetInterface
     {
         $this->requireValidator();
-        return $this->dataSet;
+        return $this->globalDataSet;
     }
 
     /**
@@ -178,15 +178,15 @@ final class ValidationContext
      *
      * @return DataSetInterface Data set instance.
      *
-     * @see $isolatedDataSet
+     * @see $dataSet
      */
-    public function getIsolatedDataSet(): DataSetInterface
+    public function getDataSet(): DataSetInterface
     {
-        if ($this->isolatedDataSet === null) {
+        if ($this->dataSet === null) {
             throw new RuntimeException('Data set in validation context is not set.');
         }
 
-        return $this->isolatedDataSet;
+        return $this->dataSet;
     }
 
     /**
@@ -198,11 +198,11 @@ final class ValidationContext
      *
      * @internal
      *
-     * @see $isolatedDataSet
+     * @see $dataSet
      */
-    public function setIsolatedDataSet(DataSetInterface $dataSet): self
+    public function setDataSet(DataSetInterface $dataSet): self
     {
-        $this->isolatedDataSet = $dataSet;
+        $this->dataSet = $dataSet;
         return $this;
     }
 
@@ -284,20 +284,20 @@ final class ValidationContext
     }
 
     /**
-     * Check whether {@see $attribute} is missing in a {@see $dataSet}.
+     * Check whether {@see $attribute} is missing in a {@see $globalDataSet}.
      *
-     * @return bool Whether {@see $attribute} is missing in a {@see $dataSet}.
+     * @return bool Whether {@see $attribute} is missing in a {@see $globalDataSet}.
      */
     public function isAttributeMissing(): bool
     {
-        return $this->attribute !== null && !$this->getIsolatedDataSet()->hasAttribute($this->attribute);
+        return $this->attribute !== null && !$this->getDataSet()->hasAttribute($this->attribute);
     }
 
     /**
      * Ensure that validator is set in validation context.
      *
      * @psalm-assert ValidatorInterface $this->validator
-     * @psalm-assert DataSetInterface $this->dataSet
+     * @psalm-assert DataSetInterface $this->globalDataSet
      *
      * @throws RuntimeException If validator is not set in validation context.
      */
