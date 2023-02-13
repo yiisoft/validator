@@ -39,15 +39,13 @@ final class ValidationContext
     private mixed $rawData = null;
 
     /**
-     * @var DataSetInterface|null Global data set the attribute belongs to.
-     * `null` if data set was not set with {@see setContextDataOnce()} yet.
+     * @var DataSetInterface|null Global data set. `null` if data set was not set with {@see setContextDataOnce()} yet.
      */
     private ?DataSetInterface $globalDataSet = null;
 
     /**
-     * @var DataSetInterface|null Current scope's data set the attribute belongs to (for example, when using with
-     * {@see Nested} rule).
-     * `null` if data set was not set with {@see setDataSet()} yet.
+     * @var DataSetInterface|null Current scope's data set the attribute belongs to. `null` if data set was not set
+     * with {@see setDataSet()} yet.
      */
     private ?DataSetInterface $dataSet = null;
 
@@ -80,7 +78,7 @@ final class ValidationContext
      * @param AttributeTranslatorInterface $attributeTranslator Attribute translator to use by default. If translator
      * is specified via {@see setAttributeTranslator()}, it will be used instead.
      * @param mixed $rawData The raw validated data.
-     * @param DataSetInterface $dataSet Global data set ({@see $globalDataSet}.
+     * @param DataSetInterface $dataSet Global data set ({@see $globalDataSet}).
      *
      * @internal
      *
@@ -136,12 +134,12 @@ final class ValidationContext
     {
         $this->requireValidator();
 
-        $currentIsolatedDataSet = $this->dataSet;
+        $currentDataSet = $this->dataSet;
         $currentAttribute = $this->attribute;
 
         $result = $this->validator->validate($data, $rules, $this);
 
-        $this->dataSet = $currentIsolatedDataSet;
+        $this->dataSet = $currentDataSet;
         $this->attribute = $currentAttribute;
 
         return $result;
@@ -161,7 +159,7 @@ final class ValidationContext
     }
 
     /**
-     * Get the global data set the attribute belongs to.
+     * Get the global data set.
      *
      * @return DataSetInterface Data set instance.
      *
@@ -284,9 +282,9 @@ final class ValidationContext
     }
 
     /**
-     * Check whether {@see $attribute} is missing in a {@see $globalDataSet}.
+     * Check whether {@see $attribute} is missing in a {@see $dataSet}.
      *
-     * @return bool Whether {@see $attribute} is missing in a {@see $globalDataSet}.
+     * @return bool Whether {@see $attribute} is missing in a {@see $dataSet}.
      */
     public function isAttributeMissing(): bool
     {
