@@ -6,6 +6,7 @@ namespace Yiisoft\Validator;
 
 use RuntimeException;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\StopOnError;
 
 /**
@@ -38,11 +39,16 @@ final class ValidationContext
     private mixed $rawData = null;
 
     /**
-     * @var DataSetInterface|null Data set the attribute belongs to.
-     * `null` if data set was not set with {@see setIsolatedDataSet()} yet.
+     * @var DataSetInterface|null Global data set the attribute belongs to.
+     * `null` if data set was not set with {@see setContextDataOnce()} yet.
      */
     private ?DataSetInterface $dataSet = null;
 
+    /**
+     * @var DataSetInterface|null Current scope's data set the attribute belongs to (for example, when using with
+     * {@see Nested} rule).
+     * `null` if data set was not set with {@see setIsolatedDataSet()} yet.
+     */
     private ?DataSetInterface $isolatedDataSet = null;
 
     /**
