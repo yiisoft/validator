@@ -7,10 +7,12 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 
 /**
- * Defines validation options to check that the specified value matches with another value or attribute.
+ * Defines validation options to compare the specified value with "target" value provided directly
+ * ({@see GreaterThanOrEqual::$targetValue}) or within an attribute ({@see GreaterThanOrEqual::$targetAttribute}).
  *
- * The value being compared with a constant {@see Compare::$targetValue}, which is set
- * in the constructor.
+ * The default comparison is based on number values (including float values). It's also possible to compare values as
+ * strings byte by byte and compare original values as is. See {@see GreaterThanOrEqual::$type} for all possible
+ * options.
  *
  * It supports different comparison operators, specified via the {@see Compare::$operator}.
  *
@@ -22,10 +24,6 @@ use Attribute;
  * - {@see GreaterThanOrEqual} is a shortcut for `new Compare(operator: '>=')`.
  * - {@see LessThan} is a shortcut for `new Compare(operator: '<')`.
  * - {@see LessThanOrEqual} is a shortcut for `new Compare(operator: '<=')`.
- *
- * The default comparison function is based on string values, which means the values
- * are compared byte by byte. When comparing numbers, make sure to change {@see Compare::$type} to
- * {@see CompareType::NUMBER} to enable numeric comparison.
  *
  * @see CompareHandler
  */

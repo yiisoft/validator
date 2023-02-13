@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Closure;
+use DateTimeInterface;
 use InvalidArgumentException;
+use Stringable;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -19,15 +21,13 @@ use function in_array;
 /**
  * Abstract base for all the comparison validation rules.
  *
- * The value being compared with {@see AbstractCompare::$targetValue} or {@see AbstractCompare::$targetAttribute}, which
- * is set in the constructor.
+ * The validated value is compared with {@see AbstractCompare::$targetValue} or
+ * {@see AbstractCompare::$targetAttribute} value of validated data set.
  *
- * It supports different comparison operators, specified
- * via the {@see AbstractCompare::$operator}.
+ * The default comparison is based on number values (including float values). It's also possible to compare values as
+ * strings byte by byte and compare original values as is. See {@see AbstractCompare::$type} for all possible options.
  *
- * The default comparison is based on string values, which means the values
- * are compared byte by byte. When comparing numbers, make sure to change {@see AbstractCompare::$type} to
- * {@see CompareType::NUMBER} to enable numeric comparison.
+ * It supports different comparison operators, specified via the {@see AbstractCompare::$operator}.
  *
  * @see CompareHandler
  *
@@ -46,18 +46,20 @@ abstract class AbstractCompare implements
     /**
      * A default for {@see $incorrectInputMessage}.
      */
-    protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types are integer, float, string, boolean and null.';
+    protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types are integer, float, string, boolean, null ' .
+    'and object implementing \Stringable interface or \DateTimeInterface.';
     /**
      * A default for {@see $incorrectDataSetTypeMessage}.
      */
     protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = 'The attribute value returned from a custom data set ' .
-    'must have a scalar type.';
+    'must have one of the following types: integer, float, string, boolean, null or an object implementing ' .
+    '\Stringable interface or \DateTimeInterface.';
     /**
      * List of valid types.
      *
      * @see CompareType
      */
-    private const VALID_TYPES = [CompareType::STRING, CompareType::NUMBER];
+    private const VALID_TYPES = [CompareType::ORIGINAL, CompareType::STRING, CompareType::NUMBER];
     /**
      * Map of valid operators. It's used instead of a list for better performance.
      */
@@ -73,8 +75,8 @@ abstract class AbstractCompare implements
     ];
 
     /**
-     * @param scalar|null $targetValue The constant value to be compared with. When both this property and
-     * {@see $targetAttribute} are set, this property takes precedence.
+     * @param mixed $targetValue The value to be compared with. When both this property and {@see $targetAttribute} are
+     * set, this property takes precedence.
      * @param string|null $targetAttribute The name of the attribute to be compared with. When both this property and
      * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
@@ -84,7 +86,7 @@ abstract class AbstractCompare implements
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $incorrectDataSetTypeMessage A message used when the value returned from a custom
-     * data set is not scalar.
+     * data set is neither scalar nor null.
      *
      * You may use the following placeholders in the message:
      *
@@ -94,14 +96,30 @@ abstract class AbstractCompare implements
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the translated label of the attribute being validated.
-     * - `{targetValue}`: the constant value to be compared with.
+     * - `{targetValue}`: the value to be compared with.
      * - `{targetAttribute}`: the name of the attribute to be compared with.
-     * - `{targetValueOrAttribute}`: the constant value to be compared with or, if it's absent, the name of
-     *   the attribute to be compared with.
-     * - `{value}`: the value of the attribute being validated.
-     * @param string $type The type of the values being compared. Either {@see CompareType::STRING}
-     * or {@see CompareType::NUMBER}.
-     * @psalm-param CompareType::STRING | CompareType::NUMBER $type
+     * - `{targetAttributeValue}`: the value extracted from the attribute to be compared with if this attribute was set.
+     * - `{targetValueOrAttribute}`: the value to be compared with or, if it's absent, the name of the attribute to be
+     * compared with.
+     * - `{value}`: the value being validated.
+     *
+     * When {@see CompareType::ORIGINAL} is used with complex types (neither scalar nor `null`), `{targetValue}`,
+     * `{targetAttributeValue}` and `{targetValueOrAttribute}` parameters might contain the actual type instead of the
+     * value, e.g. "object" for predictable formatting.
+     * @param string $type The type of the values being compared:
+     *
+     * - {@see CompareType::NUMBER} - default, both values will be converted to float numbers before comparison.
+     * - {@see CompareType::ORIGINAL} - compare the values as is.
+     * - {@see CompareType::STRING} - cast both values to strings before comparison.
+     *
+     * {@see CompareType::NUMBER} and {@see CompareType::STRING} allow only scalar and `null` values, also objects
+     * implementing {@see Stringable} interface or {@see DateTimeInterface} (validated values must be in Unix Timestamp
+     * format).
+     *
+     * {@see CompareType::ORIGINAL} allows any values. All PHP comparison rules apply here, see comparison operators -
+     * {@see https://www.php.net/manual/en/language.operators.comparison.php} and PHP type comparison tables -
+     * {@see https://www.php.net/manual/en/types.comparisons.php} sections in official PHP documentation.
+     * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @param string $operator The operator for comparison. The following operators are supported:
      *
@@ -113,8 +131,6 @@ abstract class AbstractCompare implements
      * - `>=`: check if value being validated is greater than or equal to the value being compared with.
      * - `<`: check if value being validated is less than the value being compared with.
      * - `<=`: check if value being validated is less than or equal to the value being compared with.
-     *
-     * When you want to compare numbers, make sure to also change {@see $type} to {@see TYPE_NUMBER}.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
@@ -124,12 +140,12 @@ abstract class AbstractCompare implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private int|float|string|bool|null $targetValue = null,
+        private mixed $targetValue = null,
         private string|null $targetAttribute = null,
         private string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
         private string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
         private string|null $message = null,
-        private string $type = CompareType::STRING,
+        private string $type = CompareType::NUMBER,
         private string $operator = '==',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
@@ -152,13 +168,13 @@ abstract class AbstractCompare implements
     }
 
     /**
-     * Get the constant value to be compared with.
+     * Get value to be compared with.
      *
-     * @return scalar|null Value to be compared with or `null` if it was not configured.
+     * @return mixed Value to be compared with or `null` if it was not configured.
      *
      * @see $targetValue
      */
-    public function getTargetValue(): int|float|string|bool|null
+    public function getTargetValue(): mixed
     {
         return $this->targetValue;
     }
@@ -180,7 +196,7 @@ abstract class AbstractCompare implements
      *
      * @return string The type of the values being compared. Either {@see CompareType::STRING}
      * or {@see CompareType::NUMBER}.
-     * @psalm-return CompareType::STRING | CompareType::NUMBER $type
+     * @psalm-return CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @see $type
      */
@@ -236,8 +252,10 @@ abstract class AbstractCompare implements
     public function getMessage(): string
     {
         return $this->message ?? match ($this->operator) {
-            '==', '===' => 'Value must be equal to "{targetValueOrAttribute}".',
-            '!=', '!==' => 'Value must not be equal to "{targetValueOrAttribute}".',
+            '==', => 'Value must be equal to "{targetValueOrAttribute}".',
+            '===' => 'Value must be strictly equal to "{targetValueOrAttribute}".',
+            '!=' => 'Value must not be equal to "{targetValueOrAttribute}".',
+            '!==' => 'Value must not be strictly equal to "{targetValueOrAttribute}".',
             '>' => 'Value must be greater than "{targetValueOrAttribute}".',
             '>=' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
             '<' => 'Value must be less than "{targetValueOrAttribute}".',
@@ -247,14 +265,19 @@ abstract class AbstractCompare implements
 
     public function getOptions(): array
     {
-        $messageParameters = [
-            'targetValue' => $this->targetValue,
-            'targetAttribute' => $this->targetAttribute,
-            'targetValueOrAttribute' => $this->targetValue ?? $this->targetAttribute,
-        ];
+        $isTargetValueSimple = $this->targetValue === null || is_scalar($this->targetValue);
 
-        return [
-            'targetValue' => $this->targetValue,
+        if (!$isTargetValueSimple) {
+            $messageParameters = ['targetAttribute' => $this->targetAttribute];
+        } else {
+            $messageParameters = [
+                'targetValue' => $this->targetValue,
+                'targetAttribute' => $this->targetAttribute,
+                'targetValueOrAttribute' => $this->targetAttribute ?? $this->targetValue,
+            ];
+        }
+
+        $options = [
             'targetAttribute' => $this->targetAttribute,
             'incorrectInputMessage' => [
                 'template' => $this->incorrectInputMessage,
@@ -273,6 +296,11 @@ abstract class AbstractCompare implements
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
+        if (!$isTargetValueSimple) {
+            return $options;
+        }
+
+        return array_merge(['targetValue' => $this->targetValue], $options);
     }
 
     public function getHandler(): string

@@ -102,10 +102,12 @@ return [
      * @see LessThanOrEqual
      * @see NotEqual
      */
-    'The allowed types are integer, float, string, boolean and null.' => 'Ruxsat berilgan turlar: integer, float, string, boolean va null.',
-    'The attribute value returned from a custom data set must have a scalar type.' => 'Maʼlumotlar toʻplamidan olingan qiymat skalyar turdagi boʻlishi kerak.',
+    'The allowed types are integer, float, string, boolean, null and object implementing \Stringable interface or \DateTimeInterface.' => 'Ruxsat berilgan turlar: integer, float, string, boolean va null.', // TODO: Actualize
+    'The attribute value returned from a custom data set must have one of the following types: integer, float, string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface.' => 'Maʼlumotlar toʻplamidan olingan qiymat skalyar turdagi boʻlishi kerak.', // TODO: Actualize
     'Value must be equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"ga teng boʻlishi kerak.',
+    'Value must be strictly equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"ga teng boʻlishi kerak.', // TODO: Actualize
     'Value must not be equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"ga teng boʻlmasligi kerak.',
+    'Value must not be strictly equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"ga teng boʻlmasligi kerak.', // TODO: Actualize
     'Value must be greater than "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"dan katta boʻlishi kerak.',
     'Value must be greater than or equal to "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"dan katta yoki teng boʻlishi kerak.',
     'Value must be less than "{targetValueOrAttribute}".' => 'Qiymat "{targetValueOrAttribute}"dan kichik boʻlishi kerak.',
