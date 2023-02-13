@@ -39,9 +39,11 @@ final class ValidationContext
 
     /**
      * @var DataSetInterface|null Data set the attribute belongs to.
-     * `null` if data set was not set with {@see setDataSet()} yet.
+     * `null` if data set was not set with {@see setIsolatedDataSet()} yet.
      */
     private ?DataSetInterface $dataSet = null;
+
+    private ?DataSetInterface $isolatedDataSet = null;
 
     /**
      * @var string|null Validated data set's attribute name. `null` if a single value is validated.
@@ -80,7 +82,8 @@ final class ValidationContext
     public function setContextDataOnce(
         ValidatorInterface $validator,
         AttributeTranslatorInterface $attributeTranslator,
-        mixed $rawData
+        mixed $rawData,
+        DataSetInterface $dataSet
     ): self {
         if ($this->validator !== null) {
             return $this;
@@ -89,6 +92,7 @@ final class ValidationContext
         $this->validator = $validator;
         $this->defaultAttributeTranslator = $attributeTranslator;
         $this->rawData = $rawData;
+        $this->dataSet = $dataSet;
 
         return $this;
     }
@@ -125,12 +129,12 @@ final class ValidationContext
     {
         $this->requireValidator();
 
-        $currentDataSet = $this->dataSet;
+        $currentIsolatedDataSet = $this->isolatedDataSet;
         $currentAttribute = $this->attribute;
 
         $result = $this->validator->validate($data, $rules, $this);
 
-        $this->dataSet = $currentDataSet;
+        $this->isolatedDataSet = $currentIsolatedDataSet;
         $this->attribute = $currentAttribute;
 
         return $result;
@@ -149,18 +153,24 @@ final class ValidationContext
         return $this->rawData;
     }
 
+    public function getDataSet(): DataSetInterface
+    {
+        $this->requireValidator();
+        return $this->dataSet;
+    }
+
     /**
      * Get the data set the attribute belongs to.
      *
      * @return DataSetInterface Data set the attribute belongs to.
      */
-    public function getDataSet(): DataSetInterface
+    public function getIsolatedDataSet(): DataSetInterface
     {
-        if ($this->dataSet === null) {
+        if ($this->isolatedDataSet === null) {
             throw new RuntimeException('Data set in validation context is not set.');
         }
 
-        return $this->dataSet;
+        return $this->isolatedDataSet;
     }
 
     /**
@@ -172,9 +182,9 @@ final class ValidationContext
      *
      * @internal
      */
-    public function setDataSet(DataSetInterface $dataSet): self
+    public function setIsolatedDataSet(DataSetInterface $dataSet): self
     {
-        $this->dataSet = $dataSet;
+        $this->isolatedDataSet = $dataSet;
         return $this;
     }
 
@@ -262,13 +272,14 @@ final class ValidationContext
      */
     public function isAttributeMissing(): bool
     {
-        return $this->attribute !== null && !$this->getDataSet()->hasAttribute($this->attribute);
+        return $this->attribute !== null && !$this->getIsolatedDataSet()->hasAttribute($this->attribute);
     }
 
     /**
      * Ensure that validator is set in validation context.
      *
      * @psalm-assert ValidatorInterface $this->validator
+     * @psalm-assert DataSetInterface $this->dataSet
      *
      * @throws RuntimeException If validator is not set in validation context.
      */
