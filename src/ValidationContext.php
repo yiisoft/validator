@@ -270,7 +270,8 @@ final class ValidationContext
      */
     public function isAttributeMissing(): bool
     {
-        return $this->isDataSetMissing || ($this->attribute !== null && !$this->getDataSet()->hasAttribute($this->attribute));
+        return $this->isDataSetMissing
+            || ($this->attribute !== null && !$this->getDataSet()->hasAttribute($this->attribute));
     }
 
     /**
