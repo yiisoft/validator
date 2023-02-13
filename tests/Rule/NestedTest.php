@@ -1063,7 +1063,7 @@ final class NestedTest extends RuleTestCase
                                 $method = $context->getDataSet()->getAttributeValue('method');
                                 return $method === 'get';
                             }),
-                        ]
+                        ],
                     ]),
                 ],
                 [
