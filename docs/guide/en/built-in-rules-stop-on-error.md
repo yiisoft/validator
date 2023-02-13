@@ -16,7 +16,7 @@ use Yiisoft\Validator\Validator;
 $data = 2;
 $rule = new StopOnError([
     new Length(min: 3), // "Lightweight" rule, will be run and won't pass the validation.
-    new MyHeavyRule(), // // "Heavy" rule, won't be run at all because of the existing error.
+    new MyHeavyRule(), // "Heavy" rule, won't be run at all because of the existing error.
 ]);
 $result = (new Validator())->validate($data, $rule);
 ```

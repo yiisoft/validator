@@ -32,20 +32,33 @@ use Yiisoft\Validator\WhenInterface;
  * ]);
  * ```
  *
- * Not to be confused with skipping, there is a separate functionality for that, see {@see SkipOnErrorInterface}.
+ * Not to be confused with skipping each rule individually, there is a separate functionality for that, see
+ * {@see SkipOnErrorInterface}.
  *
- * When using with other rules, it will be automatically skipped if the previous rule didn't pass the validation (no
- * additional configuration is needed):
+ * When using with other rules and default settings, it will not be skipped if the previous rule didn't pass the
+ * validation. To change this behavior, set {@see StopOnError::$skipOnError} to `true`. This allows to use it for
+ * limiting the list of errors per attribute to just the first one (in HTML forms, for example):
  *
  * ```php
  * $rules = [
- *      new SimpleRule1(), // Let's say there is an error.
- *      // Then this rule is skipped completely with all its related rules.
- *      new StopOnError([
- *          new HeavyRule1(), // Skipped.
- *          new HeavyRule2(), // Skipped.
+ *     'attribute1' => new SimpleRule1(), // Let's say there is an error.
+ *     // Then this rule is skipped completely with all its related rules because `skipOnError` is set to `true`. Useful
+ *     when all rules within `StopOnError` are heavy.
+ *     'attribute2' => new StopOnError(
+ *         [
+ *             new HeavyRule1(), // Skipped.
+ *             new HeavyRule2(), // Skipped.
+ *         ],
+ *         skipOnError: true,
+ *     ),
+ *     // This rule is not skipped because `skipOnError` is `false` by default. Useful for forcing validation and
+ *     limiting the errors.
+ *     'attribute3' => new StopOnError([
+ *         new SimpleRule2(), // Assuming there is another error.
+ *         new SimpleRule3(), // Skipped.
  *     ]),
- *     new SimpleRule2(), // Skipping of intermediate rules depends on `skipOnError` option.
+ *     // Skipping of other intermediate rules depends on `skipOnError` option set in these intermediate rules.
+ *     'attribute4' => new SimpleRule4(), // Not skipped, because `skipOnError` is `false` by default.
  * ]);
  * ```
  *
