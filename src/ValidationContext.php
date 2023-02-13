@@ -6,7 +6,6 @@ namespace Yiisoft\Validator;
 
 use RuntimeException;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\StopOnError;
 
 /**
