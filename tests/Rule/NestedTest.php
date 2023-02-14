@@ -24,10 +24,12 @@ use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
@@ -46,6 +48,7 @@ final class NestedTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
+    use RuleWithProvidedRulesTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
@@ -256,6 +259,23 @@ final class NestedTest extends RuleTestCase
                 ],
             ],
         ];
+    }
+
+    public function testGetOptionsWithNotRule(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $ruleInterfaceName = RuleInterface::class;
+        $message = "Every rule must be an instance of $ruleInterfaceName, class@anonymous given.";
+        $this->expectExceptionMessage($message);
+
+        $rule = new Nested([
+            'a' => new Required(),
+            'b' => new class () {
+            },
+            'c' => new Number(min: 1),
+        ]);
+        $rule->getOptions();
     }
 
     public function testValidationRuleIsNotInstanceOfRule(): void
