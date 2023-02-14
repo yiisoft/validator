@@ -363,7 +363,7 @@ final class CompositeTest extends RuleTestCase
                 new Composite(
                     static fn () => (new Result())->addError('Custom error.'),
                 ),
-                ['' => ['Custom error.']]
+                ['' => ['Custom error.']],
             ],
             'rules normalization, rule without iterable' => [
                 [],
