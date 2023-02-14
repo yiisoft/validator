@@ -35,25 +35,29 @@ final class PropagateOptionsHelper
     {
         $rules = [];
         foreach ($childRules as $childRule) {
-            if ($parentRule instanceof SkipOnEmptyInterface && $childRule instanceof SkipOnEmptyInterface) {
-                $childRule = $childRule->skipOnEmpty($parentRule->getSkipOnEmpty());
-            }
+            $rules[] = self::propagateRule($parentRule, $childRule);
+        }
+        return $rules;
+    }
 
-            if ($parentRule instanceof SkipOnErrorInterface && $childRule instanceof SkipOnErrorInterface) {
-                $childRule = $childRule->skipOnError($parentRule->shouldSkipOnError());
-            }
-
-            if ($parentRule instanceof WhenInterface && $childRule instanceof WhenInterface) {
-                $childRule = $childRule->when($parentRule->getWhen());
-            }
-
-            if ($childRule instanceof PropagateOptionsInterface) {
-                $childRule->propagateOptions();
-            }
-
-            $rules[] = $childRule;
+    public static function propagateRule(RuleInterface $parentRule, RuleInterface $childRule): RuleInterface
+    {
+        if ($parentRule instanceof SkipOnEmptyInterface && $childRule instanceof SkipOnEmptyInterface) {
+            $childRule = $childRule->skipOnEmpty($parentRule->getSkipOnEmpty());
         }
 
-        return $rules;
+        if ($parentRule instanceof SkipOnErrorInterface && $childRule instanceof SkipOnErrorInterface) {
+            $childRule = $childRule->skipOnError($parentRule->shouldSkipOnError());
+        }
+
+        if ($parentRule instanceof WhenInterface && $childRule instanceof WhenInterface) {
+            $childRule = $childRule->when($parentRule->getWhen());
+        }
+
+        if ($childRule instanceof PropagateOptionsInterface) {
+            $childRule->propagateOptions();
+        }
+
+        return $childRule;
     }
 }

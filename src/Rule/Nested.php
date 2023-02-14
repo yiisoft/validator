@@ -81,7 +81,6 @@ use function sprintf;
  * @see NestedHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
- * @psalm-type ReadyRulesType = array<array<RuleInterface>|RuleInterface>|null
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
@@ -107,9 +106,8 @@ final class Nested implements
     private const EACH_SHORTCUT = '*';
 
     /**
-     * @var array|null A set of ready to use rule instances. The 1st level is always an array of rules, the 2nd level is
-     * either an array of rules or a single rule.
-     * @psalm-var ReadyRulesType
+     * @var array<list<RuleInterface>|RuleInterface>|null A set of ready to use rule instances. The 1st level
+     *     is always an array of rules, the 2nd level is either an array of rules or a single rule.
      */
     private array|null $rules;
 
@@ -203,7 +201,7 @@ final class Nested implements
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        $this->prepareRules($rules);
+        $this->setRules($rules);
     }
 
     public function getName(): string
@@ -212,9 +210,9 @@ final class Nested implements
     }
 
     /**
-     * @return iterable<iterable<RuleInterface>|RuleInterface>|null
+     * @return array<array-key,list<RuleInterface>|RuleInterface>|null
      */
-    public function getRules(): iterable|null
+    public function getRules(): array|null
     {
         return $this->rules;
     }
@@ -306,11 +304,10 @@ final class Nested implements
      * @throws InvalidArgumentException When rules' source has wrong type.
      * @throws InvalidArgumentException When source contains items that are not rules.
      */
-    private function prepareRules(iterable|object|string|null $source): void
+    private function setRules(iterable|object|string|null $source): void
     {
         if ($source === null) {
             $this->rules = null;
-
             return;
         }
 
@@ -328,15 +325,45 @@ final class Nested implements
         }
 
         self::ensureArrayHasRules($rules);
-        /** @psalm-var ReadyRulesType $rules */
-        $this->rules = $rules;
 
         if ($this->handleEachShortcut) {
-            $this->handleEachShortcut();
+            $this->handleEachShortcut($rules);
         }
+
+        $preparedRules = [];
+        $this->prepareRules($rules, $preparedRules);
+
+        $this->rules = $preparedRules;
 
         if ($this->propagateOptions) {
             $this->propagateOptions();
+        }
+    }
+
+    /**
+     * @psalm-param array<array<RuleInterface>|RuleInterface> $rawRules
+     * @psalm-param array<list<RuleInterface>|RuleInterface> $result
+     */
+    private function prepareRules(array $rawRules, array &$result, ?string $baseValuePath = null): void
+    {
+        foreach ($rawRules as $valuePath => $validationRules) {
+            if (is_int($valuePath)) {
+                $key = $baseValuePath;
+            } else {
+                $key = ($baseValuePath !== null ? $baseValuePath . '.' : '') . $valuePath;
+            }
+
+            if (is_array($validationRules)) {
+                $this->prepareRules($validationRules, $result, $key);
+                continue;
+            }
+
+            if ($key === null) {
+                $result[] = $validationRules;
+            } else {
+                /** @psalm-suppress UndefinedInterfaceMethod */
+                $result[$key][] = $validationRules;
+            }
         }
     }
 
@@ -346,7 +373,11 @@ final class Nested implements
      *
      * @param iterable $rules Source iterable that will be checked and converted to array (so it's passed by reference).
      *
+     * @psalm-param-out array<array<RuleInterface>|RuleInterface> $rules
+     *
      * @throws InvalidArgumentException When iterable contains items that are not rules.
+     *
+     * @psalm-suppress ReferenceConstraintViolation
      */
     private static function ensureArrayHasRules(iterable &$rules): void
     {
@@ -372,11 +403,11 @@ final class Nested implements
 
     /**
      * Converts rules defined with {@see EACH_SHORTCUT} to separate `Nested` and `Each` rules.
+     *
+     * @psalm-param array<array<RuleInterface>|RuleInterface> $rules
      */
-    private function handleEachShortcut(): void
+    private function handleEachShortcut(array &$rules): void
     {
-        /** @var RuleInterface[] $rules Conversion to array is done in {@see ensureArrayHasRules()}. */
-        $rules = $this->rules;
         while (true) {
             $breakWhile = true;
             $rulesMap = [];
@@ -434,8 +465,6 @@ final class Nested implements
                 break;
             }
         }
-
-        $this->rules = $rules;
     }
 
     public function propagateOptions(): void
@@ -446,10 +475,9 @@ final class Nested implements
 
         $rules = [];
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
-            $rules[$attributeRulesIndex] = PropagateOptionsHelper::propagate(
-                $this,
-                is_iterable($attributeRules) ? $attributeRules : [$attributeRules],
-            );
+            $rules[$attributeRulesIndex] = is_iterable($attributeRules)
+                ? PropagateOptionsHelper::propagate($this, $attributeRules)
+                : PropagateOptionsHelper::propagateRule($this, $attributeRules);
         }
 
         $this->rules = $rules;
@@ -462,9 +490,15 @@ final class Nested implements
         }
 
         foreach ($this->rules as $rules) {
-            foreach ((is_iterable($rules) ? $rules : [$rules]) as $rule) {
-                if ($rule instanceof AfterInitAttributeEventInterface) {
-                    $rule->afterInitAttribute($object, $target);
+            if (is_array($rules)) {
+                foreach ($rules as $rule) {
+                    if ($rule instanceof AfterInitAttributeEventInterface) {
+                        $rule->afterInitAttribute($object, $target);
+                    }
+                }
+            } else {
+                if ($rules instanceof AfterInitAttributeEventInterface) {
+                    $rules->afterInitAttribute($object, $target);
                 }
             }
         }

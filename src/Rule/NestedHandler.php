@@ -60,12 +60,9 @@ final class NestedHandler implements RuleHandlerInterface
             ]);
         }
 
-        $preparedRules = [];
-        $this->prepareRules($rule->getRules(), $preparedRules);
-
         $compoundResult = new Result();
 
-        foreach ($preparedRules as $valuePath => $rules) {
+        foreach ($rule->getRules() as $valuePath => $rules) {
             if ($rule->isPropertyPathRequired() && !ArrayHelper::pathExists($data, $valuePath)) {
                 if (is_int($valuePath)) {
                     $valuePathList = [$valuePath];
@@ -111,34 +108,5 @@ final class NestedHandler implements RuleHandlerInterface
         }
 
         return $compoundResult;
-    }
-
-    /**
-     * @psalm-param iterable<iterable<RuleInterface>|RuleInterface> $rawRules
-     *
-     * @param RuleInterface[] $result
-     */
-    public function prepareRules(iterable $rawRules, array &$result, ?string $baseValuePath = null): void
-    {
-        /** @var int|string $valuePath */
-        foreach ($rawRules as $valuePath => $rules) {
-            if (is_int($valuePath)) {
-                $key = $baseValuePath;
-            } else {
-                $key = ($baseValuePath !== null ? $baseValuePath . '.' : '') . $valuePath;
-            }
-
-            if (is_iterable($rules)) {
-                $this->prepareRules($rules, $result, $key);
-                continue;
-            }
-
-            if ($key === null) {
-                $result[] = $rules;
-            } else {
-                /** @psalm-suppress UndefinedInterfaceMethod */
-                $result[$key][] = $rules;
-            }
-        }
     }
 }
