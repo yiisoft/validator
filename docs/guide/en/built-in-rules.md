@@ -60,6 +60,7 @@ Here is a list of all available built-in rules, divided by category.
 Some rules also have guides in addition to PHPDoc:
 
 - [Callback](built-in-rules-callback.md)
+- [Compare](built-in-rules-compare.md)
 - [Composite](built-in-rules-composite.md)
 - [Each](built-in-rules-each.md)
 - [Nested](built-in-rules-nested.md)

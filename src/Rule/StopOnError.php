@@ -9,6 +9,7 @@ use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
+use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Helper\RulesDumper;
@@ -20,36 +21,23 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Applies to a set of rules, runs validation for each one of them in the order they are defined and stops at the rule
- * where validation failed. In particular, it can be useful for preventing the heavy operations to increase performance.
- * It can be set like that for a group of ordered rules:
+ * where validation failed.
+ *
+ * An example of usage:
  *
  * ```php
  * $rule = new StopOnError([
- *      new Length(min: 3),
- *      // This operation executes DB query and thus heavier. It's preferable not to call it if the previous rule did
- *      not pass the validation.
- *      new ExistsInDatabase(),
+ *      new Required(), // Let's say there is an error.
+ *      new Length(min: 3), // Then this rule will be skipped.
+ *      new MyCustomRule(), // This rule will be skipped too.
  * ]);
  * ```
  *
- * Not to be confused with skipping, there is a separate functionality for that, see {@see SkipOnErrorInterface}.
+ * When using with other rules, conditional validation options, such as {@see StopOnError::$skipOnError} will be applied
+ * to the whole group of {@see StopOnError::$rules}.
  *
- * When using with other rules, it will be automatically skipped if the previous rule didn't pass the validation (no
- * additional configuration is needed):
- *
- * ```php
- * $rules = [
- *      new SimpleRule1(), // Let's say there is an error.
- *      // Then this rule is skipped completely with all its related rules.
- *      new StopOnError([
- *          new HeavyRule1(), // Skipped.
- *          new HeavyRule2(), // Skipped.
- *     ]),
- *     new SimpleRule2(), // Skipping of intermediate rules depends on `skipOnError` option.
- * ]);
- * ```
- *
- * Use grouping / ordering / `skipOnError` option to achieve the desired effect.
+ * Not to be confused with skipping each rule individually, there is a separate functionality for that, see
+ * {@see SkipOnErrorInterface}.
  *
  * @see StopOnErrorHandler Corresponding handler performing the actual validation.
  *
@@ -59,11 +47,13 @@ use Yiisoft\Validator\WhenInterface;
 final class StopOnError implements
     RuleWithOptionsInterface,
     SkipOnEmptyInterface,
+    SkipOnErrorInterface,
     WhenInterface,
     RulesProviderInterface,
     AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
+    use SkipOnErrorTrait;
     use WhenTrait;
 
     /**
@@ -72,6 +62,8 @@ final class StopOnError implements
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this `StopOnError` rule with all defined {@see $rules} if
      * the validated value is empty / not passed. See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this `StopOnError` rule with all defined {@see $rules} if any of the
+     * previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying this `StopOnError` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
      * @psalm-param WhenType $when
@@ -79,6 +71,7 @@ final class StopOnError implements
     public function __construct(
         private iterable $rules,
         private mixed $skipOnEmpty = null,
+        private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
     }
@@ -102,12 +95,14 @@ final class StopOnError implements
 
     #[ArrayShape([
         'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
         'rules' => 'array|null',
     ])]
     public function getOptions(): array
     {
         return [
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
+            'skipOnError' => $this->skipOnError,
             'rules' => $this->dumpRulesAsArray(),
         ];
     }
