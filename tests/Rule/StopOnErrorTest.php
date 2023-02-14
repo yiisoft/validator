@@ -167,8 +167,8 @@ final class StopOnErrorTest extends RuleTestCase
                 ],
                 [
                     'a' => ['Value not passed.'],
-                    'b' => ['Value cannot be blank.'],
-                    'c' => ['Value cannot be blank.'],
+                    'b' => ['Value not passed.'],
+                    'c' => ['Value not passed.'],
                     'd' => ['Value not passed.'],
                 ],
             ],
@@ -195,6 +195,19 @@ final class StopOnErrorTest extends RuleTestCase
                 [
                     'a' => ['Value not passed.'],
                     'd' => ['Value not passed.'],
+                ],
+            ],
+            'check for missing data set' => [
+                ['b' => null],
+                [
+                    'a' => new StopOnError([
+                        new Required(),
+                    ]),
+                    'b' => new Required(),
+                ],
+                [
+                    'a' => ['Value not passed.'],
+                    'b' => ['Value cannot be blank.'],
                 ],
             ],
         ];
