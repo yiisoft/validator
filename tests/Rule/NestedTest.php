@@ -1093,7 +1093,7 @@ final class NestedTest extends RuleTestCase
                     ],
                     'level1.level2' => [
                         'level3.name' => new Length(min: 5),
-                    ]
+                    ],
                 ]),
                 [
                     'level1.level2.level3.key' => ['Value must be no less than 9.', 'Value must be no greater than 5.'],
