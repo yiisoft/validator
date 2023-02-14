@@ -20,49 +20,23 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Applies to a set of rules, runs validation for each one of them in the order they are defined and stops at the rule
- * where validation failed. In particular, it can be useful for preventing the heavy operations to increase performance.
- * It can be set like that for a group of ordered rules:
+ * where validation failed.
+ *
+ * An example of usage:
  *
  * ```php
  * $rule = new StopOnError([
- *      new Length(min: 3),
- *      // This operation executes DB query and thus heavier. It's preferable not to call it if the previous rule did
- *      not pass the validation.
- *      new ExistsInDatabase(),
+ *      new Required(), // Let's say there is an error.
+ *      new Length(min: 3), // Then this rule will be skipped.
+ *      new MyCustomRule(), // This rule will be skipped too.
  * ]);
  * ```
+ *
+ * When using with other rules, conditional validation options, such as {@see StopOnError::$skipOnError} will be applied
+ * to the whole group of {@see StopOnError::$rules}.
  *
  * Not to be confused with skipping each rule individually, there is a separate functionality for that, see
  * {@see SkipOnErrorInterface}.
- *
- * When using with other rules and default settings, it will not be skipped if the previous rule didn't pass the
- * validation. To change this behavior, set {@see StopOnError::$skipOnError} to `true`. This allows to use it for
- * limiting the list of errors per attribute to just the first one (in HTML forms, for example):
- *
- * ```php
- * $rules = [
- *     'attribute1' => new SimpleRule1(), // Let's say there is an error.
- *     // Then this rule is skipped completely with all its related rules because `skipOnError` is set to `true`. Useful
- *     when all rules within `StopOnError` are heavy.
- *     'attribute2' => new StopOnError(
- *         [
- *             new HeavyRule1(), // Skipped.
- *             new HeavyRule2(), // Skipped.
- *         ],
- *         skipOnError: true,
- *     ),
- *     // This rule is not skipped because `skipOnError` is `false` by default. Useful for forcing validation and
- *     limiting the errors.
- *     'attribute3' => new StopOnError([
- *         new SimpleRule2(), // Assuming there is another error.
- *         new SimpleRule3(), // Skipped.
- *     ]),
- *     // Skipping of other intermediate rules depends on `skipOnError` option set in these intermediate rules.
- *     'attribute4' => new SimpleRule4(), // Not skipped, because `skipOnError` is `false` by default.
- * ]);
- * ```
- *
- * Use grouping / ordering / `skipOnError` option to achieve the desired effect.
  *
  * @see StopOnErrorHandler Corresponding handler performing the actual validation.
  *
