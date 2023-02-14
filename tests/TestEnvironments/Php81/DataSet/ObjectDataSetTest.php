@@ -221,10 +221,10 @@ final class ObjectDataSetTest extends TestCase
         $actualFirstEmbeddedRules = $this->toArray($actualRules[0]->getRules());
         $this->assertIsArray($actualFirstEmbeddedRules);
         $this->assertCount(1, $actualFirstEmbeddedRules);
-        $this->assertInstanceOf(Nested::class, $actualFirstEmbeddedRules[0]);
+        $this->assertInstanceOf(Nested::class, $actualFirstEmbeddedRules[0][0]);
 
         // check Point structure has right structure
-        $innerRules = $this->toArray($actualFirstEmbeddedRules[0]->getRules());
+        $innerRules = $this->toArray($actualFirstEmbeddedRules[0][0]->getRules());
         // rgb has usual structure. We can check as is
         $this->assertEquals($firstEmbeddedRules['rgb'], $this->toArray($innerRules['rgb']));
 
@@ -236,8 +236,8 @@ final class ObjectDataSetTest extends TestCase
         $secondInnerRules = $this->toArray($innerRules[0]->getRules());
         $this->assertIsArray($secondInnerRules);
         $this->assertCount(1, $secondInnerRules);
-        $this->assertInstanceOf(Nested::class, $secondInnerRules[0]);
-        $this->assertEquals($secondEmbeddedRules, $this->toNestedArray($secondInnerRules[0]->getRules()));
+        $this->assertInstanceOf(Nested::class, $secondInnerRules[0][0]);
+        $this->assertEquals($secondEmbeddedRules, $this->toNestedArray($secondInnerRules[0][0]->getRules()));
     }
 
     public function toArray(iterable $rules): array

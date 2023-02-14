@@ -419,7 +419,7 @@ final class NestedTest extends RuleTestCase
         $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
-    public function testPropagateOptions(): void
+    public function testPropagateOptions12(): void
     {
         $rule = new Nested([
             'posts' => [
@@ -446,13 +446,13 @@ final class NestedTest extends RuleTestCase
         $paths = [
             [],
             ['rules', 'posts', 0],
-            ['rules', 'posts', 0, 'rules', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'title', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'name', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 1],
+            ['rules', 'posts', 0, 'rules', 0, 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'title', 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0, 'rules', 'name', 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0, 'rules', 'age', 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0, 'rules', 'age', 1],
             ['rules', 'meta', 0],
         ];
         $keys = ['skipOnEmpty', 'skipOnError'];
@@ -463,7 +463,7 @@ final class NestedTest extends RuleTestCase
                 $fullPath[] = $key;
 
                 $value = ArrayHelper::getValueByPath($options, $fullPath);
-                $this->assertTrue($value);
+                $this->assertTrue($value, implode('.', $fullPath));
             }
         }
     }

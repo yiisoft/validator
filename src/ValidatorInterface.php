@@ -13,7 +13,8 @@ use Yiisoft\Validator\Helper\RulesNormalizer;
  * An interface allowing to validate the data according to the set of rules ({@see RuleInterface}) and validation
  * context ({@see ValidationContext}). A class implementing it is called "validator".
  *
- * @psalm-type RulesType = null|class-string|object|callable|iterable<RuleInterface|RuleInterface[]|callable|callable[]>
+ * @psalm-type RulesTypeWithoutNull = class-string|object|callable|iterable<RuleInterface|RuleInterface[]|callable|callable[]>
+ * @psalm-type RulesType = null|RulesTypeWithoutNull
  */
 interface ValidatorInterface
 {

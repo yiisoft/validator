@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Helper;
 
 use InvalidArgumentException;
 use ReflectionException;
+use Traversable;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -23,6 +24,8 @@ use function is_string;
  * Note that when using {@see Validator}, normalization is performed automatically.
  *
  * @psalm-import-type RulesType from ValidatorInterface
+ * @psalm-type NormalizedRulesType = array<int|string, Traversable<int, RuleInterface>>
+ * @psalm-type NormalizedRulesArrayType = array<array<int,RuleInterface>>
  */
 final class RulesNormalizer
 {
@@ -54,6 +57,7 @@ final class RulesNormalizer
      * - Object providing rules via separate method.
      * - Single rule instance / callable.
      * - Name of a class providing rules via PHP attributes.
+     *
      * @psalm-param RulesType $rules
      *
      * @param mixed|null $data Validated data,
@@ -65,7 +69,7 @@ final class RulesNormalizer
      * @throws ReflectionException When parsing rules from PHP attributes failed.
      *
      * @return iterable Rules normalized as a whole and individually, ready to use for validation.
-     * @psalm-return iterable<int|string, iterable<int, RuleInterface>>
+     * @psalm-return NormalizedRulesType
      */
     public static function normalize(
         callable|iterable|object|string|null $rules,
@@ -97,6 +101,23 @@ final class RulesNormalizer
         }
 
         return $normalizedRules;
+    }
+
+    /**
+     * @psalm-param RulesType $rules
+     *
+     * @psalm-return NormalizedRulesArrayType
+     */
+    public static function normalizeToArray(callable|iterable|object|string|null $rules): array
+    {
+        $rules = self::normalize($rules);
+
+        $result = [];
+        foreach ($rules as $key => $rulesList) {
+            $result[$key] = iterator_to_array($rulesList);
+        }
+
+        return $result;
     }
 
     /**
