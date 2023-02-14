@@ -116,7 +116,7 @@ use function sprintf;
  * @see NestedHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
- * @psalm-type ReadyRulesType = array<array<RuleInterface>|RuleInterface>
+ * @psalm-type ReadyNestedRulesArray = array<array<RuleInterface>|RuleInterface>
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
@@ -145,7 +145,7 @@ final class Nested implements
     /**
      * @var array A set of ready to use rule instances. The 1st level is always an array of rules, the 2nd level is
      * either an array of rules or a single rule.
-     * @psalm-var ReadyRulesType
+     * @psalm-var ReadyNestedRulesArray
      */
     private array $rules;
 
@@ -161,8 +161,6 @@ final class Nested implements
      * - Name of a class containing rules declared via PHP attributes.
      * - Empty array if validated value is an object. It can either implement {@see RulesProviderInterface} or contain
      * rules declared via PHP attributes.
-     * @psalm-param iterable|object|class-string $rules
-     *
      * @param int $validatedObjectPropertyVisibility Visibility levels to use for parsed properties when validated value
      * is an object providing rules / data. For example: public and protected only, this means that the rest (private
      * ones) will be skipped. Defaults to all visibility levels (public, protected and private). See
@@ -251,11 +249,10 @@ final class Nested implements
     /**
      * Gets a set of rules for running the validation.
      *
-     * @return iterable A set of rules. The empty array means the rules are expected to be provided with a validated
-     * value.
-     * @psalm-return iterable<iterable<RuleInterface>|RuleInterface>
+     * @return array A set of rules. The empty array means the rules are expected to be provided with a validated value.
+     * @psalm-return ReadyNestedRulesArray
      */
-    public function getRules(): iterable
+    public function getRules(): array
     {
         return $this->rules;
     }
@@ -369,7 +366,7 @@ final class Nested implements
         }
 
         self::ensureArrayHasRules($rules);
-        /** @psalm-var ReadyRulesType $rules */
+        /** @psalm-var ReadyNestedRulesArray $rules */
         $this->rules = $rules;
 
         if ($this->handleEachShortcut) {

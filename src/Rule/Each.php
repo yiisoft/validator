@@ -59,6 +59,7 @@ use Yiisoft\Validator\WhenInterface;
  * @see EachHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
+ * @psalm-import-type ReadyFlatRulesIterable from RulesNormalizer
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
@@ -76,7 +77,7 @@ final class Each implements
 
     /**
      * @var iterable A set of normalized rules that needs to be applied to each element of the validated iterable.
-     * @psalm-var iterable<RuleInterface>
+     * @psalm-var ReadyFlatRulesIterable
      */
     private iterable $rules;
 
@@ -106,9 +107,6 @@ final class Each implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        /**
-         * @param callable|iterable<callable|RuleInterface>|RuleInterface $rules
-         */
         iterable|callable|RuleInterface $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $incorrectInputKeyMessage = 'Every iterable key must have an integer or a string type.',
@@ -133,7 +131,7 @@ final class Each implements
      * Gets a set of normalized rules that needs to be applied to each element of the validated iterable.
      *
      * @return iterable A set of rules.
-     * @psalm-return iterable<Closure|Closure[]|RuleInterface|RuleInterface[]>
+     * @psalm-return ReadyFlatRulesIterable
      *
      * @see $rules
      */

@@ -88,6 +88,8 @@ use Yiisoft\Validator\RulesProviderInterface;
  * {@see ObjectParser} directly instead.
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
+ *
+ * @psalm-import-type RawRulesIterable from RulesProviderInterface
  */
 final class AttributesRulesProvider implements RulesProviderInterface
 {
@@ -127,6 +129,7 @@ final class AttributesRulesProvider implements RulesProviderInterface
      *     'files' => [new Count(max: 3)], // Attribute specific rules.
      * ],
      * ```
+     * @psalm-return RawRulesIterable
      */
     public function getRules(): iterable
     {

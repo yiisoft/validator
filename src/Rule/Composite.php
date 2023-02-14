@@ -70,6 +70,7 @@ use Yiisoft\Validator\WhenInterface;
  * @see CompositeHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
+ * @psalm-import-type ReadyFlatRulesIterable from RulesNormalizer
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Composite implements
@@ -86,30 +87,28 @@ class Composite implements
 
     /**
      * @var iterable A set of normalized rules that needs to be grouped.
-     * @psalm-var iterable<iterable<RuleInterface>|RuleInterface>
+     * @psalm-var ReadyFlatRulesIterable
      */
     protected iterable $rules = [];
     /**
      * @var bool|callable|null Whether to skip this rule group if the validated value is empty / not passed. See
      * {@see SkipOnEmptyInterface}.
      */
-    protected $skipOnEmpty;
+    private mixed $skipOnEmpty = null;
     /**
      * @var bool Whether to skip this rule group if any of the previous rules gave an error. See
      * {@see SkipOnErrorInterface}.
      */
-    protected bool $skipOnError = false;
+    private bool $skipOnError = false;
     /**
      * @var Closure|null A callable to define a condition for applying this rule group. See {@see WhenInterface}.
      * @psalm-var WhenType
      */
-    protected Closure|null $when = null;
+    private Closure|null $when = null;
 
     /**
      * @param callable|iterable|RuleInterface $rules A set of rules that needs to be grouped. They will be normalized
      * using {@see RulesNormalizer}.
-     * @psalm-param iterable<Closure|RuleInterface> $rules
-     *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule group if the validated value is empty / not
      * passed. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule group if any of the previous rules gave an error. See
@@ -120,7 +119,7 @@ class Composite implements
      */
     public function __construct(
         iterable|callable|RuleInterface $rules = [],
-        bool|callable|null $skipOnEmpty = null,
+        mixed $skipOnEmpty = null,
         bool $skipOnError = false,
         Closure|null $when = null,
     ) {
@@ -153,7 +152,7 @@ class Composite implements
      * Gets a set of normalized rules that needs to be grouped.
      *
      * @return iterable A set of rules.
-     * @psalm-return iterable<iterable<RuleInterface>|RuleInterface>
+     * @psalm-return ReadyFlatRulesIterable
      *
      * @see $rules
      */
