@@ -16,10 +16,8 @@
 
     <testsuites>
         <testsuite name="Yii Validator common tests">
-            <directory>./tests</directory>
-            <exclude>
-                <directory>./tests/TestEnvironments</directory>
-            </exclude>
+            <directory suffix=".php">./tests</directory>
+            <exclude>./tests/TestEnvironments</exclude>
         </testsuite>
 
         <testsuite name="Yii Validator PHP 8.1 tests">
