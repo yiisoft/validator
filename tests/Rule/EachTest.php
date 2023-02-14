@@ -151,7 +151,7 @@ final class EachTest extends RuleTestCase
                             [
                                 'test',
                             ],
-                        ]
+                        ],
                     ],
                 ],
             ],
