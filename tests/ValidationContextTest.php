@@ -78,14 +78,17 @@ final class ValidationContextTest extends TestCase
     public function testSetContextDataOnce(): void
     {
         $validator = new Validator();
+        $data1 = ['1'];
+        $data2 = ['2'];
+        $dataSet1 = new ArrayDataSet($data1);
+        $dataSet2 = new ArrayDataSet($data2);
 
-        $context = new ValidationContext();
+        $context = (new ValidationContext())
+            ->setContextDataOnce($validator, new NullAttributeTranslator(), $data1, $dataSet1)
+            ->setContextDataOnce($validator, new NullAttributeTranslator(), $data2, $dataSet2);
 
-        $context
-            ->setContextDataOnce($validator, new NullAttributeTranslator(), 1)
-            ->setContextDataOnce($validator, new NullAttributeTranslator(), 2);
-
-        $this->assertSame(1, $context->getRawData());
+        $this->assertSame($data1, $context->getRawData());
+        $this->assertSame($dataSet1, $context->getGlobalDataSet());
     }
 
     public function dataTranslatedAttributeWithoutTranslator(): array

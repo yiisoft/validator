@@ -101,7 +101,7 @@ final class Validator implements ValidatorInterface
 
         $context ??= new ValidationContext();
         $context
-            ->setContextDataOnce($this, $defaultAttributeTranslator, $data)
+            ->setContextDataOnce($this, $defaultAttributeTranslator, $data, $dataSet)
             ->setDataSet($dataSet);
 
         $result = new Result();
