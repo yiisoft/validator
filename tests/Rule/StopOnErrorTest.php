@@ -223,7 +223,7 @@ final class StopOnErrorTest extends RuleTestCase
                 new StopOnError([
                     static fn (): Result => (new Result())->addError('Custom error.'),
                 ]),
-                ['' => ['Custom error.']]
+                ['' => ['Custom error.']],
             ],
         ];
     }
