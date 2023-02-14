@@ -17,6 +17,7 @@ use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Nested;
@@ -1068,6 +1069,35 @@ final class NestedTest extends RuleTestCase
                 ],
                 [
                     'attributes.abc' => ['Value cannot be blank.'],
+                ],
+            ],
+            'deep level' => [
+                [
+                    'level1' => [
+                        'level2' => [
+                            'level3' => [
+                                'key' => 7,
+                                'name' => 'var',
+                            ],
+                        ],
+                    ],
+                ],
+                new Nested([
+                    'level1' => [
+                        'level2.level3' => [
+                            'key' => new Integer(min: 9),
+                        ],
+                        'level2' => [
+                            'level3.key' => [new Integer(max: 5)],
+                        ],
+                    ],
+                    'level1.level2' => [
+                        'level3.name' => new Length(min: 5),
+                    ]
+                ]),
+                [
+                    'level1.level2.level3.key' => ['Value must be no less than 9.', 'Value must be no greater than 5.'],
+                    'level1.level2.level3.name' => ['This value must contain at least 5 characters.'],
                 ],
             ],
         ];
