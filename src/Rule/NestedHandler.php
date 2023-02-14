@@ -46,9 +46,8 @@ final class NestedHandler implements RuleHandlerInterface
         if (is_array($value)) {
             $data = $value;
         } elseif (is_object($value)) {
-            /** @var mixed $data */
             $data = (new ObjectDataSet($value, $rule->getValidatedObjectPropertyVisibility()))->getData();
-            if (!is_array($data) && !is_object($data)) {
+            if ($data === null) {
                 return (new Result())->addError($rule->getIncorrectDataSetTypeMessage(), [
                     'type' => get_debug_type($data),
                 ]);
@@ -64,7 +63,7 @@ final class NestedHandler implements RuleHandlerInterface
 
         /** @var int|string $valuePath */
         foreach ($rule->getRules() as $valuePath => $rules) {
-            if (is_array($data) && $rule->isPropertyPathRequired() && !ArrayHelper::pathExists($data, $valuePath)) {
+            if ($rule->isPropertyPathRequired() && !ArrayHelper::pathExists($data, $valuePath)) {
                 if (is_int($valuePath)) {
                     $valuePathList = [$valuePath];
                 } else {
