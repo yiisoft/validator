@@ -358,6 +358,18 @@ final class CompositeTest extends RuleTestCase
                     ],
                 ],
             ],
+            'rules normalization, callable without iterable' => [
+                [],
+                new Composite(
+                    static fn () => (new Result())->addError('Custom error.'),
+                ),
+                ['' => ['Custom error.']]
+            ],
+            'rules normalization, rule without iterable' => [
+                [],
+                new Composite(new Required()),
+                ['' => ['Value cannot be blank.']],
+            ],
         ];
     }
 
