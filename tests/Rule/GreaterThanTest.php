@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use DateTime;
 use Yiisoft\Validator\Rule\CompareType;
 use Yiisoft\Validator\Rule\GreaterThan;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -32,7 +33,8 @@ final class GreaterThanTest extends RuleTestCase
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
+                        'template' => 'The allowed types are integer, float, string, boolean, null and object ' .
+                            'implementing \Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -40,42 +42,9 @@ final class GreaterThanTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be greater than "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '>',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new GreaterThan(1, type: CompareType::NUMBER),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have one of the ' .
+                            'following types: integer, float, string, boolean, null or an object implementing ' .
+                            '\Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -97,78 +66,41 @@ final class GreaterThanTest extends RuleTestCase
                 ],
             ],
             [
-                new GreaterThan(null, 'attribute'),
-                [
-                    'targetValue' => null,
-                    'targetAttribute' => 'attribute',
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'attribute',
-                            'targetValueOrAttribute' => 'attribute',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'attribute',
-                            'targetValueOrAttribute' => 'attribute',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be greater than "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'attribute',
-                            'targetValueOrAttribute' => 'attribute',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '>',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
                 new GreaterThan(
+                    new DateTime('2023-02-07 12:57:12'),
                     targetAttribute: 'test',
                     incorrectInputMessage: 'Custom message 1.',
                     incorrectDataSetTypeMessage: 'Custom message 2.',
                     message: 'Custom message 3.',
+                    type: CompareType::ORIGINAL,
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                    when: static fn (): bool => true,
                 ),
                 [
-                    'targetValue' => null,
                     'targetAttribute' => 'test',
                     'incorrectInputMessage' => [
                         'template' => 'Custom message 1.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
                         'template' => 'Custom message 2.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
                     'message' => [
                         'template' => 'Custom message 3.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
-                    'type' => 'string',
+                    'type' => 'original',
                     'operator' => '>',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];

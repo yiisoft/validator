@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use DateTime;
 use Yiisoft\Validator\Rule\CompareType;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -32,7 +33,8 @@ final class EqualTest extends RuleTestCase
                     'targetValue' => 1,
                     'targetAttribute' => null,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
+                        'template' => 'The allowed types are integer, float, string, boolean, null and object ' .
+                            'implementing \Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -40,42 +42,9 @@ final class EqualTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Equal(1, type: CompareType::NUMBER),
-                [
-                    'targetValue' => 1,
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
+                        'template' => 'The attribute value returned from a custom data set must have one of the ' .
+                            'following types: integer, float, string, boolean, null or an object implementing ' .
+                            '\Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -97,183 +66,42 @@ final class EqualTest extends RuleTestCase
                 ],
             ],
             [
-                new Equal('YES'),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Equal('YES', strict: true),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '===',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Equal('YES', skipOnEmpty: true),
-                [
-                    'targetValue' => 'YES',
-                    'targetAttribute' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => 'YES',
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 'YES',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => true,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Equal(null, 'attribute'),
-                [
-                    'targetValue' => null,
-                    'targetAttribute' => 'attribute',
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean and null.',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'attribute',
-                            'targetValueOrAttribute' => 'attribute',
-                        ],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'The attribute value returned from a custom data set must have a scalar type.',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'attribute',
-                            'targetValueOrAttribute' => 'attribute',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => 'Value must be equal to "{targetValueOrAttribute}".',
-                        'parameters' => [
-                            'targetValue' => null,
-                            'targetAttribute' => 'attribute',
-                            'targetValueOrAttribute' => 'attribute',
-                        ],
-                    ],
-                    'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
                 new Equal(
+                    new DateTime('2023-02-07 12:57:12'),
                     targetAttribute: 'test',
                     incorrectInputMessage: 'Custom message 1.',
                     incorrectDataSetTypeMessage: 'Custom message 2.',
                     message: 'Custom message 3.',
+                    type: CompareType::ORIGINAL,
+                    strict: true,
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                    when: static fn (): bool => true,
                 ),
                 [
-                    'targetValue' => null,
                     'targetAttribute' => 'test',
                     'incorrectInputMessage' => [
                         'template' => 'Custom message 1.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
                         'template' => 'Custom message 2.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
                     'message' => [
                         'template' => 'Custom message 3.',
                         'parameters' => [
-                            'targetValue' => null,
                             'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
                         ],
                     ],
-                    'type' => 'string',
-                    'operator' => '==',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'type' => 'original',
+                    'operator' => '===',
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -289,11 +117,9 @@ final class EqualTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $message = 'Value must be equal to "100".';
-
         return [
-            [101, [new Equal(100)], ['' => [$message]]],
-            [101, [new Equal(100, strict: true)], ['' => [$message]]],
+            [101, [new Equal(100)], ['' => ['Value must be equal to "100".']]],
+            ['100', [new Equal(100, strict: true)], ['' => ['Value must be strictly equal to "100".']]],
             'custom error' => [101, [new Equal(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
     }
