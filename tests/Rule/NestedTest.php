@@ -187,7 +187,7 @@ final class NestedTest extends RuleTestCase
                                 'skipOnEmpty' => false,
                                 'skipOnError' => false,
                                 'pattern' => '/1/',
-                            ]
+                            ],
                         ],
                     ],
                 ],
@@ -430,13 +430,13 @@ final class NestedTest extends RuleTestCase
                         'authors' => [
                             new Each([
                                 new Nested([
-                                        'data' => [
-                                            'name' => [new Length(min: 5)],
-                                            'age' => [
-                                                new Number(min: 18),
-                                                new Number(min: 20),
-                                            ],
+                                    'data' => [
+                                        'name' => [new Length(min: 5)],
+                                        'age' => [
+                                            new Number(min: 18),
+                                            new Number(min: 20),
                                         ],
+                                    ],
                                 ]),
                             ]),
                         ],
@@ -1102,7 +1102,6 @@ final class NestedTest extends RuleTestCase
                     'level1.level2.level3.name' => ['This value must contain at least 5 characters.'],
                 ],
             ],
-
         ];
     }
 
