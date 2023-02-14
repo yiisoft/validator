@@ -70,41 +70,6 @@ use function sprintf;
  * ]);
  * ```
  *
- * Note that the maximum nesting level is 2, a deeper one requires wrapping with another `Nested` instance or using
- * short syntax shown above. This will work:
- *
- * ```php
- * $rule = new Nested([
- *     'author' => [
- *         'name' => [new Length(min: 1)],
- *     ],
- * ]);
- * ```
- *
- * But this will not:
- *
- * ```php
- * $rule = new Nested([
- *     'author' => [
- *         'name' => [
- *             'surname' => [new Length(min: 1)],
- *         ],
- *     ],
- * ]);
- * ```
- *
- * Also it's possible to omit arrays for single rules:
- *
- *  * ```php
- * $rules = [
- *     new Nested([
- *         'author' => new Nested([
- *             'name' => new Length(min: 1),
- *         ]),
- *     ]),
- * ];
- * ```
- *
  * For more examples please refer to the guide.
  *
  * It's also possible to use DTO objects with PHP attributes, see {@see ObjectDataSet} documentation and guide for
@@ -153,9 +118,8 @@ final class Nested implements
      * supported:
      *
      * - Array or object implementing {@see Traversable} interface containing rules. Either iterables containing
-     * {@see RuleInterface} implementations or a single rule instances are expected. The maximum nesting level is 2.
-     * Another instance of `Nested`can be used for further nesting. All iterables regardless of the nesting level will
-     * be converted to arrays at the end.
+     * {@see RuleInterface} implementations or a single rule instances are expected. All iterables regardless of the
+     * nesting level will be converted to arrays at the end.
      * - Object implementing {@see RulesProviderInterface}.
      * - Name of a class containing rules declared via PHP attributes.
      * - `null` if validated value is an object. It can either implement {@see RulesProviderInterface} or contain rules

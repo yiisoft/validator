@@ -81,7 +81,7 @@ Some code can be omitted for brevity.
 
 #### Inner `Nested` instances
 
-Inner `Nested` instances can be omitted, but only for nesting levels no greater than 2:
+Inner `Nested` instances can be omitted:
 
 ```php
 use Yiisoft\Validator\Rule\Length;
