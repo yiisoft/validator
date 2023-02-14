@@ -59,6 +59,11 @@ final class ValidationContext
     private ?AttributeTranslatorInterface $defaultAttributeTranslator = null;
 
     /**
+     * @var bool Whether {@see $dataSet} is missing.
+     */
+    private bool $isDataSetMissing = false;
+
+    /**
      * @param array $parameters Arbitrary parameters.
      * @param AttributeTranslatorInterface|null $attributeTranslator Optional attribute translator instance to use.
      * If `null` is provided, or it's not specified, a default translator passed through
@@ -135,11 +140,15 @@ final class ValidationContext
 
         $currentDataSet = $this->dataSet;
         $currentAttribute = $this->attribute;
+        $isCurrentDataSetMissing = $this->isDataSetMissing;
 
+        // The lack of an attribute means that in the context of further validation there is no data set at all.
+        $this->isDataSetMissing = $this->isAttributeMissing();
         $result = $this->validator->validate($data, $rules, $this);
 
         $this->dataSet = $currentDataSet;
         $this->attribute = $currentAttribute;
+        $this->isDataSetMissing = $isCurrentDataSetMissing;
 
         return $result;
     }
@@ -287,7 +296,8 @@ final class ValidationContext
      */
     public function isAttributeMissing(): bool
     {
-        return $this->attribute !== null && !$this->getDataSet()->hasAttribute($this->attribute);
+        return $this->isDataSetMissing
+            || ($this->attribute !== null && !$this->getDataSet()->hasAttribute($this->attribute));
     }
 
     /**
