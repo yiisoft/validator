@@ -57,7 +57,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see EachHandler Corresponding handler performing the actual validation.
  *
- * @psalm-import-type RulesTypeWithoutNull from ValidatorInterface
+ * @psalm-import-type RulesType from ValidatorInterface
  * @psalm-import-type NormalizedAttributeRuleGroupsArray from RulesNormalizer
  * @psalm-import-type WhenType from WhenInterface
  */
@@ -75,13 +75,15 @@ final class Each implements
     use WhenTrait;
 
     /**
-     * @var array Rules to apply for each element of the validated iterable.
+     * @var array Normalized rules to apply for each element of the validated iterable.
      * @psalm-var NormalizedAttributeRuleGroupsArray
      */
     private array $rules;
 
     /**
-     * @param callable|iterable|object|string $rules Rules to apply for each element of the validated iterable.
+     * @param callable|iterable|object|string|null $rules Rules to apply for each element of the validated iterable.
+     * They will be normalized using {@see RulesNormalizer}, please refer to its documentation to see what structures
+     * can be passed.
      * @param string $incorrectInputMessage Error message used when validation fails because the validated value is not
      * an iterable.
      *
@@ -103,11 +105,11 @@ final class Each implements
      * @param Closure|null $when A callable to define a condition for applying this `Each` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
      *
-     * @psalm-param RulesTypeWithoutNull $rules
+     * @psalm-param RulesType $rules
      * @psalm-param WhenType $when
      */
     public function __construct(
-        callable|iterable|object|string $rules = [],
+        callable|iterable|object|string|null $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $incorrectInputKeyMessage = 'Every iterable key must have an integer or a string type.',
         private mixed $skipOnEmpty = null,
@@ -198,8 +200,8 @@ final class Each implements
 
     public function afterInitAttribute(object $object, int $target): void
     {
-        foreach ($this->rules as $rules) {
-            foreach ($rules as $rule) {
+        foreach ($this->rules as $attributeRules) {
+            foreach ($attributeRules as $rule) {
                 if ($rule instanceof AfterInitAttributeEventInterface) {
                     $rule->afterInitAttribute(
                         $object,
