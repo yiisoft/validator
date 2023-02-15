@@ -72,6 +72,18 @@ use function sprintf;
  * ]);
  * ```
  *
+ * Also it's possible to use bare keys and omit arrays for single rules:
+ *
+ *  * ```php
+ * $rules = [
+ *     new Nested([
+ *         'author' => [
+ *             'name' => new Length(min: 1),
+ *         ],
+ *     ]),
+ * ];
+ * ```
+ *
  * For more examples please refer to the guide.
  *
  * It's also possible to use DTO objects with PHP attributes, see {@see ObjectDataSet} documentation and guide for
