@@ -12,7 +12,6 @@ use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
