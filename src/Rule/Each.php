@@ -58,7 +58,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see EachHandler Corresponding handler performing the actual validation.
  *
- * @psalm-import-type RulesType from ValidatorInterface
+ * @psalm-import-type RulesTypeWithoutNull from ValidatorInterface
  * @psalm-import-type NormalizedAttributeRuleGroupsArray from RulesNormalizer
  * @psalm-import-type WhenType from WhenInterface
  */
@@ -82,9 +82,10 @@ final class Each implements
     private array $rules;
 
     /**
-     * @param callable|iterable|object|string|null $rules Rules to apply for each element of the validated iterable.
+     * @param callable|iterable|object|string $rules Rules to apply for each element of the validated iterable.
      * They will be normalized using {@see RulesNormalizer}, please refer to its documentation to see what structures
      * can be passed.
+     * @psalm-param RulesTypeWithoutNull $rules
      * @param string $incorrectInputMessage Error message used when validation fails because the validated value is not
      * an iterable.
      *
@@ -105,12 +106,10 @@ final class Each implements
      * rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying this `Each` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
-     *
-     * @psalm-param RulesType $rules
      * @psalm-param WhenType $when
      */
     public function __construct(
-        callable|iterable|object|string|null $rules = [],
+        callable|iterable|object|string $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $incorrectInputKeyMessage = 'Every iterable key must have an integer or a string type.',
         private mixed $skipOnEmpty = null,
