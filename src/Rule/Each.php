@@ -84,6 +84,7 @@ final class Each implements
     /**
      * @param callable|iterable|RuleInterface $rules A set of rules that needs to be applied to each element of the
      * validated iterable. They will be normalized using {@see RulesNormalizer}.
+     * @psalm-param callable|iterable<callable|RuleInterface>|RuleInterface $rules
      * @param string $incorrectInputMessage Error message used when validation fails because the validated value is not
      * an iterable.
      *
