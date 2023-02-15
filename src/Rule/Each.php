@@ -11,6 +11,7 @@ use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Helper\PropagateOptionsHelper;
 use Yiisoft\Validator\Helper\RulesNormalizer;
+use Yiisoft\Validator\Helper\RulesNormalizerIterator;
 use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -127,7 +128,7 @@ final class Each implements
     public function propagateOptions(): void
     {
         foreach ($this->rules as $key => $rules) {
-            $this->rules[$key] = PropagateOptionsHelper::propagate($this, $rules);
+            $this->rules[$key] = new RulesNormalizerIterator(PropagateOptionsHelper::propagate($this, $rules));
         }
     }
 
