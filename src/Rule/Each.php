@@ -83,7 +83,7 @@ final class Each implements
 
     /**
      * @param callable|iterable|object|string $rules Rules to apply for each element of the validated iterable.
-     * They will be normalized using {@see RulesNormalizer}, please refer to its documentation to see what structures
+     * They will be normalized using {@see RulesNormalizer}.
      * can be passed.
      * @psalm-param RulesTypeWithoutNull $rules
      * @param string $incorrectInputMessage Error message used when validation fails because the validated value is not
