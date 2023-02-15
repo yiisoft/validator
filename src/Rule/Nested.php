@@ -31,6 +31,8 @@ use Yiisoft\Validator\WhenInterface;
 use function array_pop;
 use function count;
 use function implode;
+use function is_array;
+use function is_int;
 use function is_string;
 use function ltrim;
 use function rtrim;
@@ -70,37 +72,14 @@ use function sprintf;
  * ]);
  * ```
  *
- * Note that the maximum nesting level is 2, a deeper one requires wrapping with another `Nested` instance or using
- * short syntax shown above. This will work:
- *
- * ```php
- * $rule = new Nested([
- *     'author' => [
- *         'name' => [new Length(min: 1)],
- *     ],
- * ]);
- * ```
- *
- * But this will not:
- *
- * ```php
- * $rule = new Nested([
- *     'author' => [
- *         'name' => [
- *             'surname' => [new Length(min: 1)],
- *         ],
- *     ],
- * ]);
- * ```
- *
- * Also it's possible to omit arrays for single rules:
+ * Also it's possible to use plain keys and omit arrays for single rules:
  *
  *  * ```php
  * $rules = [
  *     new Nested([
- *         'author' => new Nested([
+ *         'author' => [
  *             'name' => new Length(min: 1),
- *         ]),
+ *         ],
  *     ]),
  * ];
  * ```
@@ -116,7 +95,9 @@ use function sprintf;
  * @see NestedHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
- * @psalm-type ReadyNestedRulesArray = array<array<RuleInterface>|RuleInterface>
+ * @psalm-type RawRulesType = array<array<RuleInterface>|RuleInterface>
+ * @psalm-type ReadyRulesType = array<list<RuleInterface>|RuleInterface>
+ * @psalm-type OptionalReadyRulesType = ReadyRulesType|null
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
@@ -124,7 +105,6 @@ final class Nested implements
     SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
-    RulesProviderInterface,
     PropagateOptionsInterface,
     AfterInitAttributeEventInterface
 {
@@ -143,23 +123,22 @@ final class Nested implements
     private const EACH_SHORTCUT = '*';
 
     /**
-     * @var array A set of ready to use rule instances. The 1st level is always an array of rules, the 2nd level is
-     * either an array of rules or a single rule.
-     * @psalm-var ReadyNestedRulesArray
+     * @var array|null A set of ready to use rule instances. The 1st level is always
+     * an array of rules, the 2nd level is either a list of rules or a single rule.
+     * @psalm-var OptionalReadyRulesType
      */
-    private array $rules;
+    private array|null $rules;
 
     /**
      * @param iterable|object|string $rules Rules for validating nested structure. The following types are
      * supported:
      *
      * - Array or object implementing {@see Traversable} interface containing rules. Either iterables containing
-     * {@see RuleInterface} implementations or a single rule instances are expected. The maximum nesting level is 2.
-     * Another instance of `Nested`can be used for further nesting. All iterables regardless of the nesting level will
-     * be converted to arrays at the end.
+     * {@see RuleInterface} implementations or a single rule instances are expected. All iterables regardless of the
+     * nesting level will be converted to arrays at the end.
      * - Object implementing {@see RulesProviderInterface}.
      * - Name of a class containing rules declared via PHP attributes.
-     * - Empty array if validated value is an object. It can either implement {@see RulesProviderInterface} or contain
+     * - `null` if validated value is an object. It can either implement {@see RulesProviderInterface} or contain
      * rules declared via PHP attributes.
      * @param int $validatedObjectPropertyVisibility Visibility levels to use for parsed properties when validated value
      * is an object providing rules / data. For example: public and protected only, this means that the rest (private
@@ -219,7 +198,7 @@ final class Nested implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        iterable|object|string $rules = [],
+        iterable|object|string|null $rules = null,
         private int $validatedObjectPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
@@ -227,8 +206,7 @@ final class Nested implements
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
         private string $noRulesWithNoObjectMessage = 'Nested rule without rules can be used for objects only.',
-        private string $incorrectDataSetTypeMessage = 'An object data set data can only have an array or an object ' .
-        'type.',
+        private string $incorrectDataSetTypeMessage = 'An object data set data can only have an array type.',
         private string $incorrectInputMessage = 'The value must be an array or an object.',
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property "{path}" is not found.',
@@ -249,10 +227,10 @@ final class Nested implements
     /**
      * Gets a set of rules for running the validation.
      *
-     * @return array A set of rules. The empty array means the rules are expected to be provided with a validated value.
-     * @psalm-return ReadyNestedRulesArray
+     * @return array|null A set of rules. `null` means the rules are expected to be provided with a validated value.
+     * @psalm-return ReadyRulesType
      */
-    public function getRules(): array
+    public function getRules(): array|null
     {
         return $this->rules;
     }
@@ -339,16 +317,15 @@ final class Nested implements
      * Prepares raw rules passed in the constructor for usage in handler. As a result, {@see $rules} property will
      * contain ready to use rules.
      *
-     * @param iterable|object|string $source Raw rules passed in the constructor.
+     * @param iterable|object|string|null $source Raw rules passed in the constructor.
      *
      * @throws InvalidArgumentException When rules' source has wrong type.
      * @throws InvalidArgumentException When source contains items that are not rules.
      */
-    private function prepareRules(iterable|object|string $source): void
+    private function prepareRules(iterable|object|string|null $source): void
     {
-        if ($source === []) {
-            $this->rules = [];
-
+        if ($source === null) {
+            $this->rules = null;
             return;
         }
 
@@ -360,21 +337,84 @@ final class Nested implements
             $rules = $source;
         } else {
             throw new InvalidArgumentException(
-                'The $rules argument passed to Nested rule can be either: an empty array, an object implementing ' .
+                'The $rules argument passed to Nested rule can be either: a null, an object implementing ' .
                 'RulesProviderInterface, a class string or an iterable.'
             );
         }
 
         self::ensureArrayHasRules($rules);
-        /** @psalm-var ReadyNestedRulesArray $rules */
-        $this->rules = $rules;
 
         if ($this->handleEachShortcut) {
-            $this->handleEachShortcut();
+            $this->handleEachShortcut($rules);
         }
+
+        $preparedRules = [];
+        $this->flattenKeys($rules, $preparedRules);
+
+        $this->rules = $preparedRules;
 
         if ($this->propagateOptions) {
             $this->propagateOptions();
+        }
+    }
+
+    /**
+     * Recursively flattens plain keys to allow any nesting level. The keys in the result array are joined using
+     * {@see SEPARATOR}.
+     *
+     * Example of input:
+     *
+     * ```php
+     * [
+     *     'key1' => [
+     *         'key2' => [
+     *             'key3 => [
+     *                 // ...
+     *             ],
+     *         ],
+     *     ],
+     * ];
+     * ```
+     *
+     * Example of output for default {@see SEPARATOR}:
+     *
+     * ```php
+     * [
+     *     'key1.key2.key3' => [
+     *         // ...
+     *     ],
+     * ],
+     * ```
+     *
+     * @param array $rawRules Raw rules array which keys need to be flattened.
+     * @psalm-param RawRulesType $rawRules
+     *
+     * @param array $resultRules Result rules array with flattened keys passed by reference.
+     * @psalm-param ReadyRulesType $resultRules
+     *
+     * @param string|null $baseValuePath Base value path string. Can be a single key or multiple keys joined with
+     * {@see SEPARATOR}. `null` is used for the first call.
+     */
+    private function flattenKeys(array $rawRules, array &$resultRules, ?string $baseValuePath = null): void
+    {
+        foreach ($rawRules as $valuePath => $validationRules) {
+            if (is_int($valuePath)) {
+                $key = $baseValuePath;
+            } else {
+                $key = ($baseValuePath !== null ? $baseValuePath . self::SEPARATOR : '') . $valuePath;
+            }
+
+            if (is_array($validationRules)) {
+                $this->flattenKeys($validationRules, $resultRules, $key);
+                continue;
+            }
+
+            if ($key === null) {
+                $resultRules[] = $validationRules;
+            } else {
+                /** @psalm-suppress UndefinedInterfaceMethod */
+                $resultRules[$key][] = $validationRules;
+            }
         }
     }
 
@@ -384,7 +424,11 @@ final class Nested implements
      *
      * @param iterable $rules Source iterable that will be checked and converted to array (so it's passed by reference).
      *
+     * @psalm-param-out RawRulesType $rules
+     *
      * @throws InvalidArgumentException When iterable contains items that are not rules.
+     *
+     * @psalm-suppress ReferenceConstraintViolation
      */
     private static function ensureArrayHasRules(iterable &$rules): void
     {
@@ -410,11 +454,12 @@ final class Nested implements
 
     /**
      * Converts rules defined with {@see EACH_SHORTCUT} to separate `Nested` and `Each` rules.
+     *
+     * @oaram array $rules Rules array for replacing {@see EACH_SHORTCUT} passed by reference.
+     * @psalm-param RawRulesType $rules
      */
-    private function handleEachShortcut(): void
+    private function handleEachShortcut(array &$rules): void
     {
-        /** @var RuleInterface[] $rules Conversion to array is done in {@see ensureArrayHasRules()}. */
-        $rules = $this->rules;
         while (true) {
             $breakWhile = true;
             $rulesMap = [];
@@ -472,22 +517,19 @@ final class Nested implements
                 break;
             }
         }
-
-        $this->rules = $rules;
     }
 
     public function propagateOptions(): void
     {
-        if ($this->rules === []) {
+        if ($this->rules === null) {
             return;
         }
 
         $rules = [];
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
-            $rules[$attributeRulesIndex] = PropagateOptionsHelper::propagate(
-                $this,
-                is_iterable($attributeRules) ? $attributeRules : [$attributeRules],
-            );
+            $rules[$attributeRulesIndex] = is_iterable($attributeRules)
+                ? PropagateOptionsHelper::propagate($this, $attributeRules)
+                : PropagateOptionsHelper::propagateToRule($this, $attributeRules);
         }
 
         $this->rules = $rules;
@@ -495,10 +537,20 @@ final class Nested implements
 
     public function afterInitAttribute(object $object, int $target): void
     {
+        if ($this->rules === null) {
+            return;
+        }
+
         foreach ($this->rules as $rules) {
-            foreach ((is_iterable($rules) ? $rules : [$rules]) as $rule) {
-                if ($rule instanceof AfterInitAttributeEventInterface) {
-                    $rule->afterInitAttribute($object, $target);
+            if (is_array($rules)) {
+                foreach ($rules as $rule) {
+                    if ($rule instanceof AfterInitAttributeEventInterface) {
+                        $rule->afterInitAttribute($object, $target);
+                    }
+                }
+            } else {
+                if ($rules instanceof AfterInitAttributeEventInterface) {
+                    $rules->afterInitAttribute($object, $target);
                 }
             }
         }
@@ -512,7 +564,7 @@ final class Nested implements
         'noPropertyPathMessage' => 'array',
         'skipOnEmpty' => 'bool',
         'skipOnError' => 'bool',
-        'rules' => 'array',
+        'rules' => 'array|null',
     ])]
     public function getOptions(): array
     {
@@ -536,7 +588,7 @@ final class Nested implements
             'requirePropertyPath' => $this->isPropertyPathRequired(),
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => RulesDumper::asArray($this->getRules()),
+            'rules' => $this->rules === null ? null : RulesDumper::asArray($this->rules),
         ];
     }
 

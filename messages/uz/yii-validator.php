@@ -64,7 +64,7 @@ return [
     'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => 'Qiymat {exactly, number} ta {exactly, plural, one{belgi} other{belgi}}dan iborat boʻlishi kerak',
     /** @see Nested */
     'Nested rule without rules can be used for objects only.' => 'Qoidalarga ega boʻlmagan Nested qoidasi faqat obyektlarga ishlatilishi mumkin.',
-    'An object data set data can only have an array or an object type.' => 'Obyekt maʼlumotlari massiv yoki obyekt boʻlishi kerak.',
+    'An object data set data can only have an array or an object type.' => 'Obyekt maʼlumotlari obyekt boʻlishi kerak.',
     'Property "{path}" is not found.' => '{path} xususiyati topilmadi.',
     /** @see Number */
     'Value must be a number.' => 'Qiymat raqam boʻlishi kerak.',
