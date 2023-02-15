@@ -17,6 +17,7 @@ use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Nested;
@@ -97,7 +98,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array or an object type.',
+                        'template' => 'An object data set data can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -147,7 +148,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array or an object type.',
+                        'template' => 'An object data set data can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -163,28 +164,30 @@ final class NestedTest extends RuleTestCase
                     'skipOnError' => false,
                     'rules' => [
                         'user.age' => [
-                            'number',
-                            'min' => null,
-                            'max' => null,
-                            'incorrectInputMessage' => [
-                                'template' => 'The allowed types are integer, float and string.',
-                                'parameters' => [],
+                            [
+                                'number',
+                                'min' => null,
+                                'max' => null,
+                                'incorrectInputMessage' => [
+                                    'template' => 'The allowed types are integer, float and string.',
+                                    'parameters' => [],
+                                ],
+                                'notNumberMessage' => [
+                                    'template' => 'Value must be a number.',
+                                    'parameters' => [],
+                                ],
+                                'lessThanMinMessage' => [
+                                    'template' => 'Value must be no less than {min}.',
+                                    'parameters' => ['min' => null],
+                                ],
+                                'greaterThanMaxMessage' => [
+                                    'template' => 'Value must be no greater than {max}.',
+                                    'parameters' => ['max' => null],
+                                ],
+                                'skipOnEmpty' => false,
+                                'skipOnError' => false,
+                                'pattern' => '/1/',
                             ],
-                            'notNumberMessage' => [
-                                'template' => 'Value must be a number.',
-                                'parameters' => [],
-                            ],
-                            'lessThanMinMessage' => [
-                                'template' => 'Value must be no less than {min}.',
-                                'parameters' => ['min' => null],
-                            ],
-                            'greaterThanMaxMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
-                                'parameters' => ['max' => null],
-                            ],
-                            'skipOnEmpty' => false,
-                            'skipOnError' => false,
-                            'pattern' => '/1/',
                         ],
                     ],
                 ],
@@ -200,7 +203,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array or an object type.',
+                        'template' => 'An object data set data can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -215,8 +218,8 @@ final class NestedTest extends RuleTestCase
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                     'rules' => [
-                        'author.name' => ['author-name', 'key' => 'name'],
-                        'author.age' => ['author-age', 'key' => 'age'],
+                        'author.name' => [['author-name', 'key' => 'name']],
+                        'author.age' => [['author-age', 'key' => 'age']],
                     ],
                 ],
             ],
@@ -233,7 +236,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array or an object type.',
+                        'template' => 'An object data set data can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -248,10 +251,8 @@ final class NestedTest extends RuleTestCase
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                     'rules' => [
-                        'author' => [
-                            'name' => ['author-name', 'key' => 'name'],
-                            'age' => ['author-age', 'key' => 'age'],
-                        ],
+                        'author.name' => [['author-name', 'key' => 'name']],
+                        'author.age' => [['author-age', 'key' => 'age']],
                     ],
                 ],
             ],
@@ -429,10 +430,12 @@ final class NestedTest extends RuleTestCase
                         'authors' => [
                             new Each([
                                 new Nested([
-                                    'name' => [new Length(min: 5)],
-                                    'age' => [
-                                        new Number(min: 18),
-                                        new Number(min: 20),
+                                    'data' => [
+                                        'name' => [new Length(min: 5)],
+                                        'age' => [
+                                            new Number(min: 18),
+                                            new Number(min: 20),
+                                        ],
                                     ],
                                 ]),
                             ]),
@@ -450,9 +453,9 @@ final class NestedTest extends RuleTestCase
             ['rules', 'posts', 0, 'rules', 0, 'rules', 'title', 0],
             ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0],
             ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'name', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 1],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'data.name', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'data.age', 0],
+            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'data.age', 1],
             ['rules', 'meta', 0],
         ];
         $keys = ['skipOnEmpty', 'skipOnError'];
@@ -462,8 +465,8 @@ final class NestedTest extends RuleTestCase
                 $fullPath = $path;
                 $fullPath[] = $key;
 
-                $value = ArrayHelper::getValueByPath($options, $fullPath);
-                $this->assertTrue($value);
+                $value = ArrayHelper::getValue($options, $fullPath);
+                $this->assertTrue($value, implode('.', $fullPath));
             }
         }
     }
@@ -914,7 +917,7 @@ final class NestedTest extends RuleTestCase
             'incorrect data set type' => [
                 $incorrectDataSet,
                 [new Nested(['value' => new Required()])],
-                ['' => ['An object data set data can only have an array or an object type.']],
+                ['' => ['An object data set data can only have an array type.']],
             ],
             'custom incorrect data set type message' => [
                 $incorrectDataSet,
@@ -1068,6 +1071,35 @@ final class NestedTest extends RuleTestCase
                 ],
                 [
                     'attributes.abc' => ['Value cannot be blank.'],
+                ],
+            ],
+            'deep level of nesting with plain keys' => [
+                [
+                    'level1' => [
+                        'level2' => [
+                            'level3' => [
+                                'key' => 7,
+                                'name' => 'var',
+                            ],
+                        ],
+                    ],
+                ],
+                new Nested([
+                    'level1' => [
+                        'level2.level3' => [
+                            'key' => new Integer(min: 9),
+                        ],
+                        'level2' => [
+                            'level3.key' => [new Integer(max: 5)],
+                        ],
+                    ],
+                    'level1.level2' => [
+                        'level3.name' => new Length(min: 5),
+                    ],
+                ]),
+                [
+                    'level1.level2.level3.key' => ['Value must be no less than 9.', 'Value must be no greater than 5.'],
+                    'level1.level2.level3.name' => ['This value must contain at least 5 characters.'],
                 ],
             ],
         ];
