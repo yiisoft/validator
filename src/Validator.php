@@ -23,8 +23,6 @@ use function is_string;
 /**
  * The only built-in implementation of {@see ValidatorInterface}, the main class / entry point processing all the data
  * and rules with validation context together and performing the actual validation.
- *
- * @psalm-import-type RawRulesType from ValidatorInterface
  */
 final class Validator implements ValidatorInterface
 {
