@@ -64,7 +64,7 @@ return [
     'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => 'Значение должно содержать ровно {exactly, number} {exactly, plural, one{символ} few{символа} many{символов} other{символов}}.',
     /** @see Nested */
     'Nested rule without rules can be used for objects only.' => 'Правило Nested без указания правил может использоваться только для объектов.',
-    'An object data set data can only have an array or an object type.' => 'Данные в объекте должны быть массивом или объектом.',
+    'An object data set data can only have an array type.' => 'Данные в объекте должны быть массивом.',
     'Property "{path}" is not found.' => 'Свойство «{path}» не найдено.',
     /** @see Number */
     'Value must be a number.' => 'Значение должно быть числом.',

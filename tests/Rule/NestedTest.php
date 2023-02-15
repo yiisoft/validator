@@ -98,7 +98,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array or an object type.',
+                        'template' => 'An object data set data can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -148,7 +148,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array or an object type.',
+                        'template' => 'An object data set data can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -203,7 +203,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array or an object type.',
+                        'template' => 'An object data set data can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -236,7 +236,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array or an object type.',
+                        'template' => 'An object data set data can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -917,7 +917,7 @@ final class NestedTest extends RuleTestCase
             'incorrect data set type' => [
                 $incorrectDataSet,
                 [new Nested(['value' => new Required()])],
-                ['' => ['An object data set data can only have an array or an object type.']],
+                ['' => ['An object data set data can only have an array type.']],
             ],
             'custom incorrect data set type message' => [
                 $incorrectDataSet,
