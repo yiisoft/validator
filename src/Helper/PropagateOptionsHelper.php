@@ -17,16 +17,16 @@ use Yiisoft\Validator\WhenInterface;
 final class PropagateOptionsHelper
 {
     /**
-     * Propagates options' values from a single parent rule to its child rules at all nesting levels recursively. The
-     * following options' values are propagated:
+     * Propagates options' values from a single parent rule to its all child rules at all nesting levels recursively.
+     * The following options' values are propagated:
      *
      * - `$skipOnEmpty` (both rules must implement {@see SkipOnEmptyInterface}).
      * - `$skipOnError` (both rules must implement {@see SkipOnErrorInterface}).
      * - `$when` (both rules must implement {@see WhenInterface}).
      *
      * @param RuleInterface $parentRule A parent rule which options' values need to be propagated.
-     * @param iterable<RuleInterface> $childRules Direct child rules (located at the first nesting level) which options'
-     * values must be changed to be the same as in parent.
+     * @param iterable<RuleInterface> $childRules Direct child rules for this particular parent rule which options'
+     * values must be changed to be the same as in parent rule.
      *
      * @return list<RuleInterface> A list of child rules of the same nesting level with changed options' values or
      * unchanged if none of the required interfaces were implemented. The order is preserved.
@@ -35,12 +35,24 @@ final class PropagateOptionsHelper
     {
         $rules = [];
         foreach ($childRules as $childRule) {
-            $rules[] = self::propagateRule($parentRule, $childRule);
+            $rules[] = self::propagateToRule($parentRule, $childRule);
         }
         return $rules;
     }
 
-    public static function propagateRule(RuleInterface $parentRule, RuleInterface $childRule): RuleInterface
+    /**
+     * Performs propagation of options' values for a single pair of one parent rule and one of its direct child rules.
+     * If the child rule also supports such propagation, it delegates the further propagation to
+     * {@see PropagateOptionsInterface::propagateOptions()} implementation in this child rule.
+     *
+     * @param RuleInterface $parentRule A parent rule which options' values need to be propagated.
+     * @param RuleInterface $childRule One of the direct child rules for this particular parent rule which options'
+     * values must be changed to be the same as in parent rule.
+     *
+     * @return RuleInterface The same child rule instance with changed options' values or unchanged if none of the
+     * required interfaces were implemented.
+     */
+    public static function propagateToRule(RuleInterface $parentRule, RuleInterface $childRule): RuleInterface
     {
         if ($parentRule instanceof SkipOnEmptyInterface && $childRule instanceof SkipOnEmptyInterface) {
             $childRule = $childRule->skipOnEmpty($parentRule->getSkipOnEmpty());

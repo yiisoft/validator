@@ -94,24 +94,6 @@ $rule = new Nested([
 ]);
 ```
 
-This will not work:
-
-```php
-use Yiisoft\Validator\Rule\Length;
-use Yiisoft\Validator\Rule\Nested;
-
-$rule = new Nested([
-    'author' => [
-        'name' => [
-            'surname' => [new Length(min: 1)],
-        ],
-    ],
-]);
-```
-
-This limitation is planned to be removed in the future. In order for this example to work, it needs to be rewritten
-to be wrapped with another `Nested` instance or using the short syntax shown above.
-
 #### Inner arrays for single rules
 
 Inner arrays for single rules can be omitted regardless of nesting level:
