@@ -107,8 +107,8 @@ class Composite implements
     private Closure|null $when = null;
 
     /**
-     * @param callable|iterable|RuleInterface $rules A set of rules that needs to be grouped. They will be normalized
-     * using {@see RulesNormalizer}.
+     * @param iterable $rules A set of rules that needs to be grouped. They will be normalized using
+     * {@see RulesNormalizer}.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule group if the validated value is empty / not
      * passed. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule group if any of the previous rules gave an error. See
@@ -118,8 +118,8 @@ class Composite implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        iterable|callable|RuleInterface $rules = [],
-        mixed $skipOnEmpty = null,
+        iterable $rules = [],
+        bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
         Closure|null $when = null,
     ) {

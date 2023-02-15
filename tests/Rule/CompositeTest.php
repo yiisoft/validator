@@ -331,18 +331,6 @@ final class CompositeTest extends RuleTestCase
                     'longitude' => ['Value must be no greater than 180.'],
                 ],
             ],
-            'rules normalization, callable without iterable' => [
-                [],
-                new Composite(
-                    static fn (): Result => (new Result())->addError('Custom error.'),
-                ),
-                ['' => ['Custom error.']],
-            ],
-            'rules normalization, rule without iterable' => [
-                [],
-                new Composite(new Required()),
-                ['' => ['Value cannot be blank.']],
-            ],
         ];
     }
 
