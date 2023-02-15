@@ -110,6 +110,7 @@ class Composite implements
      * @param iterable $rules A set of rules that needs to be grouped. They will be normalized using
      * {@see RulesNormalizer}.
      * @psalm-param iterable<callable|RuleInterface> $rules
+     *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule group if the validated value is empty / not
      * passed. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule group if any of the previous rules gave an error. See
