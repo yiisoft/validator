@@ -479,7 +479,7 @@ final class Nested implements
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
             $rules[$attributeRulesIndex] = is_iterable($attributeRules)
                 ? PropagateOptionsHelper::propagate($this, $attributeRules)
-                : PropagateOptionsHelper::propagateForRule($this, $attributeRules);
+                : PropagateOptionsHelper::propagateToRule($this, $attributeRules);
         }
 
         $this->rules = $rules;

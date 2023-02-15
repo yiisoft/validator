@@ -35,7 +35,7 @@ final class PropagateOptionsHelper
     {
         $rules = [];
         foreach ($childRules as $childRule) {
-            $rules[] = self::propagateForRule($parentRule, $childRule);
+            $rules[] = self::propagateToRule($parentRule, $childRule);
         }
         return $rules;
     }
@@ -51,7 +51,7 @@ final class PropagateOptionsHelper
      * @return RuleInterface The same child rule instance with changed options' values or unchanged if none of the
      * required interfaces were implemented.
      */
-    public static function propagateForRule(RuleInterface $parentRule, RuleInterface $childRule): RuleInterface
+    public static function propagateToRule(RuleInterface $parentRule, RuleInterface $childRule): RuleInterface
     {
         if ($parentRule instanceof SkipOnEmptyInterface && $childRule instanceof SkipOnEmptyInterface) {
             $childRule = $childRule->skipOnEmpty($parentRule->getSkipOnEmpty());
