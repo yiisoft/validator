@@ -86,6 +86,7 @@ final class Each implements
      * They will be normalized using {@see RulesNormalizer}, please refer to its documentation to see what structures
      * can be passed.
      * @psalm-param RulesTypeWithoutNull $rules
+     *
      * @param string $incorrectInputMessage Error message used when validation fails because the validated value is not
      * an iterable.
      *
