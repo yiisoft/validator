@@ -465,7 +465,7 @@ final class NestedTest extends RuleTestCase
                 $fullPath = $path;
                 $fullPath[] = $key;
 
-                $value = ArrayHelper::getValueByPath($options, $fullPath);
+                $value = ArrayHelper::getValue($options, $fullPath);
                 $this->assertTrue($value, implode('.', $fullPath));
             }
         }
