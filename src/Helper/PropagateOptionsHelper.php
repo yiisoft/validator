@@ -48,6 +48,7 @@ final class PropagateOptionsHelper
      * @param RuleInterface $parentRule A parent rule which options' values need to be propagated.
      * @param RuleInterface $childRule One of the direct child rules for this particular parent rule which options'
      * values must be changed to be the same as in parent rule.
+     *
      * @return RuleInterface The same child rule instance with changed options' values or unchanged if none of the
      * required interfaces were implemented.
      */
