@@ -23,7 +23,7 @@ use function is_string;
  * Note that when using {@see Validator}, normalization is performed automatically.
  *
  * @psalm-import-type RawRulesType from ValidatorInterface
- * @psalm-type ReadyFlatRulesIterable = iterable<int, RuleInterface>
+ * @psalm-type NormalizedFlatRulesIterable = iterable<int, RuleInterface>
  */
 final class RulesNormalizer
 {
@@ -112,7 +112,7 @@ final class RulesNormalizer
      * implementation.
      *
      * @return iterable An iterable with every rule checked and normalized.
-     * @psalm-return ReadyFlatRulesIterable
+     * @psalm-return NormalizedFlatRulesIterable
      */
     public static function normalizeList(iterable|callable|RuleInterface $rules): iterable
     {

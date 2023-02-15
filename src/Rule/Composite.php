@@ -70,7 +70,7 @@ use Yiisoft\Validator\WhenInterface;
  * @see CompositeHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
- * @psalm-import-type ReadyFlatRulesIterable from RulesNormalizer
+ * @psalm-import-type NormalizedFlatRulesIterable from RulesNormalizer
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Composite implements
@@ -87,7 +87,7 @@ class Composite implements
 
     /**
      * @var iterable A set of normalized rules that needs to be grouped.
-     * @psalm-var ReadyFlatRulesIterable
+     * @psalm-var NormalizedFlatRulesIterable
      */
     protected iterable $rules = [];
     /**
@@ -152,7 +152,7 @@ class Composite implements
      * Gets a set of normalized rules that needs to be grouped.
      *
      * @return iterable A set of rules.
-     * @psalm-return ReadyFlatRulesIterable
+     * @psalm-return NormalizedFlatRulesIterable
      *
      * @see $rules
      */
