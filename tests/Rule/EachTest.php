@@ -8,7 +8,9 @@ use Generator;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\EachHandler;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -275,6 +277,17 @@ final class EachTest extends RuleTestCase
                 [
                     '1' => ['Max - 13, value - 20.'],
                     '2' => ['Max - 13, value - 30.'],
+                ],
+            ],
+            'validate arrays' => [
+                [['name' => 'Mi', 'age' => 31], ['name' => 'SuHo', 'age' => 17]],
+                new Each([
+                    'name' => [new Required(), new Length(min: 3)],
+                    'age' => new Number(min: 18)
+                ]),
+                [
+                    '0.name' => ['This value must contain at least 3 characters.'],
+                    '1.age' => ['Value must be no less than 18.'],
                 ],
             ],
         ];
