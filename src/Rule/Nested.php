@@ -389,8 +389,10 @@ final class Nested implements
      *
      * @param array $rawRules Raw rules array which keys need to be flattened.
      * @psalm-param RawRulesType $rawRules
+     *
      * @param array $resultRules Result rules array with flattened keys passed by reference.
      * @psalm-param ReadyRulesType $resultRules
+     *
      * @param string|null $baseValuePath Base value path string. Can be a single key or multiple keys joined with
      * {@see SEPARATOR}. `null` is used for the first call.
      */
