@@ -1073,7 +1073,7 @@ final class NestedTest extends RuleTestCase
                     'attributes.abc' => ['Value cannot be blank.'],
                 ],
             ],
-            'deep level' => [
+            'deep level of nesting with bare keys' => [
                 [
                     'level1' => [
                         'level2' => [
