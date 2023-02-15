@@ -31,6 +31,8 @@ use Yiisoft\Validator\WhenInterface;
 use function array_pop;
 use function count;
 use function implode;
+use function is_array;
+use function is_int;
 use function is_string;
 use function ltrim;
 use function rtrim;
@@ -106,8 +108,8 @@ final class Nested implements
     private const EACH_SHORTCUT = '*';
 
     /**
-     * @var array<list<RuleInterface>|RuleInterface>|null A set of ready to use rule instances. The 1st level
-     *     is always an array of rules, the 2nd level is either an array of rules or a single rule.
+     * @var array<list<RuleInterface>|RuleInterface>|null A set of ready to use rule instances. The 1st level is always
+     * an array of rules, the 2nd level is either an array of rules or a single rule.
      */
     private array|null $rules;
 
