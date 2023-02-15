@@ -58,7 +58,7 @@ use Yiisoft\Validator\WhenInterface;
  * @see EachHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type RulesTypeWithoutNull from ValidatorInterface
- * @psalm-import-type NormalizedRulesArrayType from RulesNormalizer
+ * @psalm-import-type NormalizedAttributeRuleGroupsArray from RulesNormalizer
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -76,7 +76,7 @@ final class Each implements
 
     /**
      * @var array Rules to apply for each element of the validated iterable.
-     * @psalm-var NormalizedRulesArrayType
+     * @psalm-var NormalizedAttributeRuleGroupsArray
      */
     private array $rules;
 
@@ -114,7 +114,7 @@ final class Each implements
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        $this->rules = RulesNormalizer::normalizeToArray($rules);
+        $this->rules = RulesNormalizer::normalize($rules);
     }
 
     public function getName(): string
@@ -134,7 +134,7 @@ final class Each implements
      *
      * @return array A set of rules.
      *
-     * @psalm-return NormalizedRulesArrayType
+     * @psalm-return NormalizedAttributeRuleGroupsArray
      *
      * @see $rules
      */
