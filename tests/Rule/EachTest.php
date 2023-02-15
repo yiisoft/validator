@@ -283,7 +283,7 @@ final class EachTest extends RuleTestCase
                 [['name' => 'Mi', 'age' => 31], ['name' => 'SuHo', 'age' => 17]],
                 new Each([
                     'name' => [new Required(), new Length(min: 3)],
-                    'age' => new Number(min: 18)
+                    'age' => new Number(min: 18),
                 ]),
                 [
                     '0.name' => ['This value must contain at least 3 characters.'],
