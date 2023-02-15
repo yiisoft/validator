@@ -64,7 +64,7 @@ final class NestedTest extends RuleTestCase
     {
         $rule = new Nested();
 
-        $this->assertSame([], $rule->getRules());
+        $this->assertNull($rule->getRules());
         $this->assertSame(
             ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
             $rule->getValidatedObjectPropertyVisibility(),
@@ -347,6 +347,18 @@ final class NestedTest extends RuleTestCase
                 [
                     'array.age' => ['Value must be no less than 99.'],
                 ],
+            ],
+            'empty-rules' => [
+                new class () {
+                    #[Nested([])]
+                    private ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [],
             ],
             'rules-from-validated-value' => [
                 new class () {
@@ -1059,7 +1071,7 @@ final class NestedTest extends RuleTestCase
                     ReflectionProperty::IS_PUBLIC,
                 ),
                 new Nested(['value' => new Required()]),
-                ['value' => ['Value not passed.']],
+                ['value' => ['Value cannot be blank.']],
             ],
             'nested context' => [
                 [
@@ -1245,17 +1257,17 @@ final class NestedTest extends RuleTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'The $rules argument passed to Nested rule can be either: an empty array, an object implementing ' .
+            'The $rules argument passed to Nested rule can be either: a null, an object implementing ' .
             'RulesProviderInterface, a class string or an iterable.'
         );
         new Nested(new Required());
     }
 
-    public function testPropagateOptionsWithEmptyRules(): void
+    public function testPropagateOptionsWithNullRules(): void
     {
         $rule = new Nested();
         $rule->propagateOptions();
-        $this->assertSame([], $rule->getRules());
+        $this->assertNull($rule->getRules());
     }
 
     protected function getDifferentRuleInHandlerItems(): array
