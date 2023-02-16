@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -12,12 +13,14 @@ use Yiisoft\Validator\Rule\StopOnErrorHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
 final class StopOnErrorTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
+    use RuleWithProvidedRulesTrait;
     use WhenTestTrait;
 
     public function testGetName(): void
@@ -73,6 +76,11 @@ final class StopOnErrorTest extends RuleTestCase
                 ],
             ],
         ];
+    }
+
+    public function testGetOptionsWithNotRule(): void
+    {
+        $this->testGetOptionsWithNotRuleInternal(StopOnError::class);
     }
 
     public function dataValidationPassed(): array
@@ -209,6 +217,13 @@ final class StopOnErrorTest extends RuleTestCase
                     'a' => ['Value not passed.'],
                     'b' => ['Value cannot be blank.'],
                 ],
+            ],
+            'rules normalization, callable' => [
+                [],
+                new StopOnError([
+                    static fn (): Result => (new Result())->addError('Custom error.'),
+                ]),
+                ['' => ['Custom error.']],
             ],
         ];
     }

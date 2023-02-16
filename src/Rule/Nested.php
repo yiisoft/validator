@@ -95,16 +95,15 @@ use function sprintf;
  * @see NestedHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
- * @psalm-type RawRulesType = array<array<RuleInterface>|RuleInterface>
- * @psalm-type ReadyRulesType = array<list<RuleInterface>|RuleInterface>
- * @psalm-type OptionalReadyRulesType = ReadyRulesType|null
+ * @psalm-type RawNestedRulesArray = array<array<RuleInterface>|RuleInterface>
+ * @psalm-type NormalizedNestedRulesArray = array<list<RuleInterface>|RuleInterface>
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
     RuleWithOptionsInterface,
+    SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
-    SkipOnEmptyInterface,
     PropagateOptionsInterface,
     AfterInitAttributeEventInterface
 {
@@ -123,8 +122,9 @@ final class Nested implements
     private const EACH_SHORTCUT = '*';
 
     /**
-     * @var OptionalReadyRulesType A set of ready to use rule instances. The 1st level is always
+     * @var array|null A set of ready to use rule instances. The 1st level is always
      * an array of rules, the 2nd level is either a list of rules or a single rule.
+     * @psalm-var NormalizedNestedRulesArray|null
      */
     private array|null $rules;
 
@@ -229,7 +229,7 @@ final class Nested implements
      * Gets a set of rules for running the validation.
      *
      * @return array|null A set of rules. `null` means the rules are expected to be provided with a validated value.
-     * @psalm-return ReadyRulesType
+     * @psalm-return NormalizedNestedRulesArray
      */
     public function getRules(): array|null
     {
@@ -388,10 +388,10 @@ final class Nested implements
      * ```
      *
      * @param array $rawRules Raw rules array which keys need to be flattened.
-     * @psalm-param RawRulesType $rawRules
+     * @psalm-param RawNestedRulesArray $rawRules
      *
      * @param array $resultRules Result rules array with flattened keys passed by reference.
-     * @psalm-param ReadyRulesType $resultRules
+     * @psalm-param NormalizedNestedRulesArray $resultRules
      *
      * @param string|null $baseValuePath Base value path string. Can be a single key or multiple keys joined with
      * {@see SEPARATOR}. `null` is used for the first call.
@@ -425,7 +425,7 @@ final class Nested implements
      *
      * @param iterable $rules Source iterable that will be checked and converted to array (so it's passed by reference).
      *
-     * @psalm-param-out RawRulesType $rules
+     * @psalm-param-out RawNestedRulesArray $rules
      *
      * @throws InvalidArgumentException When iterable contains items that are not rules.
      *
@@ -457,7 +457,7 @@ final class Nested implements
      * Converts rules defined with {@see EACH_SHORTCUT} to separate `Nested` and `Each` rules.
      *
      * @oaram array $rules Rules array for replacing {@see EACH_SHORTCUT} passed by reference.
-     * @psalm-param RawRulesType $rules
+     * @psalm-param RawNestedRulesArray $rules
      */
     private function handleEachShortcut(array &$rules): void
     {

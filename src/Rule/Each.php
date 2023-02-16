@@ -17,6 +17,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Helper\RulesDumper;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -58,13 +59,15 @@ use Yiisoft\Validator\WhenInterface;
  * @see EachHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
+ * @psalm-import-type NormalizedFlatRulesIterable from RulesNormalizer
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
     RuleWithOptionsInterface,
+    SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
-    SkipOnEmptyInterface,
+    RulesProviderInterface,
     PropagateOptionsInterface,
     AfterInitAttributeEventInterface
 {
@@ -74,13 +77,15 @@ final class Each implements
 
     /**
      * @var iterable A set of normalized rules that needs to be applied to each element of the validated iterable.
-     * @psalm-var iterable<RuleInterface>
+     * @psalm-var NormalizedFlatRulesIterable
      */
     private iterable $rules;
 
     /**
      * @param callable|iterable|RuleInterface $rules A set of rules that needs to be applied to each element of the
      * validated iterable. They will be normalized using {@see RulesNormalizer}.
+     * @psalm-param callable|iterable<callable|RuleInterface>|RuleInterface $rules
+     *
      * @param string $incorrectInputMessage Error message used when validation fails because the validated value is not
      * an iterable.
      *
@@ -104,9 +109,6 @@ final class Each implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        /**
-         * @param callable|iterable<callable|RuleInterface>|RuleInterface $rules
-         */
         iterable|callable|RuleInterface $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $incorrectInputKeyMessage = 'Every iterable key must have an integer or a string type.',
@@ -130,7 +132,8 @@ final class Each implements
     /**
      * Gets a set of normalized rules that needs to be applied to each element of the validated iterable.
      *
-     * @return iterable<Closure|Closure[]|RuleInterface|RuleInterface[]> A set of rules.
+     * @return iterable A set of rules.
+     * @psalm-return NormalizedFlatRulesIterable
      *
      * @see $rules
      */
