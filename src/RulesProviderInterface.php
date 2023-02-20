@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 /**
  * Provides data validation rules.
  *
- * @psalm-type RawRulesIterable = iterable<RuleInterface|iterable<RuleInterface>|callable|iterable<callable>>
+ * @psalm-import-type RawRulesIterable from ValidatorInterface
  */
 interface RulesProviderInterface
 {

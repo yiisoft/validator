@@ -23,7 +23,7 @@ use function is_string;
  *
  * Note that when using {@see Validator}, normalization is performed automatically.
  *
- * @psalm-import-type RawRulesType from ValidatorInterface
+ * @psalm-import-type RawRules from ValidatorInterface
  * @psalm-type NormalizedAttributeRuleGroupsArray = array<int|string, Traversable<int, RuleInterface>>
  * @psalm-type NormalizedFlatRulesIterable = iterable<int, RuleInterface>
  */
@@ -57,7 +57,7 @@ final class RulesNormalizer
      * - Object providing rules via separate method.
      * - Single rule instance / callable.
      * - Name of a class providing rules via PHP attributes.
-     * @psalm-param RawRulesType $rules
+     * @psalm-param RawRules|null $rules
      *
      * @param mixed|null $data Validated data,
      * @param callable|null $defaultSkipOnEmptyCondition A default "skip on empty" condition
@@ -142,7 +142,7 @@ final class RulesNormalizer
      * - Object providing rules via separate method.
      * - Single rule instance / callable.
      * - Name of a class providing rules via PHP attributes.
-     * @psalm-param RawRulesType $rules
+     * @psalm-param RawRules|null $rules
      *
      * @param mixed $data Validated data.
      *
