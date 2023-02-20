@@ -182,7 +182,7 @@ final class EachTest extends RuleTestCase
             ],
             'custom incorrect input message, plain Each rule' => [
                 1,
-                [new Each([new Number(max: 13)], incorrectInputMessage: 'Custom incorrect input message.')],
+                new Each([new Number(max: 13)], incorrectInputMessage: 'Custom incorrect input message.'),
                 ['' => ['Custom incorrect input message.']],
             ],
             'custom incorrect input message with parameters' => [
