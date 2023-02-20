@@ -24,8 +24,7 @@ use function is_string;
  * Note that when using {@see Validator}, normalization is performed automatically.
  *
  * @psalm-import-type RulesType from ValidatorInterface
- * @psalm-type NormalizedRulesType = array<int|string, Traversable<int, RuleInterface>>
- * @psalm-type NormalizedRulesArrayType = array<array<int,RuleInterface>>
+ * @psalm-type NormalizedAttributeRuleGroupsArray = array<int|string, Traversable<int, RuleInterface>>
  */
 final class RulesNormalizer
 {
@@ -69,7 +68,7 @@ final class RulesNormalizer
      * @throws ReflectionException When parsing rules from PHP attributes failed.
      *
      * @return iterable Rules normalized as a whole and individually, ready to use for validation.
-     * @psalm-return NormalizedRulesType
+     * @psalm-return NormalizedAttributeRuleGroupsArray
      */
     public static function normalize(
         callable|iterable|object|string|null $rules,
@@ -101,23 +100,6 @@ final class RulesNormalizer
         }
 
         return $normalizedRules;
-    }
-
-    /**
-     * @psalm-param RulesType $rules
-     *
-     * @psalm-return NormalizedRulesArrayType
-     */
-    public static function normalizeToArray(callable|iterable|object|string|null $rules): array
-    {
-        $rules = self::normalize($rules);
-
-        $result = [];
-        foreach ($rules as $key => $rulesList) {
-            $result[$key] = iterator_to_array($rulesList);
-        }
-
-        return $result;
     }
 
     /**

@@ -6,6 +6,7 @@ namespace Yiisoft\Validator;
 
 use Reflection;
 use ReflectionException;
+use Traversable;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 
@@ -13,8 +14,9 @@ use Yiisoft\Validator\Helper\RulesNormalizer;
  * An interface allowing to validate the data according to the set of rules ({@see RuleInterface}) and validation
  * context ({@see ValidationContext}). A class implementing it is called "validator".
  *
- * @psalm-type RulesTypeWithoutNull = class-string|object|callable|iterable<RuleInterface|RuleInterface[]|callable|callable[]>
- * @psalm-type RulesType = null|RulesTypeWithoutNull
+ * @psalm-type BaseRulesType = class-string|object|callable|iterable<RuleInterface|RuleInterface[]|Traversable<int, RuleInterface>|callable|callable[]>
+ * @psalm-type RulesType = BaseRulesType|null
+ * @psalm-type RulesTypeWithoutNull = BaseRulesType
  */
 interface ValidatorInterface
 {

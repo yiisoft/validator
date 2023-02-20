@@ -16,6 +16,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\Helper\RulesDumper;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -58,8 +59,9 @@ use Yiisoft\Validator\WhenInterface;
  * @see EachHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type RulesTypeWithoutNull from ValidatorInterface
- * @psalm-import-type NormalizedRulesArrayType from RulesNormalizer
+ * @psalm-import-type NormalizedAttributeRuleGroupsArray from RulesNormalizer
  * @psalm-import-type WhenType from WhenInterface
+ * @psalm-type EachRulesArray = NormalizedAttributeRuleGroupsArray|array<int|string, array<int, RuleInterface>>
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
@@ -75,13 +77,17 @@ final class Each implements
     use WhenTrait;
 
     /**
-     * @var array Rules to apply for each element of the validated iterable.
-     * @psalm-var NormalizedRulesArrayType
+     * @var array Normalized rules to apply for each element of the validated iterable.
+     * @psalm-var EachRulesArray
      */
     private array $rules;
 
     /**
      * @param callable|iterable|object|string $rules Rules to apply for each element of the validated iterable.
+     * They will be normalized using {@see RulesNormalizer}.
+     * can be passed.
+     * @psalm-param RulesTypeWithoutNull $rules
+     *
      * @param string $incorrectInputMessage Error message used when validation fails because the validated value is not
      * an iterable.
      *
@@ -102,8 +108,6 @@ final class Each implements
      * rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying this `Each` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
-     *
-     * @psalm-param RulesTypeWithoutNull $rules
      * @psalm-param WhenType $when
      */
     public function __construct(
@@ -114,7 +118,7 @@ final class Each implements
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        $this->rules = RulesNormalizer::normalizeToArray($rules);
+        $this->rules = RulesNormalizer::normalize($rules);
     }
 
     public function getName(): string
@@ -134,7 +138,7 @@ final class Each implements
      *
      * @return array A set of rules.
      *
-     * @psalm-return NormalizedRulesArrayType
+     * @psalm-return EachRulesArray
      *
      * @see $rules
      */
@@ -198,8 +202,8 @@ final class Each implements
 
     public function afterInitAttribute(object $object, int $target): void
     {
-        foreach ($this->rules as $rules) {
-            foreach ($rules as $rule) {
+        foreach ($this->rules as $attributeRules) {
+            foreach ($attributeRules as $rule) {
                 if ($rule instanceof AfterInitAttributeEventInterface) {
                     $rule->afterInitAttribute(
                         $object,
