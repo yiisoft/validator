@@ -177,6 +177,11 @@ final class EachTest extends RuleTestCase
             'incorrect input' => [1, [new Each([new Number(max: 13)])], ['' => ['Value must be array or iterable.']]],
             'custom incorrect input message' => [
                 1,
+                [new Each([new Number(max: 13)], incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
+            'custom incorrect input message, plain Each rule' => [
+                1,
                 new Each([new Number(max: 13)], incorrectInputMessage: 'Custom incorrect input message.'),
                 ['' => ['Custom incorrect input message.']],
             ],
