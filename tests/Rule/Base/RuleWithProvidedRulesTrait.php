@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 
 trait RuleWithProvidedRulesTrait
@@ -24,7 +23,6 @@ trait RuleWithProvidedRulesTrait
             new Number(min: 1),
         ]);
         $this->assertInstanceOf(RuleWithOptionsInterface::class, $rule);
-        $this->assertInstanceOf(RulesProviderInterface::class, $rule);
 
         $this->expectException(InvalidArgumentException::class);
 

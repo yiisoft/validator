@@ -14,7 +14,6 @@ use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -78,7 +77,6 @@ class Composite implements
     SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
-    RulesProviderInterface,
     AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
