@@ -90,7 +90,7 @@ use Yiisoft\Validator\ValidatorInterface;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  *
- * @psalm-import-type RawRulesIterable from ValidatorInterface
+ * @psalm-import-type RawRulesMap from ValidatorInterface
  */
 final class AttributesRulesProvider implements RulesProviderInterface
 {
@@ -130,7 +130,7 @@ final class AttributesRulesProvider implements RulesProviderInterface
      *     'files' => [new Count(max: 3)], // Attribute specific rules.
      * ],
      * ```
-     * @psalm-return RawRulesIterable
+     * @psalm-return RawRulesMap
      */
     public function getRules(): iterable
     {

@@ -17,6 +17,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
@@ -43,6 +44,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @psalm-import-type WhenType from WhenInterface
  * @psalm-import-type NormalizedRulesList from RulesNormalizer
+ * @psalm-import-type RawRulesList from ValidatorInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class StopOnError implements
@@ -65,7 +67,7 @@ final class StopOnError implements
     /**
      * @param iterable $rules A set of rules for running the validation. They will be normalized during initialization
      * using {@see RulesNormalizer}.
-     * @psalm-param iterable<RuleInterface> $rules
+     * @psalm-param RawRulesList $rules
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this `StopOnError` rule with all defined {@see $rules} if
      * the validated value is empty / not passed. See {@see SkipOnEmptyInterface}.

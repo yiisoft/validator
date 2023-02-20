@@ -17,6 +17,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
@@ -70,6 +71,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @psalm-import-type WhenType from WhenInterface
  * @psalm-import-type NormalizedRulesList from RulesNormalizer
+ * @psalm-import-type RawRulesList from ValidatorInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Composite implements
@@ -107,7 +109,7 @@ class Composite implements
     /**
      * @param iterable $rules A set of rules that needs to be grouped. They will be normalized using
      * {@see RulesNormalizer}.
-     * @psalm-param iterable<callable|RuleInterface> $rules
+     * @psalm-param RawRulesList $rules
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule group if the validated value is empty / not
      * passed. See {@see SkipOnEmptyInterface}.

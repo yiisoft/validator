@@ -146,7 +146,7 @@ use Yiisoft\Validator\ValidatorInterface;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  *
- * @psalm-import-type RawRulesIterable from ValidatorInterface
+ * @psalm-import-type RawRulesMap from ValidatorInterface
  */
 final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterface, AttributeTranslatorProviderInterface
 {
@@ -198,7 +198,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
      * so, when used together, the latter ones will be ignored without exception.
      *
      * @return iterable The resulting rules is an array with the following structure:
-     * @psalm-return RawRulesIterable
+     * @psalm-return RawRulesMap
      *
      * ```php
      * [
