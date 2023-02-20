@@ -103,10 +103,12 @@ final class StopOnErrorTest extends RuleTestCase
         return [
             'basic' => [
                 'hello',
-                new StopOnError([
-                    new Length(min: 10),
-                    new Length(max: 1),
-                ]),
+                [
+                    new StopOnError([
+                        new Length(min: 10),
+                        new Length(max: 1),
+                    ]),
+                ],
                 ['' => ['This value must contain at least 10 characters.']],
             ],
             'basic, different order' => [
