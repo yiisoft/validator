@@ -58,11 +58,10 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see EachHandler Corresponding handler performing the actual validation.
  *
- * @psalm-import-type RulesTypeWithoutNull from ValidatorInterface
+ * @psalm-import-type RawRules from ValidatorInterface
  * @psalm-import-type NormalizedAttributeRuleGroupsArray from RulesNormalizer
  * @psalm-import-type WhenType from WhenInterface
  * @psalm-type EachRulesArray = NormalizedAttributeRuleGroupsArray|array<int|string, array<int, RuleInterface>>
- * @psalm-import-type NormalizedFlatRulesIterable from RulesNormalizer
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
@@ -87,7 +86,7 @@ final class Each implements
      * @param callable|iterable|object|string $rules Rules to apply for each element of the validated iterable.
      * They will be normalized using {@see RulesNormalizer}.
      * can be passed.
-     * @psalm-param RulesTypeWithoutNull $rules
+     * @psalm-param RawRules $rules
      *
      * @param string $incorrectInputMessage Error message used when validation fails because the validated value is not
      * an iterable.
