@@ -121,6 +121,14 @@ final class StopOnErrorTest extends RuleTestCase
                 ],
                 ['' => ['This value must contain at most 1 character.']],
             ],
+            'basic, plain StopOnError rule' => [
+                'hello',
+                new StopOnError([
+                    new Length(min: 10),
+                    new Length(max: 1),
+                ]),
+                ['' => ['This value must contain at least 10 characters.']],
+            ],
             'combined with other top level rules' => [
                 'hello',
                 [
