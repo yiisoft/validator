@@ -14,6 +14,7 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
@@ -22,6 +23,7 @@ final class EachTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
+    use RuleWithProvidedRulesTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
@@ -158,6 +160,11 @@ final class EachTest extends RuleTestCase
                 ],
             ],
         ];
+    }
+
+    public function testGetOptionsWithNotRule(): void
+    {
+        $this->testGetOptionsWithNotRuleInternal(Each::class);
     }
 
     public function dataValidationPassed(): array

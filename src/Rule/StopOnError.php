@@ -8,11 +8,13 @@ use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
+use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Helper\RulesDumper;
+use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -41,6 +43,7 @@ use Yiisoft\Validator\WhenInterface;
  * @see StopOnErrorHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
+ * @psalm-import-type NormalizedFlatRulesIterable from RulesNormalizer
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class StopOnError implements
@@ -48,6 +51,7 @@ final class StopOnError implements
     SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
+    RulesProviderInterface,
     AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
@@ -55,7 +59,14 @@ final class StopOnError implements
     use WhenTrait;
 
     /**
-     * @param iterable $rules A set of rules for running the validation. Note that they are not normalized.
+     * @var iterable A set of normalized rules that needs to be run.
+     * @psalm-var NormalizedFlatRulesIterable
+     */
+    private iterable $rules = [];
+
+    /**
+     * @param iterable $rules A set of rules for running the validation. They will be normalized during initialization
+     * using {@see RulesNormalizer}.
      * @psalm-param iterable<RuleInterface> $rules
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this `StopOnError` rule with all defined {@see $rules} if
@@ -67,11 +78,12 @@ final class StopOnError implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private iterable $rules,
+        iterable $rules,
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        $this->rules = RulesNormalizer::normalizeList($rules);
     }
 
     public function getName(): string
@@ -84,7 +96,7 @@ final class StopOnError implements
      *
      * @return iterable A set of rules.
      *
-     * @psalm-return iterable<RuleInterface>
+     * @psalm-return NormalizedFlatRulesIterable
      */
     public function getRules(): iterable
     {

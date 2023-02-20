@@ -25,10 +25,12 @@ use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
@@ -47,6 +49,7 @@ final class NestedTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
+    use RuleWithProvidedRulesTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
@@ -259,6 +262,23 @@ final class NestedTest extends RuleTestCase
         ];
     }
 
+    public function testGetOptionsWithNotRule(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $ruleInterfaceName = RuleInterface::class;
+        $message = "Every rule must be an instance of $ruleInterfaceName, class@anonymous given.";
+        $this->expectExceptionMessage($message);
+
+        $rule = new Nested([
+            'a' => new Required(),
+            'b' => new class () {
+            },
+            'c' => new Number(min: 1),
+        ]);
+        $rule->getOptions();
+    }
+
     public function testValidationRuleIsNotInstanceOfRule(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -340,7 +360,7 @@ final class NestedTest extends RuleTestCase
                 },
                 [],
             ],
-            'wo-rules' => [
+            'rules-from-validated-value' => [
                 new class () {
                     #[Nested]
                     private ObjectWithDifferentPropertyVisibility $object;
@@ -355,7 +375,7 @@ final class NestedTest extends RuleTestCase
                     'object.age' => ['Value must be no less than 21.'],
                 ],
             ],
-            'wo-rules-only-public' => [
+            'rules-from-validated-value-only-public' => [
                 new class () {
                     #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PUBLIC)]
                     private ObjectWithDifferentPropertyVisibility $object;
@@ -369,7 +389,7 @@ final class NestedTest extends RuleTestCase
                     'object.name' => ['Value cannot be blank.'],
                 ],
             ],
-            'wo-rules-only-protected' => [
+            'rules-from-validated-value-only-protected' => [
                 new class () {
                     #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PROTECTED)]
                     private ObjectWithDifferentPropertyVisibility $object;
@@ -383,7 +403,7 @@ final class NestedTest extends RuleTestCase
                     'object.age' => ['Value must be no less than 21.'],
                 ],
             ],
-            'wo-rules-inherit-attributes' => [
+            'rules-from-validated-value-inherit-attributes' => [
                 new class () {
                     #[Nested]
                     private InheritAttributesObject $object;
@@ -401,7 +421,7 @@ final class NestedTest extends RuleTestCase
                     'object.number' => ['Value must be equal to "99".'],
                 ],
             ],
-            'nested-into-each' => [
+            'nested-with-each' => [
                 new Foo(),
                 [
                     'name' => ['Value cannot be blank.'],
@@ -1048,7 +1068,7 @@ final class NestedTest extends RuleTestCase
                     new class () {
                         private int $value = 7;
                     },
-                    ReflectionProperty::IS_PUBLIC
+                    ReflectionProperty::IS_PUBLIC,
                 ),
                 new Nested(['value' => new Required()]),
                 ['value' => ['Value cannot be blank.']],
@@ -1245,7 +1265,7 @@ final class NestedTest extends RuleTestCase
 
     public function testPropagateOptionsWithNullRules(): void
     {
-        $rule = new Nested(null);
+        $rule = new Nested();
         $rule->propagateOptions();
         $this->assertNull($rule->getRules());
     }

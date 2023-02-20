@@ -17,6 +17,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -62,13 +63,15 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type NormalizedAttributeRuleGroupsArray from RulesNormalizer
  * @psalm-import-type WhenType from WhenInterface
  * @psalm-type EachRulesArray = NormalizedAttributeRuleGroupsArray|array<int|string, array<int, RuleInterface>>
+ * @psalm-import-type NormalizedFlatRulesIterable from RulesNormalizer
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
     RuleWithOptionsInterface,
+    SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
-    SkipOnEmptyInterface,
+    RulesProviderInterface,
     PropagateOptionsInterface,
     AfterInitAttributeEventInterface
 {

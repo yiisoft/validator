@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use InvalidArgumentException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
@@ -14,6 +13,7 @@ use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\CoordinatesRuleSet;
@@ -23,6 +23,7 @@ final class CompositeTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
+    use RuleWithProvidedRulesTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
@@ -193,19 +194,9 @@ final class CompositeTest extends RuleTestCase
         ];
     }
 
-    public function testOptionsWithNotRule(): void
+    public function testGetOptionsWithNotRule(): void
     {
-        $rule = new Composite([
-            new Number(max: 13, pattern: '/1/'),
-            new class () {
-            },
-        ]);
-
-        $this->expectException(InvalidArgumentException::class);
-        $message = 'Rule must be either an instance of Yiisoft\Validator\RuleInterface or a callable, ' .
-            'class@anonymous given.';
-        $this->expectExceptionMessage($message);
-        $rule->getOptions();
+        $this->testGetOptionsWithNotRuleInternal(Composite::class);
     }
 
     public function dataValidationPassed(): array
@@ -245,7 +236,7 @@ final class CompositeTest extends RuleTestCase
                     ),
                 ],
             ],
-            'multiple attributes' => [
+            'multiple attributes via subclass' => [
                 ['latitude' => -90, 'longitude' => 180],
                 [new CoordinatesRuleSet()],
             ],

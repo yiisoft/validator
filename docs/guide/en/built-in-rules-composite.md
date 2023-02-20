@@ -47,10 +47,11 @@ use Yiisoft\Validator\Validator;
 $result = (new Validator())->validate('John', new UsernameRuleSet());
 ````
 
-It can also be applied to multiple attributes:
+It can also be combined with [Nested] rule to reuse rules for multiple attributes:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
+use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 
 final class CoordinatesRuleSet extends Composite
@@ -58,8 +59,10 @@ final class CoordinatesRuleSet extends Composite
     public function getRules(): array
     {
         return [
-            'latitude' => new Number(min: -90, max: 90),
-            'longitude' => new Number(min: -90, max: 90),
+            new Nested(
+                'latitude' => new Number(min: -90, max: 90),
+                'longitude' => new Number(min: -90, max: 90),
+            ),
         ];
     }
 }
@@ -81,3 +84,4 @@ final class ChartCoordinateRuleSet extends Composite
 ```
 
 [skipping options]: conditional-validation.md
+[Nested]: built-in-rules-nested.md
