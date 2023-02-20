@@ -42,7 +42,7 @@ use Yiisoft\Validator\WhenInterface;
  * @see StopOnErrorHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
- * @psalm-import-type NormalizedFlatRulesIterable from RulesNormalizer
+ * @psalm-import-type NormalizedRulesList from RulesNormalizer
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class StopOnError implements
@@ -58,7 +58,7 @@ final class StopOnError implements
 
     /**
      * @var iterable A set of normalized rules that needs to be run.
-     * @psalm-var NormalizedFlatRulesIterable
+     * @psalm-var NormalizedRulesList
      */
     private iterable $rules = [];
 
@@ -94,7 +94,7 @@ final class StopOnError implements
      *
      * @return iterable A set of rules.
      *
-     * @psalm-return NormalizedFlatRulesIterable
+     * @psalm-return NormalizedRulesList
      */
     public function getRules(): iterable
     {

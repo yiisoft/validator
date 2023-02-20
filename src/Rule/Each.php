@@ -16,7 +16,6 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\Helper\RulesDumper;
-use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -59,9 +58,8 @@ use Yiisoft\Validator\WhenInterface;
  * @see EachHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type RawRules from ValidatorInterface
- * @psalm-import-type NormalizedAttributeRuleGroupsArray from RulesNormalizer
+ * @psalm-import-type NormalizedRules from RulesNormalizer
  * @psalm-import-type WhenType from WhenInterface
- * @psalm-type EachRulesArray = NormalizedAttributeRuleGroupsArray|array<int|string, array<int, RuleInterface>>
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
@@ -78,7 +76,7 @@ final class Each implements
 
     /**
      * @var array Normalized rules to apply for each element of the validated iterable.
-     * @psalm-var EachRulesArray
+     * @psalm-var NormalizedRules
      */
     private array $rules;
 
@@ -138,7 +136,7 @@ final class Each implements
      *
      * @return array A set of rules.
      *
-     * @psalm-return EachRulesArray
+     * @psalm-return NormalizedRules
      *
      * @see $rules
      */

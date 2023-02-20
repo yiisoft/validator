@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Helper;
 
 use InvalidArgumentException;
 use ReflectionException;
-use Traversable;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -24,8 +23,8 @@ use function is_string;
  * Note that when using {@see Validator}, normalization is performed automatically.
  *
  * @psalm-import-type RawRules from ValidatorInterface
- * @psalm-type NormalizedAttributeRuleGroupsArray = array<int|string, Traversable<int, RuleInterface>>
- * @psalm-type NormalizedFlatRulesIterable = iterable<int, RuleInterface>
+ * @psalm-type NormalizedRulesList = iterable<int, RuleInterface>
+ * @psalm-type NormalizedRules = array<int|string, NormalizedRulesList>
  */
 final class RulesNormalizer
 {
@@ -67,14 +66,14 @@ final class RulesNormalizer
      * @throws InvalidArgumentException When attribute is neither an integer nor a string.
      * @throws ReflectionException When parsing rules from PHP attributes failed.
      *
-     * @return iterable Rules normalized as a whole and individually, ready to use for validation.
-     * @psalm-return NormalizedAttributeRuleGroupsArray
+     * @return array Rules normalized as a whole and individually, ready to use for validation.
+     * @psalm-return NormalizedRules
      */
     public static function normalize(
         callable|iterable|object|string|null $rules,
         mixed $data = null,
         ?callable $defaultSkipOnEmptyCondition = null,
-    ): iterable {
+    ): array {
         $rules = self::prepareRulesIterable($rules, $data);
 
         $normalizedRules = [];
@@ -114,7 +113,7 @@ final class RulesNormalizer
      * implementation.
      *
      * @return iterable An iterable with every rule checked and normalized.
-     * @psalm-return NormalizedFlatRulesIterable
+     * @psalm-return NormalizedRulesList
      */
     public static function normalizeList(iterable|callable|RuleInterface $rules): iterable
     {
