@@ -8,11 +8,12 @@ use ArrayObject;
 use InvalidArgumentException;
 use ReflectionProperty;
 use stdClass;
-use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Error;
+use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
@@ -37,6 +38,7 @@ use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
+use Yiisoft\Validator\Tests\Support\Helper\OptionsHelper;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
 use Yiisoft\Validator\ValidationContext;
@@ -438,55 +440,196 @@ final class NestedTest extends RuleTestCase
         $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
-    public function testPropagateOptions(): void
+    public function dataPropagateOptions(): array
     {
-        $rule = new Nested([
-            'posts' => [
-                new Each([
-                    new Nested([
-                        'title' => [new Length(min: 3)],
-                        'authors' => [
+        return [
+            'nested and each combinations' => [
+                new Nested(
+                    [
+                        'posts' => [
                             new Each([
                                 new Nested([
-                                    'data' => [
-                                        'name' => [new Length(min: 5)],
-                                        'age' => [
-                                            new Number(min: 18),
-                                            new Number(min: 20),
-                                        ],
+                                    'title' => [new Length(min: 3)],
+                                    'authors' => [
+                                        new Each([
+                                            new Nested([
+                                                'data' => [
+                                                    'name' => [new Length(min: 5)],
+                                                    'age' => [
+                                                        new Number(min: 18),
+                                                        new Number(min: 20),
+                                                    ],
+                                                ],
+                                            ]),
+                                        ]),
                                     ],
                                 ]),
                             ]),
                         ],
-                    ]),
-                ]),
+                        'meta' => [new Length(min: 7)],
+                    ],
+                    propagateOptions: true,
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
+                [
+                    [
+                        'nested',
+                        'skipOnEmpty' => true,
+                        'skipOnError' => true,
+                        'rules' => [
+                            'posts' => [
+                                [
+                                    'each',
+                                    'skipOnEmpty' => true,
+                                    'skipOnError' => true,
+                                    'rules' => [
+                                        [
+                                            [
+                                                'nested',
+                                                'skipOnEmpty' => true,
+                                                'skipOnError' => true,
+                                                'rules' => [
+                                                    'title' => [
+                                                        [
+                                                            'length',
+                                                            'skipOnEmpty' => true,
+                                                            'skipOnError' => true,
+                                                        ],
+                                                    ],
+                                                    'authors' => [
+                                                        [
+                                                            'each',
+                                                            'skipOnEmpty' => true,
+                                                            'skipOnError' => true,
+                                                            'rules' => [
+                                                                [
+                                                                    [
+                                                                        'nested',
+                                                                        'skipOnEmpty' => true,
+                                                                        'skipOnError' => true,
+                                                                        'rules' => [
+                                                                            'data.name' => [
+                                                                                [
+                                                                                    'length',
+                                                                                    'skipOnEmpty' => true,
+                                                                                    'skipOnError' => true,
+                                                                                ],
+                                                                            ],
+                                                                            'data.age' => [
+                                                                                [
+                                                                                    'number',
+                                                                                    'skipOnEmpty' => true,
+                                                                                    'skipOnError' => true,
+                                                                                ],
+                                                                                [
+                                                                                    'number',
+                                                                                    'skipOnEmpty' => true,
+                                                                                    'skipOnError' => true,
+                                                                                ],
+                                                                            ],
+                                                                        ],
+                                                                    ],
+                                                                ],
+                                                            ],
+                                                        ],
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'meta' => [
+                                [
+                                    'length',
+                                    'skipOnEmpty' => true,
+                                    'skipOnError' => true,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
-            'meta' => [new Length(min: 7)],
-        ], propagateOptions: true, skipOnEmpty: true, skipOnError: true);
-        $options = $rule->getOptions();
-        $paths = [
-            [],
-            ['rules', 'posts', 0],
-            ['rules', 'posts', 0, 'rules', 0, 0],
-            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'title', 0],
-            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0],
-            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0],
-            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0, 'rules', 'data.name', 0],
-            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0, 'rules', 'data.age', 0],
-            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0, 'rules', 'data.age', 1],
-            ['rules', 'meta', 0],
+            'null as rules' => [
+                new Nested(propagateOptions: true),
+                [
+                    [
+                        'nested',
+                        'skipOnEmpty' => false,
+                        'skipOnError' => false,
+                        'rules' => null,
+                    ],
+                ],
+            ],
+            'single rule as integer attribute rules' => [
+                new Nested(
+                    [new AtLeast(['a'])],
+                    propagateOptions: true,
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
+                [
+                    [
+                        'nested',
+                        'skipOnEmpty' => true,
+                        'skipOnError' => true,
+                        'rules' => [
+                            [
+                                'atLeast',
+                                'skipOnEmpty' => true,
+                                'skipOnError' => true,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'single rule as string attribute rules' => [
+                new Nested(
+                    [
+                        'numbers' => new Each(new Number()),
+                    ],
+                    propagateOptions: true,
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
+                [
+                    [
+                        'nested',
+                        'skipOnEmpty' => true,
+                        'skipOnError' => true,
+                        'rules' => [
+                            'numbers' => [
+                                [
+                                    'each',
+                                    'skipOnEmpty' => true,
+                                    'skipOnError' => true,
+                                    'rules' => [
+                                        [
+                                            [
+                                                'number',
+                                                'skipOnEmpty' => true,
+                                                'skipOnError' => true,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
-        $keys = ['skipOnEmpty', 'skipOnError'];
+    }
 
-        foreach ($paths as $path) {
-            foreach ($keys as $key) {
-                $fullPath = $path;
-                $fullPath[] = $key;
-
-                $value = ArrayHelper::getValue($options, $fullPath);
-                $this->assertTrue($value, implode('.', $fullPath));
-            }
-        }
+    /**
+     * @dataProvider dataPropagateOptions
+     */
+    public function testPropagateOptions(Nested $rule, array $expectedOptions): void
+    {
+        $options = RulesDumper::asArray([$rule]);
+        OptionsHelper::filterRecursive($options, ['skipOnEmpty', 'skipOnError', 'rules']);
+        $this->assertSame($expectedOptions, $options);
     }
 
     public function testNestedWithoutRulesWithObject(): void
@@ -1259,13 +1402,6 @@ final class NestedTest extends RuleTestCase
             'RulesProviderInterface, a class string or an iterable.'
         );
         new Nested(new Required());
-    }
-
-    public function testPropagateOptionsWithNullRules(): void
-    {
-        $rule = new Nested();
-        $rule->propagateOptions();
-        $this->assertNull($rule->getRules());
     }
 
     protected function getDifferentRuleInHandlerItems(): array
