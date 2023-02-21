@@ -134,6 +134,47 @@ final class CompareTest extends RuleTestCase
                     'skipOnError' => true,
                 ],
             ],
+            'targetAttribute priority with simple targetValue' => [
+                new Compare(
+                    1,
+                    targetAttribute: 'test',
+                ),
+                [
+                    'targetValue' => 1,
+                    'targetAttribute' => 'test',
+                    'incorrectInputMessage' => [
+                        'template' => 'The allowed types are integer, float, string, boolean, null and object ' .
+                            'implementing \Stringable interface or \DateTimeInterface.',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
+                    'incorrectDataSetTypeMessage' => [
+                        'template' => 'The attribute value returned from a custom data set must have one of the ' .
+                            'following types: integer, float, string, boolean, null or an object implementing ' .
+                            '\Stringable interface or \DateTimeInterface.',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
+                    'message' => [
+                        'template' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'parameters' => [
+                            'targetValue' => 1,
+                            'targetAttribute' => 'test',
+                            'targetValueOrAttribute' => 'test',
+                        ],
+                    ],
+                    'type' => 'number',
+                    'operator' => '==',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
         ];
     }
 

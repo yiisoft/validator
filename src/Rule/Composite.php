@@ -167,11 +167,11 @@ class Composite implements
         return CompositeHandler::class;
     }
 
-    public function afterInitAttribute(object $object, int $target): void
+    public function afterInitAttribute(object $object): void
     {
         foreach ($this->getRules() as $rule) {
             if ($rule instanceof AfterInitAttributeEventInterface) {
-                $rule->afterInitAttribute($object, $target);
+                $rule->afterInitAttribute($object);
             }
         }
     }
