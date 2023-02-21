@@ -19,7 +19,6 @@ interface AfterInitAttributeEventInterface
      * using {@see ObjectDataSet}, {@see AttributesRulesProvider} or {@see ObjectParser} directly.
      *
      * @param object $object An object containing rules within attributes.
-     * @param Attribute::TARGET_* $target {@see Attribute} target.
      */
-    public function afterInitAttribute(object $object, int $target): void;
+    public function afterInitAttribute(object $object): void;
 }

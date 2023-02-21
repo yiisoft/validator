@@ -88,16 +88,16 @@ abstract class AbstractNumber implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private float|int|null $min = null,
-        private float|int|null $max = null,
-        private string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
-        private string $notNumberMessage = 'Value must be a number.',
-        private string $lessThanMinMessage = self::DEFAULT_LESS_THAN_MIN_MESSAGE,
-        private string $greaterThanMaxMessage = self::DEFAULT_GREATER_THAN_MAX_MESSAGE,
-        private string $pattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
-        private mixed $skipOnEmpty = null,
-        private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private float|int|null $min,
+        private float|int|null $max,
+        private string $incorrectInputMessage,
+        private string $notNumberMessage,
+        private string $lessThanMinMessage,
+        private string $greaterThanMaxMessage,
+        private string $pattern,
+        private mixed $skipOnEmpty,
+        private bool $skipOnError,
+        private Closure|null $when,
     ) {
     }
 

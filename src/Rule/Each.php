@@ -197,15 +197,12 @@ final class Each implements
         return EachHandler::class;
     }
 
-    public function afterInitAttribute(object $object, int $target): void
+    public function afterInitAttribute(object $object): void
     {
         foreach ($this->rules as $attributeRules) {
             foreach ($attributeRules as $rule) {
                 if ($rule instanceof AfterInitAttributeEventInterface) {
-                    $rule->afterInitAttribute(
-                        $object,
-                        $target === Attribute::TARGET_CLASS ? Attribute::TARGET_PROPERTY : $target
-                    );
+                    $rule->afterInitAttribute($object);
                 }
             }
         }

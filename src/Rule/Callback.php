@@ -97,7 +97,7 @@ final class Callback implements
         return $this->method;
     }
 
-    public function afterInitAttribute(object $object, int $target): void
+    public function afterInitAttribute(object $object): void
     {
         if ($this->method === null) {
             return;

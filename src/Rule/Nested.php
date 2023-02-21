@@ -536,7 +536,7 @@ final class Nested implements
         $this->rules = $rules;
     }
 
-    public function afterInitAttribute(object $object, int $target): void
+    public function afterInitAttribute(object $object): void
     {
         if ($this->rules === null) {
             return;
@@ -546,12 +546,12 @@ final class Nested implements
             if (is_array($rules)) {
                 foreach ($rules as $rule) {
                     if ($rule instanceof AfterInitAttributeEventInterface) {
-                        $rule->afterInitAttribute($object, $target);
+                        $rule->afterInitAttribute($object);
                     }
                 }
             } else {
                 if ($rules instanceof AfterInitAttributeEventInterface) {
-                    $rules->afterInitAttribute($object, $target);
+                    $rules->afterInitAttribute($object);
                 }
             }
         }

@@ -121,11 +121,11 @@ final class StopOnError implements
         return StopOnErrorHandler::class;
     }
 
-    public function afterInitAttribute(object $object, int $target): void
+    public function afterInitAttribute(object $object): void
     {
         foreach ($this->rules as $rule) {
             if ($rule instanceof AfterInitAttributeEventInterface) {
-                $rule->afterInitAttribute($object, $target);
+                $rule->afterInitAttribute($object);
             }
         }
     }
