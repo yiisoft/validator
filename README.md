@@ -17,8 +17,6 @@
 
 This package provides data validation capabilities.
 
-- [Documentation](docs/guide/en/README.md)
-
 ## Features
 
 - Can be used with any object.
@@ -44,46 +42,63 @@ The package could be installed with composer:
 composer require yiisoft/validator
 ```
 
-## Testing
+## General usage
 
-### Unit testing
+Validator allows to check data in any format. For example, when data is an object:
 
-The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
+```php
+use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\Email;
+use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Validator;
 
-```shell
-./vendor/bin/phpunit
+#[AtLeast(['email', 'phone'])]
+final class Person
+{
+    public function __construct(
+        #[Required]
+        #[Length(min: 2)]
+        public ?string $name = null,
+
+        #[Number(min: 21)]
+        public ?int $age = null,
+
+        #[Email]
+        public ?string $email = null,
+
+        public ?string $phone = null,
+    ) {
+    }
+}
+
+$person = new Person(
+    name: 'John', 
+    age: 17, 
+    email: 'john@example.com',
+    phone: null
+);
+
+$result = (new Validator())->validate($person);
 ```
 
-### Mutation testing
+The validation result is an object that allows to check whether validation was successful:
 
-The package tests are checked with [Infection](https://infection.github.io/) mutation framework with
-[Infection Static Analysis Plugin](https://github.com/Roave/infection-static-analysis-plugin). To run it:
-
-```shell
-./vendor/bin/roave-infection-static-analysis-plugin
+```php
+$result->isValid();
 ```
 
-## Static analysis
+It also contains errors occurred during validation:
 
-The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
-
-```shell
-./vendor/bin/psalm
+```php
+$result->getErrorMessages();
 ```
 
-## Code style
+## Documentation
 
-Use [Rector](https://github.com/rectorphp/rector) to make codebase follow some specific rules or
-use either newest or any specific version of PHP:
-
-```shell
-./vendor/bin/rector
-```
-
-## Dependencies
-
-Use [ComposerRequireChecker](https://github.com/maglnet/ComposerRequireChecker) to detect transitive
-[Composer](https://getcomposer.org/) dependencies.
+- [Guide](docs/guide/en/README.md)
+- [Internals](docs/internals.md)
 
 ## License
 
