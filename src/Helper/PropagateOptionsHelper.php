@@ -54,7 +54,7 @@ final class PropagateOptionsHelper
      * @return RuleInterface The same child rule instance with changed options' values or unchanged if none of the
      * required interfaces were implemented.
      */
-    private static function propagateToRule(RuleInterface $parentRule, RuleInterface $childRule): RuleInterface
+    public static function propagateToRule(RuleInterface $parentRule, RuleInterface $childRule): RuleInterface
     {
         if ($parentRule instanceof SkipOnEmptyInterface && $childRule instanceof SkipOnEmptyInterface) {
             $childRule = $childRule->skipOnEmpty($parentRule->getSkipOnEmpty());
