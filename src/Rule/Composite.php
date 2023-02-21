@@ -12,11 +12,11 @@ use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
@@ -69,13 +69,15 @@ use Yiisoft\Validator\WhenInterface;
  * @see CompositeHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
+ * @psalm-import-type NormalizedRulesList from RulesNormalizer
+ * @psalm-import-type RawRulesList from ValidatorInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Composite implements
     RuleWithOptionsInterface,
+    SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
-    SkipOnEmptyInterface,
     AfterInitAttributeEventInterface
 {
     use SkipOnEmptyTrait;
@@ -84,29 +86,29 @@ class Composite implements
 
     /**
      * @var iterable A set of normalized rules that needs to be grouped.
-     * @psalm-var iterable<int, RuleInterface>
+     * @psalm-var NormalizedRulesList
      */
     protected iterable $rules = [];
     /**
      * @var bool|callable|null Whether to skip this rule group if the validated value is empty / not passed. See
      * {@see SkipOnEmptyInterface}.
      */
-    protected $skipOnEmpty;
+    private mixed $skipOnEmpty = null;
     /**
      * @var bool Whether to skip this rule group if any of the previous rules gave an error. See
      * {@see SkipOnErrorInterface}.
      */
-    protected bool $skipOnError = false;
+    private bool $skipOnError = false;
     /**
      * @var Closure|null A callable to define a condition for applying this rule group. See {@see WhenInterface}.
      * @psalm-var WhenType
      */
-    protected Closure|null $when = null;
+    private Closure|null $when = null;
 
     /**
      * @param iterable $rules A set of rules that needs to be grouped. They will be normalized using
      * {@see RulesNormalizer}.
-     * @psalm-param iterable<Closure|RuleInterface> $rules
+     * @psalm-param RawRulesList $rules
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule group if the validated value is empty / not
      * passed. See {@see SkipOnEmptyInterface}.
@@ -150,7 +152,8 @@ class Composite implements
     /**
      * Gets a set of normalized rules that needs to be grouped.
      *
-     * @return iterable<int, RuleInterface> A set of rules.
+     * @return iterable A set of rules.
+     * @psalm-return NormalizedRulesList
      *
      * @see $rules
      */

@@ -8,6 +8,7 @@ use ReflectionProperty;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Helper\ObjectParser;
 use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\ValidatorInterface;
 
 /**
  * A rules provider that extracts rules from PHP attributes (attached to class properties and class itself). The
@@ -88,6 +89,8 @@ use Yiisoft\Validator\RulesProviderInterface;
  * {@see ObjectParser} directly instead.
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
+ *
+ * @psalm-import-type RawRulesMap from ValidatorInterface
  */
 final class AttributesRulesProvider implements RulesProviderInterface
 {
@@ -127,6 +130,7 @@ final class AttributesRulesProvider implements RulesProviderInterface
      *     'files' => [new Count(max: 3)], // Attribute specific rules.
      * ],
      * ```
+     * @psalm-return RawRulesMap
      */
     public function getRules(): iterable
     {

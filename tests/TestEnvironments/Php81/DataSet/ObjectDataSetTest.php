@@ -190,57 +190,35 @@ final class ObjectDataSetTest extends TestCase
     public function testMoreComplexEmbeddedRule(): void
     {
         $dataSet = new ObjectDataSet(new Chart());
-        $secondEmbeddedRules = [
-            'x' => [new Number(min: -10, max: 10)],
-            'y' => [new Number(min: -10, max: 10)],
-        ];
-        $firstEmbeddedRules = [
-            'coordinates' => new Nested(
-                $secondEmbeddedRules,
-                requirePropertyPath: true,
-                noPropertyPathMessage: 'Custom message 4.'
-            ),
-            'rgb' => [
-                new Count(exactly: 3),
-                new Each(
-                    [new Number(min: 0, max: 255)],
-                    incorrectInputMessage: 'Custom message 5.',
-                ),
+        $expectedRules = [
+            'points' => [
+                new Each([
+                    new Nested([
+                        'coordinates' => new Each([
+                            new Nested(
+                                [
+                                    'x' => [new Number(min: -10, max: 10)],
+                                    'y' => [new Number(min: -10, max: 10)],
+                                ],
+                                requirePropertyPath: true,
+                                noPropertyPathMessage: 'Custom message 4.',
+                            ),
+                        ]),
+                        'rgb' => [
+                            new Count(exactly: 3),
+                            new Each(
+                                [new Number(min: 0, max: 255)],
+                                incorrectInputMessage: 'Custom message 5.',
+                            ),
+                        ],
+                    ]),
+                ]),
             ],
         ];
-
-        $actualRules = $this->toNestedArray($dataSet->getRules());
-
-        // check Chart structure has right structure
-        $this->assertIsArray($actualRules);
-        $this->assertArrayHasKey('points', $actualRules);
-        $this->assertCount(1, $actualRules = $this->toArray($actualRules['points']));
-        $this->assertInstanceOf(Each::class, $actualRules[0]);
-
-        // check Chart structure has right structure
-        $actualFirstEmbeddedRules = $this->toArray($actualRules[0]->getRules());
-        $this->assertIsArray($actualFirstEmbeddedRules);
-        $this->assertCount(1, $actualFirstEmbeddedRules);
-        $this->assertInstanceOf(Nested::class, $actualFirstEmbeddedRules[0]);
-
-        // check Point structure has right structure
-        $innerRules = $this->toArray($actualFirstEmbeddedRules[0]->getRules());
-        // rgb has usual structure. We can check as is
-        $this->assertEquals($firstEmbeddedRules['rgb'], $this->toArray($innerRules['rgb']));
-
-        // coordinates has embedded structure, so we need to unpack rules before check it
-        $this->assertIsArray($innerRules = $this->toArray($innerRules['coordinates']));
-        $this->assertCount(1, $innerRules);
-        $this->assertInstanceOf(Each::class, $innerRules[0]);
-
-        $secondInnerRules = $this->toArray($innerRules[0]->getRules());
-        $this->assertIsArray($secondInnerRules);
-        $this->assertCount(1, $secondInnerRules);
-        $this->assertInstanceOf(Nested::class, $secondInnerRules[0]);
-        $this->assertEquals($secondEmbeddedRules, $this->toNestedArray($secondInnerRules[0]->getRules()));
+        $this->assertEquals($expectedRules, $dataSet->getRules());
     }
 
-    public function toArray(iterable $rules): array
+    private function toArray(iterable $rules): array
     {
         return $rules instanceof Traversable ? iterator_to_array($rules) : (array) $rules;
     }

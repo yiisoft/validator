@@ -17,6 +17,7 @@ use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Nested;
@@ -24,6 +25,7 @@ use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -97,7 +99,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array or an object type.',
+                        'template' => 'An object data set data can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -147,7 +149,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array or an object type.',
+                        'template' => 'An object data set data can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -163,28 +165,30 @@ final class NestedTest extends RuleTestCase
                     'skipOnError' => false,
                     'rules' => [
                         'user.age' => [
-                            'number',
-                            'min' => null,
-                            'max' => null,
-                            'incorrectInputMessage' => [
-                                'template' => 'The allowed types are integer, float and string.',
-                                'parameters' => [],
+                            [
+                                'number',
+                                'min' => null,
+                                'max' => null,
+                                'incorrectInputMessage' => [
+                                    'template' => 'The allowed types are integer, float and string.',
+                                    'parameters' => [],
+                                ],
+                                'notNumberMessage' => [
+                                    'template' => 'Value must be a number.',
+                                    'parameters' => [],
+                                ],
+                                'lessThanMinMessage' => [
+                                    'template' => 'Value must be no less than {min}.',
+                                    'parameters' => ['min' => null],
+                                ],
+                                'greaterThanMaxMessage' => [
+                                    'template' => 'Value must be no greater than {max}.',
+                                    'parameters' => ['max' => null],
+                                ],
+                                'skipOnEmpty' => false,
+                                'skipOnError' => false,
+                                'pattern' => '/1/',
                             ],
-                            'notNumberMessage' => [
-                                'template' => 'Value must be a number.',
-                                'parameters' => [],
-                            ],
-                            'lessThanMinMessage' => [
-                                'template' => 'Value must be no less than {min}.',
-                                'parameters' => ['min' => null],
-                            ],
-                            'greaterThanMaxMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
-                                'parameters' => ['max' => null],
-                            ],
-                            'skipOnEmpty' => false,
-                            'skipOnError' => false,
-                            'pattern' => '/1/',
                         ],
                     ],
                 ],
@@ -200,7 +204,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array or an object type.',
+                        'template' => 'An object data set data can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -215,8 +219,8 @@ final class NestedTest extends RuleTestCase
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                     'rules' => [
-                        'author.name' => ['author-name', 'key' => 'name'],
-                        'author.age' => ['author-age', 'key' => 'age'],
+                        'author.name' => [['author-name', 'key' => 'name']],
+                        'author.age' => [['author-age', 'key' => 'age']],
                     ],
                 ],
             ],
@@ -233,7 +237,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array or an object type.',
+                        'template' => 'An object data set data can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -248,14 +252,29 @@ final class NestedTest extends RuleTestCase
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                     'rules' => [
-                        'author' => [
-                            'name' => ['author-name', 'key' => 'name'],
-                            'age' => ['author-age', 'key' => 'age'],
-                        ],
+                        'author.name' => [['author-name', 'key' => 'name']],
+                        'author.age' => [['author-age', 'key' => 'age']],
                     ],
                 ],
             ],
         ];
+    }
+
+    public function testGetOptionsWithNotRule(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $ruleInterfaceName = RuleInterface::class;
+        $message = "Every rule must be an instance of $ruleInterfaceName, class@anonymous given.";
+        $this->expectExceptionMessage($message);
+
+        $rule = new Nested([
+            'a' => new Required(),
+            'b' => new class () {
+            },
+            'c' => new Number(min: 1),
+        ]);
+        $rule->getOptions();
     }
 
     public function testValidationRuleIsNotInstanceOfRule(): void
@@ -339,7 +358,7 @@ final class NestedTest extends RuleTestCase
                 },
                 [],
             ],
-            'wo-rules' => [
+            'rules-from-validated-value' => [
                 new class () {
                     #[Nested]
                     private ObjectWithDifferentPropertyVisibility $object;
@@ -354,7 +373,7 @@ final class NestedTest extends RuleTestCase
                     'object.age' => ['Value must be no less than 21.'],
                 ],
             ],
-            'wo-rules-only-public' => [
+            'rules-from-validated-value-only-public' => [
                 new class () {
                     #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PUBLIC)]
                     private ObjectWithDifferentPropertyVisibility $object;
@@ -368,7 +387,7 @@ final class NestedTest extends RuleTestCase
                     'object.name' => ['Value cannot be blank.'],
                 ],
             ],
-            'wo-rules-only-protected' => [
+            'rules-from-validated-value-only-protected' => [
                 new class () {
                     #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PROTECTED)]
                     private ObjectWithDifferentPropertyVisibility $object;
@@ -382,7 +401,7 @@ final class NestedTest extends RuleTestCase
                     'object.age' => ['Value must be no less than 21.'],
                 ],
             ],
-            'wo-rules-inherit-attributes' => [
+            'rules-from-validated-value-inherit-attributes' => [
                 new class () {
                     #[Nested]
                     private InheritAttributesObject $object;
@@ -400,7 +419,7 @@ final class NestedTest extends RuleTestCase
                     'object.number' => ['Value must be equal to "99".'],
                 ],
             ],
-            'nested-into-each' => [
+            'nested-with-each' => [
                 new Foo(),
                 [
                     'name' => ['Value cannot be blank.'],
@@ -429,10 +448,12 @@ final class NestedTest extends RuleTestCase
                         'authors' => [
                             new Each([
                                 new Nested([
-                                    'name' => [new Length(min: 5)],
-                                    'age' => [
-                                        new Number(min: 18),
-                                        new Number(min: 20),
+                                    'data' => [
+                                        'name' => [new Length(min: 5)],
+                                        'age' => [
+                                            new Number(min: 18),
+                                            new Number(min: 20),
+                                        ],
                                     ],
                                 ]),
                             ]),
@@ -446,13 +467,13 @@ final class NestedTest extends RuleTestCase
         $paths = [
             [],
             ['rules', 'posts', 0],
-            ['rules', 'posts', 0, 'rules', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'title', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'name', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'age', 1],
+            ['rules', 'posts', 0, 'rules', 0, 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'title', 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0, 'rules', 'data.name', 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0, 'rules', 'data.age', 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0, 'rules', 'data.age', 1],
             ['rules', 'meta', 0],
         ];
         $keys = ['skipOnEmpty', 'skipOnError'];
@@ -462,8 +483,8 @@ final class NestedTest extends RuleTestCase
                 $fullPath = $path;
                 $fullPath[] = $key;
 
-                $value = ArrayHelper::getValueByPath($options, $fullPath);
-                $this->assertTrue($value);
+                $value = ArrayHelper::getValue($options, $fullPath);
+                $this->assertTrue($value, implode('.', $fullPath));
             }
         }
     }
@@ -914,7 +935,7 @@ final class NestedTest extends RuleTestCase
             'incorrect data set type' => [
                 $incorrectDataSet,
                 [new Nested(['value' => new Required()])],
-                ['' => ['An object data set data can only have an array or an object type.']],
+                ['' => ['An object data set data can only have an array type.']],
             ],
             'custom incorrect data set type message' => [
                 $incorrectDataSet,
@@ -1045,10 +1066,59 @@ final class NestedTest extends RuleTestCase
                     new class () {
                         private int $value = 7;
                     },
-                    ReflectionProperty::IS_PUBLIC
+                    ReflectionProperty::IS_PUBLIC,
                 ),
                 new Nested(['value' => new Required()]),
                 ['value' => ['Value cannot be blank.']],
+            ],
+            'nested context' => [
+                [
+                    'method' => 'get',
+                    'attributes' => ['abc' => null],
+                ],
+                [
+                    'method' => [new Required()],
+                    'attributes' => new Nested([
+                        'abc' => [
+                            new Required(when: static function (mixed $value, ValidationContext $context): bool {
+                                $method = $context->getGlobalDataSet()->getAttributeValue('method');
+                                return $method === 'get';
+                            }),
+                        ],
+                    ]),
+                ],
+                [
+                    'attributes.abc' => ['Value cannot be blank.'],
+                ],
+            ],
+            'deep level of nesting with plain keys' => [
+                [
+                    'level1' => [
+                        'level2' => [
+                            'level3' => [
+                                'key' => 7,
+                                'name' => 'var',
+                            ],
+                        ],
+                    ],
+                ],
+                new Nested([
+                    'level1' => [
+                        'level2.level3' => [
+                            'key' => new Integer(min: 9),
+                        ],
+                        'level2' => [
+                            'level3.key' => [new Integer(max: 5)],
+                        ],
+                    ],
+                    'level1.level2' => [
+                        'level3.name' => new Length(min: 5),
+                    ],
+                ]),
+                [
+                    'level1.level2.level3.key' => ['Value must be no less than 9.', 'Value must be no greater than 5.'],
+                    'level1.level2.level3.name' => ['This value must contain at least 5 characters.'],
+                ],
             ],
         ];
     }
@@ -1193,7 +1263,7 @@ final class NestedTest extends RuleTestCase
 
     public function testPropagateOptionsWithNullRules(): void
     {
-        $rule = new Nested(null);
+        $rule = new Nested();
         $rule->propagateOptions();
         $this->assertNull($rule->getRules());
     }

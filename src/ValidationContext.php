@@ -11,7 +11,7 @@ use Yiisoft\Validator\Rule\StopOnError;
 /**
  * Validation context that might be taken into account when performing validation.
  *
- * @psalm-import-type RulesType from ValidatorInterface
+ * @psalm-import-type RawRules from ValidatorInterface
  */
 final class ValidationContext
 {
@@ -38,8 +38,13 @@ final class ValidationContext
     private mixed $rawData = null;
 
     /**
-     * @var DataSetInterface|null Data set the attribute belongs to.
-     * `null` if data set was not set with {@see setDataSet()} yet.
+     * @var DataSetInterface|null Global data set. `null` if data set was not set with {@see setContextDataOnce()} yet.
+     */
+    private ?DataSetInterface $globalDataSet = null;
+
+    /**
+     * @var DataSetInterface|null Current scope's data set the attribute belongs to. `null` if data set was not set
+     * with {@see setDataSet()} yet.
      */
     private ?DataSetInterface $dataSet = null;
 
@@ -77,6 +82,7 @@ final class ValidationContext
      * @param AttributeTranslatorInterface $attributeTranslator Attribute translator to use by default. If translator
      * is specified via {@see setAttributeTranslator()}, it will be used instead.
      * @param mixed $rawData The raw validated data.
+     * @param DataSetInterface $dataSet Global data set ({@see $globalDataSet}).
      *
      * @internal
      *
@@ -85,7 +91,8 @@ final class ValidationContext
     public function setContextDataOnce(
         ValidatorInterface $validator,
         AttributeTranslatorInterface $attributeTranslator,
-        mixed $rawData
+        mixed $rawData,
+        DataSetInterface $dataSet,
     ): self {
         if ($this->validator !== null) {
             return $this;
@@ -94,6 +101,7 @@ final class ValidationContext
         $this->validator = $validator;
         $this->defaultAttributeTranslator = $attributeTranslator;
         $this->rawData = $rawData;
+        $this->globalDataSet = $dataSet;
 
         return $this;
     }
@@ -120,7 +128,7 @@ final class ValidationContext
      * @param callable|iterable|object|string|null $rules Rules to apply. If specified, rules are not read from data set
      * even if it is an instance of {@see RulesProviderInterface}.
      *
-     * @psalm-param RulesType $rules
+     * @psalm-param RawRules|null $rules
      *
      * @throws RuntimeException If validator is not set in validation context.
      *
@@ -159,9 +167,24 @@ final class ValidationContext
     }
 
     /**
-     * Get the data set the attribute belongs to.
+     * Get the global data set.
      *
-     * @return DataSetInterface Data set the attribute belongs to.
+     * @return DataSetInterface Data set instance.
+     *
+     * @see $globalDataSet
+     */
+    public function getGlobalDataSet(): DataSetInterface
+    {
+        $this->requireValidator();
+        return $this->globalDataSet;
+    }
+
+    /**
+     * Get the current scope's data set the attribute belongs to.
+     *
+     * @return DataSetInterface Data set instance.
+     *
+     * @see $dataSet
      */
     public function getDataSet(): DataSetInterface
     {
@@ -173,13 +196,15 @@ final class ValidationContext
     }
 
     /**
-     * Set the data set the attribute belongs to.
+     * Set the current scope's data set the attribute belongs to.
      *
-     * @param DataSetInterface $dataSet Data set the attribute belongs to.
+     * @param DataSetInterface $dataSet Data set instance.
      *
      * @return $this The same instance of validation context.
      *
      * @internal
+     *
+     * @see $dataSet
      */
     public function setDataSet(DataSetInterface $dataSet): self
     {
@@ -279,6 +304,7 @@ final class ValidationContext
      * Ensure that validator is set in validation context.
      *
      * @psalm-assert ValidatorInterface $this->validator
+     * @psalm-assert DataSetInterface $this->globalDataSet
      *
      * @throws RuntimeException If validator is not set in validation context.
      */
