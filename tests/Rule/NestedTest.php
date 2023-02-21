@@ -562,7 +562,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
             ],
-            'single rule for whole object' => [
+            'single rule as integer attribute rules' => [
                 new Nested(
                     [new AtLeast(['a'])],
                     propagateOptions: true,
@@ -584,7 +584,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
             ],
-            'single rule as attribute rules' => [
+            'single rule as string attribute rules' => [
                 new Nested(
                     [
                         'numbers' => new Each(new Number()),
