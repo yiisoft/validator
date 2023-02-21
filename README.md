@@ -44,7 +44,7 @@ composer require yiisoft/validator
 
 ## General usage
 
-Validator allows to check data in any format. For example, object:
+Validator allows to check data in any format. For example, when data is an object:
 
 ```php
 use Yiisoft\Validator\Rule\AtLeast;
