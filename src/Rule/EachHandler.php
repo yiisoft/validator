@@ -25,28 +25,23 @@ final class EachHandler implements RuleHandlerInterface
 
         /** @var mixed $value */
         $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
-
-        $rules = $rule->getRules();
-
-        $result = new Result();
         if (!is_iterable($value)) {
-            $result->addError($rule->getIncorrectInputMessage(), [
+            return (new Result())->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
-
-            return $result;
         }
+
+        $rules = $rule->getRules();
+        $result = new Result();
 
         /** @var mixed $item */
         foreach ($value as $index => $item) {
             if (!is_int($index) && !is_string($index)) {
-                $result->addError($rule->getIncorrectInputKeyMessage(), [
+                return (new Result())->addError($rule->getIncorrectInputKeyMessage(), [
                     'attribute' => $context->getTranslatedAttribute(),
                     'type' => get_debug_type($value),
                 ]);
-
-                return $result;
             }
 
             $itemResult = $context->validate($item, $rules);

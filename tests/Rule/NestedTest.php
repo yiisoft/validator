@@ -467,13 +467,13 @@ final class NestedTest extends RuleTestCase
         $paths = [
             [],
             ['rules', 'posts', 0],
-            ['rules', 'posts', 0, 'rules', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'title', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'data.name', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'data.age', 0],
-            ['rules', 'posts', 0, 'rules', 0, 'rules', 'authors', 0, 'rules', 0, 'rules', 'data.age', 1],
+            ['rules', 'posts', 0, 'rules', 0, 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'title', 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0, 'rules', 'data.name', 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0, 'rules', 'data.age', 0],
+            ['rules', 'posts', 0, 'rules', 0, 0, 'rules', 'authors', 0, 'rules', 0, 0, 'rules', 'data.age', 1],
             ['rules', 'meta', 0],
         ];
         $keys = ['skipOnEmpty', 'skipOnError'];

@@ -12,6 +12,7 @@ use Yiisoft\Validator\DataWrapperInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\ValidatorInterface;
 
 /**
  * A data set for object data. The object passed to this data set can provide rules and data by implementing
@@ -145,7 +146,7 @@ use Yiisoft\Validator\RulesProviderInterface;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  *
- * @psalm-import-type RawRulesIterable from RulesProviderInterface
+ * @psalm-import-type RawRulesMap from ValidatorInterface
  */
 final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterface, AttributeTranslatorProviderInterface
 {
@@ -197,7 +198,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
      * so, when used together, the latter ones will be ignored without exception.
      *
      * @return iterable The resulting rules is an array with the following structure:
-     * @psalm-return RawRulesIterable
+     * @psalm-return RawRulesMap
      *
      * ```php
      * [

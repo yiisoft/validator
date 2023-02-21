@@ -11,7 +11,7 @@ use Yiisoft\Validator\Rule\StopOnError;
 /**
  * Validation context that might be taken into account when performing validation.
  *
- * @psalm-import-type RawRulesType from ValidatorInterface
+ * @psalm-import-type RawRules from ValidatorInterface
  */
 final class ValidationContext
 {
@@ -128,7 +128,7 @@ final class ValidationContext
      * @param callable|iterable|object|string|null $rules Rules to apply. If specified, rules are not read from data set
      * even if it is an instance of {@see RulesProviderInterface}.
      *
-     * @psalm-param RawRulesType $rules
+     * @psalm-param RawRules|null $rules
      *
      * @throws RuntimeException If validator is not set in validation context.
      *

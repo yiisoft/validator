@@ -25,11 +25,13 @@ final class PropagateOptionsHelper
      * - `$when` (both rules must implement {@see WhenInterface}).
      *
      * @param RuleInterface $parentRule A parent rule which options' values need to be propagated.
-     * @param iterable<RuleInterface> $childRules Direct child rules for this particular parent rule which options'
+     * @param iterable $childRules Direct child rules for this particular parent rule which options'
      * values must be changed to be the same as in parent rule.
+     * @psalm-param iterable<RuleInterface> $childRules
      *
-     * @return list<RuleInterface> A list of child rules of the same nesting level with changed options' values or
+     * @return array A list of child rules of the same nesting level with changed options' values or
      * unchanged if none of the required interfaces were implemented. The order is preserved.
+     * @psalm-return list<RuleInterface>
      */
     public static function propagate(RuleInterface $parentRule, iterable $childRules): array
     {

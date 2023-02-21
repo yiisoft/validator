@@ -13,8 +13,9 @@ use Yiisoft\Validator\Helper\RulesNormalizer;
  * An interface allowing to validate the data according to the set of rules ({@see RuleInterface}) and validation
  * context ({@see ValidationContext}). A class implementing it is called "validator".
  *
- * @psalm-import-type RawRulesIterable from RulesProviderInterface
- * @psalm-type RawRulesType = null|class-string|object|callable|RawRulesIterable
+ * @psalm-type RawRulesList = iterable<int, callable|RuleInterface>
+ * @psalm-type RawRulesMap = iterable<int|string, RuleInterface|callable|RawRulesList>
+ * @psalm-type RawRules = class-string|object|callable|RawRulesMap
  */
 interface ValidatorInterface
 {
@@ -33,7 +34,7 @@ interface ValidatorInterface
      * argument has higher priority over {@see RulesProviderInterface::getRules()} provided in `$data` argument. A
      * variety of types is supported. They are normalized before usage, please refer to {@see RulesNormalizer}
      * documentation to see what structures can be passed.
-     * @psalm-param RawRulesType $rules
+     * @psalm-param RawRules|null $rules
      *
      * @param ValidationContext|null $context Validation context that may be taken into account when performing
      * validation.

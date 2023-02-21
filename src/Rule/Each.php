@@ -15,11 +15,11 @@ use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
@@ -57,8 +57,9 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see EachHandler Corresponding handler performing the actual validation.
  *
+ * @psalm-import-type RawRules from ValidatorInterface
+ * @psalm-import-type NormalizedRulesMap from RulesNormalizer
  * @psalm-import-type WhenType from WhenInterface
- * @psalm-import-type NormalizedFlatRulesIterable from RulesNormalizer
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
@@ -74,15 +75,15 @@ final class Each implements
     use WhenTrait;
 
     /**
-     * @var iterable A set of normalized rules that needs to be applied to each element of the validated iterable.
-     * @psalm-var NormalizedFlatRulesIterable
+     * @var array Normalized rules to apply for each element of the validated iterable.
+     * @psalm-var NormalizedRulesMap
      */
-    private iterable $rules;
+    private array $rules;
 
     /**
-     * @param callable|iterable|RuleInterface $rules A set of rules that needs to be applied to each element of the
-     * validated iterable. They will be normalized using {@see RulesNormalizer}.
-     * @psalm-param callable|iterable<callable|RuleInterface>|RuleInterface $rules
+     * @param callable|iterable|object|string $rules Rules to apply for each element of the validated iterable.
+     * They will be normalized using {@see RulesNormalizer}.
+     * @psalm-param RawRules $rules
      *
      * @param string $incorrectInputMessage Error message used when validation fails because the validated value is not
      * an iterable.
@@ -107,14 +108,14 @@ final class Each implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        iterable|callable|RuleInterface $rules = [],
+        callable|iterable|object|string $rules = [],
         private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $incorrectInputKeyMessage = 'Every iterable key must have an integer or a string type.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        $this->rules = RulesNormalizer::normalizeList($rules);
+        $this->rules = RulesNormalizer::normalize($rules);
     }
 
     public function getName(): string
@@ -124,18 +125,21 @@ final class Each implements
 
     public function propagateOptions(): void
     {
-        $this->rules = PropagateOptionsHelper::propagate($this, $this->rules);
+        foreach ($this->rules as $key => $rules) {
+            $this->rules[$key] = PropagateOptionsHelper::propagate($this, $rules);
+        }
     }
 
     /**
-     * Gets a set of normalized rules that needs to be applied to each element of the validated iterable.
+     * Gets a set of rules that needs to be applied to each element of the validated iterable.
      *
-     * @return iterable A set of rules.
-     * @psalm-return NormalizedFlatRulesIterable
+     * @return array A set of rules.
+     *
+     * @psalm-return NormalizedRulesMap
      *
      * @see $rules
      */
-    public function getRules(): iterable
+    public function getRules(): array
     {
         return $this->rules;
     }
@@ -184,7 +188,7 @@ final class Each implements
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
-            'rules' => $this->dumpRulesAsArray(),
+            'rules' => RulesDumper::asArray($this->rules),
         ];
     }
 
@@ -195,23 +199,15 @@ final class Each implements
 
     public function afterInitAttribute(object $object, int $target): void
     {
-        foreach ($this->rules as $rule) {
-            if ($rule instanceof AfterInitAttributeEventInterface) {
-                $rule->afterInitAttribute(
-                    $object,
-                    $target === Attribute::TARGET_CLASS ? Attribute::TARGET_PROPERTY : $target
-                );
+        foreach ($this->rules as $attributeRules) {
+            foreach ($attributeRules as $rule) {
+                if ($rule instanceof AfterInitAttributeEventInterface) {
+                    $rule->afterInitAttribute(
+                        $object,
+                        $target === Attribute::TARGET_CLASS ? Attribute::TARGET_PROPERTY : $target
+                    );
+                }
             }
         }
-    }
-
-    /**
-     * Dumps defined {@see $rules} to array.
-     *
-     * @return array The array of rules with their options.
-     */
-    private function dumpRulesAsArray(): array
-    {
-        return RulesDumper::asArray($this->getRules());
     }
 }

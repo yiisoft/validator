@@ -143,7 +143,7 @@ final class Validator implements ValidatorInterface
      * rules to a one unified result.
      *
      * @param mixed $value The validated value of any type.
-     * @param iterable $rules Normalized rules ({@see RuleInterface} that can be iterated.
+     * @param iterable $rules Normalized rules ({@see RuleInterface} that can be iterated).
      * @psalm-param iterable<RuleInterface> $rules
      *
      * @param ValidationContext $context Validation context.

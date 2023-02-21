@@ -13,10 +13,10 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\Helper\RulesDumper;
-use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
+use Yiisoft\Validator\ValidatorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
@@ -69,7 +69,8 @@ use Yiisoft\Validator\WhenInterface;
  * @see CompositeHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
- * @psalm-import-type NormalizedFlatRulesIterable from RulesNormalizer
+ * @psalm-import-type NormalizedRulesList from RulesNormalizer
+ * @psalm-import-type RawRulesList from ValidatorInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Composite implements
@@ -85,7 +86,7 @@ class Composite implements
 
     /**
      * @var iterable A set of normalized rules that needs to be grouped.
-     * @psalm-var NormalizedFlatRulesIterable
+     * @psalm-var NormalizedRulesList
      */
     protected iterable $rules = [];
     /**
@@ -107,7 +108,7 @@ class Composite implements
     /**
      * @param iterable $rules A set of rules that needs to be grouped. They will be normalized using
      * {@see RulesNormalizer}.
-     * @psalm-param iterable<callable|RuleInterface> $rules
+     * @psalm-param RawRulesList $rules
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule group if the validated value is empty / not
      * passed. See {@see SkipOnEmptyInterface}.
@@ -152,7 +153,7 @@ class Composite implements
      * Gets a set of normalized rules that needs to be grouped.
      *
      * @return iterable A set of rules.
-     * @psalm-return NormalizedFlatRulesIterable
+     * @psalm-return NormalizedRulesList
      *
      * @see $rules
      */

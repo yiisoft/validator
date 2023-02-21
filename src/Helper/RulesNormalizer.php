@@ -22,8 +22,9 @@ use function is_string;
  *
  * Note that when using {@see Validator}, normalization is performed automatically.
  *
- * @psalm-import-type RawRulesType from ValidatorInterface
- * @psalm-type NormalizedFlatRulesIterable = iterable<int, RuleInterface>
+ * @psalm-import-type RawRules from ValidatorInterface
+ * @psalm-type NormalizedRulesList = iterable<int, RuleInterface>
+ * @psalm-type NormalizedRulesMap = array<int|string, NormalizedRulesList>
  */
 final class RulesNormalizer
 {
@@ -55,7 +56,7 @@ final class RulesNormalizer
      * - Object providing rules via separate method.
      * - Single rule instance / callable.
      * - Name of a class providing rules via PHP attributes.
-     * @psalm-param RawRulesType $rules
+     * @psalm-param RawRules|null $rules
      *
      * @param mixed|null $data Validated data,
      * @param callable|null $defaultSkipOnEmptyCondition A default "skip on empty" condition
@@ -65,14 +66,14 @@ final class RulesNormalizer
      * @throws InvalidArgumentException When attribute is neither an integer nor a string.
      * @throws ReflectionException When parsing rules from PHP attributes failed.
      *
-     * @return iterable Rules normalized as a whole and individually, ready to use for validation.
-     * @psalm-return iterable<int|string, iterable<int, RuleInterface>>
+     * @return array Rules normalized as a whole and individually, ready to use for validation.
+     * @psalm-return NormalizedRulesMap
      */
     public static function normalize(
         callable|iterable|object|string|null $rules,
         mixed $data = null,
         ?callable $defaultSkipOnEmptyCondition = null,
-    ): iterable {
+    ): array {
         $rules = self::prepareRulesIterable($rules, $data);
 
         $normalizedRules = [];
@@ -112,7 +113,7 @@ final class RulesNormalizer
      * implementation.
      *
      * @return iterable An iterable with every rule checked and normalized.
-     * @psalm-return NormalizedFlatRulesIterable
+     * @psalm-return NormalizedRulesList
      */
     public static function normalizeList(iterable|callable|RuleInterface $rules): iterable
     {
@@ -140,7 +141,7 @@ final class RulesNormalizer
      * - Object providing rules via separate method.
      * - Single rule instance / callable.
      * - Name of a class providing rules via PHP attributes.
-     * @psalm-param RawRulesType $rules
+     * @psalm-param RawRules|null $rules
      *
      * @param mixed $data Validated data.
      *
