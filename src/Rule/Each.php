@@ -125,8 +125,8 @@ final class Each implements
 
     public function propagateOptions(): void
     {
-        foreach ($this->rules as $key => $rules) {
-            $this->rules[$key] = PropagateOptionsHelper::propagate($this, $rules);
+        foreach ($this->rules as $key => $attributeRules) {
+            $this->rules[$key] = PropagateOptionsHelper::propagate($this, $attributeRules);
         }
     }
 
