@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Support\Data;
+namespace Yiisoft\Validator\Tests\TestEnvironments\Support\Data;
 
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;

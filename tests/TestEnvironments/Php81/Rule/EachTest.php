@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\TestEnvironments\Php81\Rule;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Validator\Tests\Support\Data\EachDto;
+use Yiisoft\Validator\Tests\TestEnvironments\Support\Data\EachDto;
 use Yiisoft\Validator\Validator;
 
 final class EachTest extends TestCase
