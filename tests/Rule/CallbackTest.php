@@ -63,7 +63,7 @@ final class CallbackTest extends RuleTestCase
         $this->assertIsCallable($callback);
         $this->assertNull($rule->getMethod());
 
-        $rule->afterInitAttribute(new ObjectDataSet(new stdClass()), Attribute::TARGET_PROPERTY);
+        $rule->afterInitAttribute(new ObjectDataSet(new stdClass()));
         $this->assertIsCallable($callback);
         $this->assertNull($rule->getMethod());
         $this->assertSame($callback, $rule->getCallback());
