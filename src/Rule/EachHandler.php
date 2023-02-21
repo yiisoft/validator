@@ -23,8 +23,9 @@ final class EachHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Each::class, $rule);
         }
 
+        $valueAsArray = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY);
         /** @var mixed $value */
-        $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
+        $value = $valueAsArray !== null ? $valueAsArray : $value;
         if (!is_iterable($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),

@@ -112,6 +112,7 @@ final class Validator implements ValidatorInterface
             } else {
                 /** @psalm-suppress MixedAssignment */
                 $validatedData = $dataSet->getAttributeValue($attribute);
+                $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, null);
                 $context->setAttribute($attribute);
             }
 
