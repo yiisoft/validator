@@ -83,7 +83,7 @@ $person = new Person(
 $result = (new Validator())->validate($person);
 ```
 
-The validation result is an object that allow check validation is successful:
+The validation result is an object that allows to check whether validation was successful:
 
 ```php
 $result->isValid();
