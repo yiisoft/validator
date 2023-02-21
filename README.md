@@ -89,7 +89,7 @@ The validation result is an object that allows to check whether validation was s
 $result->isValid();
 ```
 
-…and contain of errors occurred during validation:
+It also contains errors occurred during validation:
 
 ```php
 $result->getErrorMessages();
