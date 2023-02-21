@@ -527,6 +527,7 @@ final class Nested implements
         }
 
         $rules = [];
+        /** @var array<int, RuleInterface> $attributeRules */
         foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
             $rules[$attributeRulesIndex] = PropagateOptionsHelper::propagate($this, $attributeRules);
         }
