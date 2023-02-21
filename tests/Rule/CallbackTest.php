@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Attribute;
 use InvalidArgumentException;
 use RuntimeException;
 use stdClass;
