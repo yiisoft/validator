@@ -12,7 +12,6 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function gettype;
-use function in_array;
 
 /**
  * Compares the specified value with "target" value provided directly or within an attribute.
@@ -139,14 +138,11 @@ final class CompareHandler implements RuleHandlerInterface
      */
     private function compareValues(string $type, string $operator, mixed $value, mixed $targetValue): bool
     {
-        if (!in_array($operator, ['==', '===', '!=', '!=='])) {
-            if ($type === CompareType::STRING) {
-                $value = $this->normalizeString($value);
-                $targetValue = $this->normalizeString($targetValue);
-            } elseif ($type === CompareType::NUMBER) {
-                $value = $this->normalizeNumber($value);
-                $targetValue = $this->normalizeNumber($targetValue);
-            }
+        if ($operator === '>' || $operator === '<') {
+            /** @var mixed $value */
+            $value = $this->normalizeValue($type, $value);
+            /** @var mixed $targetValue */
+            $targetValue = $this->normalizeValue($type, $targetValue);
         }
 
         return match ($operator) {
@@ -155,9 +151,11 @@ final class CompareHandler implements RuleHandlerInterface
             '!=' => !$this->checkValuesAreEqual($type, $value, $targetValue),
             '!==' => !$this->checkValuesAreEqual($type, $value, $targetValue, strict: true),
             '>' => $value > $targetValue,
-            '>=' => $value >= $targetValue,
+            '>=' => $this->checkValuesAreEqual($type, $value, $targetValue) ||
+                $this->normalizeValue($type, $value) > $this->normalizeValue($type, $targetValue),
             '<' => $value < $targetValue,
-            '<=' => $value <= $targetValue,
+            '<=' => $this->checkValuesAreEqual($type, $value, $targetValue) ||
+                $this->normalizeValue($type, $value) < $this->normalizeValue($type, $targetValue),
         };
     }
 
@@ -208,6 +206,25 @@ final class CompareHandler implements RuleHandlerInterface
     private function checkFloatsAreEqual(float $value, float $targetValue): bool
     {
         return abs($value - $targetValue) < PHP_FLOAT_EPSILON;
+    }
+
+    /**
+     * Normalizes compared value depending on selected {@see AbstractCompare::$type}.
+     *
+     * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
+     * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
+     *
+     * @param mixed $value One of the compared values. Both validated and target value can be used.
+     *
+     * @return mixed Normalized value ready for comparison.
+     */
+    private function normalizeValue(string $type, mixed $value): mixed
+    {
+        return match ($type) {
+            CompareType::ORIGINAL => $value,
+            CompareType::STRING => $this->normalizeString($value),
+            CompareType::NUMBER => $this->normalizeNumber($value),
+        };
     }
 
     /**
