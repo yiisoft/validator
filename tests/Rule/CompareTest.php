@@ -224,6 +224,18 @@ final class CompareTest extends RuleTestCase
                 1 - 0.83,
                 [new Compare(0.17, operator: '>=')],
             ],
+            'target value: float as expression result, value: float with the same value, type: number, operator: >=' => [
+                0.17,
+                [new Compare(1 - 0.83, operator: '>=')],
+            ],
+            'target value: float, value: float with the same value as expression result, type: number, operator: <=' => [
+                1 - 0.83,
+                [new Compare(0.17, operator: '<=')],
+            ],
+            'target value: float as expression result, value: float with the same value, type: number, operator: <=' => [
+                0.17,
+                [new Compare(1 - 0.83, operator: '<=')],
+            ],
             'target value: float, value: float with the same value as expression result, type: string, operator: ==' => [
                 1 - 0.83,
                 [new Compare(0.17, type: CompareType::STRING)],
@@ -701,6 +713,11 @@ final class CompareTest extends RuleTestCase
                 1 - 0.83,
                 [new Compare(0.17, type: CompareType::ORIGINAL)],
                 ['' => ['Value must be equal to "0.17".']],
+            ],
+            'target value: float epsilon, value: doubled float epsilon, type: number, operator: ==' => [
+                PHP_FLOAT_EPSILON * 2,
+                [new Compare(PHP_FLOAT_EPSILON)],
+                ['' => ['Value must be equal to "2.2204460492503E-16".']],
             ],
 
             // Number / original specific, decimal places, directly provided values

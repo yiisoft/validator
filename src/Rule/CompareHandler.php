@@ -139,7 +139,7 @@ final class CompareHandler implements RuleHandlerInterface
      */
     private function compareValues(string $type, string $operator, mixed $value, mixed $targetValue): bool
     {
-        if (!in_array($operator, ['==', '===', '!=', '!=='])) {
+        if (!in_array($operator, ['==', '===', '!=', '!==', '>=', '<='])) {
             if ($type === CompareType::STRING) {
                 $value = $this->normalizeString($value);
                 $targetValue = $this->normalizeString($targetValue);
@@ -155,9 +155,9 @@ final class CompareHandler implements RuleHandlerInterface
             '!=' => !$this->checkValuesAreEqual($type, $value, $targetValue),
             '!==' => !$this->checkValuesAreEqual($type, $value, $targetValue, strict: true),
             '>' => $value > $targetValue,
-            '>=' => $value >= $targetValue,
+            '>=' => $this->checkValuesAreEqual($type, $value, $targetValue) || $value > $targetValue,
             '<' => $value < $targetValue,
-            '<=' => $value <= $targetValue,
+            '<=' => $this->checkValuesAreEqual($type, $value, $targetValue) || $value < $targetValue,
         };
     }
 
