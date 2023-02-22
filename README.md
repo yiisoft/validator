@@ -21,7 +21,7 @@ This package provides data validation capabilities.
 
 - Validate any data: arrays, objects, scalar values, etc.
 - Supports custom data sets.
-- Handles data relations.
+- Handles nested data structures (one-to-one and one-to-many).
 - Supports PHP 8 attributes.
 - Error message formatting and translation.
 - Attribute names translation.
