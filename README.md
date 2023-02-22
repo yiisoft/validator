@@ -19,7 +19,7 @@ This package provides data validation capabilities.
 
 ## Features
 
-- Validate any data: arrays, objects, scalar values, etc.
+- Validates any data: arrays, objects, scalar values, etc.
 - Supports custom data sets.
 - Handles nested data structures (one-to-one and one-to-many).
 - Supports PHP 8 attributes.
