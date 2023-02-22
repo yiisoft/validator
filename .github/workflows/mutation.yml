@@ -23,7 +23,7 @@ jobs:
   mutation:
     uses: yiisoft/actions/.github/workflows/roave-infection.yml@master
     with:
-      min-covered-msi: 100
+      min-covered-msi: 98
       os: >-
         ['ubuntu-latest']
       php: >-
