@@ -215,6 +215,7 @@ final class CompareHandler implements RuleHandlerInterface
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @param mixed $value One of the compared values. Both validated and target value can be used.
+     *
      * @return mixed Normalized value ready for comparison.
      */
     private function normalizeValue(string $type, mixed $value): mixed
