@@ -292,6 +292,10 @@ final class CompareTest extends RuleTestCase
                 $stringableUuid,
                 [new Compare($targetStringableUuid, type: CompareType::STRING, operator: '>')],
             ],
+            'target value: stringable uuidv4, value: greater stringable uuidv4, type: string, operator: >=' => [
+                $stringableUuid,
+                [new Compare($targetStringableUuid, type: CompareType::STRING, operator: '>=')],
+            ],
 
             // Original specific, datetime
 
