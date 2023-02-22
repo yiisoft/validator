@@ -19,14 +19,19 @@ This package provides data validation capabilities.
 
 ## Features
 
-- Can be used with any object.
+- Can be used with any data, including arrays and objects. It's possible to create custom data sets too.  
+- Handles data relations.
 - Supports PHP 8 attributes.
-- Skip further validation if an error occurred for the same field.
-- Skip validation of empty value.
 - Error message formatting and translation.
-- Conditional validation.
-- Possibility to pass context to validation rule.
+- Attribute names translation.
+- Conditional validation:
+  - Skip validation of "empty" value with possibility to configure "empty" condition.
+  - Skip further validation if an error occurred for the same attribute.
+  - Skip validation depending on a condition.
+- Possibility to use context in rule handler.
 - Common rules bundled.
+- Supports DI container for creating custom rule handlers with extra dependencies.
+- Exporting rules options for using in the frontend.
 
 ## Requirements
 
