@@ -148,7 +148,7 @@ final class ObjectParser
      */
     public function __construct(
         /**
-         * @var string|object A source for parsing rules and data. Can be either a class name string or an
+         * @var object|string A source for parsing rules and data. Can be either a class name string or an
          * instance.
          * @psalm-var class-string|object
          */
@@ -340,7 +340,9 @@ final class ObjectParser
      *
      * @return array Cache storage.
      * @psalm-return ObjectParserCache
+     *
      * @see $cache
+     *
      * @internal
      */
     public static function getCache(): array
