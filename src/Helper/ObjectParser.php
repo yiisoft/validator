@@ -114,7 +114,6 @@ use function is_string;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  *
- * @psalm-type ObjectParserCache = array<string, array<string, mixed>>
  * @psalm-type RulesCacheItem = array{0:RuleInterface,1:Attribute::TARGET_*}
  */
 final class ObjectParser
@@ -127,7 +126,7 @@ final class ObjectParser
      * - The second nesting level is a mapping between cache item names and their contents.
      *
      * Different properties' combinations of the same object are cached separately.
-     * @psalm-var ObjectParserCache
+     * @psalm-var array<string, array<string, mixed>>
      */
     #[ArrayShape([
         [
