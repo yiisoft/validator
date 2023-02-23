@@ -337,21 +337,6 @@ final class ObjectParser
     }
 
     /**
-     * Gets cache storage.
-     *
-     * @return array Cache storage.
-     * @psalm-return ObjectParserCache
-     *
-     * @see $cache
-     *
-     * @internal
-     */
-    public static function getCache(): array
-    {
-        return self::$cache;
-    }
-
-    /**
      * Returns Reflection of {@see $source}. Repetitive calls utilize cache if it's enabled in {@see $useCache}.
      *
      * @return ReflectionClass|ReflectionObject Either a Reflection class or an object instance depending on what was
