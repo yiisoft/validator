@@ -114,18 +114,20 @@ use function is_string;
  *
  * @link https://www.php.net/manual/en/language.attributes.overview.php
  *
+ * @psalm-type ObjectParserCache = array<string, array<string, mixed>>
  * @psalm-type RulesCacheItem = array{0:RuleInterface,1:Attribute::TARGET_*}
  */
 final class ObjectParser
 {
     /**
-     * @var array<string, array<string, mixed>> A cache storage utilizing static class property:
+     * @var array A cache storage utilizing static class property:
      *
      * - The first nesting level is a mapping between cache keys (dynamically generated on instantiation) and item names
      * (one of: `rules`, `reflectionProperties`, `reflectionSource`).
      * - The second nesting level is a mapping between cache item names and their contents.
      *
      * Different properties' combinations of the same object are cached separately.
+     * @psalm-var ObjectParserCache
      */
     #[ArrayShape([
         [
@@ -146,8 +148,9 @@ final class ObjectParser
      */
     public function __construct(
         /**
-         * @var class-string|object A source for parsing rules and data. Can be either a class name string or an
+         * @var string|object A source for parsing rules and data. Can be either a class name string or an
          * instance.
+         * @psalm-var class-string|object
          */
         private string|object $source,
         /**
@@ -320,7 +323,7 @@ final class ObjectParser
             }
 
             if (PHP_VERSION_ID < 80100) {
-                /** @psalm-suppress UnusedMethodCall Need for pslam with PHP 8.1+ */
+                /** @psalm-suppress UnusedMethodCall Need for psalm with PHP 8.1+ */
                 $property->setAccessible(true);
             }
 
@@ -330,6 +333,19 @@ final class ObjectParser
         $this->setCacheItem('reflectionProperties', $reflectionProperties);
 
         return $reflectionProperties;
+    }
+
+    /**
+     * Gets cache storage.
+     *
+     * @return array Cache storage.
+     * @psalm-return ObjectParserCache
+     * @see $cache
+     * @internal
+     */
+    public static function getCache(): array
+    {
+        return self::$cache;
     }
 
     /**
