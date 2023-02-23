@@ -98,7 +98,7 @@ final class ObjectParserTest extends TestCase
 
     public function testCache(): void
     {
-        $parser = new ObjectParser(new ObjectForTestingCache1());
+        $parser1 = new ObjectParser(new ObjectForTestingCache1());
         $cacheKey1 = 'Yiisoft\Validator\Tests\Support\Data\ObjectForTestingCache1_7_0';
         $this->assertArrayNotHasKey($cacheKey1, ObjectParser::getCache());
 
@@ -107,19 +107,19 @@ final class ObjectParserTest extends TestCase
             'b' => [new Number(min: 1)],
             'c' => [new Number(max: 2)],
         ];
-        $this->assertEquals($expectedRules1, $parser->getRules());
+        $this->assertEquals($expectedRules1, $parser1->getRules());
         $this->assertArrayHasKey($cacheKey1, ObjectParser::getCache());
         $this->assertArrayHasKey('rules', ObjectParser::getCache()[$cacheKey1]);
         $this->assertArrayHasKey('reflectionProperties', ObjectParser::getCache()[$cacheKey1]);
         $this->assertArrayHasKey('reflectionSource', ObjectParser::getCache()[$cacheKey1]);
-        $this->assertEquals($expectedRules1, $parser->getRules());
+        $this->assertEquals($expectedRules1, $parser1->getRules());
 
-        $parser = new ObjectParser(new ObjectForTestingCache2());
+        $parser2 = new ObjectParser(new ObjectForTestingCache2());
         $cacheKey2 = 'Yiisoft\Validator\Tests\Support\Data\ObjectForTestingCache2_7_0';
         $this->assertArrayHasKey($cacheKey1, ObjectParser::getCache());
         $this->assertArrayNotHasKey($cacheKey2, ObjectParser::getCache());
 
-        $parser->getReflectionProperties();
+        $parser2->getReflectionProperties();
         $this->assertArrayHasKey($cacheKey1, ObjectParser::getCache());
         $this->assertArrayHasKey($cacheKey2, ObjectParser::getCache());
         $this->assertArrayNotHasKey('rules', ObjectParser::getCache()[$cacheKey2]);
@@ -131,8 +131,9 @@ final class ObjectParserTest extends TestCase
             'e' => [new Number(min: 5)],
             'f' => [new Number(max: 6)],
         ];
-        $this->assertEquals($expectedRules2, $parser->getRules());
+        $this->assertEquals($expectedRules2, $parser2->getRules());
         $this->assertArrayHasKey('rules', ObjectParser::getCache()[$cacheKey2]);
-        $this->assertEquals($expectedRules2, $parser->getRules());
+        $this->assertEquals($expectedRules2, $parser2->getRules());
+        $this->assertEquals($expectedRules1, $parser1->getRules());
     }
 }
