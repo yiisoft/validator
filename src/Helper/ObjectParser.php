@@ -322,8 +322,11 @@ final class ObjectParser
                 continue;
             }
 
-            // Needed only for PHP < 8.1. For PHP >= 8.1 it has no effect and can be safely called without exceptions.
-            $property->setAccessible(true);
+            /** @infection-ignore-all */
+            if (PHP_VERSION_ID < 80100) {
+                /** @psalm-suppress UnusedMethodCall Need for psalm with PHP 8.1+ */
+                $property->setAccessible(true);
+            }
 
             $reflectionProperties[$property->getName()] = $property;
         }
