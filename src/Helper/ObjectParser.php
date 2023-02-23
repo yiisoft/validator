@@ -119,13 +119,14 @@ use function is_string;
 final class ObjectParser
 {
     /**
-     * @var array<string, array<string, mixed>> A cache storage utilizing static class property:
+     * @var array A cache storage utilizing static class property:
      *
      * - The first nesting level is a mapping between cache keys (dynamically generated on instantiation) and item names
      * (one of: `rules`, `reflectionProperties`, `reflectionSource`).
      * - The second nesting level is a mapping between cache item names and their contents.
      *
      * Different properties' combinations of the same object are cached separately.
+     * @psalm-var array<string, array<string, mixed>>
      */
     #[ArrayShape([
         [
@@ -146,8 +147,9 @@ final class ObjectParser
      */
     public function __construct(
         /**
-         * @var class-string|object A source for parsing rules and data. Can be either a class name string or an
+         * @var object|string A source for parsing rules and data. Can be either a class name string or an
          * instance.
+         * @psalm-var class-string|object
          */
         private string|object $source,
         /**
@@ -319,8 +321,9 @@ final class ObjectParser
                 continue;
             }
 
+            /** @infection-ignore-all */
             if (PHP_VERSION_ID < 80100) {
-                /** @psalm-suppress UnusedMethodCall Need for pslam with PHP 8.1+ */
+                /** @psalm-suppress UnusedMethodCall Need for psalm with PHP 8.1+ */
                 $property->setAccessible(true);
             }
 

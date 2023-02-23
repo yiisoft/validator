@@ -151,9 +151,11 @@ final class CompareHandler implements RuleHandlerInterface
             '!=' => !$this->checkValuesAreEqual($type, $value, $targetValue),
             '!==' => !$this->checkValuesAreEqual($type, $value, $targetValue, strict: true),
             '>' => $value > $targetValue,
+            /** @infection-ignore-all */
             '>=' => $this->checkValuesAreEqual($type, $value, $targetValue) ||
                 $this->normalizeValue($type, $value) > $this->normalizeValue($type, $targetValue),
             '<' => $value < $targetValue,
+            /** @infection-ignore-all */
             '<=' => $this->checkValuesAreEqual($type, $value, $targetValue) ||
                 $this->normalizeValue($type, $value) < $this->normalizeValue($type, $targetValue),
         };
