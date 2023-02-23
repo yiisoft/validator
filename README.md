@@ -37,7 +37,6 @@ This package provides data validation capabilities.
 ## Requirements
 
 - PHP 8.0 or higher.
-- `JSON` PHP extension.
 - `mbstring` PHP extension.
 
 ## Installation
