@@ -247,12 +247,12 @@ final class CountTest extends RuleTestCase
             'value: array with greater count, exactly: 0' => [
                 [0],
                 [new Count(0)],
-                ['' => ['This value must contain exactly 0 items.']]
+                ['' => ['This value must contain exactly 0 items.']],
             ],
             'value: empty array iterator, exactly: positive' => [
                 new ArrayIterator(),
                 [new Count(1)],
-                ['' => ['This value must contain exactly 1 item.']]
+                ['' => ['This value must contain exactly 1 item.']],
             ],
         ];
     }
