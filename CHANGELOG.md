@@ -2,7 +2,7 @@
 
 ## 1.0.1 under development
 
-- no changes in this release.
+- TODO: Right the actual changelog.
 
 ## 1.0.0 February 22, 2023
 

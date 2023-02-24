@@ -11,7 +11,7 @@ use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\CountHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
-use Yiisoft\Validator\Tests\Rule\Base\LimitTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\CountableLimitTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
@@ -21,7 +21,7 @@ use Yiisoft\Validator\Tests\Support\Data\CountDto;
 final class CountTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
-    use LimitTestTrait;
+    use CountableLimitTestTrait;
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
@@ -76,6 +76,10 @@ final class CountTest extends RuleTestCase
             [[], [new Count(max: 3)]],
             [[0, 0], [new Count(max: 3)]],
             [[0, 0, 0], [new Count(max: 3)]],
+            'value: array iterator with min allowed count, min: positive' => [
+                new ArrayIterator([0, 0, 0]),
+                [new Count(min: 3)],
+            ],
             [
                 new SingleValueDataSet(
                     new class () implements Countable {
@@ -92,8 +96,20 @@ final class CountTest extends RuleTestCase
             'class attribute' => [
                 new CountDto(7),
             ],
-            'value: iterator, exactly: 0, skipOnEmpty: true' => [
-                new ArrayIterator([]),
+            'value: empty array, exactly: 0' => [
+                [],
+                [new Count(0)],
+            ],
+            'value: empty array, min: 0' => [
+                [],
+                [new Count(min: 0)],
+            ],
+            'value: empty array iterator, exactly: 0' => [
+                new ArrayIterator(),
+                [new Count(0)],
+            ],
+            'value: empty array iterator, exactly: positive, skipOnEmpty: true' => [
+                new ArrayIterator(),
                 [new Count(1, skipOnEmpty: true)],
             ],
         ];
@@ -134,8 +150,13 @@ final class CountTest extends RuleTestCase
             [[''], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
             [['some string'], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
             [[new stdClass()], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
+            'value: array iterator with lower count, min: positive' => [
+                new ArrayIterator([0, 0]),
+                [new Count(min: 3)],
+                ['' => [$lessThanMinmessage]]
+            ],
             // https://www.php.net/manual/ru/class.countable.php
-            [
+            'value: class with min count returned from count method but not implenting Countable interface, min: 3' => [
                 [
                     new class () {
                         protected int $myCount = 3;
@@ -223,13 +244,13 @@ final class CountTest extends RuleTestCase
                 null,
                 ['' => ['This value must contain at least 2 items.']],
             ],
-            'value: array, exactly: 0' => [
+            'value: array with greater count, exactly: 0' => [
                 [0],
                 [new Count(0)],
                 ['' => ['This value must contain exactly 0 items.']]
             ],
-            'value: iterator, exactly: 0' => [
-                new ArrayIterator([]),
+            'value: empty array iterator, exactly: positive' => [
+                new ArrayIterator(),
                 [new Count(1)],
                 ['' => ['This value must contain exactly 1 item.']]
             ],

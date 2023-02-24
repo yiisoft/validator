@@ -9,7 +9,7 @@ use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\LengthHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
-use Yiisoft\Validator\Tests\Rule\Base\LimitTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\CountableLimitTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
@@ -18,7 +18,7 @@ use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 final class LengthTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
-    use LimitTestTrait;
+    use CountableLimitTestTrait;
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
