@@ -23,7 +23,7 @@ use Yiisoft\Validator\WhenInterface;
  * - Passed.
  * - Not `null`.
  * - Not an empty string (after trimming).
- * - Not an empty array.
+ * - Not an empty iterable.
  *
  * When using with other rules, it must come first.
  *

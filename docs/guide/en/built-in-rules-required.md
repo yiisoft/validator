@@ -7,7 +7,7 @@ By default, a value is considered empty only when it is either:
 - Not passed at all.
 - `null`.
 - An empty string (after trimming).
-- An empty array.
+- An empty iterable.
 
 ## Customizing empty condition
 

@@ -21,7 +21,7 @@ use Yiisoft\Validator\Rule\Integer;
 
 $rules = [
     // Applies to a whole set.
-    new Count(exactly: 3),
+    new Count(3),
     // Applies to individual set items.
     new Each(        
         // For single rules, wrapping with array / iterable is not necessary.
@@ -49,7 +49,7 @@ $rule = new Nested([
                         'y' => [new Number(min: -10, max: 10)],
                     ]),
                     'rgb' => new Each([
-                        new Count(exactly: 3),
+                        new Count(3),
                         new Number(min: 0, max: 255),
                     ]),
                 ]),

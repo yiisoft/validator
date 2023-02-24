@@ -123,11 +123,11 @@ trait CountableLimitTrait
         }
 
         if (
-            ($this->min !== null && $this->min <= 0) ||
-            ($this->max !== null && $this->max <= 0) ||
-            ($this->exactly !== null && $this->exactly <= 0)
+            ($this->min !== null && $this->min < 0) ||
+            ($this->max !== null && $this->max < 0) ||
+            ($this->exactly !== null && $this->exactly < 0)
         ) {
-            throw new InvalidArgumentException('Only positive values are allowed.');
+            throw new InvalidArgumentException('Only positive or zero values are allowed.');
         }
 
         if ($this->min !== null && $this->max !== null) {

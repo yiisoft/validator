@@ -29,7 +29,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * ```php
  * $rules = [
- *     new Count(exactly: 3), // Not required for using with `Each`.
+ *     new Count(3), // Not required for using with `Each`.
  *     new Each([
  *         new Integer(min: 0, max: 255),
  *         // More rules can be added here.

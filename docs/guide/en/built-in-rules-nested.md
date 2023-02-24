@@ -191,7 +191,7 @@ $rule = new Nested([
                         'y' => [new Number(min: -10, max: 10)],
                     ]),
                     'rgb' => new Each([
-                        new Count(exactly: 3),
+                        new Count(3),
                         new Number(min: 0, max: 255),
                     ]),
                 ]),
@@ -227,7 +227,7 @@ $rule = new Nested([
     'charts.*.points.*.coordinates.x' => [new Number(min: -10, max: 10)],
     'charts.*.points.*.coordinates.y' => [new Number(min: -10, max: 10)],
     'charts.*.points.*.rgb' => [
-        new Count(exactly: 3),
+        new Count(3),
         new Number(min: 0, max: 255),
     ],
 ]);
@@ -246,7 +246,7 @@ $rule = new Nested([
         'y' => [new Number(min: -10, max: 10)],
     ]),
     'charts.*.points.*.rgb' => [
-        new Count(exactly: 3),
+        new Count(3),
         new Number(min: 0, max: 255),
     ],
 ]);

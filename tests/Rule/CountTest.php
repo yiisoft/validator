@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use ArrayIterator;
 use Countable;
 use stdClass;
 use Yiisoft\Validator\DataSet\SingleValueDataSet;
@@ -71,7 +72,7 @@ final class CountTest extends RuleTestCase
         return [
             [[0, 0, 0], [new Count(min: 3)]],
             [[0, 0, 0, 0], [new Count(min: 3)]],
-            [[0, 0, 0], [new Count(exactly: 3)]],
+            [[0, 0, 0], [new Count(3)]],
             [[], [new Count(max: 3)]],
             [[0, 0], [new Count(max: 3)]],
             [[0, 0, 0], [new Count(max: 3)]],
@@ -90,6 +91,10 @@ final class CountTest extends RuleTestCase
             ],
             'class attribute' => [
                 new CountDto(7),
+            ],
+            'value: iterator, exactly: 0, skipOnEmpty: true' => [
+                new ArrayIterator([]),
+                [new Count(1, skipOnEmpty: true)],
             ],
         ];
     }
@@ -190,7 +195,7 @@ final class CountTest extends RuleTestCase
 
             'custom not exactly message' => [
                 [0, 0, 0, 0],
-                [new Count(exactly: 3, notExactlyMessage: 'Custom not exactly message.')],
+                [new Count(3, notExactlyMessage: 'Custom not exactly message.')],
                 ['' => ['Custom not exactly message.']],
             ],
             'custom not exactly message with parameters' => [
@@ -217,6 +222,16 @@ final class CountTest extends RuleTestCase
                 new CountDto(),
                 null,
                 ['' => ['This value must contain at least 2 items.']],
+            ],
+            'value: array, exactly: 0' => [
+                [0],
+                [new Count(0)],
+                ['' => ['This value must contain exactly 0 items.']]
+            ],
+            'value: iterator, exactly: 0' => [
+                new ArrayIterator([]),
+                [new Count(1)],
+                ['' => ['This value must contain exactly 1 item.']]
             ],
         ];
     }

@@ -682,7 +682,7 @@ final class NestedTest extends RuleTestCase
         ];
         $yRules = [new Number(min: -10, max: 10)];
         $rgbRules = [
-            new Count(exactly: 3),
+            new Count(3),
             new Each([new Number(min: 0, max: 255)]),
         ];
 
