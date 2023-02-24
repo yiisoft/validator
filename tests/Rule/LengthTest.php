@@ -17,8 +17,8 @@ use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
 final class LengthTest extends RuleTestCase
 {
-    use DifferentRuleInHandlerTestTrait;
     use CountableLimitTestTrait;
+    use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
