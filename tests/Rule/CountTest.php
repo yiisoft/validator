@@ -226,12 +226,12 @@ final class CountTest extends RuleTestCase
             'value: array, exactly: 0' => [
                 [0],
                 [new Count(0)],
-                ['' => ['This value must contain exactly 0 items.']]
+                ['' => ['This value must contain exactly 0 items.']],
             ],
             'value: iterator, exactly: 0' => [
                 new ArrayIterator([]),
                 [new Count(1)],
-                ['' => ['This value must contain exactly 1 item.']]
+                ['' => ['This value must contain exactly 1 item.']],
             ],
         ];
     }
