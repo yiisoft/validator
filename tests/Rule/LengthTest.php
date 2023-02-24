@@ -136,6 +136,19 @@ final class LengthTest extends RuleTestCase
 
             [str_repeat('x', 5), [new Length(min: 1)]],
             [str_repeat('x', 5), [new Length(max: 100)]],
+
+            'value: empty string, exactly: 0' => [
+                '',
+                [new Length(0)],
+            ],
+            'value: empty string, min: 0' => [
+                '',
+                [new Length(min: 0)],
+            ],
+            'value: empty string, exactly: positive, skipOnEmpty: true' => [
+                '',
+                [new Length(1, skipOnEmpty: true)],
+            ],
         ];
     }
 
@@ -252,6 +265,17 @@ final class LengthTest extends RuleTestCase
                     ),
                 ],
                 ['data' => ['Exactly - 3, attribute - data, number - 4.']],
+            ],
+
+            'value: string with greater count, exactly: 0' => [
+                'a',
+                [new Length(0)],
+                ['' => ['This value must contain exactly 0 characters.']],
+            ],
+            'value: empty string, exactly: positive' => [
+                '',
+                [new Length(1)],
+                ['' => ['This value must contain exactly 1 character.']],
             ],
         ];
     }
