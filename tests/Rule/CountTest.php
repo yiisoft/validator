@@ -20,8 +20,8 @@ use Yiisoft\Validator\Tests\Support\Data\CountDto;
 
 final class CountTest extends RuleTestCase
 {
-    use DifferentRuleInHandlerTestTrait;
     use CountableLimitTestTrait;
+    use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
@@ -153,7 +153,7 @@ final class CountTest extends RuleTestCase
             'value: array iterator with lower count, min: positive' => [
                 new ArrayIterator([0, 0]),
                 [new Count(min: 3)],
-                ['' => [$lessThanMinmessage]]
+                ['' => [$lessThanMinmessage]],
             ],
             // https://www.php.net/manual/ru/class.countable.php
             'value: class with min count returned from count method but not implenting Countable interface, min: 3' => [
