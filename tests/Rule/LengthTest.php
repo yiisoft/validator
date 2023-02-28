@@ -145,6 +145,10 @@ final class LengthTest extends RuleTestCase
                 '',
                 [new Length(min: 0)],
             ],
+            'value: empty string, max: 0' => [
+                '',
+                [new Length(max: 0)],
+            ],
             'value: empty string, exactly: positive, skipOnEmpty: true' => [
                 '',
                 [new Length(1, skipOnEmpty: true)],

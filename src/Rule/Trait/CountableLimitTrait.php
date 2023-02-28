@@ -130,18 +130,14 @@ trait CountableLimitTrait
             throw new InvalidArgumentException('Only positive or zero values are allowed.');
         }
 
-        $messageForUsingExactly = 'Use $exactly instead.';
-
         if ($this->min !== null && $this->max !== null) {
             if ($this->min > $this->max) {
                 throw new InvalidArgumentException('$min must be lower than $max.');
             }
 
             if ($this->min === $this->max) {
-                throw new InvalidArgumentException($messageForUsingExactly);
+                throw new InvalidArgumentException('Use $exactly instead.');
             }
-        } elseif ($this->min === null && $this->max === 0) {
-            throw new InvalidArgumentException($messageForUsingExactly);
         }
     }
 

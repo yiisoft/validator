@@ -40,7 +40,6 @@ trait CountableLimitTestTrait
         return [
             [['min' => 3, 'max' => 3]],
             [['min' => 0, 'max' => 0]],
-            [['max' => 0]],
         ];
     }
 

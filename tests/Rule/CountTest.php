@@ -104,6 +104,10 @@ final class CountTest extends RuleTestCase
                 [],
                 [new Count(min: 0)],
             ],
+            'value: empty array, max: 0' => [
+                [],
+                [new Count(max: 0)],
+            ],
             'value: empty array iterator, exactly: 0' => [
                 new ArrayIterator(),
                 [new Count(0)],
