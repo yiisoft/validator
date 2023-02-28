@@ -15,6 +15,11 @@ use Yiisoft\Validator\Rule\StopOnError;
  */
 final class ValidationContext
 {
+    /**
+     * A name of parameter storing validated value as array. For rules working with arrays it helps to prevent extra
+     * conversion of a validated value to array. The parameter's value type is either `array` or `null`. `null` means
+     * the original value must be used.
+     */
     public const PARAMETER_VALUE_AS_ARRAY = 'yii-validator-value-as-array';
 
     /**
