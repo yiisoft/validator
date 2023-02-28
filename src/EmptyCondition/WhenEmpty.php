@@ -58,8 +58,7 @@ final class WhenEmpty
         }
 
         if (is_iterable($value)) {
-            /** @var mixed $item */
-            foreach ($value as $item) {
+            foreach ($value as $_item) {
                 return false;
             }
 
