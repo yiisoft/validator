@@ -64,12 +64,12 @@ return [
     'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => 'Ta wartość musi zawierać co najmniej {exactly, number} {exactly, plural, one{znak} few{znaki} many{znaków} other{znaku}}.',
     /** @see Nested */
     'Nested rule without rules can be used for objects only.' => 'Zagnieżdżona reguła bez reguł może być używana tylko dla obiektów.',
-    'An object data set data can only have an array type.' => 'Dane zestawu danych obiektu mogą zawierać tylko typ tablicowy',
+    'An object data set data can only have an array type.' => 'Dane zestawu danych obiektu mogą zawierać tylko typ tablicowy.',
     'Property "{path}" is not found.' => 'Właściwość "{path}" nie została znaleziona.',
     /** @see Number */
     'Value must be a number.' => 'Wartość musi być liczbą.',
     /** @see Regex */
-    'Value is invalid.' => 'Wartość jest nieprawidłowa,',
+    'Value is invalid.' => 'Wartość jest nieprawidłowa.',
     /** @see Required */
     'Value cannot be blank.' => 'Wartość nie może być pusta.',
     'Value not passed.' => 'Wartość nie została przekazana.',

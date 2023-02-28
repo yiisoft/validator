@@ -40,7 +40,7 @@ return [
     'This value must contain at most {max, number} {max, plural, one{item} other{items}}.' => 'Qiymat koʻpi bilan {max, number} ta {max, plural, one{element} other{element}}dan iborat boʻlishi kerak.',
     'This value must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => 'Qiymat aynan {exactly, number} ta {exactly, plural, one{element} other{element}}dan iborat boʻlishi kerak.',
     /** @see Each */
-    'Value must be array or iterable.' => 'Qiymat massiv yoki takrorlanadigan(iterable) psevdo-tur boʻlishi kerak',
+    'Value must be array or iterable.' => 'Qiymat massiv yoki takrorlanadigan(iterable) psevdo-tur boʻlishi kerak.',
     'Every iterable key must have an integer or a string type.' => 'Barcha kalit integer yoki string turida boʻlishi kerak.',
     /** @see Email */
     'This value is not a valid email address.' => 'Qiymat yaroqli elektron pochta manzili emas.',
@@ -61,7 +61,7 @@ return [
     /** @see Length */
     'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.' => 'Qiymat kamida {min, number} ta {min, plural, one{belgi} other{belgi}}dan iborat boʻlishi kerak.',
     'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.' => 'Qiymat koʻpi bilan {max, number} ta {max, plural, one{belgi} other{belgi}}dan iborat boʻlishi kerak.',
-    'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => 'Qiymat {exactly, number} ta {exactly, plural, one{belgi} other{belgi}}dan iborat boʻlishi kerak',
+    'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => 'Qiymat {exactly, number} ta {exactly, plural, one{belgi} other{belgi}}dan iborat boʻlishi kerak.',
     /** @see Nested */
     'Nested rule without rules can be used for objects only.' => 'Qoidalarga ega boʻlmagan Nested qoidasi faqat obyektlarga ishlatilishi mumkin.',
     'An object data set data can only have an array or an object type.' => 'Obyekt maʼlumotlari obyekt boʻlishi kerak.',
@@ -74,7 +74,7 @@ return [
     'Value cannot be blank.' => 'Qiymat boʻsh boʻlishi mumkin emas.',
     'Value not passed.' => 'Qiymat oʻtmadi.',
     /** @see Subset */
-    'Value must be iterable.' => 'Qiymat takrorlanadigan boʻlishi kerak',
+    'Value must be iterable.' => 'Qiymat takrorlanadigan boʻlishi kerak.',
     'This value is not a subset of acceptable values.' => 'Bu qiymat ruxsat etilgan qiymatlarning quyi toʻplami emas.',
     /** @see TrueValue */
     'The value must be "{true}".' => 'Qiymat "{true}" boʻlishi kerak.',
@@ -92,7 +92,7 @@ return [
      * @see BooleanValue
      * @see TrueValue
      */
-    'The allowed types are integer, float, string, boolean. {type} given.' => 'Ruxsat berilgan turlar: integer, float, string, boolean va null. Bu qiymat turi {type}',
+    'The allowed types are integer, float, string, boolean. {type} given.' => 'Ruxsat berilgan turlar: integer, float, string, boolean va null. Bu qiymat turi {type}.',
     /**
      * @see Compare
      * @see Equal
