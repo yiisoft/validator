@@ -40,7 +40,7 @@ interface SkipOnEmptyInterface
      * `false` - never skip a rule (the validated value is always considered as not empty). Matching condition -
      * {@see NeverEmpty}.
      * - `true` - skip a rule when the validated value is empty: either not passed at all, `null`, an empty string (not
-     * trimmed by default) or an empty array. Matching condition - {@see WhenEmpty}.
+     * trimmed by default) or an empty iterable. Matching condition - {@see WhenEmpty}.
      * - `callable` - skip a rule when evaluated to `true`.
      *
      * Examples of custom callables with built-in condition:
