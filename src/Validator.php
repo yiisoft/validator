@@ -81,7 +81,7 @@ final class Validator implements ValidatorInterface
     /**
      * An immutable setter to change default "skip on empty" condition.
      *
-     * @param callable $value A new raw non-normalized "skip on empty" value (see
+     * @param bool|callable|null $value A new raw non-normalized "skip on empty" value (see
      * {@see SkipOnEmptyInterface::getSkipOnEmpty()}).
      *
      * @return $this The new instance with a changed value.
