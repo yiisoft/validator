@@ -62,6 +62,22 @@ class ValidatorTest extends TestCase
         );
     }
 
+    public function testWithDefaultSkipOnEmptyCondition(): void
+    {
+        $data = '';
+        $rule = new Length(1);
+        $validator = new Validator();
+
+        $result = $validator->validate($data, $rule);
+        $this->assertFalse($result->isValid());
+
+        $newValidator = $validator->withDefaultSkipOnEmptyCondition(true);
+        $this->assertNotSame($validator, $newValidator);
+
+        $result = $newValidator->validate($data, $rule);
+        $this->assertTrue($result->isValid());
+    }
+
     public function dataDataAndRulesCombinations(): array
     {
         return [

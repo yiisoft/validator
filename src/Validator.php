@@ -78,6 +78,23 @@ final class Validator implements ValidatorInterface
             ?? new TranslatorAttributeTranslator($this->translator);
     }
 
+    /**
+     * An immutable setter to change default "skip on empty" condition.
+     *
+     * @param bool|callable|null $value A new raw non-normalized "skip on empty" value (see
+     * {@see SkipOnEmptyInterface::getSkipOnEmpty()}).
+     *
+     * @return $this The new instance with a changed value.
+     *
+     * @see $defaultSkipOnEmptyCondition
+     */
+    public function withDefaultSkipOnEmptyCondition(bool|callable|null $value): static
+    {
+        $new = clone $this;
+        $new->defaultSkipOnEmptyCondition = SkipOnEmptyNormalizer::normalize($value);
+        return $new;
+    }
+
     public function validate(
         mixed $data,
         callable|iterable|object|string|null $rules = null,
