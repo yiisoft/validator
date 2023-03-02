@@ -88,7 +88,7 @@ final class Validator implements ValidatorInterface
      *
      * @see $defaultSkipOnEmptyCondition
      */
-    public function withDefaultSkipOnEmptyCondition(mixed $value): static
+    public function withDefaultSkipOnEmptyCondition(bool|callable|null $value): static
     {
         $new = clone $this;
         $new->defaultSkipOnEmptyCondition = SkipOnEmptyNormalizer::normalize($value);
