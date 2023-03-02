@@ -205,7 +205,7 @@ final class ObjectDataSetTest extends TestCase
                             ),
                         ]),
                         'rgb' => [
-                            new Count(exactly: 3),
+                            new Count(3),
                             new Each(
                                 [new Number(min: 0, max: 255)],
                                 incorrectInputMessage: 'Custom message 5.',

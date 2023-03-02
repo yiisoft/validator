@@ -267,7 +267,7 @@ final class RgbColorRuleSet extends Composite
     public function getRules(): array
     {
         return [
-            new Count(exactly: 3),
+            new Count(3),
             new Each([new Integer(min: 0, max: 255)])
         ];
     }
@@ -400,7 +400,7 @@ final class RgbColorRuleSet extends Composite
     public function getRules(): array
     {
         return [
-            new Count(exactly: 3),
+            new Count(3),
             new Each([new Integer(min: 0, max: 255)])
         ];
     }

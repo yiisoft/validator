@@ -14,7 +14,7 @@ use function is_string;
  * - Not passed at all.
  * - `null`.
  * - An empty string (not trimmed by default).
- * - An empty array.
+ * - An empty iterable.
  *
  * With regard to validation process, a corresponding rule is skipped only if this condition is met and `WhenEmpty` is
  * set:
@@ -45,10 +45,26 @@ final class WhenEmpty
      */
     public function __invoke(mixed $value, bool $isAttributeMissing): bool
     {
-        if (is_string($value) && $this->trimString) {
-            $value = trim($value);
+        if ($isAttributeMissing || $value === null) {
+            return true;
         }
 
-        return $isAttributeMissing || $value === null || $value === [] || $value === '';
+        if (is_string($value)) {
+            if ($this->trimString) {
+                $value = trim($value);
+            }
+
+            return $value === '';
+        }
+
+        if (is_iterable($value)) {
+            foreach ($value as $_item) {
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

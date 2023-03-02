@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule\Base;
 
 use InvalidArgumentException;
 
-trait LimitTestTrait
+trait CountableLimitTestTrait
 {
     /**
      * @return class-string
@@ -19,6 +19,7 @@ trait LimitTestTrait
             [['min' => 3, 'exactly' => 3]],
             [['max' => 3, 'exactly' => 3]],
             [['min' => 3, 'max' => 3, 'exactly' => 3]],
+            [['min' => 0, 'max' => 0, 'exactly' => 0]],
         ];
     }
 
@@ -34,13 +35,24 @@ trait LimitTestTrait
         new $ruleClass(...$arguments);
     }
 
-    public function testInitWithMinAndMax(): void
+    public function dataUseExactlyInstead(): array
+    {
+        return [
+            [['min' => 3, 'max' => 3]],
+            [['min' => 0, 'max' => 0]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataUseExactlyInstead
+     */
+    public function testUseExactlyInstead(array $arguments): void
     {
         $ruleClass = $this->getRuleClass();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Use $exactly instead.');
-        new $ruleClass(min: 3, max: 3);
+        new $ruleClass(...$arguments);
     }
 
     public function testInitWithoutRequiredArguments(): void
@@ -55,15 +67,14 @@ trait LimitTestTrait
     public function dataInitWithNonPositiveValues(): array
     {
         return [
-            [['min' => 0, 'max' => 2]],
             [['min' => -1, 'max' => 2]],
-            [['min' => 2, 'max' => 0]],
             [['min' => 2, 'max' => -1]],
             [['min' => -1, 'max' => 0]],
             [['min' => 0, 'max' => -1]],
             [['min' => -2, 'max' => -1]],
-            [['exactly' => 0]],
             [['exactly' => -1]],
+            [['min' => -1]],
+            [['max' => -1]],
         ];
     }
 
@@ -75,7 +86,7 @@ trait LimitTestTrait
         $ruleClass = $this->getRuleClass();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Only positive values are allowed.');
+        $this->expectExceptionMessage('Only positive or zero values are allowed.');
         new $ruleClass(...$arguments);
     }
 

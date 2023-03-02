@@ -9,7 +9,7 @@ use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\LengthHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
-use Yiisoft\Validator\Tests\Rule\Base\LimitTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\CountableLimitTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
@@ -17,8 +17,8 @@ use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
 final class LengthTest extends RuleTestCase
 {
+    use CountableLimitTestTrait;
     use DifferentRuleInHandlerTestTrait;
-    use LimitTestTrait;
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
@@ -136,6 +136,23 @@ final class LengthTest extends RuleTestCase
 
             [str_repeat('x', 5), [new Length(min: 1)]],
             [str_repeat('x', 5), [new Length(max: 100)]],
+
+            'value: empty string, exactly: 0' => [
+                '',
+                [new Length(0)],
+            ],
+            'value: empty string, min: 0' => [
+                '',
+                [new Length(min: 0)],
+            ],
+            'value: empty string, max: 0' => [
+                '',
+                [new Length(max: 0)],
+            ],
+            'value: empty string, exactly: positive, skipOnEmpty: true' => [
+                '',
+                [new Length(1, skipOnEmpty: true)],
+            ],
         ];
     }
 
@@ -252,6 +269,17 @@ final class LengthTest extends RuleTestCase
                     ),
                 ],
                 ['data' => ['Exactly - 3, attribute - data, number - 4.']],
+            ],
+
+            'value: string with greater count, exactly: 0' => [
+                'a',
+                [new Length(0)],
+                ['' => ['This value must contain exactly 0 characters.']],
+            ],
+            'value: empty string, exactly: positive' => [
+                '',
+                [new Length(1)],
+                ['' => ['This value must contain exactly 1 character.']],
             ],
         ];
     }
