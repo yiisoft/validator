@@ -4,6 +4,13 @@ A package for validating data.
 
 ## Guides
 
+### Validation
+
+- [Using validator](using-validator.md)
+- [Result](result.md)
+- [Conditional validation](conditional-validation.md)
+- [Customizing error messages](customizing-error-messages.md)
+
 ### Rules
 
 - [Built-in rules](built-in-rules.md)
@@ -15,13 +22,6 @@ A package for validating data.
   - [StopOnError](built-in-rules-stop-on-error.md)
 - [Configuring rules via PHP attributes](configuring-rules-via-php-attributes.md)
 - [Creating custom rules](creating-custom-rules.md)
-
-### Validation
-
-- [Conditional validation](conditional-validation.md)
-- [Using validator](using-validator.md)
-- [Result](result.md)
-- [Customizing error messages](customizing-error-messages.md)
 
 ### Miscellaneous
 
