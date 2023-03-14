@@ -30,7 +30,6 @@ use Yiisoft\Validator\WhenInterface;
  * @see RequiredHandler Corresponding handler performing the actual validation.
  *
  * @psalm-type EmptyConditionType = callable(mixed,bool):bool
- *
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -66,13 +65,11 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
      *
      * - `{attribute}`: the translated label of the attribute being validated.
      * @param callable|null $emptyCondition An empty condition used to determine emptiness of the value.
-     *
      * @psalm-param EmptyConditionType|null $emptyCondition
      *
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See
      * {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
-     *
      * @psalm-param WhenType $when
      */
     public function __construct(
@@ -118,7 +115,6 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
      * Gets empty condition used to determine emptiness of the value.
      *
      * @return callable|null Empty condition.
-     *
      * @psalm-return EmptyConditionType|null
      *
      * @see $emptyCondition

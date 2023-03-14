@@ -95,7 +95,6 @@ use function sprintf;
  * @see NestedHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type WhenType from WhenInterface
- *
  * @psalm-type RawNestedRulesArray = array<array<RuleInterface>|RuleInterface>
  * @psalm-type NormalizedNestedRulesArray = array<list<RuleInterface>|RuleInterface>
  */
@@ -125,7 +124,6 @@ final class Nested implements
     /**
      * @var array|null A set of ready to use rule instances. The 1st level is always
      * an array of rules, the 2nd level is either a list of rules or a single rule.
-     *
      * @psalm-var NormalizedNestedRulesArray|null
      */
     private array|null $rules;
@@ -141,7 +139,6 @@ final class Nested implements
      * - Name of a class containing rules declared via PHP attributes.
      * - `null` if validated value is an object. It can either implement {@see RulesProviderInterface} or contain rules
      * declared via PHP attributes.
-     *
      * @psalm-param iterable|object|class-string|null $rules
      *
      * @param int $validatedObjectPropertyVisibility Visibility levels to use for parsed properties when validated value
@@ -149,7 +146,6 @@ final class Nested implements
      * ones) will be skipped. Defaults to all visibility levels (public, protected and private). See
      * {@see ObjectDataSet} for details on providing rules / data in validated object and {@see ObjectParser} for
      * overview how parsing works.
-     *
      * @psalm-param int-mask-of<ReflectionProperty::IS_*> $validatedObjectPropertyVisibility
      *
      * @param int $rulesSourceClassPropertyVisibility Visibility levels to use for parsed properties when {@see $rules}
@@ -157,7 +153,6 @@ final class Nested implements
      * (private ones) will be skipped. Defaults to all visibility levels (public, protected and private). See
      * {@see ObjectDataSet} for details on providing rules via class and {@see ObjectParser} for overview how parsing
      * works.
-     *
      * @psalm-param int-mask-of<ReflectionProperty::IS_*> $rulesSourceClassPropertyVisibility
      *
      * @param string $noRulesWithNoObjectMessage Error message used when validation fails because the validated value is
@@ -201,7 +196,6 @@ final class Nested implements
      * rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when  A callable to define a condition for applying this `Nested` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
-     *
      * @psalm-param WhenType $when
      */
     public function __construct(
@@ -235,7 +229,6 @@ final class Nested implements
      * Gets a set of rules for running the validation.
      *
      * @return array|null A set of rules. `null` means the rules are expected to be provided with a validated value.
-     *
      * @psalm-return NormalizedNestedRulesArray
      */
     public function getRules(): array|null
@@ -248,7 +241,6 @@ final class Nested implements
      * Defaults to all visibility levels (public, protected and private)
      *
      * @return int A number representing visibility levels.
-     *
      * @psalm-return int-mask-of<ReflectionProperty::IS_*>
      *
      * @see $validatedObjectPropertyVisibility
@@ -396,11 +388,9 @@ final class Nested implements
      * ```
      *
      * @param array $rawRules Raw rules array which keys need to be flattened.
-     *
      * @psalm-param RawNestedRulesArray $rawRules
      *
      * @param array $resultRules Result rules array with flattened keys passed by reference.
-     *
      * @psalm-param NormalizedNestedRulesArray $resultRules
      *
      * @param string|null $baseValuePath Base value path string. Can be a single key or multiple keys joined with
@@ -467,7 +457,6 @@ final class Nested implements
      * Converts rules defined with {@see EACH_SHORTCUT} to separate `Nested` and `Each` rules.
      *
      * @oaram array $rules Rules array for replacing {@see EACH_SHORTCUT} passed by reference.
-     *
      * @psalm-param RawNestedRulesArray $rules
      */
     private function handleEachShortcut(array &$rules): void

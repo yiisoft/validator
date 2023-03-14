@@ -76,7 +76,6 @@ final class Each implements
 
     /**
      * @var array Normalized rules to apply for each element of the validated iterable.
-     *
      * @psalm-var NormalizedRulesMap
      */
     private array $rules;
@@ -84,7 +83,6 @@ final class Each implements
     /**
      * @param callable|iterable|object|string $rules Rules to apply for each element of the validated iterable.
      * They will be normalized using {@see RulesNormalizer}.
-     *
      * @psalm-param RawRules $rules
      *
      * @param string $incorrectInputMessage Error message used when validation fails because the validated value is not
@@ -107,7 +105,6 @@ final class Each implements
      * rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying this `Each` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
-     *
      * @psalm-param WhenType $when
      */
     public function __construct(

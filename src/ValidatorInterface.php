@@ -34,7 +34,6 @@ interface ValidatorInterface
      * argument has higher priority over {@see RulesProviderInterface::getRules()} provided in `$data` argument. A
      * variety of types is supported. They are normalized before usage, please refer to {@see RulesNormalizer}
      * documentation to see what structures can be passed.
-     *
      * @psalm-param RawRules|null $rules
      *
      * @param ValidationContext|null $context Validation context that may be taken into account when performing

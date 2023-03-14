@@ -34,7 +34,6 @@ final class Error
      * names and values. Note that only scalar or `null` values are allowed.
      *
      * @link https://www.php.net/manual/ru/function.is-scalar.php
-     *
      * @psalm-param array<string, scalar|null> $parameters
      *
      * @param array $valuePath A sequence of keys determining where a value caused the validation error is located
@@ -58,7 +57,6 @@ final class Error
      * ```
      *
      * A value without nested structure won't have a path at all (it will be an empty array).
-     *
      * @psalm-param list<int|string> $valuePath
      */
     public function __construct(
@@ -82,7 +80,6 @@ final class Error
      * A getter for {@see $parameters} property. Returns parameters used for {@see $message} translation.
      *
      * @return array A mapping between parameter names and values.
-     *
      * @psalm-return array<string, scalar|null>
      */
     public function getParameters(): array
@@ -98,7 +95,6 @@ final class Error
      * (`'*``, used as a {@see Each} rule shortcut) char with a backslash char (`'\'`).
      *
      * @return array A list of keys for nested structures or an empty array otherwise.
-     *
      * @psalm-return list<int|string>
      */
     public function getValuePath(bool $escape = false): array

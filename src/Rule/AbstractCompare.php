@@ -119,7 +119,6 @@ abstract class AbstractCompare implements
      * {@see CompareType::ORIGINAL} allows any values. All PHP comparison rules apply here, see comparison operators -
      * {@see https://www.php.net/manual/en/language.operators.comparison.php} and PHP type comparison tables -
      * {@see https://www.php.net/manual/en/types.comparisons.php} sections in official PHP documentation.
-     *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @param string $operator The operator for comparison. The following operators are supported:
@@ -138,7 +137,6 @@ abstract class AbstractCompare implements
      * See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule.
      * See {@see WhenInterface}.
-     *
      * @psalm-param WhenType $when
      */
     public function __construct(
@@ -198,7 +196,6 @@ abstract class AbstractCompare implements
      *
      * @return string The type of the values being compared. Either {@see CompareType::STRING}
      * or {@see CompareType::NUMBER}.
-     *
      * @psalm-return CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @see $type

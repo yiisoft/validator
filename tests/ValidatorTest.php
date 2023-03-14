@@ -514,7 +514,6 @@ class ValidatorTest extends TestCase
     /**
      * @link https://github.com/yiisoft/validator/issues/173
      * @link https://github.com/yiisoft/validator/issues/289
-     *
      * @dataProvider requiredDataProvider
      */
     public function testRequired(array|null $rules, DataSetInterface $dataSet, array $expectedErrors): void

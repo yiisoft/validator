@@ -130,7 +130,6 @@ final class AttributesRulesProvider implements RulesProviderInterface
      *     'files' => [new Count(max: 3)], // Attribute specific rules.
      * ],
      * ```
-     *
      * @psalm-return RawRulesMap
      */
     public function getRules(): iterable

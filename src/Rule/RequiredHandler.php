@@ -38,7 +38,6 @@ final class RequiredHandler implements RuleHandlerInterface
 
     /**
      * @param callable|null $defaultEmptyCondition A default empty condition used to determine emptiness of the value.
-     *
      * @psalm-param EmptyConditionType|null $defaultEmptyCondition
      */
     public function __construct(

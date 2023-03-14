@@ -19,9 +19,9 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Defines validation options to check that the value is a string of a certain length.
  *
- * @see LengthHandler
- *
  * To check that the value only has the string type, use {@see StringValue} rule instead.
+ *
+ * @see LengthHandler
  *
  * @psalm-import-type WhenType from WhenInterface
  */

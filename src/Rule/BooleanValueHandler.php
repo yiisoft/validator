@@ -48,7 +48,6 @@ final class BooleanValueHandler implements RuleHandlerInterface
      * @param ValidationContext $context Validation context.
      *
      * @return array A mapping between attribute names and their values.
-     *
      * @psalm-return array<string,scalar|null>
      */
     private function getCommonResultParameters(BooleanValue $rule, ValidationContext $context): array
