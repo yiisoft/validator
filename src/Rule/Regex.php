@@ -53,6 +53,7 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule.
      * See {@see WhenInterface}.
+     *
      * @psalm-param WhenType $when
      */
     public function __construct(

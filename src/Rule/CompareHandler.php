@@ -73,6 +73,7 @@ final class CompareHandler implements RuleHandlerInterface
      * Checks whether the validated value has correct type depending on selected {@see AbstractCompare::$type}.
      *
      * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
+     *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @param mixed $value The validated value.
@@ -129,6 +130,7 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @param string $operator The comparison operator. One of `==`, `===`, `!=`, `!==`, `>`, `>=`, `<`, `<=`.
      * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
+     *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @param mixed $value The validated value.
@@ -166,6 +168,7 @@ final class CompareHandler implements RuleHandlerInterface
      * handles strict comparison before type casting and takes edge cases for float numbers into account.
      *
      * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
+     *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @param mixed $value The validated value.
@@ -214,6 +217,7 @@ final class CompareHandler implements RuleHandlerInterface
      * Normalizes compared value depending on selected {@see AbstractCompare::$type}.
      *
      * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
+     *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @param mixed $value One of the compared values. Both validated and target value can be used.

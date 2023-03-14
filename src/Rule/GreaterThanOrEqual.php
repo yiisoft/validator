@@ -70,6 +70,7 @@ final class GreaterThanOrEqual extends AbstractCompare
      * {@see CompareType::ORIGINAL} allows any values. All PHP comparison rules apply here, see comparison operators -
      * {@see https://www.php.net/manual/en/language.operators.comparison.php} and PHP type comparison tables -
      * {@see https://www.php.net/manual/en/types.comparisons.php} sections in official PHP documentation.
+     *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
@@ -78,6 +79,7 @@ final class GreaterThanOrEqual extends AbstractCompare
      * See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule.
      * See {@see WhenInterface}.
+     *
      * @psalm-param WhenType $when
      */
     public function __construct(

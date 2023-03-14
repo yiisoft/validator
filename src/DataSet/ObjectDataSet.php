@@ -198,6 +198,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
      * so, when used together, the latter ones will be ignored without exception.
      *
      * @return iterable The resulting rules is an array with the following structure:
+     *
      * @psalm-return RawRulesMap
      *
      * ```php

@@ -75,6 +75,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      *  - `localhost`: `127.0.0.0/8', ::1`.
      *  - `documentation`: `192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24, 2001:db8::/32`.
      *  - `system`: `multicast, linklocal, localhost, documentation`.
+     *
      * @psalm-param array<string, list<string>> $networks
      *
      * @param bool $allowIpv4 Whether the validating value can be an IPv4 address. Defaults to `true`.
@@ -169,6 +170,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See
      * {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
+     *
      * @psalm-param WhenType $when
      *
      * @throws InvalidArgumentException If configuration is wrong.
@@ -412,6 +414,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      * @return array The result array consists of 2 elements:
      * - `boolean`: whether the string is negated
      * - `string`: the string without negation (when the negation were present)
+     *
      * @psalm-return array{0: bool, 1: string}
      */
     private function parseNegatedRange(string $string): array

@@ -25,7 +25,9 @@ class ObjectDataSetBench
 
     /**
      * @Revs(100000)
+     *
      * @Iterations(5)
+     *
      * @ParamProviders({"provideObjectDataSets"})
      */
     public function benchGetRulesWithOneInstance(array $params): void
@@ -36,6 +38,7 @@ class ObjectDataSetBench
 
     /**
      * @Revs(100000)
+     *
      * @Iterations(5)
      */
     public function benchGetRulesWithNewInstanceAndCache(): void
