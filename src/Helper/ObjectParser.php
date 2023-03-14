@@ -126,6 +126,7 @@ final class ObjectParser
      * - The second nesting level is a mapping between cache item names and their contents.
      *
      * Different properties' combinations of the same object are cached separately.
+     *
      * @psalm-var array<string, array<string, mixed>>
      */
     #[ArrayShape([
@@ -149,6 +150,7 @@ final class ObjectParser
         /**
          * @var object|string A source for parsing rules and data. Can be either a class name string or an
          * instance.
+         *
          * @psalm-var class-string|object
          */
         private string|object $source,
@@ -156,6 +158,7 @@ final class ObjectParser
          * @var int Visibility levels the parsed properties must have. For example: public and protected only, this
          * means that the rest (private ones) will be skipped. Defaults to all visibility levels (public, protected and
          * private).
+         *
          * @psalm-var int-mask-of<ReflectionProperty::IS_*>
          */
         private int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
@@ -376,6 +379,7 @@ final class ObjectParser
             } else {
                 /**
                  * @psalm-var list<RulesCacheItem> $data
+                 *
                  * @psalm-suppress UndefinedInterfaceMethod
                  */
                 foreach ($data as $rule) {

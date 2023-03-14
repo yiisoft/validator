@@ -29,8 +29,11 @@ final class MainBench
 
     /**
      * @Revs(1000)
+     *
      * @Iterations(10)
+     *
      * @ParamProviders("provider")
+     *
      * @Warmup(1)
      */
     public function benchValidate(array $params): void

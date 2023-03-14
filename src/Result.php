@@ -75,6 +75,7 @@ final class Result
      * @param string $separator Attribute path separator. Dot is used by default.
      *
      * @return array Arrays of error messages indexed by attribute path.
+     *
      * @psalm-return array<string, non-empty-list<string>>
      */
     public function getErrorMessagesIndexedByPath(string $separator = '.'): array
@@ -94,6 +95,7 @@ final class Result
      * @throws InvalidArgumentException If top level attribute has a non-string type.
      *
      * @return array Arrays of error messages indexed by attribute name.
+     *
      * @psalm-return array<string, non-empty-list<string>>
      */
     public function getErrorMessagesIndexedByAttribute(): array
@@ -158,6 +160,7 @@ final class Result
      * @param string $separator Attribute path separator. Dot is used by default.
      *
      * @return array Arrays of error messages for the attribute specified indexed by attribute path.
+     *
      * @psalm-return array<string, non-empty-list<string>>
      */
     public function getAttributeErrorMessagesIndexedByPath(string $attribute, string $separator = '.'): array
@@ -192,10 +195,12 @@ final class Result
      * @param string $message The raw validation error message. See {@see Error::$message}.
      * @param array $parameters Parameters used for {@see $message} translation - a mapping between parameter
      * names and values. See {@see Error::$parameters}.
+     *
      * @psalm-param array<string,scalar|null> $parameters
      *
      * @param array $valuePath A sequence of keys determining where a value caused the validation
      * error is located within a nested structure. See {@see Error::$valuePath}.
+     *
      * @psalm-param list<int|string> $valuePath
      *
      * @return $this Same instance of result.
