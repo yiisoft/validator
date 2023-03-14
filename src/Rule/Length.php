@@ -21,6 +21,8 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see LengthHandler
  *
+ * To check that the value only has the string type, use {@see StringValue} rule instead.
+ *
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
