@@ -59,9 +59,21 @@ final class StringValueTest extends RuleTestCase
         $rule = new StringValue();
 
         return [
-            ['', [$rule]],
-            [' ', [$rule]],
-            ['test', [$rule]],
+            'value: empty string' => ['', [$rule]],
+            'value: empty string with whitespaces' => [' ', [$rule]],
+            'value: non-empty string' => ['test', [$rule]],
+            'value: null, skipOnEmpty: true' => [null, [new StringValue(skipOnEmpty: true)]],
+            'value: null, when: custom callable allowing everything except null' => [
+                null,
+                [new StringValue(when: static fn (mixed $value): bool => $value !== null)],
+            ],
+            'value: object providing rules and valid data' => [
+                new class () {
+                    #[StringValue]
+                    private string $name = 'test';
+                },
+                null,
+            ],
         ];
     }
 
@@ -71,12 +83,41 @@ final class StringValueTest extends RuleTestCase
         $message = 'The value must be a string.';
 
         return [
-            [null, [$rule], ['' => [$message]]],
-            [1, [$rule], ['' => [$message]]],
-            [1.5, [$rule], ['' => [$message]]],
-            [false, [$rule], ['' => [$message]]],
-            [['test'], [$rule], ['' => [$message]]],
-            [new stdClass(), [$rule], ['' => [$message]]],
+            'value: null' => [null, [$rule], ['' => [$message]]],
+            'value: integer' => [1, [$rule], ['' => [$message]]],
+            'value: float' => [1.5, [$rule], ['' => [$message]]],
+            'value: boolean' => [false, [$rule], ['' => [$message]]],
+            'value: array' => [['test'], [$rule], ['' => [$message]]],
+            'value: object' => [new stdClass(), [$rule], ['' => [$message]]],
+            'value: null, multiple rules' => [
+                null,
+                [
+                    new StringValue(),
+                    new StringValue(),
+                ],
+                ['' => [$message, $message]],
+            ],
+            'value: null, multiple rules, skipOnError: true' => [
+                null,
+                [
+                    new StringValue(),
+                    new StringValue(skipOnError: true),
+                ],
+                ['' => [$message]],
+            ],
+            'value: integer, when: custom callable allowing everything except null' => [
+                1,
+                [new StringValue(when: static fn (mixed $value): bool => $value !== null)],
+                ['' => [$message]],
+            ],
+            'value: object providing rules and wrong data' => [
+                new class () {
+                    #[StringValue]
+                    private ?string $name = null;
+                },
+                null,
+                ['name' => [$message]],
+            ],
         ];
     }
 
