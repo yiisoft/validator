@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use stdClass;
+use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
+use Yiisoft\Validator\AttributeTranslatorInterface;
+use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\StringValue;
 use Yiisoft\Validator\Rule\StringValueHandler;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -117,6 +121,53 @@ final class StringValueTest extends RuleTestCase
                 },
                 null,
                 ['name' => [$message]],
+            ],
+            'value: boolean, message: custom' => [
+                false,
+                [new StringValue(message: 'Custom message.')],
+                ['' => ['Custom message.']],
+            ],
+            'value: boolean, message: custom, with parameters' => [
+                false,
+                [new StringValue(message: 'Attribute - {attribute}, type - {type}.')],
+                ['' => ['Attribute - , type - bool.']],
+            ],
+            'value: boolean, message: custom, with parameters, attribute set' => [
+                ['data' => false],
+                ['data' => new StringValue(message: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => ['Attribute - data, type - bool.']],
+            ],
+            'value: object providing rules, attribute labels and wrong data' => [
+                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface
+                {
+                    public function __construct(
+                        public ?string $name = null,
+                    ) {
+                    }
+
+                    public function getAttributeLabels(): array
+                    {
+                        return [
+                            'name' => 'Имя',
+                        ];
+                    }
+
+                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    {
+                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                    }
+
+                    public function getRules(): array
+                    {
+                        return [
+                            'name' => [
+                                new StringValue(message: '{attribute} плохое.'),
+                            ],
+                        ];
+                    }
+                },
+                null,
+                ['name' => ['Имя плохое.']],
             ],
         ];
     }
