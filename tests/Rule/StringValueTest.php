@@ -138,8 +138,7 @@ final class StringValueTest extends RuleTestCase
                 ['data' => ['Attribute - data, type - bool.']],
             ],
             'value: object providing rules, attribute labels and wrong data' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface
-                {
+                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
                     public function __construct(
                         public ?string $name = null,
                     ) {
