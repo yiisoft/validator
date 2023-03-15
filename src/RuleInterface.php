@@ -33,7 +33,6 @@ interface RuleInterface
      *
      * @return RuleHandlerInterface|string A rule handler name (for example `my-handler`) or an instance (for example
      * `new MyRuleHandler()`).
-     * @psalm-return RuleHandlerInterface|class-string
      */
     public function getHandler(): string|RuleHandlerInterface;
 }
