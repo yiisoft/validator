@@ -38,6 +38,7 @@ trait CountableLimitHandlerTrait
 
         /**
          * @var CountableLimitTrait|RuleInterface $rule
+         *
          * @psalm-ignore-var
          */
         if ($rule->getExactly() !== null && $number !== $rule->getExactly()) {

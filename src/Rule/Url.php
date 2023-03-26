@@ -63,6 +63,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
+     *
      * @psalm-param WhenType $when
      *
      * @throws RuntimeException If intl extension is not enabled and {@see $enableIdn} is true.
