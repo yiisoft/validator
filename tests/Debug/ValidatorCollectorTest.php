@@ -15,7 +15,7 @@ final class ValidatorCollectorTest extends AbstractCollectorTestCase
     /**
      * @param CollectorInterface|ValidatorCollector $collector
      */
-    protected function collectTestData(\Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Validator\Debug\ValidatorCollector $collector): void
+    protected function collectTestData(CollectorInterface|ValidatorCollector $collector): void
     {
         $ruleNumber = new Number(min: 200);
         $result = new Result();
