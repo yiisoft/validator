@@ -8,7 +8,7 @@ use Yiisoft\Validator\Debug\ValidatorCollector;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Yii\Debug\Collector\CollectorInterface;
-use Yiisoft\Yii\Debug\Tests\Collector\AbstractCollectorTestCase;
+use Yiisoft\Yii\Debug\Tests\Shared\AbstractCollectorTestCase;
 
 final class ValidatorCollectorTest extends AbstractCollectorTestCase
 {
