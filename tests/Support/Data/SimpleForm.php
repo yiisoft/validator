@@ -20,7 +20,7 @@ final class SimpleForm implements RulesProviderInterface, AttributeTranslatorPro
     }
 
     /**
-     * @return array<string, string>
+     * @psalm-return array<string, string>
      */
     public function getAttributeLabels(): array
     {
@@ -35,7 +35,7 @@ final class SimpleForm implements RulesProviderInterface, AttributeTranslatorPro
         return new ArrayAttributeTranslator($this->getAttributeLabels());
     }
 
-    public function getRules(): iterable
+    public function getRules(): array
     {
         return [
             'name' => [
