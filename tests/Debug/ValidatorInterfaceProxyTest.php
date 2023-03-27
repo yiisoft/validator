@@ -16,7 +16,7 @@ final class ValidatorInterfaceProxyTest extends AbstractCollectorTestCase
     /**
      * @param CollectorInterface|ValidatorCollector $collector
      */
-    protected function collectTestData(CollectorInterface $collector): void
+    protected function collectTestData(\Yiisoft\Yii\Debug\Collector\CollectorInterface|\Yiisoft\Validator\Debug\ValidatorCollector $collector): void
     {
         $collector->collect(1, (new Result())->addError('Too low', ['arg1' => 'v1']), [new Number(min: 7)]);
         $collector->collect(10, new Result(), [new Number(min: 7)]);
