@@ -6,6 +6,7 @@ Here is a list of all available built-in rules, divided by category.
 
 ### String rules
 
+- [StringValue](../../../src/Rule/StringValue.php)
 - [Length](../../../src/Rule/Length.php)
 - [Regex](../../../src/Rule/Regex.php)
 - [Email](../../../src/Rule/Email.php)
