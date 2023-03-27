@@ -15,7 +15,7 @@ final class ValidatorCollectorTest extends AbstractCollectorTestCase
     /**
      * @param CollectorInterface|ValidatorCollector $collector
      */
-    protected function collectTestData(CollectorInterface $collector): void
+    protected function collectTestData(CollectorInterface|ValidatorCollector $collector): void
     {
         $ruleNumber = new Number(min: 200);
         $result = new Result();
