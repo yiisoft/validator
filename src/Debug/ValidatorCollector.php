@@ -6,11 +6,10 @@ namespace Yiisoft\Validator\Debug;
 
 use Traversable;
 use Yiisoft\Validator\Result;
-use Yiisoft\Yii\Debug\Collector\CollectorInterface;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
-use Yiisoft\Yii\Debug\Collector\IndexCollectorInterface;
+use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
-final class ValidatorCollector implements CollectorInterface, IndexCollectorInterface
+final class ValidatorCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;
 
@@ -40,7 +39,7 @@ final class ValidatorCollector implements CollectorInterface, IndexCollectorInte
         $this->validations = [];
     }
 
-    public function getIndexData(): array
+    public function getSummary(): array
     {
         $count = count($this->validations);
         $countValid = count(array_filter($this->validations, fn (array $data) => $data['result']));
