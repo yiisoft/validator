@@ -31,6 +31,9 @@ final class ValidationContext
      */
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'yii-validator-previous-rules-errored';
 
+    /**
+     * A name of parameter that allow use predefined {@see Result}.
+     */
     public const PARAMETER_PREDEFINED_RESULT = 'yii-validator-predefined-result';
 
     /**
