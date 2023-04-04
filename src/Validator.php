@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use InvalidArgumentException;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\IdMessageReader;
 use Yiisoft\Translator\IntlMessageFormatter;
@@ -114,12 +115,30 @@ final class Validator implements ValidatorInterface
             ($dataSet instanceof AttributeTranslatorProviderInterface ? $dataSet->getAttributeTranslator() : null)
             ?? $this->defaultAttributeTranslator;
 
-        $context ??= new ValidationContext();
+        if ($context === null) {
+            $context = new ValidationContext();
+            $result = new Result();
+        } elseif ($context->isInitialized()) {
+            $result = new Result();
+        } else {
+            /** @var mixed $result */
+            $result = $context->getParameter(ValidationContext::PARAMETER_PREDEFINED_RESULT, new Result());
+            if (!$result instanceof Result) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Result parameter must be "%s", but "%s" given.',
+                        Result::class,
+                        get_debug_type($result)
+                    )
+                );
+            }
+            $context->setParameter(ValidationContext::PARAMETER_PREVIOUS_RULES_ERRORED, !$result->isValid());
+        }
+
         $context
             ->setContextDataOnce($this, $defaultAttributeTranslator, $data, $dataSet)
             ->setDataSet($dataSet);
 
-        $result = new Result();
         foreach ($rules as $attribute => $attributeRules) {
             if (is_int($attribute)) {
                 /** @psalm-suppress MixedAssignment */

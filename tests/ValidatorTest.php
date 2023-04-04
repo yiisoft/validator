@@ -24,6 +24,7 @@ use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\In;
+use Yiisoft\Validator\Rule\StringValue;
 use Yiisoft\Validator\Rule\TrueValue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -1423,5 +1424,63 @@ class ValidatorTest extends TestCase
             ],
         );
         $this->assertTrue($result->isValid());
+    }
+
+    public function testPredefinedResult(): void
+    {
+        $context = new ValidationContext([
+            ValidationContext::PARAMETER_PREDEFINED_RESULT =>
+                (new Result())->addError('test error', valuePath: ['a'])
+        ]);
+
+        $result = (new Validator())->validate(
+            ['a' => null],
+            ['a' => new StringValue(skipOnError: true)],
+            $context,
+        );
+
+        $this->assertSame(
+            ['a' => ['test error']],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    public function testPredefinedResultWithContextValidation(): void
+    {
+        $context = new ValidationContext([
+            ValidationContext::PARAMETER_PREDEFINED_RESULT =>
+                (new Result())->addError('test error', valuePath: ['a'])
+        ]);
+
+        $result = (new Validator())->validate(
+            ['a' => null],
+            [
+                'a' => static function (mixed $value, object $rule, ValidationContext $context): Result {
+                    return $context->validate([], ['a' => new Required()]);
+                }
+            ],
+            $context,
+        );
+
+        $this->assertSame(
+            [
+                'a' => ['test error'],
+                'a.a' => ['Value not passed.'],
+            ],
+            $result->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    public function testInvalidPredefinedResult(): void
+    {
+        $context = new ValidationContext([
+            ValidationContext::PARAMETER_PREDEFINED_RESULT => 42,
+        ]);
+
+        $validator = new Validator();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Result parameter must be "Yiisoft\Validator\Result", but "int" given.');
+        $validator->validate(null, context: $context);
     }
 }

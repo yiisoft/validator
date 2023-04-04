@@ -31,6 +31,8 @@ final class ValidationContext
      */
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'yii-validator-previous-rules-errored';
 
+    public const PARAMETER_PREDEFINED_RESULT = 'yii-validator-predefined-result';
+
     /**
      * @var ValidatorInterface|null A validator instance. `null` means context data was not set
      * with {@see setContextDataOnce()} yet.
@@ -99,7 +101,7 @@ final class ValidationContext
         mixed $rawData,
         DataSetInterface $dataSet,
     ): self {
-        if ($this->validator !== null) {
+        if ($this->isInitialized()) {
             return $this;
         }
 
@@ -109,6 +111,14 @@ final class ValidationContext
         $this->globalDataSet = $dataSet;
 
         return $this;
+    }
+
+    /**
+     * @internal
+     */
+    public function isInitialized(): bool
+    {
+        return $this->validator !== null;
     }
 
     /**
