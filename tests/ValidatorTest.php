@@ -1455,9 +1455,7 @@ class ValidatorTest extends TestCase
         $result = (new Validator())->validate(
             ['a' => null],
             [
-                'a' => static function (mixed $value, object $rule, ValidationContext $context): Result {
-                    return $context->validate([], ['a' => new Required()]);
-                },
+                'a' => static fn(mixed $value, object $rule, ValidationContext $context): Result => $context->validate([], ['a' => new Required()]),
             ],
             $context,
         );
