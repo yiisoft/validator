@@ -281,3 +281,23 @@ $result->getAttributeErrors('email');
 ```
 
 [Using keys containing separator / shortcut]: #using-keys-containing-separator--shortcut
+
+## Predefined result
+
+Sometimes you can have information about validation errors before validation process. In this case use predefined result
+and pass it to validator via parameter `ValidationContext::PARAMETER_PREDEFINED_RESULT` of validation context:
+
+```php
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\ValidationContext;
+
+$predefinedResult = new Result();
+$predefinedResult->addError('Invalid value.', valuePath: ['key']);
+
+$context = new ValidationContext([
+    ValidationContext::PARAMETER_PREDEFINED_RESULT => $predefinedResult,
+])
+
+$result = (new Validator)->validate($model, context: $context);
+```
