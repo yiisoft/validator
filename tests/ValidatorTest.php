@@ -1430,7 +1430,7 @@ class ValidatorTest extends TestCase
     {
         $context = new ValidationContext([
             ValidationContext::PARAMETER_PREDEFINED_RESULT =>
-                (new Result())->addError('test error', valuePath: ['a'])
+                (new Result())->addError('test error', valuePath: ['a']),
         ]);
 
         $result = (new Validator())->validate(
@@ -1449,7 +1449,7 @@ class ValidatorTest extends TestCase
     {
         $context = new ValidationContext([
             ValidationContext::PARAMETER_PREDEFINED_RESULT =>
-                (new Result())->addError('test error', valuePath: ['a'])
+                (new Result())->addError('test error', valuePath: ['a']),
         ]);
 
         $result = (new Validator())->validate(
@@ -1457,7 +1457,7 @@ class ValidatorTest extends TestCase
             [
                 'a' => static function (mixed $value, object $rule, ValidationContext $context): Result {
                     return $context->validate([], ['a' => new Required()]);
-                }
+                },
             ],
             $context,
         );
