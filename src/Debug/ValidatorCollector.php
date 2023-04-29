@@ -20,15 +20,20 @@ final class ValidatorCollector implements SummaryCollectorInterface
         return $this->validations;
     }
 
-    public function collect(mixed $value, Result $result, ?iterable $rules = null): void
+    public function collect(mixed $value, Result $result, callable|iterable|object|string|null $rules = null): void
     {
         if (!$this->isActive()) {
             return;
         }
 
+        if ($rules instanceof Traversable) {
+            $rules = iterator_to_array($rules);
+        }
+
+
         $this->validations[] = [
             'value' => $value,
-            'rules' => $rules instanceof Traversable ? iterator_to_array($rules, true) : (array) $rules,
+            'rules' => $rules,
             'result' => $result->isValid(),
             'errors' => $result->getErrors(),
         ];
@@ -42,7 +47,7 @@ final class ValidatorCollector implements SummaryCollectorInterface
     public function getSummary(): array
     {
         $count = count($this->validations);
-        $countValid = count(array_filter($this->validations, fn (array $data) => $data['result']));
+        $countValid = count(array_filter($this->validations, fn (array $data): bool => (bool)$data['result']));
         $countInvalid = $count - $countValid;
 
         return [
