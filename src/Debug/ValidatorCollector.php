@@ -39,11 +39,6 @@ final class ValidatorCollector implements SummaryCollectorInterface
         ];
     }
 
-    private function reset(): void
-    {
-        $this->validations = [];
-    }
-
     public function getSummary(): array
     {
         $count = count($this->validations);
@@ -57,5 +52,10 @@ final class ValidatorCollector implements SummaryCollectorInterface
                 'invalid' => $countInvalid,
             ],
         ];
+    }
+
+    private function reset(): void
+    {
+        $this->validations = [];
     }
 }

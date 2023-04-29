@@ -18,14 +18,32 @@ final class ValidatorCollectorTest extends AbstractCollectorTestCase
     protected function collectTestData(CollectorInterface|ValidatorCollector $collector): void
     {
         $ruleNumber = new Number(min: 200);
+
         $result = new Result();
         $result->addError($ruleNumber->getLessThanMinMessage());
 
         $collector->collect(123, $result, [$ruleNumber]);
+
+        $result = new Result();
+
+        $collector->collect(500, $result, [$ruleNumber]);
     }
 
     protected function getCollector(): CollectorInterface
     {
         return new ValidatorCollector();
+    }
+
+    protected function checkSummaryData(array $data): void
+    {
+        $this->assertArrayHasKey('validator', $data);
+
+        $this->assertArrayHasKey('total', $data['validator']);
+        $this->assertArrayHasKey('valid', $data['validator']);
+        $this->assertArrayHasKey('invalid', $data['validator']);
+
+        $this->assertEquals(2, $data['validator']['total']);
+        $this->assertEquals(1, $data['validator']['valid']);
+        $this->assertEquals(1, $data['validator']['invalid']);
     }
 }
