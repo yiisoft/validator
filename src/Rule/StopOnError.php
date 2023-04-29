@@ -59,6 +59,7 @@ final class StopOnError implements
 
     /**
      * @var iterable A set of normalized rules that needs to be run.
+     *
      * @psalm-var NormalizedRulesList
      */
     private iterable $rules = [];
@@ -66,6 +67,7 @@ final class StopOnError implements
     /**
      * @param iterable $rules A set of rules for running the validation. They will be normalized during initialization
      * using {@see RulesNormalizer}.
+     *
      * @psalm-param RawRulesList $rules
      *
      * @param bool|callable|null $skipOnEmpty Whether to skip this `StopOnError` rule with all defined {@see $rules} if
@@ -74,6 +76,7 @@ final class StopOnError implements
      * previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying this `StopOnError` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
+     *
      * @psalm-param WhenType $when
      */
     public function __construct(

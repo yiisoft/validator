@@ -47,6 +47,7 @@ final class Callback implements
      * See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule.
      * See {@see WhenInterface}.
+     *
      * @psalm-param WhenType $when
      *
      * @throws InvalidArgumentException When neither {@see $callback} nor {@see $method} is specified or

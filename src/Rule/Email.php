@@ -60,6 +60,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
+     *
      * @psalm-param WhenType $when
      *
      * @throws RuntimeException If there was an attempt to enable IDN ({@see $enableIdn}), but "intl" PHP extension is

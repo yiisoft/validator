@@ -14,6 +14,7 @@ final class ArrayAttributeTranslator implements AttributeTranslatorInterface
     /**
      * @param array $translations Translations array where each key is an attribute name and the corresponding value is
      * a translation.
+     *
      * @psalm-param array<string,string> $translations
      */
     public function __construct(

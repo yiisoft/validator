@@ -50,6 +50,7 @@ final class Json implements RuleWithOptionsInterface, SkipOnErrorInterface, When
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See
      * {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
+     *
      * @psalm-param WhenType $when
      */
     public function __construct(
