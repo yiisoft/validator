@@ -3,6 +3,9 @@
 ## 1.2.0 under development
 
 - New #597, #608: Add debug collector for `yiisoft/yii-debug` (@xepozz, @vjik)
+- New #610: Add `$escape` parameter to methods `Result::getAttributeErrorMessagesIndexedByPath()` and
+  `Result::getErrorMessagesIndexedByPath()` that allow change or disable symbol which will be escaped in value path
+  elements. 
 - Bug #612: Disable escaping of asterisk char in value path that returns by `Error::getValuePath(true)` (@vjik)
 
 ## 1.1.0 April 06, 2023
