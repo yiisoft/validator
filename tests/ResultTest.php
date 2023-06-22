@@ -206,6 +206,30 @@ class ResultTest extends TestCase
         );
     }
 
+    public function testEscapeInGetErrorMessagesIndexedByPath(): void
+    {
+        $result = (new Result)->addError('e1', valuePath: ['user', 'meta.the-age']);
+
+        $this->assertSame(
+            [
+                'user.meta.the\-age' => ['e1'],
+            ],
+            $result->getErrorMessagesIndexedByPath(escape: '-'),
+        );
+    }
+
+    public function testEscapeInGetAttributeErrorMessagesIndexedByPath(): void
+    {
+        $result = (new Result)->addError('e1', valuePath: ['user', 'data', 'meta.the-age']);
+
+        $this->assertSame(
+            [
+                'data.meta.the\-age' => ['e1'],
+            ],
+            $result->getAttributeErrorMessagesIndexedByPath('user', escape: '-'),
+        );
+    }
+
     private function createAttributeErrorResult(): Result
     {
         $result = new Result();
