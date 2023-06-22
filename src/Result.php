@@ -171,8 +171,7 @@ final class Result
         string $attribute,
         string $separator = '.',
         ?string $escape = '.',
-    ): array
-    {
+    ): array {
         $errors = [];
         foreach ($this->errors as $error) {
             $firstItem = $error->getValuePath()[0] ?? '';
