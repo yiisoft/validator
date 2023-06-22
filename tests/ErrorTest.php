@@ -23,6 +23,11 @@ final class ErrorTest extends TestCase
                 ['user', 'the.data-age'],
                 '-',
             ],
+            'emoji' => [
+                ['user', 'the.data\😎age'],
+                ['user', 'the.data😎age'],
+                '😎',
+            ],
 
             // deprecated
             'true' => [
