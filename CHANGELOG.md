@@ -3,6 +3,7 @@
 ## 1.2.0 under development
 
 - New #597, #608: Add debug collector for `yiisoft/yii-debug` (@xepozz, @vjik)
+- Bug #612: Disable escaping of asterisk char in value path that returns by `Error::getValuePath(true)` (@vjik)
 
 ## 1.1.0 April 06, 2023
 

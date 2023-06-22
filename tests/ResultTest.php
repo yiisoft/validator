@@ -8,6 +8,9 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Validator;
 
 class ResultTest extends TestCase
 {
@@ -68,8 +71,8 @@ class ResultTest extends TestCase
                 'attribute2' => ['error2.1', 'error2.2'],
                 'attribute2.nested' => ['error2.3', 'error2.4'],
                 '' => ['error3.1', 'error3.2'],
-                'attribute4.subattribute4\.1.subattribute4\*2' => ['error4.1'],
-                'attribute4.subattribute4\.3.subattribute4\*4' => ['error4.2'],
+                'attribute4.subattribute4\.1.subattribute4*2' => ['error4.1'],
+                'attribute4.subattribute4\.3.subattribute4*4' => ['error4.2'],
             ],
             $this->createAttributeErrorResult()->getErrorMessagesIndexedByPath()
         );
@@ -164,14 +167,43 @@ class ResultTest extends TestCase
         );
         $this->assertEquals(['' => ['error3.1', 'error3.2']], $result->getAttributeErrorMessagesIndexedByPath(''));
         $this->assertEquals([
-            'subattribute4\.1.subattribute4\*2' => ['error4.1'],
-            'subattribute4\.3.subattribute4\*4' => ['error4.2'],
+            'subattribute4\.1.subattribute4*2' => ['error4.1'],
+            'subattribute4\.3.subattribute4*4' => ['error4.2'],
         ], $result->getAttributeErrorMessagesIndexedByPath('attribute4'));
     }
 
     public function testGetCommonErrorMessages(): void
     {
         $this->assertEquals(['error3.1', 'error3.2'], $this->createAttributeErrorResult()->getCommonErrorMessages());
+    }
+
+    /**
+     * @see https://github.com/yiisoft/validator/issues/610
+     */
+    public function testDataKeysWithDots(): void
+    {
+        $result = (new Validator())->validate(
+            [
+                'user.age' => 17,
+                'meta' => [
+                    'tag' => 'hi',
+                ],
+            ],
+            [
+                'user.age' => static fn() => (new Result())->addError('Too young.'),
+                'meta' => new Nested([
+                    'tag' => new Callback(static fn() => (new Result())->addError('Too short.')),
+                ]),
+            ],
+        );
+
+        $this->assertSame(
+            [
+                'user\.age' => ['Too young.'],
+                'meta.tag' => ['Too short.'],
+            ],
+            $result->getErrorMessagesIndexedByPath()
+        );
     }
 
     private function createAttributeErrorResult(): Result

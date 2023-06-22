@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use InvalidArgumentException;
 use Yiisoft\Translator\IntlMessageFormatter;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Validator\Rule\Callback;
@@ -94,21 +95,32 @@ final class Error
      * A getter for {@see $valuePath} property. Returns a sequence of keys determining where a value caused the
      * validation error is located within a nested structure.
      *
-     * @param bool $escape Whether to escape a dot (`'.'`, used as a separator in a string representation) and asterisk
-     * (`'*``, used as a {@see Each} rule shortcut) char with a backslash char (`'\'`).
+     * @param bool|string|null $escape Symbol that will be escaped with a backslash char (`\`) into path elements.
+     * When is null value path returns without escaping.
+     * Boolean value is deprecated and will be removed in the next major release. Boolean value processing so:
+     *  - `false` as null,
+     *  - `true` as dot (`.`).
      *
      * @return array A list of keys for nested structures or an empty array otherwise.
      *
      * @psalm-return list<int|string>
      */
-    public function getValuePath(bool $escape = false): array
+    public function getValuePath(bool|string|null $escape = false): array
     {
-        if ($escape === false) {
+        if ($escape === false || $escape === null) {
             return $this->valuePath;
         }
 
+        if ($escape === true) {
+            $escape = '.';
+        }
+
+        if (mb_strlen($escape) !== 1) {
+            throw new InvalidArgumentException('Escape symbol must contain exactly one character.');
+        }
+
         return array_map(
-            static fn ($key): string => str_replace(['.', '*'], ['\\' . '.', '\\' . '*'], (string) $key),
+            static fn($key): string => str_replace($escape, '\\' . $escape, (string) $key),
             $this->valuePath,
         );
     }
