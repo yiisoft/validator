@@ -178,8 +178,8 @@ A path can contain integer elements too (when using the `Each` rule for example)
 
 #### Resolving special characters collision in attribute names
 
-When the attribute name contains a path separator (dot `.` by default), they're automatically escaped using 
-a backslash (`\`) in the error messages list:
+When the attribute name in the error messages list contains a path separator (dot `.` by default),
+it is automatically escaped using a backslash (`\`):
 
 ```php
 [

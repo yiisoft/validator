@@ -73,8 +73,8 @@ final class Result
      * Each value is an array of error message strings.
      *
      * @param string $separator Attribute path separator. Dot is used by default.
-     * @param string|null $escape Symbol that will be escaped with a backslash char (`\`) into path elements.
-     * When is null value path returns without escaping.
+     * @param string|null $escape Symbol that will be escaped with a backslash char (`\`) in path elements.
+     * When it's null path is returned without escaping.
      *
      * @return array Arrays of error messages indexed by attribute path.
      *
@@ -160,8 +160,8 @@ final class Result
      *
      * @param string $attribute Attribute name.
      * @param string $separator Attribute path separator. Dot is used by default.
-     * @param string|null $escape Symbol that will be escaped with a backslash char (`\`) into path elements.
-     * When is null value path returns without escaping.
+     * @param string|null $escape Symbol that will be escaped with a backslash char (`\`) in path elements.
+     * When it's null path is returned without escaping.
      *
      * @return array Arrays of error messages for the attribute specified indexed by attribute path.
      *

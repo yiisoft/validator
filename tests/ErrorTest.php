@@ -60,7 +60,7 @@ final class ErrorTest extends TestCase
         $error = new Error('');
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Escape symbol must contain exactly one character.');
+        $this->expectExceptionMessage('Escape symbol must be exactly one character.');
         $error->getValuePath('..');
     }
 }

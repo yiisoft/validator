@@ -95,9 +95,9 @@ final class Error
      * A getter for {@see $valuePath} property. Returns a sequence of keys determining where a value caused the
      * validation error is located within a nested structure.
      *
-     * @param bool|string|null $escape Symbol that will be escaped with a backslash char (`\`) into path elements.
-     * When is null value path returns without escaping.
-     * Boolean value is deprecated and will be removed in the next major release. Boolean value processing so:
+     * @param bool|string|null $escape Symbol that will be escaped with a backslash char (`\`) in path elements.
+     * When it's null path is returned without escaping.
+     * Boolean value is deprecated and will be removed in the next major release. Boolean value processed in the following way:
      *  - `false` as null,
      *  - `true` as dot (`.`).
      *
@@ -116,7 +116,7 @@ final class Error
         }
 
         if (mb_strlen($escape) !== 1) {
-            throw new InvalidArgumentException('Escape symbol must contain exactly one character.');
+            throw new InvalidArgumentException('Escape symbol must be exactly one character.');
         }
 
         return array_map(
