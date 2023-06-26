@@ -499,7 +499,7 @@ final class Nested implements
                 $breakWhile = false;
 
                 $lastValuePath = array_pop($parts);
-                $lastValuePath = ltrim($lastValuePath, '.');
+                $lastValuePath = ltrim($lastValuePath, self::SEPARATOR);
                 $lastValuePath = str_replace('\\' . self::EACH_SHORTCUT, self::EACH_SHORTCUT, $lastValuePath);
 
                 $remainingValuePath = implode(self::EACH_SHORTCUT, $parts);

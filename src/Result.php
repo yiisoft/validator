@@ -73,16 +73,18 @@ final class Result
      * Each value is an array of error message strings.
      *
      * @param string $separator Attribute path separator. Dot is used by default.
+     * @param string|null $escape Symbol that will be escaped with a backslash char (`\`) in path elements.
+     * When it's null path is returned without escaping.
      *
      * @return array Arrays of error messages indexed by attribute path.
      *
      * @psalm-return array<string, non-empty-list<string>>
      */
-    public function getErrorMessagesIndexedByPath(string $separator = '.'): array
+    public function getErrorMessagesIndexedByPath(string $separator = '.', ?string $escape = '.'): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
-            $stringValuePath = implode($separator, $error->getValuePath(true));
+            $stringValuePath = implode($separator, $error->getValuePath($escape));
             $errors[$stringValuePath][] = $error->getMessage();
         }
 
@@ -158,13 +160,18 @@ final class Result
      *
      * @param string $attribute Attribute name.
      * @param string $separator Attribute path separator. Dot is used by default.
+     * @param string|null $escape Symbol that will be escaped with a backslash char (`\`) in path elements.
+     * When it's null path is returned without escaping.
      *
      * @return array Arrays of error messages for the attribute specified indexed by attribute path.
      *
      * @psalm-return array<string, non-empty-list<string>>
      */
-    public function getAttributeErrorMessagesIndexedByPath(string $attribute, string $separator = '.'): array
-    {
+    public function getAttributeErrorMessagesIndexedByPath(
+        string $attribute,
+        string $separator = '.',
+        ?string $escape = '.',
+    ): array {
         $errors = [];
         foreach ($this->errors as $error) {
             $firstItem = $error->getValuePath()[0] ?? '';
@@ -172,7 +179,7 @@ final class Result
                 continue;
             }
 
-            $valuePath = implode($separator, array_slice($error->getValuePath(true), 1));
+            $valuePath = implode($separator, array_slice($error->getValuePath($escape), 1));
             $errors[$valuePath][] = $error->getMessage();
         }
 

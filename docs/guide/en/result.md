@@ -178,12 +178,12 @@ A path can contain integer elements too (when using the `Each` rule for example)
 
 #### Resolving special characters collision in attribute names
 
-When the attribute name contains a path separator (dot - `.` by default) or `Each` rule shortcut (asterisk -`*`), 
-they're automatically escaped using a backslash (`\`) in the error messages list:
+When the attribute name in the error messages list contains a path separator (dot `.` by default),
+it is automatically escaped using a backslash (`\`):
 
 ```php
 [
-    '\*country\.code' => ['Value cannot be blank.'],
+    'country\.code' => ['Value cannot be blank.'],
 ],
 ```
 
@@ -195,7 +195,7 @@ use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Required;
 
 $rules = [
-    '*country.code' => [
+    'country.code' => [
         new Required();
         new In(['ru', 'en'], skipOnError: true),
     ],
