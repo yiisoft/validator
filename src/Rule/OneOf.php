@@ -15,7 +15,7 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Defines validation options to check that a minimum number of specified attributes are filled.
+ * Defines validation options to check that one of specified attributes is filled.
  *
  * Both arrays and objects with public properties are supported as validated values.
  *
@@ -32,7 +32,6 @@ final class OneOf implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     /**
      * @param string[] $attributes The list of required attributes that will be checked.
-     * @param int $min The minimum required quantity of filled attributes to pass the validation. Defaults to 1.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *
      * You may use the following placeholders in the message:
@@ -56,7 +55,6 @@ final class OneOf implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      */
     public function __construct(
         private array $attributes,
-        private int $min = 1,
         private string $incorrectInputMessage = 'The value must be an array or an object.',
         private string $message = 'The data must have at least "{min}" filled attributes.',
         private mixed $skipOnEmpty = null,
@@ -67,7 +65,7 @@ final class OneOf implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     public function getName(): string
     {
-        return 'atLeast';
+        return 'oneOf';
     }
 
     /**
@@ -80,18 +78,6 @@ final class OneOf implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
     public function getAttributes(): array
     {
         return $this->attributes;
-    }
-
-    /**
-     * Get the minimum required quantity of filled attributes to pass the validation.
-     *
-     * @return int Minimum require quantity.
-     *
-     * @see $min
-     */
-    public function getMin(): int
-    {
-        return $this->min;
     }
 
     /**
@@ -122,14 +108,13 @@ final class OneOf implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
     {
         return [
             'attributes' => $this->attributes,
-            'min' => $this->min,
             'incorrectInputMessage' => [
                 'template' => $this->incorrectInputMessage,
                 'parameters' => [],
             ],
             'message' => [
                 'template' => $this->message,
-                'parameters' => ['min' => $this->min],
+                'parameters' => [],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,

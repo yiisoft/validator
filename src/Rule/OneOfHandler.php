@@ -15,7 +15,7 @@ use function is_array;
 use function is_object;
 
 /**
- * Validates that a minimum number of specified attributes are filled.
+ * Validates that one of specified attributes is filled.
  *
  * @see AtLeast
  */
@@ -23,8 +23,8 @@ final class OneOfHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
-        if (!$rule instanceof AtLeast) {
-            throw new UnexpectedRuleException(AtLeast::class, $rule);
+        if (!$rule instanceof OneOf) {
+            throw new UnexpectedRuleException(OneOf::class, $rule);
         }
 
         /** @var mixed $value */
@@ -39,19 +39,15 @@ final class OneOfHandler implements RuleHandlerInterface
             ]);
         }
 
-        $filledCount = 0;
         foreach ($rule->getAttributes() as $attribute) {
             if (!(new WhenEmpty())(ArrayHelper::getValue($value, $attribute), $context->isAttributeMissing())) {
-                $filledCount++;
+                return $result;
             }
         }
 
-        if ($filledCount < $rule->getMin()) {
-            $result->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'min' => $rule->getMin(),
-            ]);
-        }
+        $result->addError($rule->getMessage(), [
+            'attribute' => $context->getTranslatedAttribute(),
+        ]);
 
         return $result;
     }
