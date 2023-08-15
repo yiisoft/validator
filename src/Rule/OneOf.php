@@ -43,7 +43,6 @@ final class OneOf implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the translated label of the attribute being validated.
-     * - `{min}`: the minimum number of attribute values that was not met.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
@@ -56,7 +55,7 @@ final class OneOf implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
     public function __construct(
         private array $attributes,
         private string $incorrectInputMessage = 'The value must be an array or an object.',
-        private string $message = 'The data must have at least "{min}" filled attributes.',
+        private string $message = 'The data must have at least 1 filled attribute.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null
@@ -123,6 +122,6 @@ final class OneOf implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     public function getHandler(): string
     {
-        return AtLeastHandler::class;
+        return OneOfHandler::class;
     }
 }
