@@ -28,3 +28,5 @@ phpunit.phar
 /phpunit.xml
 # phpunit cache
 .phpunit.result.cache
+
+/config/.merge-plan.php
