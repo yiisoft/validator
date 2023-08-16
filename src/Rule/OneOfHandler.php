@@ -17,7 +17,7 @@ use function is_object;
 /**
  * Validates that one of specified attributes is filled.
  *
- * @see AtLeast
+ * @see OneOf
  */
 final class OneOfHandler implements RuleHandlerInterface
 {

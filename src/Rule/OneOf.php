@@ -19,7 +19,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * Both arrays and objects with public properties are supported as validated values.
  *
- * @see AtLeastHandler
+ * @see OneOfHandler
  *
  * @psalm-import-type WhenType from WhenInterface
  */
