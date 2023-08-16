@@ -23,10 +23,11 @@ on:
 name: build
 
 jobs:
-  phpunit:
+  phpunit-without-intl:
     uses: yiisoft/actions/.github/workflows/phpunit.yml@master
     with:
-      extensions: intl
+      phpunitConfig: phpunit-without-intl.xml
+      extensions: :intl
       coverage: xdebug
       os: >-
         ['ubuntu-latest', 'windows-latest']
