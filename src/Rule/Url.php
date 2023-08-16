@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use InvalidArgumentException;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -33,6 +34,12 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
+
+    /**
+     * @var string The regular expression used to validate the value.
+     * @psalm-var non-empty-string
+     */
+    private string $pattern;
 
     /**
      * @param string $pattern The regular expression used to validate the value.
@@ -69,7 +76,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
      * @throws RuntimeException If intl extension is not enabled and {@see $enableIdn} is true.
      */
     public function __construct(
-        private string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
+        string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
         private array $validSchemes = ['http', 'https'],
         private bool $enableIdn = false,
         private string $incorrectInputMessage = 'The value must be a string.',
@@ -78,6 +85,16 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        $pattern = $this->preparePattern($pattern);
+        if ($pattern === '') {
+            throw new InvalidArgumentException('Pattern can\'t be empty.');
+        }
+
+        /**
+         * @psalm-var non-empty-string $pattern
+         */
+        $this->pattern = $pattern;
+
         if ($enableIdn && !function_exists('idn_to_ascii')) {
             // Tested via separate CI configuration (see ".github/workflows/build.yml").
             // @codeCoverageIgnoreStart
@@ -95,10 +112,13 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
      * Get ready to use regular expression pattern applied for URL validation.
      *
      * @return string Regular expression pattern applied for URL validation.
+     * @psalm-return non-empty-string
+     *
+     * @see $pattern
      */
     public function getPattern(): string
     {
-        return str_replace('{schemes}', '((?i)' . implode('|', $this->validSchemes) . ')', $this->pattern);
+        return $this->pattern;
     }
 
     /**
@@ -176,5 +196,10 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
     public function getHandler(): string
     {
         return UrlHandler::class;
+    }
+
+    private function preparePattern(string $pattern): string
+    {
+        return str_replace('{schemes}', '((?i)' . implode('|', $this->validSchemes) . ')', $pattern);
     }
 }

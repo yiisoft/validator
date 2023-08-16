@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use InvalidArgumentException;
 use JetBrains\PhpStorm\Language;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -30,6 +31,12 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
+
+    /**
+     * @var string The regular expression to be matched with.
+     * @psalm-var non-empty-string
+     */
+    private string $pattern;
 
     /**
      * @param string $pattern The regular expression to be matched with.
@@ -58,7 +65,7 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      */
     public function __construct(
         #[Language('RegExp')]
-        private string $pattern,
+        string $pattern,
         private bool $not = false,
         private string $incorrectInputMessage = 'The value must be a string.',
         private string $message = 'Value is invalid.',
@@ -66,6 +73,11 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        if ($pattern === '') {
+            throw new InvalidArgumentException('Pattern can\'t be empty.');
+        }
+
+        $this->pattern = $pattern;
     }
 
     public function getName(): string
@@ -77,6 +89,7 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * Get the regular expression to be matched with.
      *
      * @return string The regular expression.
+     * @psalm-return non-empty-string
      *
      * @see $pattern
      */

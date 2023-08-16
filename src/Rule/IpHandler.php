@@ -75,6 +75,7 @@ final class IpHandler implements RuleHandlerInterface
      * Used to get the Regexp pattern for initial IP address parsing.
      *
      * @return string Regular expression pattern.
+     * @psalm-return non-empty-string
      */
     private static function getIpParsePattern(): string
     {
