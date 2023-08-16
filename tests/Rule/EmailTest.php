@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\EmailHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -18,6 +19,25 @@ final class EmailTest extends RuleTestCase
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
+
+    public function dataInvalidConfiguration(): array
+    {
+        return [
+            [['pattern' => ''], 'Pattern can\'t be empty.'],
+            [['fullPattern' => ''], 'Full pattern can\'t be empty.'],
+            [['idnEmailPattern' => ''], 'IDN e-mail pattern can\'t be empty.'],
+        ];
+    }
+
+    /**
+     * @dataProvider dataInvalidConfiguration
+     */
+    public function testinvalidConfiguration(array $arguments, string $expectedExceptionMessage): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        new Email(...$arguments);
+    }
 
     public function testGetName(): void
     {

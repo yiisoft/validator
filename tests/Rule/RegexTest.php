@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use stdClass;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\RegexHandler;
@@ -19,6 +20,13 @@ final class RegexTest extends RuleTestCase
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
+
+    public function testNumberEmptyPattern(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Pattern can\'t be empty.');
+        new Regex(pattern: '');
+    }
 
     public function testGetName(): void
     {
