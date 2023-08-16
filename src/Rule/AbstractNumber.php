@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Closure;
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -48,6 +49,12 @@ abstract class AbstractNumber implements
     protected const DEFAULT_GREATER_THAN_MAX_MESSAGE = 'Value must be no greater than {max}.';
 
     /**
+     * @var string The regular expression for matching numbers.
+     * @psalm-var non-empty-string
+     */
+    private $pattern;
+
+    /**
      * @param float|int|null $min Lower limit of the number. Defaults to `null`, meaning no lower limit. See
      * {@see $lessThanMinMessage} for the customized message used when the number is too small.
      * @param float|int|null $max Upper limit of the number. Defaults to `null`, meaning no upper limit. See
@@ -78,8 +85,7 @@ abstract class AbstractNumber implements
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{max}`: maximum value.
      * - `{value}`: actual value.
-     * @param string $pattern The regular expression for matching numbers. It defaults to a pattern that matches
-     * floating numbers with optional exponential part (e.g. -1.23e-10).
+     * @param string $pattern The regular expression for matching numbers.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty. See
      * {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See
@@ -95,11 +101,16 @@ abstract class AbstractNumber implements
         private string $notNumberMessage,
         private string $lessThanMinMessage,
         private string $greaterThanMaxMessage,
-        private string $pattern,
+        string $pattern,
         private mixed $skipOnEmpty,
         private bool $skipOnError,
         private Closure|null $when,
     ) {
+        if ($pattern === '') {
+            throw new InvalidArgumentException('Pattern can\'t be empty.');
+        }
+
+        $this->pattern = $pattern;
     }
 
     /**
@@ -178,6 +189,7 @@ abstract class AbstractNumber implements
      * The regular expression for matching numbers.
      *
      * @return string The regular expression.
+     * @psalm-return non-empty-string
      *
      * @see $pattern
      */

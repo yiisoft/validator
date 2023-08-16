@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use InvalidArgumentException;
 use RuntimeException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -30,6 +31,24 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
+
+    /**
+     * @var string The regular expression used to validate the value. See
+     * {@link https://www.regular-expressions.info/email.html}.
+     * @psalm-var non-empty-string
+     */
+    private string $pattern;
+    /**
+     * @var string The regular expression used to validate email addresses with the name part. This property is used
+     * only when {@see $allowName} is `true`.
+     * @psalm-var non-empty-string
+     */
+    private string $fullPattern;
+    /**
+     * @var string The regular expression used to validate complex emails when {@see $enableIdn} is `true`.
+     * @psalm-var non-empty-string
+     */
+    private string $idnEmailPattern;
 
     /**
      * @param string $pattern The regular expression used to validate the value. See {@link https://www.regular-expressions.info/email.html}.
@@ -67,9 +86,9 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * not installed or not enabled.
      */
     public function __construct(
-        private string $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/',
-        private string $fullPattern = '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/',
-        private string $idnEmailPattern = '/^([a-zA-Z0-9._%+-]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|\d{1,3})(\]?)$/',
+        string $pattern = '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/',
+        string $fullPattern = '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/',
+        string $idnEmailPattern = '/^([a-zA-Z0-9._%+-]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|\d{1,3})(\]?)$/',
         private bool $allowName = false,
         private bool $checkDns = false,
         private bool $enableIdn = false,
@@ -79,6 +98,24 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        if ($pattern === '') {
+            throw new InvalidArgumentException('Pattern can\'t be empty.');
+        }
+
+        $this->pattern = $pattern;
+
+        if ($fullPattern === '') {
+            throw new InvalidArgumentException('Full pattern can\'t be empty.');
+        }
+
+        $this->fullPattern = $fullPattern;
+
+        if ($idnEmailPattern === '') {
+            throw new InvalidArgumentException('IDN e-mail pattern can\'t be empty.');
+        }
+
+        $this->idnEmailPattern = $idnEmailPattern;
+
         if ($enableIdn && !function_exists('idn_to_ascii')) {
             // Tested via separate CI configuration (see ".github/workflows/build.yml").
             // @codeCoverageIgnoreStart
@@ -96,6 +133,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * Get the regular expression used to validate the value.
      *
      * @return string The regular expression.
+     * @psalm-return non-empty-string
      *
      * @see $pattern
      */
@@ -108,6 +146,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * Get the regular expression used to validate email addresses with the name part.
      *
      * @return string The regular expression.
+     * @psalm-return non-empty-string
      *
      * @see $fullPattern
      */
@@ -120,6 +159,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * Get the regular expression used to validate complex emails when {@see $enableIdn} is `true`.
      *
      * @return string The regular expression.
+     * @psalm-return non-empty-string
      *
      * @see $idnEmailPattern
      */
