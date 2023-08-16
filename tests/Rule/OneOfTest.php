@@ -189,6 +189,11 @@ final class OneOfTest extends RuleTestCase
                 [new OneOf(['attr1', 'attr2'])],
                 ['' => ['The data must have at least 1 filled attribute.']],
             ],
+            'more than 1 attribute is filled' => [
+                ['attr1' => 1, 'attr2' => 2],
+                [new OneOf(['attr1', 'attr2'])],
+                ['' => ['The data must have at least 1 filled attribute.']],
+            ],
             'custom message' => [
                 $object,
                 [new OneOf(['attr1', 'attr2'], message: 'Custom message.')],

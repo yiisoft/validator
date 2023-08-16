@@ -39,16 +39,24 @@ final class OneOfHandler implements RuleHandlerInterface
             ]);
         }
 
+        $filledCount = 0;
         foreach ($rule->getAttributes() as $attribute) {
             if (!(new WhenEmpty())(ArrayHelper::getValue($value, $attribute), $context->isAttributeMissing())) {
-                return $result;
+                $filledCount++;
+            }
+
+            if ($filledCount > 1) {
+                return $this->getGenericErrorResult($rule->getMessage(), $context);
             }
         }
 
-        $result->addError($rule->getMessage(), [
+        return $filledCount === 1 ? $result: $this->getGenericErrorResult($rule->getMessage(), $context);
+    }
+
+    private function getGenericErrorResult(string $message, ValidationContext $context): Result
+    {
+        return (new Result())->addError($message, [
             'attribute' => $context->getTranslatedAttribute(),
         ]);
-
-        return $result;
     }
 }
