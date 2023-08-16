@@ -52,7 +52,7 @@ abstract class AbstractNumber implements
      * @var string The regular expression for matching numbers.
      * @psalm-var non-empty-string
      */
-    private $pattern;
+    private string $pattern;
 
     /**
      * @param float|int|null $min Lower limit of the number. Defaults to `null`, meaning no lower limit. See
