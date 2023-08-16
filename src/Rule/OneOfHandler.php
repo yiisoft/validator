@@ -50,7 +50,7 @@ final class OneOfHandler implements RuleHandlerInterface
             }
         }
 
-        return $filledCount === 1 ? $result: $this->getGenericErrorResult($rule->getMessage(), $context);
+        return $filledCount === 1 ? $result : $this->getGenericErrorResult($rule->getMessage(), $context);
     }
 
     private function getGenericErrorResult(string $message, ValidationContext $context): Result
