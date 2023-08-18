@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use stdClass;
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Number;
@@ -17,6 +18,20 @@ final class NumberTest extends RuleTestCase
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
+
+    public function testNumberEmptyPattern(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Pattern can\'t be empty.');
+        new Number(pattern: '');
+    }
+
+    public function testIntegerEmptyPattern(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Pattern can\'t be empty.');
+        new Integer(pattern: '');
+    }
 
     public function testGetName(): void
     {
