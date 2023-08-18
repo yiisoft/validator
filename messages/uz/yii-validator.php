@@ -21,6 +21,7 @@ use Yiisoft\Validator\Rule\LessThanOrEqual;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NotEqual;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\OneOf;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Subset;
@@ -68,6 +69,8 @@ return [
     'Property "{path}" is not found.' => '{path} xususiyati topilmadi.',
     /** @see Number */
     'Value must be a number.' => 'Qiymat raqam boʻlishi kerak.',
+    /** @see OneOf */
+    'The data must have at least 1 filled attribute.' => 'Kamida 1 ta atribut toʻldirilgan boʻlishi kerak.',
     /** @see Regex */
     'Value is invalid.' => 'Qiymat notoʻgʻri.',
     /** @see Required */
@@ -86,6 +89,7 @@ return [
     /**
      * @see AtLeast
      * @see Nested
+     * @see OneOf
      */
     'The value must be an array or an object.' => 'Qiymat massiv yoki obyekt boʻlishi kerak.',
     /**

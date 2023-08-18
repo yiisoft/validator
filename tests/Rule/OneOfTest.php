@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\EmptyCondition\NeverEmpty;
-use Yiisoft\Validator\Rule\AtLeast;
-use Yiisoft\Validator\Rule\AtLeastHandler;
+use Yiisoft\Validator\Rule\OneOf;
+use Yiisoft\Validator\Rule\OneOfHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\Tests\Support\Data\AtLeastDto;
+use Yiisoft\Validator\Tests\Support\Data\OneOfDto;
 
-final class AtLeastTest extends RuleTestCase
+final class OneOfTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
@@ -23,68 +23,46 @@ final class AtLeastTest extends RuleTestCase
 
     public function testGetName(): void
     {
-        $rule = new AtLeast([]);
-        $this->assertSame('atLeast', $rule->getName());
+        $rule = new OneOf([]);
+        $this->assertSame('oneOf', $rule->getName());
     }
 
     public function dataOptions(): array
     {
         return [
             [
-                new AtLeast(['attr1', 'attr2']),
+                new OneOf(['attr1', 'attr2']),
                 [
                     'attributes' => [
                         'attr1',
                         'attr2',
                     ],
-                    'min' => 1,
                     'incorrectInputMessage' => [
                         'template' => 'The value must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The data must have at least "{min}" filled attributes.',
-                        'parameters' => ['min' => 1],
-                    ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new AtLeast(['attr1', 'attr2'], min: 2),
-                [
-                    'attributes' => [
-                        'attr1',
-                        'attr2',
-                    ],
-                    'min' => 2,
-                    'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => 'The data must have at least 1 filled attribute.',
                         'parameters' => [],
-                    ],
-                    'message' => [
-                        'template' => 'The data must have at least "{min}" filled attributes.',
-                        'parameters' => ['min' => 2],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
             'callable skip on empty' => [
-                new AtLeast(['attr1', 'attr2'], skipOnEmpty: new NeverEmpty()),
+                new OneOf(['attr1', 'attr2'], skipOnEmpty: new NeverEmpty()),
                 [
                     'attributes' => [
                         'attr1',
                         'attr2',
                     ],
-                    'min' => 1,
                     'incorrectInputMessage' => [
                         'template' => 'The value must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The data must have at least "{min}" filled attributes.',
-                        'parameters' => ['min' => 1],
+                        'template' => 'The data must have at least 1 filled attribute.',
+                        'parameters' => [],
                     ],
                     'skipOnEmpty' => null,
                     'skipOnError' => false,
@@ -101,29 +79,29 @@ final class AtLeastTest extends RuleTestCase
                     public $attr1 = 1;
                     public $attr2 = null;
                 },
-                [new AtLeast(['attr1', 'attr2'])],
+                [new OneOf(['attr1', 'attr2'])],
             ],
             [
                 new class () {
                     public $attr1 = null;
                     public $attr2 = 1;
                 },
-                [new AtLeast(['attr2'])],
+                [new OneOf(['attr1', 'attr2'])],
             ],
             [
                 new class () {
                     private int $attr1 = 1;
                     private $attr2 = null;
                 },
-                [new AtLeast(['attr1', 'attr2'])],
+                [new OneOf(['attr1', 'attr2'])],
             ],
             [
                 ['attr1' => 1, 'attr2' => null],
-                [new AtLeast(['attr1', 'attr2'])],
+                [new OneOf(['attr1', 'attr2'])],
             ],
             [
                 ['attr1' => null, 'attr2' => 1],
-                [new AtLeast(['attr2'])],
+                [new OneOf(['attr1', 'attr2'])],
             ],
             [
                 new class () {
@@ -137,7 +115,7 @@ final class AtLeastTest extends RuleTestCase
                         };
                     }
                 },
-                ['obj' => new AtLeast(['attr1', 'attr2'])],
+                ['obj' => new OneOf(['attr1', 'attr2'])],
             ],
             [
                 new class () {
@@ -151,116 +129,107 @@ final class AtLeastTest extends RuleTestCase
                         };
                     }
                 },
-                ['obj' => new AtLeast(['attr2'])],
+                ['obj' => new OneOf(['attr1', 'attr2'])],
             ],
             [
                 ['obj' => ['attr1' => 1, 'attr2' => null]],
-                ['obj' => new AtLeast(['attr1', 'attr2'])],
+                ['obj' => new OneOf(['attr1', 'attr2'])],
             ],
             [
                 ['obj' => ['attr1' => null, 'attr2' => 1]],
-                ['obj' => new AtLeast(['attr2'])],
-            ],
-            'more than "min" attributes are filled' => [
-                ['attr1' => 1, 'attr2' => 2],
-                [new AtLeast(['attr1', 'attr2'])],
+                ['obj' => new OneOf(['attr1', 'attr2'])],
             ],
             'class attribute' => [
-                new AtLeastDto(1),
+                new OneOfDto(1),
             ],
         ];
     }
 
     public function dataValidationFailed(): array
     {
-        $class = new class () {
-            public $attr1 = 1;
+        $object = new class () {
+            public $attr1 = null;
             public $attr2 = null;
         };
-        $array = ['attr1' => 1, 'attr2' => null];
+        $array = ['attr1' => null, 'attr2' => null];
 
         return [
             'incorrect input' => [
                 1,
-                [new AtLeast(['attr2'])],
+                [new OneOf(['attr1', 'attr2'])],
                 ['' => ['The value must be an array or an object.']],
             ],
             'custom incorrect input message' => [
                 1,
-                [new AtLeast(['attr2'], incorrectInputMessage: 'Custom incorrect input message.')],
+                [new OneOf(['attr1', 'attr2'], incorrectInputMessage: 'Custom incorrect input message.')],
                 ['' => ['Custom incorrect input message.']],
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new AtLeast(['attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                [new OneOf(['attr1', 'attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
                 ['' => ['Attribute - , type - int.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['attribute' => 1],
                 [
-                    'attribute' => new AtLeast(
-                        ['attr2'],
+                    'attribute' => new OneOf(
+                        ['attr1', 'attr2'],
                         incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
                     ),
                 ],
                 ['attribute' => ['Attribute - attribute, type - int.']],
             ],
             'object' => [
-                $class,
-                [new AtLeast(['attr2'])],
-                ['' => ['The data must have at least "1" filled attributes.']],
-            ],
-            'object, custom min' => [
-                $class,
-                [new AtLeast(['attr1', 'attr2'], min: 2)],
-                ['' => ['The data must have at least "2" filled attributes.']],
+                $object,
+                [new OneOf(['attr1', 'attr2'])],
+                ['' => ['The data must have at least 1 filled attribute.']],
             ],
             'array' => [
                 $array,
-                [new AtLeast(['attr2'])],
-                ['' => ['The data must have at least "1" filled attributes.']],
+                [new OneOf(['attr1', 'attr2'])],
+                ['' => ['The data must have at least 1 filled attribute.']],
             ],
-            'array, custom min' => [
-                $array,
-                [new AtLeast(['attr2'], min: 2)],
-                ['' => ['The data must have at least "2" filled attributes.']],
+            'more than 1 attribute is filled' => [
+                ['attr1' => 1, 'attr2' => 2],
+                [new OneOf(['attr1', 'attr2'])],
+                ['' => ['The data must have at least 1 filled attribute.']],
             ],
             'custom message' => [
-                $class,
-                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom message.')],
+                $object,
+                [new OneOf(['attr1', 'attr2'], message: 'Custom message.')],
                 ['' => ['Custom message.']],
             ],
             'custom message with parameters' => [
-                $class,
-                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attribute - {attribute}, min - {min}.')],
-                ['' => ['Attribute - , min - 2.']],
+                $object,
+                [new OneOf(['attr1', 'attr2'], message: 'Attribute - {attribute}.')],
+                ['' => ['Attribute - .']],
             ],
             'custom message with parameters, attribute set' => [
-                ['data' => $class],
-                ['data' => new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attribute - {attribute}, min - {min}.')],
-                ['data' => ['Attribute - data, min - 2.']],
+                ['data' => $object],
+                ['data' => new OneOf(['attr1', 'attr2'], message: 'Attribute - {attribute}.')],
+                ['data' => ['Attribute - data.']],
             ],
             'class attribute' => [
-                new AtLeastDto(),
+                new OneOfDto(),
                 null,
-                ['' => ['The data must have at least "1" filled attributes.']],
+                ['' => ['The data must have at least 1 filled attribute.']],
             ],
         ];
     }
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new AtLeast([]), new AtLeast([], skipOnError: true));
+        $this->testSkipOnErrorInternal(new OneOf([]), new OneOf([], skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new AtLeast([]), new AtLeast([], when: $when));
+        $this->testWhenInternal(new OneOf([]), new OneOf([], when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array
     {
-        return [AtLeast::class, AtLeastHandler::class];
+        return [OneOf::class, OneOfHandler::class];
     }
 }

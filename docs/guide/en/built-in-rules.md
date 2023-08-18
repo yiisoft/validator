@@ -43,6 +43,7 @@ Here is a list of all available built-in rules, divided by category.
 
 - [AtLeast](../../../src/Rule/AtLeast.php)
 - [Count](../../../src/Rule/Count.php)
+- [OneOf](../../../src/Rule/OneOf.php)
 
 ### General purpose rules
 
