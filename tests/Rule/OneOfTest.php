@@ -42,7 +42,7 @@ final class OneOfTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The data must have at least 1 filled attribute.',
+                        'template' => 'The data must have exactly 1 filled attribute among this set: {attributes}.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -61,7 +61,7 @@ final class OneOfTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The data must have at least 1 filled attribute.',
+                        'template' => 'The data must have exactly 1 filled attribute among this set: {attributes}.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => null,
@@ -182,17 +182,17 @@ final class OneOfTest extends RuleTestCase
             'object' => [
                 $object,
                 [new OneOf(['attr1', 'attr2'])],
-                ['' => ['The data must have at least 1 filled attribute.']],
+                ['' => ['The data must have exactly 1 filled attribute among this set: "attr1", "attr2".']],
             ],
             'array' => [
                 $array,
                 [new OneOf(['attr1', 'attr2'])],
-                ['' => ['The data must have at least 1 filled attribute.']],
+                ['' => ['The data must have exactly 1 filled attribute among this set: "attr1", "attr2".']],
             ],
             'more than 1 attribute is filled' => [
                 ['attr1' => 1, 'attr2' => 2],
                 [new OneOf(['attr1', 'attr2'])],
-                ['' => ['The data must have at least 1 filled attribute.']],
+                ['' => ['The data must have exactly 1 filled attribute among this set: "attr1", "attr2".']],
             ],
             'custom message' => [
                 $object,
@@ -201,18 +201,18 @@ final class OneOfTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 $object,
-                [new OneOf(['attr1', 'attr2'], message: 'Attribute - {attribute}.')],
-                ['' => ['Attribute - .']],
+                [new OneOf(['attr1', 'attr2'], message: 'Attributes - {attributes}.')],
+                ['' => ['Attributes - "attr1", "attr2".']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => $object],
-                ['data' => new OneOf(['attr1', 'attr2'], message: 'Attribute - {attribute}.')],
-                ['data' => ['Attribute - data.']],
+                ['data' => new OneOf(['attr1', 'attr2'], message: 'Attributes - {attributes}.')],
+                ['data' => ['Attributes - "attr1", "attr2".']],
             ],
             'class attribute' => [
                 new OneOfDto(),
                 null,
-                ['' => ['The data must have at least 1 filled attribute.']],
+                ['' => ['The data must have exactly 1 filled attribute among this set: "a", "b", "c".']],
             ],
         ];
     }

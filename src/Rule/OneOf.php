@@ -55,7 +55,7 @@ final class OneOf implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
     public function __construct(
         private array $attributes,
         private string $incorrectInputMessage = 'The value must be an array or an object.',
-        private string $message = 'The data must have at least 1 filled attribute.',
+        private string $message = 'The data must have exactly 1 filled attribute among this set: {attributes}.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null
