@@ -59,7 +59,7 @@ final class OneOfHandler implements RuleHandlerInterface
     private function getGenericErrorResult(OneOf $rule, ValidationContext $context): Result
     {
         return (new Result())->addError($rule->getMessage(), [
-            'attributes' => $this->getFormattedAttributesString($rule->getAttributes(), $context)
+            'attributes' => $this->getFormattedAttributesString($rule->getAttributes(), $context),
         ]);
     }
 }
