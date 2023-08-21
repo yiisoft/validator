@@ -32,7 +32,7 @@ return [
     // Used in single rule
 
     /** @see AtLeast */
-    'At least {min, number} {min, plural, one{attribute} other{attributes}} from this list must be filled' => 'Как '.
+    'At least {min, number} {min, plural, one{attribute} other{attributes}} from this list must be filled' => 'Как ' .
         'минимум {min, number}' .
         '{min, plural, one{атрибут} few{атрибута} many{атрибутов} other{атрибута}} из этого списка ' .
         '{min, plural, one{должен} few{должны} many{должны} other{должны}} быть ' .
