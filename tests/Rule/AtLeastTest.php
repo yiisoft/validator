@@ -246,7 +246,7 @@ final class AtLeastTest extends RuleTestCase
             'class attribute' => [
                 new AtLeastDto(),
                 null,
-                ['' => ['At least 1 attribute from this list must be filled: "a", "b", "c".']],
+                ['' => ['At least 1 attribute from this list must be filled: "A", "B", "C".']],
             ],
         ];
     }

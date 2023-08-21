@@ -212,7 +212,7 @@ final class OneOfTest extends RuleTestCase
             'class attribute' => [
                 new OneOfDto(),
                 null,
-                ['' => ['Exactly 1 attribute from this list must be filled: "a", "b", "c".']],
+                ['' => ['Exactly 1 attribute from this list must be filled: "A", "B", "C".']],
             ],
         ];
     }
