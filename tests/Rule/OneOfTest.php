@@ -42,7 +42,7 @@ final class OneOfTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The data must have exactly 1 filled attribute among this set: {attributes}.',
+                        'template' => 'Exactly 1 attribute from this list must be filled: {attributes}.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -61,7 +61,7 @@ final class OneOfTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The data must have exactly 1 filled attribute among this set: {attributes}.',
+                        'template' => 'Exactly 1 attribute from this list must be filled: {attributes}.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => null,
@@ -182,17 +182,17 @@ final class OneOfTest extends RuleTestCase
             'object' => [
                 $object,
                 [new OneOf(['attr1', 'attr2'])],
-                ['' => ['The data must have exactly 1 filled attribute among this set: "attr1", "attr2".']],
+                ['' => ['Exactly 1 attribute from this list must be filled: "attr1", "attr2".']],
             ],
             'array' => [
                 $array,
                 [new OneOf(['attr1', 'attr2'])],
-                ['' => ['The data must have exactly 1 filled attribute among this set: "attr1", "attr2".']],
+                ['' => ['Exactly 1 attribute from this list must be filled: "attr1", "attr2".']],
             ],
             'more than 1 attribute is filled' => [
                 ['attr1' => 1, 'attr2' => 2],
                 [new OneOf(['attr1', 'attr2'])],
-                ['' => ['The data must have exactly 1 filled attribute among this set: "attr1", "attr2".']],
+                ['' => ['Exactly 1 attribute from this list must be filled: "attr1", "attr2".']],
             ],
             'custom message' => [
                 $object,
@@ -212,7 +212,7 @@ final class OneOfTest extends RuleTestCase
             'class attribute' => [
                 new OneOfDto(),
                 null,
-                ['' => ['The data must have exactly 1 filled attribute among this set: "a", "b", "c".']],
+                ['' => ['Exactly 1 attribute from this list must be filled: "a", "b", "c".']],
             ],
         ];
     }
