@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use Yiisoft\Validator\EmptyCondition\NeverEmpty;
 use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\AtLeastHandler;
@@ -20,6 +21,13 @@ final class AtLeastTest extends RuleTestCase
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
+
+    public function testMinGreaterThanAttributesCount(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$min must be no greater than amount of $attributes.');
+        new AtLeast(['attr'], min: 2);
+    }
 
     public function testGetName(): void
     {
