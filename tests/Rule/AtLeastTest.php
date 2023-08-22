@@ -259,7 +259,7 @@ final class AtLeastTest extends RuleTestCase
                 ['data' => new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attributes - {attributes}, min - {min}.')],
                 ['data' => ['Attributes - "attr1", "attr2", min - 2.']],
             ],
-            'class attribute' => [
+            'class attribute, tranlation' => [
                 new AtLeastDto(),
                 null,
                 ['' => ['At least 1 attribute from this list must be filled: "A", "B", "C".']],
