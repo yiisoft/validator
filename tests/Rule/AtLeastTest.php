@@ -176,6 +176,14 @@ final class AtLeastTest extends RuleTestCase
                 ['attr1' => 1, 'attr2' => 2],
                 [new AtLeast(['attr1', 'attr2'])],
             ],
+            'min equals amount of attributes' => [
+                ['attr1' => 1, 'attr2' => 2],
+                [new AtLeast(['attr1', 'attr2'], min: 2)],
+            ],
+            'min equals amount of attributes, 0' => [
+                [],
+                [new AtLeast([], min: 0)],
+            ],
             'class attribute' => [
                 new AtLeastDto(1),
             ],
