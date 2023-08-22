@@ -23,7 +23,7 @@ final class AtLeastTest extends RuleTestCase
 
     public function testGetName(): void
     {
-        $rule = new AtLeast([]);
+        $rule = new AtLeast(['attr']);
         $this->assertSame('atLeast', $rule->getName());
     }
 
@@ -225,8 +225,8 @@ final class AtLeastTest extends RuleTestCase
             ],
             'array, custom min' => [
                 $array,
-                [new AtLeast(['attr2'], min: 2)],
-                ['' => ['At least 2 attributes from this list must be filled: "attr2".']],
+                [new AtLeast(['attr1', 'attr2'], min: 2)],
+                ['' => ['At least 2 attributes from this list must be filled: "attr1", "attr2".']],
             ],
             'custom message' => [
                 $class,
@@ -253,13 +253,13 @@ final class AtLeastTest extends RuleTestCase
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new AtLeast([]), new AtLeast([], skipOnError: true));
+        $this->testSkipOnErrorInternal(new AtLeast(['attr']), new AtLeast(['attr'], skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new AtLeast([]), new AtLeast([], when: $when));
+        $this->testWhenInternal(new AtLeast(['attr']), new AtLeast(['attr'], when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array
