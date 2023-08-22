@@ -1,6 +1,6 @@
 # Yii Validator Change Log
 
-## 1.2.0 under development
+## 2.0.0 under development
 
 - New #597, #608: Add debug collector for `yiisoft/yii-debug` (@xepozz, @vjik)
 - New #610: Add `$escape` parameter to methods `Result::getAttributeErrorMessagesIndexedByPath()` and
