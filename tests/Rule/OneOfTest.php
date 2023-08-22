@@ -139,7 +139,7 @@ final class OneOfTest extends RuleTestCase
                 ['obj' => ['attr1' => null, 'attr2' => 1]],
                 ['obj' => new OneOf(['attr1', 'attr2'])],
             ],
-            'class attribute' => [
+            'class attribute, translation' => [
                 new OneOfDto(1),
             ],
         ];
