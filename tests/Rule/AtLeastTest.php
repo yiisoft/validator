@@ -43,7 +43,8 @@ final class AtLeastTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The data must have at least "{min}" filled attributes.',
+                        'template' => 'At least {min, number} {min, plural, one{attribute} other{attributes}} from ' .
+                            'this list must be filled: {attributes}.',
                         'parameters' => ['min' => 1],
                     ],
                     'skipOnEmpty' => false,
@@ -63,7 +64,8 @@ final class AtLeastTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The data must have at least "{min}" filled attributes.',
+                        'template' => 'At least {min, number} {min, plural, one{attribute} other{attributes}} from ' .
+                            'this list must be filled: {attributes}.',
                         'parameters' => ['min' => 2],
                     ],
                     'skipOnEmpty' => false,
@@ -83,7 +85,8 @@ final class AtLeastTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The data must have at least "{min}" filled attributes.',
+                        'template' => 'At least {min, number} {min, plural, one{attribute} other{attributes}} from ' .
+                            'this list must be filled: {attributes}.',
                         'parameters' => ['min' => 1],
                     ],
                     'skipOnEmpty' => null,
@@ -208,22 +211,22 @@ final class AtLeastTest extends RuleTestCase
             'object' => [
                 $class,
                 [new AtLeast(['attr2'])],
-                ['' => ['The data must have at least "1" filled attributes.']],
+                ['' => ['At least 1 attribute from this list must be filled: "attr2".']],
             ],
             'object, custom min' => [
                 $class,
                 [new AtLeast(['attr1', 'attr2'], min: 2)],
-                ['' => ['The data must have at least "2" filled attributes.']],
+                ['' => ['At least 2 attributes from this list must be filled: "attr1", "attr2".']],
             ],
             'array' => [
                 $array,
                 [new AtLeast(['attr2'])],
-                ['' => ['The data must have at least "1" filled attributes.']],
+                ['' => ['At least 1 attribute from this list must be filled: "attr2".']],
             ],
             'array, custom min' => [
                 $array,
                 [new AtLeast(['attr2'], min: 2)],
-                ['' => ['The data must have at least "2" filled attributes.']],
+                ['' => ['At least 2 attributes from this list must be filled: "attr2".']],
             ],
             'custom message' => [
                 $class,
@@ -232,18 +235,18 @@ final class AtLeastTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 $class,
-                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attribute - {attribute}, min - {min}.')],
-                ['' => ['Attribute - , min - 2.']],
+                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attributes - {attributes}, min - {min}.')],
+                ['' => ['Attributes - "attr1", "attr2", min - 2.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => $class],
-                ['data' => new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attribute - {attribute}, min - {min}.')],
-                ['data' => ['Attribute - data, min - 2.']],
+                ['data' => new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attributes - {attributes}, min - {min}.')],
+                ['data' => ['Attributes - "attr1", "attr2", min - 2.']],
             ],
-            'class attribute' => [
+            'class attribute, tranlation' => [
                 new AtLeastDto(),
                 null,
-                ['' => ['The data must have at least "1" filled attributes.']],
+                ['' => ['At least 1 attribute from this list must be filled: "A", "B", "C".']],
             ],
         ];
     }

@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\TranslatedAttributesHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\ValidationContext;
@@ -21,6 +22,8 @@ use function is_object;
  */
 final class AtLeastHandler implements RuleHandlerInterface
 {
+    use TranslatedAttributesHandlerTrait;
+
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof AtLeast) {
@@ -48,7 +51,7 @@ final class AtLeastHandler implements RuleHandlerInterface
 
         if ($filledCount < $rule->getMin()) {
             $result->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'attributes' => $this->getFormattedAttributesString($rule->getAttributes(), $context),
                 'min' => $rule->getMin(),
             ]);
         }

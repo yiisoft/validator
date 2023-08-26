@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\TranslatedAttributesHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\ValidationContext;
@@ -21,6 +22,8 @@ use function is_object;
  */
 final class OneOfHandler implements RuleHandlerInterface
 {
+    use TranslatedAttributesHandlerTrait;
+
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof OneOf) {
@@ -46,17 +49,17 @@ final class OneOfHandler implements RuleHandlerInterface
             }
 
             if ($filledCount > 1) {
-                return $this->getGenericErrorResult($rule->getMessage(), $context);
+                return $this->getGenericErrorResult($rule, $context);
             }
         }
 
-        return $filledCount === 1 ? $result : $this->getGenericErrorResult($rule->getMessage(), $context);
+        return $filledCount === 1 ? $result : $this->getGenericErrorResult($rule, $context);
     }
 
-    private function getGenericErrorResult(string $message, ValidationContext $context): Result
+    private function getGenericErrorResult(OneOf $rule, ValidationContext $context): Result
     {
-        return (new Result())->addError($message, [
-            'attribute' => $context->getTranslatedAttribute(),
+        return (new Result())->addError($rule->getMessage(), [
+            'attributes' => $this->getFormattedAttributesString($rule->getAttributes(), $context),
         ]);
     }
 }

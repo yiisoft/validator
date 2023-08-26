@@ -32,7 +32,11 @@ return [
     // Used in single rule
 
     /** @see AtLeast */
-    'The data must have at least "{min}" filled attributes.' => 'Данные должны содержать минимум {min, number} {min, plural, one{заполненный атрибут} few{заполненных атрибута} many{заполненных атрибутов} other{заполненных атрибута}}.',
+    'At least {min, number} {min, plural, one{attribute} other{attributes}} from this list must be filled' => 'Как ' .
+        'минимум {min, number}' .
+        '{min, plural, one{атрибут} few{атрибута} many{атрибутов} other{атрибута}} из этого списка ' .
+        '{min, plural, one{должен} few{должны} many{должны} other{должны}} быть ' .
+        'заполнены: {attributes}.',
     /** @see BooleanValue */
     'Value must be either "{true}" or "{false}".' => 'Значение должно быть «{true}» или «{false}».',
     /** @see Count */
@@ -70,7 +74,7 @@ return [
     /** @see Number */
     'Value must be a number.' => 'Значение должно быть числом.',
     /** @see OneOf */
-    'The data must have at least 1 filled attribute.' => 'Данные должны содержать минимум 1 заполненный атрибут.',
+    'Exactly 1 attribute from this list must be filled: {attributes}.' => 'Ровно 1 атрибут из этого списка должен быть заполнен: {attributes}.',
     /** @see Regex */
     'Value is invalid.' => 'Значение неверно.',
     /** @see Required */

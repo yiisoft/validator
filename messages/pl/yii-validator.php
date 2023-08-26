@@ -32,7 +32,7 @@ return [
     // Used in single rule
 
     /** @see AtLeast */
-    'The data must have at least "{min}" filled attributes.' => 'Dane muszą mieć co najmniej "{min}" wypełnionych atrybutów.',
+    'At least {min, number} {min, plural, one{attribute} other{attributes}} from this list must be filled' => 'At least {min, number} {min, plural, one{attribute} other{attributes}} from this list must be filled',
     /** @see BooleanValue */
     'Value must be either "{true}" or "{false}".' => 'Wartość musi wynosić "{true}" albo "{false}".',
     /** @see Count */
@@ -70,7 +70,7 @@ return [
     /** @see Number */
     'Value must be a number.' => 'Wartość musi być liczbą.',
     /** @see OneOf */
-    'The data must have at least 1 filled attribute.' => 'Dane muszą mieć co najmniej 1 wypełniony atrybut.',
+    'Exactly 1 attribute from this list must be filled: {attributes}.' => 'Exactly 1 attribute from this list must be filled: {attributes}.',
     /** @see Regex */
     'Value is invalid.' => 'Wartość jest nieprawidłowa.',
     /** @see Required */

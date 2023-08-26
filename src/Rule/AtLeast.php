@@ -58,7 +58,8 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
         private array $attributes,
         private int $min = 1,
         private string $incorrectInputMessage = 'The value must be an array or an object.',
-        private string $message = 'The data must have at least "{min}" filled attributes.',
+        private string $message = 'At least {min, number} {min, plural, one{attribute} other{attributes}} from this ' .
+        'list must be filled: {attributes}.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null
