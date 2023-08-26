@@ -11,6 +11,7 @@
 - Chg #623: List translated attributes in error message for `OneOf` and `AtLeast` rules (@arogachev)
 - Chg #624: Fix meaning of error message in `OneOf` rule (@arogachev)
 - Chg #625: Improve meaning and use pluralization in error message for `OneOf` and `AtLeast` rules (@arogachev)
+- Chg #626: Disallow `$min` greater than amount of `$attributes` in `AtLeast` configuration (@arogachev)
 
 ## 1.1.0 April 06, 2023
 

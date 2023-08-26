@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -13,6 +14,8 @@ use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
+
+use function count;
 
 /**
  * Defines validation options to check that a minimum number of specified attributes are filled.
@@ -64,6 +67,9 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
         private bool $skipOnError = false,
         private Closure|null $when = null
     ) {
+        if ($min > count($this->attributes)) {
+            throw new InvalidArgumentException('$min must be no greater than amount of $attributes.');
+        }
     }
 
     public function getName(): string
