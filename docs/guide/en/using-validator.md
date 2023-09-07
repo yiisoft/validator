@@ -175,7 +175,6 @@ In this case, the rules will be automatically parsed, no need to additionally do
 ```php
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Validator;
 
 final class PersonRulesProvider
