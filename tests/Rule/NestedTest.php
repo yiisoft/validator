@@ -1263,6 +1263,21 @@ final class NestedTest extends RuleTestCase
                     'level1.level2.level3.name' => ['This value must contain at least 5 characters.'],
                 ],
             ],
+            'error messages with attributes in nested structure' => [
+                [
+                    'user' => [
+                        'name' => '',
+                    ],
+                ],
+                new Nested([
+                    'user' => [
+                        'name' => new Required(message: '{attribute} is required.'),
+                    ],
+                ]),
+                [
+                    'user.name' => ['name is required.'],
+                ],
+            ],
         ];
     }
 
