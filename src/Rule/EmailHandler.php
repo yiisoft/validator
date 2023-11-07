@@ -44,7 +44,7 @@ final class EmailHandler implements RuleHandlerInterface
             if ($rule->isIdnEnabled()) {
                 $matches['local'] = idn_to_ascii($matches['local']);
                 $matches['domain'] = idn_to_ascii($matches['domain']);
-                $value = implode([
+                $value = implode('', [
                     $matches['name'],
                     $matches['open'],
                     $matches['local'],
