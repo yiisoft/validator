@@ -17,6 +17,7 @@ final class Result
 {
     /**
      * @var Error[] Validation errors.
+     * @psalm-var list<Error>
      */
     private array $errors = [];
 
@@ -61,6 +62,8 @@ final class Result
      * Get errors messages as an array of strings.
      *
      * @return string[] Array messages as strings.
+     *
+     * @psalm-return list<string>
      */
     public function getErrorMessages(): array
     {
@@ -121,6 +124,8 @@ final class Result
      * @param string $attribute Attribute name.
      *
      * @return Error[] Array of error objects.
+     *
+     * @psalm-return list<Error>
      */
     public function getAttributeErrors(string $attribute): array
     {
@@ -139,6 +144,8 @@ final class Result
      * Get an array of error messages for the attribute specified.
      *
      * @return string[] Error messages.
+     *
+     * @psalm-return list<string>
      */
     public function getAttributeErrorMessages(string $attribute): array
     {
@@ -190,6 +197,8 @@ final class Result
      * Get common error messages that are not attached to any attribute.
      *
      * @return string[] Error messages.
+     *
+     * @psalm-return list<string>
      */
     public function getCommonErrorMessages(): array
     {
