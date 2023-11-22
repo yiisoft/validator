@@ -13,6 +13,7 @@
 - Chg #625: Improve meaning and use pluralization in error message for `OneOf` and `AtLeast` rules (@arogachev)
 - Chg #626: Disallow `$min` greater than amount of `$attributes` in `AtLeast` configuration (@arogachev)
 - Bug #632: Fix property name usage in error messages of rules in `Nested` rule (@vjik) 
+- Enh #636: Improve psalm annotations in `Result` class (@vjik)
 
 ## 1.1.0 April 06, 2023
 
