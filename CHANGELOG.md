@@ -15,6 +15,9 @@
 - Bug #632: Fix property name usage in error messages of rules in `Nested` rule (@vjik) 
 - Enh #636: Improve psalm annotations in `Result` class (@vjik)
 - Enh #637: Add German translation (@took)
+- Enh #622: Use `json_validate()` built-in PHP function in `JsonHandler` if code is run with PHP 8.3 (@arogachev)
+- Enh #639: Simplify validation of JSON in `JsonHandler` using built-in PHP functions for PHP versions below 8.3 
+  (@arogachev)
 
 ## 1.1.0 April 06, 2023
 
