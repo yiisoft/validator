@@ -15,6 +15,11 @@
 - Bug #632: Fix property name usage in error messages of rules in `Nested` rule (@vjik) 
 - Enh #636: Improve psalm annotations in `Result` class (@vjik)
 - Enh #637: Add German translation (@took)
+- Chg #634: Move `getName()` method from `RuleInterface` to `RuleWithOptionsInterface` (@arogachev)
+- Chg #634: Rename `RuleWithOptionsInterface` to `DumpedRuleInterface` (@arogachev)
+- Chg #634: Use FQCN as a name for built-in rules during export with `RulesDumper` (@arogachev)
+- Chg #634: Use FQCN as a name for rules not implementing `DumpedRuleInterface` during export with `RulesDumper`
+  (@arogachev)
 
 ## 1.1.0 April 06, 2023
 
