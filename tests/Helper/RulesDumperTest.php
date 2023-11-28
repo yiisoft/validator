@@ -10,7 +10,6 @@ use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
-use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 
