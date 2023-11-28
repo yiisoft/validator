@@ -326,11 +326,6 @@ class ValidatorTest extends TestCase
                     {
                     }
 
-                    public function getName(): string
-                    {
-                        return 'test';
-                    }
-
                     public function getHandler(): string
                     {
                         return $this->ruleHandler::class;
@@ -348,11 +343,6 @@ class ValidatorTest extends TestCase
         $validator->validate(new ArrayDataSet(['property' => '']), [
             'property' => [
                 new class () implements RuleInterface {
-                    public function getName(): string
-                    {
-                        return 'test';
-                    }
-
                     public function getHandler(): string
                     {
                         return 'NonExistClass';
