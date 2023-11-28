@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -26,7 +26,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 abstract class AbstractNumber implements
-    RuleWithOptionsInterface,
+    DumpedRuleInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface

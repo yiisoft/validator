@@ -31,7 +31,7 @@ the output will be:
 [  
     'name' => [  
         [  
-            'length',  
+            'Yiisoft\Validator\Rule\Length',  
             'min' => 4,  
             'max' => 10,  
             'exactly' => null,  

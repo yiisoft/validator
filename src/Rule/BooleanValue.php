@@ -9,7 +9,7 @@ use Closure;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -27,7 +27,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class BooleanValue implements RuleWithOptionsInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
+final class BooleanValue implements DumpedRuleInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;

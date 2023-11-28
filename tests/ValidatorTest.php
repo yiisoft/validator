@@ -42,7 +42,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\SimpleDto;
 use Yiisoft\Validator\Tests\Support\Data\SimpleForm;
 use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
-use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
@@ -1084,7 +1084,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @param StubRuleWithOptions[] $rules
+     * @param StubDumpedRule[] $rules
      * @param Error[] $expectedErrors
      *
      * @dataProvider skipOnEmptyDataProvider

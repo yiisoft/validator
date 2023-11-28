@@ -39,7 +39,7 @@ use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttribut
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Helper\OptionsHelper;
-use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
@@ -196,8 +196,8 @@ final class NestedTest extends RuleTestCase
             ],
             [
                 new Nested([
-                    'author.name' => new StubRuleWithOptions('author-name', ['key' => 'name']),
-                    'author.age' => new StubRuleWithOptions('author-age', ['key' => 'age']),
+                    'author.name' => new StubDumpedRule('author-name', ['key' => 'name']),
+                    'author.age' => new StubDumpedRule('author-age', ['key' => 'age']),
                 ]),
                 [
                     'noRulesWithNoObjectMessage' => [
@@ -228,8 +228,8 @@ final class NestedTest extends RuleTestCase
             [
                 new Nested([
                     'author' => [
-                        'name' => new StubRuleWithOptions('author-name', ['key' => 'name']),
-                        'age' => new StubRuleWithOptions('author-age', ['key' => 'age']),
+                        'name' => new StubDumpedRule('author-name', ['key' => 'name']),
+                        'age' => new StubDumpedRule('author-age', ['key' => 'age']),
                     ],
                 ]),
                 [

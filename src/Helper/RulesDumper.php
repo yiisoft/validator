@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Helper;
 
 use InvalidArgumentException;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 
 use function is_int;
 use function is_string;
@@ -16,7 +16,7 @@ use function is_string;
  * The array is usually passed to the client to use it in client-side validation.
  *
  * @see RuleInterface
- * @see RuleWithOptionsInterface
+ * @see DumpedRuleInterface
  */
 final class RulesDumper
 {
@@ -96,7 +96,7 @@ final class RulesDumper
 
             if (is_iterable($rule)) {
                 $options = self::fetchOptions($rule);
-            } elseif ($rule instanceof RuleWithOptionsInterface) {
+            } elseif ($rule instanceof DumpedRuleInterface) {
                 $options = array_merge([$rule->getName()], $rule->getOptions());
             } elseif ($rule instanceof  RuleInterface) {
                 $options = [$rule->getName()];

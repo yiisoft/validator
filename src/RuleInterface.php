@@ -7,7 +7,7 @@ namespace Yiisoft\Validator;
 /**
  * A main interface for rules to implement. A rule contains a set of constraint configuration options to apply when
  * validating data. If you want to include a rule options and customize its name during conversion to array, use
- * extended version of it - {@see RuleWithOptionsInterface}.
+ * extended version of it - {@see DumpedRuleInterface}.
  */
 interface RuleInterface
 {

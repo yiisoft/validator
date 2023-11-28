@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Support\Rule\StubRule;
 
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 
-final class StubRuleWithOptions implements RuleWithOptionsInterface
+final class StubDumpedRule implements DumpedRuleInterface
 {
     public function __construct(private string $name, private array $options)
     {

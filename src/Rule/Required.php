@@ -8,7 +8,7 @@ use Attribute;
 use Closure;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
@@ -34,7 +34,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface
+final class Required implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterface
 {
     use SkipOnErrorTrait;
     use WhenTrait;

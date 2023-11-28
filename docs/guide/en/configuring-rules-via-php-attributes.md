@@ -289,11 +289,6 @@ final class Yaml implements RuleInterface
     ) {
     }
 
-    public function getName(): string
-    {
-        return 'yaml';
-    }
-
     public function getHandler(): string
     {
         return YamlHandler::class;
