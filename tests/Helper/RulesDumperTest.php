@@ -10,7 +10,9 @@ use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
+use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 
 final class RulesDumperTest extends TestCase
 {
@@ -63,6 +65,10 @@ final class RulesDumperTest extends TestCase
                         ],
                     ],
                 ],
+            ],
+            [
+                ['attributeName' => [new RuleWithoutOptions(), new StubDumpedRule('name', [])]],
+                ['attributeName' => [[RuleWithoutOptions::class], ['name']]],
             ],
         ];
     }
@@ -124,7 +130,7 @@ final class RulesDumperTest extends TestCase
                 'skipOnError' => false,
             ],
             [
-                'test',
+                RuleWithoutOptions::class,
             ],
         ];
 

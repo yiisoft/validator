@@ -98,8 +98,8 @@ final class RulesDumper
                 $options = self::fetchOptions($rule);
             } elseif ($rule instanceof DumpedRuleInterface) {
                 $options = array_merge([$rule->getName()], $rule->getOptions());
-            } elseif ($rule instanceof  RuleInterface) {
-                $options = [$rule->getName()];
+            } elseif ($rule instanceof RuleInterface) {
+                $options = [$rule::class];
             } else {
                 throw new InvalidArgumentException(sprintf(
                     'Every rule must implement "%s". Type "%s" given.',

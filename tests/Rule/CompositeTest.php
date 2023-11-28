@@ -135,7 +135,7 @@ final class CompositeTest extends RuleTestCase
                             'pattern' => '/1/',
                         ],
                         [
-                            'test',
+                            RuleWithoutOptions::class,
                         ],
                     ],
                 ],
