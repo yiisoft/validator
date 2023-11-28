@@ -86,7 +86,7 @@ final class TrueValue implements RuleWithOptionsInterface, SkipOnErrorInterface,
 
     public function getName(): string
     {
-        return 'isTrue';
+        return self::class;
     }
 
     /**

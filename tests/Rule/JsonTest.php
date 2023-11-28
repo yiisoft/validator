@@ -22,7 +22,7 @@ final class JsonTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Json();
-        $this->assertSame('json', $rule->getName());
+        $this->assertSame(Json::class, $rule->getName());
     }
 
     public function dataOptions(): array

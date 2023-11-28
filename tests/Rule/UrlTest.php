@@ -32,7 +32,7 @@ final class UrlTest extends RuleTestCase
     {
         $rule = new Url();
 
-        $this->assertSame('url', $rule->getName());
+        $this->assertSame(Url::class, $rule->getName());
         $this->assertSame(['http', 'https'], $rule->getValidSchemes());
     }
 

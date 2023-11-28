@@ -21,7 +21,7 @@ final class NotEqualTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new NotEqual(1);
-        $this->assertSame('notEqual', $rule->getName());
+        $this->assertSame(NotEqual::class, $rule->getName());
     }
 
     public function dataOptions(): array

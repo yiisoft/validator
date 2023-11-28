@@ -34,7 +34,7 @@ final class RulesDumperTest extends TestCase
                 [
                     'attributeName' => [
                         $dump = [
-                            'integer',
+                            Integer::class,
                             'min' => 10,
                             'max' => 100,
                             'incorrectInputMessage' => [
@@ -102,7 +102,7 @@ final class RulesDumperTest extends TestCase
         ];
         $expectedRules = [
             [
-                'boolean',
+                BooleanValue::class,
                 'trueValue' => '1',
                 'falseValue' => '0',
                 'strict' => false,

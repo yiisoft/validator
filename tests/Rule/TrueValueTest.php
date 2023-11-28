@@ -22,7 +22,7 @@ final class TrueValueTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new TrueValue();
-        $this->assertSame('isTrue', $rule->getName());
+        $this->assertSame(TrueValue::class, $rule->getName());
     }
 
     public function dataOptions(): array

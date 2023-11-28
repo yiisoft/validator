@@ -111,7 +111,7 @@ final class Length implements
 
     public function getName(): string
     {
-        return 'length';
+        return self::class;
     }
 
     /**

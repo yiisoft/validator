@@ -219,7 +219,7 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
 
     public function getName(): string
     {
-        return 'ip';
+        return self::class;
     }
 
     /**

@@ -30,7 +30,7 @@ final class EachTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Each();
-        $this->assertSame('each', $rule->getName());
+        $this->assertSame(Each::class, $rule->getName());
     }
 
     public function dataOptions(): array
@@ -55,7 +55,7 @@ final class EachTest extends RuleTestCase
                     'rules' => [
                         [
                             [
-                                'number',
+                                Number::class,
                                 'min' => null,
                                 'max' => 13,
                                 'incorrectInputMessage' => [
@@ -81,7 +81,7 @@ final class EachTest extends RuleTestCase
                         ],
                         [
                             [
-                                'number',
+                                Number::class,
                                 'min' => null,
                                 'max' => 14,
                                 'incorrectInputMessage' => [
@@ -127,7 +127,7 @@ final class EachTest extends RuleTestCase
                     'rules' => [
                         [
                             [
-                                'number',
+                                Number::class,
                                 'min' => null,
                                 'max' => 13,
                                 'incorrectInputMessage' => [

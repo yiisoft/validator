@@ -32,6 +32,6 @@ final class Compare extends AbstractCompare
 {
     public function getName(): string
     {
-        return 'compare';
+        return self::class;
     }
 }

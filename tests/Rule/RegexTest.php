@@ -31,7 +31,7 @@ final class RegexTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Regex('//');
-        $this->assertSame('regex', $rule->getName());
+        $this->assertSame(Regex::class, $rule->getName());
     }
 
     public function dataOptions(): array

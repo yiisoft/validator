@@ -82,7 +82,7 @@ final class Subset implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
 
     public function getName(): string
     {
-        return 'subset';
+        return self::class;
     }
 
     /**

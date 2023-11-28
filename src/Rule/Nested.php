@@ -228,7 +228,7 @@ final class Nested implements
 
     public function getName(): string
     {
-        return 'nested';
+        return self::class;
     }
 
     /**

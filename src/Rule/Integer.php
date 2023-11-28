@@ -91,6 +91,6 @@ final class Integer extends AbstractNumber
 
     public function getName(): string
     {
-        return 'integer';
+        return self::class;
     }
 }

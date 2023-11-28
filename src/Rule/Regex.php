@@ -82,7 +82,7 @@ final class Regex implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     public function getName(): string
     {
-        return 'regex';
+        return self::class;
     }
 
     /**

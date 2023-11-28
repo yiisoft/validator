@@ -108,6 +108,6 @@ final class LessThanOrEqual extends AbstractCompare
 
     public function getName(): string
     {
-        return 'lessThanOrEqual';
+        return self::class;
     }
 }

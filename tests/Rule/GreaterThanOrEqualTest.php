@@ -21,7 +21,7 @@ final class GreaterThanOrEqualTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new GreaterThanOrEqual(1);
-        $this->assertSame('greaterThanOrEqual', $rule->getName());
+        $this->assertSame(GreaterThanOrEqual::class, $rule->getName());
     }
 
     public function dataOptions(): array

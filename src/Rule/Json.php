@@ -64,7 +64,7 @@ final class Json implements RuleWithOptionsInterface, SkipOnErrorInterface, When
 
     public function getName(): string
     {
-        return 'json';
+        return self::class;
     }
 
     /**

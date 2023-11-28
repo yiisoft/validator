@@ -56,8 +56,7 @@ final class NestedTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Nested();
-
-        $this->assertSame('nested', $rule->getName());
+        $this->assertSame(Nested::class, $rule->getName());
     }
 
     public function testDefaultValues(): void
@@ -117,7 +116,7 @@ final class NestedTest extends RuleTestCase
                     'skipOnError' => false,
                     'rules' => [
                         [
-                            'number',
+                            Number::class,
                             'min' => null,
                             'max' => null,
                             'incorrectInputMessage' => [
@@ -168,7 +167,7 @@ final class NestedTest extends RuleTestCase
                     'rules' => [
                         'user.age' => [
                             [
-                                'number',
+                                Number::class,
                                 'min' => null,
                                 'max' => null,
                                 'incorrectInputMessage' => [
@@ -330,7 +329,7 @@ final class NestedTest extends RuleTestCase
                     private array $array = [
                         'name' => 'hello',
                         'age' => 17,
-                        'number' => 500,
+                        Number::class => 500,
                     ];
 
                     public function getRules(): iterable
@@ -474,56 +473,56 @@ final class NestedTest extends RuleTestCase
                 ),
                 [
                     [
-                        'nested',
+                        Nested::class,
                         'skipOnEmpty' => true,
                         'skipOnError' => true,
                         'rules' => [
                             'posts' => [
                                 [
-                                    'each',
+                                    Each::class,
                                     'skipOnEmpty' => true,
                                     'skipOnError' => true,
                                     'rules' => [
                                         [
                                             [
-                                                'nested',
+                                                Nested::class,
                                                 'skipOnEmpty' => true,
                                                 'skipOnError' => true,
                                                 'rules' => [
                                                     'title' => [
                                                         [
-                                                            'length',
+                                                            Length::class,
                                                             'skipOnEmpty' => true,
                                                             'skipOnError' => true,
                                                         ],
                                                     ],
                                                     'authors' => [
                                                         [
-                                                            'each',
+                                                            Each::class,
                                                             'skipOnEmpty' => true,
                                                             'skipOnError' => true,
                                                             'rules' => [
                                                                 [
                                                                     [
-                                                                        'nested',
+                                                                        Nested::class,
                                                                         'skipOnEmpty' => true,
                                                                         'skipOnError' => true,
                                                                         'rules' => [
                                                                             'data.name' => [
                                                                                 [
-                                                                                    'length',
+                                                                                    Length::class,
                                                                                     'skipOnEmpty' => true,
                                                                                     'skipOnError' => true,
                                                                                 ],
                                                                             ],
                                                                             'data.age' => [
                                                                                 [
-                                                                                    'number',
+                                                                                    Number::class,
                                                                                     'skipOnEmpty' => true,
                                                                                     'skipOnError' => true,
                                                                                 ],
                                                                                 [
-                                                                                    'number',
+                                                                                    Number::class,
                                                                                     'skipOnEmpty' => true,
                                                                                     'skipOnError' => true,
                                                                                 ],
@@ -542,7 +541,7 @@ final class NestedTest extends RuleTestCase
                             ],
                             'meta' => [
                                 [
-                                    'length',
+                                    Length::class,
                                     'skipOnEmpty' => true,
                                     'skipOnError' => true,
                                 ],
@@ -555,7 +554,7 @@ final class NestedTest extends RuleTestCase
                 new Nested(propagateOptions: true),
                 [
                     [
-                        'nested',
+                        Nested::class,
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
                         'rules' => null,
@@ -571,12 +570,12 @@ final class NestedTest extends RuleTestCase
                 ),
                 [
                     [
-                        'nested',
+                        Nested::class,
                         'skipOnEmpty' => true,
                         'skipOnError' => true,
                         'rules' => [
                             [
-                                'atLeast',
+                                AtLeast::class,
                                 'skipOnEmpty' => true,
                                 'skipOnError' => true,
                             ],
@@ -595,19 +594,19 @@ final class NestedTest extends RuleTestCase
                 ),
                 [
                     [
-                        'nested',
+                        Nested::class,
                         'skipOnEmpty' => true,
                         'skipOnError' => true,
                         'rules' => [
                             'numbers' => [
                                 [
-                                    'each',
+                                    Each::class,
                                     'skipOnEmpty' => true,
                                     'skipOnError' => true,
                                     'rules' => [
                                         [
                                             [
-                                                'number',
+                                                Number::class,
                                                 'skipOnEmpty' => true,
                                                 'skipOnError' => true,
                                             ],

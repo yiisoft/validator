@@ -111,6 +111,6 @@ final class NotEqual extends AbstractCompare
 
     public function getName(): string
     {
-        return 'notEqual';
+        return self::class;
     }
 }

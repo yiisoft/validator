@@ -109,7 +109,7 @@ final class Count implements
 
     public function getName(): string
     {
-        return 'count';
+        return self::class;
     }
 
     /**

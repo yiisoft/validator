@@ -123,7 +123,7 @@ final class Each implements
 
     public function getName(): string
     {
-        return 'each';
+        return self::class;
     }
 
     public function propagateOptions(): void

@@ -136,7 +136,7 @@ class Composite implements
 
     public function getName(): string
     {
-        return 'composite';
+        return self::class;
     }
 
     #[ArrayShape([

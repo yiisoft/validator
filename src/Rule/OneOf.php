@@ -64,7 +64,7 @@ final class OneOf implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     public function getName(): string
     {
-        return 'oneOf';
+        return self::class;
     }
 
     /**

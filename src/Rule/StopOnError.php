@@ -90,7 +90,7 @@ final class StopOnError implements
 
     public function getName(): string
     {
-        return 'stopOnError';
+        return self::class;
     }
 
     /**

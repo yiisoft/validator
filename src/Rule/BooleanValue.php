@@ -91,7 +91,7 @@ final class BooleanValue implements RuleWithOptionsInterface, SkipOnEmptyInterfa
 
     public function getName(): string
     {
-        return 'boolean';
+        return self::class;
     }
 
     /**

@@ -62,7 +62,7 @@ final class StringValue implements
 
     public function getName(): string
     {
-        return 'string';
+        return self::class;
     }
 
     /**

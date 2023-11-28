@@ -87,7 +87,7 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
 
     public function getName(): string
     {
-        return 'required';
+        return self::class;
     }
 
     /**

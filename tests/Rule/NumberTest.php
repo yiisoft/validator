@@ -36,7 +36,7 @@ final class NumberTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Number();
-        $this->assertSame('number', $rule->getName());
+        $this->assertSame(Number::class, $rule->getName());
     }
 
     public function dataOptions(): array

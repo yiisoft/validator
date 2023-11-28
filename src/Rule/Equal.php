@@ -111,6 +111,6 @@ final class Equal extends AbstractCompare
 
     public function getName(): string
     {
-        return 'equal';
+        return self::class;
     }
 }

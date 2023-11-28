@@ -71,7 +71,7 @@ final class Callback implements
 
     public function getName(): string
     {
-        return 'callback';
+        return self::class;
     }
 
     /**

@@ -74,7 +74,7 @@ final class AtLeast implements RuleWithOptionsInterface, SkipOnErrorInterface, W
 
     public function getName(): string
     {
-        return 'atLeast';
+        return self::class;
     }
 
     /**

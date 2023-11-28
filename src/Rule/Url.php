@@ -105,7 +105,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
 
     public function getName(): string
     {
-        return 'url';
+        return self::class;
     }
 
     /**

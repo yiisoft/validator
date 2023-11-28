@@ -80,7 +80,7 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
 
     public function getName(): string
     {
-        return 'inRange';
+        return self::class;
     }
 
     /**

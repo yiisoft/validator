@@ -108,6 +108,6 @@ final class GreaterThan extends AbstractCompare
 
     public function getName(): string
     {
-        return 'greaterThan';
+        return self::class;
     }
 }

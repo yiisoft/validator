@@ -126,7 +126,7 @@ final class Email implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
     public function getName(): string
     {
-        return 'email';
+        return self::class;
     }
 
     /**

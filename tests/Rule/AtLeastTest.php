@@ -32,7 +32,7 @@ final class AtLeastTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new AtLeast(['attr']);
-        $this->assertSame('atLeast', $rule->getName());
+        $this->assertSame(AtLeast::class, $rule->getName());
     }
 
     public function dataOptions(): array

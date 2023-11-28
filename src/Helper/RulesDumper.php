@@ -98,7 +98,7 @@ final class RulesDumper
                 $options = self::fetchOptions($rule);
             } elseif ($rule instanceof RuleWithOptionsInterface) {
                 $options = array_merge([$rule->getName()], $rule->getOptions());
-            } elseif ($rule instanceof RuleInterface) {
+            } elseif ($rule instanceof  RuleInterface) {
                 $options = [$rule->getName()];
             } else {
                 throw new InvalidArgumentException(sprintf(

@@ -24,7 +24,7 @@ final class SubsetTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Subset([]);
-        $this->assertSame('subset', $rule->getName());
+        $this->assertSame(Subset::class, $rule->getName());
     }
 
     public function dataOptions(): array
