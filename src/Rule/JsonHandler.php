@@ -56,7 +56,7 @@ final class JsonHandler implements RuleHandlerInterface
     private function isValidJson(string $value): bool
     {
         if (function_exists('json_validate')) {
-            return json_validate($value);
+            return json_validate($value) === true;
         }
 
         json_decode($value);
