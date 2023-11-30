@@ -1,7 +1,8 @@
 {
     "symbol-whitelist": [
         "Yiisoft\\Yii\\Debug\\Collector\\CollectorTrait",
-        "Yiisoft\\Yii\\Debug\\Collector\\SummaryCollectorInterface"
+        "Yiisoft\\Yii\\Debug\\Collector\\SummaryCollectorInterface",
+        "json_validate"
     ],
     "php-core-extensions": [
         "Core",
