@@ -56,7 +56,8 @@ final class JsonHandler implements RuleHandlerInterface
     private function isValidJson(string $value): bool
     {
         if (function_exists('json_validate')) {
-            return json_validate($value) === true;
+            /** @var bool Can be removed after upgrading to PHP 8.3 */
+            return json_validate($value);
         }
 
         json_decode($value);
