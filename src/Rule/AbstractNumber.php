@@ -113,6 +113,11 @@ abstract class AbstractNumber implements
         $this->pattern = $pattern;
     }
 
+    public function getName(): string
+    {
+        return self::class;
+    }
+
     /**
      * Get lower limit of the number. `null` means no lower limit.
      *

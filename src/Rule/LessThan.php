@@ -105,9 +105,4 @@ final class LessThan extends AbstractCompare
             when: $when,
         );
     }
-
-    public function getName(): string
-    {
-        return self::class;
-    }
 }

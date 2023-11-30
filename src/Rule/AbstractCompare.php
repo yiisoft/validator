@@ -169,6 +169,11 @@ abstract class AbstractCompare implements
         }
     }
 
+    public function getName(): string
+    {
+        return self::class;
+    }
+
     /**
      * Get value to be compared with.
      *
