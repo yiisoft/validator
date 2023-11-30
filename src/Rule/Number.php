@@ -88,9 +88,4 @@ final class Number extends AbstractNumber
             when: $when,
         );
     }
-
-    public function getName(): string
-    {
-        return 'number';
-    }
 }

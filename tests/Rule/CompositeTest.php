@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Equal;
@@ -30,7 +31,7 @@ final class CompositeTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Composite([]);
-        $this->assertSame('composite', $rule->getName());
+        $this->assertSame(Composite::class, $rule->getName());
     }
 
     public function dataOptions(): array
@@ -46,7 +47,7 @@ final class CompositeTest extends RuleTestCase
                     'skipOnError' => false,
                     'rules' => [
                         [
-                            'number',
+                            Number::class,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -70,7 +71,7 @@ final class CompositeTest extends RuleTestCase
                             'pattern' => '/1/',
                         ],
                         [
-                            'number',
+                            Number::class,
                             'min' => null,
                             'max' => 14,
                             'incorrectInputMessage' => [
@@ -106,7 +107,7 @@ final class CompositeTest extends RuleTestCase
                     'skipOnError' => false,
                     'rules' => [
                         [
-                            'number',
+                            Number::class,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -134,7 +135,7 @@ final class CompositeTest extends RuleTestCase
                             'pattern' => '/1/',
                         ],
                         [
-                            'test',
+                            RuleWithoutOptions::class,
                         ],
                     ],
                 ],
@@ -148,7 +149,7 @@ final class CompositeTest extends RuleTestCase
                     'skipOnError' => false,
                     'rules' => [
                         [
-                            'callback',
+                            Callback::class,
                             'method' => null,
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
@@ -177,7 +178,7 @@ final class CompositeTest extends RuleTestCase
                     'specific-key' => 42,
                     'rules' => [
                         [
-                            'required',
+                            Required::class,
                             'message' => [
                                 'template' => 'Value cannot be blank.',
                                 'parameters' => [],

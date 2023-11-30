@@ -21,7 +21,7 @@ final class EqualTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Equal(1);
-        $this->assertSame('equal', $rule->getName());
+        $this->assertSame(Equal::class, $rule->getName());
     }
 
     public function dataOptions(): array

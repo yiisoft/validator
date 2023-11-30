@@ -31,12 +31,7 @@ final class RgbColor implements RuleInterface
     public function __construct(
         public readonly string $message = 'Invalid RGB color value.',  
     ) {  
-    }  
-  
-    public function getName(): string  
-    {  
-        return 'rgbColor';  
-    }  
+    }
   
     public function getHandler(): string  
     {  
@@ -117,11 +112,6 @@ final class RgbColor implements RuleInterface
         '{position, selectordinal, one {#st} two {#nd} few {#rd} other {#th}} position.',          
     ) {  
     }
-  
-    public function getName(): string  
-    {  
-        return 'rgbColor';  
-    }  
   
     public function getHandler(): string  
     {  
@@ -329,11 +319,6 @@ final class Yaml implements RuleInterface
         public readonly string $message = 'The value is not a valid YAML.',          
     ) {  
     }
-  
-    public function getName(): string  
-    {  
-        return 'yaml';  
-    }  
   
     public function getHandler(): string  
     {  

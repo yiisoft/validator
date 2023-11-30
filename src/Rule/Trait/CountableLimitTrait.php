@@ -35,7 +35,7 @@ use JetBrains\PhpStorm\ArrayShape;
  * }
  * ```
  *
- * Also, if a rule implements {@see RuleWithOptionsInterface}, you can merge limit related options instead of adding it
+ * Also, if a rule implements {@see DumpedRuleInterface}, you can merge limit related options instead of adding it
  * manually:
  *
  * ```php

@@ -22,7 +22,7 @@ final class BooleanValueTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new BooleanValue();
-        $this->assertSame('boolean', $rule->getName());
+        $this->assertSame(BooleanValue::class, $rule->getName());
     }
 
     public function dataOptions(): array

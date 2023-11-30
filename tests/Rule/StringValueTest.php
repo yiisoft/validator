@@ -27,7 +27,7 @@ final class StringValueTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new StringValue();
-        $this->assertSame('string', $rule->getName());
+        $this->assertSame(StringValue::class, $rule->getName());
     }
 
     public function dataOptions(): array

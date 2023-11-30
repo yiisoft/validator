@@ -108,9 +108,4 @@ final class NotEqual extends AbstractCompare
             when: $when,
         );
     }
-
-    public function getName(): string
-    {
-        return 'notEqual';
-    }
 }

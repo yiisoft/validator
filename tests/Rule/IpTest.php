@@ -23,7 +23,7 @@ final class IpTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Ip();
-        $this->assertSame('ip', $rule->getName());
+        $this->assertSame(Ip::class, $rule->getName());
     }
 
     public function getNetworksData(): array

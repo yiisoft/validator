@@ -26,7 +26,7 @@ final class LengthTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Length(min: 3);
-        $this->assertSame('length', $rule->getName());
+        $this->assertSame(Length::class, $rule->getName());
     }
 
     public function dataOptions(): array

@@ -16,7 +16,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\Helper\RulesDumper;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidatorInterface;
@@ -63,7 +63,7 @@ use Yiisoft\Validator\WhenInterface;
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
-    RuleWithOptionsInterface,
+    DumpedRuleInterface,
     SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
@@ -123,7 +123,7 @@ final class Each implements
 
     public function getName(): string
     {
-        return 'each';
+        return self::class;
     }
 
     public function propagateOptions(): void

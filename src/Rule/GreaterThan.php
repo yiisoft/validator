@@ -105,9 +105,4 @@ final class GreaterThan extends AbstractCompare
             when: $when,
         );
     }
-
-    public function getName(): string
-    {
-        return 'greaterThan';
-    }
 }

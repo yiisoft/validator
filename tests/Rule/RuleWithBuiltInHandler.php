@@ -22,11 +22,6 @@ final class RuleWithBuiltInHandler implements RuleInterface, RuleHandlerInterfac
         return $result;
     }
 
-    public function getName(): string
-    {
-        return 'is42';
-    }
-
     public function getHandler(): string|RuleHandlerInterface
     {
         return $this;

@@ -51,7 +51,7 @@ final class CompareTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Compare();
-        $this->assertSame('compare', $rule->getName());
+        $this->assertSame(Compare::class, $rule->getName());
     }
 
     public function dataOptions(): array

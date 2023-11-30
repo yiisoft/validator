@@ -42,7 +42,7 @@ final class EmailTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Email();
-        $this->assertSame('email', $rule->getName());
+        $this->assertSame(Email::class, $rule->getName());
     }
 
     public function dataOptions(): array

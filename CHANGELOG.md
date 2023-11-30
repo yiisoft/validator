@@ -15,6 +15,10 @@
 - Bug #632: Fix property name usage in error messages of rules in `Nested` rule (@vjik) 
 - Enh #636: Improve psalm annotations in `Result` class (@vjik)
 - Enh #637: Add German translation (@took)
+- Chg #634: Move `getName()` method from `RuleInterface` to `RuleWithOptionsInterface` (@arogachev)
+- Chg #634: Rename `RuleWithOptionsInterface` to `DumpedRuleInterface` (@arogachev)
+- Chg #634: Use FQCN as a name for built-in rules during export with `RulesDumper` (@arogachev)
+- Chg #634: Use FQCN as a name for rules not implementing `DumpedRuleInterface` during export with `RulesDumper`
 - Enh #622: Use `json_validate()` built-in PHP function in `JsonHandler` if code is run with PHP 8.3 (@arogachev)
 - Enh #639: Simplify validation of JSON in `JsonHandler` using built-in PHP functions for PHP versions below 8.3 
   (@arogachev)

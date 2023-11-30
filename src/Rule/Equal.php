@@ -108,9 +108,4 @@ final class Equal extends AbstractCompare
             when: $when,
         );
     }
-
-    public function getName(): string
-    {
-        return 'equal';
-    }
 }

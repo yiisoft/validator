@@ -13,11 +13,6 @@ final class RuleWithCustomHandler implements RuleInterface
     ) {
     }
 
-    public function getName(): string
-    {
-        return 'rule-with-custom-handler';
-    }
-
     public function getHandler(): string
     {
         return $this->handlerClassName;

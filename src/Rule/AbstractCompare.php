@@ -11,7 +11,7 @@ use Stringable;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -34,7 +34,7 @@ use function in_array;
  * @psalm-import-type WhenType from WhenInterface
  */
 abstract class AbstractCompare implements
-    RuleWithOptionsInterface,
+    DumpedRuleInterface,
     SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface
@@ -167,6 +167,11 @@ abstract class AbstractCompare implements
 
             throw new InvalidArgumentException($message);
         }
+    }
+
+    public function getName(): string
+    {
+        return self::class;
     }
 
     /**

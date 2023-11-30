@@ -12,7 +12,7 @@ use Yiisoft\Validator\Rule\Trait\CountableLimitTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -27,7 +27,7 @@ use Yiisoft\Validator\WhenInterface;
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Count implements
-    RuleWithOptionsInterface,
+    DumpedRuleInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
@@ -109,7 +109,7 @@ final class Count implements
 
     public function getName(): string
     {
-        return 'count';
+        return self::class;
     }
 
     /**

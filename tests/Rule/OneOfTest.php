@@ -24,7 +24,7 @@ final class OneOfTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new OneOf([]);
-        $this->assertSame('oneOf', $rule->getName());
+        $this->assertSame(OneOf::class, $rule->getName());
     }
 
     public function dataOptions(): array

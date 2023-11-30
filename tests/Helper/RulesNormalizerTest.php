@@ -7,7 +7,9 @@ namespace Yiisoft\Validator\Tests\Helper;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 
@@ -19,17 +21,17 @@ final class RulesNormalizerTest extends TestCase
             'null' => [[], null],
             'object' => [
                 [
-                    'name' => ['required'],
-                    'age' => ['number'],
-                    'number' => ['number'],
+                    'name' => [Required::class],
+                    'age' => [Number::class],
+                    'number' => [Number::class],
                 ],
                 new ObjectWithDifferentPropertyVisibility(),
             ],
             'class-string' => [
                 [
-                    'name' => ['required'],
-                    'age' => ['number'],
-                    'number' => ['number'],
+                    'name' => [Required::class],
+                    'age' => [Number::class],
+                    'number' => [Number::class],
                 ],
                 ObjectWithDifferentPropertyVisibility::class,
             ],
@@ -74,15 +76,15 @@ final class RulesNormalizerTest extends TestCase
                 [],
             ],
             [
-                ['callback'],
+                [Callback::class],
                 static fn () => new Result(),
             ],
             [
-                ['number'],
+                [Number::class],
                 new Number(),
             ],
             [
-                ['number', 'callback'],
+                [Number::class, Callback::class],
                 [new Number(), static fn () => new Result()],
             ],
         ];

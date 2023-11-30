@@ -17,9 +17,4 @@ final class CustomUrlRuleSet extends Composite
         yield new Url(enableIdn: true);
         yield new Length(max: 20);
     }
-
-    public function getName(): string
-    {
-        return 'customUrlRule';
-    }
 }

@@ -29,7 +29,7 @@ final class CountTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Count(min: 3);
-        $this->assertSame('count', $rule->getName());
+        $this->assertSame(Count::class, $rule->getName());
     }
 
     public function dataOptions(): array

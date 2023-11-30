@@ -26,7 +26,7 @@ final class StopOnErrorTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new StopOnError([new Length(min: 10)]);
-        $this->assertSame('stopOnError', $rule->getName());
+        $this->assertSame(StopOnError::class, $rule->getName());
     }
 
     public function dataOptions(): array
@@ -39,7 +39,7 @@ final class StopOnErrorTest extends RuleTestCase
                     'skipOnError' => false,
                     'rules' => [
                         [
-                            'length',
+                            Length::class,
                             'min' => 10,
                             'max' => null,
                             'exactly' => null,

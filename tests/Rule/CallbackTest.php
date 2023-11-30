@@ -46,7 +46,7 @@ final class CallbackTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Callback(callback: static fn (): Result => new Result());
-        $this->assertSame('callback', $rule->getName());
+        $this->assertSame(Callback::class, $rule->getName());
     }
 
     public function testGetMethod(): void

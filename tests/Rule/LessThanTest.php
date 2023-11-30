@@ -21,7 +21,7 @@ final class LessThanTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new LessThan(1);
-        $this->assertSame('lessThan', $rule->getName());
+        $this->assertSame(LessThan::class, $rule->getName());
     }
 
     public function dataOptions(): array

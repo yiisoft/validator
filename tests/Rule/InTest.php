@@ -23,7 +23,7 @@ final class InTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new In(range(1, 10));
-        $this->assertSame('inRange', $rule->getName());
+        $this->assertSame(In::class, $rule->getName());
     }
 
     public function dataOptions(): array

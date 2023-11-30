@@ -30,8 +30,4 @@ use Attribute;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Compare extends AbstractCompare
 {
-    public function getName(): string
-    {
-        return 'compare';
-    }
 }
