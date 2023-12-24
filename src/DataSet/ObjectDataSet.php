@@ -301,7 +301,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
         return $this->parser->getAttributeTranslator();
     }
 
-    public function getLabels(): array
+    public function getValidationPropertyLabels(): array
     {
         return $this->parser->getLabels();
     }

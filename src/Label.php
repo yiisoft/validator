@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Helper;
+namespace Yiisoft\Validator;
 
 use Attribute;
 

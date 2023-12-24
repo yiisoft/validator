@@ -15,6 +15,7 @@ use ReflectionProperty;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\AttributeTranslatorInterface;
 use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\Label;
 use Yiisoft\Validator\RuleInterface;
 
 use function array_key_exists;

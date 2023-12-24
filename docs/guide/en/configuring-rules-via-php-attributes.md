@@ -77,9 +77,9 @@ final class User
 Error messages may include an `{attribute}` placeholder that is replaced with name of the property. If you would like the name to be replaced with a custom value, you can specify it using the `Label` attribute:
 
 ```php
+use Yiisoft\Validator\Label;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\Helper\Label;
 
 final class User
 {

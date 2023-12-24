@@ -12,5 +12,5 @@ interface LabelsProviderInterface
     /**
      * @return array<string, string> A set of attribute labels.
      */
-    public function getLabels(): array;
+    public function getValidationPropertyLabels(): array;
 }

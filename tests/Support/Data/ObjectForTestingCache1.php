@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Support\Data;
 
-use Yiisoft\Validator\Helper\Label;
+use Yiisoft\Validator\Label;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Helper\ObjectParserTest;
