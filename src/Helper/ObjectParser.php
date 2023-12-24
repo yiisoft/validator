@@ -134,6 +134,7 @@ final class ObjectParser
             'rules' => 'array',
             'reflectionAttributes' => 'array',
             'reflectionSource' => 'object',
+            'labels' => 'array',
         ],
     ])]
     private static array $cache = [];
@@ -233,6 +234,33 @@ final class ObjectParser
         $this->setCacheItem('rules', $rules);
 
         return $this->prepareRules($rules);
+    }
+
+    /**
+     * Parses labels specified via {@see Label} attributes attached to class properties.
+     *
+     * @return array<string, string>
+     */
+    public function getLabels(): array
+    {
+        if ($this->hasCacheItem('labels')) {
+            /** @var array<string, string> $labels */
+            $labels = $this->getCacheItem('labels');
+            return $labels;
+        }
+
+        $labels = [];
+
+        foreach ($this->getReflectionProperties() as $property) {
+            $attributes = $property->getAttributes(Label::class, ReflectionAttribute::IS_INSTANCEOF);
+            foreach ($attributes as $attribute) {
+                $labels[$property->getName()] = $attribute->newInstance()->getLabel();
+            }
+        }
+
+        $this->setCacheItem('labels', $labels);
+
+        return $labels;
     }
 
     /**
@@ -415,7 +443,7 @@ final class ObjectParser
      * @return bool `true` if an item exists, `false` - if it does not or the cache is disabled in {@see $useCache}.
      */
     private function hasCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionSource'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionSource', 'labels'])]
         string $name,
     ): bool {
         if (!$this->useCache()) {
@@ -437,7 +465,7 @@ final class ObjectParser
      * @return mixed Cache item value.
      */
     private function getCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionSource'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionSource', 'labels'])]
         string $name,
     ): mixed {
         /** @psalm-suppress PossiblyNullArrayOffset */
@@ -451,7 +479,7 @@ final class ObjectParser
      * @param mixed $value A new value.
      */
     private function setCacheItem(
-        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionSource'])]
+        #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionSource', 'labels'])]
         string $name,
         mixed $value,
     ): void {

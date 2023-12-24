@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Support\Data;
 
+use Yiisoft\Validator\Helper\Label;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Helper\ObjectParserTest;
@@ -19,6 +20,7 @@ final class ObjectForTestingCache1
     #[Number(min: 1)]
     protected int $b = 3;
 
+    #[Label('d')]
     #[Number(max: 2)]
     private int $c = 4;
 }

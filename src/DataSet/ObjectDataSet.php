@@ -10,6 +10,7 @@ use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\DataWrapperInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
+use Yiisoft\Validator\LabelsProviderInterface;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\ValidatorInterface;
@@ -148,7 +149,7 @@ use Yiisoft\Validator\ValidatorInterface;
  *
  * @psalm-import-type RawRulesMap from ValidatorInterface
  */
-final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterface, AttributeTranslatorProviderInterface
+final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterface, LabelsProviderInterface, AttributeTranslatorProviderInterface
 {
     /**
      * @var bool Whether an {@see $object} provided a data set by implementing {@see DataSetInterface}.
@@ -298,5 +299,10 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
     public function getAttributeTranslator(): ?AttributeTranslatorInterface
     {
         return $this->parser->getAttributeTranslator();
+    }
+
+    public function getLabels(): array
+    {
+        return $this->parser->getLabels();
     }
 }

@@ -58,6 +58,8 @@ final class ValidationContext
      */
     private ?string $attribute = null;
 
+    private ?string $attributeLabel = null;
+
     /**
      * @var AttributeTranslatorInterface|null Default attribute translator to use if attribute translator is not set.
      */
@@ -122,6 +124,12 @@ final class ValidationContext
     public function setAttributeTranslator(?AttributeTranslatorInterface $attributeTranslator): self
     {
         $this->attributeTranslator = $attributeTranslator;
+        return $this;
+    }
+
+    public function setAttributeLabel(?string $label): self
+    {
+        $this->attributeLabel = $label;
         return $this;
     }
 
@@ -228,6 +236,14 @@ final class ValidationContext
     }
 
     /**
+     * @return string|null
+     */
+    public function getAttributeLabel(): ?string
+    {
+        return $this->attributeLabel;
+    }
+
+    /**
      * Get translated attribute name.
      *
      * @return string|null Translated attribute name. `null` if a single value is validated and there is nothing
@@ -239,15 +255,17 @@ final class ValidationContext
             return null;
         }
 
+        $label = $this->attributeLabel ?? $this->attribute;
+
         if ($this->attributeTranslator !== null) {
-            return $this->attributeTranslator->translate($this->attribute);
+            return $this->attributeTranslator->translate($label);
         }
 
         if ($this->defaultAttributeTranslator !== null) {
-            return $this->defaultAttributeTranslator->translate($this->attribute);
+            return $this->defaultAttributeTranslator->translate($label);
         }
 
-        return $this->attribute;
+        return $label;
     }
 
     /**

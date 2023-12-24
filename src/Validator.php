@@ -131,6 +131,10 @@ final class Validator implements ValidatorInterface
                 $validatedData = $dataSet->getAttributeValue($attribute);
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, null);
                 $context->setAttribute($attribute);
+
+                if ($dataSet instanceof LabelsProviderInterface) {
+                    $context->setAttributeLabel($dataSet->getLabels()[$attribute] ?? null);
+                }
             }
 
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
