@@ -17,26 +17,28 @@ use Yiisoft\Validator\EmptyCondition\WhenNull;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
+use Yiisoft\Validator\Label;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Compare;
+use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
-use Yiisoft\Validator\Rule\In;
-use Yiisoft\Validator\Rule\TrueValue;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rule\TrueValue;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\RuleWithBuiltInHandler;
+use Yiisoft\Validator\Tests\Support\Data\DataSetWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithAttributesOnly;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
-use Yiisoft\Validator\Tests\Support\Data\DataSetWithPostValidationHook;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithLabelsProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\SimpleDto;
@@ -1414,5 +1416,43 @@ class ValidatorTest extends TestCase
             ],
         );
         $this->assertTrue($result->isValid());
+    }
+
+
+    public function dataDataWithLabels(): array
+    {
+        return [
+            [
+                new class() {
+                    #[Label('Test')]
+                    #[Length(
+                        min: 20,
+                        lessThanMinMessage: '{attribute} value must contain at least {min, number} {min, plural, ' .
+                        'one{character} other{characters}}.',
+                    )]
+                    public string $property = 'test';
+                },
+                ['property' => ['Test value must contain at least 20 characters.']],
+            ],
+            [
+                new ObjectWithLabelsProvider(),
+                [
+                    'name' => ['Имя cannot be blank.'],
+                    'age' => ['Возраст must be no less than 21.'],
+                ],
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider dataDataWithLabels
+     */
+    public function testErrorMessagesWithLabels(
+        mixed $data,
+        array $expectedErrorMessages,
+    ): void {
+        $validator = new Validator();
+        $result = $validator->validate($data, $data);
+        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
     }
 }
