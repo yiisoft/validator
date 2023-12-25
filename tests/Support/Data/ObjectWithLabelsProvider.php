@@ -15,6 +15,7 @@ final class ObjectWithLabelsProvider implements LabelsProviderInterface
     public string $name = '';
 
     #[Number(min: 21, lessThanMinMessage: '{attribute} must be no less than {min}.')]
+    #[Label('test age')]
     protected int $age = 17;
 
     #[Number(max: 100)]
