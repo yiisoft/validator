@@ -160,7 +160,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
      */
     private bool $rulesProvided;
     /**
-     * @var bool Whether an {@see $object} provided rules by implementing {@see LabelsProviderInterface}.
+     * @var bool Whether an {@see $object} provided labels by implementing {@see LabelsProviderInterface}.
      */
     private bool $labelsProvided;
     /**
