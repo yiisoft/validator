@@ -127,6 +127,7 @@ final class ValidationContextTest extends TestCase
             ->setAttribute('name')
             ->setAttributeLabel('First Name');
 
+        $this->assertSame('First Name', $context->getAttributeLabel());
         $this->assertSame('First Name', $context->getTranslatedAttribute());
     }
 

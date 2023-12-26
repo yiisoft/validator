@@ -235,9 +235,6 @@ final class ValidationContext
         return $this->attribute;
     }
 
-    /**
-     * @return string|null
-     */
     public function getAttributeLabel(): ?string
     {
         return $this->attributeLabel;
