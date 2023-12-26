@@ -1419,7 +1419,7 @@ class ValidatorTest extends TestCase
     }
 
 
-    public function dataDataWithLabels(): array
+    public function dataErrorMessagesWithLabels(): array
     {
         return [
             [
@@ -1445,7 +1445,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider dataDataWithLabels
+     * @dataProvider dataErrorMessagesWithLabels
      */
     public function testErrorMessagesWithLabels(
         mixed $data,

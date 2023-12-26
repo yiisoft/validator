@@ -245,9 +245,8 @@ final class ObjectParser
     public function getLabels(): array
     {
         if ($this->hasCacheItem('labels')) {
-            /** @var array<string, string> $labels */
-            $labels = $this->getCacheItem('labels');
-            return $labels;
+            /** @var array<string, string> */
+            return $this->getCacheItem('labels');
         }
 
         $labels = [];
@@ -255,7 +254,9 @@ final class ObjectParser
         foreach ($this->getReflectionProperties() as $property) {
             $attributes = $property->getAttributes(Label::class, ReflectionAttribute::IS_INSTANCEOF);
             foreach ($attributes as $attribute) {
-                $labels[$property->getName()] = $attribute->newInstance()->getLabel();
+                /** @var Label $instance */
+                $instance = $attribute->newInstance();
+                $labels[$property->getName()] = $instance->getLabel();
             }
         }
 
