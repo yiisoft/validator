@@ -160,10 +160,6 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
      */
     private bool $rulesProvided;
     /**
-     * @var bool Whether an {@see $object} provided labels by implementing {@see LabelsProviderInterface}.
-     */
-    private bool $labelsProvided;
-    /**
      * @var ObjectParser An object parser instance used to parse rules and data from attributes if these were not
      * provided by implementing {@see RulesProviderInterface} and {@see DataSetInterface} accordingly.
      */
@@ -189,7 +185,6 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
     ) {
         $this->dataSetProvided = $this->object instanceof DataSetInterface;
         $this->rulesProvided = $this->object instanceof RulesProviderInterface;
-        $this->labelsProvided = $this->object instanceof LabelsProviderInterface;
         $this->parser = new ObjectParser(
             source: $object,
             propertyVisibility: $propertyVisibility,
@@ -308,7 +303,7 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
 
     public function getValidationPropertyLabels(): array
     {
-        if ($this->labelsProvided) {
+        if ($this->object instanceof LabelsProviderInterface) {
             /** @var LabelsProviderInterface $object */
             $object = $this->object;
             return $object->getValidationPropertyLabels();
