@@ -90,6 +90,7 @@ final class User
 }
 ```
 
+> **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
 ## Configuring for multiple entities / models with relations
 
