@@ -10,6 +10,7 @@ use ReflectionProperty;
 use stdClass;
 use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\Label;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\Length;
@@ -21,6 +22,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDynamicDataSet;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithLabelsProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\Post;
 use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
@@ -372,5 +374,34 @@ final class ObjectDataSetTest extends TestCase
         $objectDataSet = new ObjectDataSet(new ObjectWithDataSet());
         $this->assertTrue($objectDataSet->hasAttribute('key1'));
         $this->assertFalse($objectDataSet->hasAttribute('non-existing-key'));
+    }
+
+    public function objectWithLabelsProvider(): array
+    {
+        $dataSet = new ObjectDataSet(new ObjectWithLabelsProvider());
+        $expectedResult = ['name' => 'Имя', 'age' => 'Возраст'];
+
+        return [
+            [new ObjectDataSet(new ObjectWithLabelsProvider()), $expectedResult],
+            [new ObjectDataSet(new ObjectWithLabelsProvider()), $expectedResult], // Not a duplicate. Used to test caching.
+            [$dataSet, $expectedResult],
+            [$dataSet, $expectedResult], // Not a duplicate. Used to test caching.
+            [
+                new ObjectDataSet(new class() {
+                    #[Required]
+                    #[Label('Test label')]
+                    public string $property;
+                }),
+                ['property' => 'Test label'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider objectWithLabelsProvider
+     */
+    public function testObjectWithLabelsProvider(ObjectDataSet $dataSet, array $expected): void
+    {
+        $this->assertSame($expected, $dataSet->getValidationPropertyLabels());
     }
 }

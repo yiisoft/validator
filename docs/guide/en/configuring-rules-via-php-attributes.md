@@ -74,6 +74,25 @@ final class User
 
 > **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
+Error messages may include an `{attribute}` placeholder that is replaced with the name of the property. If you would 
+like the name to be replaced with a custom value, you can specify it using the `Label` attribute:
+
+```php
+use Yiisoft\Validator\Label;
+use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Required;
+
+final class User
+{
+    #[Required]
+    #[Length(min: 1, max: 50)]
+    #[Label('First Name')]
+    public readonly string $name;
+}
+```
+
+> **Note:** [readonly properties] are supported only starting from PHP 8.1.
+
 ## Configuring for multiple entities / models with relations
 
 An example of rule set for a blog post configured via arrays only:
