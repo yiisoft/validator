@@ -1418,12 +1418,11 @@ class ValidatorTest extends TestCase
         $this->assertTrue($result->isValid());
     }
 
-
     public function dataErrorMessagesWithLabels(): array
     {
         return [
             [
-                new class() {
+                new class () {
                     #[Label('Test')]
                     #[Length(
                         min: 20,
@@ -1440,7 +1439,7 @@ class ValidatorTest extends TestCase
                     'name' => ['Имя cannot be blank.'],
                     'age' => ['Возраст must be no less than 21.'],
                 ],
-            ]
+            ],
         ];
     }
 

@@ -387,7 +387,7 @@ final class ObjectDataSetTest extends TestCase
             [$dataSet, $expectedResult],
             [$dataSet, $expectedResult], // Not a duplicate. Used to test caching.
             [
-                new ObjectDataSet(new class() {
+                new ObjectDataSet(new class () {
                     #[Required]
                     #[Label('Test label')]
                     public string $property;

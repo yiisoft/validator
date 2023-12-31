@@ -127,7 +127,7 @@ final class ObjectParserTest extends TestCase
         $this->assertArrayHasKey('reflectionSource', $cache[$cacheKey1]);
         $this->assertArrayHasKey('labels', $cache[$cacheKey1]);
         $this->assertSame($rules1, $parser1->getRules());
-        $this->assertSame($labels1,  $expectedLabels1);
+        $this->assertSame($labels1, $expectedLabels1);
 
         $parser2 = new ObjectParser(new ObjectForTestingCache2());
         $cacheKey2 = 'Yiisoft\Validator\Tests\Support\Data\ObjectForTestingCache2_7_0';
