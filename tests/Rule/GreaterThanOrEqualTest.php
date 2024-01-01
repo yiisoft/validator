@@ -52,7 +52,7 @@ final class GreaterThanOrEqualTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
+                        'template' => '{label} must be greater than or equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -116,7 +116,7 @@ final class GreaterThanOrEqualTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $message = 'Value must be greater than or equal to "100".';
+        $message = 'The value must be greater than or equal to "100".';
 
         return [
             [99, [new GreaterThanOrEqual(100)], ['' => [$message]]],

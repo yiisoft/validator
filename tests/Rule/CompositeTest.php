@@ -55,15 +55,15 @@ final class CompositeTest extends RuleTestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => 'Value must be a number.',
+                                'template' => '{label} must be a number.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
-                                'template' => 'Value must be no less than {min}.',
+                                'template' => '{label} must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
+                                'template' => '{label} must be no greater than {max}.',
                                 'parameters' => ['max' => 13],
                             ],
                             'skipOnEmpty' => false,
@@ -79,15 +79,15 @@ final class CompositeTest extends RuleTestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => 'Value must be a number.',
+                                'template' => '{label} must be a number.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
-                                'template' => 'Value must be no less than {min}.',
+                                'template' => '{label} must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
+                                'template' => '{label} must be no greater than {max}.',
                                 'parameters' => ['max' => 14],
                             ],
                             'skipOnEmpty' => false,
@@ -115,17 +115,17 @@ final class CompositeTest extends RuleTestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => 'Value must be a number.',
+                                'template' => '{label} must be a number.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
-                                'template' => 'Value must be no less than {min}.',
+                                'template' => '{label} must be no less than {min}.',
                                 'parameters' => [
                                     'min' => null,
                                 ],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
+                                'template' => '{label} must be no greater than {max}.',
                                 'parameters' => [
                                     'max' => 13,
                                 ],
@@ -180,11 +180,11 @@ final class CompositeTest extends RuleTestCase
                         [
                             Required::class,
                             'message' => [
-                                'template' => 'Value cannot be blank.',
+                                'template' => '{label} cannot be blank.',
                                 'parameters' => [],
                             ],
                             'notPassedMessage' => [
-                                'template' => 'Value not passed.',
+                                'template' => '{label} not passed.',
                                 'parameters' => [],
                             ],
                             'skipOnError' => false,
@@ -272,8 +272,8 @@ final class CompositeTest extends RuleTestCase
                 ],
                 [
                     '' => [
-                        'Value must be no greater than 13.',
-                        'Value must be no less than 21.',
+                        'The value must be no greater than 13.',
+                        'The value must be no less than 21.',
                     ],
                 ],
             ],
@@ -287,7 +287,7 @@ final class CompositeTest extends RuleTestCase
                     ),
                 ],
                 [
-                    '' => ['Value must be equal to "19".'],
+                    '' => ['The value must be equal to "19".'],
                 ],
             ],
             'skip on error without previous error' => [
@@ -299,7 +299,7 @@ final class CompositeTest extends RuleTestCase
                     ),
                 ],
                 [
-                    '' => ['Value must be no greater than 13.'],
+                    '' => ['The value must be no greater than 13.'],
                 ],
             ],
             'custom error' => [
@@ -322,14 +322,14 @@ final class CompositeTest extends RuleTestCase
                         }
                     },
                 ],
-                ['' => ['Value cannot be blank.']],
+                ['' => ['The value cannot be blank.']],
             ],
             'multiple attributes' => [
                 ['latitude' => -91, 'longitude' => 181],
                 [new CoordinatesRuleSet()],
                 [
-                    'latitude' => ['Value must be no less than -90.'],
-                    'longitude' => ['Value must be no greater than 180.'],
+                    'latitude' => ['The value must be no less than -90.'],
+                    'longitude' => ['The value must be no greater than 180.'],
                 ],
             ],
         ];

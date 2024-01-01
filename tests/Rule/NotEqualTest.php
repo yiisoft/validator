@@ -52,7 +52,7 @@ final class NotEqualTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => 'Value must not be equal to "{targetValueOrAttribute}".',
+                        'template' => '{label} must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -118,8 +118,8 @@ final class NotEqualTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         return [
-            [100, [new NotEqual(100)], ['' => ['Value must not be equal to "100".']]],
-            [100, [new NotEqual(100, strict: true)], ['' => ['Value must not be strictly equal to "100".']]],
+            [100, [new NotEqual(100)], ['' => ['The value must not be equal to "100".']]],
+            [100, [new NotEqual(100, strict: true)], ['' => ['The value must not be strictly equal to "100".']]],
             'custom error' => [100, [new NotEqual(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
     }

@@ -8,10 +8,10 @@ use Closure;
 use DateTimeInterface;
 use InvalidArgumentException;
 use Stringable;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -260,14 +260,14 @@ abstract class AbstractCompare implements
     public function getMessage(): string
     {
         return $this->message ?? match ($this->operator) {
-            '==', => 'Value must be equal to "{targetValueOrAttribute}".',
-            '===' => 'Value must be strictly equal to "{targetValueOrAttribute}".',
-            '!=' => 'Value must not be equal to "{targetValueOrAttribute}".',
-            '!==' => 'Value must not be strictly equal to "{targetValueOrAttribute}".',
-            '>' => 'Value must be greater than "{targetValueOrAttribute}".',
-            '>=' => 'Value must be greater than or equal to "{targetValueOrAttribute}".',
-            '<' => 'Value must be less than "{targetValueOrAttribute}".',
-            '<=' => 'Value must be less than or equal to "{targetValueOrAttribute}".',
+            '==', => '{label} must be equal to "{targetValueOrAttribute}".',
+            '===' => '{label} must be strictly equal to "{targetValueOrAttribute}".',
+            '!=' => '{label} must not be equal to "{targetValueOrAttribute}".',
+            '!==' => '{label} must not be strictly equal to "{targetValueOrAttribute}".',
+            '>' => '{label} must be greater than "{targetValueOrAttribute}".',
+            '>=' => '{label} must be greater than or equal to "{targetValueOrAttribute}".',
+            '<' => '{label} must be less than "{targetValueOrAttribute}".',
+            '<=' => '{label} must be less than or equal to "{targetValueOrAttribute}".',
         };
     }
 

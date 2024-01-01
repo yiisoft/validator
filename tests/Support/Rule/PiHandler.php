@@ -17,7 +17,7 @@ final class PiHandler implements RuleHandlerInterface
         $result = new Result();
 
         if (!(abs($value - M_PI) < PHP_FLOAT_EPSILON)) {
-            $result->addError('Value must be Pi.');
+            $result->addError('The value must be Pi.');
         }
 
         return $result;

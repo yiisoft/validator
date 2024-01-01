@@ -16,8 +16,8 @@ final class EachTest extends TestCase
 
         $this->assertSame(
             [
-                'a' => ['Value must be zero.'],
-                'c' => ['Value must be zero.'],
+                'a' => ['The value must be zero.'],
+                'c' => ['The value must be zero.'],
             ],
             $result->getErrorMessagesIndexedByAttribute()
         );

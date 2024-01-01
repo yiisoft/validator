@@ -38,7 +38,7 @@ final class OneOfTest extends RuleTestCase
                         'attr2',
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{label} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -57,7 +57,7 @@ final class OneOfTest extends RuleTestCase
                         'attr2',
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{label} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [

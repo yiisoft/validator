@@ -17,7 +17,7 @@ final class ObjectWithCallbackMethod
     {
         $result = new Result();
         if ($value !== 'foo') {
-            $result->addError('Value must be "foo"!');
+            $result->addError('The value must be "foo"!');
         }
 
         return $result;

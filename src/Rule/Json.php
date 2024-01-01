@@ -6,10 +6,10 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -54,8 +54,8 @@ final class Json implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private string $incorrectInputMessage = 'The value must be a string.',
-        private string $message = 'The value is not JSON.',
+        private string $incorrectInputMessage = '{label} must be a string.',
+        private string $message = '{label} is not JSON.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

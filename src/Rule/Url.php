@@ -8,10 +8,10 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use RuntimeException;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -79,8 +79,8 @@ final class Url implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterf
         string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
         private array $validSchemes = ['http', 'https'],
         private bool $enableIdn = false,
-        private string $incorrectInputMessage = 'The value must be a string.',
-        private string $message = 'This value is not a valid URL.',
+        private string $incorrectInputMessage = '{label} must be a string.',
+        private string $message = '{label} is not a valid URL.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

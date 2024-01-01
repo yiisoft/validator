@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\TranslatedAttributesHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
-use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_array;
@@ -38,6 +38,7 @@ final class OneOfHandler implements RuleHandlerInterface
         if (!is_array($value) && !is_object($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
+                'label' => $context->getTranslatedLabel(),
                 'type' => get_debug_type($value),
             ]);
         }

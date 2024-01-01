@@ -8,10 +8,10 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use Yiisoft\NetworkUtilities\IpHelper;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -182,7 +182,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
         private bool $allowSubnet = false,
         private bool $requireSubnet = false,
         private bool $allowNegation = false,
-        private string $incorrectInputMessage = 'The value must be a string.',
+        private string $incorrectInputMessage = '{label} must be a string.',
         private string $message = 'Must be a valid IP address.',
         private string $ipv4NotAllowedMessage = 'Must not be an IPv4 address.',
         private string $ipv6NotAllowedMessage = 'Must not be an IPv6 address.',

@@ -40,7 +40,7 @@ final class TrueValueTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => 'The value must be "{true}".',
+                        'template' => '{label} must be "{true}".',
                         'parameters' => [
                             'true' => '1',
                         ],
@@ -61,7 +61,7 @@ final class TrueValueTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => 'The value must be "{true}".',
+                        'template' => '{label} must be "{true}".',
                         'parameters' => [
                             'true' => 'true',
                         ],

@@ -59,7 +59,7 @@ class ValidatorTest extends TestCase
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
-            ['name' => ['This value must contain at least 5 characters.']],
+            ['name' => ['The value must contain at least 5 characters.']],
             $result->getErrorMessagesIndexedByPath()
         );
     }
@@ -85,7 +85,7 @@ class ValidatorTest extends TestCase
         return [
             'pure-object-and-array-of-rules' => [
                 [
-                    'number' => ['Value must be no less than 77.'],
+                    'number' => ['The value must be no less than 77.'],
                 ],
                 new ObjectWithDifferentPropertyVisibility(),
                 [
@@ -95,15 +95,15 @@ class ValidatorTest extends TestCase
             ],
             'pure-object-and-no-rules' => [
                 [
-                    'name' => ['Value cannot be blank.'],
-                    'age' => ['Value must be no less than 21.'],
+                    'name' => ['The value cannot be blank.'],
+                    'age' => ['The value must be no less than 21.'],
                 ],
                 new ObjectWithDifferentPropertyVisibility(),
                 null,
             ],
             'dataset-object-and-array-of-rules' => [
                 [
-                    'key1' => ['Value must be no less than 21.'],
+                    'key1' => ['The value must be no less than 21.'],
                 ],
                 new ObjectWithDataSet(),
                 [
@@ -117,7 +117,7 @@ class ValidatorTest extends TestCase
             ],
             'rules-provider-object-and-array-of-rules' => [
                 [
-                    'number' => ['Value must be no greater than 7.'],
+                    'number' => ['The value must be no greater than 7.'],
                 ],
                 new ObjectWithRulesProvider(),
                 [
@@ -127,14 +127,14 @@ class ValidatorTest extends TestCase
             ],
             'rules-provider-object-and-no-rules' => [
                 [
-                    'age' => ['Value must be equal to "25".'],
+                    'age' => ['The value must be equal to "25".'],
                 ],
                 new ObjectWithRulesProvider(),
                 null,
             ],
             'rules-provider-and-dataset-object-and-array-of-rules' => [
                 [
-                    'key2' => ['Value must be no greater than 7.'],
+                    'key2' => ['The value must be no greater than 7.'],
                 ],
                 new ObjectWithDataSetAndRulesProvider(),
                 [
@@ -143,14 +143,14 @@ class ValidatorTest extends TestCase
             ],
             'rules-provider-and-dataset-object-and-no-rules' => [
                 [
-                    'key2' => ['Value must be equal to "99".'],
+                    'key2' => ['The value must be equal to "99".'],
                 ],
                 new ObjectWithDataSetAndRulesProvider(),
                 null,
             ],
             'array-and-array-of-rules' => [
                 [
-                    'key2' => ['Value must be no greater than 7.'],
+                    'key2' => ['The value must be no greater than 7.'],
                 ],
                 ['key1' => 15, 'key2' => 99],
                 [
@@ -165,7 +165,7 @@ class ValidatorTest extends TestCase
             ],
             'scalar-and-array-of-rules' => [
                 [
-                    '' => ['Value must be no greater than 7.'],
+                    '' => ['The value must be no greater than 7.'],
                 ],
                 42,
                 [
@@ -179,7 +179,7 @@ class ValidatorTest extends TestCase
             ],
             'array-and-rules-provider' => [
                 [
-                    'age' => ['Value must be no less than 18.'],
+                    'age' => ['The value must be no less than 18.'],
                 ],
                 [
                     'age' => 17,
@@ -195,8 +195,8 @@ class ValidatorTest extends TestCase
             ],
             'array-and-object' => [
                 [
-                    'name' => ['Value not passed.'],
-                    'bars' => ['Value must be array or iterable.'],
+                    'name' => ['The value not passed.'],
+                    'bars' => ['The value must be array or iterable.'],
                 ],
                 [],
                 new Foo(),
@@ -257,7 +257,7 @@ class ValidatorTest extends TestCase
                 static function (mixed $value): Result {
                     $result = new Result();
                     if ($value !== 42) {
-                        $result->addError('Value should be 42!', ['int']);
+                        $result->addError('The value should be 42!', ['int']);
                     }
 
                     return $result;
@@ -384,13 +384,13 @@ class ValidatorTest extends TestCase
                 new ArrayDataSet(['merchantId' => null]),
                 [
                     new Error(
-                        'Value cannot be blank.',
-                        ['attribute' => 'merchantId'],
+                        'The value cannot be blank.',
+                        ['attribute' => 'merchantId', 'label' => 'The value'],
                         ['merchantId']
                     ),
                     new Error(
                         'The allowed types are integer, float and string.',
-                        ['attribute' => 'merchantId', 'type' => 'null'],
+                        ['attribute' => 'merchantId', 'type' => 'null', 'label' => 'The value'],
                         ['merchantId']
                     ),
                 ],
@@ -398,12 +398,12 @@ class ValidatorTest extends TestCase
             [
                 ['merchantId' => [new Required(), new Integer(skipOnError: true)]],
                 new ArrayDataSet(['merchantId' => null]),
-                [new Error('Value cannot be blank.', [ 'attribute' => 'merchantId'], ['merchantId'])],
+                [new Error('The value cannot be blank.', [ 'attribute' => 'merchantId', 'label' => 'The value'], ['merchantId'])],
             ],
             [
                 ['merchantId' => [new Required(), new Integer(skipOnError: true)]],
                 new ArrayDataSet(['merchantIdd' => 1]),
-                [new Error('Value not passed.', ['attribute' => 'merchantId'], ['merchantId'])],
+                [new Error('The value not passed.', ['attribute' => 'merchantId', 'label' => 'The value'], ['merchantId'])],
             ],
 
             [
@@ -431,18 +431,18 @@ class ValidatorTest extends TestCase
             [
                 $strictRules,
                 new ArrayDataSet(['orderBy' => 'name', 'sort' => 'up']),
-                [new Error('This value is not in the list of acceptable values.', ['attribute' => 'sort'], ['sort'])],
+                [new Error('The value is not in the list of acceptable values.', ['attribute' => 'sort', 'label' => 'The value'], ['sort'])],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet(['orderBy' => 'name', 'sort' => 'up']),
-                [new Error('This value is not in the list of acceptable values.', ['attribute' => 'sort'], ['sort'])],
+                [new Error('The value is not in the list of acceptable values.', ['attribute' => 'sort', 'label' => 'The value'], ['sort'])],
             ],
 
             [
                 $strictRules,
                 new ArrayDataSet(['orderBy' => 'name', 'sort' => '']),
-                [new Error('This value is not in the list of acceptable values.', ['attribute' => 'sort'], ['sort'])],
+                [new Error('The value is not in the list of acceptable values.', ['attribute' => 'sort', 'label' => 'The value'], ['sort'])],
             ],
             [
                 $notStrictRules,
@@ -464,23 +464,23 @@ class ValidatorTest extends TestCase
             [
                 $strictRules,
                 new ArrayDataSet(['orderBy' => '']),
-                [new Error('Value cannot be blank.', ['attribute' => 'orderBy'], ['orderBy'])],
+                [new Error('The value cannot be blank.', ['attribute' => 'orderBy', 'label' => 'The value'], ['orderBy'])],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet(['orderBy' => '']),
-                [new Error('Value cannot be blank.', ['attribute' => 'orderBy'], ['orderBy'])],
+                [new Error('The value cannot be blank.', ['attribute' => 'orderBy', 'label' => 'The value'], ['orderBy'])],
             ],
 
             [
                 $strictRules,
                 new ArrayDataSet([]),
-                [new Error('Value not passed.', ['attribute' => 'orderBy'], ['orderBy'])],
+                [new Error('The value not passed.', ['attribute' => 'orderBy', 'label' => 'The value'], ['orderBy'])],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet([]),
-                [new Error('Value not passed.', ['attribute' => 'orderBy'], ['orderBy'])],
+                [new Error('The value not passed.', ['attribute' => 'orderBy', 'label' => 'The value'], ['orderBy'])],
             ],
             [
                 [
@@ -493,7 +493,7 @@ class ValidatorTest extends TestCase
                         private string $description = 'abc123';
                     }
                 ),
-                [new Error('Value not passed.', ['attribute' => 'name'], ['name'])],
+                [new Error('The value not passed.', ['attribute' => 'name', 'label' => 'The value'], ['name'])],
             ],
             [
                 null,
@@ -523,10 +523,10 @@ class ValidatorTest extends TestCase
             'name' => [new Length(min: 8)],
             'age' => [new Integer(min: 18)],
         ];
-        $stringLessThanMinMessage = 'This value must contain at least 8 characters.';
+        $stringLessThanMinMessage = 'The value must contain at least 8 characters.';
         $incorrectNumberMessage = 'The allowed types are integer, float and string.';
-        $intMessage = 'Value must be an integer.';
-        $intLessThanMinMessage = 'Value must be no less than 18.';
+        $intMessage = 'The value must be an integer.';
+        $intLessThanMinMessage = 'The value must be no less than 18.';
 
         return [
             'rule / validator, skipOnEmpty: false, value not passed' => [
@@ -540,10 +540,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
                         'type' => 'null',
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -559,10 +561,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
                         'type' => 'null',
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -578,11 +582,13 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -601,6 +607,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                 ],
             ],
@@ -619,6 +626,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                 ],
             ],
@@ -637,11 +645,13 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 1,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -660,6 +670,7 @@ class ValidatorTest extends TestCase
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -678,11 +689,13 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -701,6 +714,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                 ],
             ],
@@ -719,6 +733,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                 ],
             ],
@@ -737,11 +752,13 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -760,10 +777,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
                         'value' => '',
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -787,10 +806,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
                         'type' => 'null',
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -814,6 +835,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                 ],
             ],
@@ -837,11 +859,13 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -865,10 +889,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
                         'type' => 'null',
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -884,6 +910,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                 ],
             ],
@@ -899,6 +926,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                 ],
             ],
@@ -914,11 +942,13 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -934,6 +964,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                 ],
             ],
@@ -949,6 +980,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                 ],
             ],
@@ -964,11 +996,13 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -984,10 +1018,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($intMessage, [
                         'attribute' => 'age',
                         'value' => '',
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -1005,10 +1041,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
                         'type' => 'null',
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -1026,6 +1064,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                 ],
             ],
@@ -1043,11 +1082,13 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -1065,10 +1106,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
+                        'label' => 'The value',
                     ], ['name']),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
                         'type' => 'null',
+                        'label' => 'The value',
                     ], ['age']),
                 ],
             ],
@@ -1158,7 +1201,7 @@ class ValidatorTest extends TestCase
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrorMessages());
-        $this->assertStringStartsWith('This value must contain at least', $result->getErrorMessages()[0]);
+        $this->assertStringStartsWith('The value must contain at least', $result->getErrorMessages()[0]);
     }
 
     public function testRuleWithoutSkipOnEmpty(): void
@@ -1181,7 +1224,7 @@ class ValidatorTest extends TestCase
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
-            ['' => ['Value must be no less than 5.']],
+            ['' => ['The value must be no less than 5.']],
             $result->getErrorMessagesIndexedByPath(),
         );
     }
@@ -1289,7 +1332,7 @@ class ValidatorTest extends TestCase
         $this->assertSame(
             [
                 'agree' => ['The value must be "1".'],
-                'viewsCount' => ['Value must be no less than 0.'],
+                'viewsCount' => ['The value must be no less than 0.'],
             ],
             $result->getErrorMessagesIndexedByPath(),
         );
@@ -1319,7 +1362,7 @@ class ValidatorTest extends TestCase
                         'Имя плохое.',
                     ],
                     'mail' => [
-                        'This value is not a valid email address.',
+                        'The value is not a valid email address.',
                     ],
                 ],
                 null,
@@ -1330,7 +1373,7 @@ class ValidatorTest extends TestCase
                         'name плохое.',
                     ],
                     'mail' => [
-                        'This value is not a valid email address.',
+                        'The value is not a valid email address.',
                     ],
                 ],
                 new ValidationContext(attributeTranslator: new NullAttributeTranslator()),
@@ -1401,7 +1444,7 @@ class ValidatorTest extends TestCase
         $result = (new Validator())->validate(19, $rule);
 
         $this->assertSame(
-            ['' => ['Value must be 42.']],
+            ['' => ['The value must be 42.']],
             $result->getErrorMessagesIndexedByPath()
         );
     }

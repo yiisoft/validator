@@ -37,7 +37,7 @@ final class StringValueTest extends RuleTestCase
                 new StringValue(),
                 [
                     'message' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{label} must be a string.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,

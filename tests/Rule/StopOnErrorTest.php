@@ -44,28 +44,28 @@ final class StopOnErrorTest extends RuleTestCase
                             'max' => null,
                             'exactly' => null,
                             'lessThanMinMessage' => [
-                                'template' => 'This value must contain at least {min, number} {min, plural, ' .
+                                'template' => '{label} must contain at least {min, number} {min, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'min' => 10,
                                 ],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => 'This value must contain at most {max, number} {max, plural, ' .
+                                'template' => '{label} must contain at most {max, number} {max, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'max' => null,
                                 ],
                             ],
                             'notExactlyMessage' => [
-                                'template' => 'This value must contain exactly {exactly, number} {exactly, plural, ' .
+                                'template' => '{label} must contain exactly {exactly, number} {exactly, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'exactly' => null,
                                 ],
                             ],
                             'incorrectInputMessage' => [
-                                'template' => 'The value must be a string.',
+                                'template' => '{label} must be a string.',
                                 'parameters' => [],
                             ],
                             'encoding' => 'UTF-8',
@@ -109,7 +109,7 @@ final class StopOnErrorTest extends RuleTestCase
                         new Length(max: 1),
                     ]),
                 ],
-                ['' => ['This value must contain at least 10 characters.']],
+                ['' => ['The value must contain at least 10 characters.']],
             ],
             'basic, different order' => [
                 'hello',
@@ -119,7 +119,7 @@ final class StopOnErrorTest extends RuleTestCase
                         new Length(min: 10),
                     ]),
                 ],
-                ['' => ['This value must contain at most 1 character.']],
+                ['' => ['The value must contain at most 1 character.']],
             ],
             'basic, plain StopOnError rule' => [
                 'hello',
@@ -127,7 +127,7 @@ final class StopOnErrorTest extends RuleTestCase
                     new Length(min: 10),
                     new Length(max: 1),
                 ]),
-                ['' => ['This value must contain at least 10 characters.']],
+                ['' => ['The value must contain at least 10 characters.']],
             ],
             'combined with other top level rules' => [
                 'hello',
@@ -141,9 +141,9 @@ final class StopOnErrorTest extends RuleTestCase
                 ],
                 [
                     '' => [
-                        'Value must be a number.',
-                        'This value must contain at most 1 character.',
-                        'This value must contain at least 7 characters.',
+                        'The value must be a number.',
+                        'The value must contain at most 1 character.',
+                        'The value must contain at least 7 characters.',
                     ],
                 ],
             ],
@@ -162,8 +162,8 @@ final class StopOnErrorTest extends RuleTestCase
                 ],
                 [
                     '' => [
-                        'Value must be a number.',
-                        'This value must contain at least 7 characters.',
+                        'The value must be a number.',
+                        'The value must contain at least 7 characters.',
                     ],
                 ],
             ],
@@ -182,10 +182,10 @@ final class StopOnErrorTest extends RuleTestCase
                     'd' => new Required(),
                 ],
                 [
-                    'a' => ['Value not passed.'],
-                    'b' => ['Value not passed.'],
-                    'c' => ['Value not passed.'],
-                    'd' => ['Value not passed.'],
+                    'a' => ['The value not passed.'],
+                    'b' => ['The value not passed.'],
+                    'c' => ['The value not passed.'],
+                    'd' => ['The value not passed.'],
                 ],
             ],
             'attributes, multiple StopOnError rules combined with other top level rules, skipOnError: true' => [
@@ -209,8 +209,8 @@ final class StopOnErrorTest extends RuleTestCase
                     'd' => new Required(),
                 ],
                 [
-                    'a' => ['Value not passed.'],
-                    'd' => ['Value not passed.'],
+                    'a' => ['The value not passed.'],
+                    'd' => ['The value not passed.'],
                 ],
             ],
             'check for missing data set' => [
@@ -222,8 +222,8 @@ final class StopOnErrorTest extends RuleTestCase
                     'b' => new Required(),
                 ],
                 [
-                    'a' => ['Value not passed.'],
-                    'b' => ['Value cannot be blank.'],
+                    'a' => ['The value not passed.'],
+                    'b' => ['The value cannot be blank.'],
                 ],
             ],
             'rules normalization, callable' => [

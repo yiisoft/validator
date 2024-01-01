@@ -16,7 +16,7 @@ final class RuleWithBuiltInHandler implements RuleInterface, RuleHandlerInterfac
         $result = new Result();
 
         if ($value !== 42) {
-            $result->addError('Value must be 42.');
+            $result->addError('The value must be 42.');
         }
 
         return $result;

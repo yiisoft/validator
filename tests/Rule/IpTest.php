@@ -90,7 +90,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{label} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -145,7 +145,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{label} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -200,7 +200,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{label} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -255,7 +255,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{label} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -310,7 +310,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => true,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{label} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -365,7 +365,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => true,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{label} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -420,7 +420,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{label} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [

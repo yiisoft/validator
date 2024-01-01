@@ -6,10 +6,10 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -82,7 +82,7 @@ final class BooleanValue implements DumpedRuleInterface, SkipOnEmptyInterface, S
         private int|float|string|bool $falseValue = '0',
         private bool $strict = false,
         private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean. {type} given.',
-        private string $message = 'Value must be either "{true}" or "{false}".',
+        private string $message = '{label} must be either "{true}" or "{false}".',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

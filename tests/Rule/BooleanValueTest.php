@@ -42,7 +42,7 @@ final class BooleanValueTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => 'Value must be either "{true}" or "{false}".',
+                        'template' => '{label} must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => '1',
                             'false' => '0',
@@ -66,7 +66,7 @@ final class BooleanValueTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => 'Value must be either "{true}" or "{false}".',
+                        'template' => '{label} must be either "{true}" or "{false}".',
                         'parameters' => [
                             'true' => 'true',
                             'false' => 'false',
@@ -130,8 +130,8 @@ final class BooleanValueTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $defaultErrors = ['' => ['Value must be either "1" or "0".']];
-        $booleanErrors = ['' => ['Value must be either "true" or "false".']];
+        $defaultErrors = ['' => ['The value must be either "1" or "0".']];
+        $booleanErrors = ['' => ['The value must be either "true" or "false".']];
 
         return [
             ['5', [new BooleanValue()], $defaultErrors],

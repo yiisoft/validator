@@ -314,7 +314,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertInstanceOf(Callback::class, $rules['name'][0]);
 
         $result = $validator->validate(['name' => 'bar'], $rules);
-        $this->assertSame(['name' => ['Value must be "foo"!']], $result->getErrorMessagesIndexedByPath());
+        $this->assertSame(['name' => ['The value must be "foo"!']], $result->getErrorMessagesIndexedByPath());
     }
 
     public function testValidateWithWrongCallbackMethod(): void

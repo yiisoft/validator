@@ -47,7 +47,7 @@ final class AtLeastTest extends RuleTestCase
                     ],
                     'min' => 1,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{label} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -68,7 +68,7 @@ final class AtLeastTest extends RuleTestCase
                     ],
                     'min' => 2,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{label} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -89,7 +89,7 @@ final class AtLeastTest extends RuleTestCase
                     ],
                     'min' => 1,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{label} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [

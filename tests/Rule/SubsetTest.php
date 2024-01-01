@@ -36,11 +36,11 @@ final class SubsetTest extends RuleTestCase
                     'values' => [],
                     'strict' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'Value must be iterable.',
+                        'template' => '{label} must be iterable.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'This value is not a subset of acceptable values.',
+                        'template' => '{label} is not a subset of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -113,13 +113,13 @@ final class SubsetTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $errors = ['' => ['This value is not a subset of acceptable values.']];
+        $errors = ['' => ['The value is not a subset of acceptable values.']];
 
         return [
             'non-iterable' => [
                 1,
                 [new Subset([1, 2, 3])],
-                ['' => ['Value must be iterable.']],
+                ['' => ['The value must be iterable.']],
             ],
             'custom incorrect input message' => [
                 1,

@@ -25,7 +25,13 @@ final class InHandler implements RuleHandlerInterface
 
         $result = new Result();
         if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getValues(), $rule->isStrict())) {
-            $result->addError($rule->getMessage(), ['attribute' => $context->getTranslatedAttribute()]);
+            $result->addError(
+                $rule->getMessage(),
+                [
+                    'attribute' => $context->getTranslatedAttribute(),
+                    'label' => $context->getTranslatedLabel(),
+                ],
+            );
         }
 
         return $result;

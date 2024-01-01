@@ -52,15 +52,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => 'Value must be a number.',
+                        'template' => '{label} must be a number.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => 'Value must be no less than {min}.',
+                        'template' => '{label} must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
+                        'template' => '{label} must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,
@@ -78,15 +78,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => 'Value must be a number.',
+                        'template' => '{label} must be a number.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => 'Value must be no less than {min}.',
+                        'template' => '{label} must be no less than {min}.',
                         'parameters' => ['min' => 1],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
+                        'template' => '{label} must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,
@@ -104,15 +104,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => 'Value must be a number.',
+                        'template' => '{label} must be a number.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => 'Value must be no less than {min}.',
+                        'template' => '{label} must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
+                        'template' => '{label} must be no greater than {max}.',
                         'parameters' => ['max' => 1],
                     ],
                     'skipOnEmpty' => false,
@@ -130,15 +130,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => 'Value must be a number.',
+                        'template' => '{label} must be a number.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => 'Value must be no less than {min}.',
+                        'template' => '{label} must be no less than {min}.',
                         'parameters' => ['min' => 2],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
+                        'template' => '{label} must be no greater than {max}.',
                         'parameters' => ['max' => 10],
                     ],
                     'skipOnEmpty' => false,
@@ -156,15 +156,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => 'Value must be an integer.',
+                        'template' => '{label} must be an integer.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => 'Value must be no less than {min}.',
+                        'template' => '{label} must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
+                        'template' => '{label} must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,
@@ -217,8 +217,8 @@ final class NumberTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         $incorrectInputMessage = 'The allowed types are integer, float and string.';
-        $notNumberMessage = 'Value must be a number.';
-        $notIntegerMessage = 'Value must be an integer.';
+        $notNumberMessage = 'The value must be a number.';
+        $notIntegerMessage = 'The value must be an integer.';
 
         return [
             [false, [new Number()], ['' => [$incorrectInputMessage]]],
@@ -246,27 +246,27 @@ final class NumberTest extends RuleTestCase
             ['-4.534-e-12', [new Integer()], ['' => [$notIntegerMessage]]],
             ['12.23^4', [new Integer()], ['' => [$notIntegerMessage]]],
 
-            [-1, [new Number(min: 1)], ['' => ['Value must be no less than 1.']]],
-            ['22e-12', [new Number(min: 1)], ['' => ['Value must be no less than 1.']]],
+            [-1, [new Number(min: 1)], ['' => ['The value must be no less than 1.']]],
+            ['22e-12', [new Number(min: 1)], ['' => ['The value must be no less than 1.']]],
 
-            [-1, [new Integer(min: 1)], ['' => ['Value must be no less than 1.']]],
+            [-1, [new Integer(min: 1)], ['' => ['The value must be no less than 1.']]],
             ['22e-12', [new Integer(min: 1)], ['' => [$notIntegerMessage]]],
-            [1.5, [new Number(max: 1.25)], ['' => ['Value must be no greater than 1.25.']]],
+            [1.5, [new Number(max: 1.25)], ['' => ['The value must be no greater than 1.25.']]],
 
             // TODO: fix wrong message
             [1.5, [new Integer(max: 1.25)], ['' => [$notIntegerMessage]]],
             ['22e-12', [new Integer(max: 1.25)], ['' => [$notIntegerMessage]]],
             ['125e-2', [new Integer(max: 1.25)], ['' => [$notIntegerMessage]]],
 
-            [-11, [new Number(min: -10, max: 20)], ['' => ['Value must be no less than -10.']]],
-            [21, [new Number(min: -10, max: 20)], ['' => ['Value must be no greater than 20.']]],
-            [-11, [new Integer(min: -10, max: 20)], ['' => ['Value must be no less than -10.']]],
-            [22, [new Integer(min: -10, max: 20)], ['' => ['Value must be no greater than 20.']]],
+            [-11, [new Number(min: -10, max: 20)], ['' => ['The value must be no less than -10.']]],
+            [21, [new Number(min: -10, max: 20)], ['' => ['The value must be no greater than 20.']]],
+            [-11, [new Integer(min: -10, max: 20)], ['' => ['The value must be no less than -10.']]],
+            [22, [new Integer(min: -10, max: 20)], ['' => ['The value must be no greater than 20.']]],
             ['20e-1', [new Integer(min: -10, max: 20)], ['' => [$notIntegerMessage]]],
             'custom error' => [
                 0,
-                [new Number(min: 5, lessThanMinMessage: 'Value is too small.')],
-                ['' => ['Value is too small.']],
+                [new Number(min: 5, lessThanMinMessage: 'The value is too small.')],
+                ['' => ['The value is too small.']],
             ],
         ];
     }

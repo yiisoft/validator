@@ -26,7 +26,7 @@ final class WhenNullTest extends TestCase
                 ['property' => new Number(skipOnEmpty: new WhenNull())],
             ],
             [
-                ['Value must be a number.'],
+                ['The value must be a number.'],
                 '',
                 new Number(skipOnEmpty: new WhenNull()),
             ],

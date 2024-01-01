@@ -6,10 +6,10 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -77,7 +77,7 @@ final class TrueValue implements DumpedRuleInterface, SkipOnErrorInterface, When
         private int|float|string|bool $trueValue = '1',
         private bool $strict = false,
         private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean. {type} given.',
-        private string $message = 'The value must be "{true}".',
+        private string $message = '{label} must be "{true}".',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

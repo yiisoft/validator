@@ -52,7 +52,7 @@ final class LessThanTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => 'Value must be less than "{targetValueOrAttribute}".',
+                        'template' => '{label} must be less than "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -116,7 +116,7 @@ final class LessThanTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $message = 'Value must be less than "100".';
+        $message = 'The value must be less than "100".';
 
         return [
             [100, [new LessThan(100)], ['' => [$message]]],

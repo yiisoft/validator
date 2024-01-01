@@ -52,7 +52,7 @@ final class EqualTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => 'Value must be equal to "{targetValueOrAttribute}".',
+                        'template' => '{label} must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -118,8 +118,8 @@ final class EqualTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         return [
-            [101, [new Equal(100)], ['' => ['Value must be equal to "100".']]],
-            ['100', [new Equal(100, strict: true)], ['' => ['Value must be strictly equal to "100".']]],
+            [101, [new Equal(100)], ['' => ['The value must be equal to "100".']]],
+            ['100', [new Equal(100, strict: true)], ['' => ['The value must be strictly equal to "100".']]],
             'custom error' => [101, [new Equal(100, message: 'Custom error')], ['' => ['Custom error']]],
         ];
     }

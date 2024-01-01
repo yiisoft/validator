@@ -10,8 +10,8 @@ use stdClass;
 use Yiisoft\Validator\DataSet\SingleValueDataSet;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\CountHandler;
-use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\CountableLimitTestTrait;
+use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
@@ -42,22 +42,22 @@ final class CountTest extends RuleTestCase
                     'max' => null,
                     'exactly' => null,
                     'lessThanMinMessage' => [
-                        'template' => 'This value must contain at least {min, number} {min, plural, one{item} ' .
+                        'template' => '{label} must contain at least {min, number} {min, plural, one{item} ' .
                             'other{items}}.',
                         'parameters' => ['min' => 3],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => 'This value must contain at most {max, number} {max, plural, one{item} ' .
+                        'template' => '{label} must contain at most {max, number} {max, plural, one{item} ' .
                             'other{items}}.',
                         'parameters' => ['max' => null],
                     ],
                     'notExactlyMessage' => [
-                        'template' => 'This value must contain exactly {exactly, number} {exactly, plural, one{item} ' .
+                        'template' => '{label} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
                             'other{items}}.',
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'This value must be an array or implement \Countable interface.',
+                        'template' => '{label} must be an array or implement \Countable interface.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -121,14 +121,14 @@ final class CountTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $lessThanMinmessage = 'This value must contain at least 3 items.';
-        $greaterThanMaxMessage = 'This value must contain at most 3 items.';
+        $lessThanMinmessage = 'The value must contain at least 3 items.';
+        $greaterThanMaxMessage = 'The value must contain at most 3 items.';
 
         return [
             'incorrect input' => [
                 1,
                 [new Count(min: 3)],
-                ['' => ['This value must be an array or implement \Countable interface.']],
+                ['' => ['The value must be an array or implement \Countable interface.']],
             ],
             'custom incorrect input message' => [
                 1,
@@ -146,7 +146,7 @@ final class CountTest extends RuleTestCase
                 ['data' => ['Attribute - data, type - int.']],
             ],
 
-            [[1], new Count(3), ['' => ['This value must contain exactly 3 items.']]],
+            [[1], new Count(3), ['' => ['The value must contain exactly 3 items.']]],
             [[1], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
             [[], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
             [[0, 0], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
@@ -246,17 +246,17 @@ final class CountTest extends RuleTestCase
             'class attribute' => [
                 new CountDto(),
                 null,
-                ['' => ['This value must contain at least 2 items.']],
+                ['' => ['The value must contain at least 2 items.']],
             ],
             'value: array with greater count, exactly: 0' => [
                 [0],
                 [new Count(0)],
-                ['' => ['This value must contain exactly 0 items.']],
+                ['' => ['The value must contain exactly 0 items.']],
             ],
             'value: empty array iterator, exactly: positive' => [
                 new ArrayIterator(),
                 [new Count(1)],
-                ['' => ['This value must contain exactly 1 item.']],
+                ['' => ['The value must contain exactly 1 item.']],
             ],
         ];
     }
