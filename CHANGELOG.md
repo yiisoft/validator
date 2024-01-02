@@ -2,6 +2,7 @@
 
 ## 2.0.0 under development
 
+- New #633: Include labels in error messages and the ability to use labels with classes (@dood-)
 - New #633: Add PHP attribute that sets property label for usage in error messages (@dood-)
 - New #597, #608: Add debug collector for `yiisoft/yii-debug` (@xepozz, @vjik)
 - New #610: Add `$escape` parameter to methods `Result::getAttributeErrorMessagesIndexedByPath()` and
