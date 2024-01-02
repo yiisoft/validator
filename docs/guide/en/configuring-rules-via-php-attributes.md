@@ -74,7 +74,7 @@ final class User
 
 > **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
-Error messages may include an `{attribute}` placeholder that is replaced with the name of the property. If you would 
+Error messages may include an `{label}` placeholder that is replaced with the name of the property. If you would 
 like the name to be replaced with a custom value, you can specify it using the `Label` attribute:
 
 ```php
@@ -87,6 +87,22 @@ final class User
     #[Required]
     #[Length(min: 1, max: 50)]
     #[Label('First Name')]
+    public readonly string $name;
+}
+```
+
+Alternatively, you can specify a label for all class properties:
+
+```php
+use Yiisoft\Validator\Label;
+use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Required;
+
+#[Label('This value')]
+final class User
+{
+    #[Required]
+    #[Length(min: 1, max: 50)]
     public readonly string $name;
 }
 ```
