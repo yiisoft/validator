@@ -1477,6 +1477,28 @@ class ValidatorTest extends TestCase
                 ['property' => ['Test value must contain at least 20 characters.']],
             ],
             [
+                new class () {
+                    #[Label]
+                    #[Length(min: 20)]
+                    public string $property = 'test';
+                },
+                ['property' => ['property must contain at least 20 characters.']],
+            ],
+            [
+                new #[Label('This value')] class () {
+                    #[Length(min: 20)]
+                    public string $property = 'test';
+                },
+                ['property' => ['This value must contain at least 20 characters.']],
+            ],
+            [
+                new #[Label] class () {
+                    #[Length(min: 20)]
+                    public string $property = 'test';
+                },
+                ['property' => ['property must contain at least 20 characters.']],
+            ],
+            [
                 new ObjectWithLabelsProvider(),
                 [
                     'name' => ['Имя cannot be blank.'],
