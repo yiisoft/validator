@@ -74,7 +74,7 @@ final class User
 
 > **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
-Error messages may include an `{label}` placeholder that is replaced with the name of the property. If you would 
+Error messages may include a `{label}` placeholder that is replaced with the name of the property. If you would 
 like the name to be replaced with a custom value, you can specify it using the `Label` attribute:
 
 ```php
