@@ -44,28 +44,28 @@ final class StopOnErrorTest extends RuleTestCase
                             'max' => null,
                             'exactly' => null,
                             'lessThanMinMessage' => [
-                                'template' => '{label} must contain at least {min, number} {min, plural, ' .
+                                'template' => '{attribute} must contain at least {min, number} {min, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'min' => 10,
                                 ],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => '{label} must contain at most {max, number} {max, plural, ' .
+                                'template' => '{attribute} must contain at most {max, number} {max, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'max' => null,
                                 ],
                             ],
                             'notExactlyMessage' => [
-                                'template' => '{label} must contain exactly {exactly, number} {exactly, plural, ' .
+                                'template' => '{attribute} must contain exactly {exactly, number} {exactly, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'exactly' => null,
                                 ],
                             ],
                             'incorrectInputMessage' => [
-                                'template' => '{label} must be a string.',
+                                'template' => '{attribute} must be a string.',
                                 'parameters' => [],
                             ],
                             'encoding' => 'UTF-8',
@@ -182,10 +182,10 @@ final class StopOnErrorTest extends RuleTestCase
                     'd' => new Required(),
                 ],
                 [
-                    'a' => ['The value not passed.'],
-                    'b' => ['The value not passed.'],
-                    'c' => ['The value not passed.'],
-                    'd' => ['The value not passed.'],
+                    'a' => ['a not passed.'],
+                    'b' => ['b not passed.'],
+                    'c' => ['c not passed.'],
+                    'd' => ['d not passed.'],
                 ],
             ],
             'attributes, multiple StopOnError rules combined with other top level rules, skipOnError: true' => [
@@ -209,8 +209,8 @@ final class StopOnErrorTest extends RuleTestCase
                     'd' => new Required(),
                 ],
                 [
-                    'a' => ['The value not passed.'],
-                    'd' => ['The value not passed.'],
+                    'a' => ['a not passed.'],
+                    'd' => ['d not passed.'],
                 ],
             ],
             'check for missing data set' => [
@@ -222,8 +222,8 @@ final class StopOnErrorTest extends RuleTestCase
                     'b' => new Required(),
                 ],
                 [
-                    'a' => ['The value not passed.'],
-                    'b' => ['The value cannot be blank.'],
+                    'a' => ['a not passed.'],
+                    'b' => ['b cannot be blank.'],
                 ],
             ],
             'rules normalization, callable' => [

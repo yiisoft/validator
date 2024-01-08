@@ -52,7 +52,7 @@ final class NotEqualTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => '{label} must not be equal to "{targetValueOrAttribute}".',
+                        'template' => '{attribute} must not be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,

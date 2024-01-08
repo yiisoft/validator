@@ -52,7 +52,7 @@ final class GreaterThanTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => '{label} must be greater than "{targetValueOrAttribute}".',
+                        'template' => '{attribute} must be greater than "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,

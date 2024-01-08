@@ -43,11 +43,11 @@ final class RegexTest extends RuleTestCase
                     'pattern' => '//',
                     'not' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{label} must be a string.',
+                        'template' => '{attribute} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{label} is invalid.',
+                        'template' => '{attribute} is invalid.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -60,11 +60,11 @@ final class RegexTest extends RuleTestCase
                     'pattern' => '//',
                     'not' => true,
                     'incorrectInputMessage' => [
-                        'template' => '{label} must be a string.',
+                        'template' => '{attribute} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{label} is invalid.',
+                        'template' => '{attribute} is invalid.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -103,7 +103,7 @@ final class RegexTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 null,
                 [new Regex('/a/', incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - null.']],
+                ['' => ['Attribute - The value, type - null.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => null],
@@ -117,7 +117,7 @@ final class RegexTest extends RuleTestCase
             'custom message with parameters' => [
                 'b',
                 [new Regex('/a/', message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - , value - b.']],
+                ['' => ['Attribute - The value, value - b.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => 'b'],

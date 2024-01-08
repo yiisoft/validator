@@ -37,7 +37,6 @@ final class CompareHandler implements RuleHandlerInterface
         if (!$this->isInputCorrect($rule->getType(), $value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'label' => $context->getTranslatedLabel(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -62,7 +61,6 @@ final class CompareHandler implements RuleHandlerInterface
 
         return (new Result())->addError($rule->getMessage(), [
             'attribute' => $context->getTranslatedAttribute(),
-            'label' => $context->getTranslatedLabel(),
             'targetValue' => $this->getFormattedValue($rule->getTargetValue()),
             'targetAttribute' => $targetAttribute,
             'targetAttributeValue' => $targetAttribute !== null ? $this->getFormattedValue($targetValue) : null,

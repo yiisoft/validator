@@ -24,7 +24,6 @@ final class SubsetHandler implements RuleHandlerInterface
         if (!is_iterable($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'label' => $context->getTranslatedLabel(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -32,7 +31,6 @@ final class SubsetHandler implements RuleHandlerInterface
         if (!ArrayHelper::isSubset($value, $rule->getValues(), $rule->isStrict())) {
             return (new Result())->addError($rule->getMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'label' => $context->getTranslatedLabel(),
             ]);
         }
 

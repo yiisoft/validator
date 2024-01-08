@@ -32,11 +32,11 @@ final class JsonTest extends RuleTestCase
                 new Json(),
                 [
                     'incorrectInputMessage' => [
-                        'template' => '{label} must be a string.',
+                        'template' => '{attribute} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{label} is not JSON.',
+                        'template' => '{attribute} is not JSON.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -149,7 +149,7 @@ JSON_WRAP
             'custom incorrect input message with parameters' => [
                 ['json'],
                 [new Json(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - array.']],
+                ['' => ['Attribute - The value, type - array.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => ['json']],
@@ -164,7 +164,7 @@ JSON_WRAP
             'custom message with parameters' => [
                 'bad json',
                 [new Json(message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - , value - bad json.']],
+                ['' => ['Attribute - The value, value - bad json.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => 'bad json'],

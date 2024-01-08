@@ -214,7 +214,7 @@ final class Nested implements
         | ReflectionProperty::IS_PUBLIC,
         private string $noRulesWithNoObjectMessage = 'Nested rule without rules can be used for objects only.',
         private string $incorrectDataSetTypeMessage = 'An object data set data can only have an array type.',
-        private string $incorrectInputMessage = '{label} must be an array or an object.',
+        private string $incorrectInputMessage = '{attribute} must be an array or an object.',
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property "{path}" is not found.',
         private bool $handleEachShortcut = true,

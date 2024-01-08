@@ -43,7 +43,7 @@ final class RulesDumperTest extends TestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => '{label} must be an integer.',
+                                'template' => '{attribute} must be an integer.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
@@ -119,7 +119,7 @@ final class RulesDumperTest extends TestCase
                     ],
                 ],
                 'message' => [
-                    'template' => '{label} must be either "{true}" or "{false}".',
+                    'template' => '{attribute} must be either "{true}" or "{false}".',
                     'parameters' => [
                         'true' => '1',
                         'false' => '0',

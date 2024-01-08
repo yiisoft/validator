@@ -42,11 +42,11 @@ abstract class AbstractNumber implements
     /**
      * A default for {@see $lessThanMinMessage}.
      */
-    protected const DEFAULT_LESS_THAN_MIN_MESSAGE = '{label} must be no less than {min}.';
+    protected const DEFAULT_LESS_THAN_MIN_MESSAGE = '{attribute} must be no less than {min}.';
     /**
      * A default for {@see $greaterThanMaxMessage}.
      */
-    protected const DEFAULT_GREATER_THAN_MAX_MESSAGE = '{label} must be no greater than {max}.';
+    protected const DEFAULT_GREATER_THAN_MAX_MESSAGE = '{attribute} must be no greater than {max}.';
 
     /**
      * @var string The regular expression for matching numbers.

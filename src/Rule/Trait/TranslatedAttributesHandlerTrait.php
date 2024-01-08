@@ -23,15 +23,15 @@ trait TranslatedAttributesHandlerTrait
      */
     private function getTranslatedAttributes(array $attributes, ValidationContext $context): array
     {
-        $initialAttribute = $context->getAttribute();
+        $initialLabel = $context->getAttributeLabel();
         $translatedAttributes = [];
         foreach ($attributes as $attribute) {
-            $translatedAttributes[] = $context->setAttribute($attribute)->getTranslatedAttribute();
+            $translatedAttributes[] = $context->setAttributeLabel($attribute)->getTranslatedAttribute();
         }
 
         /** @var string[] $translatedAttributes */
 
-        $context->setAttribute($initialAttribute);
+        $context->setAttributeLabel($initialLabel);
 
         return $translatedAttributes;
     }

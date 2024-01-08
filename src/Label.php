@@ -10,11 +10,11 @@ use Attribute;
 final class Label
 {
     public function __construct(
-        private ?string $label = null,
+        private string $label,
     ) {
     }
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return $this->label;
     }

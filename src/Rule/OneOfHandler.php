@@ -38,7 +38,6 @@ final class OneOfHandler implements RuleHandlerInterface
         if (!is_array($value) && !is_object($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'label' => $context->getTranslatedLabel(),
                 'type' => get_debug_type($value),
             ]);
         }

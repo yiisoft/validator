@@ -29,9 +29,9 @@ final class RequiredTest extends RuleTestCase
 
         $this->assertNull($rule->getEmptyCondition());
         $this->assertSame(RequiredHandler::class, $rule->getHandler());
-        $this->assertSame('{label} cannot be blank.', $rule->getMessage());
+        $this->assertSame('{attribute} cannot be blank.', $rule->getMessage());
         $this->assertSame(Required::class, $rule->getName());
-        $this->assertSame('{label} not passed.', $rule->getNotPassedMessage());
+        $this->assertSame('{attribute} not passed.', $rule->getNotPassedMessage());
         $this->assertNull($rule->getWhen());
         $this->assertFalse($rule->shouldSkipOnError());
     }
@@ -61,11 +61,11 @@ final class RequiredTest extends RuleTestCase
                 new Required(),
                 [
                     'message' => [
-                        'template' => '{label} cannot be blank.',
+                        'template' => '{attribute} cannot be blank.',
                         'parameters' => [],
                     ],
                     'notPassedMessage' => [
-                        'template' => '{label} not passed.',
+                        'template' => '{attribute} not passed.',
                         'parameters' => [],
                     ],
                     'skipOnError' => false,

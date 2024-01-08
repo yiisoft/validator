@@ -31,7 +31,6 @@ final class LengthHandler implements RuleHandlerInterface
         if (!is_string($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'label' => $context->getTranslatedLabel(),
                 'type' => get_debug_type($value),
             ]);
 

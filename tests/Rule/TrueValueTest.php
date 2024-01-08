@@ -40,7 +40,7 @@ final class TrueValueTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => '{label} must be "{true}".',
+                        'template' => '{attribute} must be "{true}".',
                         'parameters' => [
                             'true' => '1',
                         ],
@@ -61,7 +61,7 @@ final class TrueValueTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => '{label} must be "{true}".',
+                        'template' => '{attribute} must be "{true}".',
                         'parameters' => [
                             'true' => 'true',
                         ],
@@ -138,7 +138,7 @@ final class TrueValueTest extends RuleTestCase
             'custom message with parameters' => [
                 5,
                 [new TrueValue(message: 'Attribute - {attribute}, true - {true}, value - {value}.')],
-                ['' => ['Attribute - , true - 1, value - 5.']],
+                ['' => ['Attribute - The value, true - 1, value - 5.']],
             ],
             'custom message with parameters, custom true value, strict' => [
                 5,
@@ -149,7 +149,7 @@ final class TrueValueTest extends RuleTestCase
                         message: 'Attribute - {attribute}, true - {true}, value - {value}.',
                     ),
                 ],
-                ['' => ['Attribute - , true - true, value - 5.']],
+                ['' => ['Attribute - The value, true - true, value - 5.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => 5],
@@ -168,7 +168,7 @@ final class TrueValueTest extends RuleTestCase
                 [
                     new TrueValue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),
                 ],
-                ['' => ['Attribute - , true - 1, type - array.']],
+                ['' => ['Attribute - The value, true - 1, type - array.']],
             ],
             'custom incorrect input message with parameters, custom true and false values, strict' => [
                 [],
@@ -179,7 +179,7 @@ final class TrueValueTest extends RuleTestCase
                         incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - , true - true, type - array.']],
+                ['' => ['Attribute - The value, true - true, type - array.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => []],
@@ -191,7 +191,7 @@ final class TrueValueTest extends RuleTestCase
             'custom incorrect input message, null' => [
                 null,
                 [new TrueValue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),],
-                ['' => ['Attribute - , true - 1, type - null.']],
+                ['' => ['Attribute - The value, true - 1, type - null.']],
             ],
         ];
     }

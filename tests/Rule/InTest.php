@@ -36,7 +36,7 @@ final class InTest extends RuleTestCase
                     'strict' => false,
                     'not' => false,
                     'message' => [
-                        'template' => '{label} is not in the list of acceptable values.',
+                        'template' => '{attribute} is not in the list of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -50,7 +50,7 @@ final class InTest extends RuleTestCase
                     'strict' => true,
                     'not' => false,
                     'message' => [
-                        'template' => '{label} is not in the list of acceptable values.',
+                        'template' => '{attribute} is not in the list of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -64,7 +64,7 @@ final class InTest extends RuleTestCase
                     'strict' => false,
                     'not' => true,
                     'message' => [
-                        'template' => '{label} is not in the list of acceptable values.',
+                        'template' => '{attribute} is not in the list of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,

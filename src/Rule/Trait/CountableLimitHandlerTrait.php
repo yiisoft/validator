@@ -45,7 +45,6 @@ trait CountableLimitHandlerTrait
             $result->addError($rule->getNotExactlyMessage(), [
                 'exactly' => $rule->getExactly(),
                 'attribute' => $context->getTranslatedAttribute(),
-                'label' => $context->getTranslatedLabel(),
                 'number' => $number,
             ]);
 
@@ -56,7 +55,6 @@ trait CountableLimitHandlerTrait
             $result->addError($rule->getLessThanMinMessage(), [
                 'min' => $rule->getMin(),
                 'attribute' => $context->getTranslatedAttribute(),
-                'label' => $context->getTranslatedLabel(),
                 'number' => $number,
             ]);
         }
@@ -65,7 +63,6 @@ trait CountableLimitHandlerTrait
             $result->addError($rule->getGreaterThanMaxMessage(), [
                 'max' => $rule->getMax(),
                 'attribute' => $context->getTranslatedAttribute(),
-                'label' => $context->getTranslatedLabel(),
                 'number' => $number,
             ]);
         }

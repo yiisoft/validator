@@ -53,7 +53,7 @@ final class StringValue implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private string $message = '{label} must be a string.',
+        private string $message = '{attribute} must be a string.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

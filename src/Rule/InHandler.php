@@ -29,7 +29,6 @@ final class InHandler implements RuleHandlerInterface
                 $rule->getMessage(),
                 [
                     'attribute' => $context->getTranslatedAttribute(),
-                    'label' => $context->getTranslatedLabel(),
                 ],
             );
         }

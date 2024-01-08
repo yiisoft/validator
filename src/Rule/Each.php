@@ -112,7 +112,7 @@ final class Each implements
      */
     public function __construct(
         callable|iterable|object|string $rules = [],
-        private string $incorrectInputMessage = '{label} must be array or iterable.',
+        private string $incorrectInputMessage = '{attribute} must be array or iterable.',
         private string $incorrectInputKeyMessage = 'Every iterable key must have an integer or a string type.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,

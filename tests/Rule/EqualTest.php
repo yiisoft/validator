@@ -52,7 +52,7 @@ final class EqualTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => '{label} must be equal to "{targetValueOrAttribute}".',
+                        'template' => '{attribute} must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,

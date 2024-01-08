@@ -104,7 +104,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{label} must be an array or an object.',
+                        'template' => '{attribute} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -124,15 +124,15 @@ final class NestedTest extends RuleTestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => '{label} must be a number.',
+                                'template' => '{attribute} must be a number.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
-                                'template' => '{label} must be no less than {min}.',
+                                'template' => '{attribute} must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => '{label} must be no greater than {max}.',
+                                'template' => '{attribute} must be no greater than {max}.',
                                 'parameters' => ['max' => null],
                             ],
                             'skipOnEmpty' => false,
@@ -154,7 +154,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{label} must be an array or an object.',
+                        'template' => '{attribute} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -175,15 +175,15 @@ final class NestedTest extends RuleTestCase
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
-                                    'template' => '{label} must be a number.',
+                                    'template' => '{attribute} must be a number.',
                                     'parameters' => [],
                                 ],
                                 'lessThanMinMessage' => [
-                                    'template' => '{label} must be no less than {min}.',
+                                    'template' => '{attribute} must be no less than {min}.',
                                     'parameters' => ['min' => null],
                                 ],
                                 'greaterThanMaxMessage' => [
-                                    'template' => '{label} must be no greater than {max}.',
+                                    'template' => '{attribute} must be no greater than {max}.',
                                     'parameters' => ['max' => null],
                                 ],
                                 'skipOnEmpty' => false,
@@ -209,7 +209,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{label} must be an array or an object.',
+                        'template' => '{attribute} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -242,7 +242,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{label} must be an array or an object.',
+                        'template' => '{attribute} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -304,8 +304,8 @@ final class NestedTest extends RuleTestCase
                     ];
                 },
                 [
-                    'array.age' => ['The value must be no less than 21.'],
-                    'array.number' => ['The value must be no greater than 100.'],
+                    'array.age' => ['age must be no less than 21.'],
+                    'array.number' => ['number must be no greater than 100.'],
                 ],
             ],
             'class-string-rules-private-only' => [
@@ -321,7 +321,7 @@ final class NestedTest extends RuleTestCase
                     ];
                 },
                 [
-                    'array.number' => ['The value must be no greater than 100.'],
+                    'array.number' => ['number must be no greater than 100.'],
                 ],
             ],
             'rules-provider' => [
@@ -344,7 +344,7 @@ final class NestedTest extends RuleTestCase
                     }
                 },
                 [
-                    'array.age' => ['The value must be no less than 99.'],
+                    'array.age' => ['age must be no less than 99.'],
                 ],
             ],
             'empty-rules' => [
@@ -370,8 +370,8 @@ final class NestedTest extends RuleTestCase
                     }
                 },
                 [
-                    'object.name' => ['The value cannot be blank.'],
-                    'object.age' => ['The value must be no less than 21.'],
+                    'object.name' => ['name cannot be blank.'],
+                    'object.age' => ['age must be no less than 21.'],
                 ],
             ],
             'rules-from-validated-value-only-public' => [
@@ -385,7 +385,7 @@ final class NestedTest extends RuleTestCase
                     }
                 },
                 [
-                    'object.name' => ['The value cannot be blank.'],
+                    'object.name' => ['name cannot be blank.'],
                 ],
             ],
             'rules-from-validated-value-only-protected' => [
@@ -399,7 +399,7 @@ final class NestedTest extends RuleTestCase
                     }
                 },
                 [
-                    'object.age' => ['The value must be no less than 21.'],
+                    'object.age' => ['age must be no less than 21.'],
                 ],
             ],
             'rules-from-validated-value-inherit-attributes' => [
@@ -414,17 +414,17 @@ final class NestedTest extends RuleTestCase
                 },
                 [
                     'object.age' => [
-                        'The value must be no less than 21.',
-                        'The value must be equal to "23".',
+                        'age must be no less than 21.',
+                        'age must be equal to "23".',
                     ],
-                    'object.number' => ['The value must be equal to "99".'],
+                    'object.number' => ['number must be equal to "99".'],
                 ],
             ],
             'nested-with-each' => [
                 new Foo(),
                 [
-                    'name' => ['The value cannot be blank.'],
-                    'bars.0.name' => ['The value cannot be blank.'],
+                    'name' => ['name cannot be blank.'],
+                    'bars.0.name' => ['name cannot be blank.'],
                 ],
             ],
         ];
@@ -639,8 +639,8 @@ final class NestedTest extends RuleTestCase
         $this->assertFalse($result->isValid());
         $this->assertSame(
             [
-                'caption' => ['The value must contain at least 3 characters.'],
-                'object.name' => ['The value must contain at least 5 characters.'],
+                'caption' => ['caption must contain at least 3 characters.'],
+                'object.name' => ['name must contain at least 5 characters.'],
             ],
             $result->getErrorMessagesIndexedByPath()
         );
@@ -686,28 +686,28 @@ final class NestedTest extends RuleTestCase
         ];
 
         $detailedErrorsData = [
-            [['charts', 0, 'points', 0, 'coordinates', 'x'], 'The value must be no less than -10.'],
+            [['charts', 0, 'points', 0, 'coordinates', 'x'], 'x must be no less than -10.'],
             [['charts', 0, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 0, 'points', 0, 'coordinates', 'y'], 'The value must be no greater than 10.'],
-            [['charts', 0, 'points', 0, 'rgb', 0], 'The value must be no less than 0.'],
-            [['charts', 0, 'points', 0, 'rgb', 1], 'The value must be no greater than 255.'],
-            [['charts', 0, 'points', 1, 'coordinates', 'x'], 'The value must be no less than -10.'],
+            [['charts', 0, 'points', 0, 'coordinates', 'y'], 'y must be no greater than 10.'],
+            [['charts', 0, 'points', 0, 'rgb', 0], 'rgb must be no less than 0.'],
+            [['charts', 0, 'points', 0, 'rgb', 1], 'rgb must be no greater than 255.'],
+            [['charts', 0, 'points', 1, 'coordinates', 'x'], 'x must be no less than -10.'],
             [['charts', 0, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 0, 'points', 1, 'coordinates', 'y'], 'The value must be no greater than 10.'],
-            [['charts', 0, 'points', 1, 'rgb', 1], 'The value must be no less than 0.'],
-            [['charts', 0, 'points', 1, 'rgb', 2], 'The value must be no greater than 255.'],
+            [['charts', 0, 'points', 1, 'coordinates', 'y'], 'y must be no greater than 10.'],
+            [['charts', 0, 'points', 1, 'rgb', 1], 'rgb must be no less than 0.'],
+            [['charts', 0, 'points', 1, 'rgb', 2], 'rgb must be no greater than 255.'],
             [['charts', 1, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
             [['charts', 1, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 2, 'points', 0, 'coordinates', 'x'], 'The value must be no less than -10.'],
+            [['charts', 2, 'points', 0, 'coordinates', 'x'], 'x must be no less than -10.'],
             [['charts', 2, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 2, 'points', 0, 'coordinates', 'y'], 'The value must be no greater than 10.'],
-            [['charts', 2, 'points', 0, 'rgb', 0], 'The value must be no less than 0.'],
-            [['charts', 2, 'points', 0, 'rgb', 1], 'The value must be no greater than 255.'],
-            [['charts', 2, 'points', 1, 'coordinates', 'x'], 'The value must be no less than -10.'],
+            [['charts', 2, 'points', 0, 'coordinates', 'y'], 'y must be no greater than 10.'],
+            [['charts', 2, 'points', 0, 'rgb', 0], 'rgb must be no less than 0.'],
+            [['charts', 2, 'points', 0, 'rgb', 1], 'rgb must be no greater than 255.'],
+            [['charts', 2, 'points', 1, 'coordinates', 'x'], 'x must be no less than -10.'],
             [['charts', 2, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 2, 'points', 1, 'coordinates', 'y'], 'The value must be no greater than 10.'],
-            [['charts', 2, 'points', 1, 'rgb', 1], 'The value must be no less than 0.'],
-            [['charts', 2, 'points', 1, 'rgb', 2], 'The value must be no greater than 255.'],
+            [['charts', 2, 'points', 1, 'coordinates', 'y'], 'y must be no greater than 10.'],
+            [['charts', 2, 'points', 1, 'rgb', 1], 'rgb must be no less than 0.'],
+            [['charts', 2, 'points', 1, 'rgb', 2], 'rgb must be no greater than 255.'],
         ];
         $detailedErrors = [];
         foreach ($detailedErrorsData as $errorData) {
@@ -715,48 +715,48 @@ final class NestedTest extends RuleTestCase
         }
 
         $errorMessages = [
-            'The value must be no less than -10.',
+            'x must be no less than -10.',
             'Custom error.',
-            'The value must be no greater than 10.',
-            'The value must be no less than 0.',
-            'The value must be no greater than 255.',
-            'The value must be no less than -10.',
+            'y must be no greater than 10.',
+            'rgb must be no less than 0.',
+            'rgb must be no greater than 255.',
+            'x must be no less than -10.',
             'Custom error.',
-            'The value must be no greater than 10.',
-            'The value must be no less than 0.',
-            'The value must be no greater than 255.',
+            'y must be no greater than 10.',
+            'rgb must be no less than 0.',
+            'rgb must be no greater than 255.',
             'Custom error.',
             'Custom error.',
-            'The value must be no less than -10.',
+            'x must be no less than -10.',
             'Custom error.',
-            'The value must be no greater than 10.',
-            'The value must be no less than 0.',
-            'The value must be no greater than 255.',
-            'The value must be no less than -10.',
+            'y must be no greater than 10.',
+            'rgb must be no less than 0.',
+            'rgb must be no greater than 255.',
+            'x must be no less than -10.',
             'Custom error.',
-            'The value must be no greater than 10.',
-            'The value must be no less than 0.',
-            'The value must be no greater than 255.',
+            'y must be no greater than 10.',
+            'rgb must be no less than 0.',
+            'rgb must be no greater than 255.',
         ];
         $errorMessagesIndexedByPath = [
-            'charts.0.points.0.coordinates.x' => ['The value must be no less than -10.', 'Custom error.'],
-            'charts.0.points.0.coordinates.y' => ['The value must be no greater than 10.'],
-            'charts.0.points.0.rgb.0' => ['The value must be no less than 0.'],
-            'charts.0.points.0.rgb.1' => ['The value must be no greater than 255.'],
-            'charts.0.points.1.coordinates.x' => ['The value must be no less than -10.', 'Custom error.'],
-            'charts.0.points.1.coordinates.y' => ['The value must be no greater than 10.'],
-            'charts.0.points.1.rgb.1' => ['The value must be no less than 0.'],
-            'charts.0.points.1.rgb.2' => ['The value must be no greater than 255.'],
+            'charts.0.points.0.coordinates.x' => ['x must be no less than -10.', 'Custom error.'],
+            'charts.0.points.0.coordinates.y' => ['y must be no greater than 10.'],
+            'charts.0.points.0.rgb.0' => ['rgb must be no less than 0.'],
+            'charts.0.points.0.rgb.1' => ['rgb must be no greater than 255.'],
+            'charts.0.points.1.coordinates.x' => ['x must be no less than -10.', 'Custom error.'],
+            'charts.0.points.1.coordinates.y' => ['y must be no greater than 10.'],
+            'charts.0.points.1.rgb.1' => ['rgb must be no less than 0.'],
+            'charts.0.points.1.rgb.2' => ['rgb must be no greater than 255.'],
             'charts.1.points.0.coordinates.x' => ['Custom error.'],
             'charts.1.points.1.coordinates.x' => ['Custom error.'],
-            'charts.2.points.0.coordinates.x' => ['The value must be no less than -10.', 'Custom error.'],
-            'charts.2.points.0.coordinates.y' => ['The value must be no greater than 10.'],
-            'charts.2.points.0.rgb.0' => ['The value must be no less than 0.'],
-            'charts.2.points.0.rgb.1' => ['The value must be no greater than 255.'],
-            'charts.2.points.1.coordinates.x' => ['The value must be no less than -10.', 'Custom error.'],
-            'charts.2.points.1.coordinates.y' => ['The value must be no greater than 10.'],
-            'charts.2.points.1.rgb.1' => ['The value must be no less than 0.'],
-            'charts.2.points.1.rgb.2' => ['The value must be no greater than 255.'],
+            'charts.2.points.0.coordinates.x' => ['x must be no less than -10.', 'Custom error.'],
+            'charts.2.points.0.coordinates.y' => ['y must be no greater than 10.'],
+            'charts.2.points.0.rgb.0' => ['rgb must be no less than 0.'],
+            'charts.2.points.0.rgb.1' => ['rgb must be no greater than 255.'],
+            'charts.2.points.1.coordinates.x' => ['x must be no less than -10.', 'Custom error.'],
+            'charts.2.points.1.coordinates.y' => ['y must be no greater than 10.'],
+            'charts.2.points.1.rgb.1' => ['rgb must be no less than 0.'],
+            'charts.2.points.1.rgb.2' => ['rgb must be no greater than 255.'],
         ];
 
         return [
@@ -1113,7 +1113,7 @@ final class NestedTest extends RuleTestCase
                         incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - , type - string.']],
+                ['' => ['Attribute - The value, type - string.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => ''],
@@ -1133,7 +1133,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author.age' => [new Number(min: 40)]])],
-                ['author.age' => ['The value must be no less than 40.']],
+                ['author.age' => ['age must be no less than 40.']],
             ],
             'key not exists' => [
                 [
@@ -1143,12 +1143,12 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author.sex' => [new In(['male', 'female'])]])],
-                ['author.sex' => ['The value is not in the list of acceptable values.']],
+                ['author.sex' => ['sex is not in the list of acceptable values.']],
             ],
             [
                 ['value' => null],
                 [new Nested(['value' => new Required()])],
-                ['value' => ['The value cannot be blank.']],
+                ['value' => ['value cannot be blank.']],
             ],
             [
                 [],
@@ -1179,7 +1179,7 @@ final class NestedTest extends RuleTestCase
                         ],
                     ]),
                 ],
-                ['body.shipping.phone' => ['The value is invalid.']],
+                ['body.shipping.phone' => ['phone is invalid.']],
             ],
             [
                 [0 => [0 => -11]],
@@ -1211,7 +1211,7 @@ final class NestedTest extends RuleTestCase
                     ReflectionProperty::IS_PUBLIC,
                 ),
                 new Nested(['value' => new Required()]),
-                ['value' => ['The value cannot be blank.']],
+                ['value' => ['value cannot be blank.']],
             ],
             'nested context' => [
                 [
@@ -1230,7 +1230,7 @@ final class NestedTest extends RuleTestCase
                     ]),
                 ],
                 [
-                    'attributes.abc' => ['The value cannot be blank.'],
+                    'attributes.abc' => ['abc cannot be blank.'],
                 ],
             ],
             'deep level of nesting with plain keys' => [
@@ -1258,8 +1258,8 @@ final class NestedTest extends RuleTestCase
                     ],
                 ]),
                 [
-                    'level1.level2.level3.key' => ['The value must be no less than 9.', 'The value must be no greater than 5.'],
-                    'level1.level2.level3.name' => ['The value must contain at least 5 characters.'],
+                    'level1.level2.level3.key' => ['key must be no less than 9.', 'key must be no greater than 5.'],
+                    'level1.level2.level3.name' => ['name must contain at least 5 characters.'],
                 ],
             ],
             'error messages with attributes in nested structure' => [
@@ -1291,7 +1291,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author.age' => [new Number(min: 20)]])],
-                [['The value must be no less than 20.', ['author', 'age']]],
+                [['age must be no less than 20.', ['author', 'age']]],
             ],
             'key not exists' => [
                 [
@@ -1301,7 +1301,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author.sex' => [new In(['male', 'female'])]])],
-                [['The value is not in the list of acceptable values.', ['author', 'sex']]],
+                [['sex is not in the list of acceptable values.', ['author', 'sex']]],
             ],
             [
                 '',
@@ -1311,7 +1311,7 @@ final class NestedTest extends RuleTestCase
             [
                 ['value' => null],
                 [new Nested(['value' => new Required()])],
-                [['The value cannot be blank.', ['value']]],
+                [['value cannot be blank.', ['value']]],
             ],
             [
                 [],
@@ -1340,7 +1340,7 @@ final class NestedTest extends RuleTestCase
                         ],
                     ]),
                 ],
-                [['The value is invalid.', ['body', 'shipping', 'phone']]],
+                [['phone is invalid.', ['body', 'shipping', 'phone']]],
             ],
             [
                 [0 => [0 => -11]],
@@ -1360,7 +1360,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author\.data.name\.surname' => [new Length(min: 8)]])],
-                [['The value must contain at least 8 characters.', ['author.data', 'name.surname']]],
+                [['name.surname must contain at least 8 characters.', ['author.data', 'name.surname']]],
             ],
         ];
     }

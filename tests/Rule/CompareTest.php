@@ -81,7 +81,7 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => '{label} must be equal to "{targetValueOrAttribute}".',
+                        'template' => '{attribute} must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,
@@ -161,7 +161,7 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => '{label} must be equal to "{targetValueOrAttribute}".',
+                        'template' => '{attribute} must be equal to "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => 'test',
@@ -622,7 +622,7 @@ final class CompareTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 [],
                 [new Compare(false, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - array.']],
+                ['' => ['Attribute - The value, type - array.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => []],
@@ -678,7 +678,7 @@ final class CompareTest extends RuleTestCase
                 ],
                 [
                     '' => [
-                        'Attribute - , target value - 100, target attribute - , target value or attribute - 100, ' .
+                        'Attribute - The value, target value - 100, target attribute - , target value or attribute - 100, ' .
                         'value - 101.',
                     ],
                 ],
@@ -953,12 +953,12 @@ final class CompareTest extends RuleTestCase
             'target attribute: array key, target attribute value: string integer, attribute value: integer with the same value, type: number, operator: ===' => [
                 ['attribute' => '100', 'number' => 100],
                 ['number' => new Compare(targetAttribute: 'attribute', operator: '===')],
-                ['number' => ['The value must be strictly equal to "attribute".']],
+                ['number' => ['number must be strictly equal to "attribute".']],
             ],
             'target attribute: array key, target attribute value: integer, attribute value: greater integer, type: number, operator: <=' => [
                 ['attribute' => 100, 'number' => 101],
                 ['number' => new Compare(targetAttribute: 'attribute', operator: '<=')],
-                ['number' => ['The value must be less than or equal to "attribute".']],
+                ['number' => ['number must be less than or equal to "attribute".']],
             ],
         ];
 

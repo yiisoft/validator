@@ -29,7 +29,7 @@ final class NestedTest extends TestCase
                     }
                 },
                 [
-                    'object.number' => ['The value must be no greater than 7.'],
+                    'object.number' => ['number must be no greater than 7.'],
                 ],
             ],
             'object-private-only' => [
@@ -46,7 +46,7 @@ final class NestedTest extends TestCase
                     }
                 },
                 [
-                    'object.number' => ['The value must be no greater than 7.'],
+                    'object.number' => ['number must be no greater than 7.'],
                 ],
             ],
         ];
@@ -74,8 +74,8 @@ final class NestedTest extends TestCase
 
         $this->assertSame(
             [
-                'a' => ['The value must be no less than 7.'],
-                'b' => ['The value must be no greater than 1.'],
+                'a' => ['a must be no less than 7.'],
+                'b' => ['b must be no greater than 1.'],
             ],
             $result->getErrorMessagesIndexedByAttribute(),
         );

@@ -127,7 +127,7 @@ final class ValidationContext
         return $this;
     }
 
-    public function setAttributeLabel(?string $label): self
+    public function setAttributeLabel(string|null $label): self
     {
         $this->attributeLabel = $label;
         return $this;
@@ -248,31 +248,7 @@ final class ValidationContext
      */
     public function getTranslatedAttribute(): ?string
     {
-        if ($this->attribute === null) {
-            return null;
-        }
-
-        $label = $this->attributeLabel ?? $this->attribute;
-
-        if ($this->attributeTranslator !== null) {
-            return $this->attributeTranslator->translate($label);
-        }
-
-        if ($this->defaultAttributeTranslator !== null) {
-            return $this->defaultAttributeTranslator->translate($label);
-        }
-
-        return $label;
-    }
-
-    /**
-     * Get translated label.
-     *
-     * @return string Translated label or "The value" if the label is null
-     */
-    public function getTranslatedLabel(): string
-    {
-        $label = $this->attributeLabel ?? 'The value';
+        $label = $this->attributeLabel ?? $this->attribute ?? 'The value';
 
         if ($this->attributeTranslator !== null) {
             return $this->attributeTranslator->translate($label);

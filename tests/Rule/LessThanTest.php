@@ -52,7 +52,7 @@ final class LessThanTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => '{label} must be less than "{targetValueOrAttribute}".',
+                        'template' => '{attribute} must be less than "{targetValueOrAttribute}".',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetAttribute' => null,

@@ -54,8 +54,8 @@ final class Json implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private string $incorrectInputMessage = '{label} must be a string.',
-        private string $message = '{label} is not JSON.',
+        private string $incorrectInputMessage = '{attribute} must be a string.',
+        private string $message = '{attribute} is not JSON.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

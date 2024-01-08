@@ -37,7 +37,7 @@ final class StringValueTest extends RuleTestCase
                 new StringValue(),
                 [
                     'message' => [
-                        'template' => '{label} must be a string.',
+                        'template' => '{attribute} must be a string.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -120,7 +120,7 @@ final class StringValueTest extends RuleTestCase
                     private ?string $name = null;
                 },
                 null,
-                ['name' => [$message]],
+                ['name' => ['name must be a string.']],
             ],
             'value: boolean, message: custom' => [
                 false,
@@ -130,7 +130,7 @@ final class StringValueTest extends RuleTestCase
             'value: boolean, message: custom, with parameters' => [
                 false,
                 [new StringValue(message: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - bool.']],
+                ['' => ['Attribute - The value, type - bool.']],
             ],
             'value: boolean, message: custom, with parameters, attribute set' => [
                 ['data' => false],

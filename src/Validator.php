@@ -121,19 +121,6 @@ final class Validator implements ValidatorInterface
 
         $result = new Result();
         foreach ($rules as $attribute => $attributeRules) {
-            if ($dataSet instanceof LabelsProviderInterface) {
-                $labels = $dataSet->getValidationPropertyLabels();
-                $hasLabel = array_key_exists(0, $labels) || array_key_exists($attribute, $labels);
-
-                if ($hasLabel) {
-                    $context->setAttributeLabel($labels[$attribute] ?? $labels[0] ?? $attribute);
-                } else {
-                    $context->setAttributeLabel(null);
-                }
-            } else {
-                $context->setAttributeLabel(null);
-            }
-
             if (is_int($attribute)) {
                 /** @psalm-suppress MixedAssignment */
                 $validatedData = $originalData;
@@ -144,6 +131,14 @@ final class Validator implements ValidatorInterface
                 $validatedData = $dataSet->getAttributeValue($attribute);
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, null);
                 $context->setAttribute($attribute);
+            }
+
+            if ($dataSet instanceof LabelsProviderInterface) {
+                $labels = $dataSet->getValidationPropertyLabels();
+                $attributeLabel = is_string($attribute) ? $attribute : null;
+                $context->setAttributeLabel($labels[$attribute] ?? $labels[0] ?? $attributeLabel);
+            } else {
+                $context->setAttributeLabel(is_string($attribute) ? $attribute : $context->getAttributeLabel());
             }
 
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
