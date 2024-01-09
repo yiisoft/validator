@@ -6,7 +6,7 @@ namespace Yiisoft\Validator;
 
 use Attribute;
 
-#[Attribute(Attribute::TARGET_PROPERTY|Attribute::TARGET_CLASS)]
+#[Attribute(Attribute::TARGET_PROPERTY)]
 final class Label
 {
     public function __construct(

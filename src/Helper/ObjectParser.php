@@ -251,16 +251,6 @@ final class ObjectParser
 
         $labels = [];
 
-        $sourceLabelAttributes = $this
-            ->getReflectionSource()
-            ->getAttributes(Label::class, ReflectionAttribute::IS_INSTANCEOF);
-
-        foreach ($sourceLabelAttributes as $attribute) {
-            /** @var Label $instance */
-            $instance = $attribute->newInstance();
-            $labels[] = $instance->getLabel();
-        }
-
         foreach ($this->getReflectionProperties() as $property) {
             $attributes = $property->getAttributes(Label::class, ReflectionAttribute::IS_INSTANCEOF);
             foreach ($attributes as $attribute) {
