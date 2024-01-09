@@ -91,22 +91,6 @@ final class User
 }
 ```
 
-Alternatively, you can specify a label for all class properties:
-
-```php
-use Yiisoft\Validator\Label;
-use Yiisoft\Validator\Rule\Length;
-use Yiisoft\Validator\Rule\Required;
-
-#[Label('This value')]
-final class User
-{
-    #[Required]
-    #[Length(min: 1, max: 50)]
-    public readonly string $name;
-}
-```
-
 > **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
 ## Configuring for multiple entities / models with relations
