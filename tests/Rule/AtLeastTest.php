@@ -199,71 +199,71 @@ final class AtLeastTest extends RuleTestCase
         $array = ['attr1' => 1, 'attr2' => null];
 
         return [
-            //'incorrect input' => [
-            //    1,
-            //    [new AtLeast(['attr2'])],
-            //    ['' => ['The value must be an array or an object.']],
-            //],
-            //'custom incorrect input message' => [
-            //    1,
-            //    [new AtLeast(['attr2'], incorrectInputMessage: 'Custom incorrect input message.')],
-            //    ['' => ['Custom incorrect input message.']],
-            //],
-            //'custom incorrect input message with parameters' => [
-            //    1,
-            //    [new AtLeast(['attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-            //    ['' => ['Attribute - The value, type - int.']],
-            //],
-            //'custom incorrect input message with parameters, attribute set' => [
-            //    ['attribute' => 1],
-            //    [
-            //        'attribute' => new AtLeast(
-            //            ['attr2'],
-            //            incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
-            //        ),
-            //    ],
-            //    ['attribute' => ['Attribute - attribute, type - int.']],
-            //],
-            //'object' => [
-            //    $class,
-            //    [new AtLeast(['attr2'])],
-            //    ['' => ['At least 1 attribute from this list must be filled: "attr2".']],
-            //],
-            //'object, custom min' => [
-            //    $class,
-            //    [new AtLeast(['attr1', 'attr2'], min: 2)],
-            //    ['' => ['At least 2 attributes from this list must be filled: "attr1", "attr2".']],
-            //],
-            //'array' => [
-            //    $array,
-            //    [new AtLeast(['attr2'])],
-            //    ['' => ['At least 1 attribute from this list must be filled: "attr2".']],
-            //],
-            //'array, custom min' => [
-            //    $array,
-            //    [new AtLeast(['attr1', 'attr2'], min: 2)],
-            //    ['' => ['At least 2 attributes from this list must be filled: "attr1", "attr2".']],
-            //],
-            //'custom message' => [
-            //    $class,
-            //    [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom message.')],
-            //    ['' => ['Custom message.']],
-            //],
-            //'custom message with parameters' => [
-            //    $class,
-            //    [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attributes - {attributes}, min - {min}.')],
-            //    ['' => ['Attributes - "attr1", "attr2", min - 2.']],
-            //],
+            'incorrect input' => [
+                1,
+                [new AtLeast(['attr2'])],
+                ['' => ['The value must be an array or an object.']],
+            ],
+            'custom incorrect input message' => [
+                1,
+                [new AtLeast(['attr2'], incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
+            'custom incorrect input message with parameters' => [
+                1,
+                [new AtLeast(['attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['' => ['Attribute - The value, type - int.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['attribute' => 1],
+                [
+                    'attribute' => new AtLeast(
+                        ['attr2'],
+                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                    ),
+                ],
+                ['attribute' => ['Attribute - attribute, type - int.']],
+            ],
+            'object' => [
+                $class,
+                [new AtLeast(['attr2'])],
+                ['' => ['At least 1 attribute from this list must be filled: "attr2".']],
+            ],
+            'object, custom min' => [
+                $class,
+                [new AtLeast(['attr1', 'attr2'], min: 2)],
+                ['' => ['At least 2 attributes from this list must be filled: "attr1", "attr2".']],
+            ],
+            'array' => [
+                $array,
+                [new AtLeast(['attr2'])],
+                ['' => ['At least 1 attribute from this list must be filled: "attr2".']],
+            ],
+            'array, custom min' => [
+                $array,
+                [new AtLeast(['attr1', 'attr2'], min: 2)],
+                ['' => ['At least 2 attributes from this list must be filled: "attr1", "attr2".']],
+            ],
+            'custom message' => [
+                $class,
+                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Custom message.')],
+                ['' => ['Custom message.']],
+            ],
+            'custom message with parameters' => [
+                $class,
+                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attributes - {attributes}, min - {min}.')],
+                ['' => ['Attributes - "attr1", "attr2", min - 2.']],
+            ],
             'custom message with parameters, attribute set' => [
                 ['data' => $class],
                 ['data' => new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attributes - {attributes}, min - {min}.')],
                 ['data' => ['Attributes - "attr1", "attr2", min - 2.']],
             ],
-            //'class attribute, tranlation' => [
-            //    new AtLeastDto(),
-            //    null,
-            //    ['' => ['At least 1 attribute from this list must be filled: "A", "B", "C".']],
-            //],
+            'class attribute, tranlation' => [
+                new AtLeastDto(),
+                null,
+                ['' => ['At least 1 attribute from this list must be filled: "A", "B", "C".']],
+            ],
         ];
     }
 
