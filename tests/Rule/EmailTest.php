@@ -58,11 +58,11 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => false,
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{attribute} must be a string.',
+                        'template' => '{Attribute} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{attribute} is not a valid email address.',
+                        'template' => '{Attribute} is not a valid email address.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -79,11 +79,11 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => false,
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{attribute} must be a string.',
+                        'template' => '{Attribute} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{attribute} is not a valid email address.',
+                        'template' => '{Attribute} is not a valid email address.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -100,11 +100,11 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => true,
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{attribute} must be a string.',
+                        'template' => '{Attribute} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{attribute} is not a valid email address.',
+                        'template' => '{Attribute} is not a valid email address.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -121,11 +121,11 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => false,
                     'enableIdn' => true,
                     'incorrectInputMessage' => [
-                        'template' => '{attribute} must be a string.',
+                        'template' => '{Attribute} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{attribute} is not a valid email address.',
+                        'template' => '{Attribute} is not a valid email address.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -226,7 +226,7 @@ final class EmailTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 1,
                 [new Email(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - Value, type - int.']],
+                ['' => ['Attribute - value, type - int.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => 1],
@@ -327,7 +327,7 @@ final class EmailTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 'test@nonexistingsubdomain.example.com',
-                [new Email(checkDns: true, message: 'Attribute - {attribute}, value - {value}.')],
+                [new Email(checkDns: true, message: 'Attribute - {Attribute}, value - {value}.')],
                 ['' => ['Attribute - Value, value - test@nonexistingsubdomain.example.com.']],
             ],
             'custom message with parameters, attribute set' => [

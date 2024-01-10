@@ -37,6 +37,7 @@ final class IpHandler implements RuleHandlerInterface
         if (!is_string($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
+                'Attribute' => ucfirst($context->getTranslatedAttribute()),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -190,6 +191,7 @@ final class IpHandler implements RuleHandlerInterface
     {
         return (new Result())->addError($message, [
             'attribute' => $context->getTranslatedAttribute(),
+            'Attribute' => ucfirst($context->getTranslatedAttribute()),
             'value' => $value,
         ]);
     }

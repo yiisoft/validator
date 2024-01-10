@@ -55,15 +55,15 @@ final class CompositeTest extends RuleTestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => '{attribute} must be a number.',
+                                'template' => '{Attribute} must be a number.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
-                                'template' => '{attribute} must be no less than {min}.',
+                                'template' => '{Attribute} must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => '{attribute} must be no greater than {max}.',
+                                'template' => '{Attribute} must be no greater than {max}.',
                                 'parameters' => ['max' => 13],
                             ],
                             'skipOnEmpty' => false,
@@ -79,15 +79,15 @@ final class CompositeTest extends RuleTestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => '{attribute} must be a number.',
+                                'template' => '{Attribute} must be a number.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
-                                'template' => '{attribute} must be no less than {min}.',
+                                'template' => '{Attribute} must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => '{attribute} must be no greater than {max}.',
+                                'template' => '{Attribute} must be no greater than {max}.',
                                 'parameters' => ['max' => 14],
                             ],
                             'skipOnEmpty' => false,
@@ -115,17 +115,17 @@ final class CompositeTest extends RuleTestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => '{attribute} must be a number.',
+                                'template' => '{Attribute} must be a number.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
-                                'template' => '{attribute} must be no less than {min}.',
+                                'template' => '{Attribute} must be no less than {min}.',
                                 'parameters' => [
                                     'min' => null,
                                 ],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => '{attribute} must be no greater than {max}.',
+                                'template' => '{Attribute} must be no greater than {max}.',
                                 'parameters' => [
                                     'max' => 13,
                                 ],
@@ -180,11 +180,11 @@ final class CompositeTest extends RuleTestCase
                         [
                             Required::class,
                             'message' => [
-                                'template' => '{attribute} cannot be blank.',
+                                'template' => '{Attribute} cannot be blank.',
                                 'parameters' => [],
                             ],
                             'notPassedMessage' => [
-                                'template' => '{attribute} not passed.',
+                                'template' => '{Attribute} not passed.',
                                 'parameters' => [],
                             ],
                             'skipOnError' => false,
@@ -328,8 +328,8 @@ final class CompositeTest extends RuleTestCase
                 ['latitude' => -91, 'longitude' => 181],
                 [new CoordinatesRuleSet()],
                 [
-                    'latitude' => ['latitude must be no less than -90.'],
-                    'longitude' => ['longitude must be no greater than 180.'],
+                    'latitude' => ['Latitude must be no less than -90.'],
+                    'longitude' => ['Longitude must be no greater than 180.'],
                 ],
             ],
         ];

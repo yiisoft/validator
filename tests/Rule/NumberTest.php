@@ -52,15 +52,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => '{attribute} must be a number.',
+                        'template' => '{Attribute} must be a number.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => '{attribute} must be no less than {min}.',
+                        'template' => '{Attribute} must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{attribute} must be no greater than {max}.',
+                        'template' => '{Attribute} must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,
@@ -78,15 +78,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => '{attribute} must be a number.',
+                        'template' => '{Attribute} must be a number.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => '{attribute} must be no less than {min}.',
+                        'template' => '{Attribute} must be no less than {min}.',
                         'parameters' => ['min' => 1],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{attribute} must be no greater than {max}.',
+                        'template' => '{Attribute} must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,
@@ -104,15 +104,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => '{attribute} must be a number.',
+                        'template' => '{Attribute} must be a number.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => '{attribute} must be no less than {min}.',
+                        'template' => '{Attribute} must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{attribute} must be no greater than {max}.',
+                        'template' => '{Attribute} must be no greater than {max}.',
                         'parameters' => ['max' => 1],
                     ],
                     'skipOnEmpty' => false,
@@ -130,15 +130,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => '{attribute} must be a number.',
+                        'template' => '{Attribute} must be a number.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => '{attribute} must be no less than {min}.',
+                        'template' => '{Attribute} must be no less than {min}.',
                         'parameters' => ['min' => 2],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{attribute} must be no greater than {max}.',
+                        'template' => '{Attribute} must be no greater than {max}.',
                         'parameters' => ['max' => 10],
                     ],
                     'skipOnEmpty' => false,
@@ -156,15 +156,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => '{attribute} must be an integer.',
+                        'template' => '{Attribute} must be an integer.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => '{attribute} must be no less than {min}.',
+                        'template' => '{Attribute} must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{attribute} must be no greater than {max}.',
+                        'template' => '{Attribute} must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,

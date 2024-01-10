@@ -60,7 +60,7 @@ final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenIn
     public function __construct(
         private array $attributes,
         private int $min = 1,
-        private string $incorrectInputMessage = '{attribute} must be an array or an object.',
+        private string $incorrectInputMessage = '{Attribute} must be an array or an object.',
         private string $message = 'At least {min, number} {min, plural, one{attribute} other{attributes}} from this ' .
         'list must be filled: {attributes}.',
         private mixed $skipOnEmpty = null,

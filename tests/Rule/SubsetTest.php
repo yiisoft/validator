@@ -36,11 +36,11 @@ final class SubsetTest extends RuleTestCase
                     'values' => [],
                     'strict' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{attribute} must be iterable.',
+                        'template' => '{Attribute} must be iterable.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{attribute} is not a subset of acceptable values.',
+                        'template' => '{Attribute} is not a subset of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -129,7 +129,7 @@ final class SubsetTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 1,
                 [new Subset([1, 2, 3], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - Value, type - int.']],
+                ['' => ['Attribute - value, type - int.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => 1],

@@ -39,19 +39,19 @@ final class LengthTest extends RuleTestCase
                     'max' => null,
                     'exactly' => null,
                     'lessThanMinMessage' => [
-                        'template' => '{attribute} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                        'template' => '{Attribute} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'parameters' => ['min' => 3],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{attribute} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                        'template' => '{Attribute} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
                         'parameters' => ['max' => null],
                     ],
                     'notExactlyMessage' => [
-                        'template' => '{attribute} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
+                        'template' => '{Attribute} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{attribute} must be a string.',
+                        'template' => '{Attribute} must be a string.',
                         'parameters' => [],
                     ],
                     'encoding' => 'UTF-8',
@@ -66,19 +66,19 @@ final class LengthTest extends RuleTestCase
                     'max' => 3,
                     'exactly' => null,
                     'lessThanMinMessage' => [
-                        'template' => '{attribute} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                        'template' => '{Attribute} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{attribute} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                        'template' => '{Attribute} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
                         'parameters' => ['max' => 3],
                     ],
                     'notExactlyMessage' => [
-                        'template' => '{attribute} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
+                        'template' => '{Attribute} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{attribute} must be a string.',
+                        'template' => '{Attribute} must be a string.',
                         'parameters' => [],
                     ],
                     'encoding' => 'UTF-8',
@@ -93,19 +93,19 @@ final class LengthTest extends RuleTestCase
                     'max' => 4,
                     'exactly' => null,
                     'lessThanMinMessage' => [
-                        'template' => '{attribute} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                        'template' => '{Attribute} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
                         'parameters' => ['min' => 3],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{attribute} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                        'template' => '{Attribute} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
                         'parameters' => ['max' => 4],
                     ],
                     'notExactlyMessage' => [
-                        'template' => '{attribute} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
+                        'template' => '{Attribute} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{attribute} must be a string.',
+                        'template' => '{Attribute} must be a string.',
                         'parameters' => [],
                     ],
                     'encoding' => 'windows-1251',
@@ -175,7 +175,7 @@ final class LengthTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 false,
                 [new Length(min: 25, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - Value, type - bool.']],
+                ['' => ['Attribute - value, type - bool.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => false],
@@ -205,7 +205,7 @@ final class LengthTest extends RuleTestCase
             ],
             'custom less than min message with parameters' => [
                 'ab',
-                [new Length(min: 3, lessThanMinMessage: 'Min - {min}, attribute - {attribute}, number - {number}.')],
+                [new Length(min: 3, lessThanMinMessage: 'Min - {min}, attribute - {Attribute}, number - {number}.')],
                 ['' => ['Min - 3, attribute - Value, number - 2.']],
             ],
             'custom less than min message with parameters, attribute set' => [
@@ -232,7 +232,7 @@ final class LengthTest extends RuleTestCase
                         greaterThanMaxMessage: 'Max - {max}, attribute - {attribute}, number - {number}.',
                     ),
                 ],
-                ['' => ['Max - 3, attribute - Value, number - 4.']],
+                ['' => ['Max - 3, attribute - value, number - 4.']],
             ],
             'custom greater than max message with parameters, attribute set' => [
                 ['data' => 'abcd'],
@@ -255,7 +255,7 @@ final class LengthTest extends RuleTestCase
                 [
                     new Length(
                         exactly: 3,
-                        notExactlyMessage: 'Exactly - {exactly}, attribute - {attribute}, number - {number}.',
+                        notExactlyMessage: 'Exactly - {exactly}, attribute - {Attribute}, number - {number}.',
                     ),
                 ],
                 ['' => ['Exactly - 3, attribute - Value, number - 4.']],

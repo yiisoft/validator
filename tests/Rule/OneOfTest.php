@@ -38,7 +38,7 @@ final class OneOfTest extends RuleTestCase
                         'attr2',
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{attribute} must be an array or an object.',
+                        'template' => '{Attribute} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -57,7 +57,7 @@ final class OneOfTest extends RuleTestCase
                         'attr2',
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{attribute} must be an array or an object.',
+                        'template' => '{Attribute} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -167,7 +167,7 @@ final class OneOfTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 1,
                 [new OneOf(['attr1', 'attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - Value, type - int.']],
+                ['' => ['Attribute - value, type - int.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['attribute' => 1],

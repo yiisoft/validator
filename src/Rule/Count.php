@@ -86,12 +86,12 @@ final class Count implements
         int|null $exactly = null,
         int|null $min = null,
         int|null $max = null,
-        private string $incorrectInputMessage = '{attribute} must be an array or implement \Countable interface.',
-        string $lessThanMinMessage = '{attribute} must contain at least {min, number} {min, plural, one{item} ' .
+        private string $incorrectInputMessage = '{Attribute} must be an array or implement \Countable interface.',
+        string $lessThanMinMessage = '{Attribute} must contain at least {min, number} {min, plural, one{item} ' .
         'other{items}}.',
-        string $greaterThanMaxMessage = '{attribute} must contain at most {max, number} {max, plural, one{item} ' .
+        string $greaterThanMaxMessage = '{Attribute} must contain at most {max, number} {max, plural, one{item} ' .
         'other{items}}.',
-        string $notExactlyMessage = '{attribute} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
+        string $notExactlyMessage = '{Attribute} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
         'other{items}}.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,

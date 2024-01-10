@@ -260,14 +260,14 @@ abstract class AbstractCompare implements
     public function getMessage(): string
     {
         return $this->message ?? match ($this->operator) {
-            '==', => '{attribute} must be equal to "{targetValueOrAttribute}".',
-            '===' => '{attribute} must be strictly equal to "{targetValueOrAttribute}".',
-            '!=' => '{attribute} must not be equal to "{targetValueOrAttribute}".',
-            '!==' => '{attribute} must not be strictly equal to "{targetValueOrAttribute}".',
-            '>' => '{attribute} must be greater than "{targetValueOrAttribute}".',
-            '>=' => '{attribute} must be greater than or equal to "{targetValueOrAttribute}".',
-            '<' => '{attribute} must be less than "{targetValueOrAttribute}".',
-            '<=' => '{attribute} must be less than or equal to "{targetValueOrAttribute}".',
+            '==', => '{Attribute} must be equal to "{targetValueOrAttribute}".',
+            '===' => '{Attribute} must be strictly equal to "{targetValueOrAttribute}".',
+            '!=' => '{Attribute} must not be equal to "{targetValueOrAttribute}".',
+            '!==' => '{Attribute} must not be strictly equal to "{targetValueOrAttribute}".',
+            '>' => '{Attribute} must be greater than "{targetValueOrAttribute}".',
+            '>=' => '{Attribute} must be greater than or equal to "{targetValueOrAttribute}".',
+            '<' => '{Attribute} must be less than "{targetValueOrAttribute}".',
+            '<=' => '{Attribute} must be less than or equal to "{targetValueOrAttribute}".',
         };
     }
 

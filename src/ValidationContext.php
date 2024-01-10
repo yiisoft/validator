@@ -248,7 +248,7 @@ final class ValidationContext
      */
     public function getTranslatedAttribute(): ?string
     {
-        $label = $this->attributeLabel ?? $this->attribute ?? 'Value';
+        $label = $this->attributeLabel ?? $this->attribute ?? 'value';
 
         if ($this->attributeTranslator !== null) {
             return $this->attributeTranslator->translate($label);

@@ -29,6 +29,7 @@ final class InHandler implements RuleHandlerInterface
                 $rule->getMessage(),
                 [
                     'attribute' => $context->getTranslatedAttribute(),
+                    'Attribute' => ucfirst($context->getTranslatedAttribute()),
                 ],
             );
         }

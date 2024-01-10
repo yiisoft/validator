@@ -72,8 +72,8 @@ final class Subset implements DumpedRuleInterface, SkipOnErrorInterface, WhenInt
     public function __construct(
         private iterable $values,
         private bool $strict = false,
-        private string $incorrectInputMessage = '{attribute} must be iterable.',
-        private string $message = '{attribute} is not a subset of acceptable values.',
+        private string $incorrectInputMessage = '{Attribute} must be iterable.',
+        private string $message = '{Attribute} is not a subset of acceptable values.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

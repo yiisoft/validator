@@ -182,7 +182,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
         private bool $allowSubnet = false,
         private bool $requireSubnet = false,
         private bool $allowNegation = false,
-        private string $incorrectInputMessage = '{attribute} must be a string.',
+        private string $incorrectInputMessage = '{Attribute} must be a string.',
         private string $message = 'Must be a valid IP address.',
         private string $ipv4NotAllowedMessage = 'Must not be an IPv4 address.',
         private string $ipv6NotAllowedMessage = 'Must not be an IPv6 address.',

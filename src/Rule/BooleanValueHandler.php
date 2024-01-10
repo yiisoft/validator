@@ -55,6 +55,7 @@ final class BooleanValueHandler implements RuleHandlerInterface
     {
         return [
             'attribute' => $context->getTranslatedAttribute(),
+            'Attribute' => ucfirst($context->getTranslatedAttribute()),
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
             'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
         ];
