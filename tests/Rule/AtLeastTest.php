@@ -202,7 +202,7 @@ final class AtLeastTest extends RuleTestCase
             'incorrect input' => [
                 1,
                 [new AtLeast(['attr2'])],
-                ['' => ['The value must be an array or an object.']],
+                ['' => ['Value must be an array or an object.']],
             ],
             'custom incorrect input message' => [
                 1,
@@ -212,7 +212,7 @@ final class AtLeastTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 1,
                 [new AtLeast(['attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - The value, type - int.']],
+                ['' => ['Attribute - Value, type - int.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['attribute' => 1],

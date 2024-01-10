@@ -1098,7 +1098,7 @@ final class NestedTest extends RuleTestCase
             'incorrect input' => [
                 '',
                 [new Nested(['value' => new Required()])],
-                ['' => ['The value must be an array or an object.']],
+                ['' => ['Value must be an array or an object.']],
             ],
             'custom incorrect input message' => [
                 '',
@@ -1113,7 +1113,7 @@ final class NestedTest extends RuleTestCase
                         incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - The value, type - string.']],
+                ['' => ['Attribute - Value, type - string.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => ''],
@@ -1190,7 +1190,7 @@ final class NestedTest extends RuleTestCase
                         ]),
                     ]),
                 ],
-                ['0.0' => ['The value must be no less than -10.']],
+                ['0.0' => ['Value must be no less than -10.']],
             ],
             'custom error' => [
                 [],
@@ -1306,7 +1306,7 @@ final class NestedTest extends RuleTestCase
             [
                 '',
                 [new Nested(['value' => new Required()])],
-                [['The value must be an array or an object.', []]],
+                [['Value must be an array or an object.', []]],
             ],
             [
                 ['value' => null],
@@ -1351,7 +1351,7 @@ final class NestedTest extends RuleTestCase
                         ]),
                     ]),
                 ],
-                [['The value must be no less than -10.', [0, 0]]],
+                [['Value must be no less than -10.', [0, 0]]],
             ],
             [
                 [

@@ -94,7 +94,7 @@ final class ValidationContextTest extends TestCase
     public function dataTranslatedAttributeWithoutTranslator(): array
     {
         return [
-            'null' => ['The value'],
+            'null' => ['Value'],
             'string' => ['test'],
         ];
     }

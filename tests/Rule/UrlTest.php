@@ -159,8 +159,8 @@ final class UrlTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputErrors = ['' => ['The value must be a string.']];
-        $errors = ['' => ['The value is not a valid URL.']];
+        $incorrectInputErrors = ['' => ['Value must be a string.']];
+        $errors = ['' => ['Value is not a valid URL.']];
         $longUrl = 'http://' . str_repeat('u', 1990) . '.de';
 
         return [
@@ -175,7 +175,7 @@ final class UrlTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 1,
                 [new Url(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - The value, type - int.']],
+                ['' => ['Attribute - Value, type - int.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['attribute' => 1],
@@ -212,7 +212,7 @@ final class UrlTest extends RuleTestCase
             'custom message with parameters' => [
                 'not a url',
                 [new Url(enableIdn: true, message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - The value, value - not a url.']],
+                ['' => ['Attribute - Value, value - not a url.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['attribute' => 'not a url'],

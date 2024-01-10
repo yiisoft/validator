@@ -128,7 +128,7 @@ final class InTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $errors = ['' => ['The value is not in the list of acceptable values.']];
+        $errors = ['' => ['Value is not in the list of acceptable values.']];
 
         return [
             [0, [new In(range(1, 10))], $errors],

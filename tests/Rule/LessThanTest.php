@@ -116,7 +116,7 @@ final class LessThanTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $message = 'The value must be less than "100".';
+        $message = 'Value must be less than "100".';
 
         return [
             [100, [new LessThan(100)], ['' => [$message]]],

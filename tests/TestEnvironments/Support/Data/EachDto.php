@@ -25,7 +25,7 @@ final class EachDto
         $result = new Result();
 
         if ($value !== 0) {
-            $result->addError('The value must be zero.');
+            $result->addError('Value must be zero.');
         }
 
         return $result;

@@ -116,7 +116,7 @@ final class GreaterThanOrEqualTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $message = 'The value must be greater than or equal to "100".';
+        $message = 'Value must be greater than or equal to "100".';
 
         return [
             [99, [new GreaterThanOrEqual(100)], ['' => [$message]]],

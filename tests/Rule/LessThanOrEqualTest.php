@@ -117,7 +117,7 @@ final class LessThanOrEqualTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $message = 'The value must be less than or equal to "100".';
+        $message = 'Value must be less than or equal to "100".';
 
         return [
             [101, [new LessThanOrEqual(100)], ['' => [$message]]],

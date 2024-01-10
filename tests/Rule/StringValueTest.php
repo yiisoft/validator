@@ -84,7 +84,7 @@ final class StringValueTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         $rule = new StringValue();
-        $message = 'The value must be a string.';
+        $message = 'Value must be a string.';
 
         return [
             'value: null' => [null, [$rule], ['' => [$message]]],
@@ -130,7 +130,7 @@ final class StringValueTest extends RuleTestCase
             'value: boolean, message: custom, with parameters' => [
                 false,
                 [new StringValue(message: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - The value, type - bool.']],
+                ['' => ['Attribute - Value, type - bool.']],
             ],
             'value: boolean, message: custom, with parameters, attribute set' => [
                 ['data' => false],

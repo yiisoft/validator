@@ -158,10 +158,10 @@ final class LengthTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputMessage = 'The value must be a string.';
-        $greaterThanMaxMessage = 'The value must contain at most 25 characters.';
-        $notExactlyMessage = 'The value must contain exactly 25 characters.';
-        $lessThanMinMessage = 'The value must contain at least 25 characters.';
+        $incorrectInputMessage = 'Value must be a string.';
+        $greaterThanMaxMessage = 'Value must contain at most 25 characters.';
+        $notExactlyMessage = 'Value must contain exactly 25 characters.';
+        $lessThanMinMessage = 'Value must contain at least 25 characters.';
 
         return [
             'incorrect input, array' => [['not a string'], [new Length(min: 25)], ['' => [$incorrectInputMessage]]],
@@ -175,7 +175,7 @@ final class LengthTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 false,
                 [new Length(min: 25, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - The value, type - bool.']],
+                ['' => ['Attribute - Value, type - bool.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => false],
@@ -193,7 +193,7 @@ final class LengthTest extends RuleTestCase
             [
                 str_repeat('x', 5),
                 [new Length(min: 10, max: 25)],
-                ['' => ['The value must contain at least 10 characters.']],
+                ['' => ['Value must contain at least 10 characters.']],
             ],
             [str_repeat('x', 13), [new Length(min: 25)], ['' => [$lessThanMinMessage]]],
             ['', [new Length(min: 25)], ['' => [$lessThanMinMessage]]],
@@ -206,7 +206,7 @@ final class LengthTest extends RuleTestCase
             'custom less than min message with parameters' => [
                 'ab',
                 [new Length(min: 3, lessThanMinMessage: 'Min - {min}, attribute - {attribute}, number - {number}.')],
-                ['' => ['Min - 3, attribute - The value, number - 2.']],
+                ['' => ['Min - 3, attribute - Value, number - 2.']],
             ],
             'custom less than min message with parameters, attribute set' => [
                 ['data' => 'ab'],
@@ -232,7 +232,7 @@ final class LengthTest extends RuleTestCase
                         greaterThanMaxMessage: 'Max - {max}, attribute - {attribute}, number - {number}.',
                     ),
                 ],
-                ['' => ['Max - 3, attribute - The value, number - 4.']],
+                ['' => ['Max - 3, attribute - Value, number - 4.']],
             ],
             'custom greater than max message with parameters, attribute set' => [
                 ['data' => 'abcd'],
@@ -258,7 +258,7 @@ final class LengthTest extends RuleTestCase
                         notExactlyMessage: 'Exactly - {exactly}, attribute - {attribute}, number - {number}.',
                     ),
                 ],
-                ['' => ['Exactly - 3, attribute - The value, number - 4.']],
+                ['' => ['Exactly - 3, attribute - Value, number - 4.']],
             ],
             'custom not exactly message with parameters, attribute set' => [
                 ['data' => 'abcd'],
@@ -274,12 +274,12 @@ final class LengthTest extends RuleTestCase
             'value: string with greater count, exactly: 0' => [
                 'a',
                 [new Length(0)],
-                ['' => ['The value must contain exactly 0 characters.']],
+                ['' => ['Value must contain exactly 0 characters.']],
             ],
             'value: empty string, exactly: positive' => [
                 '',
                 [new Length(1)],
-                ['' => ['The value must contain exactly 1 character.']],
+                ['' => ['Value must contain exactly 1 character.']],
             ],
         ];
     }

@@ -88,7 +88,7 @@ final class RequiredTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $singleMessageCannotBeBlank = ['' => ['The value cannot be blank.']];
+        $singleMessageCannotBeBlank = ['' => ['Value cannot be blank.']];
 
         return [
             [null, [new Required()], $singleMessageCannotBeBlank],

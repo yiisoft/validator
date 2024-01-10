@@ -544,7 +544,7 @@ final class IpTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputMessage = 'The value must be a string.';
+        $incorrectInputMessage = 'Value must be a string.';
         $message = 'Must be a valid IP address.';
         $hasSubnetMessage = 'Must not be a subnet.';
         $notInRangeMessage = 'Is not in the allowed range.';
@@ -567,7 +567,7 @@ final class IpTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 1,
                 [new Ip(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - The value, type - int.']],
+                ['' => ['Attribute - Value, type - int.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => 1],
@@ -595,7 +595,7 @@ final class IpTest extends RuleTestCase
             'custom has subnet message with parameters' => [
                 '2008:fa::0:1/64',
                 [new Ip(hasSubnetMessage: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - The value, value - 2008:fa::0:1/64.']],
+                ['' => ['Attribute - Value, value - 2008:fa::0:1/64.']],
             ],
             'custom has subnet message with parameters, attribute set' => [
                 ['data' => '2008:fa::0:1/64'],
@@ -631,7 +631,7 @@ final class IpTest extends RuleTestCase
                         ranges: ['10.0.0.1', '!10.0.0.0/8', '!babe::/8', 'any'],
                     ),
                 ],
-                ['' => ['Attribute - The value, value - 10.0.0.2.']],
+                ['' => ['Attribute - Value, value - 10.0.0.2.']],
             ],
             'custom not in range message with parameters, attribute set' => [
                 ['data' => '10.0.0.2'],
@@ -657,7 +657,7 @@ final class IpTest extends RuleTestCase
             'custom IPv4 not allowed message with parameters' => [
                 '192.168.10.11',
                 [new Ip(allowIpv4: false, ipv4NotAllowedMessage: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - The value, value - 192.168.10.11.']],
+                ['' => ['Attribute - Value, value - 192.168.10.11.']],
             ],
             'custom IPv4 not allowed message with parameters, attribute set' => [
                 ['data' => '192.168.10.11'],
@@ -679,7 +679,7 @@ final class IpTest extends RuleTestCase
             'custom wrong CIDR message with parameters' => [
                 '192.168.5.32/33',
                 [new Ip(allowSubnet: true, wrongCidrMessage: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - The value, value - 192.168.5.32/33.']],
+                ['' => ['Attribute - Value, value - 192.168.5.32/33.']],
             ],
             'custom wrong CIDR message with parameters, attribute set' => [
                 ['data' => '192.168.5.32/33'],
@@ -698,7 +698,7 @@ final class IpTest extends RuleTestCase
             'custom no subnet message with parameters' => [
                 '10.0.0.1',
                 [new Ip(requireSubnet: true, noSubnetMessage: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - The value, value - 10.0.0.1.']],
+                ['' => ['Attribute - Value, value - 10.0.0.1.']],
             ],
             'custom no subnet message with parameters, attribute set' => [
                 ['data' => '10.0.0.1'],
@@ -726,7 +726,7 @@ final class IpTest extends RuleTestCase
             'custom IPv6 not allowed message with parameters' => [
                 '2008:fa::1',
                 [new Ip(allowIpv6: false, ipv6NotAllowedMessage: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - The value, value - 2008:fa::1.']],
+                ['' => ['Attribute - Value, value - 2008:fa::1.']],
             ],
             'custom IPv6 not allowed message with parameters, attribute set' => [
                 ['data' => '2008:fa::1'],
@@ -802,7 +802,7 @@ final class IpTest extends RuleTestCase
             'custom message with parameters' => [
                 '192.168.5.32/af',
                 [new Ip(allowSubnet: true, message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - The value, value - 192.168.5.32/af.']],
+                ['' => ['Attribute - Value, value - 192.168.5.32/af.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => '192.168.5.32/af'],

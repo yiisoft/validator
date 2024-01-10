@@ -130,8 +130,8 @@ final class BooleanValueTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $defaultErrors = ['' => ['The value must be either "1" or "0".']];
-        $booleanErrors = ['' => ['The value must be either "true" or "false".']];
+        $defaultErrors = ['' => ['Value must be either "1" or "0".']];
+        $booleanErrors = ['' => ['Value must be either "true" or "false".']];
 
         return [
             ['5', [new BooleanValue()], $defaultErrors],
@@ -161,7 +161,7 @@ final class BooleanValueTest extends RuleTestCase
                         message: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
                     ),
                 ],
-                ['' => ['Attribute - The value, true - 1, false - 0, value - 5.']],
+                ['' => ['Attribute - Value, true - 1, false - 0, value - 5.']],
             ],
             'custom message with parameters, custom true and false values, strict' => [
                 5,
@@ -173,7 +173,7 @@ final class BooleanValueTest extends RuleTestCase
                         message: 'Attribute - {attribute}, true - {true}, false - {false}, value - {value}.',
                     ),
                 ],
-                ['' => ['Attribute - The value, true - true, false - false, value - 5.']],
+                ['' => ['Attribute - Value, true - true, false - false, value - 5.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => 5],
@@ -196,7 +196,7 @@ final class BooleanValueTest extends RuleTestCase
                         incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - The value, true - 1, false - 0, type - array.']],
+                ['' => ['Attribute - Value, true - 1, false - 0, type - array.']],
             ],
             'custom incorrect input message with parameters, custom true and false values, strict' => [
                 [],
@@ -208,7 +208,7 @@ final class BooleanValueTest extends RuleTestCase
                         incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - The value, true - true, false - false, type - array.']],
+                ['' => ['Attribute - Value, true - true, false - false, type - array.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => []],
@@ -226,7 +226,7 @@ final class BooleanValueTest extends RuleTestCase
                         incorrectInputMessage: 'Attribute - {attribute}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - The value, true - 1, false - 0, type - null.']],
+                ['' => ['Attribute - Value, true - 1, false - 0, type - null.']],
             ],
         ];
     }

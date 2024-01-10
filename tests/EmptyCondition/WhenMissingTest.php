@@ -26,7 +26,7 @@ final class WhenMissingTest extends TestCase
                 ['property' => new Number(skipOnEmpty: new WhenMissing())],
             ],
             [
-                ['The value must be a number.'],
+                ['Value must be a number.'],
                 '',
                 new Number(skipOnEmpty: new WhenMissing()),
             ],

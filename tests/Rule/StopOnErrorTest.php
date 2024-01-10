@@ -109,7 +109,7 @@ final class StopOnErrorTest extends RuleTestCase
                         new Length(max: 1),
                     ]),
                 ],
-                ['' => ['The value must contain at least 10 characters.']],
+                ['' => ['Value must contain at least 10 characters.']],
             ],
             'basic, different order' => [
                 'hello',
@@ -119,7 +119,7 @@ final class StopOnErrorTest extends RuleTestCase
                         new Length(min: 10),
                     ]),
                 ],
-                ['' => ['The value must contain at most 1 character.']],
+                ['' => ['Value must contain at most 1 character.']],
             ],
             'basic, plain StopOnError rule' => [
                 'hello',
@@ -127,7 +127,7 @@ final class StopOnErrorTest extends RuleTestCase
                     new Length(min: 10),
                     new Length(max: 1),
                 ]),
-                ['' => ['The value must contain at least 10 characters.']],
+                ['' => ['Value must contain at least 10 characters.']],
             ],
             'combined with other top level rules' => [
                 'hello',
@@ -141,9 +141,9 @@ final class StopOnErrorTest extends RuleTestCase
                 ],
                 [
                     '' => [
-                        'The value must be a number.',
-                        'The value must contain at most 1 character.',
-                        'The value must contain at least 7 characters.',
+                        'Value must be a number.',
+                        'Value must contain at most 1 character.',
+                        'Value must contain at least 7 characters.',
                     ],
                 ],
             ],
@@ -162,8 +162,8 @@ final class StopOnErrorTest extends RuleTestCase
                 ],
                 [
                     '' => [
-                        'The value must be a number.',
-                        'The value must contain at least 7 characters.',
+                        'Value must be a number.',
+                        'Value must contain at least 7 characters.',
                     ],
                 ],
             ],

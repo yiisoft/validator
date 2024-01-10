@@ -622,7 +622,7 @@ final class CompareTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 [],
                 [new Compare(false, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - The value, type - array.']],
+                ['' => ['Attribute - Value, type - array.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => []],
@@ -678,7 +678,7 @@ final class CompareTest extends RuleTestCase
                 ],
                 [
                     '' => [
-                        'Attribute - The value, target value - 100, target attribute - , target value or attribute - 100, ' .
+                        'Attribute - Value, target value - 100, target attribute - , target value or attribute - 100, ' .
                         'value - 101.',
                     ],
                 ],
@@ -707,7 +707,7 @@ final class CompareTest extends RuleTestCase
             'target value: integer (0), value: null, type: string, operator: ==' => [
                 null,
                 [new Compare(0, type: CompareType::STRING)],
-                ['' => ['The value must be equal to "0".']],
+                ['' => ['Value must be equal to "0".']],
             ],
 
             // Number / string specific, expressions
@@ -715,24 +715,24 @@ final class CompareTest extends RuleTestCase
             'target value: float, value: float with the same value as expression result, type: original, operator: ==' => [
                 1 - 0.83,
                 [new Compare(0.17, type: CompareType::ORIGINAL)],
-                ['' => ['The value must be equal to "0.17".']],
+                ['' => ['Value must be equal to "0.17".']],
             ],
             'target value: float epsilon, value: doubled float epsilon, type: number, operator: ==' => [
                 PHP_FLOAT_EPSILON * 2,
                 [new Compare(PHP_FLOAT_EPSILON)],
-                ['' => ['The value must be equal to "2.2204460492503E-16".']],
+                ['' => ['Value must be equal to "2.2204460492503E-16".']],
             ],
 
             // Number / original specific, decimal places, directly provided values
 
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: string, operator: ==' => [
-                '100.50', [new Compare('100.5', type: CompareType::STRING)], ['' => ['The value must be equal to "100.5".']],
+                '100.50', [new Compare('100.5', type: CompareType::STRING)], ['' => ['Value must be equal to "100.5".']],
             ],
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: string, operator: ===' => [
-                '100.50', [new Compare('100.5', type: CompareType::STRING, operator: '===')], ['' => ['The value must be strictly equal to "100.5".']],
+                '100.50', [new Compare('100.5', type: CompareType::STRING, operator: '===')], ['' => ['Value must be strictly equal to "100.5".']],
             ],
             'target value: string float, value: string float with the same value, but extra decimal place (0), type: original, operator: ===' => [
-                '100.50', [new Compare('100.5', type: CompareType::ORIGINAL, operator: '===')], ['' => ['The value must be strictly equal to "100.5".']],
+                '100.50', [new Compare('100.5', type: CompareType::ORIGINAL, operator: '===')], ['' => ['Value must be strictly equal to "100.5".']],
             ],
 
             // Number / original specific, decimal places, values provided via stringable objects
@@ -740,22 +740,22 @@ final class CompareTest extends RuleTestCase
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: string, operator: ==' => [
                 $stringableFloat,
                 [new Compare($targetStringableFloat, type: CompareType::STRING)],
-                ['' => ['The value must be equal to "100.5".']],
+                ['' => ['Value must be equal to "100.5".']],
             ],
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: string, operator: ===' => [
                 $stringableFloat,
                 [new Compare($targetStringableFloat, type: CompareType::STRING, operator: '===')],
-                ['' => ['The value must be strictly equal to "100.5".']],
+                ['' => ['Value must be strictly equal to "100.5".']],
             ],
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: original, operator: ==' => [
                 $stringableFloat,
                 [new Compare($targetStringableFloat, type: CompareType::ORIGINAL)],
-                ['' => ['The value must be equal to "100.5".']],
+                ['' => ['Value must be equal to "100.5".']],
             ],
             'target value: stringable float, value: stringable float with the same value, but extra decimal place (0), type: original, operator: ===' => [
                 $stringableFloat,
                 [new Compare($targetStringableFloat, type: CompareType::ORIGINAL, operator: '===')],
-                ['' => ['The value must be strictly equal to "100.5".']],
+                ['' => ['Value must be strictly equal to "100.5".']],
             ],
 
             // String / original specific, character order, directly provided values
@@ -763,7 +763,7 @@ final class CompareTest extends RuleTestCase
             'target value: character, value: character located further within alphabet, type: number, operator: >' => [
                 'b',
                 [new Compare('a', type: CompareType::NUMBER, operator: '>')],
-                ['' => ['The value must be greater than "a".']],
+                ['' => ['Value must be greater than "a".']],
             ],
 
             // String specific, character order, values provided via stringable objects
@@ -771,12 +771,12 @@ final class CompareTest extends RuleTestCase
             'target value: stringable uuidv4, value: greater stringable uuidv4, type: number, operator: >' => [
                 $stringableUuid,
                 [new Compare($targetStringableUuid, type: CompareType::NUMBER, operator: '>')],
-                ['' => ['The value must be greater than "3b98a689-7d49-48bb-8741-7e27f220b69a".']],
+                ['' => ['Value must be greater than "3b98a689-7d49-48bb-8741-7e27f220b69a".']],
             ],
             'target value: stringable uuidv4, value: greater stringable uuidv4, type: original, operator: >' => [
                 $stringableUuid,
                 [new Compare($targetStringableUuid, type: CompareType::ORIGINAL, operator: '>')],
-                ['' => ['The value must be greater than "3b98a689-7d49-48bb-8741-7e27f220b69a".']],
+                ['' => ['Value must be greater than "3b98a689-7d49-48bb-8741-7e27f220b69a".']],
             ],
 
             // Original specific, datetime
@@ -784,7 +784,7 @@ final class CompareTest extends RuleTestCase
             'target value: human-readable DateTime string, value: greater DateTime string, type: string, operator: >' => [
                 '2022-06-03',
                 [new Compare('June 2nd, 2022', type: CompareType::STRING, operator: '>')],
-                ['' => ['The value must be greater than "June 2nd, 2022".']],
+                ['' => ['Value must be greater than "June 2nd, 2022".']],
             ],
 
             // Number / string specific, DateTime object and Unix Timestamp
@@ -792,12 +792,12 @@ final class CompareTest extends RuleTestCase
             'target value: Unix Timestamp string, value: DateTime object with the same value, type: original, operator: ==' => [
                 $dateTime->format('U'),
                 [new Compare($dateTime, type: CompareType::ORIGINAL)],
-                ['' => ['The value must be equal to "1675774632".']],
+                ['' => ['Value must be equal to "1675774632".']],
             ],
             'target value: Unix Timestamp string, value: DateTime object with the same value, type: original, operator: >=' => [
                 $dateTime->format('U'),
                 [new Compare($dateTime, type: CompareType::ORIGINAL, operator: '>=')],
-                ['' => ['The value must be greater than or equal to "1675774632".']],
+                ['' => ['Value must be greater than or equal to "1675774632".']],
             ],
 
             // Original specific, objects
@@ -805,22 +805,22 @@ final class CompareTest extends RuleTestCase
             'target value: object, value: similar object in a different instance, type: original, operator: ===' => [
                 new stdClass(),
                 [new Compare(new stdClass(), type: CompareType::ORIGINAL, operator: '===')],
-                ['' => ['The value must be strictly equal to "stdClass".']],
+                ['' => ['Value must be strictly equal to "stdClass".']],
             ],
             'target value: object, value: similar object with different property value, type: original, operator: ==' => [
                 $objectWithDifferentPropertyValue,
                 [new Compare($object, type: CompareType::ORIGINAL)],
-                ['' => [sprintf('The value must be equal to "%s".', CompareObject::class)]],
+                ['' => [sprintf('Value must be equal to "%s".', CompareObject::class)]],
             ],
             'target value: object, value: similar object with different property value, type: original, operator: ===' => [
                 $objectWithDifferentPropertyValue,
                 [new Compare($object, type: CompareType::ORIGINAL, operator: '===')],
-                ['' => [sprintf('The value must be strictly equal to "%s".', CompareObject::class)]],
+                ['' => [sprintf('Value must be strictly equal to "%s".', CompareObject::class)]],
             ],
             'target value: object, value: similar object but with different property type, type: original, operator: ===' => [
                 $objectWithDifferentPropertyType,
                 [new Compare($object, type: CompareType::ORIGINAL, operator: '===')],
-                ['' => [sprintf('The value must be strictly equal to "%s".', CompareObject::class)]],
+                ['' => [sprintf('Value must be strictly equal to "%s".', CompareObject::class)]],
             ],
 
             // Original specific, arrays
@@ -828,31 +828,31 @@ final class CompareTest extends RuleTestCase
             'target value: array, value: similar array but with different item type, type: original, operator: ===' => [
                 [1, 2],
                 [new Compare([1, '2'], type: CompareType::ORIGINAL, operator: '===')],
-                ['' => ['The value must be strictly equal to "array".']],
+                ['' => ['Value must be strictly equal to "array".']],
             ],
             'target value: array, value: similar array but with different items order, type: original, operator: ==' => [
                 $reversedArray,
                 [new Compare($array, type: CompareType::ORIGINAL)],
-                ['' => ['The value must be equal to "array".']],
+                ['' => ['Value must be equal to "array".']],
             ],
             'target value: array, value: similar array but reversed, type: original, operator: ===' => [
                 $reversedArray,
                 [new Compare($array, type: CompareType::ORIGINAL, operator: '===')],
-                ['' => ['The value must be strictly equal to "array".']],
+                ['' => ['Value must be strictly equal to "array".']],
             ],
         ];
     }
 
     public function dataValidationFailedWithDifferentTypes(): array
     {
-        $messageEqual = 'The value must be equal to "100".';
-        $messageStrictlyEqual = 'The value must be strictly equal to "100".';
-        $messageNotEqual = 'The value must not be equal to "100".';
-        $messageNotStrictlyEqual = 'The value must not be strictly equal to "100".';
-        $messageGreaterThan = 'The value must be greater than "100".';
-        $messageGreaterOrEqualThan = 'The value must be greater than or equal to "100".';
-        $messageLessThan = 'The value must be less than "100".';
-        $messageLessOrEqualThan = 'The value must be less than or equal to "100".';
+        $messageEqual = 'Value must be equal to "100".';
+        $messageStrictlyEqual = 'Value must be strictly equal to "100".';
+        $messageNotEqual = 'Value must not be equal to "100".';
+        $messageNotStrictlyEqual = 'Value must not be strictly equal to "100".';
+        $messageGreaterThan = 'Value must be greater than "100".';
+        $messageGreaterOrEqualThan = 'Value must be greater than or equal to "100".';
+        $messageLessThan = 'Value must be less than "100".';
+        $messageLessOrEqualThan = 'Value must be less than or equal to "100".';
         $initialData = [
             // Basic
 
@@ -922,7 +922,7 @@ final class CompareTest extends RuleTestCase
             'target value: empty string, value: null, type: number, operator: ===' => [
                 null,
                 [new Compare('', operator: '===')],
-                ['' => ['The value must be strictly equal to "".']],
+                ['' => ['Value must be strictly equal to "".']],
             ],
             'target value: integer, value: string integer with the same value, type: number, operator: ===' => [
                 '100',

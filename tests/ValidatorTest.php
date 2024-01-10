@@ -165,7 +165,7 @@ class ValidatorTest extends TestCase
             ],
             'scalar-and-array-of-rules' => [
                 [
-                    '' => ['The value must be no greater than 7.'],
+                    '' => ['Value must be no greater than 7.'],
                 ],
                 42,
                 [
@@ -257,7 +257,7 @@ class ValidatorTest extends TestCase
                 static function (mixed $value): Result {
                     $result = new Result();
                     if ($value !== 42) {
-                        $result->addError('The value should be 42!', ['int']);
+                        $result->addError('Value should be 42!', ['int']);
                     }
 
                     return $result;
@@ -1181,7 +1181,7 @@ class ValidatorTest extends TestCase
 
         $this->assertFalse($result->isValid());
         $this->assertSame(
-            ['' => ['The value must be no less than 5.']],
+            ['' => ['Value must be no less than 5.']],
             $result->getErrorMessagesIndexedByPath(),
         );
     }
@@ -1401,7 +1401,7 @@ class ValidatorTest extends TestCase
         $result = (new Validator())->validate(19, $rule);
 
         $this->assertSame(
-            ['' => ['The value must be 42.']],
+            ['' => ['Value must be 42.']],
             $result->getErrorMessagesIndexedByPath()
         );
     }

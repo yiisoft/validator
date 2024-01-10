@@ -121,14 +121,14 @@ final class CountTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $lessThanMinmessage = 'The value must contain at least 3 items.';
-        $greaterThanMaxMessage = 'The value must contain at most 3 items.';
+        $lessThanMinmessage = 'Value must contain at least 3 items.';
+        $greaterThanMaxMessage = 'Value must contain at most 3 items.';
 
         return [
             'incorrect input' => [
                 1,
                 [new Count(min: 3)],
-                ['' => ['The value must be an array or implement \Countable interface.']],
+                ['' => ['Value must be an array or implement \Countable interface.']],
             ],
             'custom incorrect input message' => [
                 1,
@@ -138,7 +138,7 @@ final class CountTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 1,
                 [new Count(min: 3, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - The value, type - int.']],
+                ['' => ['Attribute - Value, type - int.']],
             ],
             'custom incorrect input message, attribute set' => [
                 ['data' => 1],
@@ -146,7 +146,7 @@ final class CountTest extends RuleTestCase
                 ['data' => ['Attribute - data, type - int.']],
             ],
 
-            [[1], new Count(3), ['' => ['The value must contain exactly 3 items.']]],
+            [[1], new Count(3), ['' => ['Value must contain exactly 3 items.']]],
             [[1], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
             [[], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
             [[0, 0], [new Count(min: 3)], ['' => [$lessThanMinmessage]]],
@@ -184,7 +184,7 @@ final class CountTest extends RuleTestCase
             'custom less than min message with parameters' => [
                 [0, 0],
                 [new Count(min: 3, lessThanMinMessage: 'Min - {min}, attribute - {attribute}, number - {number}.')],
-                ['' => ['Min - 3, attribute - The value, number - 2.']],
+                ['' => ['Min - 3, attribute - Value, number - 2.']],
             ],
             'custom less than min message with parameters, attribute set' => [
                 ['data' => [0, 0]],
@@ -205,7 +205,7 @@ final class CountTest extends RuleTestCase
             'custom greater than max message with parameters' => [
                 [0, 0, 0, 0],
                 [new Count(max: 3, greaterThanMaxMessage: 'Max - {max}, attribute - {attribute}, number - {number}.')],
-                ['' => ['Max - 3, attribute - The value, number - 4.']],
+                ['' => ['Max - 3, attribute - Value, number - 4.']],
             ],
             'custom greater than max message with parameters, attribute set' => [
                 ['data' => [0, 0, 0, 0]],
@@ -231,7 +231,7 @@ final class CountTest extends RuleTestCase
                         notExactlyMessage: 'Exactly - {exactly}, attribute - {attribute}, number - {number}.',
                     ),
                 ],
-                ['' => ['Exactly - 3, attribute - The value, number - 4.']],
+                ['' => ['Exactly - 3, attribute - Value, number - 4.']],
             ],
             'custom not exactly message with parameters, attribute set' => [
                 ['data' => [0, 0, 0, 0]],
@@ -246,17 +246,17 @@ final class CountTest extends RuleTestCase
             'class attribute' => [
                 new CountDto(),
                 null,
-                ['' => ['The value must contain at least 2 items.']],
+                ['' => ['Value must contain at least 2 items.']],
             ],
             'value: array with greater count, exactly: 0' => [
                 [0],
                 [new Count(0)],
-                ['' => ['The value must contain exactly 0 items.']],
+                ['' => ['Value must contain exactly 0 items.']],
             ],
             'value: empty array iterator, exactly: positive' => [
                 new ArrayIterator(),
                 [new Count(1)],
-                ['' => ['The value must contain exactly 1 item.']],
+                ['' => ['Value must contain exactly 1 item.']],
             ],
         ];
     }

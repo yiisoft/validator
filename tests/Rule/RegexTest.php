@@ -85,8 +85,8 @@ final class RegexTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputMessage = 'The value must be a string.';
-        $message = 'The value is invalid.';
+        $incorrectInputMessage = 'Value must be a string.';
+        $message = 'Value is invalid.';
 
         return [
             [['a', 'b'], [new Regex('/a/')], ['' => [$incorrectInputMessage]]],
@@ -103,7 +103,7 @@ final class RegexTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 null,
                 [new Regex('/a/', incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - The value, type - null.']],
+                ['' => ['Attribute - Value, type - null.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => null],
@@ -117,7 +117,7 @@ final class RegexTest extends RuleTestCase
             'custom message with parameters' => [
                 'b',
                 [new Regex('/a/', message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - The value, value - b.']],
+                ['' => ['Attribute - Value, value - b.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => 'b'],

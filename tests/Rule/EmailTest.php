@@ -208,8 +208,8 @@ final class EmailTest extends RuleTestCase
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIdn = new Email(enableIdn: true);
         $ruleEnabledIdnAndAllowedName = new Email(allowName: true, enableIdn: true);
-        $errors = ['' => ['The value is not a valid email address.']];
-        $incorrectInputErrors = ['' => ['The value must be a string.']];
+        $errors = ['' => ['Value is not a valid email address.']];
+        $incorrectInputErrors = ['' => ['Value must be a string.']];
 
         return [
             'incorrect input, integer' => [1, [$rule], $incorrectInputErrors],
@@ -226,7 +226,7 @@ final class EmailTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 1,
                 [new Email(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - The value, type - int.']],
+                ['' => ['Attribute - Value, type - int.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => 1],
@@ -328,7 +328,7 @@ final class EmailTest extends RuleTestCase
             'custom message with parameters' => [
                 'test@nonexistingsubdomain.example.com',
                 [new Email(checkDns: true, message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - The value, value - test@nonexistingsubdomain.example.com.']],
+                ['' => ['Attribute - Value, value - test@nonexistingsubdomain.example.com.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => 'test@nonexistingsubdomain.example.com'],

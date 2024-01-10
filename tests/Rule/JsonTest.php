@@ -134,8 +134,8 @@ JSON_WRAP
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputErrors = ['' => ['The value must be a string.']];
-        $errors = ['' => ['The value is not JSON.']];
+        $incorrectInputErrors = ['' => ['Value must be a string.']];
+        $errors = ['' => ['Value is not JSON.']];
 
         return [
             'incorrect input, array' => [['json'], [new Json()], $incorrectInputErrors],
@@ -149,7 +149,7 @@ JSON_WRAP
             'custom incorrect input message with parameters' => [
                 ['json'],
                 [new Json(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - The value, type - array.']],
+                ['' => ['Attribute - Value, type - array.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => ['json']],
@@ -164,7 +164,7 @@ JSON_WRAP
             'custom message with parameters' => [
                 'bad json',
                 [new Json(message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - The value, value - bad json.']],
+                ['' => ['Attribute - Value, value - bad json.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => 'bad json'],
