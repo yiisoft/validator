@@ -21,7 +21,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\ValidationContext;
 
-function (mixed $value, Callback $rule, ValidationContext $context): Result;
+function (mixed $value, Callback $rule, ValidationContext $context, int|string|null $key): Result;
 ```
 
 where:
@@ -29,6 +29,7 @@ where:
 - `$value` is the validated value;
 - `$rule` is a reference to the original `Callback` rule;
 - `$context` is a validation context;
+- `$key` is the key of the current element if the rule is nested in `Each`
 - returned value is a validation result instance with or without errors.
 
 ## Using as a function
@@ -41,7 +42,7 @@ use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\ValidationContext;
 
 new Callback(
-    static function (mixed $value, Callback $rule, ValidationContext $context): Result {
+    static function (mixed $value, Callback $rule, ValidationContext $context, string|int|null $key): Result {
         // The actual validation code.
         
         return new Result();

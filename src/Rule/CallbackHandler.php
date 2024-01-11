@@ -32,7 +32,10 @@ final class CallbackHandler implements RuleHandlerInterface
             throw new InvalidArgumentException('Using method outside of attribute scope is prohibited.');
         }
 
-        $result = $callback($value, $rule, $context);
+        /** @var int|string|null $eachIndex */
+        $eachIndex = $context->getParameter(ValidationContext::PARAMETER_CURRENT_EACH_INDEX);
+
+        $result = $callback($value, $rule, $context, $eachIndex);
         if (!$result instanceof Result) {
             throw new InvalidCallbackReturnTypeException($result);
         }

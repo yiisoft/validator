@@ -44,6 +44,8 @@ final class EachHandler implements RuleHandlerInterface
                 ]);
             }
 
+            $context->setParameter(ValidationContext::PARAMETER_CURRENT_EACH_INDEX, $index);
+
             $itemResult = $context->validate($item, $rules);
             if ($itemResult->isValid()) {
                 continue;
@@ -57,6 +59,8 @@ final class EachHandler implements RuleHandlerInterface
                 );
             }
         }
+
+        $context->setParameter(ValidationContext::PARAMETER_CURRENT_EACH_INDEX, null);
 
         return $result;
     }

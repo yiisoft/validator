@@ -12,6 +12,7 @@ use Yiisoft\Validator\Exception\InvalidCallbackReturnTypeException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\CallbackHandler;
+use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -242,5 +243,46 @@ final class CallbackTest extends RuleTestCase
     protected function getDifferentRuleInHandlerItems(): array
     {
         return [Callback::class, CallbackHandler::class];
+    }
+
+    public function dataValidationWithCallback(): array
+    {
+        return [
+            [
+                [10, 20, 30],
+                [0, 1, 2],
+            ],
+            [
+                ['key1' => 10, 'key2' => '2 test', 'key3' => 30],
+                ['key1', 'key2', 'key3'],
+            ],
+            [
+                [3 => 10, 'key2' => '2 test', 'key3' => 30],
+                [3, 'key2', 'key3'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationWithCallback
+     */
+    public function testValidationWithCallback($data, $keys): void
+    {
+        $indexes = [];
+        $rules = [
+            new Each(
+                new Callback(
+                    function (mixed $value, object $rule, ValidationContext $context, int|string $key) use (&$indexes) {
+                        $indexes[] = $key;
+                        return new Result();
+                    }
+                ),
+            ),
+        ];
+
+        $result = (new Validator())->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+        $this->assertSame($keys, $indexes);
     }
 }
