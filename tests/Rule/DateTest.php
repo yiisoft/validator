@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Date;
+use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\DateHandler;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
@@ -18,6 +20,24 @@ final class DateTest extends RuleTestCase
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
+
+    public function dataInvalidConfiguration(): array
+    {
+        return [
+            [['pattern' => ''], 'Pattern can\'t be empty.'],
+            [['format' => ''], 'Format can\'t be empty.'],
+        ];
+    }
+
+    /**
+     * @dataProvider dataInvalidConfiguration
+     */
+    public function testinvalidConfiguration(array $arguments, string $expectedExceptionMessage): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        new Date(...$arguments);
+    }
 
     public function dataValidationPassed(): array
     {
