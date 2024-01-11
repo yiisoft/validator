@@ -243,10 +243,9 @@ final class ValidationContext
     /**
      * Get translated attribute name.
      *
-     * @return string|null Translated attribute name. `null` if a single value is validated and there is nothing
-     * to translate.
+     * @return string Translated attribute name. `value` if a single value is validated and a label is not set.
      */
-    public function getTranslatedAttribute(): ?string
+    public function getTranslatedAttribute(): string
     {
         $label = $this->attributeLabel ?? $this->attribute ?? 'value';
 

@@ -4,7 +4,7 @@ To use a non-default error message, pass a custom message/template when creating
 `message` option is responsible for storing error message:
 
 ```php
-new Required(message: '{attribute} is required.');
+new Required(message: '{Attribute} is required.');
 ```
 
 Some rules have multiple error messages and are overridden via different corresponding options.
@@ -113,13 +113,13 @@ use Yiisoft\Validator\Validator;
 final class ChangePasswordForm implements AttributeTranslatorProviderInterface  
 {  
     public function __construct(  
-        #[Required(message: '{attribute} обязателен для ввода.')]  
+        #[Required(message: '{Attribute} обязателен для ввода.')]  
         public string $currentPassword = '',  
   
         #[Length(  
             min: 8,
             skipOnEmpty: false,  
-            lessThanMinMessage: '{attribute} должен быть сложный, не менее 8 символов.'  
+            lessThanMinMessage: '{Attribute} должен быть сложный, не менее 8 символов.'  
         )]  
         public string $newPassword = '',  
     ) {  
