@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Closure;
 use Attribute;
+use InvalidArgumentException;
 use Yiisoft\Validator\WhenInterface;
 use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -26,6 +27,17 @@ final class Date implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
     use WhenTrait;
 
     /**
+     * @var string The regular expression used to validate the value. See
+     * {@link https://www.regular-expressions.info/email.html}.
+     * @psalm-var non-empty-string
+     */
+    private string $pattern;
+
+    /**
+     * @psalm-var non-empty-string
+     */
+    private string $format;
+    /**
      * @param string $format The format of the date.
      * @param string $message A message used when the value is not valid.
      *You may use the following placeholders in the message:
@@ -41,16 +53,35 @@ final class Date implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private string $format = 'Y-m-d',
-        private string $pattern = '/^(?=.*Y)(?=.*[mM])(?=.*d).*[Ymd](-|\/|.)[Ymd]\1[Ymd]$/',
+        string $format = 'Y-m-d',
+        string $pattern = '/^(?=.*Y)(?=.*[mM])(?=.*d).*[Ymd](-|\/|.)[Ymd]\1[Ymd]$/',
         private string $incorrectInputMessage = 'The {attribute} must be a date.',
         private string $message = 'The {attribute} is not a valid date.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private ?Closure $when = null,
     ) {
+        if ($pattern === '') {
+            throw new InvalidArgumentException('Pattern can\'t be empty.');
+        }
+
+        $this->pattern = $pattern;
+
+        if ($format === '') {
+            throw new InvalidArgumentException('Format can\'t be empty.');
+        }
+
+        $this->format = $format;
     }
 
+    /**
+     *  The format date.
+     *
+     * @return string The format.
+     * @psalm-return non-empty-string
+     *
+     * @see $format
+     */
 
     public function getFormat(): string
     {
@@ -100,7 +131,14 @@ final class Date implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
     {
         return DateHandler::class;
     }
-
+    /**
+     * Get the regular expression used to validate the value.
+     *
+     * @return string The regular expression.
+     * @psalm-return non-empty-string
+     *
+     * @see $pattern
+     */
     public function getPattern(): string
     {
         return $this->pattern;
