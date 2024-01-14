@@ -25,7 +25,7 @@ final class DateHandler implements RuleHandlerInterface
 
         $result = new Result();
 
-        if (!is_string($value) || !preg_match($rule->getPattern(), $rule->getFormat()) ) {
+        if (!is_string($value) || empty($value)|| !preg_match($rule->getPattern(), $rule->getFormat()) ) {
             return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'type' => get_debug_type($value),
@@ -33,11 +33,9 @@ final class DateHandler implements RuleHandlerInterface
         }
 
         $date = DateTime::createFromFormat($rule->getFormat(), $value);
-        $errors = DateTime::getLastErrors();
 
-        if ($date === false || ($errors !== false && ($errors['error_count'] || $errors['warning_count']))
-            || ($date->format($rule->getFormat()) !== $value)) {
-            $result->addError($rule->getMessage(), [
+        if ($date === false  || ($date->format($rule->getFormat()) !== $value)) {
+             $result->addError($rule->getMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'value' => $value,
             ]);

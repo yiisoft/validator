@@ -12,6 +12,7 @@ use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
+use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 
@@ -127,7 +128,7 @@ final class Date implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
         return self::class;
     }
 
-    public function getHandler(): string
+    public function getHandler(): string|RuleHandlerInterface
     {
         return DateHandler::class;
     }

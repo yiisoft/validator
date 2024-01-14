@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Date;
-use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\DateHandler;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
@@ -58,16 +57,10 @@ final class DateTest extends RuleTestCase
                 ['' => ['Custom incorrect input message.']],
             ],
             [
-                '2023-02-30',
-                [new Date(format: 'Y-m-d', message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - , value - 2023-02-30.']],
-            ],
-            [
                 '2023-02-20ee',
                 [new Date(format: 'Y-m-dee', incorrectInputMessage: 'The must be a date.')],
                 ['' => ['The must be a date.']],
             ],
-
             [
                 '10-02-2023 00:00',
                 [new Date(format: 'd-m-Y H:i', incorrectInputMessage: 'The must be a date.')],
@@ -78,6 +71,16 @@ final class DateTest extends RuleTestCase
                 [new Date(format: 'Y-d-Y', incorrectInputMessage: 'The must be a date.')],
                 ['' => ['The must be a date.']],
             ],
+            [
+                '2023-02-30',
+                [new Date(format: 'Y-m-d', message: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - 2023-02-30.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['attribute' => 1],
+                ['attribute' => [new Date(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')]],
+                ['attribute' => ['Attribute - attribute, type - int.']],
+            ],
             'incorrect input, is not date' => [
                 'asdadas',
                 [new Date(message: 'Attribute - {attribute}, value - {value}.')],
@@ -85,8 +88,8 @@ final class DateTest extends RuleTestCase
             ],
             'empty string and custom message' => [
                 '',
-                [new Date(message: 'Custom message.')],
-                ['' => ['Custom message.']],
+                [new Date()],
+                ['' => ['The  must be a date.']],
             ],
         ];
     }
