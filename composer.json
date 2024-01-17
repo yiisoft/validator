@@ -44,7 +44,7 @@
         "rector/rector": "^0.19.0",
         "roave/infection-static-analysis-plugin": "^1.25",
         "spatie/phpunit-watcher": "^1.23",
-        "vimeo/psalm": "^4.30|^5.0",
+        "vimeo/psalm": "^5.0",
         "yiisoft/di": "^1.2",
         "yiisoft/test-support": "^3.0",
         "yiisoft/translator-message-php": "^1.1",
@@ -86,6 +86,10 @@
     },
     "scripts": {
         "test": "phpunit --testdox --no-interaction",
-        "test-watch": "phpunit-watcher watch"
+        "test-watch": "phpunit-watcher watch",
+        "rector": "vendor/bin/rector process",
+        "infection": "vendor/bin/infection",
+        "dry-run": "vendor/bin/rector process --dry-run",
+        "psalm": "vendor/bin/psalm --config=psalm.xml"
     }
 }
