@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -55,7 +56,7 @@ final class BooleanValueHandler implements RuleHandlerInterface
     {
         return [
             'attribute' => $context->getTranslatedAttribute(),
-            'Attribute' => ucfirst($context->getTranslatedAttribute()),
+            'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
             'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
         ];

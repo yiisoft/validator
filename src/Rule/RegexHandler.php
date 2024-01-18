@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -28,7 +29,7 @@ final class RegexHandler implements RuleHandlerInterface
         if (!is_string($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => ucfirst($context->getTranslatedAttribute()),
+                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -39,7 +40,7 @@ final class RegexHandler implements RuleHandlerInterface
         ) {
             $result->addError($rule->getMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => ucfirst($context->getTranslatedAttribute()),
+                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
                 'value' => $value,
             ]);
         }

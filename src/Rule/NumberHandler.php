@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Strings\NumericHelper;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -30,7 +31,7 @@ final class NumberHandler implements RuleHandlerInterface
         if (is_bool($value) || !is_scalar($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => ucfirst($context->getTranslatedAttribute()),
+                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
                 'type' => get_debug_type($value),
             ]);
 
@@ -40,21 +41,21 @@ final class NumberHandler implements RuleHandlerInterface
         if (!preg_match($rule->getPattern(), NumericHelper::normalize($value))) {
             $result->addError($rule->getNotNumberMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => ucfirst($context->getTranslatedAttribute()),
+                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
                 'value' => $value,
             ]);
         } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
             $result->addError($rule->getLessThanMinMessage(), [
                 'min' => $rule->getMin(),
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => ucfirst($context->getTranslatedAttribute()),
+                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
                 'value' => $value,
             ]);
         } elseif ($rule->getMax() !== null && $value > $rule->getMax()) {
             $result->addError($rule->getGreaterThanMaxMessage(), [
                 'max' => $rule->getMax(),
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => ucfirst($context->getTranslatedAttribute()),
+                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
                 'value' => $value,
             ]);
         }

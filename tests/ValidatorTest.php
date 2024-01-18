@@ -1477,6 +1477,18 @@ class ValidatorTest extends TestCase
                 ['property' => ['Test value must contain at least 20 characters.']],
             ],
             [
+                new class () {
+                    #[Label('проверка кириллицы')]
+                    #[Length(
+                        min: 20,
+                        lessThanMinMessage: '{Attribute} value must contain at least {min, number} {min, plural, ' .
+                        'one{character} other{characters}}.',
+                    )]
+                    public string $property = 'test';
+                },
+                ['property' => ['Проверка кириллицы value must contain at least 20 characters.']],
+            ],
+            [
                 new ObjectWithLabelsProvider(),
                 [
                     'name' => ['Имя cannot be blank.'],

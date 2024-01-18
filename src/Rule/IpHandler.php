@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use InvalidArgumentException;
 use Yiisoft\NetworkUtilities\IpHelper;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -37,7 +38,7 @@ final class IpHandler implements RuleHandlerInterface
         if (!is_string($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => ucfirst($context->getTranslatedAttribute()),
+                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -191,7 +192,7 @@ final class IpHandler implements RuleHandlerInterface
     {
         return (new Result())->addError($message, [
             'attribute' => $context->getTranslatedAttribute(),
-            'Attribute' => ucfirst($context->getTranslatedAttribute()),
+            'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
             'value' => $value,
         ]);
     }

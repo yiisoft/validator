@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
@@ -57,7 +58,7 @@ final class RequiredHandler implements RuleHandlerInterface
         if ($context->isAttributeMissing()) {
             $result->addError($rule->getNotPassedMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => ucfirst($context->getTranslatedAttribute()),
+                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
             ]);
 
             return $result;
@@ -71,7 +72,7 @@ final class RequiredHandler implements RuleHandlerInterface
 
         $result->addError($rule->getMessage(), [
             'attribute' => $context->getTranslatedAttribute(),
-            'Attribute' => ucfirst($context->getTranslatedAttribute()),
+            'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
         ]);
 
         return $result;
