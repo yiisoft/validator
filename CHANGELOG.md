@@ -1,8 +1,8 @@
 # Yii Validator Change Log
 
 ## 2.0.0 under development
-
-- New #615: Add `$key` of the current element to the `Callback` rule if it is nested in `Each` (@dood-)
+- New #615: Add the `Each::PARAMETER_EACH_KEY` parameter to the `Callback` rule containing the key of the current 
+  element if it is nested in `Each` (@dood-)
 - New #633: Add PHP attribute that sets property label for usage in error messages (@dood-)
 - New #597, #608: Add debug collector for `yiisoft/yii-debug` (@xepozz, @vjik)
 - New #610: Add `$escape` parameter to methods `Result::getAttributeErrorMessagesIndexedByPath()` and

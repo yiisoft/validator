@@ -272,7 +272,9 @@ final class CallbackTest extends RuleTestCase
         $rules = [
             new Each(
                 new Callback(
-                    function (mixed $value, object $rule, ValidationContext $context, int|string $key) use (&$indexes) {
+                    function (mixed $value, object $rule, ValidationContext $context) use (&$indexes) {
+                        /** @var int|string|null $key */
+                        $key = $context->getParameter(Each::PARAMETER_EACH_KEY);
                         $indexes[] = $key;
                         return new Result();
                     }
