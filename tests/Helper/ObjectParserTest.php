@@ -104,9 +104,7 @@ final class ObjectParserTest extends TestCase
         $reflectionParser = new ReflectionObject($parser1);
 
         $cacheProperty = $reflectionParser->getProperty('cache');
-        if (PHP_VERSION_ID < 80100) {
-            $cacheProperty->setAccessible(true);
-        }
+
 
         $cacheKey1 = 'Yiisoft\Validator\Tests\Support\Data\ObjectForTestingCache1_7_0';
         $this->assertArrayNotHasKey($cacheKey1, $cacheProperty->getValue());
@@ -162,9 +160,7 @@ final class ObjectParserTest extends TestCase
         $reflectionParser = new ReflectionObject($parser);
 
         $cacheProperty = $reflectionParser->getProperty('cache');
-        if (PHP_VERSION_ID < 80100) {
-            $cacheProperty->setAccessible(true);
-        }
+
 
         $cacheKey = 'Yiisoft\Validator\Tests\Support\Data\ObjectForTestingDisabledCache_7_0';
         $this->assertArrayNotHasKey($cacheKey, $cacheProperty->getValue());

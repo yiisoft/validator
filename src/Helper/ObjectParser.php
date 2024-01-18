@@ -353,13 +353,6 @@ final class ObjectParser
             if ($this->skipStaticProperties && $property->isStatic()) {
                 continue;
             }
-
-            /** @infection-ignore-all */
-            if (PHP_VERSION_ID < 80100) {
-                /** @psalm-suppress UnusedMethodCall Need for psalm with PHP 8.1+ */
-                $property->setAccessible(true);
-            }
-
             $reflectionProperties[$property->getName()] = $property;
         }
 
