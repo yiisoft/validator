@@ -14,6 +14,11 @@
         "@default": true,
         "global-ignoreSourceCodeByRegex": [
             ".*bool \\$useCache = true.*"
-        ]
+        ],
+        "LogicalAndSingleSubExprNegation": {
+            "ignoreSourceCodeByRegex": [
+                ".*if \\(\\$enableIdn .*"
+            ]
+        }
     }
 }

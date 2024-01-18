@@ -95,6 +95,7 @@ final class RegexTest extends RuleTestCase
             [null, [new Regex('/a/', not: true)], ['' => [$incorrectInputMessage]]],
             [new stdClass(), [new Regex('/a/')], ['' => [$incorrectInputMessage]]],
             [new stdClass(), [new Regex('/a/', not: true)], ['' => [$incorrectInputMessage]]],
+            'not' => ['a', [new Regex('/a/', not: true)], ['' => [$message]]],
             'custom incorrect input message' => [
                 null,
                 [new Regex('/a/', incorrectInputMessage: 'Custom incorrect input message.')],
