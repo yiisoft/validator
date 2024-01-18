@@ -32,11 +32,6 @@ final class ValidationContext
     public const PARAMETER_PREVIOUS_RULES_ERRORED = 'yii-validator-previous-rules-errored';
 
     /**
-     * A name of parameter string current key in the {@see Each} rule
-     */
-    public const PARAMETER_CURRENT_EACH_INDEX = 'yii-validator-current-each-index';
-
-    /**
      * @var ValidatorInterface|null A validator instance. `null` means context data was not set
      * with {@see setContextDataOnce()} yet.
      */

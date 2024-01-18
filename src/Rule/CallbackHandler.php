@@ -33,7 +33,7 @@ final class CallbackHandler implements RuleHandlerInterface
         }
 
         /** @var int|string|null $eachIndex */
-        $eachIndex = $context->getParameter(ValidationContext::PARAMETER_CURRENT_EACH_INDEX);
+        $eachIndex = $context->getParameter(Each::PARAMETER_EACH_KEY);
 
         $result = $callback($value, $rule, $context, $eachIndex);
         if (!$result instanceof Result) {
