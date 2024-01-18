@@ -3,6 +3,7 @@
 ## 2.0.0 under development
 
 - New #633: Include labels in error messages (@dood-)
+- Enh #648: Raise the minimum version of PHP to 8.1 (@pamparam83)
 - New #633: Add PHP attribute that sets property label for usage in error messages (@dood-)
 - New #597, #608: Add debug collector for `yiisoft/yii-debug` (@xepozz, @vjik)
 - New #610: Add `$escape` parameter to methods `Result::getAttributeErrorMessagesIndexedByPath()` and
