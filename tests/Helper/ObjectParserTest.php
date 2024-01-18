@@ -105,7 +105,6 @@ final class ObjectParserTest extends TestCase
 
         $cacheProperty = $reflectionParser->getProperty('cache');
 
-
         $cacheKey1 = 'Yiisoft\Validator\Tests\Support\Data\ObjectForTestingCache1_7_0';
         $this->assertArrayNotHasKey($cacheKey1, $cacheProperty->getValue());
 
@@ -160,7 +159,6 @@ final class ObjectParserTest extends TestCase
         $reflectionParser = new ReflectionObject($parser);
 
         $cacheProperty = $reflectionParser->getProperty('cache');
-
 
         $cacheKey = 'Yiisoft\Validator\Tests\Support\Data\ObjectForTestingDisabledCache_7_0';
         $this->assertArrayNotHasKey($cacheKey, $cacheProperty->getValue());
