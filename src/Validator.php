@@ -135,8 +135,9 @@ final class Validator implements ValidatorInterface
 
             if ($dataSet instanceof LabelsProviderInterface) {
                 $labels = $dataSet->getValidationPropertyLabels();
-                $attributeName = is_string($attribute) ? $attribute : null;
-                $context->setAttributeLabel($labels[$attribute] ?? $attributeName);
+                if (is_string($attribute)) {
+                    $context->setAttributeLabel($labels[$attribute] ?? $attribute);
+                }
             } else {
                 $context->setAttributeLabel(is_string($attribute) ? $attribute : $context->getAttributeLabel());
             }

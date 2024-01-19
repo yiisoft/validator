@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Generator;
+use stdClass;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\EachHandler;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rule\StringValue;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -18,6 +20,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
+use Yiisoft\Validator\Validator;
 
 final class EachTest extends RuleTestCase
 {
@@ -300,6 +303,18 @@ final class EachTest extends RuleTestCase
                 [
                     '0.name' => ['Name must contain at least 3 characters.'],
                     '1.age' => ['Age must be no less than 18.'],
+                ],
+            ],
+            'validate with labels' => [
+                ['a' => [1, 2], 'b' => [new stdClass(), 0, 'test']],
+                [
+                    'a' => new StringValue(),
+                    'b' => new Each(new StringValue()),
+                ],
+                [
+                    'a' => ['A must be a string.'],
+                    'b.0' => ['B must be a string.'],
+                    'b.1' => ['B must be a string.'],
                 ],
             ],
         ];
