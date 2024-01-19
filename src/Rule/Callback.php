@@ -37,7 +37,7 @@ final class Callback implements
     use WhenTrait;
 
     /**
-     * @param callable|null $callback Callable with the `function ($value, $rule, $context, $key): Result` signature that
+     * @param callable|null $callback Callable with the `function ($value, $rule, $context): Result` signature that
      * performs the validation. Mutually exclusive with {@see $method}.
      * @param string|null $method Name of a validated object method with the `function ($value, $rule, $context, $key): Result`
      * signature that performs the validation. Mutually exclusive with {@see $callback}.
