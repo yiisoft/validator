@@ -1,6 +1,7 @@
 # Yii Validator Change Log
 
 ## 2.0.0 under development
+
 - New #615: Add the `Each::PARAMETER_EACH_KEY` validation context parameter that available during `Each` rule handling 
   and containing the current key (@dood-)
 - Enh #648: Raise the minimum version of PHP to 8.1 (@pamparam83)
