@@ -3,6 +3,8 @@
 ## 2.0.0 under development
 
 - New #633: Include labels in error messages (@dood-)
+- New #615: Add the `Each::PARAMETER_EACH_KEY` validation context parameter that available during `Each` rule handling 
+  and containing the current key (@dood-)
 - Enh #648: Raise the minimum version of PHP to 8.1 (@pamparam83)
 - New #633: Add PHP attribute that sets property label for usage in error messages (@dood-)
 - New #597, #608: Add debug collector for `yiisoft/yii-debug` (@xepozz, @vjik)

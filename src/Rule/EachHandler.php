@@ -37,6 +37,8 @@ final class EachHandler implements RuleHandlerInterface
         $rules = $rule->getRules();
         $result = new Result();
 
+        $originalEachKey = $context->getParameter(Each::PARAMETER_EACH_KEY);
+
         /** @var mixed $item */
         foreach ($value as $index => $item) {
             if (!is_int($index) && !is_string($index)) {
@@ -46,6 +48,8 @@ final class EachHandler implements RuleHandlerInterface
                     'type' => get_debug_type($value),
                 ]);
             }
+
+            $context->setParameter(Each::PARAMETER_EACH_KEY, $index);
 
             $itemResult = $context->validate($item, $rules);
             if ($itemResult->isValid()) {
@@ -60,6 +64,8 @@ final class EachHandler implements RuleHandlerInterface
                 );
             }
         }
+
+        $context->setParameter(Each::PARAMETER_EACH_KEY, $originalEachKey);
 
         return $result;
     }

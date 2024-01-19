@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use Generator;
 use stdClass;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\EachHandler;
 use Yiisoft\Validator\Rule\Length;
@@ -21,6 +22,7 @@ use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
 use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\ValidationContext;
 
 final class EachTest extends RuleTestCase
 {
@@ -334,5 +336,70 @@ final class EachTest extends RuleTestCase
     protected function getDifferentRuleInHandlerItems(): array
     {
         return [Each::class, EachHandler::class];
+    }
+
+    public static function dataContextEachKey(): array
+    {
+        return [
+            [
+                [10, 20, 30],
+                [0, 1, 2],
+            ],
+            [
+                ['key1' => 10, 'key2' => '2 test', 'key3' => 30],
+                ['key1', 'key2', 'key3'],
+            ],
+            [
+                [3 => 10, 'key2' => '2 test', 'key3' => 30],
+                [3, 'key2', 'key3'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataContextEachKey
+     */
+    public function testContextEachKey($data, $keys): void
+    {
+        $indexes = [];
+        $rules = [
+            new Each(
+                new Callback(
+                    function (mixed $value, object $rule, ValidationContext $context) use (&$indexes) {
+                        $indexes[] = $context->getParameter(Each::PARAMETER_EACH_KEY);
+                        return new Result();
+                    }
+                ),
+            ),
+        ];
+
+        $result = (new Validator())->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+        $this->assertSame($keys, $indexes);
+    }
+
+    public function testNestedContextEachKey(): void
+    {
+        $indexes = [];
+        $callback = new Callback(
+            function (mixed $value, object $rule, ValidationContext $context) use (&$indexes) {
+                $indexes[] = $context->getParameter(Each::PARAMETER_EACH_KEY);
+                return new Result();
+            }
+        );
+
+        (new Validator())->validate(
+            [
+                'a' => ['x' => 1, 'y' => 2],
+                'b' => ['z' => 3],
+            ],
+            new Each([
+                new Each($callback),
+                $callback,
+            ]),
+        );
+
+        $this->assertSame(['x', 'y', 'a', 'z', 'b'], $indexes);
     }
 }
