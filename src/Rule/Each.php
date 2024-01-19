@@ -77,7 +77,7 @@ final class Each implements
     /**
      * A name of parameter string current key in the {@see Each} rule
      */
-    public const PARAMETER_EACH_KEY = 'yii-validator-current-each-index';
+    public const PARAMETER_EACH_KEY = 'yii-validator-current-each-key';
 
     /**
      * @var array Normalized rules to apply for each element of the validated iterable.
