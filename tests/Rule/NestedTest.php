@@ -1067,11 +1067,11 @@ final class NestedTest extends RuleTestCase
             ],
             'custom no rules with no object message with parameters' => [
                 new class () {
-                    #[Nested(noRulesWithNoObjectMessage: 'Attribute - {attribute}, type - {type}.')]
+                    #[Nested(noRulesWithNoObjectMessage: 'Attribute - {Attribute}, type - {type}.')]
                     public array $value = [];
                 },
                 null,
-                ['value' => ['Attribute - value, type - array.']],
+                ['value' => ['Attribute - Value, type - array.']],
             ],
             // Incorrect data set type
             'incorrect data set type' => [

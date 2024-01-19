@@ -205,10 +205,10 @@ final class EachTest extends RuleTestCase
                 [
                     'data' => new Each(
                         [new Number(max: 13)],
-                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                        incorrectInputMessage: 'Attribute - {Attribute}, type - {type}.',
                     ),
                 ],
-                ['data' => ['Attribute - data, type - int.']],
+                ['data' => ['Attribute - Data, type - int.']],
             ],
 
             'incorrect input key' => [
