@@ -245,7 +245,7 @@ final class CallbackTest extends RuleTestCase
         return [Callback::class, CallbackHandler::class];
     }
 
-    public function dataValidationWithCallback(): array
+    public static function dataValidationWithCallback(): array
     {
         return [
             [
