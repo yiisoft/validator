@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use DateTimeInterface;
-use DateTimeImmutable;
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\DateTime;
 use Yiisoft\Validator\Rule\DateTimeHandler;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -21,103 +20,72 @@ final class DateTimeTest extends RuleTestCase
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
+    public function dataInvalidConfiguration(): array
+    {
+        return [
+            [['format' => ''], 'Format can\'t be empty.'],
+        ];
+    }
+
+    /**
+     * @dataProvider dataInvalidConfiguration
+     */
+    public function testinvalidConfiguration(array $arguments, string $expectedExceptionMessage): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        new DateTime(...$arguments);
+    }
 
     public function dataValidationPassed(): array
     {
         return [
-            ['2024-08-15T15:52:01+00:00', [new DateTime(formats: DateTimeInterface::W3C)]],
-            ['2024-08-15 15:52:01', [new DateTime(formats: 'Y-m-d H:i:s')]],
-            ['15-08-2024 15:52', [new DateTime(formats: 'd-m-Y H:i')]],
-            [
-                '2024-08-15 15:52:01',
-                [
-                    new DateTime(
-                        min: null,
-                        max: null,
-                        message: 'The value must be between 2024-08-15 15:52:01 and 2024-08-15 15:52:01.',
-                        lessThanMinMessage: 'The value must be no less than 2024-08-15 15:52:01.',
-                        greaterThanMaxMessage: 'The value must be no greater than 2024-08-15 15:52:01.',
-                        skipOnEmpty: false,
-                        skipOnError: false,
-                        when: null,
-                        formats: 'Y-m-d H:i:s', format: DateTimeInterface::W3C,
-                    ),
-                ],
-            ],
-            [
-                '2024-08-15 15:52:01',
-                [
-                    new DateTime(
-                        min: new DateTimeImmutable('2024-08-15 15:52:01'),
-                        formats: 'Y-m-d H:i:s'
-                    ),
-                ],
-            ],
-            [
-                new DateTimeImmutable('2024-08-15 15:52:01'),
-                [new DateTime(formats: 'Y-m-d H:i:s')],
-            ],
-            [
-                '2024-08-15 15:51:59',
-                [
-                    new DateTime(
-                        max: new DateTimeImmutable('2024-08-15 15:52:01'),
-                        formats: 'Y-m-d H:i:s'
-                    ),
-                ],
-            ],
-            [
-                '2024-08-15 15:52:01',
-                [
-                    new DateTime(
-                        max: new DateTimeImmutable('2024-08-15 15:52:01'),
-                        formats: 'Y-m-d H:i:s'
-                    ),
-                ],
-                ['' => [' must be no greater than 2024-08-15 15:52:01.']],
-            ],
-
-            [
-                1705322898,
-                [new DateTime()],
-                ['' => [' value is not a valid DateTime.']],
-            ],
+            ['2020-01-01', [new DateTime(format: 'Y-m-d')]],
+            ['2020-01-01 10:10:10', [new DateTime(format: 'Y-m-d H:i:s')]],
+            ['10.02.2023', [new DateTime(format: 'd.m.Y')]],
+            ['10/02/2023', [new DateTime(format: 'd/m/Y')]],
+            ['April 30, 2023, 5:16 pm', [new DateTime(format: 'F j, Y, g:i a')]],
+            ['', [new DateTime(format: 'd-m-Y', skipOnEmpty: true)]],
         ];
     }
 
     public function dataValidationFailed(): array
     {
         return [
-
+            'incorrect input, is integer' => [
+                1,
+                [new DateTime(incorrectInputMessage: 'Custom incorrect input message.')],
+                ['' => ['Custom incorrect input message.']],
+            ],
             [
                 '2023-02-20ee',
-                [new DateTime(message: '{attribute} value is not a valid DateTime.')],
-                ['' => [' value is not a valid DateTime.']],
+                [new DateTime(format: 'Y-m-dee',)],
+                ['' => ['The  is not a valid date.']],
             ],
             [
+                '2023-02-30',
+                [new DateTime(format: 'Y-m-d', message: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - 2023-02-30.']],
+            ],
+            'custom incorrect input message with parameters, attribute set' => [
+                ['attribute' => 1],
+                ['attribute' => [new DateTime(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')]],
+                ['attribute' => ['Attribute - attribute, type - int.']],
+            ],
+            'incorrect input, is not date' => [
+                'datetime',
+                [new DateTime(message: 'Attribute - {attribute}, value - {value}.')],
+                ['' => ['Attribute - , value - datetime.']],
+            ],
+            'empty string and custom message' => [
                 '',
-                [new DateTime(message: '{attribute} value is not a valid DateTime.')],
-                ['' => [' value is not a valid DateTime.']],
+                [new DateTime()],
+                ['' => ['The  must be a date.']],
             ],
-            [
-                '2024-08-14 15:52:01',
-                [
-                    new DateTime(
-                        min: new DateTimeImmutable('2024-08-15 15:52:01'),
-                        formats: 'Y-m-d H:i:s'
-                    ),
-                ],
-                ['' => [' must be no less than 2024-08-15 15:52:01.']],
-            ],
-            [
-                '2024-08-15 15:52:02',
-                [
-                    new DateTime(
-                        max: new DateTimeImmutable('2024-08-15 15:52:01'),
-                        formats: 'Y-m-d H:i:s'
-                    ),
-                ],
-                ['' => [' must be no greater than 2024-08-15 15:52:01.']],
+              [
+                null,
+                [new DateTime()],
+                ['' => ['The  must be a date.']],
             ],
         ];
     }
@@ -128,19 +96,13 @@ final class DateTimeTest extends RuleTestCase
             [
                 new DateTime(),
                 [
-                    'formats' => [],
-                    'min' => null,
-                    'max' => null,
-                    'lessThanMinMessage' => [
-                        'template' => '{attribute} must be no less than {min}.',
-                        'parameters' => [],
-                    ],
-                    'greaterThanMaxMessage' => [
-                        'template' => '{attribute} must be no greater than {max}.',
+                    'format' => 'Y-m-d',
+                    'incorrectInputMessage' => [
+                        'template' => 'The {attribute} must be a date.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{attribute} value is not a valid DateTime.',
+                        'template' => 'The {attribute} is not a valid date.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,

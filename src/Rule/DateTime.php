@@ -6,8 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Closure;
 use Attribute;
-use DateTimeImmutable;
-use DateTimeInterface;
+use InvalidArgumentException;
 use Yiisoft\Validator\WhenInterface;
 use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -18,7 +17,41 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 
 /**
+ * Defines validation options to check that the value is a date.
+ *
+ * An example for simple  that can be used to validate the date:
+ * ```php
+ * use Yiisoft\Validator\Rule\DateTime;
+ *
+ * $rules = [
+ *      'date' => [
+ *          new DateTime(format: 'Y-m-d'),
+ *      ],
+ * ];
+ * ```
+ * In the example above, the PHP attributes equivalent will be:
+ *
+ * ```php
+ * use Yiisoft\Validator\Validator;
+ * use Yiisoft\Validator\Rule\DateTime;
+ *
+ * final class User
+ * {
+ *     public function __construct(
+ *          #[DateTime(format: 'Y-m-d')]
+ *          public string $date,
+ *     ){
+ *    }
+ * }
+ *
+ * $user = new User( date: '2022-01-01' );
+ *
+ * $validator = (new Validator())->validate($user);
+ *
+ * ```
+ *
  * @see DateTimeHandler
+ *
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -29,100 +62,73 @@ final class DateTime implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
     use WhenTrait;
 
     /**
-     * @var string[]
+     * @link https://www.php.net/manual/en/function.date.php
+     * @psalm-var non-empty-string
+     * @var string The allowed date formats.
      */
-    private array $formats = [];
-    private DateTimeInterface|false|null $min;
-    private DateTimeInterface|false|null $max;
+    private string $format;
 
     /**
-     * Constructor for the class.
-     *
-     * @param int|DateTimeInterface|null $min The minimum value allowed.
-     * @param int|DateTimeInterface|null $max The maximum value allowed.
-     * @param string $message The validation error message for invalid DateTime value.
-     * @param string $lessThanMinMessage The validation error message for values less than the minimum.
-     * @param string $greaterThanMaxMessage The validation error message for values greater than the maximum.
-     * @param mixed $skipOnEmpty Determines if the validation should be skipped when the value is empty.
-     * @param bool $skipOnError Determines if the validation should be skipped when there is an error.
-     * @param Closure|null $when The condition that determines when the validation should be applied.
-     * @param string ...$formats The allowed date formats.
+     * @param string $format The format of the date. See {@see $format}
+     * @param string $message A message used when the value is not valid.
+     * You may use the following placeholders in the message:
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{value}`: the value of the attribute being validated.
+     * @param string $incorrectInputMessage A message used when the input is incorrect.
+     * You may use the following placeholders in the message:
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
+     * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty. See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
+     * @psalm-param WhenType $when
      */
     public function __construct(
-        int|DateTimeInterface|null $min = null,
-        int|DateTimeInterface|null $max = null,
-        private string $message = '{attribute} value is not a valid DateTime.',
-        private string $lessThanMinMessage = '{attribute} must be no less than {min}.',
-        private string $greaterThanMaxMessage = '{attribute} must be no greater than {max}.',
+        string $format = 'Y-m-d',
+        private string $incorrectInputMessage = 'The {attribute} must be a date.',
+        private string $message = 'The {attribute} is not a valid date.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private ?Closure $when = null,
-        string ...$formats
     ) {
-        $this->formats = $formats;
-        $this->min = is_int($min) ? DateTimeImmutable::createFromFormat('U', (string) $min) : $min;
-        $this->max = is_int($max) ? DateTimeImmutable::createFromFormat('U', (string) $max) : $max;
+        if ($format === '') {
+            throw new InvalidArgumentException('Format can\'t be empty.');
+        }
+
+        $this->format = $format;
     }
 
     /**
-     * @return string[]
+     *  The date format.
+     *
+     * @return string The format. See {@see $format}
+     * @psalm-return non-empty-string
+     *
+     * @see $format
      */
-    public function getFormats(): array
-    {
-        if ($this->formats) {
-            return $this->formats;
-        }
 
-        return [
-            DateTimeInterface::ATOM,
-            DateTimeInterface::COOKIE,
-            DateTimeInterface::RFC822,
-            DateTimeInterface::RFC850,
-            DateTimeInterface::RFC1036,
-            DateTimeInterface::RFC1123,
-            DateTimeInterface::RFC7231,
-            DateTimeInterface::RFC2822,
-            DateTimeInterface::RFC3339,
-            DateTimeInterface::RFC3339_EXTENDED,
-            DateTimeInterface::RSS,
-            DateTimeInterface::W3C,
-        ];
+    public function getFormat(): string
+    {
+        return $this->format;
     }
 
-
-    public function getLessThanMinMessage(): string
+    /**
+     * Get a message used when the input is incorrect.
+     *
+     * @return string A message used when the input is incorrect.
+     * @see $incorrectInputMessage
+     */
+    public function getIncorrectInputMessage(): string
     {
-        return $this->lessThanMinMessage;
+        return $this->incorrectInputMessage;
     }
-
-    public function getGreaterThanMaxMessage(): string
-    {
-        return $this->greaterThanMaxMessage;
-    }
-
-    public function getMin(): DateTimeInterface|false|null
-    {
-        return $this->min;
-    }
-
-    public function getMax(): DateTimeInterface|false|null
-    {
-        return $this->max;
-    }
-
 
     public function getOptions(): array
     {
         return [
-            'formats' => $this->formats,
-            'min' => $this->min,
-            'max' => $this->max,
-            'lessThanMinMessage' => [
-                'template' => $this->lessThanMinMessage,
-                'parameters' => [],
-            ],
-            'greaterThanMaxMessage' => [
-                'template' => $this->greaterThanMaxMessage,
+            'format' => $this->format,
+            'incorrectInputMessage' => [
+                'template' => $this->incorrectInputMessage,
                 'parameters' => [],
             ],
             'message' => [
@@ -148,4 +154,5 @@ final class DateTime implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
     {
         return DateTimeHandler::class;
     }
+
 }
