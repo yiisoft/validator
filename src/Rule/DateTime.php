@@ -62,7 +62,7 @@ final class DateTime implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
     use WhenTrait;
 
     /**
-     * @link https://www.php.net/manual/en/function.date.php
+     * @link https://www.php.net/manual/en/datetimeimmutable.createfromformat.php
      * @psalm-var non-empty-string
      * @var string The allowed date formats.
      */

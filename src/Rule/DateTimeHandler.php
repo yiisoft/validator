@@ -30,11 +30,12 @@ final class DateTimeHandler implements RuleHandlerInterface
                 'type' => get_debug_type($value),
             ]);
         }
+        \DateTime::createFromFormat($rule->getFormat(), $value);
 
-        $date = \DateTime::createFromFormat($rule->getFormat(), $value);
-
-        if ($date === false  || ($date->format($rule->getFormat()) !== $value)) {
-             $result->addError($rule->getMessage(), [
+        // Before PHP 8.2 may return array instead of false (see https://github.com/php/php-src/issues/9431).
+        $errors = \DateTime::getLastErrors() ?: [ 'error_count' => 0, 'warning_count' => 0 ];
+        if($errors['error_count'] != 0  ||  $errors['warning_count'] != 0){
+            $result->addError($rule->getMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'value' => $value,
             ]);
