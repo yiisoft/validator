@@ -46,14 +46,17 @@ final class DateTimeTest extends RuleTestCase
             ['10/02/2023', [new DateTime(format: 'd/m/Y')]],
             ['April 30, 2023, 5:16 pm', [new DateTime(format: 'F j, Y, g:i a')]],
             ['', [new DateTime(format: 'd-m-Y', skipOnEmpty: true)]],
+            ['125636000', [new DateTime(format: 'U')]],
+            [125636000, [new DateTime(format: 'U')]],
+            [123456.344, [new DateTime(format: 'U.u')]],
         ];
     }
 
     public function dataValidationFailed(): array
     {
         return [
-            'incorrect input, is integer' => [
-                1,
+            'incorrect input, is boolean' => [
+                true,
                 [new DateTime(incorrectInputMessage: 'Custom incorrect input message.')],
                 ['' => ['Custom incorrect input message.']],
             ],
@@ -63,14 +66,19 @@ final class DateTimeTest extends RuleTestCase
                 ['' => ['The  is not a valid date.']],
             ],
             [
+                '2024-02-20',
+                [new DateTime(format: 'H:i',)],
+                ['' => ['The  is not a valid date.']],
+            ],
+            [
                 '2023-02-30',
                 [new DateTime(format: 'Y-m-d', message: 'Attribute - {attribute}, value - {value}.')],
                 ['' => ['Attribute - , value - 2023-02-30.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
-                ['attribute' => 1],
+                ['attribute' => []],
                 ['attribute' => [new DateTime(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')]],
-                ['attribute' => ['Attribute - attribute, type - int.']],
+                ['attribute' => ['Attribute - attribute, type - array.']],
             ],
             'incorrect input, is not date' => [
                 'datetime',
