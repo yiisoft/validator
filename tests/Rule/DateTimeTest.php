@@ -62,12 +62,12 @@ final class DateTimeTest extends RuleTestCase
             ],
             [
                 '2023-02-20ee',
-                [new DateTime(format: 'Y-m-dee',)],
+                [new DateTime(format: 'Y-m-dee', )],
                 ['' => ['The  is not a valid date.']],
             ],
             [
                 '2024-02-20',
-                [new DateTime(format: 'H:i',)],
+                [new DateTime(format: 'H:i', )],
                 ['' => ['The  is not a valid date.']],
             ],
             [
@@ -90,7 +90,7 @@ final class DateTimeTest extends RuleTestCase
                 [new DateTime()],
                 ['' => ['The  must be a date.']],
             ],
-              [
+            [
                 null,
                 [new DateTime()],
                 ['' => ['The  must be a date.']],
@@ -141,5 +141,4 @@ final class DateTimeTest extends RuleTestCase
         $rule = new DateTime();
         $this->assertSame(DateTime::class, $rule->getName());
     }
-
 }

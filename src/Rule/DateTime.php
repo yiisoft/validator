@@ -106,7 +106,6 @@ final class DateTime implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
      *
      * @see $format
      */
-
     public function getFormat(): string
     {
         return $this->format;
@@ -154,5 +153,4 @@ final class DateTime implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
     {
         return DateTimeHandler::class;
     }
-
 }
