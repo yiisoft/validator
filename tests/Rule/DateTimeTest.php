@@ -63,37 +63,37 @@ final class DateTimeTest extends RuleTestCase
             [
                 '2023-02-20ee',
                 [new DateTime(format: 'Y-m-dee', )],
-                ['' => ['The  is not a valid date.']],
+                ['' => ['The value is not a valid date.']],
             ],
             [
                 '2024-02-20',
                 [new DateTime(format: 'H:i', )],
-                ['' => ['The  is not a valid date.']],
+                ['' => ['The value is not a valid date.']],
             ],
             [
                 '2023-02-30',
                 [new DateTime(format: 'Y-m-d', message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - , value - 2023-02-30.']],
+                ['' => ['Attribute - value, value - 2023-02-30.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['attribute' => []],
-                ['attribute' => [new DateTime(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')]],
-                ['attribute' => ['Attribute - attribute, type - array.']],
+                ['attribute' => [new DateTime(incorrectInputMessage: 'Attribute - {Attribute}, type - {type}.')]],
+                ['attribute' => ['Attribute - Attribute, type - array.']],
             ],
             'incorrect input, is not date' => [
                 'datetime',
                 [new DateTime(message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - , value - datetime.']],
+                ['' => ['Attribute - value, value - datetime.']],
             ],
             'empty string and custom message' => [
                 '',
                 [new DateTime()],
-                ['' => ['The  must be a date.']],
+                ['' => ['The value must be a date.']],
             ],
             [
                 null,
                 [new DateTime()],
-                ['' => ['The  must be a date.']],
+                ['' => ['The value must be a date.']],
             ],
         ];
     }
