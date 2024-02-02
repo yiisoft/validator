@@ -33,21 +33,17 @@ final class DateTimeHandler implements RuleHandlerInterface
         \DateTime::createFromFormat($rule->getFormat(), (string)$value);
 
         $errors = \DateTime::getLastErrors();
+
         // Before PHP 8.2 may return array instead of false (see https://github.com/php/php-src/issues/9431).
-        if (PHP_VERSION_ID < 80200) {
-            if ($errors['error_count'] !== 0  ||  $errors['warning_count'] !== 0) {
-                $result->addError($rule->getMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
-                    'value' => $value,
-                ]);
-            }
-        } else {
-            if ($errors) {
-                $result->addError($rule->getMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
-                    'value' => $value,
-                ]);
-            }
+        $hasError = is_array($errors)
+            ? $errors['error_count'] !== 0 || $errors['warning_count'] !== 0
+            : $errors;
+
+        if ($hasError) {
+            $result->addError($rule->getMessage(), [
+                'attribute' => $context->getTranslatedAttribute(),
+                'value' => $value,
+            ]);
         }
 
         return $result;

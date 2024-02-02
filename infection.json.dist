@@ -19,11 +19,6 @@
             "ignoreSourceCodeByRegex": [
                 ".*if \\(\\$enableIdn .*"
             ]
-        },
-        "LessThan": {
-            "ignoreSourceCodeByRegex": [
-                ".*if \\(PHP_VERSION_ID .*"
-            ]
         }
     }
 }
