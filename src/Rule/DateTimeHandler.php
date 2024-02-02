@@ -34,7 +34,6 @@ final class DateTimeHandler implements RuleHandlerInterface
 
         $errors = \DateTime::getLastErrors();
         // Before PHP 8.2 may return array instead of false (see https://github.com/php/php-src/issues/9431).
-        /** @infection-ignore-all */
         if (PHP_VERSION_ID < 80200) {
             if ($errors['error_count'] !== 0  ||  $errors['warning_count'] !== 0) {
                 $result->addError($rule->getMessage(), [
