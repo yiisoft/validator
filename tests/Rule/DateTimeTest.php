@@ -30,7 +30,7 @@ final class DateTimeTest extends RuleTestCase
     /**
      * @dataProvider dataInvalidConfiguration
      */
-    public function testinvalidConfiguration(array $arguments, string $expectedExceptionMessage): void
+    public function testInvalidConfiguration(array $arguments, string $expectedExceptionMessage): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
@@ -94,6 +94,11 @@ final class DateTimeTest extends RuleTestCase
                 null,
                 [new DateTime()],
                 ['' => ['The value must be a date.']],
+            ],
+            [
+                '2024-02-31T25:00:00',
+                [new DateTime(format: 'Y-m-d')],
+                ['' => ['The  is not a valid date.']],
             ],
         ];
     }
