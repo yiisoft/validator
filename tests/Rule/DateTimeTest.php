@@ -98,7 +98,7 @@ final class DateTimeTest extends RuleTestCase
             [
                 '2024-02-31T25:00:00',
                 [new DateTime(format: 'Y-m-d')],
-                ['' => ['The  is not a valid date.']],
+                ['' => ['The value is not a valid date.']],
             ],
         ];
     }
