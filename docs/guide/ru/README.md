@@ -7,7 +7,7 @@
 ### Валидация
 
 - [Использование валидатора](using-validator.md)
-- [Result](result.md)
+- [Результат](result.md)
 - [Conditional validation](conditional-validation.md)
 - [Customizing error messages](customizing-error-messages.md)
 
