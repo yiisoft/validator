@@ -1,12 +1,12 @@
 # Yii Validator
 
-A package for validating data.
+Пакет для валидации данных.
 
-## Guides
+## Руководство
 
-### Validation
+### Валидация
 
-- [Using validator](using-validator.md)
+- [Использование валидатора](using-validator.md)
 - [Result](result.md)
 - [Conditional validation](conditional-validation.md)
 - [Customizing error messages](customizing-error-messages.md)
