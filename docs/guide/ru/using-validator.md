@@ -291,4 +291,4 @@ $result = (new Validator())->validate($data);
 
 [Each]: built-in-rules-each.md
 [Nested]: built-in-rules-nested.md
-[readonly-свойства]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[readonly-свойства]: https://www.php.net/manual/ru/language.oop5.properties.php#language.oop5.properties.readonly-properties
