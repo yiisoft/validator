@@ -87,7 +87,7 @@ Similar to arrays, it's possible to validate an object both as a whole and by in
 
 For objects there is an additional option to configure validation with PHP attributes which allows to not pass the rules
 separately in explicit way (passing just the object itself is enough). For example:
-Для объектов есть дополнительная возможность настроить валидацию по PHP атрибутами, что позволяет не передавать правила отдельно явным образом (достаточно передавать только сам объект). Например:
+Для объектов есть дополнительная возможность настроить валидацию по атрибутами, что позволяет не передавать правила отдельно явным образом (достаточно передавать только сам объект). Например:
 
 ```php
 use Yiisoft\Validator\Rule\AtLeast;
@@ -179,6 +179,7 @@ $result = (new Validator())->validate($data, $rules);
 ### Передача одиночного значения
 
 For a single rule, there is an option to omit the array:
+Для одиночного правила есть возможность опустить массив:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
@@ -190,13 +191,18 @@ $result = (new Validator())->validate($value, $rule);
 ```
 
 ### Providing rules via dedicated object
+### Передача правил посредством выделенного объекта
 
 Could help reuse the same set of rules across different places. Two ways are possible - using PHP attributes 
 and specifying explicitly via interface method implementation.
+Может помочь повторно использовать один и тот же набор правил в разных местах. Возможны два способа: использование атрибутов и явное указание через реализацию метода интерфейса.
+
 
 #### Using PHP attributes
+#### Использование атрибутов
 
 In this case, the rules will be automatically parsed, no need to additionally do anything.
+В этом случае правила будут парситься автоматически, дополнительно ничего делать не нужно.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -218,9 +224,12 @@ $result = (new Validator())->validate($data, $rulesProvider);
 ```
 
 #### Using interface method implementation
+#### Использование реализации метода интерфейса
 
 Providing rules via interface method implementation has priority over PHP attributes. So, in case both are present,
 the attributes will be ignored without causing an exception.
+Передача правил через реализацию метода интерфейса имеет приоритет над атрибутами.
+Поэтому в случае одновременного использования, атрибуты будут игнорироваться без выбрасывания исключения.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -230,22 +239,31 @@ use Yiisoft\Validator\Validator;
 
 final class PersonRulesProvider implements RulesProviderInterface
 {
-    #[Length(min: 2)] // Will be silently ignored.
+    #[Length(min: 2)] // Будет тихо проигнорировано.
     public string $name;
 
-    #[Number(min: 21)] // Will be silently ignored.
+    #[Number(min: 21)] // Будет тихо проигнорировано.
     protected int $age;
     
     public function getRules() : iterable
     {
         return ['name' => new Length(min: 2), 'age' => new Number(min: 21)];
-    }readonly propertiesider);
+    }
+}
+
+$data = ['name' => 'John', 'age' => 18];
+$rulesProvider = new PersonRulesProvider();
+$result = (new Validator())->validate($data, $rulesProvider);
 ```
 
-### Providing rules via the data object
+### Providing rules via the data object 
+### Передача правил через объект данных
 
 In this way, rules are provided in addition to data in the same object. Only interface method implementation is 
 supported. Note that the `rules` argument is `null` in the `validate()` method call.
+В этом случае правила передаются в дополнение к данным в одном и том же объекте.
+Поддерживается только реализация метода интерфейса.
+Обратите внимание, что аргумент `rules` имеет значение `null`при вызове метода `validate()`.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -255,10 +273,10 @@ use Yiisoft\Validator\Validator;
 
 final class Person implements RulesProviderInterface
 {
-    #[Length(min: 2)] // Not supported for using with data objects. Will be silently ignored.
+    #[Length(min: 2)] // Не поддерживается для использования с объектами данных. Будет тихо проигнорировано.
     public string $name;
 
-    #[Number(min: 21)] // Not supported for using with data objects. Will be silently ignored.
+    #[Number(min: 21)] // Не поддерживается для использования с объектами данных. Будет тихо проигнорировано.
     protected int $age;
     
     public function getRules(): iterable
