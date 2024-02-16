@@ -1,12 +1,18 @@
 # Using validator
+# Использование валидатора
 
 Validator allows to check data in any format. Here are some of the most common use cases.
+Валидатор позволяет проверить данные в любом формате. Вот некоторые из наиболее распространенных случаев использования.
 
 ## Data
+## Данные
 
 ### Single value
+### Одиночное значение
+
 
 In the simplest case, the validator can be used to check a single value:
+В простейшем случае, валидатор может использоваться для проверки одиночного значения:
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -22,10 +28,13 @@ $result = (new Validator())->validate($value, $rules);
 ```
 
 > **Note:** Use [Each] rule to validate multiple values of the same type.
+> **Примечание:** Используйте правило [Each] для валидации нескольких значений одного типа.
 
 ### Array
+### Массив
 
 It's possible to validate an array both as a whole and by individual items. For example:
+Валидировать массив можно как целиком, так и по отдельным элементам. Например:
 
 ```php
 use Yiisoft\Validator\Rule\AtLeast;
@@ -44,32 +53,41 @@ $data = [
 ];
 $rules = [
     // The rules that are not related to a specific attribute
+    // Правила, не относящиеся к конкретному атрибуту.
 
     // At least one of the attributes ("email" and "phone") must be passed and have non-empty value.  
+    // Хотя бы один из атрибутов ("email" или "phone"), должен быть передан и иметь непустое значение.
     new AtLeast(['email', 'phone']),
 
     // The rules related to a specific attribute.
+    // Правила, относящиеся к конкретному атрибуту.
 
     'name' => [
         // The name is required (must be passed and have non-empty value).
+        // Атрибут "name" обязательный (должен быть передан и иметь непустое значение).
         new Required(),
         // The name's length must be no less than 2 characters.
+        // Длина "name" должна быть не менее 2 символов.
         new Length(min: 2),
     ],  
-    'age' => new Number(min: 21), // The age must be at least 21 years.  
-    'email' => new Email(), // Email must be a valid email address.  
+    'age' => new Number(min: 21), // Возраст должен быть не менее 21 года.  
+    'email' => new Email(), // Email должен быть валидным адресом электронной почты.  
 ];
 $result = (new Validator())->validate($data, $rules);
 ```
 
 > **Note:** Use [Nested] rule to validate nested arrays and [Each] rule to validate multiple arrays.
+> **Примечание:** Используйте правило [Nested] для валидации вложенных массивов и правило [Each] для валидации нескольких массивов.
 
 ### Object
+### Объект
 
 Similar to arrays, it's possible to validate an object both as a whole and by individual properties.
+Подобно массивам, объект можно провалидировать как в целом, так и по отдельным свойствам.
 
 For objects there is an additional option to configure validation with PHP attributes which allows to not pass the rules
 separately in explicit way (passing just the object itself is enough). For example:
+Для объектов есть дополнительная возможность настроить валидацию по PHP атрибутами, что позволяет не передавать правила отдельно явным образом (достаточно передавать только сам объект). Например:
 
 ```php
 use Yiisoft\Validator\Rule\AtLeast;
@@ -103,13 +121,19 @@ $result = (new Validator())->validate($person);
 ```
 
 > **Note:** [readonly properties] are supported only starting from PHP 8.1.
+> **Примечание:** [readonly-свойства] поддерживаются только начиная с версии PHP 8.1.
+
 
 > **Note:** Use [Nested] rule to validate related objects and [Each] rule to validate multiple objects.
+> **Примечание:** Используйте правило [Nested] для валидации связанных объектов и правило [Each] для валидации нескольких объектов.
 
 ### Custom data set
+### Пользовательский набор данных
 
 Most of the time creating a custom data set is not needed because of built-in data sets and automatic normalization of
 all types during validation. However, this can be useful, for example, to change a default value for certain attributes:
+В большинстве случаев создание собственного набора данных не требуется из-за наличия встроенных наборов данных и автоматической нормализации всех типов во время валидации.
+Однако, это может оказаться полезным, например, для изменения значения по-умолчанию для определенных атрибутов:
 
 ```php
 use Yiisoft\Validator\DataSetInterface;
@@ -149,8 +173,10 @@ $result = (new Validator())->validate($data, $rules);
 ```
 
 ## Rules
+## Правила
 
 ### Passing single rule
+### Передача одиночного значения
 
 For a single rule, there is an option to omit the array:
 
@@ -213,12 +239,7 @@ final class PersonRulesProvider implements RulesProviderInterface
     public function getRules() : iterable
     {
         return ['name' => new Length(min: 2), 'age' => new Number(min: 21)];
-    }
-}
-
-$data = ['name' => 'John', 'age' => 18];
-$rulesProvider = new PersonRulesProvider();
-$result = (new Validator())->validate($data, $rulesProvider);
+    }readonly propertiesider);
 ```
 
 ### Providing rules via the data object
@@ -252,4 +273,4 @@ $result = (new Validator())->validate($data);
 
 [Each]: built-in-rules-each.md
 [Nested]: built-in-rules-nested.md
-[readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[readonly-свойства]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
