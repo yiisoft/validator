@@ -204,7 +204,7 @@ $rules = [
 
 However, when using the `Nested` rule with multiple attributes per rule set, special characters need to be escaped with 
 a backslash (`\`) for value paths to be correct and to be possible to reverse them back from string to individual 
-items. See the [Using keys containing separator/shortcut] section for more details.
+items. See the [Using keys containing separator / shortcut] section for more details.
 
 This can be used as an alternative to using a custom separator.
 
@@ -280,4 +280,4 @@ use Yiisoft\Validator\Result;
 $result->getAttributeErrors('email');
 ```
 
-[Using keys containing separator/shortcut]: built-in-rules-nested.md#using-keys-containing-separator--shortcut
+[Using keys containing separator / shortcut]: built-in-rules-nested.md#using-keys-containing-separator--shortcut
