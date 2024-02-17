@@ -280,4 +280,4 @@ use Yiisoft\Validator\Result;
 $result->getAttributeErrors('email');
 ```
 
-[Using keys containing separator / shortcut]: #using-keys-containing-separator--shortcut
+[Using keys containing separator / shortcut]: built-in-rules-nested.md#using-keys-containing-separator--shortcut
