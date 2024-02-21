@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
@@ -21,6 +22,7 @@ use Yiisoft\Validator\WhenInterface;
  * @see CompareHandler
  * @see AbstractCompare
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -80,6 +82,7 @@ final class GreaterThanOrEqual extends AbstractCompare
      * @param Closure|null $when A callable to define a condition for applying the rule.
      * See {@see WhenInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      */
     public function __construct(

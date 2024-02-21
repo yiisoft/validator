@@ -23,6 +23,7 @@ use function function_exists;
  *
  * @see EmailHandler
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -80,6 +81,7 @@ final class Email implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      *
      * @throws RuntimeException If there was an attempt to enable IDN ({@see $enableIdn}), but "intl" PHP extension is

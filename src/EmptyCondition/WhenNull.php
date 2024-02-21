@@ -25,7 +25,7 @@ final class WhenNull
      *
      * @return bool Whether the validated value is considered empty.
      */
-    public function __invoke(mixed $value, bool $isAttributeMissing): bool
+    public function __invoke(mixed $value, bool $isAttributeMissing = false): bool
     {
         return $value === null;
     }
