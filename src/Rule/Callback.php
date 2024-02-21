@@ -22,6 +22,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see CallbackHandler
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -48,6 +49,7 @@ final class Callback implements
      * @param Closure|null $when A callable to define a condition for applying the rule.
      * See {@see WhenInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      *
      * @throws InvalidArgumentException When neither {@see $callback} nor {@see $method} is specified or

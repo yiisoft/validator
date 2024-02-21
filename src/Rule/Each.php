@@ -57,6 +57,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see EachHandler Corresponding handler performing the actual validation.
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type RawRules from ValidatorInterface
  * @psalm-import-type NormalizedRulesMap from RulesNormalizer
  * @psalm-import-type WhenType from WhenInterface
@@ -108,6 +109,7 @@ final class Each implements
      * @param Closure|null $when A callable to define a condition for applying this `Each` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      */
     public function __construct(

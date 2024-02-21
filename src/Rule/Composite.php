@@ -68,6 +68,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see CompositeHandler Corresponding handler performing the actual validation.
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  * @psalm-import-type NormalizedRulesList from RulesNormalizer
  * @psalm-import-type RawRulesList from ValidatorInterface
@@ -90,11 +91,14 @@ class Composite implements
      * @psalm-var NormalizedRulesList
      */
     protected iterable $rules = [];
+
     /**
      * @var bool|callable|null Whether to skip this rule group if the validated value is empty / not passed. See
      * {@see SkipOnEmptyInterface}.
+     * @psalm-var SkipOnEmptyValue
      */
     private mixed $skipOnEmpty = null;
+
     /**
      * @var bool Whether to skip this rule group if any of the previous rules gave an error. See
      * {@see SkipOnErrorInterface}.
@@ -120,6 +124,7 @@ class Composite implements
      * @param Closure|null $when A callable to define a condition for applying this rule group. See
      * {@see WhenInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      */
     public function __construct(
