@@ -15,6 +15,11 @@
         "global-ignoreSourceCodeByRegex": [
             ".*bool \\$useCache = true.*"
         ],
+        "LogicalAndSingleSubExprNegation": {
+            "ignoreSourceCodeByRegex": [
+                ".*if \\(\\$enableIdn .*"
+            ]
+        },
         "FalseValue": {
             "ignore": [
                 "Yiisoft\\Validator\\EmptyCondition\\NeverEmpty::__invoke",
