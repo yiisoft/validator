@@ -1,17 +1,17 @@
 # Yii Validator Change Log
 
-## 1.2.0 under development
+## 1.2.0 February 21, 2024
 
 - New #597, #608: Add debug collector for `yiisoft/yii-debug` (@xepozz, @vjik)
 - New #610: Add `$escape` parameter to methods `Result::getAttributeErrorMessagesIndexedByPath()` and
   `Result::getErrorMessagesIndexedByPath()` that allow change or disable symbol which will be escaped in value path
   elements (@vjik)
-- Bug #612: Disable escaping of asterisk char in value path returned by `Error::getValuePath(true)` (@vjik)
 - New #617: Add `OneOf` rule (@arogachev)
 - Enh #658: Minor refactoring of `EmailHandler::validate()` method (@vjik)
 - Enh #658: Add more specific psalm type for "skip on empty" callable (@vjik)
 - Enh #658: Make `$isAttributeMissing` parameter of empty conditions (`NeverEmpty`, `WhenEmpty`, `WhenMissing`,
   `WhenNull`) optional (@vjik)
+- Bug #612: Disable escaping of asterisk char in value path returned by `Error::getValuePath(true)` (@vjik)
 
 ## 1.1.0 April 06, 2023
 
