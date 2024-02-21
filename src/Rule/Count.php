@@ -23,6 +23,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see CountHandler
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -80,6 +81,7 @@ final class Count implements
      * @param Closure|null $when A callable to define a condition for applying the rule.
      * See {@see WhenInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      */
     public function __construct(

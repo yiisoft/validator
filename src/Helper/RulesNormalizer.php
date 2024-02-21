@@ -9,6 +9,7 @@ use ReflectionException;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
+use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
@@ -26,6 +27,7 @@ use function is_string;
  *
  * @psalm-type NormalizedRulesList = iterable<int, RuleInterface>
  * @psalm-type NormalizedRulesMap = array<int|string, NormalizedRulesList>
+ * @psalm-import-type SkipOnEmptyCallable from SkipOnEmptyInterface
  */
 final class RulesNormalizer
 {
@@ -70,6 +72,7 @@ final class RulesNormalizer
      *
      * @return array Rules normalized as a whole and individually, ready to use for validation.
      *
+     * @psalm-param SkipOnEmptyCallable|null $defaultSkipOnEmptyCondition
      * @psalm-return NormalizedRulesMap
      */
     public static function normalize(

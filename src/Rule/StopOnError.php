@@ -41,6 +41,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see StopOnErrorHandler Corresponding handler performing the actual validation.
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  * @psalm-import-type NormalizedRulesList from RulesNormalizer
  * @psalm-import-type RawRulesList from ValidatorInterface
@@ -77,6 +78,7 @@ final class StopOnError implements
      * @param Closure|null $when A callable to define a condition for applying this `StopOnError` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      */
     public function __construct(

@@ -16,6 +16,9 @@ use function is_callable;
  * ({@see SkipOnEmptyInterface}).
  *
  * @internal
+ *
+ * @psalm-import-type SkipOnEmptyCallable from SkipOnEmptyInterface
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  */
 final class SkipOnEmptyNormalizer
 {
@@ -27,13 +30,14 @@ final class SkipOnEmptyNormalizer
      * - A callable is left as is.
      * - Other types are rejected causing the exception.
      *
-     * @param mixed $skipOnEmpty Raw "skip on empty" value of any type.
-     *
-     * @throws InvalidArgumentException If the type of {@see $skipOnEmpty} is not valid.
+     * @param bool|callable|null $skipOnEmpty Raw "skip on empty" value of any type.
      *
      * @return callable An empty condition as a callable.
+     *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
+     * @psalm-return SkipOnEmptyCallable
      */
-    public static function normalize(mixed $skipOnEmpty): callable
+    public static function normalize(bool|callable|null $skipOnEmpty): callable
     {
         if ($skipOnEmpty === false || $skipOnEmpty === null) {
             return new NeverEmpty();
@@ -43,10 +47,6 @@ final class SkipOnEmptyNormalizer
             return new WhenEmpty();
         }
 
-        if (is_callable($skipOnEmpty)) {
-            return $skipOnEmpty;
-        }
-
-        throw new InvalidArgumentException('$skipOnEmpty must be a null, a boolean or a callable.');
+        return $skipOnEmpty;
     }
 }

@@ -24,6 +24,7 @@ use function function_exists;
  * Note that the handler only checks if the URL scheme and host parts are correct.
  * It does not check the remaining parts of a URL.
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  *
  * @see UrlHandler
@@ -71,6 +72,7 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      *
      * @throws RuntimeException If intl extension is not enabled and {@see $enableIdn} is true.
