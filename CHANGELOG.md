@@ -1,5 +1,9 @@
 # Yii Validator Change Log
 
+## 1.2.1 under development
+
+- no changes in this release.
+
 ## 1.2.0 February 21, 2024
 
 - New #597, #608: Add debug collector for `yiisoft/yii-debug` (@xepozz, @vjik)
