@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Helper;
 
-use InvalidArgumentException;
 use Yiisoft\Validator\EmptyCondition\NeverEmpty;
 use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\SkipOnEmptyInterface;
-
-use function is_callable;
 
 /**
  * A helper class used to normalize different types of "skip on empty" values including shortcuts to a callable
