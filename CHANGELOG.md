@@ -10,6 +10,8 @@
 - New #617: Add `OneOf` rule (@arogachev)
 - Enh #658: Minor refactoring of `EmailHandler::validate()` method (@vjik)
 - Enh #658: Add more specific psalm type for "skip on empty" callable (@vjik)
+- Enh #658: Make `$isAttributeMissing` parameter of empty conditions (`NeverEmpty`, `WhenEmpty`, `WhenMissing`,
+  `WhenNull`) optional (@vjik)
 
 ## 1.1.0 April 06, 2023
 
