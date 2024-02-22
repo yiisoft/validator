@@ -77,8 +77,8 @@ final class DateTimeTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['attribute' => []],
-                ['attribute' => [new DateTime(incorrectInputMessage: 'Attribute - {Attribute}, type - {type}.')]],
-                ['attribute' => ['Attribute - Attribute, type - array.']],
+                ['attribute' => [new DateTime(incorrectInputMessage: 'Attribute - {Attribute}, attribute - {attribute}, type - {type}.')]],
+                ['attribute' => ['Attribute - Attribute, attribute - attribute, type - array.']],
             ],
             'incorrect input, is not date' => [
                 'datetime',
