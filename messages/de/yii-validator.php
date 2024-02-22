@@ -36,24 +36,24 @@ return [
         'Mindestens {min, number} {min, plural, one{Attribut aus dieser Liste muss} other{Attribute aus dieser ' .
         'Liste müssen}} ausgefüllt werden',
     /** @see BooleanValue */
-    'Value must be either "{true}" or "{false}".' => 'Der Wert muss "{true}" oder "{false}" sein.',
+    '{Attribute} must be either "{true}" or "{false}".' => '{Attribute} muss "{true}" oder "{false}" sein.',
     /** @see Count */
-    'This value must be an array or implement \Countable interface.' => 'Dieser Wert muss ein Array sein oder das ' .
+    '{Attribute} must be an array or implement \Countable interface.' => '{Attribute} muss ein Array sein oder das ' .
         '\Countable Interface implementieren.',
-    'This value must contain at least {min, number} {min, plural, one{item} other{items}}.' => 'Dieser Wert muss ' .
+    '{Attribute} must contain at least {min, number} {min, plural, one{item} other{items}}.' => '{Attribute} muss ' .
         'mindestens {min, number} {min, plural, one{Eintrag} other{Einträge}} enthalten.',
-    'This value must contain at most {max, number} {max, plural, one{item} other{items}}.' => 'Dieser Wert darf ' .
+    '{Attribute} must contain at most {max, number} {max, plural, one{item} other{items}}.' => '{Attribute} darf ' .
         'maximal {max, number} {max, plural, one{Eintrag} other{Einträge}} enthalten.',
-    'This value must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => 'Dieser Wert ' .
+    '{Attribute} must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => '{Attribute} ' .
         'muss genau {exactly, number} {exactly, plural, one{Eintrag} other{Einträge}} enthalten.',
     /** @see Each */
-    'Value must be array or iterable.' => 'Wert muss ein Array oder iterierbar sein.',
+    '{Attribute} must be array or iterable.' => '{Attribute} muss ein Array oder iterierbar sein.',
     'Every iterable key must have an integer or a string type.' => 'Jeder iterierbarer Schlüssel muss vom Typ ' .
         'Integer oder String sein.',
     /** @see Email */
-    'This value is not a valid email address.' => 'Dieser Wert ist keine gültige E-Mail-Adresse.',
+    '{Attribute} is not a valid email address.' => '{Attribute} ist keine gültige E-Mail-Adresse.',
     /** @see In */
-    'This value is not in the list of acceptable values.' => 'Dieser Wert ist nicht in der Liste der akzeptierten ' .
+    '{Attribute} is not in the list of acceptable values.' => '{Attribute} ist nicht in der Liste der akzeptierten ' .
         'Werte.',
     /** @see Ip */
     'Must be a valid IP address.' => 'Muss eine gültige IP-Adresse sein.',
@@ -64,16 +64,16 @@ return [
     'Must not be a subnet.' => 'Darf kein Subnetz sein.',
     'Is not in the allowed range.' => 'Ist nicht im erlaubten Bereich.',
     /** @see Integer */
-    'Value must be an integer.' => 'Wert muss ein Integer sein.',
+    '{Attribute} must be an integer.' => '{Attribute} muss ein Integer sein.',
     /** @see Json */
-    'The value is not JSON.' => 'Der Wert ist kein JSON.',
+    '{Attribute} is not JSON.' => '{Attribute} ist kein JSON.',
     /** @see Length */
-    'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.' => 'Dieser ' .
-        'Wert muss mindestens {min, number} {min, plural, one{Buchstabe} other{Buchstaben}} enthalten.',
-    'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.' => 'Dieser ' .
-        'Wert darf maximal {max, number} {max, plural, one{Buchstabe} other{Buchstaben}} enthalten.',
-    'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' =>
-        'Dieser Wert muss genau {exactly, number} {exactly, plural, one{Buchstabe} other{Buchstaben}} enthalten.',
+    '{Attribute} must contain at least {min, number} {min, plural, one{character} other{characters}}.' =>
+        '{Attribute} muss mindestens {min, number} {min, plural, one{Buchstabe} other{Buchstaben}} enthalten.',
+    '{Attribute} must contain at most {max, number} {max, plural, one{character} other{characters}}.' =>
+        '{Attribute} darf maximal {max, number} {max, plural, one{Buchstabe} other{Buchstaben}} enthalten.',
+    '{Attribute} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' =>
+        '{Attribute} muss genau {exactly, number} {exactly, plural, one{Buchstabe} other{Buchstaben}} enthalten.',
     /** @see Nested */
     'Nested rule without rules can be used for objects only.' => 'Verschachtelte Regeln ohne Regeln können nur ' .
         'für Objekte verwendet werden.',
@@ -81,22 +81,22 @@ return [
         'Typ Array haben.',
     'Property "{path}" is not found.' => 'Eigenschaft "{path}" nicht gefunden.',
     /** @see Number */
-    'Value must be a number.' => 'Wert muss eine Nummer sein.',
+    '{Attribute} must be a number.' => '{Attribute} muss eine Nummer sein.',
     /** @see OneOf */
     'Exactly 1 attribute from this list must be filled: {attributes}.' => 'Exakt ein Attribut aus dieser Liste ' .
         'muss gefüllt sein: {attributes}.',
     /** @see Regex */
-    'Value is invalid.' => 'Wert ist ungültig.',
+    '{Attribute} is invalid.' => '{Attribute} ist ungültig.',
     /** @see Required */
-    'Value cannot be blank.' => 'Wert darf nicht leer sein.',
-    'Value not passed.' => 'Wert nicht übergeben.',
+    '{Attribute} cannot be blank.' => '{Attribute} darf nicht leer sein.',
+    '{Attribute} not passed.' => '{Attribute} nicht übergeben.',
     /** @see Subset */
-    'Value must be iterable.' => 'Der Wert muss iterierbar sein.',
-    'This value is not a subset of acceptable values.' => 'Dieser Wert ist keine Teilmenge akzeptabler Werte.',
+    '{Attribute} must be iterable.' => '{Attribute} muss iterierbar sein.',
+    '{Attribute} is not a subset of acceptable values.' => '{Attribute} ist keine Teilmenge akzeptabler Werte.',
     /** @see TrueValue */
-    'The value must be "{true}".' => 'Der Wert muss "{true}" sein.',
+    '{Attribute} must be "{true}".' => '{Attribute} muss "{true}" sein.',
     /** @see Url */
-    'This value is not a valid URL.' => 'Dieser Wert ist keine gültige URL.',
+    '{Attribute} is not a valid URL.' => '{Attribute} ist keine gültige URL.',
 
     // Used in multiple rules
 
@@ -105,7 +105,7 @@ return [
      * @see Nested
      * @see OneOf
      */
-    'The value must be an array or an object.' => 'Dieser Wert muss ein Array oder Object sein.',
+    '{Attribute} must be an array or an object.' => '{Attribute} muss ein Array oder Object sein.',
     /**
      * @see BooleanValue
      * @see TrueValue
@@ -129,20 +129,20 @@ return [
         'einem benutzerdefinierten Datensatz zurückgegebene Attributwert muss einen der folgenden Typen haben: ' .
         'integer, float, string, boolean, null oder ein Objekte, das \Stringable oder \DateTimeInterface ' .
         'implementiert.',
-    'Value must be equal to "{targetValueOrAttribute}".' => 'Der Wert muss gleich "{targetValueOrAttribute}" sein.',
-    'Value must be strictly equal to "{targetValueOrAttribute}".' => 'Der Wert muss strikt gleich ' .
+    '{Attribute} must be equal to "{targetValueOrAttribute}".' => '{Attribute} muss gleich "{targetValueOrAttribute}" sein.',
+    '{Attribute} must be strictly equal to "{targetValueOrAttribute}".' => '{Attribute} muss strikt gleich ' .
         '"{targetValueOrAttribute}" sein.',
-    'Value must not be equal to "{targetValueOrAttribute}".' => 'Der Wert darf nicht gleich ' .
+    '{Attribute} must not be equal to "{targetValueOrAttribute}".' => '{Attribute} darf nicht gleich ' .
         '"{targetValueOrAttribute}" sein.',
-    'Value must not be strictly equal to "{targetValueOrAttribute}".' => 'Der Wert darf nicht strikt gleich ' .
+    '{Attribute} must not be strictly equal to "{targetValueOrAttribute}".' => '{Attribute} darf nicht strikt gleich ' .
         '"{targetValueOrAttribute}" sein.',
-    'Value must be greater than "{targetValueOrAttribute}".' => 'Der Wert muss größer als ' .
+    '{Attribute} must be greater than "{targetValueOrAttribute}".' => '{Attribute} muss größer als ' .
         '"{targetValueOrAttribute}" sein.',
-    'Value must be greater than or equal to "{targetValueOrAttribute}".' => 'Der Wert muss größer als oder gleich ' .
+    '{Attribute} must be greater than or equal to "{targetValueOrAttribute}".' => '{Attribute} muss größer als oder gleich ' .
         '"{targetValueOrAttribute}" sein.',
-    'Value must be less than "{targetValueOrAttribute}".' => 'Der Wert muss kleiner als "{targetValueOrAttribute}" ' .
+    '{Attribute} must be less than "{targetValueOrAttribute}".' => '{Attribute} muss kleiner als "{targetValueOrAttribute}" ' .
         'sein.',
-    'Value must be less than or equal to "{targetValueOrAttribute}".' => 'Der Wert muss kleiner als oder gleich ' .
+    '{Attribute} must be less than or equal to "{targetValueOrAttribute}".' => '{Attribute} muss kleiner als oder gleich ' .
         '"{targetValueOrAttribute}" sein.',
     /**
      * @see Email
@@ -152,12 +152,12 @@ return [
      * @see Regex
      * @see Url
      */
-    'The value must be a string.' => 'Der Wert muss eine Zeichenkette sein.',
+    '{Attribute} must be a string.' => '{Attribute} muss eine Zeichenkette sein.',
     /**
      * @see Number
      * @see Integer
      */
     'The allowed types are integer, float and string.' => 'Die erlaubte Typen sind: integer, float und string.',
-    'Value must be no less than {min}.' => 'Der Wert darf nicht kleiner als {min} sein.',
-    'Value must be no greater than {max}.' => 'Der Wert darf nicht größer als {max} sein.',
+    '{Attribute} must be no less than {min}.' => '{Attribute} darf nicht kleiner als {min} sein.',
+    '{Attribute} must be no greater than {max}.' => '{Attribute} darf nicht größer als {max} sein.',
 ];
