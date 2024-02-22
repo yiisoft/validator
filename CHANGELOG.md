@@ -3,21 +3,15 @@
 ## 2.0.0 under development
 
 - New #646, #653: Add `DateTime` rule (@pamparam83)
-- New #615: Add the `Each::PARAMETER_EACH_KEY` validation context parameter that available during `Each` rule handling 
+- New #615: Add the `Each::PARAMETER_EACH_KEY` validation context parameter that available during `Each` rule handling
   and containing the current key (@dood-)
 - Enh #648: Raise the minimum version of PHP to 8.1 (@pamparam83)
 - New #633: Add PHP attribute that sets property label for usage in error messages (@dood-)
-- New #597, #608: Add debug collector for `yiisoft/yii-debug` (@xepozz, @vjik)
-- New #610: Add `$escape` parameter to methods `Result::getAttributeErrorMessagesIndexedByPath()` and
-  `Result::getErrorMessagesIndexedByPath()` that allow change or disable symbol which will be escaped in value path
-  elements (@vjik)
-- Bug #612: Disable escaping of asterisk char in value path returned by `Error::getValuePath(true)` (@vjik)
-- New #617: Add `OneOf` rule (@arogachev)
 - Chg #623: List translated attributes in error message for `OneOf` and `AtLeast` rules (@arogachev)
 - Chg #624: Fix meaning of error message in `OneOf` rule (@arogachev)
 - Chg #625: Improve meaning and use pluralization in error message for `OneOf` and `AtLeast` rules (@arogachev)
 - Chg #626: Disallow `$min` greater than amount of `$attributes` in `AtLeast` configuration (@arogachev)
-- Bug #632: Fix property name usage in error messages of rules in `Nested` rule (@vjik) 
+- Bug #632: Fix property name usage in error messages of rules in `Nested` rule (@vjik)
 - Enh #636: Improve psalm annotations in `Result` class (@vjik)
 - Enh #637: Add German translation (@took)
 - Chg #634: Move `getName()` method from `RuleInterface` to `RuleWithOptionsInterface` (@arogachev)
@@ -25,8 +19,21 @@
 - Chg #634: Use FQCN as a name for built-in rules during export with `RulesDumper` (@arogachev)
 - Chg #634: Use FQCN as a name for rules not implementing `DumpedRuleInterface` during export with `RulesDumper`
 - Enh #622: Use `json_validate()` built-in PHP function in `JsonHandler` if code is run with PHP 8.3 (@arogachev)
-- Enh #639: Simplify validation of JSON in `JsonHandler` using built-in PHP functions for PHP versions below 8.3 
+- Enh #639: Simplify validation of JSON in `JsonHandler` using built-in PHP functions for PHP versions below 8.3
   (@arogachev)
+
+## 1.2.0 February 21, 2024
+
+- New #597, #608: Add debug collector for `yiisoft/yii-debug` (@xepozz, @vjik)
+- New #610: Add `$escape` parameter to methods `Result::getAttributeErrorMessagesIndexedByPath()` and
+  `Result::getErrorMessagesIndexedByPath()` that allow change or disable symbol which will be escaped in value path
+  elements (@vjik)
+- New #617: Add `OneOf` rule (@arogachev)
+- Enh #658: Minor refactoring of `EmailHandler::validate()` method (@vjik)
+- Enh #658: Add more specific psalm type for "skip on empty" callable (@vjik)
+- Enh #658: Make `$isAttributeMissing` parameter of empty conditions (`NeverEmpty`, `WhenEmpty`, `WhenMissing`,
+  `WhenNull`) optional (@vjik)
+- Bug #612: Disable escaping of asterisk char in value path returned by `Error::getValuePath(true)` (@vjik)
 
 ## 1.1.0 April 06, 2023
 

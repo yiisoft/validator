@@ -21,6 +21,8 @@ use function is_bool;
  * ) {
  * }
  * ```
+ *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  */
 trait SkipOnEmptyTrait
 {
@@ -30,6 +32,8 @@ trait SkipOnEmptyTrait
      * @param bool|callable|null $value A new value.
      *
      * @return $this The new instance with a changed value.
+     *
+     * @psalm-param SkipOnEmptyValue $value
      */
     public function skipOnEmpty(bool|callable|null $value): static
     {
@@ -42,6 +46,8 @@ trait SkipOnEmptyTrait
      * A getter for `$skipOnEmpty` property.
      *
      * @return bool|callable|null A current raw (non-normalized) value.
+     *
+     * @psalm-return SkipOnEmptyValue
      */
     public function getSkipOnEmpty(): bool|callable|null
     {

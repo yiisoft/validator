@@ -24,6 +24,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * @see TrueValueHandler Corresponding handler performing the actual validation.
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -71,6 +72,7 @@ final class TrueValue implements DumpedRuleInterface, SkipOnErrorInterface, When
      * {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      */
     public function __construct(

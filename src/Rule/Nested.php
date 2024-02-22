@@ -94,6 +94,7 @@ use function sprintf;
  *
  * @see NestedHandler Corresponding handler performing the actual validation.
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  *
  * @psalm-type RawNestedRulesArray = array<array<RuleInterface>|RuleInterface>
@@ -202,6 +203,7 @@ final class Nested implements
      * @param Closure|null $when  A callable to define a condition for applying this `Nested` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      */
     public function __construct(

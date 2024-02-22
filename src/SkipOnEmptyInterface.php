@@ -15,6 +15,9 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
  *
  * The package ships with {@see SkipOnEmptyTrait} which already implements that interface. All you have to do is include
  * it in the rule class along with the interface.
+ *
+ * @psalm-type SkipOnEmptyCallable = callable(mixed $value, bool $isAttributeMissing): bool
+ * @psalm-type SkipOnEmptyValue = SkipOnEmptyCallable|bool|null
  */
 interface SkipOnEmptyInterface
 {
@@ -24,6 +27,8 @@ interface SkipOnEmptyInterface
      * @param bool|callable|null $value A new value.
      *
      * @return $this The new instance of a rule with a changed value.
+     *
+     * @psalm-param SkipOnEmptyValue $value
      */
     public function skipOnEmpty(bool|callable|null $value): static;
 
@@ -69,6 +74,8 @@ interface SkipOnEmptyInterface
      *     }
      * }
      * ```
+     *
+     * @psalm-return SkipOnEmptyValue
      */
     public function getSkipOnEmpty(): bool|callable|null;
 }

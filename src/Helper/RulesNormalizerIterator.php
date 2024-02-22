@@ -20,12 +20,16 @@ use function is_callable;
  * @internal
  *
  * @template-implements IteratorAggregate<int, RuleInterface>
+ *
+ * @psalm-import-type SkipOnEmptyCallable from SkipOnEmptyInterface
  */
 final class RulesNormalizerIterator implements IteratorAggregate
 {
     /**
      * @var callable|null A default "skip on empty" condition ({@see SkipOnEmptyInterface}), already normalized. Used to
      * optimize setting the same value in all the rules. Defaults to `null` meaning that it's not used.
+     *
+     * @psalm-var SkipOnEmptyCallable|null
      */
     private $defaultSkipOnEmptyCondition;
 
@@ -34,6 +38,8 @@ final class RulesNormalizerIterator implements IteratorAggregate
      * @param callable|null $defaultSkipOnEmptyCondition A default "skip on empty" condition
      * ({@see SkipOnEmptyInterface}), already normalized. Used to optimize setting the same value in all the rules.
      * Defaults to `null` meaning that it's not used.
+     *
+     * @psalm-param SkipOnEmptyCallable|null $defaultSkipOnEmptyCondition
      */
     public function __construct(
         private iterable $rules,
@@ -44,7 +50,6 @@ final class RulesNormalizerIterator implements IteratorAggregate
 
     public function getIterator(): Traversable
     {
-        /** @var mixed $rule */
         foreach ($this->rules as $rule) {
             yield self::normalizeRule($rule, $this->defaultSkipOnEmptyCondition);
         }
@@ -64,6 +69,8 @@ final class RulesNormalizerIterator implements IteratorAggregate
      * @throws InvalidArgumentException When rule is neither a callable nor a {@see RuleInterface} implementation.
      *
      * @return RuleInterface Ready to use rule instance.
+     *
+     * @psalm-param SkipOnEmptyCallable|null $defaultSkipOnEmptyCondition
      */
     private static function normalizeRule(mixed $rule, ?callable $defaultSkipOnEmptyCondition): RuleInterface
     {

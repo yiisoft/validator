@@ -52,6 +52,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
  *
  * @see DateTimeHandler
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -81,6 +82,8 @@ final class DateTime implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
+     *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      */
     public function __construct(

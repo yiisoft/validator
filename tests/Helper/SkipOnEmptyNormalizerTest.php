@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Helper;
 
 use Closure;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\EmptyCondition\NeverEmpty;
 use Yiisoft\Validator\EmptyCondition\WhenEmpty;
@@ -29,12 +28,5 @@ final class SkipOnEmptyNormalizerTest extends TestCase
     public function testNormalize(mixed $skipOnEmpty, string $expectedClassName): void
     {
         $this->assertInstanceOf($expectedClassName, SkipOnEmptyNormalizer::normalize($skipOnEmpty));
-    }
-
-    public function testWrongType(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('$skipOnEmpty must be a null, a boolean or a callable');
-        SkipOnEmptyNormalizer::normalize(1);
     }
 }
