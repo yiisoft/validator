@@ -63,12 +63,12 @@ final class DateTimeTest extends RuleTestCase
             [
                 '2023-02-20ee',
                 [new DateTime(format: 'Y-m-dee', )],
-                ['' => ['The value is not a valid date.']],
+                ['' => ['Value is not a valid date.']],
             ],
             [
                 '2024-02-20',
                 [new DateTime(format: 'H:i', )],
-                ['' => ['The value is not a valid date.']],
+                ['' => ['Value is not a valid date.']],
             ],
             [
                 '2023-02-30',
@@ -88,17 +88,17 @@ final class DateTimeTest extends RuleTestCase
             'empty string and custom message' => [
                 '',
                 [new DateTime()],
-                ['' => ['The value must be a date.']],
+                ['' => ['Value must be a date.']],
             ],
             [
                 null,
                 [new DateTime()],
-                ['' => ['The value must be a date.']],
+                ['' => ['Value must be a date.']],
             ],
             [
                 '2024-02-31T25:00:00',
                 [new DateTime(format: 'Y-m-d')],
-                ['' => ['The value is not a valid date.']],
+                ['' => ['Value is not a valid date.']],
             ],
         ];
     }
@@ -111,11 +111,11 @@ final class DateTimeTest extends RuleTestCase
                 [
                     'format' => 'Y-m-d',
                     'incorrectInputMessage' => [
-                        'template' => 'The {attribute} must be a date.',
+                        'template' => '{Attribute} must be a date.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The {attribute} is not a valid date.',
+                        'template' => '{Attribute} is not a valid date.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
