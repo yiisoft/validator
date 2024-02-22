@@ -48,13 +48,13 @@ return [
     /** @see In */
     '{Attribute} is not in the list of acceptable values.' => 'Ta wartość nie znajduje się na liście dopuszczalnych wartości.',
     /** @see Ip */
-    'Must be a valid IP address.' => 'Musi to być prawidłowy adres IP.',
-    'Must not be an IPv4 address.' => 'Nie może to być adres IPv4.',
-    'Must not be an IPv6 address.' => 'Nie może to być adres IPv6.',
-    'Contains wrong subnet mask.' => 'Zawiera niewłaściwą maskę podsieci.',
-    'Must be an IP address with specified subnet.' => 'Musi to być adres IP z określoną podsiecią.',
-    'Must not be a subnet.' => 'Nie może to być podsieć.',
-    'Is not in the allowed range.' => 'Nie mieści się w dozwolonym zakresie.',
+    '{Attribute} must be a valid IP address.' => '{Attribute} musi to być prawidłowy adres IP.',
+    '{Attribute} must not be an IPv4 address.' => '{Attribute} nie może to być adres IPv4.',
+    '{Attribute} must not be an IPv6 address.' => '{Attribute} nie może to być adres IPv6.',
+    '{Attribute} contains wrong subnet mask.' => '{Attribute} zawiera niewłaściwą maskę podsieci.',
+    '{Attribute} must be an IP address with specified subnet.' => '{Attribute} musi to być adres IP z określoną podsiecią.',
+    '{Attribute} must not be a subnet.' => '{Attribute} nie może to być podsieć.',
+    '{Attribute} is not in the allowed range.' => '{Attribute} nie mieści się w dozwolonym zakresie.',
     /** @see Integer */
     '{Attribute} must be an integer.' => '{Attribute} być liczbą całkowitą.',
     /** @see Json */

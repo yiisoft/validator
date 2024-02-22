@@ -94,31 +94,31 @@ final class IpTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Must be a valid IP address.',
+                        'template' => '{Attribute} must be a valid IP address.',
                         'parameters' => [],
                     ],
                     'ipv4NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv4 address.',
+                        'template' => '{Attribute} must not be an IPv4 address.',
                         'parameters' => [],
                     ],
                     'ipv6NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv6 address.',
+                        'template' => '{Attribute} must not be an IPv6 address.',
                         'parameters' => [],
                     ],
                     'wrongCidrMessage' => [
-                        'template' => 'Contains wrong subnet mask.',
+                        'template' => '{Attribute} contains wrong subnet mask.',
                         'parameters' => [],
                     ],
                     'noSubnetMessage' => [
-                        'template' => 'Must be an IP address with specified subnet.',
+                        'template' => '{Attribute} must be an IP address with specified subnet.',
                         'parameters' => [],
                     ],
                     'hasSubnetMessage' => [
-                        'template' => 'Must not be a subnet.',
+                        'template' => '{Attribute} must not be a subnet.',
                         'parameters' => [],
                     ],
                     'notInRangeMessage' => [
-                        'template' => 'Is not in the allowed range.',
+                        'template' => '{Attribute} is not in the allowed range.',
                         'parameters' => [],
                     ],
                     'ranges' => [],
@@ -149,31 +149,31 @@ final class IpTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Must be a valid IP address.',
+                        'template' => '{Attribute} must be a valid IP address.',
                         'parameters' => [],
                     ],
                     'ipv4NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv4 address.',
+                        'template' => '{Attribute} must not be an IPv4 address.',
                         'parameters' => [],
                     ],
                     'ipv6NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv6 address.',
+                        'template' => '{Attribute} must not be an IPv6 address.',
                         'parameters' => [],
                     ],
                     'wrongCidrMessage' => [
-                        'template' => 'Contains wrong subnet mask.',
+                        'template' => '{Attribute} contains wrong subnet mask.',
                         'parameters' => [],
                     ],
                     'noSubnetMessage' => [
-                        'template' => 'Must be an IP address with specified subnet.',
+                        'template' => '{Attribute} must be an IP address with specified subnet.',
                         'parameters' => [],
                     ],
                     'hasSubnetMessage' => [
-                        'template' => 'Must not be a subnet.',
+                        'template' => '{Attribute} must not be a subnet.',
                         'parameters' => [],
                     ],
                     'notInRangeMessage' => [
-                        'template' => 'Is not in the allowed range.',
+                        'template' => '{Attribute} is not in the allowed range.',
                         'parameters' => [],
                     ],
                     'ranges' => [],
@@ -204,31 +204,31 @@ final class IpTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Must be a valid IP address.',
+                        'template' => '{Attribute} must be a valid IP address.',
                         'parameters' => [],
                     ],
                     'ipv4NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv4 address.',
+                        'template' => '{Attribute} must not be an IPv4 address.',
                         'parameters' => [],
                     ],
                     'ipv6NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv6 address.',
+                        'template' => '{Attribute} must not be an IPv6 address.',
                         'parameters' => [],
                     ],
                     'wrongCidrMessage' => [
-                        'template' => 'Contains wrong subnet mask.',
+                        'template' => '{Attribute} contains wrong subnet mask.',
                         'parameters' => [],
                     ],
                     'noSubnetMessage' => [
-                        'template' => 'Must be an IP address with specified subnet.',
+                        'template' => '{Attribute} must be an IP address with specified subnet.',
                         'parameters' => [],
                     ],
                     'hasSubnetMessage' => [
-                        'template' => 'Must not be a subnet.',
+                        'template' => '{Attribute} must not be a subnet.',
                         'parameters' => [],
                     ],
                     'notInRangeMessage' => [
-                        'template' => 'Is not in the allowed range.',
+                        'template' => '{Attribute} is not in the allowed range.',
                         'parameters' => [],
                     ],
                     'ranges' => [],
@@ -259,31 +259,31 @@ final class IpTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Must be a valid IP address.',
+                        'template' => '{Attribute} must be a valid IP address.',
                         'parameters' => [],
                     ],
                     'ipv4NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv4 address.',
+                        'template' => '{Attribute} must not be an IPv4 address.',
                         'parameters' => [],
                     ],
                     'ipv6NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv6 address.',
+                        'template' => '{Attribute} must not be an IPv6 address.',
                         'parameters' => [],
                     ],
                     'wrongCidrMessage' => [
-                        'template' => 'Contains wrong subnet mask.',
+                        'template' => '{Attribute} contains wrong subnet mask.',
                         'parameters' => [],
                     ],
                     'noSubnetMessage' => [
-                        'template' => 'Must be an IP address with specified subnet.',
+                        'template' => '{Attribute} must be an IP address with specified subnet.',
                         'parameters' => [],
                     ],
                     'hasSubnetMessage' => [
-                        'template' => 'Must not be a subnet.',
+                        'template' => '{Attribute} must not be a subnet.',
                         'parameters' => [],
                     ],
                     'notInRangeMessage' => [
-                        'template' => 'Is not in the allowed range.',
+                        'template' => '{Attribute} is not in the allowed range.',
                         'parameters' => [],
                     ],
                     'ranges' => [],
@@ -314,31 +314,31 @@ final class IpTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Must be a valid IP address.',
+                        'template' => '{Attribute} must be a valid IP address.',
                         'parameters' => [],
                     ],
                     'ipv4NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv4 address.',
+                        'template' => '{Attribute} must not be an IPv4 address.',
                         'parameters' => [],
                     ],
                     'ipv6NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv6 address.',
+                        'template' => '{Attribute} must not be an IPv6 address.',
                         'parameters' => [],
                     ],
                     'wrongCidrMessage' => [
-                        'template' => 'Contains wrong subnet mask.',
+                        'template' => '{Attribute} contains wrong subnet mask.',
                         'parameters' => [],
                     ],
                     'noSubnetMessage' => [
-                        'template' => 'Must be an IP address with specified subnet.',
+                        'template' => '{Attribute} must be an IP address with specified subnet.',
                         'parameters' => [],
                     ],
                     'hasSubnetMessage' => [
-                        'template' => 'Must not be a subnet.',
+                        'template' => '{Attribute} must not be a subnet.',
                         'parameters' => [],
                     ],
                     'notInRangeMessage' => [
-                        'template' => 'Is not in the allowed range.',
+                        'template' => '{Attribute} is not in the allowed range.',
                         'parameters' => [],
                     ],
                     'ranges' => [],
@@ -369,31 +369,31 @@ final class IpTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Must be a valid IP address.',
+                        'template' => '{Attribute} must be a valid IP address.',
                         'parameters' => [],
                     ],
                     'ipv4NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv4 address.',
+                        'template' => '{Attribute} must not be an IPv4 address.',
                         'parameters' => [],
                     ],
                     'ipv6NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv6 address.',
+                        'template' => '{Attribute} must not be an IPv6 address.',
                         'parameters' => [],
                     ],
                     'wrongCidrMessage' => [
-                        'template' => 'Contains wrong subnet mask.',
+                        'template' => '{Attribute} contains wrong subnet mask.',
                         'parameters' => [],
                     ],
                     'noSubnetMessage' => [
-                        'template' => 'Must be an IP address with specified subnet.',
+                        'template' => '{Attribute} must be an IP address with specified subnet.',
                         'parameters' => [],
                     ],
                     'hasSubnetMessage' => [
-                        'template' => 'Must not be a subnet.',
+                        'template' => '{Attribute} must not be a subnet.',
                         'parameters' => [],
                     ],
                     'notInRangeMessage' => [
-                        'template' => 'Is not in the allowed range.',
+                        'template' => '{Attribute} is not in the allowed range.',
                         'parameters' => [],
                     ],
                     'ranges' => [],
@@ -424,31 +424,31 @@ final class IpTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Must be a valid IP address.',
+                        'template' => '{Attribute} must be a valid IP address.',
                         'parameters' => [],
                     ],
                     'ipv4NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv4 address.',
+                        'template' => '{Attribute} must not be an IPv4 address.',
                         'parameters' => [],
                     ],
                     'ipv6NotAllowedMessage' => [
-                        'template' => 'Must not be an IPv6 address.',
+                        'template' => '{Attribute} must not be an IPv6 address.',
                         'parameters' => [],
                     ],
                     'wrongCidrMessage' => [
-                        'template' => 'Contains wrong subnet mask.',
+                        'template' => '{Attribute} contains wrong subnet mask.',
                         'parameters' => [],
                     ],
                     'noSubnetMessage' => [
-                        'template' => 'Must be an IP address with specified subnet.',
+                        'template' => '{Attribute} must be an IP address with specified subnet.',
                         'parameters' => [],
                     ],
                     'hasSubnetMessage' => [
-                        'template' => 'Must not be a subnet.',
+                        'template' => '{Attribute} must not be a subnet.',
                         'parameters' => [],
                     ],
                     'notInRangeMessage' => [
-                        'template' => 'Is not in the allowed range.',
+                        'template' => '{Attribute} is not in the allowed range.',
                         'parameters' => [],
                     ],
                     'ranges' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
@@ -545,13 +545,13 @@ final class IpTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         $incorrectInputMessage = 'Value must be a string.';
-        $message = 'Must be a valid IP address.';
-        $hasSubnetMessage = 'Must not be a subnet.';
-        $notInRangeMessage = 'Is not in the allowed range.';
-        $ipv4NotAllowedMessage = 'Must not be an IPv4 address.';
-        $wrongCidrMessage = 'Contains wrong subnet mask.';
-        $noSubnetMessage = 'Must be an IP address with specified subnet.';
-        $ipv6NotAllowedMessage = 'Must not be an IPv6 address.';
+        $message = 'Value must be a valid IP address.';
+        $hasSubnetMessage = 'Value must not be a subnet.';
+        $notInRangeMessage = 'Value is not in the allowed range.';
+        $ipv4NotAllowedMessage = 'Value must not be an IPv4 address.';
+        $wrongCidrMessage = 'Value contains wrong subnet mask.';
+        $noSubnetMessage = 'Value must be an IP address with specified subnet.';
+        $ipv6NotAllowedMessage = 'Value must not be an IPv6 address.';
 
         return [
             'incorrect input, array' => [['what an array', '??'], [new Ip()], ['' => [$incorrectInputMessage]]],

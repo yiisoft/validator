@@ -56,13 +56,13 @@ return [
     '{Attribute} is not in the list of acceptable values.' => '{Attribute} ist nicht in der Liste der akzeptierten ' .
         'Werte.',
     /** @see Ip */
-    'Must be a valid IP address.' => 'Muss eine gültige IP-Adresse sein.',
-    'Must not be an IPv4 address.' => 'Darf keine IPv4-Adresse sein.',
-    'Must not be an IPv6 address.' => 'Darf keine IPv6-Adresse sein.',
-    'Contains wrong subnet mask.' => 'Enthält falsche Subnetz-Maske.',
-    'Must be an IP address with specified subnet.' => 'Muss eine gültige IP-Adresse mit Subnetz sein.',
-    'Must not be a subnet.' => 'Darf kein Subnetz sein.',
-    'Is not in the allowed range.' => 'Ist nicht im erlaubten Bereich.',
+    '{Attribute} must be a valid IP address.' => '{Attribute} muss eine gültige IP-Adresse sein.',
+    '{Attribute} must not be an IPv4 address.' => '{Attribute} darf keine IPv4-Adresse sein.',
+    '{Attribute} must not be an IPv6 address.' => '{Attribute} darf keine IPv6-Adresse sein.',
+    '{Attribute} contains wrong subnet mask.' => '{Attribute} enthält falsche Subnetz-Maske.',
+    '{Attribute} must be an IP address with specified subnet.' => '{Attribute} muss eine gültige IP-Adresse mit Subnetz sein.',
+    '{Attribute} must not be a subnet.' => '{Attribute} darf kein Subnetz sein.',
+    '{Attribute} is not in the allowed range.' => '{Attribute} ist nicht im erlaubten Bereich.',
     /** @see Integer */
     '{Attribute} must be an integer.' => '{Attribute} muss ein Integer sein.',
     /** @see Json */

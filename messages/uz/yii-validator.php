@@ -48,13 +48,13 @@ return [
     /** @see In */
     '{Attribute} is not in the list of acceptable values.' => '{Attribute} qabul qilinadigan qiymatlar roʻyxatida yoʻq.',
     /** @see Ip */
-    'Must be a valid IP address.' => 'Toʻgʻri IP manzil boʻlishi kerak.',
-    'Must not be an IPv4 address.' => 'IPv4 manzil boʻlmasligi kerak.',
-    'Must not be an IPv6 address.' => 'IPv6 manzil boʻlmasligi kerak.',
-    'Contains wrong subnet mask.' => 'Notoʻgʻri quyi tarmoq(subnet) niqobini oʻz ichiga olgan.',
-    'Must be an IP address with specified subnet.' => 'Quyi tarmoq(subnet)ga ega IP manzil boʻlishi kerak.',
-    'Must not be a subnet.' => 'Quyi tarmoq(subnet) boʻlmasligi kerak.',
-    'Is not in the allowed range.' => 'Ruxsat etilgan manzillar qatoriga kirmaydi.',
+    '{Attribute} must be a valid IP address.' => '{Attribute} toʻgʻri IP manzil boʻlishi kerak.',
+    '{Attribute} must not be an IPv4 address.' => '{Attribute} IPv4 manzil boʻlmasligi kerak.',
+    '{Attribute} must not be an IPv6 address.' => '{Attribute} IPv6 manzil boʻlmasligi kerak.',
+    '{Attribute} contains wrong subnet mask.' => '{Attribute} notoʻgʻri quyi tarmoq(subnet) niqobini oʻz ichiga olgan.',
+    '{Attribute} must be an IP address with specified subnet.' => '{Attribute} quyi tarmoq(subnet)ga ega IP manzil boʻlishi kerak.',
+    '{Attribute} must not be a subnet.' => '{Attribute} quyi tarmoq(subnet) boʻlmasligi kerak.',
+    '{Attribute} is not in the allowed range.' => '{Attribute} ruxsat etilgan manzillar qatoriga kirmaydi.',
     /** @see Integer */
     '{Attribute} must be an integer.' => '{Attribute} butun son boʻlishi kerak.',
     /** @see Json */

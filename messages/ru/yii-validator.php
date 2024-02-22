@@ -52,13 +52,13 @@ return [
     /** @see In */
     '{Attribute} is not in the list of acceptable values.' => '{Attribute} не в списке допустимых значений.',
     /** @see Ip */
-    'Must be a valid IP address.' => 'Должно быть правильным IP-адресом.',
-    'Must not be an IPv4 address.' => 'Не должно быть IPv4-адресом.',
-    'Must not be an IPv6 address.' => 'Не должно быть IPv6-адресом.',
-    'Contains wrong subnet mask.' => 'Содержит неверную маску подсети.',
-    'Must be an IP address with specified subnet.' => 'Должно быть IP адресом с подсетью.',
-    'Must not be a subnet.' => 'Не должно быть подсетью.',
-    'Is not in the allowed range.' => 'Не входит в список разрешенных диапазонов адресов.',
+    '{Attribute} must be a valid IP address.' => '{Attribute} должен быть правильным IP-адресом.',
+    '{Attribute} must not be an IPv4 address.' => '{Attribute} не должен быть IPv4-адресом.',
+    '{Attribute} must not be an IPv6 address.' => '{Attribute} не должен быть IPv6-адресом.',
+    '{Attribute} contains wrong subnet mask.' => '{Attribute} содержит неверную маску подсети.',
+    '{Attribute} must be an IP address with specified subnet.' => '{Attribute} должно быть IP адресом с подсетью.',
+    '{Attribute} must not be a subnet.' => '{Attribute} не должно быть подсетью.',
+    '{Attribute} is not in the allowed range.' => '{Attribute} не входит в список разрешенных диапазонов адресов.',
     /** @see Integer */
     '{Attribute} must be an integer.' => '{Attribute} должно быть целым числом.',
     /** @see Json */
