@@ -447,7 +447,7 @@ class ValidatorTest extends TestCase
                         ['attribute' => 'sort'],
                         ['sort'],
                         false
-                    )
+                    ),
                 ],
             ],
             [
@@ -459,7 +459,7 @@ class ValidatorTest extends TestCase
                         ['attribute' => 'sort'],
                         ['sort'],
                         false
-                    )
+                    ),
                 ],
             ],
 
@@ -472,7 +472,7 @@ class ValidatorTest extends TestCase
                         ['attribute' => 'sort'],
                         ['sort'],
                         false
-                    )
+                    ),
                 ],
             ],
             [
