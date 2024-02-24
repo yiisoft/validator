@@ -144,12 +144,17 @@ final class Validator implements ValidatorInterface
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
 
             foreach ($tempResult->getErrors() as $error) {
-                $result->addError(
-                    $this->translator->translate(
+                if ($error->shouldTranslate()) {
+                    $message = $this->translator->translate(
                         $error->getMessage(),
                         $error->getParameters(),
                         $this->translationCategory
-                    ),
+                    );
+                } else {
+                    $message = $error->getMessage();
+                }
+                $result->addErrorWithoutTranslation(
+                    $message,
                     $error->getParameters(),
                     $error->getValuePath()
                 );
@@ -201,7 +206,15 @@ final class Validator implements ValidatorInterface
                 if ($context->getAttribute() !== null) {
                     $valuePath = [$context->getAttribute(), ...$valuePath];
                 }
-                $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePath);
+                if ($error->shouldTranslate()) {
+                    $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePath);
+                } else {
+                    $compoundResult->addErrorWithoutTranslation(
+                        $error->getMessage(),
+                        $error->getParameters(),
+                        $valuePath
+                    );
+                }
             }
         }
         return $compoundResult;

@@ -218,4 +218,21 @@ final class Result
 
         return $this;
     }
+
+    /**
+     * Add an error, the message of which does not require translation.
+     *
+     * @see addError()
+     *
+     * @psalm-param array<string,scalar|null> $parameters
+     * @psalm-param list<int|string> $valuePath
+     *
+     * @return $this Same instance of result.
+     */
+    public function addErrorWithoutTranslation(string $message, array $parameters = [], array $valuePath = []): self
+    {
+        $this->errors[] = new Error($message, $parameters, $valuePath, false);
+
+        return $this;
+    }
 }

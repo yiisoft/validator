@@ -60,12 +60,15 @@ final class Error
      *
      * A value without nested structure won't have a path at all (it will be an empty array).
      *
+     * @param bool $translate Whether to translate error message.
+     *
      * @psalm-param list<int|string> $valuePath
      */
     public function __construct(
         private string $message,
         private array $parameters = [],
         private array $valuePath = [],
+        private bool $translate = true,
     ) {
     }
 
@@ -123,5 +126,13 @@ final class Error
             static fn($key): string => str_replace($escape, '\\' . $escape, (string) $key),
             $this->valuePath,
         );
+    }
+
+    /**
+     * Whether to translate error message.
+     */
+    public function shouldTranslate(): bool
+    {
+        return $this->translate;
     }
 }
