@@ -9,6 +9,7 @@ use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\Message\Php\MessageSource;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\Translator;
+use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Validator;
 
@@ -66,6 +67,28 @@ final class MessagesTest extends TestCase
             $this->assertIsString($message);
             $this->assertNotEmpty($message);
         }
+    }
+
+    public function testErrorWithoutTranslation(): void
+    {
+        $translator = (new Translator('ru', 'en'))->addCategorySources(
+            new CategorySource(
+                Validator::DEFAULT_TRANSLATION_CATEGORY,
+                new MessageSource($this->getMessagesPath()),
+                new SimpleMessageFormatter(),
+            )
+        );
+        $validator = new Validator(translator: $translator);
+
+        $result = $validator->validate(
+            'hello',
+            [static fn() => (new Result())->addErrorWithoutTranslation('Value is invalid.')],
+        );
+
+        $this->assertSame(
+            ['' => ['Value is invalid.']],
+            $result->getErrorMessagesIndexedByAttribute(),
+        );
     }
 
     private function getMessagesPath(): string
