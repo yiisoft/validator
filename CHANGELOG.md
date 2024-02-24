@@ -1,8 +1,8 @@
 # Yii Validator Change Log
 
-## 1.2.1 under development
+## 1.3.0 under development
 
-- no changes in this release.
+- New #665: Add method `Result::addErrorWithoutTranslation()` (@vjik)
 
 ## 1.2.0 February 21, 2024
 
