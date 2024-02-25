@@ -24,6 +24,12 @@
             "ignoreSourceCodeByRegex": [
                 ".*if \\(function_exists\\('json_validate'\\).*"
             ]
+        },
+        "FalseValue": {
+            "ignore": [
+                "Yiisoft\\Validator\\EmptyCondition\\NeverEmpty::__invoke",
+                "Yiisoft\\Validator\\EmptyCondition\\WhenNull::__invoke"
+            ]
         }
     }
 }

@@ -23,6 +23,9 @@ use function is_string;
 /**
  * The only built-in implementation of {@see ValidatorInterface}, the main class / entry point processing all the data
  * and rules with validation context together and performing the actual validation.
+ *
+ * @psalm-import-type SkipOnEmptyCallable from SkipOnEmptyInterface
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  */
 final class Validator implements ValidatorInterface
 {
@@ -40,11 +43,15 @@ final class Validator implements ValidatorInterface
      * explicitly in the constructor, a default one created automatically in {@see createDefaultTranslator()}.
      */
     private TranslatorInterface $translator;
+
     /**
      * @var callable A default "skip on empty" condition ({@see SkipOnEmptyInterface}), already normalized. Used to
      * optimize setting the same value in all the rules.
+     *
+     * @psalm-var SkipOnEmptyCallable
      */
     private $defaultSkipOnEmptyCondition;
+
     /**
      * @var AttributeTranslatorInterface A default translator used for translation of rule ({@see RuleInterface})
      * attributes. Used to optimize setting the same value in all the rules.
@@ -63,6 +70,8 @@ final class Validator implements ValidatorInterface
      * argument was not specified explicitly. If not provided, a {@see DEFAULT_TRANSLATION_CATEGORY} will be used.
      * @param AttributeTranslatorInterface|null $defaultAttributeTranslator A default translator used for translation of
      * rule ({@see RuleInterface}) attributes. If not provided, a {@see TranslatorAttributeTranslator} will be used.
+     *
+     * @psalm-param SkipOnEmptyValue $defaultSkipOnEmpty
      */
     public function __construct(
         ?RuleHandlerResolverInterface $ruleHandlerResolver = null,
@@ -87,6 +96,8 @@ final class Validator implements ValidatorInterface
      * @return $this The new instance with a changed value.
      *
      * @see $defaultSkipOnEmptyCondition
+     *
+     * @psalm-param SkipOnEmptyValue $value
      */
     public function withDefaultSkipOnEmptyCondition(bool|callable|null $value): static
     {
@@ -101,7 +112,6 @@ final class Validator implements ValidatorInterface
         ?ValidationContext $context = null
     ): Result {
         $dataSet = DataSetNormalizer::normalize($data);
-        /** @psalm-suppress MixedAssignment */
         $originalData = $dataSet instanceof DataWrapperInterface ? $dataSet->getSource() : $data;
 
         $rules = RulesNormalizer::normalize(
@@ -122,12 +132,10 @@ final class Validator implements ValidatorInterface
         $result = new Result();
         foreach ($rules as $attribute => $attributeRules) {
             if (is_int($attribute)) {
-                /** @psalm-suppress MixedAssignment */
                 $validatedData = $originalData;
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, $dataSet->getData());
                 $context->setAttribute(null);
             } else {
-                /** @psalm-suppress MixedAssignment */
                 $validatedData = $dataSet->getAttributeValue($attribute);
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, null);
                 $context->setAttribute($attribute);

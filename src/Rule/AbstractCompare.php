@@ -31,6 +31,7 @@ use function in_array;
  *
  * @see CompareHandler
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  */
 abstract class AbstractCompare implements
@@ -139,6 +140,7 @@ abstract class AbstractCompare implements
      * @param Closure|null $when A callable to define a condition for applying the rule.
      * See {@see WhenInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      */
     public function __construct(

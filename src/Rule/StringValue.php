@@ -16,13 +16,13 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Defines validation options to check that the value is a string.
-
  * When you also need to check the value has a certain length, or it's a valid e-mail address, etc. use according rules
  * instead (without combining them). Full list of rules working with strings is available at
  * {@link https://github.com/yiisoft/validator/blob/master/docs/guide/en/built-in-rules.md#string-rules}.
  *
  * @see StringValueHandler
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -50,6 +50,7 @@ final class StringValue implements
      * @param Closure|null $when A callable to define a condition for applying the rule.
      * See {@see WhenInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      */
     public function __construct(
