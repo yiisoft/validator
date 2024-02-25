@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\Message\Php\MessageSource;
+use Yiisoft\Translator\MessageFormatterInterface;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\Translator;
 use Yiisoft\Validator\Result;
@@ -69,7 +70,7 @@ final class MessagesTest extends TestCase
         }
     }
 
-    public function testErrorWithoutTranslation(): void
+    public function testErrorWithoutPostProcessing(): void
     {
         $translator = (new Translator('ru', 'en'))->addCategorySources(
             new CategorySource(
@@ -87,6 +88,42 @@ final class MessagesTest extends TestCase
 
         $this->assertSame(
             ['' => ['Value is invalid.']],
+            $result->getErrorMessagesIndexedByAttribute(),
+        );
+    }
+
+    public function testErrorWithFormatOnly(): void
+    {
+        $translator = (new Translator('ru', 'en'))->addCategorySources(
+            new CategorySource(
+                Validator::DEFAULT_TRANSLATION_CATEGORY,
+                new MessageSource($this->getMessagesPath()),
+                new SimpleMessageFormatter(),
+            )
+        );
+        $messageFormatter = new class() implements MessageFormatterInterface {
+            public function format(string $message, array $parameters, string $locale): string
+            {
+                $result = $message . '!';
+                foreach ($parameters as $key => $value) {
+                    $result .= $key . '-' . $value;
+                }
+                return $result . '!' . $locale;
+            }
+        };
+        $validator = new Validator(
+            translator: $translator,
+            messageFormatter: $messageFormatter,
+            messageFormatterLocale: 'ru',
+        );
+
+        $result = $validator->validate(
+            'hello',
+            [static fn() => (new Result())->addErrorWithFormatOnly('Value is invalid.', ['a' => 3])],
+        );
+
+        $this->assertSame(
+            ['' => ['Value is invalid.!a-3!ru']],
             $result->getErrorMessagesIndexedByAttribute(),
         );
     }
