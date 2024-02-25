@@ -64,7 +64,10 @@ final class Error
      *
      * A value without nested structure won't have a path at all (it will be an empty array).
      *
-     * @param int $messageProcessing Message processing type.
+     * @param int $messageProcessing Message processing type:
+     *  - `Error::MESSAGE_NONE` - without post-processing;
+     *  - `Error::MESSAGE_FORMAT` - format message;
+     *  - `Error::MESSAGE_TRANSLATE` - translate message (translator do formatting also).
      *
      * @psalm-param list<int|string> $valuePath
      * @psalm-param self::MESSAGE_* $messageProcessing
@@ -134,7 +137,7 @@ final class Error
     }
 
     /**
-     * Whether to translate error message.
+     * Returns error message processing type.
      *
      * @psalm-return self::MESSAGE_*
      */

@@ -16,6 +16,9 @@ final class MessageProcessor
     /**
      * @param TranslatorInterface $translator A translator instance used for translations of error messages.
      * @param string $translationCategory A translation category.
+     * @param MessageFormatterInterface $messageFormatter A message formatter instance used for formats of error
+     * messages.
+     * @param string $messageFormatterLocale Locale to use when error message requires format only.
      */
     public function __construct(
         private TranslatorInterface $translator,

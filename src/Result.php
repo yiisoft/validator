@@ -220,7 +220,7 @@ final class Result
     }
 
     /**
-     * Add an error, the message of which does not require translation, but will be formatted.
+     * Add an error, the message of which does not require translation, but should be formatted.
      *
      * @see addError()
      *

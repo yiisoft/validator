@@ -70,6 +70,9 @@ final class Validator implements ValidatorInterface
      * argument was not specified explicitly. If not provided, a {@see DEFAULT_TRANSLATION_CATEGORY} will be used.
      * @param AttributeTranslatorInterface|null $defaultAttributeTranslator A default translator used for translation of
      * rule ({@see RuleInterface}) attributes. If not provided, a {@see TranslatorAttributeTranslator} will be used.
+     * @param MessageFormatterInterface|null $messageFormatter A message formatter instance used for formats of error
+     * messages that requires format only. If not provided, message is returned as is.
+     * @param string $messageFormatterLocale Locale to use when error message requires format only.
      *
      * @psalm-param SkipOnEmptyValue $defaultSkipOnEmpty
      */
