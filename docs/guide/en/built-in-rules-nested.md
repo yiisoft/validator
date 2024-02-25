@@ -461,6 +461,6 @@ $data = [
 
 [Result]: result.md
 [Basic usage]: #basic-usage-one-to-one-relation
-[JSFiddle]: http://jsfiddle.net/fys8uadr/
+[JSFiddle]: https://jsfiddle.net/fys8uadr/
 [Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md
 [Using validator]: using-validator.md
