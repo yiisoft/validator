@@ -101,7 +101,7 @@ final class MessagesTest extends TestCase
                 new SimpleMessageFormatter(),
             )
         );
-        $messageFormatter = new class() implements MessageFormatterInterface {
+        $messageFormatter = new class () implements MessageFormatterInterface {
             public function format(string $message, array $parameters, string $locale): string
             {
                 $result = $message . '!';

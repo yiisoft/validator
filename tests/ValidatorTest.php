@@ -414,7 +414,7 @@ class ValidatorTest extends TestCase
                         ['attribute' => 'merchantId'],
                         ['merchantId'],
                         Error::MESSAGE_NONE,
-                    )
+                    ),
                 ],
             ],
             [
