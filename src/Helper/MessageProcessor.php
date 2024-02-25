@@ -27,24 +27,18 @@ final class MessageProcessor
 
     public function process(Error $error): string
     {
-        switch ($error->getMessageProcessing()) {
-            case Error::MESSAGE_TRANSLATE:
-                return $this->translator->translate(
-                    $error->getMessage(),
-                    $error->getParameters(),
-                    $this->translationCategory
-                );
-
-            case Error::MESSAGE_FORMAT:
-                return $this->messageFormatter->format(
-                    $error->getMessage(),
-                    $error->getParameters(),
-                    $this->messageFormatterLocale,
-                );
-
-            case Error::MESSAGE_NONE:
-            default:
-                return $error->getMessage();
-        }
+        return match ($error->getMessageProcessing()) {
+            Error::MESSAGE_TRANSLATE => $this->translator->translate(
+                $error->getMessage(),
+                $error->getParameters(),
+                $this->translationCategory
+            ),
+            Error::MESSAGE_FORMAT => $this->messageFormatter->format(
+                $error->getMessage(),
+                $error->getParameters(),
+                $this->messageFormatterLocale,
+            ),
+            default => $error->getMessage(),
+        };
     }
 }

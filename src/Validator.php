@@ -205,25 +205,19 @@ final class Validator implements ValidatorInterface
                 if ($context->getAttribute() !== null) {
                     $valuePath = [$context->getAttribute(), ...$valuePath];
                 }
-                switch ($error->getMessageProcessing()) {
-                    case Error::MESSAGE_TRANSLATE:
-                        $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePath);
-                        break;
-                    case Error::MESSAGE_FORMAT:
-                        $compoundResult->addErrorWithFormatOnly(
-                            $error->getMessage(),
-                            $error->getParameters(),
-                            $valuePath
-                        );
-                        break;
-                    case Error::MESSAGE_NONE:
-                    default:
-                        $compoundResult->addErrorWithoutPostProcessing(
-                            $error->getMessage(),
-                            $error->getParameters(),
-                            $valuePath
-                        );
-                }
+                match ($error->getMessageProcessing()) {
+                    Error::MESSAGE_TRANSLATE => $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePath),
+                    Error::MESSAGE_FORMAT => $compoundResult->addErrorWithFormatOnly(
+                        $error->getMessage(),
+                        $error->getParameters(),
+                        $valuePath
+                    ),
+                    default => $compoundResult->addErrorWithoutPostProcessing(
+                        $error->getMessage(),
+                        $error->getParameters(),
+                        $valuePath
+                    ),
+                };
             }
         }
         return $compoundResult;
