@@ -16,8 +16,8 @@ use Yiisoft\Validator\Rule\Length;
 new Length(  
     min: 4,  
     max: 10,
-    lessThanMinMessage: 'The {attribute} is too short.',  
-    greaterThanMaxMessage: 'The {attribute} is too long.',  
+    lessThanMinMessage: '{Attribute} is too short.',  
+    greaterThanMaxMessage: '{Attribute} is too long.',  
 );
 ```
 
