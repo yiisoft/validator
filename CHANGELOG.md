@@ -2,7 +2,7 @@
 
 ## 1.3.0 under development
 
-- New #665: Add method `Result::addErrorWithoutTranslation()` (@vjik)
+- New #665: Add methods `addErrorWithFormatOnly()` and `addErrorWithoutPostProcessing()` to `Result` object (@vjik)
 
 ## 1.2.0 February 21, 2024
 
