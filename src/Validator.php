@@ -12,6 +12,7 @@ use Yiisoft\Translator\Translator;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\AttributeTranslator\TranslatorAttributeTranslator;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
+use Yiisoft\Validator\Helper\ErrorMessagePostProcessor;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
 use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
@@ -38,11 +39,6 @@ final class Validator implements ValidatorInterface
      * @var RuleHandlerResolverInterface A container to resolve rule handler names to corresponding instances.
      */
     private RuleHandlerResolverInterface $ruleHandlerResolver;
-    /**
-     * @var TranslatorInterface A translator instance used for translations of error messages. If it was not set
-     * explicitly in the constructor, a default one created automatically in {@see createDefaultTranslator()}.
-     */
-    private TranslatorInterface $translator;
 
     /**
      * @var callable A default "skip on empty" condition ({@see SkipOnEmptyInterface}), already normalized. Used to
@@ -57,6 +53,8 @@ final class Validator implements ValidatorInterface
      * attributes. Used to optimize setting the same value in all the rules.
      */
     private AttributeTranslatorInterface $defaultAttributeTranslator;
+
+    private ErrorMessagePostProcessor $errorMessagePostProcessor;
 
     /**
      * @param RuleHandlerResolverInterface|null $ruleHandlerResolver Optional container to resolve rule handler names to
@@ -77,14 +75,15 @@ final class Validator implements ValidatorInterface
         ?RuleHandlerResolverInterface $ruleHandlerResolver = null,
         ?TranslatorInterface $translator = null,
         bool|callable|null $defaultSkipOnEmpty = null,
-        private string $translationCategory = self::DEFAULT_TRANSLATION_CATEGORY,
+        string $translationCategory = self::DEFAULT_TRANSLATION_CATEGORY,
         ?AttributeTranslatorInterface $defaultAttributeTranslator = null,
     ) {
+        $translator ??= $this->createDefaultTranslator($translationCategory);
         $this->ruleHandlerResolver = $ruleHandlerResolver ?? new SimpleRuleHandlerContainer();
-        $this->translator = $translator ?? $this->createDefaultTranslator();
         $this->defaultSkipOnEmptyCondition = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
         $this->defaultAttributeTranslator = $defaultAttributeTranslator
-            ?? new TranslatorAttributeTranslator($this->translator);
+            ?? new TranslatorAttributeTranslator($translator);
+        $this->errorMessagePostProcessor = new ErrorMessagePostProcessor($translator, $translationCategory);
     }
 
     /**
@@ -144,17 +143,8 @@ final class Validator implements ValidatorInterface
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
 
             foreach ($tempResult->getErrors() as $error) {
-                if ($error->shouldTranslate()) {
-                    $message = $this->translator->translate(
-                        $error->getMessage(),
-                        $error->getParameters(),
-                        $this->translationCategory
-                    );
-                } else {
-                    $message = $error->getMessage();
-                }
                 $result->addErrorWithoutTranslation(
-                    $message,
+                    $this->errorMessagePostProcessor->process($error),
                     $error->getParameters(),
                     $error->getValuePath()
                 );
@@ -267,16 +257,15 @@ final class Validator implements ValidatorInterface
      *
      * @return Translator Translator instance used for translations of error messages.
      */
-    private function createDefaultTranslator(): Translator
+    private function createDefaultTranslator(string $category): Translator
     {
         $categorySource = new CategorySource(
-            $this->translationCategory,
+            $category,
             new IdMessageReader(),
             extension_loaded('intl') ? new IntlMessageFormatter() : new SimpleMessageFormatter(),
         );
         $translator = new Translator();
         $translator->addCategorySources($categorySource);
-
         return $translator;
     }
 }
