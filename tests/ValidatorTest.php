@@ -395,25 +395,32 @@ class ValidatorTest extends TestCase
                         'Value cannot be blank.',
                         ['attribute' => 'merchantId'],
                         ['merchantId'],
-                        false
+                        Error::MESSAGE_NONE,
                     ),
                     new Error(
                         'The allowed types are integer, float and string.',
                         ['attribute' => 'merchantId', 'type' => 'null'],
                         ['merchantId'],
-                        false
+                        Error::MESSAGE_NONE,
                     ),
                 ],
             ],
             [
                 ['merchantId' => [new Required(), new Integer(skipOnError: true)]],
                 new ArrayDataSet(['merchantId' => null]),
-                [new Error('Value cannot be blank.', ['attribute' => 'merchantId'], ['merchantId'], false)],
+                [
+                    new Error(
+                        'Value cannot be blank.',
+                        ['attribute' => 'merchantId'],
+                        ['merchantId'],
+                        Error::MESSAGE_NONE,
+                    )
+                ],
             ],
             [
                 ['merchantId' => [new Required(), new Integer(skipOnError: true)]],
                 new ArrayDataSet(['merchantIdd' => 1]),
-                [new Error('Value not passed.', ['attribute' => 'merchantId'], ['merchantId'], false)],
+                [new Error('Value not passed.', ['attribute' => 'merchantId'], ['merchantId'], Error::MESSAGE_NONE)],
             ],
 
             [
@@ -446,7 +453,7 @@ class ValidatorTest extends TestCase
                         'This value is not in the list of acceptable values.',
                         ['attribute' => 'sort'],
                         ['sort'],
-                        false
+                        Error::MESSAGE_NONE,
                     ),
                 ],
             ],
@@ -458,7 +465,7 @@ class ValidatorTest extends TestCase
                         'This value is not in the list of acceptable values.',
                         ['attribute' => 'sort'],
                         ['sort'],
-                        false
+                        Error::MESSAGE_NONE,
                     ),
                 ],
             ],
@@ -471,7 +478,7 @@ class ValidatorTest extends TestCase
                         'This value is not in the list of acceptable values.',
                         ['attribute' => 'sort'],
                         ['sort'],
-                        false
+                        Error::MESSAGE_NONE,
                     ),
                 ],
             ],
@@ -495,23 +502,23 @@ class ValidatorTest extends TestCase
             [
                 $strictRules,
                 new ArrayDataSet(['orderBy' => '']),
-                [new Error('Value cannot be blank.', ['attribute' => 'orderBy'], ['orderBy'], false)],
+                [new Error('Value cannot be blank.', ['attribute' => 'orderBy'], ['orderBy'], Error::MESSAGE_NONE)],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet(['orderBy' => '']),
-                [new Error('Value cannot be blank.', ['attribute' => 'orderBy'], ['orderBy'], false)],
+                [new Error('Value cannot be blank.', ['attribute' => 'orderBy'], ['orderBy'], Error::MESSAGE_NONE)],
             ],
 
             [
                 $strictRules,
                 new ArrayDataSet([]),
-                [new Error('Value not passed.', ['attribute' => 'orderBy'], ['orderBy'], false)],
+                [new Error('Value not passed.', ['attribute' => 'orderBy'], ['orderBy'], Error::MESSAGE_NONE)],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet([]),
-                [new Error('Value not passed.', ['attribute' => 'orderBy'], ['orderBy'], false)],
+                [new Error('Value not passed.', ['attribute' => 'orderBy'], ['orderBy'], Error::MESSAGE_NONE)],
             ],
             [
                 [
@@ -524,7 +531,7 @@ class ValidatorTest extends TestCase
                         private string $description = 'abc123';
                     }
                 ),
-                [new Error('Value not passed.', ['attribute' => 'name'], ['name'], false)],
+                [new Error('Value not passed.', ['attribute' => 'name'], ['name'], Error::MESSAGE_NONE)],
             ],
             [
                 null,
@@ -571,11 +578,11 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
                         'type' => 'null',
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
             'rule / validator, skipOnEmpty: false, value is empty' => [
@@ -590,11 +597,11 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
                         'type' => 'null',
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
             'rule / validator, skipOnEmpty: false, value is not empty' => [
@@ -609,12 +616,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
 
@@ -632,7 +639,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                 ],
             ],
             'rule, skipOnEmpty: true, value is empty (null)' => [
@@ -650,7 +657,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                 ],
             ],
             'rule, skipOnEmpty: true, value is empty (empty string after trimming), trimString is false' => [
@@ -668,12 +675,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 1,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
             'rule, skipOnEmpty: SkipOnEmpty, value is empty (empty string after trimming), trimString is true' => [
@@ -691,7 +698,7 @@ class ValidatorTest extends TestCase
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
             'rule, skipOnEmpty: true, value is not empty' => [
@@ -709,12 +716,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
 
@@ -732,7 +739,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                 ],
             ],
             'rule, skipOnEmpty: SkipOnNull, value is empty' => [
@@ -750,7 +757,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                 ],
             ],
             'rule, skipOnEmpty: SkipOnNull, value is not empty' => [
@@ -768,12 +775,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
             'rule, skipOnEmpty: SkipOnNull, value is not empty (empty string)' => [
@@ -791,11 +798,11 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($intMessage, [
                         'attribute' => 'age',
                         'value' => '',
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
 
@@ -818,11 +825,11 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
                         'type' => 'null',
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
             'rule, skipOnEmpty: custom callback, value is empty' => [
@@ -845,7 +852,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                 ],
             ],
             'rule, skipOnEmpty, custom callback, value is not empty' => [
@@ -868,12 +875,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
             'rule, skipOnEmpty, custom callback, value is not empty (null)' => [
@@ -896,11 +903,11 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
                         'type' => 'null',
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
 
@@ -915,7 +922,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                 ],
             ],
             'validator, skipOnEmpty: true, value is empty' => [
@@ -930,7 +937,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                 ],
             ],
             'validator, skipOnEmpty: true, value is not empty' => [
@@ -945,12 +952,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
 
@@ -965,7 +972,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                 ],
             ],
             'validator, skipOnEmpty: SkipOnNull, value is empty' => [
@@ -980,7 +987,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                 ],
             ],
             'validator, skipOnEmpty: SkipOnNull, value is not empty' => [
@@ -995,12 +1002,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
             'validator, skipOnEmpty: SkipOnNull, value is not empty (empty string)' => [
@@ -1015,11 +1022,11 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($intMessage, [
                         'attribute' => 'age',
                         'value' => '',
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
 
@@ -1036,11 +1043,11 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
                         'type' => 'null',
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
             'validator, skipOnEmpty: custom callback, value is empty' => [
@@ -1057,7 +1064,7 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                 ],
             ],
             'validator, skipOnEmpty: custom callback, value is not empty' => [
@@ -1074,12 +1081,12 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
                         'attribute' => 'age',
                         'value' => 17,
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
             'validator, skipOnEmpty: custom callback, value is not empty (null)' => [
@@ -1096,11 +1103,11 @@ class ValidatorTest extends TestCase
                         'min' => 8,
                         'attribute' => 'name',
                         'number' => 7,
-                    ], ['name'], false),
+                    ], ['name'], Error::MESSAGE_NONE),
                     new Error($incorrectNumberMessage, [
                         'attribute' => 'age',
                         'type' => 'null',
-                    ], ['age'], false),
+                    ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
         ];

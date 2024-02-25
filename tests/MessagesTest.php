@@ -82,7 +82,7 @@ final class MessagesTest extends TestCase
 
         $result = $validator->validate(
             'hello',
-            [static fn() => (new Result())->addErrorWithoutTranslation('Value is invalid.')],
+            [static fn() => (new Result())->addErrorWithoutPostProcessing('Value is invalid.')],
         );
 
         $this->assertSame(

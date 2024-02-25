@@ -102,7 +102,7 @@ final class NestedHandler implements RuleHandlerInterface
                     array_push($valuePathList, ...$error->getValuePath());
                 }
 
-                $compoundResult->addErrorWithoutTranslation(
+                $compoundResult->addErrorWithoutPostProcessing(
                     $error->getMessage(),
                     $error->getParameters(),
                     $valuePathList

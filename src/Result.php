@@ -220,7 +220,7 @@ final class Result
     }
 
     /**
-     * Add an error, the message of which does not require translation.
+     * Add an error, the message of which does not require translation, but will be formatted.
      *
      * @see addError()
      *
@@ -229,10 +229,25 @@ final class Result
      *
      * @return $this Same instance of result.
      */
-    public function addErrorWithoutTranslation(string $message, array $parameters = [], array $valuePath = []): self
+    public function addErrorWithFormatOnly(string $message, array $parameters = [], array $valuePath = []): self
     {
-        $this->errors[] = new Error($message, $parameters, $valuePath, false);
+        $this->errors[] = new Error($message, $parameters, $valuePath, Error::MESSAGE_FORMAT);
+        return $this;
+    }
 
+    /**
+     * Add an error, the message of which does not require any post-processing.
+     *
+     * @see addError()
+     *
+     * @psalm-param array<string,scalar|null> $parameters
+     * @psalm-param list<int|string> $valuePath
+     *
+     * @return $this Same instance of result.
+     */
+    public function addErrorWithoutPostProcessing(string $message, array $parameters = [], array $valuePath = []): self
+    {
+        $this->errors[] = new Error($message, $parameters, $valuePath, Error::MESSAGE_NONE);
         return $this;
     }
 }

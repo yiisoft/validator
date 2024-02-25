@@ -7,12 +7,14 @@ namespace Yiisoft\Validator;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\IdMessageReader;
 use Yiisoft\Translator\IntlMessageFormatter;
+use Yiisoft\Translator\MessageFormatterInterface;
+use Yiisoft\Translator\NullMessageFormatter;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\Translator;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\AttributeTranslator\TranslatorAttributeTranslator;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
-use Yiisoft\Validator\Helper\ErrorMessagePostProcessor;
+use Yiisoft\Validator\Helper\MessageProcessor;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
 use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
@@ -54,7 +56,7 @@ final class Validator implements ValidatorInterface
      */
     private AttributeTranslatorInterface $defaultAttributeTranslator;
 
-    private ErrorMessagePostProcessor $errorMessagePostProcessor;
+    private MessageProcessor $messageProcessor;
 
     /**
      * @param RuleHandlerResolverInterface|null $ruleHandlerResolver Optional container to resolve rule handler names to
@@ -77,13 +79,20 @@ final class Validator implements ValidatorInterface
         bool|callable|null $defaultSkipOnEmpty = null,
         string $translationCategory = self::DEFAULT_TRANSLATION_CATEGORY,
         ?AttributeTranslatorInterface $defaultAttributeTranslator = null,
+        ?MessageFormatterInterface $messageFormatter = null,
+        string $messageFormatterLocale = 'en-US',
     ) {
         $translator ??= $this->createDefaultTranslator($translationCategory);
         $this->ruleHandlerResolver = $ruleHandlerResolver ?? new SimpleRuleHandlerContainer();
         $this->defaultSkipOnEmptyCondition = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
         $this->defaultAttributeTranslator = $defaultAttributeTranslator
             ?? new TranslatorAttributeTranslator($translator);
-        $this->errorMessagePostProcessor = new ErrorMessagePostProcessor($translator, $translationCategory);
+        $this->messageProcessor = new MessageProcessor(
+            $translator,
+            $translationCategory,
+            $messageFormatter ?? new NullMessageFormatter(),
+            $messageFormatterLocale,
+        );
     }
 
     /**
@@ -143,8 +152,8 @@ final class Validator implements ValidatorInterface
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
 
             foreach ($tempResult->getErrors() as $error) {
-                $result->addErrorWithoutTranslation(
-                    $this->errorMessagePostProcessor->process($error),
+                $result->addErrorWithoutPostProcessing(
+                    $this->messageProcessor->process($error),
                     $error->getParameters(),
                     $error->getValuePath()
                 );
@@ -196,14 +205,24 @@ final class Validator implements ValidatorInterface
                 if ($context->getAttribute() !== null) {
                     $valuePath = [$context->getAttribute(), ...$valuePath];
                 }
-                if ($error->shouldTranslate()) {
-                    $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePath);
-                } else {
-                    $compoundResult->addErrorWithoutTranslation(
-                        $error->getMessage(),
-                        $error->getParameters(),
-                        $valuePath
-                    );
+                switch ($error->getMessageProcessing()) {
+                    case Error::MESSAGE_TRANSLATE:
+                        $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePath);
+                        break;
+                    case Error::MESSAGE_FORMAT:
+                        $compoundResult->addErrorWithFormatOnly(
+                            $error->getMessage(),
+                            $error->getParameters(),
+                            $valuePath
+                        );
+                        break;
+                    case Error::MESSAGE_NONE:
+                    default:
+                        $compoundResult->addErrorWithoutPostProcessing(
+                            $error->getMessage(),
+                            $error->getParameters(),
+                            $valuePath
+                        );
                 }
             }
         }
