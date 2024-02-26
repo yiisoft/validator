@@ -7,11 +7,14 @@ namespace Yiisoft\Validator;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\IdMessageReader;
 use Yiisoft\Translator\IntlMessageFormatter;
+use Yiisoft\Translator\MessageFormatterInterface;
+use Yiisoft\Translator\NullMessageFormatter;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\Translator;
 use Yiisoft\Translator\TranslatorInterface;
 use Yiisoft\Validator\AttributeTranslator\TranslatorAttributeTranslator;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
+use Yiisoft\Validator\Helper\MessageProcessor;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
 use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
@@ -38,11 +41,6 @@ final class Validator implements ValidatorInterface
      * @var RuleHandlerResolverInterface A container to resolve rule handler names to corresponding instances.
      */
     private RuleHandlerResolverInterface $ruleHandlerResolver;
-    /**
-     * @var TranslatorInterface A translator instance used for translations of error messages. If it was not set
-     * explicitly in the constructor, a default one created automatically in {@see createDefaultTranslator()}.
-     */
-    private TranslatorInterface $translator;
 
     /**
      * @var callable A default "skip on empty" condition ({@see SkipOnEmptyInterface}), already normalized. Used to
@@ -58,6 +56,8 @@ final class Validator implements ValidatorInterface
      */
     private AttributeTranslatorInterface $defaultAttributeTranslator;
 
+    private MessageProcessor $messageProcessor;
+
     /**
      * @param RuleHandlerResolverInterface|null $ruleHandlerResolver Optional container to resolve rule handler names to
      * corresponding instances. If not provided, {@see SimpleRuleContainer} used as a default one.
@@ -70,6 +70,9 @@ final class Validator implements ValidatorInterface
      * argument was not specified explicitly. If not provided, a {@see DEFAULT_TRANSLATION_CATEGORY} will be used.
      * @param AttributeTranslatorInterface|null $defaultAttributeTranslator A default translator used for translation of
      * rule ({@see RuleInterface}) attributes. If not provided, a {@see TranslatorAttributeTranslator} will be used.
+     * @param MessageFormatterInterface|null $messageFormatter A message formatter instance used for formats of error
+     * messages that requires format only. If not provided, message is returned as is.
+     * @param string $messageFormatterLocale Locale to use when error message requires format only.
      *
      * @psalm-param SkipOnEmptyValue $defaultSkipOnEmpty
      */
@@ -77,14 +80,22 @@ final class Validator implements ValidatorInterface
         ?RuleHandlerResolverInterface $ruleHandlerResolver = null,
         ?TranslatorInterface $translator = null,
         bool|callable|null $defaultSkipOnEmpty = null,
-        private string $translationCategory = self::DEFAULT_TRANSLATION_CATEGORY,
+        string $translationCategory = self::DEFAULT_TRANSLATION_CATEGORY,
         ?AttributeTranslatorInterface $defaultAttributeTranslator = null,
+        ?MessageFormatterInterface $messageFormatter = null,
+        string $messageFormatterLocale = 'en-US',
     ) {
+        $translator ??= $this->createDefaultTranslator($translationCategory);
         $this->ruleHandlerResolver = $ruleHandlerResolver ?? new SimpleRuleHandlerContainer();
-        $this->translator = $translator ?? $this->createDefaultTranslator();
         $this->defaultSkipOnEmptyCondition = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
         $this->defaultAttributeTranslator = $defaultAttributeTranslator
-            ?? new TranslatorAttributeTranslator($this->translator);
+            ?? new TranslatorAttributeTranslator($translator);
+        $this->messageProcessor = new MessageProcessor(
+            $translator,
+            $translationCategory,
+            $messageFormatter ?? new NullMessageFormatter(),
+            $messageFormatterLocale,
+        );
     }
 
     /**
@@ -144,12 +155,8 @@ final class Validator implements ValidatorInterface
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
 
             foreach ($tempResult->getErrors() as $error) {
-                $result->addError(
-                    $this->translator->translate(
-                        $error->getMessage(),
-                        $error->getParameters(),
-                        $this->translationCategory
-                    ),
+                $result->addErrorWithoutPostProcessing(
+                    $this->messageProcessor->process($error),
                     $error->getParameters(),
                     $error->getValuePath()
                 );
@@ -201,7 +208,19 @@ final class Validator implements ValidatorInterface
                 if ($context->getAttribute() !== null) {
                     $valuePath = [$context->getAttribute(), ...$valuePath];
                 }
-                $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePath);
+                match ($error->getMessageProcessing()) {
+                    Error::MESSAGE_TRANSLATE => $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePath),
+                    Error::MESSAGE_FORMAT => $compoundResult->addErrorWithFormatOnly(
+                        $error->getMessage(),
+                        $error->getParameters(),
+                        $valuePath
+                    ),
+                    default => $compoundResult->addErrorWithoutPostProcessing(
+                        $error->getMessage(),
+                        $error->getParameters(),
+                        $valuePath
+                    ),
+                };
             }
         }
         return $compoundResult;
@@ -254,16 +273,15 @@ final class Validator implements ValidatorInterface
      *
      * @return Translator Translator instance used for translations of error messages.
      */
-    private function createDefaultTranslator(): Translator
+    private function createDefaultTranslator(string $category): Translator
     {
         $categorySource = new CategorySource(
-            $this->translationCategory,
+            $category,
             new IdMessageReader(),
             extension_loaded('intl') ? new IntlMessageFormatter() : new SimpleMessageFormatter(),
         );
         $translator = new Translator();
         $translator->addCategorySources($categorySource);
-
         return $translator;
     }
 }

@@ -50,7 +50,7 @@ final class EachHandler implements RuleHandlerInterface
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                $result->addError(
+                $result->addErrorWithoutPostProcessing(
                     $error->getMessage(),
                     $error->getParameters(),
                     $error->getValuePath() === [] ? [$index] : [$index, ...$error->getValuePath()],
