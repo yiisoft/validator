@@ -34,7 +34,7 @@ final class NestedHandler implements RuleHandlerInterface
             if (!is_object($value)) {
                 return (new Result())->addError($rule->getNoRulesWithNoObjectMessage(), [
                     'attribute' => $context->getTranslatedAttribute(),
-                    'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                    'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                     'type' => get_debug_type($value),
                 ]);
             }
@@ -56,7 +56,7 @@ final class NestedHandler implements RuleHandlerInterface
         } else {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -74,7 +74,7 @@ final class NestedHandler implements RuleHandlerInterface
                     [
                         'path' => $valuePath,
                         'attribute' => $context->getTranslatedAttribute(),
-                        'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                        'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                     ],
                     $valuePathList,
                 );

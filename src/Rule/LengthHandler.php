@@ -32,7 +32,7 @@ final class LengthHandler implements RuleHandlerInterface
         if (!is_string($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
 

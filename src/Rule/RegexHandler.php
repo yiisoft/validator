@@ -29,7 +29,7 @@ final class RegexHandler implements RuleHandlerInterface
         if (!is_string($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -40,7 +40,7 @@ final class RegexHandler implements RuleHandlerInterface
         ) {
             $result->addError($rule->getMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'value' => $value,
             ]);
         }

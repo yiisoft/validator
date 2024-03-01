@@ -6,6 +6,7 @@ namespace Yiisoft\Validator;
 
 use RuntimeException;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Rule\StopOnError;
 
 /**
@@ -258,6 +259,11 @@ final class ValidationContext
         }
 
         return $label;
+    }
+
+    public function getCapitalizedTranslatedAttribute(): string
+    {
+        return StringHelper::uppercaseFirstCharacter($this->getTranslatedAttribute());
     }
 
     /**

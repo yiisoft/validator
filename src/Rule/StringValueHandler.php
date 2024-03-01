@@ -28,7 +28,7 @@ final class StringValueHandler implements RuleHandlerInterface
         if (!is_string($value)) {
             return (new Result())->addError($rule->getMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }

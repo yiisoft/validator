@@ -31,7 +31,7 @@ final class NumberHandler implements RuleHandlerInterface
         if (is_bool($value) || !is_scalar($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
 
@@ -41,21 +41,21 @@ final class NumberHandler implements RuleHandlerInterface
         if (!preg_match($rule->getPattern(), NumericHelper::normalize($value))) {
             $result->addError($rule->getNotNumberMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'value' => $value,
             ]);
         } elseif ($rule->getMin() !== null && $value < $rule->getMin()) {
             $result->addError($rule->getLessThanMinMessage(), [
                 'min' => $rule->getMin(),
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'value' => $value,
             ]);
         } elseif ($rule->getMax() !== null && $value > $rule->getMax()) {
             $result->addError($rule->getGreaterThanMaxMessage(), [
                 'max' => $rule->getMax(),
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'value' => $value,
             ]);
         }

@@ -58,7 +58,7 @@ final class RequiredHandler implements RuleHandlerInterface
         if ($context->isAttributeMissing()) {
             $result->addError($rule->getNotPassedMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
             ]);
 
             return $result;
@@ -72,7 +72,7 @@ final class RequiredHandler implements RuleHandlerInterface
 
         $result->addError($rule->getMessage(), [
             'attribute' => $context->getTranslatedAttribute(),
-            'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+            'Attribute' => $context->getCapitalizedTranslatedAttribute(),
         ]);
 
         return $result;

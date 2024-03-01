@@ -30,7 +30,7 @@ final class InHandler implements RuleHandlerInterface
                 $rule->getMessage(),
                 [
                     'attribute' => $context->getTranslatedAttribute(),
-                    'Attribute' => StringHelper::uppercaseFirstCharacter($context->getTranslatedAttribute()),
+                    'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 ],
             );
         }
