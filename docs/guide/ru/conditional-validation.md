@@ -193,9 +193,13 @@ new Integer(max: 100, skipOnEmpty: new WhenNull());
 ```
 
 ### Custom empty condition
+### Пользовательское пустое условие !!!
 
-For even more customization you can use your own class that implements the `__invoke()` magic method. Here is an example 
+For even more customization you can use your own class that implements the `__invoke()` magic method. 
+Для еще большей настройки вы можете использовать свой собственный класс, реализующий магический метод `__invoke()`.
+Here is an example 
 where a value is empty only if it is missing (when using attributes) or equals exactly to zero.
+Вот пример, где значение пусто, только если оно отсутствует (при использовании атрибутов) или равно нулю:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
@@ -212,6 +216,7 @@ new Integer(max: 100, skipOnEmpty: new WhenZero());
 ```
 
 or just a callable:
+или с помощью обратного вызова:
 
 ```php
 use Yiisoft\Validator\Rule\Integer;
@@ -225,20 +230,46 @@ new Integer(
 ```
 
 Using the class has the benefit of the code reusability.
+Преимущество использования класса заключается в возможности повторного использования кода.
 
 ### Using the same non-default empty condition for all the rules
+### Использование одного и того же пустого условия, отличного от стандартного, для всех правил
 
 For multiple rules, this can also be more conveniently set at the validator level:
+ДЛя нескольких правил, это также может быть удобнее установить на уровне валидатора:
 
 ```php
 use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Validator;
 
-$validator = new Validator(skipOnEmpty: true); // Using the shortcut.
+$validator = new Validator(skipOnEmpty: true); // Using the shortcut. // Использование сокращения.
 $validator = new Validator(
     new SimpleRuleHandlerContainer(),
     // Using the custom callback.
+    // Использование пользовательского обратного вызова.
     skipOnEmpty: static function (mixed $value, bool $isAttributeMissing): bool {"age"
+$rule = new Required(
+    emptyCondition: static function (mixed $value, bool $isAttributeMissing): bool {
+        return $isAttributeMissing || $value === '';
+    },
+);
+```
+### Configuring empty condition in other rules
+### Настройка пустого условия в других правилах
+
+Some rules, such as `Required` can't be skipped for empty values - that would defeat the purpose of the rule.
+Некоторые правила, такие как `Required` нельзя пропустить для пустых значений - это противоречит цели правила.
+
+However, empty condition can be configured here for detecting when a value is empty.
+Однако здесь можно настроить пустое условие для определения того, что значение пусто.
+Note - this does not skip the rule.
+Обратите внимание - это не приводит к пропуску правила.
+It only determines what the empty condition is:
+Это только определяет что является пустым состоянием:
+
+```php
+use Yiisoft\Validator\Rule\Required;
+
 $rule = new Required(
     emptyCondition: static function (mixed $value, bool $isAttributeMissing): bool {
         return $isAttributeMissing || $value === '';
@@ -248,13 +279,37 @@ $rule = new Required(
 
 It is also possible to set it globally for all rules of this type at the handler level via 
 `RequiredHandler::$defaultEmptyCondition`.
+Также возможно установить его глобально для всех правил этого типа на уровне обработчика через `RequiredHandler::$defaultEmptyCondition`.
 
 ## `when`
+## `when`
 
-`when` provides the option to apply the rule depending on a condition of the provided callable. A callable's result"age"
+`when` provides the option to apply the rule depending on a condition of the provided callable.
+`when` предоставляет возможность применить правило в зависимости от состояния обратного вызова. !!!!
+A callable's result determines if the rule will be skipped.
+Результат обратного вызова определяет, будет ли правило пропущено.
+The signature of the function is the following:
+Сигнатура функции следующая:
 
-In this example the state is only required when the country is `Brazil`. `$context->getDataSet()->getAttributeValue()`
+```php
+function (mixed $value, ValidationContext $context): bool;
+```
+
+where:
+где:
+
+- `$value` is a validated value;
+- `$value` проверяемое значение;
+- `$context` is a validation context;
+- `$context` контекст валидации;
+- `true` as a returned value means that the rule must be applied and a `false` means it must be skipped.
+- возвращаемое значение:??? `true` означает, что правило должно быть применено, а `false` означает, что его необходимо пропустить.
+
+In this example the state is only required when the country is `Brazil`.
+В этом примере штат требуется только в том случае, если страна - `Brazil`.
+`$context->getDataSet()->getAttributeValue()`
 method allows you to get any other attribute's value within the `ValidationContext`.
+Метод `$context->getDataSet()->getAttributeValue()` позволяет вам получить значение любого другого атрибута в рамках `ValidationContext`.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -276,4 +331,13 @@ $rules = [
 ];
 $result = (new Validator())->validate($data, $rules);
 ```
-"age"
+
+As an alternative to functions, callable classes can be used instead.
+В качестве альтернативы функциям можно использовать вызываемые классы. !!!
+This approach has the advantage of code reusability.
+Преимущество этого подхода заключается в возможности повторного использования кода.
+See the [Skip on empty] section for an example.
+Пример см. в разделе [Skip on empty]
+
+[Configuring empty condition in other rules]: #configuring-empty-condition-in-other-rules
+[Skip on empty]: #skiponempty---skipping-a-rule-if-the-validated-value-is-empty
