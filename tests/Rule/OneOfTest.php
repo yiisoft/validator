@@ -201,8 +201,8 @@ final class OneOfTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 $object,
-                [new OneOf(['attr1', 'attr2'], message: 'Attributes - {attributes}.')],
-                ['' => ['Attributes - "attr1", "attr2".']],
+                [new OneOf(['attr1', 'attr2'], message: 'Attributes - {Attributes}.')],
+                ['' => ['Attributes - "Attr1", "Attr2".']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => $object],

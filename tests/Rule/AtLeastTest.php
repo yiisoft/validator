@@ -251,8 +251,8 @@ final class AtLeastTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 $class,
-                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attributes - {attributes}, min - {min}.')],
-                ['' => ['Attributes - "attr1", "attr2", min - 2.']],
+                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attributes - {Attributes}, min - {min}.')],
+                ['' => ['Attributes - "Attr1", "Attr2", min - 2.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => $class],

@@ -62,6 +62,7 @@ final class OneOfHandler implements RuleHandlerInterface
     {
         return (new Result())->addError($rule->getMessage(), [
             'attributes' => $this->getFormattedAttributesString($rule->getAttributes(), $context),
+            'Attributes' => $this->getCapitalizedAttributesString($rule->getAttributes(), $context),
         ]);
     }
 }
