@@ -108,7 +108,7 @@ $result = (new Validator())->validate($data, $rules);
 Если атрибут является обязательным, более уместно использовать `skipOnError: true` вместе с предшествующим правилом `Required`, вместо `skipOnEmpty: true`.
 Это связано с тем, что обнаружение пустых значений в правиле `Required` и пропуск дальнейших правил можно настроить отдельно.
 
-Более подробно об этом написано ниже, см. раздел [Configuring empty condition in other rules] !!!
+Более подробно об этом написано ниже, см. раздел [Настройка "пустого условия" в других правилах]
 
 ```php
 use Yiisoft\Validator\Rule\In;
@@ -271,5 +271,5 @@ $result = (new Validator())->validate($data, $rules);
 Преимущество этого подхода заключается в возможности повторного использования кода.
 Пример см. в разделе [Skip on empty]
 
-[Configuring empty condition in other rules]: #configuring-empty-condition-in-other-rules
-[Skip on empty]: #skiponempty---skipping-a-rule-if-the-validated-value-is-empty
+[Настройка "пустого условия" в других правилах]: #настройка-пустого-условия-в-других-правилах
+[Skip on empty]: #skiponempty---пропуск-правила-если-проверяемое-значение-пустое
