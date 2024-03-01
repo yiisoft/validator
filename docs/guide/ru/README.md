@@ -8,7 +8,7 @@
 
 - [Использование валидатора](using-validator.md)
 - [Результат](result.md)
-- [Conditional validation](conditional-validation.md)
+- [Условия валидации](conditional-validation.md)
 - [Customizing error messages](customizing-error-messages.md)
 
 ### Rules
