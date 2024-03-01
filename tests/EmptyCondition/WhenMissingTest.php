@@ -42,4 +42,13 @@ final class WhenMissingTest extends TestCase
 
         $this->assertSame($expectedMessages, $result->getErrorMessages());
     }
+
+    public function testDefault(): void
+    {
+        $condition = new WhenMissing();
+
+        $result = $condition('test');
+
+        $this->assertFalse($result);
+    }
 }
