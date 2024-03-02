@@ -14,6 +14,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\AtLeastDto;
+use Yiisoft\Validator\ValidationContext;
 
 final class AtLeastTest extends RuleTestCase
 {
@@ -33,6 +34,21 @@ final class AtLeastTest extends RuleTestCase
     {
         $rule = new AtLeast(['attr']);
         $this->assertSame(AtLeast::class, $rule->getName());
+    }
+
+    public function testAttributeIsNull(): void
+    {
+        $data = ['attr1' => 1, 'attr2' => null];
+        $rule = new AtLeast(
+            attributes: ['attr1', 'attr2'],
+            min: 2,
+            message: 'attributes - {attributes}, attribute - {attribute}, min - {min}.',
+        );
+        $context = new ValidationContext();
+
+        (new AtLeastHandler())->validate($data, $rule, $context);
+
+        $this->assertNull($context->getAttributeLabel());
     }
 
     public function dataOptions(): array
