@@ -702,6 +702,25 @@ final class CompareTest extends RuleTestCase
                 ],
             ],
 
+            'custom message with parameters, capitalized attribute and target attribute set' => [
+                ['attribute' => 100, 'number' => 101],
+                [
+                    'number' => new Compare(
+                        targetAttribute: 'attribute',
+                        message: 'Attribute - {Attribute}, target value - {targetValue}, target attribute - ' .
+                        '{TargetAttribute}, target attribute value - {targetAttributeValue}, target value or ' .
+                        'attribute - {TargetValueOrAttribute}, value - {value}.',
+                        operator: '===',
+                    ),
+                ],
+                [
+                    'number' => [
+                        'Attribute - Number, target value - , target attribute - Attribute, target attribute value ' .
+                        '- 100, target value or attribute - Attribute, value - 101.',
+                    ],
+                ],
+            ],
+
             // String / original specific, falsy values
 
             'target value: integer (0), value: null, type: string, operator: ==' => [
