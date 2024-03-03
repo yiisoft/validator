@@ -113,7 +113,7 @@ use Yiisoft\Validator\Validator;
 final class ChangePasswordForm implements AttributeTranslatorProviderInterface  
 {  
     public function __construct(  
-        #[Required(message: '{Attribute} обязателен для ввода.')]  
+        #[Required(message: '{Attribute} обязателен.')]  
         public string $currentPassword = '',  
   
         #[Length(  

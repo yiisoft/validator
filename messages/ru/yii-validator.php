@@ -56,7 +56,7 @@ return [
     '{Attribute} must not be an IPv4 address.' => '{Attribute} не должен быть IPv4-адресом.',
     '{Attribute} must not be an IPv6 address.' => '{Attribute} не должен быть IPv6-адресом.',
     '{Attribute} contains wrong subnet mask.' => '{Attribute} содержит неверную маску подсети.',
-    '{Attribute} must be an IP address with specified subnet.' => '{Attribute} должно быть IP адресом с подсетью.',
+    '{Attribute} must be an IP address with specified subnet.' => '{Attribute} должен быть IP адресом с подсетью.',
     '{Attribute} must not be a subnet.' => '{Attribute} не должно быть подсетью.',
     '{Attribute} is not in the allowed range.' => '{Attribute} не входит в список разрешенных диапазонов адресов.',
     /** @see Integer */
