@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -27,6 +28,7 @@ final class DateTimeHandler implements RuleHandlerInterface
         if ((!is_string($value) && !is_int($value) && !is_float($value)) || empty($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -45,6 +47,7 @@ final class DateTimeHandler implements RuleHandlerInterface
         if ($hasError) {
             $result->addError($rule->getMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'value' => $value,
             ]);
         }

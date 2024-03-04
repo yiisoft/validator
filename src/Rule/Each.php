@@ -9,14 +9,14 @@ use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Helper\PropagateOptionsHelper;
+use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\Helper\RulesDumper;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidatorInterface;
@@ -119,7 +119,7 @@ final class Each implements
      */
     public function __construct(
         callable|iterable|object|string $rules = [],
-        private string $incorrectInputMessage = 'Value must be array or iterable.',
+        private string $incorrectInputMessage = '{Attribute} must be array or iterable.',
         private string $incorrectInputKeyMessage = 'Every iterable key must have an integer or a string type.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,

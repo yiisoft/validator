@@ -7,10 +7,10 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use InvalidArgumentException;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -62,7 +62,7 @@ final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenIn
     public function __construct(
         private array $attributes,
         private int $min = 1,
-        private string $incorrectInputMessage = 'The value must be an array or an object.',
+        private string $incorrectInputMessage = '{Attribute} must be an array or an object.',
         private string $message = 'At least {min, number} {min, plural, one{attribute} other{attributes}} from this ' .
         'list must be filled: {attributes}.',
         private mixed $skipOnEmpty = null,

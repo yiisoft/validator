@@ -32,11 +32,11 @@ final class JsonTest extends RuleTestCase
                 new Json(),
                 [
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{Attribute} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The value is not JSON.',
+                        'template' => '{Attribute} is not JSON.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -134,8 +134,8 @@ JSON_WRAP
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputErrors = ['' => ['The value must be a string.']];
-        $errors = ['' => ['The value is not JSON.']];
+        $incorrectInputErrors = ['' => ['Value must be a string.']];
+        $errors = ['' => ['Value is not JSON.']];
 
         return [
             'incorrect input, array' => [['json'], [new Json()], $incorrectInputErrors],
@@ -149,7 +149,7 @@ JSON_WRAP
             'custom incorrect input message with parameters' => [
                 ['json'],
                 [new Json(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - array.']],
+                ['' => ['Attribute - value, type - array.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => ['json']],
@@ -164,12 +164,12 @@ JSON_WRAP
             'custom message with parameters' => [
                 'bad json',
                 [new Json(message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - , value - bad json.']],
+                ['' => ['Attribute - value, value - bad json.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => 'bad json'],
-                ['data' => new Json(message: 'Attribute - {attribute}, value - {value}.')],
-                ['data' => ['Attribute - data, value - bad json.']],
+                ['data' => new Json(message: 'Attribute - {Attribute}, value - {value}.')],
+                ['data' => ['Attribute - Data, value - bad json.']],
             ],
         ];
     }

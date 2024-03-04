@@ -6,9 +6,9 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
@@ -76,8 +76,8 @@ final class Required implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private string $message = 'Value cannot be blank.',
-        private string $notPassedMessage = 'Value not passed.',
+        private string $message = '{Attribute} cannot be blank.',
+        private string $notPassedMessage = '{Attribute} not passed.',
         callable|null $emptyCondition = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

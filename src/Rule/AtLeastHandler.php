@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Strings\StringHelper;
+use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\TranslatedAttributesHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
-use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_array;
@@ -38,6 +39,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         if (!is_array($value) && !is_object($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -52,6 +54,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         if ($filledCount < $rule->getMin()) {
             $result->addError($rule->getMessage(), [
                 'attributes' => $this->getFormattedAttributesString($rule->getAttributes(), $context),
+                'Attributes' => $this->getCapitalizedAttributesString($rule->getAttributes(), $context),
                 'min' => $rule->getMin(),
             ]);
         }

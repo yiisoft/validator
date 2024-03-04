@@ -14,6 +14,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\AtLeastDto;
+use Yiisoft\Validator\ValidationContext;
 
 final class AtLeastTest extends RuleTestCase
 {
@@ -35,6 +36,21 @@ final class AtLeastTest extends RuleTestCase
         $this->assertSame(AtLeast::class, $rule->getName());
     }
 
+    public function testAttributeIsNull(): void
+    {
+        $data = ['attr1' => 1, 'attr2' => null];
+        $rule = new AtLeast(
+            attributes: ['attr1', 'attr2'],
+            min: 2,
+            message: 'attributes - {attributes}, attribute - {attribute}, min - {min}.',
+        );
+        $context = new ValidationContext();
+
+        (new AtLeastHandler())->validate($data, $rule, $context);
+
+        $this->assertNull($context->getAttributeLabel());
+    }
+
     public function dataOptions(): array
     {
         return [
@@ -47,7 +63,7 @@ final class AtLeastTest extends RuleTestCase
                     ],
                     'min' => 1,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{Attribute} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -68,7 +84,7 @@ final class AtLeastTest extends RuleTestCase
                     ],
                     'min' => 2,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{Attribute} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -89,7 +105,7 @@ final class AtLeastTest extends RuleTestCase
                     ],
                     'min' => 1,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{Attribute} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -202,7 +218,7 @@ final class AtLeastTest extends RuleTestCase
             'incorrect input' => [
                 1,
                 [new AtLeast(['attr2'])],
-                ['' => ['The value must be an array or an object.']],
+                ['' => ['Value must be an array or an object.']],
             ],
             'custom incorrect input message' => [
                 1,
@@ -211,8 +227,8 @@ final class AtLeastTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new AtLeast(['attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - int.']],
+                [new AtLeast(['attr2'], incorrectInputMessage: 'Attribute - {Attribute}, type - {type}.')],
+                ['' => ['Attribute - Value, type - int.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['attribute' => 1],
@@ -251,8 +267,8 @@ final class AtLeastTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 $class,
-                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attributes - {attributes}, min - {min}.')],
-                ['' => ['Attributes - "attr1", "attr2", min - 2.']],
+                [new AtLeast(['attr1', 'attr2'], min: 2, message: 'Attributes - {Attributes}, min - {min}.')],
+                ['' => ['Attributes - "Attr1", "Attr2", min - 2.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => $class],

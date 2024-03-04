@@ -38,7 +38,7 @@ final class OneOfTest extends RuleTestCase
                         'attr2',
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{Attribute} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -57,7 +57,7 @@ final class OneOfTest extends RuleTestCase
                         'attr2',
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{Attribute} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -157,7 +157,7 @@ final class OneOfTest extends RuleTestCase
             'incorrect input' => [
                 1,
                 [new OneOf(['attr1', 'attr2'])],
-                ['' => ['The value must be an array or an object.']],
+                ['' => ['Value must be an array or an object.']],
             ],
             'custom incorrect input message' => [
                 1,
@@ -167,7 +167,7 @@ final class OneOfTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 1,
                 [new OneOf(['attr1', 'attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - int.']],
+                ['' => ['Attribute - value, type - int.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['attribute' => 1],
@@ -201,8 +201,8 @@ final class OneOfTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 $object,
-                [new OneOf(['attr1', 'attr2'], message: 'Attributes - {attributes}.')],
-                ['' => ['Attributes - "attr1", "attr2".']],
+                [new OneOf(['attr1', 'attr2'], message: 'Attributes - {Attributes}.')],
+                ['' => ['Attributes - "Attr1", "Attr2".']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => $object],

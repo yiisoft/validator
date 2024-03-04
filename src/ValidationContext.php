@@ -6,6 +6,7 @@ namespace Yiisoft\Validator;
 
 use RuntimeException;
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Rule\StopOnError;
 
 /**
@@ -127,7 +128,7 @@ final class ValidationContext
         return $this;
     }
 
-    public function setAttributeLabel(?string $label): self
+    public function setAttributeLabel(string|null $label): self
     {
         $this->attributeLabel = $label;
         return $this;
@@ -243,16 +244,11 @@ final class ValidationContext
     /**
      * Get translated attribute name.
      *
-     * @return string|null Translated attribute name. `null` if a single value is validated and there is nothing
-     * to translate.
+     * @return string Translated attribute name. `value` if a single value is validated and a label is not set.
      */
-    public function getTranslatedAttribute(): ?string
+    public function getTranslatedAttribute(): string
     {
-        if ($this->attribute === null) {
-            return null;
-        }
-
-        $label = $this->attributeLabel ?? $this->attribute;
+        $label = $this->attributeLabel ?? $this->attribute ?? 'value';
 
         if ($this->attributeTranslator !== null) {
             return $this->attributeTranslator->translate($label);
@@ -263,6 +259,11 @@ final class ValidationContext
         }
 
         return $label;
+    }
+
+    public function getCapitalizedTranslatedAttribute(): string
+    {
+        return StringHelper::uppercaseFirstCharacter($this->getTranslatedAttribute());
     }
 
     /**

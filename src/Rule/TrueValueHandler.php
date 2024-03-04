@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -55,6 +56,7 @@ final class TrueValueHandler implements RuleHandlerInterface
     {
         return [
             'attribute' => $context->getTranslatedAttribute(),
+            'Attribute' => $context->getCapitalizedTranslatedAttribute(),
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
         ];
     }

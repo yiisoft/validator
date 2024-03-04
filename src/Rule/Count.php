@@ -8,11 +8,11 @@ use Attribute;
 use Closure;
 use Countable;
 use Yiisoft\Validator\CountableLimitInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\CountableLimitTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -88,12 +88,12 @@ final class Count implements
         int|null $exactly = null,
         int|null $min = null,
         int|null $max = null,
-        private string $incorrectInputMessage = 'This value must be an array or implement \Countable interface.',
-        string $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{item} ' .
+        private string $incorrectInputMessage = '{Attribute} must be an array or implement \Countable interface.',
+        string $lessThanMinMessage = '{Attribute} must contain at least {min, number} {min, plural, one{item} ' .
         'other{items}}.',
-        string $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{item} ' .
+        string $greaterThanMaxMessage = '{Attribute} must contain at most {max, number} {max, plural, one{item} ' .
         'other{items}}.',
-        string $notExactlyMessage = 'This value must contain exactly {exactly, number} {exactly, plural, one{item} ' .
+        string $notExactlyMessage = '{Attribute} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
         'other{items}}.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,

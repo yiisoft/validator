@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Trait;
 
 use InvalidArgumentException;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\CountableLimitInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleInterface;
@@ -45,6 +46,7 @@ trait CountableLimitHandlerTrait
             $result->addError($rule->getNotExactlyMessage(), [
                 'exactly' => $rule->getExactly(),
                 'attribute' => $context->getTranslatedAttribute(),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'number' => $number,
             ]);
 
@@ -55,6 +57,7 @@ trait CountableLimitHandlerTrait
             $result->addError($rule->getLessThanMinMessage(), [
                 'min' => $rule->getMin(),
                 'attribute' => $context->getTranslatedAttribute(),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'number' => $number,
             ]);
         }
@@ -63,6 +66,7 @@ trait CountableLimitHandlerTrait
             $result->addError($rule->getGreaterThanMaxMessage(), [
                 'max' => $rule->getMax(),
                 'attribute' => $context->getTranslatedAttribute(),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'number' => $number,
             ]);
         }
