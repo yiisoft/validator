@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Countable;
-use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\CountableLimitHandlerTrait;

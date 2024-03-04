@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Trait;
 
 use InvalidArgumentException;
-use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\CountableLimitInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleInterface;

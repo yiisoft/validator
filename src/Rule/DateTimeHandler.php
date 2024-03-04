@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\RuleHandlerInterface;
