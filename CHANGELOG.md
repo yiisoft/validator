@@ -3,6 +3,7 @@
 ## 1.3.0 under development
 
 - New #665: Add methods `addErrorWithFormatOnly()` and `addErrorWithoutPostProcessing()` to `Result` object (@vjik)
+- Enh #668: Clarify psalm types in `Result` (@vjik)
 
 ## 1.2.0 February 21, 2024
 
