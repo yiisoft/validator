@@ -1,7 +1,10 @@
 {
     "symbol-whitelist": [
         "Yiisoft\\Yii\\Debug\\Collector\\CollectorTrait",
-        "Yiisoft\\Yii\\Debug\\Collector\\SummaryCollectorInterface"
+        "Yiisoft\\Yii\\Debug\\Collector\\SummaryCollectorInterface",
+        "JetBrains\\PhpStorm\\ArrayShape",
+        "JetBrains\\PhpStorm\\ExpectedValues",
+        "JetBrains\\PhpStorm\\Language"
     ],
     "php-core-extensions": [
         "Core",
