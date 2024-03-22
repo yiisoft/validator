@@ -128,7 +128,7 @@ Returning to the previous example, when `name` and `email` belong to a `user` at
 ];
 ```
 
-Also keep in mind that attribute names are always must be strings, even when used with `Each`:
+Also keep in mind that attribute names must be strings, even when used with `Each`:
 
 ```php
 $rule = new Each([new Number(min: 21)]),
