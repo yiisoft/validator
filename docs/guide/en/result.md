@@ -134,17 +134,20 @@ Also keep in mind that attribute names must be strings, even when used with `Eac
 $rule = new Each([new Number(min: 21)]),
 ```
 
-Given `[21, 22, 23, 20]` input throw exception, because default array keys is numbers: 
+Given `[21, 22, 23, 20]` input throw exception, because default array keys is int:
 
 ```php
 InvalidArgumentException
 Top level attributes can only have string type.
 ```
-But if given array with string keys `['1' => 21, '2' => 22, '3' => 23, '4' => 20]`, the output will be:
+
+Even  array `['1' => 21, '2' => 22, '3' => 23, '4' => 20]` will cause an error, because PHP [will cast keys to the int type].
+
+But if given array with string keys `['1a' => 21, '2b' => 22, '3c' => 23, '4d' => 20]`, the output will be:
 
 ```php
 [
-    '4' => [
+    '4d' => [
         0 => 'Value must be no less than 21.'
     ]
 ]
@@ -288,3 +291,4 @@ $result->getAttributeErrors('email');
 ```
 
 [Using keys containing separator / shortcut]: built-in-rules-nested.md#using-keys-containing-separator--shortcut
+[will cast keys to the int type]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
