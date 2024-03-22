@@ -128,19 +128,26 @@ Returning to the previous example, when `name` and `email` belong to a `user` at
 ];
 ```
 
-Also keep in mind that attribute names are always strings, even when used with `Each`:
+Also keep in mind that attribute names are always must be strings, even when used with `Each`:
 
 ```php
 $rule = new Each([new Number(min: 21)]),
 ```
 
-Given `[21, 22, 23, 20]` input, the output will be: 
+Given `[21, 22, 23, 20]` input throw exception, because array keys is numbers: 
+
+```php
+InvalidArgumentException
+Top level attributes can only have string type.
+```
+But if given array with string keys `['1' => 21, '2' => 22, '3' => 23, '4' => 20]`, the output will be:
 
 ```php
 [
-    '1' => ['Value must be no less than 21.'],
-    '2' => ['Value must be no less than 21.'],
-],
+    '4' => [
+        0 => 'Value must be no less than 21.'
+    ]
+]
 ```
 
 ### Error messages indexed by path
