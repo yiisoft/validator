@@ -134,7 +134,7 @@ Also keep in mind that attribute names are always must be strings, even when use
 $rule = new Each([new Number(min: 21)]),
 ```
 
-Given `[21, 22, 23, 20]` input throw exception, because array keys is numbers: 
+Given `[21, 22, 23, 20]` input throw exception, because default array keys is numbers: 
 
 ```php
 InvalidArgumentException
