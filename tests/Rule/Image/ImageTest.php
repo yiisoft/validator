@@ -34,9 +34,13 @@ final class ImageTest extends RuleTestCase
             'uploaded-file' => [new UploadedFile(__DIR__ . '/16x18.jpg', 0, UPLOAD_ERR_OK), new Image()],
             'exactly' => [__DIR__ . '/16x18.jpg', new Image(width: 16, height: 18)],
             'min-width' => [__DIR__ . '/16x18.jpg', new Image(minWidth: 12)],
+            'min-width-boundary' => [__DIR__ . '/16x18.jpg', new Image(minWidth: 16)],
             'min-height' => [__DIR__ . '/16x18.jpg', new Image(minHeight: 17)],
+            'min-height-boundary' => [__DIR__ . '/16x18.jpg', new Image(minHeight: 18)],
             'max-width' => [__DIR__ . '/16x18.jpg', new Image(maxWidth: 17)],
+            'max-width-boundary' => [__DIR__ . '/16x18.jpg', new Image(maxWidth: 16)],
             'max-height' => [__DIR__ . '/16x18.jpg', new Image(maxHeight: 19)],
+            'max-height-boundary' => [__DIR__ . '/16x18.jpg', new Image(maxHeight: 18)],
         ];
     }
 
@@ -48,6 +52,11 @@ final class ImageTest extends RuleTestCase
             'empty-string' => ['', new Image(), $notImageResult],
             'not-file-path' => ['test', new Image(), $notImageResult],
             'not-image' => [__DIR__ . '/ImageTest.php', new Image(), $notImageResult],
+            'not-image-with-custom-message' => [
+                ['a' => __DIR__ . '/ImageTest.php'],
+                ['a' => new Image(notImageMessage: 'The value of "{attribute}" must be an image.')],
+                ['a' => ['The value of "a" must be an image.']]
+            ],
             'not-uploaded-file' => [
                 new UploadedFile(__DIR__ . '/16x18.jpg', 0, UPLOAD_ERR_NO_FILE),
                 new Image(),
