@@ -29,7 +29,6 @@
     "require": {
         "php": "^8.0",
         "ext-mbstring": "*",
-        "ext-fileinfo": "*",
         "psr/container": "^1.0|^2.0",
         "psr/http-message": "^1.0|^2.0",
         "yiisoft/arrays": "^2.1|^3.0",
@@ -54,6 +53,7 @@
     },
     "suggest": {
         "ext-intl": "Allows using IDN validation for emails",
+        "ext-fileinfo": "To use image rule",
         "yiisoft/di": "To create rule handlers via Yii DI"
     },
     "autoload": {
