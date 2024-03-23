@@ -86,6 +86,13 @@ final class ImageHandler implements RuleHandlerInterface
         return is_array($info) ? $info : null;
     }
 
+    /**
+     * From PHP documentation: do not use `getimagesize()` to check that a given file is a valid image. Use
+     * a purpose-built solution such as the `Fileinfo` extension instead.
+     *
+     * @link https://www.php.net/manual/function.getimagesize.php
+     * @link https://www.php.net/manual/function.mime-content-type.php
+     */
     private function isImageFile(string $filePath): bool
     {
         $mimeType = @mime_content_type($filePath);
