@@ -34,7 +34,7 @@ final class ImageHandler implements RuleHandlerInterface
                 'exactly' => $rule->getWidth(),
             ]);
         }
-        if ($rule->getHeight() !== null && $width !== $rule->getHeight()) {
+        if ($rule->getHeight() !== null && $height !== $rule->getHeight()) {
             $result->addError($rule->getNotExactlyHeightMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'exactly' => $rule->getHeight(),
@@ -88,14 +88,14 @@ final class ImageHandler implements RuleHandlerInterface
 
     private function isImageFile(string $filePath): bool
     {
-        $mimeType = mime_content_type($filePath);
+        $mimeType = @mime_content_type($filePath);
         return $mimeType !== false && str_starts_with($mimeType, 'image/');
     }
 
     private function getFilePath(mixed $value): ?string
     {
         if ($value instanceof UploadedFileInterface) {
-            $value = $value->getStream()->getMetadata('uri');
+            $value = $value->getError() === UPLOAD_ERR_OK ? $value->getStream()->getMetadata('uri') : null;
         }
         return is_string($value) ? $value : null;
     }
