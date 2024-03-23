@@ -82,6 +82,9 @@ final class ImageHandler implements RuleHandlerInterface
             return null;
         }
 
+        /**
+         * @psalm-var (array{0:int,1:int}&array)|null $info Need for PHP 8.0 only
+         */
         $info = getimagesize($filePath);
         return is_array($info) ? $info : null;
     }
