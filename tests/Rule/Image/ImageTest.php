@@ -55,7 +55,7 @@ final class ImageTest extends RuleTestCase
             'not-image-with-custom-message' => [
                 ['a' => __DIR__ . '/ImageTest.php'],
                 ['a' => new Image(notImageMessage: 'The value of "{attribute}" must be an image.')],
-                ['a' => ['The value of "a" must be an image.']]
+                ['a' => ['The value of "a" must be an image.']],
             ],
             'not-uploaded-file' => [
                 new UploadedFile(__DIR__ . '/16x18.jpg', 0, UPLOAD_ERR_NO_FILE),
