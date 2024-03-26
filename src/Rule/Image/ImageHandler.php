@@ -19,12 +19,12 @@ use function is_string;
  */
 final class ImageHandler implements RuleHandlerInterface
 {
-    private InfoProviderInterface $infoProvider;
+    private ImageInfoProviderInterface $imageInfoProvider;
 
     public function __construct(
-        ?InfoProviderInterface $infoProvider = null,
+        ?ImageInfoProviderInterface $imageInfoProvider = null,
     ) {
-        $this->infoProvider = $infoProvider ?? new NativeInfoProvider();
+        $this->imageInfoProvider = $imageInfoProvider ?? new NativeImageInfoProvider();
     }
 
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
@@ -84,7 +84,7 @@ final class ImageHandler implements RuleHandlerInterface
         return $result;
     }
 
-    private function getImageInfo(mixed $value): ?Info
+    private function getImageInfo(mixed $value): ?ImageInfo
     {
         $filePath = $this->getFilePath($value);
         if (empty($filePath)) {
@@ -95,7 +95,7 @@ final class ImageHandler implements RuleHandlerInterface
             return null;
         }
 
-        return $this->infoProvider->get($filePath);
+        return $this->imageInfoProvider->get($filePath);
     }
 
     /**

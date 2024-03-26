@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule\Image;
 
-final class Info
+final class ImageInfo
 {
     public function __construct(
         private int $width,

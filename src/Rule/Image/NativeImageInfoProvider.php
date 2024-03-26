@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule\Image;
 
-final class NativeInfoProvider implements InfoProviderInterface
+final class NativeImageInfoProvider implements ImageInfoProviderInterface
 {
-    public function get(string $path): ?Info
+    public function get(string $path): ?ImageInfo
     {
         $data = @getimagesize($path);
         if ($data === false) {
             return null;
         }
 
-        return new Info($data[0], $data[1]);
+        return new ImageInfo($data[0], $data[1]);
     }
 }

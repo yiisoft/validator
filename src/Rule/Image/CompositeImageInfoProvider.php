@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule\Image;
 
-final class CompositeInfoProvider implements InfoProviderInterface
+final class CompositeImageInfoProvider implements ImageInfoProviderInterface
 {
     /**
-     * @var InfoProviderInterface[]
+     * @var ImageInfoProviderInterface[]
      */
     private array $providers;
 
     public function __construct(
-        InfoProviderInterface ...$providers
+        ImageInfoProviderInterface ...$providers
     ) {
         $this->providers = $providers;
     }
 
-    public function get(string $path): ?Info
+    public function get(string $path): ?ImageInfo
     {
         foreach ($this->providers as $provider) {
             $info = $provider->get($path);
