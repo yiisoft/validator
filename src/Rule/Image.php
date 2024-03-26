@@ -15,6 +15,10 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
+ * Defines validation options to check that a value is an image with a certain dimensions (optionally).
+ *
+ * > Currently not adapted for using with HEIF / HEIC formats.
+ *
  * @see ImageHandler
  *
  * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
@@ -28,6 +32,65 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
     use WhenTrait;
 
     /**
+     * @param int|null $width Expected exact width of validated image file.
+     * @param int|null $height Expected exact height of validated image file.
+     * @param int|null $minWidth Expected minimum width of validated image file.
+     * @param int|null $minHeight Expected minimum height of validated image file.
+     * @param int|null $maxWidth Expected maximum width of validated image file.
+     * @param int|null $maxHeight Expected maximum height of validated image file.
+     * @param string $notImageMessage A message used when the validated value is not valid image file.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     *
+     * @param string $notExactWidthMessage A message used when the width of validated image file doesn't exactly equal
+     * to {@see $width}.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{exactly}`: expected exact width of validated image file.
+     *
+     * @param string $notExactHeightMessage A message used when the height of validated image file doesn't exactly equal
+     * to {@see $height}.
+     *
+     *  You may use the following placeholders in the message:
+     *
+     *  - `{attribute}`: the translated label of the attribute being validated.
+     *  - `{exactly}`: expected exact height of validated image file.
+     *
+     * @param string $tooSmallWidthMessage A message used when the width of validated image file is less than
+     * {@see $minWidth}.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{limit}`: expected minimum width of validated image file.
+     *
+     * @param string $tooSmallHeightMessage A message used when the height of validated image file is less than
+     * {@see $minHeight}.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{limit}`: expected minimum height of validated image file.
+     *
+     * @param string $tooLargeWidthMessage A message used when the width of validated image file is more than
+     *  {@see $maxWidth}.
+     *
+     *  You may use the following placeholders in the message:
+     *
+     *  - `{attribute}`: the translated label of the attribute being validated.
+     *  - `{limit}`: expected maximum width of validated image file.
+     *
+     * @param string $tooLargeHeightMessage A message used when the height of validated image file is more than
+     * {@see $maxHeight}.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{limit}`: expected maximum height of validated image file.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
@@ -45,8 +108,8 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private ?int $maxWidth = null,
         private ?int $maxHeight = null,
         private string $notImageMessage = 'The value must be an image.',
-        private string $notExactlyWidthMessage = 'The width of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
-        private string $notExactlyHeightMessage = 'The height of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
+        private string $notExactWidthMessage = 'The width of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
+        private string $notExactHeightMessage = 'The height of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
         private string $tooSmallWidthMessage = 'The width of image "{attribute}" cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
         private string $tooSmallHeightMessage = 'The height of image "{attribute}" cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
         private string $tooLargeWidthMessage = 'The width of image "{attribute}" cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
@@ -92,14 +155,14 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         return $this->notImageMessage;
     }
 
-    public function getNotExactlyWidthMessage(): string
+    public function getNotExactWidthMessage(): string
     {
-        return $this->notExactlyWidthMessage;
+        return $this->notExactWidthMessage;
     }
 
-    public function getNotExactlyHeightMessage(): string
+    public function getNotExactHeightMessage(): string
     {
-        return $this->notExactlyHeightMessage;
+        return $this->notExactHeightMessage;
     }
 
     public function getTooSmallWidthMessage(): string
@@ -135,14 +198,14 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
     public function getOptions(): array
     {
         return [
-            'notExactlyWidthMessage' => [
-                'template' => $this->notExactlyWidthMessage,
+            'notExactWidthMessage' => [
+                'template' => $this->notExactWidthMessage,
                 'parameters' => [
                     'exactly' => $this->width,
                 ],
             ],
-            'notExactlyHeightMessage' => [
-                'template' => $this->notExactlyHeightMessage,
+            'notExactHeightMessage' => [
+                'template' => $this->notExactHeightMessage,
                 'parameters' => [
                     'exactly' => $this->height,
                 ],

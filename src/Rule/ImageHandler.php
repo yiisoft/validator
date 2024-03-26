@@ -10,6 +10,14 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function is_array;
+use function is_string;
+
+/**
+ * Validates that a value is an image with a certain dimensions (optionally).
+ *
+ * @see Image
+ */
 final class ImageHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
@@ -29,13 +37,13 @@ final class ImageHandler implements RuleHandlerInterface
         [$width, $height] = $info;
 
         if ($rule->getWidth() !== null && $width !== $rule->getWidth()) {
-            $result->addError($rule->getNotExactlyWidthMessage(), [
+            $result->addError($rule->getNotExactWidthMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'exactly' => $rule->getWidth(),
             ]);
         }
         if ($rule->getHeight() !== null && $height !== $rule->getHeight()) {
-            $result->addError($rule->getNotExactlyHeightMessage(), [
+            $result->addError($rule->getNotExactHeightMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'exactly' => $rule->getHeight(),
             ]);
@@ -85,6 +93,7 @@ final class ImageHandler implements RuleHandlerInterface
         /**
          * @psalm-var (array{0:int,1:int}&array)|null $info Need for PHP 8.0 only
          */
+        // HEIF / HEIC formats are not supported.
         $info = getimagesize($filePath);
         return is_array($info) ? $info : null;
     }
