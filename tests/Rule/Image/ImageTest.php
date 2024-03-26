@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule\Image;
 
 use GuzzleHttp\Psr7\UploadedFile;
-use Yiisoft\Validator\Rule\Image;
-use Yiisoft\Validator\Rule\ImageHandler;
+use Yiisoft\Validator\Rule\Image\Image;
+use Yiisoft\Validator\Rule\Image\ImageHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
