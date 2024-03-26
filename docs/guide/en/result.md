@@ -141,7 +141,7 @@ InvalidArgumentException
 Top level attributes can only have string type.
 ```
 
-Even  array `['1' => 21, '2' => 22, '3' => 23, '4' => 20]` will cause an error, because PHP [will cast keys to the int type].
+Even array `['1' => 21, '2' => 22, '3' => 23, '4' => 20]` will cause an error, because PHP [will cast keys to the int type].
 
 But if given array with string keys `['1a' => 21, '2b' => 22, '3c' => 23, '4d' => 20]`, the output will be:
 
