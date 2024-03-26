@@ -29,13 +29,13 @@ final class ImageHandler implements RuleHandlerInterface
         [$width, $height] = $info;
 
         if ($rule->getWidth() !== null && $width !== $rule->getWidth()) {
-            $result->addError($rule->getNotExactlyWidthMessage(), [
+            $result->addError($rule->getNotExactWidthMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'exactly' => $rule->getWidth(),
             ]);
         }
         if ($rule->getHeight() !== null && $height !== $rule->getHeight()) {
-            $result->addError($rule->getNotExactlyHeightMessage(), [
+            $result->addError($rule->getNotExactHeightMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
                 'exactly' => $rule->getHeight(),
             ]);
