@@ -10,6 +10,14 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function is_array;
+use function is_string;
+
+/**
+ * Validates that a value is an image with a certain dimensions (optionally).
+ *
+ * @see Image
+ */
 final class ImageHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
