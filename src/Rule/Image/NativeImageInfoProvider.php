@@ -11,6 +11,9 @@ final class NativeImageInfoProvider implements ImageInfoProviderInterface
 {
     public function get(string $path): ?ImageInfo
     {
+        /**
+         * @psalm-var (array{0:int,1:int}&array)|null $data Need for PHP 8.0 only
+         */
         $data = @getimagesize($path);
         if ($data === false) {
             return null;
