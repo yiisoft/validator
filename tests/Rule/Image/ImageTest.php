@@ -59,7 +59,7 @@ final class ImageTest extends RuleTestCase
             'heic-with-size-and-custom-message' => [
                 ['a' => __DIR__ . '/797x808.HEIC'],
                 ['a' => new Image(minWidth: 10, notImageMessage: 'The value of "{attribute}" must be an image.')],
-                ['a' => ['The value of "a" must be an image.']]
+                ['a' => ['The value of "a" must be an image.']],
             ],
             'empty-string' => ['', new Image(), $notImageResult],
             'not-file-path' => ['test', new Image(), $notImageResult],
