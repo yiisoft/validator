@@ -47,7 +47,7 @@ Here is a list of all available built-in rules, divided by category.
 
 ### File rules
 
-- [Image](../../../src/Rule/Image.php)
+- [Image](../../../src/Rule/Image/Image.php)
 
 ### General purpose rules
 
