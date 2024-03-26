@@ -50,7 +50,17 @@ final class ImageTest extends RuleTestCase
         $notImageResult = ['' => ['The value must be an image.']];
 
         return [
-            'heic-with-size' => [__DIR__ . '/797x808.HEIC', new Image(minWidth: 10), $notImageResult],
+            'heic-with-width' => [__DIR__ . '/797x808.HEIC', new Image(width: 10), $notImageResult],
+            'heic-with-height' => [__DIR__ . '/797x808.HEIC', new Image(height: 10), $notImageResult],
+            'heic-with-min-width' => [__DIR__ . '/797x808.HEIC', new Image(minWidth: 10), $notImageResult],
+            'heic-with-max-height' => [__DIR__ . '/797x808.HEIC', new Image(minHeight: 10), $notImageResult],
+            'heic-with-max-width' => [__DIR__ . '/797x808.HEIC', new Image(maxWidth: 10), $notImageResult],
+            'heic-with-min-height' => [__DIR__ . '/797x808.HEIC', new Image(maxHeight: 10), $notImageResult],
+            'heic-with-size-and-custom-message' => [
+                ['a' => __DIR__ . '/797x808.HEIC'],
+                ['a' => new Image(minWidth: 10, notImageMessage: 'The value of "{attribute}" must be an image.')],
+                ['a' => ['The value of "a" must be an image.']]
+            ],
             'empty-string' => ['', new Image(), $notImageResult],
             'not-file-path' => ['test', new Image(), $notImageResult],
             'not-image' => [__DIR__ . '/ImageTest.php', new Image(), $notImageResult],
