@@ -93,6 +93,7 @@ final class ImageHandler implements RuleHandlerInterface
         /**
          * @psalm-var (array{0:int,1:int}&array)|null $info Need for PHP 8.0 only
          */
+        // HEIF / HEIC formats are not supported.
         $info = getimagesize($filePath);
         return is_array($info) ? $info : null;
     }
