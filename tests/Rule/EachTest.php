@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Generator;
+use stdClass;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Each;
@@ -12,6 +13,7 @@ use Yiisoft\Validator\Rule\EachHandler;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rule\StringValue;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -19,8 +21,8 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
-use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\ValidationContext;
 
 final class EachTest extends RuleTestCase
 {
@@ -46,7 +48,7 @@ final class EachTest extends RuleTestCase
                 ]),
                 [
                     'incorrectInputMessage' => [
-                        'template' => 'Value must be array or iterable.',
+                        'template' => '{Attribute} must be array or iterable.',
                         'parameters' => [],
                     ],
                     'incorrectInputKeyMessage' => [
@@ -66,15 +68,15 @@ final class EachTest extends RuleTestCase
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
-                                    'template' => 'Value must be a number.',
+                                    'template' => '{Attribute} must be a number.',
                                     'parameters' => [],
                                 ],
                                 'lessThanMinMessage' => [
-                                    'template' => 'Value must be no less than {min}.',
+                                    'template' => '{Attribute} must be no less than {min}.',
                                     'parameters' => ['min' => null],
                                 ],
                                 'greaterThanMaxMessage' => [
-                                    'template' => 'Value must be no greater than {max}.',
+                                    'template' => '{Attribute} must be no greater than {max}.',
                                     'parameters' => ['max' => 13],
                                 ],
                                 'skipOnEmpty' => false,
@@ -92,15 +94,15 @@ final class EachTest extends RuleTestCase
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
-                                    'template' => 'Value must be a number.',
+                                    'template' => '{Attribute} must be a number.',
                                     'parameters' => [],
                                 ],
                                 'lessThanMinMessage' => [
-                                    'template' => 'Value must be no less than {min}.',
+                                    'template' => '{Attribute} must be no less than {min}.',
                                     'parameters' => ['min' => null],
                                 ],
                                 'greaterThanMaxMessage' => [
-                                    'template' => 'Value must be no greater than {max}.',
+                                    'template' => '{Attribute} must be no greater than {max}.',
                                     'parameters' => ['max' => 14],
                                 ],
                                 'skipOnEmpty' => false,
@@ -118,7 +120,7 @@ final class EachTest extends RuleTestCase
                 ]),
                 [
                     'incorrectInputMessage' => [
-                        'template' => 'Value must be array or iterable.',
+                        'template' => '{Attribute} must be array or iterable.',
                         'parameters' => [],
                     ],
                     'incorrectInputKeyMessage' => [
@@ -138,15 +140,15 @@ final class EachTest extends RuleTestCase
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
-                                    'template' => 'Value must be a number.',
+                                    'template' => '{Attribute} must be a number.',
                                     'parameters' => [],
                                 ],
                                 'lessThanMinMessage' => [
-                                    'template' => 'Value must be no less than {min}.',
+                                    'template' => '{Attribute} must be no less than {min}.',
                                     'parameters' => ['min' => null],
                                 ],
                                 'greaterThanMaxMessage' => [
-                                    'template' => 'Value must be no greater than {max}.',
+                                    'template' => '{Attribute} must be no greater than {max}.',
                                     'parameters' => ['max' => 13],
                                 ],
                                 'skipOnEmpty' => false,
@@ -201,17 +203,17 @@ final class EachTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 1,
                 [new Each([new Number(max: 13)], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - int.']],
+                ['' => ['Attribute - value, type - int.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => 1],
                 [
                     'data' => new Each(
                         [new Number(max: 13)],
-                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                        incorrectInputMessage: 'Attribute - {Attribute}, type - {type}.',
                     ),
                 ],
-                ['data' => ['Attribute - data, type - int.']],
+                ['data' => ['Attribute - Data, type - int.']],
             ],
 
             'incorrect input key' => [
@@ -301,8 +303,20 @@ final class EachTest extends RuleTestCase
                     'age' => new Number(min: 18),
                 ]),
                 [
-                    '0.name' => ['This value must contain at least 3 characters.'],
-                    '1.age' => ['Value must be no less than 18.'],
+                    '0.name' => ['Name must contain at least 3 characters.'],
+                    '1.age' => ['Age must be no less than 18.'],
+                ],
+            ],
+            'validate with labels' => [
+                ['a' => [1, 2], 'b' => [new stdClass(), 0, 'test']],
+                [
+                    'a' => new StringValue(),
+                    'b' => new Each(new StringValue()),
+                ],
+                [
+                    'a' => ['A must be a string.'],
+                    'b.0' => ['B must be a string.'],
+                    'b.1' => ['B must be a string.'],
                 ],
             ],
         ];

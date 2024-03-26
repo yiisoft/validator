@@ -36,7 +36,7 @@ final class InTest extends RuleTestCase
                     'strict' => false,
                     'not' => false,
                     'message' => [
-                        'template' => 'This value is not in the list of acceptable values.',
+                        'template' => '{Attribute} is not in the list of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -50,7 +50,7 @@ final class InTest extends RuleTestCase
                     'strict' => true,
                     'not' => false,
                     'message' => [
-                        'template' => 'This value is not in the list of acceptable values.',
+                        'template' => '{Attribute} is not in the list of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -64,7 +64,7 @@ final class InTest extends RuleTestCase
                     'strict' => false,
                     'not' => true,
                     'message' => [
-                        'template' => 'This value is not in the list of acceptable values.',
+                        'template' => '{Attribute} is not in the list of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -128,7 +128,7 @@ final class InTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $errors = ['' => ['This value is not in the list of acceptable values.']];
+        $errors = ['' => ['Value is not in the list of acceptable values.']];
 
         return [
             [0, [new In(range(1, 10))], $errors],

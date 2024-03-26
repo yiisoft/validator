@@ -13,7 +13,15 @@ trait TranslatedAttributesHandlerTrait
      */
     private function getFormattedAttributesString(array $attributes, ValidationContext $context): string
     {
-        return '"' . implode('", "', $this->getTranslatedAttributes($attributes, $context)) . '"';
+        return '"' . implode('", "', $this->getTranslatedAttributes($attributes, $context, false)) . '"';
+    }
+
+    /**
+     * @param string[] $attributes
+     */
+    private function getCapitalizedAttributesString(array $attributes, ValidationContext $context): string
+    {
+        return '"' . implode('", "', $this->getTranslatedAttributes($attributes, $context, true)) . '"';
     }
 
     /**
@@ -21,17 +29,20 @@ trait TranslatedAttributesHandlerTrait
      *
      * @return string[]
      */
-    private function getTranslatedAttributes(array $attributes, ValidationContext $context): array
+    private function getTranslatedAttributes(array $attributes, ValidationContext $context, bool $capitalized): array
     {
-        $initialAttribute = $context->getAttribute();
+        $initialLabel = $context->getAttributeLabel();
         $translatedAttributes = [];
         foreach ($attributes as $attribute) {
-            $translatedAttributes[] = $context->setAttribute($attribute)->getTranslatedAttribute();
+            $context->setAttributeLabel($attribute);
+            $translatedAttributes[] = $capitalized
+                ? $context->getCapitalizedTranslatedAttribute()
+                : $context->getTranslatedAttribute();
         }
 
         /** @var string[] $translatedAttributes */
 
-        $context->setAttribute($initialAttribute);
+        $context->setAttributeLabel($initialLabel);
 
         return $translatedAttributes;
     }

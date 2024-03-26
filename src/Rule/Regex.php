@@ -8,10 +8,10 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Language;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -69,8 +69,8 @@ final class Regex implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
         #[Language('RegExp')]
         string $pattern,
         private bool $not = false,
-        private string $incorrectInputMessage = 'The value must be a string.',
-        private string $message = 'Value is invalid.',
+        private string $incorrectInputMessage = '{Attribute} must be a string.',
+        private string $message = '{Attribute} is invalid.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

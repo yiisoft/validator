@@ -55,6 +55,7 @@ final class TrueValueHandler implements RuleHandlerInterface
     {
         return [
             'attribute' => $context->getTranslatedAttribute(),
+            'Attribute' => $context->getCapitalizedTranslatedAttribute(),
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
         ];
     }

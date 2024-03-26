@@ -28,6 +28,7 @@ final class EachHandler implements RuleHandlerInterface
         if (!is_iterable($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -42,6 +43,7 @@ final class EachHandler implements RuleHandlerInterface
             if (!is_int($index) && !is_string($index)) {
                 return (new Result())->addError($rule->getIncorrectInputKeyMessage(), [
                     'attribute' => $context->getTranslatedAttribute(),
+                    'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                     'type' => get_debug_type($value),
                 ]);
             }

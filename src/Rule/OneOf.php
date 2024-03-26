@@ -6,10 +6,10 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -56,7 +56,7 @@ final class OneOf implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      */
     public function __construct(
         private array $attributes,
-        private string $incorrectInputMessage = 'The value must be an array or an object.',
+        private string $incorrectInputMessage = '{Attribute} must be an array or an object.',
         private string $message = 'Exactly 1 attribute from this list must be filled: {attributes}.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,

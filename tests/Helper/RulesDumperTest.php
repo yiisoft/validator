@@ -6,9 +6,9 @@ namespace Yiisoft\Validator\Tests\Helper;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Integer;
-use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
@@ -43,7 +43,7 @@ final class RulesDumperTest extends TestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => 'Value must be an integer.',
+                                'template' => '{Attribute} must be an integer.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
@@ -119,7 +119,7 @@ final class RulesDumperTest extends TestCase
                     ],
                 ],
                 'message' => [
-                    'template' => 'Value must be either "{true}" or "{false}".',
+                    'template' => '{Attribute} must be either "{true}" or "{false}".',
                     'parameters' => [
                         'true' => '1',
                         'false' => '0',

@@ -6,9 +6,9 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Closure;
 use Yiisoft\Validator\EmptyCondition\NeverEmpty;
+use Yiisoft\Validator\EmptyCondition\WhenNull;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\RequiredHandler;
-use Yiisoft\Validator\EmptyCondition\WhenNull;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -29,9 +29,9 @@ final class RequiredTest extends RuleTestCase
 
         $this->assertNull($rule->getEmptyCondition());
         $this->assertSame(RequiredHandler::class, $rule->getHandler());
-        $this->assertSame('Value cannot be blank.', $rule->getMessage());
+        $this->assertSame('{Attribute} cannot be blank.', $rule->getMessage());
         $this->assertSame(Required::class, $rule->getName());
-        $this->assertSame('Value not passed.', $rule->getNotPassedMessage());
+        $this->assertSame('{Attribute} not passed.', $rule->getNotPassedMessage());
         $this->assertNull($rule->getWhen());
         $this->assertFalse($rule->shouldSkipOnError());
     }
@@ -61,11 +61,11 @@ final class RequiredTest extends RuleTestCase
                 new Required(),
                 [
                     'message' => [
-                        'template' => 'Value cannot be blank.',
+                        'template' => '{Attribute} cannot be blank.',
                         'parameters' => [],
                     ],
                     'notPassedMessage' => [
-                        'template' => 'Value not passed.',
+                        'template' => '{Attribute} not passed.',
                         'parameters' => [],
                     ],
                     'skipOnError' => false,

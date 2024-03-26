@@ -88,8 +88,8 @@ final class DateTime implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
      */
     public function __construct(
         string $format = 'Y-m-d',
-        private string $incorrectInputMessage = 'The {attribute} must be a date.',
-        private string $message = 'The {attribute} is not a valid date.',
+        private string $incorrectInputMessage = '{Attribute} must be a date.',
+        private string $message = '{Attribute} is not a valid date.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private ?Closure $when = null,

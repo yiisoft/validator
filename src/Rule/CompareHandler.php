@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use DateTimeInterface;
 use Stringable;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -37,6 +38,7 @@ final class CompareHandler implements RuleHandlerInterface
         if (!$this->isInputCorrect($rule->getType(), $value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -59,12 +61,17 @@ final class CompareHandler implements RuleHandlerInterface
             return new Result();
         }
 
+        $capitalizedTargetAttribute = $targetAttribute ? StringHelper::uppercaseFirstCharacter($targetAttribute) : null;
+
         return (new Result())->addError($rule->getMessage(), [
             'attribute' => $context->getTranslatedAttribute(),
+            'Attribute' => $context->getCapitalizedTranslatedAttribute(),
             'targetValue' => $this->getFormattedValue($rule->getTargetValue()),
             'targetAttribute' => $targetAttribute,
+            'TargetAttribute' => $capitalizedTargetAttribute,
             'targetAttributeValue' => $targetAttribute !== null ? $this->getFormattedValue($targetValue) : null,
             'targetValueOrAttribute' => $targetAttribute ?? $this->getFormattedValue($targetValue),
+            'TargetValueOrAttribute' => $capitalizedTargetAttribute ?? $this->getFormattedValue($targetValue),
             'value' => $this->getFormattedValue($value),
         ]);
     }

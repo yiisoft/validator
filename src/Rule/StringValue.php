@@ -6,10 +6,10 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -54,7 +54,7 @@ final class StringValue implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private string $message = 'The value must be a string.',
+        private string $message = '{Attribute} must be a string.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

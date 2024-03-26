@@ -8,10 +8,10 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use Yiisoft\NetworkUtilities\IpHelper;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -184,14 +184,14 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
         private bool $allowSubnet = false,
         private bool $requireSubnet = false,
         private bool $allowNegation = false,
-        private string $incorrectInputMessage = 'The value must be a string.',
-        private string $message = 'Must be a valid IP address.',
-        private string $ipv4NotAllowedMessage = 'Must not be an IPv4 address.',
-        private string $ipv6NotAllowedMessage = 'Must not be an IPv6 address.',
-        private string $wrongCidrMessage = 'Contains wrong subnet mask.',
-        private string $noSubnetMessage = 'Must be an IP address with specified subnet.',
-        private string $hasSubnetMessage = 'Must not be a subnet.',
-        private string $notInRangeMessage = 'Is not in the allowed range.',
+        private string $incorrectInputMessage = '{Attribute} must be a string.',
+        private string $message = '{Attribute} must be a valid IP address.',
+        private string $ipv4NotAllowedMessage = '{Attribute} must not be an IPv4 address.',
+        private string $ipv6NotAllowedMessage = '{Attribute} must not be an IPv6 address.',
+        private string $wrongCidrMessage = '{Attribute} contains wrong subnet mask.',
+        private string $noSubnetMessage = '{Attribute} must be an IP address with specified subnet.',
+        private string $hasSubnetMessage = '{Attribute} must not be a subnet.',
+        private string $notInRangeMessage = '{Attribute} is not in the allowed range.',
         private array $ranges = [],
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,

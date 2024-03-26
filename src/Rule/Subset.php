@@ -6,10 +6,10 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -74,8 +74,8 @@ final class Subset implements DumpedRuleInterface, SkipOnErrorInterface, WhenInt
     public function __construct(
         private iterable $values,
         private bool $strict = false,
-        private string $incorrectInputMessage = 'Value must be iterable.',
-        private string $message = 'This value is not a subset of acceptable values.',
+        private string $incorrectInputMessage = '{Attribute} must be iterable.',
+        private string $message = '{Attribute} is not a subset of acceptable values.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
