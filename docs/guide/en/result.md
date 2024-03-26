@@ -24,8 +24,8 @@ $result->isAttributeValid('name');
 
 ## Errors
 
-Most of the time telling only the status of validation is not enough. There are multiple methods to get detailed errors 
-list with their data from the result. The difference between them is in the grouping, filtering, and representation of every 
+Most of the time telling only the status of validation is not enough. There are multiple methods to get detailed errors
+list with their data from the result. The difference between them is in the grouping, filtering, and representation of every
 error. Choose one to fit your needs depending on the situation.
 
 ### Flat list of error messages
@@ -128,25 +128,30 @@ Returning to the previous example, when `name` and `email` belong to a `user` at
 ];
 ```
 
-Also keep in mind that attribute names are always strings, even when used with `Each`:
+Also keep in mind that attribute names must be strings, even when used with `Each`:
 
 ```php
 $rule = new Each([new Number(min: 21)]),
 ```
 
-Given `[21, 22, 23, 20]` input, the output will be: 
+With input containing non-string keys for top level attributes, for example, `[21, 22, 23, 20]`, InvalidArgumentException` will be thrown.
+
+Even array `['1' => 21, '2' => 22, '3' => 23, '4' => 20]` will cause an error, because PHP [will cast keys to the int type].
+
+But if given array with string keys `['1a' => 21, '2b' => 22, '3c' => 23, '4d' => 20]`, the output will be:
 
 ```php
 [
-    '1' => ['Value must be no less than 21.'],
-    '2' => ['Value must be no less than 21.'],
-],
+    '4d' => [
+        0 => 'Value must be no less than 21.'
+    ]
+]
 ```
 
 ### Error messages indexed by path
 
-This is probably the most advanced representation offered by built-in methods. The grouping is done by path - a 
-concatenated attribute sequence showing the location of errored value within a data structure. A separator is customizable, 
+This is probably the most advanced representation offered by built-in methods. The grouping is done by path - a
+concatenated attribute sequence showing the location of errored value within a data structure. A separator is customizable,
 dot notation is set as the default one. Use the following `Result` API call:
 
 ```php
@@ -202,9 +207,9 @@ $rules = [
 ];
 ```
 
-However, when using the `Nested` rule with multiple attributes per rule set, special characters need to be escaped with 
-a backslash (`\`) for value paths to be correct and to be possible to reverse them back from string to individual 
-items. See the [Using keys containing separator/shortcut] section for more details.
+However, when using the `Nested` rule with multiple attributes per rule set, special characters need to be escaped with
+a backslash (`\`) for value paths to be correct and to be possible to reverse them back from string to individual
+items. See the [Using keys containing separator / shortcut] section for more details.
 
 This can be used as an alternative to using a custom separator.
 
@@ -230,7 +235,7 @@ The output for example above:
 
 ## Error objects list
 
-When even these representations are not enough, an initial unmodified list of error objects can be accessed via 
+When even these representations are not enough, an initial unmodified list of error objects can be accessed via
 this method:
 
 ```php
@@ -242,9 +247,9 @@ $result->getErrors();
 
 Each error stores the following data:
 
-- Message. Either a simple message like `This value is wrong.` or a template with placeholders enclosed in curly braces 
-(`{}`), for example: `Value must be no less than {min}.`. The actual formatting is done in `Validator` depending on
-the configured translator.
+- Message. Either a simple message like `This value is wrong.` or a template with placeholders enclosed in curly braces
+  (`{}`), for example: `Value must be no less than {min}.`. The actual formatting is done in `Validator` depending on
+  the configured translator.
 - Template parameters for substitution during formatting, for example: `['min' => 7]`.
 - A path to a value within a checked data structure, for example: `['user', 'name', 'firstName']`.
 
@@ -264,7 +269,7 @@ What this can be useful for? For example, to build a nested tree of error messag
 ];
 ```
 
-It's intentionally not provided out of the box due to the complexity of iteration. However, this can be useful for dumping 
+It's intentionally not provided out of the box due to the complexity of iteration. However, this can be useful for dumping
 as JSON and storing in logs for example.
 
 Debugging original error objects is also more convenient.
@@ -280,4 +285,5 @@ use Yiisoft\Validator\Result;
 $result->getAttributeErrors('email');
 ```
 
-[Using keys containing separator / shortcut]: #using-keys-containing-separator--shortcut
+[Using keys containing separator / shortcut]: built-in-rules-nested.md#using-keys-containing-separator--shortcut
+[will cast keys to the int type]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
