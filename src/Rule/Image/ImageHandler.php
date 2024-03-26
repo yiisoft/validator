@@ -35,7 +35,17 @@ final class ImageHandler implements RuleHandlerInterface
 
         $result = new Result();
 
-        $info = $this->getImageInfo($value);
+        $imageFilePath = $this->getImageFilePath($value);
+        if (empty($imageFilePath)) {
+            $result->addError($rule->getNotImageMessage(), ['attribute' => $context->getTranslatedAttribute()]);
+            return $result;
+        }
+
+        if (!$this->isNeedToValidateDeminisions($rule)) {
+            return $result;
+        }
+
+        $info = $this->imageInfoProvider->get($imageFilePath);
         if (empty($info)) {
             $result->addError($rule->getNotImageMessage(), ['attribute' => $context->getTranslatedAttribute()]);
             return $result;
@@ -84,7 +94,17 @@ final class ImageHandler implements RuleHandlerInterface
         return $result;
     }
 
-    private function getImageInfo(mixed $value): ?ImageInfo
+    private function isNeedToValidateDeminisions(Image $rule): bool
+    {
+        return $rule->getWidth() !== null
+            || $rule->getHeight() !== null
+            || $rule->getMinHeight() !== null
+            || $rule->getMinWidth() !== null
+            || $rule->getMaxHeight() !== null
+            || $rule->getMaxWidth() !== null;
+    }
+
+    private function getImageFilePath(mixed $value): ?string
     {
         $filePath = $this->getFilePath($value);
         if (empty($filePath)) {
@@ -95,7 +115,7 @@ final class ImageHandler implements RuleHandlerInterface
             return null;
         }
 
-        return $this->imageInfoProvider->get($filePath);
+        return $filePath;
     }
 
     /**

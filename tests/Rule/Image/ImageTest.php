@@ -31,6 +31,7 @@ final class ImageTest extends RuleTestCase
         return [
             'png' => [__DIR__ . '/16x18.png', new Image()],
             'jpg' => [__DIR__ . '/16x18.jpg', new Image()],
+            'heic' => [__DIR__ . '/797x808.HEIC', new Image()],
             'uploaded-file' => [new UploadedFile(__DIR__ . '/16x18.jpg', 0, UPLOAD_ERR_OK), new Image()],
             'exactly' => [__DIR__ . '/16x18.jpg', new Image(width: 16, height: 18)],
             'min-width' => [__DIR__ . '/16x18.jpg', new Image(minWidth: 12)],
@@ -49,6 +50,7 @@ final class ImageTest extends RuleTestCase
         $notImageResult = ['' => ['The value must be an image.']];
 
         return [
+            'heic-with-size' => [__DIR__ . '/797x808.HEIC', new Image(minWidth: 10), $notImageResult],
             'empty-string' => ['', new Image(), $notImageResult],
             'not-file-path' => ['test', new Image(), $notImageResult],
             'not-image' => [__DIR__ . '/ImageTest.php', new Image(), $notImageResult],
