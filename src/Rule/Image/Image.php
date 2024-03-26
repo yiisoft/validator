@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Rule;
+namespace Yiisoft\Validator\Rule\Image;
 
 use Attribute;
 use Closure;
