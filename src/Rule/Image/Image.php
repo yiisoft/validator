@@ -17,8 +17,6 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Defines validation options to check that a value is an image with a certain dimensions (optionally).
  *
- * > Currently not adapted for using with HEIF / HEIC formats.
- *
  * @see ImageHandler
  *
  * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
