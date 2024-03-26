@@ -20,6 +20,14 @@ use function is_string;
  */
 final class ImageHandler implements RuleHandlerInterface
 {
+    private InfoProviderInterface $infoProvider;
+
+    public function __construct(
+        ?InfoProviderInterface $infoProvider = null,
+    ) {
+        $this->infoProvider = $infoProvider ?? new NativeInfoProvider();
+    }
+
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Image) {
@@ -34,7 +42,8 @@ final class ImageHandler implements RuleHandlerInterface
             return $result;
         }
 
-        [$width, $height] = $info;
+        $width = $info->getWidth();
+        $height = $info->getHeight();
 
         if ($rule->getWidth() !== null && $width !== $rule->getWidth()) {
             $result->addError($rule->getNotExactWidthMessage(), [
@@ -76,10 +85,7 @@ final class ImageHandler implements RuleHandlerInterface
         return $result;
     }
 
-    /**
-     * @psalm-return array{0:int,1:int}&array
-     */
-    private function getImageInfo(mixed $value): ?array
+    private function getImageInfo(mixed $value): ?Info
     {
         $filePath = $this->getFilePath($value);
         if (empty($filePath)) {
@@ -90,12 +96,7 @@ final class ImageHandler implements RuleHandlerInterface
             return null;
         }
 
-        /**
-         * @psalm-var (array{0:int,1:int}&array)|null $info Need for PHP 8.0 only
-         */
-        // HEIF / HEIC formats are not supported.
-        $info = getimagesize($filePath);
-        return is_array($info) ? $info : null;
+        return $this->infoProvider->get($filePath);
     }
 
     /**
