@@ -15,7 +15,7 @@ abstract class RuleTestCase extends TestCase
     /**
      * @dataProvider dataValidationPassed
      */
-    public function testValidationPassed(mixed $data, ?array $rules = null): void
+    public function testValidationPassed(mixed $data, array|RuleInterface|null $rules = null): void
     {
         $result = (new Validator())->validate($data, $rules);
 

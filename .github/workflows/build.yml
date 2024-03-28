@@ -26,7 +26,7 @@ jobs:
   phpunit:
     uses: yiisoft/actions/.github/workflows/phpunit.yml@master
     with:
-      extensions: intl
+      extensions: intl,fileinfo
       coverage: xdebug
       os: >-
         ['ubuntu-latest', 'windows-latest']

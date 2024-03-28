@@ -45,6 +45,10 @@ Here is a list of all available built-in rules, divided by category.
 - [Count](../../../src/Rule/Count.php)
 - [OneOf](../../../src/Rule/OneOf.php)
 
+### File rules
+
+- [Image](../../../src/Rule/Image/Image.php)
+
 ### General purpose rules
 
 - [Callback](../../../src/Rule/Callback.php)

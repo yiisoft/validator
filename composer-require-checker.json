@@ -15,6 +15,7 @@
         "Reflection",
         "SPL",
         "standard",
+        "fileinfo",
         "intl"
     ],
     "scan-files": []
