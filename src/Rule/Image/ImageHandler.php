@@ -41,7 +41,7 @@ final class ImageHandler implements RuleHandlerInterface
             return $result;
         }
 
-        if (!$this->isNeedToValidateDeminisions($rule)) {
+        if (!$this->shouldValidateDimensions($rule)) {
             return $result;
         }
 
@@ -94,7 +94,7 @@ final class ImageHandler implements RuleHandlerInterface
         return $result;
     }
 
-    private function isNeedToValidateDeminisions(Image $rule): bool
+    private function shouldValidateDimensions(Image $rule): bool
     {
         return $rule->getWidth() !== null
             || $rule->getHeight() !== null
