@@ -13,7 +13,7 @@ use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
- * Validates that a value is an image with a certain dimensions (optionally).
+ * Validates that a value is an image and optionally checks its dimensions.
  *
  * @see Image
  */
