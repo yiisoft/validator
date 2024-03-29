@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Rule;
+namespace Yiisoft\Validator\Rule\Date;
 
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -27,6 +27,9 @@ final class DateHandler implements RuleHandlerInterface
     public function __construct(
         private ?string $timeZone = null,
         private ?string $locale = null,
+        private ?string $messageFormat = null,
+        private ?int $messageDateType = null,
+        private ?int $messageTimeType = null,
     ) {
     }
 
@@ -36,108 +39,62 @@ final class DateHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Date::class, $rule);
         }
 
-        $result = new Result();
-
-        $prepareResult = $this->prepareValue($value, $rule);
-        if ($prepareResult === null) {
-            $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-            ]);
-            return $result;
-        }
-        [$timestamp, $date] = $prepareResult;
-
-        $prepareResult = $this->prepareValue($rule->getMin(), $rule);
-        if ($prepareResult !== null) {
-            [$min, $minAsString] = $prepareResult;
-            if ($timestamp < $min) {
-                $result->addError($rule->getTooEarlyMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
-                    'date' => $date,
-                    'limit' => $minAsString,
-                ]);
-                return $result;
-            }
-        }
-
-        $prepareResult = $this->prepareValue($rule->getMax(), $rule);
-        if ($prepareResult !== null) {
-            [$max, $maxAsString] = $prepareResult;
-            if ($timestamp > $max) {
-                $result->addError($rule->getTooLateMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
-                    'date' => $date,
-                    'limit' => $maxAsString,
-                ]);
-                return $result;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * @psalm-return array{0:int,1:string}|null
-     */
-    private function prepareValue(mixed $value, Date $rule): ?array
-    {
         $timeZone = $rule->getTimeZone() ?? $this->timeZone;
         if ($timeZone !== null) {
             $timeZone = new DateTimeZone($timeZone);
         }
 
-        $locale = $rule->getLocale() ?? $this->locale;
+        $result = new Result();
 
-        $format = $rule->getFormat();
-        $isPhpFormat = is_string($format) && str_starts_with($format, 'php:');
-        if ($isPhpFormat) {
-            $format = substr($format, 4);
+        $date = $this->prepareValue($value, $rule, $timeZone);
+        if ($date === null) {
+            $result->addError($rule->getIncorrectInputMessage(), [
+                'attribute' => $context->getTranslatedAttribute(),
+            ]);
+            return $result;
         }
 
+        $min = $this->prepareValue($rule->getMin(), $rule, $timeZone);
+        if ($min !== null && $date < $min) {
+            $result->addError($rule->getTooEarlyMessage(), [
+                'attribute' => $context->getTranslatedAttribute(),
+                'date' => $this->formatDate($date, $rule, $timeZone),
+                'limit' => $this->formatDate($min, $rule, $timeZone),
+            ]);
+            return $result;
+        }
+
+        $max = $this->prepareValue($rule->getMax(), $rule, $timeZone);
+        if ($max !== null && $date > $max) {
+            $result->addError($rule->getTooLateMessage(), [
+                'attribute' => $context->getTranslatedAttribute(),
+                'date' => $this->formatDate($date, $rule, $timeZone),
+                'limit' => $this->formatDate($max, $rule, $timeZone),
+            ]);
+            return $result;
+        }
+
+        return $result;
+    }
+
+    private function prepareValue(mixed $value, Date $rule, ?DateTimeZone $timeZone): ?DateTimeInterface
+    {
+        $format = $rule->getFormat();
+
         if (is_int($value)) {
-            $date = $this->makeDateTimeFromTimestamp($value, $timeZone);
-            if ($isPhpFormat) {
-                /** @var string $format */
-                $dateAsString = $date->format($format);
-            } else {
-                $dateAsString = $this
-                    ->makeFormatter(
-                        $format,
-                        $locale,
-                        $rule->getDateType(),
-                        $rule->getTimeType(),
-                        $timeZone,
-                    )
-                    ->format($date);
-            }
-            return [$value, $dateAsString];
+            return $this->makeDateTimeFromTimestamp($value, $timeZone);
         }
 
         if ($value instanceof DateTimeInterface) {
-            if ($isPhpFormat) {
-                /** @var string $format */
-                $dateAsString = $value->format($format);
-            } else {
-                $dateAsString = $this
-                    ->makeFormatter(
-                        $format,
-                        $locale,
-                        $rule->getDateType(),
-                        $rule->getTimeType(),
-                        $timeZone,
-                    )
-                    ->format($value);
-            }
-            return [$value->getTimestamp(), $dateAsString];
+            return $value;
         }
 
         if (!is_string($value) || empty($value)) {
             return null;
         }
 
-        if ($isPhpFormat) {
-            /** @var string $format */
-            return $this->prepareValueWithPhpFormat($value, $format, $timeZone);
+        if (is_string($format) && str_starts_with($format, 'php:')) {
+            return $this->prepareValueWithPhpFormat($value, substr($format, 4), $timeZone);
         }
 
         return $this->prepareValueWithIntlFormat(
@@ -146,16 +103,18 @@ final class DateHandler implements RuleHandlerInterface
             $rule->getDateType(),
             $rule->getTimeType(),
             $timeZone,
-            $locale,
+            $rule->getLocale() ?? $this->locale,
         );
     }
 
     /**
      * @psalm-param non-empty-string $value
-     * @psalm-return array{0:int,1:string}|null
      */
-    private function prepareValueWithPhpFormat(string $value, string $format, ?DateTimeZone $timeZone): ?array
-    {
+    private function prepareValueWithPhpFormat(
+        string $value,
+        string $format,
+        ?DateTimeZone $timeZone
+    ): ?DateTimeInterface {
         $date = DateTimeImmutable::createFromFormat($format, $value, $timeZone);
         if ($date === false) {
             return null;
@@ -171,14 +130,13 @@ final class DateHandler implements RuleHandlerInterface
             $date = $date->setTime(0, 0);
         }
 
-        return [$date->getTimestamp(), $date->format($format)];
+        return $date;
     }
 
     /**
      * @psalm-param non-empty-string $value
      * @psalm-param IntlDateFormatterFormat|null $dateType
      * @psalm-param IntlDateFormatterFormat|null $timeType
-     * @psalm-return array{0:int,1:string}|null
      */
     private function prepareValueWithIntlFormat(
         string $value,
@@ -187,13 +145,30 @@ final class DateHandler implements RuleHandlerInterface
         ?int $timeType,
         ?DateTimeZone $timeZone,
         ?string $locale,
-    ): ?array {
+    ): ?DateTimeInterface
+    {
         $formatter = $this->makeFormatter($format, $locale, $dateType, $timeType, $timeZone);
         $formatter->setLenient(false);
         $timestamp = $formatter->parse($value);
-        return is_int($timestamp)
-            ? [$timestamp, $formatter->format($this->makeDateTimeFromTimestamp($timestamp, $timeZone))]
-            : null;
+        return is_int($timestamp) ? $this->makeDateTimeFromTimestamp($timestamp, $timeZone) : null;
+    }
+
+    private function formatDate(DateTimeInterface $date, Date $rule, ?DateTimeZone $timeZone): string
+    {
+        $format = $rule->getMessageFormat() ?? $this->messageFormat ?? $rule->getFormat();
+        if (is_string($format) && str_starts_with($format, 'php:')) {
+            return $date->format(substr($format, 4));
+        }
+
+        $formatter = $this->makeFormatter(
+            $format,
+            $rule->getLocale() ?? $this->locale,
+            $rule->getMessageDateType() ?? $this->messageDateType ?? $rule->getDateType(),
+            $rule->getMessageTimeType() ?? $this->messageTimeType ?? $rule->getTimeType(),
+            $timeZone,
+        );
+
+        return $formatter->format($date);
     }
 
     private function makeFormatter(

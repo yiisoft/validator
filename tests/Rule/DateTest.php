@@ -6,8 +6,8 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use Yiisoft\Validator\Rule\Date;
-use Yiisoft\Validator\Rule\DateHandler;
+use Yiisoft\Validator\Rule\Date\Date;
+use Yiisoft\Validator\Rule\Date\DateHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;

@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Rule;
+namespace Yiisoft\Validator\Rule\Date;
 
 use Attribute;
 use Closure;
 use DateTimeInterface;
 use IntlDateFormatter;
+use Yiisoft\Validator\Rule\Date\DateHandler;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -40,6 +41,8 @@ final class Date implements RuleInterface, SkipOnErrorInterface, WhenInterface, 
      * @psalm-param non-empty-string|null $timeZone
      * @psalm-param IntlDateFormatterFormat|null $dateType
      * @psalm-param IntlDateFormatterFormat|null $timeType
+     * @psalm-param IntlDateFormatterFormat|null $messageDateType
+     * @psalm-param IntlDateFormatterFormat|null $messageTimeType
      * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      */
@@ -51,6 +54,9 @@ final class Date implements RuleInterface, SkipOnErrorInterface, WhenInterface, 
         private ?string $locale = null,
         private int|string|DateTimeInterface|null $min = null,
         private int|string|DateTimeInterface|null $max = null,
+        private ?string $messageFormat = null,
+        private ?int $messageDateType = null,
+        private ?int $messageTimeType = null,
         private string $incorrectInputMessage = 'Invalid date value.',
         private string $tooEarlyMessage = 'The value must be no early than {limit}.',
         private string $tooLateMessage = 'The value must be no late than {limit}.',
@@ -107,6 +113,21 @@ final class Date implements RuleInterface, SkipOnErrorInterface, WhenInterface, 
     public function getMax(): DateTimeInterface|int|string|null
     {
         return $this->max;
+    }
+
+    public function getMessageFormat(): ?string
+    {
+        return $this->messageFormat;
+    }
+
+    public function getMessageDateType(): ?int
+    {
+        return $this->messageDateType;
+    }
+
+    public function getMessageTimeType(): ?int
+    {
+        return $this->messageTimeType;
     }
 
     public function getIncorrectInputMessage(): string
