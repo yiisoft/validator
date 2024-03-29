@@ -55,17 +55,17 @@ final class TimeTest extends RuleTestCase
             'min' => [
                 '15:30',
                 new Time(format: 'HH:mm', min: '15:40'),
-                ['' => ['The value must be no early than 3:40 PM.']],
+                ['' => ['The value must be no early than 3:40 PM.']],
             ],
             'max' => [
                 '15:30',
                 new Time(format: 'php:H:i', max: '12:00'),
-                ['' => ['The value must be no late than 12:00 PM.']],
+                ['' => ['The value must be no late than 12:00 PM.']],
             ],
             'timestamp' => [
                 1711705158,
                 new Time(format: 'php:d.m.Y, H:i:s', min: 1711705200),
-                ['' => ['The value must be no early than 9:40 AM.']],
+                ['' => ['The value must be no early than 9:40 AM.']],
             ],
         ];
     }
