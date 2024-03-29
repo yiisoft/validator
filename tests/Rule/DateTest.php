@@ -46,7 +46,7 @@ final class DateTest extends RuleTestCase
             'timestamp' => [1711705158, new Date(min: 1711705100)],
             'zero-time' => [
                 '2021-01-01',
-                new Date(format: 'php:Y-m-d', max: new DateTimeImmutable('2021-01-01, 00:00:00'))
+                new Date(format: 'php:Y-m-d', max: new DateTimeImmutable('2021-01-01, 00:00:00')),
             ],
         ];
     }
@@ -61,12 +61,12 @@ final class DateTest extends RuleTestCase
             'min' => [
                 '2024-03-29',
                 new Date(format: 'YYYY-mm-dd', min: '2025-01-01'),
-                ['' => ['The value must be no early than 2025-01-01.']]
+                ['' => ['The value must be no early than 2025-01-01.']],
             ],
             'max' => [
                 '2024-03-29',
                 new Date(format: 'php:Y-m-d', max: '2024-01-01'),
-                ['' => ['The value must be no late than 2024-01-01.']]
+                ['' => ['The value must be no late than 2024-01-01.']],
             ],
             'timestamp' => [
                 1711705158,
