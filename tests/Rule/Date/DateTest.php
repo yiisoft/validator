@@ -53,6 +53,10 @@ final class DateTest extends RuleTestCase
                 '2021-01-01',
                 new Date(format: 'php:Y-m-d', max: new DateTimeIMMutable('2021-01-01, 00:00:00')),
             ],
+            'rule-locale' => [
+                '29.03.2024',
+                new Date(locale: 'ru'),
+            ],
         ];
     }
 
@@ -81,7 +85,7 @@ final class DateTest extends RuleTestCase
             ],
             'without-message-date-type' => [
                 '29*03*2024',
-                new Date(format: 'php:d*m*Y', max: '11*11*2023'),
+                new Date(format: 'php:d*m*Y', max: '11*11*2023', dateType: null),
                 ['' => ['The value must be no late than 11*11*2023.']],
                 [DateHandler::class => new DateHandler(messageDateType: null)],
             ],

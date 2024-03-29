@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule\Date;
 use Attribute;
 use Closure;
 use DateTimeInterface;
+use IntlDateFormatter;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\WhenInterface;
 
@@ -27,7 +28,7 @@ final class Date extends BaseDate
      */
     public function __construct(
         ?string $format = null,
-        private ?int $dateType = null,
+        private ?int $dateType = IntlDateFormatter::SHORT,
         ?string $timeZone = null,
         ?string $locale = null,
         int|string|DateTimeInterface|null $min = null,
