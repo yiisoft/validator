@@ -128,9 +128,6 @@ abstract class BaseDateHandler implements RuleHandlerInterface
             : $result;
     }
 
-    /**
-     * @psalm-param non-empty-string $value
-     */
     private function prepareValueWithPhpFormat(
         string $value,
         string $format,
@@ -155,7 +152,6 @@ abstract class BaseDateHandler implements RuleHandlerInterface
     }
 
     /**
-     * @psalm-param non-empty-string $value
      * @psalm-param IntlDateFormatterFormat|null $dateType
      * @psalm-param IntlDateFormatterFormat|null $timeType
      */
