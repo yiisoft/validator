@@ -136,8 +136,8 @@ final class DateTest extends RuleTestCase
                 [DateHandler::class => new DateHandler(messageFormat: 'php:d_m_Y')],
             ],
             'handler-message-type' => [
-                '3/29/2024',
-                new Date(max: '12/11/2019', dateType: IntlDateFormatter::SHORT),
+                'Mar 29, 2024',
+                new Date(max: 'Dec 11, 2019', dateType: IntlDateFormatter::MEDIUM),
                 ['' => ['The value must be no late than Wednesday, December 11, 2019.']],
                 [DateHandler::class => new DateHandler(messageDateType: IntlDateFormatter::FULL)],
             ],
