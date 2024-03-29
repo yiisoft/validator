@@ -69,6 +69,11 @@ final class DateTest extends RuleTestCase
             'intl-format-invalid' => ['2021.01.01', new Date(format: 'yyyy-MM-dd'), $invalidDateMessage],
             'invalid-date' => ['2021.02.30', new Date(format: 'yyyy-MM-dd'), $invalidDateMessage],
             'invalid-value' => [new stdClass(), new Date(), $invalidDateMessage],
+            'invalid-value-custom-message' => [
+                ['a' => new stdClass()],
+                ['a' => new Date(incorrectInputMessage: 'Invalid — {attribute}.')],
+                ['a' => ['Invalid — a.']],
+            ],
             'min' => [
                 '2024-03-29',
                 new Date(format: 'yyyy-MM-dd', min: '2025-01-01'),
@@ -166,6 +171,16 @@ final class DateTest extends RuleTestCase
     public function testInvalidMinValue(): void
     {
         $rule = new Date(format: 'php:Y-m-d', min: '12.11.2023');
+        $validator = new Validator();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Invalid date value.');
+        $validator->validate('2024-11-01', $rule);
+    }
+
+    public function testInvalidMaxValue(): void
+    {
+        $rule = new Date(format: 'php:Y-m-d', max: '12.11.2023');
         $validator = new Validator();
 
         $this->expectException(LogicException::class);
