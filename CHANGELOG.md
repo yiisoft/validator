@@ -5,6 +5,7 @@
 - New #665: Add methods `addErrorWithFormatOnly()` and `addErrorWithoutPostProcessing()` to `Result` object (@vjik)
 - Enh #668: Clarify psalm types in `Result` (@vjik)
 - New #670: Add `Image` validation rule (@vjik, @arogachev)
+- New #678: Add `Date` validation rule (@vjik)
 
 ## 1.2.0 February 21, 2024
 
