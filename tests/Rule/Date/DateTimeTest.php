@@ -64,7 +64,7 @@ final class DateTimeTest extends RuleTestCase
             'php-format-invalid-2' => [
                 '2021-17-35 16:60:97',
                 new DateTime(format: 'php:Y-m-d H:i:s'),
-                $invalidDateMessage
+                $invalidDateMessage,
             ],
             'intl-format-invalid' => [
                 '2021.01.01, 12:35',
