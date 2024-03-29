@@ -28,7 +28,8 @@
         },
         "IncrementInteger": {
             "ignoreSourceCodeByRegex": [
-                ".*setDate\\(2024, 3, 29\\).*"
+                ".*setDate\\(2024, 3, 29\\).*",
+                ".*setTime\\(0, 0\\).*"
             ]
         },
         "DecrementInteger": {
