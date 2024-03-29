@@ -13,7 +13,6 @@ use Yiisoft\Validator\Rule\Date\Date;
 use Yiisoft\Validator\Rule\Date\DateHandler;
 use Yiisoft\Validator\Rule\Date\DateTime;
 use Yiisoft\Validator\Rule\Date\Time;
-use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
