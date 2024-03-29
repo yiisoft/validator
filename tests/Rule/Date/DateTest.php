@@ -120,6 +120,12 @@ final class DateTest extends RuleTestCase
                 ['' => ['The value must be no late than 12/11/19.']],
                 [DateHandler::class => new DateHandler(messageDateType: IntlDateFormatter::FULL)],
             ],
+            'rule-locale-override-handler' => [
+                '12.11.2002',
+                new Date(max: '10.11.2002', locale: 'ru'),
+                ['' => ['The value must be no late than 10.11.2002.']],
+                [DateHandler::class => new DateHandler(locale: 'en')],
+            ],
         ];
     }
 
