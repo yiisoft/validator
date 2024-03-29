@@ -179,8 +179,14 @@ abstract class BaseDateHandler implements RuleHandlerInterface
             ?? $this->getTimeTypeFromRule($rule);
 
         $format = $rule->getMessageFormat() ?? $this->messageFormat;
-        if ($format === null && $formatterDateType === null && $formatterTimeType === null) {
-            $format = $rule->getFormat();
+        if ($format === null) {
+            if (
+                ($rule instanceof Date && $formatterDateType === null)
+                || ($rule instanceof DateTime && $formatterDateType === null && $formatterTimeType === null)
+                || ($rule instanceof Time && $formatterTimeType === null)
+            ) {
+                $format = $rule->getFormat();
+            }
         }
         if (is_string($format) && str_starts_with($format, 'php:')) {
             return $date->format(substr($format, 4));

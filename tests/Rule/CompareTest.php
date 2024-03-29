@@ -974,8 +974,9 @@ final class CompareTest extends RuleTestCase
         mixed $data,
         array|RuleInterface|null $rules,
         array $errorMessagesIndexedByPath,
+        ?array $ruleHandlers = null
     ): void {
-        parent::testValidationFailed($data, $rules, $errorMessagesIndexedByPath);
+        parent::testValidationFailed($data, $rules, $errorMessagesIndexedByPath, $ruleHandlers);
     }
 
     private function extendDataWithDifferentTypes(array $initialData): array

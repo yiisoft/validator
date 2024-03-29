@@ -13,6 +13,7 @@ use Yiisoft\Validator\Rule\Date\Date;
 use Yiisoft\Validator\Rule\Date\DateHandler;
 use Yiisoft\Validator\Rule\Date\DateTime;
 use Yiisoft\Validator\Rule\Date\Time;
+use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
@@ -76,8 +77,14 @@ final class DateTest extends RuleTestCase
             ],
             'timestamp' => [
                 1711705158,
-                new Date(format: 'php:d.m.Y, H:i:s', min: 1711705200),
+                new Date(min: 1711705200),
                 ['' => ['The value must be no early than 3/29/24.']],
+            ],
+            'without-message-date-type' => [
+                '29*03*2024',
+                new Date(format: 'php:d*m*Y', max: '11*11*2023'),
+                ['' => ['The value must be no late than 11*11*2023.']],
+                [DateHandler::class => new DateHandler(messageDateType: null)],
             ],
         ];
     }
