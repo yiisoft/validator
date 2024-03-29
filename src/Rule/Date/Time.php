@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Rule\Date;
 use Attribute;
 use Closure;
 use DateTimeInterface;
-use IntlDateFormatter;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\WhenInterface;
 

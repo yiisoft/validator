@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\Rule\Date;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use IntlDateFormatter;
 use Yiisoft\Validator\Rule\Date\DateTime;
 use Yiisoft\Validator\Rule\Date\Date;
 use Yiisoft\Validator\Rule\Date\DateTimeHandler;
