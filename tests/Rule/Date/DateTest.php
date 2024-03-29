@@ -6,6 +6,8 @@ namespace Yiisoft\Validator\Tests\Rule\Date;
 
 use DateTimeIMMutable;
 use DateTimeZone;
+use LogicException;
+use stdClass;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Rule\Date\Date;
 use Yiisoft\Validator\Rule\Date\DateHandler;
@@ -61,6 +63,7 @@ final class DateTest extends RuleTestCase
             'php-format-invalid' => ['2021.01.01', new Date(format: 'php:Y-m-d'), $invalidDateMessage],
             'intl-format-invalid' => ['2021.01.01', new Date(format: 'yyyy-MM-dd'), $invalidDateMessage],
             'invalid-date' => ['2021.02.30', new Date(format: 'yyyy-MM-dd'), $invalidDateMessage],
+            'invalid-value' => [new stdClass(), new Date(), $invalidDateMessage],
             'min' => [
                 '2024-03-29',
                 new Date(format: 'yyyy-MM-dd', min: '2025-01-01'),
@@ -88,7 +91,17 @@ final class DateTest extends RuleTestCase
         $this->expectExceptionMessage(
             'Expected "' . Date::class . '", "' . DateTime::class . '", "' . Time::class . '", but "' . RuleWithCustomHandler::class . '" given.'
         );
-        $validator->validate([], [$rule]);
+        $validator->validate([], $rule);
+    }
+
+    public function testInvalidMinValue(): void
+    {
+        $rule = new Date(format: 'php:Y-m-d', min: '12.11.2023');
+        $validator = new Validator();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Invalid date value.');
+        $validator->validate('2024-11-01', $rule);
     }
 
     public function testSkipOnError(): void
