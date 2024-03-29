@@ -74,10 +74,32 @@ final class DateTest extends RuleTestCase
                 new Date(format: 'yyyy-MM-dd', min: '2025-01-01'),
                 ['' => ['The value must be no early than 1/1/25.']],
             ],
+            'min-custom-message' => [
+                ['a' => '2024-03-29'],
+                [
+                    'a' => new Date(
+                        format: 'php:Y-m-d',
+                        min: '2025-01-01',
+                        tooEarlyMessage: 'Attr — {attribute}. Date — {date}. Min — {limit}.',
+                    ),
+                ],
+                ['a' => ['Attr — a. Date — 3/29/24. Min — 1/1/25.']],
+            ],
             'max' => [
                 '2024-03-29',
                 new Date(format: 'php:Y-m-d', max: '2024-01-01'),
                 ['' => ['The value must be no late than 1/1/24.']],
+            ],
+            'max-custom-message' => [
+                ['a' => '2024-03-29'],
+                [
+                    'a' => new Date(
+                        format: 'php:Y-m-d',
+                        max: '2024-01-01',
+                        tooLateMessage: 'Attr — {attribute}. Date — {date}. Max — {limit}.',
+                    ),
+                ],
+                ['a' => ['Attr — a. Date — 3/29/24. Max — 1/1/24.']],
             ],
             'rule-and-handler-locales' => [
                 '2024-03-29',
