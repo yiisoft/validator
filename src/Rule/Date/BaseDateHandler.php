@@ -9,7 +9,6 @@ use DateTimeInterface;
 use DateTimeZone;
 use IntlDateFormatter;
 use LogicException;
-use RuntimeException;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
