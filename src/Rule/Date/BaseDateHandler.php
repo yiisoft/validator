@@ -143,11 +143,6 @@ abstract class BaseDateHandler implements RuleHandlerInterface
             return null;
         }
 
-        // If no time was provided in the format string set time to 0 to get a simple date timestamp.
-        if (!strpbrk($format, 'aAghGHisvuU')) {
-            $date = $date->setTime(0, 0);
-        }
-
         return $date;
     }
 

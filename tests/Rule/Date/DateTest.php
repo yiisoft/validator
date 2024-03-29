@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Date;
 
-use DateTimeIMMutable;
+use DateTimeImmutable;
 use DateTimeZone;
 use IntlDateFormatter;
 use LogicException;
@@ -36,7 +36,7 @@ final class DateTest extends RuleTestCase
         return [
             'php-format' => ['2021-01-01', new Date(format: 'php:Y-m-d')],
             'intl-format' => ['2021-01-01', new Date(format: 'yyyy-MM-dd')],
-            'datetime' => [new DateTimeIMMutable('2021-01-01'), new Date()],
+            'datetime' => [new DateTimeImmutable('2021-01-01'), new Date()],
             'min' => ['2021-01-01', new Date(format: 'yyyy-MM-dd', min: '2020-01-01')],
             'max' => ['2021-01-01', new Date(format: 'yyyy-MM-dd', max: '2022-01-01')],
             'min-equal' => ['2021-01-01', new Date(format: 'yyyy-MM-dd', min: '2021-01-01')],
@@ -46,13 +46,13 @@ final class DateTest extends RuleTestCase
                 new Date(
                     format: 'php:d.m.Y',
                     timeZone: 'UTC',
-                    min: new DateTimeIMMutable('12.11.2003, 1:00:00', new DateTimeZone('GMT+3')),
+                    min: new DateTimeImmutable('12.11.2003, 1:00:00', new DateTimeZone('GMT+3')),
                 ),
             ],
             'timestamp' => [1711705158, new Date(min: 1711705100)],
             'zero-time' => [
                 '2021-01-01',
-                new Date(format: 'php:Y-m-d', max: new DateTimeIMMutable('2021-01-01, 00:00:00')),
+                new Date(format: 'php:Y-m-d', max: new DateTimeImmutable('2021-01-01, 00:00:00')),
             ],
             'rule-locale' => [
                 '29.03.2024',

@@ -44,10 +44,6 @@ final class DateTimeTest extends RuleTestCase
                 ),
             ],
             'timestamp' => [1711705158, new DateTime(min: 1711705100)],
-            'zero-time' => [
-                '2021-01-01',
-                new DateTime(format: 'php:Y-m-d', max: new DateTimeImmutable('2021-01-01, 00:00:00')),
-            ],
             'rule-timezone-override-handler' => [
                 '12.11.2003, 15:00:00',
                 new DateTime(
