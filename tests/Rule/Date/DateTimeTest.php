@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Yiisoft\Validator\Rule\Date\DateTime;
 use Yiisoft\Validator\Rule\Date\Date;
+use Yiisoft\Validator\Rule\Date\DateTimeHandler;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
@@ -74,6 +75,12 @@ final class DateTimeTest extends RuleTestCase
                 1711705158,
                 new DateTime(format: 'php:d.m.Y, H:i:s', min: 1711705200),
                 ['' => ['The value must be no early than 3/29/24, 9:40 AM.']],
+            ],
+            'without-message-date-type' => [
+                '29*03*2024*12*35',
+                new DateTime(format: 'php:d*m*Y*12*35', max: '11*11*2023*12*35', dateType: null, timeType: null),
+                ['' => ['The value must be no late than 11*11*2023*12*35.']],
+                [DateTimeHandler::class => new DateTimeHandler(messageDateType: null, messageTimeType: null)],
             ],
         ];
     }

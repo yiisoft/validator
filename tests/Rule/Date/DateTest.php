@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule\Date;
 
 use DateTimeIMMutable;
 use DateTimeZone;
+use IntlDateFormatter;
 use LogicException;
 use stdClass;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -78,6 +79,18 @@ final class DateTest extends RuleTestCase
                 new Date(format: 'php:Y-m-d', max: '2024-01-01'),
                 ['' => ['The value must be no late than 1/1/24.']],
             ],
+            'rule-and-handler-locales' => [
+                '2024-03-29',
+                new Date(format: 'php:Y-m-d', locale: 'ru', max: '2024-01-01'),
+                ['' => ['The value must be no late than 01.01.2024.']],
+                [DateHandler::class => new DateHandler(locale: 'en')],
+            ],
+            'handler-locale' => [
+                '2024-03-29',
+                new Date(format: 'php:Y-m-d', max: '2024-01-01'),
+                ['' => ['The value must be no late than 01.01.2024.']],
+                [DateHandler::class => new DateHandler(locale: 'ru')],
+            ],
             'timestamp' => [
                 1711705158,
                 new Date(min: 1711705200),
@@ -88,6 +101,24 @@ final class DateTest extends RuleTestCase
                 new Date(format: 'php:d*m*Y', max: '11*11*2023', dateType: null),
                 ['' => ['The value must be no late than 11*11*2023.']],
                 [DateHandler::class => new DateHandler(messageDateType: null)],
+            ],
+            'rule-message-format' => [
+                '29*03*2024',
+                new Date(format: 'php:d*m*Y', max: '11*11*2023', messageFormat: 'php:d=m=Y'),
+                ['' => ['The value must be no late than 11=11=2023.']],
+                [DateHandler::class => new DateHandler(messageFormat: 'php:d_m_Y')],
+            ],
+            'handler-message-type' => [
+                '3/29/2024',
+                new Date(max: '12/11/2019', dateType: IntlDateFormatter::SHORT),
+                ['' => ['The value must be no late than Wednesday, December 11, 2019.']],
+                [DateHandler::class => new DateHandler(messageDateType: IntlDateFormatter::FULL)],
+            ],
+            'rule-message-type-override-handler' => [
+                '3/29/2024',
+                new Date(max: '12/11/2019', messageDateType: IntlDateFormatter::SHORT),
+                ['' => ['The value must be no late than 12/11/19.']],
+                [DateHandler::class => new DateHandler(messageDateType: IntlDateFormatter::FULL)],
             ],
         ];
     }
