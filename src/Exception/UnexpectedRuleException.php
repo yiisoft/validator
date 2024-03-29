@@ -38,9 +38,9 @@ final class UnexpectedRuleException extends InvalidArgumentException
 {
     public function __construct(
         /**
-         * @var string Expected class name of a rule.
+         * @var string|string[] Expected class name(s) of a rule.
          */
-        string $expectedClassName,
+        string|array $expectedClassName,
         /**
          * @var object An actual given object that's not an instance of `$expectedClassName`.
          */
@@ -54,10 +54,15 @@ final class UnexpectedRuleException extends InvalidArgumentException
          */
         ?Throwable $previous = null,
     ) {
+        $expectedClassName = array_map(
+            static fn(string $name): string => '"' . $name . '"',
+            (array) $expectedClassName,
+        );
+
         parent::__construct(
             sprintf(
-                'Expected "%s", but "%s" given.',
-                $expectedClassName,
+                'Expected %s, but "%s" given.',
+                implode(', ', $expectedClassName),
                 $actualObject::class
             ),
             $code,

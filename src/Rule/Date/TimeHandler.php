@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Rule\Date;
 
 use IntlDateFormatter;
 
-final class DateHandler extends BaseDateHandler
+final class TimeHandler extends BaseDateHandler
 {
     /**
      * @psalm-param non-empty-string|null $timeZone
@@ -15,8 +15,8 @@ final class DateHandler extends BaseDateHandler
         ?string $timeZone = null,
         ?string $locale = null,
         ?string $messageFormat = null,
-        ?int $messageDateType = IntlDateFormatter::SHORT,
+        ?int $messageTimeType = IntlDateFormatter::SHORT,
     ) {
-        parent::__construct($timeZone, $locale, $messageFormat, $messageDateType, IntlDateFormatter::NONE);
+        parent::__construct($timeZone, $locale, $messageFormat, IntlDateFormatter::NONE, $messageTimeType);
     }
 }
