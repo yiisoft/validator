@@ -69,10 +69,10 @@ final class TimeTest extends RuleTestCase
                 new Time(format: 'php:d.m.Y, H:i:s', min: 1711705200),
                 ['' => ['The value must be no early than 9:40 AM.']],
             ],
-            'without-message-date-type' => [
+            'without-message-time-type' => [
                 '13*30',
-                new Time(format: 'php:H*i', max: '11*30', timeType: null),
-                ['' => ['The value must be no late than 11*30.']],
+                new Time(format: 'php:H*i', max: '11*30'),
+                ['' => ['The value must be no late than 11:30 AM.']],
                 [TimeHandler::class => new TimeHandler(messageTimeType: null)],
             ],
             'rule-message-format' => [

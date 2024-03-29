@@ -125,8 +125,8 @@ final class DateTest extends RuleTestCase
             ],
             'without-message-date-type' => [
                 '29*03*2024',
-                new Date(format: 'php:d*m*Y', max: '11*11*2023', dateType: null),
-                ['' => ['The value must be no late than 11*11*2023.']],
+                new Date(format: 'php:d*m*Y', max: '11*11*2023', ),
+                ['' => ['The value must be no late than 11/11/23.']],
                 [DateHandler::class => new DateHandler(messageDateType: null)],
             ],
             'rule-message-format' => [

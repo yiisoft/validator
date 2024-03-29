@@ -24,9 +24,13 @@ use Yiisoft\Validator\ValidationContext;
 abstract class BaseDateHandler implements RuleHandlerInterface
 {
     /**
+     * @psalm-param IntlDateFormatterFormat $dateType
+     * @psalm-param IntlDateFormatterFormat $timeType
      * @psalm-param non-empty-string|null $timeZone
      */
     public function __construct(
+        private int $dateType,
+        private int $timeType,
         private ?string $timeZone,
         private ?string $locale,
         private ?string $messageFormat,
@@ -156,14 +160,14 @@ abstract class BaseDateHandler implements RuleHandlerInterface
     }
 
     /**
-     * @psalm-param IntlDateFormatterFormat|null $dateType
-     * @psalm-param IntlDateFormatterFormat|null $timeType
+     * @psalm-param IntlDateFormatterFormat $dateType
+     * @psalm-param IntlDateFormatterFormat $timeType
      */
     private function prepareValueWithIntlFormat(
         string $value,
         ?string $format,
-        ?int $dateType,
-        ?int $timeType,
+        int $dateType,
+        int $timeType,
         ?DateTimeZone $timeZone,
         ?string $locale,
     ): ?DateTimeInterface {
@@ -183,15 +187,6 @@ abstract class BaseDateHandler implements RuleHandlerInterface
             ?? $this->getTimeTypeFromRule($rule);
 
         $format = $rule->getMessageFormat() ?? $this->messageFormat;
-        if ($format === null) {
-            if (
-                ($rule instanceof Date && $formatterDateType === null)
-                || ($rule instanceof DateTime && $formatterDateType === null && $formatterTimeType === null)
-                || ($rule instanceof Time && $formatterTimeType === null)
-            ) {
-                $format = $rule->getFormat();
-            }
-        }
         if (is_string($format) && str_starts_with($format, 'php:')) {
             return $date->format(substr($format, 4));
         }
@@ -210,17 +205,12 @@ abstract class BaseDateHandler implements RuleHandlerInterface
     private function makeFormatter(
         ?string $format,
         ?string $locale,
-        ?int $dateType,
-        ?int $timeType,
+        int $dateType,
+        int $timeType,
         ?DateTimeZone $timeZone
     ): IntlDateFormatter {
         if ($format === null) {
-            return new IntlDateFormatter(
-                $locale,
-                $dateType ?? IntlDateFormatter::NONE,
-                $timeType ?? IntlDateFormatter::NONE,
-                $timeZone,
-            );
+            return new IntlDateFormatter($locale, $dateType, $timeType, $timeZone,);
         }
 
         return new IntlDateFormatter(
@@ -238,19 +228,23 @@ abstract class BaseDateHandler implements RuleHandlerInterface
     }
 
     /**
-     * @psalm-return IntlDateFormatterFormat|null
+     * @psalm-return IntlDateFormatterFormat
      */
-    private function getDateTypeFromRule(Date|DateTime|Time $rule): ?int
+    private function getDateTypeFromRule(Date|DateTime|Time $rule): int
     {
-        return $rule instanceof Time ? null : $rule->getDateType();
+        return $rule instanceof Time
+            ? IntlDateFormatter::NONE
+            : $rule->getDateType() ?? $this->dateType;
     }
 
     /**
-     * @psalm-return IntlDateFormatterFormat|null
+     * @psalm-return IntlDateFormatterFormat
      */
-    private function getTimeTypeFromRule(Date|DateTime|Time $rule): ?int
+    private function getTimeTypeFromRule(Date|DateTime|Time $rule): int
     {
-        return $rule instanceof Date ? null : $rule->getTimeType();
+        return $rule instanceof Date
+            ? IntlDateFormatter::NONE
+            : $rule->getTimeType() ?? $this->timeType;
     }
 
     /**

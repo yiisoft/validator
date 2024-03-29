@@ -28,7 +28,7 @@ final class Time extends BaseDate
      */
     public function __construct(
         ?string $format = null,
-        private ?int $timeType = IntlDateFormatter::SHORT,
+        private ?int $timeType = null,
         ?string $timeZone = null,
         ?string $locale = null,
         int|string|DateTimeInterface|null $min = null,
