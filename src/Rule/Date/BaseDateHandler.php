@@ -139,7 +139,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
         }
 
         $errors = DateTimeImmutable::getLastErrors();
-        if ($errors !== false && ($errors['warning_count'] > 0 || $errors['error_count'] > 0)) {
+        if ($errors !== false && !empty($errors['warning_count'])) {
             return null;
         }
 
