@@ -205,10 +205,6 @@ abstract class BaseDateHandler implements RuleHandlerInterface
         ?int $timeType,
         ?DateTimeZone $timeZone
     ): IntlDateFormatter {
-        if (!extension_loaded('intl')) {
-            throw new RuntimeException('The "intl" PHP extension is required to parse date.');
-        }
-
         if ($format === null) {
             return new IntlDateFormatter(
                 $locale,
