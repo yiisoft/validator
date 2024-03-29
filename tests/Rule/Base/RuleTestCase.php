@@ -17,9 +17,15 @@ abstract class RuleTestCase extends TestCase
     /**
      * @dataProvider dataValidationPassed
      */
-    public function testValidationPassed(mixed $data, array|RuleInterface|null $rules = null): void
-    {
-        $result = (new Validator())->validate($data, $rules);
+    public function testValidationPassed(
+        mixed $data,
+        array|RuleInterface|null $rules = null,
+        ?array $ruleHandlers = null
+    ): void {
+        $validator = new Validator(
+            ruleHandlerResolver: $ruleHandlers === null ? null : new SimpleRuleHandlerContainer($ruleHandlers)
+        );
+        $result = $validator->validate($data, $rules);
 
         $this->assertSame([], $result->getErrorMessagesIndexedByPath());
     }

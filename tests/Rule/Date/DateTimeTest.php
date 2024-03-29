@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule\Date;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use IntlDateFormatter;
 use Yiisoft\Validator\Rule\Date\DateTime;
 use Yiisoft\Validator\Rule\Date\Date;
 use Yiisoft\Validator\Rule\Date\DateTimeHandler;
@@ -47,6 +48,15 @@ final class DateTimeTest extends RuleTestCase
                 '2021-01-01',
                 new DateTime(format: 'php:Y-m-d', max: new DateTimeImmutable('2021-01-01, 00:00:00')),
             ],
+            'rule-timezone-override-handler' => [
+                '12.11.2003, 15:00:00',
+                new DateTime(
+                    format: 'php:d.m.Y, H:i:s',
+                    timeZone: 'UTC',
+                    min: new DateTimeImmutable('12.11.2003, 16:00:00', new DateTimeZone('GMT+3')),
+                ),
+                [DateTimeHandler::class => new DateTimeHandler(timeZone: 'GMT+3')],
+            ],
         ];
     }
 
@@ -55,6 +65,11 @@ final class DateTimeTest extends RuleTestCase
         $invalidDateMessage = ['' => ['Invalid date value.']];
         return [
             'php-format-invalid' => ['2021.01.01, 12:35', new DateTime(format: 'php:Y-m-d, H:i'), $invalidDateMessage],
+            'php-format-invalid-2' => [
+                '2021-17-35 16:60:97',
+                new DateTime(format: 'php:Y-m-d H:i:s'),
+                $invalidDateMessage
+            ],
             'intl-format-invalid' => [
                 '2021.01.01, 12:35',
                 new DateTime(format: 'yyyy-MM-dd, HH:mm'),
@@ -80,6 +95,17 @@ final class DateTimeTest extends RuleTestCase
                 '29*03*2024*12*35',
                 new DateTime(format: 'php:d*m*Y*12*35', max: '11*11*2023*12*35', dateType: null, timeType: null),
                 ['' => ['The value must be no late than 11*11*2023*12*35.']],
+                [DateTimeHandler::class => new DateTimeHandler(messageDateType: null, messageTimeType: null)],
+            ],
+            'message-type-edge-case' => [
+                '29*03*2024*12*35',
+                new DateTime(
+                    format: 'php:d*m*Y*12*35',
+                    max: '11*11*2023*12*35',
+                    messageDateType: IntlDateFormatter::SHORT,
+                    timeType: null
+                ),
+                ['' => ['The value must be no late than 11/11/23.']],
                 [DateTimeHandler::class => new DateTimeHandler(messageDateType: null, messageTimeType: null)],
             ],
         ];
