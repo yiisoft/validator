@@ -40,9 +40,9 @@ abstract class BaseDate implements RuleInterface, SkipOnErrorInterface, WhenInte
         private int|string|DateTimeInterface|null $min,
         private int|string|DateTimeInterface|null $max,
         private ?string $messageFormat,
-        private string $incorrectInputMessage,
-        private string $tooEarlyMessage,
-        private string $tooLateMessage,
+        private ?string $incorrectInputMessage,
+        private ?string $tooEarlyMessage,
+        private ?string $tooLateMessage,
         private mixed $skipOnEmpty,
         private bool $skipOnError,
         private Closure|null $when,
@@ -87,17 +87,17 @@ abstract class BaseDate implements RuleInterface, SkipOnErrorInterface, WhenInte
         return $this->messageFormat;
     }
 
-    public function getIncorrectInputMessage(): string
+    public function getIncorrectInputMessage(): ?string
     {
         return $this->incorrectInputMessage;
     }
 
-    public function getTooEarlyMessage(): string
+    public function getTooEarlyMessage(): ?string
     {
         return $this->tooEarlyMessage;
     }
 
-    public function getTooLateMessage(): string
+    public function getTooLateMessage(): ?string
     {
         return $this->tooLateMessage;
     }

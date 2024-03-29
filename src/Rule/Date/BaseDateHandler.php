@@ -27,11 +27,14 @@ abstract class BaseDateHandler implements RuleHandlerInterface
      * @psalm-param non-empty-string|null $timeZone
      */
     public function __construct(
-        private ?string $timeZone = null,
-        private ?string $locale = null,
-        private ?string $messageFormat = null,
-        private ?int $messageDateType = null,
-        private ?int $messageTimeType = null,
+        private ?string $timeZone,
+        private ?string $locale,
+        private ?string $messageFormat,
+        private ?int $messageDateType,
+        private ?int $messageTimeType,
+        private string $incorrectInputMessage,
+        private string $tooEarlyMessage,
+        private string $tooLateMessage,
     ) {
     }
 
@@ -50,29 +53,36 @@ abstract class BaseDateHandler implements RuleHandlerInterface
 
         $date = $this->prepareValue($value, $rule, $timeZone, false);
         if ($date === null) {
-            $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-            ]);
+            $result->addError(
+                $rule->getIncorrectInputMessage() ?? $this->incorrectInputMessage,
+                ['attribute' => $context->getTranslatedAttribute()]
+            );
             return $result;
         }
 
         $min = $this->prepareValue($rule->getMin(), $rule, $timeZone, true);
         if ($min !== null && $date < $min) {
-            $result->addError($rule->getTooEarlyMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'date' => $this->formatDate($date, $rule, $timeZone),
-                'limit' => $this->formatDate($min, $rule, $timeZone),
-            ]);
+            $result->addError(
+                $rule->getTooEarlyMessage() ?? $this->tooEarlyMessage,
+                [
+                    'attribute' => $context->getTranslatedAttribute(),
+                    'date' => $this->formatDate($date, $rule, $timeZone),
+                    'limit' => $this->formatDate($min, $rule, $timeZone),
+                ]
+            );
             return $result;
         }
 
         $max = $this->prepareValue($rule->getMax(), $rule, $timeZone, true);
         if ($max !== null && $date > $max) {
-            $result->addError($rule->getTooLateMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'date' => $this->formatDate($date, $rule, $timeZone),
-                'limit' => $this->formatDate($max, $rule, $timeZone),
-            ]);
+            $result->addError(
+                $rule->getTooLateMessage() ?? $this->tooLateMessage,
+                [
+                    'attribute' => $context->getTranslatedAttribute(),
+                    'date' => $this->formatDate($date, $rule, $timeZone),
+                    'limit' => $this->formatDate($max, $rule, $timeZone),
+                ]
+            );
             return $result;
         }
 

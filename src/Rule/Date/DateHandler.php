@@ -16,7 +16,19 @@ final class DateHandler extends BaseDateHandler
         ?string $locale = null,
         ?string $messageFormat = null,
         ?int $messageDateType = IntlDateFormatter::SHORT,
+        string $incorrectInputMessage = 'Invalid date value.',
+        string $tooEarlyMessage = 'The value must be no early than {limit}.',
+        string $tooLateMessage = 'The value must be no late than {limit}.',
     ) {
-        parent::__construct($timeZone, $locale, $messageFormat, $messageDateType, IntlDateFormatter::NONE);
+        parent::__construct(
+            $timeZone,
+            $locale,
+            $messageFormat,
+            $messageDateType,
+            IntlDateFormatter::NONE,
+            $incorrectInputMessage,
+            $tooEarlyMessage,
+            $tooLateMessage,
+        );
     }
 }
