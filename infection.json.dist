@@ -25,6 +25,16 @@
                 "Yiisoft\\Validator\\EmptyCondition\\NeverEmpty::__invoke",
                 "Yiisoft\\Validator\\EmptyCondition\\WhenNull::__invoke"
             ]
+        },
+        "IncrementInteger": {
+            "ignoreSourceCodeByRegex": [
+                ".*setDate\\(2024, 3, 29\\).*"
+            ]
+        },
+        "DecrementInteger": {
+            "ignoreSourceCodeByRegex": [
+                ".*setDate\\(2024, 3, 29\\).*"
+            ]
         }
     }
 }
