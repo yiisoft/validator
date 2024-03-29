@@ -34,18 +34,18 @@ abstract class BaseDate implements RuleInterface, SkipOnErrorInterface, WhenInte
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private ?string $format = null,
-        private ?string $timeZone = null,
-        private ?string $locale = null,
-        private int|string|DateTimeInterface|null $min = null,
-        private int|string|DateTimeInterface|null $max = null,
-        private ?string $messageFormat = null,
-        private string $incorrectInputMessage = 'Invalid date value.',
-        private string $tooEarlyMessage = 'The value must be no early than {limit}.',
-        private string $tooLateMessage = 'The value must be no late than {limit}.',
-        private mixed $skipOnEmpty = null,
-        private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?string $format,
+        private ?string $timeZone,
+        private ?string $locale,
+        private int|string|DateTimeInterface|null $min,
+        private int|string|DateTimeInterface|null $max,
+        private ?string $messageFormat,
+        private string $incorrectInputMessage,
+        private string $tooEarlyMessage,
+        private string $tooLateMessage,
+        private mixed $skipOnEmpty,
+        private bool $skipOnError,
+        private Closure|null $when,
     ) {
     }
 
