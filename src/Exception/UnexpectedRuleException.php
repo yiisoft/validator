@@ -54,15 +54,10 @@ final class UnexpectedRuleException extends InvalidArgumentException
          */
         ?Throwable $previous = null,
     ) {
-        $expectedClassName = array_map(
-            static fn(string $name): string => '"' . $name . '"',
-            (array) $expectedClassName,
-        );
-
         parent::__construct(
             sprintf(
-                'Expected %s, but "%s" given.',
-                implode(', ', $expectedClassName),
+                'Expected "%s", but "%s" given.',
+                implode('", "', (array) $expectedClassName),
                 $actualObject::class
             ),
             $code,
