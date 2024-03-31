@@ -36,22 +36,16 @@ use Throwable;
  */
 final class UnexpectedRuleException extends InvalidArgumentException
 {
+    /**
+     * @param string|string[] $expectedClassName Expected class name(s) of a rule.
+     * @param object $actualObject An actual given object that's not an instance of `$expectedClassName`.
+     * @param int $code The Exception code.
+     * @param Throwable|null $previous The previous throwable used for the exception chaining.
+     */
     public function __construct(
-        /**
-         * @var string|string[] Expected class name(s) of a rule.
-         */
         string|array $expectedClassName,
-        /**
-         * @var object An actual given object that's not an instance of `$expectedClassName`.
-         */
         object $actualObject,
-        /**
-         * @var int The Exception code.
-         */
         int $code = 0,
-        /**
-         * @var Throwable|null The previous throwable used for the exception chaining.
-         */
         ?Throwable $previous = null,
     ) {
         parent::__construct(

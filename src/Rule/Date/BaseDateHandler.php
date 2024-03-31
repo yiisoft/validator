@@ -210,7 +210,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
         ?DateTimeZone $timeZone
     ): IntlDateFormatter {
         if ($format === null) {
-            return new IntlDateFormatter($locale, $dateType, $timeType, $timeZone, );
+            return new IntlDateFormatter($locale, $dateType, $timeType, $timeZone);
         }
 
         return new IntlDateFormatter(
