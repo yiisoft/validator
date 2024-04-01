@@ -85,7 +85,7 @@ final class DateTest extends RuleTestCase
                     'a' => new Date(
                         format: 'php:Y-m-d',
                         min: '2025-01-01',
-                        tooEarlyMessage: 'Attr — {attribute}. Date — {date}. Min — {limit}.',
+                        tooEarlyMessage: 'Attr — {attribute}. Date — {value}. Min — {limit}.',
                     ),
                 ],
                 ['a' => ['Attr — a. Date — 3/29/24. Min — 1/1/25.']],
@@ -101,7 +101,7 @@ final class DateTest extends RuleTestCase
                     'a' => new Date(
                         format: 'php:Y-m-d',
                         max: '2024-01-01',
-                        tooLateMessage: 'Attr — {attribute}. Date — {date}. Max — {limit}.',
+                        tooLateMessage: 'Attr — {attribute}. Date — {value}. Max — {limit}.',
                     ),
                 ],
                 ['a' => ['Attr — a. Date — 3/29/24. Max — 1/1/24.']],

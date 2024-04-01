@@ -70,7 +70,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
                 $rule->getTooEarlyMessage() ?? $this->tooEarlyMessage,
                 [
                     'attribute' => $context->getTranslatedAttribute(),
-                    'date' => $this->formatDate($date, $rule, $timeZone),
+                    'value' => $this->formatDate($date, $rule, $timeZone),
                     'limit' => $this->formatDate($min, $rule, $timeZone),
                 ]
             );
@@ -83,7 +83,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
                 $rule->getTooLateMessage() ?? $this->tooLateMessage,
                 [
                     'attribute' => $context->getTranslatedAttribute(),
-                    'date' => $this->formatDate($date, $rule, $timeZone),
+                    'value' => $this->formatDate($date, $rule, $timeZone),
                     'limit' => $this->formatDate($max, $rule, $timeZone),
                 ]
             );
