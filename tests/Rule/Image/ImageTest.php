@@ -118,6 +118,12 @@ final class ImageTest extends RuleTestCase
             [
                 new Image(),
                 [
+                    'width' => null,
+                    'height' => null,
+                    'minWidth' => null,
+                    'minHeight' => null,
+                    'maxWidth' => null,
+                    'maxHeight' => null,
                     'notExactWidthMessage' => [
                         'template' => 'The width of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
