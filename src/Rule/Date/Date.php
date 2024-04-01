@@ -65,7 +65,7 @@ final class Date extends BaseDate
      * 'php:m/d/Y' // the same date in PHP format
      * ```
      *
-     * @param int|null $dateType Format of the date determined by one of the `IntlDateFormatter` constants. It used when
+     * @param int|null $dateType Format of the date determined by one of the `IntlDateFormatter` constants. It is used when
      * {@see $format} is not set.
      *
      * @param string|null $timeZone The timezone to use for parsing and formatting date values. This can be any value
