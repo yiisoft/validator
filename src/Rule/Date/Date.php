@@ -13,7 +13,7 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Defines validation options to check that the value is a date.
  *
- * An example for simple that can be used to validate the date:
+ * A simple example of how to use it to validate a date:
  *
  * ```php
  * $rules = [
