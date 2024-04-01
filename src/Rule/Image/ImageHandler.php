@@ -148,8 +148,7 @@ final class ImageHandler implements RuleHandlerInterface
         Image $rule,
         ValidationContext $context,
         Result $result,
-    ): void
-    {
+    ): void {
         if ($rule->getAspectRatioWidth() === null || $rule->getAspectRatioHeight() === null) {
             return;
         }
