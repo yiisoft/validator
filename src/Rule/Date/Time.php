@@ -13,7 +13,7 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Defines validation options to check that the value is a time.
  *
- * An example for simple that can be used to validate the time:
+ * An simple example on how to validate the time:
  *
  * ```php
  * $rules = [
