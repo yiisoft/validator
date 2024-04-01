@@ -68,7 +68,7 @@ final class DateTime extends BaseDate
      * @param int|null $dateType Format of the date determined by one of the `IntlDateFormatter` constants. It is used when
      * {@see $format} is not set.
      *
-     * @param int|null $timeType Format of the time determined by one of the `IntlDateFormatter` constants. It used when
+     * @param int|null $timeType Format of the time determined by one of the `IntlDateFormatter` constants. It is used when
      * {@see $format} is not set.
      *
      * @param string|null $timeZone The timezone to use for parsing and formatting date values. This can be any value
