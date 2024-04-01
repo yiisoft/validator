@@ -85,8 +85,7 @@ final class Date extends BaseDate
      *
      * @param string|null $messageFormat Date format that is used in error messages.
      *
-     * @param int|null $messageDateType Format of date determined by one of the `IntlDateFormatter` constants that used
-     * in error messages. It used when {@see $messageFormat} is not set.
+     * @param int|null $messageDateType One of the `IntlDateFormatter` constants that used determines date format for error messages used when {@see $messageFormat} is not set.
      *
      * @param string|null $incorrectInputMessage A message used when the validated value is not valid date. You may use
      * the following placeholders in the message:
