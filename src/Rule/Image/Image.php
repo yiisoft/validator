@@ -196,6 +196,12 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
     public function getOptions(): array
     {
         return [
+            'width' => $this->width,
+            'height' => $this->height,
+            'minWidth' => $this->minWidth,
+            'minHeight' => $this->minHeight,
+            'maxWidth' => $this->maxWidth,
+            'maxHeight' => $this->maxHeight,
             'notExactWidthMessage' => [
                 'template' => $this->notExactWidthMessage,
                 'parameters' => [
