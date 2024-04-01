@@ -41,8 +41,9 @@ final class SimpleRuleHandlerContainer implements RuleHandlerResolverInterface
      */
     public function __construct(
         /**
-         * @var array<string, RuleHandlerInterface> A storage of rule handlers' instances - a mapping where keys are
-         * strings (the rule handlers' class names by default) and values are corresponding rule handlers' instances.
+         * @var RuleHandlerInterface[] A storage of rule handlers' instances - a mapping where keys are strings (the
+         * rule handlers' class names by default) and values are corresponding rule handlers' instances.
+         * @psalm-var array<string, RuleHandlerInterface>
          */
         private array $instances = [],
     ) {

@@ -91,6 +91,8 @@ final class ImageHandler implements RuleHandlerInterface
             ]);
         }
 
+        $this->validateAspectRatio($width, $height, $rule, $context, $result);
+
         return $result;
     }
 
@@ -101,7 +103,8 @@ final class ImageHandler implements RuleHandlerInterface
             || $rule->getMinHeight() !== null
             || $rule->getMinWidth() !== null
             || $rule->getMaxHeight() !== null
-            || $rule->getMaxWidth() !== null;
+            || $rule->getMaxWidth() !== null
+            || ($rule->getAspectRatioWidth() !== null && $rule->getAspectRatioHeight() !== null);
     }
 
     private function getImageFilePath(mixed $value): ?string
@@ -137,5 +140,36 @@ final class ImageHandler implements RuleHandlerInterface
             $value = $value->getError() === UPLOAD_ERR_OK ? $value->getStream()->getMetadata('uri') : null;
         }
         return is_string($value) ? $value : null;
+    }
+
+    private function validateAspectRatio(
+        int $validatedWidth,
+        int $validatedHeight,
+        Image $rule,
+        ValidationContext $context,
+        Result $result,
+    ): void
+    {
+        if ($rule->getAspectRatioWidth() === null || $rule->getAspectRatioHeight() === null) {
+            return;
+        }
+
+        $allowedHeight = $validatedWidth * $rule->getAspectRatioHeight() / $rule->getAspectRatioWidth();
+        $absoluteMargin = $allowedHeight * $rule->getAspectRatioMargin() / 100;
+
+        if (
+            ($validatedHeight < $allowedHeight - $absoluteMargin) ||
+            ($validatedHeight > $allowedHeight + $absoluteMargin)
+        ) {
+            $result->addError(
+                $rule->getInvalidAspectRatioMessage(),
+                [
+                    'attribute' => $context->getTranslatedAttribute(),
+                    'width' => $rule->getAspectRatioWidth(),
+                    'height' => $rule->getAspectRatioHeight(),
+                    'margin' => $rule->getAspectRatioMargin(),
+                ],
+            );
+        }
     }
 }

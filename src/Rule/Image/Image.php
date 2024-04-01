@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule\Image;
 
 use Attribute;
 use Closure;
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -105,6 +106,9 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private ?int $minHeight = null,
         private ?int $maxWidth = null,
         private ?int $maxHeight = null,
+        private ?int $aspectRatioWidth = null,
+        private ?int $aspectRatioHeight = null,
+        private float $aspectRatioMargin = 0,
         private string $notImageMessage = 'The value must be an image.',
         private string $notExactWidthMessage = 'The width of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
         private string $notExactHeightMessage = 'The height of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
@@ -112,10 +116,17 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private string $tooSmallHeightMessage = 'The height of image "{attribute}" cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
         private string $tooLargeWidthMessage = 'The width of image "{attribute}" cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
         private string $tooLargeHeightMessage = 'The height of image "{attribute}" cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+        private string $invalidAspectRatioMessage = 'The aspect ratio of the image must be {width}:{height} with margin {margin}%.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        if (
+            ($this->aspectRatioWidth !== null && $this->aspectRatioHeight === null) ||
+            ($this->aspectRatioWidth === null && $this->aspectRatioHeight !== null)
+        ) {
+            throw new InvalidArgumentException('Aspect ratio width and height must be specified together');
+        }
     }
 
     public function getWidth(): ?int
@@ -146,6 +157,21 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
     public function getMaxHeight(): ?int
     {
         return $this->maxHeight;
+    }
+
+    public function getAspectRatioWidth(): ?int
+    {
+        return $this->aspectRatioWidth;
+    }
+
+    public function getAspectRatioHeight(): ?int
+    {
+        return $this->aspectRatioHeight;
+    }
+
+    public function getAspectRatioMargin(): float
+    {
+        return $this->aspectRatioMargin;
     }
 
     public function getNotImageMessage(): string
@@ -181,6 +207,11 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
     public function getTooLargeHeightMessage(): string
     {
         return $this->tooLargeHeightMessage;
+    }
+
+    public function getInvalidAspectRatioMessage(): string
+    {
+        return $this->invalidAspectRatioMessage;
     }
 
     public function getName(): string

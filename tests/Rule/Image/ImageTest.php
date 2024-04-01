@@ -7,11 +7,14 @@ namespace Yiisoft\Validator\Tests\Rule\Image;
 use GuzzleHttp\Psr7\UploadedFile;
 use Yiisoft\Validator\Rule\Image\Image;
 use Yiisoft\Validator\Rule\Image\ImageHandler;
+use Yiisoft\Validator\Rule\Image\ImageInfo;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\RuleHandlerResolver\ImageHandlerContainer;
+use Yiisoft\Validator\Validator;
 
 final class ImageTest extends RuleTestCase
 {
@@ -43,6 +46,25 @@ final class ImageTest extends RuleTestCase
             'max-height' => [__DIR__ . '/16x18.jpg', new Image(maxHeight: 19)],
             'max-height-boundary' => [__DIR__ . '/16x18.jpg', new Image(maxHeight: 18)],
         ];
+    }
+
+    public function dataValidationPassedAspectRatio(): array
+    {
+        return [
+            [new ImageInfo(800, 594), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1)],
+            [new ImageInfo(800, 595), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1)],
+            [new ImageInfo(800, 605), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1)],
+            [new ImageInfo(800, 606), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1)],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationPassedAspectRatio
+     */
+    public function testValidationPassedAspectRatio(ImageInfo $imageInfo, Image $rules): void
+    {
+        $result = (new Validator(new ImageHandlerContainer($imageInfo)))->validate(__DIR__ . '/16x18.jpg', $rules);
+        $this->assertSame([], $result->getErrorMessagesIndexedByPath());
     }
 
     public function dataValidationFailed(): array
@@ -105,6 +127,31 @@ final class ImageTest extends RuleTestCase
                 ['' => ['The height of image "" cannot be larger than 17 pixels.']],
             ],
         ];
+    }
+
+    public function dataValidationFailedAspectRatio(): array
+    {
+        return [
+            [
+                new ImageInfo(800, 593),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+                ['' => ['The aspect ratio of the image must be 4:3 with margin 1%.']],
+            ],
+            [
+                new ImageInfo(800, 607),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+                ['' => ['The aspect ratio of the image must be 4:3 with margin 1%.']],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataValidationFailedAspectRatio
+     */
+    public function testValidationFailedAspectRatio(ImageInfo $imageInfo, Image $rules, array $errors): void
+    {
+        $result = (new Validator(new ImageHandlerContainer($imageInfo)))->validate(__DIR__ . '/16x18.jpg', $rules);
+        $this->assertSame($errors, $result->getErrorMessagesIndexedByPath());
     }
 
     protected function getDifferentRuleInHandlerItems(): array
