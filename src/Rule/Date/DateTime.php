@@ -80,10 +80,10 @@ final class DateTime extends BaseDate
      * @param string|null $locale Locale to use when formatting or parsing or `null` to use the value specified in the
      * ini setting `intl.default_locale`.
      *
-     * @param int|string|DateTimeInterface|null $min Lower limit of the date. Defaults to `null`, meaning no lower
+     * @param DateTimeInterface|int|string|null $min Lower limit of the date. Defaults to `null`, meaning no lower
      * limit. This can be a unix timestamp or a string representing a date value or `DateTimeInterface` instance.
      *
-     * @param int|string|DateTimeInterface|null $max Upper limit of the date. Defaults to `null`, meaning no upper
+     * @param DateTimeInterface|int|string|null $max Upper limit of the date. Defaults to `null`, meaning no upper
      * limit. This can be a unix timestamp or a string representing a date value or `DateTimeInterface` instance.
      *
      * @param string|null $messageFormat Format of date that used in error messages.
