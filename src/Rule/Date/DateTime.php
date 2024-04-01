@@ -65,7 +65,7 @@ final class DateTime extends BaseDate
      * 'php:m/d/Y, H:i' // the same date in PHP format
      * ```
      *
-     * @param int|null $dateType Format of the date determined by one of the `IntlDateFormatter` constants. It used when
+     * @param int|null $dateType Format of the date determined by one of the `IntlDateFormatter` constants. It is used when
      * {@see $format} is not set.
      *
      * @param int|null $timeType Format of the time determined by one of the `IntlDateFormatter` constants. It used when
