@@ -85,7 +85,7 @@ final class Time extends BaseDate
      *
      * @param string|null $messageFormat Format of time that is used in error messages.
      *
-     * @param int|null $messageTimeType Format of time determined by one of the `IntlDateFormatter` constants that used
+     * @param int|null $messageTimeType Format of time determined by one of the `IntlDateFormatter` constants that is used
      * in error messages. It used when {@see $messageFormat} is not set.
      *
      * @param string|null $incorrectInputMessage A message used when the validated value is not valid time. You may use
