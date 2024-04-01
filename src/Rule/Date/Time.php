@@ -83,7 +83,7 @@ final class Time extends BaseDate
      * @param DateTimeInterface|int|string|null $max Upper limit of the time. Defaults to `null`, meaning no upper
      * limit. This can be a unix timestamp or a string representing a date value or `DateTimeInterface` instance.
      *
-     * @param string|null $messageFormat Format of time that used in error messages.
+     * @param string|null $messageFormat Format of time that is used in error messages.
      *
      * @param int|null $messageTimeType Format of time determined by one of the `IntlDateFormatter` constants that used
      * in error messages. It used when {@see $messageFormat} is not set.
