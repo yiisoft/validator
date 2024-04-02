@@ -116,7 +116,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private string $tooSmallHeightMessage = 'The height of image "{attribute}" cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
         private string $tooLargeWidthMessage = 'The width of image "{attribute}" cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
         private string $tooLargeHeightMessage = 'The height of image "{attribute}" cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
-        private string $invalidAspectRatioMessage = 'The aspect ratio of the image must be {width}:{height} with margin {margin}%.',
+        private string $invalidAspectRatioMessage = 'The aspect ratio of image "{attribute}" must be {width}:{height} with margin {margin}%.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
@@ -125,7 +125,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
             ($this->aspectRatioWidth !== null && $this->aspectRatioHeight === null) ||
             ($this->aspectRatioWidth === null && $this->aspectRatioHeight !== null)
         ) {
-            throw new InvalidArgumentException('Aspect ratio width and height must be specified together');
+            throw new InvalidArgumentException('Aspect ratio width and height must be specified together.');
         }
     }
 

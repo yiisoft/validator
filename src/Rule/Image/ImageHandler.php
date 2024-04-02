@@ -104,7 +104,8 @@ final class ImageHandler implements RuleHandlerInterface
             || $rule->getMinWidth() !== null
             || $rule->getMaxHeight() !== null
             || $rule->getMaxWidth() !== null
-            || ($rule->getAspectRatioWidth() !== null && $rule->getAspectRatioHeight() !== null);
+            || $rule->getAspectRatioWidth() !== null
+            || $rule->getAspectRatioHeight() !== null;
     }
 
     private function getImageFilePath(mixed $value): ?string

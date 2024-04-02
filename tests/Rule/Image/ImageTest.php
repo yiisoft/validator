@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule\Image;
 
 use GuzzleHttp\Psr7\UploadedFile;
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Image\Image;
 use Yiisoft\Validator\Rule\Image\ImageHandler;
 use Yiisoft\Validator\Rule\Image\ImageInfo;
@@ -22,6 +23,30 @@ final class ImageTest extends RuleTestCase
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
+
+    public function dataConfigurationError(): array
+    {
+        return [
+            'aspect ratio, height is missing' => [
+                ['aspectRatioWidth' => 800],
+                'Aspect ratio width and height must be specified together.',
+            ],
+            'aspect ratio, width is missing' => [
+                ['aspectRatioHeight' => 600],
+                'Aspect ratio width and height must be specified together.',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataConfigurationError
+     */
+    public function testConfigurationError(array $arguments, string $expectedExceptionMessage): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        new Image(...$arguments);
+    }
 
     public function testGetName(): void
     {
@@ -51,6 +76,7 @@ final class ImageTest extends RuleTestCase
     public function dataValidationPassedAspectRatio(): array
     {
         return [
+            [new ImageInfo(800, 600), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3)],
             [new ImageInfo(800, 594), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1)],
             [new ImageInfo(800, 595), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1)],
             [new ImageInfo(800, 605), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1)],
@@ -132,15 +158,30 @@ final class ImageTest extends RuleTestCase
     public function dataValidationFailedAspectRatio(): array
     {
         return [
+            'default aspect ratio margin , smaller height' => [
+                new ImageInfo(800, 599),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3),
+                ['' => ['The aspect ratio of image "" must be 4:3 with margin 0%.']],
+            ],
+            'default aspect ratio margin, bigger height' => [
+                new ImageInfo(800, 601),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3),
+                ['' => ['The aspect ratio of image "" must be 4:3 with margin 0%.']],
+            ],
             [
                 new ImageInfo(800, 593),
                 new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
-                ['' => ['The aspect ratio of the image must be 4:3 with margin 1%.']],
+                ['' => ['The aspect ratio of image "" must be 4:3 with margin 1%.']],
             ],
             [
                 new ImageInfo(800, 607),
                 new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
-                ['' => ['The aspect ratio of the image must be 4:3 with margin 1%.']],
+                ['' => ['The aspect ratio of image "" must be 4:3 with margin 1%.']],
+            ],
+            [
+                new ImageInfo(800, 721),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 20),
+                ['' => ['The aspect ratio of image "" must be 4:3 with margin 20%.']],
             ],
         ];
     }
