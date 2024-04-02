@@ -93,20 +93,36 @@ final class ImageTest extends RuleTestCase
     {
         return [
             'default margin' => [new ImageInfo(800, 600), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3)],
+            'boundary width, min' => [
+                new ImageInfo(794, 600),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+            ],
+            'boundary width, max' => [
+                new ImageInfo(806, 600),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+            ],
             'boundary height, min' => [
-                new ImageInfo(800, 594),
-                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
-            ],
-            'height within margin, smaller value' => [
-                new ImageInfo(800, 595),
-                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
-            ],
-            'height within margin, bigger value' => [
-                new ImageInfo(800, 605),
+                new ImageInfo(800, 596),
                 new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
             ],
             'boundary height, max' => [
-                new ImageInfo(800, 606),
+                new ImageInfo(800, 604),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+            ],
+            'width within margin, smaller value' => [
+                new ImageInfo(795, 600),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+            ],
+            'width within margin, bigger value' => [
+                new ImageInfo(805, 600),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+            ],
+            'height within margin, smaller value' => [
+                new ImageInfo(800, 597),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+            ],
+            'height within margin, bigger value' => [
+                new ImageInfo(800, 603),
                 new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
             ],
         ];
@@ -195,6 +211,16 @@ final class ImageTest extends RuleTestCase
                 new ImageInfo(800, 601),
                 new Image(aspectRatioWidth: 4, aspectRatioHeight: 3),
                 ['' => ['The aspect ratio of image "" must be 4:3 with margin 0%.']],
+            ],
+            'width, off by 1, smaller value' => [
+                new ImageInfo(593, 600),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+                ['' => ['The aspect ratio of image "" must be 4:3 with margin 1%.']],
+            ],
+            'width, off by 1, bigger value' => [
+                new ImageInfo(807, 600),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+                ['' => ['The aspect ratio of image "" must be 4:3 with margin 1%.']],
             ],
             'height, off by 1, smaller value' => [
                 new ImageInfo(800, 593),

@@ -154,12 +154,13 @@ final class ImageHandler implements RuleHandlerInterface
             return;
         }
 
-        $allowedHeight = $validatedWidth * $rule->getAspectRatioHeight() / $rule->getAspectRatioWidth();
-        $absoluteMargin = $allowedHeight * $rule->getAspectRatioMargin() / 100;
+        $validatedAspectRatio = $validatedWidth / $validatedHeight;
+        $expectedAspectRatio = $rule->getAspectRatioWidth() / $rule->getAspectRatioHeight();
+        $absoluteMargin = $rule->getAspectRatioMargin() / 100;
 
         if (
-            ($validatedHeight < $allowedHeight - $absoluteMargin) ||
-            ($validatedHeight > $allowedHeight + $absoluteMargin)
+            ($validatedAspectRatio < $expectedAspectRatio - $absoluteMargin) ||
+            ($validatedAspectRatio > $expectedAspectRatio + $absoluteMargin)
         ) {
             $result->addError(
                 $rule->getInvalidAspectRatioMessage(),

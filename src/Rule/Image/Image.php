@@ -37,6 +37,18 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * @param int|null $minHeight Expected minimum height of validated image file.
      * @param int|null $maxWidth Expected maximum width of validated image file.
      * @param int|null $maxHeight Expected maximum height of validated image file.
+     * @param int|null $aspectRatioWidth Expected width part for aspect ratio. For example, for `4:3` aspect ratio, it
+     * will be `4`.
+     * @param int|null $aspectRatioHeight Expected height part for aspect ratio. For example, for `4:3` aspect ratio, it
+     * will be `3`.
+     * @param float $aspectRatioMargin Expected margin for aspect ratio in percents. For example, with value `1` and
+     * `4:3` aspect ratio:
+     *
+     * - If the validated image has height of 600 pixels, the allowed width range is 794 - 806 pixels.
+     * - If the validated image has width of 800 pixels, the allowed height range is 596 - 604 pixels.
+     *
+     * Defaults to `0` meaning no margin is allowed. For example, image with size 800 x 600 pixels and aspect ratio
+     * expected to be `4:3` will meet this requirement.
      * @param string $notImageMessage A message used when the validated value is not valid image file.
      *
      * You may use the following placeholders in the message:
@@ -90,6 +102,19 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      *
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{limit}`: expected maximum height of validated image file.
+     *
+     * @param string $invalidAspectRatioMessage A message used when aspect ratio of validated image file is different
+     * than {@see $aspectRatioWidth}:{@see $aspectRatioHeight} with correction based on {@see $aspectRatioMargin}.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{aspectRatioWidth}`: expected width part for aspect ratio. For example, for `4:3` aspect ratio, it will be
+     * `4`.
+     * - `{aspectRatioHeight}`: expected height part for aspect ratio. For example, for `4:3` aspect ratio, it will be
+     *  `3`.
+     * - `{aspectRatioMargin}`: expected margin for aspect ratio in percents.
+     *
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
