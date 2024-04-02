@@ -215,7 +215,7 @@ final class ImageTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new Image(),
                 [
                     'width' => null,
@@ -224,6 +224,9 @@ final class ImageTest extends RuleTestCase
                     'minHeight' => null,
                     'maxWidth' => null,
                     'maxHeight' => null,
+                    'aspectRatioWidth' => null,
+                    'aspectRatioHeight' => null,
+                    'aspectRatioMargin' => 0.0,
                     'notExactWidthMessage' => [
                         'template' => 'The width of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
@@ -276,7 +279,7 @@ final class ImageTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
+            'exact width and height' => [
                 new Image(width: 800, height: 600),
                 [
                     'width' => 800,
@@ -285,6 +288,9 @@ final class ImageTest extends RuleTestCase
                     'minHeight' => null,
                     'maxWidth' => null,
                     'maxHeight' => null,
+                    'aspectRatioWidth' => null,
+                    'aspectRatioHeight' => null,
+                    'aspectRatioMargin' => 0.0,
                     'notExactWidthMessage' => [
                         'template' => 'The width of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
@@ -337,7 +343,7 @@ final class ImageTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
+            'min and max height with aspect ratio' => [
                 new Image(
                     minWidth: 700,
                     minHeight: 550,
@@ -354,6 +360,9 @@ final class ImageTest extends RuleTestCase
                     'minHeight' => 550,
                     'maxWidth' => 900,
                     'maxHeight' => 750,
+                    'aspectRatioWidth' => 4,
+                    'aspectRatioHeight' => 3,
+                    'aspectRatioMargin' => 1.0,
                     'notExactWidthMessage' => [
                         'template' => 'The width of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
                         'parameters' => [

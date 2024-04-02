@@ -233,6 +233,9 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
             'minHeight' => $this->minHeight,
             'maxWidth' => $this->maxWidth,
             'maxHeight' => $this->maxHeight,
+            'aspectRatioWidth' => $this->aspectRatioWidth,
+            'aspectRatioHeight' => $this->aspectRatioHeight,
+            'aspectRatioMargin' => $this->aspectRatioMargin,
             'notExactWidthMessage' => [
                 'template' => $this->notExactWidthMessage,
                 'parameters' => [
