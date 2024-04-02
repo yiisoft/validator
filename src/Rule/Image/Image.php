@@ -121,6 +121,14 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        if ($this->width !== null && ($this->minWidth !== null || $this->maxWidth !== null)) {
+            throw new InvalidArgumentException('Exact width and min / max width can\'t be specified together.');
+        }
+
+        if ($this->height !== null && ($this->minHeight !== null || $this->maxHeight !== null)) {
+            throw new InvalidArgumentException('Exact width and min / max height can\'t be specified together.');
+        }
+
         if (
             ($this->aspectRatioWidth !== null && $this->aspectRatioHeight === null) ||
             ($this->aspectRatioWidth === null && $this->aspectRatioHeight !== null)

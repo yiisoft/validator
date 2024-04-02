@@ -27,12 +27,28 @@ final class ImageTest extends RuleTestCase
     public function dataConfigurationError(): array
     {
         return [
+            'width and min width' => [
+                ['width' => 800, 'minWidth' => 800],
+                'Exact width and min / max width can\'t be specified together.',
+            ],
+            'width and max width' => [
+                ['width' => 800, 'maxWidth' => 800],
+                'Exact width and min / max width can\'t be specified together.',
+            ],
+            'heifht and min height' => [
+                ['height' => 600, 'minHeight' => 600],
+                'Exact width and min / max height can\'t be specified together.',
+            ],
+            'heifht and max height' => [
+                ['height' => 600, 'maxHeight' => 600],
+                'Exact width and min / max height can\'t be specified together.',
+            ],
             'aspect ratio, height is missing' => [
-                ['aspectRatioWidth' => 800],
+                ['aspectRatioWidth' => 4],
                 'Aspect ratio width and height must be specified together.',
             ],
             'aspect ratio, width is missing' => [
-                ['aspectRatioHeight' => 600],
+                ['aspectRatioHeight' => 3],
                 'Aspect ratio width and height must be specified together.',
             ],
         ];
