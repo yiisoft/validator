@@ -76,11 +76,23 @@ final class ImageTest extends RuleTestCase
     public function dataValidationPassedAspectRatio(): array
     {
         return [
-            [new ImageInfo(800, 600), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3)],
-            [new ImageInfo(800, 594), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1)],
-            [new ImageInfo(800, 595), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1)],
-            [new ImageInfo(800, 605), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1)],
-            [new ImageInfo(800, 606), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1)],
+            'default margin' => [new ImageInfo(800, 600), new Image(aspectRatioWidth: 4, aspectRatioHeight: 3)],
+            'boundary height, min' => [
+                new ImageInfo(800, 594),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+            ],
+            'height within margin, smaller value' => [
+                new ImageInfo(800, 595),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+            ],
+            'height within margin, bigger value' => [
+                new ImageInfo(800, 605),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+            ],
+            'boundary height, max' => [
+                new ImageInfo(800, 606),
+                new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
+            ],
         ];
     }
 
@@ -168,17 +180,17 @@ final class ImageTest extends RuleTestCase
                 new Image(aspectRatioWidth: 4, aspectRatioHeight: 3),
                 ['' => ['The aspect ratio of image "" must be 4:3 with margin 0%.']],
             ],
-            [
+            'height, off by 1, smaller value' => [
                 new ImageInfo(800, 593),
                 new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
                 ['' => ['The aspect ratio of image "" must be 4:3 with margin 1%.']],
             ],
-            [
+            'height, off by 1, bigger value' => [
                 new ImageInfo(800, 607),
                 new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 1),
                 ['' => ['The aspect ratio of image "" must be 4:3 with margin 1%.']],
             ],
-            [
+            'absolute margin calculation mutant, / 100 => / 99' => [
                 new ImageInfo(800, 721),
                 new Image(aspectRatioWidth: 4, aspectRatioHeight: 3, aspectRatioMargin: 20),
                 ['' => ['The aspect ratio of image "" must be 4:3 with margin 20%.']],
