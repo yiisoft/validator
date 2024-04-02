@@ -273,6 +273,14 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
                 'template' => $this->notImageMessage,
                 'parameters' => [],
             ],
+            'invalidAspectRatioMessage' => [
+                'template' => $this->invalidAspectRatioMessage,
+                'parameters' => [
+                    'aspectRatioWidth' => $this->aspectRatioWidth,
+                    'aspectRatioHeight' => $this->aspectRatioHeight,
+                    'aspectRatioMargin' => $this->aspectRatioMargin,
+                ],
+            ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];

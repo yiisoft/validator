@@ -264,6 +264,144 @@ final class ImageTest extends RuleTestCase
                         'template' => 'The value must be an image.',
                         'parameters' => [],
                     ],
+                    'invalidAspectRatioMessage' => [
+                        'template' => 'The aspect ratio of image "{attribute}" must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.',
+                        'parameters' => [
+                            'aspectRatioWidth' => null,
+                            'aspectRatioHeight' => null,
+                            'aspectRatioMargin' => 0.0,
+                        ],
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
+            [
+                new Image(width: 800, height: 600),
+                [
+                    'width' => 800,
+                    'height' => 600,
+                    'minWidth' => null,
+                    'minHeight' => null,
+                    'maxWidth' => null,
+                    'maxHeight' => null,
+                    'notExactWidthMessage' => [
+                        'template' => 'The width of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
+                        'parameters' => [
+                            'exactly' => 800,
+                        ],
+                    ],
+                    'notExactHeightMessage' => [
+                        'template' => 'The height of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
+                        'parameters' => [
+                            'exactly' => 600,
+                        ],
+                    ],
+                    'tooSmallWidthMessage' => [
+                        'template' => 'The width of image "{attribute}" cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'parameters' => [
+                            'limit' => null,
+                        ],
+                    ],
+                    'tooSmallHeightMessage' => [
+                        'template' => 'The height of image "{attribute}" cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'parameters' => [
+                            'limit' => null,
+                        ],
+                    ],
+                    'tooLargeWidthMessage' => [
+                        'template' => 'The width of image "{attribute}" cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'parameters' => [
+                            'limit' => null,
+                        ],
+                    ],
+                    'tooLargeHeightMessage' => [
+                        'template' => 'The height of image "{attribute}" cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'parameters' => [
+                            'limit' => null,
+                        ],
+                    ],
+                    'notImageMessage' => [
+                        'template' => 'The value must be an image.',
+                        'parameters' => [],
+                    ],
+                    'invalidAspectRatioMessage' => [
+                        'template' => 'The aspect ratio of image "{attribute}" must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.',
+                        'parameters' => [
+                            'aspectRatioWidth' => null,
+                            'aspectRatioHeight' => null,
+                            'aspectRatioMargin' => 0.0,
+                        ],
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
+            [
+                new Image(
+                    minWidth: 700,
+                    minHeight: 550,
+                    maxWidth: 900,
+                    maxHeight: 750,
+                    aspectRatioWidth: 4,
+                    aspectRatioHeight: 3,
+                    aspectRatioMargin: 1,
+                ),
+                [
+                    'width' => null,
+                    'height' => null,
+                    'minWidth' => 700,
+                    'minHeight' => 550,
+                    'maxWidth' => 900,
+                    'maxHeight' => 750,
+                    'notExactWidthMessage' => [
+                        'template' => 'The width of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
+                        'parameters' => [
+                            'exactly' => null,
+                        ],
+                    ],
+                    'notExactHeightMessage' => [
+                        'template' => 'The height of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
+                        'parameters' => [
+                            'exactly' => null,
+                        ],
+                    ],
+                    'tooSmallWidthMessage' => [
+                        'template' => 'The width of image "{attribute}" cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'parameters' => [
+                            'limit' => 700,
+                        ],
+                    ],
+                    'tooSmallHeightMessage' => [
+                        'template' => 'The height of image "{attribute}" cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'parameters' => [
+                            'limit' => 550,
+                        ],
+                    ],
+                    'tooLargeWidthMessage' => [
+                        'template' => 'The width of image "{attribute}" cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'parameters' => [
+                            'limit' => 900,
+                        ],
+                    ],
+                    'tooLargeHeightMessage' => [
+                        'template' => 'The height of image "{attribute}" cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'parameters' => [
+                            'limit' => 750,
+                        ],
+                    ],
+                    'notImageMessage' => [
+                        'template' => 'The value must be an image.',
+                        'parameters' => [],
+                    ],
+                    'invalidAspectRatioMessage' => [
+                        'template' => 'The aspect ratio of image "{attribute}" must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.',
+                        'parameters' => [
+                            'aspectRatioWidth' => 4,
+                            'aspectRatioHeight' => 3,
+                            'aspectRatioMargin' => 1.0,
+                        ],
+                    ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
