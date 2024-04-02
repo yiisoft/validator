@@ -165,9 +165,9 @@ final class ImageHandler implements RuleHandlerInterface
                 $rule->getInvalidAspectRatioMessage(),
                 [
                     'attribute' => $context->getTranslatedAttribute(),
-                    'width' => $rule->getAspectRatioWidth(),
-                    'height' => $rule->getAspectRatioHeight(),
-                    'margin' => $rule->getAspectRatioMargin(),
+                    'aspectRatioWidth' => $rule->getAspectRatioWidth(),
+                    'aspectRatioHeight' => $rule->getAspectRatioHeight(),
+                    'aspectRatioMargin' => $rule->getAspectRatioMargin(),
                 ],
             );
         }
