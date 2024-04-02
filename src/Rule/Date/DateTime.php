@@ -13,7 +13,7 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Defines validation options to check that the value is a date with time.
  *
- * An example for simple that can be used to validate the date with time:
+ * A simple example of how to use it to validate a date with time:
  *
  * ```php
  * $rules = [
@@ -86,13 +86,13 @@ final class DateTime extends BaseDate
      * @param DateTimeInterface|int|string|null $max Upper limit of the date. Defaults to `null`, meaning no upper
      * limit. This can be a unix timestamp or a string representing a date value or `DateTimeInterface` instance.
      *
-     * @param string|null $messageFormat Format of date that used in error messages.
+     * @param string|null $messageFormat Date format that is used in error messages.
      *
-     * @param int|null $messageDateType Format of date determined by one of the `IntlDateFormatter` constants that used
-     * in error messages. It used when {@see $messageFormat} is not set.
+     * @param int|null $messageDateType One of the `IntlDateFormatter` constants that used determines date format for
+     * error messages used when {@see $messageFormat} is not set.
      *
-     * @param int|null $messageTimeType Format of time determined by one of the `IntlDateFormatter` constants that used
-     * in error messages. It used when {@see $messageFormat} is not set.
+     * @param int|null $messageTimeType One of the `IntlDateFormatter` constants that used determines time format for
+     * error messages used when {@see $messageFormat} is not set.
      *
      * @param string|null $incorrectInputMessage A message used when the validated value is not valid date. You may use
      * the following placeholders in the message:

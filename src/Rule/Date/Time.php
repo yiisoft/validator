@@ -13,7 +13,7 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Defines validation options to check that the value is a time.
  *
- * An simple example on how to validate the time:
+ * A simple example of how to use it to validate a time:
  *
  * ```php
  * $rules = [
@@ -65,8 +65,8 @@ final class Time extends BaseDate
      * 'php:H:i' // time in PHP format
      * ```
      *
-     * @param int|null $timeType Format of the time determined by one of the `IntlDateFormatter` constants. It used when
-     * {@see $format} is not set.
+     * @param int|null $timeType Format of the time determined by one of the `IntlDateFormatter` constants. It is used
+     * when {@see $format} is not set.
      *
      * @param string|null $timeZone The timezone to use for parsing and formatting date values. This can be any value
      * that may be passed to
@@ -85,8 +85,8 @@ final class Time extends BaseDate
      *
      * @param string|null $messageFormat Format of time that is used in error messages.
      *
-     * @param int|null $messageTimeType Format of time determined by one of the `IntlDateFormatter` constants that is used
-     * in error messages. It used when {@see $messageFormat} is not set.
+     * @param int|null $messageTimeType One of the `IntlDateFormatter` constants that used determines time format for
+     * error messages used when {@see $messageFormat} is not set.
      *
      * @param string|null $incorrectInputMessage A message used when the validated value is not valid time. You may use
      * the following placeholders in the message:
