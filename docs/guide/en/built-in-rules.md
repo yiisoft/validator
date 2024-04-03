@@ -49,6 +49,12 @@ Here is a list of all available built-in rules, divided by category.
 
 - [Image](../../../src/Rule/Image/Image.php)
 
+### Date rules
+
+- [Date](../../../src/Rule/Date/Date.php)
+- [DateTime](../../../src/Rule/Date/DateTime.php)
+- [Time](../../../src/Rule/Date/Time.php)
+
 ### General purpose rules
 
 - [Callback](../../../src/Rule/Callback.php)
