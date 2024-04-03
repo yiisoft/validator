@@ -104,8 +104,7 @@ final class ImageHandler implements RuleHandlerInterface
             || $rule->getMinWidth() !== null
             || $rule->getMaxHeight() !== null
             || $rule->getMaxWidth() !== null
-            || $rule->getAspectRatioWidth() !== null
-            || $rule->getAspectRatioHeight() !== null;
+            || $rule->getAspectRatio() !== null;
     }
 
     private function getImageFilePath(mixed $value): ?string
@@ -150,13 +149,13 @@ final class ImageHandler implements RuleHandlerInterface
         ValidationContext $context,
         Result $result,
     ): void {
-        if ($rule->getAspectRatioWidth() === null || $rule->getAspectRatioHeight() === null) {
+        if ($rule->getAspectRatio() === null) {
             return;
         }
 
         $validatedAspectRatio = $validatedWidth / $validatedHeight;
-        $expectedAspectRatio = $rule->getAspectRatioWidth() / $rule->getAspectRatioHeight();
-        $absoluteMargin = $rule->getAspectRatioMargin() / 100;
+        $expectedAspectRatio = $rule->getAspectRatio()->getWidth() / $rule->getAspectRatio()->getHeight();
+        $absoluteMargin = $rule->getAspectRatio()->getMargin() / 99;
 
         if (
             ($validatedAspectRatio < $expectedAspectRatio - $absoluteMargin) ||
@@ -166,9 +165,9 @@ final class ImageHandler implements RuleHandlerInterface
                 $rule->getInvalidAspectRatioMessage(),
                 [
                     'attribute' => $context->getTranslatedAttribute(),
-                    'aspectRatioWidth' => $rule->getAspectRatioWidth(),
-                    'aspectRatioHeight' => $rule->getAspectRatioHeight(),
-                    'aspectRatioMargin' => $rule->getAspectRatioMargin(),
+                    'aspectRatioWidth' => $rule->getAspectRatio()->getWidth(),
+                    'aspectRatioHeight' => $rule->getAspectRatio()->getHeight(),
+                    'aspectRatioMargin' => $rule->getAspectRatio()->getMargin(),
                 ],
             );
         }

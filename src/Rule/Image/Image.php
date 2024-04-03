@@ -37,18 +37,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * @param int|null $minHeight Expected minimum height of validated image file.
      * @param int|null $maxWidth Expected maximum width of validated image file.
      * @param int|null $maxHeight Expected maximum height of validated image file.
-     * @param int|null $aspectRatioWidth Expected width part for aspect ratio. For example, for `4:3` aspect ratio, it
-     * will be `4`.
-     * @param int|null $aspectRatioHeight Expected height part for aspect ratio. For example, for `4:3` aspect ratio, it
-     * will be `3`.
-     * @param float $aspectRatioMargin Expected margin for aspect ratio in percents. For example, with value `1` and
-     * `4:3` aspect ratio:
-     *
-     * - If the validated image has height of 600 pixels, the allowed width range is 794 - 806 pixels.
-     * - If the validated image has width of 800 pixels, the allowed height range is 596 - 604 pixels.
-     *
-     * Defaults to `0` meaning no margin is allowed. For example, image with size 800 x 600 pixels and aspect ratio
-     * expected to be `4:3` will meet this requirement.
+     * @param ImageAspectRatio|null $aspectRatio Expected aspect ratio of validated image file.
      * @param string $notImageMessage A message used when the validated value is not valid image file.
      *
      * You may use the following placeholders in the message:
@@ -104,7 +93,8 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      * - `{limit}`: expected maximum height of validated image file.
      *
      * @param string $invalidAspectRatioMessage A message used when aspect ratio of validated image file is different
-     * than {@see $aspectRatioWidth}:{@see $aspectRatioHeight} with correction based on {@see $aspectRatioMargin}.
+     * than {@see ImageAspectRatio::$width}:{@see ImageAspectRatio::$height} with correction based on
+     * {@see ImageAspectRatio::$margin}.
      *
      * You may use the following placeholders in the message:
      *
@@ -131,9 +121,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private ?int $minHeight = null,
         private ?int $maxWidth = null,
         private ?int $maxHeight = null,
-        private ?int $aspectRatioWidth = null,
-        private ?int $aspectRatioHeight = null,
-        private float $aspectRatioMargin = 0,
+        private ?ImageAspectRatio $aspectRatio = null,
         private string $notImageMessage = 'The value must be an image.',
         private string $notExactWidthMessage = 'The width of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
         private string $notExactHeightMessage = 'The height of image "{attribute}" must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
@@ -152,13 +140,6 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
 
         if ($this->height !== null && ($this->minHeight !== null || $this->maxHeight !== null)) {
             throw new InvalidArgumentException('Exact width and min / max height can\'t be specified together.');
-        }
-
-        if (
-            ($this->aspectRatioWidth !== null && $this->aspectRatioHeight === null) ||
-            ($this->aspectRatioWidth === null && $this->aspectRatioHeight !== null)
-        ) {
-            throw new InvalidArgumentException('Aspect ratio width and height must be specified together.');
         }
     }
 
@@ -192,19 +173,9 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         return $this->maxHeight;
     }
 
-    public function getAspectRatioWidth(): ?int
+    public function getAspectRatio(): ?ImageAspectRatio
     {
-        return $this->aspectRatioWidth;
-    }
-
-    public function getAspectRatioHeight(): ?int
-    {
-        return $this->aspectRatioHeight;
-    }
-
-    public function getAspectRatioMargin(): float
-    {
-        return $this->aspectRatioMargin;
+        return $this->aspectRatio;
     }
 
     public function getNotImageMessage(): string
@@ -266,9 +237,9 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
             'minHeight' => $this->minHeight,
             'maxWidth' => $this->maxWidth,
             'maxHeight' => $this->maxHeight,
-            'aspectRatioWidth' => $this->aspectRatioWidth,
-            'aspectRatioHeight' => $this->aspectRatioHeight,
-            'aspectRatioMargin' => $this->aspectRatioMargin,
+            'aspectRatioWidth' => $this->getAspectRatio()?->getWidth(),
+            'aspectRatioHeight' => $this->getAspectRatio()?->getHeight(),
+            'aspectRatioMargin' => $this->getAspectRatio()?->getMargin(),
             'notExactWidthMessage' => [
                 'template' => $this->notExactWidthMessage,
                 'parameters' => [
@@ -312,9 +283,9 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
             'invalidAspectRatioMessage' => [
                 'template' => $this->invalidAspectRatioMessage,
                 'parameters' => [
-                    'aspectRatioWidth' => $this->aspectRatioWidth,
-                    'aspectRatioHeight' => $this->aspectRatioHeight,
-                    'aspectRatioMargin' => $this->aspectRatioMargin,
+                    'aspectRatioWidth' => $this->getAspectRatio()?->getWidth(),
+                    'aspectRatioHeight' => $this->getAspectRatio()?->getHeight(),
+                    'aspectRatioMargin' => $this->getAspectRatio()?->getMargin(),
                 ],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
