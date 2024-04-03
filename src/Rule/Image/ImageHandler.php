@@ -155,7 +155,7 @@ final class ImageHandler implements RuleHandlerInterface
 
         $validatedAspectRatio = $validatedWidth / $validatedHeight;
         $expectedAspectRatio = $rule->getAspectRatio()->getWidth() / $rule->getAspectRatio()->getHeight();
-        $absoluteMargin = $rule->getAspectRatio()->getMargin() / 99;
+        $absoluteMargin = $rule->getAspectRatio()->getMargin() / 100;
 
         if (
             ($validatedAspectRatio < $expectedAspectRatio - $absoluteMargin) ||

@@ -229,9 +229,9 @@ final class ImageTest extends RuleTestCase
                 ['' => ['The aspect ratio of image "" must be 4:3 with margin 1%.']],
             ],
             'absolute margin calculation mutant, / 100 => / 99' => [
-                new ImageInfo(800, 721),
-                new Image(aspectRatio: new ImageAspectRatio(width: 4, height: 3, margin: 22)),
-                ['' => ['The aspect ratio of image "" must be 4:3 with margin 22%.']],
+                new ImageInfo(801, 600),
+                new Image(aspectRatio: new ImageAspectRatio(width: 1, height: 3, margin: 100)),
+                ['' => ['The aspect ratio of image "" must be 1:3 with margin 100%.']],
             ],
         ];
     }
