@@ -132,4 +132,23 @@ return [
     'The allowed types are integer, float and string.' => 'Разрешённые типы: integer, float и string.',
     'Value must be no less than {min}.' => 'Значение должно быть не меньше {min}.',
     'Value must be no greater than {max}.' => 'Значение должно быть не больше {max}.',
+
+    /**
+     * @see \Yiisoft\Validator\Rule\Date\Date
+     * @see \Yiisoft\Validator\Rule\Date\DateTime
+     * @see \Yiisoft\Validator\Rule\Date\Time
+     */
+    'The value must be no early than {limit}.' => 'Значение должно быть не ранее {limit}.',
+    'The value must be no late than {limit}.' => 'Значение должно быть не позднее {limit}.',
+
+    /**
+     * @see \Yiisoft\Validator\Rule\Date\Date
+     * @see \Yiisoft\Validator\Rule\Date\DateTime
+     */
+    'Invalid date value.' => 'Некорректное значение даты.',
+
+    /**
+     * @see \Yiisoft\Validator\Rule\Date\Time
+     */
+    'Invalid time value.' => 'Некорректное значение времени.',
 ];
