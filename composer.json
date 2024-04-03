@@ -52,7 +52,7 @@
         "yiisoft/yii-debug": "dev-master|dev-php80"
     },
     "suggest": {
-        "ext-intl": "Allows using IDN validation for emails",
+        "ext-intl": "Allows using date rules and IDN validation for emails",
         "ext-fileinfo": "To use image rule",
         "yiisoft/di": "To create rule handlers via Yii DI"
     },
