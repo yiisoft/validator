@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Image;
 
 /**
- * {@link https://en.wikipedia.org/wiki/Aspect_ratio_(image)}
+ * @link https://en.wikipedia.org/wiki/Aspect_ratio_(image)
  */
 final class ImageAspectRatio
 {
