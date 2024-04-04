@@ -10,12 +10,12 @@ use Yiisoft\Validator\Rule\Image\Image;
 use Yiisoft\Validator\Rule\Image\ImageAspectRatio;
 use Yiisoft\Validator\Rule\Image\ImageHandler;
 use Yiisoft\Validator\Rule\Image\ImageInfo;
+use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
-use Yiisoft\Validator\Tests\Support\RuleHandlerResolver\ImageHandlerContainer;
 use Yiisoft\Validator\Validator;
 
 final class ImageTest extends RuleTestCase
@@ -129,7 +129,10 @@ final class ImageTest extends RuleTestCase
      */
     public function testValidationPassedAspectRatio(ImageInfo $imageInfo, Image $rules): void
     {
-        $result = (new Validator(new ImageHandlerContainer($imageInfo)))->validate(__DIR__ . '/16x18.jpg', $rules);
+        $ruleHandlerResolver = new SimpleRuleHandlerContainer([
+            ImageHandler::class => new ImageHandler(new StubImageInfoProvider($imageInfo)),
+        ]);
+        $result = (new Validator($ruleHandlerResolver))->validate(__DIR__ . '/16x18.jpg', $rules);
         $this->assertSame([], $result->getErrorMessagesIndexedByPath());
     }
 
@@ -278,8 +281,29 @@ final class ImageTest extends RuleTestCase
      */
     public function testValidationFailedAspectRatio(ImageInfo $imageInfo, Image $rules, array $errors): void
     {
-        $result = (new Validator(new ImageHandlerContainer($imageInfo)))->validate(__DIR__ . '/16x18.jpg', $rules);
+        $ruleHandlerResolver = new SimpleRuleHandlerContainer([
+            ImageHandler::class => new ImageHandler(new StubImageInfoProvider($imageInfo)),
+        ]);
+        $result = (new Validator($ruleHandlerResolver))->validate(__DIR__ . '/16x18.jpg', $rules);
         $this->assertSame($errors, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testValidationFailedAspectRatioWithCustomMessage(): void
+    {
+        $ruleHandlerResolver = new SimpleRuleHandlerContainer([
+            ImageHandler::class => new ImageHandler(new StubImageInfoProvider(new ImageInfo(800, 599))),
+        ]);
+        $rules = [
+            'a' => new Image(
+                aspectRatio: new ImageAspectRatio(width: 4, height: 3),
+                invalidAspectRatioMessage: 'Attribute - {attribute}.',
+            ),
+        ];
+        $result = (new Validator($ruleHandlerResolver))->validate(['a' => __DIR__ . '/16x18.jpg'], $rules);
+        $this->assertSame(
+            ['a' => ['Attribute - a.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
     }
 
     protected function getDifferentRuleInHandlerItems(): array
