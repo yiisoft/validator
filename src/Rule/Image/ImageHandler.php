@@ -91,6 +91,8 @@ final class ImageHandler implements RuleHandlerInterface
             ]);
         }
 
+        $this->validateAspectRatio($width, $height, $rule, $context, $result);
+
         return $result;
     }
 
@@ -101,7 +103,8 @@ final class ImageHandler implements RuleHandlerInterface
             || $rule->getMinHeight() !== null
             || $rule->getMinWidth() !== null
             || $rule->getMaxHeight() !== null
-            || $rule->getMaxWidth() !== null;
+            || $rule->getMaxWidth() !== null
+            || $rule->getAspectRatio() !== null;
     }
 
     private function getImageFilePath(mixed $value): ?string
@@ -137,5 +140,36 @@ final class ImageHandler implements RuleHandlerInterface
             $value = $value->getError() === UPLOAD_ERR_OK ? $value->getStream()->getMetadata('uri') : null;
         }
         return is_string($value) ? $value : null;
+    }
+
+    private function validateAspectRatio(
+        int $validatedWidth,
+        int $validatedHeight,
+        Image $rule,
+        ValidationContext $context,
+        Result $result,
+    ): void {
+        if ($rule->getAspectRatio() === null) {
+            return;
+        }
+
+        $validatedAspectRatio = $validatedWidth / $validatedHeight;
+        $expectedAspectRatio = $rule->getAspectRatio()->getWidth() / $rule->getAspectRatio()->getHeight();
+        $absoluteMargin = $rule->getAspectRatio()->getMargin() / 100;
+
+        if (
+            ($validatedAspectRatio < $expectedAspectRatio - $absoluteMargin) ||
+            ($validatedAspectRatio > $expectedAspectRatio + $absoluteMargin)
+        ) {
+            $result->addError(
+                $rule->getInvalidAspectRatioMessage(),
+                [
+                    'attribute' => $context->getTranslatedAttribute(),
+                    'aspectRatioWidth' => $rule->getAspectRatio()->getWidth(),
+                    'aspectRatioHeight' => $rule->getAspectRatio()->getHeight(),
+                    'aspectRatioMargin' => $rule->getAspectRatio()->getMargin(),
+                ],
+            );
+        }
     }
 }
