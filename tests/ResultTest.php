@@ -247,7 +247,7 @@ class ResultTest extends TestCase
             'same errors in added results' => [
                 (new Result())->addError('error1', valuePath: ['attribute1']),
                 [
-                    (new Result())->addError('error1', valuePath: ['attribute1'])
+                    (new Result())->addError('error1', valuePath: ['attribute1']),
                 ],
                 (new Result())
                     ->addError('error1', valuePath: ['attribute1'])

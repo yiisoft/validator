@@ -266,7 +266,7 @@ final class Result
      * @param Result ...$results Other results for merging.
      * @return $this Same instance of result.
      */
-    public function add(Result ...$results): self
+    public function add(self ...$results): self
     {
         foreach ($results as $result) {
             $this->errors = array_merge($this->errors, $result->getErrors());
