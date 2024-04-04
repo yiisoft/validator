@@ -1,5 +1,9 @@
 # Yii Validator Change Log
 
+## 1.3.1 under development
+
+- no changes in this release.
+
 ## 1.3.0 April 04, 2024
 
 - New #665: Add methods `addErrorWithFormatOnly()` and `addErrorWithoutPostProcessing()` to `Result` object (@vjik)
