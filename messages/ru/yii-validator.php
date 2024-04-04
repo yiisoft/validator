@@ -142,8 +142,8 @@ return [
      * @see \Yiisoft\Validator\Rule\Date\DateTime
      * @see \Yiisoft\Validator\Rule\Date\Time
      */
-    'The value must be no early than {limit}.' => 'Значение должно быть не ранее {limit}.',
-    'The value must be no late than {limit}.' => 'Значение должно быть не позднее {limit}.',
+    '{Attribute} must be no early than {limit}.' => '{Attribute} должно быть не ранее {limit}.',
+    '{Attribute} must be no late than {limit}.' => '{Attribute} должно быть не позднее {limit}.',
 
     /**
      * @see \Yiisoft\Validator\Rule\Date\Date

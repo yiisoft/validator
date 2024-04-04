@@ -138,7 +138,7 @@ final class ImageTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $notImageResult = ['' => ['The value must be an image.']];
+        $notImageResult = ['' => ['Value must be an image.']];
 
         return [
             'heic-with-width' => [__DIR__ . '/797x808.HEIC', new Image(width: 10), $notImageResult],
@@ -149,16 +149,16 @@ final class ImageTest extends RuleTestCase
             'heic-with-min-height' => [__DIR__ . '/797x808.HEIC', new Image(maxHeight: 10), $notImageResult],
             'heic-with-size-and-custom-message' => [
                 ['a' => __DIR__ . '/797x808.HEIC'],
-                ['a' => new Image(minWidth: 10, notImageMessage: 'The value of "{attribute}" must be an image.')],
-                ['a' => ['The value of "a" must be an image.']],
+                ['a' => new Image(minWidth: 10, notImageMessage: 'Value of "{attribute}" must be an image.')],
+                ['a' => ['Value of "a" must be an image.']],
             ],
             'empty-string' => ['', new Image(), $notImageResult],
             'not-file-path' => ['test', new Image(), $notImageResult],
             'not-image' => [__DIR__ . '/ImageTest.php', new Image(), $notImageResult],
             'not-image-with-custom-message' => [
                 ['a' => __DIR__ . '/ImageTest.php'],
-                ['a' => new Image(notImageMessage: 'The value of "{attribute}" must be an image.')],
-                ['a' => ['The value of "a" must be an image.']],
+                ['a' => new Image(notImageMessage: 'Value of "{attribute}" must be an image.')],
+                ['a' => ['Value of "a" must be an image.']],
             ],
             'not-uploaded-file' => [
                 new UploadedFile(__DIR__ . '/16x18.jpg', 0, UPLOAD_ERR_NO_FILE),
@@ -363,7 +363,7 @@ final class ImageTest extends RuleTestCase
                         ],
                     ],
                     'notImageMessage' => [
-                        'template' => 'The value must be an image.',
+                        'template' => '{Attribute} must be an image.',
                         'parameters' => [],
                     ],
                     'invalidAspectRatioMessage' => [
@@ -427,7 +427,7 @@ final class ImageTest extends RuleTestCase
                         ],
                     ],
                     'notImageMessage' => [
-                        'template' => 'The value must be an image.',
+                        'template' => '{Attribute} must be an image.',
                         'parameters' => [],
                     ],
                     'invalidAspectRatioMessage' => [
@@ -497,7 +497,7 @@ final class ImageTest extends RuleTestCase
                         ],
                     ],
                     'notImageMessage' => [
-                        'template' => 'The value must be an image.',
+                        'template' => '{Attribute} must be an image.',
                         'parameters' => [],
                     ],
                     'invalidAspectRatioMessage' => [

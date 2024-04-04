@@ -59,7 +59,10 @@ abstract class BaseDateHandler implements RuleHandlerInterface
         if ($date === null) {
             $result->addError(
                 $rule->getIncorrectInputMessage() ?? $this->incorrectInputMessage,
-                ['attribute' => $context->getTranslatedAttribute()]
+                [
+                    'attribute' => $context->getTranslatedAttribute(),
+                    'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                ]
             );
             return $result;
         }
@@ -70,6 +73,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
                 $rule->getTooEarlyMessage() ?? $this->tooEarlyMessage,
                 [
                     'attribute' => $context->getTranslatedAttribute(),
+                    'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                     'value' => $this->formatDate($date, $rule, $timeZone),
                     'limit' => $this->formatDate($min, $rule, $timeZone),
                 ]
@@ -83,6 +87,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
                 $rule->getTooLateMessage() ?? $this->tooLateMessage,
                 [
                     'attribute' => $context->getTranslatedAttribute(),
+                    'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                     'value' => $this->formatDate($date, $rule, $timeZone),
                     'limit' => $this->formatDate($max, $rule, $timeZone),
                 ]

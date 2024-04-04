@@ -74,22 +74,22 @@ final class DateTimeTest extends RuleTestCase
             'min' => [
                 '2024-03-29, 12:35',
                 new DateTime(format: 'yyyy-MM-dd, HH:mm', min: '2025-01-01, 11:00'),
-                ['' => ['The value must be no early than 1/1/25, 11:00 AM.']],
+                ['' => ['Value must be no early than 1/1/25, 11:00 AM.']],
             ],
             'max' => [
                 '2024-03-29, 12:50',
                 new DateTime(format: 'php:Y-m-d, H:i', max: '2024-01-01, 00:00'),
-                ['' => ['The value must be no late than 1/1/24, 12:00 AM.']],
+                ['' => ['Value must be no late than 1/1/24, 12:00 AM.']],
             ],
             'timestamp' => [
                 1711705158,
                 new DateTime(format: 'php:d.m.Y, H:i:s', min: 1711705200),
-                ['' => ['The value must be no early than 3/29/24, 9:40 AM.']],
+                ['' => ['Value must be no early than 3/29/24, 9:40 AM.']],
             ],
             'without-message-date-and-time-type' => [
                 '29*03*2024*12*35',
                 new DateTime(format: 'php:d*m*Y*H*i', max: '11*11*2023*12*35'),
-                ['' => ['The value must be no late than 11/11/23, 12:35 PM.']],
+                ['' => ['Value must be no late than 11/11/23, 12:35 PM.']],
                 [DateTimeHandler::class => new DateTimeHandler(messageDateType: null, messageTimeType: null)],
             ],
         ];

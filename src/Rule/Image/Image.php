@@ -10,7 +10,7 @@ use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -24,7 +24,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -122,7 +122,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private ?int $maxWidth = null,
         private ?int $maxHeight = null,
         private ?ImageAspectRatio $aspectRatio = null,
-        private string $notImageMessage = 'The value must be an image.',
+        private string $notImageMessage = '{Attribute} must be an image.',
         private string $notExactWidthMessage = 'The width must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
         private string $notExactHeightMessage = 'The height must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
         private string $tooSmallWidthMessage = 'The width cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
