@@ -1,11 +1,11 @@
 # Yii Validator Change Log
 
-## 1.3.0 under development
+## 1.3.0 April 04, 2024
 
 - New #665: Add methods `addErrorWithFormatOnly()` and `addErrorWithoutPostProcessing()` to `Result` object (@vjik)
-- Enh #668: Clarify psalm types in `Result` (@vjik)
 - New #670, #677, #680: Add `Image` validation rule (@vjik, @arogachev)
 - New #678: Add `Date`, `DateTime` and `Time` validation rules (@vjik)
+- Enh #668: Clarify psalm types in `Result` (@vjik)
 
 ## 1.2.0 February 21, 2024
 
