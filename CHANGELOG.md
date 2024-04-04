@@ -22,6 +22,16 @@
 - Enh #622: Use `json_validate()` built-in PHP function in `JsonHandler` if code is run with PHP 8.3 (@arogachev)
 - Enh #639: Simplify validation of JSON in `JsonHandler` using built-in PHP functions for PHP versions below 8.3
   (@arogachev)
+## 1.3.1 under development
+
+- no changes in this release.
+
+## 1.3.0 April 04, 2024
+
+- New #665: Add methods `addErrorWithFormatOnly()` and `addErrorWithoutPostProcessing()` to `Result` object (@vjik)
+- New #670, #677, #680: Add `Image` validation rule (@vjik, @arogachev)
+- New #678: Add `Date`, `DateTime` and `Time` validation rules (@vjik)
+- Enh #668: Clarify psalm types in `Result` (@vjik)
 
 ## 1.2.0 February 21, 2024
 

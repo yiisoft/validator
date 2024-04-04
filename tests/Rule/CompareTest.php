@@ -542,9 +542,12 @@ final class CompareTest extends RuleTestCase
      * @dataProvider dataValidationPassed
      * @dataProvider dataValidationPassedWithDifferentTypes
      */
-    public function testValidationPassed(mixed $data, ?array $rules = null): void
-    {
-        parent::testValidationPassed($data, $rules);
+    public function testValidationPassed(
+        mixed $data,
+        array|RuleInterface|null $rules = null,
+        ?array $ruleHandlers = null
+    ): void {
+        parent::testValidationPassed($data, $rules, $ruleHandlers);
     }
 
     public function dataValidationFailed(): array
@@ -992,8 +995,9 @@ final class CompareTest extends RuleTestCase
         mixed $data,
         array|RuleInterface|null $rules,
         array $errorMessagesIndexedByPath,
+        ?array $ruleHandlers = null
     ): void {
-        parent::testValidationFailed($data, $rules, $errorMessagesIndexedByPath);
+        parent::testValidationFailed($data, $rules, $errorMessagesIndexedByPath, $ruleHandlers);
     }
 
     private function extendDataWithDifferentTypes(array $initialData): array
