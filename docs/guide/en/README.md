@@ -16,7 +16,7 @@ A package for validating data.
 - [Built-in rules](built-in-rules.md)
   - [Callback](built-in-rules-callback.md)
   - [Composite](built-in-rules-composite.md)
-  - [Each](built-in-rules-each.md)
+  - [Каждый](built-in-rules-each.md)
   - [Nested](built-in-rules-nested.md)
   - [Required](built-in-rules-required.md)
   - [StopOnError](built-in-rules-stop-on-error.md)

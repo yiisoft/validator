@@ -1,7 +1,6 @@
-# `Each` - applying the same rules for each data item in the set
+# `Каждый` - применение одних и тех же правил для каждого элемента в наборе
 
-The `Each` rule allows the same rules to be applied to each data item in the set. The following example shows
-the configuration for validating [RGB color] components:
+Правило `Каждый` позволяет применять одинаковые правила к каждому элементу данных в наборе. Следующий пример показывает конфигурацию для валидации компонентов [модели RGB-цветов]:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -12,7 +11,7 @@ new Each([
 ]);
 ```
 
-By combining with another built-in rule called `Count` we can be sure that the number of components is exactly 3:
+Комбинируя его с другим встроенным правилом `Количество`, мы можем быть уверены, что количество компонентов действительно равно 3:
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -20,18 +19,17 @@ use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Integer;
 
 $rules = [
-    // Applies to a whole set.
+    // Применяется ко всему набору.
     new Count(3),
-    // Applies to individual set items.
+    // Применяется к отдельному элементу набора.
     new Each(        
-        // For single rules, wrapping with array / iterable is not necessary.
+        // Для одиночных правил не требуется оборачивать его в массив / итерируемый объект.
         new Integer(min: 0, max: 255),
     ),
 ];
 ```
 
-Validated data items are not limited to only "simple" values - `Each` can be used both within a `Nested` and contain 
-`Nested` rule covering one-to-many and many-to-many relations:
+Проверяемые элементы данных не ограничиваются только "простыми значениями" - `Каждый` может использоваться как внутри правила `Вложенный` так и содержать его, имея отношения один-ко-многим и многие-ко-многим:
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -59,7 +57,7 @@ $rule = new Nested([
 ]);
 ```
 
-For more information about using it with `Nested`, see the [Nested] guide.
+Дополнительную информацию об использовании с правилом `Вложенный` см. в [руководстве]
 
-[RGB color]: https://en.wikipedia.org/wiki/RGB_color_model
-[Nested]: built-in-rules-nested.md
+[модели RGB-цветов]: https://en.wikipedia.org/wiki/RGB_color_model
+[руководстве]: built-in-rules-nested.md
