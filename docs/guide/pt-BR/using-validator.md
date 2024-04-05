@@ -1,12 +1,12 @@
-# Using validator
+# Usando validações
 
-Validator allows to check data in any format. Here are some of the most common use cases.
+Validator permite verificar dados em qualquer formato. Aqui estão alguns dos casos de uso mais comuns.
 
-## Data
+## Dados
 
-### Single value
+### Valor único
 
-In the simplest case, the validator can be used to check a single value:
+No caso mais simples, o validador pode ser usado para verificar um único valor:
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -21,11 +21,11 @@ $rules = [
 $result = (new Validator())->validate($value, $rules);
 ```
 
-> **Note:** Use [Each] rule to validate multiple values of the same type.
+> **Observação:** Use a regra [Each] para validar vários valores do mesmo tipo.
 
 ### Array
 
-It's possible to validate an array both as a whole and by individual items. For example:
+É possível validar um array como um todo ou por itens individuais. Por exemplo:
 
 ```php
 use Yiisoft\Validator\Rule\AtLeast;
@@ -43,33 +43,33 @@ $data = [
     'phone' => null,
 ];
 $rules = [
-    // The rules that are not related to a specific attribute
+    // As regras que não estão relacionadas a um atributo específico
 
-    // At least one of the attributes ("email" and "phone") must be passed and have non-empty value.  
+    // Pelo menos um dos atributos ("email" e "phone") deve ser passado e ter valor não vazio.
     new AtLeast(['email', 'phone']),
 
-    // The rules related to a specific attribute.
+    // As regras relacionadas a um atributo específico.
 
     'name' => [
-        // The name is required (must be passed and have non-empty value).
+        // O nome é obrigatório (deve ser passado e ter valor não vazio).
         new Required(),
-        // The name's length must be no less than 2 characters.
+        // O comprimento do nome não deve ser inferior a 2 caracteres.
         new Length(min: 2),
-    ],  
-    'age' => new Number(min: 21), // The age must be at least 21 years.  
-    'email' => new Email(), // Email must be a valid email address.  
+    ],
+    'age' => new Number(min: 21), // A idade deve ser de pelo menos 21 anos.
+    'email' => new Email(), // O email deve ser um endereço de email válido.
 ];
 $result = (new Validator())->validate($data, $rules);
 ```
 
-> **Note:** Use [Nested] rule to validate nested arrays and [Each] rule to validate multiple arrays.
+> **Observação:** Use a regra [Nested] para validar arrays aninhados e a regra [Each] para validar vários arrays.
 
-### Object
+### Objeto
 
-Similar to arrays, it's possible to validate an object both as a whole and by individual properties.
+Semelhante aos arrays, é possível validar um objeto como um todo ou por propriedades individuais.
 
-For objects there is an additional option to configure validation with PHP attributes which allows to not pass the rules
-separately in explicit way (passing just the object itself is enough). For example:
+Para objetos existe uma opção adicional para configurar a validação com atributos PHP que permite não passar as regras
+separadamente de forma explícita (passar apenas o objeto em si é suficiente). Por exemplo:
 
 ```php
 use Yiisoft\Validator\Rule\AtLeast;
@@ -102,14 +102,14 @@ $person = new Person(name: 'John', age: 17, email: 'john@example.com', phone: nu
 $result = (new Validator())->validate($person);
 ```
 
-> **Note:** [readonly properties] are supported only starting from PHP 8.1.
+> **Nota:** [propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
 
-> **Note:** Use [Nested] rule to validate related objects and [Each] rule to validate multiple objects.
+> **Observação:** Use a regra [Nested] para validar objetos relacionados e a regra [Each] para validar vários objetos.
 
-### Custom data set
+### Conjunto de dados personalizado
 
-Most of the time creating a custom data set is not needed because of built-in data sets and automatic normalization of
-all types during validation. However, this can be useful, for example, to change a default value for certain attributes:
+Na maioria das vezes, a criação de um conjunto de dados personalizado não é necessária devido aos conjuntos de dados integrados e à normalização automática de
+todos os tipos durante a validação. No entanto, isto pode ser útil, por exemplo, para alterar um valor padrão para determinados atributos:
 
 ```php
 use Yiisoft\Validator\DataSetInterface;
@@ -119,7 +119,7 @@ use Yiisoft\Validator\Validator;
 
 final class MyArrayDataSet implements DataSetInterface
 {
-    public function __construct(private array $data = [],) 
+    public function __construct(private array $data = [],)
     {
     }
 
@@ -148,11 +148,11 @@ $rules = ['name' => new Length(min: 2), 'age' => new Number(min: 21)];
 $result = (new Validator())->validate($data, $rules);
 ```
 
-## Rules
+## Regras
 
-### Passing single rule
+### Passando regra única
 
-For a single rule, there is an option to omit the array:
+Para uma única regra, existe a opção de omitir o array:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
@@ -163,14 +163,14 @@ $rule = new Number(min: 42);
 $result = (new Validator())->validate($value, $rule);
 ```
 
-### Providing rules via dedicated object
+### Fornecendo regras via objeto dedicado
 
-Could help reuse the same set of rules across different places. Two ways are possible - using PHP attributes 
-and specifying explicitly via interface method implementation.
+Poderia ajudar a reutilizar o mesmo conjunto de regras em locais diferentes. Duas maneiras são possíveis - usando atributos PHP
+e especificando explicitamente por meio da implementação do método de interface.
 
-#### Using PHP attributes
+#### Usando atributos PHP
 
-In this case, the rules will be automatically parsed, no need to additionally do anything.
+Neste caso, as regras serão analisadas automaticamente, sem necessidade de fazer nada adicional.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -192,10 +192,10 @@ $rulesProvider = new PersonRulesProvider();
 $result = (new Validator())->validate($data, $rulesProvider);
 ```
 
-#### Using interface method implementation
+#### Usando implementação de método de interface
 
-Providing rules via interface method implementation has priority over PHP attributes. So, in case both are present,
-the attributes will be ignored without causing an exception.
+O fornecimento de regras por meio da implementação do método de interface tem prioridade sobre os atributos PHP. Então, caso ambos estejam presentes,
+os atributos serão ignorados sem causar uma exceção.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -210,7 +210,7 @@ final class PersonRulesProvider implements RulesProviderInterface
 
     #[Number(min: 21)] // Will be silently ignored.
     protected int $age;
-    
+
     public function getRules() : iterable
     {
         return ['name' => new Length(min: 2), 'age' => new Number(min: 21)];
@@ -222,10 +222,10 @@ $rulesProvider = new PersonRulesProvider();
 $result = (new Validator())->validate($data, $rulesProvider);
 ```
 
-### Providing rules via the data object
+### Fornecendo regras por meio do objeto de dados
 
-In this way, rules are provided in addition to data in the same object. Only interface method implementation is 
-supported. Note that the `rules` argument is `null` in the `validate()` method call.
+Dessa forma, as regras são fornecidas além dos dados no mesmo objeto. Apenas a implementação do método de interface é
+suportado. Observe que o argumento `rules` é `null` na chamada do método `validate()`.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -240,7 +240,7 @@ final class Person implements RulesProviderInterface
 
     #[Number(min: 21)] // Not supported for using with data objects. Will be silently ignored.
     protected int $age;
-    
+
     public function getRules(): iterable
     {
         return ['name' => new Length(min: 2), 'age' => new Number(min: 21)];
@@ -251,6 +251,6 @@ $data = new Person(name: 'John', age: 18);
 $result = (new Validator())->validate($data);
 ```
 
-[Each]: built-in-rules-each.md
-[Nested]: built-in-rules-nested.md
-[Readonly properties](https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties)
+[Para cada elemento](built-in-rules-each.md)
+[Aninhado](built-in-rules-nested.md)
+[Propriedades somente leitura](https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties)
