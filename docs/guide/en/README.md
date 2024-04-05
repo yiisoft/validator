@@ -22,6 +22,7 @@ A package for validating data.
   - [StopOnError](built-in-rules-stop-on-error.md)
 - [Configuring rules via PHP attributes](configuring-rules-via-php-attributes.md)
 - [Creating custom rules](creating-custom-rules.md)
+- [Readonly properties](https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties)
 
 ### Miscellaneous
 
