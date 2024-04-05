@@ -22,7 +22,6 @@ Pacote para validação de dados.
    - [Parar em caso de erro](built-in-rules-stop-on-error.md)
 - [Configurando regras via atributos PHP](configuring-rules-via-php-attributes.md)
 - [Criando regras personalizadas](creating-custom-rules.md)
-- [Propriedades somente leitura](https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties)
 
 
 ### Diversos
