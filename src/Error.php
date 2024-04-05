@@ -15,6 +15,10 @@ use Yiisoft\Validator\Rule\Callback;
  */
 final class Error
 {
+    public const MESSAGE_NONE = 0;
+    public const MESSAGE_FORMAT = 1;
+    public const MESSAGE_TRANSLATE = 2;
+
     /**
      * @param string $message The raw validation error message. Can be a simple text or a template with placeholders enclosed
      * in curly braces (`{}`). In the end of the validation it will be translated using configured translator.
@@ -60,12 +64,19 @@ final class Error
      *
      * A value without nested structure won't have a path at all (it will be an empty array).
      *
+     * @param int $messageProcessing Message processing type:
+     *  - `Error::MESSAGE_NONE` - without post-processing;
+     *  - `Error::MESSAGE_FORMAT` - format message;
+     *  - `Error::MESSAGE_TRANSLATE` - translate message (translator do formatting also).
+     *
      * @psalm-param list<int|string> $valuePath
+     * @psalm-param self::MESSAGE_* $messageProcessing
      */
     public function __construct(
         private string $message,
         private array $parameters = [],
         private array $valuePath = [],
+        private int $messageProcessing = self::MESSAGE_TRANSLATE,
     ) {
     }
 
@@ -123,5 +134,15 @@ final class Error
             static fn($key): string => str_replace($escape, '\\' . $escape, (string) $key),
             $this->valuePath,
         );
+    }
+
+    /**
+     * Returns error message processing type.
+     *
+     * @psalm-return self::MESSAGE_*
+     */
+    public function getMessageProcessing(): int
+    {
+        return $this->messageProcessing;
     }
 }

@@ -52,6 +52,7 @@ final class Result
 
     /**
      * @return Error[] Validation errors.
+     * @psalm-return list<Error>
      */
     public function getErrors(): array
     {
@@ -225,6 +226,38 @@ final class Result
     {
         $this->errors[] = new Error($message, $parameters, $valuePath);
 
+        return $this;
+    }
+
+    /**
+     * Add an error, the message of which does not require translation, but should be formatted.
+     *
+     * @see addError()
+     *
+     * @psalm-param array<string,scalar|null> $parameters
+     * @psalm-param list<int|string> $valuePath
+     *
+     * @return $this Same instance of result.
+     */
+    public function addErrorWithFormatOnly(string $message, array $parameters = [], array $valuePath = []): self
+    {
+        $this->errors[] = new Error($message, $parameters, $valuePath, Error::MESSAGE_FORMAT);
+        return $this;
+    }
+
+    /**
+     * Add an error, the message of which does not require any post-processing.
+     *
+     * @see addError()
+     *
+     * @psalm-param array<string,scalar|null> $parameters
+     * @psalm-param list<int|string> $valuePath
+     *
+     * @return $this Same instance of result.
+     */
+    public function addErrorWithoutPostProcessing(string $message, array $parameters = [], array $valuePath = []): self
+    {
+        $this->errors[] = new Error($message, $parameters, $valuePath, Error::MESSAGE_NONE);
         return $this;
     }
 }

@@ -101,7 +101,11 @@ final class NestedHandler implements RuleHandlerInterface
                     ? [$valuePath, ...$error->getValuePath()]
                     : [...StringHelper::parsePath($valuePath), ...array_slice($error->getValuePath(), 1)];
 
-                $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePathList);
+                $compoundResult->addErrorWithoutPostProcessing(
+                    $error->getMessage(),
+                    $error->getParameters(),
+                    $valuePathList
+                );
             }
         }
 

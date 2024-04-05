@@ -2,6 +2,9 @@
     "symbol-whitelist": [
         "Yiisoft\\Yii\\Debug\\Collector\\CollectorTrait",
         "Yiisoft\\Yii\\Debug\\Collector\\SummaryCollectorInterface",
+        "JetBrains\\PhpStorm\\ArrayShape",
+        "JetBrains\\PhpStorm\\ExpectedValues",
+        "JetBrains\\PhpStorm\\Language",
         "json_validate"
     ],
     "php-core-extensions": [
@@ -13,6 +16,7 @@
         "Reflection",
         "SPL",
         "standard",
+        "fileinfo",
         "intl"
     ],
     "scan-files": []
