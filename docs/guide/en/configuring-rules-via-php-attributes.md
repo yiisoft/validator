@@ -12,7 +12,6 @@ Given a single `User` entity / model:
 ```php
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
-use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
 [
@@ -83,7 +82,6 @@ use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Nested;
-use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Url;
 
@@ -226,6 +224,7 @@ In this case the set of rules for `Truck` will be:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 
 [

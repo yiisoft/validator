@@ -390,7 +390,7 @@ final class YamlHandler implements RuleHandlerInterface
 > **Note:** Using [yaml_parse] additionally requires `yaml` PHP extension.
 
 > **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to
-> [yaml_parse docs] for more details.
+> [yaml_parse] docs for more details.
 
 ### Wrapping validation
 
@@ -447,7 +447,6 @@ someone else - make it available as an extension.
 [array_is_list]: https://www.php.net/manual/en/function.array-is-list.php
 [YAML]: https://en.wikipedia.org/wiki/YAML
 [yaml_parse]: https://www.php.net/manual/en/function.yaml-parse.php
-[yaml_parse docs]: https://www.php.net/manual/en/function.yaml-parse.php
 [scenarios from Yii 2]: https://www.yiiframework.com/doc/guide/2.0/en/structure-models#scenarios
 [Yii Validator Scenarios]: https://github.com/vjik/yii-validator-scenarios
 [Sergei Predvoditelev]: https://github.com/vjik

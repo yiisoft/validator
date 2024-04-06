@@ -16,8 +16,8 @@ Here is a list of all available built-in rules, divided by category.
 
 ### Boolean rules
 
-- [Boolean](../../../src/Rule/Boolean.php)
-- [IsTrue](../../../src/Rule/IsTrue.php)
+- [Boolean](../../../src/Rule/BooleanValue.php)
+- [IsTrue](../../../src/Rule/TrueValue.php)
 
 ### Number rules
 

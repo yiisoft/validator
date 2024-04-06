@@ -45,7 +45,7 @@ And use it just like a single regular rule:
 use Yiisoft\Validator\Validator;
 
 $result = (new Validator())->validate('John', new UsernameRuleSet());
-````
+```
 
 It can also be combined with [Nested] rule to reuse rules for multiple attributes:
 

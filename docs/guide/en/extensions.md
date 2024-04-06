@@ -13,7 +13,7 @@ approach is discouraged and the recommended way with this package is using separ
 Sure, this will lead to some code duplication, but it's acceptable and will pay off in the future.
 Anyway, we decided to make it available through an extension, but use it with caution.   
 
-[Yii Validator Scenarios] (`vjik/yii-validator-scenarios`) package from a core team member [Sergei Predvoditelev] adds
+[Yii Validator Scenarios] package from a core team member [Sergei Predvoditelev] adds
 special `On` rule which allows to wrap other rules by declaring specific scenarios.
 
 An example of the class using scenarios:
@@ -59,7 +59,7 @@ $result = (new Validator())->validate($userDto, context: $context));
 
 ## Wrapper for Symfony rules
 
-[Yii Validator Symfony Rule] (`vjik/yii-validator-symfony-rule`) package from a core team member [Sergei Predvoditelev] 
+[Yii Validator Symfony Rule] package from a core team member [Sergei Predvoditelev] 
 adapts [constraints from Symfony framework] to be used as rules in Yii Validator.
 
 Using it is straightforward, all you have to do is wrap a Symfony constraint (or a list of them) with `SymfonyRule` rule 

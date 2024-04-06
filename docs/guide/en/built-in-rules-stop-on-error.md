@@ -46,7 +46,7 @@ $rules = [
     ]),
     // Skipping of other intermediate rules depends on `skipOnError` option set in these intermediate rules.
     'attribute4' => new SimpleRule4(), // Not skipped, because `skipOnError` is `false` by default.
-]);
+];
 ```
 
 Use grouping / ordering / `skipOnError` option to achieve the desired effect.
