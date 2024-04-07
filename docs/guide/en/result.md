@@ -286,4 +286,4 @@ $result->getAttributeErrors('email');
 ```
 
 [Using keys containing separator / shortcut]: built-in-rules-nested.md#using-keys-containing-separator--shortcut
-[will cast keys to the int type]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[will cast keys to the int type]: https://www.php.net/manual/en/language.types.array.php

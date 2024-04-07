@@ -1,27 +1,27 @@
-# Creating custom rules
+# Criando regras personalizadas
 
-When desired validation logic is missing in both built-in rules and extensions - it's time to create a custom rule. 
+Quando a lógica de validação desejada está faltando nas regras e extensões integradas, é hora de criar uma regra personalizada.
 
-## Rules concept
+## Conceito de regras
 
-The key feature of the rules' concept is a separation into 2 parts: 
+A principal característica do conceito de regras é a separação em 2 partes:
 
-- Rule (a class implementing `RuleInterface`). It only stores configuration options and a reference to its handler. Does 
-not perform actual validation.
-- Rule handler (a class implementing `RuleHandlerInterface`). Given a rule and input data, performs the actual 
-validation within a current validation context. 
+- Rule (uma classe que implementa `RuleInterface`). Ele armazena apenas opções de configuração e uma referência ao seu manipulador. Ele
+não realiza a validação real.
+- Rule handler - Manipulador de regras (uma classe que implementa `RuleHandlerInterface`). Dada uma regra e dados de entrada, executa o procedimento real
+da validação no contexto da validação atual.
 
-Besides responsibilities' separation, this approach allows to automatically resolve dependencies for a handler. For 
-example, if you need a database connection object within a handler, you don't have to pass it there explicitly - it 
-can be automatically obtained from a dependency container.
+Além da separação de responsabilidades, esta abordagem permite resolver automaticamente dependências de um manipulador. 
+Por exemplo, se você precisar de um objeto de conexão de banco de dados dentro de um manipulador, não será necessário passá-lo explicitamente - ele
+pode ser obtido automaticamente de um contêiner de dependência.
 
-## Instructions for creating a custom rule and what to avoid
+## Instruções para criar uma regra personalizada e o que evitar
 
-Let's try to create a rule for checking that a value is a valid [RGB color].
+Vamos tentar criar uma regra para verificar se um valor é uma [cor RGB] válida.
 
-### Creating a rule
+### Criando uma regra
 
-The 1st step is creating a rule:
+O primeiro passo é criar uma regra:
 
 ```php
 use Yiisoft\Validator\RuleInterface;
@@ -45,18 +45,18 @@ final class RgbColor implements RuleInterface
 }
 ```
 
-> **Note:** [readonly properties] are supported only starting from PHP 8.1.
+> **Nota:** [propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
 
-Besides required interface method implementations it only contains customizable error message. Of course, more features 
-can be added - conditional validation, client options, etc. But this is a bare minimum to start with.
+Além das implementações de métodos de interface necessárias, ele contém apenas mensagens de erro personalizáveis. Claro, mais recursos
+pode ser adicionado - validação condicional, opções do cliente, etc. Mas isso é o mínimo para começar.
 
-### Creating a handler
+### Criando um manipulador
 
-The 2nd step is creating the handler. Let's define what is exactly a valid RGB color:
+A segunda etapa é criar o manipulador. Vamos definir o que é exatamente uma cor RGB válida:
 
-- It's an array (list to be exact).
-- Contains exactly 3 items.
-- Each item is an integer number within 0 - 255 range.
+- É um array (lista para ser exato).
+- Contém exatamente 3 itens.
+- Cada item é um número inteiro no intervalo de 0 a 255.
 
 ```php
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -88,18 +88,18 @@ final class RgbColorHandler implements RuleHandlerInterface
 }
 ```
 
-> **Note:** A `validate()` method is not intended to be called directly. Both resolving handler and calling the method
-> happen automatically when using `Validator`.
+> **Nota:** Um método `validate()` não se destina a ser chamado diretamente. Resolvendo o manipulador e chamando o método
+> ocorre automaticamente ao usar o `Validator`.
 
-### Tips for improving code
+### Dicas para melhorar o código
 
-#### More specific error messages
+#### Mensagens de erro mais específicas
 
-Prefer more specific error messages to broad ones. Even this requires a bigger amount of messages and code, it helps to 
-quicker understand what exactly is wrong with input data. RGB color is quite simple and compact structure, but in case 
-of more complex data it will definitely pay off.
+Prefira mensagens de erro mais específicas às gerais. Mesmo que isso exija uma quantidade maior de mensagens e códigos, ajuda a
+entender mais rapidamente o que exatamente há de errado com os dados de entrada. A cor RGB é uma estrutura bastante simples e compacta, mas no caso
+de dados mais complexos, certamente valerá a pena.
 
-Keeping this in mind the rule can be rewritten something like this:
+Tendo isso em mente, a regra pode ser reescrita mais ou menos assim:
 
 ```php
 use Yiisoft\Validator\RuleInterface;
@@ -130,13 +130,13 @@ final class RgbColor implements RuleInterface
 }
 ```
 
-> **Note:** [readonly properties] are supported only starting from PHP 8.1.
+> **Nota:** [propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
 
-> **Note:** Formatting used in `$incorrectItemTypeMessage` and `$incorrectItemValueMessage` requires `intl` PHP 
-> extension.
+> **Nota:** A formatação usada em `$incorrectItemTypeMessage` e `$incorrectItemValueMessage` requer
+> a extensão PHP `intl`.
 
-The handler needs to be changed accordingly. Let's also add error parameters to be able to use them as placeholders in 
-message templates:
+O manipulador precisa ser alterado de acordo. Vamos também adicionar parâmetros de erro para poder usá-los como espaços reservados em
+modelos de mensagens:
 
 ```php
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -200,18 +200,18 @@ final class RgbColorHandler implements RuleHandlerInterface
 }
 ```
 
-> **Note:** It's also a good idea to utilize the features of used language version. For example, for PHP >= 8.1 we can 
-> simplify checking that a given array is a list with [array_is_list] function.
+> **Observação:** Também é uma boa ideia utilizar os recursos da versão do idioma usado. Por exemplo, para PHP >= 8.1 podemos
+> simplificar a verificação de que um determinado array é uma lista com a função [array_is_list()].
 
-#### Using built-in rules if possible
+#### Usando regras integradas, se possível
 
-Before creating a custom rule, please check if it can be replaced with a built-in rule or set of rules. If so, it's 
-unnecessary to create a custom rule.
+Antes de criar uma regra personalizada, verifique se ela pode ser substituída por uma regra integrada ou um conjunto de regras. Se sim, é
+desnecessário criar uma regra personalizada.
 
-##### Replacing with `Composite`
+##### Substituindo por `Composite` ("Agrupamento")
 
-The example with RGB color can be significantly simplified after realizing that it's also possible to achieve the same 
-effect by just using only built-in rules:
+O exemplo com cores RGB pode ser significativamente simplificado depois de perceber que também é possível obter o mesmo
+efeito usando apenas regras internas:
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -224,8 +224,8 @@ $rules = [
 ];
 ```
 
-Making them reusable isn't much harder - the whole set can be placed inside a `Composite` rule and used as a single 
-regular rule.
+Torná-los reutilizáveis não é muito mais difícil - todo o conjunto pode ser colocado dentro de uma regra `Composite` e usado como uma única
+regra regular.
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -248,12 +248,12 @@ final class RgbColorRuleSet extends Composite
 $result = (new Validator())->validate([205, 92, 92], new RgbColorRuleSet());
 ```
 
-##### Replacing with separate rules and `when`
+##### Substituindo por regras separadas e `when`
 
-Below is an attempt at using validation context for validating attributes depending on each other:
+Abaixo está uma tentativa de usar o contexto de validação para validar atributos dependendo uns dos outros:
 
-- Validate company name only when the other attribute `hasCompany` name is filled.
-- The company name must be a string with a length between 1 and 50 characters.
+- Valide o nome da empresa somente quando o outro atributo `hasCompany` estiver preenchido.
+- O nome da empresa deve ser uma string com comprimento entre 1 e 50 caracteres.
 
 ```php
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -287,7 +287,7 @@ final class CompanyNameHandler implements RuleHandlerInterface
 }
 ```
 
-This custom rule can also be separated and refactored using built-in rules reducing coupling:
+Esta regra personalizada também pode ser separada e refatorada usando regras integradas que reduzem o agrupamento:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
@@ -306,18 +306,18 @@ $rules = [
 ];
 ```
 
-## More examples
+## Mais exemplos
 
-The idea for previous examples was to show the process of creating custom rules with handlers using "learn by mistakes" 
-principle. So in terms of practical usage they probably less valuable because of replacement with built-in-rules. 
-Knowing the core principles, let's explore more appropriate real-life examples.
+A ideia dos exemplos anteriores era mostrar o processo de criação de regras customizadas com manipuladores usando o princípio 
+"aprender por erros". Portanto, em termos de uso prático, eles provavelmente são menos valiosos devido à substituição por regras integradas.
+Conhecendo os princípios básicos, vamos explorar exemplos mais apropriados da vida real.
 
-### Verifying `YAML`
+### Verificando `YAML`
 
-There is built-in rule for validating JSON. But what if we need the same, but for [YAML]? Let's try to
-implement it.
+Existe uma regra integrada para validar JSON. Mas e se precisarmos da mesma coisa, mas para [YAML]? Vamos tentar
+implementá-lo.
 
-Rule:
+Regra:
 
 ```php
 use Yiisoft\Validator\RuleInterface;
@@ -342,9 +342,9 @@ final class Yaml implements RuleInterface
 }
 ```
 
-> **Note:** [readonly properties] are supported only starting from PHP 8.1.
+> **Nota:** [propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
 
-Handler:
+Manipulador:
 
 ```php
 use Exception;
@@ -387,15 +387,15 @@ final class YamlHandler implements RuleHandlerInterface
 }
 ```
 
-> **Note:** Using [yaml_parse] additionally requires `yaml` PHP extension.
+> **Nota:** O uso de [yaml_parse] requer adicionalmente a extensão PHP `yaml`.
 
-> **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to
-> [yaml_parse] docs for more details.
+> **Nota:** Processar entradas de usuários não confiáveis com `yaml_parse()` pode ser perigoso com certas configurações. Consulte
+> a documentação do [yaml_parse] para mais detalhes.
 
-### Wrapping validation
+### Validação de empacotamento
 
-One of the right usages of validation context can be wrapping validation with some additional logic. This can be used
-for implementing [scenarios from Yii 2] for example.
+Um dos usos corretos do contexto de validação pode envolver a validação com alguma lógica adicional. Isso pode ser usado
+para implementar [cenários do Yii 2], por exemplo.
 
 ```php
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -434,20 +434,20 @@ final class OnHandler implements RuleHandlerInterface
 }
 ```
 
-This code snippet is taken from [Yii Validator Scenarios] extension by [Sergei Predvoditelev]. Read more in [Scenarios]
-section.
+Este trecho de código foi retirado da extensão [Yii Validator Scenarios] por [Sergei Predvoditelev]. Leia mais na
+seção [Cenários].
 
-## Making an extension
+## Criando uma extensão
 
-With a custom rule, you can go even further. If it's not too project-specific, and you feel that it might be useful to 
-someone else - make it available as an extension.
+Com uma regra personalizada, você pode ir ainda mais longe. Se não for muito específico do projeto e você achar que pode ser útil
+para outra pessoa, disponibilize-o como uma extensão.
 
-[RGB color]: https://en.wikipedia.org/wiki/RGB_color_model
-[readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
-[array_is_list]: https://www.php.net/manual/en/function.array-is-list.php
+[cor RGB]: https://en.wikipedia.org/wiki/RGB_color_model
+[propriedades somente leitura]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[array_is_list()]: https://www.php.net/manual/en/function.array-is-list.php
 [YAML]: https://en.wikipedia.org/wiki/YAML
 [yaml_parse]: https://www.php.net/manual/en/function.yaml-parse.php
-[scenarios from Yii 2]: https://www.yiiframework.com/doc/guide/2.0/en/structure-models#scenarios
-[Yii Validator Scenarios]: https://github.com/vjik/yii-validator-scenarios
+[cenários do Yii 2]: https://www.yiiframework.com/doc/guide/2.0/en/structure-models#scenarios
+[Cenários do validador Yii]: https://github.com/vjik/yii-validator-scenarios
 [Sergei Predvoditelev]: https://github.com/vjik
-[Scenarios]: extensions.md#scenarios
+[Cenários]: extensions.md#cenários
