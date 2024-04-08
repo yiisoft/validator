@@ -41,7 +41,7 @@ final class StringTypeTest extends RuleTestCase
                 ],
             ],
             'custom' => [
-                new StringType(message: 'Custom message.', skipOnError: true, skipOnEmpty: true,),
+                new StringType(message: 'Custom message.', skipOnError: true, skipOnEmpty: true, ),
                 [
                     'message' => [
                         'template' => 'Custom message.',
@@ -71,8 +71,7 @@ final class StringTypeTest extends RuleTestCase
             [1.5, [new StringType()], ['' => [$message]]],
             [1, [new StringType()], ['' => [$message]]],
             [
-                new class () implements Stringable
-                {
+                new class () implements Stringable {
                     public function __toString(): string
                     {
                         return 'test';
