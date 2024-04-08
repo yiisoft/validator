@@ -4,6 +4,13 @@
 
 Here is a list of all available built-in rules, divided by category.
 
+### Type rules
+
+- [BooleanType](../../../src/Rule/BooleanType.php)
+- [FloatType](../../../src/Rule/FloatType.php)
+- [IntegerType](../../../src/Rule/IntegerType.php)
+- [StringType](../../../src/Rule/StringType.php)
+
 ### String rules
 
 - [StringValue](../../../src/Rule/StringValue.php)
