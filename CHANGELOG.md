@@ -2,7 +2,7 @@
 
 ## 1.3.1 under development
 
-- no changes in this release.
+- New #657: Add `Result::add()` method for merging other results to the base one (@arogachev) 
 
 ## 1.3.0 April 04, 2024
 

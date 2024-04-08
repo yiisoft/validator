@@ -259,4 +259,19 @@ final class Result
         $this->errors[] = new Error($message, $parameters, $valuePath, Error::MESSAGE_NONE);
         return $this;
     }
+
+    /**
+     * Merges other validation results into the current one.
+     *
+     * @param Result ...$results Other results for merging.
+     * @return $this Same instance of result.
+     */
+    public function add(self ...$results): self
+    {
+        foreach ($results as $result) {
+            $this->errors = array_merge($this->errors, $result->getErrors());
+        }
+
+        return $this;
+    }
 }
