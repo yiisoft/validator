@@ -261,7 +261,7 @@ final class Result
     }
 
     /**
-     * Merges other validation results to the current one.
+     * Merges other validation results into the current one.
      *
      * @param Result ...$results Other results for merging.
      * @return $this Same instance of result.
