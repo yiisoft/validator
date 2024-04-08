@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Rule\Type;
 
 use Yiisoft\Validator\Rule\Type\FloatType;
-use Yiisoft\Validator\Rule\Type\IntegerType;
-use Yiisoft\Validator\Rule\Type\IntegerTypeHandler;
+use Yiisoft\Validator\Rule\Type\FloatTypeHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -88,6 +87,6 @@ final class FloatTypeTest extends RuleTestCase
 
     protected function getDifferentRuleInHandlerItems(): array
     {
-        return [IntegerType::class, IntegerTypeHandler::class];
+        return [FloatType::class, FloatTypeHandler::class];
     }
 }
