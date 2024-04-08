@@ -1,11 +1,11 @@
-# `StopOnError` - stop validation on the first error
+# `StopOnError` - interrompe a validação no primeiro erro
 
-This rule applies to a group of rules and allows you to stop the validation for the whole group immediately after
-an error occurs in any of the rules. This means that all rules following the rule that failed validation won't be
-run at all.
+Esta regra se aplica a um grupo de regras e permite interromper a validação para todo o grupo imediatamente após
+ocorre um erro em qualquer uma das regras. Isso significa que todas as regras que seguem a regra cuja validação falhou não serão
+executadas de jeito nenhum.
 
-This can be useful for performance-intensive validations, such as database queries or some complex calculations. 
-The order of rules within a group is crucial here - the "lightweight" rules need to be placed above the "heavy" ones:
+Isso pode ser útil para validações com alto desempenho, como consultas de banco de dados ou alguns cálculos complexos.
+A ordem das regras dentro de um grupo é crucial aqui - as regras “leves” precisam ser colocadas acima das “pesadas”:
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -21,10 +21,10 @@ $rule = new StopOnError([
 $result = (new Validator())->validate($data, $rule);
 ```
 
-When using with other rules and conditional validation, it behaves like a single unit. For example, with 
-default settings it will not be skipped if the previous rule didn't pass the validation. To change this behavior, set 
-`$skipOnError` to `true`. This allows to use it for limiting the list of errors per attribute to just the first one (in 
-HTML forms, for example).
+Ao usar com outras regras e validação condicional, ele se comporta como uma única unidade. Por exemplo, com
+configurações padrão, ela não será ignorada se a regra anterior não passar na validação. Para alterar esse comportamento, defina
+`$skipOnError` para `true`. Isto permite utilizá-lo para limitar a lista de erros por atributo apenas ao primeiro (em
+formulários HTML, por exemplo).
 
 ```php
 $rules = [
@@ -49,4 +49,4 @@ $rules = [
 ];
 ```
 
-Use grouping / ordering / `skipOnError` option to achieve the desired effect.
+Use a opção grouping / ordering / `skipOnError` para obter o efeito desejado.
