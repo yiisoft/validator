@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Type;
 
+use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
+use Yiisoft\Validator\AttributeTranslatorInterface;
+use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Type\IntegerType;
 use Yiisoft\Validator\Rule\Type\IntegerTypeHandler;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -40,7 +44,7 @@ final class IntegerTypeTest extends RuleTestCase
                 ],
             ],
             'custom' => [
-                new IntegerType(message: 'Custom message.', skipOnError: true, skipOnEmpty: true, ),
+                new IntegerType(message: 'Custom message.', skipOnError: true, skipOnEmpty: true),
                 [
                     'message' => [
                         'template' => 'Custom message.',
@@ -56,9 +60,9 @@ final class IntegerTypeTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            [-1, [new IntegerType()]],
-            [0, [new IntegerType()]],
-            [1, [new IntegerType()]],
+            [-1, new IntegerType()],
+            [0, new IntegerType()],
+            [1, new IntegerType()],
         ];
     }
 
@@ -67,10 +71,40 @@ final class IntegerTypeTest extends RuleTestCase
         $message = 'Value must be an integer.';
 
         return [
-            [false, [new IntegerType()], ['' => [$message]]],
-            [1.5, [new IntegerType()], ['' => [$message]]],
-            ['1.5', [new IntegerType()], ['' => [$message]]],
-            [[], [new IntegerType()], ['' => [$message]]],
+            [false, new IntegerType(), ['' => [$message]]],
+            [1.5, new IntegerType(), ['' => [$message]]],
+            ['1.5', new IntegerType(), ['' => [$message]]],
+            [[], new IntegerType(), ['' => [$message]]],
+            'message, custom' => [['sum' => []], ['sum' => new IntegerType('{attribute}')], ['sum' => ['sum']]],
+            'message, translated attribute' => [
+                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                    public function __construct(
+                        public ?bool $active = null,
+                    ) {
+                    }
+
+                    public function getAttributeLabels(): array
+                    {
+                        return [
+                            'sum' => 'Сумма',
+                        ];
+                    }
+
+                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    {
+                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                    }
+
+                    public function getRules(): array
+                    {
+                        return [
+                            'sum' => new IntegerType(message: '"{attribute}" - нецелое число.'),
+                        ];
+                    }
+                },
+                null,
+                ['sum' => ['"Сумма" - нецелое число.']],
+            ],
         ];
     }
 

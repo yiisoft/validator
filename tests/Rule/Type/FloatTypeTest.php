@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Rule\Type;
 
+use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
+use Yiisoft\Validator\AttributeTranslatorInterface;
+use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Type\FloatType;
 use Yiisoft\Validator\Rule\Type\FloatTypeHandler;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -40,7 +44,7 @@ final class FloatTypeTest extends RuleTestCase
                 ],
             ],
             'custom' => [
-                new FloatType(message: 'Custom message.', skipOnError: true, skipOnEmpty: true, ),
+                new FloatType(message: 'Custom message.', skipOnError: true, skipOnEmpty: true),
                 [
                     'message' => [
                         'template' => 'Custom message.',
@@ -56,9 +60,9 @@ final class FloatTypeTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            [-1.5, [new FloatType()]],
-            [0.0, [new FloatType()]],
-            [1.5, [new FloatType()]],
+            [-1.5, new FloatType()],
+            [0.0, new FloatType()],
+            [1.5, new FloatType()],
         ];
     }
 
@@ -67,10 +71,44 @@ final class FloatTypeTest extends RuleTestCase
         $message = 'Value must be a float.';
 
         return [
-            [false, [new FloatType()], ['' => [$message]]],
-            [0, [new FloatType()], ['' => [$message]]],
-            ['1.5', [new FloatType()], ['' => [$message]]],
-            [[], [new FloatType()], ['' => [$message]]],
+            [false, new FloatType(), ['' => [$message]]],
+            [0, new FloatType(), ['' => [$message]]],
+            ['1.5', new FloatType(), ['' => [$message]]],
+            [[], new FloatType(), ['' => [$message]]],
+            'message, custom' => [
+                ['sum' => []],
+                ['sum' => new FloatType('{attribute}')],
+                ['sum' => ['sum']],
+            ],
+            'message, translated attribute' => [
+                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                    public function __construct(
+                        public ?bool $active = null,
+                    ) {
+                    }
+
+                    public function getAttributeLabels(): array
+                    {
+                        return [
+                            'sum' => 'Сумма',
+                        ];
+                    }
+
+                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    {
+                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                    }
+
+                    public function getRules(): array
+                    {
+                        return [
+                            'sum' => new FloatType(message: '"{attribute}" - невещественное число.'),
+                        ];
+                    }
+                },
+                null,
+                ['sum' => ['"Сумма" - невещественное число.']],
+            ],
         ];
     }
 

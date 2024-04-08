@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace Rule\Type;
 
 use Stringable;
+use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
+use Yiisoft\Validator\AttributeTranslatorInterface;
+use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Type\StringType;
 use Yiisoft\Validator\Rule\Type\StringTypeHandler;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -41,7 +45,7 @@ final class StringTypeTest extends RuleTestCase
                 ],
             ],
             'custom' => [
-                new StringType(message: 'Custom message.', skipOnError: true, skipOnEmpty: true, ),
+                new StringType(message: 'Custom message.', skipOnError: true, skipOnEmpty: true),
                 [
                     'message' => [
                         'template' => 'Custom message.',
@@ -57,8 +61,8 @@ final class StringTypeTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            ['', [new StringType()]],
-            ['test', [new StringType()]],
+            ['', new StringType()],
+            ['test', new StringType()],
         ];
     }
 
@@ -67,9 +71,9 @@ final class StringTypeTest extends RuleTestCase
         $message = 'Value must be a string.';
 
         return [
-            [false, [new StringType()], ['' => [$message]]],
-            [1.5, [new StringType()], ['' => [$message]]],
-            [1, [new StringType()], ['' => [$message]]],
+            [false, new StringType(), ['' => [$message]]],
+            [1.5, new StringType(), ['' => [$message]]],
+            [1, new StringType(), ['' => [$message]]],
             [
                 new class () implements Stringable {
                     public function __toString(): string
@@ -77,10 +81,40 @@ final class StringTypeTest extends RuleTestCase
                         return 'test';
                     }
                 },
-                [new StringType()],
+                new StringType(),
                 ['' => [$message]],
             ],
-            [[], [new StringType()], ['' => [$message]]],
+            [[], new StringType(), ['' => [$message]]],
+            'message, custom' => [['name' => []], ['name' => new StringType('{attribute}')], ['name' => ['name']]],
+            'message, translated attribute' => [
+                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                    public function __construct(
+                        public ?bool $active = null,
+                    ) {
+                    }
+
+                    public function getAttributeLabels(): array
+                    {
+                        return [
+                            'name' => 'Название',
+                        ];
+                    }
+
+                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    {
+                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                    }
+
+                    public function getRules(): array
+                    {
+                        return [
+                            'name' => new StringType(message: '"{attribute}" - не строка.'),
+                        ];
+                    }
+                },
+                null,
+                ['name' => ['"Название" - не строка.']],
+            ],
         ];
     }
 
