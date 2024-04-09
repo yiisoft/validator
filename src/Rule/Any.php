@@ -21,7 +21,7 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Applies to a set of rules, runs validation for each one of them in the order they are defined and stops at the rule
- * where validation passed. The opposite to {@see StopOnError}
+ * where validation passed. The opposite of {@see StopOnError}.
  *
  * An example of usage:
  *

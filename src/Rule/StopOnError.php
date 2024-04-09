@@ -39,6 +39,8 @@ use Yiisoft\Validator\WhenInterface;
  * Not to be confused with skipping each rule individually, there is a separate functionality for that, see
  * {@see SkipOnErrorInterface}.
  *
+ * There is a similar rule that stops on successful validation - {@see Any}.
+ *
  * @see StopOnErrorHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
