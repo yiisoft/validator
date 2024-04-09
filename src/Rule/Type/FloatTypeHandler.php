@@ -12,7 +12,8 @@ use Yiisoft\Validator\ValidationContext;
 use function is_float;
 
 /**
- * A handler for {@see FloatType} rule.
+ * A handler for {@see FloatType} rule. Validates that the value has float type -
+ * {@link https://www.php.net/manual/en/language.types.float.php}.
  */
 final class FloatTypeHandler implements RuleHandlerInterface
 {

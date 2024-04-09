@@ -12,7 +12,8 @@ use Yiisoft\Validator\ValidationContext;
 use function is_bool;
 
 /**
- * A handler for {@see BooleanType} rule.
+ * A handler for {@see BooleanType} rule. Validates that the value has a boolean type (strictly) -
+ * {@link https://www.php.net/manual/en/language.types.boolean.php}.
  */
 final class BooleanTypeHandler implements RuleHandlerInterface
 {

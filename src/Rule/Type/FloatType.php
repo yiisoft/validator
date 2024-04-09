@@ -15,6 +15,10 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
+ * Defines validation options to check that the value has float type. Only native PHP float type -
+ * {@link https://www.php.net/manual/en/language.types.float.php} is allowed. For example, the float number within a
+ * string is discarded. If you need to support that, consider to use {@see Number} instead.
+ *
  * @see FloatTypeHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface

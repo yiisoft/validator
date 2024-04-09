@@ -15,6 +15,9 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
+ * Defines validation options to check that the value has string type. Only native PHP string type -
+ * {@link https://www.php.net/manual/en/language.types.string.php} is allowed.
+ *
  * @see StringTypeHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface

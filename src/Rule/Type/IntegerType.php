@@ -15,6 +15,10 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
+ * Defines validation options to check that the value has integer type. Only native PHP integer type -
+ * {@link https://www.php.net/manual/en/language.types.integer.php} is allowed. For example, the integer number within a
+ * string is discarded. If you need to support that, consider to use {@see Integer} instead.
+ *
  * @see IntegerTypeHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface

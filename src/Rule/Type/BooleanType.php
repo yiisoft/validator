@@ -15,6 +15,11 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
+ * Defines validation options to check that the value has boolean type. It's different from {@see BooleanValue} because
+ * it only strictly allows boolean values ({@link https://www.php.net/manual/en/language.types.boolean.php}) and not the
+ * ones that evaluates to boolean ("truthy" / "falsy"). If you need to support that, consider to use {@see BooleanValue}
+ * instead.
+ *
  * @see BooleanTypeHandler Corresponding handler performing the actual validation.
  *
  * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface

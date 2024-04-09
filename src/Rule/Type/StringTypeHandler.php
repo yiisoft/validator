@@ -12,7 +12,8 @@ use Yiisoft\Validator\ValidationContext;
 use function is_string;
 
 /**
- * A handler for {@see StringType} rule.
+ * A handler for {@see StringType} rule. Validates that the value has string type -
+ * {@link https://www.php.net/manual/en/language.types.string.php}.
  */
 final class StringTypeHandler implements RuleHandlerInterface
 {

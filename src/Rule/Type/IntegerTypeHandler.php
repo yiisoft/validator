@@ -12,7 +12,8 @@ use Yiisoft\Validator\ValidationContext;
 use function is_int;
 
 /**
- * A handler for {@see IntegerType} rule.
+ * A handler for {@see IntegerType} rule. Validates that the value has integer type -
+ * {@link https://www.php.net/manual/en/language.types.integer.php}.
  */
 final class IntegerTypeHandler implements RuleHandlerInterface
 {
