@@ -60,8 +60,8 @@ final class BooleanTypeTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            [false, new BooleanType()],
-            [true, new BooleanType()],
+            'boolean, false' => [false, new BooleanType()],
+            'boolean, true' => [true, new BooleanType()],
         ];
     }
 
@@ -70,14 +70,15 @@ final class BooleanTypeTest extends RuleTestCase
         $message = 'Value must be a boolean.';
 
         return [
-            [0.0, new BooleanType(), ['' => [$message]]],
-            [0, new BooleanType(), ['' => [$message]]],
-            [1, new BooleanType(), ['' => [$message]]],
-            ['0', new BooleanType(), ['' => [$message]]],
-            ['1', new BooleanType(), ['' => [$message]]],
-            ['false', new BooleanType(), ['' => [$message]]],
-            ['true', new BooleanType(), ['' => [$message]]],
-            [[], new BooleanType(), ['' => [$message]]],
+            'float, zero' => [0.0, new BooleanType(), ['' => [$message]]],
+            'float, one' => [1.0, new BooleanType(), ['' => [$message]]],
+            'integer, zero' => [0, new BooleanType(), ['' => [$message]]],
+            'integer, one' => [1, new BooleanType(), ['' => [$message]]],
+            'string, zero' => ['0', new BooleanType(), ['' => [$message]]],
+            'string, one' => ['1', new BooleanType(), ['' => [$message]]],
+            'string containing false' => ['false', new BooleanType(), ['' => [$message]]],
+            'string containing true' => ['true', new BooleanType(), ['' => [$message]]],
+            'array' => [[], new BooleanType(), ['' => [$message]]],
             'message, custom' => [['active' => []], ['active' => new BooleanType('{attribute}')], ['active' => ['active']]],
             'message, translated attribute' => [
                 new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {

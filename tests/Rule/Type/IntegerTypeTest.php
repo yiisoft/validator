@@ -60,9 +60,13 @@ final class IntegerTypeTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            [-1, new IntegerType()],
-            [0, new IntegerType()],
-            [1, new IntegerType()],
+            'integer, negative' => [-1, new IntegerType()],
+            'integer, zero' => [0, new IntegerType()],
+            'integer, positive' => [1, new IntegerType()],
+            'octal number' => [0123, new IntegerType()],
+            'hexademical number' => [0x1A, new IntegerType()],
+            'binary number' => [0b11111111, new IntegerType()],
+            'decimal number, underscores, PHP >= 7.4' => [1_234_567, new IntegerType()],
         ];
     }
 
@@ -71,10 +75,11 @@ final class IntegerTypeTest extends RuleTestCase
         $message = 'Value must be an integer.';
 
         return [
-            [false, new IntegerType(), ['' => [$message]]],
-            [1.5, new IntegerType(), ['' => [$message]]],
-            ['1.5', new IntegerType(), ['' => [$message]]],
-            [[], new IntegerType(), ['' => [$message]]],
+            'boolean' => [false, new IntegerType(), ['' => [$message]]],
+            'float' => [1.5, new IntegerType(), ['' => [$message]]],
+            'string containing float' => ['1.5', new IntegerType(), ['' => [$message]]],
+            'string containing integer' => ['1', new IntegerType(), ['' => [$message]]],
+            'array' => [[], new IntegerType(), ['' => [$message]]],
             'message, custom' => [['sum' => []], ['sum' => new IntegerType('{attribute}')], ['sum' => ['sum']]],
             'message, translated attribute' => [
                 new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {

@@ -61,8 +61,27 @@ final class StringTypeTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            ['', new StringType()],
-            ['test', new StringType()],
+            'empty' => ['', new StringType()],
+            'single quotes' => ['test', new StringType()],
+            'double quotes' => ["test", new StringType()],
+            'heredoc syntax' => [
+                <<<END
+a
+b
+c
+\n
+END,
+                new StringType(),
+            ],
+            'nowdoc syntax' => [
+                <<<'EOD'
+a
+b
+\\
+\
+EOD,
+                new StringType(),
+            ]
         ];
     }
 
@@ -71,10 +90,10 @@ final class StringTypeTest extends RuleTestCase
         $message = 'Value must be a string.';
 
         return [
-            [false, new StringType(), ['' => [$message]]],
-            [1.5, new StringType(), ['' => [$message]]],
-            [1, new StringType(), ['' => [$message]]],
-            [
+            'boolean' => [false, new StringType(), ['' => [$message]]],
+            'float' => [1.5, new StringType(), ['' => [$message]]],
+            'ingeter' => [1, new StringType(), ['' => [$message]]],
+            'stringable' => [
                 new class () implements Stringable {
                     public function __toString(): string
                     {
@@ -84,7 +103,7 @@ final class StringTypeTest extends RuleTestCase
                 new StringType(),
                 ['' => [$message]],
             ],
-            [[], new StringType(), ['' => [$message]]],
+            'array' => [[], new StringType(), ['' => [$message]]],
             'message, custom' => [['name' => []], ['name' => new StringType('{attribute}')], ['name' => ['name']]],
             'message, translated attribute' => [
                 new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {

@@ -60,9 +60,12 @@ final class FloatTypeTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            [-1.5, new FloatType()],
-            [0.0, new FloatType()],
-            [1.5, new FloatType()],
+            'float, negative' => [-1.5, new FloatType()],
+            'float, zero' => [0.0, new FloatType()],
+            'float, positive' => [1.5, new FloatType()],
+            'float, e' => [1.2e3, new FloatType()],
+            'float, capital e' => [7E-10, new FloatType()],
+            'float, underscores, PHP >= 7.4' => [1_234.567, new FloatType()],
         ];
     }
 
@@ -71,10 +74,12 @@ final class FloatTypeTest extends RuleTestCase
         $message = 'Value must be a float.';
 
         return [
-            [false, new FloatType(), ['' => [$message]]],
-            [0, new FloatType(), ['' => [$message]]],
-            ['1.5', new FloatType(), ['' => [$message]]],
-            [[], new FloatType(), ['' => [$message]]],
+            'boolean' => [false, new FloatType(), ['' => [$message]]],
+            'integer, negative' => [- 1, new FloatType(), ['' => [$message]]],
+            'integer, zero' => [0, new FloatType(), ['' => [$message]]],
+            'integer, positive' => [1, new FloatType(), ['' => [$message]]],
+            'string containing float' => ['1.5', new FloatType(), ['' => [$message]]],
+            'array' => [[], new FloatType(), ['' => [$message]]],
             'message, custom' => [
                 ['sum' => []],
                 ['sum' => new FloatType('{attribute}')],
