@@ -221,14 +221,14 @@ final class NumberTest extends RuleTestCase
                 [
                     new Any([new IntegerType(), new FloatType()]),
                     new Number(),
-                ]
+                ],
             ],
             'limit types with other rules, any: validation passed later' => [
                 1.5,
                 [
                     new Any([new IntegerType(), new FloatType()]),
                     new Number(),
-                ]
+                ],
             ],
         ];
     }
