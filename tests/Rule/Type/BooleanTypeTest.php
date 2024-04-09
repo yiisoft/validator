@@ -79,7 +79,11 @@ final class BooleanTypeTest extends RuleTestCase
             'string containing false' => ['false', new BooleanType(), ['' => [$message]]],
             'string containing true' => ['true', new BooleanType(), ['' => [$message]]],
             'array' => [[], new BooleanType(), ['' => [$message]]],
-            'message, custom' => [['active' => []], ['active' => new BooleanType('{attribute}')], ['active' => ['active']]],
+            'message, custom' => [
+                ['active' => []],
+                ['active' => new BooleanType('Attribute - {attribute}, type - {type}')],
+                ['active' => ['Attribute - active, type - array']],
+            ],
             'message, translated attribute' => [
                 new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
                     public function __construct(

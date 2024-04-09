@@ -104,11 +104,15 @@ EOD,
                 ['' => [$message]],
             ],
             'array' => [[], new StringType(), ['' => [$message]]],
-            'message, custom' => [['name' => []], ['name' => new StringType('{attribute}')], ['name' => ['name']]],
+            'message, custom' => [
+                ['name' => []],
+                ['name' => new StringType('Attribute - {attribute}, type - {type}')],
+                ['name' => ['Attribute - name, type - array']],
+            ],
             'message, translated attribute' => [
                 new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
                     public function __construct(
-                        public ?bool $active = null,
+                        public ?string $name = null,
                     ) {
                     }
 

@@ -80,11 +80,15 @@ final class IntegerTypeTest extends RuleTestCase
             'string containing float' => ['1.5', new IntegerType(), ['' => [$message]]],
             'string containing integer' => ['1', new IntegerType(), ['' => [$message]]],
             'array' => [[], new IntegerType(), ['' => [$message]]],
-            'message, custom' => [['sum' => []], ['sum' => new IntegerType('{attribute}')], ['sum' => ['sum']]],
+            'message, custom' => [
+                ['sum' => []],
+                ['sum' => new IntegerType('Attribute - {attribute}, type - {type}')],
+                ['sum' => ['Attribute - sum, type - array']],
+            ],
             'message, translated attribute' => [
                 new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
                     public function __construct(
-                        public ?bool $active = null,
+                        public ?int $sum = null,
                     ) {
                     }
 

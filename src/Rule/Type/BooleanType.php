@@ -39,6 +39,7 @@ final class BooleanType implements RuleWithOptionsInterface, SkipOnEmptyInterfac
      * You may use the following placeholders in the message:
      *
      * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{type}`: the type of the value being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty / not passed.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See

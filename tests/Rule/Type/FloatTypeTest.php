@@ -82,13 +82,13 @@ final class FloatTypeTest extends RuleTestCase
             'array' => [[], new FloatType(), ['' => [$message]]],
             'message, custom' => [
                 ['sum' => []],
-                ['sum' => new FloatType('{attribute}')],
-                ['sum' => ['sum']],
+                ['sum' => new FloatType('Attribute - {attribute}, type - {type}')],
+                ['sum' => ['Attribute - sum, type - array']],
             ],
             'message, translated attribute' => [
                 new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
                     public function __construct(
-                        public ?bool $active = null,
+                        public ?float $sum = null,
                     ) {
                     }
 
