@@ -63,7 +63,7 @@ final class StringTypeTest extends RuleTestCase
         return [
             'empty' => ['', new StringType()],
             'single quotes' => ['test', new StringType()],
-            'double quotes' => ["test", new StringType()],
+            'double quotes' => ['test', new StringType()],
             'heredoc syntax' => [
                 <<<END
 a
@@ -81,7 +81,7 @@ b
 \
 EOD,
                 new StringType(),
-            ]
+            ],
         ];
     }
 

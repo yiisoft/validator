@@ -75,7 +75,7 @@ final class FloatTypeTest extends RuleTestCase
 
         return [
             'boolean' => [false, new FloatType(), ['' => [$message]]],
-            'integer, negative' => [- 1, new FloatType(), ['' => [$message]]],
+            'integer, negative' => [-1, new FloatType(), ['' => [$message]]],
             'integer, zero' => [0, new FloatType(), ['' => [$message]]],
             'integer, positive' => [1, new FloatType(), ['' => [$message]]],
             'string containing float' => ['1.5', new FloatType(), ['' => [$message]]],
