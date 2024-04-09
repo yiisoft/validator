@@ -295,6 +295,7 @@ final class NumberTest extends RuleTestCase
                     new Any([new IntegerType(), new FloatType()]),
                     new Number(),
                 ],
+                ['' => ['At least one of the inner rules must pass the validation.']],
             ],
         ];
     }
