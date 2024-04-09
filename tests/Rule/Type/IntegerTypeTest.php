@@ -44,7 +44,7 @@ final class IntegerTypeTest extends RuleTestCase
                 ],
             ],
             'custom' => [
-                new IntegerType(message: 'Custom message.', skipOnError: true, skipOnEmpty: true),
+                new IntegerType(message: 'Custom message.', skipOnEmpty: true, skipOnError: true),
                 [
                     'message' => [
                         'template' => 'Custom message.',

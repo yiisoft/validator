@@ -44,7 +44,7 @@ final class BooleanTypeTest extends RuleTestCase
                 ],
             ],
             'custom' => [
-                new BooleanType(message: 'Custom message.', skipOnError: true, skipOnEmpty: true),
+                new BooleanType(message: 'Custom message.', skipOnEmpty: true, skipOnError: true),
                 [
                     'message' => [
                         'template' => 'Custom message.',

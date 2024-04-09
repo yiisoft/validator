@@ -44,7 +44,7 @@ final class FloatTypeTest extends RuleTestCase
                 ],
             ],
             'custom' => [
-                new FloatType(message: 'Custom message.', skipOnError: true, skipOnEmpty: true),
+                new FloatType(message: 'Custom message.', skipOnEmpty: true, skipOnError: true),
                 [
                     'message' => [
                         'template' => 'Custom message.',

@@ -45,7 +45,7 @@ final class StringTypeTest extends RuleTestCase
                 ],
             ],
             'custom' => [
-                new StringType(message: 'Custom message.', skipOnError: true, skipOnEmpty: true),
+                new StringType(message: 'Custom message.', skipOnEmpty: true, skipOnError: true),
                 [
                     'message' => [
                         'template' => 'Custom message.',
