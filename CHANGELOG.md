@@ -2,7 +2,8 @@
 
 ## 1.3.1 under development
 
-- New #657: Add `Result::add()` method for merging other results to the base one (@arogachev) 
+- New #657: Add `Result::add()` method for merging other results to the base one (@arogachev)
+- New #655: Add rules for validating value types - `boolean`, `float`, `integer`, `string` (@arogachev) 
 
 ## 1.3.0 April 04, 2024
 
