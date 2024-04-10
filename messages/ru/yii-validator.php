@@ -157,5 +157,5 @@ return [
     'Invalid time value.' => 'Некорректное значение времени.',
     /** @see Unique */
     'The allowed types for iterable\'s item values are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' => 'Разрешённые типы для значений элементов списка: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
-    'Every iterable\'s item must be unique.' => 'Каждый элемент списка должен быть уникален.'
+    'Every iterable\'s item must be unique.' => 'Каждый элемент списка должен быть уникален.',
 ];
