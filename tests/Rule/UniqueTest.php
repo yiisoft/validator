@@ -119,15 +119,13 @@ final class UniqueTest extends RuleTestCase
                     2.5,
                     false,
                     true,
-                    new class () implements Stringable
-                    {
+                    new class () implements Stringable {
                         public function __toString()
                         {
                             return 'c';
                         }
                     },
-                    new class () implements Stringable
-                    {
+                    new class () implements Stringable {
                         public function __toString()
                         {
                             return 'd';
@@ -239,7 +237,7 @@ final class UniqueTest extends RuleTestCase
                 ['data' => [1, 2, 1, 3]],
                 ['data' => new Unique(message: 'Attribute - {attribute}.')],
                 ['data' => ['Attribute - data.']],
-            ]
+            ],
         ];
     }
 
