@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rule;
 
 use DateTime;
+use stdClass;
 use Stringable;
 use Yiisoft\Validator\Rule\Unique;
 use Yiisoft\Validator\Rule\UniqueHandler;
@@ -109,7 +110,7 @@ final class UniqueTest extends RuleTestCase
                 [new DateTime('2024-04-10 14:05:01'), new DateTime('2024-04-10 14:05:02')],
                 new Unique(),
             ],
-            'mix' => [
+            'mix, all allowed types' => [
                 [
                     null,
                     'a',
@@ -120,6 +121,22 @@ final class UniqueTest extends RuleTestCase
                     2.5,
                     false,
                     true,
+                    new class () implements Stringable
+                    {
+                        public function __toString()
+                        {
+                            return 'c';
+                        }
+                    },
+                    new class () implements Stringable
+                    {
+                        public function __toString()
+                        {
+                            return 'd';
+                        }
+                    },
+                    new DateTime('2024-04-10 14:05:01'),
+                    new DateTime('2024-04-10 14:05:02'),
                 ],
                 new Unique(),
             ],
@@ -136,9 +153,30 @@ final class UniqueTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
+        $incorrectInputMessage = 'Value must be array or iterable.';
+        $incorrectItemValueMessage = 'The allowed types for iterable\'s item values are integer, float, string, ' .
+            'boolean, null and object implementing \Stringable or \DateTimeInterface.';
         $message = 'Every iterable\'s item must be unique.';
 
         return [
+            'incorrect input, integer' => [1, new Unique(), ['' => [$incorrectInputMessage]]],
+            'incorrect input, object' => [new stdClass(), new Unique(), ['' => [$incorrectInputMessage]]],
+            'incorrect input, custom message' => [
+                ['data' => 1],
+                ['data' => new Unique(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => ['Attribute - data, type - int.']],
+            ],
+            'incorrect item value, array' => [[1, [], 2], new Unique(), ['' => [$incorrectItemValueMessage]]],
+            'incorrect item value, object not implemeting \Stringable' => [
+                [1, new stdClass(), 2],
+                new Unique(),
+                ['' => [$incorrectItemValueMessage]],
+            ],
+            'incorrect item value, custom message' => [
+                ['data' => [1, [], 2]],
+                ['data' => new Unique(incorrectItemValueMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => ['Attribute - data, type - array.']],
+            ],
             'null' => [[null, null], new Unique(), ['' => [$message]]],
             'strings' => [['a', 'b', 'a', 'c'], new Unique(), ['' => [$message]]],
             'integers' => [[1, 2, 1, 3], new Unique(), ['' => [$message]]],
@@ -204,6 +242,11 @@ final class UniqueTest extends RuleTestCase
                 new Unique(),
                 ['' => [$message]],
             ],
+            'custom message' => [
+                ['data' => [1, 2, 1, 3]],
+                ['data' => new Unique(message: 'Attribute - {attribute}.')],
+                ['data' => ['Attribute - data.']],
+            ]
         ];
     }
 
