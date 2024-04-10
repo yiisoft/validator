@@ -7,8 +7,12 @@ namespace Rule;
 use DateTime;
 use stdClass;
 use Stringable;
+use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
+use Yiisoft\Validator\AttributeTranslatorInterface;
+use Yiisoft\Validator\AttributeTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Unique;
 use Yiisoft\Validator\Rule\UniqueHandler;
+use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -164,6 +168,33 @@ final class UniqueTest extends RuleTestCase
                 ['data' => new Unique(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
                 ['data' => ['Attribute - data, type - int.']],
             ],
+            'incorrect input, custom message, translated attribute' => [
+                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                    public function __construct(
+                        public int $data = 1,
+                    ) {
+                    }
+
+                    public function getAttributeLabels(): array
+                    {
+                        return [
+                            'data' => 'Данные',
+                        ];
+                    }
+
+                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    {
+                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                    }
+
+                    public function getRules(): array
+                    {
+                        return ['data' => new Unique(incorrectInputMessage: '"{attribute}" - неитерируемое значение.')];
+                    }
+                },
+                null,
+                ['data' => ['"Данные" - неитерируемое значение.']],
+            ],
             'incorrect item value, array' => [[1, [], 2], new Unique(), ['' => [$incorrectItemValueMessage]]],
             'incorrect item value, object not implemeting \Stringable' => [
                 [1, new stdClass(), 2],
@@ -174,6 +205,37 @@ final class UniqueTest extends RuleTestCase
                 ['data' => [1, [], 2]],
                 ['data' => new Unique(incorrectItemValueMessage: 'Attribute - {attribute}, type - {type}.')],
                 ['data' => ['Attribute - data, type - array.']],
+            ],
+            'incorrect item value, custom message, translated attribute' => [
+                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                    public function __construct(
+                        public array $data = [1, 2, [], 3],
+                    ) {
+                    }
+
+                    public function getAttributeLabels(): array
+                    {
+                        return [
+                            'data' => 'Данные',
+                        ];
+                    }
+
+                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    {
+                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                    }
+
+                    public function getRules(): array
+                    {
+                        return [
+                            'data' => new Unique(
+                                incorrectItemValueMessage: '"{attribute}" - в списке есть недопустимое значение.',
+                            ),
+                        ];
+                    }
+                },
+                null,
+                ['data' => ['"Данные" - в списке есть недопустимое значение.']],
             ],
             'null' => [[null, null], new Unique(), ['' => [$message]]],
             'strings' => [['a', 'b', 'a', 'c'], new Unique(), ['' => [$message]]],
@@ -239,7 +301,34 @@ final class UniqueTest extends RuleTestCase
                 ['data' => [1, 2, 1, 3]],
                 ['data' => new Unique(message: 'Attribute - {attribute}.')],
                 ['data' => ['Attribute - data.']],
-            ]
+            ],
+            'custom message, translated attribute' => [
+                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                    public function __construct(
+                        public array $data = [1, 2, 1, 3],
+                    ) {
+                    }
+
+                    public function getAttributeLabels(): array
+                    {
+                        return [
+                            'data' => 'Данные',
+                        ];
+                    }
+
+                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    {
+                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                    }
+
+                    public function getRules(): array
+                    {
+                        return ['data' => new Unique(message: '"{attribute}" - в списке есть дубликаты.')];
+                    }
+                },
+                null,
+                ['data' => ['"Данные" - в списке есть дубликаты.']],
+            ],
         ];
     }
 
