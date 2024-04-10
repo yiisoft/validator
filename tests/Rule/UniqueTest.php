@@ -88,15 +88,13 @@ final class UniqueTest extends RuleTestCase
             'boolean values' => [[false, true], new Unique()],
             'stringable values' => [
                 [
-                    new class () implements Stringable
-                    {
+                    new class () implements Stringable {
                         public function __toString()
                         {
                             return 'a';
                         }
                     },
-                    new class () implements Stringable
-                    {
+                    new class () implements Stringable {
                         public function __toString()
                         {
                             return 'b';
@@ -146,29 +144,25 @@ final class UniqueTest extends RuleTestCase
             'boolean values' => [[false, true, false], new Unique(), ['' => [$message]]],
             'stringable values' => [
                 [
-                    new class () implements Stringable
-                    {
+                    new class () implements Stringable {
                         public function __toString()
                         {
                             return 'a';
                         }
                     },
-                    new class () implements Stringable
-                    {
+                    new class () implements Stringable {
                         public function __toString()
                         {
                             return 'b';
                         }
                     },
-                    new class () implements Stringable
-                    {
+                    new class () implements Stringable {
                         public function __toString()
                         {
                             return 'a';
                         }
                     },
-                    new class () implements Stringable
-                    {
+                    new class () implements Stringable {
                         public function __toString()
                         {
                             return 'c';
@@ -192,14 +186,13 @@ final class UniqueTest extends RuleTestCase
                 [
                     'a',
                     'b',
-                    new class () implements Stringable
-                    {
+                    new class () implements Stringable {
                         public function __toString()
                         {
                             return 'a';
                         }
                     },
-                    'c'
+                    'c',
                 ],
                 new Unique(),
                 ['' => [$message]],
