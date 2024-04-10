@@ -26,6 +26,7 @@ use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Subset;
 use Yiisoft\Validator\Rule\TrueValue;
+use Yiisoft\Validator\Rule\Unique;
 use Yiisoft\Validator\Rule\Url;
 
 return [
@@ -40,7 +41,10 @@ return [
     'This value must contain at least {min, number} {min, plural, one{item} other{items}}.' => 'Значение должно содержать как минимум {min, number} {min, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
     'This value must contain at most {max, number} {max, plural, one{item} other{items}}.' => 'Значение должно содержать не более {max, number} {max, plural, one{элемента} few{элементов} many{элементов} other{элементов}}.',
     'This value must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => 'Значение должно содержать ровно {exactly, number} {exactly, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
-    /** @see Each */
+    /**
+     * @see Each
+     * @see Unique
+     */
     'Value must be array or iterable.' => 'Значение должно быть массивом или иметь псевдотип iterable.',
     'Every iterable key must have an integer or a string type.' => 'Ключ должен иметь тип integer или string.',
     /** @see Email */
@@ -151,4 +155,7 @@ return [
      * @see \Yiisoft\Validator\Rule\Date\Time
      */
     'Invalid time value.' => 'Некорректное значение времени.',
+    /** @see Unique */
+    'The allowed types for iterable\'s item values are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' => 'Разрешённые типы для значений элементов списка: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
+    'Every iterable\'s item must be unique.' => 'Каждый элемент списка должен быть уникален.'
 ];
