@@ -123,15 +123,13 @@ final class UniqueTest extends RuleTestCase
                     2.5,
                     false,
                     true,
-                    new class () implements Stringable
-                    {
+                    new class () implements Stringable {
                         public function __toString()
                         {
                             return 'c';
                         }
                     },
-                    new class () implements Stringable
-                    {
+                    new class () implements Stringable {
                         public function __toString()
                         {
                             return 'd';
