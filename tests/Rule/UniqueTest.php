@@ -148,6 +148,13 @@ final class UniqueTest extends RuleTestCase
                 ],
                 new Unique(),
             ],
+            'using as attribute' => [
+                new class () {
+                    #[Unique]
+                    private array $data = [1, 2];
+                },
+                null,
+            ],
         ];
     }
 
@@ -326,6 +333,14 @@ final class UniqueTest extends RuleTestCase
                 },
                 null,
                 ['data' => ['"Данные" - в списке есть дубликаты.']],
+            ],
+            'using as attribute' => [
+                new class () {
+                    #[Unique]
+                    private array $data = [1, 2, 1, 3];
+                },
+                null,
+                ['data' => [$message]],
             ],
         ];
     }
