@@ -82,6 +82,13 @@ b
 EOD,
                 new StringType(),
             ],
+            'using as attribute' => [
+                new class () {
+                    #[StringType]
+                    private string $name = 'test';
+                },
+                null,
+            ],
         ];
     }
 
@@ -137,6 +144,14 @@ EOD,
                 },
                 null,
                 ['name' => ['"Название" - не строка.']],
+            ],
+            'using as attribute' => [
+                new class () {
+                    #[StringType]
+                    private array $name = ['test'];
+                },
+                null,
+                ['name' => [$message]],
             ],
         ];
     }

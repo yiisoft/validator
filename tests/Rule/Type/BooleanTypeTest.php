@@ -62,6 +62,13 @@ final class BooleanTypeTest extends RuleTestCase
         return [
             'boolean, false' => [false, new BooleanType()],
             'boolean, true' => [true, new BooleanType()],
+            'using as attribute' => [
+                new class () {
+                    #[BooleanType]
+                    private bool $active = true;
+                },
+                null,
+            ],
         ];
     }
 
@@ -112,6 +119,14 @@ final class BooleanTypeTest extends RuleTestCase
                 },
                 null,
                 ['active' => ['"Активен" - не булево значение.']],
+            ],
+            'using as attribute' => [
+                new class () {
+                    #[BooleanType]
+                    private int $active = 1;
+                },
+                null,
+                ['active' => [$message]],
             ],
         ];
     }

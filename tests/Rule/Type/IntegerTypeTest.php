@@ -67,6 +67,13 @@ final class IntegerTypeTest extends RuleTestCase
             'hexademical number' => [0x1A, new IntegerType()],
             'binary number' => [0b11111111, new IntegerType()],
             'decimal number, underscores, PHP >= 7.4' => [1_234_567, new IntegerType()],
+            'using as attribute' => [
+                new class () {
+                    #[IntegerType]
+                    private int $sum = 1;
+                },
+                null,
+            ],
         ];
     }
 
@@ -113,6 +120,14 @@ final class IntegerTypeTest extends RuleTestCase
                 },
                 null,
                 ['sum' => ['"Сумма" - нецелое число.']],
+            ],
+            'using as attribute' => [
+                new class () {
+                    #[IntegerType]
+                    private float $sum = 1.5;
+                },
+                null,
+                ['sum' => [$message]],
             ],
         ];
     }

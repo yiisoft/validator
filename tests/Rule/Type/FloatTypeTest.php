@@ -66,6 +66,13 @@ final class FloatTypeTest extends RuleTestCase
             'float, e' => [1.2e3, new FloatType()],
             'float, capital e' => [7E-10, new FloatType()],
             'float, underscores, PHP >= 7.4' => [1_234.567, new FloatType()],
+            'using as attribute' => [
+                new class () {
+                    #[FloatType]
+                    private float $sum = 1.5;
+                },
+                null,
+            ],
         ];
     }
 
@@ -113,6 +120,14 @@ final class FloatTypeTest extends RuleTestCase
                 },
                 null,
                 ['sum' => ['"Сумма" - невещественное число.']],
+            ],
+            'using as attribute' => [
+                new class () {
+                    #[FloatType]
+                    private int $sum = 1;
+                },
+                null,
+                ['sum' => [$message]],
             ],
         ];
     }

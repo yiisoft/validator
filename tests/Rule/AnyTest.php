@@ -96,6 +96,13 @@ final class AnyTest extends RuleTestCase
         return [
             'right away' => [1, new Any([new IntegerType(), new FloatType()])],
             'later' => [1.5, new Any([new IntegerType(), new FloatType()])],
+            'using as attribute' => [
+                new class () {
+                    #[Any([new IntegerType(), new FloatType()])]
+                    private int|float $sum = 1.5;
+                },
+                null,
+            ],
         ];
     }
 
@@ -105,6 +112,14 @@ final class AnyTest extends RuleTestCase
 
         return [
             'none' => ['1', new Any([new IntegerType(), new FloatType()]), ['' => [$message]]],
+            'using as attribute' => [
+                new class () {
+                    #[Any([new IntegerType(), new FloatType()])]
+                    private string $sum = '1.5';
+                },
+                null,
+                ['sum' => [$message]],
+            ],
         ];
     }
 
