@@ -10,6 +10,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\TranslatedAttributesHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_array;
@@ -24,7 +25,7 @@ final class OneOfHandler implements RuleHandlerInterface
 {
     use TranslatedAttributesHandlerTrait;
 
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof OneOf) {
             throw new UnexpectedRuleException(OneOf::class, $rule);

@@ -66,7 +66,7 @@ final class CountableLimitHandlerTraitTest extends TestCase
         $handler = new class () implements RuleHandlerInterface {
             use CountableLimitHandlerTrait;
 
-            public function validate(mixed $value, object $rule, ValidationContext $context): Result
+            public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
             {
                 return new Result();
             }

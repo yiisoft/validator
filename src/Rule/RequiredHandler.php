@@ -9,6 +9,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -47,7 +48,7 @@ final class RequiredHandler implements RuleHandlerInterface
         $this->defaultEmptyCondition = $defaultEmptyCondition ?? new WhenEmpty(trimString: true);
     }
 
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Required) {
             throw new UnexpectedRuleException(Required::class, $rule);

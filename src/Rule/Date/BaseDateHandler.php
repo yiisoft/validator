@@ -12,6 +12,7 @@ use LogicException;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -42,7 +43,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
     ) {
     }
 
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Date && !$rule instanceof DateTime && !$rule instanceof Time) {
             throw new UnexpectedRuleException([Date::class, DateTime::class, Time::class], $rule);
