@@ -11,8 +11,6 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
-use function in_array;
-
 /**
  * A handler for {@see Unique} rule. Validates uniqueness of each element of an iterable.
  */
@@ -68,8 +66,7 @@ final class UniqueHandler implements RuleHandlerInterface
     private function areItemsEqual(
         null|string|int|float|bool|Stringable|DateTimeInterface $item,
         null|string|int|float|bool|Stringable|DateTimeInterface $stackItem,
-    ): bool
-    {
+    ): bool {
         if ($item instanceof DateTimeInterface && $stackItem instanceof DateTimeInterface) {
             return $item == $stackItem;
         }
