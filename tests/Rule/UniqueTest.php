@@ -148,6 +148,7 @@ final class UniqueTest extends RuleTestCase
                 ],
                 new Unique(),
             ],
+            'mix, numbers and strings' => [[1, 2, '1', '3'], new Unique()],
             'using as attribute' => [
                 new class () {
                     #[Unique]
