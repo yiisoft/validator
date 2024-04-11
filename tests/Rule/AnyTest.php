@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use stdClass;
 use Yiisoft\Validator\Rule\Any;
 use Yiisoft\Validator\Rule\AnyHandler;
 use Yiisoft\Validator\Rule\Type\FloatType;
@@ -13,6 +14,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithAfterInit;
 
 final class AnyTest extends RuleTestCase
 {
@@ -128,5 +130,16 @@ final class AnyTest extends RuleTestCase
     protected function getDifferentRuleInHandlerItems(): array
     {
         return [Any::class, AnyHandler::class];
+    }
+
+    public function testAfterInitAttribute(): void
+    {
+        $object = new stdClass();
+        $innerRule1 = new StubRuleWithAfterInit();
+        $innerRule2 = new StubRuleWithAfterInit();
+
+        (new Any([$innerRule1, $innerRule2]))->afterInitAttribute($object);
+        $this->assertSame($object, $innerRule1->getObject());
+        $this->assertSame($object, $innerRule2->getObject());
     }
 }
