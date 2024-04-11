@@ -31,7 +31,7 @@ final class UniqueHandler implements RuleHandlerInterface
             ]);
         }
 
-        $stackMap = ['simple' => [], 'datetime' => []];
+        $stack = [];
         foreach ($value as $item) {
             if (!$this->isValueAllowedForItem($item)) {
                 return (new Result())->addError($rule->getIncorrectItemValueMessage(), [
@@ -40,34 +40,48 @@ final class UniqueHandler implements RuleHandlerInterface
                 ]);
             }
 
-            if ($item instanceof Stringable) {
-                $itemValue = (string) $item;
-                $stackMapKey = 'simple';
-            } elseif ($item instanceof DateTimeInterface) {
-                $itemValue = $item->getTimestamp();
-                $stackMapKey = 'datetime';
-            } else {
-                $itemValue = $item;
-                $stackMapKey = 'simple';
+            foreach ($stack as $stackItem) {
+                if ($this->areItemsEqual($item, $stackItem)) {
+                    return (new Result())->addError($rule->getMessage(), [
+                        'attribute' => $context->getTranslatedAttribute(),
+                    ]);
+                }
             }
 
-            if (in_array($itemValue, $stackMap[$stackMapKey], strict: true)) {
-                return (new Result())->addError($rule->getMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
-                ]);
-            }
-
-            $stackMap[$stackMapKey][] = $itemValue;
+            $stack[] = $item;
         }
 
         return new Result();
     }
 
+    /**
+     * @psalm-assert null|string|int|float|bool|Stringable|DateTimeInterface $value
+     */
     private function isValueAllowedForItem(mixed $value): bool
     {
         return $value === null ||
             is_scalar($value) ||
             $value instanceof Stringable ||
             $value instanceof DateTimeInterface;
+    }
+
+    private function areItemsEqual(
+        null|string|int|float|bool|Stringable|DateTimeInterface $item,
+        null|string|int|float|bool|Stringable|DateTimeInterface $stackItem,
+    ): bool
+    {
+        if ($item instanceof DateTimeInterface && $stackItem instanceof DateTimeInterface) {
+            return $item == $stackItem;
+        }
+
+        if ($item instanceof Stringable) {
+            $item = (string) $item;
+        }
+
+        if ($stackItem instanceof Stringable) {
+            $stackItem = (string) $stackItem;
+        }
+
+        return $item === $stackItem;
     }
 }
