@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule;
 
-use DateTime;
 use DateTimeInterface;
 use Stringable;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
