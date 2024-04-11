@@ -44,7 +44,7 @@ final class UniqueHandler implements RuleHandlerInterface
             if ($item instanceof Stringable) {
                 $itemValue = (string) $item;
                 $stackMapKey = 'simple';
-            } elseif ($item instanceof DateTime) {
+            } elseif ($item instanceof DateTimeInterface) {
                 $itemValue = $item->getTimestamp();
                 $stackMapKey = 'datetime';
             } else {
