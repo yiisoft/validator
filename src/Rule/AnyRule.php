@@ -140,7 +140,7 @@ final class AnyRule implements
 
     public function getHandler(): string
     {
-        return AnyHandler::class;
+        return AnyRuleHandler::class;
     }
 
     public function afterInitAttribute(object $object): void
