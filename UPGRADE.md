@@ -27,6 +27,3 @@ for both A and B.
 
   public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result;
   ```
-  
-* The type of `$escape` argument in `Yiisoft\Validator\Error::getValuePath()` changed from `bool|string|null` to 
-  `string|null`. If you used `bool`, replace `false` with `null` and `true` with dot (`.`).

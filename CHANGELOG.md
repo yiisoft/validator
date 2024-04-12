@@ -24,8 +24,6 @@
   (@arogachev)
 - Chg #679: Change type of `$rule` argument in `RuleHandlerInterface::validate()` from `object` to `RuleInterface`
   (@arogachev)
-- Chg #613: Change type of `$escape` argument in `Error::getValuePath()` from `bool|string|null` to `string|null` 
-  (@arogachev)
 
 ## 1.3.0 April 04, 2024
 
