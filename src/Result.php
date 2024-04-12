@@ -6,7 +6,6 @@ namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
 
-use function array_key_exists;
 use function array_slice;
 use function implode;
 use function is_string;
