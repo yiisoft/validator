@@ -146,7 +146,7 @@ final class UrlTest extends RuleTestCase
             ['http://google.de', [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps'])]],
             ['https://google.de', [new Url(validSchemes: ['http', 'https', 'ftp', 'ftps'])]],
 
-            ['https://www.yiiframework.com/', [new Url(validSchemes: ['http', 'FTP'])]],
+            ['HtTp://www.yiiframework.com/://www.yiiframework.com/', [new Url(validSchemes: ['http', 'https', 'FTP'])]],
             ['fTp://www.yiiframework.com/', [new Url(validSchemes: ['http', 'FTP'])]],
 
             ['http://äüößìà.de', [new Url(enableIdn: true)]],
