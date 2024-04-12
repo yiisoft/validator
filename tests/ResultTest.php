@@ -106,13 +106,12 @@ class ResultTest extends TestCase
         );
     }
 
-    public function testGetErrorMessagesIndexedByAttribute_IncorrectType(): void
+    public function testGetErrorMessagesIndexedByAttributeWithIncorrectType(): void
     {
-        $result = new Result();
-
-        $result->addError('error1', [], [1]);
+        $result = (new Result())->addError('error1', [], [1]);
 
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Top level attributes can only have string type.');
         $result->getErrorMessagesIndexedByAttribute();
     }
 
@@ -126,6 +125,15 @@ class ResultTest extends TestCase
             ],
             $this->createAttributeErrorResult()->getFirstErrorMessagesIndexedByAttribute(),
         );
+    }
+
+    public function testGetFirstErrorMessagesIndexedByAttributeWithIncorrectType(): void
+    {
+        $result = (new Result())->addError('error1', [], [1]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Top level attributes can only have string type.');
+        $result->getFirstErrorMessagesIndexedByAttribute();
     }
 
     public function testGetAttributeErrors(): void
