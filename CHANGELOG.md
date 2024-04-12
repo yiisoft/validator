@@ -22,6 +22,8 @@
 - Enh #622: Use `json_validate()` built-in PHP function in `JsonHandler` if code is run with PHP 8.3 (@arogachev)
 - Enh #639: Simplify validation of JSON in `JsonHandler` using built-in PHP functions for PHP versions below 8.3
   (@arogachev)
+- Chg #679: Change type of `$rule` argument in `RuleHandlerInterface::validate()` from `object` to `RuleInterface`
+  (@arogachev)
 
 ## 1.3.0 April 04, 2024
 

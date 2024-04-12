@@ -11,7 +11,7 @@ use Yiisoft\Validator\ValidationContext;
 
 final class RuleWithBuiltInHandler implements RuleInterface, RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         $result = new Result();
 

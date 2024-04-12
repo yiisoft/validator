@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
@@ -16,7 +17,7 @@ use function is_string;
  */
 final class DateTimeHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof DateTime) {
             throw new UnexpectedRuleException(DateTime::class, $rule);

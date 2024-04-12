@@ -10,6 +10,7 @@ use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function gettype;
@@ -28,7 +29,7 @@ use function gettype;
  */
 final class CompareHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof AbstractCompare) {
             throw new UnexpectedRuleException(AbstractCompare::class, $rule);

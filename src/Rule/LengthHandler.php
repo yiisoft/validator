@@ -8,6 +8,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Trait\CountableLimitHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_string;
@@ -21,7 +22,7 @@ final class LengthHandler implements RuleHandlerInterface
 {
     use CountableLimitHandlerTrait;
 
-    public function validate($value, object $rule, ValidationContext $context): Result
+    public function validate($value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Length) {
             throw new UnexpectedRuleException(Length::class, $rule);

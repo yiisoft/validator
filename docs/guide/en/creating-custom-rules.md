@@ -57,11 +57,12 @@ The 2nd step is creating the handler. Let's define what is exactly a valid RGB c
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class RgbColorHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         // Every rule handler must start with this check.  
         if (!$rule instanceof RgbColor) {
@@ -132,11 +133,12 @@ message templates:
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class RgbColorHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof RgbColor) {
             throw new UnexpectedRuleException(RgbColor::class, $rule);
@@ -249,11 +251,12 @@ Below is an attempt at using validation context for validating attributes depend
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class CompanyNameHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof CompanyName) {
             throw new UnexpectedRuleException(CompanyName::class, $rule);
@@ -336,11 +339,12 @@ use Exception;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class YamlHandler implements RuleHandlerInterface
 {  
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result 
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result 
     {  
         if (!$rule instanceof Yaml) {
             throw new UnexpectedRuleException(RgbColor::class, $rule);
@@ -386,11 +390,12 @@ for implementing [scenarios from Yii 2] for example.
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class OnHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof On) {
             throw new UnexpectedRuleException(On::class, $rule);
