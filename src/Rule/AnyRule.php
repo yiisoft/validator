@@ -26,14 +26,14 @@ use Yiisoft\Validator\WhenInterface;
  * An example of usage:
  *
  * ```php
- * $rule = new Any([
+ * $rule = new AnyRule([
  *      new IntegerType(), // Let's say the validation passed here.
  *      new FloatType(), // Then this rule will be skipped.
  * ]);
  * ```
  *
- * When using with other rules, conditional validation options, such as {@see Any::$skipOnError} will be applied
- * to the whole group of {@see Any::$rules}.
+ * When using with other rules, conditional validation options, such as {@see AnyRule::$skipOnError} will be applied
+ * to the whole group of {@see AnyRule::$rules}.
  *
  * @see StopOnErrorHandler Corresponding handler performing the actual validation.
  *
@@ -43,7 +43,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type RawRulesList from ValidatorInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Any implements
+final class AnyRule implements
     RuleWithOptionsInterface,
     SkipOnEmptyInterface,
     SkipOnErrorInterface,

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use stdClass;
-use Yiisoft\Validator\Rule\Any;
-use Yiisoft\Validator\Rule\AnyHandler;
+use Yiisoft\Validator\Rule\AnyRule;
+use Yiisoft\Validator\Rule\AnyRuleHandler;
 use Yiisoft\Validator\Rule\Type\FloatType;
 use Yiisoft\Validator\Rule\Type\IntegerType;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -16,7 +16,7 @@ use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithAfterInit;
 
-final class AnyTest extends RuleTestCase
+final class AnyRuleTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
@@ -25,7 +25,7 @@ final class AnyTest extends RuleTestCase
 
     public function testGetName(): void
     {
-        $rule = new Any([new IntegerType(), new FloatType()]);
+        $rule = new AnyRule([new IntegerType(), new FloatType()]);
         $this->assertSame('any', $rule->getName());
     }
 
@@ -33,7 +33,7 @@ final class AnyTest extends RuleTestCase
     {
         return [
             'default' => [
-                new Any([new IntegerType()]),
+                new AnyRule([new IntegerType()]),
                 [
                     'message' => [
                         'template' => 'At least one of the inner rules must pass the validation.',
@@ -55,7 +55,7 @@ final class AnyTest extends RuleTestCase
                 ],
             ],
             'custom' => [
-                new Any(
+                new AnyRule(
                     [new IntegerType(), new FloatType()],
                     message: 'Custom message.',
                     skipOnEmpty: true,
@@ -96,8 +96,8 @@ final class AnyTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            'right away' => [1, new Any([new IntegerType(), new FloatType()])],
-            'later' => [1.5, new Any([new IntegerType(), new FloatType()])],
+            'right away' => [1, new AnyRule([new IntegerType(), new FloatType()])],
+            'later' => [1.5, new AnyRule([new IntegerType(), new FloatType()])],
         ];
     }
 
@@ -106,15 +106,15 @@ final class AnyTest extends RuleTestCase
         $message = 'At least one of the inner rules must pass the validation.';
 
         return [
-            'none' => ['1', new Any([new IntegerType(), new FloatType()]), ['' => [$message]]],
+            'none' => ['1', new AnyRule([new IntegerType(), new FloatType()]), ['' => [$message]]],
         ];
     }
 
     public function testSkipOnError(): void
     {
         $this->testSkipOnErrorInternal(
-            new Any([new IntegerType(), new FloatType()]),
-            new Any([new IntegerType(), new FloatType()], skipOnError: true),
+            new AnyRule([new IntegerType(), new FloatType()]),
+            new AnyRule([new IntegerType(), new FloatType()], skipOnError: true),
         );
     }
 
@@ -122,14 +122,14 @@ final class AnyTest extends RuleTestCase
     {
         $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(
-            new Any([new IntegerType(), new FloatType()]),
-            new Any([new IntegerType(), new FloatType()], when: $when),
+            new AnyRule([new IntegerType(), new FloatType()]),
+            new AnyRule([new IntegerType(), new FloatType()], when: $when),
         );
     }
 
     protected function getDifferentRuleInHandlerItems(): array
     {
-        return [Any::class, AnyHandler::class];
+        return [AnyRule::class, AnyRuleHandler::class];
     }
 
     public function testAfterInitAttribute(): void
@@ -138,7 +138,7 @@ final class AnyTest extends RuleTestCase
         $innerRule1 = new StubRuleWithAfterInit();
         $innerRule2 = new StubRuleWithAfterInit();
 
-        (new Any([$innerRule1, $innerRule2]))->afterInitAttribute($object);
+        (new AnyRule([$innerRule1, $innerRule2]))->afterInitAttribute($object);
         $this->assertSame($object, $innerRule1->getObject());
         $this->assertSame($object, $innerRule2->getObject());
     }

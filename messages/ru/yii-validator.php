@@ -163,6 +163,6 @@ return [
     'Value must be a boolean.' => 'Значение должно быть булевым.',
     /** @see FloatType */
     'Value must be a float.' => 'Значение должно быть вещественным числом.',
-    /** @see Any */
+    /** @see AnyRule */
     'At least one of the inner rules must pass the validation.' => 'Как минимум одно из внутренних правил должно пройти валидацию',
 ];

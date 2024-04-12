@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use stdClass;
-use Yiisoft\Validator\Rule\Any;
+use Yiisoft\Validator\Rule\AnyRule;
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Type\FloatType;
@@ -219,14 +219,14 @@ final class NumberTest extends RuleTestCase
             'limit types with other rules, any: validation passed right away' => [
                 1,
                 [
-                    new Any([new IntegerType(), new FloatType()]),
+                    new AnyRule([new IntegerType(), new FloatType()]),
                     new Number(),
                 ],
             ],
             'limit types with other rules, any: validation passed later' => [
                 1.5,
                 [
-                    new Any([new IntegerType(), new FloatType()]),
+                    new AnyRule([new IntegerType(), new FloatType()]),
                     new Number(),
                 ],
             ],
@@ -292,7 +292,7 @@ final class NumberTest extends RuleTestCase
             'limit types with other rules, any: validation failed' => [
                 '1.5',
                 [
-                    new Any([new IntegerType(), new FloatType()]),
+                    new AnyRule([new IntegerType(), new FloatType()]),
                     new Number(),
                 ],
                 ['' => ['At least one of the inner rules must pass the validation.']],
