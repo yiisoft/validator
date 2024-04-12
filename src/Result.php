@@ -164,9 +164,7 @@ final class Result
                 throw new InvalidArgumentException('Top level attributes can only have string type.');
             }
 
-            if (!array_key_exists($key, $errors)) {
-                $errors[$key] = $error->getMessage();
-            }
+            $errors[$key] ??= $error->getMessage();
         }
 
         return $errors;
