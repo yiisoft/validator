@@ -9,6 +9,7 @@ use Closure;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
+use Yiisoft\Validator\Rule\Type\BooleanType;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -20,7 +21,9 @@ use Yiisoft\Validator\WhenInterface;
  * {@see BooleanValue::$falseValue} settings accordingly. There is also an option to choose between strict and
  * non-strict mode of comparison (see {@see BooleanValue::$strict}).
  *
- * If the purpose is to check the truthiness only, use {@see TrueValue} rule instead.
+ * - If the purpose is to check the truthiness only, use {@see TrueValue} rule instead.
+ * - As an alternative, see also {@see BooleanType} rule, that only strictly allows boolean values and not the ones that
+ * evaluates to boolean ("truthy" / "falsy").
  *
  * @see BooleanValueHandler Corresponding handler performing the actual validation.
  *

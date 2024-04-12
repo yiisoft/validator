@@ -26,6 +26,9 @@ use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Subset;
 use Yiisoft\Validator\Rule\TrueValue;
+use Yiisoft\Validator\Rule\Type\FloatType;
+use Yiisoft\Validator\Rule\Type\IntegerType;
+use Yiisoft\Validator\Rule\Type\StringType;
 use Yiisoft\Validator\Rule\Unique;
 use Yiisoft\Validator\Rule\Url;
 
@@ -59,7 +62,10 @@ return [
     'Must be an IP address with specified subnet.' => 'Должно быть IP адресом с подсетью.',
     'Must not be a subnet.' => 'Не должно быть подсетью.',
     'Is not in the allowed range.' => 'Не входит в список разрешенных диапазонов адресов.',
-    /** @see Integer */
+    /**
+     * @see IntegerType
+     * @see Integer
+     */
     'Value must be an integer.' => 'Значение должно быть целым числом.',
     /** @see Json */
     'The value is not JSON.' => 'Значение не является строкой JSON.',
@@ -126,6 +132,7 @@ return [
      * @see Json
      * @see Length
      * @see Regex
+     * @see StringType
      * @see Url
      */
     'The value must be a string.' => 'Значение должно быть строкой.',
@@ -155,7 +162,15 @@ return [
      * @see \Yiisoft\Validator\Rule\Date\Time
      */
     'Invalid time value.' => 'Некорректное значение времени.',
+
     /** @see Unique */
     'The allowed types for iterable\'s item values are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' => 'Разрешённые типы для значений элементов списка: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
     'Every iterable\'s item must be unique.' => 'Каждый элемент списка должен быть уникален.',
+
+    /** @see BooleanType */
+    'Value must be a boolean.' => 'Значение должно быть булевым.',
+    /** @see FloatType */
+    'Value must be a float.' => 'Значение должно быть вещественным числом.',
+    /** @see AnyRule */
+    'At least one of the inner rules must pass the validation.' => 'Как минимум одно из внутренних правил должно пройти валидацию',
 ];
