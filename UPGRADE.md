@@ -9,7 +9,7 @@ for both A and B.
 
 ## Upgrade from 1.x
 
-* The signature for `Yiisoft\Validator'RuleHandlerIntarface::validate()` changed from:
+* The signature for `Yiisoft\Validator\RuleHandlerIntarface::validate()` changed from:
 
   ```php
   use Yiisoft\Validator\ValidationContext;
