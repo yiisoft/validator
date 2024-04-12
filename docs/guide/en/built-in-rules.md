@@ -69,7 +69,7 @@ Here is a list of all available built-in rules, divided by category.
 
 ### Complex rules
 
-- [Any](../../../src/Rule/Any.php)
+- [AnyRule](../../../src/Rule/AnyRule.php)
 - [Composite](../../../src/Rule/Composite.php)
 - [Each](../../../src/Rule/Each.php)
 - [Nested](../../../src/Rule/Nested.php)
