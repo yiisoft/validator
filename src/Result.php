@@ -114,9 +114,7 @@ final class Result
         foreach ($this->errors as $error) {
             $stringValuePath = implode($separator, $error->getValuePath($escape));
 
-            if (!array_key_exists($stringValuePath, $errors)) {
-                $errors[$stringValuePath] = $error->getMessage();
-            }
+            $errors[$stringValuePath] ??= $error->getMessage();
         }
 
         return $errors;
