@@ -74,7 +74,7 @@ final class Integer extends AbstractNumber
         string $lessThanMinMessage = self::DEFAULT_LESS_THAN_MIN_MESSAGE,
         string $greaterThanMaxMessage = self::DEFAULT_GREATER_THAN_MAX_MESSAGE,
         string $pattern = '/^\s*[+-]?\d+\s*$/',
-        mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
         Closure|null $when = null,
     ) {

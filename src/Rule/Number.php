@@ -74,7 +74,7 @@ final class Number extends AbstractNumber
         string $lessThanMinMessage = '{Attribute} must be no less than {min}.',
         string $greaterThanMaxMessage = '{Attribute} must be no greater than {max}.',
         string $pattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
-        mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
         Closure|null $when = null,
     ) {

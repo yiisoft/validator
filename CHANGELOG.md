@@ -24,6 +24,8 @@
   (@arogachev)
 - Chg #679: Change type of `$rule` argument in `RuleHandlerInterface::validate()` from `object` to `RuleInterface`
   (@arogachev)
+- Chg #660: Change type of `$skipOnEmpty` argument in rules' constructors from `mixed` to `bool|callable|null`
+  (@arogachev)
 
 ## 1.3.0 April 04, 2024
 
