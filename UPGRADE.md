@@ -9,7 +9,9 @@ for both A and B.
 
 ## Upgrade from 1.x
 
-* The signature for `Yiisoft\Validator\RuleHandlerIntarface::validate()` changed from:
+* The signature for `Yiisoft\Validator\RuleHandlerIntarface::validate()` changed. If you have classes that implement 
+  `RuleHandlerIntarface`, change the type of `$rule` parameter in method `validate()` from `object` to `RuleInterface`. 
+  For example:
 
   ```php
   use Yiisoft\Validator\ValidationContext;
@@ -17,7 +19,7 @@ for both A and B.
   public function validate(mixed $value, object $rule, ValidationContext $context): Result;
   ```
   
-  to:
+  Change to:
 
   ```php
   use Yiisoft\Validator\RuleInterface;
