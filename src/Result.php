@@ -113,7 +113,6 @@ final class Result
         $errors = [];
         foreach ($this->errors as $error) {
             $stringValuePath = implode($separator, $error->getValuePath($escape));
-
             $errors[$stringValuePath] ??= $error->getMessage();
         }
 
