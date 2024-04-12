@@ -1,6 +1,6 @@
 # Upgrading Instructions for Yii Validator
 
-### !!!IMPORTANT!!!
+**!!!IMPORTANT!!!**
 
 The following upgrading instructions are cumulative. That is,
 if you want to upgrade from version A to version C and there is
