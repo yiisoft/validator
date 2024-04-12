@@ -4,6 +4,13 @@
 
 Here is a list of all available built-in rules, divided by category.
 
+### Type rules
+
+- [BooleanType](../../../src/Rule/BooleanType.php)
+- [FloatType](../../../src/Rule/FloatType.php)
+- [IntegerType](../../../src/Rule/IntegerType.php)
+- [StringType](../../../src/Rule/StringType.php)
+
 ### String rules
 
 - [StringValue](../../../src/Rule/StringValue.php)
@@ -62,6 +69,7 @@ Here is a list of all available built-in rules, divided by category.
 
 ### Complex rules
 
+- [Any](../../../src/Rule/Any.php)
 - [Composite](../../../src/Rule/Composite.php)
 - [Each](../../../src/Rule/Each.php)
 - [Nested](../../../src/Rule/Nested.php)
