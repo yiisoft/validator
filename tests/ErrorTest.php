@@ -28,19 +28,10 @@ final class ErrorTest extends TestCase
                 ['user', 'the.data😎age'],
                 '😎',
             ],
-
-            // deprecated
-            'true' => [
+            'dot' => [
                 ['user', 'data\.age'],
                 ['user', 'data.age'],
-                true,
-            ],
-
-            // deprecated
-            'false' => [
-                ['user', 'data.age'],
-                ['user', 'data.age'],
-                false,
+                '.',
             ],
         ];
     }
