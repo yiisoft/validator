@@ -44,7 +44,7 @@ final class UniqueTest extends RuleTestCase
                     ],
                     'incorrectItemValueMessage' => [
                         'template' => 'The allowed types for iterable\'s item values are integer, float, string, ' .
-                            'boolean, null and object implementing \Stringable or \DateTimeInterface.',
+                            'boolean and object implementing \Stringable or \DateTimeInterface.',
                         'parameters' => [],
                     ],
                     'differentTypesMessage' => [
@@ -133,7 +133,7 @@ final class UniqueTest extends RuleTestCase
     {
         $incorrectInputMessage = 'Value must be array or iterable.';
         $incorrectItemValueMessage = 'The allowed types for iterable\'s item values are integer, float, string, ' .
-            'boolean, null and object implementing \Stringable or \DateTimeInterface.';
+            'boolean and object implementing \Stringable or \DateTimeInterface.';
         $differentTypesMessage = 'All iterable items must have the same type.';
         $message = 'Every iterable\'s item must be unique.';
 

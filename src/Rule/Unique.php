@@ -44,7 +44,7 @@ final class Unique implements
      * - `{type}`: the type of the value being validated.
      * @param string $incorrectItemValueMessage Error message used when validation fails because the validated iterable
      * contains items with invalid values. Only the following types are allowed: scalar (string, integer, float,
-     * boolean), `null`, objects implementing `\Stringable` or `\DateTimeInterface` interfaces.
+     * boolean), objects implementing `\Stringable` or `\DateTimeInterface` interfaces.
      *
      * You may use the following placeholders in the message:
      *
@@ -75,7 +75,7 @@ final class Unique implements
     public function __construct(
         private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $incorrectItemValueMessage = 'The allowed types for iterable\'s item values are integer, ' .
-        'float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.',
+        'float, string, boolean, and object implementing \Stringable or \DateTimeInterface.',
         private string $differentTypesMessage = 'All iterable items must have the same type.',
         private string $message = 'Every iterable\'s item must be unique.',
         private mixed $skipOnEmpty = null,
