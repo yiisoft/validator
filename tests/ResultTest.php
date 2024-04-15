@@ -60,14 +60,6 @@ class ResultTest extends TestCase
     public function testGetErrorMessagesIndexedByPath(): void
     {
         $this->assertEquals(
-            ['' => ['error1'], 'path.2' => ['error2']],
-            $this->createErrorResult()->getErrorMessagesIndexedByPath()
-        );
-    }
-
-    public function testGetErrorMessagesIndexedByPathWithAttributes(): void
-    {
-        $this->assertEquals(
             [
                 'attribute2' => ['error2.1', 'error2.2'],
                 'attribute2.nested' => ['error2.3', 'error2.4'],
@@ -76,6 +68,20 @@ class ResultTest extends TestCase
                 'attribute4.subattribute4\.3.subattribute4*4' => ['error4.2'],
             ],
             $this->createAttributeErrorResult()->getErrorMessagesIndexedByPath()
+        );
+    }
+
+    public function testGetFirstErrorMessagesIndexedByPath(): void
+    {
+        $this->assertSame(
+            [
+                'attribute2' => 'error2.1',
+                'attribute2.nested' => 'error2.3',
+                '' => 'error3.1',
+                'attribute4.subattribute4\.1.subattribute4*2' => 'error4.1',
+                'attribute4.subattribute4\.3.subattribute4*4' => 'error4.2',
+            ],
+            $this->createAttributeErrorResult()->getFirstErrorMessagesIndexedByPath(),
         );
     }
 
@@ -100,14 +106,34 @@ class ResultTest extends TestCase
         );
     }
 
-    public function testGetErrorMessagesIndexedByAttribute_IncorrectType(): void
+    public function testGetErrorMessagesIndexedByAttributeWithIncorrectType(): void
     {
-        $result = new Result();
-
-        $result->addError('error1', [], [1]);
+        $result = (new Result())->addError('error1', [], [1]);
 
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Top level attributes can only have string type.');
         $result->getErrorMessagesIndexedByAttribute();
+    }
+
+    public function testGetFirstErrorMessagesIndexedByAttribute(): void
+    {
+        $this->assertSame(
+            [
+                'attribute2' => 'error2.1',
+                '' => 'error3.1',
+                'attribute4' => 'error4.1',
+            ],
+            $this->createAttributeErrorResult()->getFirstErrorMessagesIndexedByAttribute(),
+        );
+    }
+
+    public function testGetFirstErrorMessagesIndexedByAttributeWithIncorrectType(): void
+    {
+        $result = (new Result())->addError('error1', [], [1]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Top level attributes can only have string type.');
+        $result->getFirstErrorMessagesIndexedByAttribute();
     }
 
     public function testGetAttributeErrors(): void
@@ -269,7 +295,7 @@ class ResultTest extends TestCase
         $result = new Result();
         $result
             ->addError('error1')
-            ->addError('error2', [], ['path', 2]);
+            ->addError('error2', valuePath: ['path', 2]);
 
         return $result;
     }
