@@ -225,8 +225,7 @@ final class CompositeTest extends RuleTestCase
                             bool|callable|null $skipOnEmpty = null,
                             bool $skipOnError = false,
                             Closure|null $when = null,
-                        )
-                        {
+                        ) {
                             parent::__construct($rules, $skipOnEmpty, $skipOnError, $when);
                         }
                     },
@@ -328,8 +327,7 @@ final class CompositeTest extends RuleTestCase
                             bool|callable|null $skipOnEmpty = null,
                             bool $skipOnError = false,
                             Closure|null $when = null,
-                        )
-                        {
+                        ) {
                             parent::__construct([new Required()], $skipOnEmpty, $skipOnError, $when);
                         }
                     },
