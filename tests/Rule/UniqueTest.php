@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rule;
+namespace Yiisoft\Validator\Tests\Rule;
 
 use DateTime;
 use stdClass;
@@ -47,6 +47,10 @@ final class UniqueTest extends RuleTestCase
                             'boolean, null and object implementing \Stringable or \DateTimeInterface.',
                         'parameters' => [],
                     ],
+                    'differentTypesMessage' => [
+                        'template' => 'All iterable items must have the same type.',
+                        'parameters' => [],
+                    ],
                     'message' => [
                         'template' => 'Every iterable\'s item must be unique.',
                         'parameters' => [],
@@ -72,6 +76,10 @@ final class UniqueTest extends RuleTestCase
                         'template' => 'Custom message 2.',
                         'parameters' => [],
                     ],
+                    'differentTypesMessage' => [
+                        'template' => 'All iterable items must have the same type.',
+                        'parameters' => [],
+                    ],
                     'message' => [
                         'template' => 'Custom message 3.',
                         'parameters' => [],
@@ -86,7 +94,6 @@ final class UniqueTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            'null' => [[null], new Unique()],
             'strings' => [['a', 'b'], new Unique()],
             'integers' => [[1, 2], new Unique()],
             'floats' => [[1.5, 2.5], new Unique()],
@@ -112,43 +119,6 @@ final class UniqueTest extends RuleTestCase
                 [new DateTime('2024-04-10 14:05:01'), new DateTime('2024-04-10 14:05:02')],
                 new Unique(),
             ],
-            'mix, all allowed types' => [
-                [
-                    null,
-                    'a',
-                    'b',
-                    1,
-                    2,
-                    1.5,
-                    2.5,
-                    false,
-                    true,
-                    new class () implements Stringable {
-                        public function __toString()
-                        {
-                            return 'c';
-                        }
-                    },
-                    new class () implements Stringable {
-                        public function __toString()
-                        {
-                            return 'd';
-                        }
-                    },
-                    new DateTime('2024-04-10 14:05:01'),
-                    new DateTime('2024-04-10 14:05:02'),
-                ],
-                new Unique(),
-            ],
-            'mix, timestamps and datetime values' => [
-                [
-                    new DateTime('2024-04-10 14:05:01'),
-                    new DateTime('2024-04-10 14:05:02'),
-                    (new DateTime('2024-04-10 14:05:01'))->getTimestamp(),
-                ],
-                new Unique(),
-            ],
-            'mix, numbers and strings' => [[1, 2, '1', '3'], new Unique()],
             'using as attribute' => [
                 new class () {
                     #[Unique]
@@ -164,6 +134,7 @@ final class UniqueTest extends RuleTestCase
         $incorrectInputMessage = 'Value must be array or iterable.';
         $incorrectItemValueMessage = 'The allowed types for iterable\'s item values are integer, float, string, ' .
             'boolean, null and object implementing \Stringable or \DateTimeInterface.';
+        $differentTypesMessage = 'All iterable items must have the same type.';
         $message = 'Every iterable\'s item must be unique.';
 
         return [
@@ -201,6 +172,7 @@ final class UniqueTest extends RuleTestCase
                 null,
                 ['data' => ['"Данные" - неитерируемое значение.']],
             ],
+            'incorrect item value, null' => [[null], new Unique(), ['' => [$incorrectItemValueMessage]]],
             'incorrect item value, array' => [[1, [], 2], new Unique(), ['' => [$incorrectItemValueMessage]]],
             'incorrect item value, object not implemeting \Stringable' => [
                 [1, new stdClass(), 2],
@@ -243,7 +215,6 @@ final class UniqueTest extends RuleTestCase
                 null,
                 ['data' => ['"Данные" - в списке есть недопустимое значение.']],
             ],
-            'null' => [[null, null], new Unique(), ['' => [$message]]],
             'strings' => [['a', 'b', 'a', 'c'], new Unique(), ['' => [$message]]],
             'integers' => [[1, 2, 1, 3], new Unique(), ['' => [$message]]],
             'floats' => [[1.5, 2.5, 1.5, 3.5], new Unique(), ['' => [$message]]],
@@ -288,20 +259,46 @@ final class UniqueTest extends RuleTestCase
                 new Unique(),
                 ['' => [$message]],
             ],
-            'mix, string and stringable' => [
-                [
-                    'a',
-                    'b',
-                    new class () implements Stringable {
-                        public function __toString()
-                        {
-                            return 'a';
-                        }
-                    },
-                    'c',
-                ],
-                new Unique(),
-                ['' => [$message]],
+            'different types' => [
+                ['data' => [1, '2', 3]],
+                ['data' => new Unique()],
+                ['data' => [$differentTypesMessage]],
+            ],
+            'different types, custom message' => [
+                ['data' => [1, '2', 3]],
+                ['data' => new Unique(differentTypesMessage: 'Attribute - {attribute}.')],
+                ['data' => ['Attribute - data.']],
+            ],
+            'different types, translated attribute' => [
+                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                    public function __construct(
+                        public array $data = [1, '2', 3],
+                    ) {
+                    }
+
+                    public function getAttributeLabels(): array
+                    {
+                        return [
+                            'data' => 'Данные',
+                        ];
+                    }
+
+                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    {
+                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                    }
+
+                    public function getRules(): array
+                    {
+                        return [
+                            'data' => new Unique(
+                                differentTypesMessage: '"{attribute}" - в списке есть элементы разных типов.',
+                            ),
+                        ];
+                    }
+                },
+                null,
+                ['data' => ['"Данные" - в списке есть элементы разных типов.']],
             ],
             'custom message' => [
                 ['data' => [1, 2, 1, 3]],

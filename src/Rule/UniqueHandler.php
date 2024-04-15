@@ -11,6 +11,9 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function count;
+use function gettype;
+
 /**
  * A handler for {@see Unique} rule. Validates uniqueness of each element of an iterable.
  */
@@ -30,6 +33,7 @@ final class UniqueHandler implements RuleHandlerInterface
         }
 
         $stack = [];
+        $previousItem = null;
         foreach ($value as $item) {
             if (!$this->isValueAllowedForItem($item)) {
                 return (new Result())->addError($rule->getIncorrectItemValueMessage(), [
@@ -38,47 +42,37 @@ final class UniqueHandler implements RuleHandlerInterface
                 ]);
             }
 
-            foreach ($stack as $stackItem) {
-                if ($this->areItemsEqual($item, $stackItem)) {
-                    return (new Result())->addError($rule->getMessage(), [
-                        'attribute' => $context->getTranslatedAttribute(),
-                    ]);
-                }
+            if ($previousItem !== null && gettype($previousItem) !== gettype($item)) {
+                return (new Result())->addError($rule->getDifferentTypesMessage(), [
+                    'attribute' => $context->getTranslatedAttribute(),
+                ]);
             }
 
-            $stack[] = $item;
+            $previousItem = $item;
+
+            if (!empty($stack) && count($stack) !== count(array_unique($stack, flags: SORT_REGULAR))) {
+                return (new Result())->addError($rule->getMessage(), [
+                    'attribute' => $context->getTranslatedAttribute(),
+                ]);
+            }
+
+            if ($value instanceof Stringable) {
+                $stack[] = (string) $value;
+            } elseif ($value instanceof DateTimeInterface) {
+                $stack[] = $value->getTimestamp();
+            } else {
+                $stack[] = $value;
+            }
         }
 
         return new Result();
     }
 
     /**
-     * @psalm-assert null|string|int|float|bool|Stringable|DateTimeInterface $value
+     * @psalm-assert string|int|float|bool|Stringable|DateTimeInterface $value
      */
     private function isValueAllowedForItem(mixed $value): bool
     {
-        return $value === null ||
-            is_scalar($value) ||
-            $value instanceof Stringable ||
-            $value instanceof DateTimeInterface;
-    }
-
-    private function areItemsEqual(
-        null|string|int|float|bool|Stringable|DateTimeInterface $item,
-        null|string|int|float|bool|Stringable|DateTimeInterface $stackItem,
-    ): bool {
-        if ($item instanceof DateTimeInterface && $stackItem instanceof DateTimeInterface) {
-            return $item == $stackItem;
-        }
-
-        if ($item instanceof Stringable) {
-            $item = (string) $item;
-        }
-
-        if ($stackItem instanceof Stringable) {
-            $stackItem = (string) $stackItem;
-        }
-
-        return $item === $stackItem;
+        return is_scalar($value) || $value instanceof Stringable || $value instanceof DateTimeInterface;
     }
 }

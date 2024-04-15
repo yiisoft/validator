@@ -50,6 +50,12 @@ final class Unique implements
      *
      * - `{attribute}`: the translated label of the attribute being validated.
      * - `{type}`: the type of the iterable key being validated.
+     * @param string $differentTypesMessage Error message used when validation fails because the validated iterable
+     * contains items of different type.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{attribute}`: the translated label of the attribute being validated.
      * @param string $message Error message used when validation fails because the validated iterable contains duplicate
      * items.
      *
@@ -70,6 +76,7 @@ final class Unique implements
         private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $incorrectItemValueMessage = 'The allowed types for iterable\'s item values are integer, ' .
         'float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.',
+        private string $differentTypesMessage = 'All iterable items must have the same type.',
         private string $message = 'Every iterable\'s item must be unique.',
         private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
@@ -107,6 +114,18 @@ final class Unique implements
     }
 
     /**
+     * Error message used when validation fails because the validated iterable contains items of different types.
+     *
+     * @return string Error message / template.
+     *
+     * @see $differentTypesMessage
+     */
+    public function getDifferentTypesMessage(): string
+    {
+        return $this->differentTypesMessage;
+    }
+
+    /**
      * Error message used when validation fails because the validated iterable contains duplicate items.
      *
      * @return string Error message / template.
@@ -134,6 +153,10 @@ final class Unique implements
             ],
             'incorrectItemValueMessage' => [
                 'template' => $this->incorrectItemValueMessage,
+                'parameters' => [],
+            ],
+            'differentTypesMessage' => [
+                'template' => $this->differentTypesMessage,
                 'parameters' => [],
             ],
             'message' => [
