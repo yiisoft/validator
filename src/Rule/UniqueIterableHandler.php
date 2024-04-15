@@ -15,14 +15,14 @@ use function count;
 use function gettype;
 
 /**
- * A handler for {@see Unique} rule. Validates uniqueness of each element of an iterable.
+ * A handler for {@see UniqueIterable} rule. Validates uniqueness of each element of an iterable.
  */
-final class UniqueHandler implements RuleHandlerInterface
+final class UniqueIterableHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
-        if (!$rule instanceof Unique) {
-            throw new UnexpectedRuleException(Unique::class, $rule);
+        if (!$rule instanceof UniqueIterable) {
+            throw new UnexpectedRuleException(UniqueIterable::class, $rule);
         }
 
         if (!is_iterable($value)) {

@@ -24,7 +24,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Unique implements
+final class UniqueIterable implements
     RuleWithOptionsInterface,
     SkipOnEmptyInterface,
     SkipOnErrorInterface,
@@ -75,7 +75,7 @@ final class Unique implements
     public function __construct(
         private string $incorrectInputMessage = 'Value must be array or iterable.',
         private string $incorrectItemValueMessage = 'The allowed types for iterable\'s item values are integer, ' .
-        'float, string, boolean, and object implementing \Stringable or \DateTimeInterface.',
+        'float, string, boolean and object implementing \Stringable or \DateTimeInterface.',
         private string $differentTypesMessage = 'All iterable items must have the same type.',
         private string $message = 'Every iterable\'s item must be unique.',
         private mixed $skipOnEmpty = null,
@@ -170,6 +170,6 @@ final class Unique implements
 
     public function getHandler(): string
     {
-        return UniqueHandler::class;
+        return UniqueIterableHandler::class;
     }
 }

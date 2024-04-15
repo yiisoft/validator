@@ -10,8 +10,8 @@ use Stringable;
 use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
 use Yiisoft\Validator\AttributeTranslatorInterface;
 use Yiisoft\Validator\AttributeTranslatorProviderInterface;
-use Yiisoft\Validator\Rule\Unique;
-use Yiisoft\Validator\Rule\UniqueHandler;
+use Yiisoft\Validator\Rule\UniqueIterable;
+use Yiisoft\Validator\Rule\UniqueIterableHandler;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
@@ -19,7 +19,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
-final class UniqueTest extends RuleTestCase
+final class UniqueIterableTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;
     use RuleWithOptionsTestTrait;
@@ -28,7 +28,7 @@ final class UniqueTest extends RuleTestCase
 
     public function testGetName(): void
     {
-        $rule = new Unique();
+        $rule = new UniqueIterable();
         $this->assertSame('unique', $rule->getName());
     }
 
@@ -36,7 +36,7 @@ final class UniqueTest extends RuleTestCase
     {
         return [
             'default' => [
-                new Unique(),
+                new UniqueIterable(),
                 [
                     'incorrectInputMessage' => [
                         'template' => 'Value must be array or iterable.',
@@ -60,7 +60,7 @@ final class UniqueTest extends RuleTestCase
                 ],
             ],
             'custom' => [
-                new Unique(
+                new UniqueIterable(
                     incorrectInputMessage: 'Custom message 1.',
                     incorrectItemValueMessage: 'Custom message 2.',
                     message: 'Custom message 3.',
@@ -94,10 +94,10 @@ final class UniqueTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            'strings' => [['a', 'b'], new Unique()],
-            'integers' => [[1, 2], new Unique()],
-            'floats' => [[1.5, 2.5], new Unique()],
-            'boolean values' => [[false, true], new Unique()],
+            'strings' => [['a', 'b'], new UniqueIterable()],
+            'integers' => [[1, 2], new UniqueIterable()],
+            'floats' => [[1.5, 2.5], new UniqueIterable()],
+            'boolean values' => [[false, true], new UniqueIterable()],
             'stringable values' => [
                 [
                     new class () implements Stringable {
@@ -113,15 +113,15 @@ final class UniqueTest extends RuleTestCase
                         }
                     },
                 ],
-                new Unique(),
+                new UniqueIterable(),
             ],
             'datetime values' => [
                 [new DateTime('2024-04-10 14:05:01'), new DateTime('2024-04-10 14:05:02')],
-                new Unique(),
+                new UniqueIterable(),
             ],
             'using as attribute' => [
                 new class () {
-                    #[Unique]
+                    #[UniqueIterable]
                     private array $data = [1, 2];
                 },
                 null,
@@ -138,11 +138,11 @@ final class UniqueTest extends RuleTestCase
         $message = 'Every iterable\'s item must be unique.';
 
         return [
-            'incorrect input, integer' => [1, new Unique(), ['' => [$incorrectInputMessage]]],
-            'incorrect input, object' => [new stdClass(), new Unique(), ['' => [$incorrectInputMessage]]],
+            'incorrect input, integer' => [1, new UniqueIterable(), ['' => [$incorrectInputMessage]]],
+            'incorrect input, object' => [new stdClass(), new UniqueIterable(), ['' => [$incorrectInputMessage]]],
             'incorrect input, custom message' => [
                 ['data' => 1],
-                ['data' => new Unique(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => new UniqueIterable(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
                 ['data' => ['Attribute - data, type - int.']],
             ],
             'incorrect input, custom message, translated attribute' => [
@@ -166,22 +166,22 @@ final class UniqueTest extends RuleTestCase
 
                     public function getRules(): array
                     {
-                        return ['data' => new Unique(incorrectInputMessage: '"{attribute}" - неитерируемое значение.')];
+                        return ['data' => new UniqueIterable(incorrectInputMessage: '"{attribute}" - неитерируемое значение.')];
                     }
                 },
                 null,
                 ['data' => ['"Данные" - неитерируемое значение.']],
             ],
-            'incorrect item value, null' => [[null], new Unique(), ['' => [$incorrectItemValueMessage]]],
-            'incorrect item value, array' => [[1, [], 2], new Unique(), ['' => [$incorrectItemValueMessage]]],
+            'incorrect item value, null' => [[null], new UniqueIterable(), ['' => [$incorrectItemValueMessage]]],
+            'incorrect item value, array' => [[1, [], 2], new UniqueIterable(), ['' => [$incorrectItemValueMessage]]],
             'incorrect item value, object not implemeting \Stringable' => [
                 [1, new stdClass(), 2],
-                new Unique(),
+                new UniqueIterable(),
                 ['' => [$incorrectItemValueMessage]],
             ],
             'incorrect item value, custom message' => [
                 ['data' => [1, [], 2]],
-                ['data' => new Unique(incorrectItemValueMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => new UniqueIterable(incorrectItemValueMessage: 'Attribute - {attribute}, type - {type}.')],
                 ['data' => ['Attribute - data, type - array.']],
             ],
             'incorrect item value, custom message, translated attribute' => [
@@ -206,7 +206,7 @@ final class UniqueTest extends RuleTestCase
                     public function getRules(): array
                     {
                         return [
-                            'data' => new Unique(
+                            'data' => new UniqueIterable(
                                 incorrectItemValueMessage: '"{attribute}" - в списке есть недопустимое значение.',
                             ),
                         ];
@@ -215,10 +215,10 @@ final class UniqueTest extends RuleTestCase
                 null,
                 ['data' => ['"Данные" - в списке есть недопустимое значение.']],
             ],
-            'strings' => [['a', 'b', 'a', 'c'], new Unique(), ['' => [$message]]],
-            'integers' => [[1, 2, 1, 3], new Unique(), ['' => [$message]]],
-            'floats' => [[1.5, 2.5, 1.5, 3.5], new Unique(), ['' => [$message]]],
-            'boolean values' => [[false, true, false], new Unique(), ['' => [$message]]],
+            'strings' => [['a', 'b', 'a', 'c'], new UniqueIterable(), ['' => [$message]]],
+            'integers' => [[1, 2, 1, 3], new UniqueIterable(), ['' => [$message]]],
+            'floats' => [[1.5, 2.5, 1.5, 3.5], new UniqueIterable(), ['' => [$message]]],
+            'boolean values' => [[false, true, false], new UniqueIterable(), ['' => [$message]]],
             'stringable values' => [
                 [
                     new class () implements Stringable {
@@ -246,7 +246,7 @@ final class UniqueTest extends RuleTestCase
                         }
                     },
                 ],
-                new Unique(),
+                new UniqueIterable(),
                 ['' => [$message]],
             ],
             'datetime values' => [
@@ -256,17 +256,17 @@ final class UniqueTest extends RuleTestCase
                     new DateTime('2024-04-10 14:05:01'),
                     new DateTime('2024-04-10 14:05:03'),
                 ],
-                new Unique(),
+                new UniqueIterable(),
                 ['' => [$message]],
             ],
             'different types' => [
                 ['data' => [1, '2', 3]],
-                ['data' => new Unique()],
+                ['data' => new UniqueIterable()],
                 ['data' => [$differentTypesMessage]],
             ],
             'different types, custom message' => [
                 ['data' => [1, '2', 3]],
-                ['data' => new Unique(differentTypesMessage: 'Attribute - {attribute}.')],
+                ['data' => new UniqueIterable(differentTypesMessage: 'Attribute - {attribute}.')],
                 ['data' => ['Attribute - data.']],
             ],
             'different types, translated attribute' => [
@@ -291,7 +291,7 @@ final class UniqueTest extends RuleTestCase
                     public function getRules(): array
                     {
                         return [
-                            'data' => new Unique(
+                            'data' => new UniqueIterable(
                                 differentTypesMessage: '"{attribute}" - в списке есть элементы разных типов.',
                             ),
                         ];
@@ -302,7 +302,7 @@ final class UniqueTest extends RuleTestCase
             ],
             'custom message' => [
                 ['data' => [1, 2, 1, 3]],
-                ['data' => new Unique(message: 'Attribute - {attribute}.')],
+                ['data' => new UniqueIterable(message: 'Attribute - {attribute}.')],
                 ['data' => ['Attribute - data.']],
             ],
             'custom message, translated attribute' => [
@@ -326,7 +326,7 @@ final class UniqueTest extends RuleTestCase
 
                     public function getRules(): array
                     {
-                        return ['data' => new Unique(message: '"{attribute}" - в списке есть дубликаты.')];
+                        return ['data' => new UniqueIterable(message: '"{attribute}" - в списке есть дубликаты.')];
                     }
                 },
                 null,
@@ -334,7 +334,7 @@ final class UniqueTest extends RuleTestCase
             ],
             'using as attribute' => [
                 new class () {
-                    #[Unique]
+                    #[UniqueIterable]
                     private array $data = [1, 2, 1, 3];
                 },
                 null,
@@ -345,17 +345,17 @@ final class UniqueTest extends RuleTestCase
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new Unique(), new Unique(skipOnError: true));
+        $this->testSkipOnErrorInternal(new UniqueIterable(), new UniqueIterable(skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new Unique(), new Unique(when: $when));
+        $this->testWhenInternal(new UniqueIterable(), new UniqueIterable(when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array
     {
-        return [Unique::class, UniqueHandler::class];
+        return [UniqueIterable::class, UniqueIterableHandler::class];
     }
 }
