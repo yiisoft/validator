@@ -95,7 +95,7 @@ final class Count implements
         'other{items}}.',
         string $notExactlyMessage = '{Attribute} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
         'other{items}}.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
@@ -107,6 +107,7 @@ final class Count implements
             $greaterThanMaxMessage,
             $notExactlyMessage
         );
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

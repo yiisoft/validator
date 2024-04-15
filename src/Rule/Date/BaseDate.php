@@ -43,10 +43,11 @@ abstract class BaseDate implements RuleInterface, SkipOnErrorInterface, WhenInte
         private ?string $incorrectInputMessage,
         private ?string $tooEarlyMessage,
         private ?string $tooLateMessage,
-        private mixed $skipOnEmpty,
+        bool|callable|null $skipOnEmpty,
         private bool $skipOnError,
         private Closure|null $when,
     ) {
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getFormat(): ?string

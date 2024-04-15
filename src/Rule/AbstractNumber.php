@@ -104,7 +104,7 @@ abstract class AbstractNumber implements
         private string $lessThanMinMessage,
         private string $greaterThanMaxMessage,
         string $pattern,
-        private mixed $skipOnEmpty,
+        bool|callable|null $skipOnEmpty,
         private bool $skipOnError,
         private Closure|null $when,
     ) {
@@ -113,6 +113,7 @@ abstract class AbstractNumber implements
         }
 
         $this->pattern = $pattern;
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

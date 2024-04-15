@@ -90,7 +90,7 @@ final class DateTime implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
         string $format = 'Y-m-d',
         private string $incorrectInputMessage = '{Attribute} must be a date.',
         private string $message = '{Attribute} is not a valid date.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private ?Closure $when = null,
     ) {
@@ -99,6 +99,7 @@ final class DateTime implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
         }
 
         $this->format = $format;
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     /**

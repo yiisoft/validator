@@ -83,11 +83,12 @@ final class StopOnError implements
      */
     public function __construct(
         iterable $rules,
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
         $this->rules = RulesNormalizer::normalizeList($rules);
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

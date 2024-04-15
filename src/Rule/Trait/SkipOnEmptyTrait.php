@@ -16,7 +16,7 @@ use function is_bool;
  * ```php
  * public function __construct(
  *     // ...
- *     private mixed $skipOnEmpty = null,
+ *     bool|callable|null $skipOnEmpty = null,
  *     // ...
  * ) {
  * }
@@ -26,6 +26,13 @@ use function is_bool;
  */
 trait SkipOnEmptyTrait
 {
+    /**
+     * @var bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty / not passed.
+     *  See {@see SkipOnEmptyInterface}.
+     * @psalm-var SkipOnEmptyValue $skipOnEmpty
+     */
+    private mixed $skipOnEmpty;
+
     /**
      * An immutable setter to change `$skipOnEmpty` property.
      *

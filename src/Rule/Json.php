@@ -58,10 +58,11 @@ final class Json implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
     public function __construct(
         private string $incorrectInputMessage = '{Attribute} must be a string.',
         private string $message = '{Attribute} is not JSON.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

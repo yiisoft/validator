@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use Closure;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Composite;
@@ -219,8 +220,14 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new class () extends Composite {
-                        public function __construct()
+                        public function __construct(
+                            iterable $rules = [],
+                            bool|callable|null $skipOnEmpty = null,
+                            bool $skipOnError = false,
+                            Closure|null $when = null,
+                        )
                         {
+                            parent::__construct($rules, $skipOnEmpty, $skipOnError, $when);
                         }
                     },
                 ],
@@ -316,9 +323,14 @@ final class CompositeTest extends RuleTestCase
                 null,
                 [
                     new class () extends Composite {
-                        public function __construct()
+                        public function __construct(
+                            iterable $rules = [],
+                            bool|callable|null $skipOnEmpty = null,
+                            bool $skipOnError = false,
+                            Closure|null $when = null,
+                        )
                         {
-                            $this->rules = [new Required()];
+                            parent::__construct([new Required()], $skipOnEmpty, $skipOnError, $when);
                         }
                     },
                 ],
