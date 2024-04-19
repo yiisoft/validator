@@ -15,6 +15,10 @@ use Yiisoft\Validator\WhenInterface;
  * The format of the number must match the regular expression specified in {@see Number::$pattern}. Optionally, you may
  * configure the {@see Number::$min} and {@see Number::$max} to ensure the number is within a certain range.
  *
+ * As an alternative, see also {@see FloatType} and {@see IntegerType} rules, that only strictly allow float and integer
+ * values accordingly and not the ones that evaluate to such (for example number within a string). Or you can use them
+ * together with this rule to limit the valid types.
+ *
  * @see NumberHandler
  * @see AbstractNumber
  *
