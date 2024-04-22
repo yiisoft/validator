@@ -7,6 +7,7 @@
 - New #693: Add `AnyRule` rule (@arogachev)
 - New #649: Add `getFirstErrorMessagesIndexedByPath()` and `getFirstErrorMessagesIndexedByAttribute()` methods to
   `Result` (@arogachev)
+- New #687: Add `UniqueIterable` rule (@arogachev)
 
 ## 1.3.0 April 04, 2024
 

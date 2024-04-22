@@ -45,6 +45,7 @@ Here is a list of all available built-in rules, divided by category.
 
 - [In](../../../src/Rule/In.php)
 - [Subset](../../../src/Rule/Subset.php)
+- [UniqueIterable](../../../src/Rule/UniqueIterable.php)
 
 ### Count rules
 

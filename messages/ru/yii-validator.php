@@ -29,6 +29,7 @@ use Yiisoft\Validator\Rule\TrueValue;
 use Yiisoft\Validator\Rule\Type\FloatType;
 use Yiisoft\Validator\Rule\Type\IntegerType;
 use Yiisoft\Validator\Rule\Type\StringType;
+use Yiisoft\Validator\Rule\UniqueIterable;
 use Yiisoft\Validator\Rule\Url;
 
 return [
@@ -43,7 +44,10 @@ return [
     'This value must contain at least {min, number} {min, plural, one{item} other{items}}.' => 'Значение должно содержать как минимум {min, number} {min, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
     'This value must contain at most {max, number} {max, plural, one{item} other{items}}.' => 'Значение должно содержать не более {max, number} {max, plural, one{элемента} few{элементов} many{элементов} other{элементов}}.',
     'This value must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => 'Значение должно содержать ровно {exactly, number} {exactly, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
-    /** @see Each */
+    /**
+     * @see Each
+     * @see UniqueIterable
+     */
     'Value must be array or iterable.' => 'Значение должно быть массивом или иметь псевдотип iterable.',
     'Every iterable key must have an integer or a string type.' => 'Ключ должен иметь тип integer или string.',
     /** @see Email */
@@ -158,6 +162,11 @@ return [
      * @see \Yiisoft\Validator\Rule\Date\Time
      */
     'Invalid time value.' => 'Некорректное значение времени.',
+
+    /** @see UniqueIterable */
+    'The allowed types for iterable\'s item values are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' => 'Разрешённые типы для значений элементов списка: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
+    'All iterable items must have the same type.' => 'Все элементы списка должны иметь одинаковый тип.',
+    'Every iterable\'s item must be unique.' => 'Каждый элемент списка должен быть уникален.',
 
     /** @see BooleanType */
     'Value must be a boolean.' => 'Значение должно быть булевым.',
