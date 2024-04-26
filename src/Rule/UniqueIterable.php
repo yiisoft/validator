@@ -139,7 +139,7 @@ final class UniqueIterable implements
 
     #[ArrayShape([
         'incorrectInputMessage' => 'array',
-        'incorrectIItemValueMessage' => 'array',
+        'incorrectItemValueMessage' => 'array',
         'message' => 'array',
         'skipOnEmpty' => 'bool',
         'skipOnError' => 'bool',
