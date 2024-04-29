@@ -220,13 +220,8 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new class () extends Composite {
-                        public function __construct(
-                            iterable $rules = [],
-                            bool|callable|null $skipOnEmpty = null,
-                            bool $skipOnError = false,
-                            Closure|null $when = null,
-                        ) {
-                            parent::__construct($rules, $skipOnEmpty, $skipOnError, $when);
+                        public function __construct()
+                        {
                         }
                     },
                 ],
@@ -318,17 +313,13 @@ final class CompositeTest extends RuleTestCase
                 ],
                 ['' => ['Custom error']],
             ],
-            'override constructor' => [
+            'override rules' => [
                 null,
                 [
                     new class () extends Composite {
-                        public function __construct(
-                            iterable $rules = [],
-                            bool|callable|null $skipOnEmpty = null,
-                            bool $skipOnError = false,
-                            Closure|null $when = null,
-                        ) {
-                            parent::__construct([new Required()], $skipOnEmpty, $skipOnError, $when);
+                        public function getRules(): array
+                        {
+                            return [new Required()];
                         }
                     },
                 ],
