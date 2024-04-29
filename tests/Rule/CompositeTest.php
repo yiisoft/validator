@@ -160,7 +160,7 @@ final class CompositeTest extends RuleTestCase
             ],
             'inheritance' => [
                 new class () extends Composite {
-                    public function getRules(): iterable
+                    public function getRules(): array
                     {
                         return [
                             new Required(),
