@@ -18,7 +18,8 @@ use function is_bool;
  *     // ...
  *     bool|callable|null $skipOnEmpty = null,
  *     // ...
- * ) {
+ * )
+ * {
  *     $this->skipOnEmpty = $skipOnEmpty;
  * }
  * ```
