@@ -32,7 +32,7 @@ trait SkipOnEmptyTrait
      *  See {@see SkipOnEmptyInterface}.
      * @psalm-var SkipOnEmptyValue $skipOnEmpty
      */
-    private mixed $skipOnEmpty;
+    private mixed $skipOnEmpty = null;
 
     /**
      * An immutable setter to change `$skipOnEmpty` property.
