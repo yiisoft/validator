@@ -56,7 +56,7 @@ for both A and B.
   ```php
   public function __construct(
       // ...
-      private mixed $skipOnEmpty = null,
+      bool|callable|null $skipOnEmpty = null,
       // ...
   ) 
   {
