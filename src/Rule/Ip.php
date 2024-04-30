@@ -193,7 +193,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
         private string $hasSubnetMessage = '{Attribute} must not be a subnet.',
         private string $notInRangeMessage = '{Attribute} is not in the allowed range.',
         private array $ranges = [],
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
@@ -217,6 +217,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
         }
 
         $this->ranges = $this->prepareRanges($ranges);
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

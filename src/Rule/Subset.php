@@ -76,10 +76,11 @@ final class Subset implements DumpedRuleInterface, SkipOnErrorInterface, WhenInt
         private bool $strict = false,
         private string $incorrectInputMessage = '{Attribute} must be iterable.',
         private string $message = '{Attribute} is not a subset of acceptable values.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

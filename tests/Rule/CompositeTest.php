@@ -159,7 +159,7 @@ final class CompositeTest extends RuleTestCase
             ],
             'inheritance' => [
                 new class () extends Composite {
-                    public function getRules(): iterable
+                    public function getRules(): array
                     {
                         return [
                             new Required(),
@@ -312,13 +312,13 @@ final class CompositeTest extends RuleTestCase
                 ],
                 ['' => ['Custom error']],
             ],
-            'override constructor' => [
+            'override rules' => [
                 null,
                 [
                     new class () extends Composite {
-                        public function __construct()
+                        public function getRules(): array
                         {
-                            $this->rules = [new Required()];
+                            return [new Required()];
                         }
                     },
                 ],

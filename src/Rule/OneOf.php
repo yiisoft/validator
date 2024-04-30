@@ -58,10 +58,11 @@ final class OneOf implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
         private array $attributes,
         private string $incorrectInputMessage = '{Attribute} must be an array or an object.',
         private string $message = 'Exactly 1 attribute from this list must be filled: {attributes}.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null
     ) {
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

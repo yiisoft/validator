@@ -221,10 +221,11 @@ final class Nested implements
         private string $noPropertyPathMessage = 'Property "{path}" is not found.',
         private bool $handleEachShortcut = true,
         private bool $propagateOptions = false,
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        $this->skipOnEmpty = $skipOnEmpty;
         $this->prepareRules($rules);
     }
 

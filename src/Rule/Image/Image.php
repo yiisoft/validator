@@ -130,7 +130,7 @@ final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
         private string $tooLargeWidthMessage = 'The width cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
         private string $tooLargeHeightMessage = 'The height cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
         private string $invalidAspectRatioMessage = 'The aspect ratio must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
@@ -141,6 +141,8 @@ final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
         if ($this->height !== null && ($this->minHeight !== null || $this->maxHeight !== null)) {
             throw new InvalidArgumentException('Exact width and min / max height can\'t be specified together.');
         }
+
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getWidth(): ?int

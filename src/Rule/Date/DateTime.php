@@ -140,7 +140,7 @@ final class DateTime extends BaseDate
         ?string $incorrectInputMessage = null,
         ?string $tooEarlyMessage = null,
         ?string $tooLateMessage = null,
-        mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
         Closure|null $when = null,
     ) {

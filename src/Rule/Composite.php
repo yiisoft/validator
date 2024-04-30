@@ -93,13 +93,6 @@ class Composite implements
     protected iterable $rules = [];
 
     /**
-     * @var bool|callable|null Whether to skip this rule group if the validated value is empty / not passed. See
-     * {@see SkipOnEmptyInterface}.
-     * @psalm-var SkipOnEmptyValue
-     */
-    private mixed $skipOnEmpty = null;
-
-    /**
      * @var bool Whether to skip this rule group if any of the previous rules gave an error. See
      * {@see SkipOnErrorInterface}.
      */
@@ -133,8 +126,8 @@ class Composite implements
         bool $skipOnError = false,
         Closure|null $when = null,
     ) {
-        $this->rules = RulesNormalizer::normalizeList($rules);
         $this->skipOnEmpty = $skipOnEmpty;
+        $this->rules = RulesNormalizer::normalizeList($rules);
         $this->skipOnError = $skipOnError;
         $this->when = $when;
     }
