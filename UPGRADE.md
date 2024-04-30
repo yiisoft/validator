@@ -45,8 +45,7 @@ for both A and B.
       // ...
       private mixed $skipOnEmpty = null,
       // ...
-  ) 
-  {
+  ) {
       // ...
   }
   ```
