@@ -29,7 +29,7 @@ trait SkipOnEmptyTrait
 {
     /**
      * @var bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty / not passed.
-     *  See {@see SkipOnEmptyInterface}.
+     * See {@see SkipOnEmptyInterface}.
      * @psalm-var SkipOnEmptyValue $skipOnEmpty
      */
     private mixed $skipOnEmpty = null;
