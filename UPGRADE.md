@@ -58,6 +58,6 @@ for both A and B.
       bool|callable|null $skipOnEmpty = null,
       // ...
   ) {
-      $this->skipOnEmpty = $this->skipOnEmpty;
+      $this->skipOnEmpty = $skipOnEmpty;
   }
   ```
