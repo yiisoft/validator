@@ -1,7 +1,7 @@
 # `StopOnError` - interrompe a validação no primeiro erro
 
 Esta regra se aplica a um grupo de regras e permite interromper a validação para todo o grupo imediatamente após
-ocorre um erro em qualquer uma das regras. Isso significa que todas as regras que seguem a regra cuja validação falhou não serão
+ocorrer um erro em qualquer uma das regras. Isso significa que todas as regras que seguem a regra cuja validação falhou não serão
 executadas de jeito nenhum.
 
 Isso pode ser útil para validações com alto desempenho, como consultas de banco de dados ou alguns cálculos complexos.
@@ -21,7 +21,7 @@ $rule = new StopOnError([
 $result = (new Validator())->validate($data, $rule);
 ```
 
-Ao usar com outras regras e validação condicional, ele se comporta como uma única unidade. Por exemplo, com
+Ao usar com outras regras e [`validação condicional`], ele se comporta como uma única unidade. Por exemplo, com
 configurações padrão, ela não será ignorada se a regra anterior não passar na validação. Para alterar esse comportamento, defina
 `$skipOnError` para `true`. Isto permite utilizá-lo para limitar a lista de erros por atributo apenas ao primeiro (em
 formulários HTML, por exemplo).
@@ -49,4 +49,7 @@ $rules = [
 ];
 ```
 
-Use a opção grouping / ordering / `skipOnError` para obter o efeito desejado.
+Use a opção grouping / ordering / [`skipOnError`] para obter o efeito desejado.
+
+[`validação condicional`]: conditional-validation.md
+[`skipOnError`]: conditional-validation.md#skipOnError---pula-uma-regra-no-conjunto-se-a-anterior-falhou

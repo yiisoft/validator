@@ -39,7 +39,7 @@ $result = (new Validator())->validate($data, $rules);
 
 Note that this setting must be set for each rule that needs to be skipped on error.
 
-The same effect can be achieved with `StopOnError` and `Composite` rules, which can be more convenient for a larger
+The same effect can be achieved with `StopOnError` and [`Composite`] rules, which can be more convenient for a larger
 number of rules.
 
 Using `StopOnError`:
@@ -62,7 +62,7 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
-Using `Composite`:
+Using [`Composite`]:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -131,7 +131,7 @@ $result = (new Validator())->validate($data, $rules);
 
 What is considered empty can vary depending on the scope of usage.
 
-The value passed to `skipOnEmpty` is called "empty condition". Due to normalization the following shortcut values are
+The value passed to [`skipOnEmpty`] is called "empty condition". Due to normalization the following shortcut values are
 supported:
 
 - When `false` or `null`, `Yiisoft\Validator\EmptyCondition\NeverEmpty` is used automatically as a callback - every value 
@@ -271,3 +271,5 @@ See the [Skip on empty] section for an example.
 
 [Configuring empty condition in other rules]: #configuring-empty-condition-in-other-rules
 [Skip on empty]: #skiponempty---skipping-a-rule-if-the-validated-value-is-empty
+[`Composite`]: built-in-rules-composite.md
+[`skipOnEmpty`]: conditional-validation.md#skiponempty---skipping-a-rule-if-the-validated-value-is-empty

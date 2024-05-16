@@ -1,17 +1,13 @@
 # Yii Validator
 
-A package for validating data.
-
-## Guides
-
-### Validation
+## Validation
 
 - [Using validator](using-validator.md)
 - [Result](result.md)
 - [Conditional validation](conditional-validation.md)
 - [Customizing error messages](customizing-error-messages.md)
 
-### Rules
+## Rules
 
 - [Built-in rules](built-in-rules.md)
   - [Callback](built-in-rules-callback.md)
@@ -23,7 +19,7 @@ A package for validating data.
 - [Configuring rules via PHP attributes](configuring-rules-via-php-attributes.md)
 - [Creating custom rules](creating-custom-rules.md)
 
-### Miscellaneous
+## Miscellaneous
 
 - [Client-side validation](client-side-validation.md)
 - [Extensions](extensions.md)

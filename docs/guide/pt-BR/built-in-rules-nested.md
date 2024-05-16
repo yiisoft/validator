@@ -35,7 +35,7 @@ A saída de `$errors` será:
 Neste exemplo, uma instância adicional da regra `Nested` é usada para cada relação. Outras formas de configuração
 são possíveis e são descritos abaixo.
 
-Outras representações da lista de erros são abordadas na seção [Resultados].
+Outras representações da lista de erros são abordadas na seção [Result].
 
 ## Opções de configuração
 
@@ -117,7 +117,7 @@ $rule = new Nested([
 ### Relações um-para-muitos e muitos-para-muitos
 
 O exemplo na seção [Uso básico] mostra como trabalhar apenas com relações um-para-um, onde a regra `Nested` é
-suficiente para referenciar as relações. Pode ser combinado com outras regras complexas, como `Each`, para validar
+suficiente para referenciar as relações. Pode ser combinado com outras regras complexas, como [`Each`], para validar
 relações um-para-muitos e muitos-para-muitos também:
 
 Vamos pegar este conjunto de gráfico de linhas como exemplo:
@@ -217,7 +217,7 @@ $ erros = [
 
 ### Usando o atalho `*`
 
-Um atalho `*` pode ser usado para simplificar as combinações `Nested` e `Each`:
+Um atalho `*` pode ser usado para simplificar as combinações `Nested` e [`Each`]:
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -254,7 +254,7 @@ $rule = new Nested([
 ```
 
 Isso é menos detalhado, mas a desvantagem dessa abordagem é que você não pode configurar adicionalmente
-pares `Nested` e `Each`. Se você precisar fazer isso, use a forma explícita de configuração (veja o exemplo fornecido na
+pares `Nested` e [`Each`]. Se você precisar fazer isso, use a forma explícita de configuração (veja o exemplo fornecido na
 seção [Uso básico]).
 
 ### Usando atributos PHP
@@ -388,9 +388,9 @@ $errors = $result->getErrorMessagesIndexedByPath();
 [Configurando regras via atributos PHP].
 - Para mais informações sobre possíveis combinações de dados/regras passadas para validação, consulte a seção [Usando validator].
 
-### Usando chaves contendo separador/atalho
+### Usando chaves contendo separador / atalho
 
-Se uma chave contém o separador (`.`) ou o atalho `Each` (`*`), ela deve ser escapada com uma barra invertida (`\`) para que
+Se uma chave contém o separador (`.`) ou o atalho [`Each`] (`*`), ela deve ser escapada com uma barra invertida (`\`) para que
 a configuração da regra funcione corretamente. Nos dados de entrada, o escape não é necessário. Aqui está um exemplo com 2 chaves
 aninhadas denominadas `author.data` e `name.surname`:
 
@@ -429,7 +429,7 @@ $data = [
 ];
 ```
 
-O exemplo com o atalho `Each` (`*`):
+O exemplo com o atalho [`Each`] (`*`):
 
 ```php
 use Yiisoft\Validator\Rule\Nested;
@@ -458,8 +458,9 @@ $data = [
 ];
 ```
 
-[Resultados]: result.md
+[Result]: result.md
 [Uso básico]: #uso-básico-relação-um-para-um
+[`Each`]: built-in-rules-each.md
 [JSFiddle]: https://jsfiddle.net/fys8uadr/
 [Configurando regras via atributos PHP]: configuring-rules-via-php-attributes.md
 [Usando validator]: using-validator.md

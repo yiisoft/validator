@@ -1,7 +1,7 @@
 # Configurando regras via atributos PHP
 
-O recurso [Attributes] introduzido no PHP 8 permite uma forma alternativa de configurar regras. Se entidades/modelos com
-suas relações são representadas como classes [DTO], os atributos possibilitam o uso de tais classes para fornecer regras.
+O recurso [`Attributes`] introduzido no PHP 8 permite uma forma alternativa de configurar regras. Se entidades/modelos com
+suas relações são representadas como classes [`DTO`], os atributos possibilitam o uso de tais classes para fornecer regras.
 As regras são definidas acima das próprias propriedades, o que alguns desenvolvedores podem achar mais conveniente em termos
 de legibilidade.
 
@@ -71,7 +71,7 @@ final class User
 }
 ```
 
-> **Nota:** [propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
+> **Nota:** [Propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
 
 ## Configurando para múltiplas entidades/modelos com relações
 
@@ -110,7 +110,7 @@ use Yiisoft\Validator\Rule\Url;
 ];
 ```
 
-Pode ser aplicado a tais classes DTO para obter o mesmo efeito:
+Pode ser aplicado a tais classes [`DTO`] para obter o mesmo efeito:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -159,11 +159,11 @@ final class File
 }
 ```
 
-Para uma melhor compreensão do conceito de relações, recomenda-se a leitura da documentação [Nested] e [Each].
+Para uma melhor compreensão do conceito de relações, recomenda-se a leitura da documentação [`Nested`] e [`Each`].
 
 ## Traits
 
-Atributos também podem ser usados em traits. Pode ser útil reutilizar o mesmo conjunto de propriedades com regras idênticas:
+Atributos também podem ser usados em [traits]. Pode ser útil reutilizar o mesmo conjunto de propriedades com regras idênticas:
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -187,7 +187,7 @@ final class WikiArticle
 
 ## Herança
 
-A herança é suportada, mas há algumas coisas a serem lembradas:
+A [herança] é suportada, mas há algumas coisas a serem lembradas:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
@@ -219,7 +219,7 @@ class Truck extends Car
 }
 ```
 
-Neste caso o conjunto de regras para `Truck` será:
+Neste caso o conjunto de regras para a classe `Truck` será:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
@@ -237,19 +237,18 @@ use Yiisoft\Validator\Rule\Required;
 ];
 ```
 
-Entao, para resumir:
+Então, para resumir:
 
 - As regras pai para propriedades substituídas são completamente ignoradas, apenas as da classe filha são obtidas.
 - Todas as regras pai para propriedades que não são substituídas na classe filha são obtidas integralmente.
-
-Quanto aos dados, os valores padrão definidos na classe filha têm precedência.
+- Quanto aos dados, os valores padrão definidos na classe filha têm precedência.
 
 ## Adicionando suporte de atributos a regras personalizadas
 
-Para anexar regras às propriedades do DTO ou a todo o DTO, o atributo `Attribute` deve ser adicionado à
+Para anexar regras às propriedades do [`DTO`] ou a todo ele, o atributo [`Attributes`] deve ser adicionado à
 classe personalizada. E para que as regras sejam obtidas dos atributos, elas devem implementar a classe `RuleInterface`.
 
-Para regras `Composite` personalizadas, você só precisa adicionar o atributo:
+Para regras [`Composite`] personalizadas, você só precisa adicionar [`Attributes`]:
 
 ```php
 use Attribute;
@@ -272,7 +271,7 @@ final class RgbColorRuleSet extends Composite
 }
 ```
 
-Exemplo de regra personalizada:
+Exemplo de [`regra personalizada`]:
 
 ```php
 use Attribute;
@@ -317,10 +316,10 @@ final class Yaml implements RuleInterface
 ### Instâncias
 
 Passar instâncias no escopo de atributos só é possível a partir do PHP 8.1. Isso significa usar atributos para regras complexas
-como `Composite`, `Each` e `Nested` ou regras que usam instâncias como argumentos podem ser problemáticas com o PHP 8.0.
+como [`Composite`], [`Nested`] e [`Each`] ou regras que usam instâncias como argumentos podem ser problemáticas com o PHP 8.0.
 
 A primeira solução alternativa é atualizar para o PHP 8.1 - isso é bastante simples, pois é uma versão secundária. Ferramentas como
-[Rector] pode facilitar o processo de atualização da base de código automatizando tarefas de rotina.
+[`Rector`] podem facilitar o processo de atualização da base de código automatizando tarefas de rotina.
 
 Se isso não for uma opção, você poderá usar outras formas de fornecer regras, como provedores de regras:
 
@@ -382,8 +381,8 @@ $postRulesProvider = new PostRulesProvider();
 $validator = (new Validator())->validate($post, $postRulesProvider);
 ```
 
-Para regras sem relações, em vez de usar `Composite` diretamente, crie uma classe filha que se estenda a partir dela e coloque a
-regras nela. Não se esqueça de adicionar o atributo support.
+Para regras sem relações, em vez de usar [`Composite`] diretamente, crie uma classe filha que se estenda a partir dela e coloque as
+regras nela. Não se esqueça de adicionar suporte para o [`Attributes`].
 
 ```php
 use Attribute;
@@ -415,33 +414,32 @@ final class User
 }
 ```
 
-A regra `Nested` pode ser usada sem argumentos, veja este [exemplo](#Configurando-para-uma-entidade--modelo-única) acima.
+A regra [`Nested`] pode ser usada sem argumentos, veja este [exemplo] no início do artigo.
 
 ### Callables
 
-A tentativa de usar callables dentro do escopo de um atributo causará o erro. Isso significa que usar [when] para
-[validação condicional] ou o argumento `callback` para a regra `Callback` não funcionará.
+A tentativa de usar [`callables`] dentro do escopo de um atributo causará o erro. Isso significa que usar [`when`] para
+[`validação condicional`] ou o argumento `callback` para a regra [`Callback`] não funcionará.
 
 As soluções alternativas são:
 
-- `Composite` ou o provedor de regras descrito na seção [Instâncias] também caberá aqui.
-- Crie uma [regra personalizada].
-- Para a regra `Callback` em particular, é possível substituir um retorno de chamada por uma [referência de método].
+- [`Composite`] ou o provedor de regras descrito na seção [Instâncias] também caberá aqui.
+- Crie uma [`regra personalizada`].
+- Para a regra [`Callback`] em particular, é possível substituir um retorno de chamada por uma [`referência de método`].
 
 ### Chamadas de funções/métodos
 
-As chamadas de função e de método não são suportadas no escopo de um atributo. Se a intenção é chamar uma função /
-método para validação - use uma regra `Callback` com [referência de método]. Caso contrário, as opções restantes são:
+As chamadas de função e de método não são suportadas no escopo de um atributo. Se a intenção é chamar uma função/método para validação - use uma regra [`Callback`] com [`referência de método`]. Caso contrário, as opções restantes são:
 
-- Use `Composite` ou provedor de regras descrito na seção [Instâncias].
-- Crie uma [regra personalizada].
+- Use [`Composite`] ou provedor de regras descrito na seção [Instâncias].
+- Crie uma [`regra personalizada`].
 
 ## Usando regras
 
 Bem, as regras estão configuradas. Qual é o próximo passo? Podemos:
 
-- Passe-os para validação imediatamente.
-- Ajuste a análise de regras (propriedades puláveis, usando cache).
+- Passar para validação imediatamente.
+- Ajustar a análise de regras (propriedades puláveis (skippable properties), usando cache).
 - Use-os para outra coisa (por exemplo, para exportar suas opções).
 
 Vamos usar uma postagem de blog novamente para demonstração, mas em uma versão ligeiramente abreviada:
@@ -480,7 +478,7 @@ final class Author
 
 ### Passando junto com dados para validação
 
-Provavelmente, uma das maneiras mais limpas é passar instâncias de DTO com regras e dados declarados. Esta forma não requer
+Provavelmente, uma das maneiras mais limpas é passar instâncias de [`DTO`] com regras e dados declarados. Esta forma não requer
 qualquer configuração adicional:
 
 ```php
@@ -518,7 +516,7 @@ Os dados não precisam estar dentro de um array, o objetivo deste exemplo é mos
 ### Ajustando a análise de regras
 
 Os dados passados para validação como um objeto serão automaticamente normalizados para `ObjectDataSet`. No entanto, você pode
-envolve o objeto validado com este conjunto para permitir alguma configuração adicional:
+envolver o objeto validado com este conjunto para permitir alguma configuração adicional:
 
 ```php
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -549,7 +547,7 @@ $dataSet = new ObjectDataSet(
 $result = (new Validator())->validate($dataSet);
 ```
 
-Alguns casos extremos, como ignorar as propriedades estáticas do DTO, exigem o uso de `AttributeRulesProvider`. Depois de inicializá-lo
+Alguns casos extremos, como ignorar as propriedades estáticas dos [`DTO`]s, exigem o uso de `AttributeRulesProvider`. Depois de inicializá-lo
 pode ser passado para validação imediatamente - não há necessidade de extrair regras manualmente de antemão.
 
 ```php
@@ -600,15 +598,21 @@ $validator = (new Validator())->validate([], $rules);
 $options = RulesDumper::asArray($rules);
 ```
 
-[Attributes]: https://www.php.net/manual/en/language.attributes.overview.php
-[DTO]: https://en.wikipedia.org/wiki/Data_transfer_object
-[promoção de propriedade do construtor]: https://www.php.net/manual/en/language.oop5.decon.php#language.oop5.decon.constructor.promotion
-[propriedades somente leitura]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
-[Nested]: built-in-rules-nested.md
-[Each]: built-in-rules-each.md
-[Rector]: https://github.com/rectorphp/rector
-[when]: conditional-validation.md#when
-[validação condicional]: conditional-validation.md
+[`Attributes`]: https://www.php.net/manual/pt_BR/language.attributes.overview.php
+[`DTO`]: https://pt.wikipedia.org/wiki/Data_transfer_object
+[promoção de propriedade do construtor]: https://www.php.net/manual/pt_BR/language.oop5.decon.php#language.oop5.decon.constructor.promotion
+[Propriedades somente leitura]: https://www.php.net/manual/pt_BR/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[`Nested`]: built-in-rules-nested.md
+[`Each`]: built-in-rules-each.md
+[traits]: https://www.php.net/manual/pt_BR/language.oop5.traits.php
+[herança]: https://www.php.net/manual/pt_BR/language.oop5.inheritance.php
+[`Composite`]: built-in-rules-composite.md
+[`regra personalizada`]: creating-custom-rules.md
+[`Rector`]: https://github.com/rectorphp/rector
+[`when`]: conditional-validation.md#when
+[`validação condicional`]: conditional-validation.md
+[`Callback`]: built-in-rules-callback.md
+[`callables`]: https://www.php.net/manual/pt_BR/language.types.callable.php
 [Instâncias]: #instâncias
-[regra personalizada]: creating-custom-rules.md
-[referência de método]: built-in-rules-callback.md#para-propriedades
+[`referência de método`]: built-in-rules-callback.md#para-propriedades
+[exemplo]: #configurando-para-uma-entidade--modelo-única

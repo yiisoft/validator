@@ -1,4 +1,4 @@
-# Resultados
+# Result
 
 O resultado da validação é um objeto que contém os erros ocorridos durante a validação.
 
@@ -24,14 +24,13 @@ $result->isAttributeValid('name');
 
 ## Erros
 
-Na maioria das vezes, informar apenas o status da validação não é suficiente. Existem vários métodos para obter erros detalhados
-lista com seus dados do resultado. A diferença entre eles está no agrupamento, filtragem e representação de cada
+Na maioria das vezes, informar apenas o status da validação não é suficiente. Existem vários métodos para obter uma lista de erros
+detalhados com seus dados do resultado. A diferença entre eles está no agrupamento, filtragem e representação de cada
 erro. Escolha um que atenda às suas necessidades, dependendo da situação.
 
 ### Lista simples de mensagens de erro
 
 Um dos casos mais simples é obter uma lista simples de todas as mensagens de erro. Use a seguinte chamada de API `Result`:
-
 
 ```php
 use Yiisoft\Validator\Result;
@@ -62,7 +61,7 @@ vários atributos dependendo uns dos outros, por exemplo. Use a seguinte chamada
 $result->getCommonErrorMessages();
 ```
 
-A saída, por exemplo, acima:
+A saída será:
 
 ```php
 [
@@ -78,7 +77,7 @@ Esta lista também pode ser filtrada por um atributo específico. Somente atribu
 $result->getAttributeErrorMessages('email');
 ```
 
-A saída, por exemplo, acima:
+A saída será:
 
 ```php
 [
@@ -111,9 +110,9 @@ Um exemplo de saída:
 ];
 ```
 
-Observe que o resultado é sempre uma matriz bidimensional com nomes de atributos como chaves no primeiro nível de aninhamento. Isso significa
+Observe que o resultado é sempre um array com nomes de atributos como chaves no primeiro nível de aninhamento. Isso significa
 que o aninhamento adicional de atributos não é suportado (mas pode ser alcançado
-usando [`getErrorMessagesIndexedByPath()`](#Mensagens-de-erro-indexadas-por-caminho)).
+usando [`getErrorMessagesIndexedByPath()`]).
 Voltando ao exemplo anterior, quando `name` e `email` pertencem a um atributo `user`, a saída será:
 
 ```php
@@ -128,13 +127,13 @@ Voltando ao exemplo anterior, quando `name` e `email` pertencem a um atributo `u
 ];
 ```
 
-Lembre-se também de que os nomes dos atributos devem ser strings, mesmo quando usados com `Each`:
+Lembre-se também de que os nomes dos atributos devem ser strings, mesmo quando usados com [`Each`]:
 
 ```php
 $rule = new Each([new Number(min: 21)]),
 ```
 
-Com a entrada contendo chaves sem string para atributos de nível superior, por exemplo, `[21, 22, 23, 20]`, InvalidArgumentException` será lançada.
+Com a entrada contendo chaves sem string para atributos de nível superior, por exemplo `[21, 22, 23, 20]`, `InvalidArgumentException` será lançada.
 
 Mesmo o array `['1' => 21, '2' => 22, '3' => 23, '4' => 20]` causará um erro, porque o PHP [converterá chaves para o tipo int].
 
@@ -150,9 +149,9 @@ Mas se for fornecido um array com chaves de string `['1a' => 21, '2b' => 22, '3c
 
 ### Mensagens de erro indexadas por caminho
 
-Esta é provavelmente a representação mais avançada oferecida pelos métodos integrados. O agrupamento é feito por caminho - um
-sequência de atributos concatenados mostrando a localização do valor com erro em uma estrutura de dados. Um separador é personalizável,
-a notação de ponto é definida como padrão. Use a seguinte chamada de API `Result`:
+Esta é provavelmente a representação mais avançada oferecida pelos métodos integrados. O agrupamento é feito por caminho - uma
+sequência de atributos concatenados mostrando a localização do valor com erro em uma estrutura de dados. Se o separador é personalizável,
+a notação de ponto é definida como padrão. Use a seguinte chamada da API `Result`:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -173,7 +172,7 @@ Um exemplo de saída:
 ];
 ```
 
-Um caminho também pode conter elementos inteiros (ao usar a regra `Each`, por exemplo):
+Um caminho também pode conter elementos inteiros (ao usar a regra [`Each`], por exemplo):
 
 ```php
 [
@@ -192,8 +191,8 @@ ele é escapado automaticamente usando uma barra invertida (`\`):
 ],
 ```
 
-No caso de usar um único atributo por conjunto de regras, quaisquer modificações adicionais nos nomes dos atributos nas regras
-configuração não é necessária, então eles devem permanecer como estão:
+No caso de usar um único atributo por conjunto de regras, quaisquer modificações adicionais nos nomes dos atributos nas configurações da
+regra não é necessária, então eles podem permanecer como estão:
 
 ```php
 use Yiisoft\Validator\Rule\In;
@@ -207,9 +206,8 @@ $rules = [
 ];
 ```
 
-No entanto, ao usar a regra `Nested` com vários atributos por conjunto de regras, os caracteres especiais precisam ser escapados com
-uma barra invertida (`\`) para que os caminhos dos valores estejam corretos e seja possível revertê-los de string para individual
-Unid. Consulte a seção [Usando teclas contendo separador/atalho] para obter mais detalhes.
+No entanto, ao usar a regra [`Nested`] com vários atributos por conjunto de regras, os caracteres especiais precisam ser escapados com
+uma barra invertida (`\`) para que os caminhos dos valores estejam corretos e seja possível revertê-los de string para int. Consulte a seção [Usando teclas contendo separador/atalho] para obter mais detalhes.
 
 Isso pode ser usado como uma alternativa ao uso de um separador personalizado.
 
@@ -224,7 +222,7 @@ use Yiisoft\Validator\Result;
 $result->getAttributeErrorMessagesIndexedByPath('user');
 ```
 
-A saída, por exemplo, acima:
+A saída será:
 
 ```php
 [
@@ -235,7 +233,7 @@ A saída, por exemplo, acima:
 
 ## Lista de objetos de erro
 
-Quando mesmo essas representações não são suficientes, uma lista inicial não modificada de objetos de erro pode ser acessada via
+Quando mesmo essas representações não são suficientes, uma lista inicial não modificada de objetos de erro pode ser acessada por
 este método:
 
 ```php
@@ -249,7 +247,7 @@ Cada erro armazena os seguintes dados:
 
 - Mensagem. Uma mensagem simples como "Este valor está errado." ou um modelo com espaços reservados entre chaves
    (`{}`), por exemplo: `O valor não deve ser inferior a {min}.`. A formatação real é feita no `Validator` dependendo
-   o tradutor configurado.
+   do tradutor configurado.
 - Parâmetros do modelo para substituição durante a formatação, por exemplo: `['min' => 7]`.
 - Um caminho para um valor dentro de uma estrutura de dados verificada, por exemplo: `['user', 'name', 'firstName']`.
 
@@ -270,7 +268,7 @@ Para que isso pode ser útil? Por exemplo, para construir uma árvore aninhada d
 ```
 
 Ele não é fornecido intencionalmente imediatamente devido à complexidade da iteração. No entanto, isto pode ser útil para despejar
-como JSON e armazenamento em logs, por exemplo.
+como JSON e armazenar em logs, por exemplo.
 
 A depuração de objetos de erro originais também é mais conveniente.
 
@@ -285,5 +283,8 @@ use Yiisoft\Validator\Result;
 $result->getAttributeErrors('email');
 ```
 
-[Usando chaves contendo separador/atalho]: built-in-rules-nested.md#usando-chaves-contendo-separador--atalho
-[converterá chaves para o tipo int]: https://www.php.net/manual/en/language.types.array.php
+[`Each`]: built-in-rules-each.md
+[`Nested`]: built-in-rules-nested.md
+[`getErrorMessagesIndexedByPath()`]: #Mensagens-de-erro-indexadas-por-caminho
+[converterá chaves para o tipo int]: https://www.php.net/manual/pt_BR/language.types.array.php
+[Usando teclas contendo separador/atalho]: built-in-rules-nested.md#usando-chaves-contendo-separador--atalho

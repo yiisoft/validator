@@ -30,7 +30,8 @@ $rules = [
 ];
 ```
 
-Os itens de dados validados não estão limitados apenas a valores "simples" - `Each` pode ser usado dentro de um `Nested` e conter regras `Nested` englobando relações um para muitos e muitos para muitos:
+Os itens de dados validados não estão limitados apenas a valores "simples" - `Each` pode ser usado dentro de um [`Nested`] e conter regras
+[`Nested`] englobando relações um para muitos e muitos para muitos:
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -58,7 +59,7 @@ $rule = new Nested([
 ]);
 ```
 
-Para obter mais informações sobre como usá-lo com `Nested`, consulte o guia [Nested].
+Para obter mais informações sobre como usá-lo com [`Nested`], consulte o guia [`Nested`].
 
 [cor RGB]: https://en.wikipedia.org/wiki/RGB_color_model
-[Nested]: built-in-rules-nested.md
+[`Nested`]: built-in-rules-nested.md

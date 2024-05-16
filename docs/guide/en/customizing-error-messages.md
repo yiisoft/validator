@@ -21,7 +21,7 @@ new Length(
 );
 ```
 
-A full list of supported placeholders with descriptions is available in PHPDoc for each message.
+A full list of supported placeholders with descriptions is available in [PHPDoc] for each message.
 
 ## Translating error messages
 
@@ -138,7 +138,8 @@ $form = new ChangePasswordForm();
 $result = (new Validator())->validate($form);
 ```
 
-[PR]: https://github.com/yiisoft/validator/pulls
+[PHPDoc]: https://www.phpdoc.org/
 [Yii Translator]: https://github.com/yiisoft/translator
 [Yii Config]: https://github.com/yiisoft/config
 [Yii DI]: https://github.com/yiisoft/di
+[PR]: https://github.com/yiisoft/validator/pulls

@@ -8,7 +8,7 @@ However, there is a possibility to export rules' options as an array for passing
 
 - Multiple rules and nesting of rules are supported.
 - If a rule does not provide options, only the name is exported.
-- The option values that can't be serialized/reproduced on the client side - callables, for example, are excluded - 
+- The option values that can't be serialized/reproduced on the client side - [`callables`], for example, are excluded - 
 either completely like `Callback::$callback` or partially like `$skipOnEmpty` if multiple types are supported.
 
 Given built-in `Length` rule:
@@ -68,7 +68,7 @@ Here are some specifics of the rules structure:
 - The indexing of rules by attribute names is maintained.
 - The first rule element is always a rule name with an integer index of `0`.
 - The remaining rule elements are key-value pairs, where key is an option name and value is a corresponding option value.
-- For complex rules, such as `Composite`, `Each` and `Nested`, the options of the child rules are located under
+- For complex rules, such as [`Composite`], [`Each`] and [`Nested`], the options of the child rules are located under
   the `rules` key.
 
 Note that the error messages have a special structure:
@@ -90,3 +90,8 @@ It stays the same regardless of the presence of placeholders and parameters:
     'parameters' => [],
 ],
 ```
+
+[`callables`]: https://www.php.net/manual/en/language.types.callable.php
+[`Nested`]: built-in-rules-nested.md
+[`Each`]: built-in-rules-each.md
+[`Composite`]: built-in-rules-composite.md

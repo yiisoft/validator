@@ -41,8 +41,8 @@ $rules = [
 ];
 ```
 
-Com essas configurações, `Length` ainda será executado no caso de um valor vazio. Para evitar isso, configure um condicional
-validação:
+Com essas configurações, `Length` ainda será executado no caso de um valor vazio. Para evitar isso, configure uma
+validação condicional:
 
 ```php
 use Yiisoft\Validator\Rule\Length;

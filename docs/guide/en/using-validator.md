@@ -1,6 +1,6 @@
 # Using validator
 
-Validator allows to check data in any format. Here are some of the most common use cases.
+`Validator` allows to check data in any format. Here are some of the most common use cases.
 
 ## Data
 
@@ -21,7 +21,7 @@ $rules = [
 $result = (new Validator())->validate($value, $rules);
 ```
 
-> **Note:** Use [Each] rule to validate multiple values of the same type.
+> **Note:** Use [`Each`] rule to validate multiple values of the same type.
 
 ### Array
 
@@ -62,7 +62,7 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
-> **Note:** Use [Nested] rule to validate nested arrays and [Each] rule to validate multiple arrays.
+> **Note:** Use [`Nested`] rule to validate nested arrays and [`Each`] rule to validate multiple arrays.
 
 ### Object
 
@@ -102,9 +102,9 @@ $person = new Person(name: 'John', age: 17, email: 'john@example.com', phone: nu
 $result = (new Validator())->validate($person);
 ```
 
-> **Note:** [readonly properties] are supported only starting from PHP 8.1.
-
-> **Note:** Use [Nested] rule to validate related objects and [Each] rule to validate multiple objects.
+> **Notes:**
+>- [Readonly properties] are supported only starting from PHP 8.1.
+>- Use [`Nested`] rule to validate related objects and [`Each`] rule to validate multiple objects.
 
 ### Custom data set
 
@@ -152,7 +152,7 @@ $result = (new Validator())->validate($data, $rules);
 
 ### Passing single rule
 
-For a single rule, there is an option to omit the array:
+For a single rule there is an option to omit the array:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
@@ -165,7 +165,7 @@ $result = (new Validator())->validate($value, $rule);
 
 ### Providing rules via dedicated object
 
-Could help reuse the same set of rules across different places. Two ways are possible - using PHP attributes 
+It could help to reuse the same set of rules in different locations. Two ways are possible - using PHP attributes 
 and specifying explicitly via interface method implementation.
 
 #### Using PHP attributes
@@ -251,6 +251,6 @@ $data = new Person(name: 'John', age: 18);
 $result = (new Validator())->validate($data);
 ```
 
-[Each]: built-in-rules-each.md
-[Nested]: built-in-rules-nested.md
-[readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[`Each`]: built-in-rules-each.md
+[`Nested`]: built-in-rules-nested.md
+[Readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties

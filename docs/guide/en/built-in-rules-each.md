@@ -30,8 +30,8 @@ $rules = [
 ];
 ```
 
-Validated data items are not limited to only "simple" values - `Each` can be used both within a `Nested` and contain 
-`Nested` rule covering one-to-many and many-to-many relations:
+Validated data items are not limited to only "simple" values - `Each` can be used both within a [`Nested`] and contain 
+[`Nested`] rule covering one-to-many and many-to-many relations:
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -59,7 +59,7 @@ $rule = new Nested([
 ]);
 ```
 
-For more information about using it with `Nested`, see the [Nested] guide.
+For more information about using it with [`Nested`], see the [`Nested`] guide.
 
 [RGB color]: https://en.wikipedia.org/wiki/RGB_color_model
-[Nested]: built-in-rules-nested.md
+[`Nested`]: built-in-rules-nested.md

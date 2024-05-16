@@ -6,9 +6,9 @@ Quando a lógica de validação desejada está faltando nas regras e extensões 
 
 A principal característica do conceito de regras é a separação em 2 partes:
 
-- Rule (uma classe que implementa `RuleInterface`). Ele armazena apenas opções de configuração e uma referência ao seu manipulador. Ele
+- `Rule` (uma classe que implementa `RuleInterface`). Ele armazena apenas opções de configuração e uma referência ao seu manipulador. Ele
 não realiza a validação real.
-- Rule handler - Manipulador de regras (uma classe que implementa `RuleHandlerInterface`). Dada uma regra e dados de entrada, executa o procedimento real
+- `Rule handler` - Manipulador de regras (uma classe que implementa `RuleHandlerInterface`). Dada uma regra e dados de entrada, executa o procedimento real
 da validação no contexto da validação atual.
 
 Além da separação de responsabilidades, esta abordagem permite resolver automaticamente dependências de um manipulador. 
@@ -45,14 +45,14 @@ final class RgbColor implements RuleInterface
 }
 ```
 
-> **Nota:** [propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
+> **Nota:** [Propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
 
 Além das implementações de métodos de interface necessárias, ele contém apenas mensagens de erro personalizáveis. Claro, mais recursos
-pode ser adicionado - validação condicional, opções do cliente, etc. Mas isso é o mínimo para começar.
+podem ser adicionados - validação condicional, opções do cliente, etc. Mas isso é o mínimo para começar.
 
 ### Criando um manipulador
 
-A segunda etapa é criar o manipulador. Vamos definir o que é exatamente uma cor RGB válida:
+A segunda etapa é criar o manipulador. Vamos definir o que é exatamente uma [cor RGB] válida:
 
 - É um array (lista para ser exato).
 - Contém exatamente 3 itens.
@@ -88,7 +88,7 @@ final class RgbColorHandler implements RuleHandlerInterface
 }
 ```
 
-> **Nota:** Um método `validate()` não se destina a ser chamado diretamente. Resolvendo o manipulador e chamando o método
+> **Nota:** Um método `validate()` não se destina a ser chamado diretamente. Resolver o manipulador e chamar o método
 > ocorre automaticamente ao usar o `Validator`.
 
 ### Dicas para melhorar o código
@@ -96,7 +96,7 @@ final class RgbColorHandler implements RuleHandlerInterface
 #### Mensagens de erro mais específicas
 
 Prefira mensagens de erro mais específicas às gerais. Mesmo que isso exija uma quantidade maior de mensagens e códigos, ajuda a
-entender mais rapidamente o que exatamente há de errado com os dados de entrada. A cor RGB é uma estrutura bastante simples e compacta, mas no caso
+entender mais rapidamente o que exatamente há de errado com os dados de entrada. A [cor RGB] é uma estrutura bastante simples e compacta, mas no caso
 de dados mais complexos, certamente valerá a pena.
 
 Tendo isso em mente, a regra pode ser reescrita mais ou menos assim:
@@ -130,10 +130,9 @@ final class RgbColor implements RuleInterface
 }
 ```
 
-> **Nota:** [propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
-
-> **Nota:** A formatação usada em `$incorrectItemTypeMessage` e `$incorrectItemValueMessage` requer
-> a extensão PHP `intl`.
+> **Notas:**
+>- [Propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
+>- A formatação usada em `$incorrectItemTypeMessage` e `$incorrectItemValueMessage` requer a extensão [PHP `intl`].
 
 O manipulador precisa ser alterado de acordo. Vamos também adicionar parâmetros de erro para poder usá-los como espaços reservados em
 modelos de mensagens:
@@ -200,7 +199,7 @@ final class RgbColorHandler implements RuleHandlerInterface
 }
 ```
 
-> **Observação:** Também é uma boa ideia utilizar os recursos da versão do idioma usado. Por exemplo, para PHP >= 8.1 podemos
+> **Nota:** Também é uma boa ideia utilizar os recursos da versão do idioma usado. Por exemplo, para PHP >= 8.1 podemos
 > simplificar a verificação de que um determinado array é uma lista com a função [array_is_list()].
 
 #### Usando regras integradas, se possível
@@ -210,7 +209,7 @@ desnecessário criar uma regra personalizada.
 
 ##### Substituindo por `Composite` ("Agrupamento")
 
-O exemplo com cores RGB pode ser significativamente simplificado depois de perceber que também é possível obter o mesmo
+O exemplo com [cores RGB] pode ser significativamente simplificado depois de perceber que também é possível obter o mesmo
 efeito usando apenas regras internas:
 
 ```php
@@ -224,7 +223,7 @@ $rules = [
 ];
 ```
 
-Torná-los reutilizáveis não é muito mais difícil - todo o conjunto pode ser colocado dentro de uma regra `Composite` e usado como uma única
+Torná-los reutilizáveis não é muito mais difícil - todo o conjunto pode ser colocado dentro de uma regra [`Composite`] e usado como uma única
 regra regular.
 
 ```php
@@ -248,7 +247,7 @@ final class RgbColorRuleSet extends Composite
 $result = (new Validator())->validate([205, 92, 92], new RgbColorRuleSet());
 ```
 
-##### Substituindo por regras separadas e `when`
+##### Substituindo por regras separadas e [`when`]
 
 Abaixo está uma tentativa de usar o contexto de validação para validar atributos dependendo uns dos outros:
 
@@ -342,7 +341,7 @@ final class Yaml implements RuleInterface
 }
 ```
 
-> **Nota:** [propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
+> **Nota:** [Propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
 
 Manipulador:
 
@@ -387,12 +386,12 @@ final class YamlHandler implements RuleHandlerInterface
 }
 ```
 
-> **Nota:** O uso de [yaml_parse] requer adicionalmente a extensão PHP `yaml`.
+> **Notas:**
+>- O uso de [`yaml_parse()`] requer adicionalmente a extensão [PHP `yaml`].
+>- Processar entradas de usuários não confiáveis com [`yaml_parse()`] pode ser perigoso com certas configurações.
+>Consulte a documentação para mais detalhes.
 
-> **Nota:** Processar entradas de usuários não confiáveis com `yaml_parse()` pode ser perigoso com certas configurações. Consulte
-> a documentação do [yaml_parse] para mais detalhes.
-
-### Validação de empacotamento
+### Wrapping validation
 
 Um dos usos corretos do contexto de validação pode envolver a validação com alguma lógica adicional. Isso pode ser usado
 para implementar [cenários do Yii 2], por exemplo.
@@ -434,20 +433,23 @@ final class OnHandler implements RuleHandlerInterface
 }
 ```
 
-Este trecho de código foi retirado da extensão [Yii Validator Scenarios] por [Sergei Predvoditelev]. Leia mais na
-seção [Cenários].
+Este trecho de código foi retirado da extensão [Yii Validator Scenarios]. Leia mais na seção [Cenários].
 
 ## Criando uma extensão
 
 Com uma regra personalizada, você pode ir ainda mais longe. Se não for muito específico do projeto e você achar que pode ser útil
-para outra pessoa, disponibilize-o como uma extensão.
+para outra pessoa, disponibilize-o como uma [`extensão`].
 
-[cor RGB]: https://en.wikipedia.org/wiki/RGB_color_model
-[propriedades somente leitura]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
-[array_is_list()]: https://www.php.net/manual/en/function.array-is-list.php
-[YAML]: https://en.wikipedia.org/wiki/YAML
-[yaml_parse]: https://www.php.net/manual/en/function.yaml-parse.php
-[cenários do Yii 2]: https://www.yiiframework.com/doc/guide/2.0/en/structure-models#scenarios
-[Cenários do validador Yii]: https://github.com/vjik/yii-validator-scenarios
-[Sergei Predvoditelev]: https://github.com/vjik
 [Cenários]: extensions.md#cenários
+[Yii Validator Scenarios]: https://github.com/vjik/yii-validator-scenarios
+[cor RGB]: https://en.wikipedia.org/wiki/RGB_color_model
+[Propriedades somente leitura]: https://www.php.net/manual/pt_BR/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[PHP `intl`]: https://www.php.net/manual/pt_BR/book.intl.php
+[array_is_list()]: https://www.php.net/manual/pt_BR/function.array-is-list.php
+[`Composite`]: built-in-rules-composite.md
+[YAML]: https://pt.wikipedia.org/wiki/YAML
+[`yaml_parse()`]: https://www.php.net/manual/pt_BR/function.yaml-parse.php
+[PHP `yaml`]: https://www.php.net/manual/pt_BR/book.yaml.php
+[cenários do Yii 2]: https://www.yiiframework.com/doc/guide/2.0/en/structure-models#scenarios
+[`extensão`]: https://www.yiiframework.com/doc/guide/2.0/en/structure-extensions#creating-extensions
+[`when`]: conditional-validation.md#when 

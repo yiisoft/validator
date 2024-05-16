@@ -39,7 +39,7 @@ $result = (new Validator())->validate($data, $rules);
 
 Observe que essa configuração deve ser definida para cada regra que precisa ser ignorada em caso de erro.
 
-O mesmo efeito pode ser alcançado com as regras `StopOnError` e `Composite`, que podem ser mais convenientes para um número maior
+O mesmo efeito pode ser alcançado com as regras `StopOnError` e [`Composite`], que podem ser mais convenientes para um número maior
 de regras.
 
 Usando `StopOnError`:
@@ -62,7 +62,7 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
-Usando `Composite`:
+Usando [`Composite`]:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -131,7 +131,7 @@ $result = (new Validator())->validate($data, $rules);
 
 O que é considerado vazio pode variar dependendo do escopo de uso.
 
-O valor passado para `skipOnEmpty` é chamado de "condição vazia". Devido à normalização, os seguintes valores de atalho são
+O valor passado para [`skipOnEmpty`] é chamado de "condição vazia". Devido à normalização, os seguintes valores de atalho são
 suportado:
 
 - Quando `false` ou `null`, `Yiisoft\Validator\EmptyCondition\NeverEmpty` é usado automaticamente como retorno de chamada - cada valor
@@ -271,3 +271,5 @@ Consulte a seção [Pular quando vazio] para ver um exemplo.
 
 [Configurando condição vazia em outras regras]: #configurando-condição-vazia-em-outras-regras
 [Pular quando vazio]: #skiponempty---ignorando-uma-regra-se-o-valor-validado-estiver-vazio
+[`Composite`]: built-in-rules-composite.md
+[`skipOnEmpty`]: conditional-validation.md#skiponempty---ignorando-uma-regra-se-o-valor-validado-estiver-vazio

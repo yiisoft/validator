@@ -116,7 +116,7 @@ $rule = new Nested([
 ### One-to-many and many-to-many relations
 
 The example in the [Basic usage] section shows how to work with one-to-one relations only, where the `Nested` rule is
-sufficient for referencing relations. It can be combined with other complex rules, such as `Each`, to validate
+sufficient for referencing relations. It can be combined with other complex rules, such as [`Each`], to validate
 one-to-many and many-to-many relations as well:
 
 Let's take this line chart set as an example: 
@@ -216,7 +216,7 @@ $errors = [
 
 ### Using `*` shortcut
 
-A `*` shortcut can be used to simplify `Nested` and `Each` combinations:
+A `*` shortcut can be used to simplify `Nested` and [`Each`] combinations:
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -253,7 +253,7 @@ $rule = new Nested([
 ```
 
 This is less verbose, but the downside of this approach is that you can't additionally configure dynamically generated
-`Nested` and `Each` pairs. If you need to do this, use the explicit form of configuration (see the example provided in 
+`Nested` and [`Each`] pairs. If you need to do this, use the explicit form of configuration (see the example provided in 
 [Basic usage] section).
 
 ### Using PHP attributes
@@ -390,7 +390,7 @@ section.
 
 ### Using keys containing separator / shortcut
 
-If a key contains the separator (`.`), or `Each` shortcut (`*`), it must be escaped with backslash (`\`) in
+If a key contains the separator (`.`), or [`Each`] shortcut (`*`), it must be escaped with backslash (`\`) in
 the rule config to work correctly. In the input data escaping is not needed. Here is an example with 2 nested
 keys named `author.data` and `name.surname`:
 
@@ -430,7 +430,7 @@ $data = [
 ];
 ```
 
-The example with the `Each` shortcut (`*`):
+The example with the [`Each`] shortcut (`*`):
 
 ```php
 use Yiisoft\Validator\Rule\Nested;
@@ -461,6 +461,7 @@ $data = [
 
 [Result]: result.md
 [Basic usage]: #basic-usage-one-to-one-relation
+[`Each`]: built-in-rules-each.md
 [JSFiddle]: https://jsfiddle.net/fys8uadr/
 [Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md
 [Using validator]: using-validator.md
