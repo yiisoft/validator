@@ -17,7 +17,7 @@ Aqui está uma lista de todas as regras integradas disponíveis, divididas por c
 - [Length](../../../src/Rule/Length.php)
 - [Regex](../../../src/Rule/Regex.php)
 - [Email](../../../src/Rule/Email.php)
-- [IP](../../../src/Rule/Ip.php)
+- [Ip](../../../src/Rule/Ip.php)
 - [Json](../../../src/Rule/Json.php)
 - [Url](../../../src/Rule/Url.php)
 

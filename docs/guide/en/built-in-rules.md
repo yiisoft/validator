@@ -17,7 +17,7 @@ Here is a list of all available built-in rules, divided by category.
 - [Length](../../../src/Rule/Length.php)
 - [Regex](../../../src/Rule/Regex.php)
 - [Email](../../../src/Rule/Email.php)
-- [IP](../../../src/Rule/Ip.php)
+- [Ip](../../../src/Rule/Ip.php)
 - [Json](../../../src/Rule/Json.php)
 - [Url](../../../src/Rule/Url.php)
 

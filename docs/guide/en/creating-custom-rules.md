@@ -6,9 +6,9 @@ When desired validation logic is missing in both built-in rules and extensions -
 
 The key feature of the rules' concept is a separation into 2 parts: 
 
-- `Rule` (a class implementing `RuleInterface`). It only stores configuration options and a reference to its handler. Does 
+- Rule (a class implementing `RuleInterface`). It only stores configuration options and a reference to its handler. Does 
 not perform actual validation.
-- `Rule handler` (a class implementing `RuleHandlerInterface`). Given a rule and input data, performs the actual 
+- Rule handler (a class implementing `RuleHandlerInterface`). Given a rule and input data, performs the actual 
 validation within a current validation context. 
 
 Besides responsibilities' separation, this approach allows to automatically resolve dependencies for a handler. For 

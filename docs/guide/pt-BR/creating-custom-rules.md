@@ -6,9 +6,9 @@ Quando a lógica de validação desejada está faltando nas regras e extensões 
 
 A principal característica do conceito de regras é a separação em 2 partes:
 
-- `Rule` (uma classe que implementa `RuleInterface`). Ele armazena apenas opções de configuração e uma referência ao seu manipulador. Ele
+- Rule (uma classe que implementa `RuleInterface`). Ele armazena apenas opções de configuração e uma referência ao seu manipulador. Ele
 não realiza a validação real.
-- `Rule handler` - Manipulador de regras (uma classe que implementa `RuleHandlerInterface`). Dada uma regra e dados de entrada, executa o procedimento real
+- Rule handler - Manipulador de regras (uma classe que implementa `RuleHandlerInterface`). Dada uma regra e dados de entrada, executa o procedimento real
 da validação no contexto da validação atual.
 
 Além da separação de responsabilidades, esta abordagem permite resolver automaticamente dependências de um manipulador. 
