@@ -227,7 +227,7 @@ final class Config {
 ```
 
 A sintaxe é a mesma de uma função normal. Observe que não há restrições nos níveis de visibilidade e modificadores estáticos,
-todos eles podem ser usados ([`public`], [`protected`], [`private`], [`static`]).
+todos eles podem ser usados (`public`, `protected`, `private`, `static`).
 
 Usar um argumento `callback` em vez de um [`método`] com atributos PHP é proibido devido à restrições da linguagem PHP atual
 (um retorno de chamada não pode estar dentro de um atributo PHP).
@@ -398,8 +398,4 @@ $result = (new Validator())->validate($data, $rules);
 [`yaml_parse()`]: https://www.php.net/manual/pt_BR/function.yaml-parse.php
 [`DTO`]: https://pt.wikipedia.org/wiki/Data_transfer_object
 [`when`]: conditional-validation.md#when
-[`public`]: https://www.php.net/manual/pt_BR/language.oop5.visibility.php
-[`protected`]: https://www.php.net/manual/pt_BR/language.oop5.visibility.php
-[`private`]: https://www.php.net/manual/pt_BR/language.oop5.visibility.php
-[`static`]: https://www.php.net/manual/pt_BR/language.oop5.static.php
 [`método`]: built-in-rules-callback.md#para-propriedades

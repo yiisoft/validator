@@ -38,5 +38,3 @@ $rules = [
     ],
 ];
 ```
-
-[`DateTime`]: https://www.php.net/manual/pt_BR/book.datetime.php

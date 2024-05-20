@@ -227,7 +227,7 @@ final class Config {
 ```
 
 The signature is the same as in a regular function. Note that there are no restrictions on visibility levels and static
-modifiers, all of them can be used ([`public`], [`protected`], [`private`], [`static`]).
+modifiers, all of them can be used (`public`, `protected`, `private`, `static`).
 
 Using a `callback` argument instead of [`method`] with PHP attributes is prohibited due to current PHP language
 restrictions (a callback can't be inside a PHP attribute).
@@ -398,9 +398,5 @@ $result = (new Validator())->validate($data, $rules);
 [`yaml_parse()`]: https://www.php.net/manual/en/function.yaml-parse.php
 [`DTO`]: https://pt.wikipedia.org/wiki/Data_transfer_object
 [`when`]: conditional-validation.md#when
-[`public`]: https://www.php.net/manual/en/language.oop5.visibility.php
-[`protected`]: https://www.php.net/manual/en/language.oop5.visibility.php
-[`private`]: https://www.php.net/manual/en/language.oop5.visibility.php
-[`static`]: https://www.php.net/manual/en/language.oop5.static.php
 [`method`]: built-in-rules-callback.md#for-property
  
