@@ -85,7 +85,7 @@ new Callback(
 );
 ```
 
-> **Note:** Processing untrusted user input with [`yaml_parse()`] can be dangerous with certain settings. Please refer to
+> **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to
 > [`yaml_parse()` docs](https://www.php.net/manual/en/function.yaml-parse.php) for more details. 
 
 ### Usage of validation context for validating multiple attributes depending on each other
