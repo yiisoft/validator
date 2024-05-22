@@ -13,7 +13,8 @@ approach is discouraged and the recommended way with this package is using separ
 Sure, this will lead to some code duplication, but it's acceptable and will pay off in the future.
 Anyway, we decided to make it available through an extension, but use it with caution.   
 
-[Yii Validator Scenarios] adds special `On` rule which allows to wrap other rules by declaring specific scenarios.
+[Yii Validator Scenarios] package from a core team member [Sergei Predvoditelev] adds
+special `On` rule which allows to wrap other rules by declaring specific scenarios.
 
 An example of the class using scenarios:
 
@@ -58,7 +59,8 @@ $result = (new Validator())->validate($userDto, context: $context);
 
 ## Wrapper for Symfony rules
 
-[Yii Validator Symfony Rule] adapts [constraints from Symfony framework] to be used as rules in Yii Validator.
+[Yii Validator Symfony Rule] package from a core team member [Sergei Predvoditelev] 
+adapts [constraints from Symfony framework] to be used as rules in Yii Validator.
 
 Using it is straightforward, all you have to do is wrap a Symfony constraint (or a list of them) with `SymfonyRule` rule 
 provided by this extension.
@@ -91,8 +93,9 @@ final class Car
     public int $number = 13;
 }
 ```
-
+ 
 [scenarios]: https://www.yiiframework.com/doc/guide/2.0/en/structure-models#scenarios
 [Yii Validator Scenarios]: https://github.com/vjik/yii-validator-scenarios
+[Sergei Predvoditelev]: https://github.com/vjik
 [Yii Validator Symfony Rule]: https://github.com/vjik/yii-validator-symfony-rule
 [constraints from Symfony framework]: https://symfony.com/doc/current/reference/constraints.html

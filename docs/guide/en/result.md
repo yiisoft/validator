@@ -62,7 +62,7 @@ multiple attributes depending on each other for example. Use the following `Resu
 $result->getCommonErrorMessages();
 ```
 
-The output will be:
+The output for example above:
 
 ```php
 [
@@ -78,7 +78,7 @@ This list can be also filtered by a specific attribute. Only top-level attribute
 $result->getAttributeErrorMessages('email');
 ```
 
-The output will be:
+The output for example above:
 
 ```php
 [
@@ -113,7 +113,7 @@ An example of output:
 
 Note that the result is always a 2-dimensional array with attribute names as keys at the first nesting level. This means
 that further nesting of attributes is not supported (but could be achieved
-by using [`getErrorMessagesIndexedByPath()`]).
+by using [`getErrorMessagesIndexedByPath()`](#error-messages-indexed-by-path)).
 Returning to the previous example, when `name` and `email` belong to a `user` attribute, the output will be:
 
 ```php
@@ -128,13 +128,14 @@ Returning to the previous example, when `name` and `email` belong to a `user` at
 ];
 ```
 
-Also keep in mind that attribute names must be strings, even when used with [`Each`]:
+Also keep in mind that attribute names must be strings, even when used with `Each`:
 
 ```php
 $rule = new Each([new Number(min: 21)]),
 ```
 
-With input containing non-string keys for top level attributes, for example `[21, 22, 23, 20]`, `InvalidArgumentException` will be thrown.
+With input containing non-string keys for top level attributes, for example, `[21, 22, 23, 20]`,
+`InvalidArgumentException` will be thrown.
 
 Even array `['1' => 21, '2' => 22, '3' => 23, '4' => 20]` will cause an error, because PHP [will cast keys to the int type].
 
@@ -151,7 +152,7 @@ But if given array with string keys `['1a' => 21, '2b' => 22, '3c' => 23, '4d' =
 ### Error messages indexed by path
 
 This is probably the most advanced representation offered by built-in methods. The grouping is done by path - a
-concatenated attribute sequence showing the location of errored value within a data structure. If the separator is customizable,
+concatenated attribute sequence showing the location of errored value within a data structure. A separator is customizable,
 dot notation is set as the default one. Use the following `Result` API call:
 
 ```php
@@ -173,7 +174,7 @@ An example of output:
 ];
 ```
 
-A path can contain integer elements too (when using the [`Each`] rule for example):
+A path can contain integer elements too (when using the `Each` rule for example):
 
 ```php
 [
@@ -207,9 +208,9 @@ $rules = [
 ];
 ```
 
-However, when using the [`Nested`] rule with multiple attributes per rule set, special characters need to be escaped with
+However, when using the `Nested` rule with multiple attributes per rule set, special characters need to be escaped with
 a backslash (`\`) for value paths to be correct and to be possible to reverse them back from string to individual
-items. See the [Using keys containing separator/shortcut] section for more details.
+items. See the [Using keys containing separator / shortcut] section for more details.
 
 This can be used as an alternative to using a custom separator.
 
@@ -224,7 +225,7 @@ use Yiisoft\Validator\Result;
 $result->getAttributeErrorMessagesIndexedByPath('user');
 ```
 
-The output will be:
+The output for example above:
 
 ```php
 [
@@ -235,7 +236,7 @@ The output will be:
 
 ## Error objects list
 
-When even these representations are not enough, an initial unmodified list of error objects can be accessed by
+When even these representations are not enough, an initial unmodified list of error objects can be accessed via
 this method:
 
 ```php
@@ -285,8 +286,5 @@ use Yiisoft\Validator\Result;
 $result->getAttributeErrors('email');
 ```
 
-[`Each`]: built-in-rules-each.md
-[`Nested`]: built-in-rules-nested.md
-[`getErrorMessagesIndexedByPath()`]: #error-messages-indexed-by-path
+[Using keys containing separator / shortcut]: built-in-rules-nested.md#using-keys-containing-separator--shortcut
 [will cast keys to the int type]: https://www.php.net/manual/en/language.types.array.php
-[Using keys containing separator/shortcut]: built-in-rules-nested.md#using-keys-containing-separator--shortcut

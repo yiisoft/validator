@@ -45,14 +45,14 @@ final class RgbColor implements RuleInterface
 }
 ```
 
-> **Note:** [Readonly properties] are supported only starting from PHP 8.1.
+> **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
 Besides required interface method implementations it only contains customizable error message. Of course, more features 
 can be added - conditional validation, client options, etc. But this is a bare minimum to start with.
 
 ### Creating a handler
 
-The 2nd step is creating the handler. Let's define what is exactly a valid [RGB color]:
+The 2nd step is creating the handler. Let's define what is exactly a valid RGB color:
 
 - It's an array (list to be exact).
 - Contains exactly 3 items.
@@ -96,7 +96,7 @@ final class RgbColorHandler implements RuleHandlerInterface
 #### More specific error messages
 
 Prefer more specific error messages to broad ones. Even this requires a bigger amount of messages and code, it helps to 
-quicker understand what exactly is wrong with input data. [RGB color] is quite simple and compact structure, but in case 
+quicker understand what exactly is wrong with input data. RGB color is quite simple and compact structure, but in case 
 of more complex data it will definitely pay off.
 
 Keeping this in mind the rule can be rewritten something like this:
@@ -130,9 +130,10 @@ final class RgbColor implements RuleInterface
 }
 ```
 
-> **Notes:**
->- [Readonly properties] are supported only starting from PHP 8.1.
->- Formatting used in `$incorrectItemTypeMessage` and `$incorrectItemValueMessage` requires [`intl` PHP] extension.
+> **Note:** [readonly properties] are supported only starting from PHP 8.1.
+
+> **Note:** Formatting used in `$incorrectItemTypeMessage` and `$incorrectItemValueMessage` requires `intl` PHP 
+> extension.
 
 The handler needs to be changed accordingly. Let's also add error parameters to be able to use them as placeholders in 
 message templates:
@@ -200,7 +201,7 @@ final class RgbColorHandler implements RuleHandlerInterface
 ```
 
 > **Note:** It's also a good idea to utilize the features of used language version. For example, for PHP >= 8.1 we can 
-> simplify checking that a given array is a list with [array_is_list()] function.
+> simplify checking that a given array is a list with [array_is_list] function.
 
 #### Using built-in rules if possible
 
@@ -209,7 +210,7 @@ unnecessary to create a custom rule.
 
 ##### Replacing with `Composite`
 
-The example with [RGB color] can be significantly simplified after realizing that it's also possible to achieve the same 
+The example with RGB color can be significantly simplified after realizing that it's also possible to achieve the same 
 effect by just using only built-in rules:
 
 ```php
@@ -223,7 +224,7 @@ $rules = [
 ];
 ```
 
-Making them reusable isn't much harder - the whole set can be placed inside a [`Composite`] rule and used as a single 
+Making them reusable isn't much harder - the whole set can be placed inside a `Composite` rule and used as a single 
 regular rule.
 
 ```php
@@ -247,7 +248,7 @@ final class RgbColorRuleSet extends Composite
 $result = (new Validator())->validate([205, 92, 92], new RgbColorRuleSet());
 ```
 
-##### Replacing with separate rules and [`when`]
+##### Replacing with separate rules and `when`
 
 Below is an attempt at using validation context for validating attributes depending on each other:
 
@@ -341,7 +342,7 @@ final class Yaml implements RuleInterface
 }
 ```
 
-> **Note:** [Readonly properties] are supported only starting from PHP 8.1.
+> **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
 Handler:
 
@@ -386,10 +387,10 @@ final class YamlHandler implements RuleHandlerInterface
 }
 ```
 
-> **Notes:**
->- Using [`yaml_parse()`] additionally requires [`yaml PHP`] extension.
->- Processing untrusted user input with [`yaml_parse()`] can be dangerous with certain settings. Please refer to
-> docs for more details.
+> **Note:** Using [yaml_parse] additionally requires `yaml` PHP extension.
+
+> **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to
+> [yaml_parse] docs for more details.
 
 ### Wrapping validation
 
@@ -433,23 +434,20 @@ final class OnHandler implements RuleHandlerInterface
 }
 ```
 
-This code snippet is taken from [Yii Validator Scenarios] extension. Read more in [Scenarios] section.
+This code snippet is taken from [Yii Validator Scenarios] extension by [Sergei Predvoditelev]. Read more in [Scenarios]
+section.
 
 ## Making an extension
 
 With a custom rule, you can go even further. If it's not too project-specific, and you feel that it might be useful to 
-someone else - make it available as an [`extension`].
+someone else - make it available as an extension.
 
-[Scenarios]: extensions.md#scenarios
-[Yii Validator Scenarios]: https://github.com/vjik/yii-validator-scenarios
 [RGB color]: https://en.wikipedia.org/wiki/RGB_color_model
-[Readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
-[`intl` PHP]: https://www.php.net/manual/en/book.intl.php
-[array_is_list()]: https://www.php.net/manual/en/function.array-is-list.php
-[`Composite`]: built-in-rules-composite.md
+[readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[array_is_list]: https://www.php.net/manual/en/function.array-is-list.php
 [YAML]: https://en.wikipedia.org/wiki/YAML
-[`yaml_parse()`]: https://www.php.net/manual/en/function.yaml-parse.php
-[`yaml PHP`]: https://www.php.net/manual/en/book.yaml.php
+[yaml_parse]: https://www.php.net/manual/en/function.yaml-parse.php
 [scenarios from Yii 2]: https://www.yiiframework.com/doc/guide/2.0/en/structure-models#scenarios
-[`extension`]: https://www.yiiframework.com/doc/guide/2.0/en/structure-extensions#creating-extensions
-[`when`]: conditional-validation.md#when 
+[Yii Validator Scenarios]: https://github.com/vjik/yii-validator-scenarios
+[Sergei Predvoditelev]: https://github.com/vjik
+[Scenarios]: extensions.md#scenarios
