@@ -1,5 +1,9 @@
 # Yii Validator Change Log
 
+## 1.4.1 under development
+
+- no changes in this release.
+
 ## 1.4.0 May 22, 2024
 
 - New #649: Add `getFirstErrorMessagesIndexedByPath()` and `getFirstErrorMessagesIndexedByAttribute()` methods to
