@@ -1,7 +1,7 @@
 # Configuring rules via PHP attributes
 
-The [`Attributes`] feature introduced in PHP 8 allows an alternative way of configuring rules. If entities/models with
-their relations are represented as [`DTO`] classes, attributes make it possible to use such classes to provide rules.
+The [Attributes] feature introduced in PHP 8 allows an alternative way of configuring rules. If entities/models with
+their relations are represented as [DTO] classes, attributes make it possible to use such classes to provide rules.
 The rules are defined above the properties themselves, which some developers may find more convenient in terms
 of readability.
 
@@ -71,7 +71,7 @@ final class User
 }
 ```
 
-> **Note:** [Readonly properties] are supported only starting from PHP 8.1.
+> **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
 ## Configuring for multiple entities / models with relations
 
@@ -110,7 +110,7 @@ use Yiisoft\Validator\Rule\Url;
 ];
 ```
 
-It can be applied to such [`DTO`] classes to achieve the same effect:
+It can be applied to such DTO classes to achieve the same effect:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -159,11 +159,11 @@ final class File
 }
 ```
 
-For a better understanding of relations concept, it's recommended to read the [`Nested`] and [`Each`] guides.
+For a better understanding of relations concept, it's recommended to read the [Nested] and [Each] guides.
 
 ## Traits
 
-Attributes can also be used in [traits]. It might come in handy for reusing the same set of properties with identical 
+Attributes can also be used in traits. It might come in handy for reusing the same set of properties with identical 
 rules:
 
 ```php
@@ -188,7 +188,7 @@ final class WikiArticle
 
 ## Inheritance
 
-[`Inheritance`] is supported, but there are some things to keep in mind:
+Inheritance is supported, but there are some things to keep in mind:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
@@ -242,14 +242,15 @@ So, to sum up:
 
 - Parent rules for overridden properties are ignored completely, only the ones from the child class are obtained.
 - All parent rules for properties that are not overridden in the child class are obtained fully.
-- As for the data, default values set in the child class take precedence.
+
+As for the data, default values set in the child class take precedence.
 
 ## Adding attributes support to custom rules
 
-In order to attach rules to [`DTO`] properties or the whole [`DTO`], the [`Attributes`] attribute must be added to the 
+In order to attach rules to DTO properties or the whole DTO, the `Attribute` attribute must be added to the 
 custom class. And in order for rules to be fetched from attributes, they must implement the `RuleInterface`.
 
-For custom [`Composite`] rules you only need to add the [`Attributes`]:
+For custom `Composite` rules you only need to add the attribute:
 
 ```php
 use Attribute;
@@ -272,7 +273,7 @@ final class RgbColorRuleSet extends Composite
 }
 ```
 
-Example for [`custom rule`]:
+Example for custom rule:
 
 ```php
 use Attribute;
@@ -317,10 +318,10 @@ final class Yaml implements RuleInterface
 ### Instances
 
 Passing instances in the scope of attributes is only possible as of PHP 8.1. This means using attributes for complex
-rules such as [`Composite`], [`Nested`] and [`Each`] or rules that take instances as arguments, can be problematic with PHP 8.0.
+rules such as `Composite`, `Each` and `Nested` or rules that take instances as arguments, can be problematic with PHP 8.0.
 
 The first workaround is to upgrade to PHP 8.1 - this is fairly simple since it is a minor version. Tools like 
-[`Rector`] can ease the process of upgrading the code base by automating routine tasks.
+[Rector] can ease the process of upgrading the code base by automating routine tasks.
 
 If this is not an option, you can use other ways of providing rules, such as rule providers:
 
@@ -382,8 +383,8 @@ $postRulesProvider = new PostRulesProvider();
 $validator = (new Validator())->validate($post, $postRulesProvider);
 ```
 
-For rules without relations, instead of using [`Composite`] directly, create a child class that extends from it and put the 
-rules into it. Don't forget to add the [`Attributes`] support.
+For rules without relations, instead of using `Composite` directly, create a child class that extends from it and put the 
+rules into it. Don't forget to add the attribute support.
 
 ```php
 use Attribute;
@@ -415,26 +416,26 @@ final class User
 }
 ```
 
-The [`Nested`] rule can be used without arguments, see this [example] above.
+The `Nested` rule can be used without arguments, see this [example](#configuring-for-a-single-entity--model) above.
 
 ### Callables
 
-Attempting to use [`callables`] within the scope of an attribute will cause the error. This means that using [`when`] for
-[`conditional validation`] or `callback` argument for the [`Callback`] rule will not work. 
+Attempting to use callables within the scope of an attribute will cause the error. This means that using [when] for
+[conditional validation] or `callback` argument for the `Callback` rule will not work. 
 
 The workarounds are:
 
-- [`Composite`] or the rules provider described in the [Instances] section will also fit here.
-- Create a [`custom rule`].
-- For the [`Callback`] rule in particular, it is possible to replace a callback with a [`method reference`].
+- `Composite` or the rules provider described in the [Instances] section will also fit here.
+- Create a [custom rule].
+- For the `Callback` rule in particular, it is possible to replace a callback with a [method reference].
 
 ### Function / method calls
 
 Both function and method calls are not supported within the scope of an attribute. If the intent is to call a function / 
-method for validation - use a [`Callback`] rule with [`method reference`]. Otherwise, the remaining options are:
+method for validation - use a `Callback` rule with [method reference]. Otherwise, the remaining options are:
 
-- Use [`Composite`] or rules provider described in the [Instances] section.
-- Create a [`custom rule`].
+- Use `Composite` or rules provider described in the [Instances] section.
+- Create a [custom rule].
 
 ## Using rules
 
@@ -480,7 +481,7 @@ final class Author
 
 ### Passing along with data for validation
 
-Probably one of the cleanest ways is to pass [`DTO`] instances with declared rules and data. This way doesn't require
+Probably one of the cleanest ways is to pass DTO instances with declared rules and data. This way doesn't require
 any additional setup:
 
 ```php
@@ -549,7 +550,7 @@ $dataSet = new ObjectDataSet(
 $result = (new Validator())->validate($dataSet);
 ```
 
-Some edge cases, like skipping [`DTO`]'s static properties, require using of `AttributeRulesProvider`. After initializing it 
+Some edge cases, like skipping DTO's static properties, require using of `AttributeRulesProvider`. After initializing it 
 can be passed for validation right away - no need to extract rules manually beforehand.
 
 ```php
@@ -600,21 +601,15 @@ $validator = (new Validator())->validate([], $rules);
 $options = RulesDumper::asArray($rules);
 ```
 
-[`Attributes`]: https://www.php.net/manual/en/language.attributes.overview.php
-[`DTO`]: https://pt.wikipedia.org/wiki/Data_transfer_object
+[Attributes]: https://www.php.net/manual/en/language.attributes.overview.php
+[DTO]: https://en.wikipedia.org/wiki/Data_transfer_object
 [constructor property promotion]: https://www.php.net/manual/en/language.oop5.decon.php#language.oop5.decon.constructor.promotion
-[Readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
-[`Nested`]: built-in-rules-nested.md
-[`Each`]: built-in-rules-each.md
-[traits]: https://www.php.net/manual/en/language.oop5.traits.php
-[`Inheritance`]: https://www.php.net/manual/en/language.oop5.inheritance.php
-[`Composite`]: built-in-rules-composite.md
-[`custom rule`]: creating-custom-rules.md
-[`Rector`]: https://github.com/rectorphp/rector
-[`when`]: conditional-validation.md#when
-[`conditional validation`]: conditional-validation.md
-[`Callback`]: built-in-rules-callback.md
-[`callables`]: https://www.php.net/manual/en/language.types.callable.php
+[readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[Nested]: built-in-rules-nested.md
+[Each]: built-in-rules-each.md
+[Rector]: https://github.com/rectorphp/rector
+[when]: conditional-validation.md#when
+[conditional validation]: conditional-validation.md
 [Instances]: #instances
-[`method reference`]: built-in-rules-callback.md#for-property
-[example]: #configuring-for-a-single-entity--model
+[custom rule]: creating-custom-rules.md
+[method reference]: built-in-rules-callback.md#for-property
