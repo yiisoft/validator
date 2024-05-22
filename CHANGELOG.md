@@ -1,13 +1,13 @@
 # Yii Validator Change Log
 
-## 1.3.1 under development
+## 1.4.0 May 22, 2024
 
-- New #657: Add `Result::add()` method for merging other results to the base one (@arogachev)
-- New #655: Add rules for validating value types - `boolean`, `float`, `integer`, `string` (@arogachev)
-- New #693: Add `AnyRule` rule (@arogachev)
 - New #649: Add `getFirstErrorMessagesIndexedByPath()` and `getFirstErrorMessagesIndexedByAttribute()` methods to
   `Result` (@arogachev)
+- New #655: Add rules for validating value types - `boolean`, `float`, `integer`, `string` (@arogachev)
+- New #657: Add `Result::add()` method for merging other results to the base one (@arogachev)
 - New #687: Add `UniqueIterable` rule (@arogachev)
+- New #693: Add `AnyRule` rule (@arogachev)
 
 ## 1.3.0 April 04, 2024
 
