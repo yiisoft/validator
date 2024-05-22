@@ -1,7 +1,7 @@
 # `Each` - applying the same rules for each data item in the set
 
 The `Each` rule allows the same rules to be applied to each data item in the set. The following example shows
-the configuration for validating [RGB color] components:
+the configuration for validating [RGB color](https://en.wikipedia.org/wiki/RGB_color_model) components:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -30,8 +30,8 @@ $rules = [
 ];
 ```
 
-Validated data items are not limited to only "simple" values - `Each` can be used both within a [`Nested`] and contain 
-[`Nested`] rule covering one-to-many and many-to-many relations:
+Validated data items are not limited to only "simple" values - `Each` can be used both within a `Nested` and contain
+`Nested` rule covering one-to-many and many-to-many relations:
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -59,7 +59,4 @@ $rule = new Nested([
 ]);
 ```
 
-For more information about using it with [`Nested`], see the [`Nested`] guide.
-
-[RGB color]: https://en.wikipedia.org/wiki/RGB_color_model
-[`Nested`]: built-in-rules-nested.md
+For more information about using it with `Nested`, see the [Nested](built-in-rules-nested.md) guide.
