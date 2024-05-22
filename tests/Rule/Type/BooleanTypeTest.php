@@ -26,7 +26,7 @@ final class BooleanTypeTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new BooleanType();
-        $this->assertSame('booleanType', $rule->getName());
+        $this->assertSame(BooleanType::class, $rule->getName());
     }
 
     public function dataOptions(): array

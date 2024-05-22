@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule\Type;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_bool;
@@ -17,7 +18,7 @@ use function is_bool;
  */
 final class BooleanTypeHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof BooleanType) {
             throw new UnexpectedRuleException(BooleanType::class, $rule);

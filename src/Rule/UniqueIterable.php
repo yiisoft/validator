@@ -7,10 +7,10 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -25,7 +25,7 @@ use Yiisoft\Validator\WhenInterface;
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class UniqueIterable implements
-    RuleWithOptionsInterface,
+    DumpedRuleInterface,
     SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface
@@ -78,15 +78,16 @@ final class UniqueIterable implements
         'float, string, boolean and object implementing \Stringable or \DateTimeInterface.',
         private string $differentTypesMessage = 'All iterable items must have the same type.',
         private string $message = 'Every iterable\'s item must be unique.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string
     {
-        return 'unique';
+        return self::class;
     }
 
     /**

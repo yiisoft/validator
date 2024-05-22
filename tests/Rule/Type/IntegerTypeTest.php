@@ -26,7 +26,7 @@ final class IntegerTypeTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new IntegerType();
-        $this->assertSame('integerType', $rule->getName());
+        $this->assertSame(IntegerType::class, $rule->getName());
     }
 
     public function dataOptions(): array

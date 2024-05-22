@@ -8,12 +8,12 @@ use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\Helper\RulesDumper;
-use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidatorInterface;
@@ -44,7 +44,7 @@ use Yiisoft\Validator\WhenInterface;
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class AnyRule implements
-    RuleWithOptionsInterface,
+    DumpedRuleInterface,
     SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
@@ -83,16 +83,17 @@ final class AnyRule implements
     public function __construct(
         iterable $rules,
         private string $message = 'At least one of the inner rules must pass the validation.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
         $this->rules = RulesNormalizer::normalizeList($rules);
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string
     {
-        return 'any';
+        return self::class;
     }
 
     /**

@@ -29,7 +29,7 @@ final class UniqueIterableTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new UniqueIterable();
-        $this->assertSame('unique', $rule->getName());
+        $this->assertSame(UniqueIterable::class, $rule->getName());
     }
 
     public function dataOptions(): array

@@ -26,7 +26,7 @@ final class FloatTypeTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new FloatType();
-        $this->assertSame('floatType', $rule->getName());
+        $this->assertSame(FloatType::class, $rule->getName());
     }
 
     public function dataOptions(): array

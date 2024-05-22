@@ -379,7 +379,7 @@ final class YamlHandler implements RuleHandlerInterface
 > **Note:** Using [yaml_parse] additionally requires `yaml` PHP extension.
 
 > **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to
-> [yaml_parse] docs for more details.
+> [`yaml_parse()` docs](https://www.php.net/manual/en/function.yaml-parse.php) for more details.
 
 ### Wrapping validation
 

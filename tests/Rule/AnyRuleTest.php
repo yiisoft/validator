@@ -26,7 +26,7 @@ final class AnyRuleTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new AnyRule([new IntegerType(), new FloatType()]);
-        $this->assertSame('any', $rule->getName());
+        $this->assertSame(AnyRule::class, $rule->getName());
     }
 
     public function dataOptions(): array
@@ -43,7 +43,7 @@ final class AnyRuleTest extends RuleTestCase
                     'skipOnError' => false,
                     'rules' => [
                         [
-                            'integerType',
+                            IntegerType::class,
                             'message' => [
                                 'template' => 'Value must be an integer.',
                                 'parameters' => [],
@@ -70,7 +70,7 @@ final class AnyRuleTest extends RuleTestCase
                     'skipOnError' => true,
                     'rules' => [
                         [
-                            'integerType',
+                            IntegerType::class,
                             'message' => [
                                 'template' => 'Value must be an integer.',
                                 'parameters' => [],
@@ -79,7 +79,7 @@ final class AnyRuleTest extends RuleTestCase
                             'skipOnError' => false,
                         ],
                         [
-                            'floatType',
+                            FloatType::class,
                             'message' => [
                                 'template' => 'Value must be a float.',
                                 'parameters' => [],
