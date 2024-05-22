@@ -1,7 +1,7 @@
 # `Composite` - grouping multiple validation rules
 
-`Composite` allows to group multiple rules and configure the common [skipping options], such as [`skipOnEmpty`], 
-[`skipOnError`] and [`when`], for the whole set only once instead of repeating them in each rule:
+`Composite` allows to group multiple rules and configure the common [skipping options](conditional-validation.md),
+such as `skipOnEmpty`, `skipOnError` and `when`, for the whole set only once instead of repeating them in each rule:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -19,7 +19,7 @@ new Composite(
 
 ## Reusing multiple rules / single rule with the same options
 
-`Composite` is one of the few built-in rules that is not [`final`]. This means that you can extend it and override the
+`Composite` is one of the few built-in rules that is not `final`. This means that you can extend it and override the
 `getRules()` method to create a reusable set of rules:
 
 ```php
@@ -47,7 +47,7 @@ use Yiisoft\Validator\Validator;
 $result = (new Validator())->validate('John', new UsernameRuleSet());
 ```
 
-It can also be combined with [`Nested`] rule to reuse rules for multiple attributes:
+It can also be combined with [Nested](built-in-rules-nested.md) rule to reuse rules for multiple attributes:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -82,10 +82,3 @@ final class ChartCoordinateRuleSet extends Composite
     }
 }
 ```
-
-[skipping options]: conditional-validation.md
-[`Nested`]: built-in-rules-nested.md
-[`when`]: conditional-validation.md#when
-[`final`]: https://www.php.net/manual/en/language.oop5.final.php
-[`skipOnEmpty`]: conditional-validation.md#skiponempty---skipping-a-rule-if-the-validated-value-is-empty
-[`skipOnError`]: conditional-validation.md#skipOnError---skip-a-rule-in-the-set-if-the-previous-one-failed
