@@ -21,7 +21,7 @@ $rule = new StopOnError([
 $result = (new Validator())->validate($data, $rule);
 ```
 
-When using with other rules and [`conditional validation`], it behaves like a single unit. For example, with 
+When using with other rules and conditional validation, it behaves like a single unit. For example, with 
 default settings it will not be skipped if the previous rule didn't pass the validation. To change this behavior, set 
 `$skipOnError` to `true`. This allows to use it for limiting the list of errors per attribute to just the first one (in 
 HTML forms, for example).
@@ -49,7 +49,4 @@ $rules = [
 ];
 ```
 
-Use grouping / ordering / [`skipOnError`] option to achieve the desired effect.
-
-[`conditional validation`]: conditional-validation.md
-[`skipOnError`]: conditional-validation.md#skipOnError---skip-a-rule-in-the-set-if-the-previous-one-failed
+Use grouping / ordering / `skipOnError` option to achieve the desired effect.
