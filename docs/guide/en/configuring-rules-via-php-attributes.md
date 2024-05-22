@@ -220,7 +220,7 @@ class Truck extends Car
 }
 ```
 
-In this case the set of rules for `Truck` will be:
+In this case the set of rules for `Truck` class will be:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;

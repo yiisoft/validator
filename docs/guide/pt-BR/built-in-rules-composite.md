@@ -1,7 +1,7 @@
 # `Composite` - agrupando múltiplas regras de validação
 
-`Composite` permite agrupar múltiplas regras e configurar as [opções de salto] comuns, como `skipOnEmpty`,
-`skipOnError` e `when`, para todo o conjunto apenas uma vez em vez de repeti-los em cada regra:
+`Composite` permite agrupar múltiplas regras e configurar as [opções de salto] comuns, como [`skipOnEmpty`],
+[`skipOnError`] e [`when`], para todo o conjunto apenas uma vez ao invés de repeti-los em cada regra:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -19,8 +19,8 @@ new Composite(
 
 ## Reutilizando múltiplas regras/regra única com as mesmas opções
 
-`Composite` é uma das poucas regras integradas que não é `final`. Isso significa que você pode estendê-lo e substituir o
-Método `getRules()` para criar um conjunto reutilizável de regras:
+`Composite` é uma das poucas regras integradas que não é [`final`]. Isso significa que você pode estendê-lo e substituir o
+método `getRules()` para criar um conjunto reutilizável de regras:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -47,7 +47,7 @@ use Yiisoft\Validator\Validator;
 $result = (new Validator())->validate('John', new UsernameRuleSet());
 ```
 
-Também pode ser combinado com a regra [Nested] para reutilizar regras para vários atributos:
+Também pode ser combinado com a regra [`Nested`] para reutilizar regras para vários atributos:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -84,4 +84,8 @@ final class ChartCoordinateRuleSet extends Composite
 ```
 
 [opções de salto]: conditional-validation.md
-[Nested]: built-in-rules-nested.md
+[`Nested`]: built-in-rules-nested.md
+[`when`]: conditional-validation.md#when
+[`final`]: https://www.php.net/manual/pt_BR/language.oop5.final.php
+[`skipOnEmpty`]: conditional-validation.md#skiponempty---ignorando-uma-regra-se-o-valor-validado-estiver-vazio
+[`skipOnError`]: conditional-validation.md#skipOnError---pula-uma-regra-no-conjunto-se-a-anterior-falhou

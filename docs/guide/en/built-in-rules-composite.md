@@ -1,7 +1,7 @@
 # `Composite` - grouping multiple validation rules
 
-`Composite` allows to group multiple rules and configure the common [skipping options], such as `skipOnEmpty`, 
-`skipOnError` and `when`, for the whole set only once instead of repeating them in each rule:
+`Composite` allows to group multiple rules and configure the common [skipping options](conditional-validation.md),
+such as `skipOnEmpty`, `skipOnError` and `when`, for the whole set only once instead of repeating them in each rule:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -47,7 +47,7 @@ use Yiisoft\Validator\Validator;
 $result = (new Validator())->validate('John', new UsernameRuleSet());
 ```
 
-It can also be combined with [Nested] rule to reuse rules for multiple attributes:
+It can also be combined with [Nested](built-in-rules-nested.md) rule to reuse rules for multiple attributes:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -82,6 +82,3 @@ final class ChartCoordinateRuleSet extends Composite
     }
 }
 ```
-
-[skipping options]: conditional-validation.md
-[Nested]: built-in-rules-nested.md

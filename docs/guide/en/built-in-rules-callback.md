@@ -9,7 +9,7 @@ A condition can be within:
 - Callable class.
 - DTO (data transfer object) method.
 
-The downside of using standalone functions and DTO methods is a lack of reusability. So they are mainly useful 
+The downside of using standalone functions and DTO methods is a lack of reusability. So they are mainly useful
 for some specific non-repetitive conditions. Reusability can be achieved with callable classes, but depending on other
 factors (the need for additional parameters for example), it might be a good idea to create a full-fledged
 [custom rule](creating-custom-rules.md) with a separate handler instead.
@@ -54,7 +54,8 @@ new Callback(
 ### Value validation
 
 `Callback` rule can be used to add validation missing in built-in rules for a single attribute's value. Below is the 
-example verifying that a value is a valid [YAML] string (additionally requires `yaml` PHP extension):
+example verifying that a value is a valid [YAML](https://en.wikipedia.org/wiki/YAML) string
+(additionally requires `yaml` PHP extension):
 
 ```php
 use Exception;
@@ -85,7 +86,7 @@ new Callback(
 ```
 
 > **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to
-> [yaml_parse docs] for more details. 
+> [`yaml_parse()` docs](https://www.php.net/manual/en/function.yaml-parse.php) for more details. 
 
 ### Usage of validation context for validating multiple attributes depending on each other
 
@@ -390,6 +391,3 @@ $rules = [
 ];
 $result = (new Validator())->validate($data, $rules);
 ```
-
-[YAML]: https://en.wikipedia.org/wiki/YAML
-[yaml_parse docs]: https://www.php.net/manual/en/function.yaml-parse.php

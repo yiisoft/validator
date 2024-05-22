@@ -1,14 +1,13 @@
 # Personalizando mensagens de erro
 
-Para usar uma mensagem de erro não padrão, passe uma message/template personalizada ao criar uma regra de validação. Geralmente o
-A opção `message` é responsável por armazenar a mensagem de erro:
+Para usar uma mensagem de erro não padrão, passe uma mensagem/template personalizado ao criar uma regra de validação. Geralmente a opção `message` é responsável por armazenar a mensagem de erro:
 
 ```php
 new Required(message: '{attribute} is required.');
 ```
 
 Algumas regras possuem diversas mensagens de erro e são substituídas por diferentes opções correspondentes.
-É fácil diferenciá-los do resto dos parâmetros pelo sufixo `Message`:
+É fácil diferenciá-las do resto dos parâmetros pelo sufixo `Message`:
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -21,12 +20,12 @@ new Length(
 );
 ```
 
-Uma lista completa de espaços reservados suportados com descrição está disponível no PHPDoc para cada mensagem.
+Uma lista completa de placeholders suportados com descrição está disponível no [PHPDoc] para cada mensagem.
 
 ## Traduzindo mensagens de erro
 
 A tradução de mensagens de erro é implementada com a ajuda do pacote [Yii Translator], usando mensagens em inglês
-linguagem como fonte. As traduções são armazenadas em um arquivo PHP normal em formato de array associativo, onde as chaves são
+como fonte. As traduções são armazenadas em um arquivo PHP normal em formato de array associativo, onde as chaves são
 mensagens e valores originais são traduções.
 
 Para utilizar as traduções, é necessário instalar um pacote adicional para suporte à leitura de arquivos PHP:
@@ -71,7 +70,7 @@ melhor fornecer uma tradução de atributo adicional.
 Existe uma interface separada chamada `AttributeTranslatorInterface` para resolver exatamente esta tarefa. Ele vem com 3
 implementações prontas para uso:
 
-- `ArrayAttributeTranslator` - usa um array associativo, onde as chaves são nomes de atributos iniciais e os valores são seus
+- `ArrayAttributeTranslator` - usa um array associativo, onde as chaves são nomes de atributos iniciais e os valores são suas
 versões traduzidas correspondentes.
 - `TranslatorAttributeTranslator` - usa [Yii Translator].
 - `NullAttributeTranslator` - tradutor fictício, retorna o nome do atributo como está, sem tradução.
@@ -138,7 +137,8 @@ $form = new ChangePasswordForm();
 $result = (new Validator())->validate($form);
 ```
 
-[PR]: https://github.com/yiisoft/validator/pulls
+[PHPDoc]: https://www.phpdoc.org/
 [Yii Translator]: https://github.com/yiisoft/translator
 [Yii Config]: https://github.com/yiisoft/config
 [Yii DI]: https://github.com/yiisoft/di
+[PR]: https://github.com/yiisoft/validator/pulls

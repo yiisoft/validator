@@ -1,6 +1,6 @@
 # `Compare` - comparando o valor validado com o valor alvo
 
-## Usando com objetos `DateTime`
+## Usando com objetos [`DateTime`]
 
 ### Uso básico
 

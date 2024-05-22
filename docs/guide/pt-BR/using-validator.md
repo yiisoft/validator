@@ -1,6 +1,6 @@
 # Usando validações
 
-Validator permite verificar dados em qualquer formato. Aqui estão alguns dos casos de uso mais comuns.
+`Validator` permite verificar dados em qualquer formato. Aqui estão alguns dos casos de uso mais comuns.
 
 ## Dados
 
@@ -21,7 +21,7 @@ $rules = [
 $result = (new Validator())->validate($value, $rules);
 ```
 
-> **Observação:** Use a regra [Each] para validar vários valores do mesmo tipo.
+> **Nota:** Use a regra [`Each`] para validar vários valores do mesmo tipo.
 
 ### Array
 
@@ -62,7 +62,7 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
-> **Observação:** Use a regra [Nested] para validar arrays aninhados e a regra [Each] para validar vários arrays.
+> **Nota:** Use a regra [`Nested`] para validar arrays aninhados e a regra [`Each`] para validar vários arrays.
 
 ### Objeto
 
@@ -102,13 +102,13 @@ $person = new Person(name: 'John', age: 17, email: 'john@example.com', phone: nu
 $result = (new Validator())->validate($person);
 ```
 
-> **Nota:** [propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
-
-> **Observação:** Use a regra [Nested] para validar objetos relacionados e a regra [Each] para validar vários objetos.
+> **Notas:** 
+>- [Propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
+>- Use a regra [`Nested`] para validar objetos relacionados e a regra [`Each`] para validar vários objetos.
 
 ### Conjunto de dados personalizado
 
-Na maioria das vezes, a criação de um conjunto de dados personalizado não é necessária devido aos conjuntos de dados integrados e à normalização automática de
+Na maioria das vezes, a criação de um conjunto de dados personalizados não é necessário devido aos conjuntos de dados integrados e à normalização automática de
 todos os tipos durante a validação. No entanto, isto pode ser útil, por exemplo, para alterar um valor padrão para determinados atributos:
 
 ```php
@@ -150,9 +150,9 @@ $result = (new Validator())->validate($data, $rules);
 
 ## Regras
 
-### Passando regra única
+### Passando uma regra única
 
-Para uma única regra, existe a opção de omitir o array:
+Para uma regra única existe a opção de omitir o array:
 
 ```php
 use Yiisoft\Validator\Rule\Number;
@@ -165,12 +165,12 @@ $result = (new Validator())->validate($value, $rule);
 
 ### Fornecendo regras via objeto dedicado
 
-Poderia ajudar a reutilizar o mesmo conjunto de regras em locais diferentes. Duas maneiras são possíveis - usando atributos PHP
+Poderia ajudar a reutilização do mesmo conjunto de regras em locais diferentes. Duas maneiras são possíveis - usando atributos PHP
 e especificando explicitamente por meio da implementação do método de interface.
 
 #### Usando atributos PHP
 
-Neste caso, as regras serão analisadas automaticamente, sem necessidade de fazer nada adicional.
+Neste caso, as regras serão analisadas automaticamente, sem necessidade de fazer nada a mais.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -251,6 +251,6 @@ $data = new Person(name: 'John', age: 18);
 $result = (new Validator())->validate($data);
 ```
 
-[Each]: built-in-rules-each.md
-[Nested]: built-in-rules-nested.md
-[Propriedades somente leitura]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[`Each`]: built-in-rules-each.md
+[`Nested`]: built-in-rules-nested.md
+[Propriedades somente leitura]: https://www.php.net/manual/pt_BR/language.oop5.properties.php#language.oop5.properties.readonly-properties

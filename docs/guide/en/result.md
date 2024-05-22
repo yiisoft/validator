@@ -134,7 +134,8 @@ Also keep in mind that attribute names must be strings, even when used with `Eac
 $rule = new Each([new Number(min: 21)]),
 ```
 
-With input containing non-string keys for top level attributes, for example, `[21, 22, 23, 20]`, InvalidArgumentException` will be thrown.
+With input containing non-string keys for top level attributes, for example, `[21, 22, 23, 20]`,
+`InvalidArgumentException` will be thrown.
 
 Even array `['1' => 21, '2' => 22, '3' => 23, '4' => 20]` will cause an error, because PHP [will cast keys to the int type].
 

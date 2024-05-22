@@ -54,7 +54,7 @@ use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
 $context = new ValidationContext([On::SCENARIO_PARAMETER => 'signup']);
-$result = (new Validator())->validate($userDto, context: $context));
+$result = (new Validator())->validate($userDto, context: $context);
 ```
 
 ## Wrapper for Symfony rules

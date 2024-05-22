@@ -4,7 +4,14 @@
 
 Aqui está uma lista de todas as regras integradas disponíveis, divididas por categoria.
 
-### Regras de string
+### Regras de tipo
+
+- [BooleanType](../../../src/Rule/Type/BooleanType.php)
+- [FloatType](../../../src/Rule/Type/FloatType.php)
+- [IntegerType](../../../src/Rule/Type/IntegerType.php)
+- [StringType](../../../src/Rule/Type/StringType.php)
+
+### String rules
 
 - [StringValue](../../../src/Rule/StringValue.php)
 - [Length](../../../src/Rule/Length.php)
@@ -34,10 +41,11 @@ Aqui está uma lista de todas as regras integradas disponíveis, divididas por c
 - [LessThan](../../../src/Rule/LessThan.php)
 - [LessThanOrEqual](../../../src/Rule/LessThanOrEqual.php)
 
-### Defina as regras
+### Regras de conjunto
 
 - [In](../../../src/Rule/In.php)
 - [Subset](../../../src/Rule/Subset.php)
+- [UniqueIterable](../../../src/Rule/UniqueIterable.php)
 
 ### Regras de contagem
 
@@ -62,6 +70,7 @@ Aqui está uma lista de todas as regras integradas disponíveis, divididas por c
 
 ### Regras complexas
 
+- [AnyRule](../../../src/Rule/AnyRule.php)
 - [Composite](../../../src/Rule/Composite.php)
 - [Each](../../../src/Rule/Each.php)
 - [Nested](../../../src/Rule/Nested.php)
@@ -83,5 +92,6 @@ Algumas regras também possuem documentação além do PHPDoc:
 
 Não consegue encontrar uma regra? Sinta-se à vontade para enviar um issue/PR, para que possa ser incluído no pacote após análise. Outra opção,
 se o seu caso de uso for menos genérico, procure por [uma extensão] ou [crie uma regra personalizada].
+
 [uma extensão]: extensions.md
 [crie uma regra personalizadaa]: creating-custom-rules.md
