@@ -1,18 +1,18 @@
-# `Callback` - a wrapper around [`callables`]
+# `Callback` - a wrapper around `callable`
 
 This rule allows validation of the current attribute value (but not limited to it) with an arbitrary condition within a  
 callable. The benefit is that there is no need to create a separate custom rule and handler.
 
 A condition can be within:
 
-- Standalone [`callables`] function.
-- `Callable` class.
-- [`DTO`] (data transfer object) method.
+- Standalone callable function.
+- Callable class.
+- DTO (data transfer object) method.
 
-The downside of using standalone functions and [`DTO`] methods is a lack of reusability. So they are mainly useful 
+The downside of using standalone functions and DTO methods is a lack of reusability. So they are mainly useful
 for some specific non-repetitive conditions. Reusability can be achieved with callable classes, but depending on other
 factors (the need for additional parameters for example), it might be a good idea to create a full-fledged
-[custom rule] with a separate handler instead.
+[custom rule](creating-custom-rules.md) with a separate handler instead.
 
 The callback function signature is the following:
 
@@ -54,7 +54,7 @@ new Callback(
 ### Value validation
 
 `Callback` rule can be used to add validation missing in built-in rules for a single attribute's value. Below is the 
-example verifying that a value is a valid [YAML] string (additionally requires [`yaml PHP`] extension):
+example verifying that a value is a valid [YAML](https://en.wikipedia.org/wiki/YAML) string (additionally requires `yaml` extension):
 
 ```php
 use Exception;
@@ -85,7 +85,7 @@ new Callback(
 ```
 
 > **Note:** Processing untrusted user input with [`yaml_parse()`] can be dangerous with certain settings. Please refer to
-> [`yaml_parse()`] docs for more details. 
+> [`yaml_parse()` docs](https://www.php.net/manual/en/function.yaml-parse.php) for more details. 
 
 ### Usage of validation context for validating multiple attributes depending on each other
 
@@ -134,7 +134,7 @@ $rules = [
 ];
 ```
 
-### Replacing boilerplate code with separate rules and [`when`]
+### Replacing boilerplate code with separate rules and `when`
 
 However, some cases of using validation context can lead to boilerplate code:
 
@@ -229,7 +229,7 @@ final class Config {
 The signature is the same as in a regular function. Note that there are no restrictions on visibility levels and static
 modifiers, all of them can be used (`public`, `protected`, `private`, `static`).
 
-Using a `callback` argument instead of [`method`] with PHP attributes is prohibited due to current PHP language
+Using a `callback` argument instead of `method` with PHP attributes is prohibited due to current PHP language
 restrictions (a callback can't be inside a PHP attribute).
 
 ### For the whole object
@@ -390,13 +390,3 @@ $rules = [
 ];
 $result = (new Validator())->validate($data, $rules);
 ```
-
-[`callables`]: https://www.php.net/manual/en/language.types.callable.php
-[custom rule]: creating-custom-rules.md
-[YAML]: https://en.wikipedia.org/wiki/YAML
-[PHP `yaml`]: https://www.php.net/manual/en/book.yaml.php
-[`yaml_parse()`]: https://www.php.net/manual/en/function.yaml-parse.php
-[`DTO`]: https://pt.wikipedia.org/wiki/Data_transfer_object
-[`when`]: conditional-validation.md#when
-[`method`]: built-in-rules-callback.md#for-property
- 
