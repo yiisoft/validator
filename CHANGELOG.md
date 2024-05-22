@@ -34,6 +34,25 @@
 - New #670, #677, #680: Add `Image` validation rule (@vjik, @arogachev)
 - New #678: Add `Date`, `DateTime` and `Time` validation rules (@vjik)
 - Enh #668: Clarify psalm types in `Result` (@vjik)
+## 1.4.1 under development
+
+- no changes in this release.
+
+## 1.4.0 May 22, 2024
+
+- New #649: Add `getFirstErrorMessagesIndexedByPath()` and `getFirstErrorMessagesIndexedByAttribute()` methods to
+  `Result` (@arogachev)
+- New #655: Add rules for validating value types - `boolean`, `float`, `integer`, `string` (@arogachev)
+- New #657: Add `Result::add()` method for merging other results to the base one (@arogachev)
+- New #687: Add `UniqueIterable` rule (@arogachev)
+- New #693: Add `AnyRule` rule (@arogachev)
+
+## 1.3.0 April 04, 2024
+
+- New #665: Add methods `addErrorWithFormatOnly()` and `addErrorWithoutPostProcessing()` to `Result` object (@vjik)
+- New #670, #677, #680: Add `Image` validation rule (@vjik, @arogachev)
+- New #678: Add `Date`, `DateTime` and `Time` validation rules (@vjik)
+- Enh #668: Clarify psalm types in `Result` (@vjik)
 
 ## 1.2.0 February 21, 2024
 

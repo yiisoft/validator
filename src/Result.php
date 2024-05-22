@@ -63,7 +63,6 @@ final class Result
      * Get errors messages as an array of strings.
      *
      * @return string[] Array messages as strings.
-     *
      * @psalm-return list<string>
      */
     public function getErrorMessages(): array
@@ -96,6 +95,30 @@ final class Result
     }
 
     /**
+     * Get strings of the first error messages for each attribute path.
+     * Each key is a dot-separated attribute path.
+     * Each value is the first error message string for this path.
+     *
+     * @param string $separator Attribute path separator. Dot is used by default.
+     * @param string|null $escape Symbol that will be escaped with a backslash char (`\`) in path elements.
+     * When it's null path is returned without escaping.
+     *
+     * @return array Strings of error messages indexed by attribute path.
+     *
+     * @psalm-return array<string, string>
+     */
+    public function getFirstErrorMessagesIndexedByPath(string $separator = '.', ?string $escape = '.'): array
+    {
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $stringValuePath = implode($separator, $error->getValuePath($escape));
+            $errors[$stringValuePath] ??= $error->getMessage();
+        }
+
+        return $errors;
+    }
+
+    /**
      * Get arrays of error messages indexed by attribute name.
      *
      * @throws InvalidArgumentException If top level attribute has a non-string type.
@@ -114,6 +137,30 @@ final class Result
             }
 
             $errors[$key][] = $error->getMessage();
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Get arrays of the first error messages for each attribute name.
+     *
+     * @throws InvalidArgumentException If top level attribute has a non-string type.
+     *
+     * @return array Strings of error messages indexed by attribute name.
+     *
+     * @psalm-return array<string, string>
+     */
+    public function getFirstErrorMessagesIndexedByAttribute(): array
+    {
+        $errors = [];
+        foreach ($this->errors as $error) {
+            $key = $error->getValuePath()[0] ?? '';
+            if (!is_string($key)) {
+                throw new InvalidArgumentException('Top level attributes can only have string type.');
+            }
+
+            $errors[$key] ??= $error->getMessage();
         }
 
         return $errors;
@@ -258,6 +305,21 @@ final class Result
     public function addErrorWithoutPostProcessing(string $message, array $parameters = [], array $valuePath = []): self
     {
         $this->errors[] = new Error($message, $parameters, $valuePath, Error::MESSAGE_NONE);
+        return $this;
+    }
+
+    /**
+     * Merges other validation results into the current one.
+     *
+     * @param Result ...$results Other results for merging.
+     * @return $this Same instance of result.
+     */
+    public function add(self ...$results): self
+    {
+        foreach ($results as $result) {
+            $this->errors = array_merge($this->errors, $result->getErrors());
+        }
+
         return $this;
     }
 }

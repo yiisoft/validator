@@ -26,6 +26,10 @@ use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Subset;
 use Yiisoft\Validator\Rule\TrueValue;
+use Yiisoft\Validator\Rule\Type\FloatType;
+use Yiisoft\Validator\Rule\Type\IntegerType;
+use Yiisoft\Validator\Rule\Type\StringType;
+use Yiisoft\Validator\Rule\UniqueIterable;
 use Yiisoft\Validator\Rule\Url;
 
 return [
@@ -126,6 +130,7 @@ return [
      * @see Json
      * @see Length
      * @see Regex
+     * @see StringType
      * @see Url
      */
     '{Attribute} must be a string.' => '{Attribute} должно быть строкой.',
@@ -155,4 +160,16 @@ return [
      * @see \Yiisoft\Validator\Rule\Date\Time
      */
     'Invalid time value.' => 'Некорректное значение времени.',
+
+    /** @see UniqueIterable */
+    'The allowed types for iterable\'s item values are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' => 'Разрешённые типы для значений элементов списка: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
+    'All iterable items must have the same type.' => 'Все элементы списка должны иметь одинаковый тип.',
+    'Every iterable\'s item must be unique.' => 'Каждый элемент списка должен быть уникален.',
+
+    /** @see BooleanType */
+    'Value must be a boolean.' => 'Значение должно быть булевым.',
+    /** @see FloatType */
+    'Value must be a float.' => 'Значение должно быть вещественным числом.',
+    /** @see AnyRule */
+    'At least one of the inner rules must pass the validation.' => 'Как минимум одно из внутренних правил должно пройти валидацию',
 ];
