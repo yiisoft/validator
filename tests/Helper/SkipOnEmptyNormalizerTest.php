@@ -25,7 +25,7 @@ final class SkipOnEmptyNormalizerTest extends TestCase
     /**
      * @dataProvider normalizeData
      */
-    public function testNormalize(mixed $skipOnEmpty, string $expectedClassName): void
+    public function testNormalize(bool|callable|null $skipOnEmpty, string $expectedClassName): void
     {
         $this->assertInstanceOf($expectedClassName, SkipOnEmptyNormalizer::normalize($skipOnEmpty));
     }

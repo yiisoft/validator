@@ -151,7 +151,7 @@ abstract class AbstractCompare implements
         private string|null $message = null,
         private string $type = CompareType::NUMBER,
         private string $operator = '==',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
@@ -169,6 +169,8 @@ abstract class AbstractCompare implements
 
             throw new InvalidArgumentException($message);
         }
+
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

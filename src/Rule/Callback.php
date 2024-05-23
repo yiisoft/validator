@@ -58,7 +58,7 @@ final class Callback implements
     public function __construct(
         private mixed $callback = null,
         private string|null $method = null,
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
@@ -69,6 +69,8 @@ final class Callback implements
         if ($this->callback !== null && $this->method !== null) {
             throw new InvalidArgumentException('"$callback" and "$method" are mutually exclusive.');
         }
+
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

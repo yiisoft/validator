@@ -80,10 +80,11 @@ final class TrueValue implements DumpedRuleInterface, SkipOnErrorInterface, When
         private bool $strict = false,
         private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean. {type} given.',
         private string $message = '{Attribute} must be "{true}".',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

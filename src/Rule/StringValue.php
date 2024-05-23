@@ -55,10 +55,11 @@ final class StringValue implements
      */
     public function __construct(
         private string $message = '{Attribute} must be a string.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

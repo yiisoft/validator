@@ -65,13 +65,15 @@ final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenIn
         private string $incorrectInputMessage = '{Attribute} must be an array or an object.',
         private string $message = 'At least {min, number} {min, plural, one{attribute} other{attributes}} from this ' .
         'list must be filled: {attributes}.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null
     ) {
         if ($min > count($this->attributes)) {
             throw new InvalidArgumentException('$min must be no greater than amount of $attributes.');
         }
+
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

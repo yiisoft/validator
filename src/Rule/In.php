@@ -74,10 +74,11 @@ final class In implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
         private bool $strict = false,
         private bool $not = false,
         private string $message = '{Attribute} is not in the list of acceptable values.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

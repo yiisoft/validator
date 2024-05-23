@@ -96,7 +96,7 @@ final class Email implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
         private bool $enableIdn = false,
         private string $incorrectInputMessage = '{Attribute} must be a string.',
         private string $message = '{Attribute} is not a valid email address.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
@@ -124,6 +124,8 @@ final class Email implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
             // @codeCoverageIgnoreEnd
         }
+
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

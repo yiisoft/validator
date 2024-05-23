@@ -97,7 +97,7 @@ final class Length implements
         string $notExactlyMessage = '{Attribute} must contain exactly {exactly, number} {exactly, plural, ' .
         'one{character} other{characters}}.',
         private string $encoding = 'UTF-8',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null
     ) {
@@ -109,6 +109,7 @@ final class Length implements
             $greaterThanMaxMessage,
             $notExactlyMessage
         );
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

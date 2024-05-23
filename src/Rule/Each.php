@@ -121,11 +121,12 @@ final class Each implements
         callable|iterable|object|string $rules = [],
         private string $incorrectInputMessage = '{Attribute} must be array or iterable.',
         private string $incorrectInputKeyMessage = 'Every iterable key must have an integer or a string type.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
         $this->rules = RulesNormalizer::normalize($rules);
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string
