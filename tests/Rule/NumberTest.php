@@ -6,8 +6,11 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
 use stdClass;
+use Yiisoft\Validator\Rule\AnyRule;
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Type\FloatType;
+use Yiisoft\Validator\Rule\Type\IntegerType;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
@@ -211,6 +214,22 @@ final class NumberTest extends RuleTestCase
             [-10, [new Number(min: -10, max: 20)]],
 
             [0, [new Integer(min: -10, max: 20)]],
+
+            // https://github.com/yiisoft/validator/issues/655
+            'limit types with other rules, any: validation passed right away' => [
+                1,
+                [
+                    new AnyRule([new IntegerType(), new FloatType()]),
+                    new Number(),
+                ],
+            ],
+            'limit types with other rules, any: validation passed later' => [
+                1.5,
+                [
+                    new AnyRule([new IntegerType(), new FloatType()]),
+                    new Number(),
+                ],
+            ],
         ];
     }
 
@@ -267,6 +286,16 @@ final class NumberTest extends RuleTestCase
                 0,
                 [new Number(min: 5, lessThanMinMessage: 'Value is too small.')],
                 ['' => ['Value is too small.']],
+            ],
+
+            // https://github.com/yiisoft/validator/issues/655
+            'limit types with other rules, any: validation failed' => [
+                '1.5',
+                [
+                    new AnyRule([new IntegerType(), new FloatType()]),
+                    new Number(),
+                ],
+                ['' => ['At least one of the inner rules must pass the validation.']],
             ],
         ];
     }

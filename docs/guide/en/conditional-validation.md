@@ -140,7 +140,7 @@ is considered non-empty and validated without skipping (default).
 (corresponding attribute must be present) and non-empty values (not `null`, `[]`, or `''`) are validated.
 - If a custom callback is set, it is used to determine emptiness.
 
-`false` is usually more suitable for HTML forms and `true` - for APIs.
+`false` is usually more suitable for HTML forms and `true` for APIs.
 
 There are some more conditions that have no shortcuts and need to be set explicitly because they are less used:
 

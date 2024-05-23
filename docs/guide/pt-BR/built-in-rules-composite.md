@@ -1,7 +1,7 @@
-# `Composite` - grouping multiple validation rules
+# `Composite` - agrupando múltiplas regras de validação
 
-`Composite` allows to group multiple rules and configure the common [skipping options](conditional-validation.md),
-such as `skipOnEmpty`, `skipOnError` and `when`, for the whole set only once instead of repeating them in each rule:
+`Composite` permite agrupar múltiplas regras e configurar as [opções de salto] comuns, como [`skipOnEmpty`],
+[`skipOnError`] e [`when`], para todo o conjunto apenas uma vez ao invés de repeti-los em cada regra:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -17,10 +17,10 @@ new Composite(
 );
 ```
 
-## Reusing multiple rules / single rule with the same options
+## Reutilizando múltiplas regras/regra única com as mesmas opções
 
-`Composite` is one of the few built-in rules that is not `final`. This means that you can extend it and override the
-`getRules()` method to create a reusable set of rules:
+`Composite` é uma das poucas regras integradas que não é [`final`]. Isso significa que você pode estendê-lo e substituir o
+método `getRules()` para criar um conjunto reutilizável de regras:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -39,7 +39,7 @@ final class UsernameRuleSet extends Composite
 }
 ```
 
-And use it just like a single regular rule:
+E use-o como uma única regra regular:
 
 ```php
 use Yiisoft\Validator\Validator;
@@ -47,7 +47,7 @@ use Yiisoft\Validator\Validator;
 $result = (new Validator())->validate('John', new UsernameRuleSet());
 ```
 
-It can also be combined with [Nested](built-in-rules-nested.md) rule to reuse rules for multiple attributes:
+Também pode ser combinado com a regra [`Nested`] para reutilizar regras para vários atributos:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -68,7 +68,7 @@ final class CoordinatesRuleSet extends Composite
 }
 ```
 
-Even the problem of reusing only one rule with the same arguments can be solved with `Composite`:
+Até mesmo o problema de reutilizar apenas uma regra com os mesmos argumentos pode ser resolvido com `Composite`:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;
@@ -82,3 +82,10 @@ final class ChartCoordinateRuleSet extends Composite
     }
 }
 ```
+
+[opções de salto]: conditional-validation.md
+[`Nested`]: built-in-rules-nested.md
+[`when`]: conditional-validation.md#when
+[`final`]: https://www.php.net/manual/pt_BR/language.oop5.final.php
+[`skipOnEmpty`]: conditional-validation.md#skiponempty---ignorando-uma-regra-se-o-valor-validado-estiver-vazio
+[`skipOnError`]: conditional-validation.md#skipOnError---pula-uma-regra-no-conjunto-se-a-anterior-falhou

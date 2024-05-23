@@ -1,13 +1,13 @@
-# Configuring rules via PHP attributes
+# Configurando regras via atributos PHP
 
-The [Attributes] feature introduced in PHP 8 allows an alternative way of configuring rules. If entities/models with
-their relations are represented as [DTO] classes, attributes make it possible to use such classes to provide rules.
-The rules are defined above the properties themselves, which some developers may find more convenient in terms
-of readability.
+O recurso [`Attributes`] introduzido no PHP 8 permite uma forma alternativa de configurar regras. Se entidades/modelos com
+suas relações são representadas como classes [`DTO`], os atributos possibilitam o uso de tais classes para fornecer regras.
+As regras são definidas acima das próprias propriedades, o que alguns desenvolvedores podem achar mais conveniente em termos
+de legibilidade.
 
-## Configuring for a single entity / model
+## Configurando para uma entidade / modelo única
 
-Given a single `User` entity / model:
+Dada uma entidade/modelo única `User`:
 
 ```php
 use Yiisoft\Validator\Rule\Integer;
@@ -25,7 +25,7 @@ use Yiisoft\Validator\Rule\Required;
 ]
 ```
 
-the PHP attributes equivalent will be:
+o equivalente dos atributos PHP será:
 
 ```php
 use JetBrains\PhpStorm\Deprecated;
@@ -50,8 +50,8 @@ final class User
 }
 ```
 
-This example uses the [constructor property promotion] feature introduced in PHP 8. Attributes can also
-be used with regular properties:
+Este exemplo usa o recurso [promoção de propriedade do construtor] introduzido no PHP 8. Os atributos também podem
+ser usados com propriedades regulares:
 
 ```php
 use Yiisoft\Validator\Rule\Integer;
@@ -71,31 +71,11 @@ final class User
 }
 ```
 
-> **Note:** [readonly properties] are supported only starting from PHP 8.1.
+> **Nota:** [Propriedades somente leitura] são suportadas apenas a partir do PHP 8.1.
 
-Error messages may include `{attribute}` placeholder that is replaced with the name of the property. To capitalize the 
-first letter, you can use the `{Attribute}` placeholder. If you would like the name to be replaced with a custom value, 
-you can specify it using the `Label` attribute:
+## Configurando para múltiplas entidades/modelos com relações
 
-```php
-use Yiisoft\Validator\Label;
-use Yiisoft\Validator\Rule\Length;
-use Yiisoft\Validator\Rule\Required;
-
-final class User
-{
-    #[Required]
-    #[Length(min: 1, max: 50)]
-    #[Label('First Name')]
-    public readonly string $name;
-}
-```
-
-> **Note:** [readonly properties] are supported only starting from PHP 8.1.
-
-## Configuring for multiple entities / models with relations
-
-An example of rule set for a blog post configured via arrays only:
+Um exemplo de conjunto de regras para uma postagem de blog configurada apenas por meio de arrays:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -130,7 +110,7 @@ use Yiisoft\Validator\Rule\Url;
 ];
 ```
 
-It can be applied to such DTO classes to achieve the same effect:
+Pode ser aplicado a tais classes [`DTO`] para obter o mesmo efeito:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -179,12 +159,11 @@ final class File
 }
 ```
 
-For a better understanding of relations concept, it's recommended to read the [Nested] and [Each] guides.
+Para uma melhor compreensão do conceito de relações, recomenda-se a leitura da documentação [`Nested`] e [`Each`].
 
 ## Traits
 
-Attributes can also be used in traits. It might come in handy for reusing the same set of properties with identical 
-rules:
+Atributos também podem ser usados em [traits]. Pode ser útil reutilizar o mesmo conjunto de propriedades com regras idênticas:
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -206,9 +185,9 @@ final class WikiArticle
 }
 ```
 
-## Inheritance
+## Herança
 
-Inheritance is supported, but there are some things to keep in mind:
+A [herança] é suportada, mas há algumas coisas a serem lembradas:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
@@ -240,7 +219,7 @@ class Truck extends Car
 }
 ```
 
-In this case the set of rules for `Truck` class will be:
+Neste caso o conjunto de regras para a classe `Truck` será:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
@@ -258,19 +237,18 @@ use Yiisoft\Validator\Rule\Required;
 ];
 ```
 
-So, to sum up:
+Então, para resumir:
 
-- Parent rules for overridden properties are ignored completely, only the ones from the child class are obtained.
-- All parent rules for properties that are not overridden in the child class are obtained fully.
+- As regras pai para propriedades substituídas são completamente ignoradas, apenas as da classe filha são obtidas.
+- Todas as regras pai para propriedades que não são substituídas na classe filha são obtidas integralmente.
+- Quanto aos dados, os valores padrão definidos na classe filha têm precedência.
 
-As for the data, default values set in the child class take precedence.
+## Adicionando suporte de atributos a regras personalizadas
 
-## Adding attributes support to custom rules
+Para anexar regras às propriedades do [`DTO`] ou a todo ele, o atributo [`Attributes`] deve ser adicionado à
+classe personalizada. E para que as regras sejam obtidas dos atributos, elas devem implementar a classe `RuleInterface`.
 
-In order to attach rules to DTO properties or the whole DTO, the `Attribute` attribute must be added to the 
-custom class. And in order for rules to be fetched from attributes, they must implement the `RuleInterface`.
-
-For custom `Composite` rules you only need to add the attribute:
+Para regras [`Composite`] personalizadas, você só precisa adicionar [`Attributes`]:
 
 ```php
 use Attribute;
@@ -293,7 +271,7 @@ final class RgbColorRuleSet extends Composite
 }
 ```
 
-Example for custom rule:
+Exemplo de [`regra personalizada`]:
 
 ```php
 use Attribute;
@@ -308,6 +286,11 @@ final class Yaml implements RuleInterface
     ) {
     }
 
+    public function getName(): string
+    {
+        return 'yaml';
+    }
+
     public function getHandler(): string
     {
         return YamlHandler::class;
@@ -315,7 +298,7 @@ final class Yaml implements RuleInterface
 }
 ```
 
-To allow attaching to the class, modify the attribute definition like this:
+Para permitir a anexação à classe, modifique a definição do atributo assim:
 
 ```php
 use Attribute;
@@ -328,17 +311,17 @@ final class Yaml implements RuleInterface
 }
 ```
 
-## Limitations and workarounds
+## Limitações e soluções alternativas
 
-### Instances
+### Instâncias
 
-Passing instances in the scope of attributes is only possible as of PHP 8.1. This means using attributes for complex
-rules such as `Composite`, `Each` and `Nested` or rules that take instances as arguments, can be problematic with PHP 8.0.
+Passar instâncias no escopo de atributos só é possível a partir do PHP 8.1. Isso significa usar atributos para regras complexas
+como [`Composite`], [`Nested`] e [`Each`] ou regras que usam instâncias como argumentos podem ser problemáticas com o PHP 8.0.
 
-The first workaround is to upgrade to PHP 8.1 - this is fairly simple since it is a minor version. Tools like 
-[Rector] can ease the process of upgrading the code base by automating routine tasks.
+A primeira solução alternativa é atualizar para o PHP 8.1 - isso é bastante simples, pois é uma versão secundária. Ferramentas como
+[`Rector`] podem facilitar o processo de atualização da base de código automatizando tarefas de rotina.
 
-If this is not an option, you can use other ways of providing rules, such as rule providers:
+Se isso não for uma opção, você poderá usar outras formas de fornecer regras, como provedores de regras:
 
 ```php
 use Yiisoft\Validator\Rule\Integer;
@@ -398,8 +381,8 @@ $postRulesProvider = new PostRulesProvider();
 $validator = (new Validator())->validate($post, $postRulesProvider);
 ```
 
-For rules without relations, instead of using `Composite` directly, create a child class that extends from it and put the 
-rules into it. Don't forget to add the attribute support.
+Para regras sem relações, em vez de usar [`Composite`] diretamente, crie uma classe filha que se estenda a partir dela e coloque as
+regras nela. Não se esqueça de adicionar suporte para o [`Attributes`].
 
 ```php
 use Attribute;
@@ -431,36 +414,35 @@ final class User
 }
 ```
 
-The `Nested` rule can be used without arguments, see this [example](#configuring-for-a-single-entity--model) above.
+A regra [`Nested`] pode ser usada sem argumentos, veja este [exemplo] no início do artigo.
 
 ### Callables
 
-Attempting to use callables within the scope of an attribute will cause the error. This means that using [when] for
-[conditional validation] or `callback` argument for the `Callback` rule will not work. 
+A tentativa de usar [`callables`] dentro do escopo de um atributo causará o erro. Isso significa que usar [`when`] para
+[`validação condicional`] ou o argumento `callback` para a regra [`Callback`] não funcionará.
 
-The workarounds are:
+As soluções alternativas são:
 
-- `Composite` or the rules provider described in the [Instances] section will also fit here.
-- Create a [custom rule].
-- For the `Callback` rule in particular, it is possible to replace a callback with a [method reference].
+- [`Composite`] ou o provedor de regras descrito na seção [Instâncias] também caberá aqui.
+- Crie uma [`regra personalizada`].
+- Para a regra [`Callback`] em particular, é possível substituir um retorno de chamada por uma [`referência de método`].
 
-### Function / method calls
+### Chamadas de funções/métodos
 
-Both function and method calls are not supported within the scope of an attribute. If the intent is to call a function / 
-method for validation - use a `Callback` rule with [method reference]. Otherwise, the remaining options are:
+As chamadas de função e de método não são suportadas no escopo de um atributo. Se a intenção é chamar uma função/método para validação - use uma regra [`Callback`] com [`referência de método`]. Caso contrário, as opções restantes são:
 
-- Use `Composite` or rules provider described in the [Instances] section.
-- Create a [custom rule].
+- Use [`Composite`] ou provedor de regras descrito na seção [Instâncias].
+- Crie uma [`regra personalizada`].
 
-## Using rules
+## Usando regras
 
-Well, the rules are configured. What's next? We can either:
+Bem, as regras estão configuradas. Qual é o próximo passo? Podemos:
 
-- Pass them for validation right away.
-- Tune the parsing of rules (skippable properties, using cache).
-- Use them for something else (e.g. for exporting their options).
+- Passar para validação imediatamente.
+- Ajustar a análise de regras (propriedades puláveis (skippable properties), usando cache).
+- Use-os para outra coisa (por exemplo, para exportar suas opções).
 
-Let's use a blog post again for demonstration, but a slightly shortened version:
+Vamos usar uma postagem de blog novamente para demonstração, mas em uma versão ligeiramente abreviada:
 
 ```php
 use Yiisoft\Validator\Rule\Integer;
@@ -494,10 +476,10 @@ final class Author
 }
 ```
 
-### Passing along with data for validation
+### Passando junto com dados para validação
 
-Probably one of the cleanest ways is to pass DTO instances with declared rules and data. This way doesn't require
-any additional setup:
+Provavelmente, uma das maneiras mais limpas é passar instâncias de [`DTO`] com regras e dados declarados. Esta forma não requer
+qualquer configuração adicional:
 
 ```php
 use Yiisoft\Validator\Validator;
@@ -512,9 +494,9 @@ $post = new Post(
 $result = (new Validator())->validate($post) // Note `$rules` argument is `null` here.
 ```
 
-### Passing separately for validation
+### Passando separadamente para validação
 
-It can be helpful to use the class for parsing rules and provide data separately:
+Pode ser útil usar a classe para analisar regras e fornecer dados separadamente:
 
 ```php
 use Yiisoft\Validator\Validator;
@@ -529,12 +511,12 @@ $data = [
 $result = (new Validator())->validate($data, Post::class);
 ```
 
-The data doesn't have to be within an array, the goal of this snippet is to show that it is isolated from the rules.
+Os dados não precisam estar dentro de um array, o objetivo deste exemplo é mostrar que eles estão isolados das regras.
 
-### Tuning parsing of rules
+### Ajustando a análise de regras
 
-Data passed for validation as an object will be automatically normalized to `ObjectDataSet`. However, you can manually
-wrap validated object with this set to allow some additional configuration:
+Os dados passados para validação como um objeto serão automaticamente normalizados para `ObjectDataSet`. No entanto, você pode
+envolver o objeto validado com este conjunto para permitir alguma configuração adicional:
 
 ```php
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -565,8 +547,8 @@ $dataSet = new ObjectDataSet(
 $result = (new Validator())->validate($dataSet);
 ```
 
-Some edge cases, like skipping DTO's static properties, require using of `AttributeRulesProvider`. After initializing it 
-can be passed for validation right away - no need to extract rules manually beforehand.
+Alguns casos extremos, como ignorar as propriedades estáticas dos [`DTO`]s, exigem o uso de `AttributeRulesProvider`. Depois de inicializá-lo
+pode ser passado para validação imediatamente - não há necessidade de extrair regras manualmente de antemão.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -590,10 +572,10 @@ $rules = new AttributesRulesProvider(Post::class, skipStaticProperties: true);
 $validator = (new Validator())->validate($post, $rules);
 ```
 
-### Using rules outside the validator scope
+### Usando regras fora do escopo do validador
 
-Let's say we want to extract all rules for exporting their options to the client side for further implementing frontend 
-validation:
+Digamos que queremos extrair todas as regras para exportar suas opções para o lado do cliente para posterior implementação da validação
+no frontend:
 
 ```php
 use Yiisoft\Validator\Helper\RulesDumper;
@@ -616,15 +598,21 @@ $validator = (new Validator())->validate([], $rules);
 $options = RulesDumper::asArray($rules);
 ```
 
-[Attributes]: https://www.php.net/manual/en/language.attributes.overview.php
-[DTO]: https://en.wikipedia.org/wiki/Data_transfer_object
-[constructor property promotion]: https://www.php.net/manual/en/language.oop5.decon.php#language.oop5.decon.constructor.promotion
-[readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
-[Nested]: built-in-rules-nested.md
-[Each]: built-in-rules-each.md
-[Rector]: https://github.com/rectorphp/rector
-[when]: conditional-validation.md#when
-[conditional validation]: conditional-validation.md
-[Instances]: #instances
-[custom rule]: creating-custom-rules.md
-[method reference]: built-in-rules-callback.md#for-property
+[`Attributes`]: https://www.php.net/manual/pt_BR/language.attributes.overview.php
+[`DTO`]: https://pt.wikipedia.org/wiki/Data_transfer_object
+[promoção de propriedade do construtor]: https://www.php.net/manual/pt_BR/language.oop5.decon.php#language.oop5.decon.constructor.promotion
+[Propriedades somente leitura]: https://www.php.net/manual/pt_BR/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[`Nested`]: built-in-rules-nested.md
+[`Each`]: built-in-rules-each.md
+[traits]: https://www.php.net/manual/pt_BR/language.oop5.traits.php
+[herança]: https://www.php.net/manual/pt_BR/language.oop5.inheritance.php
+[`Composite`]: built-in-rules-composite.md
+[`regra personalizada`]: creating-custom-rules.md
+[`Rector`]: https://github.com/rectorphp/rector
+[`when`]: conditional-validation.md#when
+[`validação condicional`]: conditional-validation.md
+[`Callback`]: built-in-rules-callback.md
+[`callables`]: https://www.php.net/manual/pt_BR/language.types.callable.php
+[Instâncias]: #instâncias
+[`referência de método`]: built-in-rules-callback.md#para-propriedades
+[exemplo]: #configurando-para-uma-entidade--modelo-única

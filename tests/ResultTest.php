@@ -14,33 +14,34 @@ use Yiisoft\Validator\Validator;
 
 class ResultTest extends TestCase
 {
-    public function isValidByDefault(): void
+    public function testDefaults(): void
     {
         $result = new Result();
         $this->assertTrue($result->isValid());
-    }
-
-    public function errorsAreEmptyByDefault(): void
-    {
-        $result = new Result();
         $this->assertEmpty($result->getErrorMessages());
     }
 
-    public function errorsAreProperlyAdded(): void
+    public function testAddError(): void
     {
         $result = new Result();
-        $result->addError('Error 1')
+        $this->assertTrue($result->isValid());
+
+        $result
+            ->addError('Error 1')
             ->addError('Error 2');
 
+        $this->assertFalse($result->isValid());
         $this->assertEquals(['Error 1', 'Error 2'], $result->getErrorMessages());
     }
 
-    public function addingErrorChangesIsValid(): void
+    public function testAddErrorSame(): void
     {
         $result = new Result();
-        $result->addError('Error');
+        $result
+            ->addError('Error 1')
+            ->addError('Error 1');
 
-        $this->assertFalse($result->isValid());
+        $this->assertEquals([new Error('Error 1'), new Error('Error 1')], $result->getErrors());
     }
 
     public function testGetErrors(): void
@@ -59,14 +60,6 @@ class ResultTest extends TestCase
     public function testGetErrorMessagesIndexedByPath(): void
     {
         $this->assertEquals(
-            ['' => ['error1'], 'path.2' => ['error2']],
-            $this->createErrorResult()->getErrorMessagesIndexedByPath()
-        );
-    }
-
-    public function testGetErrorMessagesIndexedByPathWithAttributes(): void
-    {
-        $this->assertEquals(
             [
                 'attribute2' => ['error2.1', 'error2.2'],
                 'attribute2.nested' => ['error2.3', 'error2.4'],
@@ -78,14 +71,18 @@ class ResultTest extends TestCase
         );
     }
 
-    private function createErrorResult(): Result
+    public function testGetFirstErrorMessagesIndexedByPath(): void
     {
-        $result = new Result();
-        $result
-            ->addError('error1')
-            ->addError('error2', [], ['path', 2]);
-
-        return $result;
+        $this->assertSame(
+            [
+                'attribute2' => 'error2.1',
+                'attribute2.nested' => 'error2.3',
+                '' => 'error3.1',
+                'attribute4.subattribute4\.1.subattribute4*2' => 'error4.1',
+                'attribute4.subattribute4\.3.subattribute4*4' => 'error4.2',
+            ],
+            $this->createAttributeErrorResult()->getFirstErrorMessagesIndexedByPath(),
+        );
     }
 
     public function testIsAttributeValid(): void
@@ -109,14 +106,34 @@ class ResultTest extends TestCase
         );
     }
 
-    public function testGetErrorMessagesIndexedByAttribute_IncorrectType(): void
+    public function testGetErrorMessagesIndexedByAttributeWithIncorrectType(): void
     {
-        $result = new Result();
-
-        $result->addError('error1', [], [1]);
+        $result = (new Result())->addError('error1', [], [1]);
 
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Top level attributes can only have string type.');
         $result->getErrorMessagesIndexedByAttribute();
+    }
+
+    public function testGetFirstErrorMessagesIndexedByAttribute(): void
+    {
+        $this->assertSame(
+            [
+                'attribute2' => 'error2.1',
+                '' => 'error3.1',
+                'attribute4' => 'error4.1',
+            ],
+            $this->createAttributeErrorResult()->getFirstErrorMessagesIndexedByAttribute(),
+        );
+    }
+
+    public function testGetFirstErrorMessagesIndexedByAttributeWithIncorrectType(): void
+    {
+        $result = (new Result())->addError('error1', [], [1]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Top level attributes can only have string type.');
+        $result->getFirstErrorMessagesIndexedByAttribute();
     }
 
     public function testGetAttributeErrors(): void
@@ -230,18 +247,71 @@ class ResultTest extends TestCase
         );
     }
 
+    public static function dataAdd(): array
+    {
+        return [
+            'base' => [
+                (new Result())
+                    ->addError('error1', valuePath: ['attribute1'])
+                    ->addError('error2', valuePath: ['attribute2']),
+                [
+                    (new Result())
+                        ->addError('error3', valuePath: ['attribute3'])
+                        ->addError('error4', valuePath: ['attribute4']),
+                    (new Result())
+                        ->addError('error5', valuePath: ['attribute5'])
+                        ->addError('error6', valuePath: ['attribute6']),
+                ],
+                (new Result())
+                    ->addError('error1', valuePath: ['attribute1'])
+                    ->addError('error2', valuePath: ['attribute2'])
+                    ->addError('error3', valuePath: ['attribute3'])
+                    ->addError('error4', valuePath: ['attribute4'])
+                    ->addError('error5', valuePath: ['attribute5'])
+                    ->addError('error6', valuePath: ['attribute6']),
+            ],
+            'same errors in added results' => [
+                (new Result())->addError('error1', valuePath: ['attribute1']),
+                [
+                    (new Result())->addError('error1', valuePath: ['attribute1']),
+                ],
+                (new Result())
+                    ->addError('error1', valuePath: ['attribute1'])
+                    ->addError('error1', valuePath: ['attribute1']),
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataAdd
+     */
+    public function testAdd(Result $baseResult, array $addedResults, Result $expectedResult): void
+    {
+        $this->assertEquals($expectedResult, $baseResult->add(...$addedResults));
+    }
+
+    private function createErrorResult(): Result
+    {
+        $result = new Result();
+        $result
+            ->addError('error1')
+            ->addError('error2', valuePath: ['path', 2]);
+
+        return $result;
+    }
+
     private function createAttributeErrorResult(): Result
     {
         $result = new Result();
         $result
-            ->addError('error2.1', [], ['attribute2'])
-            ->addError('error2.2', [], ['attribute2'])
-            ->addError('error2.3', [], ['attribute2', 'nested'])
-            ->addError('error2.4', [], ['attribute2', 'nested'])
+            ->addError('error2.1', valuePath: ['attribute2'])
+            ->addError('error2.2', valuePath: ['attribute2'])
+            ->addError('error2.3', valuePath: ['attribute2', 'nested'])
+            ->addError('error2.4', valuePath: ['attribute2', 'nested'])
             ->addError('error3.1')
             ->addError('error3.2')
-            ->addError('error4.1', [], ['attribute4', 'subattribute4.1', 'subattribute4*2'])
-            ->addError('error4.2', [], ['attribute4', 'subattribute4.3', 'subattribute4*4']);
+            ->addError('error4.1', valuePath: ['attribute4', 'subattribute4.1', 'subattribute4*2'])
+            ->addError('error4.2', valuePath: ['attribute4', 'subattribute4.3', 'subattribute4*4']);
 
         return $result;
     }

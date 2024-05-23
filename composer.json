@@ -10,11 +10,11 @@
     "license": "BSD-3-Clause",
     "support": {
         "issues": "https://github.com/yiisoft/validator/issues?state=open",
+        "source": "https://github.com/yiisoft/validator",
         "forum": "https://www.yiiframework.com/forum/",
         "wiki": "https://www.yiiframework.com/wiki/",
         "irc": "ircs://irc.libera.chat:6697/yii",
-        "chat": "https://t.me/yii3en",
-        "source": "https://github.com/yiisoft/validator"
+        "chat": "https://t.me/yii3en"
     },
     "funding": [
         {
@@ -42,7 +42,7 @@
         "maglnet/composer-require-checker": "^4.3",
         "phpbench/phpbench": "^1.2",
         "phpunit/phpunit": "^9.5",
-        "rector/rector": "^1.0",
+        "rector/rector": "1.0.*",
         "roave/infection-static-analysis-plugin": "^1.25",
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^5.22",
@@ -75,7 +75,7 @@
         },
         "config-plugin": {
             "di": "di.php",
-            "params":  "params.php"
+            "params": "params.php"
         }
     },
     "config": {
