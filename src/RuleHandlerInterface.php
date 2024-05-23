@@ -42,10 +42,12 @@ interface RuleHandlerInterface
      * }
      * ```
      *
+     * @param mixed $value A validated value of any type.
      * @param object $rule A rule instance containing configuration parameters.
      * @param ValidationContext $context A validation context instance.
      *
      * @return Result A validation result instance.
+     *
      * @internal Should never be called directly. Use {@see ValidatorInterface} instead.
      */
     public function validate(mixed $value, object $rule, ValidationContext $context): Result;

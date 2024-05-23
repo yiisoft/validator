@@ -62,12 +62,14 @@ final class RulesNormalizerIterator implements IteratorAggregate
      * - For any other type verifies that it's a valid rule instance.
      * - If default "skip on empty" condition is set, applies it if possible.
      *
+     * @param mixed $rule A raw rule.
      * @param callable|null $defaultSkipOnEmptyCondition A "skip on empty" condition ({@see SkipOnEmptyInterface}) to
      * apply as default, already normalized. `null` means there is no condition to apply.
      *
      * @throws InvalidArgumentException When rule is neither a callable nor a {@see RuleInterface} implementation.
      *
      * @return RuleInterface Ready to use rule instance.
+     *
      * @psalm-param SkipOnEmptyCallable|null $defaultSkipOnEmptyCondition
      */
     private static function normalizeRule(mixed $rule, ?callable $defaultSkipOnEmptyCondition): RuleInterface

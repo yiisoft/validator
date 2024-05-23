@@ -448,6 +448,7 @@ final class ObjectParser
      * Updates cache item contents by its name.
      *
      * @param string $name Cache item name. Can be on of: `rules`, `reflectionProperties`, `reflectionSource`.
+     * @param mixed $value A new value.
      */
     private function setCacheItem(
         #[ExpectedValues(['rules', 'reflectionProperties', 'reflectionSource'])]
