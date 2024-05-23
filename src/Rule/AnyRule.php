@@ -8,12 +8,12 @@ use Attribute;
 use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\Helper\RulesDumper;
-use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidatorInterface;
@@ -21,25 +21,19 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Applies to a set of rules, runs validation for each one of them in the order they are defined and stops at the rule
- * where validation failed.
+ * where validation passed. The opposite of {@see StopOnError}.
  *
  * An example of usage:
  *
  * ```php
- * $rule = new StopOnError([
- *      new Required(), // Let's say there is an error.
- *      new Length(min: 3), // Then this rule will be skipped.
- *      new MyCustomRule(), // This rule will be skipped too.
+ * $rule = new AnyRule([
+ *      new IntegerType(), // Let's say the validation passed here.
+ *      new FloatType(), // Then this rule will be skipped.
  * ]);
  * ```
  *
- * When using with other rules, conditional validation options, such as {@see StopOnError::$skipOnError} will be applied
- * to the whole group of {@see StopOnError::$rules}.
- *
- * Not to be confused with skipping each rule individually, there is a separate functionality for that, see
- * {@see SkipOnErrorInterface}.
- *
- * There is a similar rule that stops on successful validation - {@see AnyRule}.
+ * When using with other rules, conditional validation options, such as {@see AnyRule::$skipOnError} will be applied
+ * to the whole group of {@see AnyRule::$rules}.
  *
  * @see StopOnErrorHandler Corresponding handler performing the actual validation.
  *
@@ -49,7 +43,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type RawRulesList from ValidatorInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class StopOnError implements
+final class AnyRule implements
     DumpedRuleInterface,
     SkipOnEmptyInterface,
     SkipOnErrorInterface,
@@ -68,16 +62,19 @@ final class StopOnError implements
     private iterable $rules = [];
 
     /**
+     * @param string $message Error message used when validation fails because none of the inner {@see $rules} has
+     * passed the validation.
+     *
      * @param iterable $rules A set of rules for running the validation. They will be normalized during initialization
      * using {@see RulesNormalizer}.
      *
      * @psalm-param RawRulesList $rules
      *
-     * @param bool|callable|null $skipOnEmpty Whether to skip this `StopOnError` rule with all defined {@see $rules} if
-     * the validated value is empty / not passed. See {@see SkipOnEmptyInterface}.
-     * @param bool $skipOnError Whether to skip this `StopOnError` rule with all defined {@see $rules} if any of the
-     * previous rules gave an error. See {@see SkipOnErrorInterface}.
-     * @param Closure|null $when A callable to define a condition for applying this `StopOnError` rule with all defined
+     * @param bool|callable|null $skipOnEmpty Whether to skip this `Any` rule with all defined {@see $rules} if the
+     * validated value is empty / not passed. See {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError Whether to skip this `Any` rule with all defined {@see $rules} if any of the previous
+     * rules gave an error. See {@see SkipOnErrorInterface}.
+     * @param Closure|null $when A callable to define a condition for applying this `Any` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
      *
      * @psalm-param SkipOnEmptyValue $skipOnEmpty
@@ -85,6 +82,7 @@ final class StopOnError implements
      */
     public function __construct(
         iterable $rules,
+        private string $message = 'At least one of the inner rules must pass the validation.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
@@ -110,7 +108,20 @@ final class StopOnError implements
         return $this->rules;
     }
 
+    /**
+     * Gets error message used when validation fails because none of the inner {@see $rules} has passed the validation.
+     *
+     * @return string Error message / template.
+     *
+     * @see $message
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
     #[ArrayShape([
+        'message' => 'array',
         'skipOnEmpty' => 'bool',
         'skipOnError' => 'bool',
         'rules' => 'array|null',
@@ -118,6 +129,10 @@ final class StopOnError implements
     public function getOptions(): array
     {
         return [
+            'message' => [
+                'template' => $this->message,
+                'parameters' => [],
+            ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
             'rules' => $this->dumpRulesAsArray(),
@@ -126,7 +141,7 @@ final class StopOnError implements
 
     public function getHandler(): string
     {
-        return StopOnErrorHandler::class;
+        return AnyRuleHandler::class;
     }
 
     public function afterInitAttribute(object $object): void

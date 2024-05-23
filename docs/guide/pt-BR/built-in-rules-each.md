@@ -1,7 +1,7 @@
-# `Each` - applying the same rules for each data item in the set
+# `Each` - aplicando as mesmas regras para cada item de dados do conjunto
 
-The `Each` rule allows the same rules to be applied to each data item in the set. The following example shows
-the configuration for validating [RGB color](https://en.wikipedia.org/wiki/RGB_color_model) components:
+A regra `Each` permite que as mesmas regras sejam aplicadas a cada item de dados do conjunto. O exemplo a seguir mostra
+a configuração para validação de componentes [cor RGB]:
 
 ```php
 use Yiisoft\Validator\Rule\Each;
@@ -12,7 +12,7 @@ new Each([
 ]);
 ```
 
-By combining with another built-in rule called `Count` we can be sure that the number of components is exactly 3:
+Combinando com outra regra integrada chamada `Count` podemos ter certeza de que o número de componentes é exatamente 3:
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -30,8 +30,8 @@ $rules = [
 ];
 ```
 
-Validated data items are not limited to only "simple" values - `Each` can be used both within a `Nested` and contain
-`Nested` rule covering one-to-many and many-to-many relations:
+Os itens de dados validados não estão limitados apenas a valores "simples" - `Each` pode ser usado dentro de um [`Nested`] e conter regras
+[`Nested`] englobando relações um para muitos e muitos para muitos:
 
 ```php
 use Yiisoft\Validator\Rule\Count;
@@ -59,4 +59,7 @@ $rule = new Nested([
 ]);
 ```
 
-For more information about using it with `Nested`, see the [Nested](built-in-rules-nested.md) guide.
+Para obter mais informações sobre como usá-lo com [`Nested`], consulte o guia [`Nested`].
+
+[cor RGB]: https://en.wikipedia.org/wiki/RGB_color_model
+[`Nested`]: built-in-rules-nested.md
