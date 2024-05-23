@@ -151,7 +151,6 @@ final class RulesNormalizer
      *
      * @psalm-param RawRules|null $rules
      *
-     *
      * @throws ReflectionException When parsing rules from PHP attributes failed.
      * @return iterable An iterable with rules for further individual rules' normalization.
      */
