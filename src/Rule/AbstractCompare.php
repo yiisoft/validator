@@ -76,8 +76,6 @@ abstract class AbstractCompare implements
     ];
 
     /**
-     * @param mixed $targetValue The value to be compared with. When both this property and {@see $targetAttribute} are
-     * set, this property takes precedence.
      * @param string|null $targetAttribute The name of the attribute to be compared with. When both this property and
      * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
      * @param string $incorrectInputMessage A message used when the input is incorrect.

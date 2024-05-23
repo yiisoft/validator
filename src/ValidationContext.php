@@ -89,11 +89,9 @@ final class ValidationContext
      * @param ValidatorInterface $validator A validator instance.
      * @param AttributeTranslatorInterface $attributeTranslator Attribute translator to use by default. If translator
      * is specified via {@see setAttributeTranslator()}, it will be used instead.
-     * @param mixed $rawData The raw validated data.
      * @param DataSetInterface $dataSet Global data set ({@see $globalDataSet}).
      *
      * @internal
-     *
      * @return $this The same instance of validation context.
      */
     public function setContextDataOnce(
@@ -137,15 +135,12 @@ final class ValidationContext
     /**
      * Validate data in current context.
      *
-     * @param mixed $data Data set to validate. If {@see RulesProviderInterface} instance provided and rules are
-     * not specified explicitly, they are read from the {@see RulesProviderInterface::getRules()}.
      * @param callable|iterable|object|string|null $rules Rules to apply. If specified, rules are not read from data set
      * even if it is an instance of {@see RulesProviderInterface}.
      *
      * @psalm-param RawRules|null $rules
      *
      * @throws RuntimeException If validator is not set in validation context.
-     *
      * @return Result Validation result.
      */
     public function validate(mixed $data, callable|iterable|object|string|null $rules = null): Result
@@ -285,10 +280,8 @@ final class ValidationContext
      * Get named parameter.
      *
      * @param string $name Parameter name.
-     * @param mixed $default Default value to return in case parameter with a given name does not exist.
      *
      * @return mixed Parameter value.
-     *
      * @see ArrayHelper::getValue()
      */
     public function getParameter(string $name, mixed $default = null): mixed
@@ -300,7 +293,6 @@ final class ValidationContext
      * Set parameter value.
      *
      * @param string $name Parameter name.
-     * @param mixed $value Parameter value.
      *
      * @return $this The same instance of validation context.
      */
