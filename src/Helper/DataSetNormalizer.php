@@ -28,6 +28,7 @@ final class DataSetNormalizer
      * In order to prevent mapping objects and arrays to corresponding data sets, wrap them with
      * {@see SingleValueDataSet} explicitly or use a custom data set ({@see DataSetInterface}).
      *
+     *
      * @return DataSetInterface Data set instance.
      */
     public static function normalize(mixed $data): DataSetInterface

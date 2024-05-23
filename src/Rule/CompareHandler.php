@@ -76,6 +76,7 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
+     *
      * @return bool `true` if value is correct and `false` otherwise.
      */
     private function isInputCorrect(string $type, mixed $value): bool
@@ -86,6 +87,7 @@ final class CompareHandler implements RuleHandlerInterface
     /**
      * Checks whether the validated value is allowed for types that require type casting - {@see CompareType::NUMBER}
      * and {@see CompareType::STRING}.
+     *
      *
      * @return bool `true` if value is allowed and `false` otherwise.
      */
@@ -99,6 +101,7 @@ final class CompareHandler implements RuleHandlerInterface
 
     /**
      * Gets representation of the value for using with error parameter.
+     *
      *
      * @return scalar|null Formatted value.
      */
@@ -126,6 +129,7 @@ final class CompareHandler implements RuleHandlerInterface
      * @param string $type The type of the values being compared ({@see AbstractCompare::$type}).
      *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
+     *
      *
      * @return bool Whether the result of comparison using the specified operator is true.
      */
@@ -209,6 +213,7 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
+     *
      * @return mixed Normalized value ready for comparison.
      */
     private function normalizeValue(string $type, mixed $value): mixed
@@ -222,6 +227,7 @@ final class CompareHandler implements RuleHandlerInterface
 
     /**
      * Normalizes number that might be stored in a different type to float number.
+     *
      *
      * @return float Float number ready for comparison.
      */
@@ -238,6 +244,7 @@ final class CompareHandler implements RuleHandlerInterface
 
     /**
      * Normalizes string that might be stored in a different type to simple string.
+     *
      *
      * @return string String ready for comparison.
      */
