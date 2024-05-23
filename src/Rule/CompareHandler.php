@@ -76,7 +76,6 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
-     * @param mixed $value The validated value.
      *
      * @return bool `true` if value is correct and `false` otherwise.
      */
@@ -89,7 +88,6 @@ final class CompareHandler implements RuleHandlerInterface
      * Checks whether the validated value is allowed for types that require type casting - {@see CompareType::NUMBER}
      * and {@see CompareType::STRING}.
      *
-     * @param mixed $value The Validated value.
      *
      * @return bool `true` if value is allowed and `false` otherwise.
      */
@@ -104,7 +102,6 @@ final class CompareHandler implements RuleHandlerInterface
     /**
      * Gets representation of the value for using with error parameter.
      *
-     * @param mixed $value The validated value.
      *
      * @return scalar|null Formatted value.
      */
@@ -133,8 +130,6 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
-     * @param mixed $value The validated value.
-     * @param mixed $targetValue "Target" value set in rule options.
      *
      * @return bool Whether the result of comparison using the specified operator is true.
      */
@@ -171,8 +166,6 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
-     * @param mixed $value The validated value.
-     * @param mixed $targetValue "Target" value set in rule options.
      * @param bool $strict Whether the values must be equal (when set to `false`, default) / strictly equal (when set to
      * `true`).
      *
@@ -220,7 +213,6 @@ final class CompareHandler implements RuleHandlerInterface
      *
      * @psalm-param CompareType::ORIGINAL | CompareType::STRING | CompareType::NUMBER $type
      *
-     * @param mixed $value One of the compared values. Both validated and target value can be used.
      *
      * @return mixed Normalized value ready for comparison.
      */
@@ -236,8 +228,6 @@ final class CompareHandler implements RuleHandlerInterface
     /**
      * Normalizes number that might be stored in a different type to float number.
      *
-     * @param mixed $number Raw number. Can be within an object implementing {@see Stringable} /
-     * {@see DateTimeInterface} or other primitive type, such as `int`, `float`, `string`.
      *
      * @return float Float number ready for comparison.
      */
@@ -255,8 +245,6 @@ final class CompareHandler implements RuleHandlerInterface
     /**
      * Normalizes string that might be stored in a different type to simple string.
      *
-     * @param mixed $string Raw string. Can be within an object implementing {@see DateTimeInterface} or other primitive
-     * type, such as `int`, `float`, `string`.
      *
      * @return string String ready for comparison.
      */

@@ -174,13 +174,11 @@ final class Validator implements ValidatorInterface
      * Validates input of any type according to normalized rules and validation context. Aggregates errors from all the
      * rules to a one unified result.
      *
-     * @param mixed $value The validated value of any type.
      * @param iterable $rules Normalized rules ({@see RuleInterface} that can be iterated).
      *
      * @psalm-param iterable<RuleInterface> $rules
      *
      * @param ValidationContext $context Validation context.
-     *
      * @return Result The result of validation.
      */
     private function validateInternal(mixed $value, iterable $rules, ValidationContext $context): Result
@@ -236,9 +234,7 @@ final class Validator implements ValidatorInterface
      * - "when" callable returned `false` {@see WhenInterface}.
      *
      * @param RuleInterface $rule A rule instance.
-     * @param mixed $value The validated value of any type.
      * @param ValidationContext $context Validation context.
-     *
      * @return bool Whether to skip validation for this rule - `true` means skip and `false` to not skip.
      */
     private function shouldSkipRule(RuleInterface $rule, mixed $value, ValidationContext $context): bool
