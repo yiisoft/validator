@@ -1,7 +1,15 @@
 # Extensions
 
 The validator's architecture allows to replenish its missing functionality via extensions. A few already exist
-and are available for usage. Note that they are not official in terms of not being part of Yiisoft packages.
+and are available for usage:
+
+| Name                      | Link                                                 | Author      |
+|---------------------------|------------------------------------------------------|-------------|
+| Scenarios like in Yii 2   | https://github.com/vjik/yii-validator-scenarios      | @vjik       |
+| Wrapper for Symfony rules | https://github.com/vjik/yii-validator-symfony-rule   | @vjik       |
+| Phone numbers validation  | https://github.com/beastbytes/phone-number-validator | @beastbytes |
+
+Note that they are not official in terms of not being part of Yiisoft packages.
 
 ## Scenarios
 
