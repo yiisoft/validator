@@ -48,7 +48,10 @@ return [
     '{Attribute} must contain at least {min, number} {min, plural, one{item} other{items}}.' => '{Attribute} должно содержать как минимум {min, number} {min, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
     '{Attribute} must contain at most {max, number} {max, plural, one{item} other{items}}.' => '{Attribute} должно содержать не более {max, number} {max, plural, one{элемента} few{элементов} many{элементов} other{элементов}}.',
     '{Attribute} must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => '{Attribute} должно содержать ровно {exactly, number} {exactly, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
-    /** @see Each */
+    /**
+     * @see Each
+     * @see UniqueIterable
+     */
     '{Attribute} must be array or iterable.' => '{Attribute} должно быть массивом или иметь псевдотип iterable.',
     'Every iterable key must have an integer or a string type.' => 'Ключ должен иметь тип integer или string.',
     /** @see Email */

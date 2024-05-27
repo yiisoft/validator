@@ -29,6 +29,7 @@ final class UniqueIterableHandler implements RuleHandlerInterface
         if (!is_iterable($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
                 'attribute' => $context->getTranslatedAttribute(),
+                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
                 'type' => get_debug_type($value),
             ]);
         }
