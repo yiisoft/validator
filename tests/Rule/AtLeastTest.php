@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use Yiisoft\Validator\EmptyCondition\NeverEmpty;
 use Yiisoft\Validator\Rule\AtLeast;
 use Yiisoft\Validator\Rule\AtLeastHandler;
@@ -21,9 +22,16 @@ final class AtLeastTest extends RuleTestCase
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
+    public function testMinGreaterThanAttributesCount(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$min must be no greater than amount of $attributes.');
+        new AtLeast(['attr'], min: 2);
+    }
+
     public function testGetName(): void
     {
-        $rule = new AtLeast([]);
+        $rule = new AtLeast(['attr']);
         $this->assertSame('atLeast', $rule->getName());
     }
 
@@ -165,6 +173,14 @@ final class AtLeastTest extends RuleTestCase
                 ['attr1' => 1, 'attr2' => 2],
                 [new AtLeast(['attr1', 'attr2'])],
             ],
+            'min equals amount of attributes' => [
+                ['attr1' => 1, 'attr2' => 2],
+                [new AtLeast(['attr1', 'attr2'], min: 2)],
+            ],
+            'min equals amount of attributes, 0' => [
+                [],
+                [new AtLeast([], min: 0)],
+            ],
             'class attribute' => [
                 new AtLeastDto(1),
             ],
@@ -222,7 +238,7 @@ final class AtLeastTest extends RuleTestCase
             ],
             'array, custom min' => [
                 $array,
-                [new AtLeast(['attr2'], min: 2)],
+                [new AtLeast(['attr1', 'attr2'], min: 2)],
                 ['' => ['The data must have at least "2" filled attributes.']],
             ],
             'custom message' => [
@@ -250,13 +266,13 @@ final class AtLeastTest extends RuleTestCase
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new AtLeast([]), new AtLeast([], skipOnError: true));
+        $this->testSkipOnErrorInternal(new AtLeast(['attr']), new AtLeast(['attr'], skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new AtLeast([]), new AtLeast([], when: $when));
+        $this->testWhenInternal(new AtLeast(['attr']), new AtLeast(['attr'], when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array
