@@ -88,6 +88,10 @@
     },
     "scripts": {
         "test": "phpunit --testdox --no-interaction",
-        "test-watch": "phpunit-watcher watch"
+        "test-watch": "phpunit-watcher watch",
+        "rector": "vendor/bin/rector process",
+        "infection": "vendor/bin/infection",
+        "dry-run": "vendor/bin/rector process --dry-run",
+        "psalm": "vendor/bin/psalm --config=psalm.xml"
     }
 }
