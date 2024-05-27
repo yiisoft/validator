@@ -20,8 +20,8 @@ final class Error
     public const MESSAGE_TRANSLATE = 2;
 
     /**
-     * @param string $message The raw validation error message. Can be a simple text or a template with placeholders enclosed
-     * in curly braces (`{}`). In the end of the validation it will be translated using configured translator.
+     * @param string $message The raw validation error message. Can be a simple text or a template with placeholders
+     * enclosed in curly braces (`{}`). In the end of the validation it will be translated using configured translator.
      * {@see SimpleMessageFormatter} is usually enough, but for more complex translations
      * {@see IntlMessageFormatter} can be used (requires "intl" PHP extension). Examples:
      *
