@@ -12,6 +12,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function array_slice;
 use function is_array;
 use function is_int;
 use function is_object;
@@ -63,12 +64,9 @@ final class NestedHandler implements RuleHandlerInterface
 
         foreach ($rule->getRules() as $valuePath => $rules) {
             if ($rule->isPropertyPathRequired() && !ArrayHelper::pathExists($data, $valuePath)) {
-                if (is_int($valuePath)) {
-                    $valuePathList = [$valuePath];
-                } else {
-                    /** @var list<string> $valuePathList */
-                    $valuePathList = StringHelper::parsePath($valuePath);
-                }
+                $valuePathList = is_int($valuePath)
+                    ? [$valuePath]
+                    : StringHelper::parsePath($valuePath);
 
                 $compoundResult->addError(
                     $rule->getNoPropertyPathMessage(),
@@ -82,25 +80,24 @@ final class NestedHandler implements RuleHandlerInterface
                 continue;
             }
 
-            /** @var mixed $validatedValue */
             $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
 
-            $itemResult = $context->validate($validatedValue, $rules);
+            if (is_int($valuePath)) {
+                $itemResult = $context->validate($validatedValue, $rules);
+            } else {
+                $valuePathList = StringHelper::parsePath($valuePath);
+                $attribute = (string) end($valuePathList);
+                $itemResult = $context->validate([$attribute => $validatedValue], [$attribute => $rules]);
+            }
+
             if ($itemResult->isValid()) {
                 continue;
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                if (is_int($valuePath)) {
-                    $valuePathList = [$valuePath];
-                } else {
-                    /** @var list<string> $valuePathList */
-                    $valuePathList = StringHelper::parsePath($valuePath);
-                }
-
-                if (!empty($valuePathList)) {
-                    array_push($valuePathList, ...$error->getValuePath());
-                }
+                $valuePathList = is_int($valuePath)
+                    ? [$valuePath, ...$error->getValuePath()]
+                    : [...StringHelper::parsePath($valuePath), ...array_slice($error->getValuePath(), 1)];
 
                 $compoundResult->addErrorWithoutPostProcessing(
                     $error->getMessage(),
