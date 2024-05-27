@@ -56,7 +56,6 @@ final class NestedTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Nested();
-
         $this->assertSame('nested', $rule->getName());
     }
 
