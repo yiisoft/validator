@@ -4,7 +4,8 @@
         "Yiisoft\\Yii\\Debug\\Collector\\SummaryCollectorInterface",
         "JetBrains\\PhpStorm\\ArrayShape",
         "JetBrains\\PhpStorm\\ExpectedValues",
-        "JetBrains\\PhpStorm\\Language"
+        "JetBrains\\PhpStorm\\Language",
+        "json_validate"
     ],
     "php-core-extensions": [
         "Core",
