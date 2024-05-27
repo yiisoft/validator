@@ -9,6 +9,7 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function function_exists;
 use function is_string;
 
 /**
@@ -54,23 +55,13 @@ final class JsonHandler implements RuleHandlerInterface
      */
     private function isValidJson(string $value): bool
     {
-        // Regular expression is built based on JSON grammar specified at
-        // https://tools.ietf.org/html/rfc8259
-        $regex = <<<'REGEX'
-        /
-        (?(DEFINE)
-            (?<json>(?>\s*(?&object)\s*|\s*(?&array)\s*))
-            (?<object>(?>\{\s*(?>(?&member)(?>\s*,\s*(?&member))*)?\s*\}))
-            (?<member>(?>(?&string)\s*:\s*(?&value)))
-            (?<array>(?>\[\s*(?>(?&value)(?>\s*,\s*(?&value))*)?\s*\]))
-            (?<value>(?>)false|null|true|(?&object)|(?&array)|(?&number)|(?&string))
-            (?<number>(?>-?(?>0|[1-9]\d*)(?>\.\d+)?(?>[eE][-+]?\d+)?))
-            (?<string>(?>"(?>\\(?>["\\\/bfnrt]|u[a-fA-F0-9]{4})|[^"\\\0-\x1F\x7F]+)*"))
-        )
-        \A(?&json)\z
-        /x
-        REGEX;
+        if (function_exists('json_validate')) {
+            /** @var bool Can be removed after upgrading to PHP 8.3 */
+            return json_validate($value);
+        }
 
-        return preg_match($regex, $value) === 1;
+        json_decode($value);
+
+        return json_last_error() === JSON_ERROR_NONE;
     }
 }
