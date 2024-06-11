@@ -1,6 +1,6 @@
 # Yii Validator Change Log
 
-## 1.4.1 under development
+## 1.4.1 June 11, 2024
 
 - Bug #719: Fix parameters leak in context validation (@vjik)
 
