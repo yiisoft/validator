@@ -2,7 +2,7 @@
 
 ## 1.4.1 under development
 
-- no changes in this release.
+- Bug #719: Fix parameters leak in context validation (@vjik)
 
 ## 1.4.0 May 22, 2024
 
