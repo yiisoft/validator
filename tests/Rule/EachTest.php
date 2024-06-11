@@ -175,9 +175,30 @@ final class EachTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            [
+            'base' => [
                 [10, 11],
                 [new Each([new Number(max: 20)])],
+            ],
+            'double-each-with-arrays' => [
+                [
+                    'items' => [
+                        ['variantId' => 123, 'quantity' => 1],
+                    ],
+                ],
+                [
+                    'items' => [
+                        new Each([
+                            new Callback(callback: function (array $item) {
+                                return new Result();
+                            }),
+                        ]),
+                        new Each([
+                            new Callback(callback: function (array $item) {
+                                return new Result();
+                            }),
+                        ]),
+                    ],
+                ],
             ],
         ];
     }
