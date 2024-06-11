@@ -179,7 +179,7 @@ final class EachTest extends RuleTestCase
                 [
                     'items' => [
                         ['variantId' => 123, 'quantity' => 1],
-                    ]
+                    ],
                 ],
                 [
                     'items' => [
@@ -193,7 +193,7 @@ final class EachTest extends RuleTestCase
                                 return new Result();
                             }),
                         ]),
-                    ]
+                    ],
                 ],
             ],
         ];
