@@ -73,7 +73,7 @@ final class UniqueIterable implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private string $incorrectInputMessage = 'Value must be array or iterable.',
+        private string $incorrectInputMessage = '{Attribute} must be array or iterable.',
         private string $incorrectItemValueMessage = 'The allowed types for iterable\'s item values are integer, ' .
         'float, string, boolean and object implementing \Stringable or \DateTimeInterface.',
         private string $differentTypesMessage = 'All iterable items must have the same type.',
