@@ -46,7 +46,6 @@ final class Result
                 return false;
             }
         }
-
         return true;
     }
 
@@ -90,7 +89,6 @@ final class Result
             $stringValuePath = implode($separator, $error->getValuePath($escape));
             $errors[$stringValuePath][] = $error->getMessage();
         }
-
         return $errors;
     }
 
@@ -114,7 +112,6 @@ final class Result
             $stringValuePath = implode($separator, $error->getValuePath($escape));
             $errors[$stringValuePath] ??= $error->getMessage();
         }
-
         return $errors;
     }
 
@@ -138,7 +135,6 @@ final class Result
 
             $errors[$key][] = $error->getMessage();
         }
-
         return $errors;
     }
 
@@ -162,7 +158,6 @@ final class Result
 
             $errors[$key] ??= $error->getMessage();
         }
-
         return $errors;
     }
 
@@ -184,7 +179,6 @@ final class Result
                 $errors[] = $error;
             }
         }
-
         return $errors;
     }
 
@@ -204,7 +198,6 @@ final class Result
                 $errors[] = $error->getMessage();
             }
         }
-
         return $errors;
     }
 
@@ -237,7 +230,6 @@ final class Result
             $valuePath = implode($separator, array_slice($error->getValuePath($escape), 1));
             $errors[$valuePath][] = $error->getMessage();
         }
-
         return $errors;
     }
 
@@ -272,7 +264,6 @@ final class Result
     public function addError(string $message, array $parameters = [], array $valuePath = []): self
     {
         $this->errors[] = new Error($message, $parameters, $valuePath);
-
         return $this;
     }
 
@@ -316,10 +307,11 @@ final class Result
      */
     public function add(self ...$results): self
     {
+        $appendErrors = [];
         foreach ($results as $result) {
-            $this->errors = array_merge($this->errors, $result->getErrors());
+            $appendErrors[] = $result->getErrors();
         }
-
+        $this->errors = array_merge($this->errors, $appendErrors);
         return $this;
     }
 }
