@@ -311,7 +311,7 @@ final class Result
         foreach ($results as $result) {
             $appendErrors[] = $result->getErrors();
         }
-        $this->errors = array_merge($this->errors, $appendErrors);
+        $this->errors = array_merge($this->errors, ...$appendErrors);
         return $this;
     }
 }
