@@ -27,6 +27,7 @@
 - Chg #660: Change type of `$skipOnEmpty` argument in rules' constructors from `mixed` to `bool|callable|null`
 - Chg #613: Change type of `$escape` argument in `Error::getValuePath()` from `bool|string|null` to `string|null`
   (@arogachev)
+- Enh #726: Refactor `Result::add()`: took `array_merge()` out of the `foreach` (@lav45)
 
 ## 1.4.1 June 11, 2024
 
