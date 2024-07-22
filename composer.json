@@ -45,7 +45,7 @@
         "rector/rector": "^1.2",
         "roave/infection-static-analysis-plugin": "^1.25",
         "spatie/phpunit-watcher": "^1.23",
-        "vimeo/psalm": "^4.30|^5.22",
+        "vimeo/psalm": "^4.30|^5.25",
         "yiisoft/di": "^1.2",
         "yiisoft/test-support": "^3.0",
         "yiisoft/translator-message-php": "^1.1",
