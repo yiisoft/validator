@@ -301,7 +301,7 @@ final class Nested implements
 
     /**
      * Whether to require a single data item to be passed in data according to declared nesting level structure (all
-     * keys in the sequence must be the present). Enabled by default.
+     * keys in the sequence must be the present). Disabled by default.
      *
      * @return bool `true` if required and `false` otherwise.
      *
