@@ -62,9 +62,9 @@ final class ValidationContext
     private ?string $attributeLabel = null;
 
     /**
-     * @var AttributeTranslatorInterface|null Default attribute translator to use if attribute translator is not set.
+     * @var PropertyTranslatorInterface|null Default attribute translator to use if attribute translator is not set.
      */
-    private ?AttributeTranslatorInterface $defaultAttributeTranslator = null;
+    private ?PropertyTranslatorInterface $defaultPropertyTranslator = null;
 
     /**
      * @var bool Whether {@see $dataSet} is missing.
@@ -73,13 +73,13 @@ final class ValidationContext
 
     /**
      * @param array $parameters Arbitrary parameters.
-     * @param AttributeTranslatorInterface|null $attributeTranslator Optional attribute translator instance to use.
+     * @param PropertyTranslatorInterface|null $propertyTranslator Optional property translator instance to use.
      * If `null` is provided, or it's not specified, a default translator passed through
      * {@see setContextDataOnce()} is used.
      */
     public function __construct(
         private array $parameters = [],
-        private ?AttributeTranslatorInterface $attributeTranslator = null,
+        private ?PropertyTranslatorInterface $propertyTranslator = null,
     ) {
     }
 
@@ -87,8 +87,8 @@ final class ValidationContext
      * Set context data if it is not set yet.
      *
      * @param ValidatorInterface $validator A validator instance.
-     * @param AttributeTranslatorInterface $attributeTranslator Attribute translator to use by default. If translator
-     * is specified via {@see setAttributeTranslator()}, it will be used instead.
+     * @param PropertyTranslatorInterface $propertyTranslator Property translator to use by default. If translator
+     * is specified via {@see setPropertyTranslator()}, it will be used instead.
      * @param mixed $rawData The raw validated data.
      * @param DataSetInterface $dataSet Global data set ({@see $globalDataSet}).
      *
@@ -98,7 +98,7 @@ final class ValidationContext
      */
     public function setContextDataOnce(
         ValidatorInterface $validator,
-        AttributeTranslatorInterface $attributeTranslator,
+        PropertyTranslatorInterface $propertyTranslator,
         mixed $rawData,
         DataSetInterface $dataSet,
     ): self {
@@ -107,7 +107,7 @@ final class ValidationContext
         }
 
         $this->validator = $validator;
-        $this->defaultAttributeTranslator = $attributeTranslator;
+        $this->defaultPropertyTranslator = $propertyTranslator;
         $this->rawData = $rawData;
         $this->globalDataSet = $dataSet;
 
@@ -115,16 +115,16 @@ final class ValidationContext
     }
 
     /**
-     * Set attribute translator to use.
+     * Set property translator to use.
      *
-     * @param AttributeTranslatorInterface|null $attributeTranslator Attribute translator to use. If `null`,
+     * @param PropertyTranslatorInterface|null $propertyTranslator Property translator to use. If `null`,
      * translator passed in {@see setContextData()} will be used.
      *
      * @return $this The same instance of validation context.
      */
-    public function setAttributeTranslator(?AttributeTranslatorInterface $attributeTranslator): self
+    public function setPropertyTranslator(?PropertyTranslatorInterface $propertyTranslator): self
     {
-        $this->attributeTranslator = $attributeTranslator;
+        $this->propertyTranslator = $propertyTranslator;
         return $this;
     }
 
@@ -252,12 +252,12 @@ final class ValidationContext
     {
         $label = $this->attributeLabel ?? $this->attribute ?? 'value';
 
-        if ($this->attributeTranslator !== null) {
-            return $this->attributeTranslator->translate($label);
+        if ($this->propertyTranslator !== null) {
+            return $this->propertyTranslator->translate($label);
         }
 
-        if ($this->defaultAttributeTranslator !== null) {
-            return $this->defaultAttributeTranslator->translate($label);
+        if ($this->defaultPropertyTranslator !== null) {
+            return $this->defaultPropertyTranslator->translate($label);
         }
 
         return $label;

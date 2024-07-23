@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Support\Data;
 
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\OneOf;
 
 #[OneOf(['a', 'b', 'c'])]
-final class OneOfDto implements AttributeTranslatorProviderInterface
+final class OneOfDto implements PropertyTranslatorProviderInterface
 {
     public function __construct(
         public ?int $a = null,
@@ -28,8 +28,8 @@ final class OneOfDto implements AttributeTranslatorProviderInterface
         ];
     }
 
-    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+    public function getPropertyTranslator(): ?PropertyTranslatorInterface
     {
-        return new ArrayAttributeTranslator($this->getAttributeLabels());
+        return new ArrayPropertyTranslator($this->getAttributeLabels());
     }
 }

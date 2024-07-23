@@ -61,35 +61,37 @@ $validator = new Validator(translator: $translator);
 Вы можете проверить доступные переводы, посмотрев подпапки папки `messages`.
 Если необходимый язык отсутствует, не стесняйтесь отправить [PR].
 
-## Перевод имен атрибутов
+## Перевод имен свойств
 
-Почти все шаблоны ошибок поддерживают плейсхолдер `{attribute}`, который заменяется фактическим именем атрибута, заданным во время настройки правил.
-По умолчанию имя атрибута форматируется без изменений.
-Это может быть приемлемо для английского языка (например, `currentPassword is required.`), но при использовании перевода сообщений об ошибках, лучше предоставить дополнительный перевод атрибута.
+Почти все шаблоны ошибок поддерживают плейсхолдер `{attribute}`, который заменяется фактическим именем свойства, 
+заданным во время настройки правил. По умолчанию имя свойства форматируется без изменений.
+Это может быть приемлемо для английского языка (например, `currentPassword is required.`), но при использовании перевода
+сообщений об ошибках, лучше предоставить дополнительный перевод свойства.
 
-Для решения именно этой задачи существует отдельный интерфейс `AttributeTranslatorInterface`.
+Для решения именно этой задачи существует отдельный интерфейс `PropertyTranslatorInterface`.
 Он поставляется с тремя реализациями из коробки:
 
-- `ArrayAttributeTranslator` - использует ассоциативный массив, где ключи - это имена исходных атрибутов, а значения - их соответствующие переведенные версии.
-- `TranslatorAttributeTranslator` - использует [Yii Translator].
-- `NullAttributeTranslator` - фиктивный переводчик, возвращает имя атрибута как есть, без перевода.
+- `ArrayPropertyTranslator` - использует ассоциативный массив, где ключи - это имена исходных свойств, а значения - их
+  соответствующие переведенные версии.
+- `TranslatorPropertyTranslator` - использует [Yii Translator].
+- `NullPropertyTranslator` - фиктивный переводчик, возвращает имя свойства как есть, без перевода.
 
 Существует несколько способов использования переводчика атрибутов.
 
 ### Передача переводчика в экземпляр валидатора
 
-Это вполне очевидно: просто создайте переводчик атрибутов, определите все переводы и передайте их вновь созданному экземпляру валидатора.
-Пример для русского языка:
+Это вполне очевидно: просто создайте переводчик свойств, определите все переводы и передайте их вновь созданному
+экземпляру валидатора. Пример для русского языка:
 
 ```php
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
 use Yiisoft\Validator\Validator;
 
-$attributeTranslator = new ArrayAttributeTranslator([
+$propertyTranslator = new ArrayPropertyTranslator([
     'currentPassword' => 'Текущий пароль',
     'newPassword' => 'Новый пароль',
 ]);
-$validator = new Validator(defaultAttributeTranslator: $attributeTranslator);
+$validator = new Validator(defaultPropertyTranslator: $propertyTranslator);
 ```
 
 ### Передача внутри объекта данных для проверки
@@ -97,18 +99,18 @@ $validator = new Validator(defaultAttributeTranslator: $attributeTranslator);
 Другой вариант - предоставление переводов в самом валидируемом объекте данных.
 Этот подход может быть использован, например, для создания классов форм.
 
-Для этого случая существует еще один специальный интерфейс под названием `AttributeTranslatorProviderInterface`, позволяющий валидатору извлекать переводы из реализующих его объектов.
-Пример для русского языка:
+Для этого случая существует еще один специальный интерфейс под названием `PropertyTranslatorProviderInterface`,
+позволяющий валидатору извлекать переводы из реализующих его объектов. Пример для русского языка:
 
 ```php
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
 
-final class ChangePasswordForm implements AttributeTranslatorProviderInterface  
+final class ChangePasswordForm implements PropertyTranslatorProviderInterface  
 {  
     public function __construct(  
         #[Required(message: '{attribute} обязателен для ввода.')]  
@@ -123,9 +125,9 @@ final class ChangePasswordForm implements AttributeTranslatorProviderInterface
     ) {  
     }  
   
-    public function getAttributeTranslator(): ?AttributeTranslatorInterface  
+    public function getPropertyTranslator(): ?PropertyTranslatorInterface  
     {  
-        return new ArrayAttributeTranslator([  
+        return new ArrayPropertyTranslator([  
             'currentPassword' => 'Текущий пароль',  
             'newPassword' => 'Новый пароль',  
         ]);  

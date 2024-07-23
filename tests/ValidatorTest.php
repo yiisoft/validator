@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Yiisoft\Validator\AttributeTranslator\NullAttributeTranslator;
+use Yiisoft\Validator\PropertyTranslator\NullPropertyTranslator;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSet\SingleValueDataSet;
@@ -1406,7 +1406,7 @@ class ValidatorTest extends TestCase
                         'Mail is not a valid email address.',
                     ],
                 ],
-                new ValidationContext(attributeTranslator: new NullAttributeTranslator()),
+                new ValidationContext(propertyTranslator: new NullPropertyTranslator()),
             ],
         ];
     }

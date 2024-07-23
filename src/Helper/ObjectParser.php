@@ -13,8 +13,8 @@ use ReflectionClass;
 use ReflectionObject;
 use ReflectionProperty;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Label;
 use Yiisoft\Validator\RuleInterface;
 
@@ -320,16 +320,16 @@ final class ObjectParser
     }
 
     /**
-     * An optional attribute names translator. It's taken from the {@see $source} object when
-     * {@see AttributeTranslatorProviderInterface} is implemented. In case of it's missing or {@see $source} being a
+     * An optional property names translator. It's taken from the {@see $source} object when
+     * {@see PropertyTranslatorProviderInterface} is implemented. In case of it's missing or {@see $source} being a
      * class name string, a `null` value is returned.
      *
-     * @return AttributeTranslatorInterface|null An attribute translator instance or `null if it was not provided.
+     * @return PropertyTranslatorInterface|null A property translator instance or `null if it was not provided.
      */
-    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+    public function getPropertyTranslator(): ?PropertyTranslatorInterface
     {
-        return $this->source instanceof AttributeTranslatorProviderInterface
-            ? $this->source->getAttributeTranslator()
+        return $this->source instanceof PropertyTranslatorProviderInterface
+            ? $this->source->getPropertyTranslator()
             : null;
     }
 

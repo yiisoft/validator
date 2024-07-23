@@ -12,7 +12,7 @@ use Yiisoft\Translator\NullMessageFormatter;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\Translator;
 use Yiisoft\Translator\TranslatorInterface;
-use Yiisoft\Validator\AttributeTranslator\TranslatorAttributeTranslator;
+use Yiisoft\Validator\PropertyTranslator\TranslatorPropertyTranslator;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
 use Yiisoft\Validator\Helper\MessageProcessor;
 use Yiisoft\Validator\Helper\RulesNormalizer;
@@ -51,10 +51,10 @@ final class Validator implements ValidatorInterface
     private $defaultSkipOnEmptyCondition;
 
     /**
-     * @var AttributeTranslatorInterface A default translator used for translation of rule ({@see RuleInterface})
-     * attributes. Used to optimize setting the same value in all the rules.
+     * @var PropertyTranslatorInterface A default translator used for translation of rule ({@see RuleInterface})
+     * properties. Used to optimize setting the same value in all the rules.
      */
-    private AttributeTranslatorInterface $defaultAttributeTranslator;
+    private PropertyTranslatorInterface $defaultPropertyTranslator;
 
     private MessageProcessor $messageProcessor;
 
@@ -68,8 +68,8 @@ final class Validator implements ValidatorInterface
      * @param string $translationCategory A name for {@see CategorySource} used during creation
      * ({@see createDefaultTranslator()}) of default translator ({@see TranslatorInterface}) in case `$translator`
      * argument was not specified explicitly. If not provided, a {@see DEFAULT_TRANSLATION_CATEGORY} will be used.
-     * @param AttributeTranslatorInterface|null $defaultAttributeTranslator A default translator used for translation of
-     * rule ({@see RuleInterface}) attributes. If not provided, a {@see TranslatorAttributeTranslator} will be used.
+     * @param PropertyTranslatorInterface|null $defaultPropertyTranslator A default translator used for translation of
+     * rule ({@see RuleInterface}) properties. If not provided, a {@see TranslatorPropertyTranslator} will be used.
      * @param MessageFormatterInterface|null $messageFormatter A message formatter instance used for formats of error
      * messages that requires format only. If not provided, message is returned as is.
      * @param string $messageFormatterLocale Locale to use when error message requires format only.
@@ -81,15 +81,15 @@ final class Validator implements ValidatorInterface
         ?TranslatorInterface $translator = null,
         bool|callable|null $defaultSkipOnEmpty = null,
         string $translationCategory = self::DEFAULT_TRANSLATION_CATEGORY,
-        ?AttributeTranslatorInterface $defaultAttributeTranslator = null,
+        ?PropertyTranslatorInterface $defaultPropertyTranslator = null,
         ?MessageFormatterInterface $messageFormatter = null,
         string $messageFormatterLocale = 'en-US',
     ) {
         $translator ??= $this->createDefaultTranslator($translationCategory);
         $this->ruleHandlerResolver = $ruleHandlerResolver ?? new SimpleRuleHandlerContainer();
         $this->defaultSkipOnEmptyCondition = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
-        $this->defaultAttributeTranslator = $defaultAttributeTranslator
-            ?? new TranslatorAttributeTranslator($translator);
+        $this->defaultPropertyTranslator = $defaultPropertyTranslator
+            ?? new TranslatorPropertyTranslator($translator);
         $this->messageProcessor = new MessageProcessor(
             $translator,
             $translationCategory,
@@ -131,13 +131,13 @@ final class Validator implements ValidatorInterface
             $this->defaultSkipOnEmptyCondition
         );
 
-        $defaultAttributeTranslator =
-            ($dataSet instanceof AttributeTranslatorProviderInterface ? $dataSet->getAttributeTranslator() : null)
-            ?? $this->defaultAttributeTranslator;
+        $defaultPropertyTranslator =
+            ($dataSet instanceof PropertyTranslatorProviderInterface ? $dataSet->getPropertyTranslator() : null)
+            ?? $this->defaultPropertyTranslator;
 
         $context ??= new ValidationContext();
         $context
-            ->setContextDataOnce($this, $defaultAttributeTranslator, $data, $dataSet)
+            ->setContextDataOnce($this, $defaultPropertyTranslator, $data, $dataSet)
             ->setDataSet($dataSet);
 
         $result = new Result();

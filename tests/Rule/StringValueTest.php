@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use stdClass;
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\StringValue;
 use Yiisoft\Validator\Rule\StringValueHandler;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -138,7 +138,7 @@ final class StringValueTest extends RuleTestCase
                 ['data' => ['Attribute - data, type - bool.']],
             ],
             'value: object providing rules, attribute labels and wrong data' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?string $name = null,
                     ) {
@@ -151,9 +151,9 @@ final class StringValueTest extends RuleTestCase
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getAttributeLabels());
                     }
 
                     public function getRules(): array

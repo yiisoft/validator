@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Type;
 
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Type\IntegerType;
 use Yiisoft\Validator\Rule\Type\IntegerTypeHandler;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -93,7 +93,7 @@ final class IntegerTypeTest extends RuleTestCase
                 ['sum' => ['Attribute - sum, type - array']],
             ],
             'message, translated attribute' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?int $sum = null,
                     ) {
@@ -106,9 +106,9 @@ final class IntegerTypeTest extends RuleTestCase
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getAttributeLabels());
                     }
 
                     public function getRules(): array

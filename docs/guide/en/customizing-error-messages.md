@@ -61,37 +61,37 @@ $validator = new Validator(translator: $translator);
 You can check the available translations by viewing subfolders of the `messages` folder. If a required language is 
 missing, feel free to submit a [PR].
 
-## Translating attribute names
+## Translating property names
 
-Almost all error templates have support for an `{attribute}` placeholder which is substituted with an actual attribute name 
-that was set during rules configuration. By default, an attribute name is formatted as is. It can be acceptable for 
+Almost all error templates have support for an `{attribute}` placeholder which is substituted with an actual property
+name that was set during rules configuration. By default, a property name is formatted as is. It can be acceptable for 
 English language (for example, `currentPassword is required.`), but when using translations for error messages, it's 
-better to provide an additional attribute translation.
+better to provide an additional property translation.
 
-There is a separate interface called `AttributeTranslatorInterface` to solve exactly this task. It ships with 3 
+There is a separate interface called `PropertyTranslatorInterface` to solve exactly this task. It ships with 3 
 implementations out of the box:
 
-- `ArrayAttributeTranslator` - uses an associative array, where keys are initial attribute names and values are their 
+- `ArrayPropertyTranslator` - uses an associative array, where keys are initial property names and values are their 
 corresponding translated versions.
-- `TranslatorAttributeTranslator` - uses [Yii Translator].
-- `NullAttributeTranslator` - dummy translator, returns attribute name as is without translation.
+- `TranslatorPropertyTranslator` - uses [Yii Translator].
+- `NullPropertyTranslator` - dummy translator, returns property name as is without translation.
 
-There are several ways to use attribute translator.
+There are several ways to use property translator.
 
 ### Passing translator to validator instance
 
-It's quite self-explanatory, just create an attribute translator, define all translations, and pass it to the newly
+It's quite self-explanatory, just create a property translator, define all translations, and pass it to the newly
 created validator instance. An example for Russian language:
 
 ```php
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
 use Yiisoft\Validator\Validator;
 
-$attributeTranslator = new ArrayAttributeTranslator([
+$propertyTranslator = new ArrayPropertyTranslator([
     'currentPassword' => 'Текущий пароль',
     'newPassword' => 'Новый пароль',
 ]);
-$validator = new Validator(defaultAttributeTranslator: $attributeTranslator);
+$validator = new Validator(defaultPropertyTranslator: $propertyTranslator);
 ```
 
 ### Passing within a data object for validation
@@ -99,18 +99,18 @@ $validator = new Validator(defaultAttributeTranslator: $attributeTranslator);
 Another option is providing translations in the validated data object itself. This approach can be used to create a form 
 classes for example.
 
-There is another special interface called `AttributeTranslatorProviderInterface` for this case allowing the validator to 
+There is another special interface called `PropertyTranslatorProviderInterface` for this case allowing the validator to 
 extract translations from the objects implementing it. An example for Russian language:
 
 ```php
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
 
-final class ChangePasswordForm implements AttributeTranslatorProviderInterface  
+final class ChangePasswordForm implements PropertyTranslatorProviderInterface  
 {  
     public function __construct(  
         #[Required(message: '{Attribute} обязателен.')]  
@@ -125,9 +125,9 @@ final class ChangePasswordForm implements AttributeTranslatorProviderInterface
     ) {  
     }  
   
-    public function getAttributeTranslator(): ?AttributeTranslatorInterface  
+    public function getPropertyTranslator(): ?PropertyTranslatorInterface  
     {  
-        return new ArrayAttributeTranslator([  
+        return new ArrayPropertyTranslator([  
             'currentPassword' => 'Текущий пароль',  
             'newPassword' => 'Новый пароль',  
         ]);  

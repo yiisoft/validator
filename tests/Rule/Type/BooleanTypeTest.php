@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rule\Type;
 
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Type\BooleanType;
 use Yiisoft\Validator\Rule\Type\BooleanTypeHandler;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -92,7 +92,7 @@ final class BooleanTypeTest extends RuleTestCase
                 ['active' => ['Attribute - active, type - array']],
             ],
             'message, translated attribute' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?bool $active = null,
                     ) {
@@ -105,9 +105,9 @@ final class BooleanTypeTest extends RuleTestCase
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getAttributeLabels());
                     }
 
                     public function getRules(): array

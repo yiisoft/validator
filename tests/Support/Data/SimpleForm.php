@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Support\Data;
 
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\RulesProviderInterface;
 
-final class SimpleForm implements RulesProviderInterface, AttributeTranslatorProviderInterface
+final class SimpleForm implements RulesProviderInterface, PropertyTranslatorProviderInterface
 {
     public function __construct(
         public string $name = '',
@@ -30,9 +30,9 @@ final class SimpleForm implements RulesProviderInterface, AttributeTranslatorPro
         ];
     }
 
-    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+    public function getPropertyTranslator(): ?PropertyTranslatorInterface
     {
-        return new ArrayAttributeTranslator($this->getAttributeLabels());
+        return new ArrayPropertyTranslator($this->getAttributeLabels());
     }
 
     public function getRules(): array

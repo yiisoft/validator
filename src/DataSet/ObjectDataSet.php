@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\DataSet;
 
 use ReflectionProperty;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\DataWrapperInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
@@ -149,7 +149,11 @@ use Yiisoft\Validator\ValidatorInterface;
  *
  * @psalm-import-type RawRulesMap from ValidatorInterface
  */
-final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterface, LabelsProviderInterface, AttributeTranslatorProviderInterface
+final class ObjectDataSet implements
+    RulesProviderInterface,
+    DataWrapperInterface,
+    LabelsProviderInterface,
+    PropertyTranslatorProviderInterface
 {
     /**
      * @var bool Whether an {@see $object} provided a data set by implementing {@see DataSetInterface}.
@@ -292,13 +296,13 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
 
     /**
      * An optional attribute names translator. It's taken from the {@see $object} when
-     * {@see AttributeTranslatorProviderInterface} is implemented. In case of it's missing, a `null` value is returned.
+     * {@see PropertyTranslatorProviderInterface} is implemented. In case of it's missing, a `null` value is returned.
      *
-     * @return AttributeTranslatorInterface|null An attribute translator instance or `null` if it was not provided.
+     * @return PropertyTranslatorInterface|null An attribute translator instance or `null` if it was not provided.
      */
-    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+    public function getPropertyTranslator(): ?PropertyTranslatorInterface
     {
-        return $this->parser->getAttributeTranslator();
+        return $this->parser->getPropertyTranslator();
     }
 
     public function getValidationPropertyLabels(): array

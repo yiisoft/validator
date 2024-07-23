@@ -7,9 +7,9 @@ namespace Yiisoft\Validator\Tests\Rule;
 use DateTime;
 use stdClass;
 use Stringable;
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\UniqueIterable;
 use Yiisoft\Validator\Rule\UniqueIterableHandler;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -146,7 +146,7 @@ final class UniqueIterableTest extends RuleTestCase
                 ['data' => ['Attribute - data, type - int.']],
             ],
             'incorrect input, custom message, translated attribute' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public int $data = 1,
                     ) {
@@ -159,9 +159,9 @@ final class UniqueIterableTest extends RuleTestCase
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getAttributeLabels());
                     }
 
                     public function getRules(): array
@@ -185,7 +185,7 @@ final class UniqueIterableTest extends RuleTestCase
                 ['data' => ['Attribute - data, type - array.']],
             ],
             'incorrect item value, custom message, translated attribute' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public array $data = [1, 2, [], 3],
                     ) {
@@ -198,9 +198,9 @@ final class UniqueIterableTest extends RuleTestCase
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getAttributeLabels());
                     }
 
                     public function getRules(): array
@@ -270,7 +270,7 @@ final class UniqueIterableTest extends RuleTestCase
                 ['data' => ['Attribute - data.']],
             ],
             'different types, translated attribute' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public array $data = [1, '2', 3],
                     ) {
@@ -283,9 +283,9 @@ final class UniqueIterableTest extends RuleTestCase
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getAttributeLabels());
                     }
 
                     public function getRules(): array
@@ -306,7 +306,7 @@ final class UniqueIterableTest extends RuleTestCase
                 ['data' => ['Attribute - data.']],
             ],
             'custom message, translated attribute' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public array $data = [1, 2, 1, 3],
                     ) {
@@ -319,9 +319,9 @@ final class UniqueIterableTest extends RuleTestCase
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getAttributeLabels());
                     }
 
                     public function getRules(): array

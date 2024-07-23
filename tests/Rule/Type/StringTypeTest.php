@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rule\Type;
 
 use Stringable;
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Type\StringType;
 use Yiisoft\Validator\Rule\Type\StringTypeHandler;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -117,7 +117,7 @@ EOD,
                 ['name' => ['Attribute - name, type - array']],
             ],
             'message, translated attribute' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?string $name = null,
                     ) {
@@ -130,9 +130,9 @@ EOD,
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getAttributeLabels());
                     }
 
                     public function getRules(): array
