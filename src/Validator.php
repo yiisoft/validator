@@ -147,7 +147,7 @@ final class Validator implements ValidatorInterface
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, $dataSet->getData());
                 $context->setProperty(null);
             } else {
-                $validatedData = $dataSet->getAttributeValue($attribute);
+                $validatedData = $dataSet->getPropertyValue($attribute);
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, null);
                 $context->setProperty($attribute);
             }

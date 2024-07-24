@@ -320,7 +320,7 @@ final class ValidationContext
     public function isPropertyMissing(): bool
     {
         return $this->isDataSetMissing
-            || ($this->property !== null && !$this->getDataSet()->hasAttribute($this->property));
+            || ($this->property !== null && !$this->getDataSet()->hasProperty($this->property));
     }
 
     /**

@@ -1015,7 +1015,7 @@ final class NestedTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         $incorrectDataSet = new class () implements DataSetInterface {
-            public function getAttributeValue(string $attribute): mixed
+            public function getPropertyValue(string $property): mixed
             {
                 return false;
             }
@@ -1025,7 +1025,7 @@ final class NestedTest extends RuleTestCase
                 return null;
             }
 
-            public function hasAttribute(string $attribute): bool
+            public function hasProperty(string $property): bool
             {
                 return false;
             }
@@ -1223,7 +1223,7 @@ final class NestedTest extends RuleTestCase
                     'attributes' => new Nested([
                         'abc' => [
                             new Required(when: static function (mixed $value, ValidationContext $context): bool {
-                                $method = $context->getGlobalDataSet()->getAttributeValue('method');
+                                $method = $context->getGlobalDataSet()->getPropertyValue('method');
                                 return $method === 'get';
                             }),
                         ],

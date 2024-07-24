@@ -116,9 +116,9 @@ $rules = [
 
     new Callback(
         static function (mixed $value, Callback $rule, ValidationContext $context): Result {
-            $angleA = $context->getDataSet()->getAttributeValue('angleA');
-            $angleB = $context->getDataSet()->getAttributeValue('angleB');
-            $angleC = $context->getDataSet()->getAttributeValue('angleC');
+            $angleA = $context->getDataSet()->getPropertyValue('angleA');
+            $angleB = $context->getDataSet()->getPropertyValue('angleB');
+            $angleC = $context->getDataSet()->getPropertyValue('angleC');
             $sum = $angleA + $angleB + $angleC;
             
             if ($sum <= 0) {
@@ -145,11 +145,11 @@ use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\ValidationContext;
 
 static function (mixed $value, Callback $rule, ValidationContext $context): Result {
-    if ($context->getDataSet()->getAttributeValue('married') === false) {
+    if ($context->getDataSet()->getPropertyValue('married') === false) {
         return new Result();
     }
     
-    $spouseAge = $context->getDataSet()->getAttributeValue('spouseAge');
+    $spouseAge = $context->getDataSet()->getPropertyValue('spouseAge');
     if ($spouseAge === null) {
         return (new Result())->addError('Spouse age is required.');
     }
@@ -180,7 +180,7 @@ $rules = [
         min: 18,
         max: 100,
         when: static function (mixed $value, ValidationContext $context): bool {
-            return $context->getDataSet()->getAttributeValue('married') === true;
+            return $context->getDataSet()->getPropertyValue('married') === true;
         },
     ),
 ];

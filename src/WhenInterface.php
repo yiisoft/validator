@@ -31,7 +31,7 @@ interface WhenInterface
      * function (mixed $value, ValidationContext $context): bool;
      * ```
      *
-     * An example of applying validation depending on other attribute value:
+     * An example of applying validation depending on other property value:
      *
      * ```php
      * static function (mixed $value, ValidationContext $context): bool {

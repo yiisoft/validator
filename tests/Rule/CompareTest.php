@@ -377,7 +377,7 @@ final class CompareTest extends RuleTestCase
     public function dataValidationPassedWithDifferentTypes(): array
     {
         $customDataSet = new class () implements DataSetInterface {
-            public function getAttributeValue(string $attribute): mixed
+            public function getPropertyValue(string $property): mixed
             {
                 return 100;
             }
@@ -387,7 +387,7 @@ final class CompareTest extends RuleTestCase
                 return null;
             }
 
-            public function hasAttribute(string $attribute): bool
+            public function hasProperty(string $property): bool
             {
                 return true;
             }
@@ -553,7 +553,7 @@ final class CompareTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         $incorrectDataSet = new class () implements DataWrapperInterface {
-            public function getAttributeValue(string $attribute): mixed
+            public function getPropertyValue(string $property): mixed
             {
                 return new stdClass();
             }
@@ -568,7 +568,7 @@ final class CompareTest extends RuleTestCase
                 return false;
             }
 
-            public function hasAttribute(string $attribute): bool
+            public function hasProperty(string $property): bool
             {
                 return false;
             }

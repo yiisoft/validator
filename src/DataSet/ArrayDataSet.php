@@ -10,7 +10,7 @@ use Yiisoft\Validator\Helper\DataSetNormalizer;
 use function array_key_exists;
 
 /**
- * A data set for storing data as an associative array, where keys are attribute names and values are their
+ * A data set for storing data as an associative array, where keys are property names and values are their
  * corresponding values. An example of usage:
  *
  * ```php
@@ -24,31 +24,31 @@ final class ArrayDataSet implements DataWrapperInterface
 {
     public function __construct(
         /**
-         * @var array A mapping between attribute names and their values.
+         * @var array A mapping between property names and their values.
          */
         private array $data = [],
     ) {
     }
 
     /**
-     * Returns an attribute value by its name.
+     * Returns a property value by its name.
      *
-     * Note that in case of non-existing attribute a default `null` value is returned. If you need to check the presence
-     * of attribute or return a different default value, use {@see hasAttribute()} instead.
+     * Note that in case of non-existing property a default `null` value is returned. If you need to check the presence
+     * of property or return a different default value, use {@see hasProperty()} instead.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Property name.
      *
-     * @return mixed Attribute value.
+     * @return mixed Property value.
      */
-    public function getAttributeValue(string $attribute): mixed
+    public function getPropertyValue(string $property): mixed
     {
-        return $this->data[$attribute] ?? null;
+        return $this->data[$property] ?? null;
     }
 
     /**
      * A getter for {@see $data} property. Returns the validated data as a whole in a form of array.
      *
-     * @return array A mapping between attribute names and their values.
+     * @return array A mapping between property names and their values.
      */
     public function getData(): array
     {
@@ -61,15 +61,15 @@ final class ArrayDataSet implements DataWrapperInterface
     }
 
     /**
-     * Whether this data set has the attribute with a given name. Note that this means existence only and attributes
+     * Whether this data set has the property with a given name. Note that this means existence only and properties
      * with empty values are treated as present too.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Property name.
      *
-     * @return bool Whether the attribute exists: `true` - exists and `false` - otherwise.
+     * @return bool Whether the property exists: `true` - exists and `false` - otherwise.
      */
-    public function hasAttribute(string $attribute): bool
+    public function hasProperty(string $property): bool
     {
-        return array_key_exists($attribute, $this->data);
+        return array_key_exists($property, $this->data);
     }
 }

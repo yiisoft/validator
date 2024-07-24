@@ -37,9 +37,9 @@ use Yiisoft\Validator\ValidatorInterface;
  * ```php
  * final class Author implements DataSetInterface
  * {
- *     public function getAttributeValue(string $attribute): mixed
+ *     public function getPropertyValue(string $property): mixed
  *     {
- *         return $this->getData()[$attribute] ?? null;
+ *         return $this->getData()[$property] ?? null;
  *     }
  *
  *     public function getData(): mixed
@@ -47,9 +47,9 @@ use Yiisoft\Validator\ValidatorInterface;
  *         return ['name' => 'John', 'age' => 18];
  *     }
  *
- *     public function hasAttribute(string $attribute): bool
+ *     public function hasProperty(string $property): bool
  *     {
- *         return array_key_exists($attribute, $this->getData());
+ *         return array_key_exists($property, $this->getData());
  *     }
  * }
  * ```
@@ -235,40 +235,40 @@ final class ObjectDataSet implements
      * Returns an attribute value by its name.
      *
      * Note that in case of non-existing attribute a default `null` value is returned. If you need to check the presence
-     * of attribute or return a different default value, use {@see hasAttribute()} instead.
+     * of attribute or return a different default value, use {@see hasProperty()} instead.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Attribute name.
      *
      * @return mixed Attribute value.
      */
-    public function getAttributeValue(string $attribute): mixed
+    public function getPropertyValue(string $property): mixed
     {
         if ($this->dataSetProvided) {
             /** @var DataSetInterface $object */
             $object = $this->object;
-            return $object->getAttributeValue($attribute);
+            return $object->getPropertyValue($property);
         }
 
-        return $this->parser->getAttributeValue($attribute);
+        return $this->parser->getAttributeValue($property);
     }
 
     /**
      * Whether this data set has the attribute with a given name. Note that this means existence only and attributes
      * with empty values are treated as present too.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Attribute name.
      *
      * @return bool Whether the attribute exists: `true` - exists and `false` - otherwise.
      */
-    public function hasAttribute(string $attribute): bool
+    public function hasProperty(string $property): bool
     {
         if ($this->dataSetProvided) {
             /** @var DataSetInterface $object */
             $object = $this->object;
-            return $object->hasAttribute($attribute);
+            return $object->hasProperty($property);
         }
 
-        return $this->parser->hasAttribute($attribute);
+        return $this->parser->hasAttribute($property);
     }
 
     /**
