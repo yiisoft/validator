@@ -232,10 +232,10 @@ final class ObjectDataSet implements
     }
 
     /**
-     * Returns an attribute value by its name.
+     * Returns a property value by its name.
      *
-     * Note that in case of non-existing attribute a default `null` value is returned. If you need to check the presence
-     * of attribute or return a different default value, use {@see hasProperty()} instead.
+     * Note that in case of non-existing property a default `null` value is returned. If you need to check the presence
+     * of property or return a different default value, use {@see hasProperty()} instead.
      *
      * @param string $property Attribute name.
      *
@@ -253,12 +253,12 @@ final class ObjectDataSet implements
     }
 
     /**
-     * Whether this data set has the attribute with a given name. Note that this means existence only and attributes
+     * Whether this data set has the property with a given name. Note that this means existence only and properties
      * with empty values are treated as present too.
      *
      * @param string $property Attribute name.
      *
-     * @return bool Whether the attribute exists: `true` - exists and `false` - otherwise.
+     * @return bool Whether the property exists: `true` - exists and `false` - otherwise.
      */
     public function hasProperty(string $property): bool
     {
@@ -295,10 +295,10 @@ final class ObjectDataSet implements
     }
 
     /**
-     * An optional attribute names translator. It's taken from the {@see $object} when
+     * An optional property names translator. It's taken from the {@see $object} when
      * {@see PropertyTranslatorProviderInterface} is implemented. In case of it's missing, a `null` value is returned.
      *
-     * @return PropertyTranslatorInterface|null An attribute translator instance or `null` if it was not provided.
+     * @return PropertyTranslatorInterface|null A property translator instance or `null` if it was not provided.
      */
     public function getPropertyTranslator(): ?PropertyTranslatorInterface
     {
