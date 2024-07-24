@@ -45,7 +45,7 @@ final class AtLeastHandler implements RuleHandlerInterface
         }
 
         $filledCount = 0;
-        foreach ($rule->getAttributes() as $attribute) {
+        foreach ($rule->getProperties() as $attribute) {
             if (!(new WhenEmpty())(ArrayHelper::getValue($value, $attribute), $context->isPropertyMissing())) {
                 $filledCount++;
             }
@@ -53,8 +53,8 @@ final class AtLeastHandler implements RuleHandlerInterface
 
         if ($filledCount < $rule->getMin()) {
             $result->addError($rule->getMessage(), [
-                'properties' => $this->getFormattedAttributesString($rule->getAttributes(), $context),
-                'Properties' => $this->getCapitalizedAttributesString($rule->getAttributes(), $context),
+                'properties' => $this->getFormattedAttributesString($rule->getProperties(), $context),
+                'Properties' => $this->getCapitalizedAttributesString($rule->getProperties(), $context),
                 'min' => $rule->getMin(),
             ]);
         }

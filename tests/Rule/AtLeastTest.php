@@ -23,16 +23,16 @@ final class AtLeastTest extends RuleTestCase
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
-    public function testMinGreaterThanAttributesCount(): void
+    public function testMinGreaterThanPropertiesCount(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('$min must be no greater than amount of $attributes.');
-        new AtLeast(['attr'], min: 2);
+        $this->expectExceptionMessage('$min must be no greater than amount of $properties.');
+        new AtLeast(['prop'], min: 2);
     }
 
     public function testGetName(): void
     {
-        $rule = new AtLeast(['attr']);
+        $rule = new AtLeast(['prop']);
         $this->assertSame(AtLeast::class, $rule->getName());
     }
 
@@ -40,7 +40,7 @@ final class AtLeastTest extends RuleTestCase
     {
         $data = ['prop1' => 1, 'prop2' => null];
         $rule = new AtLeast(
-            attributes: ['prop1', 'prop2'],
+            properties: ['prop1', 'prop2'],
             min: 2,
             message: 'properties - {properties}, property - {property}, min - {min}.',
         );
@@ -57,7 +57,7 @@ final class AtLeastTest extends RuleTestCase
             [
                 new AtLeast(['prop1', 'prop2']),
                 [
-                    'attributes' => [
+                    'properties' => [
                         'prop1',
                         'prop2',
                     ],
@@ -78,7 +78,7 @@ final class AtLeastTest extends RuleTestCase
             [
                 new AtLeast(['prop1', 'prop2'], min: 2),
                 [
-                    'attributes' => [
+                    'properties' => [
                         'prop1',
                         'prop2',
                     ],
@@ -99,7 +99,7 @@ final class AtLeastTest extends RuleTestCase
             'callable skip on empty' => [
                 new AtLeast(['prop1', 'prop2'], skipOnEmpty: new NeverEmpty()),
                 [
-                    'attributes' => [
+                    'properties' => [
                         'prop1',
                         'prop2',
                     ],
@@ -188,19 +188,19 @@ final class AtLeastTest extends RuleTestCase
                 ['obj' => ['prop1' => null, 'prop2' => 1]],
                 ['obj' => new AtLeast(['prop2'])],
             ],
-            'more than "min" attributes are filled' => [
+            'more than "min" properties are filled' => [
                 ['prop1' => 1, 'prop2' => 2],
                 [new AtLeast(['prop1', 'prop2'])],
             ],
-            'min equals amount of attributes' => [
+            'min equals amount of properties' => [
                 ['prop1' => 1, 'prop2' => 2],
                 [new AtLeast(['prop1', 'prop2'], min: 2)],
             ],
-            'min equals amount of attributes, 0' => [
+            'min equals amount of properties, 0' => [
                 [],
                 [new AtLeast([], min: 0)],
             ],
-            'class attribute' => [
+            'class property' => [
                 new AtLeastDto(1),
             ],
         ];
@@ -227,10 +227,10 @@ final class AtLeastTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new AtLeast(['prop2'], incorrectInputMessage: 'Attribute - {Property}, type - {type}.')],
-                ['' => ['Attribute - Value, type - int.']],
+                [new AtLeast(['prop2'], incorrectInputMessage: 'Property - {Property}, type - {type}.')],
+                ['' => ['Property - Value, type - int.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['property' => 1],
                 [
                     'property' => new AtLeast(
@@ -275,7 +275,7 @@ final class AtLeastTest extends RuleTestCase
                 ['data' => new AtLeast(['prop1', 'prop2'], min: 2, message: 'Properties - {properties}, min - {min}.')],
                 ['data' => ['Properties - "prop1", "prop2", min - 2.']],
             ],
-            'class attribute, translation' => [
+            'class property, translation' => [
                 new AtLeastDto(),
                 null,
                 ['' => ['At least 1 property from this list must be filled: "A", "B", "C".']],
@@ -285,13 +285,13 @@ final class AtLeastTest extends RuleTestCase
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new AtLeast(['attr']), new AtLeast(['attr'], skipOnError: true));
+        $this->testSkipOnErrorInternal(new AtLeast(['prop']), new AtLeast(['prop'], skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new AtLeast(['attr']), new AtLeast(['attr'], when: $when));
+        $this->testWhenInternal(new AtLeast(['prop']), new AtLeast(['prop'], when: $when));
     }
 
     protected function getDifferentRuleInHandlerItems(): array
