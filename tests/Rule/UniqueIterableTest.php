@@ -142,8 +142,8 @@ final class UniqueIterableTest extends RuleTestCase
             'incorrect input, object' => [new stdClass(), new UniqueIterable(), ['' => [$incorrectInputMessage]]],
             'incorrect input, custom message' => [
                 ['data' => 1],
-                ['data' => new UniqueIterable(incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
-                ['data' => ['Attribute - data, type - int.']],
+                ['data' => new UniqueIterable(incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['data' => ['Property - data, type - int.']],
             ],
             'incorrect input, custom message, translated property' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
@@ -152,7 +152,7 @@ final class UniqueIterableTest extends RuleTestCase
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'data' => 'Данные',
@@ -161,7 +161,7 @@ final class UniqueIterableTest extends RuleTestCase
 
                     public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayPropertyTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array
@@ -181,8 +181,8 @@ final class UniqueIterableTest extends RuleTestCase
             ],
             'incorrect item value, custom message' => [
                 ['data' => [1, [], 2]],
-                ['data' => new UniqueIterable(incorrectItemValueMessage: 'Attribute - {property}, type - {type}.')],
-                ['data' => ['Attribute - data, type - array.']],
+                ['data' => new UniqueIterable(incorrectItemValueMessage: 'Property - {property}, type - {type}.')],
+                ['data' => ['Property - data, type - array.']],
             ],
             'incorrect item value, custom message, translated property' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
@@ -191,7 +191,7 @@ final class UniqueIterableTest extends RuleTestCase
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'data' => 'Данные',
@@ -200,7 +200,7 @@ final class UniqueIterableTest extends RuleTestCase
 
                     public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayPropertyTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array
@@ -266,17 +266,17 @@ final class UniqueIterableTest extends RuleTestCase
             ],
             'different types, custom message' => [
                 ['data' => [1, '2', 3]],
-                ['data' => new UniqueIterable(differentTypesMessage: 'Attribute - {property}.')],
-                ['data' => ['Attribute - data.']],
+                ['data' => new UniqueIterable(differentTypesMessage: 'Property - {property}.')],
+                ['data' => ['Property - data.']],
             ],
-            'different types, translated attribute' => [
+            'different types, translated property' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public array $data = [1, '2', 3],
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'data' => 'Данные',
@@ -285,7 +285,7 @@ final class UniqueIterableTest extends RuleTestCase
 
                     public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayPropertyTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array
@@ -302,8 +302,8 @@ final class UniqueIterableTest extends RuleTestCase
             ],
             'custom message' => [
                 ['data' => [1, 2, 1, 3]],
-                ['data' => new UniqueIterable(message: 'Attribute - {property}.')],
-                ['data' => ['Attribute - data.']],
+                ['data' => new UniqueIterable(message: 'Property - {property}.')],
+                ['data' => ['Property - data.']],
             ],
             'custom message, translated property' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
@@ -312,7 +312,7 @@ final class UniqueIterableTest extends RuleTestCase
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'data' => 'Данные',
@@ -321,7 +321,7 @@ final class UniqueIterableTest extends RuleTestCase
 
                     public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayPropertyTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array

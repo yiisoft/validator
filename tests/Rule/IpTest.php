@@ -566,13 +566,13 @@ final class IpTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new Ip(incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
-                ['' => ['Attribute - value, type - int.']],
+                [new Ip(incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['' => ['Property - value, type - int.']],
             ],
             'custom incorrect input message with parameters, property set' => [
                 ['data' => 1],
-                ['data' => new Ip(incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
-                ['data' => ['Attribute - data, type - int.']],
+                ['data' => new Ip(incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['data' => ['Property - data, type - int.']],
             ],
 
             // Small length
@@ -594,13 +594,13 @@ final class IpTest extends RuleTestCase
             ],
             'custom has subnet message with parameters' => [
                 '2008:fa::0:1/64',
-                [new Ip(hasSubnetMessage: 'Attribute - {property}, value - {value}.')],
-                ['' => ['Attribute - value, value - 2008:fa::0:1/64.']],
+                [new Ip(hasSubnetMessage: 'Property - {property}, value - {value}.')],
+                ['' => ['Property - value, value - 2008:fa::0:1/64.']],
             ],
             'custom has subnet message with parameters, property set' => [
                 ['data' => '2008:fa::0:1/64'],
-                ['data' => new Ip(hasSubnetMessage: 'Attribute - {property}, value - {value}.')],
-                ['data' => ['Attribute - data, value - 2008:fa::0:1/64.']],
+                ['data' => new Ip(hasSubnetMessage: 'Property - {property}, value - {value}.')],
+                ['data' => ['Property - data, value - 2008:fa::0:1/64.']],
             ],
 
             [
@@ -656,18 +656,18 @@ final class IpTest extends RuleTestCase
             ],
             'custom IPv4 not allowed message with parameters' => [
                 '192.168.10.11',
-                [new Ip(allowIpv4: false, ipv4NotAllowedMessage: 'Attribute - {property}, value - {value}.')],
-                ['' => ['Attribute - value, value - 192.168.10.11.']],
+                [new Ip(allowIpv4: false, ipv4NotAllowedMessage: 'Property - {property}, value - {value}.')],
+                ['' => ['Property - value, value - 192.168.10.11.']],
             ],
             'custom IPv4 not allowed message with parameters, property set' => [
                 ['data' => '192.168.10.11'],
                 [
                     'data' => new Ip(
                         allowIpv4: false,
-                        ipv4NotAllowedMessage: 'Attribute - {property}, value - {value}.',
+                        ipv4NotAllowedMessage: 'Property - {property}, value - {value}.',
                     ),
                 ],
-                ['data' => ['Attribute - data, value - 192.168.10.11.']],
+                ['data' => ['Property - data, value - 192.168.10.11.']],
             ],
 
             ['192.168.5.32/33', [new Ip(allowSubnet: true)], ['' => [$wrongCidrMessage]]],
@@ -678,13 +678,13 @@ final class IpTest extends RuleTestCase
             ],
             'custom wrong CIDR message with parameters' => [
                 '192.168.5.32/33',
-                [new Ip(allowSubnet: true, wrongCidrMessage: 'Attribute - {property}, value - {value}.')],
-                ['' => ['Attribute - value, value - 192.168.5.32/33.']],
+                [new Ip(allowSubnet: true, wrongCidrMessage: 'Property - {property}, value - {value}.')],
+                ['' => ['Property - value, value - 192.168.5.32/33.']],
             ],
             'custom wrong CIDR message with parameters, property set' => [
                 ['data' => '192.168.5.32/33'],
-                ['data' => new Ip(allowSubnet: true, wrongCidrMessage: 'Attribute - {property}, value - {value}.')],
-                ['data' => ['Attribute - data, value - 192.168.5.32/33.']],
+                ['data' => new Ip(allowSubnet: true, wrongCidrMessage: 'Property - {property}, value - {value}.')],
+                ['data' => ['Property - data, value - 192.168.5.32/33.']],
             ],
 
             ['192.168.5.32/af', [new Ip(allowSubnet: true)], ['' => [$message]]],
@@ -697,13 +697,13 @@ final class IpTest extends RuleTestCase
             ],
             'custom no subnet message with parameters' => [
                 '10.0.0.1',
-                [new Ip(requireSubnet: true, noSubnetMessage: 'Attribute - {property}, value - {value}.')],
-                ['' => ['Attribute - value, value - 10.0.0.1.']],
+                [new Ip(requireSubnet: true, noSubnetMessage: 'Property - {property}, value - {value}.')],
+                ['' => ['Property - value, value - 10.0.0.1.']],
             ],
             'custom no subnet message with parameters, property set' => [
                 ['data' => '10.0.0.1'],
-                ['data' => new Ip(requireSubnet: true, noSubnetMessage: 'Attribute - {property}, value - {value}.')],
-                ['data' => ['Attribute - data, value - 10.0.0.1.']],
+                ['data' => new Ip(requireSubnet: true, noSubnetMessage: 'Property - {property}, value - {value}.')],
+                ['data' => ['Property - data, value - 10.0.0.1.']],
             ],
 
             ['!!192.168.5.32/32', [new Ip(requireSubnet: true, allowNegation: true)], ['' => [$message]]],
@@ -725,18 +725,18 @@ final class IpTest extends RuleTestCase
             ],
             'custom IPv6 not allowed message with parameters' => [
                 '2008:fa::1',
-                [new Ip(allowIpv6: false, ipv6NotAllowedMessage: 'Attribute - {property}, value - {value}.')],
-                ['' => ['Attribute - value, value - 2008:fa::1.']],
+                [new Ip(allowIpv6: false, ipv6NotAllowedMessage: 'Property - {property}, value - {value}.')],
+                ['' => ['Property - value, value - 2008:fa::1.']],
             ],
             'custom IPv6 not allowed message with parameters, property set' => [
                 ['data' => '2008:fa::1'],
                 [
                     'data' => new Ip(
                         allowIpv6: false,
-                        ipv6NotAllowedMessage: 'Attribute - {property}, value - {value}.',
+                        ipv6NotAllowedMessage: 'Property - {property}, value - {value}.',
                     ),
                 ],
-                ['data' => ['Attribute - data, value - 2008:fa::1.']],
+                ['data' => ['Property - data, value - 2008:fa::1.']],
             ],
 
             ['!2008:fa::0:1/0', [new Ip(requireSubnet: true)], ['' => [$message]]],
@@ -804,7 +804,7 @@ final class IpTest extends RuleTestCase
                 [new Ip(allowSubnet: true, message: 'Property - {Property}, value - {value}.')],
                 ['' => ['Property - Value, value - 192.168.5.32/af.']],
             ],
-            'custom message with parameters, attribute set' => [
+            'custom message with parameters, property set' => [
                 ['data' => '192.168.5.32/af'],
                 ['data' => new Ip(allowSubnet: true, message: 'Property - {property}, value - {value}.')],
                 ['data' => ['Property - data, value - 192.168.5.32/af.']],

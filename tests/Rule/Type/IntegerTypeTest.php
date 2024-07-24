@@ -89,17 +89,17 @@ final class IntegerTypeTest extends RuleTestCase
             'array' => [[], new IntegerType(), ['' => [$message]]],
             'message, custom' => [
                 ['sum' => []],
-                ['sum' => new IntegerType('Attribute - {property}, type - {type}')],
-                ['sum' => ['Attribute - sum, type - array']],
+                ['sum' => new IntegerType('Property - {property}, type - {type}')],
+                ['sum' => ['Property - sum, type - array']],
             ],
-            'message, translated attribute' => [
+            'message, translated property' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?int $sum = null,
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'sum' => 'Сумма',
@@ -108,7 +108,7 @@ final class IntegerTypeTest extends RuleTestCase
 
                     public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayPropertyTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array

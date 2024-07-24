@@ -91,14 +91,14 @@ final class BooleanTypeTest extends RuleTestCase
                 ['active' => new BooleanType('Property - {property}, type - {type}')],
                 ['active' => ['Property - active, type - array']],
             ],
-            'message, translated attribute' => [
+            'message, translated property' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?bool $active = null,
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'active' => 'Активен',
@@ -107,7 +107,7 @@ final class BooleanTypeTest extends RuleTestCase
 
                     public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayPropertyTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array

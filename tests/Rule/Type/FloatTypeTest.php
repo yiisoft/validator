@@ -92,14 +92,14 @@ final class FloatTypeTest extends RuleTestCase
                 ['sum' => new FloatType('Property - {property}, type - {type}')],
                 ['sum' => ['Property - sum, type - array']],
             ],
-            'message, translated attribute' => [
+            'message, translated property' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?float $sum = null,
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'sum' => 'Сумма',
@@ -108,7 +108,7 @@ final class FloatTypeTest extends RuleTestCase
 
                     public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayPropertyTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array

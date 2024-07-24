@@ -225,13 +225,13 @@ final class EmailTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new Email(incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
-                ['' => ['Attribute - value, type - int.']],
+                [new Email(incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['' => ['Property - value, type - int.']],
             ],
             'custom incorrect input message with parameters, property set' => [
                 ['data' => 1],
-                ['data' => [new Email(incorrectInputMessage: 'Attribute - {property}, type - {type}.')]],
-                ['data' => ['Attribute - data, type - int.']],
+                ['data' => [new Email(incorrectInputMessage: 'Property - {property}, type - {type}.')]],
+                ['data' => ['Property - data, type - int.']],
             ],
 
             ['rmcreative.ru', [$rule], $errors],

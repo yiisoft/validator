@@ -237,7 +237,7 @@ final class CompositeTest extends RuleTestCase
                     ),
                 ],
             ],
-            'multiple attributes via subclass' => [
+            'multiple properties via subclass' => [
                 ['latitude' => -90, 'longitude' => 180],
                 [new CoordinatesRuleSet()],
             ],
@@ -324,7 +324,7 @@ final class CompositeTest extends RuleTestCase
                 ],
                 ['' => ['Value cannot be blank.']],
             ],
-            'multiple attributes' => [
+            'multiple properties' => [
                 ['latitude' => -91, 'longitude' => 181],
                 [new CoordinatesRuleSet()],
                 [

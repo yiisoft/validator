@@ -76,7 +76,7 @@ final class ObjectDataSetTest extends TestCase
     public function testPropertyVisibility(
         ObjectDataSet $initialDataSet,
         array $expectedData,
-        array $expectedAttributeValuesMap,
+        array $expectedPropertyValuesMap,
         array $expectedRulesKeys
     ): void {
         $dataSets = [
@@ -88,8 +88,8 @@ final class ObjectDataSetTest extends TestCase
 
             $this->assertSame($expectedData, $dataSet->getData());
 
-            foreach ($expectedAttributeValuesMap as $attribute => $value) {
-                $this->assertSame($value, $dataSet->getPropertyValue($attribute));
+            foreach ($expectedPropertyValuesMap as $property => $value) {
+                $this->assertSame($value, $dataSet->getPropertyValue($property));
             }
 
             $this->assertSame($expectedRulesKeys, array_keys($dataSet->getRules()));
@@ -203,8 +203,8 @@ final class ObjectDataSetTest extends TestCase
         $dataSet = new ObjectDataSet($object);
 
         $actualRules = [];
-        foreach ($dataSet->getRules() as $attribute => $rules) {
-            $actualRules[$attribute] = $rules instanceof Traversable ? iterator_to_array($rules) : (array) $rules;
+        foreach ($dataSet->getRules() as $property => $rules) {
+            $actualRules[$property] = $rules instanceof Traversable ? iterator_to_array($rules) : (array) $rules;
         }
 
         $this->assertEquals($expectedRules, $actualRules);
@@ -369,7 +369,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame(['b' => 2], $dataSet2->getData());
     }
 
-    public function testHasAttributeWithDataSetProvided(): void
+    public function testHasPropertyWithDataSetProvided(): void
     {
         $objectDataSet = new ObjectDataSet(new ObjectWithDataSet());
         $this->assertTrue($objectDataSet->hasProperty('key1'));

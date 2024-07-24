@@ -106,7 +106,7 @@ final class RegexTest extends RuleTestCase
                 [new Regex('/a/', incorrectInputMessage: 'Property - {property}, type - {type}.')],
                 ['' => ['Property - value, type - null.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => null],
                 ['data' => new Regex('/a/', incorrectInputMessage: 'Property - {property}, type - {type}.')],
                 ['data' => ['Property - data, type - null.']],

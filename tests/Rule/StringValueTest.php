@@ -144,7 +144,7 @@ final class StringValueTest extends RuleTestCase
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'name' => 'Имя',
@@ -153,7 +153,7 @@ final class StringValueTest extends RuleTestCase
 
                     public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayPropertyTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array

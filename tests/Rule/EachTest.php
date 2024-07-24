@@ -223,8 +223,8 @@ final class EachTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new Each([new Number(max: 13)], incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
-                ['' => ['Attribute - value, type - int.']],
+                [new Each([new Number(max: 13)], incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['' => ['Property - value, type - int.']],
             ],
             'custom incorrect input message with parameters, property set' => [
                 ['data' => 1],
@@ -238,19 +238,19 @@ final class EachTest extends RuleTestCase
             ],
 
             'incorrect input key' => [
-                ['attribute' => $getGeneratorWithIncorrectKey()],
-                ['attribute' => new Each([new Number(max: 13)])],
-                ['attribute' => ['Every iterable key must have an integer or a string type.']],
+                ['property' => $getGeneratorWithIncorrectKey()],
+                ['property' => new Each([new Number(max: 13)])],
+                ['property' => ['Every iterable key must have an integer or a string type.']],
             ],
             'custom incorrect input key message' => [
-                ['attribute' => $getGeneratorWithIncorrectKey()],
+                ['property' => $getGeneratorWithIncorrectKey()],
                 [
-                    'attribute' => new Each(
+                    'property' => new Each(
                         [new Number(max: 13)],
                         incorrectInputKeyMessage: 'Custom incorrect input key message.',
                     ),
                 ],
-                ['attribute' => ['Custom incorrect input key message.']],
+                ['property' => ['Custom incorrect input key message.']],
             ],
             'custom incorrect input key message with parameters' => [
                 ['property' => $getGeneratorWithIncorrectKey()],

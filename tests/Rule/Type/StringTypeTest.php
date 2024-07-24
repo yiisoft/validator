@@ -113,17 +113,17 @@ EOD,
             'array' => [[], new StringType(), ['' => [$message]]],
             'message, custom' => [
                 ['name' => []],
-                ['name' => new StringType('Attribute - {property}, type - {type}')],
-                ['name' => ['Attribute - name, type - array']],
+                ['name' => new StringType('Property - {property}, type - {type}')],
+                ['name' => ['Property - name, type - array']],
             ],
-            'message, translated attribute' => [
+            'message, translated property' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?string $name = null,
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'name' => 'Название',
@@ -132,7 +132,7 @@ EOD,
 
                     public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayPropertyTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array

@@ -20,7 +20,7 @@ final class RulesDumperTest extends TestCase
         return [
             [
                 [
-                    'attributeName' => [
+                    'propertyName' => [
                         $rule = new Integer(
                             min: 10,
                             max: 100,
@@ -33,7 +33,7 @@ final class RulesDumperTest extends TestCase
                     ],
                 ],
                 [
-                    'attributeName' => [
+                    'propertyName' => [
                         $dump = [
                             Integer::class,
                             'min' => 10,
@@ -66,8 +66,8 @@ final class RulesDumperTest extends TestCase
                 ],
             ],
             [
-                ['attributeName' => [new RuleWithoutOptions(), new StubDumpedRule('name', [])]],
-                ['attributeName' => [[RuleWithoutOptions::class], ['name']]],
+                ['propertyName' => [new RuleWithoutOptions(), new StubDumpedRule('name', [])]],
+                ['propertyName' => [[RuleWithoutOptions::class], ['name']]],
             ],
         ];
     }

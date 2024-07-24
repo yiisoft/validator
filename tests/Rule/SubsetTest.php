@@ -128,13 +128,13 @@ final class SubsetTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new Subset([1, 2, 3], incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
-                ['' => ['Attribute - value, type - int.']],
+                [new Subset([1, 2, 3], incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['' => ['Property - value, type - int.']],
             ],
             'custom incorrect input message with parameters, property set' => [
                 ['data' => 1],
-                ['data' => new Subset([1, 2, 3], incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
-                ['data' => ['Attribute - data, type - int.']],
+                ['data' => new Subset([1, 2, 3], incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['data' => ['Property - data, type - int.']],
             ],
             [
                 [0, 1, 2],
@@ -219,13 +219,13 @@ final class SubsetTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 ['' => ['c']],
-                ['' => new Subset(['a', 'b'], message: 'Attribute - {property}.')],
-                ['' => ['Attribute - .']],
+                ['' => new Subset(['a', 'b'], message: 'Property - {property}.')],
+                ['' => ['Property - .']],
             ],
-            'custom message with parameters, attribute set' => [
+            'custom message with parameters, property set' => [
                 ['data' => ['c']],
-                ['data' => new Subset(['a', 'b'], message: 'Attribute - {property}.')],
-                ['data' => ['Attribute - data.']],
+                ['data' => new Subset(['a', 'b'], message: 'Property - {property}.')],
+                ['data' => ['Property - data.']],
             ],
         ];
     }

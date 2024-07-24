@@ -133,7 +133,7 @@ final class CompareTest extends RuleTestCase
                     'skipOnError' => true,
                 ],
             ],
-            'targetAttribute priority with simple targetValue' => [
+            'targetProperty priority with simple targetValue' => [
                 new Compare(
                     1,
                     targetProperty: 'test',
@@ -512,26 +512,26 @@ final class CompareTest extends RuleTestCase
                 [new Compare(0, operator: '===')],
             ],
 
-            // Target attribute
+            // Target property
 
-            'target attribute: array key, target attribute value: integer, attribute value: integer with the same value, type: number, operator: ==' => [
-                ['attribute' => 100, 'number' => 100],
-                ['number' => new Compare(targetProperty: 'attribute')],
+            'target property: array key, target property value: integer, property value: integer with the same value, type: number, operator: ==' => [
+                ['property' => 100, 'number' => 100],
+                ['number' => new Compare(targetProperty: 'property')],
             ],
-            'target attribute: array key, target attribute value: integer, attribute value: lower integer, type: number, operator: <=' => [
-                ['attribute' => 100, 'number' => 99],
-                ['number' => new Compare(targetProperty: 'attribute', operator: '<=')],
+            'target property: array key, target property value: integer, property value: lower integer, type: number, operator: <=' => [
+                ['property' => 100, 'number' => 99],
+                ['number' => new Compare(targetProperty: 'property', operator: '<=')],
             ],
-            'target attribute: object property, target attribute value: integer, attribute value: integer with the same value, type: number, operator: ==' => [
+            'target property: object property, target property value: integer, property value: integer with the same value, type: number, operator: ==' => [
                 new class () {
-                    public int $attribute = 100;
+                    public int $property = 100;
                     public int $number = 100;
                 },
-                ['number' => new Compare(targetProperty: 'attribute', operator: '<=')],
+                ['number' => new Compare(targetProperty: 'property', operator: '<=')],
             ],
-            'target attribute: custom data set attribute, target attribute value: integer, attribute value: integer with the same value, type: number, operator: ==' => [
+            'target property: custom data set property, target property value: integer, property value: integer with the same value, type: number, operator: ==' => [
                 $customDataSet,
-                ['number' => new Compare(targetProperty: 'attribute', operator: '<=')],
+                ['number' => new Compare(targetProperty: 'property', operator: '<=')],
             ],
         ];
 
@@ -624,10 +624,10 @@ final class CompareTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 [],
-                [new Compare(false, incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
-                ['' => ['Attribute - value, type - array.']],
+                [new Compare(false, incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['' => ['Property - value, type - array.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => []],
                 ['data' => new Compare(false, incorrectInputMessage: 'Property - {Property}, type - {type}.')],
                 ['data' => ['Property - Data, type - array.']],
@@ -675,13 +675,13 @@ final class CompareTest extends RuleTestCase
                 [
                     new Compare(
                         100,
-                        message: 'Attribute - {property}, target value - {targetValue}, target attribute - ' .
-                        '{targetProperty}, target value or attribute - {targetValueOrProperty}, value - {value}.',
+                        message: 'Property - {property}, target value - {targetValue}, target property - ' .
+                        '{targetProperty}, target value or property - {targetValueOrProperty}, value - {value}.',
                     ),
                 ],
                 [
                     '' => [
-                        'Attribute - value, target value - 100, target attribute - , target value or attribute - 100, ' .
+                        'Property - value, target value - 100, target property - , target value or property - 100, ' .
                         'value - 101.',
                     ],
                 ],
@@ -970,17 +970,17 @@ final class CompareTest extends RuleTestCase
                 ['' => [$messageNotEqual]],
             ],
 
-            // Target attribute
+            // Target property
 
-            'target attribute: array key, target attribute value: string integer, attribute value: integer with the same value, type: number, operator: ===' => [
-                ['attribute' => '100', 'number' => 100],
-                ['number' => new Compare(targetProperty: 'attribute', operator: '===')],
-                ['number' => ['Number must be strictly equal to "attribute".']],
+            'target property: array key, target property value: string integer, property value: integer with the same value, type: number, operator: ===' => [
+                ['property' => '100', 'number' => 100],
+                ['number' => new Compare(targetProperty: 'property', operator: '===')],
+                ['number' => ['Number must be strictly equal to "property".']],
             ],
-            'target attribute: array key, target attribute value: integer, attribute value: greater integer, type: number, operator: <=' => [
-                ['attribute' => 100, 'number' => 101],
-                ['number' => new Compare(targetProperty: 'attribute', operator: '<=')],
-                ['number' => ['Number must be less than or equal to "attribute".']],
+            'target property: array key, target property value: integer, property value: greater integer, type: number, operator: <=' => [
+                ['property' => 100, 'number' => 101],
+                ['number' => new Compare(targetProperty: 'property', operator: '<=')],
+                ['number' => ['Number must be less than or equal to "property".']],
             ],
         ];
 
@@ -1008,12 +1008,12 @@ final class CompareTest extends RuleTestCase
         foreach ($remainingTypes as $type) {
             foreach ($initialData as $key => $item) {
                 $rules = [];
-                foreach ($item[1] as $attribute => $rule) {
+                foreach ($item[1] as $property => $rule) {
                     if (!$rule instanceof Compare) {
                         throw new RuntimeException('Wrong format for rule.');
                     }
 
-                    $rules[$attribute] = new Compare(
+                    $rules[$property] = new Compare(
                         targetValue: $rule->getTargetValue(),
                         targetProperty: $rule->getTargetProperty(),
                         type: $type,

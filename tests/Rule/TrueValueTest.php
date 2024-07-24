@@ -151,7 +151,7 @@ final class TrueValueTest extends RuleTestCase
                 ],
                 ['' => ['Property - value, true - true, value - 5.']],
             ],
-            'custom message with parameters, attribute set' => [
+            'custom message with parameters, property set' => [
                 ['data' => 5],
                 [
                     'data' => new TrueValue(message: 'Property - {Property}, true - {true}, value - {value}.'),
@@ -181,7 +181,7 @@ final class TrueValueTest extends RuleTestCase
                 ],
                 ['' => ['Property - value, true - true, type - array.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => []],
                 [
                     'data' => new TrueValue(incorrectInputMessage: 'Property - {property}, true - {true}, type - {type}.'),

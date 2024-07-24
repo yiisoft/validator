@@ -170,12 +170,12 @@ final class BooleanValueTest extends RuleTestCase
                         trueValue: true,
                         falseValue: false,
                         strict: true,
-                        message: 'Attribute - {property}, true - {true}, false - {false}, value - {value}.',
+                        message: 'Property - {property}, true - {true}, false - {false}, value - {value}.',
                     ),
                 ],
-                ['' => ['Attribute - value, true - true, false - false, value - 5.']],
+                ['' => ['Property - value, true - true, false - false, value - 5.']],
             ],
-            'custom message with parameters, attribute set' => [
+            'custom message with parameters, property set' => [
                 ['data' => 5],
                 [
                     'data' => new BooleanValue(
@@ -193,10 +193,10 @@ final class BooleanValueTest extends RuleTestCase
                 [],
                 [
                     new BooleanValue(
-                        incorrectInputMessage: 'Attribute - {property}, true - {true}, false - {false}, type - {type}.',
+                        incorrectInputMessage: 'Property - {property}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - value, true - 1, false - 0, type - array.']],
+                ['' => ['Property - value, true - 1, false - 0, type - array.']],
             ],
             'custom incorrect input message with parameters, custom true and false values, strict' => [
                 [],
@@ -205,28 +205,28 @@ final class BooleanValueTest extends RuleTestCase
                         trueValue: true,
                         falseValue: false,
                         strict: true,
-                        incorrectInputMessage: 'Attribute - {property}, true - {true}, false - {false}, type - {type}.',
+                        incorrectInputMessage: 'Property - {property}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - value, true - true, false - false, type - array.']],
+                ['' => ['Property - value, true - true, false - false, type - array.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => []],
                 [
                     'data' => new BooleanValue(
-                        incorrectInputMessage: 'Attribute - {property}, true - {true}, false - {false}, type - {type}.',
+                        incorrectInputMessage: 'Property - {property}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
-                ['data' => ['Attribute - data, true - 1, false - 0, type - array.']],
+                ['data' => ['Property - data, true - 1, false - 0, type - array.']],
             ],
             'custom incorrect input message, null' => [
                 null,
                 [
                     new BooleanValue(
-                        incorrectInputMessage: 'Attribute - {property}, true - {true}, false - {false}, type - {type}.',
+                        incorrectInputMessage: 'Property - {property}, true - {true}, false - {false}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - value, true - 1, false - 0, type - null.']],
+                ['' => ['Property - value, true - 1, false - 0, type - null.']],
             ],
         ];
     }

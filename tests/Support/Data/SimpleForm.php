@@ -22,7 +22,7 @@ final class SimpleForm implements RulesProviderInterface, PropertyTranslatorProv
     /**
      * @psalm-return array<string, string>
      */
-    public function getAttributeLabels(): array
+    public function getPropertyLabels(): array
     {
         return [
             'name' => 'Имя',
@@ -32,7 +32,7 @@ final class SimpleForm implements RulesProviderInterface, PropertyTranslatorProv
 
     public function getPropertyTranslator(): ?PropertyTranslatorInterface
     {
-        return new ArrayPropertyTranslator($this->getAttributeLabels());
+        return new ArrayPropertyTranslator($this->getPropertyLabels());
     }
 
     public function getRules(): array

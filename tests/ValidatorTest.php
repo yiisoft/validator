@@ -361,7 +361,7 @@ class ValidatorTest extends TestCase
             'sort' => [
                 new In(
                     ['asc', 'desc'],
-                    skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $isAttributeMissing
+                    skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $isPropertyMissing
                 ),
             ],
         ];
@@ -372,8 +372,8 @@ class ValidatorTest extends TestCase
                     ['asc', 'desc'],
                     skipOnEmpty: static fn (
                         mixed $value,
-                        bool $isAttributeMissing
-                    ): bool => $isAttributeMissing || $value === ''
+                        bool $isPropertyMissing
+                    ): bool => $isPropertyMissing || $value === ''
                 ),
             ],
         ];
@@ -827,7 +827,7 @@ class ValidatorTest extends TestCase
                     'age' => [
                         new Integer(
                             min: 18,
-                            skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                            skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                         ),
                     ],
                 ],
@@ -856,7 +856,7 @@ class ValidatorTest extends TestCase
                     'age' => [
                         new Integer(
                             min: 18,
-                            skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                            skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                         ),
                     ],
                 ],
@@ -880,7 +880,7 @@ class ValidatorTest extends TestCase
                     'age' => [
                         new Integer(
                             min: 18,
-                            skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                            skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                         ),
                     ],
                 ],
@@ -910,7 +910,7 @@ class ValidatorTest extends TestCase
                     'age' => [
                         new Integer(
                             min: 18,
-                            skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                            skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                         ),
                     ],
                 ],
@@ -1060,7 +1060,7 @@ class ValidatorTest extends TestCase
 
             'validator, skipOnEmpty: custom callback, value not passed' => [
                 new Validator(
-                    defaultSkipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                    defaultSkipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -1082,7 +1082,7 @@ class ValidatorTest extends TestCase
             ],
             'validator, skipOnEmpty: custom callback, value is empty' => [
                 new Validator(
-                    defaultSkipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                    defaultSkipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -1100,7 +1100,7 @@ class ValidatorTest extends TestCase
             ],
             'validator, skipOnEmpty: custom callback, value is not empty' => [
                 new Validator(
-                    defaultSkipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                    defaultSkipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -1124,7 +1124,7 @@ class ValidatorTest extends TestCase
             ],
             'validator, skipOnEmpty: custom callback, value is not empty (null)' => [
                 new Validator(
-                    defaultSkipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                    defaultSkipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',

@@ -167,7 +167,7 @@ final class StopOnErrorTest extends RuleTestCase
                     ],
                 ],
             ],
-            'attributes, multiple StopOnError rules combined with other top level rules' => [
+            'properties, multiple StopOnError rules combined with other top level rules' => [
                 [],
                 [
                     'a' => new Required(),
@@ -188,7 +188,7 @@ final class StopOnErrorTest extends RuleTestCase
                     'd' => ['D not passed.'],
                 ],
             ],
-            'attributes, multiple StopOnError rules combined with other top level rules, skipOnError: true' => [
+            'properties, multiple StopOnError rules combined with other top level rules, skipOnError: true' => [
                 [],
                 [
                     'a' => new Required(),

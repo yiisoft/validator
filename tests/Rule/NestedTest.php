@@ -561,7 +561,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
             ],
-            'single rule as integer attribute rules' => [
+            'single rule as integer property rules' => [
                 new Nested(
                     [new AtLeast(['a'])],
                     propagateOptions: true,
@@ -583,7 +583,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
             ],
-            'single rule as string attribute rules' => [
+            'single rule as string property rules' => [
                 new Nested(
                     [
                         'numbers' => new Each(new Number()),
@@ -1110,20 +1110,20 @@ final class NestedTest extends RuleTestCase
                 [
                     new Nested(
                         ['value' => new Required()],
-                        incorrectInputMessage: 'Attribute - {property}, type - {type}.',
+                        incorrectInputMessage: 'Property - {property}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - value, type - string.']],
+                ['' => ['Property - value, type - string.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => ''],
                 [
                     'data' => new Nested(
                         ['value' => new Required()],
-                        incorrectInputMessage: 'Attribute - {property}, type - {type}.',
+                        incorrectInputMessage: 'Property - {property}, type - {type}.',
                     ),
                 ],
-                ['data' => ['Attribute - data, type - string.']],
+                ['data' => ['Property - data, type - string.']],
             ],
             'error' => [
                 [
@@ -1216,11 +1216,11 @@ final class NestedTest extends RuleTestCase
             'nested context' => [
                 [
                     'method' => 'get',
-                    'attributes' => ['abc' => null],
+                    'properties' => ['abc' => null],
                 ],
                 [
                     'method' => [new Required()],
-                    'attributes' => new Nested([
+                    'properties' => new Nested([
                         'abc' => [
                             new Required(when: static function (mixed $value, ValidationContext $context): bool {
                                 $method = $context->getGlobalDataSet()->getPropertyValue('method');
@@ -1230,7 +1230,7 @@ final class NestedTest extends RuleTestCase
                     ]),
                 ],
                 [
-                    'attributes.abc' => ['Abc cannot be blank.'],
+                    'properties.abc' => ['Abc cannot be blank.'],
                 ],
             ],
             'deep level of nesting with plain keys' => [
@@ -1262,7 +1262,7 @@ final class NestedTest extends RuleTestCase
                     'level1.level2.level3.name' => ['Name must contain at least 5 characters.'],
                 ],
             ],
-            'error messages with attributes in nested structure' => [
+            'error messages with properties in nested structure' => [
                 [
                     'user' => [
                         'name' => '',

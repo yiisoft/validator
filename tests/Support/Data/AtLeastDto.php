@@ -19,7 +19,7 @@ final class AtLeastDto implements PropertyTranslatorProviderInterface
     ) {
     }
 
-    public function getAttributeLabels(): array
+    public function getPropertyLabels(): array
     {
         return [
             'a' => 'A',
@@ -30,6 +30,6 @@ final class AtLeastDto implements PropertyTranslatorProviderInterface
 
     public function getPropertyTranslator(): ?PropertyTranslatorInterface
     {
-        return new ArrayPropertyTranslator($this->getAttributeLabels());
+        return new ArrayPropertyTranslator($this->getPropertyLabels());
     }
 }
