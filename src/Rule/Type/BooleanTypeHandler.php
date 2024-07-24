@@ -26,7 +26,8 @@ final class BooleanTypeHandler implements RuleHandlerInterface
 
         if (!is_bool($value)) {
             return (new Result())->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }

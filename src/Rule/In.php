@@ -73,7 +73,7 @@ final class In implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
         private iterable $values,
         private bool $strict = false,
         private bool $not = false,
-        private string $message = '{Attribute} is not in the list of acceptable values.',
+        private string $message = '{Property} is not in the list of acceptable values.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

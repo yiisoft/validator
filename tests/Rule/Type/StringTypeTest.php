@@ -113,7 +113,7 @@ EOD,
             'array' => [[], new StringType(), ['' => [$message]]],
             'message, custom' => [
                 ['name' => []],
-                ['name' => new StringType('Attribute - {attribute}, type - {type}')],
+                ['name' => new StringType('Attribute - {property}, type - {type}')],
                 ['name' => ['Attribute - name, type - array']],
             ],
             'message, translated attribute' => [
@@ -138,7 +138,7 @@ EOD,
                     public function getRules(): array
                     {
                         return [
-                            'name' => new StringType(message: '"{attribute}" - не строка.'),
+                            'name' => new StringType(message: '"{property}" - не строка.'),
                         ];
                     }
                 },

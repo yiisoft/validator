@@ -57,8 +57,8 @@ final class RequiredHandler implements RuleHandlerInterface
         $result = new Result();
         if ($context->isPropertyMissing()) {
             $result->addError($rule->getNotPassedMessage(), [
-                'attribute' => $context->getTranslatedProperty(),
-                'Attribute' => $context->getCapitalizedTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
             ]);
 
             return $result;
@@ -71,8 +71,8 @@ final class RequiredHandler implements RuleHandlerInterface
         }
 
         $result->addError($rule->getMessage(), [
-            'attribute' => $context->getTranslatedProperty(),
-            'Attribute' => $context->getCapitalizedTranslatedProperty(),
+            'property' => $context->getTranslatedProperty(),
+            'Property' => $context->getCapitalizedTranslatedProperty(),
         ]);
 
         return $result;

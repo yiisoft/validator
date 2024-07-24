@@ -38,8 +38,8 @@ final class AtLeastHandler implements RuleHandlerInterface
 
         if (!is_array($value) && !is_object($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedProperty(),
-                'Attribute' => $context->getCapitalizedTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -53,8 +53,8 @@ final class AtLeastHandler implements RuleHandlerInterface
 
         if ($filledCount < $rule->getMin()) {
             $result->addError($rule->getMessage(), [
-                'attributes' => $this->getFormattedAttributesString($rule->getAttributes(), $context),
-                'Attributes' => $this->getCapitalizedAttributesString($rule->getAttributes(), $context),
+                'properties' => $this->getFormattedAttributesString($rule->getAttributes(), $context),
+                'Properties' => $this->getCapitalizedAttributesString($rule->getAttributes(), $context),
                 'min' => $rule->getMin(),
             ]);
         }

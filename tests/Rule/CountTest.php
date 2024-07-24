@@ -42,22 +42,22 @@ final class CountTest extends RuleTestCase
                     'max' => null,
                     'exactly' => null,
                     'lessThanMinMessage' => [
-                        'template' => '{Attribute} must contain at least {min, number} {min, plural, one{item} ' .
+                        'template' => '{Property} must contain at least {min, number} {min, plural, one{item} ' .
                             'other{items}}.',
                         'parameters' => ['min' => 3],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{Attribute} must contain at most {max, number} {max, plural, one{item} ' .
+                        'template' => '{Property} must contain at most {max, number} {max, plural, one{item} ' .
                             'other{items}}.',
                         'parameters' => ['max' => null],
                     ],
                     'notExactlyMessage' => [
-                        'template' => '{Attribute} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
+                        'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
                             'other{items}}.',
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be an array or implement \Countable interface.',
+                        'template' => '{Property} must be an array or implement \Countable interface.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -137,12 +137,12 @@ final class CountTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new Count(min: 3, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                [new Count(min: 3, incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
                 ['' => ['Attribute - value, type - int.']],
             ],
             'custom incorrect input message, attribute set' => [
                 ['data' => 1],
-                ['data' => new Count(min: 3, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => new Count(min: 3, incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
                 ['data' => ['Attribute - data, type - int.']],
             ],
 
@@ -183,7 +183,7 @@ final class CountTest extends RuleTestCase
             ],
             'custom less than min message with parameters' => [
                 [0, 0],
-                [new Count(min: 3, lessThanMinMessage: 'Min - {min}, attribute - {attribute}, number - {number}.')],
+                [new Count(min: 3, lessThanMinMessage: 'Min - {min}, attribute - {property}, number - {number}.')],
                 ['' => ['Min - 3, attribute - value, number - 2.']],
             ],
             'custom less than min message with parameters, attribute set' => [
@@ -191,7 +191,7 @@ final class CountTest extends RuleTestCase
                 [
                     'data' => new Count(
                         min: 3,
-                        lessThanMinMessage: 'Min - {min}, attribute - {attribute}, number - {number}.',
+                        lessThanMinMessage: 'Min - {min}, attribute - {property}, number - {number}.',
                     ),
                 ],
                 ['data' => ['Min - 3, attribute - data, number - 2.']],
@@ -204,7 +204,7 @@ final class CountTest extends RuleTestCase
             ],
             'custom greater than max message with parameters' => [
                 [0, 0, 0, 0],
-                [new Count(max: 3, greaterThanMaxMessage: 'Max - {max}, attribute - {attribute}, number - {number}.')],
+                [new Count(max: 3, greaterThanMaxMessage: 'Max - {max}, attribute - {property}, number - {number}.')],
                 ['' => ['Max - 3, attribute - value, number - 4.']],
             ],
             'custom greater than max message with parameters, attribute set' => [
@@ -212,7 +212,7 @@ final class CountTest extends RuleTestCase
                 [
                     'data' => new Count(
                         max: 3,
-                        greaterThanMaxMessage: 'Max - {max}, attribute - {attribute}, number - {number}.',
+                        greaterThanMaxMessage: 'Max - {max}, attribute - {property}, number - {number}.',
                     ),
                 ],
                 ['data' => ['Max - 3, attribute - data, number - 4.']],
@@ -228,7 +228,7 @@ final class CountTest extends RuleTestCase
                 [
                     new Count(
                         exactly: 3,
-                        notExactlyMessage: 'Exactly - {exactly}, attribute - {attribute}, number - {number}.',
+                        notExactlyMessage: 'Exactly - {exactly}, attribute - {property}, number - {number}.',
                     ),
                 ],
                 ['' => ['Exactly - 3, attribute - value, number - 4.']],
@@ -238,7 +238,7 @@ final class CountTest extends RuleTestCase
                 [
                     'data' => new Count(
                         exactly: 3,
-                        notExactlyMessage: 'Exactly - {exactly}, attribute - {attribute}, number - {number}.',
+                        notExactlyMessage: 'Exactly - {exactly}, attribute - {property}, number - {number}.',
                     ),
                 ],
                 ['data' => ['Exactly - 3, attribute - data, number - 4.']],

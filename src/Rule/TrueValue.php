@@ -79,7 +79,7 @@ final class TrueValue implements DumpedRuleInterface, SkipOnErrorInterface, When
         private int|float|string|bool $trueValue = '1',
         private bool $strict = false,
         private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean. {type} given.',
-        private string $message = '{Attribute} must be "{true}".',
+        private string $message = '{Property} must be "{true}".',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

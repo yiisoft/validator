@@ -76,8 +76,8 @@ final class Required implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private string $message = '{Attribute} cannot be blank.',
-        private string $notPassedMessage = '{Attribute} not passed.',
+        private string $message = '{Property} cannot be blank.',
+        private string $notPassedMessage = '{Property} not passed.',
         callable|null $emptyCondition = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

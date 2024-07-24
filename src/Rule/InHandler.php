@@ -29,8 +29,8 @@ final class InHandler implements RuleHandlerInterface
             $result->addError(
                 $rule->getMessage(),
                 [
-                    'attribute' => $context->getTranslatedProperty(),
-                    'Attribute' => $context->getCapitalizedTranslatedProperty(),
+                    'property' => $context->getTranslatedProperty(),
+                    'Property' => $context->getCapitalizedTranslatedProperty(),
                 ],
             );
         }

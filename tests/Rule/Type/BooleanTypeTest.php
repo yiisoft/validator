@@ -88,8 +88,8 @@ final class BooleanTypeTest extends RuleTestCase
             'array' => [[], new BooleanType(), ['' => [$message]]],
             'message, custom' => [
                 ['active' => []],
-                ['active' => new BooleanType('Attribute - {attribute}, type - {type}')],
-                ['active' => ['Attribute - active, type - array']],
+                ['active' => new BooleanType('Property - {property}, type - {type}')],
+                ['active' => ['Property - active, type - array']],
             ],
             'message, translated attribute' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
@@ -113,7 +113,7 @@ final class BooleanTypeTest extends RuleTestCase
                     public function getRules(): array
                     {
                         return [
-                            'active' => new BooleanType(message: '"{attribute}" - не булево значение.'),
+                            'active' => new BooleanType(message: '"{property}" - не булево значение.'),
                         ];
                     }
                 },

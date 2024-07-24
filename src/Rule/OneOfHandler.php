@@ -17,7 +17,7 @@ use function is_array;
 use function is_object;
 
 /**
- * Validates that one of specified attributes is filled.
+ * Validates that one of specified properties is filled.
  *
  * @see OneOf
  */
@@ -38,8 +38,8 @@ final class OneOfHandler implements RuleHandlerInterface
 
         if (!is_array($value) && !is_object($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedProperty(),
-                'Attribute' => $context->getCapitalizedTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -61,8 +61,8 @@ final class OneOfHandler implements RuleHandlerInterface
     private function getGenericErrorResult(OneOf $rule, ValidationContext $context): Result
     {
         return (new Result())->addError($rule->getMessage(), [
-            'attributes' => $this->getFormattedAttributesString($rule->getAttributes(), $context),
-            'Attributes' => $this->getCapitalizedAttributesString($rule->getAttributes(), $context),
+            'properties' => $this->getFormattedAttributesString($rule->getAttributes(), $context),
+            'Properties' => $this->getCapitalizedAttributesString($rule->getAttributes(), $context),
         ]);
     }
 }

@@ -55,8 +55,8 @@ final class TrueValueHandler implements RuleHandlerInterface
     private function getCommonResultParameters(TrueValue $rule, ValidationContext $context): array
     {
         return [
-            'attribute' => $context->getTranslatedProperty(),
-            'Attribute' => $context->getCapitalizedTranslatedProperty(),
+            'property' => $context->getTranslatedProperty(),
+            'Property' => $context->getCapitalizedTranslatedProperty(),
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
         ];
     }

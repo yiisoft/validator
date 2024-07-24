@@ -30,8 +30,8 @@ final class JsonHandler implements RuleHandlerInterface
         $result = new Result();
         if (!is_string($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedProperty(),
-                'Attribute' => $context->getCapitalizedTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -39,8 +39,8 @@ final class JsonHandler implements RuleHandlerInterface
 
         if (!$this->isValidJson($value)) {
             return $result->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedProperty(),
-                'Attribute' => $context->getCapitalizedTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'value' => $value,
             ]);
         }

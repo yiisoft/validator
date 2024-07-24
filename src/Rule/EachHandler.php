@@ -28,8 +28,8 @@ final class EachHandler implements RuleHandlerInterface
         $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
         if (!is_iterable($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedProperty(),
-                'Attribute' => $context->getCapitalizedTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -43,8 +43,8 @@ final class EachHandler implements RuleHandlerInterface
         foreach ($value as $index => $item) {
             if (!is_int($index) && !is_string($index)) {
                 return (new Result())->addError($rule->getIncorrectInputKeyMessage(), [
-                    'attribute' => $context->getTranslatedProperty(),
-                    'Attribute' => $context->getCapitalizedTranslatedProperty(),
+                    'property' => $context->getTranslatedProperty(),
+                    'Property' => $context->getCapitalizedTranslatedProperty(),
                     'type' => get_debug_type($value),
                 ]);
             }

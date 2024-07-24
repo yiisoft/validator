@@ -32,11 +32,11 @@ final class JsonTest extends RuleTestCase
                 new Json(),
                 [
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Attribute} is not JSON.',
+                        'template' => '{Property} is not JSON.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -148,12 +148,12 @@ JSON_WRAP
             ],
             'custom incorrect input message with parameters' => [
                 ['json'],
-                [new Json(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                [new Json(incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
                 ['' => ['Attribute - value, type - array.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => ['json']],
-                ['data' => new Json(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => new Json(incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
                 ['data' => ['Attribute - data, type - array.']],
             ],
 
@@ -163,13 +163,13 @@ JSON_WRAP
             'custom message' => ['bad json', [new Json(message: 'Custom message.')], ['' => ['Custom message.']]],
             'custom message with parameters' => [
                 'bad json',
-                [new Json(message: 'Attribute - {attribute}, value - {value}.')],
+                [new Json(message: 'Attribute - {property}, value - {value}.')],
                 ['' => ['Attribute - value, value - bad json.']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => 'bad json'],
-                ['data' => new Json(message: 'Attribute - {Attribute}, value - {value}.')],
-                ['data' => ['Attribute - Data, value - bad json.']],
+                ['data' => new Json(message: 'Property - {Property}, value - {value}.')],
+                ['data' => ['Property - Data, value - bad json.']],
             ],
         ];
     }

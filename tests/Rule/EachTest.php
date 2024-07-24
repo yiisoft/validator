@@ -48,7 +48,7 @@ final class EachTest extends RuleTestCase
                 ]),
                 [
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be array or iterable.',
+                        'template' => '{Property} must be array or iterable.',
                         'parameters' => [],
                     ],
                     'incorrectInputKeyMessage' => [
@@ -68,15 +68,15 @@ final class EachTest extends RuleTestCase
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
-                                    'template' => '{Attribute} must be a number.',
+                                    'template' => '{Property} must be a number.',
                                     'parameters' => [],
                                 ],
                                 'lessThanMinMessage' => [
-                                    'template' => '{Attribute} must be no less than {min}.',
+                                    'template' => '{Property} must be no less than {min}.',
                                     'parameters' => ['min' => null],
                                 ],
                                 'greaterThanMaxMessage' => [
-                                    'template' => '{Attribute} must be no greater than {max}.',
+                                    'template' => '{Property} must be no greater than {max}.',
                                     'parameters' => ['max' => 13],
                                 ],
                                 'skipOnEmpty' => false,
@@ -94,15 +94,15 @@ final class EachTest extends RuleTestCase
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
-                                    'template' => '{Attribute} must be a number.',
+                                    'template' => '{Property} must be a number.',
                                     'parameters' => [],
                                 ],
                                 'lessThanMinMessage' => [
-                                    'template' => '{Attribute} must be no less than {min}.',
+                                    'template' => '{Property} must be no less than {min}.',
                                     'parameters' => ['min' => null],
                                 ],
                                 'greaterThanMaxMessage' => [
-                                    'template' => '{Attribute} must be no greater than {max}.',
+                                    'template' => '{Property} must be no greater than {max}.',
                                     'parameters' => ['max' => 14],
                                 ],
                                 'skipOnEmpty' => false,
@@ -120,7 +120,7 @@ final class EachTest extends RuleTestCase
                 ]),
                 [
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be array or iterable.',
+                        'template' => '{Property} must be array or iterable.',
                         'parameters' => [],
                     ],
                     'incorrectInputKeyMessage' => [
@@ -140,15 +140,15 @@ final class EachTest extends RuleTestCase
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
-                                    'template' => '{Attribute} must be a number.',
+                                    'template' => '{Property} must be a number.',
                                     'parameters' => [],
                                 ],
                                 'lessThanMinMessage' => [
-                                    'template' => '{Attribute} must be no less than {min}.',
+                                    'template' => '{Property} must be no less than {min}.',
                                     'parameters' => ['min' => null],
                                 ],
                                 'greaterThanMaxMessage' => [
-                                    'template' => '{Attribute} must be no greater than {max}.',
+                                    'template' => '{Property} must be no greater than {max}.',
                                     'parameters' => ['max' => 13],
                                 ],
                                 'skipOnEmpty' => false,
@@ -223,18 +223,18 @@ final class EachTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new Each([new Number(max: 13)], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                [new Each([new Number(max: 13)], incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
                 ['' => ['Attribute - value, type - int.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => 1],
                 [
                     'data' => new Each(
                         [new Number(max: 13)],
-                        incorrectInputMessage: 'Attribute - {Attribute}, type - {type}.',
+                        incorrectInputMessage: 'Property - {Property}, type - {type}.',
                     ),
                 ],
-                ['data' => ['Attribute - Data, type - int.']],
+                ['data' => ['Property - Data, type - int.']],
             ],
 
             'incorrect input key' => [
@@ -253,14 +253,14 @@ final class EachTest extends RuleTestCase
                 ['attribute' => ['Custom incorrect input key message.']],
             ],
             'custom incorrect input key message with parameters' => [
-                ['attribute' => $getGeneratorWithIncorrectKey()],
+                ['property' => $getGeneratorWithIncorrectKey()],
                 [
-                    'attribute' => new Each(
+                    'property' => new Each(
                         [new Number(max: 13)],
-                        incorrectInputKeyMessage: 'Attribute - {attribute}, type - {type}.',
+                        incorrectInputKeyMessage: 'Property - {property}, type - {type}.',
                     ),
                 ],
-                ['attribute' => ['Attribute - attribute, type - Generator.']],
+                ['property' => ['Property - property, type - Generator.']],
             ],
 
             [

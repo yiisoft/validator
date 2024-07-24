@@ -39,7 +39,7 @@ final class SimpleForm implements RulesProviderInterface, PropertyTranslatorProv
     {
         return [
             'name' => [
-                new Length(min: 8, lessThanMinMessage: '{attribute} плохое.'),
+                new Length(min: 8, lessThanMinMessage: '{property} плохое.'),
             ],
             'mail' => [
                 new Email(),

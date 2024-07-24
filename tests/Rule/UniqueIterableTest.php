@@ -142,10 +142,10 @@ final class UniqueIterableTest extends RuleTestCase
             'incorrect input, object' => [new stdClass(), new UniqueIterable(), ['' => [$incorrectInputMessage]]],
             'incorrect input, custom message' => [
                 ['data' => 1],
-                ['data' => new UniqueIterable(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => new UniqueIterable(incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
                 ['data' => ['Attribute - data, type - int.']],
             ],
-            'incorrect input, custom message, translated attribute' => [
+            'incorrect input, custom message, translated property' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public int $data = 1,
@@ -166,7 +166,7 @@ final class UniqueIterableTest extends RuleTestCase
 
                     public function getRules(): array
                     {
-                        return ['data' => new UniqueIterable(incorrectInputMessage: '"{attribute}" - неитерируемое значение.')];
+                        return ['data' => new UniqueIterable(incorrectInputMessage: '"{property}" - неитерируемое значение.')];
                     }
                 },
                 null,
@@ -181,10 +181,10 @@ final class UniqueIterableTest extends RuleTestCase
             ],
             'incorrect item value, custom message' => [
                 ['data' => [1, [], 2]],
-                ['data' => new UniqueIterable(incorrectItemValueMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => new UniqueIterable(incorrectItemValueMessage: 'Attribute - {property}, type - {type}.')],
                 ['data' => ['Attribute - data, type - array.']],
             ],
-            'incorrect item value, custom message, translated attribute' => [
+            'incorrect item value, custom message, translated property' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public array $data = [1, 2, [], 3],
@@ -207,7 +207,7 @@ final class UniqueIterableTest extends RuleTestCase
                     {
                         return [
                             'data' => new UniqueIterable(
-                                incorrectItemValueMessage: '"{attribute}" - в списке есть недопустимое значение.',
+                                incorrectItemValueMessage: '"{property}" - в списке есть недопустимое значение.',
                             ),
                         ];
                     }
@@ -266,7 +266,7 @@ final class UniqueIterableTest extends RuleTestCase
             ],
             'different types, custom message' => [
                 ['data' => [1, '2', 3]],
-                ['data' => new UniqueIterable(differentTypesMessage: 'Attribute - {attribute}.')],
+                ['data' => new UniqueIterable(differentTypesMessage: 'Attribute - {property}.')],
                 ['data' => ['Attribute - data.']],
             ],
             'different types, translated attribute' => [
@@ -292,7 +292,7 @@ final class UniqueIterableTest extends RuleTestCase
                     {
                         return [
                             'data' => new UniqueIterable(
-                                differentTypesMessage: '"{attribute}" - в списке есть элементы разных типов.',
+                                differentTypesMessage: '"{property}" - в списке есть элементы разных типов.',
                             ),
                         ];
                     }
@@ -302,10 +302,10 @@ final class UniqueIterableTest extends RuleTestCase
             ],
             'custom message' => [
                 ['data' => [1, 2, 1, 3]],
-                ['data' => new UniqueIterable(message: 'Attribute - {attribute}.')],
+                ['data' => new UniqueIterable(message: 'Attribute - {property}.')],
                 ['data' => ['Attribute - data.']],
             ],
-            'custom message, translated attribute' => [
+            'custom message, translated property' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public array $data = [1, 2, 1, 3],
@@ -326,7 +326,7 @@ final class UniqueIterableTest extends RuleTestCase
 
                     public function getRules(): array
                     {
-                        return ['data' => new UniqueIterable(message: '"{attribute}" - в списке есть дубликаты.')];
+                        return ['data' => new UniqueIterable(message: '"{property}" - в списке есть дубликаты.')];
                     }
                 },
                 null,

@@ -122,7 +122,7 @@ final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
         private ?int $maxWidth = null,
         private ?int $maxHeight = null,
         private ?ImageAspectRatio $aspectRatio = null,
-        private string $notImageMessage = '{Attribute} must be an image.',
+        private string $notImageMessage = '{Property} must be an image.',
         private string $notExactWidthMessage = 'The width must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
         private string $notExactHeightMessage = 'The height must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
         private string $tooSmallWidthMessage = 'The width cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',

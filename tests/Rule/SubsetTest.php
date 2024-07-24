@@ -36,11 +36,11 @@ final class SubsetTest extends RuleTestCase
                     'values' => [],
                     'strict' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be iterable.',
+                        'template' => '{Property} must be iterable.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Attribute} is not a subset of acceptable values.',
+                        'template' => '{Property} is not a subset of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -128,12 +128,12 @@ final class SubsetTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new Subset([1, 2, 3], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                [new Subset([1, 2, 3], incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
                 ['' => ['Attribute - value, type - int.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => 1],
-                ['data' => new Subset([1, 2, 3], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                ['data' => new Subset([1, 2, 3], incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
                 ['data' => ['Attribute - data, type - int.']],
             ],
             [
@@ -219,12 +219,12 @@ final class SubsetTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 ['' => ['c']],
-                ['' => new Subset(['a', 'b'], message: 'Attribute - {attribute}.')],
+                ['' => new Subset(['a', 'b'], message: 'Attribute - {property}.')],
                 ['' => ['Attribute - .']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => ['c']],
-                ['data' => new Subset(['a', 'b'], message: 'Attribute - {attribute}.')],
+                ['data' => new Subset(['a', 'b'], message: 'Attribute - {property}.')],
                 ['data' => ['Attribute - data.']],
             ],
         ];

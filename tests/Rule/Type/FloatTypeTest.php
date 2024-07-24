@@ -89,8 +89,8 @@ final class FloatTypeTest extends RuleTestCase
             'array' => [[], new FloatType(), ['' => [$message]]],
             'message, custom' => [
                 ['sum' => []],
-                ['sum' => new FloatType('Attribute - {attribute}, type - {type}')],
-                ['sum' => ['Attribute - sum, type - array']],
+                ['sum' => new FloatType('Property - {property}, type - {type}')],
+                ['sum' => ['Property - sum, type - array']],
             ],
             'message, translated attribute' => [
                 new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
@@ -114,7 +114,7 @@ final class FloatTypeTest extends RuleTestCase
                     public function getRules(): array
                     {
                         return [
-                            'sum' => new FloatType(message: '"{attribute}" - невещественное число.'),
+                            'sum' => new FloatType(message: '"{property}" - невещественное число.'),
                         ];
                     }
                 },

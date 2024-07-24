@@ -44,8 +44,8 @@ trait CountableLimitHandlerTrait
         if ($rule->getExactly() !== null && $number !== $rule->getExactly()) {
             $result->addError($rule->getNotExactlyMessage(), [
                 'exactly' => $rule->getExactly(),
-                'attribute' => $context->getTranslatedProperty(),
-                'Attribute' => $context->getCapitalizedTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'number' => $number,
             ]);
 
@@ -55,8 +55,8 @@ trait CountableLimitHandlerTrait
         if ($rule->getMin() !== null && $number < $rule->getMin()) {
             $result->addError($rule->getLessThanMinMessage(), [
                 'min' => $rule->getMin(),
-                'attribute' => $context->getTranslatedProperty(),
-                'Attribute' => $context->getCapitalizedTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'number' => $number,
             ]);
         }
@@ -64,8 +64,8 @@ trait CountableLimitHandlerTrait
         if ($rule->getMax() !== null && $number > $rule->getMax()) {
             $result->addError($rule->getGreaterThanMaxMessage(), [
                 'max' => $rule->getMax(),
-                'attribute' => $context->getTranslatedProperty(),
-                'Attribute' => $context->getCapitalizedTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'number' => $number,
             ]);
         }

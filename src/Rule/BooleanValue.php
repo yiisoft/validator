@@ -87,7 +87,7 @@ final class BooleanValue implements DumpedRuleInterface, SkipOnEmptyInterface, S
         private int|float|string|bool $falseValue = '0',
         private bool $strict = false,
         private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean. {type} given.',
-        private string $message = '{Attribute} must be either "{true}" or "{false}".',
+        private string $message = '{Property} must be either "{true}" or "{false}".',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

@@ -38,11 +38,11 @@ final class OneOfTest extends RuleTestCase
                         'attr2',
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Exactly 1 attribute from this list must be filled: {attributes}.',
+                        'template' => 'Exactly 1 property from this list must be filled: {properties}.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -57,11 +57,11 @@ final class OneOfTest extends RuleTestCase
                         'attr2',
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Exactly 1 attribute from this list must be filled: {attributes}.',
+                        'template' => 'Exactly 1 property from this list must be filled: {properties}.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => null,
@@ -166,15 +166,15 @@ final class OneOfTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new OneOf(['attr1', 'attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                [new OneOf(['attr1', 'attr2'], incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
                 ['' => ['Attribute - value, type - int.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['attribute' => 1],
                 [
                     'attribute' => new OneOf(
                         ['attr1', 'attr2'],
-                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                        incorrectInputMessage: 'Attribute - {property}, type - {type}.',
                     ),
                 ],
                 ['attribute' => ['Attribute - attribute, type - int.']],
@@ -182,17 +182,17 @@ final class OneOfTest extends RuleTestCase
             'object' => [
                 $object,
                 [new OneOf(['attr1', 'attr2'])],
-                ['' => ['Exactly 1 attribute from this list must be filled: "attr1", "attr2".']],
+                ['' => ['Exactly 1 property from this list must be filled: "attr1", "attr2".']],
             ],
             'array' => [
                 $array,
                 [new OneOf(['attr1', 'attr2'])],
-                ['' => ['Exactly 1 attribute from this list must be filled: "attr1", "attr2".']],
+                ['' => ['Exactly 1 property from this list must be filled: "attr1", "attr2".']],
             ],
             'more than 1 attribute is filled' => [
                 ['attr1' => 1, 'attr2' => 2],
                 [new OneOf(['attr1', 'attr2'])],
-                ['' => ['Exactly 1 attribute from this list must be filled: "attr1", "attr2".']],
+                ['' => ['Exactly 1 property from this list must be filled: "attr1", "attr2".']],
             ],
             'custom message' => [
                 $object,
@@ -201,18 +201,18 @@ final class OneOfTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 $object,
-                [new OneOf(['attr1', 'attr2'], message: 'Attributes - {Attributes}.')],
-                ['' => ['Attributes - "Attr1", "Attr2".']],
+                [new OneOf(['attr1', 'attr2'], message: 'Properties - {Properties}.')],
+                ['' => ['Properties - "Attr1", "Attr2".']],
             ],
             'custom message with parameters, attribute set' => [
                 ['data' => $object],
-                ['data' => new OneOf(['attr1', 'attr2'], message: 'Attributes - {attributes}.')],
-                ['data' => ['Attributes - "attr1", "attr2".']],
+                ['data' => new OneOf(['attr1', 'attr2'], message: 'Properties - {properties}.')],
+                ['data' => ['Properties - "attr1", "attr2".']],
             ],
             'class attribute' => [
                 new OneOfDto(),
                 null,
-                ['' => ['Exactly 1 attribute from this list must be filled: "A", "B", "C".']],
+                ['' => ['Exactly 1 property from this list must be filled: "A", "B", "C".']],
             ],
         ];
     }

@@ -89,7 +89,7 @@ final class IntegerTypeTest extends RuleTestCase
             'array' => [[], new IntegerType(), ['' => [$message]]],
             'message, custom' => [
                 ['sum' => []],
-                ['sum' => new IntegerType('Attribute - {attribute}, type - {type}')],
+                ['sum' => new IntegerType('Attribute - {property}, type - {type}')],
                 ['sum' => ['Attribute - sum, type - array']],
             ],
             'message, translated attribute' => [
@@ -114,7 +114,7 @@ final class IntegerTypeTest extends RuleTestCase
                     public function getRules(): array
                     {
                         return [
-                            'sum' => new IntegerType(message: '"{attribute}" - нецелое число.'),
+                            'sum' => new IntegerType(message: '"{property}" - нецелое число.'),
                         ];
                     }
                 },

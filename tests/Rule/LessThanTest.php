@@ -31,14 +31,14 @@ final class LessThanTest extends RuleTestCase
                 new LessThan(1),
                 [
                     'targetValue' => 1,
-                    'targetAttribute' => null,
+                    'targetProperty' => null,
                     'incorrectInputMessage' => [
                         'template' => 'The allowed types are integer, float, string, boolean, null and object ' .
                             'implementing \Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
+                            'targetProperty' => null,
+                            'targetValueOrProperty' => 1,
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
@@ -47,16 +47,16 @@ final class LessThanTest extends RuleTestCase
                             '\Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
+                            'targetProperty' => null,
+                            'targetValueOrProperty' => 1,
                         ],
                     ],
                     'message' => [
-                        'template' => '{Attribute} must be less than "{targetValueOrAttribute}".',
+                        'template' => '{Property} must be less than "{targetValueOrProperty}".',
                         'parameters' => [
                             'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
+                            'targetProperty' => null,
+                            'targetValueOrProperty' => 1,
                         ],
                     ],
                     'type' => 'number',
@@ -68,7 +68,7 @@ final class LessThanTest extends RuleTestCase
             [
                 new LessThan(
                     new DateTime('2023-02-07 12:57:12'),
-                    targetAttribute: 'test',
+                    targetProperty: 'test',
                     incorrectInputMessage: 'Custom message 1.',
                     incorrectDataSetTypeMessage: 'Custom message 2.',
                     message: 'Custom message 3.',
@@ -78,23 +78,23 @@ final class LessThanTest extends RuleTestCase
                     when: static fn (): bool => true,
                 ),
                 [
-                    'targetAttribute' => 'test',
+                    'targetProperty' => 'test',
                     'incorrectInputMessage' => [
                         'template' => 'Custom message 1.',
                         'parameters' => [
-                            'targetAttribute' => 'test',
+                            'targetProperty' => 'test',
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
                         'template' => 'Custom message 2.',
                         'parameters' => [
-                            'targetAttribute' => 'test',
+                            'targetProperty' => 'test',
                         ],
                     ],
                     'message' => [
                         'template' => 'Custom message 3.',
                         'parameters' => [
-                            'targetAttribute' => 'test',
+                            'targetProperty' => 'test',
                         ],
                     ],
                     'type' => 'original',

@@ -60,14 +60,14 @@ final class CompareTest extends RuleTestCase
                 new Compare(1),
                 [
                     'targetValue' => 1,
-                    'targetAttribute' => null,
+                    'targetProperty' => null,
                     'incorrectInputMessage' => [
                         'template' => 'The allowed types are integer, float, string, boolean, null and object ' .
                             'implementing \Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
+                            'targetProperty' => null,
+                            'targetValueOrProperty' => 1,
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
@@ -76,16 +76,16 @@ final class CompareTest extends RuleTestCase
                             '\Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
+                            'targetProperty' => null,
+                            'targetValueOrProperty' => 1,
                         ],
                     ],
                     'message' => [
-                        'template' => '{Attribute} must be equal to "{targetValueOrAttribute}".',
+                        'template' => '{Property} must be equal to "{targetValueOrProperty}".',
                         'parameters' => [
                             'targetValue' => 1,
-                            'targetAttribute' => null,
-                            'targetValueOrAttribute' => 1,
+                            'targetProperty' => null,
+                            'targetValueOrProperty' => 1,
                         ],
                     ],
                     'type' => 'number',
@@ -97,7 +97,7 @@ final class CompareTest extends RuleTestCase
             [
                 new Compare(
                     new DateTime('2023-02-07 12:57:12'),
-                    targetAttribute: 'test',
+                    targetProperty: 'test',
                     incorrectInputMessage: 'Custom message 1.',
                     incorrectDataSetTypeMessage: 'Custom message 2.',
                     message: 'Custom message 3.',
@@ -108,23 +108,23 @@ final class CompareTest extends RuleTestCase
                     when: static fn (): bool => true,
                 ),
                 [
-                    'targetAttribute' => 'test',
+                    'targetProperty' => 'test',
                     'incorrectInputMessage' => [
                         'template' => 'Custom message 1.',
                         'parameters' => [
-                            'targetAttribute' => 'test',
+                            'targetProperty' => 'test',
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
                         'template' => 'Custom message 2.',
                         'parameters' => [
-                            'targetAttribute' => 'test',
+                            'targetProperty' => 'test',
                         ],
                     ],
                     'message' => [
                         'template' => 'Custom message 3.',
                         'parameters' => [
-                            'targetAttribute' => 'test',
+                            'targetProperty' => 'test',
                         ],
                     ],
                     'type' => 'original',
@@ -136,18 +136,18 @@ final class CompareTest extends RuleTestCase
             'targetAttribute priority with simple targetValue' => [
                 new Compare(
                     1,
-                    targetAttribute: 'test',
+                    targetProperty: 'test',
                 ),
                 [
                     'targetValue' => 1,
-                    'targetAttribute' => 'test',
+                    'targetProperty' => 'test',
                     'incorrectInputMessage' => [
                         'template' => 'The allowed types are integer, float, string, boolean, null and object ' .
                             'implementing \Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
-                            'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
+                            'targetProperty' => 'test',
+                            'targetValueOrProperty' => 'test',
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
@@ -156,16 +156,16 @@ final class CompareTest extends RuleTestCase
                             '\Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
-                            'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
+                            'targetProperty' => 'test',
+                            'targetValueOrProperty' => 'test',
                         ],
                     ],
                     'message' => [
-                        'template' => '{Attribute} must be equal to "{targetValueOrAttribute}".',
+                        'template' => '{Property} must be equal to "{targetValueOrProperty}".',
                         'parameters' => [
                             'targetValue' => 1,
-                            'targetAttribute' => 'test',
-                            'targetValueOrAttribute' => 'test',
+                            'targetProperty' => 'test',
+                            'targetValueOrProperty' => 'test',
                         ],
                     ],
                     'type' => 'number',
@@ -516,22 +516,22 @@ final class CompareTest extends RuleTestCase
 
             'target attribute: array key, target attribute value: integer, attribute value: integer with the same value, type: number, operator: ==' => [
                 ['attribute' => 100, 'number' => 100],
-                ['number' => new Compare(targetAttribute: 'attribute')],
+                ['number' => new Compare(targetProperty: 'attribute')],
             ],
             'target attribute: array key, target attribute value: integer, attribute value: lower integer, type: number, operator: <=' => [
                 ['attribute' => 100, 'number' => 99],
-                ['number' => new Compare(targetAttribute: 'attribute', operator: '<=')],
+                ['number' => new Compare(targetProperty: 'attribute', operator: '<=')],
             ],
             'target attribute: object property, target attribute value: integer, attribute value: integer with the same value, type: number, operator: ==' => [
                 new class () {
                     public int $attribute = 100;
                     public int $number = 100;
                 },
-                ['number' => new Compare(targetAttribute: 'attribute', operator: '<=')],
+                ['number' => new Compare(targetProperty: 'attribute', operator: '<=')],
             ],
             'target attribute: custom data set attribute, target attribute value: integer, attribute value: integer with the same value, type: number, operator: ==' => [
                 $customDataSet,
-                ['number' => new Compare(targetAttribute: 'attribute', operator: '<=')],
+                ['number' => new Compare(targetProperty: 'attribute', operator: '<=')],
             ],
         ];
 
@@ -624,20 +624,20 @@ final class CompareTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 [],
-                [new Compare(false, incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
+                [new Compare(false, incorrectInputMessage: 'Attribute - {property}, type - {type}.')],
                 ['' => ['Attribute - value, type - array.']],
             ],
             'custom incorrect input message with parameters, attribute set' => [
                 ['data' => []],
-                ['data' => new Compare(false, incorrectInputMessage: 'Attribute - {Attribute}, type - {type}.')],
-                ['data' => ['Attribute - Data, type - array.']],
+                ['data' => new Compare(false, incorrectInputMessage: 'Property - {Property}, type - {type}.')],
+                ['data' => ['Property - Data, type - array.']],
             ],
 
             // Incorrect data set input
 
             'incorrect data set type' => [
                 $incorrectDataSet,
-                [new Compare(targetAttribute: 'test')],
+                [new Compare(targetProperty: 'test')],
                 [
                     '' => [
                         'The attribute value returned from a custom data set must have one of the following types: ' .
@@ -650,7 +650,7 @@ final class CompareTest extends RuleTestCase
                 $incorrectDataSet,
                 [
                     new Compare(
-                        targetAttribute: 'test',
+                        targetProperty: 'test',
                         incorrectDataSetTypeMessage: 'Custom incorrect data set type message.',
                     ),
                 ],
@@ -660,7 +660,7 @@ final class CompareTest extends RuleTestCase
                 $incorrectDataSet,
                 [
                     new Compare(
-                        targetAttribute: 'test',
+                        targetProperty: 'test',
                         incorrectDataSetTypeMessage: 'Type - {type}.',
                     ),
                 ],
@@ -675,8 +675,8 @@ final class CompareTest extends RuleTestCase
                 [
                     new Compare(
                         100,
-                        message: 'Attribute - {attribute}, target value - {targetValue}, target attribute - ' .
-                        '{targetAttribute}, target value or attribute - {targetValueOrAttribute}, value - {value}.',
+                        message: 'Attribute - {property}, target value - {targetValue}, target attribute - ' .
+                        '{targetProperty}, target value or attribute - {targetValueOrProperty}, value - {value}.',
                     ),
                 ],
                 [
@@ -686,40 +686,40 @@ final class CompareTest extends RuleTestCase
                     ],
                 ],
             ],
-            'custom message with parameters, attribute and target attribute set' => [
-                ['attribute' => 100, 'number' => 101],
+            'custom message with parameters, property and target property set' => [
+                ['property' => 100, 'number' => 101],
                 [
                     'number' => new Compare(
-                        targetAttribute: 'attribute',
-                        message: 'Attribute - {attribute}, target value - {targetValue}, target attribute - ' .
-                        '{targetAttribute}, target attribute value - {targetAttributeValue}, target value or ' .
-                        'attribute - {targetValueOrAttribute}, value - {value}.',
+                        targetProperty: 'property',
+                        message: 'Property - {property}, target value - {targetValue}, target property - ' .
+                        '{targetProperty}, target property value - {targetPropertyValue}, target value or ' .
+                        'property - {targetValueOrProperty}, value - {value}.',
                         operator: '===',
                     ),
                 ],
                 [
                     'number' => [
-                        'Attribute - number, target value - , target attribute - attribute, target attribute value ' .
-                        '- 100, target value or attribute - attribute, value - 101.',
+                        'Property - number, target value - , target property - property, target property value ' .
+                        '- 100, target value or property - property, value - 101.',
                     ],
                 ],
             ],
 
-            'custom message with parameters, capitalized attribute and target attribute set' => [
-                ['attribute' => 100, 'number' => 101],
+            'custom message with parameters, capitalized property and target property set' => [
+                ['property' => 100, 'number' => 101],
                 [
                     'number' => new Compare(
-                        targetAttribute: 'attribute',
-                        message: 'Attribute - {Attribute}, target value - {targetValue}, target attribute - ' .
-                        '{TargetAttribute}, target attribute value - {targetAttributeValue}, target value or ' .
-                        'attribute - {TargetValueOrAttribute}, value - {value}.',
+                        targetProperty: 'property',
+                        message: 'Property - {Property}, target value - {targetValue}, target property - ' .
+                        '{TargetProperty}, target property value - {targetPropertyValue}, target value or ' .
+                        'property - {TargetValueOrProperty}, value - {value}.',
                         operator: '===',
                     ),
                 ],
                 [
                     'number' => [
-                        'Attribute - Number, target value - , target attribute - Attribute, target attribute value ' .
-                        '- 100, target value or attribute - Attribute, value - 101.',
+                        'Property - Number, target value - , target property - Property, target property value ' .
+                        '- 100, target value or property - Property, value - 101.',
                     ],
                 ],
             ],
@@ -974,12 +974,12 @@ final class CompareTest extends RuleTestCase
 
             'target attribute: array key, target attribute value: string integer, attribute value: integer with the same value, type: number, operator: ===' => [
                 ['attribute' => '100', 'number' => 100],
-                ['number' => new Compare(targetAttribute: 'attribute', operator: '===')],
+                ['number' => new Compare(targetProperty: 'attribute', operator: '===')],
                 ['number' => ['Number must be strictly equal to "attribute".']],
             ],
             'target attribute: array key, target attribute value: integer, attribute value: greater integer, type: number, operator: <=' => [
                 ['attribute' => 100, 'number' => 101],
-                ['number' => new Compare(targetAttribute: 'attribute', operator: '<=')],
+                ['number' => new Compare(targetProperty: 'attribute', operator: '<=')],
                 ['number' => ['Number must be less than or equal to "attribute".']],
             ],
         ];
@@ -1015,7 +1015,7 @@ final class CompareTest extends RuleTestCase
 
                     $rules[$attribute] = new Compare(
                         targetValue: $rule->getTargetValue(),
-                        targetAttribute: $rule->getTargetAttribute(),
+                        targetProperty: $rule->getTargetProperty(),
                         type: $type,
                         operator: $rule->getOperator(),
                     );

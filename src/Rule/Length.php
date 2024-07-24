@@ -89,12 +89,12 @@ final class Length implements
         int|null $exactly = null,
         int|null $min = null,
         int|null $max = null,
-        private string $incorrectInputMessage = '{Attribute} must be a string.',
-        string $lessThanMinMessage = '{Attribute} must contain at least {min, number} {min, plural, one{character} ' .
+        private string $incorrectInputMessage = '{Property} must be a string.',
+        string $lessThanMinMessage = '{Property} must contain at least {min, number} {min, plural, one{character} ' .
         'other{characters}}.',
-        string $greaterThanMaxMessage = '{Attribute} must contain at most {max, number} {max, plural, one{character} ' .
+        string $greaterThanMaxMessage = '{Property} must contain at most {max, number} {max, plural, one{character} ' .
         'other{characters}}.',
-        string $notExactlyMessage = '{Attribute} must contain exactly {exactly, number} {exactly, plural, ' .
+        string $notExactlyMessage = '{Property} must contain exactly {exactly, number} {exactly, plural, ' .
         'one{character} other{characters}}.',
         private string $encoding = 'UTF-8',
         bool|callable|null $skipOnEmpty = null,
