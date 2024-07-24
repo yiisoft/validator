@@ -269,18 +269,18 @@ final class ObjectParser
      * Returns a property value of the parsed object.
      *
      * Note that in case of non-existing property a default `null` value is returned. If you need to check the presence
-     * of a property or return a different default value, use {@see hasAttribute()} instead.
+     * of a property or return a different default value, use {@see hasProperty()} instead.
      *
      * If a {@see $source} is a class name string, `null` value is always returned.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Property name.
      *
-     * @return mixed Attribute value.
+     * @return mixed Property value.
      */
-    public function getAttributeValue(string $attribute): mixed
+    public function getPropertyValue(string $property): mixed
     {
         return is_object($this->source)
-            ? ($this->getReflectionProperties()[$attribute] ?? null)?->getValue($this->source)
+            ? ($this->getReflectionProperties()[$property] ?? null)?->getValue($this->source)
             : null;
     }
 
@@ -292,9 +292,9 @@ final class ObjectParser
      *
      * @return bool Whether the property exists: `true` - exists and `false` - otherwise.
      */
-    public function hasAttribute(string $attribute): bool
+    public function hasProperty(string $property): bool
     {
-        return is_object($this->source) && array_key_exists($attribute, $this->getReflectionProperties());
+        return is_object($this->source) && array_key_exists($property, $this->getReflectionProperties());
     }
 
     /**
@@ -398,7 +398,7 @@ final class ObjectParser
         foreach ($source as $key => $data) {
             if (is_int($key)) {
                 /** @psalm-var RulesCacheItem $data */
-                $rules[$key] = $this->prepareRule($data[0], $data[1]);
+                $rules[$key] = $this->prepareRule($data[0]);
             } else {
                 /**
                  * @psalm-var list<RulesCacheItem> $data
@@ -406,7 +406,7 @@ final class ObjectParser
                  * @psalm-suppress UndefinedInterfaceMethod
                  */
                 foreach ($data as $rule) {
-                    $rules[$key][] = $this->prepareRule($rule[0], $rule[1]);
+                    $rules[$key][] = $this->prepareRule($rule[0]);
                 }
             }
         }
@@ -414,17 +414,16 @@ final class ObjectParser
     }
 
     /**
-     * Prepares a rule instance created from a Reflection attribute to use for the validation.
+     * Prepares a rule instance created from a reflection attribute to use for the validation.
      *
      * @param RuleInterface $rule A rule instance.
-     * @param Attribute::TARGET_* $target {@see Attribute} target.
      *
      * @return RuleInterface The same rule instance.
      */
-    private function prepareRule(RuleInterface $rule, int $target): RuleInterface
+    private function prepareRule(RuleInterface $rule): RuleInterface
     {
         if (is_object($this->source) && $rule instanceof AfterInitAttributeEventInterface) {
-            $rule->afterInitAttribute($this->source, $target);
+            $rule->afterInitAttribute($this->source);
         }
         return $rule;
     }

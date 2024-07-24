@@ -76,10 +76,10 @@ final class ObjectParserTest extends TestCase
         $parser = new ObjectParser(SimpleDto::class);
 
         $this->assertSame([], $parser->getData());
-        $this->assertNull($parser->getAttributeValue('a'));
-        $this->assertNull($parser->getAttributeValue('x'));
-        $this->assertFalse($parser->hasAttribute('a'));
-        $this->assertFalse($parser->hasAttribute('x'));
+        $this->assertNull($parser->getPropertyValue('a'));
+        $this->assertNull($parser->getPropertyValue('x'));
+        $this->assertFalse($parser->hasProperty('a'));
+        $this->assertFalse($parser->hasProperty('x'));
     }
 
     public function testGetRulesExpectingAttributeInheritance(): void

@@ -249,7 +249,7 @@ final class ObjectDataSet implements
             return $object->getPropertyValue($property);
         }
 
-        return $this->parser->getAttributeValue($property);
+        return $this->parser->getPropertyValue($property);
     }
 
     /**
@@ -268,7 +268,7 @@ final class ObjectDataSet implements
             return $object->hasProperty($property);
         }
 
-        return $this->parser->hasAttribute($property);
+        return $this->parser->hasProperty($property);
     }
 
     /**
