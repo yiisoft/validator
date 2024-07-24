@@ -16,7 +16,7 @@ use Yiisoft\Validator\ValidationContext;
 use function gettype;
 
 /**
- * Compares the specified value with "target" value provided directly or within an attribute.
+ * Compares the specified value with "target" value provided directly or within a property.
  *
  * @see AbstractCompare
  * @see Equal

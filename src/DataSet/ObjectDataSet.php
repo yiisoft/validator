@@ -208,8 +208,8 @@ final class ObjectDataSet implements
      *
      * ```php
      * [
-     *     [new AtLeast(['name', 'author'])], // Rules not bound to a specific attribute.
-     *     'files' => [new Count(max: 3)], // Attribute specific rules.
+     *     [new AtLeast(['name', 'author'])], // Rules not bound to a specific property.
+     *     'files' => [new Count(max: 3)], // Property specific rules.
      * ],
      * ```
      */
@@ -237,9 +237,9 @@ final class ObjectDataSet implements
      * Note that in case of non-existing property a default `null` value is returned. If you need to check the presence
      * of property or return a different default value, use {@see hasProperty()} instead.
      *
-     * @param string $property Attribute name.
+     * @param string $property Property name.
      *
-     * @return mixed Attribute value.
+     * @return mixed Property value.
      */
     public function getPropertyValue(string $property): mixed
     {
@@ -256,7 +256,7 @@ final class ObjectDataSet implements
      * Whether this data set has the property with a given name. Note that this means existence only and properties
      * with empty values are treated as present too.
      *
-     * @param string $property Attribute name.
+     * @param string $property Property name.
      *
      * @return bool Whether the property exists: `true` - exists and `false` - otherwise.
      */

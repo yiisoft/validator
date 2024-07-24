@@ -126,8 +126,8 @@ final class AttributesRulesProvider implements RulesProviderInterface
      *
      * ```php
      * [
-     *     [new AtLeast(['name', 'author'])], // Rules not bound to a specific attribute.
-     *     'files' => [new Count(max: 3)], // Attribute specific rules.
+     *     [new AtLeast(['name', 'author'])], // Rules not bound to a specific property.
+     *     'files' => [new Count(max: 3)], // Property specific rules.
      * ],
      * ```
      *

@@ -11,7 +11,7 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Defines validation options to check that the specified value is equal to "target" value provided directly
- * ({@see GreaterThanOrEqual::$targetValue}) or within an attribute ({@see GreaterThanOrEqual::$targetProperty}).
+ * ({@see GreaterThanOrEqual::$targetValue}) or within a property ({@see GreaterThanOrEqual::$targetProperty}).
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
  * strings byte by byte and compare original values as is. See {@see GreaterThanOrEqual::$type} for all possible
@@ -31,7 +31,7 @@ final class GreaterThanOrEqual extends AbstractCompare
     /**
      * @param mixed $targetValue The value to be greater than or equal to. When both this property and
      * {@see $targetProperty} are set, this property takes precedence.
-     * @param string|null $targetProperty The attribute to be greater than or equal to. When both this property and
+     * @param string|null $targetProperty The property to be greater than or equal to. When both this property and
      * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *
@@ -51,9 +51,9 @@ final class GreaterThanOrEqual extends AbstractCompare
      *
      * - `{property}`: the translated label of the property being validated.
      * - `{targetValue}`: the value to be compared with.
-     * - `{targetProperty}`: the name of the attribute to be compared with.
-     * - `{targetPropertyValue}`: the value extracted from the attribute to be compared with if this attribute was set.
-     * - `{targetValueOrProperty}`: the value to be compared with or, if it's absent, the name of the attribute to be
+     * - `{targetProperty}`: the name of the property to be compared with.
+     * - `{targetPropertyValue}`: the value extracted from the property to be compared with if this attribute was set.
+     * - `{targetValueOrProperty}`: the value to be compared with or, if it's absent, the name of the property to be
      * compared with.
      * - `{value}`: the value being validated.
      *

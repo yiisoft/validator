@@ -8,7 +8,7 @@ use Attribute;
 
 /**
  * Defines validation options to compare the specified value with "target" value provided directly
- * ({@see GreaterThanOrEqual::$targetValue}) or within an attribute ({@see GreaterThanOrEqual::$targetProperty}).
+ * ({@see GreaterThanOrEqual::$targetValue}) or within a property ({@see GreaterThanOrEqual::$targetProperty}).
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
  * strings byte by byte and compare original values as is. See {@see GreaterThanOrEqual::$type} for all possible

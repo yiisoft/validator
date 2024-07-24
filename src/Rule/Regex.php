@@ -54,7 +54,7 @@ final class Regex implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
-     * - `{value}`: the value of the attribute being validated.
+     * - `{value}`: the value of the property being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.

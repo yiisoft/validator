@@ -52,7 +52,7 @@ abstract class AbstractCompare implements
     /**
      * A default for {@see $incorrectDataSetTypeMessage}.
      */
-    protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = 'The attribute value returned from a custom data set ' .
+    protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = 'The property value returned from a custom data set ' .
     'must have one of the following types: integer, float, string, boolean, null or an object implementing ' .
     '\Stringable interface or \DateTimeInterface.';
     /**
@@ -78,7 +78,7 @@ abstract class AbstractCompare implements
     /**
      * @param mixed $targetValue The value to be compared with. When both this property and {@see $targetProperty} are
      * set, this property takes precedence.
-     * @param string|null $targetProperty The name of the attribute to be compared with. When both this property and
+     * @param string|null $targetProperty The name of the property to be compared with. When both this property and
      * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *
@@ -191,9 +191,9 @@ abstract class AbstractCompare implements
     }
 
     /**
-     * Get the name of the attribute to be compared with.
+     * Get the name of the property to be compared with.
      *
-     * @return string|null Name of the attribute to be compared with or `null` if it was not configured.
+     * @return string|null Name of the property to be compared with or `null` if it was not configured.
      *
      * @see $targetProperty
      */

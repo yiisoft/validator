@@ -11,7 +11,7 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Defines validation options to check that the specified value is equal to "target" value provided directly
- * ({@see NotEqual::$targetValue}) or within an attribute ({@see NotEqual::$targetProperty}).
+ * ({@see NotEqual::$targetValue}) or within a property ({@see NotEqual::$targetProperty}).
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
  * strings byte by byte and compare original values as is. See {@see NotEqual::$type} for all possible options.
@@ -31,7 +31,7 @@ final class NotEqual extends AbstractCompare
     /**
      * @param mixed $targetValue The value to not be equal to. When both this property and {@see $targetProperty} are
      * set, this property takes precedence.
-     * @param string|null $targetProperty The attribute to not be equal to. When both this property and
+     * @param string|null $targetProperty The property to not be equal to. When both this property and
      * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *

@@ -11,7 +11,7 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Defines validation options to check that the specified value is equal to "target" value provided directly
- * ({@see Equal::$targetValue}) or within an attribute ({@see Equal::$targetProperty}).
+ * ({@see Equal::$targetValue}) or within a property ({@see Equal::$targetProperty}).
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
  * strings byte by byte and compare original values as is. See {@see Equal::$type} for all possible options.
@@ -31,7 +31,7 @@ final class Equal extends AbstractCompare
     /**
      * @param mixed $targetValue The value to be equal to. When both this property and {@see $targetProperty} are set,
      * this property takes precedence.
-     * @param string|null $targetProperty The attribute to be equal to. When both this property and {@see $targetValue}
+     * @param string|null $targetProperty The property to be equal to. When both this property and {@see $targetValue}
      * are set, the {@see $targetValue} takes precedence.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *
@@ -51,7 +51,7 @@ final class Equal extends AbstractCompare
      *
      * - `{property}`: the translated label of the property being validated.
      * - `{targetValue}`: the value to be compared with.
-     * - `{targetProperty}`: the name of the attribute to be compared with.
+     * - `{targetProperty}`: the name of the property to be compared with.
      * - `{targetPropertyValue}`: the value extracted from the property to be compared with if this property was set.
      * - `{targetValueOrProperty}`: the value to be compared with or, if it's absent, the name of the property to be
      * compared with.
