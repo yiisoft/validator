@@ -35,7 +35,7 @@ interface WhenInterface
      *
      * ```php
      * static function (mixed $value, ValidationContext $context): bool {
-     *     return $context->getDataSet()->getAttributeValue('country') === Country::USA;
+     *     return $context->getDataSet()->getPropertyValue('country') === Country::USA;
      * }
      * ```
      *
