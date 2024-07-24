@@ -92,55 +92,55 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $message Error message used when validation fails due to the wrong IP address format.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string $ipv4NotAllowedMessage Error message used when validation fails due to the disabled IPv4
      * validation when {@see $allowIpv4} is set.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string $ipv6NotAllowedMessage Error message used when validation fails due to the disabled IPv6
      * validation when {@see $allowIpv6} is set.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string $wrongCidrMessage string Error message used when validation fails due to the wrong CIDR when
      * {@see $allowSubnet} is set.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string $noSubnetMessage Error message used when validation fails due to {@see $allowSubnet} is used, but
      * the CIDR prefix is not set.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string $hasSubnetMessage Error message used when validation fails due to {@see $allowSubnet} is false, but
      * CIDR prefix is present.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string $notInRangeMessage Error message used when validation fails due to IP address is not allowed by
      * {@see $ranges} check.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string[] $ranges The IPv4 or IPv6 ranges that are allowed or forbidden.
      *

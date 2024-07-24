@@ -36,7 +36,7 @@ final class LessThan extends AbstractCompare
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $incorrectDataSetTypeMessage A message used when the value returned from a custom
      * data set s not scalar.
@@ -48,7 +48,7 @@ final class LessThan extends AbstractCompare
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{targetValue}`: the value to be compared with.
      * - `{targetProperty}`: the name of the attribute to be compared with.
      * - `{targetPropertyValue}`: the value extracted from the attribute to be compared with if this attribute was set.

@@ -42,14 +42,14 @@ final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      *
      * @param string $notExactWidthMessage A message used when the width of validated image file doesn't exactly equal
      * to {@see $width}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{exactly}`: expected exact width of validated image file.
      *
      * @param string $notExactHeightMessage A message used when the height of validated image file doesn't exactly equal
@@ -57,7 +57,7 @@ final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      *
      *  You may use the following placeholders in the message:
      *
-     *  - `{attribute}`: the translated label of the attribute being validated.
+     *  - `{property}`: the translated label of the property being validated.
      *  - `{exactly}`: expected exact height of validated image file.
      *
      * @param string $tooSmallWidthMessage A message used when the width of validated image file is less than
@@ -65,7 +65,7 @@ final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{limit}`: expected minimum width of validated image file.
      *
      * @param string $tooSmallHeightMessage A message used when the height of validated image file is less than
@@ -73,7 +73,7 @@ final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{limit}`: expected minimum height of validated image file.
      *
      * @param string $tooLargeWidthMessage A message used when the width of validated image file is more than
@@ -81,7 +81,7 @@ final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      *
      *  You may use the following placeholders in the message:
      *
-     *  - `{attribute}`: the translated label of the attribute being validated.
+     *  - `{property}`: the translated label of the property being validated.
      *  - `{limit}`: expected maximum width of validated image file.
      *
      * @param string $tooLargeHeightMessage A message used when the height of validated image file is more than
@@ -89,7 +89,7 @@ final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{limit}`: expected maximum height of validated image file.
      *
      * @param string $invalidAspectRatioMessage A message used when aspect ratio of validated image file is different
@@ -98,7 +98,7 @@ final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{aspectRatioWidth}`: expected width part for aspect ratio. For example, for `4:3` aspect ratio, it will be
      * `4`.
      * - `{aspectRatioHeight}`: expected height part for aspect ratio. For example, for `4:3` aspect ratio, it will be

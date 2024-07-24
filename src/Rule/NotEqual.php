@@ -49,7 +49,7 @@ final class NotEqual extends AbstractCompare
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{targetValue}`: the value to be compared with.
      * - `{targetProperty}`: the name of the property to be compared with.
      * - `{targetPropertyValue}`: the value extracted from the property to be compared with if this property was set.

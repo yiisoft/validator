@@ -55,7 +55,7 @@ final class TrueValue implements DumpedRuleInterface, SkipOnErrorInterface, When
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{true}`: the value set in {@see $trueValue} option.
      * - `{type}`: the type of the value being validated.
      * @param string $message Error message used when validation fails because the validated value does not match
@@ -63,7 +63,7 @@ final class TrueValue implements DumpedRuleInterface, SkipOnErrorInterface, When
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{true}`: the value set in {@see $trueValue} option.
      * - `{value}`: the value being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty / not passed.

@@ -58,7 +58,7 @@ final class In implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the name of the attribute.
+     * - `{property}`: the name of the property.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
