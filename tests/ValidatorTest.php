@@ -219,7 +219,7 @@ class ValidatorTest extends TestCase
     ): void {
         $validator = new Validator();
         $result = $validator->validate($data, $rules);
-        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
+        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByProperty());
     }
 
     public function dataWithEmptyArrayOfRules(): array
@@ -265,8 +265,8 @@ class ValidatorTest extends TestCase
             ],
         ]);
 
-        $this->assertTrue($result->isAttributeValid('bool'));
-        $this->assertFalse($result->isAttributeValid('int'));
+        $this->assertTrue($result->isPropertyValid('bool'));
+        $this->assertFalse($result->isPropertyValid('int'));
     }
 
     public function diverseTypesDataProvider(): array
@@ -1537,6 +1537,6 @@ class ValidatorTest extends TestCase
     ): void {
         $validator = new Validator();
         $result = $validator->validate($data, $data);
-        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
+        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByProperty());
     }
 }

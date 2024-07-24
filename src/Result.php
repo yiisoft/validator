@@ -32,17 +32,17 @@ final class Result
     }
 
     /**
-     * Whether attribute specified doesn't have any validation errors.
+     * Whether property specified doesn't have any validation errors.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Property name.
      *
-     * @return bool Whether attribute is valid.
+     * @return bool Whether property is valid.
      */
-    public function isAttributeValid(string $attribute): bool
+    public function isPropertyValid(string $property): bool
     {
         foreach ($this->errors as $error) {
             $firstItem = $error->getValuePath()[0] ?? '';
-            if ($firstItem === $attribute) {
+            if ($firstItem === $property) {
                 return false;
             }
         }
@@ -70,15 +70,15 @@ final class Result
     }
 
     /**
-     * Get arrays of error messages indexed by attribute path.
-     * Each key is a dot-separated attribute path.
+     * Get arrays of error messages indexed by property path.
+     * Each key is a dot-separated property path.
      * Each value is an array of error message strings.
      *
-     * @param string $separator Attribute path separator. Dot is used by default.
+     * @param string $separator Property path separator. Dot is used by default.
      * @param string|null $escape Symbol that will be escaped with a backslash char (`\`) in path elements.
      * When it's null path is returned without escaping.
      *
-     * @return array Arrays of error messages indexed by attribute path.
+     * @return array Arrays of error messages indexed by property path.
      *
      * @psalm-return array<string, non-empty-list<string>>
      */
@@ -93,15 +93,15 @@ final class Result
     }
 
     /**
-     * Get strings of the first error messages for each attribute path.
-     * Each key is a dot-separated attribute path.
+     * Get strings of the first error messages for each property path.
+     * Each key is a dot-separated property path.
      * Each value is the first error message string for this path.
      *
-     * @param string $separator Attribute path separator. Dot is used by default.
+     * @param string $separator Property path separator. Dot is used by default.
      * @param string|null $escape Symbol that will be escaped with a backslash char (`\`) in path elements.
      * When it's null path is returned without escaping.
      *
-     * @return array Strings of error messages indexed by attribute path.
+     * @return array Strings of error messages indexed by property path.
      *
      * @psalm-return array<string, string>
      */
@@ -116,21 +116,21 @@ final class Result
     }
 
     /**
-     * Get arrays of error messages indexed by attribute name.
+     * Get arrays of error messages indexed by property name.
      *
-     * @throws InvalidArgumentException If top level attribute has a non-string type.
+     * @throws InvalidArgumentException If top level property has a non-string type.
      *
-     * @return array Arrays of error messages indexed by attribute name.
+     * @return array Arrays of error messages indexed by property name.
      *
      * @psalm-return array<string, non-empty-list<string>>
      */
-    public function getErrorMessagesIndexedByAttribute(): array
+    public function getErrorMessagesIndexedByProperty(): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
             $key = $error->getValuePath()[0] ?? '';
             if (!is_string($key)) {
-                throw new InvalidArgumentException('Top level attributes can only have string type.');
+                throw new InvalidArgumentException('Top level properties can only have string type.');
             }
 
             $errors[$key][] = $error->getMessage();
@@ -139,21 +139,21 @@ final class Result
     }
 
     /**
-     * Get arrays of the first error messages for each attribute name.
+     * Get arrays of the first error messages for each property name.
      *
-     * @throws InvalidArgumentException If top level attribute has a non-string type.
+     * @throws InvalidArgumentException If top level property has a non-string type.
      *
-     * @return array Strings of error messages indexed by attribute name.
+     * @return array Strings of error messages indexed by property name.
      *
      * @psalm-return array<string, string>
      */
-    public function getFirstErrorMessagesIndexedByAttribute(): array
+    public function getFirstErrorMessagesIndexedByProperty(): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
             $key = $error->getValuePath()[0] ?? '';
             if (!is_string($key)) {
-                throw new InvalidArgumentException('Top level attributes can only have string type.');
+                throw new InvalidArgumentException('Top level properties can only have string type.');
             }
 
             $errors[$key] ??= $error->getMessage();
@@ -162,20 +162,20 @@ final class Result
     }
 
     /**
-     * Get an array of error objects for the attribute specified.
+     * Get an array of error objects for the property specified.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Property name.
      *
      * @return Error[] Array of error objects.
      *
      * @psalm-return list<Error>
      */
-    public function getAttributeErrors(string $attribute): array
+    public function getPropertyErrors(string $property): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
             $firstItem = $error->getValuePath()[0] ?? '';
-            if ($firstItem === $attribute) {
+            if ($firstItem === $property) {
                 $errors[] = $error;
             }
         }
@@ -183,18 +183,18 @@ final class Result
     }
 
     /**
-     * Get an array of error messages for the attribute specified.
+     * Get an array of error messages for the property specified.
      *
      * @return string[] Error messages.
      *
      * @psalm-return list<string>
      */
-    public function getAttributeErrorMessages(string $attribute): array
+    public function getPropertyErrorMessages(string $property): array
     {
         $errors = [];
         foreach ($this->errors as $error) {
             $firstItem = $error->getValuePath()[0] ?? '';
-            if ($firstItem === $attribute) {
+            if ($firstItem === $property) {
                 $errors[] = $error->getMessage();
             }
         }
@@ -202,28 +202,28 @@ final class Result
     }
 
     /**
-     * Get arrays of error messages for the attribute specified indexed by attribute path.
-     * Each key is a dot-separated attribute path.
+     * Get arrays of error messages for the property specified indexed by property path.
+     * Each key is a dot-separated property path.
      * Each value is an array of error message strings.
      *
-     * @param string $attribute Attribute name.
-     * @param string $separator Attribute path separator. Dot is used by default.
+     * @param string $property Property name.
+     * @param string $separator Property path separator. Dot is used by default.
      * @param string|null $escape Symbol that will be escaped with a backslash char (`\`) in path elements.
      * When it's null path is returned without escaping.
      *
-     * @return array Arrays of error messages for the attribute specified indexed by attribute path.
+     * @return array Arrays of error messages for the property specified indexed by property path.
      *
      * @psalm-return array<string, non-empty-list<string>>
      */
-    public function getAttributeErrorMessagesIndexedByPath(
-        string $attribute,
+    public function getPropertyErrorMessagesIndexedByPath(
+        string $property,
         string $separator = '.',
         ?string $escape = '.',
     ): array {
         $errors = [];
         foreach ($this->errors as $error) {
             $firstItem = $error->getValuePath()[0] ?? '';
-            if ($firstItem !== $attribute) {
+            if ($firstItem !== $property) {
                 continue;
             }
 
@@ -234,7 +234,7 @@ final class Result
     }
 
     /**
-     * Get common error messages that are not attached to any attribute.
+     * Get common error messages that are not attached to any property.
      *
      * @return string[] Error messages.
      *
@@ -242,7 +242,7 @@ final class Result
      */
     public function getCommonErrorMessages(): array
     {
-        return $this->getAttributeErrorMessages('');
+        return $this->getPropertyErrorMessages('');
     }
 
     /**

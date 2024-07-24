@@ -40,7 +40,7 @@ final class MessagesTest extends TestCase
 
         $this->assertSame(
             ['' => ['Значение неверно.']],
-            $result->getErrorMessagesIndexedByAttribute(),
+            $result->getErrorMessagesIndexedByProperty(),
         );
     }
 
@@ -88,7 +88,7 @@ final class MessagesTest extends TestCase
 
         $this->assertSame(
             ['' => ['Value is invalid.']],
-            $result->getErrorMessagesIndexedByAttribute(),
+            $result->getErrorMessagesIndexedByProperty(),
         );
     }
 
@@ -124,7 +124,7 @@ final class MessagesTest extends TestCase
 
         $this->assertSame(
             ['' => ['Value is invalid.!a-3!ru']],
-            $result->getErrorMessagesIndexedByAttribute(),
+            $result->getErrorMessagesIndexedByProperty(),
         );
     }
 
