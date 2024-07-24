@@ -95,7 +95,7 @@ final class RulesDumperTest extends TestCase
     public function testWrongKeyException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('An attribute can only have an integer or a string type. bool given.');
+        $this->expectExceptionMessage('A property can only have an integer or a string type. bool given.');
         RulesDumper::asArray(new IteratorWithBooleanKey());
     }
 

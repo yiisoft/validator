@@ -1299,7 +1299,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('An attribute can only have an integer or a string type. bool given.');
+        $this->expectExceptionMessage('A property can only have an integer or a string type. bool given.');
         $validator->validate([], new IteratorWithBooleanKey());
     }
 
