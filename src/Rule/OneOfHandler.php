@@ -45,8 +45,8 @@ final class OneOfHandler implements RuleHandlerInterface
         }
 
         $filledCount = 0;
-        foreach ($rule->getAttributes() as $attribute) {
-            if (!(new WhenEmpty())(ArrayHelper::getValue($value, $attribute), $context->isPropertyMissing())) {
+        foreach ($rule->getProperties() as $property) {
+            if (!(new WhenEmpty())(ArrayHelper::getValue($value, $property), $context->isPropertyMissing())) {
                 $filledCount++;
             }
 
@@ -61,8 +61,8 @@ final class OneOfHandler implements RuleHandlerInterface
     private function getGenericErrorResult(OneOf $rule, ValidationContext $context): Result
     {
         return (new Result())->addError($rule->getMessage(), [
-            'properties' => $this->getFormattedPropertiesString($rule->getAttributes(), $context),
-            'Properties' => $this->getCapitalizedPropertiesString($rule->getAttributes(), $context),
+            'properties' => $this->getFormattedPropertiesString($rule->getProperties(), $context),
+            'Properties' => $this->getCapitalizedPropertiesString($rule->getProperties(), $context),
         ]);
     }
 }

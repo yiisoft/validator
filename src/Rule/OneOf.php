@@ -15,7 +15,7 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Defines validation options to check that one of specified attributes is filled.
+ * Defines validation options to check that one of specified properties is filled.
  *
  * Both arrays and objects with public properties are supported as validated values.
  *
@@ -32,18 +32,18 @@ final class OneOf implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
     use WhenTrait;
 
     /**
-     * @param string[] $attributes The list of required attributes that will be checked.
+     * @param string[] $properties The list of required properties that will be checked.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $message A message used when the value is not valid.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
@@ -55,7 +55,7 @@ final class OneOf implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private array $attributes,
+        private array $properties,
         private string $incorrectInputMessage = '{Property} must be an array or an object.',
         private string $message = 'Exactly 1 property from this list must be filled: {properties}.',
         bool|callable|null $skipOnEmpty = null,
@@ -71,15 +71,15 @@ final class OneOf implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
     }
 
     /**
-     * Get the list of required attributes that will be checked.
+     * Get the list of required properties that will be checked.
      *
-     * @return string[] The list of attributes.
+     * @return string[] The list of properties.
      *
-     * @see $attributes
+     * @see $properties
      */
-    public function getAttributes(): array
+    public function getProperties(): array
     {
-        return $this->attributes;
+        return $this->properties;
     }
 
     /**
@@ -109,7 +109,7 @@ final class OneOf implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
     public function getOptions(): array
     {
         return [
-            'attributes' => $this->attributes,
+            'properties' => $this->properties,
             'incorrectInputMessage' => [
                 'template' => $this->incorrectInputMessage,
                 'parameters' => [],

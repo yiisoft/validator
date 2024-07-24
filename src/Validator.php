@@ -141,27 +141,27 @@ final class Validator implements ValidatorInterface
             ->setDataSet($dataSet);
 
         $result = new Result();
-        foreach ($rules as $attribute => $attributeRules) {
-            if (is_int($attribute)) {
+        foreach ($rules as $property => $propertyRules) {
+            if (is_int($property)) {
                 $validatedData = $originalData;
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, $dataSet->getData());
                 $context->setProperty(null);
             } else {
-                $validatedData = $dataSet->getPropertyValue($attribute);
+                $validatedData = $dataSet->getPropertyValue($property);
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, null);
-                $context->setProperty($attribute);
+                $context->setProperty($property);
             }
 
             if ($dataSet instanceof LabelsProviderInterface) {
                 $labels = $dataSet->getValidationPropertyLabels();
-                if (is_string($attribute)) {
-                    $context->setPropertyLabel($labels[$attribute] ?? $attribute);
+                if (is_string($property)) {
+                    $context->setPropertyLabel($labels[$property] ?? $property);
                 }
             } else {
-                $context->setPropertyLabel(is_string($attribute) ? $attribute : $context->getPropertyLabel());
+                $context->setPropertyLabel(is_string($property) ? $property : $context->getPropertyLabel());
             }
 
-            $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
+            $tempResult = $this->validateInternal($validatedData, $propertyRules, $context);
 
             foreach ($tempResult->getErrors() as $error) {
                 $result->addErrorWithoutPostProcessing(
