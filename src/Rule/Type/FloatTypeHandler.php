@@ -26,7 +26,7 @@ final class FloatTypeHandler implements RuleHandlerInterface
 
         if (!is_float($value)) {
             return (new Result())->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }

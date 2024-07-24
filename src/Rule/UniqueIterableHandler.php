@@ -28,7 +28,7 @@ final class UniqueIterableHandler implements RuleHandlerInterface
 
         if (!is_iterable($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -38,14 +38,14 @@ final class UniqueIterableHandler implements RuleHandlerInterface
         foreach ($value as $item) {
             if (!$this->isValueAllowedForItem($item)) {
                 return (new Result())->addError($rule->getIncorrectItemValueMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
+                    'attribute' => $context->getTranslatedProperty(),
                     'type' => get_debug_type($item),
                 ]);
             }
 
             if ($previousItem !== null && gettype($previousItem) !== gettype($item)) {
                 return (new Result())->addError($rule->getDifferentTypesMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
+                    'attribute' => $context->getTranslatedProperty(),
                 ]);
             }
 
@@ -53,7 +53,7 @@ final class UniqueIterableHandler implements RuleHandlerInterface
 
             if (!empty($stack) && count($stack) !== count(array_unique($stack, flags: SORT_REGULAR))) {
                 return (new Result())->addError($rule->getMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
+                    'attribute' => $context->getTranslatedProperty(),
                 ]);
             }
 

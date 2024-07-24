@@ -35,8 +35,8 @@ final class CountHandler implements RuleHandlerInterface
         /** @var mixed $value */
         if (!is_countable($value)) {
             $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
+                'Attribute' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
 

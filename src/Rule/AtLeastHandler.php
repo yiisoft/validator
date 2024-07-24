@@ -38,15 +38,15 @@ final class AtLeastHandler implements RuleHandlerInterface
 
         if (!is_array($value) && !is_object($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
+                'Attribute' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
 
         $filledCount = 0;
         foreach ($rule->getAttributes() as $attribute) {
-            if (!(new WhenEmpty())(ArrayHelper::getValue($value, $attribute), $context->isAttributeMissing())) {
+            if (!(new WhenEmpty())(ArrayHelper::getValue($value, $attribute), $context->isPropertyMissing())) {
                 $filledCount++;
             }
         }

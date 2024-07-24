@@ -91,7 +91,7 @@ final class ValidationContextTest extends TestCase
         $this->assertSame($dataSet1, $context->getGlobalDataSet());
     }
 
-    public function dataTranslatedAttributeWithoutTranslator(): array
+    public function dataTranslatedPropertyWithoutTranslator(): array
     {
         return [
             'null' => ['Value'],
@@ -100,14 +100,14 @@ final class ValidationContextTest extends TestCase
     }
 
     /**
-     * @dataProvider dataTranslatedAttributeWithoutTranslator
+     * @dataProvider dataTranslatedPropertyWithoutTranslator
      */
-    public function testTranslatedAttributeWithoutTranslator(?string $attribute): void
+    public function testTranslatedPropertyWithoutTranslator(?string $property): void
     {
         $context = new ValidationContext();
-        $context->setAttribute($attribute);
+        $context->setProperty($property);
 
-        $this->assertSame($attribute, $context->getTranslatedAttribute());
+        $this->assertSame($property, $context->getTranslatedProperty());
     }
 
     public function testSetPropertyTranslator(): void
@@ -116,31 +116,31 @@ final class ValidationContextTest extends TestCase
 
         $context = (new ValidationContext())
             ->setPropertyTranslator($translator)
-            ->setAttribute('name');
+            ->setProperty('name');
 
-        $this->assertSame('Имя', $context->getTranslatedAttribute());
+        $this->assertSame('Имя', $context->getTranslatedProperty());
     }
 
-    public function testSetAttributeLabel(): void
+    public function testSetPropertyLabel(): void
     {
         $context = (new ValidationContext())
-            ->setAttribute('name')
-            ->setAttributeLabel('first Name');
+            ->setProperty('name')
+            ->setPropertyLabel('first Name');
 
-        $this->assertSame('first Name', $context->getAttributeLabel());
-        $this->assertSame('first Name', $context->getTranslatedAttribute());
-        $this->assertSame('First Name', $context->getCapitalizedTranslatedAttribute());
+        $this->assertSame('first Name', $context->getPropertyLabel());
+        $this->assertSame('first Name', $context->getTranslatedProperty());
+        $this->assertSame('First Name', $context->getCapitalizedTranslatedProperty());
     }
 
-    public function testSetAttributeLabelWithTranslator(): void
+    public function testSetPropertyLabelWithTranslator(): void
     {
         $translator = new ArrayPropertyTranslator(['First Name' => 'Имя']);
 
         $context = (new ValidationContext())
             ->setPropertyTranslator($translator)
-            ->setAttribute('name')
-            ->setAttributeLabel('First Name');
+            ->setProperty('name')
+            ->setPropertyLabel('First Name');
 
-        $this->assertSame('Имя', $context->getTranslatedAttribute());
+        $this->assertSame('Имя', $context->getTranslatedProperty());
     }
 }

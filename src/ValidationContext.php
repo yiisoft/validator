@@ -49,20 +49,20 @@ final class ValidationContext
     private ?DataSetInterface $globalDataSet = null;
 
     /**
-     * @var DataSetInterface|null Current scope's data set the attribute belongs to. `null` if data set was not set
+     * @var DataSetInterface|null Current scope's data set the property belongs to. `null` if data set was not set
      * with {@see setDataSet()} yet.
      */
     private ?DataSetInterface $dataSet = null;
 
     /**
-     * @var string|null Validated data set's attribute name. `null` if a single value is validated.
+     * @var string|null Validated data set's property name. `null` if a single value is validated.
      */
-    private ?string $attribute = null;
+    private ?string $property = null;
 
-    private ?string $attributeLabel = null;
+    private ?string $propertyLabel = null;
 
     /**
-     * @var PropertyTranslatorInterface|null Default attribute translator to use if attribute translator is not set.
+     * @var PropertyTranslatorInterface|null Default property translator to use if property translator is not set.
      */
     private ?PropertyTranslatorInterface $defaultPropertyTranslator = null;
 
@@ -128,9 +128,9 @@ final class ValidationContext
         return $this;
     }
 
-    public function setAttributeLabel(string|null $label): self
+    public function setPropertyLabel(string|null $label): self
     {
-        $this->attributeLabel = $label;
+        $this->propertyLabel = $label;
         return $this;
     }
 
@@ -153,16 +153,16 @@ final class ValidationContext
         $this->requireValidator();
 
         $currentDataSet = $this->dataSet;
-        $currentAttribute = $this->attribute;
+        $currentProperty = $this->property;
         $isCurrentDataSetMissing = $this->isDataSetMissing;
         $currentParameters = $this->parameters;
 
-        // The lack of an attribute means that in the context of further validation there is no data set at all.
-        $this->isDataSetMissing = $this->isAttributeMissing();
+        // The lack of a property means that in the context of further validation there is no data set at all.
+        $this->isDataSetMissing = $this->isPropertyMissing();
         $result = $this->validator->validate($data, $rules, $this);
 
         $this->dataSet = $currentDataSet;
-        $this->attribute = $currentAttribute;
+        $this->property = $currentProperty;
         $this->isDataSetMissing = $isCurrentDataSetMissing;
         $this->parameters = $currentParameters;
 
@@ -196,7 +196,7 @@ final class ValidationContext
     }
 
     /**
-     * Get the current scope's data set the attribute belongs to.
+     * Get the current scope's data set the property belongs to.
      *
      * @return DataSetInterface Data set instance.
      *
@@ -212,7 +212,7 @@ final class ValidationContext
     }
 
     /**
-     * Set the current scope's data set the attribute belongs to.
+     * Set the current scope's data set the property belongs to.
      *
      * @param DataSetInterface $dataSet Data set instance.
      *
@@ -229,28 +229,28 @@ final class ValidationContext
     }
 
     /**
-     * Get validated data set's attribute name.
+     * Get validated data set's property name.
      *
-     * @return string|null Validated data set's attribute name. `null` if a single value is validated.
+     * @return string|null Validated data set's property name. `null` if a single value is validated.
      */
-    public function getAttribute(): ?string
+    public function getProperty(): ?string
     {
-        return $this->attribute;
+        return $this->property;
     }
 
-    public function getAttributeLabel(): ?string
+    public function getPropertyLabel(): ?string
     {
-        return $this->attributeLabel;
+        return $this->propertyLabel;
     }
 
     /**
-     * Get translated attribute name.
+     * Get translated property name.
      *
-     * @return string Translated attribute name. `value` if a single value is validated and a label is not set.
+     * @return string Translated property name. `value` if a single value is validated and a label is not set.
      */
-    public function getTranslatedAttribute(): string
+    public function getTranslatedProperty(): string
     {
-        $label = $this->attributeLabel ?? $this->attribute ?? 'value';
+        $label = $this->propertyLabel ?? $this->property ?? 'value';
 
         if ($this->propertyTranslator !== null) {
             return $this->propertyTranslator->translate($label);
@@ -263,23 +263,23 @@ final class ValidationContext
         return $label;
     }
 
-    public function getCapitalizedTranslatedAttribute(): string
+    public function getCapitalizedTranslatedProperty(): string
     {
-        return StringHelper::uppercaseFirstCharacter($this->getTranslatedAttribute());
+        return StringHelper::uppercaseFirstCharacter($this->getTranslatedProperty());
     }
 
     /**
-     * Set the name of the attribute validated.
+     * Set the name of the property validated.
      *
-     * @param string|null $attribute Validated attribute name. Null if a single value is validated.
+     * @param string|null $property Validated property name. Null if a single value is validated.
      *
      * @return $this The same instance of validation context.
      *
      * @internal
      */
-    public function setAttribute(?string $attribute): self
+    public function setProperty(?string $property): self
     {
-        $this->attribute = $attribute;
+        $this->property = $property;
         return $this;
     }
 
@@ -313,14 +313,14 @@ final class ValidationContext
     }
 
     /**
-     * Check whether {@see $attribute} is missing in a {@see $dataSet}.
+     * Check whether {@see $property} is missing in a {@see $dataSet}.
      *
-     * @return bool Whether {@see $attribute} is missing in a {@see $dataSet}.
+     * @return bool Whether {@see $property} is missing in a {@see $dataSet}.
      */
-    public function isAttributeMissing(): bool
+    public function isPropertyMissing(): bool
     {
         return $this->isDataSetMissing
-            || ($this->attribute !== null && !$this->getDataSet()->hasAttribute($this->attribute));
+            || ($this->property !== null && !$this->getDataSet()->hasAttribute($this->property));
     }
 
     /**

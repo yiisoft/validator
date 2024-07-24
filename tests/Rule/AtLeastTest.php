@@ -48,7 +48,7 @@ final class AtLeastTest extends RuleTestCase
 
         (new AtLeastHandler())->validate($data, $rule, $context);
 
-        $this->assertNull($context->getAttributeLabel());
+        $this->assertNull($context->getPropertyLabel());
     }
 
     public function dataOptions(): array

@@ -55,8 +55,8 @@ final class BooleanValueHandler implements RuleHandlerInterface
     private function getCommonResultParameters(BooleanValue $rule, ValidationContext $context): array
     {
         return [
-            'attribute' => $context->getTranslatedAttribute(),
-            'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+            'attribute' => $context->getTranslatedProperty(),
+            'Attribute' => $context->getCapitalizedTranslatedProperty(),
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
             'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
         ];

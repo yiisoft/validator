@@ -145,20 +145,20 @@ final class Validator implements ValidatorInterface
             if (is_int($attribute)) {
                 $validatedData = $originalData;
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, $dataSet->getData());
-                $context->setAttribute(null);
+                $context->setProperty(null);
             } else {
                 $validatedData = $dataSet->getAttributeValue($attribute);
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, null);
-                $context->setAttribute($attribute);
+                $context->setProperty($attribute);
             }
 
             if ($dataSet instanceof LabelsProviderInterface) {
                 $labels = $dataSet->getValidationPropertyLabels();
                 if (is_string($attribute)) {
-                    $context->setAttributeLabel($labels[$attribute] ?? $attribute);
+                    $context->setPropertyLabel($labels[$attribute] ?? $attribute);
                 }
             } else {
-                $context->setAttributeLabel(is_string($attribute) ? $attribute : $context->getAttributeLabel());
+                $context->setPropertyLabel(is_string($attribute) ? $attribute : $context->getPropertyLabel());
             }
 
             $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
@@ -214,8 +214,8 @@ final class Validator implements ValidatorInterface
 
             foreach ($ruleResult->getErrors() as $error) {
                 $valuePath = $error->getValuePath();
-                if ($context->getAttribute() !== null) {
-                    $valuePath = [$context->getAttribute(), ...$valuePath];
+                if ($context->getProperty() !== null) {
+                    $valuePath = [$context->getProperty(), ...$valuePath];
                 }
                 match ($error->getMessageProcessing()) {
                     Error::MESSAGE_TRANSLATE => $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePath),
@@ -254,7 +254,7 @@ final class Validator implements ValidatorInterface
     {
         if (
             $rule instanceof SkipOnEmptyInterface &&
-            (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $context->isAttributeMissing())
+            (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $context->isPropertyMissing())
         ) {
             return true;
         }

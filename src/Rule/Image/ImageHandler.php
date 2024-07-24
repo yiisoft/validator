@@ -39,8 +39,8 @@ final class ImageHandler implements RuleHandlerInterface
         $imageFilePath = $this->getImageFilePath($value);
         if (empty($imageFilePath)) {
             $result->addError($rule->getNotImageMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
+                'Attribute' => $context->getCapitalizedTranslatedProperty(),
             ]);
             return $result;
         }
@@ -52,8 +52,8 @@ final class ImageHandler implements RuleHandlerInterface
         $info = $this->imageInfoProvider->get($imageFilePath);
         if (empty($info)) {
             $result->addError($rule->getNotImageMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
+                'Attribute' => $context->getCapitalizedTranslatedProperty(),
             ]);
             return $result;
         }
@@ -63,43 +63,43 @@ final class ImageHandler implements RuleHandlerInterface
 
         if ($rule->getWidth() !== null && $width !== $rule->getWidth()) {
             $result->addError($rule->getNotExactWidthMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
+                'Attribute' => $context->getCapitalizedTranslatedProperty(),
                 'exactly' => $rule->getWidth(),
             ]);
         }
         if ($rule->getHeight() !== null && $height !== $rule->getHeight()) {
             $result->addError($rule->getNotExactHeightMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
+                'Attribute' => $context->getCapitalizedTranslatedProperty(),
                 'exactly' => $rule->getHeight(),
             ]);
         }
         if ($rule->getMinWidth() !== null && $width < $rule->getMinWidth()) {
             $result->addError($rule->getTooSmallWidthMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
+                'Attribute' => $context->getCapitalizedTranslatedProperty(),
                 'limit' => $rule->getMinWidth(),
             ]);
         }
         if ($rule->getMinHeight() !== null && $height < $rule->getMinHeight()) {
             $result->addError($rule->getTooSmallHeightMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
+                'Attribute' => $context->getCapitalizedTranslatedProperty(),
                 'limit' => $rule->getMinHeight(),
             ]);
         }
         if ($rule->getMaxWidth() !== null && $width > $rule->getMaxWidth()) {
             $result->addError($rule->getTooLargeWidthMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
+                'Attribute' => $context->getCapitalizedTranslatedProperty(),
                 'limit' => $rule->getMaxWidth(),
             ]);
         }
         if ($rule->getMaxHeight() !== null && $height > $rule->getMaxHeight()) {
             $result->addError($rule->getTooLargeHeightMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
+                'Attribute' => $context->getCapitalizedTranslatedProperty(),
                 'limit' => $rule->getMaxHeight(),
             ]);
         }
@@ -177,8 +177,8 @@ final class ImageHandler implements RuleHandlerInterface
             $result->addError(
                 $rule->getInvalidAspectRatioMessage(),
                 [
-                    'attribute' => $context->getTranslatedAttribute(),
-                    'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                    'attribute' => $context->getTranslatedProperty(),
+                    'Attribute' => $context->getCapitalizedTranslatedProperty(),
                     'aspectRatioWidth' => $rule->getAspectRatio()->getWidth(),
                     'aspectRatioHeight' => $rule->getAspectRatio()->getHeight(),
                     'aspectRatioMargin' => $rule->getAspectRatio()->getMargin(),

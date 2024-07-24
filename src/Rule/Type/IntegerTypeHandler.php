@@ -26,7 +26,7 @@ final class IntegerTypeHandler implements RuleHandlerInterface
 
         if (!is_int($value)) {
             return (new Result())->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }

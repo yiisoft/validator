@@ -31,18 +31,18 @@ trait TranslatedAttributesHandlerTrait
      */
     private function getTranslatedAttributes(array $attributes, ValidationContext $context, bool $capitalized): array
     {
-        $initialLabel = $context->getAttributeLabel();
+        $initialLabel = $context->getPropertyLabel();
         $translatedAttributes = [];
         foreach ($attributes as $attribute) {
-            $context->setAttributeLabel($attribute);
+            $context->setPropertyLabel($attribute);
             $translatedAttributes[] = $capitalized
-                ? $context->getCapitalizedTranslatedAttribute()
-                : $context->getTranslatedAttribute();
+                ? $context->getCapitalizedTranslatedProperty()
+                : $context->getTranslatedProperty();
         }
 
         /** @var string[] $translatedAttributes */
 
-        $context->setAttributeLabel($initialLabel);
+        $context->setPropertyLabel($initialLabel);
 
         return $translatedAttributes;
     }

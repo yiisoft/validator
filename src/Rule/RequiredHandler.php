@@ -55,10 +55,10 @@ final class RequiredHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-        if ($context->isAttributeMissing()) {
+        if ($context->isPropertyMissing()) {
             $result->addError($rule->getNotPassedMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'attribute' => $context->getTranslatedProperty(),
+                'Attribute' => $context->getCapitalizedTranslatedProperty(),
             ]);
 
             return $result;
@@ -66,13 +66,13 @@ final class RequiredHandler implements RuleHandlerInterface
 
         $emptyCondition = $rule->getEmptyCondition() ?? $this->defaultEmptyCondition;
 
-        if (!$emptyCondition($value, $context->isAttributeMissing())) {
+        if (!$emptyCondition($value, $context->isPropertyMissing())) {
             return $result;
         }
 
         $result->addError($rule->getMessage(), [
-            'attribute' => $context->getTranslatedAttribute(),
-            'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+            'attribute' => $context->getTranslatedProperty(),
+            'Attribute' => $context->getCapitalizedTranslatedProperty(),
         ]);
 
         return $result;
