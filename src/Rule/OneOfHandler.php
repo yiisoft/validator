@@ -8,7 +8,7 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Trait\TranslatedAttributesHandlerTrait;
+use Yiisoft\Validator\Rule\Trait\TranslatedPropertiesHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -23,7 +23,7 @@ use function is_object;
  */
 final class OneOfHandler implements RuleHandlerInterface
 {
-    use TranslatedAttributesHandlerTrait;
+    use TranslatedPropertiesHandlerTrait;
 
     public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
@@ -61,8 +61,8 @@ final class OneOfHandler implements RuleHandlerInterface
     private function getGenericErrorResult(OneOf $rule, ValidationContext $context): Result
     {
         return (new Result())->addError($rule->getMessage(), [
-            'properties' => $this->getFormattedAttributesString($rule->getAttributes(), $context),
-            'Properties' => $this->getCapitalizedAttributesString($rule->getAttributes(), $context),
+            'properties' => $this->getFormattedPropertiesString($rule->getAttributes(), $context),
+            'Properties' => $this->getCapitalizedPropertiesString($rule->getAttributes(), $context),
         ]);
     }
 }

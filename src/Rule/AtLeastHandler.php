@@ -8,7 +8,7 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\Trait\TranslatedAttributesHandlerTrait;
+use Yiisoft\Validator\Rule\Trait\TranslatedPropertiesHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
@@ -17,13 +17,13 @@ use function is_array;
 use function is_object;
 
 /**
- * Validates that a minimum number of specified attributes are filled.
+ * Validates that a minimum number of specified properties are filled.
  *
  * @see AtLeast
  */
 final class AtLeastHandler implements RuleHandlerInterface
 {
-    use TranslatedAttributesHandlerTrait;
+    use TranslatedPropertiesHandlerTrait;
 
     public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
@@ -45,16 +45,16 @@ final class AtLeastHandler implements RuleHandlerInterface
         }
 
         $filledCount = 0;
-        foreach ($rule->getProperties() as $attribute) {
-            if (!(new WhenEmpty())(ArrayHelper::getValue($value, $attribute), $context->isPropertyMissing())) {
+        foreach ($rule->getProperties() as $property) {
+            if (!(new WhenEmpty())(ArrayHelper::getValue($value, $property), $context->isPropertyMissing())) {
                 $filledCount++;
             }
         }
 
         if ($filledCount < $rule->getMin()) {
             $result->addError($rule->getMessage(), [
-                'properties' => $this->getFormattedAttributesString($rule->getProperties(), $context),
-                'Properties' => $this->getCapitalizedAttributesString($rule->getProperties(), $context),
+                'properties' => $this->getFormattedPropertiesString($rule->getProperties(), $context),
+                'Properties' => $this->getCapitalizedPropertiesString($rule->getProperties(), $context),
                 'min' => $rule->getMin(),
             ]);
         }
