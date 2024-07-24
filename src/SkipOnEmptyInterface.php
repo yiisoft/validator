@@ -16,7 +16,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
  * The package ships with {@see SkipOnEmptyTrait} which already implements that interface. All you have to do is include
  * it in the rule class along with the interface.
  *
- * @psalm-type SkipOnEmptyCallable = callable(mixed $value, bool $isAttributeMissing): bool
+ * @psalm-type SkipOnEmptyCallable = callable(mixed $value, bool $isPropertyMissing): bool
  * @psalm-type SkipOnEmptyValue = SkipOnEmptyCallable|bool|null
  */
 interface SkipOnEmptyInterface
@@ -57,7 +57,7 @@ interface SkipOnEmptyInterface
      * A custom callable for skipping only when a value is zero:
      *
      * ```php
-     * static function (mixed $value, bool $isAttributeMissing): bool {
+     * static function (mixed $value, bool $isPropertyMissing): bool {
      * {
      *     return $value === 0;
      * }
@@ -68,7 +68,7 @@ interface SkipOnEmptyInterface
      * ```php
      * final class SkipOnZero
      * {
-     *     public function __invoke(mixed $value, bool $isAttributeMissing): bool
+     *     public function __invoke(mixed $value, bool $isPropertyMissing): bool
      *     {
      *         return $value === 0;
      *     }

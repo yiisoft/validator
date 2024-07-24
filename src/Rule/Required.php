@@ -15,7 +15,7 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * Contains a set of options to determine if the value is not empty according to {@see Required::$emptyCondition}. When
  * rule-level condition is not set, a handler-level condition ({@see RequiredHandler::$defaultEmptyCondition}) is
- * applied (which is also customizable). In case of using attributes, the attribute must be present with passed
+ * applied (which is also customizable). In case of using attributes, the property must be present with passed
  * non-empty value.
  *
  * With default settings in order for value to pass the validation it must satisfy all the following conditions:
@@ -44,10 +44,10 @@ final class Required implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
      * determine emptiness of the value. The signature must be like the following:
      *
      * ```php
-     * function (mixed $value, bool $isAttributeMissing): bool
+     * function (mixed $value, bool $isPropertyMissing): bool
      * ```
      *
-     * `$isAttributeMissing` is a flag defining whether the attribute is missing (not used / not passed at all).
+     * `$isPropertyMissing` is a flag defining whether the property is missing (not used / not passed at all).
      *
      * @psalm-var EmptyConditionType|null
      */
@@ -58,13 +58,13 @@ final class Required implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * @param string $notPassedMessage Error message used when validation fails because the validated value is not
      * passed.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * @param callable|null $emptyCondition An empty condition used to determine emptiness of the value.
      *
      * @psalm-param EmptyConditionType|null $emptyCondition
