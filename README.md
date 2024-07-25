@@ -27,7 +27,7 @@ This package provides data validation capabilities.
 - Attribute names translation.
 - Conditional validation:
   - Skip validation of "empty" value with possibility to configure "empty" condition.
-  - Skip further validation if an error occurred for the same attribute.
+  - Skip further validation if an error occurred for the same property.
   - Skip validation depending on a condition.
 - Possibility to use context in rule handler.
 - Common rules bundled.
