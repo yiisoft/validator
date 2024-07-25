@@ -38,7 +38,7 @@ return [
     /** @see AtLeast */
     'At least {min, number} {min, plural, one{property} other{properties}} from this list must be filled' => 'Как ' .
         'минимум {min, number}' .
-        '{min, plural, one{атрибут} few{атрибута} many{атрибутов} other{атрибута}} из этого списка ' .
+        '{min, plural, one{свойство} few{свойства} many{свойства} other{свойства}} из этого списка ' .
         '{min, plural, one{должен} few{должны} many{должны} other{должны}} быть ' .
         'заполнены: {properties}.',
     /** @see BooleanValue */
@@ -81,7 +81,7 @@ return [
     /** @see Number */
     '{Property} must be a number.' => '{Property} должно быть числом.',
     /** @see OneOf */
-    'Exactly 1 property from this list must be filled: {properties}.' => 'Ровно 1 атрибут из этого списка должен быть заполнен: {properties}.',
+    'Exactly 1 property from this list must be filled: {properties}.' => 'Ровно 1 свойство из этого списка должно быть заполнен: {properties}.',
     /** @see Regex */
     '{Property} is invalid.' => 'Значение неверно.',
     /** @see Required */
