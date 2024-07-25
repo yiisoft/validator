@@ -5,7 +5,7 @@
 В целом, параметр `message` отвечает за сохранение сообщения об ошибке:
 
 ```php
-new Required(message: '{attribute} is required.');
+new Required(message: '{property} is required.');
 ```
 
 Некоторые правила имеют несколько сообщений об ошибках и переопределяются с помощью различных соответствующих параметров.
@@ -17,8 +17,8 @@ use Yiisoft\Validator\Rule\Length;
 new Length(  
     min: 4,  
     max: 10,
-    lessThanMinMessage: 'The {attribute} is too short.',  
-    greaterThanMaxMessage: 'The {attribute} is too long.',  
+    lessThanMinMessage: 'The {property} is too short.',  
+    greaterThanMaxMessage: 'The {property} is too long.',  
 );
 ```
 
@@ -63,7 +63,7 @@ $validator = new Validator(translator: $translator);
 
 ## Перевод имен свойств
 
-Почти все шаблоны ошибок поддерживают плейсхолдер `{attribute}`, который заменяется фактическим именем свойства, 
+Почти все шаблоны ошибок поддерживают плейсхолдер `{property}`, который заменяется фактическим именем свойства, 
 заданным во время настройки правил. По умолчанию имя свойства форматируется без изменений.
 Это может быть приемлемо для английского языка (например, `currentPassword is required.`), но при использовании перевода
 сообщений об ошибках, лучше предоставить дополнительный перевод свойства.
@@ -76,7 +76,7 @@ $validator = new Validator(translator: $translator);
 - `TranslatorPropertyTranslator` - использует [Yii Translator].
 - `NullPropertyTranslator` - фиктивный переводчик, возвращает имя свойства как есть, без перевода.
 
-Существует несколько способов использования переводчика атрибутов.
+Существует несколько способов использования переводчика свойств.
 
 ### Передача переводчика в экземпляр валидатора
 
@@ -113,13 +113,13 @@ use Yiisoft\Validator\Validator;
 final class ChangePasswordForm implements PropertyTranslatorProviderInterface  
 {  
     public function __construct(  
-        #[Required(message: '{attribute} обязателен для ввода.')]  
+        #[Required(message: '{property} обязателен для ввода.')]  
         public string $currentPassword = '',  
   
         #[Length(  
             min: 8,
             skipOnEmpty: false,  
-            lessThanMinMessage: '{attribute} должен быть сложный, не менее 8 символов.'  
+            lessThanMinMessage: '{property} должен быть сложный, не менее 8 символов.'  
         )]  
         public string $newPassword = '',  
     ) {  
