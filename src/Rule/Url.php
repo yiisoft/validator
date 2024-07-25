@@ -60,14 +60,14 @@ final class Url implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterf
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the value's type.
      * @param string $message @var string A message used when the value is not valid.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
-     * - `{value}`: the value of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
+     * - `{value}`: the value of the property being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
@@ -81,8 +81,8 @@ final class Url implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterf
         string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
         private array $validSchemes = ['http', 'https'],
         private bool $enableIdn = false,
-        private string $incorrectInputMessage = '{Attribute} must be a string.',
-        private string $message = '{Attribute} is not a valid URL.',
+        private string $incorrectInputMessage = '{Property} must be a string.',
+        private string $message = '{Property} is not a valid URL.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

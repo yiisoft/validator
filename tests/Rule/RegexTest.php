@@ -43,11 +43,11 @@ final class RegexTest extends RuleTestCase
                     'pattern' => '//',
                     'not' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Attribute} is invalid.',
+                        'template' => '{Property} is invalid.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -60,11 +60,11 @@ final class RegexTest extends RuleTestCase
                     'pattern' => '//',
                     'not' => true,
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Attribute} is invalid.',
+                        'template' => '{Property} is invalid.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -103,13 +103,13 @@ final class RegexTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 null,
-                [new Regex('/a/', incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - value, type - null.']],
+                [new Regex('/a/', incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['' => ['Property - value, type - null.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => null],
-                ['data' => new Regex('/a/', incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['data' => ['Attribute - data, type - null.']],
+                ['data' => new Regex('/a/', incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['data' => ['Property - data, type - null.']],
             ],
 
             ['b', [new Regex('/a/')], ['' => [$message]]],
@@ -117,13 +117,13 @@ final class RegexTest extends RuleTestCase
             'custom message' => ['b', [new Regex('/a/', message: 'Custom message.')], ['' => ['Custom message.']]],
             'custom message with parameters' => [
                 'b',
-                [new Regex('/a/', message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - value, value - b.']],
+                [new Regex('/a/', message: 'Property - {property}, value - {value}.')],
+                ['' => ['Property - value, value - b.']],
             ],
-            'custom message with parameters, attribute set' => [
+            'custom message with parameters, property set' => [
                 ['data' => 'b'],
-                ['data' => new Regex('/a/', message: 'Attribute - {Attribute}, value - {value}.')],
-                ['data' => ['Attribute - Data, value - b.']],
+                ['data' => new Regex('/a/', message: 'Property - {Property}, value - {value}.')],
+                ['data' => ['Property - Data, value - b.']],
             ],
         ];
     }

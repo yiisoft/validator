@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rule\Type;
 
 use Stringable;
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Type\StringType;
 use Yiisoft\Validator\Rule\Type\StringTypeHandler;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -113,32 +113,32 @@ EOD,
             'array' => [[], new StringType(), ['' => [$message]]],
             'message, custom' => [
                 ['name' => []],
-                ['name' => new StringType('Attribute - {attribute}, type - {type}')],
-                ['name' => ['Attribute - name, type - array']],
+                ['name' => new StringType('Property - {property}, type - {type}')],
+                ['name' => ['Property - name, type - array']],
             ],
-            'message, translated attribute' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+            'message, translated property' => [
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?string $name = null,
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'name' => 'Название',
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array
                     {
                         return [
-                            'name' => new StringType(message: '"{attribute}" - не строка.'),
+                            'name' => new StringType(message: '"{property}" - не строка.'),
                         ];
                     }
                 },

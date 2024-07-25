@@ -76,8 +76,8 @@ final class MainBench
 
     public function generateRules(array $rules, int $count): iterable
     {
-        foreach ($rules as $attribute => $rule) {
-            yield $attribute => $this->cloneRule($rule, $count);
+        foreach ($rules as $property => $rule) {
+            yield $property => $this->cloneRule($rule, $count);
         }
     }
 

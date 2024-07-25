@@ -15,9 +15,9 @@ final class RulesProvidedDataSet implements RulesProviderInterface, DataSetInter
     {
     }
 
-    public function getAttributeValue(string $attribute): mixed
+    public function getPropertyValue(string $property): mixed
     {
-        return $this->data[$attribute] ?? null;
+        return $this->data[$property] ?? null;
     }
 
     public function getRules(): iterable
@@ -30,8 +30,8 @@ final class RulesProvidedDataSet implements RulesProviderInterface, DataSetInter
         return $this->data;
     }
 
-    public function hasAttribute(string $attribute): bool
+    public function hasProperty(string $property): bool
     {
-        return array_key_exists($attribute, $this->data);
+        return array_key_exists($property, $this->data);
     }
 }

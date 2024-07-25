@@ -12,7 +12,7 @@ use Yiisoft\Translator\NullMessageFormatter;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Translator\Translator;
 use Yiisoft\Translator\TranslatorInterface;
-use Yiisoft\Validator\AttributeTranslator\TranslatorAttributeTranslator;
+use Yiisoft\Validator\PropertyTranslator\TranslatorPropertyTranslator;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
 use Yiisoft\Validator\Helper\MessageProcessor;
 use Yiisoft\Validator\Helper\RulesNormalizer;
@@ -51,10 +51,10 @@ final class Validator implements ValidatorInterface
     private $defaultSkipOnEmptyCondition;
 
     /**
-     * @var AttributeTranslatorInterface A default translator used for translation of rule ({@see RuleInterface})
-     * attributes. Used to optimize setting the same value in all the rules.
+     * @var PropertyTranslatorInterface A default translator used for translation of rule ({@see RuleInterface})
+     * properties. Used to optimize setting the same value in all the rules.
      */
-    private AttributeTranslatorInterface $defaultAttributeTranslator;
+    private PropertyTranslatorInterface $defaultPropertyTranslator;
 
     private MessageProcessor $messageProcessor;
 
@@ -68,8 +68,8 @@ final class Validator implements ValidatorInterface
      * @param string $translationCategory A name for {@see CategorySource} used during creation
      * ({@see createDefaultTranslator()}) of default translator ({@see TranslatorInterface}) in case `$translator`
      * argument was not specified explicitly. If not provided, a {@see DEFAULT_TRANSLATION_CATEGORY} will be used.
-     * @param AttributeTranslatorInterface|null $defaultAttributeTranslator A default translator used for translation of
-     * rule ({@see RuleInterface}) attributes. If not provided, a {@see TranslatorAttributeTranslator} will be used.
+     * @param PropertyTranslatorInterface|null $defaultPropertyTranslator A default translator used for translation of
+     * rule ({@see RuleInterface}) properties. If not provided, a {@see TranslatorPropertyTranslator} will be used.
      * @param MessageFormatterInterface|null $messageFormatter A message formatter instance used for formats of error
      * messages that requires format only. If not provided, message is returned as is.
      * @param string $messageFormatterLocale Locale to use when error message requires format only.
@@ -81,15 +81,15 @@ final class Validator implements ValidatorInterface
         ?TranslatorInterface $translator = null,
         bool|callable|null $defaultSkipOnEmpty = null,
         string $translationCategory = self::DEFAULT_TRANSLATION_CATEGORY,
-        ?AttributeTranslatorInterface $defaultAttributeTranslator = null,
+        ?PropertyTranslatorInterface $defaultPropertyTranslator = null,
         ?MessageFormatterInterface $messageFormatter = null,
         string $messageFormatterLocale = 'en-US',
     ) {
         $translator ??= $this->createDefaultTranslator($translationCategory);
         $this->ruleHandlerResolver = $ruleHandlerResolver ?? new SimpleRuleHandlerContainer();
         $this->defaultSkipOnEmptyCondition = SkipOnEmptyNormalizer::normalize($defaultSkipOnEmpty);
-        $this->defaultAttributeTranslator = $defaultAttributeTranslator
-            ?? new TranslatorAttributeTranslator($translator);
+        $this->defaultPropertyTranslator = $defaultPropertyTranslator
+            ?? new TranslatorPropertyTranslator($translator);
         $this->messageProcessor = new MessageProcessor(
             $translator,
             $translationCategory,
@@ -131,37 +131,37 @@ final class Validator implements ValidatorInterface
             $this->defaultSkipOnEmptyCondition
         );
 
-        $defaultAttributeTranslator =
-            ($dataSet instanceof AttributeTranslatorProviderInterface ? $dataSet->getAttributeTranslator() : null)
-            ?? $this->defaultAttributeTranslator;
+        $defaultPropertyTranslator =
+            ($dataSet instanceof PropertyTranslatorProviderInterface ? $dataSet->getPropertyTranslator() : null)
+            ?? $this->defaultPropertyTranslator;
 
         $context ??= new ValidationContext();
         $context
-            ->setContextDataOnce($this, $defaultAttributeTranslator, $data, $dataSet)
+            ->setContextDataOnce($this, $defaultPropertyTranslator, $data, $dataSet)
             ->setDataSet($dataSet);
 
         $result = new Result();
-        foreach ($rules as $attribute => $attributeRules) {
-            if (is_int($attribute)) {
+        foreach ($rules as $property => $propertyRules) {
+            if (is_int($property)) {
                 $validatedData = $originalData;
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, $dataSet->getData());
-                $context->setAttribute(null);
+                $context->setProperty(null);
             } else {
-                $validatedData = $dataSet->getAttributeValue($attribute);
+                $validatedData = $dataSet->getPropertyValue($property);
                 $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, null);
-                $context->setAttribute($attribute);
+                $context->setProperty($property);
             }
 
             if ($dataSet instanceof LabelsProviderInterface) {
                 $labels = $dataSet->getValidationPropertyLabels();
-                if (is_string($attribute)) {
-                    $context->setAttributeLabel($labels[$attribute] ?? $attribute);
+                if (is_string($property)) {
+                    $context->setPropertyLabel($labels[$property] ?? $property);
                 }
             } else {
-                $context->setAttributeLabel(is_string($attribute) ? $attribute : $context->getAttributeLabel());
+                $context->setPropertyLabel(is_string($property) ? $property : $context->getPropertyLabel());
             }
 
-            $tempResult = $this->validateInternal($validatedData, $attributeRules, $context);
+            $tempResult = $this->validateInternal($validatedData, $propertyRules, $context);
 
             foreach ($tempResult->getErrors() as $error) {
                 $result->addErrorWithoutPostProcessing(
@@ -214,8 +214,8 @@ final class Validator implements ValidatorInterface
 
             foreach ($ruleResult->getErrors() as $error) {
                 $valuePath = $error->getValuePath();
-                if ($context->getAttribute() !== null) {
-                    $valuePath = [$context->getAttribute(), ...$valuePath];
+                if ($context->getProperty() !== null) {
+                    $valuePath = [$context->getProperty(), ...$valuePath];
                 }
                 match ($error->getMessageProcessing()) {
                     Error::MESSAGE_TRANSLATE => $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePath),
@@ -254,7 +254,7 @@ final class Validator implements ValidatorInterface
     {
         if (
             $rule instanceof SkipOnEmptyInterface &&
-            (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $context->isAttributeMissing())
+            (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $context->isPropertyMissing())
         ) {
             return true;
         }

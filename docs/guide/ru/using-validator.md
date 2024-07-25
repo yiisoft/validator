@@ -43,15 +43,15 @@ $data = [
     'phone' => null,
 ];
 $rules = [
-    // Правила, не относящиеся к конкретному атрибуту.
+    // Правила, не относящиеся к конкретному свойству.
  
-    // Хотя бы один из атрибутов ("email" или "phone"), должен быть передан и иметь непустое значение.
+    // Хотя бы одно из свойств ("email" или "phone"), должен быть передан и иметь непустое значение.
     new AtLeast(['email', 'phone']),
 
-    // Правила, относящиеся к конкретному атрибуту.
+    // Правила, относящиеся к конкретному свойству.
 
     'name' => [
-        // Атрибут "name" обязательный (должен быть передан и иметь непустое значение).
+        // Свойство "name" обязательный (должен быть передан и иметь непустое значение).
         new Required(),
         // Длина "name" должна быть не менее 2 символов.
         new Length(min: 2),
@@ -108,7 +108,7 @@ $result = (new Validator())->validate($person);
 ### Пользовательский набор данных
 
 В большинстве случаев создание собственного набора данных не требуется из-за наличия встроенных и автоматической нормализации всех типов во время валидации.
-Однако, это может оказаться полезным, например, для изменения значения по-умолчанию для определенных атрибутов:
+Однако, это может оказаться полезным, например, для изменения значения по-умолчанию для определенных свойств:
 
 ```php
 use Yiisoft\Validator\DataSetInterface;
@@ -122,13 +122,13 @@ final class MyArrayDataSet implements DataSetInterface
     {
     }
 
-    public function getAttributeValue(string $attribute): mixed
+    public function getPropertyValue(string $property): mixed
     {
-        if ($this->hasAttribute($attribute)) {
-            return $this->data[$attribute];
+        if ($this->hasProperty($property)) {
+            return $this->data[$property];
         }
 
-        return $attribute === 'name' ? '' : null;
+        return $property === 'name' ? '' : null;
     }
 
     public function getData(): array
@@ -136,9 +136,9 @@ final class MyArrayDataSet implements DataSetInterface
         return $this->data;
     }
 
-    public function hasAttribute(string $attribute): bool
+    public function hasProperty(string $property): bool
     {
-        return array_key_exists($attribute, $this->data);
+        return array_key_exists($property, $this->data);
     }
 }
 

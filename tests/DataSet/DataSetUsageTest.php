@@ -83,8 +83,8 @@ final class DataSetUsageTest extends TestCase
         $result = (new Validator())->validate($dataObject, $rules);
 
         $this->assertFalse($result->isValid());
-        $this->assertTrue($result->isAttributeValid('bool'));
-        $this->assertFalse($result->isAttributeValid('int'));
+        $this->assertTrue($result->isPropertyValid('bool'));
+        $this->assertFalse($result->isPropertyValid('int'));
     }
 
     public function testRulesProvidedDataSetResult(): void
@@ -113,8 +113,8 @@ final class DataSetUsageTest extends TestCase
         $result = (new Validator())->validate($dataObject);
 
         $this->assertFalse($result->isValid());
-        $this->assertTrue($result->isAttributeValid('bool'));
-        $this->assertFalse($result->isAttributeValid('int'));
+        $this->assertTrue($result->isPropertyValid('bool'));
+        $this->assertFalse($result->isPropertyValid('int'));
     }
 
     public function testExplicitRulesHavePriority(): void

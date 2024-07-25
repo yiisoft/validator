@@ -69,14 +69,14 @@ final class Email implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $message A message used when the value is not valid.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
-     * - `{value}`: the value of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
+     * - `{value}`: the value of the property being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
@@ -94,8 +94,8 @@ final class Email implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
         private bool $allowName = false,
         private bool $checkDns = false,
         private bool $enableIdn = false,
-        private string $incorrectInputMessage = '{Attribute} must be a string.',
-        private string $message = '{Attribute} is not a valid email address.',
+        private string $incorrectInputMessage = '{Property} must be a string.',
+        private string $message = '{Property} is not a valid email address.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

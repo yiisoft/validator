@@ -73,8 +73,8 @@ final class User
 
 > **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
-Error messages may include `{attribute}` placeholder that is replaced with the name of the property. To capitalize the 
-first letter, you can use the `{Attribute}` placeholder. If you would like the name to be replaced with a custom value, 
+Error messages may include `{property}` placeholder that is replaced with the name of the property. To capitalize the 
+first letter, you can use the `{Property}` placeholder. If you would like the name to be replaced with a custom value, 
 you can specify it using the `Label` attribute:
 
 ```php

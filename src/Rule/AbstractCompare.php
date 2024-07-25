@@ -22,7 +22,7 @@ use function in_array;
  * Abstract base for all the comparison validation rules.
  *
  * The validated value is compared with {@see AbstractCompare::$targetValue} or
- * {@see AbstractCompare::$targetAttribute} value of validated data set.
+ * {@see AbstractCompare::$targetProperty} value of validated data set.
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
  * strings byte by byte and compare original values as is. See {@see AbstractCompare::$type} for all possible options.
@@ -52,7 +52,7 @@ abstract class AbstractCompare implements
     /**
      * A default for {@see $incorrectDataSetTypeMessage}.
      */
-    protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = 'The attribute value returned from a custom data set ' .
+    protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = 'The property value returned from a custom data set ' .
     'must have one of the following types: integer, float, string, boolean, null or an object implementing ' .
     '\Stringable interface or \DateTimeInterface.';
     /**
@@ -76,15 +76,15 @@ abstract class AbstractCompare implements
     ];
 
     /**
-     * @param mixed $targetValue The value to be compared with. When both this property and {@see $targetAttribute} are
+     * @param mixed $targetValue The value to be compared with. When both this property and {@see $targetProperty} are
      * set, this property takes precedence.
-     * @param string|null $targetAttribute The name of the attribute to be compared with. When both this property and
+     * @param string|null $targetProperty The name of the property to be compared with. When both this property and
      * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $incorrectDataSetTypeMessage A message used when the value returned from a custom
      * data set is neither scalar nor null.
@@ -96,16 +96,16 @@ abstract class AbstractCompare implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{targetValue}`: the value to be compared with.
-     * - `{targetAttribute}`: the name of the attribute to be compared with.
-     * - `{targetAttributeValue}`: the value extracted from the attribute to be compared with if this attribute was set.
-     * - `{targetValueOrAttribute}`: the value to be compared with or, if it's absent, the name of the attribute to be
+     * - `{targetProperty}`: the name of the property to be compared with.
+     * - `{targetPropertyValue}`: the value extracted from the property to be compared with if this property was set.
+     * - `{targetValueOrProperty}`: the value to be compared with or, if it's absent, the name of the property to be
      * compared with.
      * - `{value}`: the value being validated.
      *
      * When {@see CompareType::ORIGINAL} is used with complex types (neither scalar nor `null`), `{targetValue}`,
-     * `{targetAttributeValue}` and `{targetValueOrAttribute}` parameters might contain the actual type instead of the
+     * `{targetPropertyValue}` and `{targetValueOrProperty}` parameters might contain the actual type instead of the
      * value, e.g. "object" for predictable formatting.
      * @param string $type The type of the values being compared:
      *
@@ -145,7 +145,7 @@ abstract class AbstractCompare implements
      */
     public function __construct(
         private mixed $targetValue = null,
-        private string|null $targetAttribute = null,
+        private string|null $targetProperty = null,
         private string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
         private string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
         private string|null $message = null,
@@ -191,15 +191,15 @@ abstract class AbstractCompare implements
     }
 
     /**
-     * Get the name of the attribute to be compared with.
+     * Get the name of the property to be compared with.
      *
-     * @return string|null Name of the attribute to be compared with or `null` if it was not configured.
+     * @return string|null Name of the property to be compared with or `null` if it was not configured.
      *
-     * @see $targetAttribute
+     * @see $targetProperty
      */
-    public function getTargetAttribute(): string|null
+    public function getTargetProperty(): string|null
     {
-        return $this->targetAttribute;
+        return $this->targetProperty;
     }
 
     /**
@@ -264,14 +264,14 @@ abstract class AbstractCompare implements
     public function getMessage(): string
     {
         return $this->message ?? match ($this->operator) {
-            '==', => '{Attribute} must be equal to "{targetValueOrAttribute}".',
-            '===' => '{Attribute} must be strictly equal to "{targetValueOrAttribute}".',
-            '!=' => '{Attribute} must not be equal to "{targetValueOrAttribute}".',
-            '!==' => '{Attribute} must not be strictly equal to "{targetValueOrAttribute}".',
-            '>' => '{Attribute} must be greater than "{targetValueOrAttribute}".',
-            '>=' => '{Attribute} must be greater than or equal to "{targetValueOrAttribute}".',
-            '<' => '{Attribute} must be less than "{targetValueOrAttribute}".',
-            '<=' => '{Attribute} must be less than or equal to "{targetValueOrAttribute}".',
+            '==', => '{Property} must be equal to "{targetValueOrProperty}".',
+            '===' => '{Property} must be strictly equal to "{targetValueOrProperty}".',
+            '!=' => '{Property} must not be equal to "{targetValueOrProperty}".',
+            '!==' => '{Property} must not be strictly equal to "{targetValueOrProperty}".',
+            '>' => '{Property} must be greater than "{targetValueOrProperty}".',
+            '>=' => '{Property} must be greater than or equal to "{targetValueOrProperty}".',
+            '<' => '{Property} must be less than "{targetValueOrProperty}".',
+            '<=' => '{Property} must be less than or equal to "{targetValueOrProperty}".',
         };
     }
 
@@ -280,17 +280,17 @@ abstract class AbstractCompare implements
         $isTargetValueSimple = $this->targetValue === null || is_scalar($this->targetValue);
 
         if (!$isTargetValueSimple) {
-            $messageParameters = ['targetAttribute' => $this->targetAttribute];
+            $messageParameters = ['targetProperty' => $this->targetProperty];
         } else {
             $messageParameters = [
                 'targetValue' => $this->targetValue,
-                'targetAttribute' => $this->targetAttribute,
-                'targetValueOrAttribute' => $this->targetAttribute ?? $this->targetValue,
+                'targetProperty' => $this->targetProperty,
+                'targetValueOrProperty' => $this->targetProperty ?? $this->targetValue,
             ];
         }
 
         $options = [
-            'targetAttribute' => $this->targetAttribute,
+            'targetProperty' => $this->targetProperty,
             'incorrectInputMessage' => [
                 'template' => $this->incorrectInputMessage,
                 'parameters' => $messageParameters,

@@ -50,27 +50,27 @@ final class Length implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $lessThanMinMessage Error message used when the length of the value is smaller than {@see $min}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{min}`: minimum number of items required.
      * - `{number}`: actual number of items.
      * @param string $greaterThanMaxMessage Error message used when the length of the value is greater than {@see $max}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{max}`: maximum number of items required.
      * - `{number}`: actual number of items.
      * @param string $notExactlyMessage Error message used when the number of items does not equal {@see $exactly}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{exactly}`: exact number of items required.
      * - `{number}`: actual number of items.
      * @param string $encoding The encoding of the string value to be validated (e.g. 'UTF-8').
@@ -89,12 +89,12 @@ final class Length implements
         int|null $exactly = null,
         int|null $min = null,
         int|null $max = null,
-        private string $incorrectInputMessage = '{Attribute} must be a string.',
-        string $lessThanMinMessage = '{Attribute} must contain at least {min, number} {min, plural, one{character} ' .
+        private string $incorrectInputMessage = '{Property} must be a string.',
+        string $lessThanMinMessage = '{Property} must contain at least {min, number} {min, plural, one{character} ' .
         'other{characters}}.',
-        string $greaterThanMaxMessage = '{Attribute} must contain at most {max, number} {max, plural, one{character} ' .
+        string $greaterThanMaxMessage = '{Property} must contain at most {max, number} {max, plural, one{character} ' .
         'other{characters}}.',
-        string $notExactlyMessage = '{Attribute} must contain exactly {exactly, number} {exactly, plural, ' .
+        string $notExactlyMessage = '{Property} must contain exactly {exactly, number} {exactly, plural, ' .
         'one{character} other{characters}}.',
         private string $encoding = 'UTF-8',
         bool|callable|null $skipOnEmpty = null,

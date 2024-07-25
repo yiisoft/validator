@@ -60,7 +60,7 @@ trait CountableLimitTestTrait
         $ruleClass = $this->getRuleClass();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('At least one of these attributes must be specified: $min, $max, $exactly.');
+        $this->expectExceptionMessage('At least one of these properties must be specified: $min, $max, $exactly.');
         new $ruleClass();
     }
 

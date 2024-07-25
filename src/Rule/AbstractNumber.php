@@ -43,11 +43,11 @@ abstract class AbstractNumber implements
     /**
      * A default for {@see $lessThanMinMessage}.
      */
-    protected const DEFAULT_LESS_THAN_MIN_MESSAGE = '{Attribute} must be no less than {min}.';
+    protected const DEFAULT_LESS_THAN_MIN_MESSAGE = '{Property} must be no less than {min}.';
     /**
      * A default for {@see $greaterThanMaxMessage}.
      */
-    protected const DEFAULT_GREATER_THAN_MAX_MESSAGE = '{Attribute} must be no greater than {max}.';
+    protected const DEFAULT_GREATER_THAN_MAX_MESSAGE = '{Property} must be no greater than {max}.';
 
     /**
      * @var string The regular expression for matching numbers.
@@ -64,26 +64,26 @@ abstract class AbstractNumber implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $notNumberMessage Error message used when the value does not match {@see $pattern}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: actual value.
      * @param string $lessThanMinMessage Error message used when the value is smaller than {@link $min}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{min}`: minimum value.
      * - `{value}`: actual value.
      * @param string $greaterThanMaxMessage Error message used when the value is bigger than {@link $max}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{max}`: maximum value.
      * - `{value}`: actual value.
      * @param string $pattern The regular expression for matching numbers.

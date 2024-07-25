@@ -19,7 +19,7 @@ final class CompositeTest extends TestCase
                 '' => ['Invalid A.'],
                 'b' => ['Invalid B.'],
             ],
-            $result->getErrorMessagesIndexedByAttribute()
+            $result->getErrorMessagesIndexedByProperty()
         );
     }
 }

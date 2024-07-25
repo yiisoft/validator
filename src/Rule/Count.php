@@ -51,27 +51,27 @@ final class Count implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $lessThanMinMessage Error message used when the number of items is smaller than {@see $min}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{min}`: minimum number of items required.
      * - `{number}`: actual number of items.
      * @param string $greaterThanMaxMessage Error message used when the number of items is greater than {@see $max}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{max}`: maximum number of items required.
      * - `{number}`: actual number of items.
      * @param string $notExactlyMessage Error message used when the number of items does not equal {@see $exactly}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{exactly}`: exact number of items required.
      * - `{number}`: actual number of items.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
@@ -88,12 +88,12 @@ final class Count implements
         int|null $exactly = null,
         int|null $min = null,
         int|null $max = null,
-        private string $incorrectInputMessage = '{Attribute} must be an array or implement \Countable interface.',
-        string $lessThanMinMessage = '{Attribute} must contain at least {min, number} {min, plural, one{item} ' .
+        private string $incorrectInputMessage = '{Property} must be an array or implement \Countable interface.',
+        string $lessThanMinMessage = '{Property} must contain at least {min, number} {min, plural, one{item} ' .
         'other{items}}.',
-        string $greaterThanMaxMessage = '{Attribute} must contain at most {max, number} {max, plural, one{item} ' .
+        string $greaterThanMaxMessage = '{Property} must contain at most {max, number} {max, plural, one{item} ' .
         'other{items}}.',
-        string $notExactlyMessage = '{Attribute} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
+        string $notExactlyMessage = '{Property} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
         'other{items}}.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,

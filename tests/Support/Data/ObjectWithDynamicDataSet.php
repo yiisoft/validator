@@ -14,9 +14,9 @@ final class ObjectWithDynamicDataSet implements DataSetInterface
     {
     }
 
-    public function getAttributeValue(string $attribute): mixed
+    public function getPropertyValue(string $property): mixed
     {
-        return $this->getData()[$attribute] ?? null;
+        return $this->getData()[$property] ?? null;
     }
 
     public function getData(): ?array
@@ -24,8 +24,8 @@ final class ObjectWithDynamicDataSet implements DataSetInterface
         return ['name' => $this->name];
     }
 
-    public function hasAttribute(string $attribute): bool
+    public function hasProperty(string $property): bool
     {
-        return array_key_exists($attribute, $this->getData());
+        return array_key_exists($property, $this->getData());
     }
 }

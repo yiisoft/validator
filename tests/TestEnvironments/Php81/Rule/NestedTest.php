@@ -77,7 +77,7 @@ final class NestedTest extends TestCase
                 'a' => ['A must be no less than 7.'],
                 'b' => ['B must be no greater than 1.'],
             ],
-            $result->getErrorMessagesIndexedByAttribute(),
+            $result->getErrorMessagesIndexedByProperty(),
         );
     }
 
@@ -90,7 +90,7 @@ final class NestedTest extends TestCase
                 'a' => ['Invalid A.'],
                 'b' => ['Invalid B.'],
             ],
-            $result->getErrorMessagesIndexedByAttribute(),
+            $result->getErrorMessagesIndexedByProperty(),
         );
     }
 }

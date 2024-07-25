@@ -259,7 +259,7 @@ $rules = [
     ],
     'state' => new Required(
         when: static function (mixed $value, ValidationContext $context): bool {
-            return $context->getDataSet()->getAttributeValue('country') === 'Brasil';
+            return $context->getDataSet()->getPropertyValue('country') === 'Brasil';
         },
     )
 ];

@@ -26,7 +26,8 @@ final class StringTypeHandler implements RuleHandlerInterface
 
         if (!is_string($value)) {
             return (new Result())->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }

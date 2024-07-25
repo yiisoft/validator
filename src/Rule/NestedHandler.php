@@ -35,8 +35,8 @@ final class NestedHandler implements RuleHandlerInterface
         if ($rule->getRules() === null) {
             if (!is_object($value)) {
                 return (new Result())->addError($rule->getNoRulesWithNoObjectMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
-                    'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                    'property' => $context->getTranslatedProperty(),
+                    'Property' => $context->getCapitalizedTranslatedProperty(),
                     'type' => get_debug_type($value),
                 ]);
             }
@@ -57,8 +57,8 @@ final class NestedHandler implements RuleHandlerInterface
             }
         } else {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -75,9 +75,8 @@ final class NestedHandler implements RuleHandlerInterface
                     $rule->getNoPropertyPathMessage(),
                     [
                         'path' => $valuePath,
-                        'attribute' => $context->getTranslatedAttribute(),
-                        'Attribute' => $context->getCapitalizedTranslatedAttribute(),
-                    ],
+                        'property' => $context->getTranslatedProperty(),
+                        'Property' => $context->getCapitalizedTranslatedProperty(),                    ],
                     $valuePathList,
                 );
 
@@ -90,8 +89,8 @@ final class NestedHandler implements RuleHandlerInterface
                 $itemResult = $context->validate($validatedValue, $rules);
             } else {
                 $valuePathList = StringHelper::parsePath($valuePath);
-                $attribute = (string) end($valuePathList);
-                $itemResult = $context->validate([$attribute => $validatedValue], [$attribute => $rules]);
+                $property = (string) end($valuePathList);
+                $itemResult = $context->validate([$property => $validatedValue], [$property => $rules]);
             }
 
             if ($itemResult->isValid()) {

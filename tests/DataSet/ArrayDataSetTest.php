@@ -13,8 +13,8 @@ final class ArrayDataSetTest extends TestCase
     {
         $data = new ArrayDataSet(['test' => 'hello']);
 
-        $this->assertNull($data->getAttributeValue('non-exist'));
-        $this->assertSame('hello', $data->getAttributeValue('test'));
+        $this->assertNull($data->getPropertyValue('non-exist'));
+        $this->assertSame('hello', $data->getPropertyValue('test'));
         $this->assertSame(['test' => 'hello'], $data->getData());
     }
 }

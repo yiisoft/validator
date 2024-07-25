@@ -40,7 +40,7 @@ final class UniqueIterable implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $incorrectItemValueMessage Error message used when validation fails because the validated iterable
      * contains items with invalid values. Only the following types are allowed: scalar (string, integer, float,
@@ -48,20 +48,20 @@ final class UniqueIterable implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the iterable key being validated.
      * @param string $differentTypesMessage Error message used when validation fails because the validated iterable
      * contains items of different type.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * @param string $message Error message used when validation fails because the validated iterable contains duplicate
      * items.
      *
      * You may use the following placeholders in the message:
      *
-     *  - `{attribute}`: the translated label of the attribute being validated.
+     *  - `{property}`: the translated label of the property being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this `Each` rule with all defined {@see $rules} if the
      * validated value is empty / not passed. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this `Each` rule with all defined {@see $rules} if any of the previous

@@ -21,9 +21,9 @@ final class ObjectWithDataSet implements DataSetInterface
     #[Number(max: 100)]
     private int $number = 42;
 
-    public function getAttributeValue(string $attribute): mixed
+    public function getPropertyValue(string $property): mixed
     {
-        return $this->getData()[$attribute] ?? null;
+        return $this->getData()[$property] ?? null;
     }
 
     public function getData(): ?array
@@ -31,8 +31,8 @@ final class ObjectWithDataSet implements DataSetInterface
         return ['key1' => 7, 'key2' => 42];
     }
 
-    public function hasAttribute(string $attribute): bool
+    public function hasProperty(string $property): bool
     {
-        return array_key_exists($attribute, $this->getData());
+        return array_key_exists($property, $this->getData());
     }
 }
