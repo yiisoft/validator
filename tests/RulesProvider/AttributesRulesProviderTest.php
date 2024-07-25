@@ -207,10 +207,10 @@ final class AttributesRulesProviderTest extends TestCase
     private function convertRulesToClassNames(iterable $rules): array
     {
         $classNames = [];
-        foreach ($rules as $attribute => $attributeRules) {
-            $classNames[$attribute] = array_map(
+        foreach ($rules as $property => $propertyRules) {
+            $classNames[$property] = array_map(
                 static fn (RuleInterface $rule): string => $rule::class,
-                $attributeRules instanceof Traversable ? iterator_to_array($attributeRules) : $attributeRules
+                $propertyRules instanceof Traversable ? iterator_to_array($propertyRules) : $propertyRules
             );
         }
 

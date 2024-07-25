@@ -43,12 +43,12 @@ $data = [
     'phone' => null,
 ];
 $rules = [
-    // The rules that are not related to a specific attribute
+    // The rules that are not related to a specific property
 
-    // At least one of the attributes ("email" and "phone") must be passed and have non-empty value.  
+    // At least one of the properties ("email" and "phone") must be passed and have non-empty value.  
     new AtLeast(['email', 'phone']),
 
-    // The rules related to a specific attribute.
+    // The rules related to a specific property.
 
     'name' => [
         // The name is required (must be passed and have non-empty value).
@@ -109,7 +109,7 @@ $result = (new Validator())->validate($person);
 ### Custom data set
 
 Most of the time creating a custom data set is not needed because of built-in data sets and automatic normalization of
-all types during validation. However, this can be useful, for example, to change a default value for certain attributes:
+all types during validation. However, this can be useful, for example, to change a default value for certain properties:
 
 ```php
 use Yiisoft\Validator\DataSetInterface;
@@ -123,13 +123,13 @@ final class MyArrayDataSet implements DataSetInterface
     {
     }
 
-    public function getAttributeValue(string $attribute): mixed
+    public function getPropertyValue(string $property): mixed
     {
-        if ($this->hasAttribute($attribute)) {
-            return $this->data[$attribute];
+        if ($this->hasProperty($property)) {
+            return $this->data[$property];
         }
 
-        return $attribute === 'name' ? '' : null;
+        return $property === 'name' ? '' : null;
     }
 
     public function getData(): array
@@ -137,9 +137,9 @@ final class MyArrayDataSet implements DataSetInterface
         return $this->data;
     }
 
-    public function hasAttribute(string $attribute): bool
+    public function hasProperty(string $property): bool
     {
-        return array_key_exists($attribute, $this->data);
+        return array_key_exists($property, $this->data);
     }
 }
 

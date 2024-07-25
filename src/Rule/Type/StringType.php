@@ -36,7 +36,7 @@ final class StringType implements DumpedRuleInterface, SkipOnEmptyInterface, Ski
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty / not passed.
      * See {@see SkipOnEmptyInterface}.

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rule\Type;
 
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Type\BooleanType;
 use Yiisoft\Validator\Rule\Type\BooleanTypeHandler;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -88,32 +88,32 @@ final class BooleanTypeTest extends RuleTestCase
             'array' => [[], new BooleanType(), ['' => [$message]]],
             'message, custom' => [
                 ['active' => []],
-                ['active' => new BooleanType('Attribute - {attribute}, type - {type}')],
-                ['active' => ['Attribute - active, type - array']],
+                ['active' => new BooleanType('Property - {property}, type - {type}')],
+                ['active' => ['Property - active, type - array']],
             ],
-            'message, translated attribute' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+            'message, translated property' => [
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?bool $active = null,
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'active' => 'Активен',
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array
                     {
                         return [
-                            'active' => new BooleanType(message: '"{attribute}" - не булево значение.'),
+                            'active' => new BooleanType(message: '"{property}" - не булево значение.'),
                         ];
                     }
                 },

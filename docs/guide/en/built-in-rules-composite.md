@@ -47,7 +47,7 @@ use Yiisoft\Validator\Validator;
 $result = (new Validator())->validate('John', new UsernameRuleSet());
 ```
 
-It can also be combined with [Nested](built-in-rules-nested.md) rule to reuse rules for multiple attributes:
+It can also be combined with [Nested](built-in-rules-nested.md) rule to reuse rules for multiple properties:
 
 ```php
 use Yiisoft\Validator\Rule\Composite;

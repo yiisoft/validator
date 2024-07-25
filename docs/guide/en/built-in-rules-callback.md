@@ -1,6 +1,6 @@
 # `Callback` - a wrapper around `callable`
 
-This rule allows validation of the current attribute value (but not limited to it) with an arbitrary condition within a  
+This rule allows validation of the current property value (but not limited to it) with an arbitrary condition within a  
 callable. The benefit is that there is no need to create a separate custom rule and handler.
 
 A condition can be within:
@@ -53,7 +53,7 @@ new Callback(
 
 ### Value validation
 
-`Callback` rule can be used to add validation missing in built-in rules for a single attribute's value. Below is the 
+`Callback` rule can be used to add validation missing in built-in rules for a single property's value. Below is the 
 example verifying that a value is a valid [YAML](https://en.wikipedia.org/wiki/YAML) string
 (additionally requires `yaml` PHP extension):
 
@@ -88,7 +88,7 @@ new Callback(
 > **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to
 > [`yaml_parse()` docs](https://www.php.net/manual/en/function.yaml-parse.php) for more details. 
 
-### Usage of validation context for validating multiple attributes depending on each other
+### Usage of validation context for validating multiple properties depending on each other
 
 In the example below, the 3 angles are validated as degrees to form
 a valid triangle:
@@ -116,9 +116,9 @@ $rules = [
 
     new Callback(
         static function (mixed $value, Callback $rule, ValidationContext $context): Result {
-            $angleA = $context->getDataSet()->getAttributeValue('angleA');
-            $angleB = $context->getDataSet()->getAttributeValue('angleB');
-            $angleC = $context->getDataSet()->getAttributeValue('angleC');
+            $angleA = $context->getDataSet()->getPropertyValue('angleA');
+            $angleB = $context->getDataSet()->getPropertyValue('angleB');
+            $angleC = $context->getDataSet()->getPropertyValue('angleC');
             $sum = $angleA + $angleB + $angleC;
             
             if ($sum <= 0) {
@@ -145,11 +145,11 @@ use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\ValidationContext;
 
 static function (mixed $value, Callback $rule, ValidationContext $context): Result {
-    if ($context->getDataSet()->getAttributeValue('married') === false) {
+    if ($context->getDataSet()->getPropertyValue('married') === false) {
         return new Result();
     }
     
-    $spouseAge = $context->getDataSet()->getAttributeValue('spouseAge');
+    $spouseAge = $context->getDataSet()->getPropertyValue('spouseAge');
     if ($spouseAge === null) {
         return (new Result())->addError('Spouse age is required.');
     }
@@ -180,7 +180,7 @@ $rules = [
         min: 18,
         max: 100,
         when: static function (mixed $value, ValidationContext $context): bool {
-            return $context->getDataSet()->getAttributeValue('married') === true;
+            return $context->getDataSet()->getPropertyValue('married') === true;
         },
     ),
 ];

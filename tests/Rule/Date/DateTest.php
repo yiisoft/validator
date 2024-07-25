@@ -71,7 +71,7 @@ final class DateTest extends RuleTestCase
             'invalid-value' => [new stdClass(), new Date(), $invalidDateMessage],
             'invalid-value-custom-message' => [
                 ['a' => new stdClass()],
-                ['a' => new Date(incorrectInputMessage: 'Invalid — {attribute}.')],
+                ['a' => new Date(incorrectInputMessage: 'Invalid — {property}.')],
                 ['a' => ['Invalid — a.']],
             ],
             'min' => [
@@ -85,10 +85,10 @@ final class DateTest extends RuleTestCase
                     'a' => new Date(
                         format: 'php:Y-m-d',
                         min: '2025-01-01',
-                        tooEarlyMessage: 'Attr — {attribute}. Date — {value}. Min — {limit}.',
+                        tooEarlyMessage: 'Prop — {property}. Date — {value}. Min — {limit}.',
                     ),
                 ],
-                ['a' => ['Attr — a. Date — 3/29/24. Min — 1/1/25.']],
+                ['a' => ['Prop — a. Date — 3/29/24. Min — 1/1/25.']],
             ],
             'max' => [
                 '2024-03-29',
@@ -101,10 +101,10 @@ final class DateTest extends RuleTestCase
                     'a' => new Date(
                         format: 'php:Y-m-d',
                         max: '2024-01-01',
-                        tooLateMessage: 'Attr — {attribute}. Date — {value}. Max — {limit}.',
+                        tooLateMessage: 'Prop — {property}. Date — {value}. Max — {limit}.',
                     ),
                 ],
-                ['a' => ['Attr — a. Date — 3/29/24. Max — 1/1/24.']],
+                ['a' => ['Prop — a. Date — 3/29/24. Max — 1/1/24.']],
             ],
             'rule-and-handler-locales' => [
                 '2024-03-29',

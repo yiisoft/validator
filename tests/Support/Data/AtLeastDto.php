@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Support\Data;
 
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\AtLeast;
 
 #[AtLeast(['a', 'b', 'c'])]
-final class AtLeastDto implements AttributeTranslatorProviderInterface
+final class AtLeastDto implements PropertyTranslatorProviderInterface
 {
     public function __construct(
         public ?int $a = null,
@@ -19,7 +19,7 @@ final class AtLeastDto implements AttributeTranslatorProviderInterface
     ) {
     }
 
-    public function getAttributeLabels(): array
+    public function getPropertyLabels(): array
     {
         return [
             'a' => 'A',
@@ -28,8 +28,8 @@ final class AtLeastDto implements AttributeTranslatorProviderInterface
         ];
     }
 
-    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+    public function getPropertyTranslator(): ?PropertyTranslatorInterface
     {
-        return new ArrayAttributeTranslator($this->getAttributeLabels());
+        return new ArrayPropertyTranslator($this->getPropertyLabels());
     }
 }

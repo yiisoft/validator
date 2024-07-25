@@ -31,9 +31,9 @@ final class ObjectWithDataSetAndRulesProvider implements DataSetInterface, Rules
         ];
     }
 
-    public function getAttributeValue(string $attribute): mixed
+    public function getPropertyValue(string $property): mixed
     {
-        return $this->getObjectData()[$attribute] ?? null;
+        return $this->getObjectData()[$property] ?? null;
     }
 
     public function getData(): ?array
@@ -41,9 +41,9 @@ final class ObjectWithDataSetAndRulesProvider implements DataSetInterface, Rules
         return $this->getObjectData();
     }
 
-    public function hasAttribute(string $attribute): bool
+    public function hasProperty(string $property): bool
     {
-        return array_key_exists($attribute, $this->getObjectData());
+        return array_key_exists($property, $this->getObjectData());
     }
 
     private function getObjectData(): array

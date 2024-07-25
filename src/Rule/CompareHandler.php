@@ -16,7 +16,7 @@ use Yiisoft\Validator\ValidationContext;
 use function gettype;
 
 /**
- * Compares the specified value with "target" value provided directly or within an attribute.
+ * Compares the specified value with "target" value provided directly or within a property.
  *
  * @see AbstractCompare
  * @see Equal
@@ -38,19 +38,19 @@ final class CompareHandler implements RuleHandlerInterface
         $result = new Result();
         if (!$this->isInputCorrect($rule->getType(), $value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
 
         /** @var mixed $targetValue */
         $targetValue = $rule->getTargetValue();
-        $targetAttribute = $rule->getTargetAttribute();
+        $targetProperty = $rule->getTargetProperty();
 
-        if ($targetValue === null && $targetAttribute !== null) {
+        if ($targetValue === null && $targetProperty !== null) {
             /** @var mixed $targetValue */
-            $targetValue = $context->getDataSet()->getAttributeValue($targetAttribute);
+            $targetValue = $context->getDataSet()->getPropertyValue($targetProperty);
             if (!$this->isInputCorrect($rule->getType(), $targetValue)) {
                 return $result->addError($rule->getIncorrectDataSetTypeMessage(), [
                     'type' => get_debug_type($targetValue),
@@ -62,17 +62,17 @@ final class CompareHandler implements RuleHandlerInterface
             return new Result();
         }
 
-        $capitalizedTargetAttribute = $targetAttribute ? StringHelper::uppercaseFirstCharacter($targetAttribute) : null;
+        $capitalizedTargetProperty = $targetProperty ? StringHelper::uppercaseFirstCharacter($targetProperty) : null;
 
         return (new Result())->addError($rule->getMessage(), [
-            'attribute' => $context->getTranslatedAttribute(),
-            'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+            'property' => $context->getTranslatedProperty(),
+            'Property' => $context->getCapitalizedTranslatedProperty(),
             'targetValue' => $this->getFormattedValue($rule->getTargetValue()),
-            'targetAttribute' => $targetAttribute,
-            'TargetAttribute' => $capitalizedTargetAttribute,
-            'targetAttributeValue' => $targetAttribute !== null ? $this->getFormattedValue($targetValue) : null,
-            'targetValueOrAttribute' => $targetAttribute ?? $this->getFormattedValue($targetValue),
-            'TargetValueOrAttribute' => $capitalizedTargetAttribute ?? $this->getFormattedValue($targetValue),
+            'targetProperty' => $targetProperty,
+            'TargetProperty' => $capitalizedTargetProperty,
+            'targetPropertyValue' => $targetProperty !== null ? $this->getFormattedValue($targetValue) : null,
+            'targetValueOrProperty' => $targetProperty ?? $this->getFormattedValue($targetValue),
+            'TargetValueOrProperty' => $capitalizedTargetProperty ?? $this->getFormattedValue($targetValue),
             'value' => $this->getFormattedValue($value),
         ]);
     }

@@ -60,7 +60,7 @@ final class BooleanValue implements DumpedRuleInterface, SkipOnEmptyInterface, S
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{true}`: the value set in {@see $trueValue} option.
      * - `{false}`: the value set in {@see $falseValue} option.
      * - `{type}`: the type of the value being validated.
@@ -69,7 +69,7 @@ final class BooleanValue implements DumpedRuleInterface, SkipOnEmptyInterface, S
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{true}`: the value set in {@see $trueValue} option.
      * - `{false}`: the value set in {@see $falseValue} option.
      * - `{value}`: the value being validated.
@@ -87,7 +87,7 @@ final class BooleanValue implements DumpedRuleInterface, SkipOnEmptyInterface, S
         private int|float|string|bool $falseValue = '0',
         private bool $strict = false,
         private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean. {type} given.',
-        private string $message = '{Attribute} must be either "{true}" or "{false}".',
+        private string $message = '{Property} must be either "{true}" or "{false}".',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

@@ -58,7 +58,7 @@ final class In implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the name of the attribute.
+     * - `{property}`: the name of the property.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
@@ -73,7 +73,7 @@ final class In implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
         private iterable $values,
         private bool $strict = false,
         private bool $not = false,
-        private string $message = '{Attribute} is not in the list of acceptable values.',
+        private string $message = '{Property} is not in the list of acceptable values.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

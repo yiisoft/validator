@@ -12,7 +12,7 @@ final class DataSetWithPostValidationHook implements DataSetInterface, PostValid
 {
     public bool $hookCalled = false;
 
-    public function getAttributeValue(string $attribute): mixed
+    public function getPropertyValue(string $property): mixed
     {
         return null;
     }
@@ -22,7 +22,7 @@ final class DataSetWithPostValidationHook implements DataSetInterface, PostValid
         return null;
     }
 
-    public function hasAttribute(string $attribute): bool
+    public function hasProperty(string $property): bool
     {
         return false;
     }

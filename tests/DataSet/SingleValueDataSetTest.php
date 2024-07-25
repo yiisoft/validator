@@ -15,7 +15,7 @@ final class SingleValueDataSetTest extends TestCase
 
         $this->assertNull($data->getData());
         $this->assertSame(['test' => 'hello'], $data->getSource());
-        $this->assertFalse($data->hasAttribute('test'));
-        $this->assertNull($data->getAttributeValue('test'));
+        $this->assertFalse($data->hasProperty('test'));
+        $this->assertNull($data->getPropertyValue('test'));
     }
 }

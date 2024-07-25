@@ -9,6 +9,46 @@ for both A and B.
 
 ## Upgrade from 1.x
 
+* Renamed classes/interfaces/traits:
+    - `Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator` to `Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator`,
+    - `Yiisoft\Validator\AttributeTranslator\NullAttributeTranslator` to `Yiisoft\Validator\PropertyTranslator\NullPropertyTranslator`,
+    - `Yiisoft\Validator\AttributeTranslator\TranslatorAttributeTranslator` to `Yiisoft\Validator\PropertyTranslator\TranslatorPropertyTranslator`,
+    - `Yiisoft\Validator\AttributeTranslatorInterface` to `Yiisoft\Validator\PropertyTranslatorInterface`.
+
+* Changed interface `Yiisoft\Validator\AttributeTranslatorProviderInterface`:
+    - renamed to `Yiisoft\Validator\PropertyTranslatorProviderInterface`,
+    - method `getAttributeTranslator()` renamed to `getPropertyTranslator()`.
+
+* Renamed methods in `DataSetInterface`:
+    - `getAttributeValue()` to `getPropertyValue()`,
+    - `hasAttribute()` to `hasProperty()`.
+
+* Renamed methods in `ObjectParser`:
+    - `getAttributeValue()` to `getPropertyValue()`,
+    - `hasAttribute()` to `hasProperty()`,
+    - `getAttributeTranslator()` to `getPropertyTranslator()`.
+
+* Renamed methods in `Result`:
+    - `isAttributeValid()` to `isPropertyValid()`,
+    - `getErrorMessagesIndexedByAttribute()` to `getErrorMessagesIndexedByProperty()`,
+    - `getFirstErrorMessagesIndexedByAttribute()` to `getFirstErrorMessagesIndexedByProperty()`,
+    - `getAttributeErrors()` to `getPropertyErrors()`,
+    - `getAttributeErrorMessages()` to `getPropertyErrorMessages()`,
+    - `getAttributeErrorMessagesIndexedByPath()` to `getPropertyErrorMessagesIndexedByPath()`.
+
+* Renamed methods in `Yiisoft\Validator\ValidationContext`:
+    - `setAttributeTranslator()` to `setPropertyTranslator()`,
+    - `getAttribute()` to `getProperty()`,
+    - `setAttribute()` to `setProperty()`,
+    - `isAttributeMissing()` to `isPropertyMissing()`.
+
+* Renamed rule message placeholders and the corresponding properties/methods of rules:
+    - `{attribute}` to `{property}`,
+    - `{targetAttribute}` to `{targetProperty}`,
+    - `{targetAttributeValue}` to `{targetPropertyValue}`,
+    - `{targetValueOrAttribute}` to `{targetValueOrProperty}`,
+    - `{attributes}` to `{properties}`.
+
 * The signature for `Yiisoft\Validator\RuleHandlerIntarface::validate()` changed. If you have classes that implement 
   `RuleHandlerIntarface`, change the type of `$rule` parameter in method `validate()` from `object` to `RuleInterface`. 
   For example:

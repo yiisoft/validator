@@ -104,7 +104,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -124,15 +124,15 @@ final class NestedTest extends RuleTestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => '{Attribute} must be a number.',
+                                'template' => '{Property} must be a number.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
-                                'template' => '{Attribute} must be no less than {min}.',
+                                'template' => '{Property} must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => '{Attribute} must be no greater than {max}.',
+                                'template' => '{Property} must be no greater than {max}.',
                                 'parameters' => ['max' => null],
                             ],
                             'skipOnEmpty' => false,
@@ -154,7 +154,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -175,15 +175,15 @@ final class NestedTest extends RuleTestCase
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
-                                    'template' => '{Attribute} must be a number.',
+                                    'template' => '{Property} must be a number.',
                                     'parameters' => [],
                                 ],
                                 'lessThanMinMessage' => [
-                                    'template' => '{Attribute} must be no less than {min}.',
+                                    'template' => '{Property} must be no less than {min}.',
                                     'parameters' => ['min' => null],
                                 ],
                                 'greaterThanMaxMessage' => [
-                                    'template' => '{Attribute} must be no greater than {max}.',
+                                    'template' => '{Property} must be no greater than {max}.',
                                     'parameters' => ['max' => null],
                                 ],
                                 'skipOnEmpty' => false,
@@ -209,7 +209,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -242,7 +242,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -561,7 +561,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
             ],
-            'single rule as integer attribute rules' => [
+            'single rule as integer property rules' => [
                 new Nested(
                     [new AtLeast(['a'])],
                     propagateOptions: true,
@@ -583,7 +583,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
             ],
-            'single rule as string attribute rules' => [
+            'single rule as string property rules' => [
                 new Nested(
                     [
                         'numbers' => new Each(new Number()),
@@ -1015,7 +1015,7 @@ final class NestedTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         $incorrectDataSet = new class () implements DataSetInterface {
-            public function getAttributeValue(string $attribute): mixed
+            public function getPropertyValue(string $property): mixed
             {
                 return false;
             }
@@ -1025,7 +1025,7 @@ final class NestedTest extends RuleTestCase
                 return null;
             }
 
-            public function hasAttribute(string $attribute): bool
+            public function hasProperty(string $property): bool
             {
                 return false;
             }
@@ -1067,11 +1067,11 @@ final class NestedTest extends RuleTestCase
             ],
             'custom no rules with no object message with parameters' => [
                 new class () {
-                    #[Nested(noRulesWithNoObjectMessage: 'Attribute - {Attribute}, {attribute}, type - {type}.')]
+                    #[Nested(noRulesWithNoObjectMessage: 'Property - {Property}, {property}, type - {type}.')]
                     public array $value = [];
                 },
                 null,
-                ['value' => ['Attribute - Value, value, type - array.']],
+                ['value' => ['Property - Value, value, type - array.']],
             ],
             // Incorrect data set type
             'incorrect data set type' => [
@@ -1110,20 +1110,20 @@ final class NestedTest extends RuleTestCase
                 [
                     new Nested(
                         ['value' => new Required()],
-                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                        incorrectInputMessage: 'Property - {property}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - value, type - string.']],
+                ['' => ['Property - value, type - string.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => ''],
                 [
                     'data' => new Nested(
                         ['value' => new Required()],
-                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                        incorrectInputMessage: 'Property - {property}, type - {type}.',
                     ),
                 ],
-                ['data' => ['Attribute - data, type - string.']],
+                ['data' => ['Property - data, type - string.']],
             ],
             'error' => [
                 [
@@ -1216,21 +1216,21 @@ final class NestedTest extends RuleTestCase
             'nested context' => [
                 [
                     'method' => 'get',
-                    'attributes' => ['abc' => null],
+                    'properties' => ['abc' => null],
                 ],
                 [
                     'method' => [new Required()],
-                    'attributes' => new Nested([
+                    'properties' => new Nested([
                         'abc' => [
                             new Required(when: static function (mixed $value, ValidationContext $context): bool {
-                                $method = $context->getGlobalDataSet()->getAttributeValue('method');
+                                $method = $context->getGlobalDataSet()->getPropertyValue('method');
                                 return $method === 'get';
                             }),
                         ],
                     ]),
                 ],
                 [
-                    'attributes.abc' => ['Abc cannot be blank.'],
+                    'properties.abc' => ['Abc cannot be blank.'],
                 ],
             ],
             'deep level of nesting with plain keys' => [
@@ -1262,7 +1262,7 @@ final class NestedTest extends RuleTestCase
                     'level1.level2.level3.name' => ['Name must contain at least 5 characters.'],
                 ],
             ],
-            'error messages with attributes in nested structure' => [
+            'error messages with properties in nested structure' => [
                 [
                     'user' => [
                         'name' => '',
@@ -1270,7 +1270,7 @@ final class NestedTest extends RuleTestCase
                 ],
                 new Nested([
                     'user' => [
-                        'name' => new Required(message: '{attribute} is required.'),
+                        'name' => new Required(message: '{property} is required.'),
                     ],
                 ]),
                 [
