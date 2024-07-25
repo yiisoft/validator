@@ -28,7 +28,7 @@
 - Chg #613: Change type of `$escape` argument in `Error::getValuePath()` from `bool|string|null` to `string|null`
   (@arogachev)
 - Enh #726: Refactor `Result::add()`: took `array_merge()` out of the `foreach` (@lav45)
-- Chg #583: Rename "attribute" to "property" in class/method/variable/placeholder names (@vjik)
+- Chg #583: Change "attribute" to "property" in class/trait/method/variable/placeholder names (@vjik)
 
 ## 1.4.1 June 11, 2024
 
