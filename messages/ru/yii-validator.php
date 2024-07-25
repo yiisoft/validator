@@ -157,12 +157,12 @@ return [
      * @see \Yiisoft\Validator\Rule\Date\Date
      * @see \Yiisoft\Validator\Rule\Date\DateTime
      */
-    'Invalid date value.' => 'Некорректное значение даты.',
+    '{Property} must be a date' => '{Property} должно быть датой.',
 
     /**
      * @see \Yiisoft\Validator\Rule\Date\Time
      */
-    'Invalid time value.' => 'Некорректное значение времени.',
+    '{Property} must be a time.' => '{Property} должно быть временем.',
 
     /** @see UniqueIterable */
     'The allowed types for iterable\'s item values are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' => 'Разрешённые типы для значений элементов списка: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',

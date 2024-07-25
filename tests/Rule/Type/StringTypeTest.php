@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rule\Type;
+namespace Yiisoft\Validator\Tests\Rule\Type;
 
 use Stringable;
 use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
@@ -37,7 +37,7 @@ final class StringTypeTest extends RuleTestCase
                 new StringType(),
                 [
                     'message' => [
-                        'template' => 'Value must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -151,7 +151,7 @@ EOD,
                     private array $name = ['test'];
                 },
                 null,
-                ['name' => [$message]],
+                ['name' => ['Name must be a string.']],
             ],
         ];
     }

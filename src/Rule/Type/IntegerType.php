@@ -49,7 +49,7 @@ final class IntegerType implements DumpedRuleInterface, SkipOnEmptyInterface, Sk
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private string $message = 'Value must be an integer.',
+        private string $message = '{Property} must be an integer.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

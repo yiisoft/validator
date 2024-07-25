@@ -36,7 +36,7 @@ final class FloatTypeTest extends RuleTestCase
                 new FloatType(),
                 [
                     'message' => [
-                        'template' => 'Value must be a float.',
+                        'template' => '{Property} must be a float.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -127,7 +127,7 @@ final class FloatTypeTest extends RuleTestCase
                     private int $sum = 1;
                 },
                 null,
-                ['sum' => [$message]],
+                ['sum' => ['Sum must be a float.']],
             ],
         ];
     }

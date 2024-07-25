@@ -24,7 +24,7 @@ final class DateTimeHandler extends BaseDateHandler
         ?string $messageFormat = null,
         ?int $messageDateType = IntlDateFormatter::SHORT,
         ?int $messageTimeType = IntlDateFormatter::SHORT,
-        string $incorrectInputMessage = 'Invalid date value.',
+        string $incorrectInputMessage = '{Property} must be a date.',
         string $tooEarlyMessage = '{Property} must be no early than {limit}.',
         string $tooLateMessage = '{Property} must be no late than {limit}.',
     ) {
