@@ -39,7 +39,7 @@ final class UniqueIterableTest extends RuleTestCase
                 new UniqueIterable(),
                 [
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be array or iterable.',
+                        'template' => '{Property} must be array or iterable.',
                         'parameters' => [],
                     ],
                     'incorrectItemValueMessage' => [
