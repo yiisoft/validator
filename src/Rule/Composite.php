@@ -27,7 +27,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * ```php
  * $when = static function ($value, ValidationContext $context): bool {
- *     return $context->getDataSet()->getAttributeValue('country') === Country::USA;
+ *     return $context->getDataSet()->getPropertyValue('country') === Country::USA;
  * };
  * $rules = [
  *     new Required(when: $when),
@@ -42,7 +42,7 @@ use Yiisoft\Validator\WhenInterface;
  *     new Required(),
  *     new Length(min: 1, max: 50, skipOnEmpty: true),
  *     when: static function ($value, ValidationContext $context): bool {
- *         return $context->getDataSet()->getAttributeValue('country') === Country::USA;
+ *         return $context->getDataSet()->getPropertyValue('country') === Country::USA;
  *     },
  * ]);
  * ```
@@ -60,7 +60,7 @@ use Yiisoft\Validator\WhenInterface;
  *             new Length(min: 1, max: 50, skipOnEmpty: true),
  *         ];
  *         $this->when = static function ($value, ValidationContext $context): bool {
- *             return $context->getDataSet()->getAttributeValue('country') === Country::USA;
+ *             return $context->getDataSet()->getPropertyValue('country') === Country::USA;
  *         };
  *     }
  * };

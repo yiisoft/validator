@@ -10,29 +10,29 @@ namespace Yiisoft\Validator;
 interface DataSetInterface
 {
     /**
-     * Returns an attribute value by its name.
+     * Returns a property value by its name.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Property name.
      *
-     * @return mixed Attribute value.
+     * @return mixed Property value.
      */
-    public function getAttributeValue(string $attribute): mixed;
+    public function getPropertyValue(string $property): mixed;
 
     /**
-     * Returns the validated data as an associative array, where keys are attribute names and values are their
-     * corresponding values. `null` means that implementation does not support getting an array of attributes.
+     * Returns the validated data as an associative array, where keys are property names and values are their
+     * corresponding values. `null` means that implementation does not support getting an array of properties.
      *
-     * @return array|null Validated data as array of attributes or `null` when does not support this.
+     * @return array|null Validated data as array of properties or `null` when does not support this.
      */
     public function getData(): ?array;
 
     /**
-     * Whether a data set has the attribute with a given name. Note that this means existence only and attributes with
+     * Whether a data set has the property with a given name. Note that this means existence only and properties with
      * empty values are treated as present.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Property name.
      *
-     * @return bool Whether the attribute exists: `true` - exists and `false` - otherwise.
+     * @return bool Whether the property exists: `true` - exists and `false` - otherwise.
      */
-    public function hasAttribute(string $attribute): bool;
+    public function hasProperty(string $property): bool;
 }

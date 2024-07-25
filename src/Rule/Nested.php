@@ -166,7 +166,7 @@ final class Nested implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $incorrectDataSetTypeMessage Error message used when validation fails because the validated value
      * is an object providing wrong type of data (neither array nor an object).
@@ -179,7 +179,7 @@ final class Nested implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param bool $requirePropertyPath Whether to require a single data item to be passed in data according to declared
      * nesting level structure (all keys in the sequence must be the present). Used only when validated value is an
@@ -191,7 +191,7 @@ final class Nested implements
      *
      * - `{path}`: the path of the value being validated. Can be either a simple key of integer / string type for a
      * single nesting level or a sequence of keys concatenated using dot notation (see {@see SEPARATOR}).
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * @param bool $handleEachShortcut Whether to handle {@see EACH_SHORTCUT}. Enabled by default meaning shortcuts are
      * supported. Can be disabled if they are not used to prevent additional checks and improve performance.
      * @param bool $propagateOptions Whether the propagation of options is enabled (see
@@ -216,7 +216,7 @@ final class Nested implements
         | ReflectionProperty::IS_PUBLIC,
         private string $noRulesWithNoObjectMessage = 'Nested rule without rules can be used for objects only.',
         private string $incorrectDataSetTypeMessage = 'An object data set data can only have an array type.',
-        private string $incorrectInputMessage = '{Attribute} must be an array or an object.',
+        private string $incorrectInputMessage = '{Property} must be an array or an object.',
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property "{path}" is not found.',
         private bool $handleEachShortcut = true,
@@ -301,7 +301,7 @@ final class Nested implements
 
     /**
      * Whether to require a single data item to be passed in data according to declared nesting level structure (all
-     * keys in the sequence must be the present). Enabled by default.
+     * keys in the sequence must be the present). Disabled by default.
      *
      * @return bool `true` if required and `false` otherwise.
      *

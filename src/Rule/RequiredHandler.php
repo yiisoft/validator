@@ -24,10 +24,10 @@ final class RequiredHandler implements RuleHandlerInterface
      * determine emptiness of the value. The signature must be like the following:
      *
      * ```php
-     * function (mixed $value, bool $isAttributeMissing): bool
+     * function (mixed $value, bool $isPropertyMissing): bool
      * ```
      *
-     * `$isAttributeMissing` is a flag defining whether the attribute is missing (not used / not passed at all).
+     * `$isPropertyMissing` is a flag defining whether the property is missing (not used / not passed at all).
      *
      * Used as a default when {@see Required::$emptyCondition} is not set. A customized handler can be added to
      * {@see SimpleRuleHandlerContainer::$instances} to be applied to all rules of this type without explicitly
@@ -55,10 +55,10 @@ final class RequiredHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-        if ($context->isAttributeMissing()) {
+        if ($context->isPropertyMissing()) {
             $result->addError($rule->getNotPassedMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
-                'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
             ]);
 
             return $result;
@@ -66,13 +66,13 @@ final class RequiredHandler implements RuleHandlerInterface
 
         $emptyCondition = $rule->getEmptyCondition() ?? $this->defaultEmptyCondition;
 
-        if (!$emptyCondition($value, $context->isAttributeMissing())) {
+        if (!$emptyCondition($value, $context->isPropertyMissing())) {
             return $result;
         }
 
         $result->addError($rule->getMessage(), [
-            'attribute' => $context->getTranslatedAttribute(),
-            'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+            'property' => $context->getTranslatedProperty(),
+            'Property' => $context->getCapitalizedTranslatedProperty(),
         ]);
 
         return $result;

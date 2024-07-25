@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\DataSet;
 
 use ReflectionProperty;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\DataWrapperInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
@@ -37,9 +37,9 @@ use Yiisoft\Validator\ValidatorInterface;
  * ```php
  * final class Author implements DataSetInterface
  * {
- *     public function getAttributeValue(string $attribute): mixed
+ *     public function getPropertyValue(string $property): mixed
  *     {
- *         return $this->getData()[$attribute] ?? null;
+ *         return $this->getData()[$property] ?? null;
  *     }
  *
  *     public function getData(): mixed
@@ -47,9 +47,9 @@ use Yiisoft\Validator\ValidatorInterface;
  *         return ['name' => 'John', 'age' => 18];
  *     }
  *
- *     public function hasAttribute(string $attribute): bool
+ *     public function hasProperty(string $property): bool
  *     {
- *         return array_key_exists($attribute, $this->getData());
+ *         return array_key_exists($property, $this->getData());
  *     }
  * }
  * ```
@@ -149,7 +149,11 @@ use Yiisoft\Validator\ValidatorInterface;
  *
  * @psalm-import-type RawRulesMap from ValidatorInterface
  */
-final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterface, LabelsProviderInterface, AttributeTranslatorProviderInterface
+final class ObjectDataSet implements
+    RulesProviderInterface,
+    DataWrapperInterface,
+    LabelsProviderInterface,
+    PropertyTranslatorProviderInterface
 {
     /**
      * @var bool Whether an {@see $object} provided a data set by implementing {@see DataSetInterface}.
@@ -204,8 +208,8 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
      *
      * ```php
      * [
-     *     [new AtLeast(['name', 'author'])], // Rules not bound to a specific attribute.
-     *     'files' => [new Count(max: 3)], // Attribute specific rules.
+     *     [new AtLeast(['name', 'author'])], // Rules not bound to a specific property.
+     *     'files' => [new Count(max: 3)], // Property specific rules.
      * ],
      * ```
      */
@@ -228,43 +232,43 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
     }
 
     /**
-     * Returns an attribute value by its name.
+     * Returns a property value by its name.
      *
-     * Note that in case of non-existing attribute a default `null` value is returned. If you need to check the presence
-     * of attribute or return a different default value, use {@see hasAttribute()} instead.
+     * Note that in case of non-existing property a default `null` value is returned. If you need to check the presence
+     * of property or return a different default value, use {@see hasProperty()} instead.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Property name.
      *
-     * @return mixed Attribute value.
+     * @return mixed Property value.
      */
-    public function getAttributeValue(string $attribute): mixed
+    public function getPropertyValue(string $property): mixed
     {
         if ($this->dataSetProvided) {
             /** @var DataSetInterface $object */
             $object = $this->object;
-            return $object->getAttributeValue($attribute);
+            return $object->getPropertyValue($property);
         }
 
-        return $this->parser->getAttributeValue($attribute);
+        return $this->parser->getPropertyValue($property);
     }
 
     /**
-     * Whether this data set has the attribute with a given name. Note that this means existence only and attributes
+     * Whether this data set has the property with a given name. Note that this means existence only and properties
      * with empty values are treated as present too.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Property name.
      *
-     * @return bool Whether the attribute exists: `true` - exists and `false` - otherwise.
+     * @return bool Whether the property exists: `true` - exists and `false` - otherwise.
      */
-    public function hasAttribute(string $attribute): bool
+    public function hasProperty(string $property): bool
     {
         if ($this->dataSetProvided) {
             /** @var DataSetInterface $object */
             $object = $this->object;
-            return $object->hasAttribute($attribute);
+            return $object->hasProperty($property);
         }
 
-        return $this->parser->hasAttribute($attribute);
+        return $this->parser->hasProperty($property);
     }
 
     /**
@@ -291,14 +295,14 @@ final class ObjectDataSet implements RulesProviderInterface, DataWrapperInterfac
     }
 
     /**
-     * An optional attribute names translator. It's taken from the {@see $object} when
-     * {@see AttributeTranslatorProviderInterface} is implemented. In case of it's missing, a `null` value is returned.
+     * An optional property names translator. It's taken from the {@see $object} when
+     * {@see PropertyTranslatorProviderInterface} is implemented. In case of it's missing, a `null` value is returned.
      *
-     * @return AttributeTranslatorInterface|null An attribute translator instance or `null` if it was not provided.
+     * @return PropertyTranslatorInterface|null A property translator instance or `null` if it was not provided.
      */
-    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+    public function getPropertyTranslator(): ?PropertyTranslatorInterface
     {
-        return $this->parser->getAttributeTranslator();
+        return $this->parser->getPropertyTranslator();
     }
 
     public function getValidationPropertyLabels(): array

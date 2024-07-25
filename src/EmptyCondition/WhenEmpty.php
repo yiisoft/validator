@@ -39,13 +39,13 @@ final class WhenEmpty
 
     /**
      * @param mixed $value The validated value.
-     * @param bool $isAttributeMissing A flag defining whether the attribute is missing (not used / not passed at all).
+     * @param bool $isPropertyMissing A flag defining whether the property is missing (not used / not passed at all).
      *
      * @return bool Whether the validated value is considered empty.
      */
-    public function __invoke(mixed $value, bool $isAttributeMissing = false): bool
+    public function __invoke(mixed $value, bool $isPropertyMissing = false): bool
     {
-        if ($isAttributeMissing || $value === null) {
+        if ($isPropertyMissing || $value === null) {
             return true;
         }
 

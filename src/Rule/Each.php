@@ -98,14 +98,14 @@ final class Each implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $incorrectInputKeyMessage Error message used when validation fails because the validated iterable
      * contains invalid keys. Only integer and string keys are allowed.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the iterable key being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this `Each` rule with all defined {@see $rules} if the
      * validated value is empty / not passed. See {@see SkipOnEmptyInterface}.
@@ -119,7 +119,7 @@ final class Each implements
      */
     public function __construct(
         callable|iterable|object|string $rules = [],
-        private string $incorrectInputMessage = '{Attribute} must be array or iterable.',
+        private string $incorrectInputMessage = '{Property} must be array or iterable.',
         private string $incorrectInputKeyMessage = 'Every iterable key must have an integer or a string type.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
@@ -136,8 +136,8 @@ final class Each implements
 
     public function propagateOptions(): void
     {
-        foreach ($this->rules as $key => $attributeRules) {
-            $this->rules[$key] = PropagateOptionsHelper::propagate($this, $attributeRules);
+        foreach ($this->rules as $key => $propertyRules) {
+            $this->rules[$key] = PropagateOptionsHelper::propagate($this, $propertyRules);
         }
     }
 
@@ -210,8 +210,8 @@ final class Each implements
 
     public function afterInitAttribute(object $object): void
     {
-        foreach ($this->rules as $attributeRules) {
-            foreach ($attributeRules as $rule) {
+        foreach ($this->rules as $propertyRules) {
+            foreach ($propertyRules as $rule) {
                 if ($rule instanceof AfterInitAttributeEventInterface) {
                     $rule->afterInitAttribute($object);
                 }

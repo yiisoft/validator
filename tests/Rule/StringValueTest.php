@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use stdClass;
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\StringValue;
 use Yiisoft\Validator\Rule\StringValueHandler;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -37,7 +37,7 @@ final class StringValueTest extends RuleTestCase
                 new StringValue(),
                 [
                     'message' => [
-                        'template' => '{Attribute} must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -129,38 +129,38 @@ final class StringValueTest extends RuleTestCase
             ],
             'value: boolean, message: custom, with parameters' => [
                 false,
-                [new StringValue(message: 'Attribute - {Attribute}, type - {type}.')],
-                ['' => ['Attribute - Value, type - bool.']],
+                [new StringValue(message: 'Property - {Property}, type - {type}.')],
+                ['' => ['Property - Value, type - bool.']],
             ],
-            'value: boolean, message: custom, with parameters, attribute set' => [
+            'value: boolean, message: custom, with parameters, property set' => [
                 ['data' => false],
-                ['data' => new StringValue(message: 'Attribute - {attribute}, type - {type}.')],
-                ['data' => ['Attribute - data, type - bool.']],
+                ['data' => new StringValue(message: 'Property - {property}, type - {type}.')],
+                ['data' => ['Property - data, type - bool.']],
             ],
-            'value: object providing rules, attribute labels and wrong data' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+            'value: object providing rules, property labels and wrong data' => [
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?string $name = null,
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'name' => 'Имя',
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array
                     {
                         return [
                             'name' => [
-                                new StringValue(message: '{attribute} плохое.'),
+                                new StringValue(message: '{property} плохое.'),
                             ],
                         ];
                     }

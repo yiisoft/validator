@@ -90,17 +90,17 @@ final class Time extends BaseDate
      *
      * @param string|null $incorrectInputMessage A message used when the validated value is not valid time. You may use
      * the following placeholders in the message:
-     *  - `{attribute}`: the translated label of the attribute being validated.
+     *  - `{property}`: the translated label of the property being validated.
      *
      * @param string|null $tooEarlyMessage A message used when the validated time is less than {@see $min}. You may use
      * the following placeholders in the message:
-     *  - `{attribute}`: the translated label of the attribute being validated.
+     *  - `{property}`: the translated label of the property being validated.
      *  - `{value}`: the validated time.
      *  - `{limit}`: expected minimum time.
      *
      * @param string|null $tooLateMessage A message used when the validated time is more than {@see $max}. You may use
      * the following placeholders in the message:
-     *  - `{attribute}`: the translated label of the attribute being validated.
+     *  - `{property}`: the translated label of the property being validated.
      *  - `{value}`: the validated time.
      *  - `{limit}`: expected maximum time.
      *

@@ -52,11 +52,11 @@ final class UrlTest extends RuleTestCase
                     'validSchemes' => ['http', 'https'],
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Attribute} is not a valid URL.',
+                        'template' => '{Property} is not a valid URL.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -70,11 +70,11 @@ final class UrlTest extends RuleTestCase
                     'validSchemes' => ['http', 'https'],
                     'enableIdn' => true,
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Attribute} is not a valid URL.',
+                        'template' => '{Property} is not a valid URL.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -88,11 +88,11 @@ final class UrlTest extends RuleTestCase
                     'validSchemes' => ['http'],
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Attribute} is not a valid URL.',
+                        'template' => '{Property} is not a valid URL.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -106,11 +106,11 @@ final class UrlTest extends RuleTestCase
                     'validSchemes' => ['http', 'https'],
                     'enableIdn' => true,
                     'incorrectInputMessage' => [
-                        'template' => '{Attribute} must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Attribute} is not a valid URL.',
+                        'template' => '{Property} is not a valid URL.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -174,13 +174,13 @@ final class UrlTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new Url(incorrectInputMessage: 'Attribute - {Attribute}, type - {type}.')],
-                ['' => ['Attribute - Value, type - int.']],
+                [new Url(incorrectInputMessage: 'Property - {Property}, type - {type}.')],
+                ['' => ['Property - Value, type - int.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
-                ['attribute' => 1],
-                ['attribute' => [new Url(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')]],
-                ['attribute' => ['Attribute - attribute, type - int.']],
+            'custom incorrect input message with parameters, property set' => [
+                ['property' => 1],
+                ['property' => [new Url(incorrectInputMessage: 'Property - {property}, type - {type}.')]],
+                ['property' => ['Property - property, type - int.']],
             ],
 
             ['google.de', [new Url()], $errors],
@@ -211,13 +211,13 @@ final class UrlTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 'not a url',
-                [new Url(enableIdn: true, message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - value, value - not a url.']],
+                [new Url(enableIdn: true, message: 'Property - {property}, value - {value}.')],
+                ['' => ['Property - value, value - not a url.']],
             ],
-            'custom message with parameters, attribute set' => [
-                ['attribute' => 'not a url'],
-                ['attribute' => new Url(enableIdn: true, message: 'Attribute - {attribute}, value - {value}.')],
-                ['attribute' => ['Attribute - attribute, value - not a url.']],
+            'custom message with parameters, property set' => [
+                ['property' => 'not a url'],
+                ['property' => new Url(enableIdn: true, message: 'Property - {property}, value - {value}.')],
+                ['property' => ['Property - property, value - not a url.']],
             ],
         ];
     }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Type;
 
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Type\IntegerType;
 use Yiisoft\Validator\Rule\Type\IntegerTypeHandler;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -89,32 +89,32 @@ final class IntegerTypeTest extends RuleTestCase
             'array' => [[], new IntegerType(), ['' => [$message]]],
             'message, custom' => [
                 ['sum' => []],
-                ['sum' => new IntegerType('Attribute - {attribute}, type - {type}')],
-                ['sum' => ['Attribute - sum, type - array']],
+                ['sum' => new IntegerType('Property - {property}, type - {type}')],
+                ['sum' => ['Property - sum, type - array']],
             ],
-            'message, translated attribute' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+            'message, translated property' => [
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?int $sum = null,
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'sum' => 'Сумма',
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array
                     {
                         return [
-                            'sum' => new IntegerType(message: '"{attribute}" - нецелое число.'),
+                            'sum' => new IntegerType(message: '"{property}" - нецелое число.'),
                         ];
                     }
                 },

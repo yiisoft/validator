@@ -11,10 +11,10 @@ use Yiisoft\Validator\Rule\Required;
 
 final class ObjectWithLabelsProvider implements LabelsProviderInterface
 {
-    #[Required(message: '{attribute} cannot be blank.')]
+    #[Required(message: '{property} cannot be blank.')]
     public string $name = '';
 
-    #[Number(min: 21, lessThanMinMessage: '{attribute} must be no less than {min}.')]
+    #[Number(min: 21, lessThanMinMessage: '{property} must be no less than {min}.')]
     #[Label('test age')]
     protected int $age = 17;
 

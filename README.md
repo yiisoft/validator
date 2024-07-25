@@ -6,9 +6,9 @@
     <br>
 </p>
 
-[![Latest Stable Version](https://poser.pugx.org/yiisoft/validator/v/stable.png)](https://packagist.org/packages/yiisoft/validator)
-[![Total Downloads](https://poser.pugx.org/yiisoft/validator/downloads.png)](https://packagist.org/packages/yiisoft/validator)
-[![Build status](https://github.com/yiisoft/validator/workflows/build/badge.svg)](https://github.com/yiisoft/validator/actions?query=workflow%3Abuild)
+[![Latest Stable Version](https://poser.pugx.org/yiisoft/validator/v)](https://packagist.org/packages/yiisoft/validator)
+[![Total Downloads](https://poser.pugx.org/yiisoft/validator/downloads)](https://packagist.org/packages/yiisoft/validator)
+[![Build status](https://github.com/yiisoft/validator/actions/workflows/build.yml/badge.svg)](https://github.com/yiisoft/validator/actions/workflows/build.yml)
 [![Code Coverage](https://codecov.io/gh/yiisoft/validator/branch/master/graph/badge.svg)](https://codecov.io/gh/yiisoft/validator)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyiisoft%2Fvalidator%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/yiisoft/validator/master)
 [![type-coverage](https://shepherd.dev/github/yiisoft/validator/coverage.svg)](https://shepherd.dev/github/yiisoft/validator)
@@ -27,7 +27,7 @@ This package provides data validation capabilities.
 - Attribute names translation.
 - Conditional validation:
   - Skip validation of "empty" value with possibility to configure "empty" condition.
-  - Skip further validation if an error occurred for the same attribute.
+  - Skip further validation if an error occurred for the same property.
   - Skip validation depending on a condition.
 - Possibility to use context in rule handler.
 - Common rules bundled.

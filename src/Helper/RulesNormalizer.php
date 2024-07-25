@@ -19,7 +19,7 @@ use function is_string;
 
 /**
  * A helper class used to normalize different types of data to the iterable with rule instances ({@see RuleInterface}).
- * Can be applied to the rules grouped by attributes with adding some default settings if needed.
+ * Can be applied to the rules grouped by properties with adding some default settings if needed.
  *
  * Note that when using {@see Validator}, normalization is performed automatically.
  *
@@ -33,7 +33,7 @@ final class RulesNormalizer
 {
     /**
      * Normalizes different types of data to the iterable with rule instances ({@see RuleInterface}) maintaining the
-     * grouping by attributes and applying some default settings if needed.
+     * grouping by properties and applying some default settings if needed.
      *
      * Based on rules source and additionally provided data this is what is done initially:
      *
@@ -44,17 +44,17 @@ final class RulesNormalizer
      * item.
      * - If rules' source is a name of class providing rules via PHP attributes, they will be fetched and used.
      *
-     * And then for every individual rule within a set by attribute:
+     * And then for every individual rule within a set by property:
      *
      * - A callable is wrapped with {@see Callback} rule.
      * - For any other type verifies that it's a valid rule instance.
      * - If default "skip on empty" condition is set, applies it if possible.
      *
-     * For attributes there is an additional internal validation for being integer / string.
+     * For properties there is an additional internal validation for being integer / string.
      *
      * @param callable|iterable|object|string|null $rules Rules source. The following types are supported:
      *
-     * - Iterable (can contain single rule instances and callables for individual attribute).
+     * - Iterable (can contain single rule instances and callables for individual property).
      * - `null`
      * - Object providing rules via separate method.
      * - Single rule instance / callable.
@@ -67,7 +67,7 @@ final class RulesNormalizer
      * ({@see SkipOnEmptyInterface}), already normalized. Used to optimize setting the same value in all the rules.
      * Defaults to `null` meaning that it's not used.
      *
-     * @throws InvalidArgumentException When attribute is neither an integer nor a string.
+     * @throws InvalidArgumentException When property is neither an integer nor a string.
      * @throws ReflectionException When parsing rules from PHP attributes failed.
      *
      * @return array Rules normalized as a whole and individually, ready to use for validation.
@@ -84,22 +84,18 @@ final class RulesNormalizer
 
         $normalizedRules = [];
 
-        /**
-         * @var mixed $attribute
-         * @var mixed $attributeRules
-         */
-        foreach ($rules as $attribute => $attributeRules) {
-            if (!is_int($attribute) && !is_string($attribute)) {
+        foreach ($rules as $property => $propertyRules) {
+            if (!is_int($property) && !is_string($property)) {
                 throw new InvalidArgumentException(
                     sprintf(
-                        'An attribute can only have an integer or a string type. %s given.',
-                        get_debug_type($attribute),
+                        'A property can only have an integer or a string type. %s given.',
+                        get_debug_type($property),
                     )
                 );
             }
 
-            $normalizedRules[$attribute] = new RulesNormalizerIterator(
-                is_iterable($attributeRules) ? $attributeRules : [$attributeRules],
+            $normalizedRules[$property] = new RulesNormalizerIterator(
+                is_iterable($propertyRules) ? $propertyRules : [$propertyRules],
                 $defaultSkipOnEmptyCondition,
             );
         }

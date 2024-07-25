@@ -18,7 +18,7 @@ final class StopOnErrorTest extends TestCase
             [
                 '' => ['error A'],
             ],
-            $result->getErrorMessagesIndexedByAttribute()
+            $result->getErrorMessagesIndexedByProperty()
         );
     }
 }

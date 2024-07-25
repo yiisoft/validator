@@ -13,13 +13,13 @@ use Yiisoft\Validator\Result;
 $result->isValid();
 ```
 
-It can be narrowed down to a specific attribute:
+It can be narrowed down to a specific property:
 
 ```php
 use Yiisoft\Validator\Result;
 
-/** @var Result */
-$result->isAttributeValid('name');
+/** @var Result $result */
+$result->isPropertyValid('name');
 ```
 
 ## Errors
@@ -40,7 +40,7 @@ use Yiisoft\Validator\Result;
 $result->getErrorMessages();
 ```
 
-An example of output with `age` and `email` attributes:
+An example of output with `age` and `email` properties:
 
 ```php
 [
@@ -50,13 +50,13 @@ An example of output with `age` and `email` attributes:
 ];
 ```
 
-It's easy to display and iterate, however, with a bigger amount of attributes and depending on a message, it can be
-problematic to understand which attribute an error belongs to.
+It's easy to display and iterate, however, with a bigger amount of properties and depending on a message, it can be
+problematic to understand which property an error belongs to.
 
-#### Error messages not bound to a specific attribute
+#### Error messages not bound to a specific property
 
-Sometimes error messages are not related to a specific attribute. It can happen during the validation of
-multiple attributes depending on each other for example. Use the following `Result` API call:
+Sometimes error messages are not related to a specific property. It can happen during the validation of
+multiple properties depending on each other for example. Use the following `Result` API call:
 
 ```php
 $result->getCommonErrorMessages();
@@ -70,12 +70,12 @@ The output for example above:
 ];
 ```
 
-#### Filtering by a specific attribute
+#### Filtering by a specific property
 
-This list can be also filtered by a specific attribute. Only top-level attributes are supported.
+This list can be also filtered by a specific property. Only top-level attributes are supported.
 
 ```php
-$result->getAttributeErrorMessages('email');
+$result->getPropertyErrorMessages('email');
 ```
 
 The output for example above:
@@ -86,15 +86,15 @@ The output for example above:
 ];
 ```
 
-### Error messages indexed by attribute
+### Error messages indexed by property
 
-To group error messages by attribute, use the following `Result` API call:
+To group error messages by property, use the following `Result` API call:
 
 ```php
 use Yiisoft\Validator\Result;
 
 /** @var Result */
-$result->getErrorMessagesIndexedByAttribute();
+$result->getErrorMessagesIndexedByProperty();
 ```
 
 An example of output:
@@ -106,15 +106,15 @@ An example of output:
         'This value must contain at least 4 characters.',
     ],
     'email' => ['This value is not a valid email address.'],
-    // Error messages not bound to specific attribute are grouped under empty string key.
+    // Error messages not bound to specific property are grouped under empty string key.
     '' => ['A custom error message.'],
 ];
 ```
 
-Note that the result is always a 2-dimensional array with attribute names as keys at the first nesting level. This means
-that further nesting of attributes is not supported (but could be achieved
+Note that the result is always a 2-dimensional array with property names as keys at the first nesting level. This means
+that further nesting of properties is not supported (but could be achieved
 by using [`getErrorMessagesIndexedByPath()`](#error-messages-indexed-by-path)).
-Returning to the previous example, when `name` and `email` belong to a `user` attribute, the output will be:
+Returning to the previous example, when `name` and `email` belong to a `user` property, the output will be:
 
 ```php
 [
@@ -123,18 +123,18 @@ Returning to the previous example, when `name` and `email` belong to a `user` at
         'This value must contain at least 4 characters.',
         'This value is not a valid email address.'
     ],
-    // Error messages not bound to specific attribute are grouped under empty string key.
+    // Error messages not bound to specific property are grouped under empty string key.
     '' => ['A custom error message.'],
 ];
 ```
 
-Also keep in mind that attribute names must be strings, even when used with `Each`:
+Also keep in mind that property names must be strings, even when used with `Each`:
 
 ```php
 $rule = new Each([new Number(min: 21)]),
 ```
 
-With input containing non-string keys for top level attributes, for example, `[21, 22, 23, 20]`,
+With input containing non-string keys for top level properties, for example, `[21, 22, 23, 20]`,
 `InvalidArgumentException` will be thrown.
 
 Even array `['1' => 21, '2' => 22, '3' => 23, '4' => 20]` will cause an error, because PHP [will cast keys to the int type].
@@ -152,7 +152,7 @@ But if given array with string keys `['1a' => 21, '2b' => 22, '3c' => 23, '4d' =
 ### Error messages indexed by path
 
 This is probably the most advanced representation offered by built-in methods. The grouping is done by path - a
-concatenated attribute sequence showing the location of errored value within a data structure. A separator is customizable,
+concatenated property sequence showing the location of errored value within a data structure. A separator is customizable,
 dot notation is set as the default one. Use the following `Result` API call:
 
 ```php
@@ -169,7 +169,7 @@ An example of output:
     'user.firstName' => ['Value cannot be blank.'],
     'user.lastName' => ['This value must contain at least 4 characters.'],
     'email' => ['This value is not a valid email address.'],
-    // Error messages not bound to specific attribute are grouped under empty string key.
+    // Error messages not bound to specific property are grouped under empty string key.
     '' => ['A custom error message.'],
 ];
 ```
@@ -182,9 +182,9 @@ A path can contain integer elements too (when using the `Each` rule for example)
 ];
 ```
 
-#### Resolving special characters collision in attribute names
+#### Resolving special characters collision in property names
 
-When the attribute name in the error messages list contains a path separator (dot `.` by default),
+When the property name in the error messages list contains a path separator (dot `.` by default),
 it is automatically escaped using a backslash (`\`):
 
 ```php
@@ -193,7 +193,7 @@ it is automatically escaped using a backslash (`\`):
 ],
 ```
 
-In case of using a single attribute per rule set, any additional modifications of attribute names in the rules
+In case of using a single property per rule set, any additional modifications of attribute names in the rules
 configuration are not required, so they must stay as is:
 
 ```php
@@ -208,21 +208,21 @@ $rules = [
 ];
 ```
 
-However, when using the `Nested` rule with multiple attributes per rule set, special characters need to be escaped with
+However, when using the `Nested` rule with multiple properties per rule set, special characters need to be escaped with
 a backslash (`\`) for value paths to be correct and to be possible to reverse them back from string to individual
 items. See the [Using keys containing separator / shortcut] section for more details.
 
 This can be used as an alternative to using a custom separator.
 
-#### Filtering by a specific attribute
+#### Filtering by a specific property
 
-This list can be also filtered by a specific attribute. Only top-level attributes are supported.
+This list can be also filtered by a specific property. Only top-level properties are supported.
 
 ```php
 use Yiisoft\Validator\Result;
 
-/** @var Result */
-$result->getAttributeErrorMessagesIndexedByPath('user');
+/** @var Result $result */
+$result->getPropertyErrorMessagesIndexedByPath('user');
 ```
 
 The output for example above:
@@ -256,7 +256,7 @@ Each error stores the following data:
 
 ### An example of an application
 
-What this can be useful for? For example, to build a nested tree of error messages indexed by attribute names:
+What this can be useful for? For example, to build a nested tree of error messages indexed by property names:
 
 ```php
 [
@@ -275,16 +275,16 @@ as JSON and storing in logs for example.
 
 Debugging original error objects is also more convenient.
 
-### Filtering by a specific attribute
+### Filtering by a specific property
 
-This list can be also filtered by a specific attribute. Only top-level attributes are supported.
+This list can be also filtered by a specific property. Only top-level attributes are supported.
 
 ```php
 use Yiisoft\Validator\Result;
 
-/** @var Result */
-$result->getAttributeErrors('email');
+/** @var Result $result */
+$result->getPropertyErrors('email');
 ```
 
 [Using keys containing separator / shortcut]: built-in-rules-nested.md#using-keys-containing-separator--shortcut
-[will cast keys to the int type]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties
+[will cast keys to the int type]: https://www.php.net/manual/en/language.types.array.php

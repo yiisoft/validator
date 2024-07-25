@@ -58,8 +58,8 @@ final class ConfigTest extends BaseConfigTest
         $this->assertInstanceOf(CategorySource::class, $translationCategorySource);
 
         $this->assertSame(
-            '{Attribute} не в списке допустимых значений.',
-            $translationCategorySource->getMessage('{Attribute} is not in the list of acceptable values.', 'ru'),
+            '{Property} не в списке допустимых значений.',
+            $translationCategorySource->getMessage('{Property} is not in the list of acceptable values.', 'ru'),
         );
     }
 

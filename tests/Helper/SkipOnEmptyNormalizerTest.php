@@ -18,7 +18,7 @@ final class SkipOnEmptyNormalizerTest extends TestCase
             [null, NeverEmpty::class],
             [false, NeverEmpty::class],
             [true, WhenEmpty::class],
-            [static fn (mixed $value, bool $isAttributeMissing): bool => true, Closure::class],
+            [static fn (mixed $value, bool $isPropertyMissing): bool => true, Closure::class],
         ];
     }
 

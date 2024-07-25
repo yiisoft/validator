@@ -44,28 +44,28 @@ final class StopOnErrorTest extends RuleTestCase
                             'max' => null,
                             'exactly' => null,
                             'lessThanMinMessage' => [
-                                'template' => '{Attribute} must contain at least {min, number} {min, plural, ' .
+                                'template' => '{Property} must contain at least {min, number} {min, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'min' => 10,
                                 ],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => '{Attribute} must contain at most {max, number} {max, plural, ' .
+                                'template' => '{Property} must contain at most {max, number} {max, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'max' => null,
                                 ],
                             ],
                             'notExactlyMessage' => [
-                                'template' => '{Attribute} must contain exactly {exactly, number} {exactly, plural, ' .
+                                'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, ' .
                                     'one{character} other{characters}}.',
                                 'parameters' => [
                                     'exactly' => null,
                                 ],
                             ],
                             'incorrectInputMessage' => [
-                                'template' => '{Attribute} must be a string.',
+                                'template' => '{Property} must be a string.',
                                 'parameters' => [],
                             ],
                             'encoding' => 'UTF-8',
@@ -167,7 +167,7 @@ final class StopOnErrorTest extends RuleTestCase
                     ],
                 ],
             ],
-            'attributes, multiple StopOnError rules combined with other top level rules' => [
+            'properties, multiple StopOnError rules combined with other top level rules' => [
                 [],
                 [
                     'a' => new Required(),
@@ -188,7 +188,7 @@ final class StopOnErrorTest extends RuleTestCase
                     'd' => ['D not passed.'],
                 ],
             ],
-            'attributes, multiple StopOnError rules combined with other top level rules, skipOnError: true' => [
+            'properties, multiple StopOnError rules combined with other top level rules, skipOnError: true' => [
                 [],
                 [
                     'a' => new Required(),

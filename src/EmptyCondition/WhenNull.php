@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\EmptyCondition;
 /**
  * Empty condition is a callable returning `true` if a value must be considered empty.
  *
- * With `WhenNull` a rule is considered empty only when the value is `null` or the attribute is missing. With regard
+ * With `WhenNull` a rule is considered empty only when the value is `null` or the property is missing. With regard
  * to validation process, a corresponding rule is skipped only if this condition is met and `WhenNull` is set:
  *
  * - At a rule level via `$skipOnEmpty` property, but only for rules implementing {@see SkipOnEmptyTrait} / including
@@ -21,11 +21,11 @@ final class WhenNull
 {
     /**
      * @param mixed $value The validated value.
-     * @param bool $isAttributeMissing A flag defining whether the attribute is missing (not used / not passed at all).
+     * @param bool $isPropertyMissing A flag defining whether the property is missing (not used / not passed at all).
      *
      * @return bool Whether the validated value is considered empty.
      */
-    public function __invoke(mixed $value, bool $isAttributeMissing = false): bool
+    public function __invoke(mixed $value, bool $isPropertyMissing = false): bool
     {
         return $value === null;
     }

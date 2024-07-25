@@ -32,7 +32,7 @@ return [
     // Usado em regra única
 
     /** @see AtLeast */
-    'The data must have at least "{min}" filled attributes.' => 'Os dados devem conter no mínimo {min, number} {min, plural, one{atributo preenchido} few{atributo preenchido} many{atributos preenchidos} other{atributo preenchido}}.',
+    'The data must have at least "{min}" filled properties.' => 'Os dados devem conter no mínimo {min, number} {min, plural, one{atributo preenchido} few{atributo preenchido} many{atributos preenchidos} other{atributo preenchido}}.',
     /** @see BooleanValue */
     'Value must be either "{true}" or "{false}".' => 'O valor deve ser "{true}" ou "{false}".',
     /** @see Count */
@@ -70,7 +70,7 @@ return [
     /** @see Number */
     'Value must be a number.' => 'O valor deve ser um número.',
     /** @see OneOf */
-    'The data must have at least 1 filled attribute.' => 'Os dados devem conter pelo menos 1 atributo preenchido.',
+    'The data must have at least 1 filled property.' => 'Os dados devem conter pelo menos 1 atributo preenchido.',
     /** @see Regex */
     'Value is invalid.' => 'O valor está incorreto.',
     /** @see Required */
@@ -107,15 +107,15 @@ return [
      * @see NotEqual
      */
     'The allowed types are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' => 'Tipos permitidos: inteiro, float, string, boolean, null e um objeto implementando a interface \Stringable ou \DateTimeInterface.',
-    'The attribute value returned from a custom data set must have one of the following types: integer, float, string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface.' => 'O valor retornado deve ser um dos seguintes tipos: inteiro, flutuante, string, bool, nulo ou um objeto que implemente a interface \Stringable ou \DateTimeInterface.',
-    'Value must be equal to "{targetValueOrAttribute}".' => 'O valor deve ser igual a "{targetValueOrAttribute}".',
-    'Value must be strictly equal to "{targetValueOrAttribute}".' => 'O valor deve ser exatamente igual a "{targetValueOrAttribute}".',
-    'Value must not be equal to "{targetValueOrAttribute}".' => 'O valor não deve ser igual a "{targetValueOrAttribute}".',
-    'Value must not be strictly equal to "{targetValueOrAttribute}".' => 'O valor não deve ser exatamente igual a "{targetValueOrAttribute}".',
-    'Value must be greater than "{targetValueOrAttribute}".' => 'O valor deve ser maior que "{targetValueOrAttribute}".',
-    'Value must be greater than or equal to "{targetValueOrAttribute}".' => 'O valor deve ser maior ou igual a "{targetValueOrAttribute}".',
-    'Value must be less than "{targetValueOrAttribute}".' => 'O valor deve ser menor que "{targetValueOrAttribute}".',
-    'Value must be less than or equal to "{targetValueOrAttribute}".' => 'O valor deve ser menor ou igual a "{targetValueOrAttribute}".',
+    'The property value returned from a custom data set must have one of the following types: integer, float, string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface.' => 'O valor retornado deve ser um dos seguintes tipos: inteiro, flutuante, string, bool, nulo ou um objeto que implemente a interface \Stringable ou \DateTimeInterface.',
+    'Value must be equal to "{targetValueOrProperty}".' => 'O valor deve ser igual a "{targetValueOrProperty}".',
+    'Value must be strictly equal to "{targetValueOrProperty}".' => 'O valor deve ser exatamente igual a "{targetValueOrProperty}".',
+    'Value must not be equal to "{targetValueOrProperty}".' => 'O valor não deve ser igual a "{targetValueOrProperty}".',
+    'Value must not be strictly equal to "{targetValueOrProperty}".' => 'O valor não deve ser exatamente igual a "{targetValueOrProperty}".',
+    'Value must be greater than "{targetValueOrProperty}".' => 'O valor deve ser maior que "{targetValueOrProperty}".',
+    'Value must be greater than or equal to "{targetValueOrProperty}".' => 'O valor deve ser maior ou igual a "{targetValueOrProperty}".',
+    'Value must be less than "{targetValueOrProperty}".' => 'O valor deve ser menor que "{targetValueOrProperty}".',
+    'Value must be less than or equal to "{targetValueOrProperty}".' => 'O valor deve ser menor ou igual a "{targetValueOrProperty}".',
     /**
      * @see Email
      * @see Ip

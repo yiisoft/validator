@@ -48,15 +48,15 @@ final class TrueValueHandler implements RuleHandlerInterface
      * @param TrueValue $rule A rule instance.
      * @param ValidationContext $context Validation context.
      *
-     * @return array A mapping between attribute names and their values.
+     * @return array A mapping between property names and their values.
      *
      * @psalm-return array<string,scalar|null>
      */
     private function getCommonResultParameters(TrueValue $rule, ValidationContext $context): array
     {
         return [
-            'attribute' => $context->getTranslatedAttribute(),
-            'Attribute' => $context->getCapitalizedTranslatedAttribute(),
+            'property' => $context->getTranslatedProperty(),
+            'Property' => $context->getCapitalizedTranslatedProperty(),
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
         ];
     }

@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Tests;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Yiisoft\Validator\AttributeTranslator\NullAttributeTranslator;
+use Yiisoft\Validator\PropertyTranslator\NullPropertyTranslator;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSet\SingleValueDataSet;
@@ -219,7 +219,7 @@ class ValidatorTest extends TestCase
     ): void {
         $validator = new Validator();
         $result = $validator->validate($data, $rules);
-        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
+        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByProperty());
     }
 
     public function dataWithEmptyArrayOfRules(): array
@@ -265,8 +265,8 @@ class ValidatorTest extends TestCase
             ],
         ]);
 
-        $this->assertTrue($result->isAttributeValid('bool'));
-        $this->assertFalse($result->isAttributeValid('int'));
+        $this->assertTrue($result->isPropertyValid('bool'));
+        $this->assertFalse($result->isPropertyValid('int'));
     }
 
     public function diverseTypesDataProvider(): array
@@ -361,7 +361,7 @@ class ValidatorTest extends TestCase
             'sort' => [
                 new In(
                     ['asc', 'desc'],
-                    skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $isAttributeMissing
+                    skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $isPropertyMissing
                 ),
             ],
         ];
@@ -372,8 +372,8 @@ class ValidatorTest extends TestCase
                     ['asc', 'desc'],
                     skipOnEmpty: static fn (
                         mixed $value,
-                        bool $isAttributeMissing
-                    ): bool => $isAttributeMissing || $value === ''
+                        bool $isPropertyMissing
+                    ): bool => $isPropertyMissing || $value === ''
                 ),
             ],
         ];
@@ -385,13 +385,13 @@ class ValidatorTest extends TestCase
                 [
                     new Error(
                         'MerchantId cannot be blank.',
-                        ['attribute' => 'merchantId', 'Attribute' => 'MerchantId'],
+                        ['property' => 'merchantId', 'Property' => 'MerchantId'],
                         ['merchantId'],
                         Error::MESSAGE_NONE,
                     ),
                     new Error(
                         'The allowed types are integer, float and string.',
-                        ['attribute' => 'merchantId', 'Attribute' => 'MerchantId', 'type' => 'null'],
+                        ['property' => 'merchantId', 'Property' => 'MerchantId', 'type' => 'null'],
                         ['merchantId'],
                         Error::MESSAGE_NONE,
                     ),
@@ -403,7 +403,7 @@ class ValidatorTest extends TestCase
                 [
                     new Error(
                         'MerchantId cannot be blank.',
-                        ['attribute' => 'merchantId', 'Attribute' => 'MerchantId'],
+                        ['property' => 'merchantId', 'Property' => 'MerchantId'],
                         ['merchantId'],
                         Error::MESSAGE_NONE,
                     ),
@@ -412,7 +412,7 @@ class ValidatorTest extends TestCase
             [
                 ['merchantId' => [new Required(), new Integer(skipOnError: true)]],
                 new ArrayDataSet(['merchantIdd' => 1]),
-                [new Error('MerchantId not passed.', ['attribute' => 'merchantId', 'Attribute' => 'MerchantId'], ['merchantId'], Error::MESSAGE_NONE)],
+                [new Error('MerchantId not passed.', ['property' => 'merchantId', 'Property' => 'MerchantId'], ['merchantId'], Error::MESSAGE_NONE)],
             ],
 
             [
@@ -443,7 +443,7 @@ class ValidatorTest extends TestCase
                 [
                     new Error(
                         'Sort is not in the list of acceptable values.',
-                        ['attribute' => 'sort', 'Attribute' => 'Sort'],
+                        ['property' => 'sort', 'Property' => 'Sort'],
                         ['sort'],
                         Error::MESSAGE_NONE,
                     ),
@@ -455,7 +455,7 @@ class ValidatorTest extends TestCase
                 [
                     new Error(
                         'Sort is not in the list of acceptable values.',
-                        ['attribute' => 'sort', 'Attribute' => 'Sort'],
+                        ['property' => 'sort', 'Property' => 'Sort'],
                         ['sort'],
                         Error::MESSAGE_NONE,
                     ),
@@ -468,7 +468,7 @@ class ValidatorTest extends TestCase
                 [
                     new Error(
                         'Sort is not in the list of acceptable values.',
-                        ['attribute' => 'sort', 'Attribute' => 'Sort'],
+                        ['property' => 'sort', 'Property' => 'Sort'],
                         ['sort'],
                         Error::MESSAGE_NONE,
                     ),
@@ -494,23 +494,23 @@ class ValidatorTest extends TestCase
             [
                 $strictRules,
                 new ArrayDataSet(['orderBy' => '']),
-                [new Error('OrderBy cannot be blank.', ['attribute' => 'orderBy', 'Attribute' => 'OrderBy'], ['orderBy'], Error::MESSAGE_NONE)],
+                [new Error('OrderBy cannot be blank.', ['property' => 'orderBy', 'Property' => 'OrderBy'], ['orderBy'], Error::MESSAGE_NONE)],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet(['orderBy' => '']),
-                [new Error('OrderBy cannot be blank.', ['attribute' => 'orderBy', 'Attribute' => 'OrderBy'], ['orderBy'], Error::MESSAGE_NONE)],
+                [new Error('OrderBy cannot be blank.', ['property' => 'orderBy', 'Property' => 'OrderBy'], ['orderBy'], Error::MESSAGE_NONE)],
             ],
 
             [
                 $strictRules,
                 new ArrayDataSet([]),
-                [new Error('OrderBy not passed.', ['attribute' => 'orderBy', 'Attribute' => 'OrderBy'], ['orderBy'], Error::MESSAGE_NONE)],
+                [new Error('OrderBy not passed.', ['property' => 'orderBy', 'Property' => 'OrderBy'], ['orderBy'], Error::MESSAGE_NONE)],
             ],
             [
                 $notStrictRules,
                 new ArrayDataSet([]),
-                [new Error('OrderBy not passed.', ['attribute' => 'orderBy', 'Attribute' => 'OrderBy'], ['orderBy'], Error::MESSAGE_NONE)],
+                [new Error('OrderBy not passed.', ['property' => 'orderBy', 'Property' => 'OrderBy'], ['orderBy'], Error::MESSAGE_NONE)],
             ],
             [
                 [
@@ -523,7 +523,7 @@ class ValidatorTest extends TestCase
                         private string $description = 'abc123';
                     }
                 ),
-                [new Error('Name not passed.', ['attribute' => 'name', 'Attribute' => 'Name'], ['name'], Error::MESSAGE_NONE)],
+                [new Error('Name not passed.', ['property' => 'name', 'Property' => 'Name'], ['name'], Error::MESSAGE_NONE)],
             ],
             [
                 null,
@@ -568,13 +568,13 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($incorrectNumberMessage, [
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'type' => 'null',
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -589,13 +589,13 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($incorrectNumberMessage, [
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'type' => 'null',
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -610,14 +610,14 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'value' => 17,
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -635,8 +635,8 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                 ],
@@ -654,8 +654,8 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                 ],
@@ -673,14 +673,14 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 1,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'value' => 17,
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -698,8 +698,8 @@ class ValidatorTest extends TestCase
                 [
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'value' => 17,
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -717,14 +717,14 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'value' => 17,
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -742,8 +742,8 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                 ],
@@ -761,8 +761,8 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                 ],
@@ -780,14 +780,14 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'value' => 17,
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -805,13 +805,13 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($intMessage, [
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'value' => '',
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -827,20 +827,20 @@ class ValidatorTest extends TestCase
                     'age' => [
                         new Integer(
                             min: 18,
-                            skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                            skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                         ),
                     ],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($incorrectNumberMessage, [
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'type' => 'null',
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -856,15 +856,15 @@ class ValidatorTest extends TestCase
                     'age' => [
                         new Integer(
                             min: 18,
-                            skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                            skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                         ),
                     ],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                 ],
@@ -880,21 +880,21 @@ class ValidatorTest extends TestCase
                     'age' => [
                         new Integer(
                             min: 18,
-                            skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                            skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                         ),
                     ],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'value' => 17,
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -910,20 +910,20 @@ class ValidatorTest extends TestCase
                     'age' => [
                         new Integer(
                             min: 18,
-                            skipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                            skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                         ),
                     ],
                 ],
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($incorrectNumberMessage, [
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'type' => 'null',
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -938,8 +938,8 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                 ],
@@ -954,8 +954,8 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                 ],
@@ -970,14 +970,14 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'value' => 17,
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -992,8 +992,8 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                 ],
@@ -1008,8 +1008,8 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                 ],
@@ -1024,14 +1024,14 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'value' => 17,
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -1046,13 +1046,13 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($intMessage, [
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'value' => '',
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -1060,7 +1060,7 @@ class ValidatorTest extends TestCase
 
             'validator, skipOnEmpty: custom callback, value not passed' => [
                 new Validator(
-                    defaultSkipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                    defaultSkipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -1069,20 +1069,20 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($incorrectNumberMessage, [
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'type' => 'null',
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
             'validator, skipOnEmpty: custom callback, value is empty' => [
                 new Validator(
-                    defaultSkipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                    defaultSkipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -1092,15 +1092,15 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                 ],
             ],
             'validator, skipOnEmpty: custom callback, value is not empty' => [
                 new Validator(
-                    defaultSkipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                    defaultSkipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -1110,21 +1110,21 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($intLessThanMinMessage, [
                         'min' => 18,
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'value' => 17,
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
             ],
             'validator, skipOnEmpty: custom callback, value is not empty (null)' => [
                 new Validator(
-                    defaultSkipOnEmpty: static fn (mixed $value, bool $isAttributeMissing): bool => $value === 0
+                    defaultSkipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -1134,13 +1134,13 @@ class ValidatorTest extends TestCase
                 [
                     new Error($stringLessThanMinMessage, [
                         'min' => 8,
-                        'attribute' => 'name',
-                        'Attribute' => 'Name',
+                        'property' => 'name',
+                        'Property' => 'Name',
                         'number' => 7,
                     ], ['name'], Error::MESSAGE_NONE),
                     new Error($incorrectNumberMessage, [
-                        'attribute' => 'age',
-                        'Attribute' => 'Age',
+                        'property' => 'age',
+                        'Property' => 'Age',
                         'type' => 'null',
                     ], ['age'], Error::MESSAGE_NONE),
                 ],
@@ -1299,7 +1299,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('An attribute can only have an integer or a string type. bool given.');
+        $this->expectExceptionMessage('A property can only have an integer or a string type. bool given.');
         $validator->validate([], new IteratorWithBooleanKey());
     }
 
@@ -1406,7 +1406,7 @@ class ValidatorTest extends TestCase
                         'Mail is not a valid email address.',
                     ],
                 ],
-                new ValidationContext(attributeTranslator: new NullAttributeTranslator()),
+                new ValidationContext(propertyTranslator: new NullPropertyTranslator()),
             ],
         ];
     }
@@ -1499,7 +1499,7 @@ class ValidatorTest extends TestCase
                     #[Label('Test')]
                     #[Length(
                         min: 20,
-                        lessThanMinMessage: '{attribute} value must contain at least {min, number} {min, plural, ' .
+                        lessThanMinMessage: '{property} value must contain at least {min, number} {min, plural, ' .
                         'one{character} other{characters}}.',
                     )]
                     public string $property = 'test';
@@ -1511,7 +1511,7 @@ class ValidatorTest extends TestCase
                     #[Label('проверка кириллицы')]
                     #[Length(
                         min: 20,
-                        lessThanMinMessage: '{Attribute} value must contain at least {min, number} {min, plural, ' .
+                        lessThanMinMessage: '{Property} value must contain at least {min, number} {min, plural, ' .
                         'one{character} other{characters}}.',
                     )]
                     public string $property = 'test';
@@ -1537,6 +1537,6 @@ class ValidatorTest extends TestCase
     ): void {
         $validator = new Validator();
         $result = $validator->validate($data, $data);
-        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByAttribute());
+        $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByProperty());
     }
 }

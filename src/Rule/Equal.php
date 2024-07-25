@@ -11,7 +11,7 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Defines validation options to check that the specified value is equal to "target" value provided directly
- * ({@see Equal::$targetValue}) or within an attribute ({@see Equal::$targetAttribute}).
+ * ({@see Equal::$targetValue}) or within a property ({@see Equal::$targetProperty}).
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
  * strings byte by byte and compare original values as is. See {@see Equal::$type} for all possible options.
@@ -29,15 +29,15 @@ use Yiisoft\Validator\WhenInterface;
 final class Equal extends AbstractCompare
 {
     /**
-     * @param mixed $targetValue The value to be equal to. When both this property and {@see $targetAttribute} are set,
+     * @param mixed $targetValue The value to be equal to. When both this property and {@see $targetProperty} are set,
      * this property takes precedence.
-     * @param string|null $targetAttribute The attribute to be equal to. When both this property and {@see $targetValue}
+     * @param string|null $targetProperty The property to be equal to. When both this property and {@see $targetValue}
      * are set, the {@see $targetValue} takes precedence.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $incorrectDataSetTypeMessage A message used when the value returned from a custom
      * data set is not a scalar.
@@ -49,16 +49,16 @@ final class Equal extends AbstractCompare
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{targetValue}`: the value to be compared with.
-     * - `{targetAttribute}`: the name of the attribute to be compared with.
-     * - `{targetAttributeValue}`: the value extracted from the attribute to be compared with if this attribute was set.
-     * - `{targetValueOrAttribute}`: the value to be compared with or, if it's absent, the name of the attribute to be
+     * - `{targetProperty}`: the name of the property to be compared with.
+     * - `{targetPropertyValue}`: the value extracted from the property to be compared with if this property was set.
+     * - `{targetValueOrProperty}`: the value to be compared with or, if it's absent, the name of the property to be
      * compared with.
      * - `{value}`: the value being validated.
      *
      * When {@see CompareType::ORIGINAL} is used with complex types (neither scalar nor `null`), `{targetValue}`,
-     * `{targetAttributeValue}` and `{targetValueOrAttribute}` parameters might contain the actual type instead of the
+     * `{targetPropertyValue}` and `{targetValueOrProperty}` parameters might contain the actual type instead of the
      * value, e.g. "object" for predictable formatting.
      * @param string $type The type of the values being compared:
      *
@@ -88,7 +88,7 @@ final class Equal extends AbstractCompare
      */
     public function __construct(
         mixed $targetValue = null,
-        ?string $targetAttribute = null,
+        ?string $targetProperty = null,
         string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
         string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
         string|null $message = null,
@@ -100,7 +100,7 @@ final class Equal extends AbstractCompare
     ) {
         parent::__construct(
             targetValue: $targetValue,
-            targetAttribute: $targetAttribute,
+            targetProperty: $targetProperty,
             incorrectInputMessage: $incorrectInputMessage,
             incorrectDataSetTypeMessage: $incorrectDataSetTypeMessage,
             message: $message,

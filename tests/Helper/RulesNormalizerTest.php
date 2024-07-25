@@ -58,10 +58,10 @@ final class RulesNormalizerTest extends TestCase
         $rules = RulesNormalizer::normalize($rules, $data);
 
         $result = [];
-        foreach ($rules as $attributeName => $attributeRules) {
-            $result[$attributeName] = [];
-            foreach ($attributeRules as $rule) {
-                $result[$attributeName][] = $rule->getName();
+        foreach ($rules as $propertyName => $propertyRules) {
+            $result[$propertyName] = [];
+            foreach ($propertyRules as $rule) {
+                $result[$propertyName][] = $rule->getName();
             }
         }
 

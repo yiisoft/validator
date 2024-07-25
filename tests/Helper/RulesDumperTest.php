@@ -20,7 +20,7 @@ final class RulesDumperTest extends TestCase
         return [
             [
                 [
-                    'attributeName' => [
+                    'propertyName' => [
                         $rule = new Integer(
                             min: 10,
                             max: 100,
@@ -33,7 +33,7 @@ final class RulesDumperTest extends TestCase
                     ],
                 ],
                 [
-                    'attributeName' => [
+                    'propertyName' => [
                         $dump = [
                             Integer::class,
                             'min' => 10,
@@ -43,7 +43,7 @@ final class RulesDumperTest extends TestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => '{Attribute} must be an integer.',
+                                'template' => '{Property} must be an integer.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
@@ -66,8 +66,8 @@ final class RulesDumperTest extends TestCase
                 ],
             ],
             [
-                ['attributeName' => [new RuleWithoutOptions(), new StubDumpedRule('name', [])]],
-                ['attributeName' => [[RuleWithoutOptions::class], ['name']]],
+                ['propertyName' => [new RuleWithoutOptions(), new StubDumpedRule('name', [])]],
+                ['propertyName' => [[RuleWithoutOptions::class], ['name']]],
             ],
         ];
     }
@@ -95,7 +95,7 @@ final class RulesDumperTest extends TestCase
     public function testWrongKeyException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('An attribute can only have an integer or a string type. bool given.');
+        $this->expectExceptionMessage('A property can only have an integer or a string type. bool given.');
         RulesDumper::asArray(new IteratorWithBooleanKey());
     }
 
@@ -119,7 +119,7 @@ final class RulesDumperTest extends TestCase
                     ],
                 ],
                 'message' => [
-                    'template' => '{Attribute} must be either "{true}" or "{false}".',
+                    'template' => '{Property} must be either "{true}" or "{false}".',
                     'parameters' => [
                         'true' => '1',
                         'false' => '0',
