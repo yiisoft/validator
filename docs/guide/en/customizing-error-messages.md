@@ -4,7 +4,7 @@ To use a non-default error message, pass a custom message/template when creating
 `message` option is responsible for storing error message:
 
 ```php
-new Required(message: '{Attribute} is required.');
+new Required(message: '{Property} is required.');
 ```
 
 Some rules have multiple error messages and are overridden via different corresponding options.
@@ -16,8 +16,8 @@ use Yiisoft\Validator\Rule\Length;
 new Length(  
     min: 4,  
     max: 10,
-    lessThanMinMessage: '{Attribute} is too short.',  
-    greaterThanMaxMessage: '{Attribute} is too long.',  
+    lessThanMinMessage: '{Property} is too short.',  
+    greaterThanMaxMessage: '{Property} is too long.',  
 );
 ```
 
@@ -63,7 +63,7 @@ missing, feel free to submit a [PR].
 
 ## Translating property names
 
-Almost all error templates have support for an `{attribute}` placeholder which is substituted with an actual property
+Almost all error templates have support for a `{property}` placeholder which is substituted with an actual property
 name that was set during rules configuration. By default, a property name is formatted as is. It can be acceptable for 
 English language (for example, `currentPassword is required.`), but when using translations for error messages, it's 
 better to provide an additional property translation.
@@ -113,13 +113,13 @@ use Yiisoft\Validator\Validator;
 final class ChangePasswordForm implements PropertyTranslatorProviderInterface  
 {  
     public function __construct(  
-        #[Required(message: '{Attribute} обязателен.')]  
+        #[Required(message: '{Property} обязателен.')]  
         public string $currentPassword = '',  
   
         #[Length(  
             min: 8,
             skipOnEmpty: false,  
-            lessThanMinMessage: '{Attribute} должен быть сложный, не менее 8 символов.'  
+            lessThanMinMessage: '{Property} должен быть сложный, не менее 8 символов.'  
         )]  
         public string $newPassword = '',  
     ) {  

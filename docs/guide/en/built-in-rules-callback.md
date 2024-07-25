@@ -1,6 +1,6 @@
 # `Callback` - a wrapper around `callable`
 
-This rule allows validation of the current attribute value (but not limited to it) with an arbitrary condition within a  
+This rule allows validation of the current property value (but not limited to it) with an arbitrary condition within a  
 callable. The benefit is that there is no need to create a separate custom rule and handler.
 
 A condition can be within:
@@ -53,7 +53,7 @@ new Callback(
 
 ### Value validation
 
-`Callback` rule can be used to add validation missing in built-in rules for a single attribute's value. Below is the 
+`Callback` rule can be used to add validation missing in built-in rules for a single property's value. Below is the 
 example verifying that a value is a valid [YAML](https://en.wikipedia.org/wiki/YAML) string
 (additionally requires `yaml` PHP extension):
 
@@ -88,7 +88,7 @@ new Callback(
 > **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to
 > [`yaml_parse()` docs](https://www.php.net/manual/en/function.yaml-parse.php) for more details. 
 
-### Usage of validation context for validating multiple attributes depending on each other
+### Usage of validation context for validating multiple properties depending on each other
 
 In the example below, the 3 angles are validated as degrees to form
 a valid triangle:

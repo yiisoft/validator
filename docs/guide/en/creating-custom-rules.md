@@ -146,7 +146,7 @@ final class RgbColorHandler implements RuleHandlerInterface
 
         if (!is_array($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -155,7 +155,7 @@ final class RgbColorHandler implements RuleHandlerInterface
         foreach (array_keys($value) as $index => $keyValue) {
             if ($keyValue !== $index) {
                 return (new Result())->addError($rule->getIncorrectInputRepresentationMessage(), [
-                    'attribute' => $context->getTranslatedProperty(),
+                    'property' => $context->getTranslatedProperty(),
                 ]);
             }
 
@@ -164,7 +164,7 @@ final class RgbColorHandler implements RuleHandlerInterface
 
         if ($itemsCount !== 3) {
             return (new Result())->addError($rule->getIncorrectItemsCountMessage(), [
-                'attribute' => $context->getTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
                 'itemsCount' => $itemsCount,
             ]);
         }
@@ -172,7 +172,7 @@ final class RgbColorHandler implements RuleHandlerInterface
         foreach ($value as $index => $item) {
             if (!is_int($item)) {
                 return (new Result())->addError($rule->getIncorrectItemTypeMessage(), [
-                    'attribute' => $context->getTranslatedProperty(),
+                    'property' => $context->getTranslatedProperty(),
                     'position' => $index + 1,
                     'type' => get_debug_type($item),
                 ]);
@@ -180,7 +180,7 @@ final class RgbColorHandler implements RuleHandlerInterface
 
             if ($item < 0 || $item > 255) {
                 return (new Result())->addError($rule->getIncorrectItemValueMessage(), [
-                    'attribute' => $context->getTranslatedProperty(),
+                    'property' => $context->getTranslatedProperty(),
                     'position' => $index + 1,
                     'value' => $value,
                 ]);
@@ -242,9 +242,9 @@ $result = (new Validator())->validate([205, 92, 92], new RgbColorRuleSet());
 
 ##### Replacing with separate rules and `when`
 
-Below is an attempt at using validation context for validating attributes depending on each other:
+Below is an attempt at using validation context for validating properties depending on each other:
 
-- Validate company name only when the other attribute `hasCompany` name is filled.
+- Validate company name only when the other property `hasCompany` name is filled.
 - The company name must be a string with a length between 1 and 50 characters.
 
 ```php
@@ -352,7 +352,7 @@ final class YamlHandler implements RuleHandlerInterface
   
         if (!is_string($value)) {
             return (new Result())->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -361,13 +361,13 @@ final class YamlHandler implements RuleHandlerInterface
             $data = yaml_parse($value);
         } catch (Exception $e) {
             return (new Result())->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
             ]);
         }
 
         if ($data === false) {
             return (new Result())->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedProperty(),
+                'property' => $context->getTranslatedProperty(),
             ]);
         }
 
