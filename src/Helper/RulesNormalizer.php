@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Helper;
 
 use InvalidArgumentException;
 use ReflectionException;
+use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -76,7 +77,7 @@ final class RulesNormalizer
      * @psalm-return NormalizedRulesMap
      */
     public static function normalize(
-        callable|iterable|object|string|null $rules,
+        callable|iterable|object|string|null $rules = null,
         mixed $data = null,
         ?callable $defaultSkipOnEmptyCondition = null,
     ): array {
@@ -162,8 +163,14 @@ final class RulesNormalizer
         }
 
         if ($rules === null) {
-            return $data instanceof RulesProviderInterface
-                ? $data->getRules()
+            if ($data instanceof RulesProviderInterface) {
+                return $data->getRules();
+            }
+            if ($data instanceof DataSetInterface) {
+                return [];
+            }
+            return is_object($data)
+                ? (new AttributesRulesProvider($data))->getRules()
                 : [];
         }
 
