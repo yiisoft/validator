@@ -2,7 +2,7 @@
 
 ## 1.4.2 under development
 
-- no changes in this release.
+- Enh #xxx: Add backend enum support to In() rule (@samdark)
 
 ## 1.4.1 June 11, 2024
 

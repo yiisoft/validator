@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
+use BackedEnum;
 use Closure;
+use UnitEnum;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -39,8 +41,8 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
     use WhenTrait;
 
     /**
-     * @param iterable $values A set of values to check against. Nested arrays are supported too (the order of values in
-     * lists must match, the order of keys in associative arrays is not important).
+     * @param iterable|string $values A set of values to check against. Enum class names and nested arrays are
+     * supported too (the order of values in lists must match, the order of keys in associative arrays is not important).
      * @param bool $strict Whether the comparison to each value in the set is strict:
      *
      * - Strict mode uses `===` operator meaning the type and the value must both match.
@@ -70,7 +72,7 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private iterable $values,
+        private iterable|string $values,
         private bool $strict = false,
         private bool $not = false,
         private string $message = 'This value is not in the list of acceptable values.',
@@ -92,6 +94,10 @@ final class In implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      */
     public function getValues(): iterable
     {
+        if (is_string($this->values) && is_subclass_of($this->values, BackedEnum::class)) {
+            return array_column($this->values::cases(), 'value');
+        }
+
         return $this->values;
     }
 
