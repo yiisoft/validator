@@ -92,7 +92,7 @@ final class NestedTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'rules without properties' => [
                 new Nested([new Number(pattern: '/1/')]),
                 [
                     'noRulesWithNoObjectMessage' => [
@@ -120,7 +120,7 @@ final class NestedTest extends RuleTestCase
                             'min' => null,
                             'max' => null,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types are integer, float and string.',
+                                'template' => 'The allowed types for {property} are integer, float and string.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
@@ -142,59 +142,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
             ],
-            [
-                new Nested(['user.age' => new Number(pattern: '/1/')]),
-                [
-                    'noRulesWithNoObjectMessage' => [
-                        'template' => 'Nested rule without rules can be used for objects only.',
-                        'parameters' => [],
-                    ],
-                    'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array type.',
-                        'parameters' => [],
-                    ],
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be an array or an object.',
-                        'parameters' => [],
-                    ],
-                    'noPropertyPathMessage' => [
-                        'template' => 'Property "{path}" is not found.',
-                        'parameters' => [],
-                    ],
-                    'requirePropertyPath' => false,
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                    'rules' => [
-                        'user.age' => [
-                            [
-                                Number::class,
-                                'min' => null,
-                                'max' => null,
-                                'incorrectInputMessage' => [
-                                    'template' => 'The allowed types are integer, float and string.',
-                                    'parameters' => [],
-                                ],
-                                'notNumberMessage' => [
-                                    'template' => '{Property} must be a number.',
-                                    'parameters' => [],
-                                ],
-                                'lessThanMinMessage' => [
-                                    'template' => '{Property} must be no less than {min}.',
-                                    'parameters' => ['min' => null],
-                                ],
-                                'greaterThanMaxMessage' => [
-                                    'template' => '{Property} must be no greater than {max}.',
-                                    'parameters' => ['max' => null],
-                                ],
-                                'skipOnEmpty' => false,
-                                'skipOnError' => false,
-                                'pattern' => '/1/',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            [
+            'rules with properties, dot notation' => [
                 new Nested([
                     'author.name' => new StubDumpedRule('author-name', ['key' => 'name']),
                     'author.age' => new StubDumpedRule('author-age', ['key' => 'age']),
@@ -225,7 +173,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
             ],
-            [
+            'rules with properties, nested arrays' => [
                 new Nested([
                     'author' => [
                         'name' => new StubDumpedRule('author-name', ['key' => 'name']),

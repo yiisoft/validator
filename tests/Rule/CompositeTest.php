@@ -37,7 +37,7 @@ final class CompositeTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'basic' => [
                 new Composite([
                     new Number(max: 13, pattern: '/1/'),
                     new Number(max: 14, pattern: '/2/'),
@@ -51,7 +51,7 @@ final class CompositeTest extends RuleTestCase
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types are integer, float and string.',
+                                'template' => 'The allowed types for {property} are integer, float and string.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
@@ -75,7 +75,7 @@ final class CompositeTest extends RuleTestCase
                             'min' => null,
                             'max' => 14,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types are integer, float and string.',
+                                'template' => 'The allowed types for {property} are integer, float and string.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
@@ -111,7 +111,7 @@ final class CompositeTest extends RuleTestCase
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types are integer, float and string.',
+                                'template' => 'The allowed types for {property} are integer, float and string.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
